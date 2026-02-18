@@ -35,16 +35,6 @@ import {
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-const DEFAULT_STEPS: JobEditorStep[] = [
-  { key: 'basics', label: 'Basics', isComplete: false, isActive: true, hasErrors: false },
-  { key: 'description', label: 'Description', isComplete: false, isActive: false, hasErrors: false },
-  { key: 'location', label: 'Location', isComplete: false, isActive: false, hasErrors: false },
-  { key: 'compensation', label: 'Compensation', isComplete: false, isActive: false, hasErrors: false },
-  { key: 'requirements', label: 'Requirements', isComplete: false, isActive: false, hasErrors: false },
-  { key: 'configuration', label: 'Configuration', isComplete: false, isActive: false, hasErrors: false },
-  { key: 'review', label: 'Review', isComplete: false, isActive: false, hasErrors: false },
-];
-
 const DEPARTMENTS = ['Engineering', 'Product', 'Design', 'Marketing', 'Sales', 'Operations', 'Finance', 'HR', 'Legal', 'Customer Success'];
 const SENIORITY_OPTIONS = [
   { value: 'intern', label: 'Intern' }, { value: 'junior', label: 'Junior' },
@@ -94,6 +84,16 @@ const REVIEW_SECTIONS = [
   { key: 'compensation', label: 'Compensation', icon: DollarSign },
   { key: 'requirements', label: 'Requirements', icon: GraduationCap },
   { key: 'configuration', label: 'Configuration', icon: Settings },
+];
+
+const DEFAULT_STEPS: JobEditorStep[] = [
+  { key: 'basics', label: 'Basics', isComplete: false, isActive: true, hasErrors: false },
+  { key: 'description', label: 'Description', isComplete: false, isActive: false, hasErrors: false },
+  { key: 'location', label: 'Location', isComplete: false, isActive: false, hasErrors: false },
+  { key: 'compensation', label: 'Compensation', isComplete: false, isActive: false, hasErrors: false },
+  { key: 'requirements', label: 'Requirements', isComplete: false, isActive: false, hasErrors: false },
+  { key: 'configuration', label: 'Configuration', isComplete: false, isActive: false, hasErrors: false },
+  { key: 'review', label: 'Review', isComplete: false, isActive: false, hasErrors: false },
 ];
 
 function generateJobCode(title: string): string {
@@ -448,6 +448,40 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
           <Field fieldKey="openings" label="Number of Openings"><input type="number" aria-label="Number of openings" style={{ ...inputStyle, maxWidth: 120 }} min={1} value={formData.openings ?? 1} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('openings', Number(e.target.value))} /></Field>
           {templates.length > 0 && <Field fieldKey="templateId" label="Job Template"><select aria-label="Job template" style={selectStyle} value={formData.templateId ?? ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { updateField('templateId', e.target.value); setSelectedTemplate(e.target.value); }}><option value="">None - Start from scratch</option>{templates.map((tp) => <option key={tp.id} value={tp.id}>{tp.name}</option>)}</select></Field>}
           {clients.length > 0 && <Field fieldKey="clientId" label="Client Association"><select aria-label="Client association" style={selectStyle} value={formData.clientId ?? ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('clientId', e.target.value)}><option value="">No client association</option>{clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></Field>}
+
+          {/* Work Mode */}
+          <Field fieldKey="workMode" label="Work Mode">
+            <Box role="radiogroup" aria-label="Work mode" style={{ display: 'flex', gap: t.spacing[2] }}>
+              {[
+                { value: 'onsite', label: 'On-site' },
+                { value: 'remote', label: 'Remote' },
+                { value: 'hybrid', label: 'Hybrid' },
+                { value: 'flexible', label: 'Flexible' },
+              ].map((o) => (
+                <OptionBtn key={o.value} selected={(formData.workMode ?? 'onsite') === o.value} label={o.label} onClick={() => updateField('workMode', o.value as any)} flexOne />
+              ))}
+            </Box>
+          </Field>
+
+          {/* Compensation Extras */}
+          <Box style={{ display: 'flex', gap: t.spacing[4] }}>
+            <Box style={{ flex: 1 }}>
+              <Box role="checkbox" tabIndex={0} aria-checked={formData.equityEligible ?? false} aria-label="Equity eligible" onClick={() => updateField('equityEligible', !(formData.equityEligible ?? false))} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => updateField('equityEligible', !(formData.equityEligible ?? false)))} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, color: (formData.equityEligible ?? false) ? t.colors.primaryScale[700] : t.colors.neutral[600], backgroundColor: (formData.equityEligible ?? false) ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${(formData.equityEligible ?? false) ? t.colors.primaryScale[200] : t.colors.neutral[200]}`, borderRadius: t.borderRadius.md, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                <Box style={{ width: 16, height: 16, borderRadius: t.borderRadius.sm, border: `${bdr} ${(formData.equityEligible ?? false) ? t.colors.primaryScale[500] : t.colors.neutral[300]}`, backgroundColor: (formData.equityEligible ?? false) ? t.colors.primaryScale[500] : t.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {(formData.equityEligible ?? false) && <Check size={10} color={t.colors.common.white} />}
+                </Box>
+                <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Equity Eligible</Text>
+              </Box>
+            </Box>
+            <Box style={{ flex: 1 }}>
+              <Box role="checkbox" tabIndex={0} aria-checked={formData.bonusEligible ?? false} aria-label="Bonus eligible" onClick={() => updateField('bonusEligible', !(formData.bonusEligible ?? false))} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => updateField('bonusEligible', !(formData.bonusEligible ?? false)))} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, color: (formData.bonusEligible ?? false) ? t.colors.primaryScale[700] : t.colors.neutral[600], backgroundColor: (formData.bonusEligible ?? false) ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${(formData.bonusEligible ?? false) ? t.colors.primaryScale[200] : t.colors.neutral[200]}`, borderRadius: t.borderRadius.md, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                <Box style={{ width: 16, height: 16, borderRadius: t.borderRadius.sm, border: `${bdr} ${(formData.bonusEligible ?? false) ? t.colors.primaryScale[500] : t.colors.neutral[300]}`, backgroundColor: (formData.bonusEligible ?? false) ? t.colors.primaryScale[500] : t.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {(formData.bonusEligible ?? false) && <Check size={10} color={t.colors.common.white} />}
+                </Box>
+                <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Bonus Eligible</Text>
+              </Box>
+            </Box>
+          </Box>
         </Box>
       ),
 

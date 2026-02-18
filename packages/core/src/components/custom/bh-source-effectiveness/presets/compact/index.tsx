@@ -19,13 +19,6 @@ import {
 import type { BhSourceEffectivenessProps, SourceMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
-const MOCK_SOURCES: SourceMetrics[] = [
-  { source: 'Referrals', applicants: 95, qualified: 62, hired: 28, hireRate: 29.5, qualityScore: 94 },
-  { source: 'LinkedIn', applicants: 420, qualified: 168, hired: 34, hireRate: 8.1, qualityScore: 82 },
-  { source: 'Indeed', applicants: 680, qualified: 136, hired: 22, hireRate: 3.2, qualityScore: 58 },
-  { source: 'Career Page', applicants: 310, qualified: 124, hired: 18, hireRate: 5.8, qualityScore: 72 },
-];
-
 export const CompactBhSourceEffectiveness = createPreset<BhSourceEffectivenessProps>({
   name: 'BhSourceEffectiveness.Compact',
   render: (ctx: PresetContext<BhSourceEffectivenessProps>) => {
@@ -36,15 +29,14 @@ export const CompactBhSourceEffectiveness = createPreset<BhSourceEffectivenessPr
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      sources: rawSources = MOCK_SOURCES,
+      sources: rawSources = [],
       onSourceClick,
       selectedSource,
       className,
       style,
     } = props;
 
-    const sources = Array.isArray(rawSources) ? rawSources : MOCK_SOURCES;
-
+    const sources = Array.isArray(rawSources) ? rawSources : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

@@ -18,6 +18,10 @@ export interface MergeField {
   field: string;
   values: string[];
   selectedIndex: number;
+  /** Category for grouping fields in the UI (e.g. 'personal', 'compensation', 'documents', 'skills') */
+  category?: 'personal' | 'compensation' | 'documents' | 'skills' | 'experience' | 'contact' | 'source' | 'other';
+  /** Source attribution per value (which system/import provided each value) */
+  sourceAttribution?: string[];
 }
 
 export interface BhCandidateMergeProps extends EngineAwareProps {

@@ -9,17 +9,24 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   FileEdit, Save, X, Variable, Tag,
-  Type, AlignLeft, AtSign,
+  Type, AlignLeft, AtSign, Globe,
+  Share2, ShieldCheck, Hash, Target, Layers,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
   createBadgeStyle,
+  createBooleanBadgeStyles,
   createEntranceAnimation,
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
+  createMetadataFieldStyle,
+  createMetadataLabelStyle,
+  createMetadataValueStyle,
+  createMetadataGridStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { BhMessageTemplateEditorProps, TemplateVariable } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -27,14 +34,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Default data                                                       */
 /* ------------------------------------------------------------------ */
-
-const DEFAULT_VARIABLES: TemplateVariable[] = [
-  { key: 'firstName', label: 'First Name', defaultValue: 'John' },
-  { key: 'lastName', label: 'Last Name', defaultValue: 'Doe' },
-  { key: 'company', label: 'Company', defaultValue: 'Acme Inc.' },
-  { key: 'position', label: 'Position', defaultValue: 'Software Engineer' },
-  { key: 'recruiterName', label: 'Recruiter Name', defaultValue: 'Sarah' },
-];
 
 /* ================================================================== */
 /*  Editor Preset                                                      */
@@ -53,20 +52,27 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
       templateName = 'New Template',
       subject = 'Exciting opportunity at {{company}}',
       body = 'Hi {{firstName}},\n\nI came across your profile and was impressed by your experience. We have an exciting {{position}} role at {{company}} that I think would be a great fit.\n\nWould you be open to a brief conversation?\n\nBest regards,\n{{recruiterName}}',
-      variables: rawVariables = DEFAULT_VARIABLES,
+      variables: rawVariables = [],
       category = 'Sourcing',
       onNameChange,
       onSubjectChange,
       onBodyChange,
       onSave,
       onCancel,
+      templateType,
+      targetAudience,
+      useCase,
+      language,
+      isShared,
+      requiresApproval,
+      version,
+      plainTextBody,
       loading,
       className,
       style,
     } = props;
 
-    const variables = Array.isArray(rawVariables) ? rawVariables : DEFAULT_VARIABLES;
-
+    const variables = Array.isArray(rawVariables) ? rawVariables : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -249,6 +255,97 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
                   ))}
                 </Box>
               </Box>
+
+              {/* Plain Text Body */}
+              {plainTextBody && (
+                <Box>
+                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>Plain Text Version</Text>
+                  <Box style={{
+                    ...inputStyle,
+                    minHeight: 80,
+                    padding: t.spacing[3],
+                    lineHeight: 1.5,
+                    whiteSpace: 'pre-wrap',
+                    backgroundColor: t.colors.neutral[50],
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>
+                      {plainTextBody}
+                    </Text>
+                  </Box>
+                </Box>
+              )}
+
+              {/* Template Metadata */}
+              <Box style={createMetadataGridStyle(t, { columns: 2, withBackground: true })}>
+                {templateType && (
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Layers size={ICON_SIZES.label} color={t.colors.neutral[400]} />
+                      <Text style={createMetadataLabelStyle(t)}>Type</Text>
+                    </Box>
+                    <Text style={{ ...createMetadataValueStyle(t), textTransform: 'capitalize' as const }}>{templateType}</Text>
+                  </Box>
+                )}
+                {targetAudience && (
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Target size={ICON_SIZES.label} color={t.colors.neutral[400]} />
+                      <Text style={createMetadataLabelStyle(t)}>Audience</Text>
+                    </Box>
+                    <Text style={createMetadataValueStyle(t)}>{targetAudience}</Text>
+                  </Box>
+                )}
+                {useCase && (
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Tag size={ICON_SIZES.label} color={t.colors.neutral[400]} />
+                      <Text style={createMetadataLabelStyle(t)}>Use Case</Text>
+                    </Box>
+                    <Text style={createMetadataValueStyle(t)}>{useCase}</Text>
+                  </Box>
+                )}
+                {language && (
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Globe size={ICON_SIZES.label} color={t.colors.neutral[400]} />
+                      <Text style={createMetadataLabelStyle(t)}>Language</Text>
+                    </Box>
+                    <Text style={{ ...createMetadataValueStyle(t), textTransform: 'uppercase' as const }}>{language}</Text>
+                  </Box>
+                )}
+                {version != null && (
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Hash size={ICON_SIZES.label} color={t.colors.neutral[400]} />
+                      <Text style={createMetadataLabelStyle(t)}>Version</Text>
+                    </Box>
+                    <Text style={createMetadataValueStyle(t)}>v{version}</Text>
+                  </Box>
+                )}
+                <Box style={{ display: 'flex', gap: t.spacing[2], gridColumn: 'span 2' }}>
+                  {isShared != null && (() => {
+                    const sharedBadge = createBooleanBadgeStyles(t, isShared, { trueColor: 'info' });
+                    return sharedBadge && (
+                      <Box style={sharedBadge}>
+                        <Share2 size={ICON_SIZES.inline} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{isShared ? 'Shared' : 'Private'}</Text>
+                      </Box>
+                    );
+                  })()}
+                  {requiresApproval != null && (
+                    <Box style={{
+                      ...createBadgeStyle(t, requiresApproval ? 'warning' : 'success'),
+                      borderRadius: badgeRadius,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                    }}>
+                      <ShieldCheck size={ICON_SIZES.inline} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{requiresApproval ? 'Requires Approval' : 'No Approval Needed'}</Text>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
             </Box>
           </Box>
 
@@ -274,7 +371,7 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
                     }}
                   >
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                      <Variable size={14} color={t.colors.primaryScale[500]} />
+                      <Variable size={ICON_SIZES.label} color={t.colors.primaryScale[500]} />
                       <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.primaryScale[700] }}>
                           {v.label}

@@ -13,27 +13,16 @@ import {
   createSectionHeaderStyle,
   createHoverStyle,
   createStatusDotStyle,
+  createStatValueStyle,
+  createStatLabelStyle,
+  ICON_SIZES,
 } from '../../../helpers';
-import type { BhPipelineAnalyticsProps, PipelineStage, PipelineSummary } from '../../core';
+import type { BhPipelineAnalyticsProps, PipelineStage, PipelineSummary, PipelineBottleneck } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Users, TrendingUp, Clock, AlertTriangle, BarChart3,
   ArrowUpRight, ArrowDownRight,
 } from 'lucide-react';
-
-const MOCK_STAGES: PipelineStage[] = [
-  { id: 'ps-1', name: 'Applied', status: 'new', count: 342, conversionRate: 100, avgTimeInStageDays: 1.2, dropoffCount: 0 },
-  { id: 'ps-2', name: 'Screening', status: 'screening', count: 186, previousPeriodCount: 164, conversionRate: 54.4, avgTimeInStageDays: 3.5, slaLimitDays: 5, dropoffCount: 156 },
-  { id: 'ps-3', name: 'Phone Screen', status: 'phone_screen', count: 98, conversionRate: 52.7, avgTimeInStageDays: 4.2, slaLimitDays: 7, dropoffCount: 88 },
-  { id: 'ps-4', name: 'Technical Interview', status: 'technical_interview', count: 54, conversionRate: 55.1, avgTimeInStageDays: 6.8, slaLimitDays: 10, dropoffCount: 44 },
-  { id: 'ps-5', name: 'Onsite Interview', status: 'onsite_interview', count: 28, conversionRate: 51.9, avgTimeInStageDays: 5.1, dropoffCount: 26 },
-  { id: 'ps-6', name: 'Offer Extended', status: 'offer_extended', count: 16, conversionRate: 57.1, avgTimeInStageDays: 3.2, dropoffCount: 12 },
-  { id: 'ps-7', name: 'Hired', status: 'hired', count: 12, conversionRate: 75.0, avgTimeInStageDays: 2.1, dropoffCount: 4 },
-];
-
-const MOCK_SUMMARY: PipelineSummary = {
-  totalActive: 342, totalHired: 12, avgTimeToHireDays: 26.1, overallConversionRate: 3.5, bottleneckCount: 1,
-};
 
 function formatNumber(value: number | null | undefined): string {
   if (value == null || isNaN(value)) return '0';
@@ -91,14 +80,19 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      stages: rawStages = MOCK_STAGES, bottlenecks: rawBottlenecks = [], summary: rawSummary = MOCK_SUMMARY,
+      stages: rawStages = [], bottlenecks: rawBottlenecks = [], summary: rawSummary = {} as Partial<PipelineSummary>,
       showComparison = false, onStageSelect, selectedStage,
-      onBottleneckSelect, className, style,
+      onBottleneckSelect,
+      trends: rawTrends = [],
+      comparisonPeriod: comparisonPeriodProp,
+      exportFormat: exportFormatProp,
+      className, style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
+    const stages = Array.isArray(rawStages) ? rawStages as PipelineStage[] : [];
     const bottlenecks = Array.isArray(rawBottlenecks) ? rawBottlenecks : [];
-    const summary = Array.isArray(rawSummary) ? rawSummary : MOCK_SUMMARY;
+    const summary = (Array.isArray(rawSummary) ? rawSummary : rawSummary ?? {}) as Partial<PipelineSummary>;
+    const trends = Array.isArray(rawTrends) ? rawTrends : [];
 
     const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
@@ -114,11 +108,11 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
 
     /* ── Summary stat icons ──────────────────────────── */
     const statIcons: Record<string, React.ReactNode> = {
-      'Active Candidates': <Users size={16} color={tokens.colors.primaryScale[500]} />,
-      'Total Hired': <TrendingUp size={16} color={tokens.colors.successScale[500]} />,
-      'Avg Time to Hire': <Clock size={16} color={tokens.colors.warningScale[500]} />,
-      'Overall Conversion': <BarChart3 size={16} color={tokens.colors.infoScale[500]} />,
-      'Bottlenecks': <AlertTriangle size={16} color={tokens.colors.errorScale[500]} />,
+      'Active Candidates': <Users size={ICON_SIZES.section} color={tokens.colors.primaryScale[500]} />,
+      'Total Hired': <TrendingUp size={ICON_SIZES.section} color={tokens.colors.successScale[500]} />,
+      'Avg Time to Hire': <Clock size={ICON_SIZES.section} color={tokens.colors.warningScale[500]} />,
+      'Overall Conversion': <BarChart3 size={ICON_SIZES.section} color={tokens.colors.infoScale[500]} />,
+      'Bottlenecks': <AlertTriangle size={ICON_SIZES.section} color={tokens.colors.errorScale[500]} />,
     };
 
     return (
@@ -148,18 +142,88 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                 }}>
                   {statIcons[stat.label]}
                 </Box>
-                <Text style={{
-                  fontSize: tokens.typography.fontSize['2xl'] || '1.5rem',
-                  fontWeight: tokens.typography.fontWeight.bold,
-                  color: tokens.colors.neutral[900],
-                }}>
+                <Text style={createStatValueStyle(tokens, { size: '2xl' })}>
                   {stat.value}
                 </Text>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                <Text style={createStatLabelStyle(tokens)}>
                   {stat.label}
                 </Text>
               </Box>
             ))}
+          </Box>
+        )}
+
+        {/* ── Active Indicators ────────────────────────── */}
+        {(comparisonPeriodProp != null || exportFormatProp) && (
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+            {comparisonPeriodProp != null && (
+              <Box style={{
+                padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                backgroundColor: comparisonPeriodProp ? tokens.colors.primaryScale[50] : tokens.colors.neutral[100],
+                color: comparisonPeriodProp ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
+              }}>
+                <BarChart3 size={ICON_SIZES.label} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>
+                  Comparison: {comparisonPeriodProp ? 'On' : 'Off'}
+                </Text>
+              </Box>
+            )}
+            {exportFormatProp && (
+              <Box style={{
+                padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                backgroundColor: tokens.colors.infoScale[50],
+                color: tokens.colors.infoScale[700],
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
+              }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>
+                  Export: {exportFormatProp.toUpperCase()}
+                </Text>
+              </Box>
+            )}
+          </Box>
+        )}
+
+        {/* ── Pipeline Trends ─────────────────────────── */}
+        {trends.length > 0 && (
+          <Box style={{ ...card, padding: tokens.spacing[5] }}>
+            <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[4] }}>
+              <TrendingUp size={14} color={tokens.colors.primaryScale[500]} />
+              <Text style={{ ...sectionHeader, marginBottom: 0 }}>Pipeline Trends</Text>
+            </Flex>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
+              {trends.map((trend: any, i: number) => {
+                const trendColor = (trend.direction ?? 'flat') === 'up' ? tokens.colors.successScale : (trend.direction ?? 'flat') === 'down' ? tokens.colors.errorScale : tokens.colors.neutral;
+                return (
+                  <Box key={trend.metric ?? i} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.md,
+                    backgroundColor: tokens.colors.neutral[50],
+                  }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
+                      {trend.metric ?? trend.name ?? `Trend ${i + 1}`}
+                    </Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                        {trend.value ?? trend.current ?? 0}
+                      </Text>
+                      {trend.change != null && (
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: trendColor[600] }}>
+                          {trend.change > 0 ? '+' : ''}{trend.change}%
+                        </Text>
+                      )}
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
           </Box>
         )}
 

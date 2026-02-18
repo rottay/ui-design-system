@@ -31,20 +31,6 @@ import {
   ChevronRight, MessageSquare, BarChart3, Award,
 } from 'lucide-react';
 
-const MOCK_STAGES: InterviewStage[] = [
-  { id: 's-1', name: 'Technical Screen', order: 1, status: 'completed', aggregationStrategy: 'average', aggregatedScore: 82, maxScore: 100, completedDate: '2025-01-15', panelMemberIds: ['m-1', 'm-2'] },
-  { id: 's-2', name: 'System Design', order: 2, status: 'completed', aggregationStrategy: 'weighted_average', aggregatedScore: 75, maxScore: 100, completedDate: '2025-01-18', panelMemberIds: ['m-3'] },
-  { id: 's-3', name: 'Behavioral', order: 3, status: 'in_progress', aggregationStrategy: 'consensus', maxScore: 100, scheduledDate: '2025-01-22', panelMemberIds: ['m-4'] },
-  { id: 's-4', name: 'Hiring Manager', order: 4, status: 'pending', aggregationStrategy: 'average', maxScore: 100, panelMemberIds: [] },
-];
-
-const MOCK_MEMBERS: PanelMember[] = [
-  { id: 'm-1', name: 'Alex Rivera', role: 'Senior Engineer', stageId: 's-1', overallScore: 85, recommendation: 'hire', submittedAt: '2025-01-15T14:00:00Z', dimensionScores: [{ dimension: 'Problem Solving', score: 9, maxScore: 10 }, { dimension: 'Code Quality', score: 8, maxScore: 10 }], notes: 'Strong problem-solving skills. Clean code approach.' },
-  { id: 'm-2', name: 'Jordan Park', role: 'Staff Engineer', stageId: 's-1', overallScore: 79, recommendation: 'hire', submittedAt: '2025-01-15T16:00:00Z', dimensionScores: [{ dimension: 'Problem Solving', score: 8, maxScore: 10 }, { dimension: 'Code Quality', score: 7, maxScore: 10 }] },
-  { id: 'm-3', name: 'Morgan Lee', role: 'Principal Architect', stageId: 's-2', overallScore: 75, recommendation: 'hire', submittedAt: '2025-01-18T11:00:00Z', dimensionScores: [{ dimension: 'System Design', score: 8, maxScore: 10 }, { dimension: 'Scalability', score: 7, maxScore: 10 }] },
-  { id: 'm-4', name: 'Casey Kim', role: 'Engineering Manager', stageId: 's-3' },
-];
-
 export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
   name: 'BhPanelCoordinator.Timeline',
   render: ({ primitives, props, tokens }: PresetContext<BhPanelCoordinatorProps>) => {
@@ -54,14 +40,14 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
     const stageColors = getStageStatusColors(tokens);
 
     const {
-      stages: rawStages = MOCK_STAGES, members: rawMembers = MOCK_MEMBERS, consensus, candidateName, positionTitle,
+      stages: rawStages = [], members: rawMembers = [], consensus, candidateName, positionTitle,
       selectedStageId: selectedStageIdProp, onStageSelect,
       selectedMemberId: selectedMemberIdProp, onMemberSelect,
       onFinalDecision, loading, className, style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
-    const members = Array.isArray(rawMembers) ? rawMembers : MOCK_MEMBERS;
+    const stages = Array.isArray(rawStages) ? rawStages : [];
+    const members = Array.isArray(rawMembers) ? rawMembers : [];
 
     const [internalStage, setInternalStage] = useState(selectedStageIdProp ?? '');
     const [internalMember, setInternalMember] = useState(selectedMemberIdProp ?? '');
@@ -231,6 +217,26 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                       {stageMembers.length} panelist{stageMembers.length !== 1 ? 's' : ''}
                     </Text>
+                    {stage.interviewMode && (
+                      <Flex align="center" gap={4} style={{
+                        padding: `0 ${tokens.spacing[2]}px`,
+                        borderRadius: tokens.borderRadius.full,
+                        backgroundColor: (stage.interviewMode === 'ai_voice' || stage.interviewMode === 'ai_chat') ? tokens.colors.infoScale[50] : tokens.colors.secondaryScale[50],
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${(stage.interviewMode === 'ai_voice' || stage.interviewMode === 'ai_chat') ? tokens.colors.infoScale[200] : tokens.colors.secondaryScale[200]}`,
+                      }}>
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: (stage.interviewMode === 'ai_voice' || stage.interviewMode === 'ai_chat') ? tokens.colors.infoScale[700] : tokens.colors.secondaryScale[700],
+                        }}>
+                          {stage.interviewMode.replace(/_/g, ' ')}
+                        </Text>
+                      </Flex>
+                    )}
+                    {stage.weight != null && (
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                        w:{stage.weight}
+                      </Text>
+                    )}
                     <ScoreSparkline scores={memberScores} />
                   </Flex>
                 </Box>

@@ -23,6 +23,27 @@ export interface MessageTemplateItem {
   usageCount?: number;
   lastUsed?: Date;
   tags?: string[];
+
+  /** Template delivery type */
+  templateType?: 'email' | 'sms' | 'whatsapp' | 'linkedin';
+  /** Use case this template is designed for */
+  useCase?: string;
+  /** Language code (e.g. "en", "es") */
+  language?: string;
+  /** Response rate percentage for this template */
+  responseRate?: number;
+  /** Whether this template is shared across the organization */
+  isShared?: boolean;
+  /** Whether this is a system-provided template */
+  isSystemTemplate?: boolean;
+  /** Whether this template is published */
+  isPublished?: boolean;
+  /** Whether this template has been approved */
+  isApproved?: boolean;
+  /** Template version number */
+  version?: number;
+  /** User who created this template */
+  createdBy?: string;
 }
 
 export interface BhMessageTemplateGalleryProps extends EngineAwareProps {

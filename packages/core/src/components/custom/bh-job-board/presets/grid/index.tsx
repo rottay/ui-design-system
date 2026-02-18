@@ -58,8 +58,6 @@ function getStatusConfig(tokens: DesignTokens): Record<string, StatusConfig> {
   };
 }
 
-const DEFAULT_STATUS_CFG: StatusConfig = { label: 'Unknown', color: '#666', bgColor: '#f5f5f5', borderColor: '#ddd', dotColor: '#999' };
-
 function getUrgencyConfig(tokens: DesignTokens): Record<string, UrgencyConfig> {
   return {
     low: { label: 'Low', color: tokens.colors.successScale[700], bgColor: tokens.colors.successScale[50], borderColor: tokens.colors.successScale[200] },
@@ -69,6 +67,7 @@ function getUrgencyConfig(tokens: DesignTokens): Record<string, UrgencyConfig> {
   };
 }
 
+const DEFAULT_STATUS_CFG: StatusConfig = { label: 'Unknown', color: '#666', bgColor: '#f5f5f5', borderColor: '#ddd', dotColor: '#999' };
 const DEFAULT_URGENCY_CFG: UrgencyConfig = { label: 'Normal', color: '#666', bgColor: '#f5f5f5', borderColor: '#ddd' };
 
 const STAGE_COLORS_KEYS = ['primaryScale', 'infoScale', 'warningScale', 'successScale', 'secondaryScale', 'errorScale'] as const;
@@ -349,6 +348,21 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
             <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight, marginBottom: 4 }}>{job.title}</Text>
             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>{job.code || job.slug}{job.departmentName ? ` - ${job.departmentName}` : ''}</Text>
           </Box>
+
+          {/* Work Mode Badge */}
+          {job.workMode && (
+            <Box style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: `2px 8px`, borderRadius: tokens.borderRadius.md, fontSize: '10px', fontWeight: tokens.typography.fontWeight.medium, backgroundColor: job.workMode === 'remote' ? tokens.colors.infoScale[50] : job.workMode === 'hybrid' ? tokens.colors.warningScale[50] : tokens.colors.neutral[50], color: job.workMode === 'remote' ? tokens.colors.infoScale[700] : job.workMode === 'hybrid' ? tokens.colors.warningScale[700] : tokens.colors.neutral[700], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${job.workMode === 'remote' ? tokens.colors.infoScale[200] : job.workMode === 'hybrid' ? tokens.colors.warningScale[200] : tokens.colors.neutral[200]}` }}>
+                <Globe size={10} />
+                <Text style={{ fontSize: '10px', color: 'inherit' }}>{job.workMode === 'remote' ? 'Remote' : job.workMode === 'hybrid' ? 'Hybrid' : 'On-site'}</Text>
+              </Box>
+              {(job.salaryMin || job.salaryMax) && (
+                <Text style={{ fontSize: '10px', color: tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>
+                  {job.salaryCurrency || 'USD'} {job.salaryMin ? `${(job.salaryMin / 1000).toFixed(0)}k` : '?'} - {job.salaryMax ? `${(job.salaryMax / 1000).toFixed(0)}k` : '?'}
+                </Text>
+              )}
+            </Box>
+          )}
 
           {/* Location */}
           <Box style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 16 }}>

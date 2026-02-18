@@ -88,26 +88,6 @@ import { getEventTypeLabel, getSeverityLabel, getEventTypeDescription } from '@r
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT: ProctoringEventCardView = {
-  event: {
-    id: 'pe-detail-1',
-    eventType: 'screen_share',
-    severity: 'critical',
-    timestamp: new Date(Date.now() - 300000),
-    metadata: {
-      screenShareTarget: 'Discord',
-      tabSwitchCount: 3,
-      focusLostDuration: 45,
-      ipAddress: '192.168.1.42',
-      userAgent: 'Chrome 120 / macOS',
-      notes: 'Detected active screen share to Discord for 45 seconds during coding challenge.',
-    },
-    reviewed: false,
-    dismissed: false,
-  },
-  candidateName: 'Sarah Johnson',
-};
-
 /* ================================================================== */
 /*  Default Preset                                                     */
 /* ================================================================== */
@@ -122,7 +102,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event: rawEventView = MOCK_EVENT,
+      event: rawEventView,
       onReview,
       onDismiss,
       onClick,
@@ -131,7 +111,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
       style,
     } = props;
 
-    const eventView = Array.isArray(rawEventView) ? rawEventView : MOCK_EVENT;
+    const eventView = (rawEventView ?? {}) as Partial<ProctoringEventCardView>;
 
     const ev = eventView?.event;
     const candidateName = eventView?.candidateName ?? 'Unknown';

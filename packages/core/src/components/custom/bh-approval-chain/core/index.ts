@@ -22,6 +22,17 @@ export interface ApprovalChainStep {
   decidedAt?: Date;
   comment?: string;
   order?: number;
+
+  /** Whether this step is required for chain completion */
+  required?: boolean;
+  /** Whether this is the currently active step */
+  isCurrentStep?: boolean;
+  /** Name of the person this step was delegated to */
+  delegatedTo?: string;
+  /** Name of the person who delegated this step */
+  delegatedBy?: string;
+  /** Date/time when this step was escalated */
+  escalatedAt?: Date;
 }
 
 export interface BhApprovalChainProps extends EngineAwareProps {

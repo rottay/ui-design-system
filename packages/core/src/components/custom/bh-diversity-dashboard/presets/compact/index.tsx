@@ -36,26 +36,6 @@ const SEGMENT_COLORS = (t: DesignTokens) => [
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_METRICS: DiversityMetric[] = [
-  {
-    category: 'Gender',
-    segments: [
-      { label: 'Female', count: 456, percentage: 42 },
-      { label: 'Male', count: 534, percentage: 49 },
-      { label: 'Other', count: 100, percentage: 9 },
-    ],
-  },
-  {
-    category: 'Ethnicity',
-    segments: [
-      { label: 'White', count: 380, percentage: 35 },
-      { label: 'Asian', count: 280, percentage: 26 },
-      { label: 'Hispanic', count: 185, percentage: 17 },
-      { label: 'Other', count: 245, percentage: 22 },
-    ],
-  },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -78,7 +58,6 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
     } = props;
 
     const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

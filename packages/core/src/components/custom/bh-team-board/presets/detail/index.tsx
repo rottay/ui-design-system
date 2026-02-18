@@ -59,37 +59,6 @@ function getTeamPerformanceScore(team: RecruiterTeam): number {
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: RecruiterTeam[] = [
-  { id: 't1', tenantId: 't', companyId: 'c', name: 'Engineering Hiring', code: 'ENG', type: 'technical', description: null, leaderId: 'l1', managerId: null, directorId: null, members: [], activeMemberCount: 6, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 12, currentUtilization: 78, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 88 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't2', tenantId: 't', companyId: 'c', name: 'Product & Design', code: 'PD', type: 'general', description: null, leaderId: 'l2', managerId: null, directorId: null, members: [], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 8, currentUtilization: 65, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 82 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't3', tenantId: 't', companyId: 'c', name: 'GTM Recruiting', code: 'GTM', type: 'volume', description: null, leaderId: 'l3', managerId: null, directorId: null, members: [], activeMemberCount: 5, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 10, currentUtilization: 92, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 74 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't4', tenantId: 't', companyId: 'c', name: 'Executive Search', code: 'EXEC', type: 'executive', description: null, leaderId: 'l4', managerId: null, directorId: null, members: [], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 4, currentUtilization: 56, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 91 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-];
-
-const MOCK_MEMBERS: TeamMember[] = [
-  { id: 'm1', name: 'Sofia Martinez', role: 'Team Lead', allocationPercent: 80, activeJobs: 4, hires: 6 },
-  { id: 'm2', name: 'Alex Kim', role: 'Sr. Recruiter', allocationPercent: 95, activeJobs: 5, hires: 4 },
-  { id: 'm3', name: 'Rachel Green', role: 'Recruiter', allocationPercent: 70, activeJobs: 3, hires: 3 },
-  { id: 'm4', name: 'Tom Baker', role: 'Jr. Recruiter', allocationPercent: 60, activeJobs: 2, hires: 2 },
-  { id: 'm5', name: 'Nina Patel', role: 'Sourcer', allocationPercent: 85, activeJobs: 3, hires: 2 },
-  { id: 'm6', name: 'Dave Johnson', role: 'Coordinator', allocationPercent: 40, activeJobs: 1, hires: 1 },
-];
-
-const MOCK_KPIS: TeamKpiData = {
-  hiresVsTarget: { actual: 18, target: 24 },
-  velocityTrend: [12, 14, 13, 16, 15, 18],
-  slaCompliance: 87,
-  satisfactionScore: 4.5,
-};
-
-const MOCK_SPRINT: SprintData = { total: 36, completed: 22, inProgress: 8, blocked: 6, burndownData: [36, 32, 28, 26, 24, 22] };
-
-const MOCK_TARGETS: TeamTarget[] = [
-  { metric: 'Engineering Hires', period: 'Q1 2026', value: 24, current: 18 },
-  { metric: 'Time to Fill Target', period: 'Q1 2026', value: 25, current: 28 },
-  { metric: 'Candidate NPS', period: 'Q1 2026', value: 80, current: 76 },
-  { metric: 'Offer Accept Rate', period: 'Q1 2026', value: 90, current: 87 },
-];
 
 /* ================================================================== */
 /*  Preset                                                             */
@@ -112,11 +81,11 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
       style,
     } = props;
 
-    const teams = teamsProp?.length ? teamsProp : MOCK_TEAMS;
-    const members = memProp?.length ? memProp : MOCK_MEMBERS;
-    const teamKpis = kpiProp ?? MOCK_KPIS;
-    const sprintData = sprintProp ?? MOCK_SPRINT;
-    const targets = targetsProp?.length ? targetsProp : MOCK_TARGETS;
+    const teams = teamsProp?.length ? teamsProp : [];
+    const members = memProp?.length ? memProp : [];
+    const teamKpis = kpiProp ?? {} as Partial<TeamKpiData>;
+    const sprintData = sprintProp ?? {} as Partial<SprintData>;
+    const targets = targetsProp?.length ? targetsProp : [];
 
     const [selectedTeam, setSelectedTeam] = useState(selProp ?? teams[0]?.id);
 
@@ -234,16 +203,16 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card }}>
                   <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>Hires vs Target</Text>
                   <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
-                    {teamKpis.hiresVsTarget.actual}/{teamKpis.hiresVsTarget.target}
+                    {teamKpis.hiresVsTarget?.actual ?? 0}/{teamKpis.hiresVsTarget?.target ?? 0}
                   </Text>
                   <Box style={{ marginTop: t.spacing[2], height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden', width: '100%' }}>
-                    <Box style={{ height: '100%', width: `${(teamKpis.hiresVsTarget.actual / teamKpis.hiresVsTarget.target) * 100}%`, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[500] }} />
+                    <Box style={{ height: '100%', width: `${((teamKpis.hiresVsTarget?.actual ?? 0) / (teamKpis.hiresVsTarget?.target || 1)) * 100}%`, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[500] }} />
                   </Box>
                 </Box>
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card }}>
                   <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>SLA Compliance</Text>
                   <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
-                    {teamKpis.slaCompliance}%
+                    {teamKpis.slaCompliance ?? 0}%
                   </Text>
                 </Box>
                 <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const }}>
@@ -257,13 +226,14 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                 </Box>
                 <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const }}>
                   <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>Velocity</Text>
-                  {teamKpis.velocityTrend.length > 1 && (
+                  {(teamKpis.velocityTrend ?? []).length > 1 && (
                     <svg width={100} height={32} viewBox="0 0 100 32">
                       {(() => {
-                        const max = Math.max(...teamKpis.velocityTrend);
-                        const min = Math.min(...teamKpis.velocityTrend);
+                        const vt = teamKpis.velocityTrend ?? [];
+                        const max = Math.max(...vt);
+                        const min = Math.min(...vt);
                         const range = max - min || 1;
-                        const pts = teamKpis.velocityTrend.map((v, i) => `${(i / (teamKpis.velocityTrend.length - 1)) * 100},${30 - ((v - min) / range) * 26}`).join(' ');
+                        const pts = vt.map((v: number, i: number) => `${(i / (vt.length - 1)) * 100},${30 - ((v - min) / range) * 26}`).join(' ');
                         return <polyline points={pts} fill="none" stroke={t.colors.primaryScale[400]} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
                       })()}
                     </svg>
@@ -282,6 +252,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                   </Box>
                   {members.map(mem => {
                     const allocColor = mem.allocationPercent >= 90 ? t.colors.errorScale[500] : mem.allocationPercent >= 70 ? t.colors.warningScale[500] : t.colors.successScale[500];
+                    const isEditing = props.editingMember === mem.id;
                     return (
                       <Box key={mem.id} style={{
                         display: 'flex',
@@ -289,6 +260,8 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                         gap: t.spacing[3],
                         padding: `${t.spacing[3]}px ${t.spacing[5]}px`,
                         borderBottom: `1px solid ${t.colors.neutral[100]}`,
+                        backgroundColor: isEditing ? t.colors.primaryScale[50] : 'transparent',
+                        borderLeft: isEditing ? `3px solid ${t.colors.primaryScale[500]}` : '3px solid transparent',
                       }}>
                         <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>
@@ -313,6 +286,27 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                           </Box>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], flexShrink: 0 }}>{mem.allocationPercent}%</Text>
                         </Box>
+                        {props.onMemberEdit && (
+                          <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`Edit ${mem.name}`}
+                            onClick={() => props.onMemberEdit?.(isEditing ? null : mem.id)}
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); props.onMemberEdit?.(isEditing ? null : mem.id); } }}
+                            style={{
+                              padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                              borderRadius: t.borderRadius.md,
+                              border: `1px solid ${isEditing ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+                              backgroundColor: isEditing ? t.colors.primaryScale[50] : t.colors.common.white,
+                              color: isEditing ? t.colors.primaryScale[600] : t.colors.neutral[500],
+                              fontSize: t.typography.fontSize.xs,
+                              cursor: 'pointer',
+                              flexShrink: 0,
+                            }}
+                          >
+                            <Settings size={12} />
+                          </Box>
+                        )}
                       </Box>
                     );
                   })}
@@ -355,7 +349,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                       <svg width={100} height={100} viewBox="0 0 100 100">
                         {(() => {
                           const total = sprintData.total || 1;
-                          const pct = sprintData.completed / total;
+                          const pct = (sprintData.completed ?? 0) / total;
                           const r = 38;
                           const circ = 2 * Math.PI * r;
                           return (

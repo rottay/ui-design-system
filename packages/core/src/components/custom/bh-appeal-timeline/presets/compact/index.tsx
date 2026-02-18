@@ -50,12 +50,6 @@ function getEventColor(type: AppealTimelineEvent['type'], t: DesignTokens): stri
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENTS: AppealTimelineEvent[] = [
-  { id: 'e-1', type: 'submitted', description: 'Appeal submitted', date: new Date(Date.now() - 259200000), actor: 'Maria Garcia' },
-  { id: 'e-2', type: 'assigned', description: 'Assigned to reviewer', date: new Date(Date.now() - 172800000), actor: 'System' },
-  { id: 'e-3', type: 'reviewed', description: 'Review completed', date: new Date(Date.now() - 86400000), actor: 'David Park' },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -69,14 +63,13 @@ export const CompactBhAppealTimeline = createPreset<BhAppealTimelineProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events: rawEvents = MOCK_EVENTS,
+      events: rawEvents = [],
       onEventClick,
       className,
       style,
     } = props;
 
-    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
-
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

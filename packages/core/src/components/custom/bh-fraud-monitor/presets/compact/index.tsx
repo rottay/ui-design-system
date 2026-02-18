@@ -20,13 +20,6 @@ import {
 import type { DesignTokens } from '../../../../../types';
 import { ShieldAlert, AlertTriangle, Clock } from 'lucide-react';
 
-const MOCK_EVENTS: ProctoringEvent[] = [
-  { id: 'fe-1', type: 'tab_switch', severity: 'high', timestamp: '2025-01-20T10:15:00Z', description: 'Tab switch during coding challenge', scorableId: 'sc-1', candidateName: 'John Doe', reviewStatus: 'pending' },
-  { id: 'fe-2', type: 'copy_paste', severity: 'critical', timestamp: '2025-01-20T10:18:00Z', description: 'Large code block pasted from clipboard', scorableId: 'sc-1', candidateName: 'John Doe', reviewStatus: 'flagged' },
-  { id: 'fe-3', type: 'focus_loss', severity: 'medium', timestamp: '2025-01-20T10:22:00Z', description: 'Browser lost focus for 45 seconds', scorableId: 'sc-2', candidateName: 'Jane Smith', reviewStatus: 'pending' },
-  { id: 'fe-4', type: 'suspicious_timing', severity: 'low', timestamp: '2025-01-20T10:30:00Z', description: 'Unusually fast answer submission', scorableId: 'sc-3', candidateName: 'Alex Johnson', reviewStatus: 'dismissed' },
-];
-
 const EVENT_TYPE_SCALE: Record<EventType, 'error' | 'warning' | 'info' | 'primary' | 'secondary'> = {
   tab_switch: 'warning', copy_paste: 'error', screen_share: 'error',
   browser_resize: 'info', focus_loss: 'warning', suspicious_timing: 'error', similarity_flag: 'primary',
@@ -42,9 +35,9 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const { events: rawEvents = MOCK_EVENTS, stats, selectedEventId, onEventSelect, loading, className, style } = props;
+    const { events: rawEvents = [], stats, timeRange, selectedEventId, onEventSelect, loading, className, style } = props;
 
-    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     const handleEventSelect = useCallback((id: string) => {
@@ -111,7 +104,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
               fontWeight: tokens.typography.fontWeight.bold,
               color: tokens.colors.neutral[900],
             }}>
-              Fraud Events
+              Fraud Events{timeRange ? ` - ${timeRange}` : ''}
             </Text>
             <Box style={{
               ...createBadgeStyle(tokens, 'primary'),

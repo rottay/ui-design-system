@@ -56,40 +56,6 @@ function getDeltaLabel(delta: number, suffix = ''): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_JOB_A: ComparisonJob = {
-  id: 'j-1',
-  title: 'Senior Software Engineer',
-  department: 'Engineering',
-  recruiter: 'Anna Smith',
-  totalCandidates: 156,
-  timeToHireDays: 34,
-  overallConversionRate: 10,
-  stages: [
-    { name: 'Applied', candidateCount: 156, conversionRate: 68, avgDaysInStage: 2 },
-    { name: 'Screening', candidateCount: 106, conversionRate: 52, avgDaysInStage: 4 },
-    { name: 'Interview', candidateCount: 55, conversionRate: 45, avgDaysInStage: 8 },
-    { name: 'Assessment', candidateCount: 25, conversionRate: 64, avgDaysInStage: 6 },
-    { name: 'Offer', candidateCount: 16, conversionRate: 82, avgDaysInStage: 3 },
-  ],
-};
-
-const MOCK_JOB_B: ComparisonJob = {
-  id: 'j-2',
-  title: 'Product Manager',
-  department: 'Product',
-  recruiter: 'Bob Jones',
-  totalCandidates: 98,
-  timeToHireDays: 28,
-  overallConversionRate: 14,
-  stages: [
-    { name: 'Applied', candidateCount: 98, conversionRate: 72, avgDaysInStage: 1 },
-    { name: 'Screening', candidateCount: 71, conversionRate: 58, avgDaysInStage: 3 },
-    { name: 'Interview', candidateCount: 41, conversionRate: 56, avgDaysInStage: 5 },
-    { name: 'Assessment', candidateCount: 23, conversionRate: 61, avgDaysInStage: 4 },
-    { name: 'Offer', candidateCount: 14, conversionRate: 86, avgDaysInStage: 2 },
-  ],
-};
-
 /* ================================================================== */
 /*  Overlay Preset                                                     */
 /* ================================================================== */
@@ -104,20 +70,21 @@ export const OverlayBhPipelineComparison = createPreset<BhPipelineComparisonProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      jobA: rawJobA = MOCK_JOB_A,
-      jobB: rawJobB = MOCK_JOB_B,
+      jobA: rawJobA = {} as Partial<ComparisonJob>,
+      jobB: rawJobB = {} as Partial<ComparisonJob>,
       onSwap,
       showDelta = true,
       onStageClick,
+      metric,
+      period,
       className,
       style,
     } = props;
 
-    const jobA = Array.isArray(rawJobA) ? rawJobA : MOCK_JOB_A;
-    const jobB = Array.isArray(rawJobB) ? rawJobB : MOCK_JOB_B;
+    const jobA = (Array.isArray(rawJobA) ? rawJobA : rawJobA ?? {}) as Partial<ComparisonJob>;
+    const jobB = (Array.isArray(rawJobB) ? rawJobB : rawJobB ?? {}) as Partial<ComparisonJob>;
 
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -140,13 +107,13 @@ export const OverlayBhPipelineComparison = createPreset<BhPipelineComparisonProp
     /* Compute paired stages */
     const pairedStages = useMemo(() => {
       const stageNames = new Set([
-        ...(jobA.stages ?? []).map(s => s.name),
-        ...(jobB.stages ?? []).map(s => s.name),
+        ...(jobA.stages ?? []).map((s: ComparisonStage) => s.name),
+        ...(jobB.stages ?? []).map((s: ComparisonStage) => s.name),
       ]);
       return Array.from(stageNames).map(name => ({
         name,
-        a: (jobA.stages ?? []).find(s => s.name === name) ?? null,
-        b: (jobB.stages ?? []).find(s => s.name === name) ?? null,
+        a: (jobA.stages ?? []).find((s: ComparisonStage) => s.name === name) ?? null,
+        b: (jobB.stages ?? []).find((s: ComparisonStage) => s.name === name) ?? null,
       }));
     }, [jobA, jobB]);
 
@@ -201,9 +168,29 @@ export const OverlayBhPipelineComparison = createPreset<BhPipelineComparisonProp
               }}>
                 Pipeline Overlay
               </Text>
-              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
-                Overlaid metrics comparison
-              </Text>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
+                  Overlaid metrics comparison
+                </Text>
+                {metric && (
+                  <Box style={{
+                    ...createBadgeStyle(t, 'secondary'),
+                    borderRadius: badgeRadius,
+                    padding: `0 ${t.spacing[2]}px`,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{metric}</Text>
+                  </Box>
+                )}
+                {period && (
+                  <Box style={{
+                    ...createBadgeStyle(t, 'info'),
+                    borderRadius: badgeRadius,
+                    padding: `0 ${t.spacing[2]}px`,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs }}>{period}</Text>
+                  </Box>
+                )}
+              </Box>
             </Box>
           </Box>
           {onSwap && (

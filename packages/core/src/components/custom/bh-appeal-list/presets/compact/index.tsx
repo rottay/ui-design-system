@@ -49,12 +49,6 @@ function getStatusLabel(status: AppealListItem['status']): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_APPEALS: AppealListItem[] = [
-  { id: 'a-1', candidateName: 'Sarah Johnson', positionTitle: 'Senior Frontend Engineer', status: 'pending', submittedAt: new Date(Date.now() - 3600000), priority: 'high' },
-  { id: 'a-2', candidateName: 'Michael Chen', positionTitle: 'Staff Backend Developer', status: 'under-review', submittedAt: new Date(Date.now() - 86400000), priority: 'medium' },
-  { id: 'a-3', candidateName: 'Emily Rodriguez', positionTitle: 'Data Scientist', status: 'approved', submittedAt: new Date(Date.now() - 172800000), priority: 'low' },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -77,7 +71,6 @@ export const CompactBhAppealList = createPreset<BhAppealListProps>({
     } = props;
 
     const appeals = Array.isArray(rawAppeals) ? rawAppeals : [];
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

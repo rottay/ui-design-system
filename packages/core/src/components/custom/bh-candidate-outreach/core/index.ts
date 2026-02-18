@@ -22,6 +22,16 @@ export type OutreachChannel = 'email' | 'sms' | 'whatsapp' | 'linkedin';
  */
 export interface OutreachRecipient {
   candidate: DBCandidate;
+  /** Seniority level (e.g. 'junior', 'mid', 'senior', 'lead', 'executive') */
+  seniorityLevel?: string;
+  /** Industry of the candidate */
+  industry?: string;
+  /** Current company name */
+  currentCompany?: string;
+  /** Current job title */
+  currentTitle?: string;
+  /** Source where the candidate was found (e.g. 'linkedin', 'referral', 'job_board') */
+  source?: string;
 }
 
 export interface OutreachTemplate {

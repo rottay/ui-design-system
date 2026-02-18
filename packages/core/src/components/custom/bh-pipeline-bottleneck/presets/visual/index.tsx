@@ -58,15 +58,6 @@ function getStageBg(stage: BottleneckStage, t: DesignTokens): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STAGES: BottleneckStage[] = [
-  { id: 's-1', name: 'Applied', candidateCount: 156, avgDaysInStage: 2, expectedDays: 3, isBottleneck: false },
-  { id: 's-2', name: 'Screening', candidateCount: 106, avgDaysInStage: 4, expectedDays: 5, isBottleneck: false },
-  { id: 's-3', name: 'Interview', candidateCount: 55, avgDaysInStage: 8, expectedDays: 7, isBottleneck: false },
-  { id: 's-4', name: 'Assessment', candidateCount: 42, avgDaysInStage: 14, expectedDays: 5, isBottleneck: true },
-  { id: 's-5', name: 'Offer', candidateCount: 20, avgDaysInStage: 3, expectedDays: 4, isBottleneck: false },
-  { id: 's-6', name: 'Hired', candidateCount: 16, avgDaysInStage: 1, expectedDays: 2, isBottleneck: false },
-];
-
 const MOCK_TOTAL = 362;
 
 /* ================================================================== */
@@ -83,17 +74,17 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages: rawStages = MOCK_STAGES,
+      stages: rawStages = [],
       totalCandidates = MOCK_TOTAL,
+      summary,
       onStageClick,
       className,
       style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
+    const stages = Array.isArray(rawStages) ? rawStages : [];
 
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -160,7 +151,7 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
                 Pipeline Bottleneck Analysis
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
-                {totalCandidates} candidates across {stages.length} stages
+                {totalCandidates} candidates across {stages.length} stages{summary?.worstStage ? ` | Worst: ${summary.worstStage}` : ''}{summary?.avgResolutionDays != null ? ` | Avg ${summary.avgResolutionDays}d` : ''}
               </Text>
             </Box>
           </Box>

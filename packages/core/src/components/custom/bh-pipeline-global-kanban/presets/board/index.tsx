@@ -11,7 +11,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Columns3, Plus, Users, AlertTriangle, Star,
   Clock, GripVertical, ChevronRight, Tag,
-  ArrowRight, XCircle, Search,
+  ArrowRight, XCircle, Search, Briefcase,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -82,56 +82,40 @@ function getDefaultStageColorLight(index: number, t: DesignTokens): string {
   return palette[index % palette.length];
 }
 
+function getPriorityBorderColor(priority: string | undefined, t: DesignTokens): string | undefined {
+  switch (priority) {
+    case 'urgent': return t.colors.errorScale[500];
+    case 'high': return t.colors.warningScale[500];
+    case 'low': return t.colors.neutral[300];
+    default: return undefined;
+  }
+}
+
+function getPriorityBadgeKey(priority: string | undefined): 'error' | 'warning' | 'info' | 'secondary' {
+  switch (priority) {
+    case 'urgent': return 'error';
+    case 'high': return 'warning';
+    case 'low': return 'secondary';
+    default: return 'info';
+  }
+}
+
+function getSourceLabel(source: string | undefined): string {
+  if (!source) return '';
+  switch (source) {
+    case 'direct': return 'Direct';
+    case 'referral': return 'Referral';
+    case 'agency': return 'Agency';
+    case 'linkedin': return 'LinkedIn';
+    case 'job_board': return 'Job Board';
+    case 'career_site': return 'Career Site';
+    default: return source.charAt(0).toUpperCase() + source.slice(1);
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_STAGES: KanbanStage[] = [
-  {
-    id: 'applied',
-    name: 'Applied',
-    limit: 30,
-    candidates: [
-      { id: 'c-1', name: 'Sarah Johnson', avatarInitial: 'SJ', score: 85, appliedAt: new Date(Date.now() - 86400000 * 1), tags: ['Referred'] },
-      { id: 'c-2', name: 'Michael Chen', avatarInitial: 'MC', score: 72, appliedAt: new Date(Date.now() - 86400000 * 2), tags: ['Senior'] },
-      { id: 'c-3', name: 'Emily Rodriguez', avatarInitial: 'ER', score: 91, appliedAt: new Date(Date.now() - 86400000 * 1), tags: ['Remote'] },
-      { id: 'c-4', name: 'David Park', avatarInitial: 'DP', score: 68, appliedAt: new Date(Date.now() - 86400000 * 3) },
-    ],
-  },
-  {
-    id: 'screening',
-    name: 'Phone Screen',
-    limit: 15,
-    candidates: [
-      { id: 'c-5', name: 'Anna Kowalski', avatarInitial: 'AK', score: 78, appliedAt: new Date(Date.now() - 86400000 * 4), tags: ['Mid-level'] },
-      { id: 'c-6', name: 'James Kim', avatarInitial: 'JK', score: 65, appliedAt: new Date(Date.now() - 86400000 * 5) },
-      { id: 'c-7', name: 'Lisa Wang', avatarInitial: 'LW', score: 88, appliedAt: new Date(Date.now() - 86400000 * 3), tags: ['Senior', 'Referred'] },
-    ],
-  },
-  {
-    id: 'technical',
-    name: 'Technical Interview',
-    limit: 8,
-    candidates: [
-      { id: 'c-8', name: 'Robert Taylor', avatarInitial: 'RT', score: 82, appliedAt: new Date(Date.now() - 86400000 * 7), tags: ['Lead'] },
-      { id: 'c-9', name: 'Maria Santos', avatarInitial: 'MS', score: 94, appliedAt: new Date(Date.now() - 86400000 * 6) },
-    ],
-  },
-  {
-    id: 'final',
-    name: 'Final Round',
-    limit: 5,
-    candidates: [
-      { id: 'c-10', name: 'Thomas Brown', avatarInitial: 'TB', score: 89, appliedAt: new Date(Date.now() - 86400000 * 10), tags: ['Senior'] },
-    ],
-  },
-  {
-    id: 'offer',
-    name: 'Offer',
-    limit: 3,
-    candidates: [],
-  },
-];
 
 /* ================================================================== */
 /*  Board Preset                                                       */
@@ -162,7 +146,6 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
 
     const [hoveredCard, setHoveredCard] = useState<string | null>(null);
     const [dragOverStage, setDragOverStage] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -236,12 +219,51 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
               </Text>
             </Box>
           </Box>
-          <Box style={{
-            ...createBadgeStyle(t, 'primary'),
-            borderRadius: badgeRadius,
-          }}>
-            <Users size={12} style={{ marginRight: 4 }} />
-            <Text style={{ fontSize: t.typography.fontSize.xs }}>{totalCandidates} total</Text>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            {/* Active filter indicators */}
+            {filters?.priority && (
+              <Box style={{
+                ...createBadgeStyle(t, getPriorityBadgeKey(filters.priority)),
+                borderRadius: badgeRadius,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  {filters.priority.charAt(0).toUpperCase() + filters.priority.slice(1)}
+                </Text>
+              </Box>
+            )}
+            {filters?.source && (
+              <Box style={{
+                ...createBadgeStyle(t, 'info'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+              }}>
+                <Briefcase size={10} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{getSourceLabel(filters.source)}</Text>
+              </Box>
+            )}
+            {filters?.slaBreached != null && (
+              <Box style={{
+                ...createBadgeStyle(t, filters.slaBreached ? 'error' : 'success'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+              }}>
+                <AlertTriangle size={10} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  {filters.slaBreached ? 'SLA Breached' : 'SLA OK'}
+                </Text>
+              </Box>
+            )}
+            <Box style={{
+              ...createBadgeStyle(t, 'primary'),
+              borderRadius: badgeRadius,
+            }}>
+              <Users size={12} style={{ marginRight: 4 }} />
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>{totalCandidates} total</Text>
+            </Box>
           </Box>
         </Box>
 
@@ -399,6 +421,9 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                           ...card,
                           padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                           cursor: 'pointer',
+                          borderLeft: getPriorityBorderColor(candidate.priority, t)
+                            ? `3px solid ${getPriorityBorderColor(candidate.priority, t)}`
+                            : undefined,
                           borderColor: isSelected ? t.colors.primaryScale[400] : undefined,
                           backgroundColor: isSelected
                             ? t.colors.primaryScale[50]
@@ -448,12 +473,36 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                           )}
                         </Box>
 
-                        {/* Card row 2: time + tags */}
+                        {/* Card row 2: time + SLA + source + tags */}
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], paddingLeft: 22, flexWrap: 'wrap' }}>
                           <Box style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <Clock size={9} color={getDaysColor(daysInStage, t)} />
                             <Text style={{ fontSize: 9, color: getDaysColor(daysInStage, t) }}>{daysInStage}d</Text>
                           </Box>
+                          {candidate.slaBreached && (
+                            <Box
+                              style={{ display: 'flex', alignItems: 'center', gap: 2 }}
+                              aria-label="SLA breached"
+                            >
+                              <AlertTriangle size={9} color={t.colors.errorScale[500]} />
+                              <Text style={{ fontSize: 9, color: t.colors.errorScale[600], fontWeight: t.typography.fontWeight.bold }}>
+                                SLA
+                              </Text>
+                            </Box>
+                          )}
+                          {candidate.source && (
+                            <Box style={{
+                              ...createBadgeStyle(t, 'info'),
+                              borderRadius: badgeRadius,
+                              padding: `0px ${t.spacing[1]}px`,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 2,
+                            }}>
+                              <Briefcase size={8} />
+                              <Text style={{ fontSize: 9 }}>{getSourceLabel(candidate.source)}</Text>
+                            </Box>
+                          )}
                           {candidate.tags?.map((tag) => (
                             <Box key={tag} style={{
                               ...createBadgeStyle(t, 'secondary'),

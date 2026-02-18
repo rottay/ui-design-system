@@ -36,22 +36,6 @@ import {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_TEMPLATE: ProcessTemplate = {
-  id: 'tpl-1',
-  name: 'Standard Engineering Hiring',
-  description: 'Full-loop process for engineering roles with technical and behavioral rounds.',
-  isActive: true,
-  createdAt: '2025-01-01T00:00:00Z',
-  updatedAt: '2025-01-15T00:00:00Z',
-  stages: [
-    { id: 'stg-1', name: 'Application Review', type: 'application_review', order: 1, isRequired: true, durationDays: 3, description: 'Resume and portfolio screening' },
-    { id: 'stg-2', name: 'Phone Screen', type: 'phone_screen', order: 2, isRequired: true, durationDays: 5, interviewerCount: 1, description: '30-min introductory call' },
-    { id: 'stg-3', name: 'Technical Interview', type: 'technical_interview', order: 3, isRequired: true, durationDays: 7, interviewerCount: 2, description: 'Live coding and system design', scoringRubrics: [{ id: 'sr-1', dimensionName: 'Problem Solving', weight: 40, maxScore: 10 }, { id: 'sr-2', dimensionName: 'Code Quality', weight: 30, maxScore: 10 }, { id: 'sr-3', dimensionName: 'Communication', weight: 30, maxScore: 10 }] },
-    { id: 'stg-4', name: 'Onsite Interview', type: 'onsite_interview', order: 4, isRequired: true, durationDays: 10, interviewerCount: 4, description: 'Full-day onsite with team' },
-    { id: 'stg-5', name: 'Offer', type: 'offer', order: 5, isRequired: true, durationDays: 5, description: 'Compensation package and negotiation' },
-  ],
-};
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -101,13 +85,12 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      template: rawTemplate = MOCK_TEMPLATE, selectedStage, onStageSelect, onStageReorder,
+      template: rawTemplate = {} as Partial<ProcessTemplate>, selectedStage, onStageSelect, onStageReorder,
       onStageAdd, onStageRemove, onStageUpdate, onTemplateUpdate,
       readOnly = false, className, style,
     } = props;
 
-    const template = Array.isArray(rawTemplate) ? rawTemplate : MOCK_TEMPLATE;
-
+    const template = Array.isArray(rawTemplate) ? rawTemplate : ({} as Partial<ProcessTemplate>);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -155,7 +138,7 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
     }
 
     const stages = useMemo(
-      () => [...template.stages].sort((a, b) => a.order - b.order),
+      () => [...(template.stages ?? [])].sort((a, b) => a.order - b.order),
       [template.stages],
     );
     const selectedStageData = useMemo(
@@ -311,10 +294,15 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
                           </Box>
                         </Box>
 
-                        <Box style={{ display: 'flex', gap: t.spacing[1], flexShrink: 0 }}>
+                        <Box style={{ display: 'flex', gap: t.spacing[1], flexShrink: 0, flexWrap: 'wrap' as const }}>
                           {stage.isRequired && (
                             <Box style={{ ...createBadgeStyle(t, 'error'), borderRadius: badgeRadius }}>
                               <Text style={{ fontSize: t.typography.fontSize.xs }}>Required</Text>
+                            </Box>
+                          )}
+                          {stage.isOptional && (
+                            <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeRadius }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>Optional</Text>
                             </Box>
                           )}
                           {hasKO && (
@@ -332,11 +320,17 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
                       </Box>
 
                       {/* Meta row */}
-                      <Box style={{ display: 'flex', gap: t.spacing[3], marginTop: t.spacing[2] }}>
+                      <Box style={{ display: 'flex', gap: t.spacing[3], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
                         {stage.durationDays && (
                           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                             <Clock size={10} />
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{stage.durationDays}d</Text>
+                          </Box>
+                        )}
+                        {stage.estimatedDuration != null && (
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                            <Clock size={10} />
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{stage.estimatedDuration}h est</Text>
                           </Box>
                         )}
                         {stage.interviewerCount && (
@@ -352,6 +346,19 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
                             <Target size={10} />
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                               {stage.scoringRubrics.length} dimensions
+                            </Text>
+                          </Box>
+                        )}
+                        {stage.weight != null && (
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>w:{stage.weight}</Text>
+                          </Box>
+                        )}
+                        {stage.requiredApprovals != null && stage.requiredApprovals > 0 && (
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                            <UserCheck size={10} />
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                              {stage.requiredApprovals} approval{stage.requiredApprovals > 1 ? 's' : ''}
                             </Text>
                           </Box>
                         )}
@@ -508,12 +515,22 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
                         <Box key={rule.id} style={{
                           padding: t.spacing[3],
                           borderRadius: t.borderRadius.lg,
-                          backgroundColor: t.colors.warningScale[50],
-                          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.warningScale[100]}`,
+                          backgroundColor: rule.severity === 'critical' ? t.colors.errorScale[50] : t.colors.warningScale[50],
+                          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${rule.severity === 'critical' ? t.colors.errorScale[100] : t.colors.warningScale[100]}`,
                         }}>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[800] }}>
-                            {rule.field} {rule.operator.replace('_', ' ')} "{rule.value}" {'\u2192'} {rule.action}
-                          </Text>
+                          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: rule.severity === 'critical' ? t.colors.errorScale[800] : t.colors.warningScale[800] }}>
+                              {rule.field} {rule.operator.replace('_', ' ')} "{rule.value}" {'\u2192'} {rule.action}
+                            </Text>
+                            <Box style={{ display: 'flex', gap: t.spacing[1] }}>
+                              {rule.severity && (
+                                <Text style={{ fontSize: '10px', color: rule.severity === 'critical' || rule.severity === 'high' ? t.colors.errorScale[600] : t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' as const }}>{rule.severity}</Text>
+                              )}
+                              {rule.autoReject && (
+                                <Text style={{ fontSize: '10px', color: t.colors.errorScale[600], fontWeight: t.typography.fontWeight.bold }}>Auto-reject</Text>
+                              )}
+                            </Box>
+                          </Box>
                         </Box>
                       ))}
                     </Box>

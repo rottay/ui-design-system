@@ -30,33 +30,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_DEPARTMENTS: DepartmentConfig[] = [
-  { name: 'Engineering' },
-  { name: 'Design' },
-  { name: 'Sales' },
-];
-
-const MOCK_DATA: TimeToHireDataPoint[] = [
-  { date: '2025-07', department: 'Engineering', days: 42 },
-  { date: '2025-08', department: 'Engineering', days: 38 },
-  { date: '2025-09', department: 'Engineering', days: 35 },
-  { date: '2025-10', department: 'Engineering', days: 32 },
-  { date: '2025-11', department: 'Engineering', days: 29 },
-  { date: '2025-12', department: 'Engineering', days: 31 },
-  { date: '2025-07', department: 'Design', days: 28 },
-  { date: '2025-08', department: 'Design', days: 25 },
-  { date: '2025-09', department: 'Design', days: 22 },
-  { date: '2025-10', department: 'Design', days: 24 },
-  { date: '2025-11', department: 'Design', days: 20 },
-  { date: '2025-12', department: 'Design', days: 19 },
-  { date: '2025-07', department: 'Sales', days: 18 },
-  { date: '2025-08', department: 'Sales', days: 22 },
-  { date: '2025-09', department: 'Sales', days: 20 },
-  { date: '2025-10', department: 'Sales', days: 16 },
-  { date: '2025-11', department: 'Sales', days: 14 },
-  { date: '2025-12', department: 'Sales', days: 15 },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -96,22 +69,23 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      data: rawData = MOCK_DATA,
-      departments: rawDepartments = MOCK_DEPARTMENTS,
+      data: rawData = [],
+      departments: rawDepartments = [],
       targetDays = 30,
       rollingAvgWindow = 3,
       title = 'Time to Hire',
       onDataPointClick,
+      benchmark,
+      period,
       loading,
       className,
       style,
     } = props;
 
-    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
-    const departments = Array.isArray(rawDepartments) ? rawDepartments : MOCK_DEPARTMENTS;
+    const data = Array.isArray(rawData) ? rawData : [];
+    const departments = Array.isArray(rawDepartments) ? rawDepartments : [];
 
     const [hoveredDept, setHoveredDept] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -248,15 +222,27 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
                 </Text>
               </Box>
             </Box>
-            <Box style={{
-              ...createBadgeStyle(t, 'info'),
-              borderRadius: badgeRadius,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-            }}>
-              <Target size={12} />
-              <Text style={{ fontSize: t.typography.fontSize.xs }}>Target: {targetDays}d</Text>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              {period && (
+                <Box style={{
+                  ...createBadgeStyle(t, 'secondary'),
+                  borderRadius: badgeRadius,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'uppercase' as const }}>{period}</Text>
+                </Box>
+              )}
+              <Box style={{
+                ...createBadgeStyle(t, 'info'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+              }}>
+                <Target size={12} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Target: {targetDays}d</Text>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -312,6 +298,31 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
                 >
                   Target
                 </text>
+
+                {/* Benchmark line */}
+                {benchmark !== undefined && benchmark > 0 && (
+                  <>
+                    <line
+                      x1={padding.left}
+                      x2={width - padding.right}
+                      y1={yScale(benchmark)}
+                      y2={yScale(benchmark)}
+                      stroke={t.colors.infoScale[400]}
+                      strokeWidth={1.5}
+                      strokeDasharray="3 3"
+                    />
+                    <text
+                      x={padding.left - 8}
+                      y={yScale(benchmark) - 6}
+                      fill={t.colors.infoScale[500]}
+                      fontSize={9}
+                      fontWeight={600}
+                      textAnchor="end"
+                    >
+                      Benchmark
+                    </text>
+                  </>
+                )}
 
                 {/* Y-axis labels */}
                 {yTicks.map(tick => (

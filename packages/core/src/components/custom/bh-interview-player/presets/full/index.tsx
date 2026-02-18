@@ -313,6 +313,22 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
           }}>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: statusStyle.text }}>{interviewInfo.status.replace(/_/g, ' ')}</Text>
           </Box>
+          {interviewInfo.billingMode && (
+            <Box style={{
+              ...createBadgeStyle(t, 'info'),
+              padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.full,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>{interviewInfo.billingMode.replace(/_/g, ' ')}</Text>
+            </Box>
+          )}
+          {interviewInfo.proctoringScore != null && (
+            <Box style={{
+              ...createBadgeStyle(t, interviewInfo.proctoringScore >= 80 ? 'success' : interviewInfo.proctoringScore >= 50 ? 'warning' : 'error'),
+              padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.full,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>Proctor: {interviewInfo.proctoringScore}%</Text>
+            </Box>
+          )}
         </Box>
 
         {/* Audio Player */}

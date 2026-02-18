@@ -22,6 +22,25 @@ export interface WorkflowRule {
   actions?: string[];
   enabled?: boolean;
   lastTriggered?: Date;
+
+  /** Description of what this rule does */
+  description?: string;
+  /** Rule execution priority */
+  priority?: 'low' | 'medium' | 'high';
+  /** Category for grouping rules */
+  category?: string;
+  /** Number of times this rule has been triggered */
+  triggerCount?: number;
+  /** Date of last successful execution */
+  lastSuccess?: Date;
+  /** Date of last failed execution */
+  lastFailure?: Date;
+  /** Number of failed executions */
+  failureCount?: number;
+  /** User who created this rule */
+  createdBy?: string;
+  /** Whether this is a system-defined rule */
+  isSystem?: boolean;
 }
 
 export interface BhWorkflowAutomationProps extends EngineAwareProps {

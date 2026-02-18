@@ -24,7 +24,7 @@ import {
   createIconContainerStyle,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhJobDetailProps, JobDetailTab, MetricsTimeRange } from '../../core';
+import type { BhJobDetailProps, JobDetailTab, MetricsTimeRange, JobInfo } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Briefcase, Building2, Clock, AlertTriangle, TrendingUp, TrendingDown, Minus,
@@ -104,7 +104,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
-    const JOB_INFO_DEFAULT = { title: '', code: '', status: 'draft' as const, clientName: '', daysOpen: 0, urgency: 'low' as const };
+    const JOB_INFO_DEFAULT: JobInfo = { title: '', code: '', status: 'draft', clientName: '', daysOpen: 0, urgency: 'low' };
     const { jobInfo: _jobInfo = JOB_INFO_DEFAULT, metrics: rawMetrics = [], funnelStages: rawFunnelStages = [], candidates: rawCandidates = [], templateInfo, events: rawEvents = [], analytics, settings, activeTab: activeTabProp, onTabChange, onEdit, onPause, onClose, onDuplicate, onCandidateClick, onSettingsSave, className, style } = props;
 
     const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
@@ -203,6 +203,11 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], color: t.colors.neutral[600], fontSize: t.typography.fontSize.sm }}><Building2 size={14} /><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{jobInfo.clientName}</Text></Box>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], color: t.colors.neutral[600], fontSize: t.typography.fontSize.sm }}><Clock size={14} /><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{jobInfo.daysOpen} days open</Text></Box>
               <Badge_ bg={uc.bg} color={uc.color} border={uc.border}><AlertTriangle size={12} />{jobInfo.urgency}</Badge_>
+              {jobInfo.workMode && (
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: jobInfo.workMode === 'remote' ? t.colors.infoScale[100] : jobInfo.workMode === 'hybrid' ? t.colors.warningScale[100] : t.colors.neutral[100], color: jobInfo.workMode === 'remote' ? t.colors.infoScale[700] : jobInfo.workMode === 'hybrid' ? t.colors.warningScale[700] : t.colors.neutral[700], border: `${bdr} ${jobInfo.workMode === 'remote' ? t.colors.infoScale[200] : jobInfo.workMode === 'hybrid' ? t.colors.warningScale[200] : t.colors.neutral[200]}` }}>
+                  <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{jobInfo.workMode === 'remote' ? 'Remote' : jobInfo.workMode === 'hybrid' ? 'Hybrid' : 'On-site'}</Text>
+                </Box>
+              )}
             </Box>
           </Box>
           <Box style={{ position: 'relative' as const, flexShrink: 0 }}>
@@ -502,7 +507,28 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, backgroundColor: t.colors.common.white, borderRadius: t.borderRadius.lg, border: `${bdr} ${t.colors.neutral[100]}`, boxShadow: t.shadows.lg, width: '100%', overflow: 'hidden', ...entrance.animate, transition: entrance.transition, ...glassCard, ...style }}>
         {renderHeader()}
         {renderTabs()}
-        {activeTab === 'overview' && <>{renderMetrics()}{renderFunnel()}{renderCandidates()}{renderTemplate()}{renderActivity()}</>}
+        {activeTab === 'overview' && <>{renderMetrics()}{renderFunnel()}{renderCandidates()}{renderTemplate()}{jobInfo.benefits && jobInfo.benefits.length > 0 && (
+          <Box style={{ padding: sectionPad }}>
+            <SectionHeader_ expanded={true} onToggle={() => {}} label="Benefits & Perks" />
+            <Box style={{ ...cardBase, padding: t.spacing[4] }}>
+              <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[2] }}>
+                {jobInfo.benefits.map((benefit, idx) => (
+                  <Text key={idx} style={createBadgeStyle(t, 'primary')}>{benefit}</Text>
+                ))}
+              </Box>
+              {jobInfo.perks && jobInfo.perks.length > 0 && (
+                <Box style={{ marginTop: t.spacing[3] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], marginBottom: t.spacing[2], display: 'block' }}>Perks</Text>
+                  <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[2] }}>
+                    {jobInfo.perks.map((perk, idx) => (
+                      <Text key={idx} style={createBadgeStyle(t, 'secondary')}>{perk}</Text>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          </Box>
+        )}{renderActivity()}</>}
         {activeTab === 'candidates' && renderCandidates()}
         {activeTab === 'analytics' && renderAnalytics()}
         {activeTab === 'settings' && renderSettings()}

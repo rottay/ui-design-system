@@ -77,8 +77,6 @@ function generateMockData(): HeatmapDataPoint[] {
   return data;
 }
 
-const MOCK_DATA = generateMockData();
-
 /* ================================================================== */
 /*  Grid Preset                                                        */
 /* ================================================================== */
@@ -92,7 +90,7 @@ export const GridBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      data: rawData = MOCK_DATA,
+      data: rawData = undefined,
       onCellClick,
       colorScale = 'error',
       showValues = false,
@@ -100,7 +98,7 @@ export const GridBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>({
       style,
     } = props;
 
-    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
+    const data = Array.isArray(rawData) ? rawData : [] as HeatmapDataPoint[];
 
     const [hoveredCell, setHoveredCell] = useState<{ day: number; hour: number } | null>(null);
 
@@ -113,11 +111,11 @@ export const GridBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>({
 
     const dataMap = useMemo(() => {
       const map = new Map<string, number>();
-      data.forEach(d => map.set(`${d.day}-${d.hour}`, d.count));
+      data.forEach((d: HeatmapDataPoint) => map.set(`${d.day}-${d.hour}`, d.count));
       return map;
     }, [data]);
 
-    const maxCount = useMemo(() => Math.max(...data.map(d => d.count), 1), [data]);
+    const maxCount = useMemo(() => Math.max(...data.map((d: HeatmapDataPoint) => d.count), 1), [data]);
 
     const handleCellClick = useCallback((day: number, hour: number) => {
       const count = dataMap.get(`${day}-${hour}`) ?? 0;
@@ -259,23 +257,61 @@ export const GridBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>({
           </Box>
 
           {/* Tooltip */}
-          {hoveredCell && (
-            <Box style={{
-              marginTop: t.spacing[2],
-              padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
-              backgroundColor: t.colors.neutral[800],
-              borderRadius: t.borderRadius.sm,
-              display: 'inline-flex',
-              gap: t.spacing[1],
-            }}>
-              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white }}>
-                {DAY_LABELS[hoveredCell.day]} {HOUR_LABELS[hoveredCell.hour]}:
-              </Text>
-              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white, fontWeight: t.typography.fontWeight.bold }}>
-                {dataMap.get(`${hoveredCell.day}-${hoveredCell.hour}`) ?? 0} events
-              </Text>
-            </Box>
-          )}
+          {hoveredCell && (() => {
+            const cellKey = `${hoveredCell.day}-${hoveredCell.hour}`;
+            const cellCount = dataMap.get(cellKey) ?? 0;
+            const cellData = data?.find(d => d.day === hoveredCell.day && d.hour === hoveredCell.hour);
+            return (
+              <Box style={{
+                marginTop: t.spacing[2],
+                padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                backgroundColor: t.colors.neutral[800],
+                borderRadius: t.borderRadius.sm,
+                display: 'inline-flex',
+                flexDirection: 'column' as const,
+                gap: t.spacing[1],
+              }}>
+                <Box style={{ display: 'flex', gap: t.spacing[1] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white }}>
+                    {DAY_LABELS[hoveredCell.day]} {HOUR_LABELS[hoveredCell.hour]}:
+                  </Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white, fontWeight: t.typography.fontWeight.bold }}>
+                    {cellCount} events
+                  </Text>
+                </Box>
+                {cellData?.severityBreakdown && (
+                  <Box style={{ display: 'flex', gap: t.spacing[2] }}>
+                    {cellData.severityBreakdown.critical != null && cellData.severityBreakdown.critical > 0 && (
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[300] }}>
+                        C:{cellData.severityBreakdown.critical}
+                      </Text>
+                    )}
+                    {cellData.severityBreakdown.high != null && cellData.severityBreakdown.high > 0 && (
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[200] }}>
+                        H:{cellData.severityBreakdown.high}
+                      </Text>
+                    )}
+                    {cellData.severityBreakdown.medium != null && cellData.severityBreakdown.medium > 0 && (
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[300] }}>
+                        M:{cellData.severityBreakdown.medium}
+                      </Text>
+                    )}
+                    {cellData.severityBreakdown.low != null && cellData.severityBreakdown.low > 0 && (
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[300] }}>
+                        L:{cellData.severityBreakdown.low}
+                      </Text>
+                    )}
+                  </Box>
+                )}
+                {cellData?.reviewedCount != null && cellData.reviewedCount > 0 && (
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                    {cellData.reviewedCount} reviewed
+                    {cellData.dismissedCount != null && cellData.dismissedCount > 0 ? `, ${cellData.dismissedCount} dismissed` : ''}
+                  </Text>
+                )}
+              </Box>
+            );
+          })()}
         </Box>
         </Box>
       </Box>

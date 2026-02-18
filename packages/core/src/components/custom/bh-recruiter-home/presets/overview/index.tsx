@@ -23,6 +23,10 @@ import {
   createPersonalityAccentBar,
   formatDistanceToNow,
   getAccentAwareLayout,
+  createMetadataFieldStyle,
+  createStatValueStyle,
+  createStatLabelStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type {
   BhRecruiterHomeProps, KpiStat, PipelineJob, UpcomingInterview,
@@ -36,63 +40,6 @@ import {
   Bell, AlertTriangle, UserPlus, XCircle, Sparkles, CheckCircle,
   BarChart3, ArrowRight, X, Zap, FileText, Video,
 } from 'lucide-react';
-
-/* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_KPI: KpiStat[] = [
-  { label: 'Open Roles', value: 12, trend: 'up', trendValue: 8, icon: <Briefcase size={18} /> },
-  { label: 'Active Candidates', value: 248, trend: 'up', trendValue: 15, icon: <Users size={18} /> },
-  { label: 'Interviews This Week', value: 9, trend: 'down', trendValue: 3, icon: <Calendar size={18} /> },
-  { label: 'Avg. Time-to-Fill', value: '28d', trend: 'up', trendValue: 5, icon: <Clock size={18} /> },
-];
-
-const DEFAULT_PIPELINE: PipelineJob[] = [
-  { id: 'j-1', title: 'Senior Frontend Engineer', stages: [{ name: 'Applied', count: 34 }, { name: 'Screen', count: 12 }, { name: 'Interview', count: 5 }, { name: 'Offer', count: 1 }] },
-  { id: 'j-2', title: 'Product Designer', stages: [{ name: 'Applied', count: 21 }, { name: 'Screen', count: 8 }, { name: 'Interview', count: 3 }, { name: 'Offer', count: 0 }] },
-  { id: 'j-3', title: 'Backend Engineer', stages: [{ name: 'Applied', count: 45 }, { name: 'Screen', count: 15 }, { name: 'Interview', count: 7 }, { name: 'Offer', count: 2 }] },
-];
-
-const DEFAULT_INTERVIEWS: UpcomingInterview[] = [
-  { id: 'i-1', candidateName: 'Sarah Johnson', jobTitle: 'Sr Frontend Engineer', stageName: 'Technical Round', time: new Date(Date.now() + 2 * 3600_000), isAI: false },
-  { id: 'i-2', candidateName: 'Michael Chen', jobTitle: 'Sr Frontend Engineer', stageName: 'AI Screening', time: new Date(Date.now() + 5 * 3600_000), isAI: true },
-  { id: 'i-3', candidateName: 'Emily Rodriguez', jobTitle: 'Product Designer', stageName: 'Portfolio Review', time: new Date(Date.now() + 24 * 3600_000) },
-];
-
-const DEFAULT_ACTIONS: QuickAction[] = [
-  { key: 'post-job', label: 'Post New Job', icon: <PlusCircle size={20} />, description: 'Create a new job listing' },
-  { key: 'search', label: 'Search Candidates', icon: <Search size={20} />, description: 'Find talent in your pool' },
-  { key: 'outreach', label: 'Send Outreach', icon: <MessageSquare size={20} />, description: 'Reach out to candidates' },
-  { key: 'reports', label: 'View Reports', icon: <BarChart3 size={20} />, description: 'Analytics & insights' },
-];
-
-const DEFAULT_ACTIVITY: ActivityItem[] = [
-  { id: 'a-1', type: 'applied', message: 'Sarah Johnson applied for Senior Frontend Engineer', time: new Date(Date.now() - 30 * 60_000), entityType: 'candidate', entityName: 'Sarah Johnson' },
-  { id: 'a-2', type: 'interview', message: 'Technical interview completed for Michael Chen', time: new Date(Date.now() - 2 * 3600_000), entityType: 'interview' },
-  { id: 'a-3', type: 'offer', message: 'Offer extended to David Park for Backend Engineer', time: new Date(Date.now() - 5 * 3600_000), entityType: 'offer', entityName: 'David Park' },
-  { id: 'a-4', type: 'stage-change', message: 'Emily Rodriguez moved to Interview stage', time: new Date(Date.now() - 8 * 3600_000), entityType: 'candidate' },
-  { id: 'a-5', type: 'hired', message: 'James Kim accepted offer for Product Designer', time: new Date(Date.now() - 24 * 3600_000), entityType: 'candidate', entityName: 'James Kim' },
-];
-
-const DEFAULT_NOTIFS: Notification[] = [
-  { id: 'n-1', type: 'breach', message: '3 candidates pending review past SLA (48h)', time: new Date(Date.now() - 1 * 3600_000) },
-  { id: 'n-2', type: 'approval', message: 'Offer for David Park awaiting approval', time: new Date(Date.now() - 3 * 3600_000) },
-  { id: 'n-3', type: 'candidate', message: '5 new high-match candidates in your pipeline', time: new Date(Date.now() - 6 * 3600_000) },
-];
-
-const DEFAULT_SUGGESTIONS: AISuggestion[] = [
-  { id: 's-1', action: 'Review Sarah Johnson\'s application', confidence: 95, reason: '98% match score, profile has been waiting 36h' },
-  { id: 's-2', action: 'Schedule follow-up with Michael Chen', confidence: 88, reason: 'Technical round completed, strong positive signals' },
-  { id: 's-3', action: 'Reach out to Emily Rodriguez', confidence: 82, reason: 'High-value passive candidate, recently updated profile' },
-];
-
-const DEFAULT_PERF: PerformanceMetric[] = [
-  { label: 'Offers Accepted', value: 8, target: 10 },
-  { label: 'Candidates Sourced', value: 45, target: 50 },
-  { label: 'Avg Response Time', value: 4, target: 2 },
-  { label: 'Pipeline Velocity', value: 72, target: 85 },
-];
 
 /* ---------------------------------------------------------------------------
  * Helpers
@@ -155,30 +102,35 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     const {
       recruiter,
       recruiterName: recruiterNameProp = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
-      kpiStats: rawKpiStats = DEFAULT_KPI,
-      pipelineJobs: rawPipelineJobs = DEFAULT_PIPELINE,
-      upcomingInterviews: rawUpcomingInterviews = DEFAULT_INTERVIEWS,
-      quickActions: rawQuickActions = DEFAULT_ACTIONS,
-      activityFeed: rawActivityFeed = DEFAULT_ACTIVITY,
-      notifications: rawNotifications = DEFAULT_NOTIFS,
-      aiSuggestions: rawAiSuggestions = DEFAULT_SUGGESTIONS,
-      performanceMetrics: rawPerformanceMetrics = DEFAULT_PERF,
+      kpiStats: rawKpiStats = [],
+      pipelineJobs: rawPipelineJobs = [],
+      upcomingInterviews: rawUpcomingInterviews = [],
+      quickActions: rawQuickActions = [],
+      activityFeed: rawActivityFeed = [],
+      notifications: rawNotifications = [],
+      aiSuggestions: rawAiSuggestions = [],
+      performanceMetrics: rawPerformanceMetrics = [],
       showAISuggestions = true,
       dateRangeLabel = BH_RECRUITER_HOME_DEFAULTS.dateRangeLabel,
+      teamPerformance: rawTeamPerformance = [],
+      totalSlaBreaches: totalSlaBreachesProp,
+      avgConversionRate: avgConversionRateProp,
+      avgTimeToFill: avgTimeToFillProp,
       onQuickAction, onPipelineJobClick, onInterviewClick,
       onNotificationDismiss, onSuggestionAccept, onSuggestionDismiss,
       onActivityClick,
       className, style,
     } = props;
 
-    const kpiStats = Array.isArray(rawKpiStats) ? rawKpiStats : DEFAULT_KPI;
-    const pipelineJobs = Array.isArray(rawPipelineJobs) ? rawPipelineJobs : DEFAULT_PIPELINE;
-    const upcomingInterviews = Array.isArray(rawUpcomingInterviews) ? rawUpcomingInterviews : DEFAULT_INTERVIEWS;
-    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : DEFAULT_ACTIONS;
-    const activityFeed = Array.isArray(rawActivityFeed) ? rawActivityFeed : DEFAULT_ACTIVITY;
-    const notifications = Array.isArray(rawNotifications) ? rawNotifications : DEFAULT_NOTIFS;
-    const aiSuggestions = Array.isArray(rawAiSuggestions) ? rawAiSuggestions : DEFAULT_SUGGESTIONS;
-    const performanceMetrics = Array.isArray(rawPerformanceMetrics) ? rawPerformanceMetrics : DEFAULT_PERF;
+    const kpiStats = Array.isArray(rawKpiStats) ? rawKpiStats : [];
+    const pipelineJobs = Array.isArray(rawPipelineJobs) ? rawPipelineJobs : [];
+    const upcomingInterviews = Array.isArray(rawUpcomingInterviews) ? rawUpcomingInterviews : [];
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : [];
+    const activityFeed = Array.isArray(rawActivityFeed) ? rawActivityFeed : [];
+    const notifications = Array.isArray(rawNotifications) ? rawNotifications : [];
+    const aiSuggestions = Array.isArray(rawAiSuggestions) ? rawAiSuggestions : [];
+    const performanceMetrics = Array.isArray(rawPerformanceMetrics) ? rawPerformanceMetrics : [];
+    const teamPerformance = Array.isArray(rawTeamPerformance) ? rawTeamPerformance : [];
 
     const recruiterName = recruiter
       ? `${recruiter.firstName ?? ''} ${recruiter.lastName ?? ''}`.trim() || recruiterNameProp
@@ -231,7 +183,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                 backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[600],
               }}>{kpi.icon}</Box>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>{kpi.label ?? ''}</Text>
+                <Text style={createStatLabelStyle(t, { personality: ptypo })}>{kpi.label ?? ''}</Text>
                 <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: 1.2 }}>{kpi.value ?? 0}</Text>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[1] }}>
                   <Box style={{ color: getTrendColor(kpi.trend ?? 'flat', t) }}>{getTrendIcon(kpi.trend ?? 'flat')}</Box>
@@ -270,7 +222,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                       onClick={() => handleNotifDismiss(n.id ?? '')}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss(n.id ?? ''); } }}
                       style={{ color: t.colors.neutral[400], cursor: 'pointer', flexShrink: 0 }}
-                    ><X size={12} /></Box>
+                    ><X size={ICON_SIZES.label} /></Box>
                   )}
                 </Box>
               );
@@ -333,8 +285,24 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                     }}
                   >
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
-                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{job.title ?? ''}</Text>
-                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], color: t.colors.neutral[400] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{job.title ?? ''}</Text>
+                        {job.slaBreachCount != null && job.slaBreachCount > 0 && (
+                          <Box style={{
+                            padding: `0 ${t.spacing[1]}px`, borderRadius: br,
+                            fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
+                            backgroundColor: t.colors.errorScale[50], color: t.colors.errorScale[700],
+                          }}>
+                            {job.slaBreachCount} SLA
+                          </Box>
+                        )}
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], color: t.colors.neutral[400] }}>
+                        {job.conversionRate != null && (
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[600], fontWeight: t.typography.fontWeight.medium }}>
+                            {job.conversionRate}% conv.
+                          </Text>
+                        )}
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{total} candidates</Text>
                         <ChevronRight size={14} />
                       </Box>
@@ -420,7 +388,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
             {showAISuggestions && (aiSuggestions ?? []).length > 0 && (
               <Box>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[2] }}>
-                  <Sparkles size={12} style={{ color: t.colors.secondaryScale[600] }} />
+                  <Sparkles size={ICON_SIZES.label} style={{ color: t.colors.secondaryScale[600] }} />
                   <Text style={{ ...sectionHeaderStyle, marginBottom: 0 }}>AI Suggested Actions</Text>
                 </Box>
                 <Box role="list" aria-label="AI suggestions" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
@@ -462,7 +430,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                             fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
                             cursor: 'pointer', transition: `all ${t.motion.hover}`,
                           }}
-                        ><CheckCircle size={10} /> Accept</Box>
+                        ><CheckCircle size={ICON_SIZES.inline} /> Accept</Box>
                         <Box
                           role="button"
                           tabIndex={0}
@@ -477,7 +445,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                             fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
                             cursor: 'pointer', transition: `all ${t.motion.hover}`,
                           }}
-                        ><X size={10} /> Dismiss</Box>
+                        ><X size={ICON_SIZES.inline} /> Dismiss</Box>
                       </Box>
                     </Box>
                   ))}
@@ -486,6 +454,72 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
             )}
           </Box>
         </Box>
+
+        {/* Aggregate Metrics Bar */}
+        {(totalSlaBreachesProp != null || avgConversionRateProp != null || avgTimeToFillProp != null) && (
+          <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${[totalSlaBreachesProp, avgConversionRateProp, avgTimeToFillProp].filter(v => v != null).length}, 1fr)`, gap: t.spacing[4] }}>
+            {avgConversionRateProp != null && (
+              <Box style={{ ...cardBase, ...glassCardBg, padding: `${t.spacing[4]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                <Box style={{ ...createIconContainerStyle(t, { size: 40 }), backgroundColor: t.colors.successScale[50], color: t.colors.successScale[600] }}>
+                  <TrendingUp size={18} />
+                </Box>
+                <Box style={createMetadataFieldStyle(t)}>
+                  <Text style={createStatValueStyle(t, { size: '2xl' })}>{avgConversionRateProp}%</Text>
+                  <Text style={createStatLabelStyle(t, { personality: ptypo })}>Avg Conversion Rate</Text>
+                </Box>
+              </Box>
+            )}
+            {avgTimeToFillProp != null && (
+              <Box style={{ ...cardBase, ...glassCardBg, padding: `${t.spacing[4]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                <Box style={{ ...createIconContainerStyle(t, { size: 40 }), backgroundColor: t.colors.infoScale[50], color: t.colors.infoScale[600] }}>
+                  <Clock size={18} />
+                </Box>
+                <Box style={createMetadataFieldStyle(t)}>
+                  <Text style={createStatValueStyle(t, { size: '2xl' })}>{avgTimeToFillProp}d</Text>
+                  <Text style={createStatLabelStyle(t, { personality: ptypo })}>Avg Time to Fill</Text>
+                </Box>
+              </Box>
+            )}
+            {totalSlaBreachesProp != null && (
+              <Box style={{ ...cardBase, ...glassCardBg, padding: `${t.spacing[4]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                <Box style={{ ...createIconContainerStyle(t, { size: 40 }), backgroundColor: totalSlaBreachesProp > 0 ? t.colors.errorScale[50] : t.colors.successScale[50], color: totalSlaBreachesProp > 0 ? t.colors.errorScale[600] : t.colors.successScale[600] }}>
+                  <AlertTriangle size={18} />
+                </Box>
+                <Box style={createMetadataFieldStyle(t)}>
+                  <Text style={{ ...createStatValueStyle(t, { size: '2xl' }), color: totalSlaBreachesProp > 0 ? t.colors.errorScale[700] : t.colors.neutral[900] }}>{totalSlaBreachesProp}</Text>
+                  <Text style={createStatLabelStyle(t, { personality: ptypo })}>Total SLA Breaches</Text>
+                </Box>
+              </Box>
+            )}
+          </Box>
+        )}
+
+        {/* Team Performance */}
+        {teamPerformance.length > 0 && (
+          <Box>
+            <Text style={{ ...sectionHeaderStyle }}>Team Performance</Text>
+            <Box style={{ ...cardBase, ...glassCardBg, padding: `${t.spacing[4]}px` }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr', gap: t.spacing[2], padding: `${t.spacing[2]}px 0`, borderBottom: `1px solid ${t.colors.neutral[200]}`, marginBottom: t.spacing[2] }}>
+                {['Recruiter', 'Hires', 'Target', 'Avg TTF', 'Conv %', 'SLA'].map(col => (
+                  <Text key={col} style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.04em' }}>{col}</Text>
+                ))}
+              </Box>
+              {teamPerformance.map((tp, idx) => {
+                const onTrack = (tp.hireTarget ?? 0) > 0 ? (tp.hires ?? 0) >= (tp.hireTarget ?? 0) * 0.8 : true;
+                return (
+                  <Box key={tp.recruiterId ?? idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr', gap: t.spacing[2], padding: `${t.spacing[2]}px 0`, borderBottom: `1px solid ${t.colors.neutral[50]}`, alignItems: 'center', ...entrance.animate, transitionDelay: `${createStaggerDelay(t, idx)}ms`, transition: entrance.transition }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{tp.recruiterName ?? 'Unknown'}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{tp.hires ?? 0}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{tp.hireTarget ?? 0}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{tp.avgTimeToFill ?? 0}d</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: (tp.conversionRate ?? 0) >= 30 ? t.colors.successScale[600] : t.colors.warningScale[600] }}>{tp.conversionRate ?? 0}%</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: (tp.slaBreachCount ?? 0) > 0 ? t.colors.errorScale[600] : t.colors.neutral[600] }}>{tp.slaBreachCount ?? 0}</Text>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        )}
 
         {/* Bottom row: Activity + Performance */}
         <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[5] }}>

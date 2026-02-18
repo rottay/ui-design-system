@@ -25,6 +25,20 @@ export interface ActiveSession {
   providerName: string;
   durationSeconds: number;
   status: 'connected' | 'processing' | 'error';
+  /** Billing mode for this session (e.g. per_interview, per_minute, token_based) */
+  billingMode?: string;
+  /** Estimated token cost for AI interviews */
+  estimatedTokenCost?: number;
+  /** Actual token cost accrued so far */
+  actualTokenCost?: number;
+  /** Whether proctoring is enabled for this session */
+  proctoringEnabled?: boolean;
+  /** Number of proctoring violations detected */
+  proctoringViolations?: number;
+  /** Whether this session was resumed from a previous disconnection */
+  wasResumed?: boolean;
+  /** Number of times the session has been resumed */
+  resumeCount?: number;
 }
 
 export interface ProviderStatus {
@@ -32,6 +46,10 @@ export interface ProviderStatus {
   status: 'healthy' | 'degraded' | 'down';
   latencyMs: number;
   circuitBreaker: 'closed' | 'open' | 'half-open';
+  /** Provider response latency in milliseconds (more granular than latencyMs) */
+  latency?: number;
+  /** Error rate as a percentage (0-100) */
+  errorRate?: number;
 }
 
 export interface MonitorAlert {

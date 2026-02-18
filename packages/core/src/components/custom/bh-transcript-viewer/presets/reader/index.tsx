@@ -29,11 +29,6 @@ import {
   Award,
 } from 'lucide-react';
 
-const MOCK_META: TranscriptMeta = {
-  interviewId: 'int-1', candidateName: 'Sarah Chen', positionTitle: 'Senior Software Engineer',
-  interviewDate: '2025-01-20', interviewType: 'Technical', duration: '45 min', overallScore: 82,
-};
-
 function createMockSegments(tokens: { colors: any }): TranscriptSegment[] {
   const primary = tokens.colors.primaryScale[500];
   const success = tokens.colors.successScale[500];
@@ -65,7 +60,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
     const defaultDimensions = useMemo(() => createMockDimensions(tokens), [tokens]);
 
     const {
-      meta: rawMeta = MOCK_META,
+      meta: rawMeta = {} as Partial<TranscriptMeta>,
       segments = defaultSegments,
       dimensions = defaultDimensions,
       selectedDimension,
@@ -73,11 +68,12 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
       selectedSegment,
       onSegmentSelect,
       showTimestamps = true,
+      playbackSpeed,
       className,
       style,
     } = props;
 
-    const meta = Array.isArray(rawMeta) ? rawMeta : MOCK_META;
+    const meta = rawMeta as Partial<TranscriptMeta>;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
@@ -188,6 +184,14 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                   </Box>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{meta.duration}</Text>
                 </Box>
+                {playbackSpeed != null && playbackSpeed !== 1 && (
+                  <Box style={{ textAlign: 'center' as const }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Speed</Text>
+                    </Box>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{playbackSpeed}x</Text>
+                  </Box>
+                )}
                 {meta.overallScore !== undefined && (
                   <Box style={{ textAlign: 'center' as const }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>

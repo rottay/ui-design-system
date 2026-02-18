@@ -85,48 +85,6 @@ function getDefaultStageColorLight(index: number, t: DesignTokens): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STAGES: KanbanStage[] = [
-  {
-    id: 'applied',
-    name: 'Applied',
-    limit: 30,
-    candidates: [
-      { id: 'c-1', name: 'Sarah Johnson', avatarInitial: 'SJ', score: 85, appliedAt: new Date(Date.now() - 86400000 * 1) },
-      { id: 'c-2', name: 'Michael Chen', avatarInitial: 'MC', score: 72, appliedAt: new Date(Date.now() - 86400000 * 2) },
-      { id: 'c-3', name: 'Emily Rodriguez', avatarInitial: 'ER', score: 91, appliedAt: new Date(Date.now() - 86400000 * 1) },
-    ],
-  },
-  {
-    id: 'screening',
-    name: 'Phone Screen',
-    limit: 15,
-    candidates: [
-      { id: 'c-5', name: 'Anna Kowalski', avatarInitial: 'AK', score: 78, appliedAt: new Date(Date.now() - 86400000 * 4) },
-      { id: 'c-6', name: 'James Kim', avatarInitial: 'JK', score: 65, appliedAt: new Date(Date.now() - 86400000 * 5) },
-    ],
-  },
-  {
-    id: 'technical',
-    name: 'Technical',
-    limit: 8,
-    candidates: [
-      { id: 'c-8', name: 'Robert Taylor', avatarInitial: 'RT', score: 82, appliedAt: new Date(Date.now() - 86400000 * 7) },
-    ],
-  },
-  {
-    id: 'final',
-    name: 'Final',
-    limit: 5,
-    candidates: [],
-  },
-  {
-    id: 'offer',
-    name: 'Offer',
-    limit: 3,
-    candidates: [],
-  },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -154,7 +112,6 @@ export const CompactBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanban
 
     const [hoveredCard, setHoveredCard] = useState<string | null>(null);
     const [expandedStage, setExpandedStage] = useState<string | null>(stages[0]?.id ?? null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

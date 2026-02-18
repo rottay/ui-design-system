@@ -32,6 +32,21 @@ export interface TemplateStage {
   rubricName?: string;
   slaHours: number;
   isKnockout: boolean;
+
+  /** Description of this stage */
+  description?: string;
+  /** Stage automation configuration */
+  automations?: {
+    autoAdvance?: boolean;
+    autoReject?: boolean;
+    autoRejectConfig?: { minScore?: number; afterDays?: number };
+  };
+  /** Notification configuration for stage transitions */
+  notificationConfig?: { notifyOnAdvance?: boolean; notifyOnReject?: boolean };
+  /** Weight of this stage in overall scoring */
+  weight?: number;
+  /** Estimated duration in minutes for this stage */
+  estimatedDurationMinutes?: number;
 }
 
 /* ── Automation ─────────────────────────────────────────────────────── */
@@ -41,6 +56,17 @@ export interface AutomationRule {
   condition: string;
   action: string;
   threshold?: number;
+
+  /** Display name for this rule */
+  name?: string;
+  /** Description of what this rule does */
+  description?: string;
+  /** Whether this rule is enabled */
+  enabled?: boolean;
+  /** ISO date of last trigger */
+  lastTriggered?: string;
+  /** Number of times this rule has been triggered */
+  triggerCount?: number;
 }
 
 /* ── Versioning ─────────────────────────────────────────────────────── */
@@ -50,6 +76,11 @@ export interface TemplateVersion {
   date: string;
   author: string;
   changes: string[];
+
+  /** Whether this version is the published version */
+  isPublished?: boolean;
+  /** Number of times this version has been used */
+  timesUsed?: number;
 }
 
 /* ── Validation ─────────────────────────────────────────────────────── */
@@ -60,6 +91,13 @@ export interface ValidationItem {
   check: string;
   status: ValidationStatus;
   message: string;
+
+  /** Category for grouping validation items */
+  category?: string;
+  /** Whether this issue can be auto-fixed */
+  autoFix?: boolean;
+  /** Additional details about the validation result */
+  details?: string;
 }
 
 /* ── Selectable Entities ────────────────────────────────────────────── */

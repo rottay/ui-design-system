@@ -23,24 +23,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_DEPARTMENTS: DepartmentConfig[] = [
-  { name: 'Engineering' },
-  { name: 'Design' },
-  { name: 'Sales' },
-];
-
-const MOCK_DATA = [
-  { date: '2025-10', department: 'Engineering', days: 32 },
-  { date: '2025-11', department: 'Engineering', days: 29 },
-  { date: '2025-12', department: 'Engineering', days: 31 },
-  { date: '2025-10', department: 'Design', days: 24 },
-  { date: '2025-11', department: 'Design', days: 20 },
-  { date: '2025-12', department: 'Design', days: 19 },
-  { date: '2025-10', department: 'Sales', days: 16 },
-  { date: '2025-11', department: 'Sales', days: 14 },
-  { date: '2025-12', department: 'Sales', days: 15 },
-];
-
 function getDeptColor(index: number, t: DesignTokens, customColor?: string): string {
   if (customColor) return customColor;
   const palette = [t.colors.primaryScale[500], t.colors.successScale[500], t.colors.warningScale[500]];
@@ -61,16 +43,17 @@ export const CompactBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      data: rawData = MOCK_DATA,
-      departments: rawDepartments = MOCK_DEPARTMENTS,
+      data: rawData = [],
+      departments: rawDepartments = [],
       targetDays = 30,
+      benchmark,
+      period,
       className,
       style,
     } = props;
 
-    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
-    const departments = Array.isArray(rawDepartments) ? rawDepartments : MOCK_DEPARTMENTS;
-
+    const data = Array.isArray(rawData) ? rawData : [];
+    const departments = Array.isArray(rawDepartments) ? rawDepartments : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -122,15 +105,35 @@ export const CompactBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
               Time to Hire
             </Text>
           </Box>
-          <Box style={{
-            ...createBadgeStyle(t, 'info'),
-            borderRadius: badgeRadius,
-            padding: `1px ${t.spacing[2]}px`,
-          }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs }}>
-              <Target size={9} style={{ marginRight: 2, verticalAlign: 'middle' }} />
-              {targetDays}d
-            </Text>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            {period && (
+              <Box style={{
+                ...createBadgeStyle(t, 'secondary'),
+                borderRadius: badgeRadius,
+                padding: `1px ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'uppercase' as const }}>{period}</Text>
+              </Box>
+            )}
+            {benchmark !== undefined && (
+              <Box style={{
+                ...createBadgeStyle(t, 'warning'),
+                borderRadius: badgeRadius,
+                padding: `1px ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Bench: {benchmark}d</Text>
+              </Box>
+            )}
+            <Box style={{
+              ...createBadgeStyle(t, 'info'),
+              borderRadius: badgeRadius,
+              padding: `1px ${t.spacing[2]}px`,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                <Target size={9} style={{ marginRight: 2, verticalAlign: 'middle' }} />
+                {targetDays}d
+              </Text>
+            </Box>
           </Box>
         </Box>
 

@@ -34,44 +34,6 @@ import {
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_STEPS: ImportStep[] = [
-  { key: 'method', label: 'Import Method', status: 'active' },
-  { key: 'upload', label: 'Upload', status: 'pending' },
-  { key: 'mapping', label: 'Field Mapping', status: 'pending' },
-  { key: 'dedup', label: 'Dedup Check', status: 'pending' },
-  { key: 'validate', label: 'Validation', status: 'pending' },
-  { key: 'import', label: 'Import', status: 'pending' },
-];
-
-const DEFAULT_MAPPINGS: FieldMapping[] = [
-  { sourceField: 'Full Name', targetField: 'name', autoDetected: true },
-  { sourceField: 'Email Address', targetField: 'email', autoDetected: true },
-  { sourceField: 'Phone', targetField: 'phone', autoDetected: true },
-  { sourceField: 'Current Company', targetField: 'company', autoDetected: false },
-  { sourceField: 'Job Title', targetField: 'currentRole', autoDetected: true },
-  { sourceField: 'LinkedIn URL', targetField: 'linkedinUrl', autoDetected: false },
-  { sourceField: 'Location', targetField: 'location', autoDetected: true },
-];
-
-const DEFAULT_DEDUP: DedupMatch[] = [
-  { candidateId: 'c-1', name: 'Sarah Johnson', email: 'sarah.j@google.com', similarity: 98, action: 'merge' },
-  { candidateId: 'c-2', name: 'Michael Chen', email: 'mchen@stripe.com', similarity: 85, action: 'skip' },
-  { candidateId: 'c-3', name: 'Emily R.', email: 'emily@meta.com', similarity: 72, action: 'create' },
-];
-
-const DEFAULT_VALIDATION: ValidationResult = {
-  valid: 142, warnings: 8, errors: 3,
-  details: [
-    { row: 23, field: 'email', message: 'Invalid email format' },
-    { row: 47, field: 'phone', message: 'Missing country code' },
-    { row: 89, field: 'email', message: 'Duplicate email within file' },
-  ],
-};
-
-/* ---------------------------------------------------------------------------
  * Helpers
  * -------------------------------------------------------------------------*/
 
@@ -120,19 +82,19 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
     }, [t]);
 
     const {
-      steps: rawSteps = DEFAULT_STEPS, currentStep: csp = 0,
+      steps: rawSteps = [], currentStep: csp = 0,
       method: mp, uploadedFile: ufp,
-      fieldMapping: rawFieldMapping = DEFAULT_MAPPINGS, dedupResults: rawDedupResults = DEFAULT_DEDUP,
-      validationResults: rawValidationResults = DEFAULT_VALIDATION, importProgress: ipp,
+      fieldMapping: rawFieldMapping = [], dedupResults: rawDedupResults = [],
+      validationResults: rawValidationResults, importProgress: ipp,
       onChange, onStepChange, onUpload, onMappingChange, onDedupAction,
       onStartImport, onCancel, loading,
       className, style,
     } = props;
 
-    const steps = Array.isArray(rawSteps) ? rawSteps : DEFAULT_STEPS;
-    const fieldMapping = Array.isArray(rawFieldMapping) ? rawFieldMapping : DEFAULT_MAPPINGS;
-    const dedupResults = Array.isArray(rawDedupResults) ? rawDedupResults : DEFAULT_DEDUP;
-    const validationResults = Array.isArray(rawValidationResults) ? rawValidationResults : DEFAULT_VALIDATION;
+    const steps = Array.isArray(rawSteps) ? rawSteps : [];
+    const fieldMapping = Array.isArray(rawFieldMapping) ? rawFieldMapping : [];
+    const dedupResults = Array.isArray(rawDedupResults) ? rawDedupResults : [];
+    const validationResults: ValidationResult | null = rawValidationResults ?? null;
 
     const [iStep, setIStep] = useState(csp);
     const [iMethod, setIMethod] = useState<ImportMethod>('csv');
@@ -368,6 +330,16 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                     <Text style={{ flex: 1, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium }}>{fm.sourceField}</Text>
                     <ArrowRight size={14} style={{ color: t.colors.neutral[300], flexShrink: 0 }} />
                     <Text style={{ flex: 1, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.semibold }}>{fm.targetField}</Text>
+                    {fm.category && (
+                      <Box style={{
+                        padding: `0 ${t.spacing[1]}px`, borderRadius: br,
+                        fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                        backgroundColor: t.colors.neutral[50], color: t.colors.neutral[500],
+                        border: `1px solid ${t.colors.neutral[100]}`,
+                      }}>
+                        {fm.category}
+                      </Box>
+                    )}
                     {fm.autoDetected && (
                       <Box style={{
                         ...createBadgeStyle(t, 'success'),

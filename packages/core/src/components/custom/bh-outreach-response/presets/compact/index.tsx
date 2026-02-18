@@ -37,6 +37,8 @@ export const CompactBhOutreachResponse = createPreset<BhOutreachResponseProps>({
     const {
       overallResponseRate = 28.5,
       bestTime = { hour: 10, day: 'Tuesday' },
+      channel,
+      period,
       className,
       style,
     } = props;
@@ -83,6 +85,26 @@ export const CompactBhOutreachResponse = createPreset<BhOutreachResponseProps>({
             }}>
               Response Rate
             </Text>
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            {channel && (
+              <Box style={{
+                ...createBadgeStyle(t, 'secondary'),
+                borderRadius: badgeRadius,
+                padding: `1px ${t.spacing[1]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{channel}</Text>
+              </Box>
+            )}
+            {period && (
+              <Box style={{
+                ...createBadgeStyle(t, 'info'),
+                borderRadius: badgeRadius,
+                padding: `1px ${t.spacing[1]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{period}</Text>
+              </Box>
+            )}
           </Box>
         </Box>
 

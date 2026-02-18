@@ -29,6 +29,10 @@ import {
   createEntranceAnimation,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createMetadataFieldStyle, createMetadataGridStyle,
+  createMetadataLabelStyle, createMetadataValueStyle,
+  createStatValueStyle, createStatLabelStyle,
+  createTrendStyle, formatScore, ICON_SIZES,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
@@ -40,70 +44,14 @@ import type {
   TrendPoint,
   CohortComparison,
   SkillGapSummary,
+  ModelPerformance,
+  TokenUsageTrend,
+  ScoreDistributionBucket,
 } from '../../core';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_KPIS: ScoringKpi[] = [
-  { label: 'Avg Score', value: 72.4, trend: 3.2, previousValue: 69.2 },
-  { label: 'Top Performers', value: 48, trend: 12, previousValue: 36 },
-  { label: 'Knockout Rate', value: 8.2, trend: -2.1, previousValue: 10.3 },
-  { label: 'Score Variance', value: 14.6, trend: -1.8, previousValue: 16.4 },
-];
-
-const MOCK_DISTRIBUTION: LevelDistribution[] = [
-  { level: 'Exceptional (90-100)', count: 24, colorKey: 'success' },
-  { level: 'Strong (75-89)', count: 86, colorKey: 'primary' },
-  { level: 'Adequate (60-74)', count: 142, colorKey: 'warning' },
-  { level: 'Below (40-59)', count: 68, colorKey: 'error' },
-  { level: 'Poor (0-39)', count: 22, colorKey: 'secondary' },
-];
-
-const MOCK_HEATMAP: HeatmapCell[] = [
-  { dimension: 'Technical Skills', job: 'Frontend Eng', avgScore: 82 },
-  { dimension: 'Technical Skills', job: 'Product Mgr', avgScore: 45 },
-  { dimension: 'Technical Skills', job: 'DevOps Lead', avgScore: 78 },
-  { dimension: 'Communication', job: 'Frontend Eng', avgScore: 71 },
-  { dimension: 'Communication', job: 'Product Mgr', avgScore: 88 },
-  { dimension: 'Communication', job: 'DevOps Lead', avgScore: 65 },
-  { dimension: 'Leadership', job: 'Frontend Eng', avgScore: 58 },
-  { dimension: 'Leadership', job: 'Product Mgr', avgScore: 76 },
-  { dimension: 'Leadership', job: 'DevOps Lead', avgScore: 72 },
-  { dimension: 'Problem Solving', job: 'Frontend Eng', avgScore: 85 },
-  { dimension: 'Problem Solving', job: 'Product Mgr', avgScore: 74 },
-  { dimension: 'Problem Solving', job: 'DevOps Lead', avgScore: 80 },
-];
-
-const MOCK_KNOCKOUTS: KnockoutStat[] = [
-  { dimension: 'Technical Skills', knockoutCount: 18, totalEvaluations: 342 },
-  { dimension: 'Communication', knockoutCount: 8, totalEvaluations: 342 },
-  { dimension: 'Culture Fit', knockoutCount: 12, totalEvaluations: 342 },
-  { dimension: 'Experience Level', knockoutCount: 6, totalEvaluations: 342 },
-];
-
-const MOCK_TREND: TrendPoint[] = [
-  { date: 'Week 1', value: 68 }, { date: 'Week 2', value: 70 },
-  { date: 'Week 3', value: 69 }, { date: 'Week 4', value: 72 },
-  { date: 'Week 5', value: 71 }, { date: 'Week 6', value: 74 },
-  { date: 'Week 7', value: 73 }, { date: 'Week 8', value: 72 },
-];
-
-const MOCK_COHORTS: CohortComparison[] = [
-  { groupName: 'Referrals', avgScore: 78.4, count: 64 },
-  { groupName: 'LinkedIn', avgScore: 71.2, count: 128 },
-  { groupName: 'Career Site', avgScore: 69.8, count: 96 },
-  { groupName: 'Agencies', avgScore: 74.1, count: 42 },
-  { groupName: 'Job Boards', avgScore: 65.3, count: 112 },
-];
-
-const MOCK_GAPS: SkillGapSummary[] = [
-  { dimension: 'System Design', avgScore: 58, gapFromTarget: -22 },
-  { dimension: 'Leadership', avgScore: 62, gapFromTarget: -18 },
-  { dimension: 'Data Analysis', avgScore: 65, gapFromTarget: -15 },
-  { dimension: 'Communication', avgScore: 72, gapFromTarget: -8 },
-  { dimension: 'Technical Skills', avgScore: 78, gapFromTarget: -2 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Color resolution helper                                            */
@@ -128,29 +76,40 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      kpis: rawKpis = MOCK_KPIS,
-      levelDistribution: rawLevelDistribution = MOCK_DISTRIBUTION,
-      heatmapData: rawHeatmapData = MOCK_HEATMAP,
-      knockoutStats: rawKnockoutStats = MOCK_KNOCKOUTS,
-      trendData: rawTrendData = MOCK_TREND,
-      cohortComparisons: rawCohortComparisons = MOCK_COHORTS,
-      skillGaps: rawSkillGaps = MOCK_GAPS,
+      kpis: rawKpis = [],
+      levelDistribution: rawLevelDistribution = [],
+      heatmapData: rawHeatmapData = [],
+      knockoutStats: rawKnockoutStats = [],
+      trendData: rawTrendData = [],
+      cohortComparisons: rawCohortComparisons = [],
+      skillGaps: rawSkillGaps = [],
+      modelPerformance: rawModelPerformance = [],
+      tokenUsageTrends: rawTokenUsageTrends = [],
+      totalTokensUsed,
+      totalScoringCost,
+      avgLatencyMs,
+      scoreDistributionBuckets: rawScoreDistributionBuckets = [],
+      dateRange: dateRangeProp,
+      chartType: chartTypeProp,
       filters,
       onFilterChange,
       className,
       style,
     } = props;
 
-    const kpis = Array.isArray(rawKpis) ? rawKpis : MOCK_KPIS;
-    const levelDistribution = Array.isArray(rawLevelDistribution) ? rawLevelDistribution : MOCK_DISTRIBUTION;
-    const heatmapData = Array.isArray(rawHeatmapData) ? rawHeatmapData : MOCK_HEATMAP;
-    const knockoutStats = Array.isArray(rawKnockoutStats) ? rawKnockoutStats : MOCK_KNOCKOUTS;
-    const trendData = Array.isArray(rawTrendData) ? rawTrendData : MOCK_TREND;
-    const cohortComparisons = Array.isArray(rawCohortComparisons) ? rawCohortComparisons : MOCK_COHORTS;
-    const skillGaps = Array.isArray(rawSkillGaps) ? rawSkillGaps : MOCK_GAPS;
+    const kpis = Array.isArray(rawKpis) ? rawKpis : [];
+    const levelDistribution = Array.isArray(rawLevelDistribution) ? rawLevelDistribution : [];
+    const heatmapData = Array.isArray(rawHeatmapData) ? rawHeatmapData : [];
+    const knockoutStats = Array.isArray(rawKnockoutStats) ? rawKnockoutStats : [];
+    const trendData = Array.isArray(rawTrendData) ? rawTrendData : [];
+    const cohortComparisons = Array.isArray(rawCohortComparisons) ? rawCohortComparisons : [];
+    const skillGaps = Array.isArray(rawSkillGaps) ? rawSkillGaps : [];
+    const modelPerformance = Array.isArray(rawModelPerformance) ? rawModelPerformance : [];
+    const tokenUsageTrends = Array.isArray(rawTokenUsageTrends) ? rawTokenUsageTrends : [];
+    const scoreDistributionBuckets = Array.isArray(rawScoreDistributionBuckets) ? rawScoreDistributionBuckets : [];
 
-    const [activeSection, setActiveSection] = useState<'overview' | 'heatmap' | 'gaps'>('overview');
-    const handleSetActiveSection = useCallback((key: 'overview' | 'heatmap' | 'gaps') => {
+    const [activeSection, setActiveSection] = useState<'overview' | 'heatmap' | 'gaps' | 'models'>('overview');
+    const handleSetActiveSection = useCallback((key: 'overview' | 'heatmap' | 'gaps' | 'models') => {
       setActiveSection(key);
     }, []);
 
@@ -197,11 +156,17 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
     }, [Box, Text, t, ptypo]);
 
     /* Tab definitions */
-    const TABS = useMemo(() => [
-      { key: 'overview' as const, label: 'Distribution', icon: BarChart3 },
-      { key: 'heatmap' as const, label: 'Heatmap', icon: Layers },
-      { key: 'gaps' as const, label: 'Skill Gaps', icon: Zap },
-    ], []);
+    const TABS = useMemo(() => {
+      const tabs: { key: 'overview' | 'heatmap' | 'gaps' | 'models'; label: string; icon: typeof BarChart3 }[] = [
+        { key: 'overview', label: 'Distribution', icon: BarChart3 },
+        { key: 'heatmap', label: 'Heatmap', icon: Layers },
+        { key: 'gaps', label: 'Skill Gaps', icon: Zap },
+      ];
+      if (modelPerformance.length > 0 || tokenUsageTrends.length > 0) {
+        tabs.push({ key: 'models', label: 'Model Perf', icon: Target });
+      }
+      return tabs;
+    }, [modelPerformance.length, tokenUsageTrends.length]);
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], width: '100%', height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
@@ -212,12 +177,39 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
             <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing }}>Scoring Insights</Text>
             <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>Candidate evaluation analytics and quality metrics</Text>
           </Stack>
-          <Box
-            role="button"
-            aria-label="Open filters"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}
-          >
-            <Filter size={14} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Filters</Text> <ChevronDown size={12} />
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            {dateRangeProp && dateRangeProp.length === 2 && (
+              <Box style={{
+                display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                borderRadius: t.borderRadius.md,
+                backgroundColor: t.colors.infoScale[50],
+                color: t.colors.infoScale[700],
+                fontSize: t.typography.fontSize.xs,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{dateRangeProp[0]} - {dateRangeProp[1]}</Text>
+              </Box>
+            )}
+            {chartTypeProp && (
+              <Box style={{
+                display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                borderRadius: t.borderRadius.md,
+                backgroundColor: t.colors.primaryScale[50],
+                color: t.colors.primaryScale[700],
+                fontSize: t.typography.fontSize.xs,
+              }}>
+                <BarChart3 size={12} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{chartTypeProp}</Text>
+              </Box>
+            )}
+            <Box
+              role="button"
+              aria-label="Open filters"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}
+            >
+              <Filter size={14} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Filters</Text> <ChevronDown size={12} />
+            </Box>
           </Box>
         </Flex>
 
@@ -243,15 +235,15 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               >
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
                   <Box style={createIconContainerStyle(t, { size: 40, color: cs[50] })}>
-                    <Icon size={20} color={cs[600]} />
+                    <Icon size={ICON_SIZES.feature} color={cs[600]} />
                   </Box>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <TrendIcon size={14} color={trendColor} />
+                  <Box style={createTrendStyle(t, kpi.trend ?? 0).container}>
+                    <TrendIcon size={ICON_SIZES.label} color={trendColor} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(kpi.trend ?? 0).toFixed(1)}%</Text>
                   </Box>
                 </Box>
-                <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{typeof kpi.value === 'number' ? (kpi.value ?? 0).toFixed(1) : kpi.value}</Text>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{kpi.label}</Text>
+                <Text style={createStatValueStyle(t, { size: '2xl' })}>{typeof kpi.value === 'number' ? formatScore(kpi.value) : kpi.value}</Text>
+                <Text style={{ ...createStatLabelStyle(t), marginTop: t.spacing[1] }}>{kpi.label}</Text>
               </Box>
             );
           })}
@@ -303,6 +295,35 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               </Box>
             </Box>
 
+            {/* Score Distribution Buckets */}
+            {scoreDistributionBuckets.length > 0 && (
+              <Box style={card}>
+                <SectionTitle>Score Buckets</SectionTitle>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                  {scoreDistributionBuckets.map((bucket, idx) => {
+                    const maxPct = Math.max(...scoreDistributionBuckets.map(b => b.percentage ?? 0), 1);
+                    const barWidth = (bucket.percentage ?? 0) / maxPct * 100;
+                    const bucketColor = (bucket.rangeMax ?? 0) >= 80 ? t.colors.successScale[400] : (bucket.rangeMax ?? 0) >= 60 ? t.colors.warningScale[400] : t.colors.errorScale[400];
+                    const entrance = createEntranceAnimation(t, { index: idx });
+                    return (
+                      <Box key={`${bucket.rangeMin}-${bucket.rangeMax}`} style={{ ...entrance.animate, transition: entrance.transition }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{bucket.rangeMin}-{bucket.rangeMax}</Text>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{bucket.count}</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{(bucket.percentage ?? 0).toFixed(1)}%</Text>
+                          </Box>
+                        </Box>
+                        <Box style={{ height: 10, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
+                          <Box style={{ height: '100%', width: `${barWidth}%`, backgroundColor: bucketColor, borderRadius: t.borderRadius.sm, transition: 'width 400ms ease' }} />
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
+            )}
+
             {/* Cohort Comparison */}
             <Box style={card}>
               <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Users size={12} /> By Source</Box>}>Cohort Comparison</SectionTitle>
@@ -319,7 +340,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{cohort.groupName}</Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{cohort.count} candidates</Text>
                       </Box>
-                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: cs[700] }}>{(cohort.avgScore ?? 0).toFixed(1)}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: cs[700] }}>{formatScore(cohort.avgScore)}</Text>
                     </Box>
                   );
                 })}
@@ -426,6 +447,175 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   </Box>
                 );
               })}
+            </Box>
+          </Box>
+        )}
+
+        {/* -- Model Performance Tab -- */}
+        {activeSection === 'models' && (
+          <Box role="tabpanel" id="tabpanel-models" aria-label="Model performance" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[6] }}>
+            {/* Model Performance Table */}
+            <Box style={card}>
+              <SectionTitle>Model Performance</SectionTitle>
+              {modelPerformance.length > 0 && (
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                  {modelPerformance.map((mp, idx) => {
+                    const latencyColor = mp.avgLatencyMs < 3000 ? t.colors.successScale : mp.avgLatencyMs < 8000 ? t.colors.warningScale : t.colors.errorScale;
+                    const errorColor = mp.errorRate < 0.02 ? t.colors.successScale : mp.errorRate < 0.1 ? t.colors.warningScale : t.colors.errorScale;
+                    const entrance = createEntranceAnimation(t, { index: idx });
+                    return (
+                      <Box key={mp.model} style={{
+                        padding: t.spacing[3],
+                        borderRadius: t.borderRadius.md,
+                        backgroundColor: t.colors.neutral[50],
+                        ...entrance.animate,
+                        transition: entrance.transition,
+                      }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{mp.model}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{mp.totalScorecards} scorecards</Text>
+                        </Box>
+                        <Box style={{ display: 'flex', gap: t.spacing[3] }}>
+                          <Box style={createMetadataFieldStyle(t)}>
+                            <Text style={createMetadataLabelStyle(t)}>Avg Latency</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: latencyColor[700] }}>
+                              {(mp.avgLatencyMs / 1000).toFixed(1)}s
+                            </Text>
+                          </Box>
+                          <Box style={createMetadataFieldStyle(t)}>
+                            <Text style={createMetadataLabelStyle(t)}>Avg Tokens</Text>
+                            <Text style={createMetadataValueStyle(t, { weight: 'bold' })}>
+                              {mp.avgTokensUsed.toLocaleString()}
+                            </Text>
+                          </Box>
+                          <Box style={createMetadataFieldStyle(t)}>
+                            <Text style={createMetadataLabelStyle(t)}>Error Rate</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: errorColor[700] }}>
+                              {(mp.errorRate * 100).toFixed(1)}%
+                            </Text>
+                          </Box>
+                          <Box style={createMetadataFieldStyle(t)}>
+                            <Text style={createMetadataLabelStyle(t)}>Avg Score</Text>
+                            <Text style={createMetadataValueStyle(t, { weight: 'bold' })}>
+                              {formatScore(mp.avgScore)}
+                            </Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </Box>
+              )}
+            </Box>
+
+            {/* Token Usage Summary */}
+            <Box style={card}>
+              <SectionTitle>Token Usage</SectionTitle>
+              {/* Summary stats */}
+              {(totalTokensUsed !== undefined || totalScoringCost !== undefined || avgLatencyMs !== undefined) && (
+                <Box style={{
+                  display: 'flex',
+                  gap: t.spacing[3],
+                  marginBottom: t.spacing[4],
+                  flexWrap: 'wrap' as const,
+                }}>
+                  {totalTokensUsed !== undefined && (
+                    <Box style={{
+                      ...createMetadataFieldStyle(t),
+                      padding: t.spacing[3],
+                      borderRadius: t.borderRadius.md,
+                      backgroundColor: t.colors.primaryScale[50],
+                      flex: 1,
+                      minWidth: 100,
+                    }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.primaryScale[600] }}>Total Tokens</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[800] }}>
+                        {totalTokensUsed.toLocaleString()}
+                      </Text>
+                    </Box>
+                  )}
+                  {totalScoringCost !== undefined && (
+                    <Box style={{
+                      ...createMetadataFieldStyle(t),
+                      padding: t.spacing[3],
+                      borderRadius: t.borderRadius.md,
+                      backgroundColor: t.colors.warningScale[50],
+                      flex: 1,
+                      minWidth: 100,
+                    }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[600] }}>Total Cost</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.warningScale[800] }}>
+                        ${totalScoringCost.toFixed(2)}
+                      </Text>
+                    </Box>
+                  )}
+                  {avgLatencyMs !== undefined && (
+                    <Box style={{
+                      ...createMetadataFieldStyle(t),
+                      padding: t.spacing[3],
+                      borderRadius: t.borderRadius.md,
+                      backgroundColor: t.colors.infoScale[50],
+                      flex: 1,
+                      minWidth: 100,
+                    }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[600] }}>Avg Latency</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.infoScale[800] }}>
+                        {(avgLatencyMs / 1000).toFixed(1)}s
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
+              )}
+
+              {/* Token usage trend bars */}
+              {tokenUsageTrends.length > 0 && (
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], marginBottom: t.spacing[1] }}>
+                    Daily Token Usage
+                  </Text>
+                  {tokenUsageTrends.map((tu, idx) => {
+                    const maxTokens = Math.max(...tokenUsageTrends.map(x => x.totalTokens), 1);
+                    const entrance = createEntranceAnimation(t, { index: idx });
+                    return (
+                      <Box key={tu.date} style={{ ...entrance.animate, transition: entrance.transition }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{tu.date}</Text>
+                          <Box style={{ display: 'flex', gap: t.spacing[2] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{tu.totalTokens.toLocaleString()}</Text>
+                            {tu.cost !== undefined && (
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[600] }}>${tu.cost.toFixed(2)}</Text>
+                            )}
+                          </Box>
+                        </Box>
+                        <Box style={{ display: 'flex', height: 8, borderRadius: t.borderRadius.full, overflow: 'hidden', backgroundColor: t.colors.neutral[100] }}>
+                          <Box style={{
+                            height: '100%',
+                            width: `${(tu.inputTokens / maxTokens) * 100}%`,
+                            backgroundColor: t.colors.primaryScale[400],
+                            transition: 'width 400ms ease',
+                          }} />
+                          <Box style={{
+                            height: '100%',
+                            width: `${(tu.outputTokens / maxTokens) * 100}%`,
+                            backgroundColor: t.colors.infoScale[400],
+                            transition: 'width 400ms ease',
+                          }} />
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                  <Box style={{ display: 'flex', gap: t.spacing[3], marginTop: t.spacing[2] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[400] }} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Input</Text>
+                    </Box>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: t.colors.infoScale[400] }} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Output</Text>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
             </Box>
           </Box>
         )}

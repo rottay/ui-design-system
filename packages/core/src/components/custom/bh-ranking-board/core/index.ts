@@ -25,6 +25,17 @@ export interface RankedCandidate {
   decisionStatus: DecisionStatus;
   strengths: string[];
   weaknesses: string[];
+  confidence?: number;
+  evidenceCount?: number;
+  tier?: string;
+  tierColor?: string;
+  scoreLevel?: string;
+  weightedScore?: number;
+  dimensionCount?: number;
+  knockoutDimensions?: string[];
+  scoredAt?: Date | string;
+  scoredBy?: string;
+  recommendations?: string[];
 }
 
 export interface ScoreDistribution {

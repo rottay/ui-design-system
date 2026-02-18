@@ -66,6 +66,28 @@ export interface JobItem {
   clientName?: string;
   recruiterAvatars?: string[];
   candidatesByStage?: CandidateStageCount[];
+  /** Work mode: remote, hybrid, or onsite */
+  workMode?: 'remote' | 'hybrid' | 'onsite';
+  /** List of benefits offered */
+  benefits?: string[];
+  /** Minimum salary for the position */
+  salaryMin?: number;
+  /** Maximum salary for the position */
+  salaryMax?: number;
+  /** Salary currency code (e.g. USD, EUR) */
+  salaryCurrency?: string;
+  /** Total number of applications received */
+  totalApplications?: number;
+  /** Total number of views on the job posting */
+  totalViews?: number;
+  /** Hiring urgency level from DB */
+  hiringUrgency?: JobHiringUrgency;
+  /** Target date to fill the position */
+  targetHireDate?: Date | string | null;
+  /** Team name associated with the job */
+  team?: string;
+  /** Seniority level required */
+  seniorityLevel?: string;
 }
 
 /** @deprecated Use string (stage names are free-form from DB) */

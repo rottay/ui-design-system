@@ -22,6 +22,12 @@ export interface SourceMetrics {
   hired: number;
   hireRate: number;
   qualityScore: number;
+  costPerHire?: number;
+  totalSpend?: number;
+  avgTimeToHire?: number;
+  retentionRate90d?: number;
+  trend?: 'up' | 'down' | 'flat';
+  previousPeriodHired?: number;
 }
 
 export interface BhSourceEffectivenessProps extends EngineAwareProps {
@@ -38,6 +44,15 @@ export interface BhSourceEffectivenessProps extends EngineAwareProps {
 
   /** Currently selected source */
   selectedSource?: string | null;
+
+  /** Time period label */
+  period?: string;
+
+  /** Whether to show cost columns */
+  showCost?: boolean;
+
+  /** Whether to show trend indicators */
+  showTrend?: boolean;
 
   /** Loading state */
   loading?: boolean;

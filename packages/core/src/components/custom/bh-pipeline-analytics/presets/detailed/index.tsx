@@ -13,27 +13,16 @@ import {
   createSectionHeaderStyle,
   createHoverStyle,
   createStatusDotStyle,
+  createStatValueStyle,
+  createStatLabelStyle,
+  ICON_SIZES,
 } from '../../../helpers';
-import type { BhPipelineAnalyticsProps, PipelineStage, PipelineSummary } from '../../core';
+import type { BhPipelineAnalyticsProps, PipelineStage, PipelineSummary, PipelineBottleneck } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Users, TrendingUp, Clock, AlertTriangle, BarChart3,
   Target, ArrowUpRight, ArrowDownRight,
 } from 'lucide-react';
-
-const MOCK_STAGES: PipelineStage[] = [
-  { id: 'ps-1', name: 'Applied', status: 'new', count: 342, conversionRate: 100, avgTimeInStageDays: 1.2, dropoffCount: 0 },
-  { id: 'ps-2', name: 'Screening', status: 'screening', count: 186, conversionRate: 54.4, avgTimeInStageDays: 3.5, slaLimitDays: 5, dropoffCount: 156 },
-  { id: 'ps-3', name: 'Phone Screen', status: 'phone_screen', count: 98, conversionRate: 52.7, avgTimeInStageDays: 4.2, slaLimitDays: 7, dropoffCount: 88 },
-  { id: 'ps-4', name: 'Technical Interview', status: 'technical_interview', count: 54, conversionRate: 55.1, avgTimeInStageDays: 6.8, slaLimitDays: 10, dropoffCount: 44 },
-  { id: 'ps-5', name: 'Onsite Interview', status: 'onsite_interview', count: 28, conversionRate: 51.9, avgTimeInStageDays: 5.1, dropoffCount: 26 },
-  { id: 'ps-6', name: 'Offer Extended', status: 'offer_extended', count: 16, conversionRate: 57.1, avgTimeInStageDays: 3.2, dropoffCount: 12 },
-  { id: 'ps-7', name: 'Hired', status: 'hired', count: 12, conversionRate: 75.0, avgTimeInStageDays: 2.1, dropoffCount: 4 },
-];
-
-const MOCK_SUMMARY: PipelineSummary = {
-  totalActive: 342, totalHired: 12, avgTimeToHireDays: 26.1, overallConversionRate: 3.5, bottleneckCount: 1,
-};
 
 function formatNumber(value: number | null | undefined): string {
   if (value == null || isNaN(value)) return '0';
@@ -80,14 +69,14 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      stages: rawStages = MOCK_STAGES, bottlenecks: rawBottlenecks = [], summary: rawSummary = MOCK_SUMMARY,
+      stages: rawStages = [], bottlenecks: rawBottlenecks = [], summary: rawSummary = {} as Partial<PipelineSummary>,
       showComparison = false, onStageSelect, selectedStage,
       onBottleneckSelect, className, style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
+    const stages = Array.isArray(rawStages) ? rawStages as PipelineStage[] : [];
     const bottlenecks = Array.isArray(rawBottlenecks) ? rawBottlenecks : [];
-    const summary = Array.isArray(rawSummary) ? rawSummary : MOCK_SUMMARY;
+    const summary = (Array.isArray(rawSummary) ? rawSummary : rawSummary ?? {}) as Partial<PipelineSummary>;
 
     const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
@@ -121,14 +110,10 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                     {stat.icon}
                   </Box>
                 </Flex>
-                <Text style={{
-                  fontSize: tokens.typography.fontSize['2xl'] || '1.5rem',
-                  fontWeight: tokens.typography.fontWeight.bold,
-                  color: stat.color,
-                }}>
+                <Text style={{ ...createStatValueStyle(tokens, { size: '2xl' }), color: stat.color }}>
                   {stat.value}
                 </Text>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                <Text style={createStatLabelStyle(tokens)}>
                   {stat.label}
                 </Text>
               </Box>
@@ -211,8 +196,8 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                                   : tokens.colors.errorScale[500],
                               }}>
                                 {(stage.count ?? 0) >= (stage.previousPeriodCount ?? 0)
-                                  ? <ArrowUpRight size={10} />
-                                  : <ArrowDownRight size={10} />}
+                                  ? <ArrowUpRight size={ICON_SIZES.inline} />
+                                  : <ArrowDownRight size={ICON_SIZES.inline} />}
                               </Flex>
                             )}
                           </Flex>

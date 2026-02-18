@@ -23,6 +23,33 @@ export interface ExpiringOffer {
   expiresAt: string;
   status: 'pending' | 'accepted' | 'expired' | 'extended';
   daysRemaining: number;
+
+  /** Department name */
+  department?: string;
+
+  /** Offered salary amount */
+  salary?: number;
+
+  /** Currency code for salary */
+  currency?: string;
+
+  /** Equity type (e.g. options, rsu, percentage) */
+  equityType?: string;
+
+  /** When the offer was sent to the candidate */
+  sentAt?: string;
+
+  /** When the candidate first viewed the offer */
+  viewedAt?: string;
+
+  /** Offer version number */
+  version?: number;
+
+  /** Whether this is a counter offer */
+  isCounterOffer?: boolean;
+
+  /** Legal review status */
+  legalReviewStatus?: string;
 }
 
 /**

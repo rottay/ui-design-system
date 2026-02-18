@@ -52,6 +52,12 @@ export interface InterviewStats {
   avgDuration: number;
   completionRate: number;
   completionTrend: number;
+  /** Average interview score across completed interviews */
+  avgScore?: number;
+  /** Net Promoter Score from candidate feedback */
+  npsScore?: number;
+  /** Rate of interviews with reported technical issues */
+  technicalIssueRate?: number;
 }
 
 export interface InterviewFilter {
@@ -60,6 +66,12 @@ export interface InterviewFilter {
   dateRange?: [string, string];
   jobId?: string | null;
   recruiterId?: string | null;
+  /** Filter by interview mode (ai_voice, ai_chat, human_video, etc.) */
+  interviewMode?: InterviewDisplayMode | null;
+  /** Filter by billing mode */
+  billingMode?: string | null;
+  /** Filter by proctoring enabled/disabled */
+  proctoringEnabled?: boolean | null;
 }
 
 export type SortDirection = 'asc' | 'desc';

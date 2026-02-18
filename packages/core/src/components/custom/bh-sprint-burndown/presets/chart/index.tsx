@@ -8,7 +8,7 @@
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
-  TrendingDown, Calendar, Target, Activity, Flame,
+  TrendingDown, Calendar, Target, Activity, Flame, Briefcase,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -33,19 +33,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_DATA: BurndownDataPoint[] = [
-  { day: 0, ideal: 40, actual: 40, date: '2025-01-06' },
-  { day: 1, ideal: 36, actual: 38, date: '2025-01-07' },
-  { day: 2, ideal: 32, actual: 35, date: '2025-01-08' },
-  { day: 3, ideal: 28, actual: 30, date: '2025-01-09' },
-  { day: 4, ideal: 24, actual: 28, date: '2025-01-10' },
-  { day: 5, ideal: 20, actual: 22, date: '2025-01-13' },
-  { day: 6, ideal: 16, actual: 18, date: '2025-01-14' },
-  { day: 7, ideal: 12, actual: 15, date: '2025-01-15' },
-  { day: 8, ideal: 8, actual: 10, date: '2025-01-16' },
-  { day: 9, ideal: 4, actual: 6, date: '2025-01-17' },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -82,19 +69,22 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      data: rawData = MOCK_DATA,
+      data: rawData = [],
       sprintName = 'Sprint 12',
       totalPoints = 40,
       daysTotal = 10,
       daysElapsed = 7,
       title = 'Sprint Burndown',
+      positionTarget: positionTargetProp,
+      placementTarget: placementTargetProp,
+      revenueTarget: revenueTargetProp,
+      completionPercentage: completionPercentageProp,
       loading = false,
       className,
       style,
     } = props;
 
-    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
-
+    const data = Array.isArray(rawData) ? rawData : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -256,6 +246,40 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
               <Box style={progress.fill} />
             </Box>
           </Box>
+
+          {/* Sprint Targets */}
+          {(positionTargetProp != null || placementTargetProp != null || revenueTargetProp != null || completionPercentageProp != null) && (
+            <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${[positionTargetProp, placementTargetProp, revenueTargetProp, completionPercentageProp].filter(v => v != null).length}, 1fr)`, gap: t.spacing[3], marginTop: t.spacing[4] }}>
+              {positionTargetProp != null && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.infoScale[50] }}>
+                  <Briefcase size={14} color={t.colors.infoScale[500]} style={{ marginBottom: t.spacing[1] }} />
+                  <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{positionTargetProp}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Position Target</Text>
+                </Box>
+              )}
+              {placementTargetProp != null && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.successScale[50] }}>
+                  <Target size={14} color={t.colors.successScale[500]} style={{ marginBottom: t.spacing[1] }} />
+                  <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{placementTargetProp}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Placement Target</Text>
+                </Box>
+              )}
+              {revenueTargetProp != null && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.warningScale[50] }}>
+                  <TrendingDown size={14} color={t.colors.warningScale[500]} style={{ marginBottom: t.spacing[1] }} />
+                  <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>${revenueTargetProp.toLocaleString()}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Revenue Target</Text>
+                </Box>
+              )}
+              {completionPercentageProp != null && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.primaryScale[50] }}>
+                  <Activity size={14} color={t.colors.primaryScale[500]} style={{ marginBottom: t.spacing[1] }} />
+                  <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{completionPercentageProp}%</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Completion</Text>
+                </Box>
+              )}
+            </Box>
+          )}
           </Box>
         </Box>
 

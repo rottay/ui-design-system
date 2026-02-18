@@ -18,6 +18,10 @@ export interface SkillGapData {
   gap?: number;
   priority?: 'high' | 'medium' | 'low';
   candidatePool?: number;
+  /** Overall gap score across all dimensions (from SkillGapAnalysisSelect.overallGap) */
+  overallGap?: number;
+  /** Recommendations for closing the gap (from SkillGapAnalysisSelect.recommendations) */
+  recommendations?: string[];
 }
 
 export interface BhSkillGapDashboardProps extends EngineAwareProps {

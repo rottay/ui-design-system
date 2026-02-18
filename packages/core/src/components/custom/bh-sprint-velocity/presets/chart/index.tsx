@@ -33,15 +33,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SPRINTS: SprintVelocityData[] = [
-  { sprintName: 'Sprint 7', planned: 32, completed: 28, carryOver: 4 },
-  { sprintName: 'Sprint 8', planned: 35, completed: 30, carryOver: 5 },
-  { sprintName: 'Sprint 9', planned: 30, completed: 30, carryOver: 0 },
-  { sprintName: 'Sprint 10', planned: 38, completed: 32, carryOver: 6 },
-  { sprintName: 'Sprint 11', planned: 36, completed: 34, carryOver: 2 },
-  { sprintName: 'Sprint 12', planned: 40, completed: 25, carryOver: 0 },
-];
-
 /* ================================================================== */
 /*  Chart Preset                                                       */
 /* ================================================================== */
@@ -57,16 +48,18 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      sprints: rawSprints = MOCK_SPRINTS,
+      sprints: rawSprints = [],
       averageVelocity,
+      activeSprint,
       title = 'Sprint Velocity',
       onSprintClick,
+      revenueCurrency = 'USD',
       loading = false,
       className,
       style,
     } = props;
 
-    const sprints = Array.isArray(rawSprints) ? rawSprints : MOCK_SPRINTS;
+    const sprints = Array.isArray(rawSprints) ? rawSprints : [];
 
     const [hoveredBar, setHoveredBar] = useState<string | null>(null);
 
@@ -204,8 +197,52 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
           </Box>
         </Box>
 
+        {/* Active Sprint Info */}
+        {activeSprint && (
+          <Box style={{ ...card, ...animStyle(1) }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
+              <Zap size={14} color={t.colors.primaryScale[500]} />
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                Active Sprint
+              </Text>
+            </Box>
+            <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[3] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Name</Text>
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+                  {activeSprint.name ?? 'Current Sprint'}
+                </Text>
+              </Box>
+              {activeSprint.positionTarget !== undefined && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Position Target</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+                    {activeSprint.positionTarget}
+                  </Text>
+                </Box>
+              )}
+              {activeSprint.revenueTarget !== undefined && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Revenue Target</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600] }}>
+                    {revenueCurrency} {Number(activeSprint.revenueTarget).toLocaleString()}
+                  </Text>
+                </Box>
+              )}
+              {activeSprint.completionPercentage !== undefined && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Completion</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[600] }}>
+                    {Number(activeSprint.completionPercentage).toFixed(0)}%
+                  </Text>
+                </Box>
+              )}
+            </Box>
+          </Box>
+        )}
+
         {/* Chart Card */}
-        <Box style={{ ...card, ...animStyle(1) }}>
+        <Box style={{ ...card, ...animStyle(2) }}>
           <Text style={{ ...sectionLabel, marginBottom: t.spacing[3] }}>Velocity per Sprint</Text>
 
           {sprints.length === 0 ? (

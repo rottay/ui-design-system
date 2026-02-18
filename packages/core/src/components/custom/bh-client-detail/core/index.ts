@@ -27,6 +27,18 @@ export interface ClientPosition {
   status: string;
   candidates: number;
   daysOpen: number;
+
+  /** Recruiter assigned to this position */
+  assignedRecruiterId?: string;
+
+  /** SLA target in days for filling the position */
+  slaTargetDays?: number;
+
+  /** Target number of candidates to source */
+  targetCandidates?: number;
+
+  /** Position priority level */
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
 }
 
 /**
@@ -35,6 +47,38 @@ export interface ClientPosition {
 export interface RevenuePoint {
   month: string;
   amount: number;
+
+  /** Currency code (e.g. 'USD', 'EUR') */
+  currency?: string;
+
+  /** Revenue breakdown by source */
+  breakdown?: { placements: number; retainer?: number };
+}
+
+/**
+ * Contract details associated with a client engagement.
+ */
+export interface ClientContract {
+  /** Type of contract (e.g. contingency, retained, exclusive, hybrid) */
+  contractType?: string;
+
+  /** Contract start date (ISO 8601) */
+  contractStartDate?: string;
+
+  /** Contract end date (ISO 8601) */
+  contractEndDate?: string;
+
+  /** External contract reference number */
+  contractReference?: string;
+
+  /** Fee percentage charged on placements */
+  feePercentage?: number;
+
+  /** Fixed retainer amount */
+  retainerAmount?: number;
+
+  /** Guarantee period in days for placed candidates */
+  guaranteePeriodDays?: number;
 }
 
 export interface BhClientDetailProps extends EngineAwareProps {
@@ -54,6 +98,9 @@ export interface BhClientDetailProps extends EngineAwareProps {
 
   /** Callback when a position is clicked */
   onPositionClick?: (positionId: string) => void;
+
+  /** Contract details for this client */
+  contract?: ClientContract;
 
   /** Loading state */
   loading?: boolean;

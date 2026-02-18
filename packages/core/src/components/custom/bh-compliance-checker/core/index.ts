@@ -21,6 +21,18 @@ export interface ComplianceRule {
   status?: 'pass' | 'fail' | 'warning' | 'na';
   description?: string;
   lastChecked?: Date;
+  /** Severity level of the rule */
+  severity?: 'critical' | 'high' | 'medium' | 'low';
+  /** Whether this rule supports auto-fix */
+  autoFix?: boolean;
+  /** Timestamp when the rule was auto-fixed */
+  fixedAt?: Date;
+  /** User who triggered or approved the fix */
+  fixedBy?: string;
+  /** Regulation this rule maps to (e.g. GDPR, SOC2, EEOC) */
+  regulation?: string;
+  /** Additional structured details about the rule check */
+  details?: Record<string, unknown>;
 }
 
 export interface BhComplianceCheckerProps extends EngineAwareProps {

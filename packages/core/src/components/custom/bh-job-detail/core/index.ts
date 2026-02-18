@@ -27,6 +27,24 @@ export interface JobInfo {
   clientName: string;
   daysOpen: number;
   urgency: UrgencyLevel;
+  /** Work mode: remote, hybrid, or onsite */
+  workMode?: 'remote' | 'hybrid' | 'onsite';
+  /** List of benefits offered */
+  benefits?: string[];
+  /** List of perks beyond standard benefits */
+  perks?: string[];
+  /** Pre-screening questions for applicants */
+  screeningQuestions?: Array<{ question: string; type: string; required: boolean }>;
+  /** Application-specific questions */
+  applicationQuestions?: Array<{ question: string; type: string }>;
+  /** Countries where remote work is allowed */
+  remoteCountries?: string[];
+  /** Timezone requirements for the role */
+  timezoneRequirements?: string;
+  /** Whether the role is eligible for equity compensation */
+  equityEligible?: boolean;
+  /** Whether the role is eligible for bonus compensation */
+  bonusEligible?: boolean;
 }
 
 export interface JobMetric {
@@ -88,6 +106,10 @@ export interface AnalyticsData {
   sources: AnalyticsSource[];
   timeToStage: TimeToStageEntry[];
   scoreDistribution: ScoreDistributionBucket[];
+  /** Total number of views on the job posting */
+  totalViews?: number;
+  /** Total number of shares of the job posting */
+  totalShares?: number;
 }
 
 export interface SlaConfig {

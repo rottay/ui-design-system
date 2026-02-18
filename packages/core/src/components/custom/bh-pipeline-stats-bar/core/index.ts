@@ -17,12 +17,17 @@ export interface StageConversion {
   rate?: number;
   candidateCount?: number;
   trend?: TrendDirection;
+  avgDaysInStage?: number;
+  slaLimit?: number;
+  breachCount?: number;
 }
 
 export interface TimeToHireMetric {
   days?: number;
   trend?: TrendDirection;
   previousDays?: number;
+  targetDays?: number;
+  byDepartment?: Array<{ department: string; days: number }>;
 }
 
 export interface BhPipelineStatsBarProps extends EngineAwareProps {
@@ -48,6 +53,15 @@ export interface BhPipelineStatsBarProps extends EngineAwareProps {
 
   /** Callback when bottleneck indicator is clicked */
   onBottleneckClick?: (stage: string) => void;
+
+  /** Offer acceptance rate percentage */
+  offerAcceptanceRate?: number;
+
+  /** Cost per hire metric */
+  costPerHire?: number;
+
+  /** Quality of hire metric */
+  qualityOfHire?: number;
 
   /** Loading state */
   loading?: boolean;

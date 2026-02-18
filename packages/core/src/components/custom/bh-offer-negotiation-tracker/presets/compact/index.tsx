@@ -20,12 +20,6 @@ import type { BhOfferNegotiationTrackerProps, NegotiationRound } from '../../cor
 import { offerToNegotiationRounds } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
-const MOCK_ROUNDS: NegotiationRound[] = [
-  { id: 'nr-1', date: '2026-01-15', offeredSalary: 120000, requestedSalary: 145000, status: 'countered' },
-  { id: 'nr-2', date: '2026-01-20', offeredSalary: 130000, requestedSalary: 140000, status: 'countered' },
-  { id: 'nr-3', date: '2026-01-28', offeredSalary: 137000, requestedSalary: 137000, status: 'accepted' },
-];
-
 function formatCurrency(value: number, currency: string): string {
   return `${currency}${(value || 0).toLocaleString()}`;
 }
@@ -57,9 +51,8 @@ export const CompactBhOfferNegotiationTracker = createPreset<BhOfferNegotiationT
       style,
     } = props;
 
-    const rounds = roundsProp ?? (offer ? offerToNegotiationRounds(offer) : MOCK_ROUNDS);
+    const rounds = roundsProp ?? (offer ? offerToNegotiationRounds(offer) : []);
     const candidateName = candidateNameProp ?? '';
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

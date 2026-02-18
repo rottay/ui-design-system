@@ -24,6 +24,16 @@ export interface TimelineEventView {
   candidateName?: string;
   /** Optional label for the timeline dot */
   label?: string;
+  /** Event description (UI-computed) */
+  description?: string;
+  /** Flat metadata for convenience (alternative to event.metadata) */
+  metadata?: Record<string, unknown>;
+  /** Whether this event has been reviewed */
+  reviewed?: boolean;
+  /** Who reviewed this event */
+  reviewedBy?: string;
+  /** Whether this event has been dismissed */
+  dismissed?: boolean;
 }
 
 export interface BhProctoringTimelineProps extends EngineAwareProps {

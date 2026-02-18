@@ -24,6 +24,12 @@ export interface TeamMetric {
   label: string;
   value: number;
   target: number;
+  /** Display unit for the metric (e.g., 'days', '%', '$') */
+  unit?: string;
+  /** Trend direction percentage (positive = improving) */
+  trend?: number;
+  /** Whether the metric is on track, at risk, or behind */
+  status?: 'on_track' | 'at_risk' | 'behind';
 }
 
 export interface BhTeamCardProps extends EngineAwareProps {
@@ -34,6 +40,12 @@ export interface BhTeamCardProps extends EngineAwareProps {
 
   /** Additional display metrics (computed/aggregated) */
   metrics?: TeamMetric[];
+
+  /** Whether to show team specializations from DBTeam.specializations */
+  showSpecializations?: boolean;
+
+  /** Whether to show capacity info (maxActivePositions, currentActivePositions) */
+  showCapacity?: boolean;
 
   /** Click handler */
   onClick?: () => void;

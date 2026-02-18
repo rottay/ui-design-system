@@ -33,6 +33,16 @@ export interface AppealListItem {
   submittedAt?: Date;
   /** UI priority (computed) */
   priority?: 'high' | 'medium' | 'low';
+  /** Original score before appeal */
+  originalScore?: number;
+  /** Adjusted score after appeal resolution */
+  adjustedScore?: number;
+  /** Dimension score ID the appeal targets */
+  dimensionScoreId?: string;
+  /** When the appeal was reviewed */
+  reviewedAt?: Date;
+  /** ID or name of the reviewer */
+  reviewedBy?: string;
 }
 
 export interface BhAppealListProps extends EngineAwareProps {

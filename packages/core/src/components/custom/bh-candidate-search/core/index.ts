@@ -38,6 +38,20 @@ export interface SearchFilter {
   source: string[];
   tags: string[];
   status: string[];
+  /** Filter by compensation range [min, max] */
+  compensationRange?: [number, number];
+  /** Filter by compensation currency */
+  compensationCurrency?: string;
+  /** Filter by remote work preference ('remote', 'hybrid', 'onsite') */
+  remotePreference?: string;
+  /** Filter by visa sponsorship requirement */
+  requiresVisaSponsorship?: boolean;
+  /** Filter by availability window (e.g. 'immediately', '2_weeks', '1_month') */
+  availabilityWindow?: string;
+  /** Filter by work authorization status */
+  workAuthorization?: string;
+  /** Filter by willing to relocate */
+  willingToRelocate?: boolean;
 }
 
 export interface FacetCount {

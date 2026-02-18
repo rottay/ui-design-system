@@ -26,6 +26,12 @@ export interface PanelMember {
   submittedAt?: string;
   dimensionScores?: Array<{ dimension: string; score: number; maxScore: number }>;
   notes?: string;
+  /** Confidence score for the evaluation (0-1) */
+  confidenceScore?: number;
+  /** Token cost for AI-assisted evaluation */
+  tokenCost?: number;
+  /** Interview mode used (ai_voice, ai_chat, human_video, etc.) */
+  interviewMode?: string;
 }
 
 export interface InterviewStage {
@@ -39,6 +45,12 @@ export interface InterviewStage {
   scheduledDate?: string;
   completedDate?: string;
   panelMemberIds: string[];
+  /** Estimated duration in minutes for this stage */
+  estimatedDuration?: number;
+  /** Interview mode for this stage (ai_voice, ai_chat, human_video, etc.) */
+  interviewMode?: string;
+  /** Weight of this stage in the overall evaluation */
+  weight?: number;
 }
 
 export interface PanelConsensus {

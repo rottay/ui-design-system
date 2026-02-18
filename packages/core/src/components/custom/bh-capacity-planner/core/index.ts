@@ -26,6 +26,20 @@ export interface RecruiterCapacity {
   activeCandidates?: number;
   avgTimePerCandidate?: number;
   status?: 'underutilized' | 'optimal' | 'overloaded';
+  /** Recruiter specializations (from DBTeam.specializations JSONB) */
+  specializations?: string[];
+  /** Industries the recruiter covers (from DBTeam.industries JSONB) */
+  industries?: string[];
+  /** Seniority levels the recruiter handles (from DBTeam.seniorityLevels JSONB) */
+  seniorityLevels?: string[];
+  /** Maximum weekly interview capacity (from DBTeam.capacity.maxWeeklyInterviews) */
+  weeklyInterviewCapacity?: number;
+  /** Current number of weekly interviews scheduled */
+  currentWeeklyInterviews?: number;
+  /** Team ID the recruiter belongs to */
+  teamId?: string;
+  /** Team name for display */
+  teamName?: string;
 }
 
 export interface RebalanceSuggestion {
@@ -35,6 +49,12 @@ export interface RebalanceSuggestion {
   toRecruiterName?: string;
   candidateCount?: number;
   reason?: string;
+  /** Estimated impact description of the rebalance */
+  estimatedImpact?: string;
+  /** Priority level of the suggestion */
+  priority?: 'low' | 'medium' | 'high';
+  /** Position IDs affected by the rebalance */
+  positionIds?: string[];
 }
 
 export interface CapacitySummary {
@@ -43,6 +63,14 @@ export interface CapacitySummary {
   overloadedCount?: number;
   underutilizedCount?: number;
   totalOpenReqs?: number;
+  /** Average time to fill positions in days (from DBTeam.performanceMetrics) */
+  avgTimeToFillDays?: number;
+  /** Total active positions across all recruiters */
+  totalActivePositions?: number;
+  /** Total active candidates across all recruiters */
+  totalActiveCandidates?: number;
+  /** Forecasted hires based on current pipeline */
+  forecastedHires?: number;
 }
 
 export interface BhCapacityPlannerProps extends EngineAwareProps {

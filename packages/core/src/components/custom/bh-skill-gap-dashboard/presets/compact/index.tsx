@@ -38,12 +38,6 @@ function getPriorityBadgeKey(priority: SkillGapData['priority']): 'error' | 'war
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SKILLS: SkillGapData[] = [
-  { skill: 'React/TypeScript', required: 95, current: 72, gap: 23, priority: 'high', candidatePool: 145 },
-  { skill: 'System Design', required: 90, current: 65, gap: 25, priority: 'high', candidatePool: 89 },
-  { skill: 'Cloud Architecture', required: 85, current: 70, gap: 15, priority: 'medium', candidatePool: 112 },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -58,14 +52,13 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      skills: rawSkills = MOCK_SKILLS,
+      skills: rawSkills = [],
       onSkillClick,
       className,
       style,
     } = props;
 
-    const skills = Array.isArray(rawSkills) ? rawSkills : MOCK_SKILLS;
-
+    const skills = Array.isArray(rawSkills) ? rawSkills : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

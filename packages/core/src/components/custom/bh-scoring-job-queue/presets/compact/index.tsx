@@ -63,21 +63,6 @@ function getStatusLabel(status: ScoringJobStatus | string): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STATS: QueueStats = {
-  totalJobs: 42,
-  queued: 12,
-  processing: 5,
-  completed: 20,
-  failed: 3,
-  avgProcessingTime: 45000,
-};
-
-const MOCK_JOBS: ScoringJobView[] = [
-  { job: { id: 'sj-1', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 120000), startedAt: new Date(Date.now() - 60000) } as any, candidateName: 'Sarah Johnson', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', progress: 0.65, priorityLabel: 'urgent', estimatedDuration: 90000 },
-  { job: { id: 'sj-2', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 300000), startedAt: new Date(Date.now() - 120000) } as any, candidateName: 'Michael Chen', jobTitle: 'Backend Developer', rubricName: 'System Design Rubric', progress: 0.3, priorityLabel: 'high', estimatedDuration: 120000 },
-  { job: { id: 'sj-3', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 600000) } as any, candidateName: 'Emily Rodriguez', jobTitle: 'Full Stack Engineer', rubricName: 'Code Review Assessment', progress: 0, priorityLabel: 'normal' },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -101,7 +86,6 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
     } = props;
 
     const jobs = Array.isArray(rawJobs) ? rawJobs : [];
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

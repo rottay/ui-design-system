@@ -71,6 +71,64 @@ export interface CandidateStats {
   totalInterviews: number;
   avgScore: number;
   lastActivityDate: Date;
+  /** AI-computed overall match score (0-100) */
+  aiMatchScore?: number;
+  /** Screening assessment score (0-100) */
+  screeningScore?: number;
+  /** Technical assessment score (0-100) */
+  technicalScore?: number;
+  /** Cultural fit score (0-100) */
+  culturalScore?: number;
+}
+
+/** Compensation details for the candidate */
+export interface CandidateCompensation {
+  /** Current salary amount */
+  currentSalary?: number;
+  /** Currency code for current salary (e.g. 'USD') */
+  currentSalaryCurrency?: string;
+  /** Minimum expected salary */
+  expectedSalaryMin?: number;
+  /** Maximum expected salary */
+  expectedSalaryMax?: number;
+  /** Currency code for expected salary */
+  expectedSalaryCurrency?: string;
+}
+
+/** Language proficiency entry */
+export interface CandidateLanguage {
+  /** Language name */
+  language: string;
+  /** Proficiency level (e.g. 'native', 'fluent', 'conversational') */
+  proficiency?: string;
+}
+
+/** Availability and relocation information */
+export interface CandidateAvailability {
+  /** Date from which candidate is available */
+  availableFrom?: Date;
+  /** Notice period in days at current employer */
+  noticePeriodDays?: number;
+  /** Whether the candidate requires visa sponsorship */
+  requiresVisaSponsorship?: boolean;
+  /** Work authorization status */
+  workAuthorization?: string;
+  /** Whether the candidate is willing to relocate */
+  willingToRelocate?: boolean;
+  /** Preferred relocation destinations */
+  relocationPreferences?: string[];
+}
+
+/** External document and profile URLs */
+export interface CandidateDocumentLinks {
+  /** Portfolio URL */
+  portfolioUrl?: string;
+  /** GitHub profile URL */
+  githubUrl?: string;
+  /** Personal website URL */
+  websiteUrl?: string;
+  /** LinkedIn profile URL */
+  linkedinUrl?: string;
 }
 
 export interface BhCandidateProfileProps extends EngineAwareProps {
@@ -99,6 +157,18 @@ export interface BhCandidateProfileProps extends EngineAwareProps {
 
   /** Document attachments */
   documents?: { id: string; name: string; type: string; uploadedAt: Date }[];
+
+  /** Compensation details (current salary, expected range) */
+  compensation?: CandidateCompensation;
+
+  /** Languages spoken by the candidate */
+  languages?: CandidateLanguage[];
+
+  /** Availability and relocation preferences */
+  availability?: CandidateAvailability;
+
+  /** External document and profile links */
+  documentLinks?: CandidateDocumentLinks;
 
   /** Default active tab */
   defaultTab?: CandidateTab;

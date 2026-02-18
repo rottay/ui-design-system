@@ -34,6 +34,27 @@ export interface ApprovalItem {
   urgency: 'low' | 'medium' | 'high';
   summary: string;
   approvalChainProgress: number;
+
+  /** ID of the entity being approved */
+  entityId?: string;
+
+  /** Current step in the approval chain */
+  currentStep?: number;
+
+  /** Total steps in the approval chain */
+  totalSteps?: number;
+
+  /** Due date for the approval decision */
+  dueAt?: string;
+
+  /** Whether this item has been escalated */
+  isEscalated?: boolean;
+
+  /** Reason for escalation */
+  escalationReason?: string;
+
+  /** Timestamp when the item will be auto-approved if no action taken */
+  autoApproveAt?: string;
 }
 
 /* -- Approval Detail -------------------------------------------------- */
@@ -47,6 +68,18 @@ export interface ApprovalDetail {
     status: 'pending' | 'approved' | 'rejected';
     name?: string;
   }[];
+
+  /** Snapshot of the entity at the time of the approval request */
+  entitySnapshot?: Record<string, unknown>;
+
+  /** Role of the requester */
+  requesterRole?: string;
+
+  /** Team name of the requester */
+  requesterTeamName?: string;
+
+  /** Changes requested by reviewers */
+  changesRequested?: string[];
 }
 
 /* -- Stats ------------------------------------------------------------ */
@@ -67,6 +100,15 @@ export interface ApprovalHistory {
   decidedBy: string;
   decidedAt: string;
   timing: number;
+
+  /** Comments left by the reviewer */
+  reviewerComments?: string;
+
+  /** Whether this was auto-approved (no human action) */
+  wasAutoApproved?: boolean;
+
+  /** Whether this was escalated before being decided */
+  wasEscalated?: boolean;
 }
 
 /* -- Main Props ------------------------------------------------------- */

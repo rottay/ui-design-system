@@ -92,19 +92,22 @@ interface ResolvedAlertEvent {
   severity: ProctoringEventSeverity;
   timestamp: Date;
   summary: string;
+  dismissed?: boolean;
+  dismissedBy?: string;
+  metadata?: Record<string, unknown>;
 }
 
-const MOCK_EVENT: ResolvedAlertEvent = {
-  id: 'pe-alert-1',
-  candidateName: 'Sarah Johnson',
-  eventType: 'screen_share',
-  severity: 'critical',
-  timestamp: new Date(Date.now() - 30000),
-  summary: 'Screen sharing detected during active coding assessment',
+const FALLBACK_EVENT: ResolvedAlertEvent = {
+  id: 'unknown',
+  candidateName: 'Unknown',
+  eventType: 'tab_switch',
+  severity: 'low',
+  timestamp: new Date(),
+  summary: '',
 };
 
 function resolveAlertEvent(raw: BhProctoringAlertProps['event']): ResolvedAlertEvent {
-  if (!raw) return MOCK_EVENT;
+  if (!raw) return FALLBACK_EVENT;
   // Support both flat (mock/inline) and nested (ProctoringAlertEvent) shapes
   const flat = raw as any;
   return {
@@ -114,6 +117,9 @@ function resolveAlertEvent(raw: BhProctoringAlertProps['event']): ResolvedAlertE
     severity: flat.severity ?? flat.event?.severity ?? 'low',
     timestamp: flat.timestamp ?? flat.event?.timestamp ?? new Date(),
     summary: flat.summary ?? '',
+    dismissed: flat.dismissed ?? flat.event?.dismissed ?? false,
+    dismissedBy: flat.dismissedBy,
+    metadata: flat.metadata ?? flat.event?.metadata,
   };
 }
 
@@ -132,6 +138,7 @@ export const BannerBhProctoringAlert = createPreset<BhProctoringAlertProps>({
 
     const {
       event: rawEvent,
+      variant = 'banner',
       onReview,
       onDismiss,
       onClose,
@@ -176,9 +183,11 @@ export const BannerBhProctoringAlert = createPreset<BhProctoringAlertProps>({
           backgroundColor: sevBg,
           borderBottom: `2px solid ${sevBorder}`,
           fontFamily: 'inherit',
-          position: 'sticky',
-          top: 0,
+          position: variant === 'toast' ? 'fixed' : 'sticky',
+          top: variant === 'toast' ? t.spacing[4] : 0,
+          right: variant === 'toast' ? t.spacing[4] : undefined,
           zIndex: 50,
+          ...(variant === 'toast' ? { maxWidth: 420, borderRadius: t.borderRadius.lg, boxShadow: t.shadows.lg } : {}),
           ...animStyle,
           ...(isGlass && t.glass ? {
             backdropFilter: t.glass.blur,
@@ -233,6 +242,22 @@ export const BannerBhProctoringAlert = createPreset<BhProctoringAlertProps>({
           }}>
             {event.summary}
           </Text>
+          {event.dismissed && (
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[1] }}>
+              <Box style={{
+                ...createBadgeStyle(t, 'secondary'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: t.spacing[1],
+              }}>
+                <XCircle size={10} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  Dismissed{event.dismissedBy ? ` by ${event.dismissedBy}` : ''}
+                </Text>
+              </Box>
+            </Box>
+          )}
         </Box>
 
         {/* Timestamp */}

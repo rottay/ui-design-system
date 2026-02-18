@@ -128,25 +128,6 @@ function sortJobs(jobs: ScoringJobView[], sortBy: SortKey): ScoringJobView[] {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STATS: QueueStats = {
-  totalJobs: 42,
-  queued: 12,
-  processing: 5,
-  completed: 20,
-  failed: 3,
-  avgProcessingTime: 45000,
-};
-
-const MOCK_JOBS: ScoringJobView[] = [
-  { job: { id: 'sj-1', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 120000), startedAt: new Date(Date.now() - 60000) } as any, candidateName: 'Sarah Johnson', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', progress: 0.65, priorityLabel: 'urgent', estimatedDuration: 90000 },
-  { job: { id: 'sj-2', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 300000), startedAt: new Date(Date.now() - 120000) } as any, candidateName: 'Michael Chen', jobTitle: 'Backend Developer', rubricName: 'System Design Rubric', progress: 0.3, priorityLabel: 'high', estimatedDuration: 120000 },
-  { job: { id: 'sj-3', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 600000) } as any, candidateName: 'Emily Rodriguez', jobTitle: 'Full Stack Engineer', rubricName: 'Code Review Assessment', progress: 0, priorityLabel: 'normal' },
-  { job: { id: 'sj-4', status: 'failed' as const, attempts: 2, createdAt: new Date(Date.now() - 1800000), startedAt: new Date(Date.now() - 1200000), errorMessage: 'Timeout: LLM provider did not respond within 60s' } as any, candidateName: 'James Kim', jobTitle: 'DevOps Engineer', rubricName: 'Infrastructure Rubric', progress: 0.45, priorityLabel: 'high' },
-  { job: { id: 'sj-5', status: 'completed' as const, attempts: 0, createdAt: new Date(Date.now() - 3600000), startedAt: new Date(Date.now() - 3540000), completedAt: new Date(Date.now() - 3500000) } as any, candidateName: 'Anna Kowalski', jobTitle: 'Data Scientist', rubricName: 'ML Knowledge Assessment', progress: 1, priorityLabel: 'normal' },
-  { job: { id: 'sj-6', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 7200000), startedAt: new Date(Date.now() - 7000000) } as any, candidateName: 'David Park', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', progress: 0.2, priorityLabel: 'low' },
-  { job: { id: 'sj-7', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 180000) } as any, candidateName: 'Lisa Wang', jobTitle: 'Product Manager', rubricName: 'PM Case Study Rubric', progress: 0, priorityLabel: 'urgent' },
-];
-
 /* ================================================================== */
 /*  List Preset                                                        */
 /* ================================================================== */
@@ -177,7 +158,6 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
 
     const [hoveredJobId, setHoveredJobId] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState<SortKey>('priority');
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -309,7 +289,6 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                 >
                   {accentBar && <Box style={accentBar} />}
 
-
                   <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
                     <Box style={createIconContainerStyle(t, { size: 36, color: sc.color[50] })}>
                       <Icon size={18} color={sc.color[600]} />
@@ -337,17 +316,48 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
             })}
           </Box>
 
-          {/* Avg processing time */}
+          {/* Avg processing time + extended stats */}
           <Box style={{
             display: 'flex',
             alignItems: 'center',
-            gap: t.spacing[2],
+            gap: t.spacing[4],
             marginBottom: t.spacing[4],
+            flexWrap: 'wrap' as const,
           }}>
-            <Timer size={14} color={t.colors.neutral[500]} />
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-              Avg processing time: {formatDuration(stats.avgProcessingTime)}
-            </Text>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <Timer size={14} color={t.colors.neutral[500]} />
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                Avg processing: {formatDuration(stats.avgProcessingTime)}
+              </Text>
+            </Box>
+            {stats.p95ProcessingTime !== undefined && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                P95: {formatDuration(stats.p95ProcessingTime)}
+              </Text>
+            )}
+            {stats.avgQueueWaitTime !== undefined && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                Avg wait: {formatDuration(stats.avgQueueWaitTime)}
+              </Text>
+            )}
+            {stats.throughputPerHour !== undefined && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                {stats.throughputPerHour.toFixed(1)} jobs/hr
+              </Text>
+            )}
+            {stats.errorRate !== undefined && (
+              <Text style={{
+                fontSize: t.typography.fontSize.xs,
+                color: stats.errorRate > 0.1 ? t.colors.errorScale[600] : t.colors.neutral[400],
+              }}>
+                Error rate: {(stats.errorRate * 100).toFixed(1)}%
+              </Text>
+            )}
+            {stats.totalTokensUsed !== undefined && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                Total tokens: {stats.totalTokensUsed.toLocaleString()}
+              </Text>
+            )}
           </Box>
 
           {/* Job List */}
@@ -520,7 +530,50 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                           {formatDistanceToNow(getJobCreatedAt(jv), { addSuffix: true })}
                         </Text>
+                        {jv.llmModel && (
+                          <>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300] }}>|</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                              {jv.llmModel}
+                            </Text>
+                          </>
+                        )}
                       </Box>
+
+                      {/* Retry count + tokens + dimensions info */}
+                      {(jv.retryCount !== undefined && jv.retryCount > 0 || jv.tokensUsed !== undefined || jv.dimensionsScored !== undefined || jv.processingTimeMs !== undefined) && (
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexWrap: 'wrap', marginTop: t.spacing[1] }}>
+                          {jv.retryCount !== undefined && jv.retryCount > 0 && (
+                            <Box style={{
+                              ...createBadgeStyle(t, jv.retryCount >= (jv.maxRetries ?? 3) ? 'error' : 'warning'),
+                              borderRadius: badgeRadius,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 2,
+                            }}>
+                              <RefreshCw size={9} />
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                                {jv.retryCount}/{jv.maxRetries ?? '?'}
+                              </Text>
+                            </Box>
+                          )}
+                          {jv.dimensionsScored !== undefined && jv.totalDimensions !== undefined && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                              {jv.dimensionsScored}/{jv.totalDimensions} dims
+                            </Text>
+                          )}
+                          {jv.tokensUsed !== undefined && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                              {jv.tokensUsed.toLocaleString()} tokens
+                            </Text>
+                          )}
+                          {jv.processingTimeMs !== undefined && status === 'completed' && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                              {formatDuration(jv.processingTimeMs)}
+                            </Text>
+                          )}
+                        </Box>
+                      )}
 
                       {/* Progress bar for processing jobs */}
                       {status === 'processing' && (

@@ -28,17 +28,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_DATA: BurndownDataPoint[] = [
-  { day: 0, ideal: 40, actual: 40, date: '2025-01-06' },
-  { day: 1, ideal: 36, actual: 38, date: '2025-01-07' },
-  { day: 2, ideal: 32, actual: 35, date: '2025-01-08' },
-  { day: 3, ideal: 28, actual: 30, date: '2025-01-09' },
-  { day: 4, ideal: 24, actual: 28, date: '2025-01-10' },
-  { day: 5, ideal: 20, actual: 22, date: '2025-01-13' },
-  { day: 6, ideal: 16, actual: 18, date: '2025-01-14' },
-  { day: 7, ideal: 12, actual: 15, date: '2025-01-15' },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -78,7 +67,7 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      data: rawData = MOCK_DATA,
+      data: rawData = [],
       sprintName = 'Sprint 12',
       totalPoints = 40,
       daysTotal = 10,
@@ -89,8 +78,7 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
       style,
     } = props;
 
-    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
-
+    const data = Array.isArray(rawData) ? rawData : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

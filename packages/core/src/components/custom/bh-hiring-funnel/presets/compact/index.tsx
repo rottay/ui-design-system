@@ -24,14 +24,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STAGES: FunnelStage[] = [
-  { name: 'Applied', count: 1240, conversionRate: 100 },
-  { name: 'Screened', count: 620, conversionRate: 50 },
-  { name: 'Interviewed', count: 248, conversionRate: 40 },
-  { name: 'Offer', count: 37, conversionRate: 30 },
-  { name: 'Hired', count: 28, conversionRate: 76 },
-];
-
 function getStageColor(index: number, t: DesignTokens, customColor?: string): string {
   if (customColor) return customColor;
   const palette = [
@@ -58,7 +50,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages: rawStages = MOCK_STAGES,
+      stages: rawStages = [],
       title = 'Funnel',
       onStageClick,
       selectedStage,
@@ -66,8 +58,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
       style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
-
+    const stages = Array.isArray(rawStages) ? rawStages : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

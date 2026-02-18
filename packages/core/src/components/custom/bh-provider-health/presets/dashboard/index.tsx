@@ -84,29 +84,6 @@ function formatRelativeTime(date: Date): string {
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_PROVIDERS: ProviderHealthItem[] = [
-  {
-    id: 'openai', name: 'OpenAI', status: 'healthy', uptimePercent: 99.95, latencyMs: 180,
-    latencyTrend: [190, 180, 175, 185, 170, 180, 165, 175, 180, 185, 170, 160],
-    errorRate: 0.02, requestCount: 15420, circuitBreaker: 'closed', lastChecked: new Date(),
-    incidents: [], region: 'US East',
-  },
-  {
-    id: 'anthropic', name: 'Anthropic', status: 'healthy', uptimePercent: 99.92, latencyMs: 210,
-    latencyTrend: [200, 210, 220, 215, 205, 210, 225, 220, 210, 200, 195, 210],
-    errorRate: 0.03, requestCount: 8320, circuitBreaker: 'closed', lastChecked: new Date(),
-    incidents: [], region: 'US East',
-  },
-  {
-    id: 'elevenlabs', name: 'ElevenLabs', status: 'degraded', uptimePercent: 98.5, latencyMs: 450,
-    latencyTrend: [300, 320, 350, 400, 420, 450, 500, 480, 450, 430, 460, 450],
-    errorRate: 1.2, requestCount: 4200, circuitBreaker: 'half-open', lastChecked: new Date(),
-    incidents: [
-      { id: 'inc-1', providerId: 'elevenlabs', type: 'latency_spike', severity: 'warning', title: 'Elevated latency', startedAt: new Date(Date.now() - 3600000) },
-    ],
-    region: 'EU West',
-  },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Dashboard Preset                                                   */
@@ -117,17 +94,19 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
     const { Box, Text } = primitives;
 
     const {
-      providers: rawProviders = MOCK_PROVIDERS,
+      providers: rawProviders = [],
       summary: controlledSummary,
       selectedProvider,
       onProviderSelect,
       onRefresh,
       showIncidents = true,
+      recentRequests: rawRecentRequests,
+      refreshInterval,
       className,
       style,
     } = props;
 
-    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
@@ -205,9 +184,28 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
             }}>
               Provider Health
             </Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
-              {summary.totalProviders} providers monitored
-            </Text>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+                {summary.totalProviders} providers monitored
+              </Text>
+              {refreshInterval !== undefined && (
+                <Box style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: tokens.spacing[1],
+                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                  borderRadius: tokens.borderRadius.full,
+                  backgroundColor: tokens.colors.neutral[100],
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.neutral[500],
+                }}>
+                  <RefreshCw size={10} />
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs }}>
+                    {refreshInterval >= 1000 ? `${Math.round(refreshInterval / 1000)}s` : `${refreshInterval}ms`}
+                  </Text>
+                </Box>
+              )}
+            </Box>
           </Box>
           {onRefresh && (
             <Box
@@ -465,6 +463,58 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
                     {incident.description && (
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], display: 'block'}}>
                         {incident.description}
+                      </Text>
+                    )}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {/* Recent Requests */}
+        {rawRecentRequests && rawRecentRequests.length > 0 && (
+          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
+            <Text style={{ ...sectionHeader }}>Recent Requests</Text>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+              {rawRecentRequests.slice(0, 10).map((req: any, idx: number) => (
+                <Box
+                  key={req.id ?? idx}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                    borderRadius: tokens.borderRadius.md,
+                    backgroundColor: tokens.colors.neutral[50],
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                  }}
+                >
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                    <Box style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: tokens.borderRadius.full,
+                      backgroundColor: req.status === 'success' ? tokens.colors.successScale[500]
+                        : req.status === 'error' ? tokens.colors.errorScale[500]
+                        : tokens.colors.warningScale[500],
+                    }} />
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>
+                      {req.providerId ?? 'Unknown'}
+                    </Text>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                      {req.model ?? req.endpoint ?? ''}
+                    </Text>
+                  </Box>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+                    {req.latencyMs !== undefined && (
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                        {req.latencyMs}ms
+                      </Text>
+                    )}
+                    {req.tokensUsed !== undefined && (
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                        {req.tokensUsed} tokens
                       </Text>
                     )}
                   </Box>

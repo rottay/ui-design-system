@@ -32,6 +32,7 @@ import {
 import type {
   BhCalibrationSampleProps,
   CalibrationSample,
+  CalibrationSampleView,
   DimensionComparison,
   CalibrationSampleStatus,
 } from '../../core';
@@ -85,24 +86,6 @@ function getStatusLabel(status: CalibrationSampleStatus): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SAMPLE: CalibrationSample = {
-  id: 'cal-1',
-  scorableId: 'sc-1',
-  candidateName: 'Sarah Johnson',
-  dimensions: [
-    { dimensionName: 'Technical Depth', humanScore: 4.2, aiScore: 3.8, deviation: -0.4, maxScore: 5, weight: 0.3, humanNotes: 'Strong understanding of system design principles', aiNotes: 'Demonstrated solid technical knowledge with some gaps in distributed systems', agreed: true },
-    { dimensionName: 'Problem Solving', humanScore: 3.5, aiScore: 4.1, deviation: 0.6, maxScore: 5, weight: 0.25, humanNotes: 'Adequate problem decomposition, could improve on edge cases', aiNotes: 'Good structured approach to problem solving with clear methodology', agreed: false },
-    { dimensionName: 'Communication', humanScore: 4.0, aiScore: 4.2, deviation: 0.2, maxScore: 5, weight: 0.2, humanNotes: 'Clear and articulate explanations', aiNotes: 'Well-structured responses with good use of examples', agreed: true },
-    { dimensionName: 'Code Quality', humanScore: 3.0, aiScore: 4.5, deviation: 1.5, maxScore: 5, weight: 0.15, humanNotes: 'Some issues with naming conventions and error handling', aiNotes: 'Clean code with consistent patterns and good abstractions', agreed: false },
-    { dimensionName: 'Culture Fit', humanScore: 4.5, aiScore: 4.3, deviation: -0.2, maxScore: 5, weight: 0.1, humanNotes: 'Excellent team player mentality, strong growth mindset', aiNotes: 'Positive collaborative indicators, aligns with company values', agreed: true },
-  ],
-  overallHumanScore: 3.8,
-  overallAiScore: 4.1,
-  overallDeviation: 0.3,
-  agreementRate: 0.6,
-  status: 'pending',
-};
-
 /* ================================================================== */
 /*  Review Preset                                                      */
 /* ================================================================== */
@@ -117,7 +100,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sample: rawSample = MOCK_SAMPLE,
+      sample: rawSample = {} as Partial<CalibrationSampleView>,
       onAdjustScore,
       onSubmitReview,
       onDismiss,
@@ -126,12 +109,11 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
       style,
     } = props;
 
-    const sample = Array.isArray(rawSample) ? rawSample : MOCK_SAMPLE;
+    const sample = rawSample as Partial<CalibrationSampleView>;
 
     const [expandedDimension, setExpandedDimension] = useState<string | null>(null);
     const [reviewNotes, setReviewNotes] = useState('');
     const [adjustments, setAdjustments] = useState<Record<string, number>>({});
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -151,7 +133,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
     }, [onAdjustScore]);
 
     const handleSubmit = useCallback(() => {
-      onSubmitReview?.(sample.id, reviewNotes);
+      onSubmitReview?.(sample.id ?? '', reviewNotes);
     }, [onSubmitReview, sample.id, reviewNotes]);
 
     const animStyle = (index: number) => ({
@@ -203,11 +185,11 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                     {sample.candidateName}
                   </Text>
                   <Box style={{
-                    ...createBadgeStyle(t, getStatusBadgeKey(sample.status!)),
+                    ...createBadgeStyle(t, getStatusBadgeKey(sample.status ?? 'pending')),
                     borderRadius: badgeRadius,
                   }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                      {getStatusLabel(sample.status!)}
+                      {getStatusLabel(sample.status ?? 'pending')}
                     </Text>
                   </Box>
                 </Box>

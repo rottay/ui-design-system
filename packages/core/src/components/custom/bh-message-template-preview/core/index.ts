@@ -44,6 +44,21 @@ export interface BhMessageTemplatePreviewProps extends EngineAwareProps {
   /** Callback to close the preview */
   onClose?: () => void;
 
+  /** Template delivery type */
+  templateType?: 'email' | 'sms' | 'whatsapp' | 'linkedin';
+  /** Plain text version of the body */
+  plainTextBody?: string;
+  /** Template variables with current values */
+  variables?: Array<{ key: string; label: string; value?: string }>;
+  /** Target audience for this template */
+  targetAudience?: string;
+  /** Use case this template is designed for */
+  useCase?: string;
+  /** Language code (e.g. "en", "es") */
+  language?: string;
+  /** Template version number */
+  version?: number;
+
   /** Loading state */
   loading?: boolean;
 

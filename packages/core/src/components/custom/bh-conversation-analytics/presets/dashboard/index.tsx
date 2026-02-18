@@ -59,36 +59,6 @@ function formatDuration(minutes: number): string {
   return m > 0 ? `${h}h ${m}m` : `${h}h`;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Mock data                                                          */
-/* ------------------------------------------------------------------ */
-
-const MOCK_VOLUME: ConversationVolumePoint[] = Array.from({ length: 30 }, (_, i) => {
-  const date = new Date(2025, 0, i + 1);
-  const base = 80 + Math.sin(i * 0.3) * 25 + Math.random() * 15;
-  return {
-    date: date.toISOString().split('T')[0],
-    count: Math.round(base),
-    completionRate: 70 + Math.random() * 25,
-  };
-});
-
-const MOCK_SCORE_DIST: ScoreDistribution[] = [
-  { range: '0-20', count: 12 },
-  { range: '21-40', count: 34 },
-  { range: '41-60', count: 87 },
-  { range: '61-80', count: 156 },
-  { range: '81-100', count: 211 },
-];
-
-const MOCK_AGENTS: AgentPerformance[] = [
-  { agentId: 'a1', agentName: 'Sarah Chen', totalConversations: 342, avgScore: 88, completionRate: 94, avgDuration: 28 },
-  { agentId: 'a2', agentName: 'Marcus Williams', totalConversations: 298, avgScore: 82, completionRate: 91, avgDuration: 32 },
-  { agentId: 'a3', agentName: 'Elena Rodriguez', totalConversations: 276, avgScore: 79, completionRate: 87, avgDuration: 35 },
-  { agentId: 'a4', agentName: 'James Park', totalConversations: 254, avgScore: 75, completionRate: 85, avgDuration: 30 },
-  { agentId: 'a5', agentName: 'Aisha Patel', totalConversations: 231, avgScore: 91, completionRate: 96, avgDuration: 25 },
-];
-
 const CHART_PAD = { top: 20, right: 20, bottom: 40, left: 50 };
 const CHART_HEIGHT = 240;
 const CHART_WIDTH = 600;
@@ -106,9 +76,9 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
     const t = tokens;
 
     const {
-      volumeData: rawVolumeData = MOCK_VOLUME,
-      scoreDistribution: rawScoreDistribution = MOCK_SCORE_DIST,
-      agentPerformance: rawAgentPerformance = MOCK_AGENTS,
+      volumeData: rawVolumeData = undefined,
+      scoreDistribution: rawScoreDistribution = [],
+      agentPerformance: rawAgentPerformance = [],
       totalConversations = 1401,
       avgScore = 83,
       avgCompletionRate = 90.6,
@@ -120,9 +90,9 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
       style,
     } = props;
 
-    const volumeData = Array.isArray(rawVolumeData) ? rawVolumeData : MOCK_VOLUME;
-    const scoreDistribution = Array.isArray(rawScoreDistribution) ? rawScoreDistribution : MOCK_SCORE_DIST;
-    const agentPerformance = Array.isArray(rawAgentPerformance) ? rawAgentPerformance : MOCK_AGENTS;
+    const volumeData = Array.isArray(rawVolumeData) ? rawVolumeData : [] as ConversationVolumePoint[];
+    const scoreDistribution = Array.isArray(rawScoreDistribution) ? rawScoreDistribution : [];
+    const agentPerformance = Array.isArray(rawAgentPerformance) ? rawAgentPerformance : [];
 
     /* --- Glass / personality tokens --- */
     const isGlass = t.surface.useGlass && !!t.glass;
@@ -139,7 +109,6 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
     const entranceAnims = useMemo(() => {
       return Array.from({ length: 8 }, (_, i) => createEntranceAnimation(t, { index: i }));
     }, [t]);
-
 
     /* --- KPI data --- */
     const kpis = useMemo(() => [

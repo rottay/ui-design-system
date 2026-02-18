@@ -32,6 +32,48 @@ export interface ClientFormData {
   personalEmail?: string;
   personalPhone?: string;
   description?: string;
+
+  /** Legal registered name of the company */
+  legalName?: string;
+
+  /** Tax identification number */
+  taxId?: string;
+
+  /** Company website URL */
+  websiteUrl?: string;
+
+  /** Number of employees at the company */
+  employeeCount?: number;
+
+  /** Contract type (e.g. contingency, retained, exclusive, hybrid) */
+  contractType?: string;
+
+  /** Contract start date (ISO 8601) */
+  contractStartDate?: string;
+
+  /** Contract end date (ISO 8601) */
+  contractEndDate?: string;
+
+  /** External contract reference number */
+  contractReference?: string;
+
+  /** Billing frequency (e.g. per_hire, monthly, quarterly, annual) */
+  billingFrequency?: string;
+
+  /** Payment terms in days */
+  paymentTermsDays?: number;
+
+  /** Credit limit for the client */
+  creditLimit?: number;
+
+  /** Email address for billing correspondence */
+  billingEmail?: string;
+
+  /** Primary recruiter assigned to this client */
+  primaryRecruiterId?: string;
+
+  /** Tags for categorization */
+  tags?: string[];
 }
 
 export interface BhClientFormProps extends EngineAwareProps {

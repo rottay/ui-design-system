@@ -24,12 +24,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_POSITIONS: PositionSlaData[] = [
-  { id: 'ps-1', positionTitle: 'Senior Backend Engineer', clientName: 'Acme Corp', slaDeadline: new Date('2026-02-20'), daysRemaining: 8, status: 'on-track', currentStage: 'Technical Interview', candidateCount: 12 },
-  { id: 'ps-2', positionTitle: 'Product Manager', clientName: 'Horizon Labs', slaDeadline: new Date('2026-02-15'), daysRemaining: 3, status: 'at-risk', currentStage: 'Final Round', candidateCount: 4 },
-  { id: 'ps-3', positionTitle: 'UX Designer', clientName: 'Nova Ventures', slaDeadline: new Date('2026-02-10'), daysRemaining: -2, status: 'breached', currentStage: 'Sourcing', candidateCount: 2 },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -56,13 +50,13 @@ export const CompactBhPositionSla = createPreset<BhPositionSlaProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions: rawPositions = MOCK_POSITIONS,
+      positions: rawPositions = [],
       onPositionClick,
       className,
       style,
     } = props;
 
-    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
+    const positions = Array.isArray(rawPositions) ? rawPositions : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

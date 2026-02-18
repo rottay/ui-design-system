@@ -381,6 +381,27 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                       })}
                     </Box>
                   )}
+                  {/* SLA indicators */}
+                  {selectedPipeline && ((selectedPipeline.slaBreachCount != null && selectedPipeline.slaBreachCount > 0) || (selectedPipeline.slaAtRiskCount != null && selectedPipeline.slaAtRiskCount > 0)) && (
+                    <Box style={{ display: 'flex', gap: tokens.spacing[3], marginTop: tokens.spacing[3], paddingTop: tokens.spacing[3], borderTop: `1px solid ${tokens.colors.neutral[100]}` }}>
+                      {selectedPipeline.slaBreachCount != null && selectedPipeline.slaBreachCount > 0 && (
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                          <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.errorScale[500] }} />
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.errorScale[700] }}>
+                            {selectedPipeline.slaBreachCount} SLA breached
+                          </Text>
+                        </Box>
+                      )}
+                      {selectedPipeline.slaAtRiskCount != null && selectedPipeline.slaAtRiskCount > 0 && (
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                          <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.warningScale[500] }} />
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.warningScale[700] }}>
+                            {selectedPipeline.slaAtRiskCount} at risk
+                          </Text>
+                        </Box>
+                      )}
+                    </Box>
+                  )}
                 </Box>
               )}
 
@@ -758,6 +779,15 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                           ${(tokenBalance.costPerInterview || 0).toFixed(2)} / interview
                         </Text>
+                        {tokenBalance.estimatedDaysRemaining != null && (
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.xs,
+                            color: tokenBalance.estimatedDaysRemaining <= 7 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500],
+                            fontWeight: tokenBalance.estimatedDaysRemaining <= 7 ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
+                          }}>
+                            ~{tokenBalance.estimatedDaysRemaining}d remaining
+                          </Text>
+                        )}
                         {usagePercent !== null && (
                           <Box style={{
                             width: 80, height: 4, backgroundColor: tokens.colors.neutral[100],

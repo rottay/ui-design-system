@@ -33,17 +33,6 @@ import type { DBCandidate } from '@rottay/recruiter';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RECIPIENTS: BulkEmailRecipient[] = [
-  { candidate: { id: 'br-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.johnson@email.com' } as DBCandidate, variables: { position: 'Senior Frontend Engineer', interviewDate: 'March 15, 2026' } },
-  { candidate: { id: 'br-2', firstName: 'Michael', lastName: 'Chen', email: 'michael.chen@email.com' } as DBCandidate, variables: { position: 'Backend Developer', interviewDate: 'March 16, 2026' } },
-  { candidate: { id: 'br-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily.r@email.com' } as DBCandidate, variables: { position: 'Product Designer', interviewDate: 'March 17, 2026' } },
-  { candidate: { id: 'br-4', firstName: 'James', lastName: 'Kim', email: 'james.kim@email.com' } as DBCandidate, variables: { position: 'DevOps Engineer', interviewDate: 'March 18, 2026' } },
-  { candidate: { id: 'br-5', firstName: 'Anna', lastName: 'Kowalski', email: 'anna.k@email.com' } as DBCandidate, variables: { position: 'Data Analyst', interviewDate: 'March 19, 2026' } },
-];
-
-const MOCK_SUBJECT = 'Interview Invitation - {{position}}';
-const MOCK_BODY = 'Dear {{name}},\n\nWe are pleased to invite you for an interview for the {{position}} position.\n\nYour interview is scheduled for {{interviewDate}}.\n\nPlease confirm your availability.\n\nBest regards,\nThe Hiring Team';
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -71,9 +60,9 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      recipients: rawRecipients = MOCK_RECIPIENTS,
-      subject: rawSubject = MOCK_SUBJECT,
-      body: rawBody = MOCK_BODY,
+      recipients: rawRecipients = [],
+      subject: rawSubject = '',
+      body: rawBody = '',
       title = 'Bulk Email',
       onRecipientToggle,
       onSend,
@@ -84,9 +73,9 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
       style,
     } = props;
 
-    const recipients = Array.isArray(rawRecipients) ? rawRecipients : MOCK_RECIPIENTS;
-    const subject = Array.isArray(rawSubject) ? rawSubject : MOCK_SUBJECT;
-    const body = Array.isArray(rawBody) ? rawBody : MOCK_BODY;
+    const recipients = Array.isArray(rawRecipients) ? rawRecipients : [];
+    const subject = Array.isArray(rawSubject) ? rawSubject : '';
+    const body = Array.isArray(rawBody) ? rawBody : '';
 
     const [localSelected, setLocalSelected] = useState<Set<string>>(
       new Set(propSelectedIds ?? recipients.map(r => r.candidate.id)),
@@ -291,19 +280,43 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
 
                     {/* Info */}
                     <Box style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                      <Text style={{
-                        fontSize: t.typography.fontSize.xs,
-                        fontWeight: t.typography.fontWeight.medium,
-                        color: t.colors.neutral[800],
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}>
-                        {recipientName}
-                      </Text>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                        <Text style={{
+                          fontSize: t.typography.fontSize.xs,
+                          fontWeight: t.typography.fontWeight.medium,
+                          color: t.colors.neutral[800],
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
+                          {recipientName}
+                        </Text>
+                        {recipient.status && (
+                          <Text style={{
+                            fontSize: 9,
+                            padding: `0 ${t.spacing[1]}px`,
+                            borderRadius: badgeRadius,
+                            backgroundColor: t.colors.neutral[100],
+                            color: t.colors.neutral[600],
+                          }}>
+                            {recipient.status}
+                          </Text>
+                        )}
+                        {recipient.candidateResponsePending && (
+                          <Box style={{
+                            width: 6, height: 6, borderRadius: t.borderRadius.full,
+                            backgroundColor: t.colors.warningScale[500], flexShrink: 0,
+                          }} />
+                        )}
+                      </Box>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                         {cand.email ?? ''}
                       </Text>
+                      {recipient.communicationCount != null && recipient.communicationCount > 0 && (
+                        <Text style={{ fontSize: 9, color: t.colors.neutral[400] }}>
+                          {recipient.communicationCount} previous email{recipient.communicationCount > 1 ? 's' : ''}
+                        </Text>
+                      )}
                     </Box>
 
                     {/* Preview button */}

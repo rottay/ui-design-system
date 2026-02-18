@@ -21,12 +21,6 @@ import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import type { DBCandidate } from '@rottay/recruiter';
 
-const MOCK_RECIPIENTS: BulkEmailRecipient[] = [
-  { candidate: { id: 'br-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah@email.com' } as DBCandidate, variables: { position: 'Senior Frontend Engineer' } },
-  { candidate: { id: 'br-2', firstName: 'Michael', lastName: 'Chen', email: 'michael@email.com' } as DBCandidate, variables: { position: 'Backend Developer' } },
-  { candidate: { id: 'br-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily@email.com' } as DBCandidate, variables: { position: 'Product Designer' } },
-];
-
 export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>({
   name: 'BhCandidateBulkEmail.Compact',
   render: (ctx: PresetContext<BhCandidateBulkEmailProps>) => {
@@ -37,7 +31,7 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      recipients: rawRecipients = MOCK_RECIPIENTS,
+      recipients: rawRecipients = [],
       subject = 'Interview Invitation',
       onRecipientToggle,
       onSend,
@@ -46,7 +40,7 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
       style,
     } = props;
 
-    const recipients = Array.isArray(rawRecipients) ? rawRecipients : MOCK_RECIPIENTS;
+    const recipients = Array.isArray(rawRecipients) ? rawRecipients : [];
 
     const [localSelected, setLocalSelected] = useState<Set<string>>(
       new Set(propSelectedIds ?? recipients.map(r => r.candidate.id)),

@@ -37,6 +37,11 @@ import {
   createStaggerDelay,
   createPersonalityAccentBar,
   createEmptyStateStyle,
+  createMetadataFieldStyle,
+  createStatValueStyle,
+  createStatLabelStyle,
+  createTrendStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import type {
@@ -52,47 +57,6 @@ import type {
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_FUNNEL: FunnelStage[] = [
-  { name: 'Applied', count: 1240, conversionPercent: 100, prevPeriodCount: 1100 },
-  { name: 'Screened', count: 620, conversionPercent: 50, prevPeriodCount: 550 },
-  { name: 'Phone Screen', count: 410, conversionPercent: 66, prevPeriodCount: 380 },
-  { name: 'Technical', count: 248, conversionPercent: 60, prevPeriodCount: 220 },
-  { name: 'Onsite', count: 124, conversionPercent: 50, prevPeriodCount: 110 },
-  { name: 'Offered', count: 62, conversionPercent: 50, prevPeriodCount: 55 },
-  { name: 'Hired', count: 48, conversionPercent: 77, prevPeriodCount: 42 },
-];
-
-const MOCK_TTH: TimeToHireData[] = [
-  { job: 'Sr. Frontend Engineer', avgDays: 28, stages: [{ name: 'Screen', avgDays: 3 }, { name: 'Technical', avgDays: 7 }, { name: 'Onsite', avgDays: 10 }, { name: 'Offer', avgDays: 5 }, { name: 'Close', avgDays: 3 }] },
-  { job: 'Product Manager', avgDays: 34, stages: [{ name: 'Screen', avgDays: 4 }, { name: 'Interview', avgDays: 12 }, { name: 'Final', avgDays: 8 }, { name: 'Offer', avgDays: 6 }, { name: 'Close', avgDays: 4 }] },
-  { job: 'DevOps Lead', avgDays: 22, stages: [{ name: 'Screen', avgDays: 2 }, { name: 'Technical', avgDays: 6 }, { name: 'Onsite', avgDays: 8 }, { name: 'Offer', avgDays: 4 }, { name: 'Close', avgDays: 2 }] },
-  { job: 'Data Scientist', avgDays: 31, stages: [{ name: 'Screen', avgDays: 3 }, { name: 'Take-Home', avgDays: 9 }, { name: 'Onsite', avgDays: 10 }, { name: 'Offer', avgDays: 5 }, { name: 'Close', avgDays: 4 }] },
-];
-
-const MOCK_VELOCITY: PipelineVelocity[] = [
-  { stage: 'Application Review', avgDays: 2.1, slaLimit: 3 },
-  { stage: 'Phone Screen', avgDays: 3.4, slaLimit: 5 },
-  { stage: 'Technical Interview', avgDays: 6.8, slaLimit: 7 },
-  { stage: 'Onsite Panel', avgDays: 8.2, slaLimit: 10 },
-  { stage: 'Offer Generation', avgDays: 4.1, slaLimit: 3 },
-  { stage: 'Offer Close', avgDays: 3.5, slaLimit: 5 },
-];
-
-const MOCK_COST: CostAnalysis[] = [
-  { category: 'Job Boards', costPerHire: 1200, breakdown: [{ item: 'LinkedIn', cost: 680 }, { item: 'Indeed', cost: 320 }, { item: 'Glassdoor', cost: 200 }] },
-  { category: 'Agencies', costPerHire: 3400, breakdown: [{ item: 'TechRecruit Pro', cost: 2100 }, { item: 'Staffing Plus', cost: 1300 }] },
-  { category: 'Referral Bonuses', costPerHire: 800, breakdown: [{ item: 'Employee referrals', cost: 800 }] },
-  { category: 'Events', costPerHire: 600, breakdown: [{ item: 'Career fairs', cost: 350 }, { item: 'Meetups', cost: 250 }] },
-];
-
-const MOCK_SOURCES: SourceEffectiveness[] = [
-  { source: 'LinkedIn', candidateCount: 420, qualityScore: 82 },
-  { source: 'Referrals', candidateCount: 180, qualityScore: 91 },
-  { source: 'Indeed', candidateCount: 310, qualityScore: 65 },
-  { source: 'Career Site', candidateCount: 210, qualityScore: 74 },
-  { source: 'Agencies', candidateCount: 120, qualityScore: 78 },
-  { source: 'Events', candidateCount: 80, qualityScore: 70 },
-];
 
 /* ================================================================== */
 /*  Operational Preset                                                 */
@@ -103,11 +67,11 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const { primitives: { Box, Flex, Stack, Text }, props, tokens: t } = ctx;
 
     const {
-      funnelData: rawFunnelData = MOCK_FUNNEL,
-      timeToHireData: rawTimeToHireData = MOCK_TTH,
-      velocityData: rawVelocityData = MOCK_VELOCITY,
-      costData: rawCostData = MOCK_COST,
-      sourceData: rawSourceData = MOCK_SOURCES,
+      funnelData: rawFunnelData = [],
+      timeToHireData: rawTimeToHireData = [],
+      velocityData: rawVelocityData = [],
+      costData: rawCostData = [],
+      sourceData: rawSourceData = [],
       dateRange = '30d',
       onDateRangeChange,
       filters = {},
@@ -117,11 +81,11 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
       style,
     } = props;
 
-    const funnelData = Array.isArray(rawFunnelData) ? rawFunnelData : MOCK_FUNNEL;
-    const timeToHireData = Array.isArray(rawTimeToHireData) ? rawTimeToHireData : MOCK_TTH;
-    const velocityData = Array.isArray(rawVelocityData) ? rawVelocityData : MOCK_VELOCITY;
-    const costData = Array.isArray(rawCostData) ? rawCostData : MOCK_COST;
-    const sourceData = Array.isArray(rawSourceData) ? rawSourceData : MOCK_SOURCES;
+    const funnelData = Array.isArray(rawFunnelData) ? rawFunnelData : [];
+    const timeToHireData = Array.isArray(rawTimeToHireData) ? rawTimeToHireData : [];
+    const velocityData = Array.isArray(rawVelocityData) ? rawVelocityData : [];
+    const costData = Array.isArray(rawCostData) ? rawCostData : [];
+    const sourceData = Array.isArray(rawSourceData) ? rawSourceData : [];
 
     const [activeTab, setActiveTab] = useState<'funnel' | 'velocity' | 'cost' | 'sources'>('funnel');
     const [expandedJob, setExpandedJob] = useState<string | null>(null);
@@ -161,10 +125,10 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
           </Stack>
           <Box style={{ display: 'flex', gap: t.spacing[2] }}>
             <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
-              <Filter size={14} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Filters</Text> <ChevronDown size={12} />
+              <Filter size={ICON_SIZES.label} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Filters</Text> <ChevronDown size={ICON_SIZES.label} />
             </Box>
             <Box onClick={() => onExport?.('csv')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
-              <Download size={14} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Export</Text>
+              <Download size={ICON_SIZES.label} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Export</Text>
             </Box>
           </Box>
         </Flex>
@@ -176,7 +140,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             const isActive = activeTab === tab.key;
             return (
               <Box key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}>
-                <Icon size={16} />
+                <Icon size={ICON_SIZES.section} />
                 <Text style={{ fontSize: t.typography.fontSize.sm }}>{tab.label}</Text>
               </Box>
             );
@@ -223,7 +187,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     <Box key={stage.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: dropRate > 50 ? t.colors.errorScale[50] : t.colors.neutral[50] }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flex: 1 }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium }}>{stage.name}</Text>
-                        <ArrowRight size={14} color={t.colors.neutral[400]} />
+                        <ArrowRight size={ICON_SIZES.label} color={t.colors.neutral[400]} />
                         <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium }}>{next.name}</Text>
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: dropRate > 50 ? t.colors.errorScale[700] : t.colors.neutral[900] }}>
@@ -254,8 +218,8 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: isOver ? t.colors.errorScale[700] : t.colors.neutral[900] }}>{v.avgDays ?? 0}d</Text>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>/ {v.slaLimit ?? 0}d SLA</Text>
-                          {isOver && <AlertTriangle size={14} color={t.colors.errorScale[500]} />}
-                          {!isOver && <CheckCircle2 size={14} color={t.colors.successScale[500]} />}
+                          {isOver && <AlertTriangle size={ICON_SIZES.label} color={t.colors.errorScale[500]} />}
+                          {!isOver && <CheckCircle2 size={ICON_SIZES.label} color={t.colors.successScale[500]} />}
                         </Box>
                       </Box>
                       <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden', position: 'relative' as const }}>
@@ -276,8 +240,8 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     <Box onClick={() => setExpandedJob(expandedJob === (job.job ?? '') ? null : (job.job ?? ''))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[3]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], cursor: 'pointer', ...hoverStyles.base }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{job.job}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: (job.avgDays ?? 0) > 30 ? t.colors.warningScale[700] : t.colors.neutral[900] }}>{job.avgDays ?? 0}d</Text>
-                        <ChevronDown size={14} color={t.colors.neutral[400]} style={{ transform: expandedJob === job.job ? 'rotate(180deg)' : 'none', transition: `transform ${t.motion.hover}` } as any} />
+                        <Text style={{ ...createStatValueStyle(t, { size: 'lg' }), color: (job.avgDays ?? 0) > 30 ? t.colors.warningScale[700] : t.colors.neutral[900] }}>{job.avgDays ?? 0}d</Text>
+                        <ChevronDown size={ICON_SIZES.label} color={t.colors.neutral[400]} style={{ transform: expandedJob === job.job ? 'rotate(180deg)' : 'none', transition: `transform ${t.motion.hover}` } as any} />
                       </Box>
                     </Box>
                     {expandedJob === job.job && (
@@ -309,7 +273,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     <Box key={cat.category}>
                       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{cat.category}</Text>
-                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>${(cat.costPerHire ?? 0).toLocaleString()}</Text>
+                        <Text style={createStatValueStyle(t, { size: 'lg' })}>${(cat.costPerHire ?? 0).toLocaleString()}</Text>
                       </Box>
                       <Box style={{ height: 12, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
                         <Box style={{ height: '100%', width: `${((cat.costPerHire ?? 0) / maxCost) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.sm, transition: `width ${t.motion.hover}` }} />
@@ -339,12 +303,12 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                   const TIcon = m.trend > 0 ? TrendingUp : TrendingDown;
                   return (
                     <Box key={m.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: t.spacing[4], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50] }}>
-                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block', marginBottom: t.spacing[1] }}>{m.label}</Text>
-                        <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{m.value}</Text>
+                      <Box style={createMetadataFieldStyle(t)}>
+                        <Text style={{ ...createStatLabelStyle(t), marginBottom: t.spacing[1] }}>{m.label}</Text>
+                        <Text style={createStatValueStyle(t)}>{m.value}</Text>
                       </Box>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <TIcon size={14} color={trendColor} />
+                        <TIcon size={ICON_SIZES.label} color={trendColor} />
                         <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(m.trend)}%</Text>
                       </Box>
                     </Box>

@@ -51,34 +51,6 @@ import type {
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_SOURCES: SourceChannel[] = [
-  { id: 's1', name: 'LinkedIn Recruiter', type: 'linkedin', candidateCount: 482, hireCount: 38, hireRate: 7.9, totalCost: 48600, costPerHire: 1279, costPerCandidate: 101, avgTimeToHireDays: 32, qualityScore: 82, retentionRate90d: 91 },
-  { id: 's2', name: 'Employee Referrals', type: 'referral', candidateCount: 214, hireCount: 42, hireRate: 19.6, totalCost: 21000, costPerHire: 500, costPerCandidate: 98, avgTimeToHireDays: 24, qualityScore: 88, retentionRate90d: 94 },
-  { id: 's3', name: 'Indeed', type: 'job_board', candidateCount: 1240, hireCount: 56, hireRate: 4.5, totalCost: 36800, costPerHire: 657, costPerCandidate: 30, avgTimeToHireDays: 41, qualityScore: 68, retentionRate90d: 82 },
-  { id: 's4', name: 'Robert Half Agency', type: 'agency', candidateCount: 86, hireCount: 18, hireRate: 20.9, totalCost: 94500, costPerHire: 5250, costPerCandidate: 1099, avgTimeToHireDays: 28, qualityScore: 79, retentionRate90d: 87 },
-  { id: 's5', name: 'Careers Page', type: 'career_site', candidateCount: 892, hireCount: 34, hireRate: 3.8, totalCost: 4200, costPerHire: 124, costPerCandidate: 5, avgTimeToHireDays: 38, qualityScore: 71, retentionRate90d: 85 },
-  { id: 's6', name: 'Twitter/X Campaigns', type: 'social', candidateCount: 156, hireCount: 8, hireRate: 5.1, totalCost: 12400, costPerHire: 1550, costPerCandidate: 79, avgTimeToHireDays: 44, qualityScore: 64, retentionRate90d: 78 },
-  { id: 's7', name: 'Tech Meetup Events', type: 'event', candidateCount: 68, hireCount: 12, hireRate: 17.6, totalCost: 18000, costPerHire: 1500, costPerCandidate: 265, avgTimeToHireDays: 26, qualityScore: 85, retentionRate90d: 92 },
-];
-
-const MOCK_TRENDS: SourceTrend[] = [
-  { month: 'Sep', sourceId: 's1', hires: 6, cost: 7200 },
-  { month: 'Oct', sourceId: 's1', hires: 8, cost: 9600 },
-  { month: 'Nov', sourceId: 's1', hires: 7, cost: 8400 },
-  { month: 'Dec', sourceId: 's1', hires: 9, cost: 10800 },
-  { month: 'Sep', sourceId: 's2', hires: 10, cost: 5000 },
-  { month: 'Oct', sourceId: 's2', hires: 12, cost: 6000 },
-  { month: 'Nov', sourceId: 's2', hires: 8, cost: 4000 },
-  { month: 'Dec', sourceId: 's2', hires: 12, cost: 6000 },
-];
-
-const MOCK_SUMMARY: SourceRoiSummary = {
-  totalSpend: 235500,
-  totalHires: 208,
-  avgCostPerHire: 1133,
-  bestRoiSource: 'Careers Page',
-  worstRoiSource: 'Robert Half Agency',
-};
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -117,18 +89,19 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
       selectedSource: selProp,
       onSourceSelect,
       onSortChange,
+      budget,
+      period,
       className,
       style,
     } = props;
 
-    const sources = srcProp?.length ? srcProp : MOCK_SOURCES;
-    const trends = trendProp?.length ? trendProp : MOCK_TRENDS;
-    const summary = sumProp ?? MOCK_SUMMARY;
+    const sources = srcProp?.length ? srcProp : [];
+    const trends = trendProp?.length ? trendProp : [];
+    const summary = (sumProp ?? {}) as Partial<SourceRoiSummary>;
 
     const [sortBy, setSortBy] = useState<SortField>('hireRate');
     const [sortAsc, setSortAsc] = useState(false);
     const [expandedSource, setExpandedSource] = useState<string | null>(selProp ?? null);
-
 
     const handleSort = useCallback((field: SortField) => {
       setSortBy(prev => {
@@ -224,14 +197,36 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...glassStyle, ...entrance.animate, transition: entrance.transition, ...style }} role="region" aria-label="Source ROI Breakdown">
 
+        {/* === Period + Budget header === */}
+        {(period || budget !== undefined) && (
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+            {period && (
+              <Box style={{
+                ...createBadgeStyle(t, 'secondary'),
+                borderRadius: badgeRadius,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Period: {period}</Text>
+              </Box>
+            )}
+            {budget !== undefined && (
+              <Box style={{
+                ...createBadgeStyle(t, 'info'),
+                borderRadius: badgeRadius,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Budget: {formatCurrency(budget)}</Text>
+              </Box>
+            )}
+          </Box>
+        )}
+
         {/* === Summary KPIs === */}
         <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: t.spacing[4] }}>
           {[
-            { label: 'Total Spend', value: formatCurrency(summary.totalSpend), icon: DollarSign, color: t.colors.errorScale[500] },
-            { label: 'Total Hires', value: String(summary.totalHires), icon: Users, color: t.colors.successScale[500] },
-            { label: 'Avg Cost/Hire', value: formatCurrency(summary.avgCostPerHire), icon: Target, color: t.colors.warningScale[500] },
-            { label: 'Best ROI', value: summary.bestRoiSource, icon: TrendingUp, color: t.colors.successScale[600] },
-            { label: 'Worst ROI', value: summary.worstRoiSource, icon: TrendingDown, color: t.colors.errorScale[600] },
+            { label: 'Total Spend', value: formatCurrency(summary.totalSpend ?? 0), icon: DollarSign, color: t.colors.errorScale[500] },
+            { label: 'Total Hires', value: String(summary.totalHires ?? 0), icon: Users, color: t.colors.successScale[500] },
+            { label: 'Avg Cost/Hire', value: formatCurrency(summary.avgCostPerHire ?? 0), icon: Target, color: t.colors.warningScale[500] },
+            { label: 'Best ROI', value: summary.bestRoiSource ?? '--', icon: TrendingUp, color: t.colors.successScale[600] },
+            { label: 'Worst ROI', value: summary.worstRoiSource ?? '--', icon: TrendingDown, color: t.colors.errorScale[600] },
           ].map((kpi, i) => {
             const Icon = kpi.icon;
             return (

@@ -60,6 +60,8 @@ export const CompactBhInterviewReplaySplit = createPreset<BhInterviewReplaySplit
       onSpeedChange,
       onEvidenceClick,
       candidateName,
+      billingStatus,
+      interview,
       loading = false,
       className,
       style,
@@ -116,6 +118,26 @@ export const CompactBhInterviewReplaySplit = createPreset<BhInterviewReplaySplit
           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], flex: 1 }}>
             {candidateName || 'Replay'}
           </Text>
+          {billingStatus && (
+            <Box style={{
+              ...createBadgeStyle(t, billingStatus === 'settled' ? 'success' : billingStatus === 'disputed' ? 'error' : 'secondary'),
+              borderRadius: badgeRadius,
+              padding: `0 ${t.spacing[1]}px`,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{billingStatus}</Text>
+            </Box>
+          )}
+          {interview && (
+            <Box style={{
+              ...createBadgeStyle(t, 'primary'),
+              borderRadius: badgeRadius,
+              padding: `0 ${t.spacing[1]}px`,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                {interview.interviewType ?? 'Interview'}
+              </Text>
+            </Box>
+          )}
 
           {/* Mini controls */}
           <Box

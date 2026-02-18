@@ -21,6 +21,7 @@ import {
   createProgressBarStyle,
   createCardHoverStyles,
   formatDistanceToNow,
+  ICON_SIZES,
 } from '../../../helpers';
 import type {
   BhRecruiterHomeProps, KpiStat, PipelineJob, UpcomingInterview,
@@ -35,47 +36,13 @@ import {
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_KPI: KpiStat[] = [
-  { label: 'Open Roles', value: 12, trend: 'up', trendValue: 8, icon: <Briefcase size={16} /> },
-  { label: 'Active Candidates', value: 248, trend: 'up', trendValue: 15, icon: <Users size={16} /> },
-  { label: 'Interviews', value: 9, trend: 'down', trendValue: 3, icon: <Calendar size={16} /> },
-  { label: 'Time-to-Fill', value: '28d', trend: 'up', trendValue: 5, icon: <Clock size={16} /> },
-];
-
-const DEFAULT_PIPELINE: PipelineJob[] = [
-  { id: 'j-1', title: 'Sr Frontend Engineer', stages: [{ name: 'Applied', count: 34 }, { name: 'Screen', count: 12 }, { name: 'Interview', count: 5 }, { name: 'Offer', count: 1 }] },
-  { id: 'j-2', title: 'Product Designer', stages: [{ name: 'Applied', count: 21 }, { name: 'Screen', count: 8 }, { name: 'Interview', count: 3 }, { name: 'Offer', count: 0 }] },
-];
-
-const DEFAULT_INTERVIEWS: UpcomingInterview[] = [
-  { id: 'i-1', candidateName: 'Sarah Johnson', jobTitle: 'Sr Frontend Engineer', stageName: 'Technical', time: new Date(Date.now() + 2 * 3600_000) },
-  { id: 'i-2', candidateName: 'Michael Chen', jobTitle: 'Sr Frontend Engineer', stageName: 'AI Screen', time: new Date(Date.now() + 5 * 3600_000), isAI: true },
-  { id: 'i-3', candidateName: 'Emily Rodriguez', jobTitle: 'Product Designer', stageName: 'Portfolio', time: new Date(Date.now() + 24 * 3600_000) },
-];
-
-const DEFAULT_NOTIFS: Notification[] = [
-  { id: 'n-1', type: 'breach', message: '3 candidates past SLA (48h)', time: new Date(Date.now() - 3600_000) },
-  { id: 'n-2', type: 'approval', message: 'Offer for David Park awaiting approval', time: new Date(Date.now() - 3 * 3600_000) },
-];
-
-const DEFAULT_ACTIONS: QuickAction[] = [
-  { key: 'post-job', label: 'Post Job', icon: <PlusCircle size={16} /> },
-  { key: 'search', label: 'Search', icon: <Search size={16} /> },
-  { key: 'outreach', label: 'Outreach', icon: <MessageSquare size={16} /> },
-  { key: 'reports', label: 'Reports', icon: <BarChart3 size={16} /> },
-];
-
-/* ---------------------------------------------------------------------------
  * Helpers
  * -------------------------------------------------------------------------*/
 
 function getTrendIcon(trend: string) {
-  if (trend === 'up') return <TrendingUp size={12} />;
-  if (trend === 'down') return <TrendingDown size={12} />;
-  return <Minus size={12} />;
+  if (trend === 'up') return <TrendingUp size={ICON_SIZES.label} />;
+  if (trend === 'down') return <TrendingDown size={ICON_SIZES.label} />;
+  return <Minus size={ICON_SIZES.label} />;
 }
 
 function getTrendColor(trend: string, t: DesignTokens) {
@@ -85,9 +52,9 @@ function getTrendColor(trend: string, t: DesignTokens) {
 }
 
 function getNotifStyle(type: string, t: DesignTokens) {
-  if (type === 'breach') return { icon: <AlertTriangle size={12} />, color: t.colors.errorScale[600], bg: t.colors.errorScale[50] };
-  if (type === 'approval') return { icon: <CheckCircle size={12} />, color: t.colors.warningScale[600], bg: t.colors.warningScale[50] };
-  return { icon: <UserPlus size={12} />, color: t.colors.infoScale[600], bg: t.colors.infoScale[50] };
+  if (type === 'breach') return { icon: <AlertTriangle size={ICON_SIZES.label} />, color: t.colors.errorScale[600], bg: t.colors.errorScale[50] };
+  if (type === 'approval') return { icon: <CheckCircle size={ICON_SIZES.label} />, color: t.colors.warningScale[600], bg: t.colors.warningScale[50] };
+  return { icon: <UserPlus size={ICON_SIZES.label} />, color: t.colors.infoScale[600], bg: t.colors.infoScale[50] };
 }
 
 /* ---------------------------------------------------------------------------
@@ -114,22 +81,22 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     const {
       recruiter,
       recruiterName: recruiterNameProp = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
-      kpiStats: rawKpiStats = DEFAULT_KPI,
-      pipelineJobs: rawPipelineJobs = DEFAULT_PIPELINE,
-      upcomingInterviews: rawUpcomingInterviews = DEFAULT_INTERVIEWS,
-      quickActions: rawQuickActions = DEFAULT_ACTIONS,
-      notifications: rawNotifications = DEFAULT_NOTIFS,
+      kpiStats: rawKpiStats = [],
+      pipelineJobs: rawPipelineJobs = [],
+      upcomingInterviews: rawUpcomingInterviews = [],
+      quickActions: rawQuickActions = [],
+      notifications: rawNotifications = [],
       dateRangeLabel = BH_RECRUITER_HOME_DEFAULTS.dateRangeLabel,
       onQuickAction, onPipelineJobClick, onInterviewClick,
       onNotificationDismiss,
       className, style,
     } = props;
 
-    const kpiStats = Array.isArray(rawKpiStats) ? rawKpiStats : DEFAULT_KPI;
-    const pipelineJobs = Array.isArray(rawPipelineJobs) ? rawPipelineJobs : DEFAULT_PIPELINE;
-    const upcomingInterviews = Array.isArray(rawUpcomingInterviews) ? rawUpcomingInterviews : DEFAULT_INTERVIEWS;
-    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : DEFAULT_ACTIONS;
-    const notifications = Array.isArray(rawNotifications) ? rawNotifications : DEFAULT_NOTIFS;
+    const kpiStats = Array.isArray(rawKpiStats) ? rawKpiStats : [];
+    const pipelineJobs = Array.isArray(rawPipelineJobs) ? rawPipelineJobs : [];
+    const upcomingInterviews = Array.isArray(rawUpcomingInterviews) ? rawUpcomingInterviews : [];
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : [];
+    const notifications = Array.isArray(rawNotifications) ? rawNotifications : [];
 
     const recruiterName = recruiter
       ? `${recruiter.firstName ?? ''} ${recruiter.lastName ?? ''}`.trim() || recruiterNameProp
@@ -188,7 +155,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
             padding: `${t.spacing[3]}px`,
           }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[2] }}>
-              <Bell size={12} style={{ color: t.colors.warningScale[600] }} />
+              <Bell size={ICON_SIZES.label} style={{ color: t.colors.warningScale[600] }} />
               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Alerts</Text>
             </Box>
             {(notifications ?? []).map(n => {
@@ -209,7 +176,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                       onClick={() => handleNotifDismiss((n.id ?? ''))}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss((n.id ?? '')); } }}
                       style={{ color: t.colors.neutral[400], cursor: 'pointer', flexShrink: 0 }}
-                    ><X size={10} /></Box>
+                    ><X size={ICON_SIZES.inline} /></Box>
                   )}
                 </Box>
               );
@@ -268,7 +235,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{job.title}</Text>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{total}</Text>
-                      <ChevronRight size={12} style={{ color: t.colors.neutral[400] }} />
+                      <ChevronRight size={ICON_SIZES.label} style={{ color: t.colors.neutral[400] }} />
                     </Box>
                   </Box>
                   <Box style={{ display: 'flex', gap: t.spacing[1], height: 4, borderRadius: t.borderRadius.full, overflow: 'hidden' }}>

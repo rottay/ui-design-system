@@ -182,6 +182,9 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
       onForecastPeriodChange,
       onTopUp,
       onAlertConfigChange,
+      autoPurchaseEnabled,
+      lastPurchaseAt,
+      totalLifetimeSpend,
       className,
       style,
     } = props;
@@ -429,6 +432,46 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
               </Text>
             </Box>
           )}
+
+          {/* Account info: auto-purchase, last purchase, lifetime spend */}
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], alignItems: 'flex-end' }}>
+            {autoPurchaseEnabled !== undefined && (
+              <Box
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: tokens.spacing[1],
+                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                  borderRadius: tokens.borderRadius.full,
+                  backgroundColor: autoPurchaseEnabled ? tokens.colors.successScale[50] : tokens.colors.neutral[100],
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: autoPurchaseEnabled ? tokens.colors.successScale[700] : tokens.colors.neutral[500],
+                }}
+              >
+                <Box
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: tokens.borderRadius.full,
+                    backgroundColor: autoPurchaseEnabled ? tokens.colors.successScale[500] : tokens.colors.neutral[400],
+                  }}
+                />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>
+                  Auto-purchase {autoPurchaseEnabled ? 'on' : 'off'}
+                </Text>
+              </Box>
+            )}
+            {lastPurchaseAt && (
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                Last purchase: {lastPurchaseAt}
+              </Text>
+            )}
+            {totalLifetimeSpend !== undefined && (
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                Lifetime spend: {formatCurrency(totalLifetimeSpend)}
+              </Text>
+            )}
+          </Box>
 
           {/* Top-up button */}
           <Box

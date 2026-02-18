@@ -26,6 +26,10 @@ export interface Team {
   name?: string;
   memberCount?: number;
   lead?: string;
+  type?: string;
+  status?: string;
+  currentUtilization?: number;
+  specializations?: string[];
 }
 
 export interface TeamKpi {
@@ -34,6 +38,9 @@ export interface TeamKpi {
   trend?: TrendDirection;
   trendValue?: string;
   sparklineData?: number[];
+  target?: number;
+  unit?: string;
+  category?: string;
 }
 
 export interface RecruiterWorkload {
@@ -41,6 +48,9 @@ export interface RecruiterWorkload {
   name?: string;
   avatar?: string;
   metrics?: Record<string, number>;
+  utilization?: number;
+  slaCompliance?: number;
+  hires?: number;
 }
 
 export interface SlaItem {
@@ -56,6 +66,9 @@ export interface TaskCard {
   priority?: TaskPriority;
   assignee?: string;
   dueDate?: string;
+  description?: string;
+  status?: 'open' | 'in_progress' | 'completed';
+  source?: string;
 }
 
 export interface PipelineStage {
@@ -72,6 +85,9 @@ export interface PerformanceAlert {
   threshold?: number;
   actual?: number;
   severity?: AlertSeverity;
+  createdAt?: string;
+  acknowledged?: boolean;
+  resolvedAt?: string;
 }
 
 export interface SprintSummary {
@@ -79,6 +95,9 @@ export interface SprintSummary {
   completed?: number;
   inProgress?: number;
   blocked?: number;
+  sprintName?: string;
+  daysRemaining?: number;
+  velocityTrend?: number[];
 }
 
 export interface BhManagerConsoleProps extends EngineAwareProps {

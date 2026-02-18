@@ -24,18 +24,10 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   getAccentAwareLayout,
+  ICON_SIZES,
 } from '../../../helpers';
 import { MessageSquare, Bookmark, Users, Clock } from 'lucide-react';
 import type { DesignTokens } from '../../../../../types';
-
-const MOCK_TRANSCRIPT: TranscriptEntry[] = [
-  { id: 't-1', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'Welcome! Could you walk me through a challenging technical project you led recently?', timestamp: '00:00', durationMs: 8000, confidence: 0.98 },
-  { id: 't-2', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Sure. I led the migration of our monolithic API to a microservices architecture serving 2M DAU.', timestamp: '00:12', durationMs: 18000, confidence: 0.95, hasEvidence: true },
-  { id: 't-3', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'What was the biggest technical challenge during the migration?', timestamp: '00:45', durationMs: 6000, confidence: 0.97 },
-  { id: 't-4', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Data consistency across services. We implemented event-sourcing with eventual consistency and a reconciliation system.', timestamp: '01:02', durationMs: 22000, confidence: 0.92, hasEvidence: true },
-  { id: 't-5', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'How did you handle team coordination?', timestamp: '01:38', durationMs: 5000, confidence: 0.96 },
-  { id: 't-6', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Weekly architecture reviews and shared OpenAPI contracts. Each team owned their service following common patterns.', timestamp: '01:55', durationMs: 16000, confidence: 0.94, hasEvidence: true },
-];
 
 /* Timeline scrubber bar */
 function TimelineScrubber({ transcript, speakerColors, tokens, primitives }: {
@@ -166,9 +158,9 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
-    const { transcript: rawTranscript = MOCK_TRANSCRIPT, candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
+    const { transcript: rawTranscript = [], candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
 
-    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : [];
 
     const stats = useMemo(() => {
       const totalMs = transcript.reduce((s, e) => s + (e.durationMs ?? 0), 0);
@@ -214,7 +206,7 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
             <Box style={headerIconStyle}>
-              <MessageSquare size={16} color={tokens.colors.primaryScale[500]} />
+              <MessageSquare size={ICON_SIZES.section} color={tokens.colors.primaryScale[500]} />
             </Box>
             <Text style={{
               fontSize: tokens.typography.fontSize.md,
@@ -238,17 +230,17 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
         }}>
           {stats.durationStr && (
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-              <Clock size={12} color={tokens.colors.primaryScale[500]} />
+              <Clock size={ICON_SIZES.label} color={tokens.colors.primaryScale[500]} />
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{stats.durationStr}</Text>
             </Box>
           )}
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-            <Users size={12} color={tokens.colors.secondaryScale[500]} />
+            <Users size={ICON_SIZES.label} color={tokens.colors.secondaryScale[500]} />
             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{stats.speakerCount} speakers</Text>
           </Box>
           {stats.evidenceCount > 0 && (
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-              <Bookmark size={12} color={tokens.colors.warningScale[500]} />
+              <Bookmark size={ICON_SIZES.label} color={tokens.colors.warningScale[500]} />
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{stats.evidenceCount} evidence</Text>
             </Box>
           )}

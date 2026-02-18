@@ -68,14 +68,6 @@ function getStatusInfo(status: string | null | undefined) {
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_CLIENTS: RecruiterClient[] = [
-  { id: 'c1', tenantId: 't', type: 'company', displayName: 'Acme Corporation', clientCompanyName: 'Acme Corporation', tier: 'enterprise', status: 'active', openPositions: 12, totalPositions: 20, totalRevenue: '125000' } as any,
-  { id: 'c2', tenantId: 't', type: 'company', displayName: 'TechStart Inc.', clientCompanyName: 'TechStart Inc.', tier: 'standard', status: 'active', openPositions: 3, totalPositions: 5, totalRevenue: '15000' } as any,
-  { id: 'c3', tenantId: 't', type: 'company', displayName: 'GlobalBank Ltd.', clientCompanyName: 'GlobalBank Ltd.', tier: 'enterprise', status: 'suspended', openPositions: 8, totalPositions: 15, totalRevenue: '98000' } as any,
-  { id: 'c4', tenantId: 't', type: 'company', displayName: 'Velocity Partners', clientCompanyName: 'Velocity Partners', tier: 'premium', status: 'active', openPositions: 6, totalPositions: 10, totalRevenue: '55000' } as any,
-  { id: 'c5', tenantId: 't', type: 'company', displayName: 'NovaTech Solutions', clientCompanyName: 'NovaTech Solutions', tier: 'premium', status: 'terminated', openPositions: 0, totalPositions: 8, totalRevenue: '42000' } as any,
-  { id: 'c6', tenantId: 't', type: 'company', displayName: 'Pinnacle Health', clientCompanyName: 'Pinnacle Health', tier: 'enterprise', status: 'active', openPositions: 15, totalPositions: 25, totalRevenue: '180000' } as any,
-];
 
 /* ------------------------------------------------------------------ */
 /*  Grid Preset                                                        */
@@ -90,12 +82,14 @@ export const GridBhClientList = createPreset<BhClientListProps>({
       clients: clientsProp,
       onClientClick,
       selectedClientId,
+      filterStatus,
+      filterTier,
       loading,
       className,
       style,
     } = props;
 
-    const clients = clientsProp?.length ? clientsProp : MOCK_CLIENTS;
+    const clients = clientsProp?.length ? clientsProp : [];
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
@@ -149,6 +143,16 @@ export const GridBhClientList = createPreset<BhClientListProps>({
           <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, marginLeft: t.spacing[1] }}>
             <Text style={{ fontSize: 'inherit' }}>{clients.length}</Text>
           </Box>
+          {filterStatus && (
+            <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, marginLeft: t.spacing[1] }}>
+              <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>Status: {filterStatus}</Text>
+            </Box>
+          )}
+          {filterTier && (
+            <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR, marginLeft: t.spacing[1] }}>
+              <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>Tier: {filterTier}</Text>
+            </Box>
+          )}
         </Box>
 
         {/* Grid */}

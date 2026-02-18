@@ -43,8 +43,6 @@ function generateMockDays(): HeatmapDay[] {
   return days;
 }
 
-const MOCK_DAYS = generateMockDays();
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -75,7 +73,7 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      days: rawDays = MOCK_DAYS,
+      days: rawDays = undefined,
       title = 'Interview Activity',
       activityLabel = 'interviews',
       onDayClick,
@@ -84,7 +82,7 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
       style,
     } = props;
 
-    const days = Array.isArray(rawDays) ? rawDays : MOCK_DAYS;
+    const days = Array.isArray(rawDays) ? rawDays : [] as HeatmapDay[];
 
     const [hoveredDay, setHoveredDay] = useState<HeatmapDay | null>(null);
 

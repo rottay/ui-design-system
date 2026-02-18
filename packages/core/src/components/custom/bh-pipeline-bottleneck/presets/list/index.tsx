@@ -63,15 +63,6 @@ function getDelayLabel(stage: BottleneckStage): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STAGES: BottleneckStage[] = [
-  { id: 's-1', name: 'Applied', candidateCount: 156, avgDaysInStage: 2, expectedDays: 3, isBottleneck: false },
-  { id: 's-2', name: 'Screening', candidateCount: 106, avgDaysInStage: 4, expectedDays: 5, isBottleneck: false },
-  { id: 's-3', name: 'Interview', candidateCount: 55, avgDaysInStage: 8, expectedDays: 7, isBottleneck: false },
-  { id: 's-4', name: 'Assessment', candidateCount: 42, avgDaysInStage: 14, expectedDays: 5, isBottleneck: true },
-  { id: 's-5', name: 'Offer', candidateCount: 20, avgDaysInStage: 3, expectedDays: 4, isBottleneck: false },
-  { id: 's-6', name: 'Hired', candidateCount: 16, avgDaysInStage: 1, expectedDays: 2, isBottleneck: false },
-];
-
 const MOCK_TOTAL = 362;
 
 /* ================================================================== */
@@ -88,15 +79,15 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages: rawStages = MOCK_STAGES,
+      stages: rawStages = [],
       totalCandidates = MOCK_TOTAL,
+      summary,
       onStageClick,
       className,
       style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
-
+    const stages = Array.isArray(rawStages) ? rawStages : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -160,6 +151,38 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
             {totalCandidates} candidates
           </Text>
         </Box>
+
+        {/* Summary metrics */}
+        {summary && (
+          <Box style={{
+            display: 'flex',
+            gap: t.spacing[4],
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            backgroundColor: t.colors.neutral[50],
+          }}>
+            {summary.totalBottlenecks != null && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                Bottlenecks: <Text style={{ fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[600] }}>{summary.totalBottlenecks}</Text>
+              </Text>
+            )}
+            {summary.worstStage && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                Worst: <Text style={{ fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[600] }}>{summary.worstStage}</Text>
+              </Text>
+            )}
+            {summary.avgResolutionDays != null && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                Avg resolution: <Text style={{ fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{summary.avgResolutionDays}d</Text>
+              </Text>
+            )}
+            {summary.costImpact != null && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                Cost impact: <Text style={{ fontWeight: t.typography.fontWeight.semibold, color: t.colors.warningScale[700] }}>${summary.costImpact.toLocaleString()}</Text>
+              </Text>
+            )}
+          </Box>
+        )}
 
         {/* Stage list */}
         <Box role="list" aria-label="Pipeline stages ranked by delay">

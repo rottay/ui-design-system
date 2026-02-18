@@ -32,13 +32,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RECRUITERS: RecruiterPerformanceItem[] = [
-  { recruiterId: 'r-1', name: 'Alice Morgan', hires: 12, timeToFill: 28, qualityScore: 92, candidateSatisfaction: 88, pipelineVelocity: 85, activePositions: 6 },
-  { recruiterId: 'r-2', name: 'Bob Chen', hires: 9, timeToFill: 35, qualityScore: 78, candidateSatisfaction: 82, pipelineVelocity: 72, activePositions: 8 },
-  { recruiterId: 'r-3', name: 'Carla Ruiz', hires: 15, timeToFill: 22, qualityScore: 95, candidateSatisfaction: 91, pipelineVelocity: 90, activePositions: 5 },
-  { recruiterId: 'r-4', name: 'Dan Patel', hires: 7, timeToFill: 42, qualityScore: 70, candidateSatisfaction: 75, pipelineVelocity: 60, activePositions: 10 },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Radar Chart (SVG)                                                  */
 /* ------------------------------------------------------------------ */
@@ -70,7 +63,7 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
     const ptypo = getPersonalityTypography(t);
 
     const {
-      recruiters: rawRecruiters = MOCK_RECRUITERS,
+      recruiters: rawRecruiters = [],
       selectedRecruiterId,
       onRecruiterClick,
       loading,
@@ -78,8 +71,7 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
       style,
     } = props;
 
-    const recruiters = Array.isArray(rawRecruiters) ? rawRecruiters : MOCK_RECRUITERS;
-
+    const recruiters = Array.isArray(rawRecruiters) ? rawRecruiters : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);

@@ -30,6 +30,12 @@ export interface LinkedJob {
   title: string;
   candidateCount: number;
   status: string;
+  /** Hiring urgency level for this job */
+  hiringUrgency?: 'low' | 'normal' | 'high' | 'urgent';
+  /** Number of positions already filled */
+  filledCount?: number;
+  /** Total number of openings for this job */
+  openings?: number;
 }
 
 /**
@@ -39,6 +45,10 @@ export interface TeamAssignment {
   teamName: string;
   leadRecruiter: string;
   allocationPercent: number;
+  /** Maximum capacity of the team for this position */
+  capacity?: number;
+  /** Current utilization percentage of the team */
+  utilization?: number;
 }
 
 /**

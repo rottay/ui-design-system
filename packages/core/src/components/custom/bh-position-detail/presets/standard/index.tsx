@@ -508,7 +508,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
 
           {/* Table header */}
           <Box style={{
-            display: 'grid', gridTemplateColumns: '1fr 120px 100px 40px',
+            display: 'grid', gridTemplateColumns: '1fr 100px 80px 100px 80px 40px',
             gap: tokens.spacing[3],
             padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
@@ -520,7 +520,9 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
           }}>
             <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Job Title</Text>
             <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Candidates</Text>
+            <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Filled</Text>
             <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Status</Text>
+            <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Urgency</Text>
             <Box />
           </Box>
 
@@ -533,7 +535,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                 onClick={() => onJobClick?.(job.id)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onJobClick?.(job.id); } }}
                 style={{
-                  display: 'grid', gridTemplateColumns: '1fr 120px 100px 40px',
+                  display: 'grid', gridTemplateColumns: '1fr 100px 80px 100px 80px 40px',
                   gap: tokens.spacing[3],
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                   alignItems: 'center',
@@ -558,6 +560,17 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                   <Users size={12} />
                   <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{job.candidateCount}</Text>
                 </Flex>
+                {/* Fill progress */}
+                <Flex align="center" gap={4} style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
+                  <Text style={{ fontSize: 'inherit', color: 'inherit' }}>
+                    {job.filledCount ?? 0}/{job.openings ?? 0}
+                  </Text>
+                  {job.openings && job.openings > 0 && (
+                    <Box style={{ width: 32, height: 4, backgroundColor: tokens.colors.neutral[200], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
+                      <Box style={{ width: `${Math.min(100, ((job.filledCount ?? 0) / job.openings) * 100)}%`, height: '100%', backgroundColor: (job.filledCount ?? 0) >= job.openings ? tokens.colors.successScale[500] : tokens.colors.primaryScale[500], borderRadius: tokens.borderRadius.full }} />
+                    </Box>
+                  )}
+                </Flex>
                 <Box style={{
                   display: 'inline-flex', alignItems: 'center',
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
@@ -570,6 +583,22 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                 }}>
                   {job.status}
                 </Box>
+                {/* Urgency badge */}
+                {job.hiringUrgency && (
+                  <Box style={{
+                    display: 'inline-flex', alignItems: 'center',
+                    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                    borderRadius: tokens.borderRadius.full,
+                    fontSize: tokens.typography.fontSize.xs,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    backgroundColor: job.hiringUrgency === 'urgent' ? tokens.colors.errorScale[50] : job.hiringUrgency === 'high' ? tokens.colors.warningScale[50] : tokens.colors.neutral[50],
+                    color: job.hiringUrgency === 'urgent' ? tokens.colors.errorScale[700] : job.hiringUrgency === 'high' ? tokens.colors.warningScale[700] : tokens.colors.neutral[600],
+                    textTransform: 'capitalize' as const, width: 'fit-content',
+                  }}>
+                    {job.hiringUrgency}
+                  </Box>
+                )}
+                {!job.hiringUrgency && <Box />}
                 <Box style={{ color: tokens.colors.neutral[400] }}>
                   <ExternalLink size={14} />
                 </Box>
@@ -682,6 +711,23 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                       }}>
                         {team.allocationPercent}%
                       </Text>
+                      {team.capacity != null && (
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: tokens.colors.neutral[500],
+                        }}>
+                          Cap: {team.capacity}
+                        </Text>
+                      )}
+                      {team.utilization != null && (
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          fontWeight: tokens.typography.fontWeight.medium,
+                          color: team.utilization > 90 ? tokens.colors.errorScale[600] : team.utilization > 70 ? tokens.colors.warningScale[600] : tokens.colors.successScale[600],
+                        }}>
+                          {team.utilization}% util
+                        </Text>
+                      )}
                       {onTeamRemove && (
                         <Box onClick={() => onTeamRemove(team.teamName)}
                           style={{

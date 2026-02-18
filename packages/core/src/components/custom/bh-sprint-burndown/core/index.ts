@@ -19,6 +19,10 @@ export interface BurndownDataPoint {
   ideal?: number;
   actual?: number;
   date?: string;
+  /** Display label for the data point */
+  label?: string;
+  /** Milestone marker name (if this point represents a milestone) */
+  milestone?: string;
 }
 
 export interface BhSprintBurndownProps extends EngineAwareProps {
@@ -44,6 +48,18 @@ export interface BhSprintBurndownProps extends EngineAwareProps {
 
   /** Card title */
   title?: string;
+
+  /** Position target for the sprint (from DBTeamSprint.positionTarget) */
+  positionTarget?: number;
+
+  /** Placement target for the sprint (from DBTeamSprint.placementTarget) */
+  placementTarget?: number;
+
+  /** Revenue target for the sprint (from DBTeamSprint.revenueTarget) */
+  revenueTarget?: number;
+
+  /** Overall sprint completion percentage (from DBTeamSprint.completionPercentage) */
+  completionPercentage?: number;
 
   /** Loading state */
   loading?: boolean;

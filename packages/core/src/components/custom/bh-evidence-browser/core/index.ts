@@ -10,6 +10,7 @@ import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
 import type { EvidenceSelect } from '@rottay/scoring';
+import { n } from '../../helpers';
 
 export type BhEvidenceBrowserPreset = 'split-pane' | 'compact';
 
@@ -35,6 +36,14 @@ export interface EvidenceItem {
   similarityScore?: number;
   speakerRole?: string;
   speakerName?: string;
+  startPosition?: number;
+  endPosition?: number;
+  turnIndex?: number;
+  turnRole?: string;
+  withinTurnStartChar?: number;
+  withinTurnEndChar?: number;
+  validationNotes?: string;
+  quoteNormalized?: string;
 }
 
 export interface TranscriptSegment {
@@ -136,13 +145,8 @@ export function getSpeakerColors(tokens: DesignTokens) {
 /** All valid impact values for filter iteration */
 export const IMPACT_OPTIONS: EvidenceImpact[] = ['positive', 'neutral', 'negative'];
 
-/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
-export function n(v: string | number | null | undefined): number {
-  if (v == null) return 0;
-  if (typeof v === 'number') return v;
-  const parsed = Number(v);
-  return isNaN(parsed) ? 0 : parsed;
-}
+/** Re-export n helper for convenience */
+export { n };
 
 /** Re-export DB type for convenience */
 export type { EvidenceSelect };

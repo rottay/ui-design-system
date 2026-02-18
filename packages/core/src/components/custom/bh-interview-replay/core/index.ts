@@ -78,6 +78,18 @@ export interface BhInterviewReplayProps extends EngineAwareProps {
   loading?: boolean;
   className?: string;
   style?: CSSProperties;
+  /** Billing mode for the interview (e.g. per_interview, token_based) */
+  billingMode?: string;
+  /** Token usage breakdown by category */
+  tokenBreakdown?: Record<string, number>;
+  /** Proctoring integrity score (0-100) */
+  proctoringScore?: number;
+  /** Proctoring violation flags */
+  proctoringFlags?: string[];
+  /** Candidate's rating of the interview (1-5) */
+  candidateRating?: number;
+  /** Duration of the recording in seconds */
+  recordingDurationSeconds?: number;
 }
 
 export const BH_INTERVIEW_REPLAY_DEFAULTS: Partial<BhInterviewReplayProps> = {

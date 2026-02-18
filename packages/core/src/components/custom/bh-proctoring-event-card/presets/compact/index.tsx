@@ -84,23 +84,6 @@ import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT: ProctoringEventCardView = {
-  event: {
-    id: 'pe-compact-1',
-    eventType: 'copy_paste',
-    severity: 'high',
-    timestamp: new Date(Date.now() - 900000),
-    metadata: {
-      pastedTextLength: 245,
-      tabSwitchCount: 2,
-      ipAddress: '10.0.0.15',
-    },
-    reviewed: false,
-    dismissed: false,
-  },
-  candidateName: 'Michael Chen',
-};
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -115,7 +98,7 @@ export const CompactBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event: rawEventView = MOCK_EVENT,
+      event: rawEventView,
       onReview,
       onDismiss,
       onClick,
@@ -124,7 +107,7 @@ export const CompactBhProctoringEventCard = createPreset<BhProctoringEventCardPr
       style,
     } = props;
 
-    const eventView = Array.isArray(rawEventView) ? rawEventView : MOCK_EVENT;
+    const eventView = (rawEventView ?? {}) as Partial<ProctoringEventCardView>;
 
     const ev = eventView?.event;
     const candidateName = eventView?.candidateName ?? 'Unknown';

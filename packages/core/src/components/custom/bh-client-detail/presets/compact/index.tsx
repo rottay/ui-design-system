@@ -39,20 +39,6 @@ import type { BhClientDetailProps, ClientPosition, RevenuePoint } from '../../co
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_POSITIONS: ClientPosition[] = [
-  { id: 'p1', title: 'Senior Frontend Engineer', status: 'open', candidates: 24, daysOpen: 15 },
-  { id: 'p2', title: 'Backend Engineer', status: 'open', candidates: 18, daysOpen: 22 },
-  { id: 'p3', title: 'DevOps Engineer', status: 'filled', candidates: 12, daysOpen: 0 },
-  { id: 'p4', title: 'Product Manager', status: 'closed', candidates: 20, daysOpen: 0 },
-];
-
-const MOCK_REVENUE: RevenuePoint[] = [
-  { month: 'Sep', amount: 18000 },
-  { month: 'Oct', amount: 14000 },
-  { month: 'Nov', amount: 22000 },
-  { month: 'Dec', amount: 19000 },
-  { month: 'Jan', amount: 25000 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  SVG Sparkline Helper                                               */
@@ -79,6 +65,7 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
       client,
       positions: rawPositionsProp = [],
       revenueHistory: rawRevenueProp = [],
+      billingRecords: rawBillingRecords = [],
       onPositionClick,
       loading,
       className,
@@ -87,6 +74,7 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
 
     const positionsProp = Array.isArray(rawPositionsProp) ? rawPositionsProp : [];
     const revenueProp = Array.isArray(rawRevenueProp) ? rawRevenueProp : [];
+    const billingRecords = Array.isArray(rawBillingRecords) ? rawBillingRecords : [];
 
     const clientName = client?.displayName ?? client?.clientCompanyName ?? '';
     const tier = (client?.tier ?? 'enterprise') as string;
@@ -264,6 +252,31 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
                     </Box>
                   </Box>
                 ))}
+            </Box>
+          </Box>
+        )}
+
+        {/* Billing summary */}
+        {billingRecords.length > 0 && (
+          <Box style={{ marginTop: t.spacing[3] }}>
+            <Box style={{ ...divider, marginBottom: t.spacing[3] }} />
+            <Text style={{ ...sectionHdr, display: 'block', marginBottom: t.spacing[2] }}>Billing</Text>
+            <Box style={{ display: 'flex', gap: t.spacing[2], flexWrap: 'wrap' as const }}>
+              <Box style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <DollarSign size={10} />
+                <Text style={{ fontSize: 'inherit' }}>
+                  {billingRecords.filter((r: any) => (r.status ?? r.billingStatus) === 'paid').length} paid
+                </Text>
+              </Box>
+              <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <Clock size={10} />
+                <Text style={{ fontSize: 'inherit' }}>
+                  {billingRecords.filter((r: any) => (r.status ?? r.billingStatus) !== 'paid').length} pending
+                </Text>
+              </Box>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'flex', alignItems: 'center' }}>
+                {billingRecords.length} total records
+              </Text>
             </Box>
           </Box>
         )}

@@ -20,12 +20,6 @@ import type { BhOfferExpirationProps, ExpiringOffer } from '../../core';
 import { offersToExpiringOffers } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
-const MOCK_OFFERS: ExpiringOffer[] = [
-  { id: 'oe-1', candidateName: 'Sarah Johnson', position: 'Senior Frontend Engineer', expiresAt: '2026-02-14', status: 'pending', daysRemaining: 2 },
-  { id: 'oe-2', candidateName: 'Michael Chen', position: 'Backend Developer', expiresAt: '2026-02-15', status: 'pending', daysRemaining: 3 },
-  { id: 'oe-3', candidateName: 'Emily Rodriguez', position: 'Product Designer', expiresAt: '2026-02-18', status: 'pending', daysRemaining: 6 },
-];
-
 function getUrgencyColor(days: number, t: DesignTokens): string {
   if (days <= 0) return t.colors.errorScale[600];
   if (days <= 2) return t.colors.errorScale[500];
@@ -52,8 +46,7 @@ export const ListBhOfferExpiration = createPreset<BhOfferExpirationProps>({
     } = props;
 
     const offers = offersProp
-      ?? (dbOffers && dbOffers.length > 0 ? offersToExpiringOffers(dbOffers, candidateNames) : MOCK_OFFERS);
-
+      ?? (dbOffers && dbOffers.length > 0 ? offersToExpiringOffers(dbOffers, candidateNames) : []);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

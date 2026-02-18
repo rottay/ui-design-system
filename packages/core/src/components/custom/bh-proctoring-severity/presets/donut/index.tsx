@@ -47,13 +47,6 @@ import { getSeverityLabel } from '@rottay/scoring';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SEVERITY: SeverityCount[] = [
-  { severity: 'critical', count: 5 },
-  { severity: 'high', count: 18 },
-  { severity: 'medium', count: 42 },
-  { severity: 'low', count: 62 },
-];
-
 /* ================================================================== */
 /*  Donut Preset                                                       */
 /* ================================================================== */
@@ -262,6 +255,16 @@ export const DonutBhProctoringSeverity = createPreset<BhProctoringSeverityProps>
                           <Text style={{ color: t.colors.neutral[400], marginLeft: 4 }}>{pct}%</Text>
                         )}
                       </Text>
+                      {sc.trend && sc.trend !== 'stable' && (
+                        <Text style={{
+                          fontSize: t.typography.fontSize.xs,
+                          color: sc.trend === 'up' ? t.colors.errorScale[500] : t.colors.successScale[500],
+                          marginLeft: t.spacing[1],
+                        }}>
+                          {sc.trend === 'up' ? '\u2191' : '\u2193'}
+                          {sc.trendPercentage != null ? `${sc.trendPercentage}%` : ''}
+                        </Text>
+                      )}
                     </Box>
                   );
                 })}

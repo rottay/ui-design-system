@@ -35,6 +35,21 @@ export interface BhClientListProps extends EngineAwareProps {
   /** Callback when sort changes */
   onSortChange?: (field: string) => void;
 
+  /** Filter by client status */
+  filterStatus?: string;
+
+  /** Filter by client tier */
+  filterTier?: string;
+
+  /** Whether to show revenue column/data */
+  showRevenue?: boolean;
+
+  /** Whether to show open positions count */
+  showPositions?: boolean;
+
+  /** Use compact layout with reduced row height */
+  compact?: boolean;
+
   /** Loading state */
   loading?: boolean;
 

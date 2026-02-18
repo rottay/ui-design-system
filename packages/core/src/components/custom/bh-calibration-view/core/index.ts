@@ -8,6 +8,7 @@
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { CalibrationSelect, CalibrationSampleSelect } from '@rottay/scoring';
+import { n } from '../../helpers';
 
 export type BhCalibrationViewPreset = 'session' | 'results';
 
@@ -21,6 +22,20 @@ export interface CalibrationSampleData {
   transcriptLines?: TranscriptLine[];
   humanScores?: Record<string, number>;
   aiScores?: Record<string, number>;
+  /** Weighted human score (accounts for dimension weights) */
+  humanWeightedScore?: number;
+  /** Weighted LLM score (accounts for dimension weights) */
+  llmWeightedScore?: number;
+  /** Human score level/band */
+  humanScoreLevel?: string;
+  /** LLM score level/band */
+  llmScoreLevel?: string;
+  /** Whether human and LLM agree on the score level */
+  levelMatch?: boolean;
+  /** ID or name of the person who scored the sample */
+  scoredBy?: string;
+  /** Reviewer or scorer notes */
+  notes?: string;
 }
 
 export interface AlignmentMetrics {
@@ -28,6 +43,18 @@ export interface AlignmentMetrics {
   meanAbsoluteError?: number;
   confidenceCorrelation?: number;
   perDimensionAlignment?: { dimension: string; agreement: number }[];
+  /** Pearson correlation between human and LLM scores */
+  overallCorrelation?: number;
+  /** Per-dimension calibration metrics */
+  dimensionMetrics?: Record<string, unknown>[];
+  /** LLM model used for scoring */
+  llmModel?: string;
+  /** Prompt version used for scoring */
+  promptVersion?: string;
+  /** Target number of samples for the session */
+  targetSamples?: number;
+  /** Minimum samples required before metrics are valid */
+  minSamples?: number;
 }
 
 export interface DimensionAdjustment {
@@ -99,13 +126,8 @@ export const BH_CALIBRATION_VIEW_DEFAULTS: Partial<BhCalibrationViewProps> = {
 /** Backward-compat alias (old name from pre-migration) */
 export type CalibrationSample = CalibrationSampleData;
 
-/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
-export function n(v: string | number | null | undefined): number {
-  if (v == null) return 0;
-  if (typeof v === 'number') return v;
-  const parsed = Number(v);
-  return isNaN(parsed) ? 0 : parsed;
-}
+/** Re-export n helper for convenience */
+export { n };
 
 /** Re-export DB types for convenience */
 export type { CalibrationSelect, CalibrationSampleSelect };

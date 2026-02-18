@@ -53,46 +53,6 @@ import type {
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: Team[] = [
-  { id: 't1', name: 'Engineering Hiring', memberCount: 6, lead: 'Sofia Martinez' },
-  { id: 't2', name: 'Product & Design', memberCount: 4, lead: 'James Chen' },
-  { id: 't3', name: 'GTM Recruiting', memberCount: 5, lead: 'Priya Sharma' },
-];
-
-const MOCK_KPIS: TeamKpi[] = [
-  { label: 'Open Requisitions', value: 24, trend: 'up', trendValue: '+3', sparklineData: [18, 20, 19, 22, 21, 24] },
-  { label: 'Time to Fill', value: '28d', trend: 'down', trendValue: '-4d', sparklineData: [34, 32, 31, 30, 29, 28] },
-  { label: 'Offer Acceptance', value: '87%', trend: 'up', trendValue: '+5%', sparklineData: [78, 80, 82, 84, 85, 87] },
-  { label: 'Pipeline Coverage', value: '3.2x', trend: 'flat', trendValue: '0', sparklineData: [3.0, 3.1, 3.0, 3.2, 3.1, 3.2] },
-];
-
-const MOCK_RECRUITERS: RecruiterWorkload[] = [
-  { recruiterId: 'r1', name: 'Sofia Martinez', metrics: { 'Open Reqs': 8, 'Screens': 12, 'Interviews': 6, 'Offers': 2, 'Hires': 1, 'Time to Fill': 26 } },
-  { recruiterId: 'r2', name: 'James Chen', metrics: { 'Open Reqs': 6, 'Screens': 9, 'Interviews': 8, 'Offers': 3, 'Hires': 2, 'Time to Fill': 24 } },
-  { recruiterId: 'r3', name: 'Priya Sharma', metrics: { 'Open Reqs': 5, 'Screens': 14, 'Interviews': 4, 'Offers': 1, 'Hires': 1, 'Time to Fill': 32 } },
-  { recruiterId: 'r4', name: 'Marcus Williams', metrics: { 'Open Reqs': 5, 'Screens': 8, 'Interviews': 7, 'Offers': 2, 'Hires': 2, 'Time to Fill': 22 } },
-];
-
-const MOCK_SLA: SlaItem[] = [
-  { stage: 'Resume Review', avgHours: 18, limitHours: 24, status: 'green' },
-  { stage: 'Phone Screen', avgHours: 22, limitHours: 24, status: 'yellow' },
-  { stage: 'Technical', avgHours: 42, limitHours: 48, status: 'yellow' },
-  { stage: 'Offer', avgHours: 16, limitHours: 24, status: 'green' },
-];
-
-const MOCK_TASKS: TaskCard[] = [
-  { id: 'tk1', title: 'Review Sr. Engineer candidates', priority: 'urgent', assignee: 'Sofia Martinez', dueDate: '2026-02-13' },
-  { id: 'tk2', title: 'Schedule panel for Data Analyst', priority: 'high', assignee: 'James Chen', dueDate: '2026-02-14' },
-  { id: 'tk3', title: 'Prepare offer for UX Designer', priority: 'high', assignee: 'Priya Sharma', dueDate: '2026-02-14' },
-  { id: 'tk4', title: 'Update job description: PM role', priority: 'medium', assignee: 'Marcus Williams', dueDate: '2026-02-16' },
-];
-
-const MOCK_ALERTS: PerformanceAlert[] = [
-  { id: 'a1', recruiterName: 'Priya Sharma', metric: 'Time to Fill', threshold: 30, actual: 32, severity: 'warning' },
-  { id: 'a2', recruiterName: 'Sofia Martinez', metric: 'Screen Completion', threshold: 80, actual: 68, severity: 'critical' },
-];
-
-const MOCK_SPRINT: SprintSummary = { total: 42, completed: 28, inProgress: 10, blocked: 4 };
 
 const DATE_OPTIONS: { value: DateRangeOption; label: string }[] = [
   { value: '7d', label: '7 days' },
@@ -129,12 +89,12 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
       style,
     } = props;
 
-    const teams = teamsProp?.length ? teamsProp : MOCK_TEAMS;
-    const kpis = kpisProp?.length ? kpisProp : MOCK_KPIS;
-    const recruiters = recProp?.length ? recProp : MOCK_RECRUITERS;
+    const teams = teamsProp?.length ? teamsProp : [];
+    const kpis = kpisProp?.length ? kpisProp : [];
+    const recruiters = recProp?.length ? recProp : [];
     const columns = colsProp?.length ? colsProp : ['Open Reqs', 'Screens', 'Interviews', 'Offers', 'Hires', 'Time to Fill'];
-    const slaItems = slaProp?.length ? slaProp : MOCK_SLA;
-    const tasks = tasksProp?.length ? tasksProp : MOCK_TASKS;
+    const slaItems = slaProp?.length ? slaProp : [];
+    const tasks = tasksProp?.length ? tasksProp : [];
     const pipeline = pipeProp?.length ? pipeProp : useMemo(() => ([
       { name: 'Applied', count: 342, percentage: 100, color: t.colors.primaryScale[500] },
       { name: 'Screened', count: 186, percentage: 54, color: t.colors.infoScale[500] },
@@ -142,8 +102,8 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
       { name: 'Offered', count: 28, percentage: 8, color: t.colors.warningScale[500] },
       { name: 'Hired', count: 18, percentage: 5, color: t.colors.errorScale[500] },
     ]), [t]);
-    const alerts = alertsProp?.length ? alertsProp : MOCK_ALERTS;
-    const sprint = sprintProp ?? MOCK_SPRINT;
+    const alerts = alertsProp?.length ? alertsProp : [];
+    const sprint = sprintProp ?? {};
 
     const [selectedTeam, setSelectedTeam] = useState(selTeamProp ?? teams[0]?.id);
     const [dateRange, setDateRange] = useState<DateRangeOption>(drProp ?? '30d');

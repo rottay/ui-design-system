@@ -17,19 +17,6 @@ import {
   createFilterPillStyle,
 } from '../../../helpers';
 
-const MOCK_STAGES: InterviewStage[] = [
-  { id: 's-1', name: 'Technical Screen', order: 1, status: 'completed', aggregationStrategy: 'average', aggregatedScore: 82, maxScore: 100, completedDate: '2025-01-15', panelMemberIds: ['m-1', 'm-2'] },
-  { id: 's-2', name: 'System Design', order: 2, status: 'completed', aggregationStrategy: 'weighted_average', aggregatedScore: 75, maxScore: 100, completedDate: '2025-01-18', panelMemberIds: ['m-3'] },
-  { id: 's-3', name: 'Behavioral', order: 3, status: 'in_progress', aggregationStrategy: 'consensus', maxScore: 100, panelMemberIds: ['m-4'] },
-];
-
-const MOCK_MEMBERS: PanelMember[] = [
-  { id: 'm-1', name: 'Alex Rivera', role: 'Senior Engineer', stageId: 's-1', overallScore: 85, recommendation: 'hire' },
-  { id: 'm-2', name: 'Jordan Park', role: 'Staff Engineer', stageId: 's-1', overallScore: 79, recommendation: 'hire' },
-  { id: 'm-3', name: 'Morgan Lee', role: 'Principal Architect', stageId: 's-2', overallScore: 75, recommendation: 'hire' },
-  { id: 'm-4', name: 'Casey Kim', role: 'Engineering Manager', stageId: 's-3' },
-];
-
 export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
   name: 'BhPanelCoordinator.Summary',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhPanelCoordinatorProps>) => {
@@ -38,10 +25,10 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
     const recColors = getRecommendationColors(tokens);
     const stageColors = getStageStatusColors(tokens);
 
-    const { stages: rawStages = MOCK_STAGES, members: rawMembers = MOCK_MEMBERS, consensus, candidateName, positionTitle, loading, className, style } = props;
+    const { stages: rawStages = [], members: rawMembers = [], consensus, candidateName, positionTitle, loading, className, style } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
-    const members = Array.isArray(rawMembers) ? rawMembers : MOCK_MEMBERS;
+    const stages = Array.isArray(rawStages) ? rawStages : [];
+    const members = Array.isArray(rawMembers) ? rawMembers : [];
 
     const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
 

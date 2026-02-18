@@ -16,11 +16,11 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
 } from '../../../helpers';
-import type { BhClientPortalProps, ClientPosition, ClientInterview } from '../../core';
+import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import {
   Table, Briefcase, Users, Clock, TrendingUp, Calendar, Award,
-  ArrowUpDown, ChevronDown, ChevronUp,
+  ArrowUpDown, ChevronDown, ChevronUp, DollarSign,
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
@@ -34,37 +34,10 @@ interface ClientDisplay {
 }
 
 const DEFAULT_CLIENT: ClientDisplay = {
-  name: 'Acme Corporation',
-  contactName: 'Jennifer Walsh',
-  contactEmail: 'jennifer.walsh@acme.com',
+  name: 'Acme Corp',
+  contactName: 'John Doe',
+  contactEmail: 'john@acme.com',
 };
-
-const DEFAULT_METRICS = {
-  totalOpenPositions: 8,
-  totalActiveCandidates: 47,
-  avgTimeToFill: 34,
-  fillRate: 78,
-  upcomingInterviews: 12,
-  offersExtended: 3,
-};
-
-const DEFAULT_POSITIONS: ClientPosition[] = [
-  { id: 'p-1', title: 'Senior Frontend Engineer', department: 'Engineering', status: 'open', totalCandidates: 18, activeCandidates: 12, interviewsScheduled: 4, daysOpen: 21, targetHireDate: '2026-03-15' },
-  { id: 'p-2', title: 'Product Manager', department: 'Product', status: 'open', totalCandidates: 14, activeCandidates: 8, interviewsScheduled: 3, daysOpen: 35, targetHireDate: '2026-03-01' },
-  { id: 'p-3', title: 'Staff Backend Engineer', department: 'Engineering', status: 'open', totalCandidates: 9, activeCandidates: 6, interviewsScheduled: 2, daysOpen: 14 },
-  { id: 'p-4', title: 'UX Designer', department: 'Design', status: 'on_hold', totalCandidates: 7, activeCandidates: 3, interviewsScheduled: 0, daysOpen: 45 },
-  { id: 'p-5', title: 'Data Analyst', department: 'Analytics', status: 'filled', totalCandidates: 22, activeCandidates: 0, interviewsScheduled: 0, daysOpen: 28 },
-  { id: 'p-6', title: 'DevOps Engineer', department: 'Engineering', status: 'open', totalCandidates: 11, activeCandidates: 7, interviewsScheduled: 2, daysOpen: 18, targetHireDate: '2026-04-01' },
-];
-
-const DEFAULT_INTERVIEWS: ClientInterview[] = [
-  { id: 'iv-1', candidateName: 'Sarah Johnson', positionTitle: 'Senior Frontend Engineer', date: '2026-02-12', time: '10:00 AM', type: 'video', status: 'scheduled' },
-  { id: 'iv-2', candidateName: 'Michael Chen', positionTitle: 'Product Manager', date: '2026-02-12', time: '2:00 PM', type: 'panel', status: 'scheduled' },
-  { id: 'iv-3', candidateName: 'Emily Rodriguez', positionTitle: 'Senior Frontend Engineer', date: '2026-02-13', time: '11:00 AM', type: 'onsite', status: 'scheduled' },
-  { id: 'iv-4', candidateName: 'James Kim', positionTitle: 'Staff Backend Engineer', date: '2026-02-14', time: '3:00 PM', type: 'phone', status: 'scheduled' },
-  { id: 'iv-5', candidateName: 'Anna Kowalski', positionTitle: 'DevOps Engineer', date: '2026-02-14', time: '10:00 AM', type: 'video', status: 'scheduled' },
-  { id: 'iv-6', candidateName: 'David Thompson', positionTitle: 'Product Manager', date: '2026-02-10', time: '9:00 AM', type: 'video', status: 'completed' },
-];
 
 /* ---------------------------------------------------------------------------
  * Helpers
@@ -116,17 +89,20 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
 
     const {
       client: clientProp,
-      positions: rawPositions = DEFAULT_POSITIONS,
-      interviews: rawInterviews = DEFAULT_INTERVIEWS,
-      metrics: rawMetrics = DEFAULT_METRICS,
+      positions: rawPositions = [],
+      interviews: rawInterviews = [],
+      metrics: rawMetrics = {} as Partial<ClientMetrics>,
+      billingOverview,
+      billingRecords: rawBillingRecords,
       selectedPosition: controlledSelected,
       onPositionSelect,
       className, style,
     } = props;
 
-    const positions = Array.isArray(rawPositions) ? rawPositions : DEFAULT_POSITIONS;
-    const interviews = Array.isArray(rawInterviews) ? rawInterviews : DEFAULT_INTERVIEWS;
-    const metrics = Array.isArray(rawMetrics) ? rawMetrics : DEFAULT_METRICS;
+    const positions = Array.isArray(rawPositions) ? rawPositions : [];
+    const interviews = Array.isArray(rawInterviews) ? rawInterviews : [];
+    const metrics = rawMetrics as Partial<ClientMetrics>;
+    const billingRecords = Array.isArray(rawBillingRecords) ? rawBillingRecords : [];
 
     const client: ClientDisplay = useMemo(() => {
       if (!clientProp) return DEFAULT_CLIENT;
@@ -138,7 +114,6 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
     }, [clientProp]);
 
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
-
 
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
@@ -377,6 +352,83 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
                   );
                 })}
               </Box>
+            </Box>
+          )}
+
+          {/* Billing Summary */}
+          {(billingOverview || billingRecords.length > 0) && (
+            <Box style={{
+              ...createCardStyle(t, { elevation: 'sm' }),
+              padding: t.spacing[5], backgroundColor: t.colors.common.white, marginTop: t.spacing[5], width: '100%',
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                <DollarSign size={15} color={t.colors.successScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                  Billing Summary
+                </Text>
+              </Box>
+              {billingOverview && (
+                <Box style={{ display: 'flex', gap: t.spacing[4], marginBottom: billingRecords.length > 0 ? t.spacing[4] : 0 }}>
+                  {billingOverview.totalBilled != null && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[1] }}>
+                      <DollarSign size={12} color={t.colors.neutral[400]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800], display: 'block' }}>
+                        {billingOverview.currency ?? '$'}{billingOverview.totalBilled.toLocaleString()}
+                      </Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], display: 'block' }}>Billed</Text>
+                    </Box>
+                  )}
+                  {billingOverview.totalPaid != null && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[1] }}>
+                      <TrendingUp size={12} color={t.colors.successScale[500]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.successScale[700], display: 'block' }}>
+                        {billingOverview.currency ?? '$'}{billingOverview.totalPaid.toLocaleString()}
+                      </Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], display: 'block' }}>Paid</Text>
+                    </Box>
+                  )}
+                  {billingOverview.outstandingBalance != null && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[1] }}>
+                      <Clock size={12} color={t.colors.warningScale[500]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: billingOverview.outstandingBalance > 0 ? t.colors.warningScale[700] : t.colors.neutral[800], display: 'block' }}>
+                        {billingOverview.currency ?? '$'}{billingOverview.outstandingBalance.toLocaleString()}
+                      </Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], display: 'block' }}>Outstanding</Text>
+                    </Box>
+                  )}
+                  {billingOverview.invoiceCount != null && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[1] }}>
+                      <Briefcase size={12} color={t.colors.neutral[400]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800], display: 'block' }}>
+                        {billingOverview.invoiceCount}
+                      </Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], display: 'block' }}>Invoices</Text>
+                    </Box>
+                  )}
+                </Box>
+              )}
+              {billingRecords.length > 0 && (
+                <Box role="list" aria-label="Billing records">
+                  {billingRecords.slice(0, 5).map((record, idx) => (
+                    <Box
+                      key={record.id ?? idx}
+                      role="listitem"
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                        borderBottom: idx < Math.min(billingRecords.length, 5) - 1 ? `1px solid ${t.colors.neutral[50]}` : 'none',
+                      }}
+                    >
+                      <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>
+                        {(record as any).description || (record as any).invoiceNumber || `Record #${idx + 1}`}
+                      </Text>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>
+                        ${Number((record as any).amount ?? 0).toLocaleString()}
+                      </Text>
+                    </Box>
+                  ))}
+                </Box>
+              )}
             </Box>
           )}
         </Box>

@@ -16,15 +16,12 @@ import {
   createIconContainerStyle, createPersonalitySectionHeaderStyle,
   getPersonalityTypography, getPersonalityBadgeRadius, createPersonalityAccentBar,
   createEmptyStateStyle,
+  createMetadataFieldStyle, createMetadataGridStyle, createMetadataValueStyle,
+  createStatValueStyle, createStatLabelStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import { DollarSign, TrendingUp, AlertCircle, Coins, BarChart3, Activity } from 'lucide-react';
-
-const MOCK_PROVIDERS: ProviderCost[] = [
-  { providerId: 'openai', providerName: 'OpenAI', totalCost: 4280.50, tokenCount: 12400000, requestCount: 8420, share: 62.3, trend: 'up' as const, trendValue: 8.2 },
-  { providerId: 'anthropic', providerName: 'Anthropic', totalCost: 1850.25, tokenCount: 5200000, requestCount: 3150, share: 26.9, trend: 'down' as const, trendValue: 3.1 },
-  { providerId: 'google', providerName: 'Google AI', totalCost: 740.80, tokenCount: 3100000, requestCount: 2080, share: 10.8, trend: 'flat' as const, trendValue: 0.4 },
-];
 
 export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
   name: 'BhCostAnalyzer.Dashboard',
@@ -40,15 +37,19 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const trendColors = useMemo(() => getTrendColors(tokens), [tokens]);
 
     const {
-      providers: rawProviders = MOCK_PROVIDERS, models: rawModels = [], trends: rawTrends = [], tokenBalance,
+      providers: rawProviders = [], models: rawModels = [], trends: rawTrends = [], tokenBalance,
       alerts: rawAlerts = [], summary, onAlertAcknowledge,
+      categoryFilter: categoryFilterProp,
+      period: periodProp,
+      searchCosts: rawSearchCosts = [],
       loading, className, style,
     } = props;
 
-    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
     const models = Array.isArray(rawModels) ? rawModels : [];
     const trends = Array.isArray(rawTrends) ? rawTrends : [];
     const alerts = Array.isArray(rawAlerts) ? rawAlerts : [];
+    const searchCosts = Array.isArray(rawSearchCosts) ? rawSearchCosts : [];
 
     if (loading) {
       return (
@@ -83,14 +84,14 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
         {/* Summary Stats */}
         {summary && (
           <Box style={{
-            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: tokens.spacing[4], marginBottom: tokens.spacing[6],
+            ...createMetadataGridStyle(tokens, { columns: 4 }),
+            marginBottom: tokens.spacing[6],
           }}>
             {[
-              { label: 'Total Spend', value: formatCurrency(summary.totalSpend), color: tokens.colors.neutral[800], icon: <DollarSign size={16} /> },
-              { label: 'Cost / Interview', value: formatCurrency(summary.costPerInterview), color: tokens.colors.neutral[800], icon: <BarChart3 size={16} /> },
-              { label: 'Cost / Hire', value: formatCurrency(summary.costPerHire), color: tokens.colors.neutral[800], icon: <TrendingUp size={16} /> },
-              { label: 'MoM Change', value: `${(summary.monthOverMonthChange ?? 0) >= 0 ? '+' : ''}${(summary.monthOverMonthChange ?? 0).toFixed(1)}%`, color: (summary.monthOverMonthChange ?? 0) > 10 ? tokens.colors.errorScale[600] : (summary.monthOverMonthChange ?? 0) < 0 ? tokens.colors.successScale[600] : tokens.colors.neutral[700], icon: <Activity size={16} /> },
+              { label: 'Total Spend', value: formatCurrency(summary.totalSpend), color: tokens.colors.neutral[800], icon: <DollarSign size={ICON_SIZES.section} /> },
+              { label: 'Cost / Interview', value: formatCurrency(summary.costPerInterview), color: tokens.colors.neutral[800], icon: <BarChart3 size={ICON_SIZES.section} /> },
+              { label: 'Cost / Hire', value: formatCurrency(summary.costPerHire), color: tokens.colors.neutral[800], icon: <TrendingUp size={ICON_SIZES.section} /> },
+              { label: 'MoM Change', value: `${(summary.monthOverMonthChange ?? 0) >= 0 ? '+' : ''}${(summary.monthOverMonthChange ?? 0).toFixed(1)}%`, color: (summary.monthOverMonthChange ?? 0) > 10 ? tokens.colors.errorScale[600] : (summary.monthOverMonthChange ?? 0) < 0 ? tokens.colors.successScale[600] : tokens.colors.neutral[700], icon: <Activity size={ICON_SIZES.section} /> },
             ].map(stat => (
               <Box key={stat.label} style={statCardStyle(stat.color)}>
                 <Box style={{
@@ -105,13 +106,41 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                     }}>{stat.label}</Text>
                   </Box>
                   <Text style={{
-                    fontSize: tokens.typography.fontSize['2xl'],
-                    fontWeight: tokens.typography.fontWeight.bold,
+                    ...createStatValueStyle(tokens, { size: '2xl' }),
                     color: stat.color,
                   }}>{stat.value}</Text>
                 </Box>
               </Box>
             ))}
+          </Box>
+        )}
+
+        {/* Category Filter & Period */}
+        {(categoryFilterProp || periodProp) && (
+          <Box style={{
+            display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
+            marginBottom: tokens.spacing[4],
+          }}>
+            {categoryFilterProp && (
+              <Box style={{
+                ...createBadgeStyle(tokens, 'primary'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
+              }}>
+                <BarChart3 size={11} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>Category: {categoryFilterProp}</Text>
+              </Box>
+            )}
+            {periodProp && (
+              <Box style={{
+                ...createBadgeStyle(tokens, 'info'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
+              }}>
+                <Activity size={11} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>Period: {periodProp}</Text>
+              </Box>
+            )}
           </Box>
         )}
 
@@ -227,18 +256,17 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                   <Text style={{ ...createSectionHeaderStyle(tokens), marginBottom: 0 }}>Token Balance</Text>
                 </Box>
                 <Text style={{
+                  ...createStatValueStyle(tokens, { size: '2xl' }),
                   fontSize: tokens.typography.fontSize['3xl'],
-                  fontWeight: tokens.typography.fontWeight.bold,
-                  color: tokens.colors.neutral[900],
                   marginBottom: tokens.spacing[3],
                 }}>{formatTokens(tokenBalance.current)}</Text>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>Burn Rate</Text>
-                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>{formatTokens(tokenBalance.dailyBurnRate)}/day</Text>
+                  <Box style={createMetadataFieldStyle(tokens)}>
+                    <Text style={{ ...createStatLabelStyle(tokens), marginBottom: tokens.spacing[1] }}>Burn Rate</Text>
+                    <Text style={createMetadataValueStyle(tokens, { weight: 'semibold' })}>{formatTokens(tokenBalance.dailyBurnRate)}/day</Text>
                   </Box>
-                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>Depletion</Text>
+                  <Box style={createMetadataFieldStyle(tokens)}>
+                    <Text style={{ ...createStatLabelStyle(tokens), marginBottom: tokens.spacing[1] }}>Depletion</Text>
                     <Text style={{
                       fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
                       color: tokenBalance.projectedDepletionDays <= 7 ? tokens.colors.errorScale[600] : tokenBalance.projectedDepletionDays <= 30 ? tokens.colors.warningScale[600] : tokens.colors.successScale[600],
@@ -327,6 +355,56 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                   </Box>
                 );
               })}
+            </Box>
+          </Box>
+        )}
+        {/* Search Costs */}
+        {searchCosts.length > 0 && (
+          <Box style={{
+            marginTop: tokens.spacing[6],
+            ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+            borderRadius: tokens.borderRadius.lg,
+            border: `1px solid ${tokens.colors.neutral[100]}`,
+            overflow: 'hidden',
+          }}>
+            <Box style={{
+              padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
+              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <DollarSign size={16} color={tokens.colors.neutral[500]} />
+                <Text style={{
+                  fontSize: tokens.typography.fontSize.md,
+                  fontWeight: ptypo.headingWeight,
+                  color: tokens.colors.neutral[900],
+                  letterSpacing: ptypo.headingLetterSpacing,
+                }}>Search Costs</Text>
+                <Box style={{ ...createBadgeStyle(tokens, 'info'), borderRadius: badgeRadius }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{searchCosts.length}</Text>
+                </Box>
+              </Box>
+            </Box>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const }}>
+              {searchCosts.slice(0, 10).map((sc, idx) => (
+                <Box key={(sc as any).id ?? idx} style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
+                  borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], fontWeight: tokens.typography.fontWeight.medium }}>
+                      {(sc as any).model ?? (sc as any).provider ?? 'Search'}
+                    </Text>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                      {(sc as any).createdAt ? new Date((sc as any).createdAt).toLocaleDateString() : ''}
+                      {(sc as any).tokensUsed != null ? ` - ${(sc as any).tokensUsed} tokens` : ''}
+                    </Text>
+                  </Box>
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[700] }}>
+                    {(sc as any).cost != null ? formatCurrency((sc as any).cost) : '-'}
+                  </Text>
+                </Box>
+              ))}
             </Box>
           </Box>
         )}

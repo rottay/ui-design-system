@@ -9,6 +9,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Eye, Send, Pencil, X, Mail, User, AtSign,
+  Globe, Layers, Target, Tag, Hash,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -26,14 +27,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Default data                                                       */
 /* ------------------------------------------------------------------ */
-
-const DEFAULT_SAMPLE_DATA: Record<string, string> = {
-  firstName: 'Alex',
-  lastName: 'Rivera',
-  company: 'TechCorp',
-  position: 'Senior Frontend Engineer',
-  recruiterName: 'Sarah Johnson',
-};
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -60,19 +53,24 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
       templateName = 'Initial Outreach',
       subject = 'Exciting opportunity at {{company}}',
       body = 'Hi {{firstName}},\n\nI came across your profile and was impressed by your experience. We have an exciting {{position}} role at {{company}} that I think would be a great fit.\n\nWould you be open to a brief conversation?\n\nBest regards,\n{{recruiterName}}',
-      sampleData: rawSampleData = DEFAULT_SAMPLE_DATA,
+      sampleData: rawSampleData,
       recipientName = 'Alex Rivera',
       recipientEmail = 'alex.rivera@example.com',
       onSend,
       onEdit,
       onClose,
+      templateType,
+      plainTextBody,
+      targetAudience,
+      useCase,
+      language,
+      version,
       loading,
       className,
       style,
     } = props;
 
-    const sampleData = Array.isArray(rawSampleData) ? rawSampleData : DEFAULT_SAMPLE_DATA;
-
+    const sampleData: Record<string, string> = (rawSampleData && !Array.isArray(rawSampleData)) ? rawSampleData : {};
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -199,6 +197,42 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
                   {resolvedSubject}
                 </Text>
               </Box>
+
+              {/* Template metadata badges */}
+              {(templateType || language || version != null || targetAudience || useCase) && (
+                <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[1], marginTop: t.spacing[2] }}>
+                  {templateType && (
+                    <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                      <Layers size={10} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{templateType}</Text>
+                    </Box>
+                  )}
+                  {language && (
+                    <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                      <Globe size={10} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'uppercase' as const }}>{language}</Text>
+                    </Box>
+                  )}
+                  {version != null && (
+                    <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                      <Hash size={10} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>v{version}</Text>
+                    </Box>
+                  )}
+                  {targetAudience && (
+                    <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                      <Target size={10} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{targetAudience}</Text>
+                    </Box>
+                  )}
+                  {useCase && (
+                    <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                      <Tag size={10} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{useCase}</Text>
+                    </Box>
+                  )}
+                </Box>
+              )}
             </Box>
 
             {/* Email body */}
@@ -212,6 +246,31 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
                 {resolvedBody}
               </Text>
             </Box>
+
+            {/* Plain text body */}
+            {plainTextBody && (
+              <Box style={{
+                padding: `${t.spacing[3]}px ${t.spacing[5]}px`,
+                borderTop: `1px solid ${t.colors.neutral[100]}`,
+              }}>
+                <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>Plain Text Version</Text>
+                <Box style={{
+                  padding: t.spacing[3],
+                  borderRadius: t.borderRadius.md,
+                  backgroundColor: t.colors.neutral[50],
+                  border: `1px solid ${t.colors.neutral[100]}`,
+                }}>
+                  <Text style={{
+                    fontSize: t.typography.fontSize.xs,
+                    color: t.colors.neutral[600],
+                    lineHeight: 1.5,
+                    whiteSpace: 'pre-wrap',
+                  }}>
+                    {plainTextBody}
+                  </Text>
+                </Box>
+              </Box>
+            )}
 
             {/* Sample data legend */}
             <Box style={{

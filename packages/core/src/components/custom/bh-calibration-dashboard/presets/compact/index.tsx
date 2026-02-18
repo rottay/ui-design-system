@@ -68,31 +68,6 @@ function getStatusLabel(status: string): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SESSIONS: CalibrationSession[] = [
-  {
-    id: 'cs-1', rubricName: 'Senior Engineer Rubric', status: 'active', progress: 0.65,
-    totalSamples: 20, completedSamples: 13, participants: ['Alex R.', 'Maria G.', 'Tom B.'],
-    agreementRate: 0.78, startedAt: new Date(Date.now() - 86400000 * 2),
-  },
-  {
-    id: 'cs-2', rubricName: 'Product Manager Rubric', status: 'active', progress: 0.30,
-    totalSamples: 15, completedSamples: 5, participants: ['David P.', 'Anna K.'],
-    agreementRate: 0.65, startedAt: new Date(Date.now() - 86400000),
-  },
-  {
-    id: 'cs-3', rubricName: 'Design Lead Rubric', status: 'completed', progress: 1.0,
-    totalSamples: 12, completedSamples: 12, participants: ['Sarah J.', 'Michael C.'],
-    agreementRate: 0.92, startedAt: new Date(Date.now() - 86400000 * 7), completedAt: new Date(Date.now() - 86400000),
-  },
-];
-
-const MOCK_METRICS: CalibrationMetrics = {
-  activeSessions: 2,
-  totalCompleted: 12,
-  avgAgreementRate: 0.78,
-  avgDeviation: 0.42,
-};
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -116,7 +91,6 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
     } = props;
 
     const sessions = Array.isArray(rawSessions) ? rawSessions : [];
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

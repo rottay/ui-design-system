@@ -44,12 +44,6 @@ const EMPTY_FORM: PositionFormData = {
   salaryRange: { min: 0, max: 0, currency: 'USD' },
 };
 
-const DEFAULT_CLIENTS = [
-  { id: 'cl-1', name: 'Acme Corporation' },
-  { id: 'cl-2', name: 'Horizon Labs' },
-  { id: 'cl-3', name: 'Nova Ventures' },
-];
-
 const PRIORITY_OPTIONS: Array<{ value: PositionFormData['priority']; label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = [
   { value: 'critical', label: 'Critical', color: t => t.colors.errorScale[700], bg: t => t.colors.errorScale[50] },
   { value: 'urgent', label: 'Urgent', color: t => t.colors.errorScale[600], bg: t => t.colors.errorScale[50] },
@@ -92,7 +86,7 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
 
     const {
       initialData,
-      clients: rawClients = DEFAULT_CLIENTS,
+      clients: rawClients = [],
       onSubmit,
       onCancel,
       isEditing = false,
@@ -101,7 +95,7 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
       style,
     } = props;
 
-    const clients = Array.isArray(rawClients) ? rawClients : DEFAULT_CLIENTS;
+    const clients = Array.isArray(rawClients) ? rawClients : [];
 
     const [form, setForm] = useState<PositionFormData>({
       ...EMPTY_FORM,
@@ -379,6 +373,89 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
               </select>
             </Box>
           </Box>
+
+          {/* Budget */}
+          <Text style={sectionLabel('Budget')}>Budget</Text>
+          <Box style={{ display: 'flex', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
+            <Box style={{ flex: 1 }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1] }}>
+                Total Budget
+              </Text>
+              <Box style={{ position: 'relative' }}>
+                <DollarSign size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
+                <input
+                  type="number"
+                  value={form.budgetTotal ?? 0}
+                  onChange={(e) => updateField('budgetTotal', Number(e.target.value))}
+                  aria-label="Total budget"
+                  style={{ ...createInputStyle(t, false), paddingLeft: t.spacing[8] }}
+                />
+              </Box>
+            </Box>
+            <Box style={{ flex: 1 }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1] }}>
+                Budget Spent
+              </Text>
+              <Box style={{ position: 'relative' }}>
+                <DollarSign size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
+                <input
+                  type="number"
+                  value={form.budgetSpent ?? 0}
+                  onChange={(e) => updateField('budgetSpent', Number(e.target.value))}
+                  aria-label="Budget spent"
+                  style={{ ...createInputStyle(t, false), paddingLeft: t.spacing[8] }}
+                />
+              </Box>
+            </Box>
+            <Box style={{ width: 100 }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1] }}>
+                Currency
+              </Text>
+              <select
+                value={form.budgetCurrency ?? 'USD'}
+                onChange={(e) => updateField('budgetCurrency', e.target.value)}
+                aria-label="Budget currency"
+                style={{ ...createInputStyle(t, false), cursor: 'pointer' }}
+              >
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+              </select>
+            </Box>
+          </Box>
+
+          {/* SLA Configuration */}
+          {form.slaConfig !== undefined && (
+            <>
+              <Text style={sectionLabel('SLA Configuration')}>SLA Configuration</Text>
+              <Box style={{ display: 'flex', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
+                <Box style={{ flex: 1 }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1] }}>
+                    Max Days to Fill
+                  </Text>
+                  <input
+                    type="number"
+                    value={form.slaConfig?.maxDaysToFill ?? 0}
+                    onChange={(e) => updateField('slaConfig', { ...(form.slaConfig ?? {}), maxDaysToFill: Number(e.target.value) } as any)}
+                    aria-label="Max days to fill"
+                    style={createInputStyle(t, false)}
+                  />
+                </Box>
+                <Box style={{ flex: 1 }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1] }}>
+                    Max Days Per Stage
+                  </Text>
+                  <input
+                    type="number"
+                    value={form.slaConfig?.maxDaysPerStage ?? 0}
+                    onChange={(e) => updateField('slaConfig', { ...(form.slaConfig ?? {}), maxDaysPerStage: Number(e.target.value) } as any)}
+                    aria-label="Max days per stage"
+                    style={createInputStyle(t, false)}
+                  />
+                </Box>
+              </Box>
+            </>
+          )}
 
           {/* Footer actions */}
           <Box style={{

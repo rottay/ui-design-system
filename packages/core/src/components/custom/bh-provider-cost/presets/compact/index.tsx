@@ -61,16 +61,7 @@ function formatCompactCurrency(value: number, currency: string): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_PROVIDERS: ProviderCostEntry[] = [
-  { provider: 'OpenAI', model: 'GPT-4o', totalCost: 4280.50, tokenCount: 12500000, avgCostPerRequest: 0.34, budgetLimit: 5000, budgetUsed: 4280.50, trend: 'up' },
-  { provider: 'Anthropic', model: 'Claude 3.5 Sonnet', totalCost: 3150.75, tokenCount: 9800000, avgCostPerRequest: 0.28, budgetLimit: 4000, budgetUsed: 3150.75, trend: 'up' },
-  { provider: 'Google', model: 'Gemini 1.5 Pro', totalCost: 1820.30, tokenCount: 7200000, avgCostPerRequest: 0.18, budgetLimit: 3000, budgetUsed: 1820.30, trend: 'down' },
-  { provider: 'Cohere', model: 'Command R+', totalCost: 890.20, tokenCount: 4500000, avgCostPerRequest: 0.12, budgetLimit: 2000, budgetUsed: 890.20, trend: 'flat' },
-  { provider: 'Mistral', model: 'Large 2', totalCost: 542.10, tokenCount: 3100000, avgCostPerRequest: 0.09, budgetLimit: 1500, budgetUsed: 542.10, trend: 'down' },
-];
-
 const MOCK_TOTAL_BUDGET = 15000;
-const MOCK_TOTAL_SPENT = 10683.85;
 
 /* ================================================================== */
 /*  Compact Preset                                                     */
@@ -83,10 +74,10 @@ export const CompactBhProviderCost = createPreset<BhProviderCostProps>({
     const t = tokens;
 
     const {
-      providers: rawProviders = MOCK_PROVIDERS,
+      providers: rawProviders = [],
       alerts: rawAlerts = [],
       totalBudget: rawTotalBudget = MOCK_TOTAL_BUDGET,
-      totalSpent: rawTotalSpent = MOCK_TOTAL_SPENT,
+      totalSpent: rawTotalSpent = 0,
       currency = 'USD',
       onProviderClick,
       loading = false,
@@ -94,10 +85,10 @@ export const CompactBhProviderCost = createPreset<BhProviderCostProps>({
       style,
     } = props;
 
-    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
     const alerts = Array.isArray(rawAlerts) ? rawAlerts : [];
     const totalBudget = Array.isArray(rawTotalBudget) ? rawTotalBudget : MOCK_TOTAL_BUDGET;
-    const totalSpent = Array.isArray(rawTotalSpent) ? rawTotalSpent : MOCK_TOTAL_SPENT;
+    const totalSpent = Array.isArray(rawTotalSpent) ? rawTotalSpent : 0;
 
     const isGlass = t.surface.useGlass && !!t.glass;
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -27,6 +27,11 @@ export interface PipelineStage {
   avgTimeInStageDays?: number;
   slaLimitDays?: number;
   dropoffCount?: number;
+  slaLimitHours?: number;
+  slaBreachCount?: number;
+  bottleneckScore?: number;
+  sourceBreakdown?: Record<string, number>;
+  rejectionReasons?: Array<{ reason: string; count: number }>;
 }
 
 export interface PipelineBottleneck {
@@ -44,6 +49,18 @@ export interface PipelineSummary {
   avgTimeToHireDays?: number;
   overallConversionRate?: number;
   bottleneckCount?: number;
+  interviews?: number;
+  offers?: number;
+  costPerHire?: number;
+}
+
+export interface PipelineTrend {
+  date?: string;
+  applications?: number;
+  hires?: number;
+  interviews?: number;
+  offers?: number;
+  costPerHire?: number;
 }
 
 export interface BhPipelineAnalyticsProps extends EngineAwareProps {
@@ -64,8 +81,17 @@ export interface BhPipelineAnalyticsProps extends EngineAwareProps {
   /** Callback when a stage is clicked for drill-down */
   onStageSelect?: (stageId: string | null) => void;
 
+  /** Trend data over time */
+  trends?: PipelineTrend[];
+
   /** Currently selected stage */
   selectedStage?: string | null;
+
+  /** Whether to show comparison with a previous period */
+  comparisonPeriod?: boolean;
+
+  /** Export format for analytics data */
+  exportFormat?: 'pdf' | 'csv';
 
   /** Callback when bottleneck is clicked */
   onBottleneckSelect?: (stageId: string) => void;

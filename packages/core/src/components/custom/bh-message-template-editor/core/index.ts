@@ -18,6 +18,13 @@ export interface TemplateVariable {
   key: string;
   label: string;
   defaultValue: string;
+
+  /** Data type of this variable */
+  type?: 'text' | 'date' | 'number' | 'url';
+  /** Whether this variable is required */
+  required?: boolean;
+  /** Description of what this variable represents */
+  description?: string;
 }
 
 export interface BhMessageTemplateEditorProps extends EngineAwareProps {
@@ -52,6 +59,25 @@ export interface BhMessageTemplateEditorProps extends EngineAwareProps {
 
   /** Callback to cancel editing */
   onCancel?: () => void;
+
+  /** Template delivery type */
+  templateType?: 'email' | 'sms' | 'whatsapp' | 'linkedin';
+  /** Target audience for this template */
+  targetAudience?: string;
+  /** Use case this template is designed for */
+  useCase?: string;
+  /** Language code (e.g. "en", "es") */
+  language?: string;
+  /** Whether this template is shared across the organization */
+  isShared?: boolean;
+  /** Whether this template requires approval before use */
+  requiresApproval?: boolean;
+  /** Template version number */
+  version?: number;
+  /** Plain text version of the body */
+  plainTextBody?: string;
+  /** Callback when plain text body changes */
+  onPlainTextChange?: (text: string) => void;
 
   /** Loading state */
   loading?: boolean;

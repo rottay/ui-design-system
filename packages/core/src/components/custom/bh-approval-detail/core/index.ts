@@ -32,6 +32,33 @@ export interface ApprovalDetailData {
     name?: string;
     type?: string;
   }>;
+
+  /** Entity ID for the approval target */
+  entityId?: string;
+  /** Snapshot of the entity at time of request */
+  entitySnapshot?: Record<string, unknown>;
+  /** Role of the person who requested the approval */
+  requesterRole?: string;
+  /** Team name of the requester */
+  requesterTeamName?: string;
+  /** Whether this approval has been escalated */
+  isEscalated?: boolean;
+  /** Reason for escalation */
+  escalationReason?: string;
+  /** Due date for this approval */
+  dueAt?: Date;
+  /** Expiration date after which this request is void */
+  expiresAt?: Date;
+  /** Whether auto-approval is enabled for this request */
+  autoApprovalEnabled?: boolean;
+  /** Date/time when auto-approval will trigger */
+  autoApproveAt?: Date;
+  /** List of changes requested by reviewers */
+  changesRequested?: string[];
+  /** Comments from reviewers */
+  reviewerComments?: string;
+  /** Internal notes not visible to requester */
+  internalNotes?: string;
 }
 
 export interface BhApprovalDetailProps extends EngineAwareProps {

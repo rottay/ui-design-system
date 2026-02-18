@@ -10,7 +10,8 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   ThumbsUp, Trash2, Plus, Smile, AlertTriangle, Zap,
-  MessageCircle, Users, Activity,
+  MessageCircle, Users, Activity, Target, CheckCircle2,
+  BarChart3, User,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -26,6 +27,8 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   getAccentAwareLayout,
+  createMetadataFieldStyle, createMetadataGridStyle,
+  createStatValueStyle, createStatLabelStyle, ICON_SIZES,
 } from '../../../helpers';
 import type { BhSprintRetrospectiveProps, RetroItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -33,18 +36,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_ITEMS: RetroItem[] = [
-  { id: 'r1', text: 'AI screening reduced time-to-shortlist by 40%', category: 'good', votes: 5, author: 'Sarah Chen' },
-  { id: 'r2', text: 'Team collaboration on candidate reviews was excellent', category: 'good', votes: 3, author: 'Mike Wilson' },
-  { id: 'r3', text: 'Automated scheduling saved hours of coordinator time', category: 'good', votes: 4, author: 'Lisa Park' },
-  { id: 'r4', text: 'Interview rubric calibration needs improvement', category: 'improve', votes: 6, author: 'John Davis' },
-  { id: 'r5', text: 'Pipeline visibility for hiring managers was lacking', category: 'improve', votes: 4, author: 'Sarah Chen' },
-  { id: 'r6', text: 'Candidate feedback loop was too slow', category: 'improve', votes: 2, author: 'Mike Wilson' },
-  { id: 'r7', text: 'Create standardized rubric templates for each role type', category: 'action', votes: 7, author: 'Lisa Park' },
-  { id: 'r8', text: 'Implement real-time pipeline dashboard for hiring managers', category: 'action', votes: 5, author: 'John Davis' },
-  { id: 'r9', text: 'Set up automated candidate status notifications', category: 'action', votes: 3, author: 'Sarah Chen' },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -97,17 +88,25 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
     const ptypo = getPersonalityTypography(t);
 
     const {
-      items: rawItems = MOCK_ITEMS,
-      sprintName = 'Sprint 12',
+      items: rawItems = [],
+      sprint,
+      sprintName: sprintNameProp = 'Sprint 12',
       onAddItem,
       onVote,
       onDeleteItem,
+      goals: rawGoals,
+      completionPercentage,
+      memberSnapshot: rawMemberSnapshot,
       loading = false,
       className,
       style,
     } = props;
 
-    const items = Array.isArray(rawItems) ? rawItems : MOCK_ITEMS;
+    const sprintName = sprint?.name ?? sprintNameProp;
+    const goals = Array.isArray(rawGoals) ? rawGoals : [];
+    const memberSnapshot = Array.isArray(rawMemberSnapshot) ? rawMemberSnapshot : [];
+
+    const items = Array.isArray(rawItems) ? rawItems : [];
 
     const [newItemTexts, setNewItemTexts] = useState<Record<string, string>>({ good: '', improve: '', action: '' });
 
@@ -182,7 +181,7 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
               <Box style={createIconContainerStyle(t, { size: 40, color: t.colors.primaryScale[50] })}>
-                <MessageCircle size={20} color={t.colors.primaryScale[600]} />
+                <MessageCircle size={ICON_SIZES.feature} color={t.colors.primaryScale[600]} />
               </Box>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                 <Text style={{
@@ -217,6 +216,101 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
           </Box>
         </Box>
 
+        {/* Sprint Overview: Completion + Goals + Members */}
+        {(completionPercentage != null || goals.length > 0 || memberSnapshot.length > 0) && (
+          <Box style={{
+            display: 'grid',
+            gridTemplateColumns: completionPercentage != null ? (goals.length > 0 || memberSnapshot.length > 0 ? '1fr 2fr' : '1fr') : '1fr',
+            gap: t.spacing[4],
+          }}>
+            {/* Completion percentage */}
+            {completionPercentage != null && (
+              <Box style={{ ...card, ...animStyle(1), display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', gap: t.spacing[2] }}>
+                <Box style={createIconContainerStyle(t, { size: 40, color: completionPercentage >= 80 ? t.colors.successScale[50] : completionPercentage >= 50 ? t.colors.warningScale[50] : t.colors.errorScale[50] })}>
+                  <BarChart3 size={ICON_SIZES.feature} color={completionPercentage >= 80 ? t.colors.successScale[600] : completionPercentage >= 50 ? t.colors.warningScale[600] : t.colors.errorScale[600]} />
+                </Box>
+                <Text style={{
+                  ...createStatValueStyle(t, { size: '2xl' }),
+                  color: completionPercentage >= 80 ? t.colors.successScale[700] : completionPercentage >= 50 ? t.colors.warningScale[700] : t.colors.errorScale[700],
+                }}>
+                  {completionPercentage}%
+                </Text>
+                <Text style={createStatLabelStyle(t, { personality: ptypo })}>
+                  Sprint Completion
+                </Text>
+              </Box>
+            )}
+
+            {/* Goals + Members */}
+            {(goals.length > 0 || memberSnapshot.length > 0) && (
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[4] }}>
+                {/* Sprint Goals */}
+                {goals.length > 0 && (
+                  <Box style={{ ...card, ...animStyle(2) }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
+                      <Target size={ICON_SIZES.section} color={t.colors.primaryScale[500]} />
+                      <Text style={sectionLabel}>Sprint Goals</Text>
+                    </Box>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
+                      {goals.map((goal, i) => (
+                        <Box key={i} style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: t.spacing[2],
+                          padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                          borderRadius: t.borderRadius.md,
+                          backgroundColor: t.colors.neutral[50],
+                          border: `1px solid ${t.colors.neutral[100]}`,
+                        }}>
+                          <CheckCircle2 size={14} color={t.colors.successScale[500]} style={{ flexShrink: 0, marginTop: 2 }} />
+                          <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], lineHeight: 1.5 }}>
+                            {goal}
+                          </Text>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Member Snapshot */}
+                {memberSnapshot.length > 0 && (
+                  <Box style={{ ...card, ...animStyle(3) }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
+                      <Users size={ICON_SIZES.section} color={t.colors.primaryScale[500]} />
+                      <Text style={sectionLabel}>Team Members</Text>
+                    </Box>
+                    <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[2] }}>
+                      {memberSnapshot.map((member) => (
+                        <Box key={member.recruiterId} style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: t.spacing[2],
+                          padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                          borderRadius: t.borderRadius.md,
+                          backgroundColor: t.colors.neutral[50],
+                          border: `1px solid ${t.colors.neutral[100]}`,
+                        }}>
+                          <Box style={createIconContainerStyle(t, { size: 28, color: t.colors.primaryScale[50] })}>
+                            <User size={13} color={t.colors.primaryScale[600]} />
+                          </Box>
+                          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                              {member.name}
+                            </Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                              {member.placementsMade} placements
+                            </Text>
+                          </Box>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            )}
+          </Box>
+        )}
+
         {/* Three-column board */}
         <Box style={{
           display: 'grid',
@@ -240,7 +334,7 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
                   justifyContent: 'space-between',
                 }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                    <Icon size={16} color={config.color} />
+                    <Icon size={ICON_SIZES.section} color={config.color} />
                     <Text style={{
                       fontSize: t.typography.fontSize.sm,
                       fontWeight: t.typography.fontWeight.bold,
@@ -309,7 +403,7 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
                                 transition: `all ${t.motion.hover}`,
                               }}
                             >
-                              <ThumbsUp size={10} />
+                              <ThumbsUp size={ICON_SIZES.inline} />
                               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
                                 {item.votes}
                               </Text>
@@ -331,7 +425,7 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
                                 transition: `all ${t.motion.hover}`,
                               }}
                             >
-                              <Trash2 size={12} />
+                              <Trash2 size={ICON_SIZES.label} />
                             </Box>
                           )}
                         </Box>

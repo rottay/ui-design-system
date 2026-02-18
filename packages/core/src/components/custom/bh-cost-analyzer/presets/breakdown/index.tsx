@@ -17,21 +17,10 @@ import {
   createCardHoverStyles, createEntranceAnimation,
   createPersonalitySectionHeaderStyle, getPersonalityTypography,
   getPersonalityBadgeRadius, createIconContainerStyle,
+  createMetadataFieldStyle, ICON_SIZES,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import { DollarSign, TrendingUp, Layers, Activity } from 'lucide-react';
-
-const MOCK_PROVIDERS: ProviderCost[] = [
-  { providerId: 'openai', providerName: 'OpenAI', totalCost: 4280.50, tokenCount: 12400000, requestCount: 8420, share: 62.3, trend: 'up' as const, trendValue: 8.2 },
-  { providerId: 'anthropic', providerName: 'Anthropic', totalCost: 1850.25, tokenCount: 5200000, requestCount: 3150, share: 26.9, trend: 'down' as const, trendValue: 3.1 },
-];
-
-const MOCK_MODELS: ModelCost[] = [
-  { modelId: 'gpt4o', modelName: 'GPT-4o', provider: 'OpenAI', totalCost: 2840.30, tokenCount: 8200000, requestCount: 5600, avgCostPerRequest: 0.507 },
-  { modelId: 'gpt4o-mini', modelName: 'GPT-4o Mini', provider: 'OpenAI', totalCost: 1440.20, tokenCount: 4200000, requestCount: 2820, avgCostPerRequest: 0.511 },
-  { modelId: 'claude-sonnet', modelName: 'Claude 3.5 Sonnet', provider: 'Anthropic', totalCost: 1250.15, tokenCount: 3500000, requestCount: 2100, avgCostPerRequest: 0.595 },
-  { modelId: 'claude-haiku', modelName: 'Claude 3 Haiku', provider: 'Anthropic', totalCost: 600.10, tokenCount: 1700000, requestCount: 1050, avgCostPerRequest: 0.572 },
-];
 
 const PROVIDER_COLOR_KEYS = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
 
@@ -79,8 +68,8 @@ function ModelRow({ model, maxCost, totalCost, providerColorMap, tokens, primiti
       {/* Top row: model name, provider, sparkline, share badge */}
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flex: 2 }}>
-          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
-            width: 10, height: 10, borderRadius: tokens.borderRadius.full,
+          <Box style={{
+            width: ICON_SIZES.inline, height: ICON_SIZES.inline, borderRadius: tokens.borderRadius.full,
             backgroundColor: provColor, flexShrink: 0,
           }} />
           <Text style={{
@@ -163,10 +152,10 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const { providers: rawProviders = MOCK_PROVIDERS, models: rawModels = MOCK_MODELS, loading, className, style } = props;
+    const { providers: rawProviders = [], models: rawModels = [], loading, className, style } = props;
 
-    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
-    const models = Array.isArray(rawModels) ? rawModels : MOCK_MODELS;
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
+    const models = Array.isArray(rawModels) ? rawModels : [];
 
     const { maxCost, totalCost, providerColorMap } = useMemo(() => {
       const max = models.reduce((m, v) => Math.max(m, v.totalCost), 0);
@@ -206,12 +195,8 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Box style={{
-              width: 36, height: 36, borderRadius: tokens.borderRadius.lg,
-              backgroundColor: tokens.colors.primaryScale[50],
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Layers size={18} color={tokens.colors.primaryScale[500]} />
+            <Box style={createIconContainerStyle(tokens, { size: 36, color: tokens.colors.primaryScale[50] })}>
+              <Layers size={ICON_SIZES.section} color={tokens.colors.primaryScale[500]} />
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
               <Text style={{

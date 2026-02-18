@@ -24,6 +24,14 @@ export interface ProctoringEventListItem {
   candidateName?: string;
   /** Candidate avatar URL (resolved externally) */
   candidateAvatar?: string;
+  /** Flat metadata for convenience (alternative to event.metadata) */
+  metadata?: Record<string, unknown>;
+  /** Who reviewed this event (flat shortcut, alternative to event.reviewedBy) */
+  reviewedBy?: string;
+  /** When the event was reviewed (flat shortcut) */
+  reviewedAt?: Date | string;
+  /** Notes left by the reviewer (flat shortcut) */
+  reviewNotes?: string;
 }
 
 export interface BhProctoringEventListProps extends EngineAwareProps {

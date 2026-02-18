@@ -23,18 +23,10 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   getAccentAwareLayout,
+  ICON_SIZES,
 } from '../../../helpers';
-import { PlayCircle, BarChart3, Eye, EyeOff, Calendar, Clock, Bot } from 'lucide-react';
+import { PlayCircle, BarChart3, Eye, EyeOff, Calendar, Clock, Bot, AlertTriangle, Coins } from 'lucide-react';
 import type { DesignTokens } from '../../../../../types';
-
-const MOCK_TRANSCRIPT: TranscriptEntry[] = [
-  { id: 't-1', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'Welcome! Could you walk me through a challenging technical project you led recently?', timestamp: '00:00', confidence: 0.98 },
-  { id: 't-2', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Sure. I led the migration of our monolithic API to a microservices architecture. We had about 2 million daily active users, so zero-downtime was critical.', timestamp: '00:12', confidence: 0.95, hasEvidence: true },
-  { id: 't-3', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'What was the biggest technical challenge you faced during the migration?', timestamp: '00:45', confidence: 0.97 },
-  { id: 't-4', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Data consistency across services was the hardest part. We implemented an event-sourcing pattern with eventual consistency, and built a reconciliation system to catch discrepancies.', timestamp: '01:02', confidence: 0.92, hasEvidence: true },
-  { id: 't-5', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'How did you handle team coordination across the different service teams?', timestamp: '01:38', confidence: 0.96 },
-  { id: 't-6', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'I set up weekly architecture review meetings and created shared API contracts using OpenAPI specs. Each team owned their service but followed common patterns we established together.', timestamp: '01:55', confidence: 0.94, hasEvidence: true },
-];
 
 export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
   name: 'BhInterviewReplay.Full',
@@ -53,17 +45,23 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      transcript: rawTranscript = MOCK_TRANSCRIPT, scoreOverlay: rawScoreOverlay = [], evidenceMarkers: rawEvidenceMarkers = [],
+      transcript: rawTranscript = [], scoreOverlay: rawScoreOverlay = [], evidenceMarkers: rawEvidenceMarkers = [],
       persona, scoreSummary, candidateName, jobTitle,
       interviewDate, duration,
+      interview: interviewProp,
+      proctoringFlags: rawProctoringFlags = [],
+      tokenBreakdown: tokenBreakdownProp,
       selectedEntryId: selectedEntryIdProp, onEntrySelect,
       showScoreOverlay: showScoreOverlayProp, onToggleScoreOverlay,
       loading, className, style,
     } = props;
 
-    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : [];
     const scoreOverlay = Array.isArray(rawScoreOverlay) ? rawScoreOverlay : [];
     const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : [];
+    const proctoringFlags = Array.isArray(rawProctoringFlags) ? rawProctoringFlags : [];
+    const tokenBreakdown = tokenBreakdownProp ?? {};
+    const interview = interviewProp ?? undefined;
 
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEntryIdProp ?? '');
     const [internalShowOverlay, setInternalShowOverlay] = useState(showScoreOverlayProp ?? true);
@@ -150,15 +148,20 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
               {jobTitle && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{jobTitle}</Text>}
               {interviewDate && (
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                  <Calendar size={10} color={tokens.colors.neutral[400]} />
+                  <Calendar size={ICON_SIZES.inline} color={tokens.colors.neutral[400]} />
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{interviewDate}</Text>
                 </Box>
               )}
               {duration && (
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                  <Clock size={10} color={tokens.colors.neutral[400]} />
+                  <Clock size={ICON_SIZES.inline} color={tokens.colors.neutral[400]} />
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{duration}</Text>
                 </Box>
+              )}
+              {props.recordingDurationSeconds != null && (
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                  Rec: {Math.floor(props.recordingDurationSeconds / 60)}m {props.recordingDurationSeconds % 60}s
+                </Text>
               )}
             </Box>
           </Box>
@@ -171,8 +174,42 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
                 border: `1px solid ${tokens.colors.secondaryScale[200]}`,
                 display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
               }}>
-                <Bot size={10} color={tokens.colors.secondaryScale[700]} />
+                <Bot size={ICON_SIZES.inline} color={tokens.colors.secondaryScale[700]} />
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.secondaryScale[700] }}>{persona.name}</Text>
+              </Box>
+            )}
+            {props.billingMode && (
+              <Box style={{
+                padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
+                borderRadius: badgeRadius,
+                background: tokens.colors.infoScale[50],
+                border: `1px solid ${tokens.colors.infoScale[200]}`,
+              }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.infoScale[700] }}>{props.billingMode.replace(/_/g, ' ')}</Text>
+              </Box>
+            )}
+            {props.proctoringScore != null && (
+              <Box style={{
+                padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
+                borderRadius: badgeRadius,
+                background: props.proctoringScore >= 80 ? tokens.colors.successScale[50] : props.proctoringScore >= 50 ? tokens.colors.warningScale[50] : tokens.colors.errorScale[50],
+                border: `1px solid ${props.proctoringScore >= 80 ? tokens.colors.successScale[200] : props.proctoringScore >= 50 ? tokens.colors.warningScale[200] : tokens.colors.errorScale[200]}`,
+              }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: props.proctoringScore >= 80 ? tokens.colors.successScale[700] : props.proctoringScore >= 50 ? tokens.colors.warningScale[700] : tokens.colors.errorScale[700] }}>
+                  Proctor: {props.proctoringScore}%
+                </Text>
+              </Box>
+            )}
+            {props.candidateRating != null && (
+              <Box style={{
+                padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
+                borderRadius: badgeRadius,
+                background: tokens.colors.warningScale[50],
+                border: `1px solid ${tokens.colors.warningScale[200]}`,
+              }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.warningScale[700] }}>
+                  Rating: {props.candidateRating}/5
+                </Text>
               </Box>
             )}
             <Box
@@ -195,7 +232,7 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
                 display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
               }}
             >
-              {showOverlay ? <Eye size={12} /> : <EyeOff size={12} />}
+              {showOverlay ? <Eye size={ICON_SIZES.label} /> : <EyeOff size={ICON_SIZES.label} />}
               <Text style={{ fontSize: tokens.typography.fontSize.xs }}>Scores {showOverlay ? 'ON' : 'OFF'}</Text>
             </Box>
           </Box>
@@ -352,6 +389,58 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
                       <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                         <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.errorScale[500] }} />
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>{w}</Text>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+
+              {/* Interview Details */}
+              {interview && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
+                  marginTop: tokens.spacing[4],
+                  padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.lg,
+                  backgroundColor: tokens.colors.common.white,
+                  border: `1px solid ${tokens.colors.neutral[100]}`,
+                }}>
+                  <Text style={{ ...sectionHeaderStyle, marginBottom: tokens.spacing[1] }}>Interview</Text>
+                  {(interview as any).type && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>Type: {(interview as any).type}</Text>}
+                  {(interview as any).status && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>Status: {(interview as any).status}</Text>}
+                  {(interview as any).scheduledAt && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Scheduled: {new Date((interview as any).scheduledAt).toLocaleDateString()}</Text>}
+                </Box>
+              )}
+
+              {/* Proctoring Flags */}
+              {proctoringFlags.length > 0 && (
+                <Box style={{ marginTop: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginBottom: tokens.spacing[2] }}>
+                    <AlertTriangle size={ICON_SIZES.label} color={tokens.colors.errorScale[500]} />
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.errorScale[700] }}>Proctoring Flags</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                    {proctoringFlags.map((flag, i) => (
+                      <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                        <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.errorScale[400] }} />
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>{flag}</Text>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+
+              {/* Token Breakdown */}
+              {Object.keys(tokenBreakdown).length > 0 && (
+                <Box style={{ marginTop: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginBottom: tokens.spacing[2] }}>
+                    <Coins size={ICON_SIZES.label} color={tokens.colors.warningScale[500]} />
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[700] }}>Token Usage</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                    {Object.entries(tokenBreakdown).map(([key, val]) => (
+                      <Box key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], textTransform: 'capitalize' as const }}>{key.replace(/_/g, ' ')}</Text>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{(val as number).toLocaleString()}</Text>
                       </Box>
                     ))}
                   </Box>

@@ -17,15 +17,7 @@ import {
   createEmptyStateStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
-import { ShieldAlert, AlertTriangle, Filter, BarChart3, Users, Activity } from 'lucide-react';
-
-const MOCK_EVENTS: ProctoringEvent[] = [
-  { id: 'fe-1', type: 'tab_switch', severity: 'high', timestamp: '2025-01-20T10:15:00Z', description: 'Candidate switched to external browser tab during coding challenge', scorableId: 'sc-1', candidateName: 'John Doe', reviewStatus: 'pending' },
-  { id: 'fe-2', type: 'copy_paste', severity: 'critical', timestamp: '2025-01-20T10:18:00Z', description: 'Large code block pasted from clipboard during technical assessment', scorableId: 'sc-1', candidateName: 'John Doe', reviewStatus: 'flagged' },
-  { id: 'fe-3', type: 'focus_loss', severity: 'medium', timestamp: '2025-01-20T10:22:00Z', description: 'Browser window lost focus for 45 seconds', scorableId: 'sc-2', candidateName: 'Jane Smith', reviewStatus: 'pending' },
-  { id: 'fe-4', type: 'suspicious_timing', severity: 'low', timestamp: '2025-01-20T10:30:00Z', description: 'Answer submitted unusually fast for question complexity', scorableId: 'sc-3', candidateName: 'Alex Johnson', reviewStatus: 'dismissed' },
-  { id: 'fe-5', type: 'similarity_flag', severity: 'high', timestamp: '2025-01-20T11:00:00Z', description: '87% similarity detected with another candidate submission', scorableId: 'sc-4', candidateName: 'Sam Wilson', reviewStatus: 'escalated' },
-];
+import { ShieldAlert, AlertTriangle, Filter, BarChart3, Users, Activity, Clock } from 'lucide-react';
 
 export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
   name: 'BhFraudMonitor.Dashboard',
@@ -41,13 +33,14 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const {
-      events: rawEvents = MOCK_EVENTS, similarityChecks: rawSimilarityChecks = [], stats,
+      events: rawEvents = [], similarityChecks: rawSimilarityChecks = [], stats,
+      timeRange,
       selectedEventId: selectedEventIdProp, onEventSelect, onReviewAction,
       severityFilter: severityFilterProp, onSeverityFilterChange,
       loading, className, style,
     } = props;
 
-    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
     const similarityChecks = Array.isArray(rawSimilarityChecks) ? rawSimilarityChecks : [];
 
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEventIdProp ?? '');
@@ -104,6 +97,22 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
 
     return (
       <Box className={className} style={{ ...style }}>
+        {/* Time Range indicator */}
+        {timeRange && (
+          <Box style={{
+            display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
+            marginBottom: tokens.spacing[3],
+          }}>
+            <Clock size={14} color={tokens.colors.neutral[400]} />
+            <Text style={{
+              fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500],
+              fontWeight: tokens.typography.fontWeight.medium,
+            }}>
+              Time range: {timeRange}
+            </Text>
+          </Box>
+        )}
+
         {/* Stats Grid */}
         <Box style={{
           display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',

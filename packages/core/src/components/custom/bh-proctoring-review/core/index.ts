@@ -27,6 +27,16 @@ export interface ProctoringReviewEventView {
   screenshotUrl?: string;
   /** Session duration in seconds (UI-computed) */
   sessionDuration?: number;
+  /** Previous review notes from the DB entity (pre-filled in form) */
+  previousReviewNotes?: string;
+  /** Name of the previous reviewer (for display) */
+  previousReviewedBy?: string;
+  /** When the previous review occurred */
+  previousReviewedAt?: Date | string;
+  /** Candidate avatar URL (resolved externally) */
+  candidateAvatar?: string;
+  /** Flat metadata for convenience (alternative to event.metadata) */
+  metadata?: Record<string, unknown>;
 }
 
 export interface ReviewSubmission {

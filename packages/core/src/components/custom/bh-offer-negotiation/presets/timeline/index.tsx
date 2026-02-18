@@ -26,21 +26,6 @@ import { offerToNegotiation } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import { Clock, Check, X, RotateCcw, User, Building2, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
-const MOCK_NEGOTIATION: OfferNegotiation = {
-  id: 'neg-1',
-  candidateName: 'Sarah Chen',
-  positionTitle: 'Senior Software Engineer',
-  department: 'Engineering',
-  currentStep: 2,
-  status: 'in_progress',
-  createdAt: '2025-01-10T00:00:00Z',
-  steps: [
-    { id: 'ns-1', type: 'initial_offer', date: '2025-01-10', initiatedBy: 'company', compensation: { baseSalary: 165000, equity: 50000, equityType: 'rsu', signingBonus: 15000, annualBonus: 20000 }, notes: 'Initial offer based on L5 band' },
-    { id: 'ns-2', type: 'counter_offer', date: '2025-01-14', initiatedBy: 'candidate', compensation: { baseSalary: 185000, equity: 75000, equityType: 'rsu', signingBonus: 25000, annualBonus: 25000 }, notes: 'Candidate requested higher base and equity' },
-    { id: 'ns-3', type: 'revised_offer', date: '2025-01-17', initiatedBy: 'company', compensation: { baseSalary: 178000, equity: 65000, equityType: 'rsu', signingBonus: 20000, annualBonus: 22000 }, notes: 'Revised offer with increased equity' },
-  ],
-};
-
 function formatCurrency(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
@@ -94,7 +79,7 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
     } = props;
 
     const negotiation = negotiationProp
-      ?? (offer ? offerToNegotiation(offer, candidateNameProp) : MOCK_NEGOTIATION);
+      ?? (offer ? offerToNegotiation(offer, candidateNameProp) : undefined);
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
@@ -114,7 +99,7 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
     }, [onStepSelect, selectedStep]);
 
     const handleAction = useCallback((action: 'approve' | 'counter' | 'withdraw') => {
-      if (negotiation) onAction?.(action, negotiation.id);
+      if (negotiation?.id) onAction?.(action, negotiation.id);
     }, [onAction, negotiation]);
 
     if (!negotiation) {

@@ -25,25 +25,6 @@ import { offerToNegotiation } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import { Users, TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react';
 
-const MOCK_NEGOTIATIONS: OfferNegotiation[] = [
-  {
-    id: 'neg-1', candidateName: 'Sarah Chen', positionTitle: 'Senior Engineer', department: 'Engineering',
-    currentStep: 2, status: 'in_progress', createdAt: '2025-01-10T00:00:00Z',
-    steps: [
-      { id: 'ns-1', type: 'initial_offer', date: '2025-01-10', initiatedBy: 'company', compensation: { baseSalary: 165000, equity: 50000, equityType: 'rsu', signingBonus: 15000 } },
-      { id: 'ns-2', type: 'counter_offer', date: '2025-01-14', initiatedBy: 'candidate', compensation: { baseSalary: 185000, equity: 75000, equityType: 'rsu', signingBonus: 25000 } },
-    ],
-  },
-  {
-    id: 'neg-2', candidateName: 'Alex Rivera', positionTitle: 'Staff Engineer', department: 'Platform',
-    currentStep: 1, status: 'accepted', createdAt: '2025-01-08T00:00:00Z',
-    steps: [
-      { id: 'ns-3', type: 'initial_offer', date: '2025-01-08', initiatedBy: 'company', compensation: { baseSalary: 195000, equity: 80000, equityType: 'rsu', signingBonus: 20000 } },
-      { id: 'ns-4', type: 'final_agreement', date: '2025-01-12', initiatedBy: 'candidate', compensation: { baseSalary: 195000, equity: 80000, equityType: 'rsu', signingBonus: 20000 } },
-    ],
-  },
-];
-
 function formatCurrency(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
@@ -83,7 +64,7 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
     const negotiations = negotiationsProp
       ?? (offersProp && offersProp.length > 0
         ? offersProp.map((o) => offerToNegotiation(o, candidateNameProp))
-        : MOCK_NEGOTIATIONS);
+        : []);
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

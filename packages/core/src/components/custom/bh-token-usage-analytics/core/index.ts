@@ -20,6 +20,12 @@ export interface TokenUsagePoint {
   tokens: number;
   /** DBUsage.cost */
   cost: number;
+  /** Number of API requests in this period */
+  requests?: number;
+  /** Number of failed requests in this period */
+  errors?: number;
+  /** Average latency in milliseconds */
+  avgLatencyMs?: number;
 }
 
 export interface TokenCategory {
@@ -27,6 +33,12 @@ export interface TokenCategory {
   category: string;
   tokens: number;
   percentage: number;
+  /** Usage trend compared to previous period */
+  trend?: 'up' | 'down' | 'flat';
+  /** Token count from the previous period for comparison */
+  previousPeriodTokens?: number;
+  /** Cost per individual token for this category */
+  costPerToken?: number;
 }
 
 export interface BhTokenUsageAnalyticsProps extends EngineAwareProps {
@@ -58,6 +70,18 @@ export interface BhTokenUsageAnalyticsProps extends EngineAwareProps {
 
   /** Loading state */
   loading?: boolean;
+
+  /** Time granularity for usage data aggregation */
+  granularity?: 'hourly' | 'daily' | 'weekly' | 'monthly';
+
+  /** Whether to show latency metrics in the chart */
+  showLatency?: boolean;
+
+  /** Whether to show error metrics in the chart */
+  showErrors?: boolean;
+
+  /** Top AI providers by usage for summary display */
+  topProviders?: Array<{ name: string; tokens: number; cost: number }>;
 
   /** Additional CSS class name(s) */
   className?: string;

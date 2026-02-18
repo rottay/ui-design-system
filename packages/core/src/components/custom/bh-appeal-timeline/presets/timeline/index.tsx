@@ -75,14 +75,6 @@ function getEventLabel(type: AppealTimelineEvent['type']): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENTS: AppealTimelineEvent[] = [
-  { id: 'e-1', type: 'submitted', description: 'Appeal submitted by hiring manager', date: new Date(Date.now() - 259200000), actor: 'Maria Garcia' },
-  { id: 'e-2', type: 'assigned', description: 'Assigned to senior reviewer for evaluation', date: new Date(Date.now() - 172800000), actor: 'System' },
-  { id: 'e-3', type: 'reviewed', description: 'Initial review completed, additional evidence requested', date: new Date(Date.now() - 86400000), actor: 'David Park' },
-  { id: 'e-4', type: 'decision', description: 'Appeal approved after thorough review of evidence', date: new Date(Date.now() - 3600000), actor: 'David Park' },
-  { id: 'e-5', type: 'notified', description: 'Candidate and hiring team notified of decision', date: new Date(Date.now() - 1800000), actor: 'System' },
-];
-
 /* ================================================================== */
 /*  Timeline Preset                                                    */
 /* ================================================================== */
@@ -97,7 +89,7 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events: rawEvents = MOCK_EVENTS,
+      events: rawEvents = [],
       appealId,
       candidateName,
       onEventClick,
@@ -106,8 +98,7 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
       style,
     } = props;
 
-    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
-
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

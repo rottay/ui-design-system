@@ -28,6 +28,30 @@ export interface CompensationPackage {
   annualBonusPercent?: number;
   relocation?: number;
   otherBenefits?: string[];
+
+  /** Number of equity shares */
+  equityShares?: number;
+
+  /** Equity vesting period in months */
+  equityVestingMonths?: number;
+
+  /** Equity cliff period in months */
+  equityCliffMonths?: number;
+
+  /** Equity strike price per share */
+  equityStrikePrice?: number;
+
+  /** Commission percentage */
+  commissionPercentage?: number;
+
+  /** Paid time off days per year */
+  ptoDays?: number;
+
+  /** Remote work stipend amount */
+  remoteWorkStipend?: number;
+
+  /** Learning/development budget amount */
+  learningBudget?: number;
 }
 
 export interface NegotiationStep {
@@ -38,6 +62,15 @@ export interface NegotiationStep {
   compensation: CompensationPackage;
   notes?: string;
   expiresAt?: string;
+
+  /** Negotiation round number */
+  round?: number;
+
+  /** Additional details about the step */
+  details?: string;
+
+  /** File attachments associated with this step */
+  attachments?: Array<{ name: string; url: string }>;
 }
 
 export interface OfferNegotiation {
@@ -50,6 +83,18 @@ export interface OfferNegotiation {
   steps: NegotiationStep[];
   status: 'in_progress' | 'accepted' | 'rejected' | 'expired' | 'withdrawn';
   createdAt: string;
+
+  /** Details about a competing offer the candidate has */
+  competitorOfferDetails?: string;
+
+  /** Notes on urgency of the negotiation */
+  urgencyNotes?: string;
+
+  /** Whether a final agreement was negotiated */
+  finalNegotiated?: boolean;
+
+  /** Candidate counter-offer details */
+  candidateCounter?: { requestedSalary?: number; notes?: string };
 }
 
 /**

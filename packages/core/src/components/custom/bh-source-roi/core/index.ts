@@ -27,6 +27,10 @@ export interface SourceChannel {
   avgTimeToHireDays: number;
   qualityScore: number;
   retentionRate90d?: number;
+  trend?: 'up' | 'down' | 'flat';
+  previousPeriodHires?: number;
+  channelUrl?: string;
+  isActive?: boolean;
 }
 
 /**
@@ -48,6 +52,10 @@ export interface SourceRoiSummary {
   avgCostPerHire: number;
   bestRoiSource: string;
   worstRoiSource: string;
+  roi?: number;
+  budgetUtilization?: number;
+  trendVsPrevious?: number;
+  recommendedBudgetShift?: Record<string, number>;
 }
 
 export interface BhSourceRoiProps extends EngineAwareProps {
@@ -73,6 +81,12 @@ export interface BhSourceRoiProps extends EngineAwareProps {
 
   /** Callback when source is selected */
   onSourceSelect?: (sourceId: string | null) => void;
+
+  /** Total budget for the period */
+  budget?: number;
+
+  /** Time period label */
+  period?: string;
 
   /** Additional CSS class name(s) */
   className?: string;

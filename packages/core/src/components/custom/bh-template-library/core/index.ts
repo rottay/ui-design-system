@@ -36,6 +36,25 @@ export interface TemplateItem {
   rubricNames: string[];
   estimatedDuration: string;
   stages: TemplateStage[];
+
+  /** Description of this template */
+  description?: string;
+  /** Whether auto-advance is enabled between stages */
+  autoAdvanceEnabled?: boolean;
+  /** Whether auto-reject is enabled */
+  autoRejectEnabled?: boolean;
+  /** Average time to hire in days using this template */
+  avgTimeToHireDays?: number;
+  /** Whether this is the default template */
+  isDefault?: boolean;
+  /** Total number of times this template has been used */
+  timesUsed?: number;
+  /** User who created this template */
+  createdBy?: string;
+  /** ISO date when this template was created */
+  createdAt?: string;
+  /** Tags for categorization */
+  tags?: string[];
 }
 
 /* ── Filters ────────────────────────────────────────────────────────── */
@@ -45,6 +64,13 @@ export interface TemplateFilter {
   category: string;
   status: string;
   search: string;
+
+  /** Filter by automation-enabled templates */
+  hasAutomation?: boolean;
+  /** Filter by creator */
+  createdBy?: string;
+  /** Sort order for results */
+  sortBy?: 'name' | 'usage' | 'created' | 'performance';
 }
 
 /* ── Industry Grouping ──────────────────────────────────────────────── */
@@ -52,6 +78,11 @@ export interface TemplateFilter {
 export interface IndustryGroup {
   industry: string;
   templates: TemplateItem[];
+
+  /** Number of templates in this group */
+  templateCount?: number;
+  /** Average performance score for this industry group */
+  avgPerformance?: number;
 }
 
 /* ── Main Props ─────────────────────────────────────────────────────── */

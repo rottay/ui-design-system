@@ -49,31 +49,6 @@ import type {
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: Team[] = [
-  { id: 't1', name: 'Engineering Hiring', memberCount: 6, lead: 'Sofia Martinez' },
-  { id: 't2', name: 'Product & Design', memberCount: 4, lead: 'James Chen' },
-];
-
-const MOCK_KPIS: TeamKpi[] = [
-  { label: 'Hires This Quarter', value: 18, trend: 'up', trendValue: '+6', sparklineData: [8, 10, 12, 14, 16, 18] },
-  { label: 'Avg Time to Fill', value: '26d', trend: 'down', trendValue: '-5d', sparklineData: [34, 31, 30, 28, 27, 26] },
-  { label: 'Quality of Hire', value: '84%', trend: 'up', trendValue: '+3%', sparklineData: [78, 79, 80, 82, 83, 84] },
-  { label: 'Recruiter Efficiency', value: '92%', trend: 'up', trendValue: '+2%', sparklineData: [86, 88, 89, 90, 91, 92] },
-];
-
-const MOCK_RECRUITERS: RecruiterWorkload[] = [
-  { recruiterId: 'r1', name: 'Sofia Martinez', avatar: undefined, metrics: { Hires: 6, Screens: 28, 'Pass Rate': 72, 'Avg Days': 24, 'Quality': 88, 'Satisfaction': 4.6 } },
-  { recruiterId: 'r2', name: 'James Chen', avatar: undefined, metrics: { Hires: 5, Screens: 22, 'Pass Rate': 68, 'Avg Days': 26, 'Quality': 84, 'Satisfaction': 4.4 } },
-  { recruiterId: 'r3', name: 'Priya Sharma', avatar: undefined, metrics: { Hires: 4, Screens: 32, 'Pass Rate': 58, 'Avg Days': 32, 'Quality': 76, 'Satisfaction': 4.2 } },
-  { recruiterId: 'r4', name: 'Marcus Williams', avatar: undefined, metrics: { Hires: 3, Screens: 18, 'Pass Rate': 82, 'Avg Days': 22, 'Quality': 90, 'Satisfaction': 4.8 } },
-];
-
-/* MOCK_PIPELINE is created inside render to use token colors */
-
-const MOCK_ALERTS: PerformanceAlert[] = [
-  { id: 'a1', recruiterName: 'Priya Sharma', metric: 'Time to Fill', threshold: 28, actual: 32, severity: 'warning' },
-  { id: 'a2', recruiterName: 'Sofia Martinez', metric: 'Screen Completion', threshold: 85, actual: 72, severity: 'critical' },
-];
 
 const PERF_COLUMNS = ['Hires', 'Screens', 'Pass Rate', 'Avg Days', 'Quality', 'Satisfaction'];
 
@@ -101,9 +76,9 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
       style,
     } = props;
 
-    const teams = teamsProp?.length ? teamsProp : MOCK_TEAMS;
-    const kpis = kpisProp?.length ? kpisProp : MOCK_KPIS;
-    const recruiters = recProp?.length ? recProp : MOCK_RECRUITERS;
+    const teams = teamsProp?.length ? teamsProp : [];
+    const kpis = kpisProp?.length ? kpisProp : [];
+    const recruiters = recProp?.length ? recProp : [];
     const pipeline = pipeProp?.length ? pipeProp : useMemo(() => ([
       { name: 'Applied', count: 342, percentage: 100, color: t.colors.primaryScale[500] },
       { name: 'Screened', count: 186, percentage: 54, color: t.colors.infoScale[500] },
@@ -111,7 +86,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
       { name: 'Offered', count: 28, percentage: 8, color: t.colors.warningScale[500] },
       { name: 'Hired', count: 18, percentage: 5, color: t.colors.errorScale[500] },
     ]), [t]);
-    const alerts = alertsProp?.length ? alertsProp : MOCK_ALERTS;
+    const alerts = alertsProp?.length ? alertsProp : [];
 
     const [selectedTeam, setSelectedTeam] = useState(selTeamProp ?? teams[0]?.id);
     const [dateRange, setDateRange] = useState<DateRangeOption>(drProp ?? '30d');

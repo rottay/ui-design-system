@@ -31,11 +31,6 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 
-const MOCK_META: TranscriptMeta = {
-  interviewId: 'int-1', candidateName: 'Sarah Chen', positionTitle: 'Senior Software Engineer',
-  interviewDate: '2025-01-20', interviewType: 'Technical', duration: '45 min', overallScore: 82,
-};
-
 function createMockSegments(tokens: { colors: any }): TranscriptSegment[] {
   const primary = tokens.colors.primaryScale[500];
   const success = tokens.colors.successScale[500];
@@ -67,7 +62,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
     const defaultDimensions = useMemo(() => createMockDimensions(tokens), [tokens]);
 
     const {
-      meta: rawMeta = MOCK_META,
+      meta: rawMeta = {} as Partial<TranscriptMeta>,
       segments = defaultSegments,
       dimensions = defaultDimensions,
       selectedDimension,
@@ -75,11 +70,12 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
       selectedSegment,
       onSegmentSelect,
       showTimestamps = true,
+      playbackSpeed,
       className,
       style,
     } = props;
 
-    const meta = Array.isArray(rawMeta) ? rawMeta : MOCK_META;
+    const meta = rawMeta as Partial<TranscriptMeta>;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
@@ -188,6 +184,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                 </Text>
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                   {meta.interviewType} &#183; {meta.interviewDate} &#183; {meta.duration}
+                  {playbackSpeed != null && playbackSpeed !== 1 ? ` &#183; ${playbackSpeed}x speed` : ''}
                 </Text>
               </Box>
               {meta.overallScore !== undefined && (

@@ -36,6 +36,14 @@ export interface ProctoringEventSummary {
   reviewed?: boolean;
   /** Whether the event has been dismissed */
   dismissed?: boolean;
+  /** Event metadata (JSONB from DB) */
+  metadata?: Record<string, unknown>;
+  /** Who reviewed this event (user ID or display name) */
+  reviewedBy?: string;
+  /** When the event was reviewed */
+  reviewedAt?: Date | string;
+  /** Notes left by the reviewer */
+  reviewNotes?: string;
 }
 
 export interface SeverityCount {

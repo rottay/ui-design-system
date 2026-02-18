@@ -24,6 +24,18 @@ export interface ProctoringEventCardView {
   candidateName?: string;
   /** Candidate avatar URL (resolved externally) */
   candidateAvatar?: string;
+  /** Event description (UI-computed) */
+  description?: string;
+  /** Screenshot URL (resolved externally) */
+  screenshotUrl?: string;
+  /** Flat metadata for convenience (alternative to event.metadata) */
+  metadata?: Record<string, unknown>;
+  /** Who reviewed this event (flat shortcut, alternative to event.reviewedBy) */
+  reviewedBy?: string;
+  /** When the event was reviewed (flat shortcut) */
+  reviewedAt?: Date | string;
+  /** Notes left by the reviewer (flat shortcut) */
+  reviewNotes?: string;
 }
 
 export interface BhProctoringEventCardProps extends EngineAwareProps {

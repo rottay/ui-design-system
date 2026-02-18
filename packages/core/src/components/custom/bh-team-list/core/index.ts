@@ -25,6 +25,10 @@ export interface TeamMemberSummary {
   name: string;
   role: string;
   avatarInitial: string;
+  /** Member allocation percentage */
+  allocation?: number;
+  /** Whether the member is currently active */
+  isActive?: boolean;
 }
 
 export interface BhTeamListProps extends EngineAwareProps {
@@ -38,6 +42,18 @@ export interface BhTeamListProps extends EngineAwareProps {
 
   /** Currently selected team ID */
   selectedTeamId?: string | null;
+
+  /** Filter teams by status */
+  filterStatus?: string;
+
+  /** Filter teams by type */
+  filterType?: string;
+
+  /** Whether to show team metrics inline */
+  showMetrics?: boolean;
+
+  /** Use compact layout */
+  compact?: boolean;
 
   /** Loading state */
   loading?: boolean;

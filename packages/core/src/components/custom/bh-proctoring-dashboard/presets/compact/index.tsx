@@ -65,26 +65,6 @@ import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STATS = {
-  totalEvents: 127,
-  unreviewedCount: 34,
-  suspiciousCandidates: 8,
-  averageRiskScore: 0.42,
-};
-
-const MOCK_SEVERITY = [
-  { severity: 'critical' as const, count: 5 },
-  { severity: 'high' as const, count: 18 },
-  { severity: 'medium' as const, count: 42 },
-  { severity: 'low' as const, count: 62 },
-];
-
-const MOCK_EVENTS = [
-  { id: 'pe-1', scorableId: 'int-1', candidateName: 'Sarah Johnson', eventType: 'screen_share' as const, severity: 'critical' as const, timestamp: new Date(Date.now() - 300000), reviewed: false, dismissed: false },
-  { id: 'pe-2', scorableId: 'int-2', candidateName: 'Michael Chen', eventType: 'copy_paste' as const, severity: 'high' as const, timestamp: new Date(Date.now() - 900000), reviewed: false, dismissed: false },
-  { id: 'pe-3', scorableId: 'int-3', candidateName: 'Emily Rodriguez', eventType: 'tab_switch' as const, severity: 'medium' as const, timestamp: new Date(Date.now() - 1800000), reviewed: true, dismissed: false },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -110,7 +90,6 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
 
     const severityCounts = Array.isArray(rawSeverityCounts) ? rawSeverityCounts : [];
     const recentEvents = Array.isArray(rawRecentEvents) ? rawRecentEvents : [];
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

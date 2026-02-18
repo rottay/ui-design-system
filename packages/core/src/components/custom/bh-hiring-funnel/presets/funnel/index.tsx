@@ -24,6 +24,9 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   getAccentAwareLayout,
+  createStatValueStyle,
+  createStatLabelStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { BhHiringFunnelProps, FunnelStage } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -31,15 +34,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_STAGES: FunnelStage[] = [
-  { name: 'Applied', count: 1240, conversionRate: 100 },
-  { name: 'Screened', count: 620, conversionRate: 50 },
-  { name: 'Interviewed', count: 248, conversionRate: 40 },
-  { name: 'Technical', count: 124, conversionRate: 50 },
-  { name: 'Offer', count: 37, conversionRate: 30 },
-  { name: 'Hired', count: 28, conversionRate: 76 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -72,8 +66,12 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages: rawStages = MOCK_STAGES,
+      stages: rawStages = [],
       title = 'Hiring Funnel',
+      totalApplicants: totalApplicantsProp,
+      totalHires: totalHiresProp,
+      overallConversionRate: overallConversionRateProp,
+      period: periodProp,
       onStageClick,
       selectedStage,
       loading,
@@ -81,10 +79,9 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
       style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
+    const stages = Array.isArray(rawStages) ? rawStages : [];
 
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -127,7 +124,7 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
             <Box style={createIconContainerStyle(t, { size: 40, color: t.colors.primaryScale[50] })}>
-              <Filter size={20} color={t.colors.primaryScale[600]} />
+              <Filter size={ICON_SIZES.feature} color={t.colors.primaryScale[600]} />
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
               <Text style={{
@@ -139,10 +136,32 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
                 {title}
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
-                {stages.length} stages in pipeline
+                {stages.length} stages in pipeline{periodProp ? ` - ${periodProp}` : ''}
               </Text>
             </Box>
           </Box>
+          {/* Summary stats */}
+          {(totalApplicantsProp != null || totalHiresProp != null || overallConversionRateProp != null) && (
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
+              {totalApplicantsProp != null && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center' }}>
+                  <Text style={createStatValueStyle(t, { size: 'lg' })}>{totalApplicantsProp.toLocaleString()}</Text>
+                  <Text style={createStatLabelStyle(t)}>Applicants</Text>
+                </Box>
+              )}
+              {totalHiresProp != null && (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center' }}>
+                  <Text style={{ ...createStatValueStyle(t, { size: 'lg' }), color: t.colors.successScale[600] }}>{totalHiresProp.toLocaleString()}</Text>
+                  <Text style={createStatLabelStyle(t)}>Hires</Text>
+                </Box>
+              )}
+              {overallConversionRateProp != null && (
+                <Box style={{ ...createBadgeStyle(t, overallConversionRateProp >= 10 ? 'success' : overallConversionRateProp >= 5 ? 'warning' : 'error'), borderRadius: badgeRadius }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{overallConversionRateProp}% overall</Text>
+                </Box>
+              )}
+            </Box>
+          )}
         </Box>
 
         {/* Funnel visualization */}

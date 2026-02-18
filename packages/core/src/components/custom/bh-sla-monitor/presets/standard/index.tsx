@@ -16,6 +16,11 @@ import {
   Minus,
   XCircle,
   Timer,
+  Settings,
+  CheckCircle2,
+  Filter,
+  Bell,
+  Users,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -24,10 +29,12 @@ import {
   createCardHoverStyles,
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
+  createMetadataFieldStyle,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+  ICON_SIZES,
 } from '../../../helpers';
 import type {
   BhSlaMonitorProps,
@@ -43,37 +50,6 @@ import { getSlaStatusColors, getComplianceColor, TIME_RANGE_OPTIONS } from '../.
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_COMPLIANCE: SlaCompliance = { percentage: 87.4, trend: 'up' };
-
-const MOCK_BREACHES: SlaBreach[] = [
-  { id: 'b1', jobName: 'Sr. Backend Engineer', stageName: 'Technical Interview', slaHours: 48, actualHours: 72, assignedRecruiter: 'Sofia Martinez' },
-  { id: 'b2', jobName: 'Product Designer', stageName: 'Portfolio Review', slaHours: 24, actualHours: 38, assignedRecruiter: 'James Chen' },
-  { id: 'b3', jobName: 'Data Analyst', stageName: 'Offer Approval', slaHours: 24, actualHours: 52, assignedRecruiter: 'Priya Sharma' },
-  { id: 'b4', jobName: 'DevOps Engineer', stageName: 'Screening Call', slaHours: 24, actualHours: 31, assignedRecruiter: 'Marcus Williams' },
-];
-
-const MOCK_STAGE_SLA: StageSla[] = [
-  { stageName: 'Application Review', avgHours: 16, limitHours: 24, status: 'green' },
-  { stageName: 'Screening Call', avgHours: 22, limitHours: 24, status: 'yellow' },
-  { stageName: 'Technical Interview', avgHours: 38, limitHours: 48, status: 'yellow' },
-  { stageName: 'Panel Interview', avgHours: 44, limitHours: 72, status: 'green' },
-  { stageName: 'Offer Approval', avgHours: 20, limitHours: 24, status: 'yellow' },
-  { stageName: 'Background Check', avgHours: 96, limitHours: 120, status: 'green' },
-];
-
-const MOCK_AT_RISK: AtRiskItem[] = [
-  { id: 'r1', type: 'candidate', name: 'Elena Vasquez', stage: 'Technical Interview', hoursRemaining: 4, assignee: 'Sofia Martinez' },
-  { id: 'r2', type: 'interview', name: 'Panel: Alex Kim', stage: 'Panel Interview', hoursRemaining: 8, assignee: 'James Chen' },
-  { id: 'r3', type: 'candidate', name: 'David Park', stage: 'Offer Approval', hoursRemaining: 2, assignee: 'Priya Sharma' },
-  { id: 'r4', type: 'candidate', name: 'Lisa Thompson', stage: 'Screening Call', hoursRemaining: 6, assignee: 'Marcus Williams' },
-];
-
-const MOCK_HISTORY: SlaHistoryPoint[] = [
-  { date: 'Jan', compliance: 82 }, { date: 'Feb', compliance: 84 }, { date: 'Mar', compliance: 81 },
-  { date: 'Apr', compliance: 85 }, { date: 'May', compliance: 83 }, { date: 'Jun', compliance: 86 },
-  { date: 'Jul', compliance: 88 }, { date: 'Aug', compliance: 85 }, { date: 'Sep', compliance: 87 },
-  { date: 'Oct', compliance: 86 }, { date: 'Nov', compliance: 88 }, { date: 'Dec', compliance: 87 },
-];
 
 /* ================================================================== */
 /*  Preset                                                             */
@@ -90,23 +66,33 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
       stageSlaData: stageProp,
       atRiskItems: riskProp,
       history: histProp,
+      config: configProp,
+      totalBreaches: totalBreachesProp,
+      resolvedBreaches: resolvedBreachesProp,
       timeRange: trProp,
       onTimeRangeChange,
       selectedStage: selStageProp,
       onStageSelect,
+      breachFilter: breachFilterProp,
+      onBreachFilterChange,
+      showConfig: showConfigProp,
+      onConfigToggle,
       className,
       style,
     } = props;
 
-    const compliance = compProp ?? MOCK_COMPLIANCE;
-    const breaches = brProp?.length ? brProp : MOCK_BREACHES;
-    const stageSlaData = stageProp?.length ? stageProp : MOCK_STAGE_SLA;
-    const atRiskItems = riskProp?.length ? riskProp : MOCK_AT_RISK;
-    const history = histProp?.length ? histProp : MOCK_HISTORY;
+    const compliance = compProp ?? {} as Partial<SlaCompliance>;
+    const breaches = brProp?.length ? brProp : [];
+    const stageSlaData = stageProp?.length ? stageProp : [];
+    const atRiskItems = riskProp?.length ? riskProp : [];
+    const history = histProp?.length ? histProp : [];
+    const config = configProp?.length ? configProp : [];
 
     const [timeRange, setTimeRange] = useState(trProp ?? '7d');
     const [selectedStage, setSelectedStage] = useState<string | null>(selStageProp ?? null);
     const [activeTab, setActiveTab] = useState<'breaches' | 'at-risk'>('breaches');
+    const [breachFilter, setBreachFilter] = useState<'all' | 'active' | 'resolved'>(breachFilterProp ?? 'all');
+    const [showConfig, setShowConfig] = useState(showConfigProp ?? false);
 
     const handleTimeRange = useCallback((val: string) => {
       setTimeRange(val);
@@ -125,7 +111,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
 
     /* ---- Computed ---- */
     const statusColors = useMemo(() => getSlaStatusColors(t), [t]);
-    const compColor = useMemo(() => getComplianceColor(t, compliance.percentage), [t, compliance.percentage]);
+    const compColor = useMemo(() => getComplianceColor(t, compliance.percentage ?? 0), [t, compliance.percentage]);
     const histMin = useMemo(() => Math.min(...history.map(h => h.compliance), 0), [history]);
     const histMax = useMemo(() => Math.max(...history.map(h => h.compliance), 100), [history]);
     const histRange = histMax - histMin || 1;
@@ -155,14 +141,14 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
             <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] })}>
-              <Shield size={22} color={t.colors.primaryScale[600]} />
+              <Shield size={ICON_SIZES.hero} color={t.colors.primaryScale[600]} />
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
               <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: typo.headingWeight, color: t.colors.neutral[900], letterSpacing: typo.headingLetterSpacing }}>
                 SLA Monitor
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
-                {breaches.length} active breach{breaches.length !== 1 ? 'es' : ''} -- {atRiskItems.length} at risk
+                {totalBreachesProp != null ? `${totalBreachesProp} total` : `${breaches.length} active`} breach{(totalBreachesProp ?? breaches.length) !== 1 ? 'es' : ''}{resolvedBreachesProp != null ? ` (${resolvedBreachesProp} resolved)` : ''} -- {atRiskItems.length} at risk
               </Text>
             </Box>
           </Box>
@@ -209,7 +195,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
               />
               {/* Value arc */}
               {(() => {
-                const pct = Math.min(compliance.percentage / 100, 1);
+                const pct = Math.min((compliance.percentage ?? 0) / 100, 1);
                 const angle = Math.PI * pct;
                 const x = 80 - 60 * Math.cos(angle);
                 const y = 90 - 60 * Math.sin(angle);
@@ -326,6 +312,60 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
               ))}
             </Box>
 
+            {/* Breach filter bar */}
+            {activeTab === 'breaches' && (
+              <Box style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: t.spacing[2],
+                padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+                borderBottom: `1px solid ${t.colors.neutral[100]}`,
+                backgroundColor: t.colors.neutral[50],
+              }}>
+                <Filter size={ICON_SIZES.label} color={t.colors.neutral[400]} />
+                {(['all', 'active', 'resolved'] as const).map(f => (
+                  <Box
+                    key={f}
+                    onClick={() => { setBreachFilter(f); onBreachFilterChange?.(f); }}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={breachFilter === f}
+                    style={{
+                      padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                      borderRadius: badgeRadius,
+                      cursor: 'pointer',
+                      backgroundColor: breachFilter === f ? t.colors.primaryScale[600] : 'transparent',
+                      transition: `all ${t.motion.hover}`,
+                    }}
+                  >
+                    <Text style={{
+                      fontSize: t.typography.fontSize.xs,
+                      fontWeight: t.typography.fontWeight.medium,
+                      color: breachFilter === f ? t.colors.common.white : t.colors.neutral[500],
+                      textTransform: 'capitalize' as const,
+                    }}>
+                      {f}
+                    </Text>
+                  </Box>
+                ))}
+                {totalBreachesProp != null && (
+                  <Box style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                      {totalBreachesProp} total
+                    </Text>
+                    {resolvedBreachesProp != null && (
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                        <CheckCircle2 size={ICON_SIZES.inline} color={t.colors.successScale[500]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[600] }}>
+                          {resolvedBreachesProp} resolved
+                        </Text>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+              </Box>
+            )}
+
             {/* Tab content */}
             <Box style={{ padding: t.spacing[4], maxHeight: 320, overflow: 'auto' }} role="tabpanel" id={`panel-${activeTab}`}>
               {activeTab === 'breaches' && breaches.map(breach => (
@@ -340,9 +380,9 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                   backgroundColor: t.colors.errorScale[50],
                 }}>
                   <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.errorScale[100] })}>
-                    <AlertTriangle size={16} color={t.colors.errorScale[600]} />
+                    <AlertTriangle size={ICON_SIZES.section} color={t.colors.errorScale[600]} />
                   </Box>
-                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                  <Box style={{ ...createMetadataFieldStyle(t), flex: 1 }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
                       {breach.jobName}
                     </Text>
@@ -350,7 +390,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                       {breach.stageName} -- {breach.assignedRecruiter}
                     </Text>
                   </Box>
-                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'right' as const }}>
+                  <Box style={{ ...createMetadataFieldStyle(t), textAlign: 'right' as const }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.errorScale[600] }}>
                       {breach.actualHours}h
                     </Text>
@@ -377,9 +417,9 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     backgroundColor: urgentBg,
                   }}>
                   <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
-                    <Timer size={16} color={urgentColor} />
+                    <Timer size={ICON_SIZES.section} color={urgentColor} />
                   </Box>
-                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                  <Box style={{ ...createMetadataFieldStyle(t), flex: 1 }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
                       {item.name}
                     </Text>
@@ -459,6 +499,92 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
             </Box>
           </Box>
         </Box>
+
+        {/* === SLA Configuration === */}
+        {config.length > 0 && (
+          <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            <Box
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: `${t.spacing[3]}px ${t.spacing[5]}px`,
+                borderBottom: showConfig ? `1px solid ${t.colors.neutral[100]}` : 'none',
+                cursor: 'pointer',
+              }}
+              role="button"
+              tabIndex={0}
+              aria-expanded={showConfig}
+              aria-label="Toggle SLA configuration"
+              onClick={() => { setShowConfig(!showConfig); onConfigToggle?.(); }}
+            >
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                <Settings size={ICON_SIZES.section} color={t.colors.neutral[500]} />
+                <Text style={{ ...sectionLabel }}>SLA Configuration</Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                  ({config.length} stage{config.length !== 1 ? 's' : ''})
+                </Text>
+              </Box>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.primaryScale[600] }}>
+                {showConfig ? 'Hide' : 'Show'}
+              </Text>
+            </Box>
+            {showConfig && (
+              <Box style={{ padding: t.spacing[4] }} role="list" aria-label="SLA stage configuration">
+                {config.map(cfg => (
+                  <Box key={cfg.stageId} role="listitem" style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: t.spacing[3],
+                    padding: `${t.spacing[3]}px`,
+                    marginBottom: t.spacing[2],
+                    borderRadius: t.borderRadius.md,
+                    border: `1px solid ${t.colors.neutral[100]}`,
+                    backgroundColor: cfg.enabled === false ? t.colors.neutral[50] : t.colors.common.white,
+                    opacity: cfg.enabled === false ? 0.6 : 1,
+                  }}>
+                    <Box style={createIconContainerStyle(t, { size: 32, color: cfg.enabled === false ? t.colors.neutral[100] : t.colors.primaryScale[50] })}>
+                      <Clock size={ICON_SIZES.section} color={cfg.enabled === false ? t.colors.neutral[400] : t.colors.primaryScale[600]} />
+                    </Box>
+                    <Box style={{ ...createMetadataFieldStyle(t), flex: 1, gap: t.spacing[2] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                          {cfg.stageName}
+                        </Text>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[600] }}>
+                            {cfg.limitHours}h limit
+                          </Text>
+                          {cfg.warningThresholdPercent != null && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[600] }}>
+                              Warning at {cfg.warningThresholdPercent}%
+                            </Text>
+                          )}
+                          {cfg.notifyOnBreach && (
+                            <Bell size={ICON_SIZES.label} color={t.colors.warningScale[500]} />
+                          )}
+                        </Box>
+                      </Box>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                        {cfg.escalationRules}
+                      </Text>
+                      {cfg.alertRecipients.length > 0 && (
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexWrap: 'wrap' }}>
+                          <Users size={ICON_SIZES.inline} color={t.colors.neutral[400]} />
+                          {cfg.alertRecipients.map((email, i) => (
+                            <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                              {email}{i < cfg.alertRecipients.length - 1 ? ',' : ''}
+                            </Text>
+                          ))}
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
+        )}
       </Box>
     );
   },

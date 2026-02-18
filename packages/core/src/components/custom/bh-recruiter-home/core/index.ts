@@ -29,6 +29,14 @@ export interface PipelineJob {
   id?: string;
   title?: string;
   stages?: PipelineStage[];
+  /** Conversion rate from applied to hired (0-100) */
+  conversionRate?: number;
+  /** Number of active SLA breaches */
+  slaBreachCount?: number;
+  /** Number of candidates at risk of breaching SLA */
+  slaAtRiskCount?: number;
+  /** Days the job has been open */
+  daysOpen?: number;
 }
 
 export interface UpcomingInterview {
@@ -81,6 +89,29 @@ export interface PerformanceMetric {
   label?: string;
   value?: number;
   target?: number;
+  /** Trend direction for this metric */
+  trend?: 'up' | 'down' | 'flat';
+  /** Percentage change from previous period */
+  changePercent?: number;
+}
+
+export interface TeamPerformance {
+  /** Recruiter ID */
+  recruiterId?: string;
+  /** Recruiter display name */
+  recruiterName?: string;
+  /** Recruiter avatar URL */
+  recruiterAvatar?: string;
+  /** Number of hires this period */
+  hires?: number;
+  /** Hire target for this period */
+  hireTarget?: number;
+  /** Average time-to-fill in days */
+  avgTimeToFill?: number;
+  /** Pipeline conversion rate (0-100) */
+  conversionRate?: number;
+  /** Number of active SLA breaches */
+  slaBreachCount?: number;
 }
 
 /** Re-export DB types for consumer convenience */
@@ -118,6 +149,18 @@ export interface BhRecruiterHomeProps extends EngineAwareProps {
 
   /** Personal performance metrics */
   performanceMetrics?: PerformanceMetric[];
+
+  /** Team performance data for team leads */
+  teamPerformance?: TeamPerformance[];
+
+  /** Total SLA breaches across all pipelines */
+  totalSlaBreaches?: number;
+
+  /** Average pipeline conversion rate (0-100) */
+  avgConversionRate?: number;
+
+  /** Average time-to-fill in days */
+  avgTimeToFill?: number;
 
   /** Callback when a quick action is triggered */
   onQuickAction?: (actionKey: string) => void;

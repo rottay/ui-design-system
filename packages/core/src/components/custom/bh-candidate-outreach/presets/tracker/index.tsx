@@ -32,26 +32,6 @@ import {
   Clock, CheckCircle, XCircle, BarChart3, Users, Mail,
 } from 'lucide-react';
 
-/* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_RECIPIENTS: OutreachRecipient[] = [
-  { candidate: { id: 'r-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.j@google.com' } as DBCandidate },
-  { candidate: { id: 'r-2', firstName: 'Michael', lastName: 'Chen', email: 'mchen@stripe.com' } as DBCandidate },
-  { candidate: { id: 'r-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily@meta.com' } as DBCandidate },
-  { candidate: { id: 'r-4', firstName: 'James', lastName: 'Kim', email: 'jkim@anthropic.com' } as DBCandidate },
-  { candidate: { id: 'r-5', firstName: 'Anna', lastName: 'Kowalski', email: 'anna@vercel.com' } as DBCandidate },
-  { candidate: { id: 'r-6', firstName: 'David', lastName: 'Thompson', email: 'david@linear.app' } as DBCandidate },
-];
-
-const DEFAULT_METRICS: CampaignMetrics = { sent: 156, opened: 98, replied: 34, bounced: 5 };
-
-const DEFAULT_VARIANTS: ABVariant[] = [
-  { id: 'v-a', name: 'Variant A', content: 'Personalized opening...', splitPercent: 50, metrics: { sent: 78, opened: 52, replied: 19, bounced: 2 } },
-  { id: 'v-b', name: 'Variant B', content: 'Direct value prop...', splitPercent: 50, metrics: { sent: 78, opened: 46, replied: 15, bounced: 3 } },
-];
-
 const RECIPIENT_STATUSES = [
   { recipientId: 'r-1', name: 'Sarah Johnson', status: 'replied', time: '2h ago' },
   { recipientId: 'r-2', name: 'Michael Chen', status: 'opened', time: '4h ago' },
@@ -96,15 +76,15 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
     }, [t]);
 
     const {
-      campaignMetrics: rawCampaignMetrics = DEFAULT_METRICS,
-      variants: rawVariants = DEFAULT_VARIANTS,
-      recipients: rawRecipients = DEFAULT_RECIPIENTS,
+      campaignMetrics: rawCampaignMetrics,
+      variants: rawVariants = [],
+      recipients: rawRecipients = [],
       className, style,
     } = props;
 
-    const campaignMetrics = Array.isArray(rawCampaignMetrics) ? rawCampaignMetrics : DEFAULT_METRICS;
-    const variants = Array.isArray(rawVariants) ? rawVariants : DEFAULT_VARIANTS;
-    const recipients = Array.isArray(rawRecipients) ? rawRecipients : DEFAULT_RECIPIENTS;
+    const campaignMetrics: CampaignMetrics = rawCampaignMetrics ?? { sent: 0, opened: 0, replied: 0, bounced: 0 };
+    const variants = Array.isArray(rawVariants) ? rawVariants : [];
+    const recipients = Array.isArray(rawRecipients) ? rawRecipients : [];
 
     const [activeTab, setActiveTab] = useState<'overview' | 'recipients' | 'ab'>('overview');
 

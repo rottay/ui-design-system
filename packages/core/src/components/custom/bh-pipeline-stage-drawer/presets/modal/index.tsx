@@ -66,20 +66,7 @@ function getStatusLabel(status: CandidateStatus): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STAGE: StageDetail = {
-  name: 'Phone Screen',
-  candidateCount: 8,
-  avgDays: 2.3,
-  conversionRate: 0.75,
-  candidates: [
-    { id: 'c-1', name: 'Sarah Johnson', avatarInitial: 'SJ', status: 'active', appliedAt: new Date(Date.now() - 86400000 * 2), score: 82 },
-    { id: 'c-2', name: 'Michael Chen', avatarInitial: 'MC', status: 'new', appliedAt: new Date(Date.now() - 86400000), score: 76 },
-    { id: 'c-3', name: 'Emily Rodriguez', avatarInitial: 'ER', status: 'active', appliedAt: new Date(Date.now() - 86400000 * 4), score: 94 },
-    { id: 'c-4', name: 'James Kim', avatarInitial: 'JK', status: 'on_hold', appliedAt: new Date(Date.now() - 86400000 * 3), score: 58 },
-  ],
-};
-
-const MOCK_TREND = [60, 68, 72, 65, 78, 74, 75];
+const MOCK_TREND = [30, 35, 32, 40, 38, 42, 45];
 
 /* ================================================================== */
 /*  Modal Preset                                                       */
@@ -95,7 +82,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] },
+      stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] } as StageDetail,
       isOpen = true,
       onClose,
       onBulkAction,
@@ -106,7 +93,6 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
 
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [hoveredCandidate, setHoveredCandidate] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -342,7 +328,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                   key={candidate.id}
                   role="listitem"
                   tabIndex={0}
-                  aria-label={`${candidate.name}, ${getStatusLabel(candidate.status!)}`}
+                  aria-label={`${candidate.name}, ${getStatusLabel(candidate.status ?? 'new')}`}
                   onClick={() => handleCandidateClick((candidate.id ?? ''))}
                   onMouseEnter={() => setHoveredCandidate((candidate.id ?? null))}
                   onMouseLeave={() => setHoveredCandidate(null)}
@@ -387,12 +373,12 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                       }}>
                         {candidate.name}
                       </Text>
-                      <Box style={{ ...createBadgeStyle(t, getStatusBadgeKey(candidate.status!)), borderRadius: badgeRadius, padding: `0px ${t.spacing[1]}px` }}>
-                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status!)}</Text>
+                      <Box style={{ ...createBadgeStyle(t, getStatusBadgeKey(candidate.status ?? 'new')), borderRadius: badgeRadius, padding: `0px ${t.spacing[1]}px` }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status ?? 'new')}</Text>
                       </Box>
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                      Applied {formatDistanceToNow((typeof candidate.appliedAt! === 'string' ? new Date(candidate.appliedAt!) : candidate.appliedAt!), { addSuffix: true })}
+                      Applied {candidate.appliedAt ? formatDistanceToNow((typeof candidate.appliedAt === 'string' ? new Date(candidate.appliedAt) : candidate.appliedAt), { addSuffix: true }) : 'N/A'}
                     </Text>
                   </Box>
 

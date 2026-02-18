@@ -15,6 +15,8 @@ export type BhTokenTransferPreset = 'timeline' | 'compact';
 export interface TokenTransferTeam {
   id: string;
   name: string;
+  balance?: number;
+  department?: string;
 }
 
 /**
@@ -38,6 +40,11 @@ export interface TokenTransfer {
   approvedBy?: string;
   approvedAt?: Date;
   notes?: string;
+  category?: 'interview' | 'assessment' | 'other';
+  relatedEntityId?: string;
+  relatedEntityType?: string;
+  expiresAt?: Date;
+  priority?: 'low' | 'normal' | 'high';
 }
 
 export interface BhTokenTransferProps extends EngineAwareProps {
@@ -46,6 +53,9 @@ export interface BhTokenTransferProps extends EngineAwareProps {
   onApprove?: (transferId: string) => void;
   onReject?: (transferId: string) => void;
   onRequestTransfer?: () => void;
+  totalBalance?: number;
+  monthlyBudget?: number;
+  burnRate?: number;
   loading?: boolean;
   className?: string;
   style?: CSSProperties;

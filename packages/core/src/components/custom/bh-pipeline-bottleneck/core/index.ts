@@ -18,6 +18,18 @@ export interface BottleneckStage {
   avgDaysInStage?: number;
   expectedDays?: number;
   isBottleneck?: boolean;
+  conversionRate?: number;
+  dropoffRate?: number;
+  waitingForAction?: number;
+  oldestCandidateDays?: number;
+  assignedRecruiterCount?: number;
+}
+
+export interface BottleneckSummary {
+  totalBottlenecks?: number;
+  worstStage?: string;
+  avgResolutionDays?: number;
+  costImpact?: number;
 }
 
 export interface BhPipelineBottleneckProps extends EngineAwareProps {
@@ -31,6 +43,12 @@ export interface BhPipelineBottleneckProps extends EngineAwareProps {
 
   /** Callback when a stage is clicked */
   onStageClick?: (stageId: string) => void;
+
+  /** Bottleneck summary metrics */
+  summary?: BottleneckSummary;
+
+  /** Whether to show trend indicators */
+  showTrend?: boolean;
 
   /** Loading state */
   loading?: boolean;

@@ -55,18 +55,6 @@ function getStatusLabel(status: AppealData['status']): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_APPEAL: AppealData = {
-  id: 'appeal-1',
-  candidateName: 'Sarah Johnson',
-  positionTitle: 'Senior Frontend Engineer',
-  originalDecision: 'Rejected',
-  reason: 'The candidate demonstrated strong technical skills during the live coding session that were not reflected in the automated scoring. The system may have had connectivity issues during the assessment.',
-  evidence: 'Video recording timestamp 14:32 shows correct solution implementation. Network logs indicate packet loss during submission window. Two panel members noted strong performance in their independent evaluations.',
-  submittedAt: new Date(Date.now() - 86400000),
-  status: 'under-review',
-  reviewerNotes: 'Initial review shows merit. Checking system logs for connectivity issues.',
-};
-
 /* ================================================================== */
 /*  Review Preset                                                      */
 /* ================================================================== */
@@ -81,7 +69,7 @@ export const ReviewBhAppealReview = createPreset<BhAppealReviewProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      appeal: rawAppeal = MOCK_APPEAL,
+      appeal: rawAppeal = {} as Partial<AppealData>,
       onApprove,
       onDeny,
       onAddNote,
@@ -91,8 +79,7 @@ export const ReviewBhAppealReview = createPreset<BhAppealReviewProps>({
       style,
     } = props;
 
-    const appeal = Array.isArray(rawAppeal) ? rawAppeal : MOCK_APPEAL;
-
+    const appeal = rawAppeal as Partial<AppealData>;
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

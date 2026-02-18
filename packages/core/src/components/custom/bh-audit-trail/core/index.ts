@@ -53,6 +53,18 @@ export interface AuditEvent {
   beforeState?: Record<string, any>;
   afterState?: Record<string, any>;
   relatedEvents?: string[];
+  actorType?: 'user' | 'system' | 'api' | 'automation' | 'candidate';
+  actorEmail?: string;
+  actorRole?: string;
+  changedFields?: string[];
+  changeSummary?: string;
+  reason?: string;
+  userAgent?: string;
+  sessionId?: string;
+  requestId?: string;
+  metadata?: Record<string, unknown>;
+  tags?: string[];
+  isSensitive?: boolean;
 }
 
 /* -- Stats ------------------------------------------------------------ */
@@ -62,6 +74,8 @@ export interface AuditStats {
   eventsToday: number;
   mostActiveUser: string;
   mostChangedEntity: string;
+  eventsByEntity?: Record<string, number>;
+  eventsByAction?: Record<string, number>;
 }
 
 /* -- Filter ----------------------------------------------------------- */
@@ -97,6 +111,10 @@ export interface BhAuditTrailProps extends EngineAwareProps {
   onLiveModeToggle?: () => void;
   exportRange?: [string, string] | null;
   onExport?: (format: 'csv' | 'json') => void;
+
+  /* sensitivity & retention */
+  showSensitive?: boolean;
+  retentionDays?: number;
 
   /* layout */
   className?: string;

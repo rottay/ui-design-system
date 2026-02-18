@@ -42,6 +42,24 @@ export interface BhProctoringSummaryProps extends EngineAwareProps {
   /** Number of reviewed events */
   reviewedCount?: number;
 
+  /** Number of dismissed events */
+  dismissedCount?: number;
+
+  /** Last event timestamp for this candidate */
+  lastEventAt?: Date | string;
+
+  /** Most recent reviewer name for this candidate's events */
+  lastReviewedBy?: string;
+
+  /** When the most recent review occurred */
+  lastReviewedAt?: Date | string;
+
+  /** Trend direction compared to previous period */
+  riskTrend?: 'up' | 'down' | 'stable';
+
+  /** Risk trend percentage change */
+  riskTrendPercentage?: number;
+
   /** Callback when view details is clicked */
   onViewDetails?: () => void;
 

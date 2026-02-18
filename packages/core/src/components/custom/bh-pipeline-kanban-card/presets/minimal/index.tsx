@@ -60,16 +60,6 @@ function getDaysColor(days: number, t: DesignTokens): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_CANDIDATE: KanbanCandidate = {
-  id: 'kan-2',
-  name: 'Michael Chen',
-  avatarInitial: 'MC',
-  score: 72,
-  stage: 'Phone Screen',
-  appliedAt: new Date(Date.now() - 86400000 * 5),
-  tags: ['Mid-level'],
-};
-
 /* ================================================================== */
 /*  Minimal Preset                                                     */
 /* ================================================================== */
@@ -84,7 +74,7 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      candidate: rawCandidate = MOCK_CANDIDATE,
+      candidate: rawCandidate = {} as Partial<KanbanCandidate>,
       isDragging = false,
       isSelected = false,
       onQuickAction,
@@ -93,10 +83,9 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
       style,
     } = props;
 
-    const candidate = Array.isArray(rawCandidate) ? rawCandidate : MOCK_CANDIDATE;
+    const candidate = (Array.isArray(rawCandidate) ? rawCandidate : rawCandidate ?? {}) as Partial<KanbanCandidate>;
 
     const [isHovered, setIsHovered] = useState(false);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: isDragging ? 'md' : 'sm', glass: isGlass }), [t, isGlass, isDragging]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

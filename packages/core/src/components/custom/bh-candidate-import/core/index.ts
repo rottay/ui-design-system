@@ -27,6 +27,12 @@ export interface FieldMapping {
   sourceField: string;
   targetField: string;
   autoDetected: boolean;
+  /** Category for grouping mappings in the UI */
+  category?: 'personal' | 'contact' | 'compensation' | 'documents' | 'skills' | 'experience' | 'other';
+  /** Whether this field mapping is required for import */
+  required?: boolean;
+  /** Example value from the source data */
+  exampleValue?: string;
 }
 
 export interface DedupMatch {

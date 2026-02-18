@@ -14,6 +14,10 @@ export interface VelocityDataPoint {
   date?: string;
   count?: number;
   target?: number;
+  hires?: number;
+  interviews?: number;
+  offers?: number;
+  costPerHire?: number;
 }
 
 export interface BhPipelineVelocityChartProps extends EngineAwareProps {
@@ -33,6 +37,12 @@ export interface BhPipelineVelocityChartProps extends EngineAwareProps {
 
   /** Callback when user changes period */
   onPeriodChange?: (period: VelocityPeriod) => void;
+
+  /** Metric to display on the chart */
+  metric?: 'count' | 'hires' | 'interviews' | 'offers';
+
+  /** Benchmark data for comparison overlay */
+  benchmarkData?: Array<{ date?: string; value?: number }>;
 
   /** Loading state */
   loading?: boolean;

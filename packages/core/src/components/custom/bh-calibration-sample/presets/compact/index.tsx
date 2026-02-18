@@ -25,6 +25,7 @@ import {
 import type {
   BhCalibrationSampleProps,
   CalibrationSample,
+  CalibrationSampleView,
   DimensionComparison,
   CalibrationSampleStatus,
 } from '../../core';
@@ -71,24 +72,6 @@ function getStatusLabel(status: CalibrationSampleStatus): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SAMPLE: CalibrationSample = {
-  id: 'cal-1',
-  scorableId: 'sc-1',
-  candidateName: 'Sarah Johnson',
-  dimensions: [
-    { dimensionName: 'Technical Depth', humanScore: 4.2, aiScore: 3.8, deviation: -0.4, maxScore: 5, weight: 0.3, agreed: true },
-    { dimensionName: 'Problem Solving', humanScore: 3.5, aiScore: 4.1, deviation: 0.6, maxScore: 5, weight: 0.25, agreed: false },
-    { dimensionName: 'Communication', humanScore: 4.0, aiScore: 4.2, deviation: 0.2, maxScore: 5, weight: 0.2, agreed: true },
-    { dimensionName: 'Code Quality', humanScore: 3.0, aiScore: 4.5, deviation: 1.5, maxScore: 5, weight: 0.15, agreed: false },
-    { dimensionName: 'Culture Fit', humanScore: 4.5, aiScore: 4.3, deviation: -0.2, maxScore: 5, weight: 0.1, agreed: true },
-  ],
-  overallHumanScore: 3.8,
-  overallAiScore: 4.1,
-  overallDeviation: 0.3,
-  agreementRate: 0.6,
-  status: 'pending',
-};
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -103,14 +86,13 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sample: rawSample = MOCK_SAMPLE,
+      sample: rawSample = {} as Partial<CalibrationSampleView>,
       onSubmitReview,
       className,
       style,
     } = props;
 
-    const sample = Array.isArray(rawSample) ? rawSample : MOCK_SAMPLE;
-
+    const sample = rawSample as Partial<CalibrationSampleView>;
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -162,11 +144,11 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
             </Text>
           </Box>
           <Box style={{
-            ...createBadgeStyle(t, getStatusBadgeKey(sample.status!)),
+            ...createBadgeStyle(t, getStatusBadgeKey(sample.status ?? 'pending')),
             borderRadius: badgeRadius,
             padding: `1px ${t.spacing[2]}px`,
           }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(sample.status!)}</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(sample.status ?? 'pending')}</Text>
           </Box>
         </Box>
 

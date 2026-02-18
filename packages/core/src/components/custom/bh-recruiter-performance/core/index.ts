@@ -25,6 +25,14 @@ export interface RecruiterPerformanceItem {
   activePositions?: number;
   /** Optional raw DB metrics for direct binding */
   dbMetrics?: Partial<DBRecruiterMetrics> | null;
+  avatar?: string;
+  offerAcceptanceRate?: number;
+  revenueGenerated?: number;
+  revenueCurrency?: string;
+  avgCandidatesPerPosition?: number;
+  slaComplianceRate?: number;
+  sparkline?: number[];
+  trend?: 'up' | 'down' | 'flat';
 }
 
 export interface BhRecruiterPerformanceProps extends EngineAwareProps {

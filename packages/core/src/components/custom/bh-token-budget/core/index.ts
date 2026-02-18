@@ -23,6 +23,12 @@ export interface BudgetAllocation {
   used: number;
   /** Maps to DBQuota.alertThreshold */
   alertThreshold: number;
+  department?: string;
+  warningThreshold?: number;
+  hardLimit?: boolean;
+  periodStart?: string;
+  periodEnd?: string;
+  billingCycle?: 'monthly' | 'daily' | 'weekly';
 }
 
 export interface BhTokenBudgetProps extends EngineAwareProps {
@@ -51,6 +57,18 @@ export interface BhTokenBudgetProps extends EngineAwareProps {
 
   /** Loading state */
   loading?: boolean;
+
+  /** Lifetime token metrics */
+  lifetimePurchased?: number;
+  lifetimeConsumed?: number;
+  lifetimeExpired?: number;
+
+  /** Auto-purchase configuration */
+  autoPurchaseEnabled?: boolean;
+  autoPurchaseThreshold?: number;
+  autoPurchaseAmount?: number;
+  lastPurchaseAt?: string;
+  lowBalanceAlertSent?: boolean;
 
   /** Additional CSS class name(s) */
   className?: string;

@@ -11,6 +11,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   X, Users, Clock, TrendingUp, ChevronRight,
   ArrowRight, XCircle, Mail, CheckSquare, Square,
+  AlertTriangle, Briefcase, MessageCircle,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -84,27 +85,38 @@ function getStatusLabel(status: CandidateStatus): string {
   }
 }
 
+function getPriorityBadgeKey(priority: string | undefined): 'error' | 'warning' | 'info' | 'secondary' {
+  switch (priority) {
+    case 'urgent': return 'error';
+    case 'high': return 'warning';
+    case 'low': return 'secondary';
+    default: return 'info';
+  }
+}
+
+function getPriorityLabel(priority: string | undefined): string {
+  if (!priority) return '';
+  return priority.charAt(0).toUpperCase() + priority.slice(1);
+}
+
+function getSourceLabel(source: string | undefined): string {
+  if (!source) return '';
+  switch (source) {
+    case 'direct': return 'Direct';
+    case 'referral': return 'Referral';
+    case 'agency': return 'Agency';
+    case 'linkedin': return 'LinkedIn';
+    case 'job_board': return 'Job Board';
+    case 'career_site': return 'Career Site';
+    default: return source.charAt(0).toUpperCase() + source.slice(1);
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STAGE: StageDetail = {
-  name: 'Technical Interview',
-  candidateCount: 12,
-  avgDays: 4.5,
-  conversionRate: 0.67,
-  candidates: [
-    { id: 'c-1', name: 'Sarah Johnson', avatarInitial: 'SJ', status: 'active', appliedAt: new Date(Date.now() - 86400000 * 2), score: 85 },
-    { id: 'c-2', name: 'Michael Chen', avatarInitial: 'MC', status: 'new', appliedAt: new Date(Date.now() - 86400000), score: 72 },
-    { id: 'c-3', name: 'Emily Rodriguez', avatarInitial: 'ER', status: 'active', appliedAt: new Date(Date.now() - 86400000 * 5), score: 91 },
-    { id: 'c-4', name: 'James Kim', avatarInitial: 'JK', status: 'on_hold', appliedAt: new Date(Date.now() - 86400000 * 3), score: 65 },
-    { id: 'c-5', name: 'Anna Kowalski', avatarInitial: 'AK', status: 'active', appliedAt: new Date(Date.now() - 86400000 * 7), score: 78 },
-    { id: 'c-6', name: 'David Park', avatarInitial: 'DP', status: 'new', appliedAt: new Date(Date.now() - 3600000 * 6), score: 88 },
-  ],
-};
-
-/* Conversion trend sparkline mock */
-const MOCK_TREND = [55, 62, 58, 70, 65, 72, 67];
+const MOCK_TREND = [30, 35, 32, 40, 38, 42, 45];
 
 /* ================================================================== */
 /*  Drawer Preset                                                      */
@@ -120,7 +132,7 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] },
+      stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] } as StageDetail,
       isOpen = true,
       onClose,
       onBulkAction,
@@ -131,7 +143,6 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
 
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [hoveredCandidate, setHoveredCandidate] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -273,13 +284,16 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
           {/* Stats Row */}
           <Box style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: stage.slaBreachCount != null ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)',
             gap: t.spacing[3],
           }}>
             {[
               { label: 'Candidates', value: String(stage.candidateCount ?? 0), icon: Users, color: t.colors.primaryScale },
               { label: 'Avg Days', value: (stage.avgDays ?? 0).toFixed(1), icon: Clock, color: t.colors.warningScale },
               { label: 'Conversion', value: `${((stage.conversionRate ?? 0) * 100).toFixed(0)}%`, icon: TrendingUp, color: t.colors.successScale },
+              ...(stage.slaBreachCount != null
+                ? [{ label: 'SLA Breaches', value: String(stage.slaBreachCount), icon: AlertTriangle, color: t.colors.errorScale }]
+                : []),
             ].map((stat) => {
               const Icon = stat.icon;
               return (
@@ -446,7 +460,7 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
                 key={candidate.id}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${candidate.name}, ${getStatusLabel(candidate.status!)}${candidate.score != null ? `, score ${candidate.score}` : ''}`}
+                aria-label={`${candidate.name}, ${getStatusLabel(candidate.status ?? 'new')}${candidate.score != null ? `, score ${candidate.score}` : ''}`}
                 onClick={() => handleCandidateClick((candidate.id ?? ''))}
                 onMouseEnter={() => setHoveredCandidate((candidate.id ?? null))}
                 onMouseLeave={() => setHoveredCandidate(null)}
@@ -500,7 +514,7 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
 
                 {/* Info */}
                 <Box style={{ flex: 1, minWidth: 0 }}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[1] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[1], flexWrap: 'wrap' }}>
                     <Text style={{
                       fontSize: t.typography.fontSize.sm,
                       fontWeight: t.typography.fontWeight.medium,
@@ -512,16 +526,66 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
                       {candidate.name}
                     </Text>
                     <Box style={{
-                      ...createBadgeStyle(t, getStatusBadgeKey(candidate.status!)),
+                      ...createBadgeStyle(t, getStatusBadgeKey(candidate.status ?? 'new')),
                       borderRadius: badgeRadius,
                       padding: `0px ${t.spacing[1]}px`,
                     }}>
-                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status!)}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status ?? 'new')}</Text>
                     </Box>
+                    {candidate.priority && candidate.priority !== 'normal' && (
+                      <Box style={{
+                        ...createBadgeStyle(t, getPriorityBadgeKey(candidate.priority)),
+                        borderRadius: badgeRadius,
+                        padding: `0px ${t.spacing[1]}px`,
+                      }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{getPriorityLabel(candidate.priority)}</Text>
+                      </Box>
+                    )}
+                    {candidate.slaBreached && (
+                      <Box
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}
+                        aria-label="SLA breached"
+                      >
+                        <AlertTriangle size={10} color={t.colors.errorScale[500]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[600], fontWeight: t.typography.fontWeight.bold }}>
+                          SLA
+                        </Text>
+                      </Box>
+                    )}
                   </Box>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    Applied {formatDistanceToNow((typeof candidate.appliedAt! === 'string' ? new Date(candidate.appliedAt!) : candidate.appliedAt!), { addSuffix: true })}
-                  </Text>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexWrap: 'wrap' }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                      Applied {candidate.appliedAt ? formatDistanceToNow((typeof candidate.appliedAt === 'string' ? new Date(candidate.appliedAt) : candidate.appliedAt), { addSuffix: true }) : 'N/A'}
+                    </Text>
+                    {candidate.source && (
+                      <Box style={{
+                        ...createBadgeStyle(t, 'info'),
+                        borderRadius: badgeRadius,
+                        padding: `0px ${t.spacing[1]}px`,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 2,
+                      }}>
+                        <Briefcase size={8} />
+                        <Text style={{ fontSize: 9 }}>{getSourceLabel(candidate.source)}</Text>
+                      </Box>
+                    )}
+                    {candidate.candidateResponsePending && (
+                      <Box
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 2,
+                        }}
+                        aria-label="Response pending from candidate"
+                      >
+                        <MessageCircle size={10} color={t.colors.warningScale[500]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[600], fontWeight: t.typography.fontWeight.medium }}>
+                          Response pending
+                        </Text>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
 
                 {/* Score */}

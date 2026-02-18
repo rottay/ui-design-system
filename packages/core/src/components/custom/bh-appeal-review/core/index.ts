@@ -74,6 +74,20 @@ export interface AppealData {
   status?: AppealDataStatus;
   /** Reviewer notes */
   reviewerNotes?: string;
+  /** Original score before appeal */
+  originalScore?: number;
+  /** Adjusted score after appeal resolution */
+  adjustedScore?: number;
+  /** ID or name of the reviewer who resolved the appeal */
+  reviewedBy?: string;
+  /** When the appeal was reviewed */
+  reviewedAt?: Date;
+  /** Scorecard ID the appeal is associated with */
+  scorecardId?: string;
+  /** Scorable entity ID the appeal targets */
+  scorableId?: string;
+  /** Dimension score ID the appeal targets */
+  dimensionScoreId?: string;
 }
 
 export const BH_APPEAL_REVIEW_DEFAULTS: Partial<BhAppealReviewProps> = {

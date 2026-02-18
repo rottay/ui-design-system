@@ -42,6 +42,9 @@ export interface ProviderCost {
   share: number;
   trend: TrendDirection;
   trendValue: number;
+  avgLatencyMs?: number;
+  successRate?: number;
+  errorCount?: number;
 }
 
 /**
@@ -56,6 +59,9 @@ export interface ModelCost {
   tokenCount: number;
   requestCount: number;
   avgCostPerRequest: number;
+  avgLatencyMs?: number;
+  successRate?: number;
+  p95LatencyMs?: number;
 }
 
 export interface CostTrendPoint {
@@ -65,6 +71,8 @@ export interface CostTrendPoint {
   cost: number;
   tokens: number;
   label?: string;
+  requests?: number;
+  errors?: number;
 }
 
 /**
@@ -84,6 +92,9 @@ export interface BudgetAlert {
   threshold: number;
   currentValue: number;
   acknowledged: boolean;
+  createdAt?: string;
+  resolvedAt?: string;
+  resolvedBy?: string;
 }
 
 export interface CostSummary {
@@ -91,6 +102,9 @@ export interface CostSummary {
   costPerInterview: number;
   costPerHire: number;
   monthOverMonthChange: number;
+  costByDepartment?: Record<string, number>;
+  projectedMonthEnd?: number;
+  savingsOpportunity?: number;
 }
 
 export interface BhCostAnalyzerProps extends EngineAwareProps {
@@ -106,6 +120,8 @@ export interface BhCostAnalyzerProps extends EngineAwareProps {
   onAlertAcknowledge?: (alertId: string) => void;
   /** Search cost logs - accepts DBSearchCostLog[] from @rottay/recruiter for position search expenses */
   searchCosts?: DBSearchCostLog[];
+  period?: string;
+  showLatency?: boolean;
   loading?: boolean;
   className?: string;
   style?: CSSProperties;

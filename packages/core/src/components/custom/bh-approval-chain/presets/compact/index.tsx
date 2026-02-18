@@ -25,12 +25,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STEPS: ApprovalChainStep[] = [
-  { id: 'step-1', approverName: 'Sarah Kim', approverRole: 'Hiring Manager', status: 'approved', decidedAt: new Date('2026-02-08T10:00:00'), order: 1 },
-  { id: 'step-2', approverName: 'Tom Walsh', approverRole: 'VP Engineering', status: 'approved', decidedAt: new Date('2026-02-09T14:30:00'), order: 2 },
-  { id: 'step-3', approverName: 'Lisa Park', approverRole: 'HR Director', status: 'pending', order: 3 },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -69,15 +63,14 @@ export const CompactBhApprovalChain = createPreset<BhApprovalChainProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      steps: rawSteps = MOCK_STEPS,
+      steps: rawSteps = [],
       entityTitle,
       onStepClick,
       className,
       style,
     } = props;
 
-    const steps = Array.isArray(rawSteps) ? rawSteps : MOCK_STEPS;
-
+    const steps = Array.isArray(rawSteps) ? rawSteps : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

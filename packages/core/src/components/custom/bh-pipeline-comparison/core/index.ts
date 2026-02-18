@@ -14,6 +14,9 @@ export interface ComparisonStage {
   candidateCount?: number;
   conversionRate?: number;
   avgDaysInStage?: number;
+  dropoffRate?: number;
+  slaBreachCount?: number;
+  sourceBreakdown?: Record<string, number>;
 }
 
 export interface ComparisonJob {
@@ -25,6 +28,11 @@ export interface ComparisonJob {
   stages?: ComparisonStage[];
   timeToHireDays?: number;
   overallConversionRate?: number;
+  status?: string;
+  startDate?: Date | string | null;
+  hiringManager?: string;
+  costPerHire?: number;
+  qualityOfHire?: number;
 }
 
 export interface BhPipelineComparisonProps extends EngineAwareProps {
@@ -44,6 +52,12 @@ export interface BhPipelineComparisonProps extends EngineAwareProps {
 
   /** Callback when a stage is clicked */
   onStageClick?: (jobId: string, stageName: string) => void;
+
+  /** Metric to compare by */
+  metric?: 'conversionRate' | 'avgDays' | 'candidateCount';
+
+  /** Time period for comparison */
+  period?: string;
 
   /** Loading state */
   loading?: boolean;

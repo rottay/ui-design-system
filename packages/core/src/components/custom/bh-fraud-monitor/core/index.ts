@@ -27,6 +27,12 @@ export interface ProctoringEvent {
   candidateName?: string;
   reviewStatus: ReviewStatus;
   metadata?: Record<string, string | number>;
+  jobTitle?: string;
+  interviewType?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
+  reviewNotes?: string;
+  confidence?: number;
 }
 
 export interface SimilarityCheck {
@@ -37,6 +43,8 @@ export interface SimilarityCheck {
   comparedWith: string;
   flagged: boolean;
   timestamp: string;
+  segments?: Array<{ startTime: number; endTime: number; score: number }>;
+  reviewStatus?: 'pending' | 'dismissed' | 'confirmed';
 }
 
 export interface FraudStats {
@@ -44,6 +52,10 @@ export interface FraudStats {
   criticalCount: number;
   pendingReview: number;
   flaggedScorables: number;
+  resolvedCount?: number;
+  avgResolutionTimeHours?: number;
+  falsePositiveRate?: number;
+  trendVsPrevious?: number;
 }
 
 export interface BhFraudMonitorProps extends EngineAwareProps {
@@ -56,6 +68,8 @@ export interface BhFraudMonitorProps extends EngineAwareProps {
   onReviewAction?: (eventId: string, status: ReviewStatus) => void;
   severityFilter?: EventSeverity[];
   onSeverityFilterChange?: (severities: EventSeverity[]) => void;
+  timeRange?: string;
+  onTimeRangeChange?: (range: string) => void;
   loading?: boolean;
   className?: string;
   style?: CSSProperties;

@@ -32,6 +32,7 @@ export interface BenefitCategory {
 }
 
 export interface ApprovalStep {
+  step?: number;
   role: string;
   approverName: string;
   approverAvatar?: string;
@@ -124,6 +125,72 @@ export interface BhOfferWorkspaceProps extends EngineAwareProps {
   /** E-signature status */
   signatureStatus?: SignatureStatus;
 
+  /** Equity type (e.g. options, rsu, percentage) */
+  equityType?: string;
+
+  /** Number of equity shares */
+  equityShares?: number;
+
+  /** Equity percentage (for percentage-based grants) */
+  equityPercentage?: number;
+
+  /** Equity vesting period in months */
+  equityVestingMonths?: number;
+
+  /** Equity cliff period in months */
+  equityCliffMonths?: number;
+
+  /** Signing bonus amount */
+  signingBonus?: number;
+
+  /** Annual bonus target as a percentage */
+  annualBonusTargetPercentage?: number;
+
+  /** Whether relocation is offered */
+  relocationOffered?: boolean;
+
+  /** Relocation allowance amount */
+  relocationAmount?: number;
+
+  /** Type of relocation package */
+  relocationType?: string;
+
+  /** Whether legal review is required */
+  legalReviewRequired?: boolean;
+
+  /** Legal review status */
+  legalReviewStatus?: string;
+
+  /** Contract type (e.g. full_time, contractor, part_time) */
+  contractType?: string;
+
+  /** Contract duration in months (for fixed-term) */
+  contractDurationMonths?: number;
+
+  /** Probation period in days */
+  probationPeriodDays?: number;
+
+  /** Offer version number */
+  version?: number;
+
+  /** Whether this is a counter offer */
+  isCounterOffer?: boolean;
+
+  /** Reference to the previous offer ID (for counter offers) */
+  previousOfferId?: string;
+
+  /** URL to the generated offer letter */
+  offerLetterUrl?: string;
+
+  /** URL to the signed offer document */
+  signedOfferUrl?: string;
+
+  /** Timestamp when the offer was signed */
+  signedAt?: string;
+
+  /** Approval chain steps with step number */
+  approvalChain?: Array<{ step: number; approverName?: string; status: string }>;
+
   /** Additional CSS class name(s) */
   className?: string;
 
@@ -149,6 +216,8 @@ export interface CompensationData {
   commissionStructure?: string;
   equityShares: number;
   equityType?: string;
+  equityPercentage?: number;
+  equityStrikePrice?: number;
   vestingMonths: number;
   cliffMonths: number;
 }

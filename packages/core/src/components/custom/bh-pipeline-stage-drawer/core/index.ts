@@ -23,6 +23,24 @@ export interface StageCandidate {
   status?: CandidateStatus;
   appliedAt?: Date | string | null;
   score?: number;
+  /** Priority level of the application */
+  priority?: 'low' | 'normal' | 'high' | 'urgent';
+  /** Source channel where the application originated */
+  source?: string;
+  /** AI-calculated match score (0-100) */
+  aiMatchScore?: number;
+  /** Whether the SLA for this application has been breached */
+  slaBreached?: boolean;
+  /** Number of days the candidate has been in the pipeline */
+  daysInPipeline?: number;
+  /** Interview recommendation from interviewers */
+  interviewRecommendation?: string;
+  /** Timestamp of the last communication with the candidate */
+  lastCommunicationAt?: Date | string | null;
+  /** Number of communications with the candidate */
+  communicationCount?: number;
+  /** Whether the candidate has a pending response */
+  candidateResponsePending?: boolean;
   /** Optional: raw application record */
   application?: Partial<DBApplication>;
 }
@@ -33,6 +51,12 @@ export interface StageDetail {
   avgDays?: number;
   conversionRate?: number;
   candidates?: StageCandidate[];
+  /** Number of candidates with breached SLAs in this stage */
+  slaBreachCount?: number;
+  /** Average score across all candidates in this stage */
+  avgScore?: number;
+  /** Most common application source in this stage */
+  topSource?: string;
 }
 
 export type BulkActionType = 'advance' | 'reject' | 'send_email';

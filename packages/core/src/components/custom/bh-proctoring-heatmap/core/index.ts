@@ -22,6 +22,19 @@ export interface HeatmapDataPoint {
   hour: number;
   /** Event count for this cell */
   count: number;
+  /** Average severity score for this cell (0-1 scale, for color weighting) */
+  averageSeverity?: number;
+  /** Breakdown of event counts by severity for this cell */
+  severityBreakdown?: {
+    low?: number;
+    medium?: number;
+    high?: number;
+    critical?: number;
+  };
+  /** Number of reviewed events in this cell */
+  reviewedCount?: number;
+  /** Number of dismissed events in this cell */
+  dismissedCount?: number;
 }
 
 export interface BhProctoringHeatmapProps extends EngineAwareProps {

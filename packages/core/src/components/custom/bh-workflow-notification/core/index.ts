@@ -21,6 +21,25 @@ export interface NotificationRule {
   recipients?: string[];
   enabled?: boolean;
   template?: string;
+
+  /** Display name for this rule */
+  name?: string;
+  /** Description of when/why this notification fires */
+  description?: string;
+  /** Notification priority level */
+  priority?: 'low' | 'medium' | 'high';
+  /** Conditions that must be met for the notification to fire */
+  triggerConditions?: string[];
+  /** Delay in minutes before sending the notification */
+  delayMinutes?: number;
+  /** Whether notifications are batched together */
+  batchEnabled?: boolean;
+  /** Date/time when this notification was last sent */
+  lastSentAt?: Date;
+  /** Number of times this notification has been sent */
+  sendCount?: number;
+  /** User who created this rule */
+  createdBy?: string;
 }
 
 export interface BhWorkflowNotificationProps extends EngineAwareProps {

@@ -30,6 +30,7 @@ import type {
   ConversationVolumePoint,
   AgentPerformance,
 } from '../../core';
+
 import {
   MessageSquare,
   Star,
@@ -58,26 +59,6 @@ function sparklinePoints(data: number[], width: number, height: number, padding:
 }
 
 /* ------------------------------------------------------------------ */
-/*  Mock data                                                          */
-/* ------------------------------------------------------------------ */
-
-const MOCK_VOLUME: ConversationVolumePoint[] = Array.from({ length: 30 }, (_, i) => {
-  const date = new Date(2025, 0, i + 1);
-  const base = 80 + Math.sin(i * 0.3) * 25 + Math.random() * 15;
-  return {
-    date: date.toISOString().split('T')[0],
-    count: Math.round(base),
-    completionRate: 70 + Math.random() * 25,
-  };
-});
-
-const MOCK_AGENTS: AgentPerformance[] = [
-  { agentId: 'a5', agentName: 'Aisha Patel', totalConversations: 231, avgScore: 91, completionRate: 96, avgDuration: 25 },
-  { agentId: 'a1', agentName: 'Sarah Chen', totalConversations: 342, avgScore: 88, completionRate: 94, avgDuration: 28 },
-  { agentId: 'a2', agentName: 'Marcus Williams', totalConversations: 298, avgScore: 82, completionRate: 91, avgDuration: 32 },
-];
-
-/* ------------------------------------------------------------------ */
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -88,8 +69,8 @@ export const CompactBhConversationAnalytics = createPreset<BhConversationAnalyti
     const t = tokens;
 
     const {
-      volumeData: rawVolumeData = MOCK_VOLUME,
-      agentPerformance: rawAgentPerformance = MOCK_AGENTS,
+      volumeData: rawVolumeData = undefined,
+      agentPerformance: rawAgentPerformance = [],
       totalConversations = 1401,
       avgScore = 83,
       avgCompletionRate = 90.6,
@@ -99,8 +80,8 @@ export const CompactBhConversationAnalytics = createPreset<BhConversationAnalyti
       style,
     } = props;
 
-    const volumeData = Array.isArray(rawVolumeData) ? rawVolumeData : MOCK_VOLUME;
-    const agentPerformance = Array.isArray(rawAgentPerformance) ? rawAgentPerformance : MOCK_AGENTS;
+    const volumeData = Array.isArray(rawVolumeData) ? rawVolumeData : [] as ConversationVolumePoint[];
+    const agentPerformance = Array.isArray(rawAgentPerformance) ? rawAgentPerformance : [];
 
     /* --- Glass / personality tokens --- */
     const isGlass = t.surface.useGlass && !!t.glass;

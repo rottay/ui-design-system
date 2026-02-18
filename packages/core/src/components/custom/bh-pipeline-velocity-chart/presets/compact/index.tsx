@@ -51,8 +51,6 @@ function generateMockData(): VelocityDataPoint[] {
   return data;
 }
 
-const MOCK_DATA = generateMockData();
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -87,12 +85,13 @@ export const CompactBhPipelineVelocityChart = createPreset<BhPipelineVelocityCha
       period = 30,
       showTarget = false,
       showAverage = false,
+      metric,
+      benchmarkData,
       className,
       style,
     } = props;
 
-
-    const data = useMemo(() => dataProp ?? MOCK_DATA, [dataProp]);
+    const data = useMemo(() => dataProp ?? [] as VelocityDataPoint[], [dataProp]);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -189,6 +188,35 @@ export const CompactBhPipelineVelocityChart = createPreset<BhPipelineVelocityCha
             </Box>
           )}
         </Box>
+
+        {/* Metric + benchmark indicators */}
+        {(metric || (benchmarkData && benchmarkData.length > 0)) && (
+          <Box style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[2],
+            padding: `0 ${t.spacing[4]}px ${t.spacing[1]}px`,
+          }}>
+            {metric && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: 'capitalize' as const }}>
+                Metric: {metric}
+              </Text>
+            )}
+            {benchmarkData && benchmarkData.length > 0 && (
+              <Box style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                padding: `1px ${t.spacing[2]}px`,
+                borderRadius: badgeRadius,
+                backgroundColor: t.colors.infoScale[50],
+              }}>
+                <Box style={{ width: 8, height: 1, backgroundColor: t.colors.infoScale[400] }} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[600] }}>Benchmark</Text>
+              </Box>
+            )}
+          </Box>
+        )}
 
         {/* Main value + sparkline */}
         <Box style={{

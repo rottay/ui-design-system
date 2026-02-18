@@ -29,6 +29,15 @@ export interface CampaignData {
   opened: number;
   replied: number;
   startDate: Date;
+  endDate?: Date;
+  targetAudience?: string;
+  channel?: 'email' | 'linkedin' | 'sms';
+  templateId?: string;
+  conversionRate?: number;
+  bounceRate?: number;
+  unsubscribeRate?: number;
+  budget?: number;
+  costPerReply?: number;
 }
 
 export interface BhOutreachCampaignProps extends EngineAwareProps {
@@ -48,6 +57,15 @@ export interface BhOutreachCampaignProps extends EngineAwareProps {
 
   /** Currently selected campaign */
   selectedCampaignId?: string | null;
+
+  /** Total messages sent across all campaigns */
+  totalSent?: number;
+
+  /** Total replies across all campaigns */
+  totalReplied?: number;
+
+  /** Average response rate across all campaigns */
+  avgResponseRate?: number;
 
   /** Loading state */
   loading?: boolean;

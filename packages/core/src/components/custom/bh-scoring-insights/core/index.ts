@@ -22,6 +22,8 @@ export interface ScoringKpi {
   value: number;
   trend?: number;
   previousValue?: number;
+  unit?: string;
+  description?: string;
 }
 
 export interface LevelDistribution {
@@ -46,12 +48,15 @@ export interface KnockoutStat {
 export interface TrendPoint {
   date: string;
   value: number;
+  label?: string;
 }
 
 export interface CohortComparison {
   groupName: string;
   avgScore: number;
   count: number;
+  medianScore?: number;
+  stdDeviation?: number;
 }
 
 export interface SkillGapSummary {
@@ -60,11 +65,36 @@ export interface SkillGapSummary {
   gapFromTarget: number;
 }
 
+export interface ModelPerformance {
+  model: string;
+  avgLatencyMs: number;
+  avgTokensUsed: number;
+  totalScorecards: number;
+  avgScore: number;
+  errorRate: number;
+}
+
+export interface TokenUsageTrend {
+  date: string;
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+  cost?: number;
+}
+
+export interface ScoreDistributionBucket {
+  rangeMin: number;
+  rangeMax: number;
+  count: number;
+  percentage: number;
+}
+
 export interface ScoringFilter {
   job?: string | null;
   stage?: string | null;
   team?: string | null;
   rubric?: string | null;
+  model?: string | null;
 }
 
 export interface BhScoringInsightsProps extends EngineAwareProps {
@@ -91,6 +121,24 @@ export interface BhScoringInsightsProps extends EngineAwareProps {
 
   /** Skill gap analysis */
   skillGaps?: SkillGapSummary[];
+
+  /** Model performance metrics */
+  modelPerformance?: ModelPerformance[];
+
+  /** Token usage trend data */
+  tokenUsageTrends?: TokenUsageTrend[];
+
+  /** Score distribution buckets */
+  scoreDistributionBuckets?: ScoreDistributionBucket[];
+
+  /** Total tokens used in period */
+  totalTokensUsed?: number;
+
+  /** Total scoring cost in period */
+  totalScoringCost?: number;
+
+  /** Average latency across all models */
+  avgLatencyMs?: number;
 
   /** Active filters */
   filters?: ScoringFilter;

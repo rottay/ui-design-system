@@ -33,24 +33,6 @@ import {
   Type, Hash, AtSign, Smartphone,
 } from 'lucide-react';
 
-/* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_RECIPIENTS: OutreachRecipient[] = [
-  { candidate: { id: 'r-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.j@google.com', phone: '+1 415-555-0127' } as DBCandidate },
-  { candidate: { id: 'r-2', firstName: 'Michael', lastName: 'Chen', email: 'mchen@stripe.com', phone: '+1 415-555-0189' } as DBCandidate },
-  { candidate: { id: 'r-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily@meta.com' } as DBCandidate },
-  { candidate: { id: 'r-4', firstName: 'James', lastName: 'Kim', email: 'jkim@anthropic.com' } as DBCandidate },
-  { candidate: { id: 'r-5', firstName: 'Anna', lastName: 'Kowalski', email: 'anna@vercel.com' } as DBCandidate },
-];
-
-const DEFAULT_TEMPLATES: OutreachTemplate[] = [
-  { id: 't-1', name: 'Initial Outreach', category: 'First Touch', content: 'Hi {firstName}, I came across your profile and was impressed by your work at {company}...', variables: ['firstName', 'company'], effectiveness: 68 },
-  { id: 't-2', name: 'Follow Up', category: 'Nurture', content: 'Hi {firstName}, I wanted to follow up on my previous message about the {role} opportunity...', variables: ['firstName', 'role'], effectiveness: 42 },
-  { id: 't-3', name: 'Referral Intro', category: 'Warm Lead', content: 'Hi {firstName}, {referrer} suggested I reach out to you regarding...', variables: ['firstName', 'referrer'], effectiveness: 82 },
-];
-
 const CHANNELS: { key: OutreachChannel; icon: React.ReactNode; label: string }[] = [
   { key: 'email', icon: <Mail size={16} />, label: 'Email' },
   { key: 'sms', icon: <Smartphone size={16} />, label: 'SMS' },
@@ -81,8 +63,8 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
 
     const {
       channel: cp = 'email', onChannelChange,
-      recipients: rawRecipients = DEFAULT_RECIPIENTS, onRecipientsChange,
-      templates: rawTemplates = DEFAULT_TEMPLATES, selectedTemplate: stp, onTemplateSelect,
+      recipients: rawRecipients = [], onRecipientsChange,
+      templates: rawTemplates = [], selectedTemplate: stp, onTemplateSelect,
       messageContent: mcp = '', onMessageChange,
       subject: sp = '', onSubjectChange,
       scheduleConfig: scp, onScheduleChange,
@@ -92,8 +74,8 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
       className, style,
     } = props;
 
-    const recipients = Array.isArray(rawRecipients) ? rawRecipients : DEFAULT_RECIPIENTS;
-    const templates = Array.isArray(rawTemplates) ? rawTemplates : DEFAULT_TEMPLATES;
+    const recipients = Array.isArray(rawRecipients) ? rawRecipients : [];
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : [];
 
     const [iChannel, setIChannel] = useState<OutreachChannel>('email');
     const [iTemplate, setITemplate] = useState<OutreachTemplate | null>(null);
@@ -263,6 +245,11 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                       display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, fontWeight: t.typography.fontWeight.bold,
                     }}>{getRecipientInitials(rName)}</Box>
                     {rName}
+                    {r.currentTitle && (
+                      <Text style={{ fontSize: 9, color: t.colors.neutral[400] }}>
+                        {r.currentTitle}{r.currentCompany ? ` @ ${r.currentCompany}` : ''}
+                      </Text>
+                    )}
                   </Box>
                   );
                 })}

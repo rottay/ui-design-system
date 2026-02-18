@@ -88,22 +88,6 @@ const SEVERITY_OPTIONS: ProctoringEventSeverity[] = ['low', 'medium', 'high', 'c
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT: ProctoringReviewEventView = {
-  event: {
-    id: 'pe-1',
-    scorableId: 'int-1',
-    eventType: 'screen_share',
-    severity: 'critical',
-    timestamp: new Date(Date.now() - 300000),
-    metadata: { duration: 45, application: 'Discord' },
-    reviewed: false,
-    dismissed: false,
-  },
-  candidateName: 'Sarah Johnson',
-  description: 'Candidate initiated a screen sharing session with an external application during the coding assessment.',
-  sessionDuration: 2400,
-};
-
 /* ================================================================== */
 /*  Stacked Preset                                                     */
 /* ================================================================== */
@@ -118,7 +102,7 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event: rawEventView = MOCK_EVENT,
+      event: rawEventView,
       onSubmitReview,
       onDismiss,
       onSeverityOverride,
@@ -127,7 +111,7 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
       style,
     } = props;
 
-    const eventView = Array.isArray(rawEventView) ? rawEventView : MOCK_EVENT;
+    const eventView = (rawEventView ?? {}) as Partial<ProctoringReviewEventView>;
 
     /* Safely extract fields from the View wrapper */
     const ev = eventView?.event;
@@ -145,7 +129,6 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const [notes, setNotes] = useState('');
     const [severityOverride, setSeverityOverride] = useState<ProctoringEventSeverity | undefined>(severity);
     const [showSeverityDropdown, setShowSeverityDropdown] = useState(false);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

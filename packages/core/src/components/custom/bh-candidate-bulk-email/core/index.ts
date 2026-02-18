@@ -22,6 +22,14 @@ export interface BulkEmailRecipient {
   candidate: DBCandidate;
   /** Template variables for personalization (e.g. { position: 'Senior Dev' }) */
   variables: Record<string, string>;
+  /** Current pipeline status of the candidate */
+  status?: string;
+  /** Timestamp of last communication with this candidate */
+  lastCommunicationAt?: Date;
+  /** Total number of communications sent to this candidate */
+  communicationCount?: number;
+  /** Whether there is a pending response from this candidate */
+  candidateResponsePending?: boolean;
 }
 
 export interface BhCandidateBulkEmailProps extends EngineAwareProps {

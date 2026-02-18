@@ -34,13 +34,6 @@ function geoToSvg(lat: number, lon: number, width: number, height: number): { x:
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_REGIONS: GeoRegion[] = [
-  { id: 'r-1', name: 'San Francisco', candidateCount: 342, latitude: 37.7749, longitude: -122.4194 },
-  { id: 'r-2', name: 'New York', candidateCount: 287, latitude: 40.7128, longitude: -74.006 },
-  { id: 'r-3', name: 'London', candidateCount: 198, latitude: 51.5074, longitude: -0.1278 },
-  { id: 'r-4', name: 'Bangalore', candidateCount: 203, latitude: 12.9716, longitude: 77.5946 },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -55,15 +48,14 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      regions: rawRegions = MOCK_REGIONS,
+      regions: rawRegions = [],
       onRegionClick,
       selectedRegionId,
       className,
       style,
     } = props;
 
-    const regions = Array.isArray(rawRegions) ? rawRegions : MOCK_REGIONS;
-
+    const regions = Array.isArray(rawRegions) ? rawRegions : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

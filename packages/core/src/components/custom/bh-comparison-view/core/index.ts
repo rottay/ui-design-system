@@ -16,6 +16,12 @@ export interface ComparisonCandidate {
   dimensionScores: { dimension: string; score: number }[];
   strengths: string[];
   weaknesses: string[];
+  /** Confidence level of the scoring (from ScorecardSelect.confidence) */
+  confidence?: number;
+  /** Scoring method used (e.g. 'llm', 'human', 'hybrid') (from ScorecardSelect.scoringMethod) */
+  scoringMethod?: string;
+  /** Number of LLM tokens used for scoring (from ScorecardSelect.tokensUsed) */
+  tokensUsed?: number;
 }
 
 /** Re-export DB types for convenience */

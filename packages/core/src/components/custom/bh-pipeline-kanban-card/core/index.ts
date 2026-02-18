@@ -25,6 +25,13 @@ export interface KanbanCandidate {
   tags?: string[];
   /** Optional: raw application record for consumers who need full data */
   application?: Partial<DBApplication>;
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  source?: string;
+  aiMatchScore?: number;
+  daysInStage?: number;
+  interviewDate?: Date | string | null;
+  assignedRecruiterName?: string;
+  slaBreached?: boolean;
 }
 
 export type QuickActionType = 'advance' | 'reject' | 'schedule';

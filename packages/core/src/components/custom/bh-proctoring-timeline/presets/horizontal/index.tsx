@@ -106,17 +106,6 @@ function getDotSize(severity: string | undefined): number {
 const NOW = new Date();
 const TWO_HOURS_AGO = new Date(NOW.getTime() - 2 * 60 * 60 * 1000);
 
-const MOCK_EVENTS: TimelineEventView[] = [
-  { event: { id: 'tl-1', eventType: 'screen_share', severity: 'critical', timestamp: new Date(NOW.getTime() - 15 * 60 * 1000) }, candidateName: 'Sarah Johnson', label: 'Screen share detected' },
-  { event: { id: 'tl-2', eventType: 'copy_paste', severity: 'high', timestamp: new Date(NOW.getTime() - 30 * 60 * 1000) }, candidateName: 'Michael Chen', label: 'Large paste detected' },
-  { event: { id: 'tl-3', eventType: 'tab_switch', severity: 'medium', timestamp: new Date(NOW.getTime() - 45 * 60 * 1000) }, candidateName: 'Emily Rodriguez' },
-  { event: { id: 'tl-4', eventType: 'unusual_typing', severity: 'medium', timestamp: new Date(NOW.getTime() - 55 * 60 * 1000) }, candidateName: 'James Kim' },
-  { event: { id: 'tl-5', eventType: 'browser_focus_lost', severity: 'low', timestamp: new Date(NOW.getTime() - 70 * 60 * 1000) }, candidateName: 'Anna Kowalski' },
-  { event: { id: 'tl-6', eventType: 'tab_switch', severity: 'low', timestamp: new Date(NOW.getTime() - 85 * 60 * 1000) }, candidateName: 'David Park' },
-  { event: { id: 'tl-7', eventType: 'copy_paste', severity: 'high', timestamp: new Date(NOW.getTime() - 100 * 60 * 1000) }, candidateName: 'Lisa Martinez', label: 'Multiple pastes' },
-  { event: { id: 'tl-8', eventType: 'browser_focus_lost', severity: 'medium', timestamp: new Date(NOW.getTime() - 110 * 60 * 1000) }, candidateName: 'Robert Taylor' },
-];
-
 /* ================================================================== */
 /*  Horizontal Preset                                                  */
 /* ================================================================== */
@@ -131,7 +120,7 @@ export const HorizontalBhProctoringTimeline = createPreset<BhProctoringTimelineP
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events: rawEvents = MOCK_EVENTS,
+      events: rawEvents = [],
       startTime = TWO_HOURS_AGO,
       endTime = NOW,
       onEventClick,
@@ -142,11 +131,10 @@ export const HorizontalBhProctoringTimeline = createPreset<BhProctoringTimelineP
       style,
     } = props;
 
-    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
 
     const [hoveredEvent, setHoveredEvent] = useState<string | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -474,6 +462,17 @@ export const HorizontalBhProctoringTimeline = createPreset<BhProctoringTimelineP
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: t.spacing[1] }}>
                             {itemLabel}
                           </Text>
+                        )}
+                        {(item.reviewed || item.dismissed) && (
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[1] }}>
+                            <Text style={{
+                              fontSize: t.typography.fontSize.xs,
+                              color: item.dismissed ? t.colors.neutral[400] : t.colors.successScale[300],
+                            }}>
+                              {item.dismissed ? 'Dismissed' : 'Reviewed'}
+                              {item.reviewedBy ? ` by ${item.reviewedBy}` : ''}
+                            </Text>
+                          </Box>
                         )}
                         {/* Tooltip arrow */}
                         <Box style={{

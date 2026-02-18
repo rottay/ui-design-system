@@ -67,45 +67,6 @@ function getTeamPerformanceScore(team: RecruiterTeam): number {
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: RecruiterTeam[] = [
-  { id: 't1', tenantId: 't', companyId: 'c', name: 'Engineering Hiring', code: 'ENG', type: 'technical', description: null, leaderId: 'l1', managerId: null, directorId: null, members: [], activeMemberCount: 6, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 12, currentUtilization: 78, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 88 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't2', tenantId: 't', companyId: 'c', name: 'Product & Design', code: 'PD', type: 'general', description: null, leaderId: 'l2', managerId: null, directorId: null, members: [], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 8, currentUtilization: 65, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 82 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't3', tenantId: 't', companyId: 'c', name: 'GTM Recruiting', code: 'GTM', type: 'volume', description: null, leaderId: 'l3', managerId: null, directorId: null, members: [], activeMemberCount: 5, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 10, currentUtilization: 92, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 74 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't4', tenantId: 't', companyId: 'c', name: 'Executive Search', code: 'EXEC', type: 'executive', description: null, leaderId: 'l4', managerId: null, directorId: null, members: [], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 4, currentUtilization: 56, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 91 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't5', tenantId: 't', companyId: 'c', name: 'Campus & Intern', code: 'CAMP', type: 'specialized', description: null, leaderId: 'l5', managerId: null, directorId: null, members: [], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 80, currentActivePositions: 6, currentUtilization: 42, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 79 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't6', tenantId: 't', companyId: 'c', name: 'Remote Talent', code: 'REM', type: 'general', description: null, leaderId: 'l6', managerId: null, directorId: null, members: [], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 7, currentUtilization: 88, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 85 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-];
-
-const MOCK_MEMBERS: TeamMember[] = [
-  { id: 'm1', name: 'Sofia Martinez', role: 'Team Lead', allocationPercent: 80, activeJobs: 4, hires: 6 },
-  { id: 'm2', name: 'Alex Kim', role: 'Sr. Recruiter', allocationPercent: 95, activeJobs: 5, hires: 4 },
-  { id: 'm3', name: 'Rachel Green', role: 'Recruiter', allocationPercent: 70, activeJobs: 3, hires: 3 },
-  { id: 'm4', name: 'Tom Baker', role: 'Jr. Recruiter', allocationPercent: 60, activeJobs: 2, hires: 2 },
-  { id: 'm5', name: 'Nina Patel', role: 'Sourcer', allocationPercent: 85, activeJobs: 3, hires: 2 },
-  { id: 'm6', name: 'Dave Johnson', role: 'Coordinator', allocationPercent: 40, activeJobs: 1, hires: 1 },
-];
-
-const MOCK_KPIS: TeamKpiData = {
-  hiresVsTarget: { actual: 18, target: 24 },
-  velocityTrend: [12, 14, 11, 16, 18, 15, 20, 22, 18, 24],
-  slaCompliance: 87,
-  satisfactionScore: 4.3,
-};
-
-const MOCK_SPRINT: SprintData = {
-  total: 32,
-  completed: 18,
-  inProgress: 9,
-  blocked: 5,
-  burndownData: [32, 30, 28, 25, 22, 20, 18, 17, 15, 14, 12, 9],
-};
-
-const MOCK_TARGETS: TeamTarget[] = [
-  { metric: 'Hires This Quarter', period: 'quarterly', value: 45, current: 32 },
-  { metric: 'Avg Time-to-Fill', period: 'quarterly', value: 28, current: 24 },
-  { metric: 'Monthly Offers', period: 'monthly', value: 12, current: 9 },
-  { metric: 'Source Quality', period: 'monthly', value: 90, current: 84 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  SVG Helpers                                                        */
@@ -168,11 +129,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
       style,
     } = props;
 
-    const teams = teamsProp?.length ? teamsProp : MOCK_TEAMS;
-    const members = membersProp?.length ? membersProp : MOCK_MEMBERS;
-    const kpis = kpisProp ?? MOCK_KPIS;
-    const sprint = sprintProp ?? MOCK_SPRINT;
-    const targets = targetsProp?.length ? targetsProp : MOCK_TARGETS;
+    const teams = teamsProp?.length ? teamsProp : [];
+    const members = membersProp?.length ? membersProp : [];
+    const kpis = kpisProp ?? {} as Partial<TeamKpiData>;
+    const sprint = sprintProp ?? {} as Partial<SprintData>;
+    const targets = targetsProp?.length ? targetsProp : [];
 
     /* -- Internal state ---------------------------------------------- */
     const [intSelected, setIntSelected] = useState<string | null>(teams[0]?.id ?? null);
@@ -529,9 +490,9 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
 
               {/* KPI cards */}
               <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
-                <KpiMini label="Hires vs Target" value={`${kpis.hiresVsTarget.actual}/${kpis.hiresVsTarget.target}`} icon={<Target size={14} />} scale="successScale" />
-                <KpiMini label="SLA Compliance" value={`${kpis.slaCompliance}%`} icon={<CheckCircle2 size={14} />} scale="infoScale" />
-                <KpiMini label="Satisfaction" value={`${kpis.satisfactionScore}/5`} icon={<Star size={14} />} scale="warningScale" />
+                <KpiMini label="Hires vs Target" value={`${kpis.hiresVsTarget?.actual ?? 0}/${kpis.hiresVsTarget?.target ?? 0}`} icon={<Target size={14} />} scale="successScale" />
+                <KpiMini label="SLA Compliance" value={`${kpis.slaCompliance ?? 0}%`} icon={<CheckCircle2 size={14} />} scale="infoScale" />
+                <KpiMini label="Satisfaction" value={`${kpis.satisfactionScore ?? 0}/5`} icon={<Star size={14} />} scale="warningScale" />
                 <KpiMini label="Performance" value={`${getTeamPerformanceScore(activeTeam)}`} icon={<Award size={14} />} scale="primaryScale" />
               </Box>
 
@@ -652,23 +613,23 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         const r2 = 40;
                         const sw2 = 7;
                         const sz2 = (r2 + sw2) * 2;
-                        const ring2 = perfRing(sprint.completed / sprint.total * 100, r2);
+                        const ring2 = perfRing((sprint.completed ?? 0) / (sprint.total || 1) * 100, r2);
                         return (
                           <svg width={sz2} height={sz2} viewBox={`0 0 ${sz2} ${sz2}`}>
                             <circle cx={sz2 / 2} cy={sz2 / 2} r={r2} fill="none" stroke={t.colors.neutral[100]} strokeWidth={sw2} />
                             <circle cx={sz2 / 2} cy={sz2 / 2} r={r2} fill="none" stroke={t.colors.successScale[500]} strokeWidth={sw2} strokeDasharray={ring2.dashArray} strokeLinecap="round" transform={`rotate(-90 ${sz2 / 2} ${sz2 / 2})`} />
-                            <text x={sz2 / 2} y={sz2 / 2 - 6} textAnchor="middle" dominantBaseline="central" fill={t.colors.neutral[900]} fontSize={t.typography.fontSize.lg} fontWeight={t.typography.fontWeight.bold}>{Math.round(sprint.completed / sprint.total * 100)}%</text>
+                            <text x={sz2 / 2} y={sz2 / 2 - 6} textAnchor="middle" dominantBaseline="central" fill={t.colors.neutral[900]} fontSize={t.typography.fontSize.lg} fontWeight={t.typography.fontWeight.bold}>{Math.round((sprint.completed ?? 0) / (sprint.total || 1) * 100)}%</text>
                             <text x={sz2 / 2} y={sz2 / 2 + 10} textAnchor="middle" dominantBaseline="central" fill={t.colors.neutral[500]} fontSize={t.typography.fontSize.xs}>done</text>
                           </svg>
                         );
                       })()}
                     </Box>
                     {[
-                      { label: 'Completed', value: sprint.completed, color: t.colors.successScale[500] },
-                      { label: 'In Progress', value: sprint.inProgress, color: t.colors.primaryScale[500] },
-                      { label: 'Blocked', value: sprint.blocked, color: t.colors.errorScale[500] },
+                      { label: 'Completed', value: sprint.completed ?? 0, color: t.colors.successScale[500] },
+                      { label: 'In Progress', value: sprint.inProgress ?? 0, color: t.colors.primaryScale[500] },
+                      { label: 'Blocked', value: sprint.blocked ?? 0, color: t.colors.errorScale[500] },
                     ].map((item) => {
-                      const bar = createProgressBarStyle(t, { color: item.color, percent: clamp(item.value, sprint.total) });
+                      const bar = createProgressBarStyle(t, { color: item.color, percent: clamp(item.value, sprint.total ?? 0) });
                       return (
                         <Box key={item.label} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], width: 80, flexShrink: 0 }}>{item.label}</Text>
@@ -682,7 +643,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                   </Box>
 
                   {/* Velocity sparkline */}
-                  {kpis.velocityTrend.length > 1 && (
+                  {(kpis.velocityTrend ?? []).length > 1 && (
                     <Box style={{ ...card }}>
                       <SectionHeader icon={<TrendingUp size={16} />} label="Velocity Trend" />
                       <svg width="100%" height="60" viewBox="0 0 160 60" preserveAspectRatio="none">
@@ -692,8 +653,8 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                             <stop offset="100%" stopColor={t.colors.primaryScale[400]} stopOpacity="0" />
                           </linearGradient>
                         </defs>
-                        <polygon points={sparkArea(kpis.velocityTrend, 160, 60)} fill="url(#tb-vel-g)" />
-                        <polyline points={sparkPts(kpis.velocityTrend, 160, 60)} fill="none" stroke={t.colors.primaryScale[500]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <polygon points={sparkArea(kpis.velocityTrend ?? [], 160, 60)} fill="url(#tb-vel-g)" />
+                        <polyline points={sparkPts(kpis.velocityTrend ?? [], 160, 60)} fill="none" stroke={t.colors.primaryScale[500]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Box>
                   )}

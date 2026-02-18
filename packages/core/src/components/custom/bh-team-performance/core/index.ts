@@ -28,6 +28,18 @@ export interface TeamPerfData {
   timeToFill: number;
   qualityScore: number;
   satisfaction: number;
+  /** Total revenue generated (from DBTeam.performanceMetrics.totalRevenue) */
+  totalRevenue?: number;
+  /** Currency for revenue display */
+  revenueCurrency?: string;
+  /** Offer acceptance rate (from DBTeam.performanceMetrics.offerAcceptanceRate) */
+  offerAcceptanceRate?: number;
+  /** Average candidates per position (computed metric) */
+  avgCandidatesPerPosition?: number;
+  /** Total placements made (from DBTeam.performanceMetrics.totalPlacements) */
+  totalPlacements?: number;
+  /** Current team utilization percentage (from DBTeam.currentUtilization) */
+  currentUtilization?: number;
 }
 
 export interface BhTeamPerformanceProps extends EngineAwareProps {

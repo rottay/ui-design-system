@@ -21,6 +21,14 @@ export interface RecruiterWorkloadItem {
   capacity?: number;
   interviews?: number;
   pendingTasks?: number;
+  avatar?: string;
+  utilizationPercent?: number;
+  avgTimePerCandidate?: number;
+  activeCandidates?: number;
+  slaBreachCount?: number;
+  overdue?: number;
+  department?: string;
+  teamName?: string;
 }
 
 export interface BhRecruiterWorkloadProps extends EngineAwareProps {

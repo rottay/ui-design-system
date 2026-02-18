@@ -12,11 +12,16 @@ export interface TimeToHireDataPoint {
   date?: string;
   department?: string;
   days?: number;
+  positionTitle?: string;
+  recruiterName?: string;
+  stage?: string;
 }
 
 export interface DepartmentConfig {
   name?: string;
   color?: string;
+  targetDays?: number;
+  avgDays?: number;
 }
 
 export interface BhTimeToHireChartProps extends EngineAwareProps {
@@ -39,6 +44,15 @@ export interface BhTimeToHireChartProps extends EngineAwareProps {
 
   /** Callback when a data point is clicked */
   onDataPointClick?: (point: TimeToHireDataPoint) => void;
+
+  /** Benchmark days to compare against */
+  benchmark?: number;
+
+  /** Whether to show trend lines */
+  showTrend?: boolean;
+
+  /** Time period for data */
+  period?: '30d' | '90d' | 'year';
 
   /** Loading state */
   loading?: boolean;

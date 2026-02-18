@@ -30,12 +30,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_ANNOTATIONS: DocumentAnnotation[] = [
-  { id: 'ann-1', page: 1, x: 30, y: 20, text: 'Strong leadership experience', color: undefined },
-  { id: 'ann-2', page: 1, x: 60, y: 45, text: 'Check references for this claim' },
-  { id: 'ann-3', page: 2, x: 40, y: 30, text: 'Relevant project experience' },
-];
-
 /* ================================================================== */
 /*  Viewer Preset                                                      */
 /* ================================================================== */
@@ -50,11 +44,12 @@ export const ViewerBhDocumentViewer = createPreset<BhDocumentViewerProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
+      documentUrl,
       documentName = 'Resume_Sarah_Johnson.pdf',
       documentType = 'pdf',
       totalPages = 3,
       currentPage: propPage = 1,
-      annotations: rawAnnotations = MOCK_ANNOTATIONS,
+      annotations: rawAnnotations = [],
       onPageChange,
       onAnnotationClick,
       onDownload,
@@ -63,7 +58,7 @@ export const ViewerBhDocumentViewer = createPreset<BhDocumentViewerProps>({
       style,
     } = props;
 
-    const annotations = Array.isArray(rawAnnotations) ? rawAnnotations : MOCK_ANNOTATIONS;
+    const annotations = Array.isArray(rawAnnotations) ? rawAnnotations : [];
 
     const [page, setPage] = useState(propPage);
     const [zoom, setZoom] = useState(propZoom);
@@ -273,17 +268,39 @@ export const ViewerBhDocumentViewer = createPreset<BhDocumentViewerProps>({
             justifyContent: 'center',
             transition: `width ${t.motion.hover}, height ${t.motion.hover}`,
           }} role="document" aria-label={`${documentName} page ${page}`}>
-            <FileText size={48} color={t.colors.neutral[200]} />
-            <Text style={{
-              fontSize: t.typography.fontSize.sm,
-              color: t.colors.neutral[400],
-              marginTop: t.spacing[2],
-            }}>
-              {documentName}
-            </Text>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300]}}>
-              Page {page} of {totalPages}
-            </Text>
+            {documentUrl ? (
+              <Box style={{
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }}>
+                <iframe
+                  src={documentUrl}
+                  title={documentName}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                  }}
+                />
+              </Box>
+            ) : (
+              <>
+                <FileText size={48} color={t.colors.neutral[200]} />
+                <Text style={{
+                  fontSize: t.typography.fontSize.sm,
+                  color: t.colors.neutral[400],
+                  marginTop: t.spacing[2],
+                }}>
+                  {documentName}
+                </Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300]}}>
+                  Page {page} of {totalPages}
+                </Text>
+              </>
+            )}
 
             {/* Annotation markers */}
             {pageAnnotations.map((ann) => (

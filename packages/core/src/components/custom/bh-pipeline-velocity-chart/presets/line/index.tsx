@@ -53,8 +53,6 @@ function generateMockData(period: VelocityPeriod): VelocityDataPoint[] {
   return data;
 }
 
-const MOCK_DATA_30 = generateMockData(30);
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -103,6 +101,8 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
       showTarget = true,
       showAverage = true,
       onPeriodChange,
+      metric,
+      benchmarkData,
       loading,
       className,
       style,
@@ -112,7 +112,7 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
     const [activePeriod, setActivePeriod] = useState<VelocityPeriod>(periodProp ?? 30 as VelocityPeriod);
     const svgRef = useRef<SVGSVGElement>(null);
 
-    const data = useMemo(() => dataProp ?? MOCK_DATA_30, [dataProp]);
+    const data = useMemo(() => dataProp ?? [] as VelocityDataPoint[], [dataProp]);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -320,6 +320,17 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
               );
             })}
           </Box>
+          {metric && (
+            <Box style={{
+              ...createBadgeStyle(t, 'info'),
+              borderRadius: badgeRadius,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 4,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{metric}</Text>
+            </Box>
+          )}
         </Box>
 
         {/* Stats Summary Row */}
@@ -464,6 +475,25 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
                     opacity={0.7}
                   />
                 )}
+
+                {/* Benchmark data overlay */}
+                {benchmarkData && benchmarkData.length > 1 && chartMetrics && (() => {
+                  const bmPoints = benchmarkData.map((d, i) => ({
+                    x: padLeft + (i / Math.max(benchmarkData.length - 1, 1)) * chartW,
+                    y: padTop + chartH - ((d.value ?? 0) / (chartMetrics.maxVal * 1.1)) * chartH,
+                  }));
+                  const bmPath = buildPathD(bmPoints, false);
+                  return bmPath ? (
+                    <path
+                      d={bmPath}
+                      fill="none"
+                      stroke={t.colors.infoScale[400]}
+                      strokeWidth={1.5}
+                      strokeDasharray="4 3"
+                      opacity={0.6}
+                    />
+                  ) : null;
+                })()}
 
                 {/* Main line */}
                 {linePath && (

@@ -40,6 +40,9 @@ import {
   getPersonalityTypography,
   createDividerStyle,
   createProgressBarStyle,
+  createMetadataFieldStyle,
+  createStatValueStyle, createStatLabelStyle,
+  createTrendStyle, formatScore, ICON_SIZES,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
@@ -57,76 +60,6 @@ import type {
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_KPIS: ScoringKpi[] = [
-  { label: 'Avg Composite Score', value: 74.8, trend: 2.6, previousValue: 72.2 },
-  { label: 'Pass Rate', value: 68, trend: 5.1, previousValue: 62.9 },
-  { label: 'Knockout Rate', value: 7.4, trend: -1.8, previousValue: 9.2 },
-  { label: 'Calibration Delta', value: 3.2, trend: -0.8, previousValue: 4.0 },
-  { label: 'Evaluations This Period', value: 342, trend: 14, previousValue: 328 },
-];
-
-const MOCK_DISTRIBUTION: LevelDistribution[] = [
-  { level: 'Exceptional (90+)', count: 32, colorKey: 'success' },
-  { level: 'Strong (75-89)', count: 98, colorKey: 'primary' },
-  { level: 'Adequate (60-74)', count: 124, colorKey: 'warning' },
-  { level: 'Below (40-59)', count: 56, colorKey: 'error' },
-  { level: 'Poor (0-39)', count: 18, colorKey: 'secondary' },
-];
-
-const MOCK_HEATMAP: HeatmapCell[] = [
-  { dimension: 'Technical Skills', job: 'Sr. Engineer', avgScore: 82 },
-  { dimension: 'Technical Skills', job: 'Product Manager', avgScore: 65 },
-  { dimension: 'Technical Skills', job: 'Data Analyst', avgScore: 78 },
-  { dimension: 'Technical Skills', job: 'UX Designer', avgScore: 58 },
-  { dimension: 'Communication', job: 'Sr. Engineer', avgScore: 71 },
-  { dimension: 'Communication', job: 'Product Manager', avgScore: 88 },
-  { dimension: 'Communication', job: 'Data Analyst', avgScore: 74 },
-  { dimension: 'Communication', job: 'UX Designer', avgScore: 85 },
-  { dimension: 'Leadership', job: 'Sr. Engineer', avgScore: 64 },
-  { dimension: 'Leadership', job: 'Product Manager', avgScore: 79 },
-  { dimension: 'Leadership', job: 'Data Analyst', avgScore: 55 },
-  { dimension: 'Leadership', job: 'UX Designer', avgScore: 61 },
-  { dimension: 'Problem Solving', job: 'Sr. Engineer', avgScore: 86 },
-  { dimension: 'Problem Solving', job: 'Product Manager', avgScore: 76 },
-  { dimension: 'Problem Solving', job: 'Data Analyst', avgScore: 83 },
-  { dimension: 'Problem Solving', job: 'UX Designer', avgScore: 72 },
-  { dimension: 'Culture Fit', job: 'Sr. Engineer', avgScore: 77 },
-  { dimension: 'Culture Fit', job: 'Product Manager', avgScore: 82 },
-  { dimension: 'Culture Fit', job: 'Data Analyst', avgScore: 80 },
-  { dimension: 'Culture Fit', job: 'UX Designer', avgScore: 84 },
-];
-
-const MOCK_KNOCKOUTS: KnockoutStat[] = [
-  { dimension: 'Technical Skills', knockoutCount: 14, totalEvaluations: 342 },
-  { dimension: 'Communication', knockoutCount: 8, totalEvaluations: 342 },
-  { dimension: 'Culture Fit', knockoutCount: 6, totalEvaluations: 342 },
-  { dimension: 'Problem Solving', knockoutCount: 4, totalEvaluations: 342 },
-  { dimension: 'Leadership', knockoutCount: 2, totalEvaluations: 342 },
-];
-
-const MOCK_TRENDS: TrendPoint[] = [
-  { date: 'Jan', value: 68 }, { date: 'Feb', value: 70 }, { date: 'Mar', value: 69 },
-  { date: 'Apr', value: 72 }, { date: 'May', value: 71 }, { date: 'Jun', value: 74 },
-  { date: 'Jul', value: 73 }, { date: 'Aug', value: 76 }, { date: 'Sep', value: 75 },
-  { date: 'Oct', value: 74 }, { date: 'Nov', value: 77 }, { date: 'Dec', value: 79 },
-];
-
-const MOCK_COHORTS: CohortComparison[] = [
-  { groupName: 'Engineering', avgScore: 78.2, count: 142 },
-  { groupName: 'Product', avgScore: 75.8, count: 68 },
-  { groupName: 'Design', avgScore: 73.4, count: 52 },
-  { groupName: 'Data Science', avgScore: 80.1, count: 44 },
-  { groupName: 'Marketing', avgScore: 69.6, count: 36 },
-];
-
-const MOCK_GAPS: SkillGapSummary[] = [
-  { dimension: 'System Design', avgScore: 62, gapFromTarget: -13 },
-  { dimension: 'Data Modeling', avgScore: 58, gapFromTarget: -17 },
-  { dimension: 'API Design', avgScore: 71, gapFromTarget: -4 },
-  { dimension: 'User Research', avgScore: 68, gapFromTarget: -7 },
-  { dimension: 'Team Collaboration', avgScore: 82, gapFromTarget: 7 },
-  { dimension: 'Strategic Thinking', avgScore: 65, gapFromTarget: -10 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -209,13 +142,13 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
       style,
     } = props;
 
-    const kpis = kpisProp?.length ? kpisProp : MOCK_KPIS;
-    const levelDistribution = distProp?.length ? distProp : MOCK_DISTRIBUTION;
-    const heatmapData = heatProp?.length ? heatProp : MOCK_HEATMAP;
-    const knockoutStats = koProp?.length ? koProp : MOCK_KNOCKOUTS;
-    const trendData = trendProp?.length ? trendProp : MOCK_TRENDS;
-    const cohortComparisons = cohortProp?.length ? cohortProp : MOCK_COHORTS;
-    const skillGaps = gapsProp?.length ? gapsProp : MOCK_GAPS;
+    const kpis = kpisProp?.length ? kpisProp : [];
+    const levelDistribution = distProp?.length ? distProp : [];
+    const heatmapData = heatProp?.length ? heatProp : [];
+    const knockoutStats = koProp?.length ? koProp : [];
+    const trendData = trendProp?.length ? trendProp : [];
+    const cohortComparisons = cohortProp?.length ? cohortProp : [];
+    const skillGaps = gapsProp?.length ? gapsProp : [];
 
     /* ---- State ---- */
     const [expandedSections, setExpandedSections] = useState<Set<SectionId>>(
@@ -303,7 +236,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
         >
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
             <Box style={createIconContainerStyle(t, { size: 32, color: isOpen ? t.colors.primaryScale[100] : t.colors.neutral[100] })}>
-              <Icon size={16} color={isOpen ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
+              <Icon size={ICON_SIZES.section} color={isOpen ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: isOpen ? t.colors.primaryScale[700] : t.colors.neutral[800], letterSpacing: ptypo.headingLetterSpacing }}>
@@ -327,11 +260,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
         <Box style={{ ...card, ...hoverStyles.base }}>
           <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>{kpi.label}</Text>
           <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[2] }}>
-            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
-              {typeof kpi.value === 'number' && (kpi.value ?? 0) % 1 !== 0 ? (kpi.value ?? 0).toFixed(1) : kpi.value ?? 0}
+            <Text style={createStatValueStyle(t, { size: '2xl' })}>
+              {typeof kpi.value === 'number' && (kpi.value ?? 0) % 1 !== 0 ? formatScore(kpi.value) : kpi.value ?? 0}
             </Text>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <TrendIcon size={14} color={trendColor} />
+            <Box style={createTrendStyle(t, kpi.trend ?? 0).container}>
+              <TrendIcon size={ICON_SIZES.label} color={trendColor} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: trendColor, fontWeight: t.typography.fontWeight.medium }}>
                 {isUp ? '+' : ''}{typeof kpi.trend === 'number' && (kpi.trend ?? 0) % 1 !== 0 ? (kpi.trend ?? 0).toFixed(1) : kpi.trend ?? 0}%
               </Text>
@@ -804,7 +737,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                         </Box>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: scoreColor }}>
-                            {(cohort.avgScore ?? 0).toFixed(1)}
+                            {formatScore(cohort.avgScore)}
                           </Text>
                           <Box style={{
                             padding: `2px ${t.spacing[2]}px`,

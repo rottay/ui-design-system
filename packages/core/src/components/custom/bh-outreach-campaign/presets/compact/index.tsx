@@ -25,12 +25,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_CAMPAIGNS: CampaignData[] = [
-  { id: 'c-1', name: 'Senior Engineers Q1', status: 'active', sent: 245, opened: 178, replied: 42, startDate: new Date(Date.now() - 7 * 86400000) },
-  { id: 'c-2', name: 'Product Designers', status: 'active', sent: 120, opened: 89, replied: 23, startDate: new Date(Date.now() - 14 * 86400000) },
-  { id: 'c-3', name: 'Data Science Sourcing', status: 'paused', sent: 340, opened: 201, replied: 34, startDate: new Date(Date.now() - 30 * 86400000) },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -67,15 +61,17 @@ export const CompactBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      campaigns: rawCampaigns = MOCK_CAMPAIGNS,
+      campaigns: rawCampaigns = [],
+      activities: rawActivities,
+      avgResponseRate,
       onCampaignClick,
       selectedCampaignId,
       className,
       style,
     } = props;
 
-    const campaigns = Array.isArray(rawCampaigns) ? rawCampaigns : MOCK_CAMPAIGNS;
-
+    const campaigns = Array.isArray(rawCampaigns) ? rawCampaigns : [];
+    const activities = Array.isArray(rawActivities) ? rawActivities : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -117,14 +113,44 @@ export const CompactBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
               Campaigns
             </Text>
           </Box>
-          <Box style={{
-            ...createBadgeStyle(t, 'success'),
-            borderRadius: badgeRadius,
-            padding: `1px ${t.spacing[2]}px`,
-          }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs }}>{activeCampaigns} active</Text>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            <Box style={{
+              ...createBadgeStyle(t, 'success'),
+              borderRadius: badgeRadius,
+              padding: `1px ${t.spacing[2]}px`,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>{activeCampaigns} active</Text>
+            </Box>
+            {avgResponseRate != null && (
+              <Box style={{
+                ...createBadgeStyle(t, 'warning'),
+                borderRadius: badgeRadius,
+                padding: `1px ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{avgResponseRate.toFixed(1)}%</Text>
+              </Box>
+            )}
           </Box>
         </Box>
+
+        {/* Activities summary */}
+        {activities.length > 0 && (
+          <Box style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[50]}`,
+            backgroundColor: t.colors.common.white,
+          }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+              Total Activities
+            </Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>
+              {activities.length}
+            </Text>
+          </Box>
+        )}
 
         {/* Campaign list */}
         <Box role="list" aria-label="Outreach campaigns">

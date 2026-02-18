@@ -92,37 +92,6 @@ import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STATS = {
-  totalEvents: 127,
-  unreviewedCount: 34,
-  suspiciousCandidates: 8,
-  averageRiskScore: 0.42,
-};
-
-const MOCK_SEVERITY: SeverityCount[] = [
-  { severity: 'critical', count: 5 },
-  { severity: 'high', count: 18 },
-  { severity: 'medium', count: 42 },
-  { severity: 'low', count: 62 },
-];
-
-const MOCK_EVENT_TYPES: EventTypeCount[] = [
-  { eventType: 'tab_switch', count: 45 },
-  { eventType: 'browser_focus_lost', count: 32 },
-  { eventType: 'copy_paste', count: 24 },
-  { eventType: 'unusual_typing', count: 16 },
-  { eventType: 'screen_share', count: 10 },
-];
-
-const MOCK_EVENTS: ProctoringEventSummary[] = [
-  { id: 'pe-1', scorableId: 'int-1', candidateName: 'Sarah Johnson', eventType: 'screen_share', severity: 'critical', timestamp: new Date(Date.now() - 300000), reviewed: false, dismissed: false },
-  { id: 'pe-2', scorableId: 'int-2', candidateName: 'Michael Chen', eventType: 'copy_paste', severity: 'high', timestamp: new Date(Date.now() - 900000), reviewed: false, dismissed: false },
-  { id: 'pe-3', scorableId: 'int-3', candidateName: 'Emily Rodriguez', eventType: 'tab_switch', severity: 'medium', timestamp: new Date(Date.now() - 1800000), reviewed: true, dismissed: false },
-  { id: 'pe-4', scorableId: 'int-4', candidateName: 'James Kim', eventType: 'unusual_typing', severity: 'medium', timestamp: new Date(Date.now() - 3600000), reviewed: false, dismissed: false },
-  { id: 'pe-5', scorableId: 'int-1', candidateName: 'Sarah Johnson', eventType: 'tab_switch', severity: 'low', timestamp: new Date(Date.now() - 5400000), reviewed: true, dismissed: true },
-  { id: 'pe-6', scorableId: 'int-5', candidateName: 'Anna Kowalski', eventType: 'browser_focus_lost', severity: 'low', timestamp: new Date(Date.now() - 7200000), reviewed: false, dismissed: false },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Donut Chart Component                                              */
 /* ------------------------------------------------------------------ */
@@ -217,6 +186,7 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
       severityCounts: rawSeverityCounts = [],
       eventTypeCounts: rawEventTypeCounts = [],
       recentEvents: rawRecentEvents = [],
+      dateRange,
       onEventClick,
       onReviewEvent,
       onDismissEvent,
@@ -231,7 +201,6 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
     const recentEvents = Array.isArray(rawRecentEvents) ? rawRecentEvents : [];
 
     const [hoveredEvent, setHoveredEvent] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -322,7 +291,7 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
                   Proctoring Dashboard
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
-                  Session integrity monitoring and fraud detection
+                  Session integrity monitoring and fraud detection{dateRange && Array.isArray(dateRange) && dateRange.length === 2 ? ` | ${dateRange[0]} - ${dateRange[1]}` : ''}
                 </Text>
               </Box>
             </Box>
@@ -577,17 +546,24 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
                     {/* Status + Actions */}
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexShrink: 0 }}>
                       {event.reviewed && (
-                        <Box style={{
-                          ...createBadgeStyle(t, event.dismissed ? 'secondary' : 'success'),
-                          borderRadius: badgeRadius,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: t.spacing[1],
-                        }}>
-                          {event.dismissed ? <EyeOff size={10} /> : <CheckCircle size={10} />}
-                          <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                            {event.dismissed ? 'Dismissed' : 'Reviewed'}
-                          </Text>
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-end', gap: t.spacing[1] }}>
+                          <Box style={{
+                            ...createBadgeStyle(t, event.dismissed ? 'secondary' : 'success'),
+                            borderRadius: badgeRadius,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: t.spacing[1],
+                          }}>
+                            {event.dismissed ? <EyeOff size={10} /> : <CheckCircle size={10} />}
+                            <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                              {event.dismissed ? 'Dismissed' : 'Reviewed'}
+                            </Text>
+                          </Box>
+                          {event.reviewedBy && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                              by {event.reviewedBy}
+                            </Text>
+                          )}
                         </Box>
                       )}
                       {!event.reviewed && isHovered && (

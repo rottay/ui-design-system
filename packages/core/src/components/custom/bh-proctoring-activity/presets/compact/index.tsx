@@ -69,14 +69,6 @@ import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENTS: ProctoringActivityEvent[] = [
-  { id: 'pa-c1', candidateName: 'Sarah Johnson', eventType: 'screen_share', severity: 'critical', timestamp: new Date(Date.now() - 120000), description: 'Screen sharing detected' },
-  { id: 'pa-c2', candidateName: 'Michael Chen', eventType: 'copy_paste', severity: 'high', timestamp: new Date(Date.now() - 480000), description: 'Clipboard paste detected' },
-  { id: 'pa-c3', candidateName: 'Emily Rodriguez', eventType: 'tab_switch', severity: 'medium', timestamp: new Date(Date.now() - 900000), description: 'Tab switch for 12s' },
-  { id: 'pa-c4', candidateName: 'James Kim', eventType: 'unusual_typing', severity: 'medium', timestamp: new Date(Date.now() - 1500000), description: 'Typing speed anomaly' },
-  { id: 'pa-c5', candidateName: 'Anna Kowalski', eventType: 'browser_focus_lost', severity: 'low', timestamp: new Date(Date.now() - 2400000), description: 'Brief focus loss' },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -91,7 +83,7 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events: rawEvents = MOCK_EVENTS,
+      events: rawEvents = [],
       onEventClick,
       maxItems = 10,
       showTimestamps = true,
@@ -99,8 +91,7 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
       style,
     } = props;
 
-    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
-
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

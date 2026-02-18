@@ -28,7 +28,7 @@ import type { DesignTokens } from '../../../../../types';
 import {
   Bot, User, Calendar, Clock, Globe, Timer, Settings, Send, X,
   Sparkles, DollarSign, Mail, CheckCircle, AlertCircle, Tag,
-  Thermometer, MessageSquare, FileText, Search,
+  Thermometer, MessageSquare, FileText, Search, Shield,
 } from 'lucide-react';
 
 const TIMEZONE_OPTIONS = [
@@ -131,6 +131,11 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{selectedCandidate.jobTitle}</Text>
                     <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{selectedCandidate.currentStage}</Box>
+                    {selectedCandidate.aiMatchScore != null && (
+                      <Box style={{ ...createBadgeStyle(t, selectedCandidate.aiMatchScore >= 80 ? 'success' : selectedCandidate.aiMatchScore >= 50 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs }}>AI Match: {selectedCandidate.aiMatchScore}%</Text>
+                      </Box>
+                    )}
                   </Box>
                 </Box>
               </Box>
@@ -431,10 +436,19 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                 ))}
               </Box>
             </Box>
-            {interviewType.type === 'ai' && estimatedCost !== undefined && (
+            {(interviewType.type === 'ai' && estimatedCost !== undefined) || interviewType.estimatedCost != null ? (
               <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.infoScale[50], border: `${bdr} ${t.colors.infoScale[200]}`, display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
                 <DollarSign size={14} color={t.colors.infoScale[600]} />
-                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.infoScale[700], fontWeight: t.typography.fontWeight.medium }}>Estimated cost: ${estimatedCost.toFixed(2)}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.infoScale[700], fontWeight: t.typography.fontWeight.medium }}>
+                  Estimated cost: ${(interviewType.estimatedCost ?? estimatedCost ?? 0).toFixed(2)}
+                  {interviewType.billingMode ? ` (${interviewType.billingMode.replace(/_/g, ' ')})` : ''}
+                </Text>
+              </Box>
+            ) : null}
+            {interviewType.proctoringEnabled && (
+              <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.warningScale[50], border: `${bdr} ${t.colors.warningScale[200]}`, display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                <Shield size={14} color={t.colors.warningScale[600]} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.warningScale[700], fontWeight: t.typography.fontWeight.medium }}>Proctoring enabled for this interview</Text>
               </Box>
             )}
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>

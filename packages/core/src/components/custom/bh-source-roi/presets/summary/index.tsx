@@ -50,22 +50,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_SOURCES: SourceChannel[] = [
-  { id: 's1', name: 'LinkedIn Recruiter', type: 'linkedin', candidateCount: 482, hireCount: 38, hireRate: 7.9, totalCost: 48600, costPerHire: 1279, costPerCandidate: 101, avgTimeToHireDays: 32, qualityScore: 82 },
-  { id: 's2', name: 'Employee Referrals', type: 'referral', candidateCount: 214, hireCount: 42, hireRate: 19.6, totalCost: 21000, costPerHire: 500, costPerCandidate: 98, avgTimeToHireDays: 24, qualityScore: 88 },
-  { id: 's3', name: 'Indeed', type: 'job_board', candidateCount: 1240, hireCount: 56, hireRate: 4.5, totalCost: 36800, costPerHire: 657, costPerCandidate: 30, avgTimeToHireDays: 41, qualityScore: 68 },
-  { id: 's4', name: 'Robert Half Agency', type: 'agency', candidateCount: 86, hireCount: 18, hireRate: 20.9, totalCost: 94500, costPerHire: 5250, costPerCandidate: 1099, avgTimeToHireDays: 28, qualityScore: 79 },
-  { id: 's5', name: 'Careers Page', type: 'career_site', candidateCount: 892, hireCount: 34, hireRate: 3.8, totalCost: 4200, costPerHire: 124, costPerCandidate: 5, avgTimeToHireDays: 38, qualityScore: 71 },
-  { id: 's6', name: 'Tech Meetup Events', type: 'event', candidateCount: 68, hireCount: 12, hireRate: 17.6, totalCost: 18000, costPerHire: 1500, costPerCandidate: 265, avgTimeToHireDays: 26, qualityScore: 85 },
-];
-
-const MOCK_SUMMARY: SourceRoiSummary = {
-  totalSpend: 223100,
-  totalHires: 200,
-  avgCostPerHire: 1116,
-  bestRoiSource: 'Careers Page',
-  worstRoiSource: 'Robert Half Agency',
-};
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -118,16 +102,17 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
       summary: sumProp,
       selectedSource: selProp,
       onSourceSelect,
+      budget,
+      period,
       className,
       style,
     } = props;
 
-    const sources = srcProp?.length ? srcProp : MOCK_SOURCES;
-    const summary = sumProp ?? MOCK_SUMMARY;
+    const sources = srcProp?.length ? srcProp : [];
+    const summary = (sumProp ?? {}) as Partial<SourceRoiSummary>;
 
     const [selectedId, setSelectedId] = useState<string | null>(selProp ?? null);
     const [metricView, setMetricView] = useState<'hireRate' | 'costPerHire' | 'qualityScore'>('hireRate');
-
 
     const handleSelect = useCallback((id: string) => {
       const next = selectedId === id ? null : id;
@@ -188,15 +173,39 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
           <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: typo.headingWeight, color: t.colors.neutral[900], marginBottom: t.spacing[1], letterSpacing: typo.headingLetterSpacing }}>
             Source ROI Summary
           </Text>
-          <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginBottom: t.spacing[5] }}>
-            Aggregate performance across {sources.length} sourcing channels
-          </Text>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[5] }}>
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
+              Aggregate performance across {sources.length} sourcing channels
+            </Text>
+            {period && (
+              <Box style={{
+                ...createBadgeStyle(t, 'secondary'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{period}</Text>
+              </Box>
+            )}
+            {budget !== undefined && (
+              <Box style={{
+                ...createBadgeStyle(t, 'info'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+              }}>
+                <DollarSign size={10} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Budget: {formatCurrency(budget)}</Text>
+              </Box>
+            )}
+          </Box>
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[4] }}>
             {[
-              { label: 'Total Spend', value: formatCurrency(summary.totalSpend), icon: DollarSign, color: t.colors.errorScale[500] },
-              { label: 'Total Hires', value: String(summary.totalHires), icon: Users, color: t.colors.successScale[500] },
-              { label: 'Avg Cost/Hire', value: formatCurrency(summary.avgCostPerHire), icon: Target, color: t.colors.warningScale[500] },
-              { label: 'Best ROI Source', value: summary.bestRoiSource, icon: Star, color: t.colors.primaryScale[500] },
+              { label: 'Total Spend', value: formatCurrency(summary.totalSpend ?? 0), icon: DollarSign, color: t.colors.errorScale[500] },
+              { label: 'Total Hires', value: String(summary.totalHires ?? 0), icon: Users, color: t.colors.successScale[500] },
+              { label: 'Avg Cost/Hire', value: formatCurrency(summary.avgCostPerHire ?? 0), icon: Target, color: t.colors.warningScale[500] },
+              { label: 'Best ROI Source', value: summary.bestRoiSource ?? '--', icon: Star, color: t.colors.primaryScale[500] },
             ].map((kpi, i) => {
               const Icon = kpi.icon;
               return (

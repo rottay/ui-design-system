@@ -20,12 +20,20 @@ export interface EmailTemplate {
   subject: string;
   body: string;
   variables: string[];
+  category?: string;
+  tags?: string[];
+  usageCount?: number;
+  responseRate?: number;
+  lastUsedAt?: string;
 }
 
 export interface EmailVariable {
   key: string;
   label: string;
   value: string;
+  type?: 'text' | 'date' | 'number' | 'url';
+  required?: boolean;
+  description?: string;
 }
 
 export interface BhEmailComposerProps extends EngineAwareProps {
@@ -66,6 +74,24 @@ export interface BhEmailComposerProps extends EngineAwareProps {
 
   /** Callback to trigger AI rewrite */
   onAiRewrite?: () => void;
+
+  /** CC recipients */
+  ccRecipients?: string[];
+
+  /** BCC recipients */
+  bccRecipients?: string[];
+
+  /** File attachments */
+  attachments?: Array<{ name: string; url: string; size?: number }>;
+
+  /** Schedule send for a specific time (ISO string) */
+  scheduleSendAt?: string;
+
+  /** Whether to track email opens */
+  trackOpens?: boolean;
+
+  /** Whether to track link clicks */
+  trackClicks?: boolean;
 
   /** Loading state */
   loading?: boolean;

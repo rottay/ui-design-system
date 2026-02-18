@@ -31,25 +31,9 @@ import {
 import type { DesignTokens } from '../../../../../types';
 import {
   ThumbsUp, ThumbsDown, Pause, CheckCircle, Clock, X,
-  Sparkles, ChevronRight, AlertTriangle, FileText, User,
+  Sparkles, ChevronRight, AlertTriangle, FileText, User, Users,
   MessageSquare, Calendar,
 } from 'lucide-react';
-
-/* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_CANDIDATES: DecisionCandidate[] = [
-  { id: 'c-1', name: 'Sarah Johnson', rank: 1, scorePercent: 92, highlights: ['Google experience', 'React expert'], aiRecommendation: 'Strong Advance - top 5% match', pros: ['Deep technical skills', 'Strong leadership potential', 'Cultural alignment'], cons: ['Limited backend'], riskFactors: [] },
-  { id: 'c-2', name: 'Michael Chen', rank: 2, scorePercent: 88, highlights: ['Stripe full-stack', 'Go expertise'], aiRecommendation: 'Advance - solid match', pros: ['Full-stack capability', 'Startup mindset'], cons: ['Short tenure', 'Needs mentoring'], riskFactors: ['Flight risk - has competing offers'] },
-  { id: 'c-3', name: 'Emily Rodriguez', rank: 3, scorePercent: 85, highlights: ['Staff at Meta', 'System design'], aiRecommendation: 'Advance with caution', pros: ['Staff-level experience'], cons: ['High salary expectations', 'Culture concerns'], riskFactors: ['May not accept at our range'] },
-];
-
-const DEFAULT_HISTORY: DecisionRecord[] = [
-  { candidateId: 'c-4', decision: 'advance', reason: 'Strong technical skills', decidedBy: 'Jane Doe', decidedAt: '2025-01-15T10:00:00Z' },
-  { candidateId: 'c-5', decision: 'reject', rejectCategory: 'not_qualified', reason: 'Below technical threshold', decidedBy: 'Jane Doe', decidedAt: '2025-01-14T15:30:00Z' },
-  { candidateId: 'c-6', decision: 'hold', reason: 'Waiting for references', decidedBy: 'John Smith', decidedAt: '2025-01-14T09:00:00Z' },
-];
 
 /* ---------------------------------------------------------------------------
  * ScoreRing
@@ -104,6 +88,9 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
       decision: dp, onDecisionChange,
       history: rawHistory = [], historyFilter: hfp, onHistoryFilterChange,
       advanceSteps: rawAdvanceSteps = [],
+      compareSlots: rawCompareSlots = [],
+      feedbackEnabled: feedbackEnabledProp,
+      rejectReason: rejectReasonProp,
       onSubmitDecision,
       className, style,
     } = props;
@@ -111,6 +98,9 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
     const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
     const history = Array.isArray(rawHistory) ? rawHistory : [];
     const advanceSteps = Array.isArray(rawAdvanceSteps) ? rawAdvanceSteps : [];
+    const compareSlots = Array.isArray(rawCompareSlots) ? rawCompareSlots : [];
+    const feedbackEnabled = feedbackEnabledProp ?? false;
+    const rejectReason = rejectReasonProp ?? undefined;
 
     const [iSelected, setISelected] = useState<string | null>(candidates[0]?.id ?? null);
     const [iDecision, setIDecision] = useState<DecisionFormData>({});
@@ -142,6 +132,21 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
           <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], padding: `${t.spacing[5]}px`, borderBottom: `1px solid ${t.colors.neutral[100]}` }}>
             <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>Decision Queue</Text>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{pendingCount} pending decisions</Text>
+            {/* Compare Slots + Feedback indicator */}
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
+              {compareSlots.length > 0 && (
+                <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: t.colors.infoScale[50], color: t.colors.infoScale[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <Users size={10} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{compareSlots.length} compare</Text>
+                </Box>
+              )}
+              {feedbackEnabled && (
+                <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: t.colors.successScale[50], color: t.colors.successScale[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <MessageSquare size={10} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>Feedback On</Text>
+                </Box>
+              )}
+            </Box>
           </Box>
           <Box style={{ flex: 1, overflow: 'auto' }}>
             {candidates.map(c => {
@@ -309,6 +314,23 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                           <Text style={{ fontSize: t.typography.fontSize.xs }}>{getRejectCategoryLabel(cat)}</Text>
                         </Box>
                       ))}
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Reject Reason Detail */}
+                {rejectReason && (
+                  <Box style={{ marginBottom: t.spacing[4], padding: t.spacing[3], borderRadius: t.borderRadius.lg, backgroundColor: t.colors.errorScale[50], border: `1px solid ${t.colors.errorScale[200]}` }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[700], marginBottom: t.spacing[1] }}>Previous Rejection</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.errorScale[800], display: 'block' }}>{rejectReason.reason}</Text>
+                    <Box style={{ display: 'flex', gap: t.spacing[2], marginTop: t.spacing[2] }}>
+                      <Box style={{ padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: t.colors.errorScale[100], color: t.colors.errorScale[700], fontSize: t.typography.fontSize.xs }}>{rejectReason.category}</Box>
+                      {rejectReason.followupDate && (
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                          <Calendar size={10} color={t.colors.neutral[500]} />
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Follow-up: {rejectReason.followupDate}</Text>
+                        </Box>
+                      )}
                     </Box>
                   </Box>
                 )}

@@ -35,22 +35,6 @@ import {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_TEMPLATE: ProcessTemplate = {
-  id: 'tpl-1',
-  name: 'Standard Engineering Hiring',
-  description: 'Full-loop process for engineering roles.',
-  isActive: true,
-  createdAt: '2025-01-01T00:00:00Z',
-  updatedAt: '2025-01-15T00:00:00Z',
-  stages: [
-    { id: 'stg-1', name: 'Application Review', type: 'application_review', order: 1, isRequired: true, durationDays: 3 },
-    { id: 'stg-2', name: 'Phone Screen', type: 'phone_screen', order: 2, isRequired: true, durationDays: 5, interviewerCount: 1 },
-    { id: 'stg-3', name: 'Technical Interview', type: 'technical_interview', order: 3, isRequired: true, durationDays: 7, interviewerCount: 2 },
-    { id: 'stg-4', name: 'Onsite Interview', type: 'onsite_interview', order: 4, isRequired: true, durationDays: 10, interviewerCount: 4 },
-    { id: 'stg-5', name: 'Offer', type: 'offer', order: 5, isRequired: true, durationDays: 5 },
-  ],
-};
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -100,12 +84,11 @@ export const CompactBhProcessDesigner = createPreset<BhProcessDesignerProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      template: rawTemplate = MOCK_TEMPLATE, selectedStage, onStageSelect, onStageAdd, onStageRemove,
+      template: rawTemplate = {} as Partial<ProcessTemplate>, selectedStage, onStageSelect, onStageAdd, onStageRemove,
       readOnly = false, className, style,
     } = props;
 
-    const template = Array.isArray(rawTemplate) ? rawTemplate : MOCK_TEMPLATE;
-
+    const template = Array.isArray(rawTemplate) ? rawTemplate : ({} as Partial<ProcessTemplate>);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -151,7 +134,7 @@ export const CompactBhProcessDesigner = createPreset<BhProcessDesignerProps>({
     }
 
     const stages = useMemo(
-      () => [...template.stages].sort((a, b) => a.order - b.order),
+      () => [...(template.stages ?? [])].sort((a, b) => a.order - b.order),
       [template.stages],
     );
 

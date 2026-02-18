@@ -13,6 +13,10 @@ export interface FunnelStage {
   count?: number;
   conversionRate?: number;
   color?: string;
+  previousCount?: number;
+  trend?: 'up' | 'down' | 'flat';
+  avgDaysInStage?: number;
+  dropoffCount?: number;
 }
 
 export interface BhHiringFunnelProps extends EngineAwareProps {
@@ -29,6 +33,18 @@ export interface BhHiringFunnelProps extends EngineAwareProps {
 
   /** Currently selected stage */
   selectedStage?: string | null;
+
+  /** Total applicants across all stages */
+  totalApplicants?: number;
+
+  /** Total hires */
+  totalHires?: number;
+
+  /** Overall conversion rate (applicants to hires) */
+  overallConversionRate?: number;
+
+  /** Time period label */
+  period?: string;
 
   /** Loading state */
   loading?: boolean;

@@ -32,6 +32,9 @@ export interface FilterConfig {
   type?: FilterType;
   options?: FilterOption[];
   placeholder?: string;
+  defaultValue?: string | string[];
+  required?: boolean;
+  collapsible?: boolean;
 }
 
 export interface ActiveFilter {
@@ -45,6 +48,9 @@ export interface SavedPreset {
   name?: string;
   filters?: ActiveFilter[];
   createdAt?: Date | string | null;
+  isDefault?: boolean;
+  createdBy?: string;
+  isShared?: boolean;
 }
 
 export interface BhPipelineFilterBarProps extends EngineAwareProps {
@@ -73,6 +79,12 @@ export interface BhPipelineFilterBarProps extends EngineAwareProps {
 
   /** Callback to clear all filters */
   onClear?: () => void;
+
+  /** Whether to use compact layout */
+  compact?: boolean;
+
+  /** Whether to show saved presets panel */
+  showSavedPresets?: boolean;
 
   /** Loading state */
   loading?: boolean;

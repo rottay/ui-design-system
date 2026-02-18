@@ -8,6 +8,7 @@
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
 import type { CalibrationSampleSelect, CalibrationSelect } from '@rottay/scoring';
+import { n } from '../../helpers';
 
 export type BhCalibrationScatterPreset = 'chart' | 'compact';
 
@@ -19,6 +20,12 @@ export interface ScatterPoint {
   dimensionName?: string;
   deviation?: number;
   calibrated?: boolean;
+  /** Weighted human score (accounts for dimension weights) */
+  humanWeightedScore?: number;
+  /** Weighted LLM score (accounts for dimension weights) */
+  llmWeightedScore?: number;
+  /** Whether human and LLM agree on the score level */
+  levelMatch?: boolean;
 }
 
 export interface CalibrationStats {
@@ -65,13 +72,8 @@ export const BH_CALIBRATION_SCATTER_DEFAULTS: Partial<BhCalibrationScatterProps>
   showDiagonal: true,
 };
 
-/** Safe numeric coercion for DB string -> number fields */
-export function n(v: string | number | null | undefined): number {
-  if (v == null) return 0;
-  if (typeof v === 'number') return v;
-  const parsed = Number(v);
-  return isNaN(parsed) ? 0 : parsed;
-}
+/** Re-export n helper for convenience */
+export { n };
 
 /** Re-export DB types for convenience */
 export type { CalibrationSampleSelect, CalibrationSelect };

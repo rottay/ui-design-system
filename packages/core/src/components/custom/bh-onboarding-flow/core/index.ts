@@ -19,6 +19,15 @@ export interface OnboardingStep {
   isComplete: boolean;
   isActive: boolean;
   icon?: ReactNode;
+
+  /** Estimated time to complete this step in minutes */
+  estimatedMinutes?: number;
+
+  /** Role required to complete this step */
+  requiredRole?: string;
+
+  /** Step keys that must be completed before this one */
+  dependsOn?: string[];
 }
 
 export interface FormField {
@@ -31,6 +40,15 @@ export interface FormField {
   options?: Array<{ value: string; label: string }>;
   helpText?: string;
   error?: string;
+
+  /** Validation constraints for the field */
+  validation?: {
+    pattern?: string;
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+  };
 }
 
 export interface PreviewItem {

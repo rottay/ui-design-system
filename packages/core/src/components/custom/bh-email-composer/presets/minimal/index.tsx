@@ -6,7 +6,7 @@
  */
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { Mail, Send, Wand2 } from 'lucide-react';
+import { Mail, Send, Wand2, Paperclip, Clock, Eye, MousePointerClick, Users } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -14,14 +14,10 @@ import {
   createEntranceAnimation,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { BhEmailComposerProps, EmailVariable } from '../../core';
 import type { DesignTokens } from '../../../../../types';
-
-const MOCK_VARIABLES: EmailVariable[] = [
-  { key: 'candidateName', label: 'Name', value: 'Sarah Johnson' },
-  { key: 'position', label: 'Position', value: 'Senior Frontend Engineer' },
-];
 
 export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
   name: 'BhEmailComposer.Minimal',
@@ -33,19 +29,28 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      variables: rawVariables = MOCK_VARIABLES,
+      variables: rawVariables = [],
       subject = 'Interview Invitation - Senior Frontend Engineer',
       body = 'Dear Sarah Johnson,\n\nWe are pleased to invite you for an interview...\n\nBest regards,\nAlex Thompson',
       recipientName = 'Sarah Johnson',
       recipientEmail = 'sarah@email.com',
       onSend,
       onAiRewrite,
+      ccRecipients: rawCcRecipients,
+      bccRecipients: rawBccRecipients,
+      attachments: rawAttachments,
+      scheduleSendAt,
+      trackOpens,
+      trackClicks,
       className,
       style,
     } = props;
 
-    const variables = Array.isArray(rawVariables) ? rawVariables : MOCK_VARIABLES;
+    const ccRecipients = Array.isArray(rawCcRecipients) ? rawCcRecipients : [];
+    const bccRecipients = Array.isArray(rawBccRecipients) ? rawBccRecipients : [];
+    const attachments = Array.isArray(rawAttachments) ? rawAttachments : [];
 
+    const variables = Array.isArray(rawVariables) ? rawVariables : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -76,7 +81,7 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
           justifyContent: 'space-between',
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-            <Mail size={14} color={t.colors.primaryScale[500]} />
+            <Mail size={ICON_SIZES.label} color={t.colors.primaryScale[500]} />
             <Text style={{
               fontSize: t.typography.fontSize.sm,
               fontWeight: ptypo.headingWeight,
@@ -103,7 +108,7 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
                 transition: `all ${t.motion.hover}`,
               }}
             >
-              <Wand2 size={12} color={t.colors.primaryScale[500]} />
+              <Wand2 size={ICON_SIZES.label} color={t.colors.primaryScale[500]} />
             </Box>
             <Box
               tabIndex={0}
@@ -121,13 +126,13 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
                 transition: `all ${t.motion.hover}`,
               }}
             >
-              <Send size={12} color={t.colors.common.white} />
+              <Send size={ICON_SIZES.label} color={t.colors.common.white} />
             </Box>
           </Box>
         </Box>
 
         {/* To */}
-        <Box style={{ 
+        <Box style={{
           padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
           borderBottom: `1px solid ${t.colors.neutral[50]}`,
           display: 'flex',
@@ -139,6 +144,38 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
             {recipientName} ({recipientEmail})
           </Text>
         </Box>
+
+        {/* CC */}
+        {ccRecipients.length > 0 && (
+          <Box style={{
+            padding: `${t.spacing[1]}px ${t.spacing[4]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[50]}`,
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[1],
+          }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>CC:</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
+              {ccRecipients.join(', ')}
+            </Text>
+          </Box>
+        )}
+
+        {/* BCC */}
+        {bccRecipients.length > 0 && (
+          <Box style={{
+            padding: `${t.spacing[1]}px ${t.spacing[4]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[50]}`,
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[1],
+          }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>BCC:</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
+              {bccRecipients.join(', ')}
+            </Text>
+          </Box>
+        )}
 
         {/* Subject */}
         <Box style={{
@@ -168,6 +205,58 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
             {body}
           </Text>
         </Box>
+
+        {/* Attachments */}
+        {attachments.length > 0 && (
+          <Box style={{
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderTop: `1px solid ${t.colors.neutral[50]}`,
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[1],
+            flexWrap: 'wrap',
+          }}>
+            <Paperclip size={ICON_SIZES.inline} color={t.colors.neutral[400]} />
+            {attachments.map((att, i) => (
+              <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                {att.name}{i < attachments.length - 1 ? ',' : ''}
+              </Text>
+            ))}
+          </Box>
+        )}
+
+        {/* Tracking & Schedule */}
+        {(scheduleSendAt || trackOpens != null || trackClicks != null) && (
+          <Box style={{
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderTop: `1px solid ${t.colors.neutral[50]}`,
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[2],
+            flexWrap: 'wrap',
+          }}>
+            {scheduleSendAt && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <Clock size={ICON_SIZES.inline} color={t.colors.infoScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[600] }}>
+                  {new Date(scheduleSendAt).toLocaleString()}
+                </Text>
+              </Box>
+            )}
+            {trackOpens && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Eye size={ICON_SIZES.inline} color={t.colors.successScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[600] }}>Opens</Text>
+              </Box>
+            )}
+            {trackClicks && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <MousePointerClick size={ICON_SIZES.inline} color={t.colors.successScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[600] }}>Clicks</Text>
+              </Box>
+            )}
+          </Box>
+        )}
       </Box>
     );
   },

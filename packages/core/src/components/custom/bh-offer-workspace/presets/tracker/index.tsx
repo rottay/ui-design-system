@@ -13,14 +13,17 @@ import {
   createEntranceAnimation, createStaggerDelay, createCardHoverStyles,
   createPersonalitySectionHeaderStyle, createIconContainerStyle,
   createDividerStyle, getPersonalityTypography, getPersonalityBadgeRadius,
-  getCardPadding,
+  getCardPadding, createMetadataFieldStyle, createMetadataGridStyle,
+  createMetadataLabelStyle, createMetadataValueStyle,
+  createStatValueStyle, createStatLabelStyle, ICON_SIZES,
 } from '../../../helpers';
 import type { BhOfferWorkspaceProps, ApprovalStep } from '../../core';
 import { getOfferStatusConfig, getOfferPipelineSteps, formatCurrency, getOfferCompensation } from '../../core';
 import {
   DollarSign, Shield, Clock, Check, X, Send, FileText,
   PenTool, History, User, BarChart3, ArrowRight,
-  Calendar, Briefcase, ChevronDown, ChevronUp,
+  Calendar, Briefcase, ChevronDown, ChevronUp, Scale,
+  GitBranch, ExternalLink, Link2, Award,
 } from 'lucide-react';
 
 export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
@@ -40,6 +43,15 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       approvalSteps: rawApprovalSteps = [], negotiationHistory: rawNegotiationHistory = [],
       documents: rawDocuments = [], onSendOffer, currentVersion: currentVersionProp,
       signatureStatus, className, style,
+      // Previously unrendered fields
+      equityType: equityTypeProp, equityPercentage: equityPercentageProp,
+      equityCliffMonths: equityCliffMonthsProp,
+      relocationType: relocationTypeProp,
+      contractType: contractTypeProp, contractDurationMonths: contractDurationMonthsProp,
+      legalReviewRequired: legalReviewRequiredProp, legalReviewStatus: legalReviewStatusProp,
+      offerLetterUrl: offerLetterUrlProp, signedOfferUrl: signedOfferUrlProp,
+      signedAt: signedAtProp,
+      isCounterOffer: isCounterOfferProp, previousOfferId: previousOfferIdProp,
     } = props;
 
     const approvalSteps = Array.isArray(rawApprovalSteps) ? rawApprovalSteps : [];
@@ -54,6 +66,20 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const startDate = offer?.proposedStartDate ? new Date(offer.proposedStartDate).toLocaleDateString() : 'TBD';
     const workLocation = offer?.remoteType ?? offer?.workLocation ?? 'TBD';
     const probationDays = offer?.probationPeriodDays ?? 90;
+
+    // Resolved values for previously unrendered fields
+    const equityType = equityTypeProp ?? compensation.equityType ?? undefined;
+    const equityPercentage = equityPercentageProp ?? (offer?.equityPercentage != null ? Number(offer.equityPercentage) : undefined);
+    const equityCliffMonths = equityCliffMonthsProp ?? compensation.cliffMonths ?? 12;
+    const contractType = contractTypeProp ?? offer?.contractType ?? undefined;
+    const contractDurationMonths = contractDurationMonthsProp ?? offer?.contractDurationMonths ?? undefined;
+    const legalReviewRequired = legalReviewRequiredProp ?? offer?.legalReviewRequired ?? false;
+    const legalReviewStatus = legalReviewStatusProp ?? offer?.legalReviewStatus ?? undefined;
+    const offerLetterUrl = offerLetterUrlProp ?? offer?.offerLetterUrl ?? undefined;
+    const signedOfferUrl = signedOfferUrlProp ?? offer?.signedOfferUrl ?? undefined;
+    const signedAt = signedAtProp ?? (offer?.signedAt ? new Date(offer.signedAt).toLocaleDateString() : undefined);
+    const isCounterOffer = isCounterOfferProp ?? offer?.isCounterOffer ?? false;
+    const previousOfferId = previousOfferIdProp ?? offer?.previousOfferId ?? undefined;
 
     const [expanded, setExpanded] = useState<Record<string, boolean>>({
       pipeline: true, approval: true, compensation: false, documents: false, history: false,
@@ -211,12 +237,26 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 </Text>
               </Box>
             </Box>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: sp[3] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: sp[3], flexWrap: 'wrap' as const }}>
               <Box style={createBadgeStyle(t, statusCfg.color)}>
                 <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.medium, color: 'inherit' }}>
                   {statusCfg.label}
                 </Text>
               </Box>
+              {isCounterOffer && (
+                <Box style={{ ...createBadgeStyle(t, 'warning'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
+                  <GitBranch size={ICON_SIZES.label} />
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Counter Offer</Text>
+                </Box>
+              )}
+              {previousOfferId && (
+                <Box style={{ ...createBadgeStyle(t, 'secondary'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
+                  <History size={ICON_SIZES.label} />
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>
+                    Prev: {previousOfferId.substring(0, 8)}...
+                  </Text>
+                </Box>
+              )}
               {status === 'approved' && onSendOffer && (
                 <Box
                   role="button"
@@ -240,7 +280,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
           </Box>
 
           {/* Stats */}
-          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: sp[3] }}>
+          <Box style={createMetadataGridStyle(t, { columns: 4 })}>
             {stats.map((s, i) => {
               const statEntrance = createEntranceAnimation(t, { index: i });
               return (
@@ -252,21 +292,12 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                     ...createIconContainerStyle(t, { size: 36, color: s.color[50] }),
                     margin: '0 auto', marginBottom: sp[2],
                   }}>
-                    <s.Icon size={18} color={s.color[600]} />
+                    <s.Icon size={ICON_SIZES.section} color={s.color[600]} />
                   </Box>
-                  <Text style={{
-                    fontSize: ty.fontSize.lg,
-                    fontWeight: typo.headingWeight,
-                    letterSpacing: typo.headingLetterSpacing,
-                    color: n[900],
-                  }}>
+                  <Text style={createStatValueStyle(t, { size: 'lg' })}>
                     {s.value}
                   </Text>
-                  <Text style={{
-                    fontSize: ty.fontSize.xs, color: n[500], marginTop: sp[1],
-                    textTransform: typo.labelTransform,
-                    letterSpacing: typo.labelLetterSpacing,
-                  }}>
+                  <Text style={{ ...createStatLabelStyle(t, { personality: typo }), marginTop: sp[1] }}>
                     {s.label}
                   </Text>
                 </Box>
@@ -322,44 +353,73 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
 
           {/* Compensation Summary */}
           <Section k="compensation" icon={<DollarSign size={18} color={p[600]} />} title="Compensation Summary">
-            <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: sp[3] }}>
+            <Box style={createMetadataGridStyle(t, { columns: 2 })}>
               {[
                 { label: 'Base Salary', value: formatCurrency(compensation.baseSalary, compensation.currency) },
                 { label: 'Signing Bonus', value: formatCurrency(compensation.signingBonus, compensation.currency) },
                 { label: 'Annual Bonus', value: `${compensation.annualBonusPercent}%` },
                 { label: 'Equity', value: compensation.equityShares ? `${compensation.equityShares.toLocaleString()} shares` : 'N/A' },
               ].map((item, i) => (
-                <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], padding: `${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: n[50] }}>
-                  <Text style={{
-                    fontSize: ty.fontSize.xs, color: n[500],
-                    textTransform: typo.labelTransform,
-                    letterSpacing: typo.labelLetterSpacing,
-                  }}>
+                <Box key={i} style={createMetadataFieldStyle(t, { withBackground: true })}>
+                  <Text style={createMetadataLabelStyle(t, { personality: typo })}>
                     {item.label}
                   </Text>
-                  <Text style={{
-                    fontSize: ty.fontSize.md,
-                    fontWeight: typo.headingWeight,
-                    color: n[900],
-                  }}>
+                  <Text style={createMetadataValueStyle(t, { size: 'md', weight: 'semibold' })}>
                     {item.value}
                   </Text>
                 </Box>
               ))}
             </Box>
+            {/* Equity details row */}
+            {(equityType || equityPercentage != null) && (
+              <Box style={{ display: 'flex', gap: sp[2], flexWrap: 'wrap' as const, marginTop: sp[2] }}>
+                {equityType && (
+                  <Box style={{ ...createBadgeStyle(t, 'primary'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
+                    <Award size={ICON_SIZES.label} />
+                    <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit', textTransform: 'capitalize' as const }}>
+                      {equityType.replace(/_/g, ' ')}
+                    </Text>
+                  </Box>
+                )}
+                {equityPercentage != null && (
+                  <Box style={{ ...createBadgeStyle(t, 'info'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
+                    <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{equityPercentage}% equity</Text>
+                  </Box>
+                )}
+                <Box style={{ ...createBadgeStyle(t, 'secondary'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
+                  <Clock size={ICON_SIZES.label} />
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{equityCliffMonths}mo cliff</Text>
+                </Box>
+              </Box>
+            )}
+            {/* Terms badges row */}
             <Box style={{ marginTop: sp[3], display: 'flex', gap: sp[3], flexWrap: 'wrap' as const }}>
               <Box style={{ ...createBadgeStyle(t, 'info'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
-                <Calendar size={12} />
+                <Calendar size={ICON_SIZES.label} />
                 <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Start: {startDate}</Text>
               </Box>
               <Box style={{ ...createBadgeStyle(t, 'secondary'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
-                <Briefcase size={12} />
+                <Briefcase size={ICON_SIZES.label} />
                 <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{workLocation}</Text>
               </Box>
               <Box style={{ ...createBadgeStyle(t, 'warning'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
-                <Clock size={12} />
+                <Clock size={ICON_SIZES.label} />
                 <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Probation: {probationDays} days</Text>
               </Box>
+              {contractType && (
+                <Box style={{ ...createBadgeStyle(t, 'primary'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
+                  <Briefcase size={ICON_SIZES.label} />
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit', textTransform: 'capitalize' as const }}>
+                    {contractType.replace(/_/g, ' ')}
+                  </Text>
+                </Box>
+              )}
+              {contractDurationMonths != null && (
+                <Box style={{ ...createBadgeStyle(t, 'warning'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
+                  <Calendar size={ICON_SIZES.label} />
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{contractDurationMonths}mo contract</Text>
+                </Box>
+              )}
             </Box>
           </Section>
 
@@ -380,15 +440,18 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 </Box>
               </Box>
             ))}
+            {/* E-Signatures */}
             <Box style={{
               marginTop: sp[3], padding: `${sp[3]}px`, borderRadius: t.borderRadius.md,
               backgroundColor: allSigned ? c.successScale[50] : n[50],
-              border: `1px solid ${allSigned ? c.successScale[200] : n[200]}`,
+              border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${allSigned ? c.successScale[200] : n[200]}`,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              flexWrap: 'wrap' as const, gap: sp[2],
             }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
                 <PenTool size={16} color={allSigned ? c.successScale[600] : n[400]} />
                 <Text style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.medium, color: n[700] }}>E-Signatures</Text>
+                {signedAt && <Text style={{ fontSize: ty.fontSize.xs, color: c.successScale[600] }}>(signed: {signedAt})</Text>}
               </Box>
               <Box style={{ display: 'flex', gap: sp[2] }}>
                 <Box style={createBadgeStyle(t, signatureStatus?.companySigned ? 'success' : 'secondary')}>
@@ -398,6 +461,61 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Candidate {signatureStatus?.candidateSigned ? 'Signed' : 'Pending'}</Text>
                 </Box>
               </Box>
+            </Box>
+            {/* Document Links */}
+            {(offerLetterUrl || signedOfferUrl) && (
+              <Box style={{ marginTop: sp[2], display: 'flex', gap: sp[2], flexWrap: 'wrap' as const }}>
+                {offerLetterUrl && (
+                  <Box style={{
+                    display: 'inline-flex', alignItems: 'center', gap: sp[2],
+                    padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md,
+                    backgroundColor: n[50],
+                    border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${n[200]}`,
+                  }}>
+                    <FileText size={14} color={p[500]} />
+                    <Text style={{ fontSize: ty.fontSize.xs, color: n[700] }}>Offer Letter</Text>
+                    <ExternalLink size={12} color={p[500]} />
+                  </Box>
+                )}
+                {signedOfferUrl && (
+                  <Box style={{
+                    display: 'inline-flex', alignItems: 'center', gap: sp[2],
+                    padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md,
+                    backgroundColor: c.successScale[50],
+                    border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${c.successScale[200]}`,
+                  }}>
+                    <PenTool size={14} color={c.successScale[600]} />
+                    <Text style={{ fontSize: ty.fontSize.xs, color: c.successScale[700] }}>Signed Document</Text>
+                    <ExternalLink size={12} color={c.successScale[500]} />
+                  </Box>
+                )}
+              </Box>
+            )}
+            {/* Legal Review */}
+            <Box style={{
+              marginTop: sp[2], padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md,
+              backgroundColor: legalReviewRequired ? c.infoScale[50] : n[50],
+              border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${legalReviewRequired ? c.infoScale[200] : n[200]}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+                <Scale size={14} color={legalReviewRequired ? c.infoScale[600] : n[400]} />
+                <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.medium, color: legalReviewRequired ? c.infoScale[800] : n[600] }}>
+                  Legal Review {legalReviewRequired ? 'Required' : 'Not Required'}
+                </Text>
+              </Box>
+              {legalReviewStatus && (
+                <Box style={createBadgeStyle(t,
+                  legalReviewStatus === 'approved' ? 'success'
+                    : legalReviewStatus === 'changes_requested' ? 'error'
+                    : legalReviewStatus === 'in_review' ? 'warning'
+                    : 'secondary'
+                )}>
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit', textTransform: 'capitalize' as const }}>
+                    {legalReviewStatus.replace(/_/g, ' ')}
+                  </Text>
+                </Box>
+              )}
             </Box>
           </Section>
 

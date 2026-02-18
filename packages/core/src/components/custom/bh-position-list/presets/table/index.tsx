@@ -10,7 +10,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   Briefcase, ArrowUpDown, ArrowUp, ArrowDown,
-  Users, Clock, User, Search, Filter,
+  Users, Clock, User, Search, Filter, ChevronDown, X,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -31,15 +31,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_POSITIONS: RecruiterPosition[] = [
-  { id: 'pl-1', tenantId: 't', clientId: 'c1', code: 'FE-01', title: 'Senior Frontend Engineer', status: 'open', priority: 'high', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 12 * 86400000) } as any,
-  { id: 'pl-2', tenantId: 't', clientId: 'c2', code: 'PM-01', title: 'Product Manager', status: 'open', priority: 'normal', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 25 * 86400000) } as any,
-  { id: 'pl-3', tenantId: 't', clientId: 'c3', code: 'UX-01', title: 'UX Designer', status: 'on_hold', priority: 'low', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 45 * 86400000) } as any,
-  { id: 'pl-4', tenantId: 't', clientId: 'c1', code: 'BE-01', title: 'Backend Developer', status: 'open', priority: 'high', openings: 2, filledCount: 0, createdAt: new Date(Date.now() - 5 * 86400000) } as any,
-  { id: 'pl-5', tenantId: 't', clientId: 'c4', code: 'DA-01', title: 'Data Analyst', status: 'filled', priority: 'normal', openings: 1, filledCount: 1, createdAt: new Date(Date.now() - 60 * 86400000) } as any,
-  { id: 'pl-6', tenantId: 't', clientId: 'c1', code: 'DO-01', title: 'DevOps Lead', status: 'closed', priority: 'low', openings: 1, filledCount: 1, createdAt: new Date(Date.now() - 90 * 86400000) } as any,
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -89,18 +80,28 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions: rawPositions = MOCK_POSITIONS,
+      positions: rawPositions = [],
       onPositionClick,
       selectedPositionId,
       sortBy: sortByProp,
       onSortChange,
       loading = false,
+      statusFilterOptions,
+      statusFilter: statusFilterProp,
+      onStatusFilterChange,
+      urgencyFilter: urgencyFilterProp,
+      onUrgencyFilterChange,
+      departmentFilter: departmentFilterProp,
+      onDepartmentFilterChange,
+      departments: departmentsProp,
+      teamFilter: teamFilterProp,
+      onTeamFilterChange,
+      teams: teamsProp,
       className,
       style,
     } = props;
 
-    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
-
+    const positions = Array.isArray(rawPositions) ? rawPositions : [];
 
     const [internalSort, setInternalSort] = useState<string>(sortByProp ?? 'daysOpen');
     const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
@@ -129,7 +130,7 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
     }, [sortBy, onSortChange]);
 
     const filtered = useMemo(() => {
-      let result = Array.isArray(positions) ? positions : MOCK_POSITIONS;
+      let result = Array.isArray(positions) ? positions : [];
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         result = result.filter(p =>
@@ -222,6 +223,132 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
             />
           </Box>
         </Box>
+
+        {/* Filter bar */}
+        {(statusFilterOptions || departmentsProp || teamsProp || urgencyFilterProp !== undefined) && (
+          <Box style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[2],
+            flexWrap: 'wrap',
+            padding: `${t.spacing[2]}px ${t.spacing[5]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            backgroundColor: t.colors.neutral[50],
+          }} role="toolbar" aria-label="Position filters">
+            <Filter size={13} color={t.colors.neutral[400]} />
+            {/* Status filter */}
+            {statusFilterOptions && statusFilterOptions.length > 0 && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${statusFilterProp && statusFilterProp !== 'all' ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: statusFilterProp && statusFilterProp !== 'all' ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: statusFilterProp && statusFilterProp !== 'all' ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {statusFilterProp && statusFilterProp !== 'all' ? statusFilterProp.replace('_', ' ') : 'All Statuses'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by status"
+                    value={statusFilterProp ?? 'all'}
+                    onChange={(e: any) => onStatusFilterChange?.(e.target.value)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    {statusFilterOptions.map(s => (
+                      <option key={s} value={s}>{s === 'all' ? 'All Statuses' : s.replace('_', ' ')}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+            {/* Department filter */}
+            {departmentsProp && departmentsProp.length > 0 && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${departmentFilterProp ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: departmentFilterProp ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: departmentFilterProp ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {departmentFilterProp ?? 'All Departments'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by department"
+                    value={departmentFilterProp ?? ''}
+                    onChange={(e: any) => onDepartmentFilterChange?.(e.target.value || null)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    <option value="">All Departments</option>
+                    {departmentsProp.map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+            {/* Team filter */}
+            {teamsProp && teamsProp.length > 0 && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${teamFilterProp ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: teamFilterProp ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: teamFilterProp ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {teamFilterProp ?? 'All Teams'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by team"
+                    value={teamFilterProp ?? ''}
+                    onChange={(e: any) => onTeamFilterChange?.(e.target.value || null)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    <option value="">All Teams</option>
+                    {teamsProp.map(tm => (
+                      <option key={tm} value={tm}>{tm}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+            {/* Urgency filter */}
+            {urgencyFilterProp !== undefined && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${urgencyFilterProp ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: urgencyFilterProp ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: urgencyFilterProp ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {urgencyFilterProp ? `${urgencyFilterProp} urgency` : 'All Urgencies'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by urgency"
+                    value={urgencyFilterProp ?? ''}
+                    onChange={(e: any) => onUrgencyFilterChange?.(e.target.value || null)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    <option value="">All Urgencies</option>
+                    {(['low', 'normal', 'high', 'urgent', 'critical'] as const).map(u => (
+                      <option key={u} value={u}>{u}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+          </Box>
+        )}
 
         {/* Table header */}
         <Box style={{
@@ -325,7 +452,7 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>{statusCfg.label}</Text>
                   </Box>
                 </Box>
-                <Box style={{ flex: 1 }}>
+                <Box style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 4 }}>
                   <Box style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -337,6 +464,9 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
                       {priorityCfg.label}
                     </Text>
                   </Box>
+                  {(pos.priority === 'urgent' || pos.priority === 'critical') && (
+                    <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: t.colors.errorScale[500], flexShrink: 0, animation: 'pulse 2s infinite' }} aria-label="Urgent" />
+                  )}
                 </Box>
                 <Box style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 3 }}>
                   <Users size={11} color={t.colors.neutral[400]} />

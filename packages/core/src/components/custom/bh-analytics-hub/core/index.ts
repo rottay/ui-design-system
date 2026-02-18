@@ -29,6 +29,10 @@ export interface SourceEffectiveness {
   source?: ApplicationSourceValue | string;
   candidateCount?: number;
   qualityScore?: number;
+  hireCount?: number;
+  hireRate?: number;
+  costPerHire?: number;
+  retentionRate?: number;
 }
 
 export interface RecruiterPerformance {
@@ -39,18 +43,27 @@ export interface RecruiterPerformance {
   pipelineValue?: number;
   satisfaction?: number;
   sparkline?: number[];
+  id?: string;
+  activePositions?: number;
+  avgTimeToFill?: number;
+  offerAcceptanceRate?: number;
 }
 
 export interface CostAnalysis {
   category?: string;
   costPerHire?: number;
   breakdown?: { item?: string; cost?: number }[];
+  trend?: number;
+  previousPeriodCost?: number;
+  savings?: number;
 }
 
 export interface PipelineVelocity {
   stage?: string;
   avgDays?: number;
   slaLimit?: number;
+  breachCount?: number;
+  trend?: 'improving' | 'declining' | 'stable';
 }
 
 export interface TrendComparison {

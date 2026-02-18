@@ -54,6 +54,14 @@ export interface TeamQuota {
   used: number;
   /** DBQuota.quotaLimit */
   limit: number;
+  /** Department the team belongs to */
+  department?: string;
+  /** Percentage threshold to trigger warning (0-100) */
+  warningThreshold?: number;
+  /** Whether the quota is a hard limit (blocks usage) vs soft (warning only) */
+  hardLimit?: boolean;
+  /** ISO date when the quota resets */
+  resetDate?: string;
 }
 
 /**
@@ -73,6 +81,22 @@ export interface TokenTransactionDisplay {
   cost: number;
   /** DBTokenTransaction.balanceAfter */
   runningBalance: number;
+  /** DBTokenTransaction.balanceBefore */
+  balanceBefore?: number;
+  /** DBTokenTransaction.balanceAfter (raw) */
+  balanceAfter?: number;
+  /** Reference entity type (e.g. 'interview', 'screening') */
+  referenceType?: string;
+  /** Reference entity ID */
+  referenceId?: string;
+  /** Human-readable transaction description */
+  description?: string;
+  /** User who initiated the transaction */
+  performedBy?: string;
+  /** Payment amount in cents (for purchase transactions) */
+  paymentAmountCents?: number;
+  /** Payment currency code */
+  paymentCurrency?: string;
 }
 
 export interface AlertConfig {
@@ -81,6 +105,12 @@ export interface AlertConfig {
   /** Maps to DBTokenBalance.lowBalanceThreshold or DBQuota.alertThreshold */
   threshold: number;
   enabled: boolean;
+  /** ISO date when the alert was created */
+  createdAt?: string;
+  /** ISO date when the alert last fired */
+  lastTriggeredAt?: string;
+  /** Channel used for alert delivery */
+  notificationChannel?: 'email' | 'slack' | 'in-app';
 }
 
 export interface ForecastPoint {
@@ -88,6 +118,10 @@ export interface ForecastPoint {
   projected: number;
   confidenceLow: number;
   confidenceHigh: number;
+  /** Actual observed value (populated for past dates) */
+  actual?: number;
+  /** Difference between projected and actual */
+  variance?: number;
 }
 
 export interface BhTokenManagerProps extends EngineAwareProps {
@@ -161,6 +195,15 @@ export interface BhTokenManagerProps extends EngineAwareProps {
 
   /** Inline CSS styles */
   style?: CSSProperties;
+
+  /** ISO date of the most recent token purchase */
+  lastPurchaseAt?: string;
+
+  /** Whether automatic top-up is enabled */
+  autoPurchaseEnabled?: boolean;
+
+  /** Total lifetime spend in the account's currency */
+  totalLifetimeSpend?: number;
 }
 
 export const BH_TOKEN_MANAGER_DEFAULTS: Partial<BhTokenManagerProps> = {

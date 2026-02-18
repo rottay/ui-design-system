@@ -18,6 +18,14 @@ import {
   createEmptyStateStyle,
   createEntranceAnimation,
   createStaggerDelay,
+  createMetadataFieldStyle,
+  createMetadataLabelStyle,
+  createMetadataValueStyle,
+  createMetadataGridStyle,
+  createStatValueStyle,
+  createStatLabelStyle,
+  formatAbbreviated,
+  ICON_SIZES,
 } from '../../../helpers';
 import type {
   BhClientDirectoryProps, ClientFilter,
@@ -57,6 +65,7 @@ import {
   Search, Plus, Building2, User, ChevronDown, ChevronUp, X,
   Mail, Phone, Briefcase, DollarSign, Calendar, FileText,
   CheckCircle2, Clock, XCircle, Edit3, Users, Star, Shield, Eye,
+  ChevronLeft, ChevronRight, List, LayoutGrid,
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
@@ -125,13 +134,6 @@ function filterClients(clients: ClientItem[], f: ClientFilter): ClientItem[] {
   });
 }
 
-const DEFAULT_CLIENTS: ClientItem[] = [
-  { id: 'cl-1', name: 'Acme Corporation', type: 'company', status: 'active', tier: 'enterprise', industry: 'Technology', positionsCount: 12, revenue: 450000, approvalStatus: 'approved', contacts: [{ name: 'Lisa Park', email: 'lisa@acme.co', phone: '+1 (555) 100-2000', role: 'VP Engineering' }], contractInfo: { terms: 'Annual', startDate: '2025-01-15', endDate: '2026-01-14' }, feeStructure: { type: 'percentage', value: 20 } },
-  { id: 'cl-2', name: 'Horizon Labs', type: 'company', status: 'active', tier: 'premium', industry: 'Healthcare', positionsCount: 5, revenue: 180000, approvalStatus: 'approved', contacts: [{ name: 'Mark Rivera', email: 'mark@horizon.io', phone: '+1 (555) 200-3000', role: 'HR Director' }], feeStructure: { type: 'retainer', value: 8000 } },
-  { id: 'cl-3', name: 'Nova Ventures', type: 'company', status: 'pending_approval', tier: 'standard', industry: 'Finance', positionsCount: 3, revenue: 75000, approvalStatus: 'pending', contacts: [{ name: 'Sam Ortiz', email: 'sam@nova.vc', phone: '+1 (555) 300-4000', role: 'Talent Lead' }], feeStructure: { type: 'fixed', value: 25000 } },
-  { id: 'cl-4', name: 'David Chen', type: 'individual', status: 'active', tier: 'standard', industry: 'Consulting', positionsCount: 1, revenue: 15000, approvalStatus: 'approved', contacts: [{ name: 'David Chen', email: 'david@chen.consulting', phone: '+1 (555) 400-5000', role: 'Owner' }] },
-];
-
 /* ---------------------------------------------------------------------------
  * Preset
  * -------------------------------------------------------------------------*/
@@ -157,16 +159,21 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
       onClientSelect,
       onAddClient,
       onEditClient,
+      viewMode,
+      onViewModeChange,
+      totalCount: totalCountProp,
+      pageSize: pageSizeProp,
+      currentPage: currentPageProp,
+      onPageChange,
       className, style,
     } = props;
 
     const clients: ClientItem[] = useMemo(
-      () => clientsProp?.length ? clientsProp.map(toClientItem) : DEFAULT_CLIENTS,
+      () => clientsProp?.length ? clientsProp.map(toClientItem) : [],
       [clientsProp],
     );
 
     const [expandedCard, setExpandedCard] = useState<string | null>(null);
-
 
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
@@ -204,31 +211,57 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
         }}>
           <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-              <Building2 size={16} color={t.colors.primaryScale[500]} />
+              <Building2 size={ICON_SIZES.section} color={t.colors.primaryScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: typo.headingWeight, color: t.colors.neutral[900], letterSpacing: typo.headingLetterSpacing }}>
                 Client Directory
               </Text>
             </Box>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>{filtered.length} clients</Text>
           </Box>
-          {onAddClient && (
-            <Box
-              onClick={() => onAddClient({})}
-              role="button"
-              tabIndex={0}
-              aria-label="Add new client"
-              style={{
-                display: 'flex', alignItems: 'center', gap: t.spacing[2],
-                padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: br,
-                backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
-                fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
-                transition: `all ${t.motion.hover}`,
-              }}
-            >
-              <Plus size={14} />
-              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.common.white }}>Add Client</Text>
-            </Box>
-          )}
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            {/* View mode toggle */}
+            {onViewModeChange && (
+              <Box style={{ display: 'flex', border: `1px solid ${t.colors.neutral[200]}`, borderRadius: br, overflow: 'hidden' }}>
+                {([{ mode: 'list' as const, icon: List }, { mode: 'grid' as const, icon: LayoutGrid }]).map(({ mode, icon: Icon }) => (
+                  <Box
+                    key={mode}
+                    onClick={() => onViewModeChange(mode)}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={viewMode === mode}
+                    aria-label={`${mode} view`}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                      backgroundColor: viewMode === mode ? t.colors.primaryScale[50] : t.colors.common.white,
+                      cursor: 'pointer',
+                      transition: `all ${t.motion.hover}`,
+                    }}
+                  >
+                    <Icon size={14} color={viewMode === mode ? t.colors.primaryScale[600] : t.colors.neutral[400]} />
+                  </Box>
+                ))}
+              </Box>
+            )}
+            {onAddClient && (
+              <Box
+                onClick={() => onAddClient({})}
+                role="button"
+                tabIndex={0}
+                aria-label="Add new client"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                  padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: br,
+                  backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+                  fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
+                  transition: `all ${t.motion.hover}`,
+                }}
+              >
+                <Plus size={14} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.common.white }}>Add Client</Text>
+              </Box>
+            )}
+          </Box>
         </Box>
 
         {/* Filter bar */}
@@ -238,7 +271,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
         }} role="toolbar" aria-label="Filter controls">
           {[
-            { label: 'All', value: 'all' as const, icon: <Users size={12} /> },
+            { label: 'All', value: 'all' as const, icon: <Users size={ICON_SIZES.label} /> },
             { label: 'Companies', value: 'company' as const, icon: <Building2 size={12} /> },
             { label: 'Individuals', value: 'individual' as const, icon: <User size={12} /> },
           ].map(opt => {
@@ -369,15 +402,15 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                       color: client.type === 'company' ? t.colors.primaryScale[50] : t.colors.secondaryScale[50],
                     })}>
                       {client.type === 'company'
-                        ? <Building2 size={20} color={t.colors.primaryScale[600]} />
-                        : <User size={20} color={t.colors.secondaryScale[600]} />}
+                        ? <Building2 size={ICON_SIZES.feature} color={t.colors.primaryScale[600]} />
+                        : <User size={ICON_SIZES.feature} color={t.colors.secondaryScale[600]} />}
                     </Box>
                     <Box style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{client.name}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
                         <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: ti.bg(t) }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: ti.color(t), fontWeight: t.typography.fontWeight.medium }}>
-                            <Star size={9} style={{ verticalAlign: 'middle', marginRight: t.spacing[1] }} />{ti.label}
+                            <Star size={ICON_SIZES.inline} style={{ verticalAlign: 'middle', marginRight: t.spacing[1] }} />{ti.label}
                           </Text>
                         </Box>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
@@ -398,9 +431,9 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                       { label: 'Revenue', value: formatRevenue(client.revenue) },
                       { label: 'Contacts', value: client.contacts.length },
                     ].map(s => (
-                      <Box key={s.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, textAlign: 'center', padding: `${t.spacing[3]}px 0` }}>
-                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{s.value}</Text>
-                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>{s.label}</Text>
+                      <Box key={s.label} style={{ ...createMetadataFieldStyle(t), flex: 1, textAlign: 'center', padding: `${t.spacing[3]}px 0` }}>
+                        <Text style={createStatValueStyle(t, { size: 'lg' })}>{s.value}</Text>
+                        <Text style={createStatLabelStyle(t)}>{s.label}</Text>
                       </Box>
                     ))}
                   </Box>
@@ -434,8 +467,8 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                             <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{contact.name}</Text>
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{contact.role}</Text>
                           </Box>
-                          <Mail size={12} style={{ color: t.colors.primaryScale[400] }} />
-                          <Phone size={12} style={{ color: t.colors.primaryScale[400] }} />
+                          <Mail size={ICON_SIZES.label} style={{ color: t.colors.primaryScale[400] }} />
+                          <Phone size={ICON_SIZES.label} style={{ color: t.colors.primaryScale[400] }} />
                         </Box>
                       ))}
 
@@ -447,29 +480,30 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                             <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>Contract</Text>
                           </Box>
                           <Box style={{
-                            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[2],
+                            ...createMetadataGridStyle(t, { columns: 2 }),
+                            gap: t.spacing[2],
                             padding: t.spacing[3], borderRadius: t.borderRadius.lg,
                             backgroundColor: t.colors.common.white, border: `1px solid ${t.colors.neutral[100]}`,
                           }}>
-                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Terms</Text>
+                            <Box style={createMetadataFieldStyle(t)}>
+                              <Text style={createMetadataLabelStyle(t)}>Terms</Text>
                               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{client.contractInfo.terms}</Text>
                             </Box>
-                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Fee</Text>
+                            <Box style={createMetadataFieldStyle(t)}>
+                              <Text style={createMetadataLabelStyle(t)}>Fee</Text>
                               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{formatFee(client.feeStructure)}</Text>
                             </Box>
-                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Start</Text>
+                            <Box style={createMetadataFieldStyle(t)}>
+                              <Text style={createMetadataLabelStyle(t)}>Start</Text>
                               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-                                <Calendar size={10} color={t.colors.neutral[500]} />
+                                <Calendar size={ICON_SIZES.inline} color={t.colors.neutral[500]} />
                                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[800] }}>{client.contractInfo.startDate}</Text>
                               </Box>
                             </Box>
-                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>End</Text>
+                            <Box style={createMetadataFieldStyle(t)}>
+                              <Text style={createMetadataLabelStyle(t)}>End</Text>
                               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-                                <Calendar size={10} color={t.colors.neutral[500]} />
+                                <Calendar size={ICON_SIZES.inline} color={t.colors.neutral[500]} />
                                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[800] }}>{client.contractInfo.endDate}</Text>
                               </Box>
                             </Box>
@@ -518,6 +552,70 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
               );
             })}
           </Box>
+
+          {/* Pagination */}
+          {(totalCountProp != null || currentPageProp != null || pageSizeProp != null) && (
+            <Box style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: `${t.spacing[3]}px 0`,
+              marginTop: t.spacing[3],
+            }} role="navigation" aria-label="Pagination">
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                {totalCountProp != null
+                  ? `${totalCountProp} total client${totalCountProp !== 1 ? 's' : ''}`
+                  : `${filtered.length} client${filtered.length !== 1 ? 's' : ''}`}
+                {pageSizeProp != null && ` | ${pageSizeProp} per page`}
+              </Text>
+              {currentPageProp != null && onPageChange && (
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Box
+                    onClick={() => currentPageProp > 1 && onPageChange(currentPageProp - 1)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Previous page"
+                    aria-disabled={currentPageProp <= 1}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 28, height: 28, borderRadius: br,
+                      border: `1px solid ${t.colors.neutral[200]}`,
+                      backgroundColor: t.colors.common.white,
+                      cursor: currentPageProp > 1 ? 'pointer' : 'not-allowed',
+                      opacity: currentPageProp > 1 ? 1 : 0.4,
+                      transition: `all ${t.motion.hover}`,
+                    }}
+                  >
+                    <ChevronLeft size={14} color={t.colors.neutral[600]} />
+                  </Box>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>
+                    Page {currentPageProp}{totalCountProp != null && pageSizeProp ? ` of ${Math.ceil(totalCountProp / pageSizeProp)}` : ''}
+                  </Text>
+                  <Box
+                    onClick={() => {
+                      const totalPages = totalCountProp != null && pageSizeProp ? Math.ceil(totalCountProp / pageSizeProp) : Infinity;
+                      if (currentPageProp < totalPages) onPageChange(currentPageProp + 1);
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Next page"
+                    aria-disabled={totalCountProp != null && pageSizeProp ? currentPageProp >= Math.ceil(totalCountProp / pageSizeProp) : false}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 28, height: 28, borderRadius: br,
+                      border: `1px solid ${t.colors.neutral[200]}`,
+                      backgroundColor: t.colors.common.white,
+                      cursor: 'pointer',
+                      opacity: totalCountProp != null && pageSizeProp && currentPageProp >= Math.ceil(totalCountProp / pageSizeProp) ? 0.4 : 1,
+                      transition: `all ${t.motion.hover}`,
+                    }}
+                  >
+                    <ChevronRight size={14} color={t.colors.neutral[600]} />
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          )}
         </Box>
       </Box>
     );

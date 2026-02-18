@@ -17,6 +17,12 @@ export type BhPositionListPreset = 'table' | 'cards';
  */
 export type RecruiterPosition = DBPosition;
 
+/** Available position status values for filtering */
+export type PositionStatusFilter = 'all' | 'open' | 'filled' | 'closed' | 'on_hold' | 'draft' | 'pending_approval' | 'cancelled' | 'archived';
+
+/** Hiring urgency levels for positions */
+export type PositionHiringUrgency = 'low' | 'normal' | 'high' | 'urgent' | 'critical';
+
 export interface BhPositionListProps extends EngineAwareProps {
   preset?: BhPositionListPreset;
 
@@ -37,6 +43,39 @@ export interface BhPositionListProps extends EngineAwareProps {
 
   /** Loading state */
   loading?: boolean;
+
+  /** Available status filter options */
+  statusFilterOptions?: PositionStatusFilter[];
+
+  /** Currently active status filter */
+  statusFilter?: PositionStatusFilter;
+
+  /** Callback when status filter changes */
+  onStatusFilterChange?: (status: PositionStatusFilter) => void;
+
+  /** Hiring urgency filter */
+  urgencyFilter?: PositionHiringUrgency | null;
+
+  /** Callback when urgency filter changes */
+  onUrgencyFilterChange?: (urgency: PositionHiringUrgency | null) => void;
+
+  /** Department filter value */
+  departmentFilter?: string | null;
+
+  /** Callback when department filter changes */
+  onDepartmentFilterChange?: (department: string | null) => void;
+
+  /** List of department names for the department filter dropdown */
+  departments?: string[];
+
+  /** Team filter value */
+  teamFilter?: string | null;
+
+  /** Callback when team filter changes */
+  onTeamFilterChange?: (team: string | null) => void;
+
+  /** List of team names for the team filter dropdown */
+  teams?: string[];
 
   /** Additional CSS class name(s) */
   className?: string;

@@ -39,23 +39,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_USAGE: TokenUsagePoint[] = [
-  { date: '2026-01-06', tokens: 124000, cost: 3.72 },
-  { date: '2026-01-13', tokens: 156000, cost: 4.68 },
-  { date: '2026-01-20', tokens: 189000, cost: 5.67 },
-  { date: '2026-01-27', tokens: 142000, cost: 4.26 },
-  { date: '2026-02-03', tokens: 198000, cost: 5.94 },
-  { date: '2026-02-10', tokens: 221000, cost: 6.63 },
-];
-
-const MOCK_CATEGORIES: TokenCategory[] = [
-  { category: 'Resume Parsing', tokens: 420000, percentage: 35 },
-  { category: 'Interview Analysis', tokens: 264000, percentage: 22 },
-  { category: 'Job Description', tokens: 192000, percentage: 16 },
-  { category: 'Candidate Matching', tokens: 156000, percentage: 13 },
-  { category: 'Email Generation', tokens: 108000, percentage: 9 },
-  { category: 'Other', tokens: 60000, percentage: 5 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -115,16 +98,16 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
       currency = 'USD',
       title = 'Token Usage',
       loading = false,
+      granularity,
+      topProviders,
       className,
       style,
     } = props;
 
-    const usage = usageProp?.length ? usageProp : MOCK_USAGE;
-    const categories = catProp?.length ? catProp : MOCK_CATEGORIES;
+    const usage = usageProp?.length ? usageProp : [];
+    const categories = catProp?.length ? catProp : [];
     const totalTokens = totalProp ?? usage.reduce((s, p) => s + p.tokens, 0);
     const totalCost = costProp ?? usage.reduce((s, p) => s + p.cost, 0);
-
-
 
     /* -- Styles -------------------------------------------------------- */
     const isGlass = t.surface.useGlass && !!t.glass;
@@ -280,6 +263,45 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
               <polygon points={sparkArea(trendData, 200, 40)} fill="url(#tua-c-grad)" />
               <polyline points={sparkPoints(trendData, 200, 40)} fill="none" stroke={t.colors.primaryScale[500]} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
+          </Box>
+        )}
+
+        {/* Granularity indicator */}
+        {granularity && (
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Granularity:</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], textTransform: 'capitalize' as const }}>
+              {granularity}
+            </Text>
+          </Box>
+        )}
+
+        {/* Top providers */}
+        {topProviders && topProviders.length > 0 && (
+          <Box>
+            <Text style={{
+              fontSize: t.typography.fontSize.xs,
+              color: t.colors.neutral[500],
+              marginBottom: t.spacing[2],
+              fontWeight: t.typography.fontWeight.medium,
+              textTransform: typo.labelTransform,
+              letterSpacing: typo.labelLetterSpacing,
+            }}>
+              Top Providers
+            </Text>
+            {topProviders.slice(0, 3).map((provider, idx) => (
+              <Box key={provider.name} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1],
+              }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: categoryColors[idx % categoryColors.length], flexShrink: 0 }} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{provider.name}</Text>
+                </Box>
+                <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600] }}>
+                  {formatTokens(provider.tokens)}
+                </Text>
+              </Box>
+            ))}
           </Box>
         )}
 

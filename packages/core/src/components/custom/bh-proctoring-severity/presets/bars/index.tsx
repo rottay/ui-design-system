@@ -48,13 +48,6 @@ import { getSeverityLabel } from '@rottay/scoring';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SEVERITY: SeverityCount[] = [
-  { severity: 'critical', count: 5 },
-  { severity: 'high', count: 18 },
-  { severity: 'medium', count: 42 },
-  { severity: 'low', count: 62 },
-];
-
 /* ================================================================== */
 /*  Bars Preset                                                        */
 /* ================================================================== */

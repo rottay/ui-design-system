@@ -69,8 +69,6 @@ function generateMockData(): HeatmapDataPoint[] {
   return data;
 }
 
-const MOCK_DATA = generateMockData();
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -84,7 +82,7 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      data: rawData = MOCK_DATA,
+      data: rawData = undefined,
       onCellClick,
       colorScale = 'error',
       showValues = false,
@@ -92,7 +90,7 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
       style,
     } = props;
 
-    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
+    const data = Array.isArray(rawData) ? rawData : [] as HeatmapDataPoint[];
 
     const [hoveredCell, setHoveredCell] = useState<{ day: number; hour: number } | null>(null);
 
@@ -103,12 +101,12 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
 
     const dataMap = useMemo(() => {
       const map = new Map<string, number>();
-      data.forEach(d => map.set(`${d.day}-${d.hour}`, d.count));
+      data.forEach((d: HeatmapDataPoint) => map.set(`${d.day}-${d.hour}`, d.count));
       return map;
     }, [data]);
 
-    const maxCount = useMemo(() => Math.max(...data.map(d => d.count), 1), [data]);
-    const totalEvents = useMemo(() => data.reduce((s, d) => s + d.count, 0), [data]);
+    const maxCount = useMemo(() => Math.max(...data.map((d: HeatmapDataPoint) => d.count), 1), [data]);
+    const totalEvents = useMemo(() => data.reduce((s: number, d: HeatmapDataPoint) => s + d.count, 0), [data]);
 
     const handleCellClick = useCallback((day: number, hour: number) => {
       const count = dataMap.get(`${day}-${hour}`) ?? 0;

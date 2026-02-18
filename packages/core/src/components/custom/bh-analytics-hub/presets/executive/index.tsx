@@ -36,6 +36,10 @@ import {
   getPersonalityTypography,
   createPersonalityAccentBar,
   createEmptyStateStyle,
+  createStatValueStyle,
+  createStatLabelStyle,
+  createTrendStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import type {
@@ -62,38 +66,6 @@ function sparkPoints(data: number[], w: number, h: number, pad: number = 2): str
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_FUNNEL: FunnelStage[] = [
-  { name: 'Applied', count: 1240, conversionPercent: 100, prevPeriodCount: 1100 },
-  { name: 'Screened', count: 620, conversionPercent: 50, prevPeriodCount: 550 },
-  { name: 'Interviewed', count: 248, conversionPercent: 40, prevPeriodCount: 220 },
-  { name: 'Offered', count: 62, conversionPercent: 25, prevPeriodCount: 55 },
-  { name: 'Hired', count: 48, conversionPercent: 77, prevPeriodCount: 42 },
-];
-
-const MOCK_RECRUITERS: RecruiterPerformance[] = [
-  { name: 'Sarah Chen', hires: 12, velocity: 18, pipelineValue: 340000, satisfaction: 94, sparkline: [8, 9, 10, 11, 10, 12, 12] },
-  { name: 'Marcus Williams', hires: 10, velocity: 22, pipelineValue: 280000, satisfaction: 91, sparkline: [6, 7, 8, 9, 10, 9, 10] },
-  { name: 'Elena Rodriguez', hires: 9, velocity: 20, pipelineValue: 260000, satisfaction: 88, sparkline: [5, 6, 7, 8, 8, 9, 9] },
-  { name: 'James Park', hires: 8, velocity: 25, pipelineValue: 220000, satisfaction: 86, sparkline: [4, 5, 6, 7, 7, 8, 8] },
-  { name: 'Aisha Patel', hires: 7, velocity: 19, pipelineValue: 200000, satisfaction: 92, sparkline: [3, 4, 5, 6, 6, 7, 7] },
-];
-
-const MOCK_SOURCES: SourceEffectiveness[] = [
-  { source: 'LinkedIn', candidateCount: 420, qualityScore: 82 },
-  { source: 'Employee Referrals', candidateCount: 180, qualityScore: 91 },
-  { source: 'Indeed', candidateCount: 310, qualityScore: 65 },
-  { source: 'Career Site', candidateCount: 210, qualityScore: 74 },
-  { source: 'Agencies', candidateCount: 120, qualityScore: 78 },
-];
-
-const MOCK_TREND: TrendComparison[] = [
-  { date: 'Jan', current: 38, previous: 32 },
-  { date: 'Feb', current: 42, previous: 35 },
-  { date: 'Mar', current: 45, previous: 38 },
-  { date: 'Apr', current: 41, previous: 40 },
-  { date: 'May', current: 48, previous: 42 },
-  { date: 'Jun', current: 52, previous: 44 },
-];
 
 const DATE_RANGES: { value: DateRangePreset; label: string }[] = [
   { value: '7d', label: '7 days' },
@@ -113,25 +85,30 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const {
       dateRange = '30d',
       onDateRangeChange,
-      funnelData: rawFunnelData = MOCK_FUNNEL,
-      recruiterData: rawRecruiterData = MOCK_RECRUITERS,
-      sourceData: rawSourceData = MOCK_SOURCES,
-      trendData: rawTrendData = MOCK_TREND,
+      funnelData: rawFunnelData = [],
+      recruiterData: rawRecruiterData = [],
+      sourceData: rawSourceData = [],
+      trendData: rawTrendData = [],
       comparisonPeriod = true,
       onComparisonToggle,
       onExport,
       onMetricSelect,
+      diversityData: rawDiversityData = [],
+      selectedMetric: selectedMetricProp,
+      drilldownEntity: drilldownEntityProp,
+      exportFormat: exportFormatProp,
       className,
       style,
     } = props;
 
-    const funnelData = Array.isArray(rawFunnelData) ? rawFunnelData : MOCK_FUNNEL;
-    const recruiterData = Array.isArray(rawRecruiterData) ? rawRecruiterData : MOCK_RECRUITERS;
-    const sourceData = Array.isArray(rawSourceData) ? rawSourceData : MOCK_SOURCES;
-    const trendData = Array.isArray(rawTrendData) ? rawTrendData : MOCK_TREND;
+    const funnelData = Array.isArray(rawFunnelData) ? rawFunnelData : [];
+    const recruiterData = Array.isArray(rawRecruiterData) ? rawRecruiterData : [];
+    const sourceData = Array.isArray(rawSourceData) ? rawSourceData : [];
+    const trendData = Array.isArray(rawTrendData) ? rawTrendData : [];
+    const diversityData = Array.isArray(rawDiversityData) ? rawDiversityData : [];
 
     const [activeDateRange, setActiveDateRange] = useState<DateRangePreset>(dateRange);
-    const [selectedKpi, setSelectedKpi] = useState<string | null>(null);
+    const [selectedKpi, setSelectedKpi] = useState<string | null>(selectedMetricProp ?? null);
 
     const isGlass = t.surface.useGlass;
     const card = useMemo(() => createCardStyle(t, { padding: 28, glass: isGlass }), [t, isGlass]);
@@ -187,7 +164,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               ))}
             </Box>
             <Box onClick={() => onExport?.('pdf')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer', ...hoverStyles.base }}>
-              <Download size={14} />
+              <Download size={ICON_SIZES.label} />
               <Text style={{ fontSize: t.typography.fontSize.xs }}>Export</Text>
             </Box>
           </Box>
@@ -207,15 +184,15 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <Box key={kpi.label} onClick={() => { setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); }} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card, cursor: 'pointer', ...hoverStyles.base, border: selectedKpi === kpi.label ? `2px solid ${t.colors.primaryScale[300]}` : card.border }} onMouseEnter={(e: any) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: any) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
                   <Box style={createIconContainerStyle(t, { size: 40, color: kpi.color[50] })}>
-                    <Icon size={20} color={kpi.color[600]} />
+                    <Icon size={ICON_SIZES.feature} color={kpi.color[600]} />
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <TrendIcon size={14} color={trendColor} />
+                    <TrendIcon size={ICON_SIZES.label} color={trendColor} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(kpi.trend)}%</Text>
                   </Box>
                 </Box>
-                <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{kpi.value}</Text>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{kpi.label}</Text>
+                <Text style={createStatValueStyle(t, { size: '2xl' })}>{kpi.value}</Text>
+                <Text style={createStatLabelStyle(t)}>{kpi.label}</Text>
               </Box>
             );
           })}
@@ -291,7 +268,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
 
           {/* Leaderboard */}
           <Box style={card}>
-            <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Award size={12} /> Top Performers</Box>}>
+            <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Award size={ICON_SIZES.label} /> Top Performers</Box>}>
               Recruiter Leaderboard
             </SectionTitle>
             <Box style={{ display: 'flex', flexDirection: 'column' }}>
@@ -319,6 +296,24 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             </Box>
           </Box>
 
+          {/* Drilldown & Export indicators */}
+          {(drilldownEntityProp || exportFormatProp) && (
+            <Box style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+              {drilldownEntityProp && (
+                <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <BarChart3 size={ICON_SIZES.label} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>Drilldown: {drilldownEntityProp}</Text>
+                </Box>
+              )}
+              {exportFormatProp && (
+                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <Download size={ICON_SIZES.label} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>Export: {exportFormatProp.toUpperCase()}</Text>
+                </Box>
+              )}
+            </Box>
+          )}
+
           {/* Source Quality */}
           <Box style={card}>
             <SectionTitle>Source Quality</SectionTitle>
@@ -344,6 +339,33 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             </Box>
           </Box>
         </Box>
+        {/* Diversity Data */}
+        {diversityData.length > 0 && (
+          <Box style={{ ...card, marginTop: t.spacing[6] }}>
+            <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Users size={ICON_SIZES.label} /> Diversity</Box>}>Diversity Breakdown</SectionTitle>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+              {diversityData.map((item) => {
+                const pct = item.total > 0 ? (item.value / item.total) * 100 : 0;
+                const barColor = pct >= 40 ? t.colors.successScale[400] : pct >= 25 ? t.colors.warningScale[400] : t.colors.errorScale[400];
+                return (
+                  <Box key={item.category}>
+                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{item.category}</Text>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{item.value}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>/ {item.total}</Text>
+                        <Box style={{ ...createBadgeStyle(t, pct >= 40 ? 'success' : pct >= 25 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{pct.toFixed(1)}%</Box>
+                      </Box>
+                    </Box>
+                    <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden' }}>
+                      <Box style={{ height: '100%', width: `${pct}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}` }} />
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        )}
       </Box>
     );
   },

@@ -23,10 +23,12 @@ import {
   createPersonalityAccentBar,
   createProgressBarStyle,
   getAccentAwareLayout,
+  formatDistanceToNow,
 } from '../../../helpers';
 import type {
   BhProctoringSummaryProps,
   ProctoringEventSeverity,
+  SeverityEventCounts,
 } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
@@ -71,14 +73,6 @@ function getRiskBadgeKey(score: number): 'error' | 'warning' | 'success' {
 /*  Mock defaults                                                      */
 /* ------------------------------------------------------------------ */
 
-const MOCK_PROPS = {
-  candidateName: 'Sarah Johnson',
-  riskScore: 72,
-  eventCounts: { low: 8, medium: 5, high: 3, critical: 1 },
-  totalEvents: 17,
-  reviewedCount: 12,
-};
-
 /* ================================================================== */
 /*  Card Preset                                                        */
 /* ================================================================== */
@@ -93,23 +87,22 @@ export const CardBhProctoringSummary = createPreset<BhProctoringSummaryProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      candidateName: rawCandidateName = MOCK_PROPS.candidateName,
+      candidateName = '',
       candidateAvatar,
-      riskScore: rawRiskScore = MOCK_PROPS.riskScore,
-      eventCounts: rawEventCounts = MOCK_PROPS.eventCounts,
-      totalEvents: rawTotalEvents = MOCK_PROPS.totalEvents,
-      reviewedCount: rawReviewedCount = MOCK_PROPS.reviewedCount,
+      riskScore = 0,
+      eventCounts = {} as SeverityEventCounts,
+      totalEvents = 0,
+      reviewedCount = 0,
       onViewDetails,
+      dismissedCount,
+      lastEventAt,
+      lastReviewedBy,
+      lastReviewedAt,
+      riskTrend,
+      riskTrendPercentage,
       className,
       style,
     } = props;
-
-    const candidateName = Array.isArray(rawCandidateName) ? rawCandidateName : MOCK_PROPS.candidateName;
-    const riskScore = Array.isArray(rawRiskScore) ? rawRiskScore : MOCK_PROPS.riskScore;
-    const eventCounts = Array.isArray(rawEventCounts) ? rawEventCounts : MOCK_PROPS.eventCounts;
-    const totalEvents = Array.isArray(rawTotalEvents) ? rawTotalEvents : MOCK_PROPS.totalEvents;
-    const reviewedCount = Array.isArray(rawReviewedCount) ? rawReviewedCount : MOCK_PROPS.reviewedCount;
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -251,6 +244,27 @@ export const CardBhProctoringSummary = createPreset<BhProctoringSummaryProps>({
             </Box>
           </Box>
 
+          {/* Risk Trend */}
+          {riskTrend && riskTrend !== 'stable' && (
+            <Box style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: t.spacing[1],
+              marginBottom: t.spacing[3],
+            }}>
+              <Text style={{
+                fontSize: t.typography.fontSize.xs,
+                color: riskTrend === 'up' ? t.colors.errorScale[600] : t.colors.successScale[600],
+                fontWeight: t.typography.fontWeight.medium,
+              }}>
+                {riskTrend === 'up' ? '\u2191' : '\u2193'}
+                {riskTrendPercentage != null ? ` ${riskTrendPercentage}%` : ''}
+                {riskTrend === 'up' ? ' from previous period' : ' from previous period'}
+              </Text>
+            </Box>
+          )}
+
           {/* Event Breakdown */}
           <Box style={{ marginBottom: t.spacing[4] }}>
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>Event Breakdown</Text>
@@ -307,6 +321,33 @@ export const CardBhProctoringSummary = createPreset<BhProctoringSummaryProps>({
               <Box style={progressBar.fill} />
             </Box>
           </Box>
+
+          {/* Last Activity + Reviewer Info */}
+          {(lastEventAt || lastReviewedBy) && (
+            <Box style={{
+              marginBottom: t.spacing[3],
+              display: 'flex',
+              flexDirection: 'column' as const,
+              gap: t.spacing[1],
+            }}>
+              {lastEventAt && (
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  Last event: {formatDistanceToNow(new Date(lastEventAt), { addSuffix: true })}
+                </Text>
+              )}
+              {lastReviewedBy && (
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  Last reviewed by {lastReviewedBy}
+                  {lastReviewedAt ? ` ${formatDistanceToNow(new Date(lastReviewedAt), { addSuffix: true })}` : ''}
+                </Text>
+              )}
+              {dismissedCount != null && dismissedCount > 0 && (
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                  {dismissedCount} dismissed
+                </Text>
+              )}
+            </Box>
+          )}
 
           {/* View Details Button */}
           <button

@@ -31,24 +31,6 @@ import {
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_CANDIDATES: RankedCandidate[] = [
-  { id: 'c-1', rank: 1, name: 'Sarah Johnson', overallScore: 92, stageScores: [{ stage: 'Technical', score: 95 }, { stage: 'Culture', score: 88 }, { stage: 'Leadership', score: 93 }], completionPercent: 100, hasKnockout: false, decisionStatus: 'pending', strengths: ['Deep React expertise', 'Google experience'], weaknesses: ['Limited backend'] },
-  { id: 'c-2', rank: 2, name: 'Michael Chen', overallScore: 88, stageScores: [{ stage: 'Technical', score: 90 }, { stage: 'Culture', score: 91 }, { stage: 'Leadership', score: 83 }], completionPercent: 100, hasKnockout: false, decisionStatus: 'advanced', strengths: ['Full-stack'], weaknesses: ['Short tenure'] },
-  { id: 'c-3', rank: 3, name: 'Emily Rodriguez', overallScore: 85, stageScores: [{ stage: 'Technical', score: 88 }, { stage: 'Culture', score: 80 }, { stage: 'Leadership', score: 87 }], completionPercent: 90, hasKnockout: false, decisionStatus: 'pending', strengths: ['Staff-level at Meta'], weaknesses: ['Salary expectations'] },
-  { id: 'c-4', rank: 4, name: 'James Kim', overallScore: 72, stageScores: [{ stage: 'Technical', score: 78 }, { stage: 'Culture', score: 70 }, { stage: 'Leadership', score: 68 }], completionPercent: 85, hasKnockout: true, decisionStatus: 'hold', strengths: ['ML background'], weaknesses: ['Knockout on culture', 'Junior level'] },
-  { id: 'c-5', rank: 5, name: 'Anna Kowalski', overallScore: 68, stageScores: [{ stage: 'Technical', score: 72 }, { stage: 'Culture', score: 65 }, { stage: 'Leadership', score: 67 }], completionPercent: 75, hasKnockout: false, decisionStatus: 'rejected', strengths: ['DevOps skills'], weaknesses: ['Below threshold'] },
-];
-
-const DEFAULT_DISTRIBUTION: ScoreDistribution[] = [
-  { score: 60, count: 1 }, { score: 65, count: 2 }, { score: 70, count: 3 },
-  { score: 75, count: 5 }, { score: 80, count: 4 }, { score: 85, count: 6 },
-  { score: 90, count: 3 }, { score: 95, count: 2 },
-];
-
-/* ---------------------------------------------------------------------------
  * Preset
  * -------------------------------------------------------------------------*/
 
@@ -110,9 +92,12 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
 
     const maxDist = Math.max(...scoreDistribution.map(d => d.count), 1);
 
+    const scoreRange = props.scoreRange;
+
     const filtered = useMemo(() => {
       let list = [...candidates];
       if (search) list = list.filter(c => (c.name || '').toLowerCase().includes(search.toLowerCase()));
+      if (scoreRange) list = list.filter(c => c.overallScore >= scoreRange[0] && c.overallScore <= scoreRange[1]);
       list.sort((a, b) => {
         let cmp = 0;
         if (sortBy === 'rank') cmp = a.rank - b.rank;
@@ -148,7 +133,9 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
         }}>
           <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
             <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: personalityTypo.headingWeight, color: t.colors.neutral[900], letterSpacing: personalityTypo.headingLetterSpacing }}>{jobName} - Rankings</Text>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{filtered.length} candidates ranked</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
+              {filtered.length} candidates ranked{scoreRange ? ` (score ${scoreRange[0]}-${scoreRange[1]})` : ''}
+            </Text>
           </Box>
           <Box style={{ display: 'flex', gap: t.spacing[2] }} role="toolbar" aria-label="Ranking actions">
             {selected.length > 0 && onCompare && (
@@ -321,18 +308,45 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>{getCandidateInitials(c.name)}</Text>
                     </Box>
                     <Box>
-                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{c.name}</Text>
-                      {c.hasKnockout && (
-                        <Box style={{ display: 'flex', alignItems: 'center', gap: 2, marginTop: 1 }}>
-                          <AlertTriangle size={10} style={{ color: t.colors.errorScale[500] }} />
-                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[600] }}>Knockout</Text>
-                        </Box>
-                      )}
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{c.name}</Text>
+                        {c.tier && (
+                          <Text style={{
+                            display: 'inline-block',
+                            padding: `0px ${t.spacing[1]}px`,
+                            borderRadius: br,
+                            fontSize: '9px',
+                            fontWeight: t.typography.fontWeight.semibold,
+                            backgroundColor: c.tierColor ?? t.colors.primaryScale[50],
+                            color: c.tierColor ? t.colors.common.white : t.colors.primaryScale[700],
+                          }}>{c.tier}</Text>
+                        )}
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: 1 }}>
+                        {c.hasKnockout && (
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <AlertTriangle size={10} style={{ color: t.colors.errorScale[500] }} />
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[600] }}>Knockout</Text>
+                          </Box>
+                        )}
+                        {c.evidenceCount !== undefined && (
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                            {c.evidenceCount} evidence
+                          </Text>
+                        )}
+                      </Box>
                     </Box>
                   </Box>
                   {/* Score */}
-                  <Box style={{ display: 'flex', alignItems: 'center' }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: getScoreBarColor(c.overallScore, t) }}>{c.overallScore}%</Text>
+                    {c.confidence !== undefined && (
+                      <Box style={{ display: 'inline-flex' }} title={`Confidence: ${Math.round(c.confidence * 100)}%`}>
+                        <Text style={{ fontSize: '9px', color: t.colors.neutral[400] }}>
+                          ({Math.round(c.confidence * 100)}%)
+                        </Text>
+                      </Box>
+                    )}
                   </Box>
                   {/* Stage scores mini bars */}
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
@@ -386,6 +400,46 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                       {(c.weaknesses ?? []).map((w, i) => (
                         <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {w}</Text>
                       ))}
+                    </Box>
+                    {c.recommendations && c.recommendations.length > 0 && (
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.infoScale[600], marginBottom: t.spacing[1] }}>Recommendations</Text>
+                        {c.recommendations.map((r, i) => (
+                          <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {r}</Text>
+                        ))}
+                      </Box>
+                    )}
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2], alignItems: 'flex-start' }}>
+                      {/* Scored metadata */}
+                      {(c.scoredBy || c.scoredAt || c.scoreLevel) && (
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                          {c.scoreLevel && (
+                            <Text style={{
+                              display: 'inline-block',
+                              padding: `1px ${t.spacing[2]}px`,
+                              borderRadius: br,
+                              fontSize: t.typography.fontSize.xs,
+                              fontWeight: t.typography.fontWeight.medium,
+                              backgroundColor: c.scoreLevel === 'excellent' || c.scoreLevel === 'good'
+                                ? t.colors.successScale[50]
+                                : c.scoreLevel === 'average' ? t.colors.warningScale[50] : t.colors.errorScale[50],
+                              color: c.scoreLevel === 'excellent' || c.scoreLevel === 'good'
+                                ? t.colors.successScale[700]
+                                : c.scoreLevel === 'average' ? t.colors.warningScale[700] : t.colors.errorScale[700],
+                              textTransform: 'capitalize' as const,
+                            }}>{c.scoreLevel}</Text>
+                          )}
+                          {c.scoredBy && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>By: {c.scoredBy}</Text>
+                          )}
+                          {c.scoredAt && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                              {new Date(c.scoredAt).toLocaleDateString()}
+                            </Text>
+                          )}
+                        </Box>
+                      )}
+                      {/* Decision actions */}
                     </Box>
                     <Box style={{ display: 'flex', gap: t.spacing[2], alignItems: 'flex-start' }} role="group" aria-label="Decision actions">
                       {(['advance', 'hold', 'reject'] as DecisionAction[]).map(action => {

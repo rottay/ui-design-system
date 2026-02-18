@@ -64,23 +64,6 @@ import {
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_EVENTS: AuditEvent[] = [
-  { id: 'e1', timestamp: new Date(Date.now() - 180000).toISOString(), userName: 'Sofia Martinez', entityType: 'candidate', actionType: 'created', entityName: 'Emily Watson', ipAddress: '192.168.1.42' },
-  { id: 'e2', timestamp: new Date(Date.now() - 600000).toISOString(), userName: 'James Chen', entityType: 'job', actionType: 'updated', entityName: 'Sr. Frontend Engineer', ipAddress: '10.0.0.15', beforeState: { status: 'draft', salary: '120k' }, afterState: { status: 'published', salary: '140k' } },
-  { id: 'e3', timestamp: new Date(Date.now() - 1500000).toISOString(), userName: 'Priya Sharma', entityType: 'interview', actionType: 'state_change', entityName: 'Panel Review - Alex Kim', ipAddress: '172.16.0.8', beforeState: { stage: 'scheduled', panel: 3 }, afterState: { stage: 'completed', panel: 3 } },
-  { id: 'e4', timestamp: new Date(Date.now() - 3000000).toISOString(), userName: 'Marcus Williams', entityType: 'offer', actionType: 'created', entityName: 'Offer #1247 - Rachel Green', ipAddress: '192.168.1.55' },
-  { id: 'e5', timestamp: new Date(Date.now() - 5400000).toISOString(), userName: 'Sofia Martinez', entityType: 'team', actionType: 'updated', entityName: 'Engineering Hiring', ipAddress: '192.168.1.42', beforeState: { capacity: 80, members: 5 }, afterState: { capacity: 100, members: 6 } },
-  { id: 'e6', timestamp: new Date(Date.now() - 10800000).toISOString(), userName: 'James Chen', entityType: 'candidate', actionType: 'state_change', entityName: 'Tom Baker', ipAddress: '10.0.0.15', beforeState: { stage: 'phone_screen', rating: 3 }, afterState: { stage: 'onsite', rating: 4 }, relatedEvents: ['e3'] },
-  { id: 'e7', timestamp: new Date(Date.now() - 21600000).toISOString(), userName: 'Priya Sharma', entityType: 'settings', actionType: 'updated', entityName: 'SLA Configuration', ipAddress: '172.16.0.8', beforeState: { responseTime: 48, escalation: false }, afterState: { responseTime: 24, escalation: true } },
-  { id: 'e8', timestamp: new Date(Date.now() - 36000000).toISOString(), userName: 'Marcus Williams', entityType: 'job', actionType: 'deleted', entityName: 'Legacy QA Role', ipAddress: '192.168.1.55' },
-];
-
-const MOCK_STATS: AuditStats = {
-  totalEvents: 1247,
-  eventsToday: 34,
-  mostActiveUser: 'Sofia Martinez',
-  mostChangedEntity: 'Candidates',
-};
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -152,12 +135,20 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
       liveMode: externalLive = false,
       onLiveModeToggle,
       onExport,
+      aiAuditEvents: rawAiAuditEvents,
+      viewMode: viewModeProp,
+      exportRange: exportRangeProp,
+      retentionDays: retentionDaysProp,
       className,
       style,
     } = props;
 
-    const events = eventsProp?.length ? eventsProp : MOCK_EVENTS;
-    const stats = statsProp ?? MOCK_STATS;
+    const events = eventsProp?.length ? eventsProp : [];
+    const stats = statsProp ?? {} as Partial<AuditStats>;
+    const aiAuditEvents = Array.isArray(rawAiAuditEvents) ? rawAiAuditEvents : [];
+    const viewMode = viewModeProp ?? 'timeline';
+    const exportRange = exportRangeProp ?? null;
+    const retentionDays = retentionDaysProp ?? undefined;
 
     /* -- Internal state ---------------------------------------------- */
     const [filters, setFilters] = useState<AuditFilter>(externalFilters ?? {});
@@ -315,11 +306,35 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
 
           {/* ---- Stats Bar ------------------------------------------ */}
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[4] }}>
-            <StatCard label="Total Events" value={stats.totalEvents} icon={<Layers size={18} />} scale="primaryScale" />
-            <StatCard label="Today" value={stats.eventsToday} icon={<Activity size={18} />} scale="infoScale" />
-            <StatCard label="Most Active" value={stats.mostActiveUser} icon={<UserCheck size={18} />} scale="successScale" />
-            <StatCard label="Most Changed" value={stats.mostChangedEntity} icon={<Zap size={18} />} scale="warningScale" />
+            <StatCard label="Total Events" value={stats.totalEvents ?? 0} icon={<Layers size={18} />} scale="primaryScale" />
+            <StatCard label="Today" value={stats.eventsToday ?? 0} icon={<Activity size={18} />} scale="infoScale" />
+            <StatCard label="Most Active" value={stats.mostActiveUser ?? '-'} icon={<UserCheck size={18} />} scale="successScale" />
+            <StatCard label="Most Changed" value={stats.mostChangedEntity ?? '-'} icon={<Zap size={18} />} scale="warningScale" />
           </Box>
+
+          {/* ---- Info Bar: View Mode, Retention, Export Range --------- */}
+          {(viewMode || retentionDays != null || exportRange) && (
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap' as const }}>
+              {viewMode && (
+                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <Layers size={11} />
+                  <Text style={{ fontSize: 'inherit' }}>View: {viewMode}</Text>
+                </Box>
+              )}
+              {retentionDays != null && (
+                <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <Clock size={11} />
+                  <Text style={{ fontSize: 'inherit' }}>Retention: {retentionDays}d</Text>
+                </Box>
+              )}
+              {exportRange && exportRange.length === 2 && (
+                <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <Download size={11} />
+                  <Text style={{ fontSize: 'inherit' }}>Export: {exportRange[0]} - {exportRange[1]}</Text>
+                </Box>
+              )}
+            </Box>
+          )}
 
           {/* ---- Filter Bar ----------------------------------------- */}
           <Box style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: t.spacing[3] }}>
@@ -523,6 +538,53 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                   );
                 })}
               </Box>
+            </Box>
+          )}
+
+          {/* ---- AI Audit Events ------------------------------------ */}
+          {aiAuditEvents.length > 0 && (
+            <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+                <Box style={{ color: t.colors.secondaryScale[500] }}>
+                  <Zap size={16} />
+                </Box>
+                <Text style={{ ...sectionHdr, marginBottom: 0 }}>AI Audit Events</Text>
+                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR }}>
+                  <Text style={{ fontSize: 'inherit' }}>{aiAuditEvents.length}</Text>
+                </Box>
+              </Box>
+              {aiAuditEvents.slice(0, 10).map((aiEvent, idx) => {
+                const itemEntrance = createEntranceAnimation(t, { index: idx });
+                return (
+                  <Box key={aiEvent.id ?? `ai-${idx}`} style={{
+                    display: 'flex', alignItems: 'center', gap: t.spacing[3],
+                    padding: `${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
+                    backgroundColor: t.colors.neutral[50],
+                    ...itemEntrance.animate, transition: itemEntrance.transition,
+                  }}>
+                    <Box style={{
+                      ...createIconContainerStyle(t, { size: 28, color: t.colors.secondaryScale[100] }),
+                      color: t.colors.secondaryScale[600],
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Zap size={14} />
+                    </Box>
+                    <Box style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                        {(aiEvent as any).action ?? (aiEvent as any).eventType ?? 'AI Event'}
+                      </Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                        {(aiEvent as any).model ?? ''} {(aiEvent as any).createdAt ? `- ${new Date((aiEvent as any).createdAt).toLocaleDateString()}` : ''}
+                      </Text>
+                    </Box>
+                    {(aiEvent as any).tokensUsed != null && (
+                      <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR }}>
+                        <Text style={{ fontSize: 'inherit' }}>{(aiEvent as any).tokensUsed} tokens</Text>
+                      </Box>
+                    )}
+                  </Box>
+                );
+              })}
             </Box>
           )}
 

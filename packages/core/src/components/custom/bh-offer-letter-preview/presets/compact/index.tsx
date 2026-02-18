@@ -19,14 +19,6 @@ import type { BhOfferLetterPreviewProps, OfferLetterData } from '../../core';
 import { offerToLetterData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
-const MOCK_LETTER: OfferLetterData = {
-  candidateName: 'Sarah Johnson',
-  position: 'Senior Frontend Engineer',
-  salary: 137000,
-  startDate: 'March 15, 2026',
-  benefits: ['Health insurance', '401(k)', '20 PTO days', 'Remote work'],
-};
-
 export const CompactBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProps>({
   name: 'BhOfferLetterPreview.Compact',
   render: (ctx: PresetContext<BhOfferLetterPreviewProps>) => {
@@ -49,7 +41,6 @@ export const CompactBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
 
     const letterData = letterDataProp
       ?? (offer ? offerToLetterData(offer, candidateNameProp) : { candidateName: '', position: '', salary: 0, startDate: '', benefits: [] });
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

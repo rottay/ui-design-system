@@ -45,8 +45,6 @@ function generateMockData(): ResponseData[] {
   return data;
 }
 
-const MOCK_DATA = generateMockData();
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -73,17 +71,18 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      data: rawData = MOCK_DATA,
+      data: rawData = undefined,
       overallResponseRate = 28.5,
       bestTime = { hour: 10, day: 'Tuesday' },
       title = 'Response Analytics',
+      channel,
+      period,
       loading,
       className,
       style,
     } = props;
 
-    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
-
+    const data = Array.isArray(rawData) ? rawData : [] as ResponseData[];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -140,9 +139,29 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
               }}>
                 {title}
               </Text>
-              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
-                Response patterns and optimal send times
-              </Text>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
+                  Response patterns and optimal send times
+                </Text>
+                {channel && (
+                  <Box style={{
+                    ...createBadgeStyle(t, 'secondary'),
+                    borderRadius: badgeRadius,
+                    padding: `1px ${t.spacing[2]}px`,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{channel}</Text>
+                  </Box>
+                )}
+                {period && (
+                  <Box style={{
+                    ...createBadgeStyle(t, 'info'),
+                    borderRadius: badgeRadius,
+                    padding: `1px ${t.spacing[2]}px`,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs }}>{period}</Text>
+                  </Box>
+                )}
+              </Box>
             </Box>
           </Box>
         </Box>

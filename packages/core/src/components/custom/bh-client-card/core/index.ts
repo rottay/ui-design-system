@@ -26,6 +26,15 @@ export interface BhClientCardProps extends EngineAwareProps {
   /** Click handler */
   onClick?: () => void;
 
+  /** Whether to display the client tier badge */
+  showTier?: boolean;
+
+  /** Whether to display key metrics (placements, revenue) */
+  showMetrics?: boolean;
+
+  /** Use compact layout with reduced spacing */
+  compact?: boolean;
+
   /** Additional CSS class name(s) */
   className?: string;
 

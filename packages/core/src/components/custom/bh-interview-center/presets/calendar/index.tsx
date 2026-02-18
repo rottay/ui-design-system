@@ -226,7 +226,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     // --- Stats Bar ---
     const renderStatsBar = () => {
       if (!stats) return null;
-      const items = [
+      const items: { label: string; value: string | number; icon: React.ReactNode; scale: string; pulse?: boolean; trend?: number }[] = [
         { label: 'Scheduled Today', value: stats.scheduledToday, icon: <CalendarDays size={16} />, scale: 'infoScale' },
         { label: 'In Progress', value: stats.inProgress, icon: <Activity size={16} />, scale: 'warningScale', pulse: true },
         { label: 'Completed', value: stats.completedToday, icon: <CheckCircle2 size={16} />, scale: 'successScale' },
@@ -234,8 +234,17 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
         { label: 'Avg Duration', value: `${stats.avgDuration}m`, icon: <Timer size={16} />, scale: 'secondaryScale' },
         { label: 'Completion Rate', value: `${stats.completionRate}%`, icon: <BarChart3 size={16} />, scale: 'primaryScale', trend: stats.completionTrend },
       ];
+      if (stats.avgScore != null) {
+        items.push({ label: 'Avg Score', value: `${stats.avgScore}`, icon: <Star size={16} />, scale: 'primaryScale' });
+      }
+      if (stats.npsScore != null) {
+        items.push({ label: 'NPS Score', value: `${stats.npsScore}`, icon: <TrendingUp size={16} />, scale: 'successScale' });
+      }
+      if (stats.technicalIssueRate != null) {
+        items.push({ label: 'Tech Issues', value: `${stats.technicalIssueRate}%`, icon: <XCircle size={16} />, scale: 'errorScale' });
+      }
       return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
+        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(items.length, 6)}, 1fr)`, gap: t.spacing[3], marginBottom: t.spacing[4] }}>
           {items.map((item, idx) => (
             <div key={idx} style={{ ...createCardStyle(t, { elevation: 'sm', glass: isModern }), padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2], ...(isModern ? glassSurface : {}) }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

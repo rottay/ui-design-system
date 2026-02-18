@@ -17,6 +17,16 @@ export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 export interface SeverityCount {
   severity: ProctoringEventSeverity;
   count: number;
+  /** Number of reviewed events at this severity level */
+  reviewedCount?: number;
+  /** Number of dismissed events at this severity level */
+  dismissedCount?: number;
+  /** Percentage of total events (pre-computed by consumer) */
+  percentage?: number;
+  /** Trend direction compared to previous period */
+  trend?: 'up' | 'down' | 'stable';
+  /** Trend percentage change */
+  trendPercentage?: number;
 }
 
 export interface BhProctoringSeverityProps extends EngineAwareProps {

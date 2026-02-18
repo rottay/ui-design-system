@@ -59,6 +59,28 @@ export interface JobFormData {
   openings: number;
   templateId: string;
   clientId: string;
+  /** Work mode: remote, hybrid, onsite, or flexible */
+  workMode?: 'remote' | 'hybrid' | 'onsite' | 'flexible';
+  /** List of perks beyond standard benefits */
+  perks?: string[];
+  /** Timezone requirements for the role */
+  timezoneRequirements?: string;
+  /** Countries where remote work is allowed */
+  remoteCountries?: string[];
+  /** Whether the role is eligible for equity compensation */
+  equityEligible?: boolean;
+  /** Whether the role is eligible for bonus compensation */
+  bonusEligible?: boolean;
+  /** Bonus percentage of base salary */
+  bonusPercentage?: number;
+  /** Hiring urgency level from DB */
+  hiringUrgency?: 'low' | 'normal' | 'high' | 'urgent';
+  /** SEO meta title for the job posting */
+  metaTitle?: string;
+  /** SEO meta description for the job posting */
+  metaDescription?: string;
+  /** SEO keywords for the job posting */
+  keywords?: string[];
 }
 
 export interface JobEditorStep {

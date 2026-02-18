@@ -10,35 +10,36 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Wallet, AlertTriangle, TrendingUp, Save,
   Settings, DollarSign, Users, Bell,
+  ShoppingCart, Clock, Package, Trash2, ToggleLeft, ToggleRight,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
   createBadgeStyle,
+  createBooleanBadgeStyles,
   createCardHoverStyles,
   createEntranceAnimation,
   createStaggerDelay,
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
   createProgressBarStyle,
+  createMetadataFieldStyle,
+  createMetadataLabelStyle,
+  createMetadataValueStyle,
+  createMetadataGridStyle,
+  createStatValueStyle,
+  createStatLabelStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
   createEmptyStateStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { BhTokenBudgetProps, BudgetAllocation } from '../../core';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_ALLOCATIONS: BudgetAllocation[] = [
-  { teamId: 't-1', teamName: 'Engineering', allocated: 5000, used: 3200, alertThreshold: 80 },
-  { teamId: 't-2', teamName: 'Product', allocated: 3000, used: 2700, alertThreshold: 75 },
-  { teamId: 't-3', teamName: 'Design', allocated: 2000, used: 800, alertThreshold: 90 },
-  { teamId: 't-4', teamName: 'Marketing', allocated: 1500, used: 1400, alertThreshold: 85 },
-  { teamId: 't-5', teamName: 'Sales', allocated: 2500, used: 1100, alertThreshold: 80 },
-];
 
 /* ================================================================== */
 /*  Config Preset                                                      */
@@ -54,7 +55,7 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      allocations: rawAllocations = MOCK_ALLOCATIONS,
+      allocations: rawAllocations = [],
       totalBudget = 14000,
       totalUsed = 9200,
       currency = '$',
@@ -62,12 +63,19 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
       onAlertChange,
       onSave,
       loading,
+      lifetimePurchased,
+      lifetimeConsumed,
+      lifetimeExpired,
+      autoPurchaseEnabled,
+      autoPurchaseThreshold,
+      autoPurchaseAmount,
+      lastPurchaseAt,
+      lowBalanceAlertSent,
       className,
       style,
     } = props;
 
-    const allocations = Array.isArray(rawAllocations) ? rawAllocations : MOCK_ALLOCATIONS;
-
+    const allocations = Array.isArray(rawAllocations) ? rawAllocations : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -153,7 +161,7 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
                 fontWeight: t.typography.fontWeight.medium,
               }}
             >
-              <Save size={16} />
+              <Save size={ICON_SIZES.section} />
               <Text style={{ color: t.colors.common.white, fontSize: t.typography.fontSize.sm }}>Save</Text>
             </Box>
           </Box>
@@ -190,21 +198,10 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
                       <Icon size={18} color={sc.color[600]} />
                     </Box>
                   </Box>
-                  <Text style={{
-                    fontSize: t.typography.fontSize['2xl'],
-                    fontWeight: t.typography.fontWeight.bold,
-                    color: t.colors.neutral[900],
-                    display: 'block',
-                  }}>
+                  <Text style={createStatValueStyle(t, { size: '2xl' })}>
                     {sc.value}
                   </Text>
-                  <Text style={{
-                    fontSize: t.typography.fontSize.xs,
-                    color: t.colors.neutral[500],
-                    marginTop: t.spacing[1],
-                    textTransform: ptypo.labelTransform,
-                    letterSpacing: ptypo.labelLetterSpacing,
-                  }}>
+                  <Text style={{ ...createStatLabelStyle(t, { personality: ptypo }), marginTop: t.spacing[1] }}>
                     {sc.label}
                   </Text>
                 </Box>
@@ -224,6 +221,119 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
               <Box style={overallProgress.fill} />
             </Box>
           </Box>
+
+          {/* Lifetime Metrics */}
+          {(lifetimePurchased != null || lifetimeConsumed != null || lifetimeExpired != null) && (
+            <Box style={{
+              ...createMetadataGridStyle(t, { columns: 3 }),
+              gap: t.spacing[4],
+              marginBottom: t.spacing[7],
+            }}>
+              {[
+                { label: 'Lifetime Purchased', value: lifetimePurchased ?? 0, icon: Package, color: t.colors.primaryScale },
+                { label: 'Lifetime Consumed', value: lifetimeConsumed ?? 0, icon: TrendingUp, color: t.colors.warningScale },
+                { label: 'Lifetime Expired', value: lifetimeExpired ?? 0, icon: Trash2, color: t.colors.errorScale },
+              ].map((m) => {
+                const Icon = m.icon;
+                return (
+                  <Box key={m.label} style={{ ...card, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+                      <Box style={createIconContainerStyle(t, { size: 32, color: m.color[50] })}>
+                        <Icon size={ICON_SIZES.section} color={m.color[600]} />
+                      </Box>
+                    </Box>
+                    <Text style={createStatValueStyle(t)}>
+                      {currency}{m.value.toLocaleString()}
+                    </Text>
+                    <Text style={createStatLabelStyle(t, { personality: ptypo })}>
+                      {m.label}
+                    </Text>
+                  </Box>
+                );
+              })}
+            </Box>
+          )}
+
+          {/* Auto-Purchase Configuration */}
+          {(autoPurchaseEnabled != null || autoPurchaseThreshold != null || autoPurchaseAmount != null) && (
+            <Box style={{ ...card, ...animStyle(6), marginBottom: t.spacing[7] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.primaryScale[50] })}>
+                    <ShoppingCart size={ICON_SIZES.section} color={t.colors.primaryScale[600]} />
+                  </Box>
+                  <Text style={sectionLabel}>Auto-Purchase</Text>
+                </Box>
+                {(() => {
+                  const apBadge = createBooleanBadgeStyles(t, autoPurchaseEnabled);
+                  return apBadge && (
+                    <Box style={apBadge}>
+                      {autoPurchaseEnabled
+                        ? <ToggleRight size={ICON_SIZES.label} />
+                        : <ToggleLeft size={ICON_SIZES.label} />}
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                        {autoPurchaseEnabled ? 'Enabled' : 'Disabled'}
+                      </Text>
+                    </Box>
+                  );
+                })()}
+              </Box>
+              <Box style={createMetadataGridStyle(t, { columns: 'repeat(auto-fit, minmax(160px, 1fr))' })}>
+                {autoPurchaseThreshold != null && (
+                  <Box style={createMetadataFieldStyle(t, { withBackground: true })}>
+                    <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>
+                      Threshold
+                    </Text>
+                    <Text style={createMetadataValueStyle(t, { size: 'sm', weight: 'semibold' })}>
+                      {currency}{autoPurchaseThreshold.toLocaleString()}
+                    </Text>
+                  </Box>
+                )}
+                {autoPurchaseAmount != null && (
+                  <Box style={createMetadataFieldStyle(t, { withBackground: true })}>
+                    <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>
+                      Purchase Amount
+                    </Text>
+                    <Text style={createMetadataValueStyle(t, { size: 'sm', weight: 'semibold' })}>
+                      {currency}{autoPurchaseAmount.toLocaleString()}
+                    </Text>
+                  </Box>
+                )}
+                {lastPurchaseAt && (
+                  <Box style={createMetadataFieldStyle(t, { withBackground: true })}>
+                    <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>
+                      Last Purchase
+                    </Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Clock size={ICON_SIZES.label} color={t.colors.neutral[500]} />
+                      <Text style={createMetadataValueStyle(t)}>
+                        {new Date(lastPurchaseAt).toLocaleDateString()}
+                      </Text>
+                    </Box>
+                  </Box>
+                )}
+                {lowBalanceAlertSent != null && (
+                  <Box style={{
+                    ...createMetadataFieldStyle(t),
+                    padding: t.spacing[3],
+                    borderRadius: t.borderRadius.md,
+                    backgroundColor: lowBalanceAlertSent ? t.colors.warningScale[50] : t.colors.neutral[50],
+                    border: `1px solid ${lowBalanceAlertSent ? t.colors.warningScale[200] : t.colors.neutral[100]}`,
+                  }}>
+                    <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>
+                      Low Balance Alert
+                    </Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Bell size={ICON_SIZES.label} color={lowBalanceAlertSent ? t.colors.warningScale[600] : t.colors.neutral[400]} />
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: lowBalanceAlertSent ? t.colors.warningScale[700] : t.colors.neutral[600] }}>
+                        {lowBalanceAlertSent ? 'Sent' : 'Not triggered'}
+                      </Text>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          )}
 
           {/* Team Allocations */}
           <Box style={{ ...card, ...animStyle(5), padding: 0 }}>
@@ -298,7 +408,7 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
                             alignItems: 'center',
                             gap: 3,
                           }}>
-                            <AlertTriangle size={10} />
+                            <AlertTriangle size={ICON_SIZES.inline} />
                             <Text style={{ fontSize: t.typography.fontSize.xs }}>Alert</Text>
                           </Box>
                         )}
@@ -309,7 +419,7 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
                           alignItems: 'center',
                           gap: 3,
                         }}>
-                          <Bell size={10} />
+                          <Bell size={ICON_SIZES.inline} />
                           <Text style={{ fontSize: t.typography.fontSize.xs }}>{alloc.alertThreshold}%</Text>
                         </Box>
                       </Box>

@@ -38,12 +38,6 @@ function getChannelIcon(channel: NotificationRule['channel']) {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RULES: NotificationRule[] = [
-  { id: 'n-1', event: 'Candidate Applied', channel: 'email', recipients: ['recruiter@company.com'], enabled: true },
-  { id: 'n-2', event: 'Interview Scheduled', channel: 'slack', recipients: ['#hiring-updates'], enabled: true },
-  { id: 'n-3', event: 'Assessment Completed', channel: 'in-app', recipients: ['panel-members'], enabled: false },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -58,14 +52,13 @@ export const CompactBhWorkflowNotification = createPreset<BhWorkflowNotification
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules: rawRules = MOCK_RULES,
+      rules: rawRules = [],
       onRuleToggle,
       className,
       style,
     } = props;
 
-    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
-
+    const rules = Array.isArray(rawRules) ? rawRules : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

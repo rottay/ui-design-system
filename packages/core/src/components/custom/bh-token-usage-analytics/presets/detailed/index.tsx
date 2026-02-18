@@ -43,23 +43,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_USAGE: TokenUsagePoint[] = [
-  { date: '2026-01-06', tokens: 124000, cost: 3.72 },
-  { date: '2026-01-13', tokens: 156000, cost: 4.68 },
-  { date: '2026-01-20', tokens: 189000, cost: 5.67 },
-  { date: '2026-01-27', tokens: 142000, cost: 4.26 },
-  { date: '2026-02-03', tokens: 198000, cost: 5.94 },
-  { date: '2026-02-10', tokens: 221000, cost: 6.63 },
-];
-
-const MOCK_CATEGORIES: TokenCategory[] = [
-  { category: 'Resume Parsing', tokens: 420000, percentage: 35 },
-  { category: 'Interview Analysis', tokens: 264000, percentage: 22 },
-  { category: 'Job Description', tokens: 192000, percentage: 16 },
-  { category: 'Candidate Matching', tokens: 156000, percentage: 13 },
-  { category: 'Email Generation', tokens: 108000, percentage: 9 },
-  { category: 'Other', tokens: 60000, percentage: 5 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -106,17 +89,18 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
       title = 'Token Usage Analytics',
       onDateRangeChange,
       loading = false,
+      granularity,
+      topProviders,
       className,
       style,
     } = props;
 
-    const usage = usageProp?.length ? usageProp : MOCK_USAGE;
-    const categories = catProp?.length ? catProp : MOCK_CATEGORIES;
+    const usage = usageProp?.length ? usageProp : [];
+    const categories = catProp?.length ? catProp : [];
     const totalTokens = totalProp ?? usage.reduce((s, p) => s + p.tokens, 0);
     const totalCost = costProp ?? usage.reduce((s, p) => s + p.cost, 0);
 
     const [dateRange, setDateRange] = useState('30d');
-
 
     const handleRangeChange = useCallback((range: string) => {
       setDateRange(range);
@@ -234,7 +218,19 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
                 </Text>
               </Box>
             </Box>
-            {/* Date range selector */}
+            {/* Granularity + Date range selector */}
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+            {granularity && (
+              <Box style={{
+                ...createBadgeStyle(t, 'secondary'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{granularity}</Text>
+              </Box>
+            )}
             <Box style={{ display: 'flex', gap: t.spacing[1] }} role="radiogroup" aria-label="Date range">
               {[
                 { label: '7d', value: '7d' },
@@ -264,6 +260,7 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
                   </Text>
                 </Box>
               ))}
+            </Box>
             </Box>
           </Box>
         </Box>
@@ -519,6 +516,47 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
               );
             })}
           </Box>
+
+          {/* Top Providers */}
+          {topProviders && topProviders.length > 0 && (
+            <Box style={{ ...card, ...animStyle(8), marginTop: t.spacing[6] }} role="region" aria-label="Top AI providers">
+              <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px`, borderBottom: `1px solid ${t.colors.neutral[100]}` }}>
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                  Top AI Providers
+                </Text>
+              </Box>
+              {topProviders.map((provider, idx) => (
+                <Box key={provider.name} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: `${t.spacing[3]}px ${t.spacing[5]}px`,
+                  borderBottom: `1px solid ${t.colors.neutral[50]}`,
+                }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                    <Box style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: t.borderRadius.full,
+                      backgroundColor: categoryColors[idx % categoryColors.length],
+                      flexShrink: 0,
+                    }} />
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                      {provider.name}
+                    </Text>
+                  </Box>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>
+                      {formatTokens(provider.tokens)}
+                    </Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                      {formatCurrency(provider.cost, currency)}
+                    </Text>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
         </Box>
       </Box>
     );

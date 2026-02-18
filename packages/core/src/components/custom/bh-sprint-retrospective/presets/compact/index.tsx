@@ -9,6 +9,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   ThumbsUp, Smile, AlertTriangle, Zap, MessageCircle, Activity,
+  Target, BarChart3, Users as UsersIcon,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -19,6 +20,9 @@ import {
   createListItemStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createStatValueStyle,
+  createStatLabelStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { BhSprintRetrospectiveProps, RetroItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -26,15 +30,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_ITEMS: RetroItem[] = [
-  { id: 'r1', text: 'AI screening reduced time-to-shortlist by 40%', category: 'good', votes: 5, author: 'Sarah Chen' },
-  { id: 'r2', text: 'Interview rubric calibration needs improvement', category: 'improve', votes: 6, author: 'John Davis' },
-  { id: 'r3', text: 'Create standardized rubric templates for each role type', category: 'action', votes: 7, author: 'Lisa Park' },
-  { id: 'r4', text: 'Team collaboration on candidate reviews was excellent', category: 'good', votes: 3, author: 'Mike Wilson' },
-  { id: 'r5', text: 'Pipeline visibility for hiring managers was lacking', category: 'improve', votes: 4, author: 'Sarah Chen' },
-  { id: 'r6', text: 'Implement real-time pipeline dashboard', category: 'action', votes: 5, author: 'John Davis' },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -80,16 +75,23 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      items: rawItems = MOCK_ITEMS,
-      sprintName = 'Sprint 12',
+      items: rawItems = [],
+      sprint,
+      sprintName: sprintNameProp = 'Sprint 12',
       onVote,
+      goals: rawGoals,
+      completionPercentage,
+      memberSnapshot: rawMemberSnapshot,
       loading = false,
       className,
       style,
     } = props;
 
-    const items = Array.isArray(rawItems) ? rawItems : MOCK_ITEMS;
+    const sprintName = sprint?.name ?? sprintNameProp;
+    const goals = Array.isArray(rawGoals) ? rawGoals : [];
+    const memberSnapshot = Array.isArray(rawMemberSnapshot) ? rawMemberSnapshot : [];
 
+    const items = Array.isArray(rawItems) ? rawItems : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -118,7 +120,7 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
       return (
         <Box className={className} style={{ ...card, ...animStyle, ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[4] }}>
-            <Activity size={20} color={t.colors.neutral[300]} style={{ animation: 'pulse 1.5s infinite' }} />
+            <Activity size={ICON_SIZES.feature} color={t.colors.neutral[300]} style={{ animation: 'pulse 1.5s infinite' }} />
           </Box>
         </Box>
       );
@@ -148,7 +150,7 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
           justifyContent: 'space-between',
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-            <MessageCircle size={16} color={t.colors.primaryScale[500]} />
+            <MessageCircle size={ICON_SIZES.section} color={t.colors.primaryScale[500]} />
             <Text style={{
               fontSize: t.typography.fontSize.sm,
               fontWeight: ptypo.headingWeight,
@@ -161,6 +163,47 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
             {sprintName}
           </Text>
         </Box>
+
+        {/* Sprint stats row */}
+        {(completionPercentage != null || goals.length > 0 || memberSnapshot.length > 0) && (
+          <Box style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[3],
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            flexWrap: 'wrap',
+          }}>
+            {completionPercentage != null && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <BarChart3 size={ICON_SIZES.inline} color={completionPercentage >= 80 ? t.colors.successScale[500] : t.colors.warningScale[500]} />
+                <Text style={{
+                  fontSize: t.typography.fontSize.xs,
+                  fontWeight: t.typography.fontWeight.bold,
+                  color: completionPercentage >= 80 ? t.colors.successScale[700] : completionPercentage >= 50 ? t.colors.warningScale[700] : t.colors.errorScale[700],
+                }}>
+                  {completionPercentage}%
+                </Text>
+              </Box>
+            )}
+            {goals.length > 0 && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <Target size={ICON_SIZES.inline} color={t.colors.primaryScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  {goals.length} goal{goals.length !== 1 ? 's' : ''}
+                </Text>
+              </Box>
+            )}
+            {memberSnapshot.length > 0 && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <UsersIcon size={ICON_SIZES.inline} color={t.colors.primaryScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  {memberSnapshot.length} member{memberSnapshot.length !== 1 ? 's' : ''}
+                </Text>
+              </Box>
+            )}
+          </Box>
+        )}
 
         {/* Category counts */}
         <Box style={{
@@ -188,16 +231,11 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
                   borderRight: c.cat !== 'action' ? `1px solid ${t.colors.neutral[100]}` : undefined,
                 }}
               >
-                <Icon size={14} color={c.color[500]} />
-                <Text style={{
-                  fontSize: t.typography.fontSize.lg,
-                  fontWeight: t.typography.fontWeight.bold,
-                  color: t.colors.neutral[900],
-                  display: 'block',
-                }}>
+                <Icon size={ICON_SIZES.label} color={c.color[500]} />
+                <Text style={createStatValueStyle(t, { size: 'lg' })}>
                   {counts[c.cat]}
                 </Text>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                <Text style={createStatLabelStyle(t)}>
                   {c.label}
                 </Text>
               </Box>
@@ -229,7 +267,7 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
                     gap: t.spacing[2],
                   }}
                 >
-                  <Icon size={12} color={catColor} style={{ flexShrink: 0 }} />
+                  <Icon size={ICON_SIZES.label} color={catColor} style={{ flexShrink: 0 }} />
                   <Text style={{
                     flex: 1,
                     fontSize: t.typography.fontSize.xs,
@@ -258,14 +296,14 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
                         transition: `all ${t.motion.hover}`,
                       }}
                     >
-                      <ThumbsUp size={10} />
+                      <ThumbsUp size={ICON_SIZES.inline} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                         {item.votes}
                       </Text>
                     </Box>
                   ) : (
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
-                      <ThumbsUp size={10} color={t.colors.neutral[400]} />
+                      <ThumbsUp size={ICON_SIZES.inline} color={t.colors.neutral[400]} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                         {item.votes}
                       </Text>

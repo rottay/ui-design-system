@@ -72,27 +72,6 @@ function getStatusLabel(status: string): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SCORECARD: ScorecardDetail = {
-  id: 'sc-1',
-  scorableId: 'int-1',
-  candidateName: 'Sarah Johnson',
-  jobTitle: 'Senior Frontend Engineer',
-  overallScore: 4.2,
-  maxScore: 5,
-  dimensions: [
-    { dimensionId: 'dim-1', dimensionName: 'Technical Knowledge', score: 4.5, maxScore: 5, weight: 0.25, confidence: 0.92, evidenceCount: 8, notes: 'Strong React and TypeScript skills' },
-    { dimensionId: 'dim-2', dimensionName: 'Problem Solving', score: 4.0, maxScore: 5, weight: 0.20, confidence: 0.85, evidenceCount: 6 },
-    { dimensionId: 'dim-3', dimensionName: 'Communication', score: 4.8, maxScore: 5, weight: 0.15, confidence: 0.90, evidenceCount: 5 },
-    { dimensionId: 'dim-4', dimensionName: 'System Design', score: 3.5, maxScore: 5, weight: 0.20, confidence: 0.78, evidenceCount: 4 },
-    { dimensionId: 'dim-5', dimensionName: 'Cultural Fit', score: 4.2, maxScore: 5, weight: 0.10, confidence: 0.88, evidenceCount: 3 },
-    { dimensionId: 'dim-6', dimensionName: 'Leadership', score: 3.8, maxScore: 5, weight: 0.10, confidence: 0.72, evidenceCount: 2 },
-  ],
-  scoredBy: 'Alex Rivera',
-  scoredAt: new Date(Date.now() - 3600000),
-  calibrated: true,
-  status: 'calibrated',
-};
-
 /* ------------------------------------------------------------------ */
 /*  Module-level Box/Text for sub-components                           */
 /* ------------------------------------------------------------------ */
@@ -288,7 +267,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      scorecard: rawScorecard = MOCK_SCORECARD,
+      scorecard: rawScorecard = {} as Partial<ScorecardDetail>,
       onDimensionClick,
       onCalibrateClick,
       onExportClick,
@@ -297,10 +276,9 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
       style,
     } = props;
 
-    const scorecard = Array.isArray(rawScorecard) ? rawScorecard : MOCK_SCORECARD;
+    const scorecard = rawScorecard as Partial<ScorecardDetail>;
 
     const [hoveredDim, setHoveredDim] = useState<string | null>(null);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -313,7 +291,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
       onDimensionClick?.(dimId);
     }, [onDimensionClick]);
 
-    const dims = scorecard.dimensions ?? [];
+    const dims = scorecard.dimensions ?? props.dimensionScores ?? [];
     const sortedByScore = useMemo(
       () => [...dims].sort((a, b) => n(b.score) - n(a.score)),
       [dims],
@@ -443,6 +421,20 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
         <Box style={accentLayout.inner}>
               <Text style={{ ...sectionLabel, marginBottom: 0 }}>Overall Score</Text>
               <ScoreGauge score={n(scorecard.overallScore)} maxScore={n(scorecard.maxScore) || 1} tokens={t} />
+              {/* Score Level Badge */}
+              {scorecard.scoreLevel && (
+                <Box style={{
+                  ...createBadgeStyle(t, scorecard.scoreLevel === 'excellent' || scorecard.scoreLevel === 'good' ? 'success' : scorecard.scoreLevel === 'average' ? 'warning' : 'error'),
+                  borderRadius: badgeRadius,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 3,
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>
+                    {scorecard.scoreLevel}
+                  </Text>
+                </Box>
+              )}
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                 {scorecard.calibrated && (
                   <Box style={{
@@ -456,6 +448,21 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>Calibrated</Text>
                   </Box>
                 )}
+                {/* Override indicator */}
+                {scorecard.overrideScore !== undefined && scorecard.overrideScore !== null && (
+                  <Box style={{
+                    ...createBadgeStyle(t, 'warning'),
+                    borderRadius: badgeRadius,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 3,
+                  }}>
+                    <Scale size={10} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                      Override: {scorecard.originalScore} {'→'} {scorecard.overrideScore}
+                    </Text>
+                  </Box>
+                )}
               </Box>
             </Box>
 
@@ -467,6 +474,104 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
               </Box>
             </Box>
           </Box>
+
+          {/* Summary */}
+          {scorecard.summary && (
+            <Box style={{ ...card, ...animStyle(2), marginBottom: t.spacing[6] }}>
+              <Text style={sectionLabel}>Summary</Text>
+              <Text style={{
+                fontSize: t.typography.fontSize.sm,
+                color: t.colors.neutral[700],
+                lineHeight: t.typography.lineHeight.relaxed,
+              }}>
+                {scorecard.summary}
+              </Text>
+            </Box>
+          )}
+
+          {/* Strengths / Weaknesses */}
+          {((scorecard.strengths && scorecard.strengths.length > 0) || (scorecard.weaknesses && scorecard.weaknesses.length > 0)) && (
+            <Box style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: t.spacing[6],
+              marginBottom: t.spacing[6],
+            }}>
+              {scorecard.strengths && scorecard.strengths.length > 0 && (
+                <Box style={{ ...card, ...animStyle(2) }}>
+                  <Text style={{
+                    ...sectionLabel,
+                    color: t.colors.successScale[700],
+                  }}>Strengths</Text>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
+                    {scorecard.strengths.map((s, i) => (
+                      <Box key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: t.spacing[2] }}>
+                        <CheckCircle size={12} color={t.colors.successScale[500]} style={{ flexShrink: 0, marginTop: 2 }} />
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{s}</Text>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+              {scorecard.weaknesses && scorecard.weaknesses.length > 0 && (
+                <Box style={{ ...card, ...animStyle(2) }}>
+                  <Text style={{
+                    ...sectionLabel,
+                    color: t.colors.errorScale[700],
+                  }}>Weaknesses</Text>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
+                    {scorecard.weaknesses.map((w, i) => (
+                      <Box key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: t.spacing[2] }}>
+                        <AlertCircle size={12} color={t.colors.errorScale[500]} style={{ flexShrink: 0, marginTop: 2 }} />
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{w}</Text>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          )}
+
+          {/* Review Info */}
+          {scorecard.reviewedBy && (
+            <Box style={{
+              ...card,
+              ...animStyle(2),
+              marginBottom: t.spacing[6],
+              display: 'flex',
+              alignItems: 'center',
+              gap: t.spacing[4],
+            }}>
+              <Box style={{
+                ...createBadgeStyle(t, 'primary'),
+                borderRadius: badgeRadius,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+              }}>
+                <User size={12} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Reviewed</Text>
+              </Box>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>
+                {scorecard.reviewedBy}
+              </Text>
+              {scorecard.reviewedAt && (
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  {formatDistanceToNow(new Date(scorecard.reviewedAt), { addSuffix: true })}
+                </Text>
+              )}
+              {scorecard.reviewNotes && (
+                <Text style={{
+                  fontSize: t.typography.fontSize.xs,
+                  color: t.colors.neutral[500],
+                  fontStyle: 'italic',
+                  flex: 1,
+                }}>
+                  {scorecard.reviewNotes}
+                </Text>
+              )}
+            </Box>
+          )}
 
           {/* Dimension Breakdown */}
           <Box style={{ ...card, ...animStyle(2), marginBottom: t.spacing[7] }}>

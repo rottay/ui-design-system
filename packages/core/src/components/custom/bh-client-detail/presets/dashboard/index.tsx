@@ -42,25 +42,6 @@ import type { BhClientDetailProps, ClientPosition, RevenuePoint } from '../../co
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_POSITIONS: ClientPosition[] = [
-  { id: 'p1', title: 'Senior Frontend Engineer', status: 'open', candidates: 24, daysOpen: 15 },
-  { id: 'p2', title: 'Backend Engineer', status: 'open', candidates: 18, daysOpen: 22 },
-  { id: 'p3', title: 'DevOps Engineer', status: 'filled', candidates: 12, daysOpen: 0 },
-  { id: 'p4', title: 'QA Lead', status: 'open', candidates: 8, daysOpen: 30 },
-  { id: 'p5', title: 'Product Manager', status: 'closed', candidates: 20, daysOpen: 0 },
-  { id: 'p6', title: 'Data Scientist', status: 'open', candidates: 15, daysOpen: 10 },
-  { id: 'p7', title: 'UI/UX Designer', status: 'filled', candidates: 9, daysOpen: 0 },
-];
-
-const MOCK_REVENUE: RevenuePoint[] = [
-  { month: 'Jul', amount: 12000 },
-  { month: 'Aug', amount: 15000 },
-  { month: 'Sep', amount: 18000 },
-  { month: 'Oct', amount: 14000 },
-  { month: 'Nov', amount: 22000 },
-  { month: 'Dec', amount: 19000 },
-  { month: 'Jan', amount: 25000 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  SVG Helpers                                                        */
@@ -94,6 +75,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
       client,
       positions: rawPositionsProp = [],
       revenueHistory: rawRevenueProp = [],
+      billingRecords: rawBillingRecords = [],
       onPositionClick,
       loading,
       className,
@@ -102,6 +84,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
 
     const positionsProp = Array.isArray(rawPositionsProp) ? rawPositionsProp : [];
     const revenueProp = Array.isArray(rawRevenueProp) ? rawRevenueProp : [];
+    const billingRecords = Array.isArray(rawBillingRecords) ? rawBillingRecords : [];
 
     const clientName = client?.displayName ?? client?.clientCompanyName ?? '';
     const tier = (client?.tier ?? 'enterprise') as string;
@@ -439,6 +422,70 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
             </Box>
           </Box>
         </Box>
+
+        {/* Billing Records */}
+        {billingRecords.length > 0 && (
+          <Box style={{ ...card }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <DollarSign size={16} style={{ color: t.colors.successScale[500] }} />
+              <Text style={{ ...sectionHdr, marginBottom: 0 }}>Billing Records</Text>
+              <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR }}>
+                <Text style={{ fontSize: 'inherit' }}>{billingRecords.length}</Text>
+              </Box>
+            </Box>
+
+            {/* Table header */}
+            <Box style={{
+              display: 'grid',
+              gridTemplateColumns: '2fr 1fr 1fr 1fr',
+              gap: t.spacing[2],
+              padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+              backgroundColor: t.colors.neutral[50],
+              borderRadius: t.borderRadius.md,
+              marginBottom: t.spacing[2],
+            }}>
+              {['Description', 'Amount', 'Status', 'Date'].map((col) => (
+                <Text key={col} style={{ ...sectionHdr, marginBottom: 0 }}>{col}</Text>
+              ))}
+            </Box>
+
+            {/* Billing rows */}
+            {billingRecords.slice(0, 10).map((record: any, idx: number) => {
+              const entrance = createEntranceAnimation(t, { index: idx });
+              const billingStatus = record.status ?? record.billingStatus ?? 'pending';
+              const statusBadge = billingStatus === 'paid' ? 'success' : billingStatus === 'overdue' ? 'error' : 'warning';
+              return (
+                <Box
+                  key={record.id ?? idx}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '2fr 1fr 1fr 1fr',
+                    gap: t.spacing[2],
+                    padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                    borderBottom: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[100]}`,
+                    alignItems: 'center',
+                    ...entrance.animate,
+                  }}
+                >
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
+                    {record.description ?? record.invoiceNumber ?? `Invoice #${idx + 1}`}
+                  </Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+                    ${Number(record.amount ?? record.totalAmount ?? 0).toLocaleString()}
+                  </Text>
+                  <Box>
+                    <Box style={{ ...createBadgeStyle(t, statusBadge as any), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{billingStatus}</Text>
+                    </Box>
+                  </Box>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                    {record.billingDate ?? record.invoiceDate ?? record.createdAt ?? '--'}
+                  </Text>
+                </Box>
+              );
+            })}
+          </Box>
+        )}
       </Box>
     );
   },

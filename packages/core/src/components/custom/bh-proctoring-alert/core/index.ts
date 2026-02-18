@@ -25,6 +25,16 @@ export interface ProctoringAlertEvent {
   candidateName?: string;
   /** Alert summary text (UI-computed) */
   summary?: string;
+  /** Event metadata (JSONB from DB, flattened for convenience) */
+  metadata?: Record<string, unknown>;
+  /** Whether the alert event has been dismissed */
+  dismissed?: boolean;
+  /** Who dismissed this event (user ID or display name) */
+  dismissedBy?: string;
+  /** When the event was dismissed */
+  dismissedAt?: Date | string;
+  /** Reason for dismissal */
+  dismissReason?: string;
 }
 
 export interface BhProctoringAlertProps extends EngineAwareProps {

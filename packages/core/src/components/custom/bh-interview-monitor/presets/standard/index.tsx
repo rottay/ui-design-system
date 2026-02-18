@@ -334,6 +334,48 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                         </Box>
                       </Box>
 
+                      {/* Token cost and proctoring indicators */}
+                      {(session.actualTokenCost != null || session.proctoringEnabled) && (
+                        <Box style={{
+                          display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                          marginTop: t.spacing[2], flexWrap: 'wrap' as const,
+                        }}>
+                          {session.actualTokenCost != null && (
+                            <Box style={{
+                              ...createBadgeStyle(t, 'info'),
+                              borderRadius: badgeRadius,
+                              fontSize: t.typography.fontSize.xs,
+                            }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                                ${session.actualTokenCost.toFixed(2)} tokens
+                              </Text>
+                            </Box>
+                          )}
+                          {session.proctoringEnabled && (
+                            <Box style={{
+                              ...createBadgeStyle(t, session.proctoringViolations ? 'warning' : 'success'),
+                              borderRadius: badgeRadius,
+                              fontSize: t.typography.fontSize.xs,
+                            }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                                Proctored{session.proctoringViolations ? ` (${session.proctoringViolations} violations)` : ''}
+                              </Text>
+                            </Box>
+                          )}
+                          {session.wasResumed && (
+                            <Box style={{
+                              ...createBadgeStyle(t, 'warning'),
+                              borderRadius: badgeRadius,
+                              fontSize: t.typography.fontSize.xs,
+                            }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                                Resumed{session.resumeCount ? ` x${session.resumeCount}` : ''}
+                              </Text>
+                            </Box>
+                          )}
+                        </Box>
+                      )}
+
                       {isSelected && (
                         <Box style={{
                           display: 'flex', gap: t.spacing[2],

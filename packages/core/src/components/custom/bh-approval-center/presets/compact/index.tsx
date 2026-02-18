@@ -25,12 +25,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_APPROVALS: ApprovalItem[] = [
-  { id: 'ap-1', entityType: 'offer', entityTitle: 'Offer for Sarah Johnson', requestedBy: 'Tom Walsh', requestedAt: new Date('2026-02-10T14:30:00'), priority: 'high', status: 'pending' },
-  { id: 'ap-2', entityType: 'position', entityTitle: 'New DevOps Lead Position', requestedBy: 'Emily Chen', requestedAt: new Date('2026-02-11T09:00:00'), priority: 'medium', status: 'pending' },
-  { id: 'ap-3', entityType: 'budget', entityTitle: 'Q2 Budget Increase', requestedBy: 'Mark Rivera', requestedAt: new Date('2026-02-09T16:00:00'), priority: 'high', status: 'pending' },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -58,14 +52,13 @@ export const CompactBhApprovalCenter = createPreset<BhApprovalCenterProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approvals: rawApprovals = MOCK_APPROVALS,
+      approvals: rawApprovals = [],
       onApprovalClick,
       className,
       style,
     } = props;
 
-    const approvals = Array.isArray(rawApprovals) ? rawApprovals : MOCK_APPROVALS;
-
+    const approvals = Array.isArray(rawApprovals) ? rawApprovals : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

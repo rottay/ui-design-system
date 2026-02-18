@@ -33,6 +33,34 @@ export interface ScoringJobView {
   priorityLabel?: ScoringJobPriority;
   /** Estimated duration in ms (UI-computed) */
   estimatedDuration?: number;
+  /** Numeric priority value (from DB) */
+  priority?: number;
+  /** Number of retry attempts */
+  retryCount?: number;
+  /** Maximum retry attempts allowed */
+  maxRetries?: number;
+  /** Error code (machine-readable) */
+  errorCode?: string;
+  /** Stack trace or detailed error */
+  errorDetails?: string;
+  /** Time spent waiting in queue (ms) */
+  queueWaitMs?: number;
+  /** Time spent processing (ms) */
+  processingTimeMs?: number;
+  /** Scheduled start time */
+  scheduledAt?: Date | string;
+  /** Actual start time */
+  startedAt?: Date | string;
+  /** Completion time */
+  completedAt?: Date | string;
+  /** LLM model used for scoring */
+  llmModel?: string;
+  /** Tokens consumed by this job */
+  tokensUsed?: number;
+  /** Number of dimensions scored */
+  dimensionsScored?: number;
+  /** Total dimensions to score */
+  totalDimensions?: number;
 }
 
 export interface QueueStats {
@@ -42,6 +70,12 @@ export interface QueueStats {
   completed: number;
   failed: number;
   avgProcessingTime: number;
+  avgQueueWaitTime?: number;
+  p95ProcessingTime?: number;
+  throughputPerHour?: number;
+  errorRate?: number;
+  retryRate?: number;
+  totalTokensUsed?: number;
 }
 
 export interface BhScoringJobQueueProps extends EngineAwareProps {

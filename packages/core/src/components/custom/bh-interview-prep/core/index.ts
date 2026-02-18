@@ -24,6 +24,16 @@ export interface InterviewBrief {
   type: 'ai' | 'human' | 'ai_voice' | 'ai_chat' | 'human_video' | 'human_phone' | 'in_person';
   dateTime: Date;
   estimatedDuration: number;
+  /** Specific interview mode from the DB schema */
+  interviewMode?: string;
+  /** Scheduled duration in minutes */
+  scheduledDurationMinutes?: number;
+  /** Timezone for the interview */
+  timezone?: string;
+  /** Whether proctoring is enabled */
+  proctoringEnabled?: boolean;
+  /** AI persona/model snapshot for the interview */
+  personaSnapshot?: Record<string, unknown>;
 }
 
 export interface CandidateBrief {
@@ -32,6 +42,8 @@ export interface CandidateBrief {
   summary: string;
   resumeHighlights: string[];
   previousScores: { stage: string; score: number }[];
+  /** AI-generated match score for the candidate (0-100) */
+  aiMatchScore?: number;
 }
 
 export interface EvaluationFocus {

@@ -20,54 +20,12 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
 } from '../../../helpers';
-import type { BhSkillGapMapProps, GapPriority, SkillGapItem, DimensionHeatmapCell } from '../../core';
+import type { BhSkillGapMapProps, GapPriority, SkillGapItem, DimensionHeatmapCell, GapSummary } from '../../core';
 import { getPriorityColors, getScoreColor, getScoreBgColor } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Grid3x3, AlertTriangle, TrendingDown, BarChart3, Info, Target,
 } from 'lucide-react';
-
-/* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_GAPS: SkillGapItem[] = [
-  { id: 'g-1', dimension: 'System Design', dimensionCode: 'SD', currentLevel: 3, requiredLevel: 5, gapSize: 2, priority: 'critical', candidateCount: 4, recommendation: 'Focus hiring on candidates with distributed systems experience.' },
-  { id: 'g-2', dimension: 'React Advanced', dimensionCode: 'RA', currentLevel: 4, requiredLevel: 5, gapSize: 1, priority: 'high', candidateCount: 3, recommendation: 'Look for server component and RSC expertise.' },
-  { id: 'g-3', dimension: 'TypeScript', dimensionCode: 'TS', currentLevel: 4, requiredLevel: 5, gapSize: 1, priority: 'medium', candidateCount: 2 },
-  { id: 'g-4', dimension: 'Leadership', dimensionCode: 'LD', currentLevel: 3, requiredLevel: 4, gapSize: 1, priority: 'high', candidateCount: 5, recommendation: 'Prioritize candidates with tech lead or EM experience.' },
-  { id: 'g-5', dimension: 'Testing', dimensionCode: 'QA', currentLevel: 3, requiredLevel: 4, gapSize: 1, priority: 'medium', candidateCount: 3 },
-  { id: 'g-6', dimension: 'Communication', dimensionCode: 'CM', currentLevel: 4, requiredLevel: 4, gapSize: 0, priority: 'low', candidateCount: 1 },
-];
-
-const DEFAULT_HEATMAP: DimensionHeatmapCell[] = [
-  { dimension: 'System Design', candidate: 'Sarah Johnson', candidateId: 'c-1', score: 90, maxScore: 100, gapSize: 0 },
-  { dimension: 'React Advanced', candidate: 'Sarah Johnson', candidateId: 'c-1', score: 95, maxScore: 100, gapSize: 0 },
-  { dimension: 'TypeScript', candidate: 'Sarah Johnson', candidateId: 'c-1', score: 88, maxScore: 100, gapSize: 0 },
-  { dimension: 'Leadership', candidate: 'Sarah Johnson', candidateId: 'c-1', score: 85, maxScore: 100, gapSize: 0 },
-  { dimension: 'Testing', candidate: 'Sarah Johnson', candidateId: 'c-1', score: 72, maxScore: 100, gapSize: 1 },
-  { dimension: 'Communication', candidate: 'Sarah Johnson', candidateId: 'c-1', score: 88, maxScore: 100, gapSize: 0 },
-  { dimension: 'System Design', candidate: 'Michael Chen', candidateId: 'c-2', score: 78, maxScore: 100, gapSize: 1 },
-  { dimension: 'React Advanced', candidate: 'Michael Chen', candidateId: 'c-2', score: 82, maxScore: 100, gapSize: 0 },
-  { dimension: 'TypeScript', candidate: 'Michael Chen', candidateId: 'c-2', score: 90, maxScore: 100, gapSize: 0 },
-  { dimension: 'Leadership', candidate: 'Michael Chen', candidateId: 'c-2', score: 60, maxScore: 100, gapSize: 2 },
-  { dimension: 'Testing', candidate: 'Michael Chen', candidateId: 'c-2', score: 85, maxScore: 100, gapSize: 0 },
-  { dimension: 'Communication', candidate: 'Michael Chen', candidateId: 'c-2', score: 91, maxScore: 100, gapSize: 0 },
-  { dimension: 'System Design', candidate: 'Emily Rodriguez', candidateId: 'c-3', score: 95, maxScore: 100, gapSize: 0 },
-  { dimension: 'React Advanced', candidate: 'Emily Rodriguez', candidateId: 'c-3', score: 65, maxScore: 100, gapSize: 2 },
-  { dimension: 'TypeScript', candidate: 'Emily Rodriguez', candidateId: 'c-3', score: 75, maxScore: 100, gapSize: 1 },
-  { dimension: 'Leadership', candidate: 'Emily Rodriguez', candidateId: 'c-3', score: 55, maxScore: 100, gapSize: 2 },
-  { dimension: 'Testing', candidate: 'Emily Rodriguez', candidateId: 'c-3', score: 70, maxScore: 100, gapSize: 1 },
-  { dimension: 'Communication', candidate: 'Emily Rodriguez', candidateId: 'c-3', score: 62, maxScore: 100, gapSize: 1 },
-  { dimension: 'System Design', candidate: 'James Kim', candidateId: 'c-4', score: 45, maxScore: 100, gapSize: 3 },
-  { dimension: 'React Advanced', candidate: 'James Kim', candidateId: 'c-4', score: 40, maxScore: 100, gapSize: 3 },
-  { dimension: 'TypeScript', candidate: 'James Kim', candidateId: 'c-4', score: 70, maxScore: 100, gapSize: 1 },
-  { dimension: 'Leadership', candidate: 'James Kim', candidateId: 'c-4', score: 50, maxScore: 100, gapSize: 2 },
-  { dimension: 'Testing', candidate: 'James Kim', candidateId: 'c-4', score: 80, maxScore: 100, gapSize: 0 },
-  { dimension: 'Communication', candidate: 'James Kim', candidateId: 'c-4', score: 75, maxScore: 100, gapSize: 1 },
-];
-
-const DEFAULT_SUMMARY = { totalGaps: 6, criticalGaps: 1, averageGapSize: 1.0, mostCommonDimension: 'Leadership' };
 
 /* ---------------------------------------------------------------------------
  * Preset
@@ -82,9 +40,10 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
-      gaps: rawGaps = DEFAULT_GAPS,
-      heatmapData: rawHeatmapData = DEFAULT_HEATMAP,
-      summary: rawSummary = DEFAULT_SUMMARY,
+      analysis,
+      gaps: rawGaps = [],
+      heatmapData: rawHeatmapData = [],
+      summary: rawSummary = {} as Partial<GapSummary>,
       dimensions: dimsProp,
       candidates: candsProp,
       selectedGapId: selectedGapProp,
@@ -95,9 +54,9 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
       className, style,
     } = props;
 
-    const gaps = Array.isArray(rawGaps) ? rawGaps : DEFAULT_GAPS;
-    const heatmapData = Array.isArray(rawHeatmapData) ? rawHeatmapData : DEFAULT_HEATMAP;
-    const summary = Array.isArray(rawSummary) ? rawSummary : DEFAULT_SUMMARY;
+    const gaps = Array.isArray(rawGaps) ? rawGaps : [];
+    const heatmapData = Array.isArray(rawHeatmapData) ? rawHeatmapData : [];
+    const summary = rawSummary as Partial<GapSummary>;
 
     /* ── State ─────────────────────────────────────────────────── */
     const [internalSelected, setInternalSelected] = useState<string>(selectedGapProp ?? '');
@@ -176,6 +135,8 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
             </Text>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
               {dims.length} dimensions | {cands.length} candidates | {gaps.length} gaps identified
+              {(analysis as any)?.status ? ` | Status: ${(analysis as any).status}` : ''}
+              {(analysis as any)?.analysisType ? ` | Type: ${(analysis as any).analysisType}` : ''}
             </Text>
           </Box>
         </Box>

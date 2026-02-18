@@ -23,6 +23,9 @@ export interface SystemHealthStatus {
   interviewsRunning?: number;
   tokenBalance?: number;
   slaCompliance?: number;
+  avgLatencyMs?: number;
+  errorRate?: number;
+  uptime?: number;
 }
 
 export type ProviderStatusType = 'healthy' | 'degraded' | 'down';
@@ -35,6 +38,10 @@ export interface ProviderHealth {
   latencyMs: number;
   circuitBreaker: CircuitBreakerState;
   lastChecked: string;
+  errorCount?: number;
+  requestsPerMinute?: number;
+  region?: string;
+  fallbackProvider?: string;
 }
 
 /* ── Billing ─────────────────────────────────────────────────────────── */
@@ -45,6 +52,8 @@ export interface BillingMetrics {
   monthlyTrend: number[];
   projectedRunwayDays: number;
   monthlyCost: number;
+  costByProvider?: Array<{ provider: string; cost: number }>;
+  savingsVsPrevious?: number;
 }
 
 /* ── KPIs & Users ────────────────────────────────────────────────────── */
@@ -60,6 +69,8 @@ export interface UserSummary {
   totalUsers: number;
   byRole: Record<string, number>;
   recentInvitations: number;
+  activeUsersToday?: number;
+  lastLoginStats?: Record<string, number>;
 }
 
 /* ── Events ──────────────────────────────────────────────────────────── */
@@ -73,6 +84,9 @@ export interface SystemEvent {
   message: string;
   time: string;
   severity: EventSeverity;
+  resolvedAt?: string;
+  resolvedBy?: string;
+  actionRequired?: boolean;
 }
 
 /* ── Cost & Compliance ───────────────────────────────────────────────── */

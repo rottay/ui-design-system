@@ -107,22 +107,7 @@ function getTrendColor(trend: 'up' | 'down' | 'flat', t: DesignTokens): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_PROVIDERS: ProviderCostEntry[] = [
-  { provider: 'OpenAI', model: 'GPT-4o', totalCost: 4280.50, tokenCount: 12500000, avgCostPerRequest: 0.34, budgetLimit: 5000, budgetUsed: 4280.50, trend: 'up' },
-  { provider: 'Anthropic', model: 'Claude 3.5 Sonnet', totalCost: 3150.75, tokenCount: 9800000, avgCostPerRequest: 0.28, budgetLimit: 4000, budgetUsed: 3150.75, trend: 'up' },
-  { provider: 'Google', model: 'Gemini 1.5 Pro', totalCost: 1820.30, tokenCount: 7200000, avgCostPerRequest: 0.18, budgetLimit: 3000, budgetUsed: 1820.30, trend: 'down' },
-  { provider: 'Cohere', model: 'Command R+', totalCost: 890.20, tokenCount: 4500000, avgCostPerRequest: 0.12, budgetLimit: 2000, budgetUsed: 890.20, trend: 'flat' },
-  { provider: 'Mistral', model: 'Large 2', totalCost: 542.10, tokenCount: 3100000, avgCostPerRequest: 0.09, budgetLimit: 1500, budgetUsed: 542.10, trend: 'down' },
-];
-
-const MOCK_ALERTS: CostAlert[] = [
-  { id: 'ca-1', provider: 'OpenAI', message: 'OpenAI spend at 86% of monthly budget', severity: 'critical', timestamp: new Date(Date.now() - 1800000) },
-  { id: 'ca-2', provider: 'Anthropic', message: 'Anthropic cost trending 22% above forecast', severity: 'warning', timestamp: new Date(Date.now() - 7200000) },
-  { id: 'ca-3', provider: 'Google', message: 'Gemini usage normalized after spike', severity: 'info', timestamp: new Date(Date.now() - 14400000) },
-];
-
 const MOCK_TOTAL_BUDGET = 15000;
-const MOCK_TOTAL_SPENT = 10683.85;
 
 /* ================================================================== */
 /*  Dashboard Preset                                                   */
@@ -140,26 +125,28 @@ export const DashboardBhProviderCost = createPreset<BhProviderCostProps>({
     const chartCfg = useMemo(() => getChartConfig(t), [t]);
 
     const {
-      providers: rawProviders = MOCK_PROVIDERS,
-      alerts: rawAlerts = MOCK_ALERTS,
+      providers: rawProviders = [],
+      alerts: rawAlerts = [],
       totalBudget: rawTotalBudget = MOCK_TOTAL_BUDGET,
-      totalSpent: rawTotalSpent = MOCK_TOTAL_SPENT,
+      totalSpent: rawTotalSpent = 0,
       currency = 'USD',
       period = 'This Month',
       onProviderClick,
       onAlertDismiss,
+      cacheEntries: rawCacheEntries,
       loading = false,
       className,
       style,
     } = props;
 
-    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
-    const alerts = Array.isArray(rawAlerts) ? rawAlerts : MOCK_ALERTS;
+    const cacheEntries = Array.isArray(rawCacheEntries) ? rawCacheEntries : [];
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
+    const alerts = Array.isArray(rawAlerts) ? rawAlerts : [];
     const totalBudget = Array.isArray(rawTotalBudget) ? rawTotalBudget : MOCK_TOTAL_BUDGET;
-    const totalSpent = Array.isArray(rawTotalSpent) ? rawTotalSpent : MOCK_TOTAL_SPENT;
+    const totalSpent = Array.isArray(rawTotalSpent) ? rawTotalSpent : 0;
 
     const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -623,6 +610,47 @@ export const DashboardBhProviderCost = createPreset<BhProviderCostProps>({
               )}
             </Box>
           </Box>
+
+          {/* Cache Entries */}
+          {cacheEntries.length > 0 && (
+            <Box style={{ ...card, ...animStyle(4), marginBottom: t.spacing[6] }}>
+              <Text style={{ ...sectionLabel, marginBottom: t.spacing[3] }}>Cache Savings</Text>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                {cacheEntries.slice(0, 5).map((entry, idx) => (
+                  <Box key={(entry as any).id ?? idx} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                    borderRadius: t.borderRadius.md,
+                    backgroundColor: t.colors.successScale[50],
+                    border: `1px solid ${t.colors.successScale[200]}`,
+                  }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                        {(entry as any).providerCode ?? (entry as any).provider ?? 'Provider'}
+                      </Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                        {(entry as any).cacheKey ? `Key: ${String((entry as any).cacheKey).slice(0, 20)}...` : 'Cached response'}
+                      </Text>
+                    </Box>
+                    <Box style={{
+                      padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                      borderRadius: badgeRadius,
+                      backgroundColor: t.colors.successScale[100],
+                    }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[700] }}>
+                        {(entry as any).hitCount ?? 0} hits
+                      </Text>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+              {cacheEntries.length > 5 && (
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: t.spacing[2] }}>
+                  +{cacheEntries.length - 5} more cache entries
+                </Text>
+              )}
+            </Box>
+          )}
         </Box>
         </Box>
       </Box>

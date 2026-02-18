@@ -33,21 +33,6 @@ import type { DBCandidate } from '@rottay/recruiter';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_CANDIDATES: ComparisonCandidate[] = [
-  {
-    candidate: { id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', currentTitle: 'Senior Frontend Engineer', currentCompany: 'Google', yearsOfExperience: 8 } as unknown as DBCandidate,
-    scores: { 'Technical': 92, 'Communication': 85, 'Leadership': 78, 'Problem Solving': 90, 'Culture Fit': 88 },
-  },
-  {
-    candidate: { id: 'c-2', firstName: 'Michael', lastName: 'Chen', currentTitle: 'Full Stack Developer', currentCompany: 'Stripe', yearsOfExperience: 6 } as unknown as DBCandidate,
-    scores: { 'Technical': 88, 'Communication': 92, 'Leadership': 85, 'Problem Solving': 82, 'Culture Fit': 90 },
-  },
-  {
-    candidate: { id: 'c-3', firstName: 'Emily', lastName: 'Rodriguez', currentTitle: 'Staff Engineer', currentCompany: 'Meta', yearsOfExperience: 10 } as unknown as DBCandidate,
-    scores: { 'Technical': 95, 'Communication': 78, 'Leadership': 72, 'Problem Solving': 94, 'Culture Fit': 80 },
-  },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -93,7 +78,6 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
     } = props;
 
     const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -260,6 +244,16 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
                         <Award size={11} color={t.colors.neutral[400]} />
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{expStr}</Text>
                       </Box>
+                    )}
+                    {(compCandidate.expectedSalaryMin != null || compCandidate.expectedSalaryMax != null) && (
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>
+                        ${((compCandidate.expectedSalaryMin ?? 0) / 1000).toFixed(0)}k - ${((compCandidate.expectedSalaryMax ?? 0) / 1000).toFixed(0)}k {compCandidate.expectedSalaryCurrency ?? 'USD'}
+                      </Text>
+                    )}
+                    {compCandidate.availableFrom && (
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: t.spacing[1] }}>
+                        Available: {compCandidate.availableFrom.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </Text>
                     )}
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
                       marginTop: t.spacing[3],

@@ -18,17 +18,6 @@ import {
 import type { BhCapacityPlannerProps, RecruiterCapacity, CapacitySummary } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 
-const MOCK_RECRUITERS: RecruiterCapacity[] = [
-  { id: 'r-1', name: 'Sarah Johnson', department: 'Engineering', currentAssignments: 14, maxCapacity: 12, utilizationPercent: 117, activePositions: 4, activeCandidates: 14, avgTimePerCandidate: 3.2, status: 'overloaded' },
-  { id: 'r-2', name: 'Michael Chen', department: 'Engineering', currentAssignments: 9, maxCapacity: 12, utilizationPercent: 75, activePositions: 3, activeCandidates: 9, avgTimePerCandidate: 4.1, status: 'optimal' },
-  { id: 'r-3', name: 'Emily Rodriguez', department: 'Product', currentAssignments: 11, maxCapacity: 12, utilizationPercent: 92, activePositions: 3, activeCandidates: 11, avgTimePerCandidate: 3.8, status: 'optimal' },
-  { id: 'r-4', name: 'James Kim', department: 'Design', currentAssignments: 4, maxCapacity: 10, utilizationPercent: 40, activePositions: 2, activeCandidates: 4, avgTimePerCandidate: 5.0, status: 'underutilized' },
-];
-
-const MOCK_SUMMARY: CapacitySummary = {
-  totalRecruiters: 4, avgUtilization: 81, overloadedCount: 1, underutilizedCount: 1, totalOpenReqs: 12,
-};
-
 function getStatusColor(status: string, tokens: DesignTokens): string {
   switch (status) {
     case 'overloaded': return tokens.colors.errorScale[500];
@@ -57,9 +46,9 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
     const { Box, Text } = primitives;
 
     const {
-      recruiters: rawRecruiters = MOCK_RECRUITERS,
+      recruiters: rawRecruiters = [],
       suggestions: rawSuggestions = [],
-      summary: rawSummary = MOCK_SUMMARY,
+      summary: rawSummary = {},
       selectedRecruiter,
       onRecruiterSelect,
       onAcceptSuggestion,
@@ -67,9 +56,9 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
       style,
     } = props;
 
-    const recruiters = Array.isArray(rawRecruiters) ? rawRecruiters : MOCK_RECRUITERS;
+    const recruiters = Array.isArray(rawRecruiters) ? rawRecruiters : [];
     const suggestions = Array.isArray(rawSuggestions) ? rawSuggestions : [];
-    const summary = Array.isArray(rawSummary) ? rawSummary : MOCK_SUMMARY;
+    const summary = Array.isArray(rawSummary) ? rawSummary : ({} as Partial<CapacitySummary>);
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

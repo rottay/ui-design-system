@@ -31,6 +31,7 @@ import type {
   BhPipelineStatsBarProps,
   StageConversion,
   TrendDirection,
+  TimeToHireMetric,
 } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
@@ -65,15 +66,6 @@ function getTrendColor(trend: TrendDirection, t: DesignTokens, invertForTime = f
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_CONVERSIONS: StageConversion[] = [
-  { fromStage: 'Applied', toStage: 'Screening', rate: 68, candidateCount: 156, trend: 'up' },
-  { fromStage: 'Screening', toStage: 'Interview', rate: 52, candidateCount: 106, trend: 'flat' },
-  { fromStage: 'Interview', toStage: 'Assessment', rate: 45, candidateCount: 55, trend: 'down' },
-  { fromStage: 'Assessment', toStage: 'Offer', rate: 38, candidateCount: 25, trend: 'up' },
-  { fromStage: 'Offer', toStage: 'Hired', rate: 82, candidateCount: 20, trend: 'up' },
-];
-
-const MOCK_TIME_TO_HIRE = { days: 34, trend: 'down' as const, previousDays: 38 };
 const MOCK_BOTTLENECK = 'Assessment';
 const MOCK_TOTAL = 362;
 const MOCK_ACTIVE_JOBS = 12;
@@ -92,8 +84,8 @@ export const CompactBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      conversionRates: rawConversionRates = MOCK_CONVERSIONS,
-      avgTimeToHire: rawAvgTimeToHire = MOCK_TIME_TO_HIRE,
+      conversionRates: rawConversionRates = [],
+      avgTimeToHire: rawAvgTimeToHire = {} as Partial<TimeToHireMetric>,
       bottleneckStage: rawBottleneckStage = MOCK_BOTTLENECK,
       totalCandidates = MOCK_TOTAL,
       activeJobs: rawActiveJobs = MOCK_ACTIVE_JOBS,
@@ -103,11 +95,10 @@ export const CompactBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>({
       style,
     } = props;
 
-    const conversionRates = Array.isArray(rawConversionRates) ? rawConversionRates : MOCK_CONVERSIONS;
-    const avgTimeToHire = Array.isArray(rawAvgTimeToHire) ? rawAvgTimeToHire : MOCK_TIME_TO_HIRE;
-    const bottleneckStage = Array.isArray(rawBottleneckStage) ? rawBottleneckStage : MOCK_BOTTLENECK;
-    const activeJobs = Array.isArray(rawActiveJobs) ? rawActiveJobs : MOCK_ACTIVE_JOBS;
-
+    const conversionRates = Array.isArray(rawConversionRates) ? rawConversionRates : [] as StageConversion[];
+    const avgTimeToHire = (Array.isArray(rawAvgTimeToHire) ? rawAvgTimeToHire : rawAvgTimeToHire ?? {}) as Partial<TimeToHireMetric>;
+    const bottleneckStage = (Array.isArray(rawBottleneckStage) ? rawBottleneckStage : rawBottleneckStage ?? MOCK_BOTTLENECK) as string;
+    const activeJobs = (Array.isArray(rawActiveJobs) ? rawActiveJobs : rawActiveJobs ?? MOCK_ACTIVE_JOBS) as number;
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

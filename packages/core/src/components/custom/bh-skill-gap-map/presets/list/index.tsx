@@ -18,19 +18,6 @@ import {
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_GAPS: SkillGapItem[] = [
-  { id: 'g-1', dimension: 'System Design', dimensionCode: 'SD', currentLevel: 3, requiredLevel: 5, gapSize: 2, priority: 'critical', candidateCount: 4, recommendation: 'Focus hiring on candidates with distributed systems experience at scale.' },
-  { id: 'g-2', dimension: 'React Advanced', dimensionCode: 'RA', currentLevel: 4, requiredLevel: 5, gapSize: 1, priority: 'high', candidateCount: 3, recommendation: 'Look for RSC and server component expertise.' },
-  { id: 'g-3', dimension: 'Leadership', dimensionCode: 'LD', currentLevel: 3, requiredLevel: 4, gapSize: 1, priority: 'high', candidateCount: 5, recommendation: 'Prioritize tech lead or engineering manager backgrounds.' },
-  { id: 'g-4', dimension: 'TypeScript', dimensionCode: 'TS', currentLevel: 4, requiredLevel: 5, gapSize: 1, priority: 'medium', candidateCount: 2 },
-  { id: 'g-5', dimension: 'Testing', dimensionCode: 'QA', currentLevel: 3, requiredLevel: 4, gapSize: 1, priority: 'medium', candidateCount: 3 },
-  { id: 'g-6', dimension: 'Communication', dimensionCode: 'CM', currentLevel: 4, requiredLevel: 4, gapSize: 0, priority: 'low', candidateCount: 1 },
-];
-
-/* ---------------------------------------------------------------------------
  * Preset
  * -------------------------------------------------------------------------*/
 
@@ -42,13 +29,13 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const pc = getPriorityColors(t);
 
     const {
-      gaps: rawGaps = DEFAULT_GAPS,
+      gaps: rawGaps = [],
       onGapSelect,
       loading,
       className, style,
     } = props;
 
-    const gaps = Array.isArray(rawGaps) ? rawGaps : DEFAULT_GAPS;
+    const gaps = Array.isArray(rawGaps) ? rawGaps : [];
 
     const counts = useMemo(() => {
       const c = { critical: 0, high: 0, medium: 0, low: 0 };

@@ -23,6 +23,38 @@ export interface NegotiationRound {
   requestedSalary: number;
   status: 'pending' | 'accepted' | 'rejected' | 'countered';
   notes?: string;
+
+  /** Round number in the negotiation sequence */
+  round?: number;
+
+  /** Equity offered in this round */
+  equityOffered?: number;
+
+  /** Equity requested by candidate in this round */
+  equityRequested?: number;
+
+  /** Signing bonus offered in this round */
+  signingBonusOffered?: number;
+
+  /** Signing bonus requested by candidate in this round */
+  signingBonusRequested?: number;
+
+  /** Who initiated this round */
+  initiatedBy?: 'company' | 'candidate';
+}
+
+export interface NegotiationSummary {
+  /** Total number of negotiation rounds */
+  totalRounds?: number;
+
+  /** Days elapsed since negotiation started */
+  daysInNegotiation?: number;
+
+  /** Difference between final and initial salary */
+  salaryDelta?: number;
+
+  /** Whether a final agreement was reached */
+  finalNegotiated?: boolean;
 }
 
 /**
@@ -98,6 +130,9 @@ export interface BhOfferNegotiationTrackerProps extends EngineAwareProps {
 
   /** Currency symbol */
   currency?: string;
+
+  /** Negotiation summary metrics */
+  summary?: NegotiationSummary;
 
   /** Loading state */
   loading?: boolean;

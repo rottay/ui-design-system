@@ -36,12 +36,6 @@ const EMPTY_FORM: PositionFormData = {
   workMode: 'onsite',
 };
 
-const DEFAULT_CLIENTS = [
-  { id: 'cl-1', name: 'Acme Corporation' },
-  { id: 'cl-2', name: 'Horizon Labs' },
-  { id: 'cl-3', name: 'Nova Ventures' },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -76,7 +70,7 @@ export const CompactBhPositionForm = createPreset<BhPositionFormProps>({
 
     const {
       initialData,
-      clients: rawClients = DEFAULT_CLIENTS,
+      clients: rawClients = [],
       onSubmit,
       onCancel,
       isEditing = false,
@@ -85,7 +79,7 @@ export const CompactBhPositionForm = createPreset<BhPositionFormProps>({
       style,
     } = props;
 
-    const clients = Array.isArray(rawClients) ? rawClients : DEFAULT_CLIENTS;
+    const clients = Array.isArray(rawClients) ? rawClients : [];
 
     const [form, setForm] = useState<PositionFormData>({
       ...EMPTY_FORM,

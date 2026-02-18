@@ -17,6 +17,10 @@ export interface AppealTimelineEvent {
   description?: string;
   date?: Date;
   actor?: string;
+  /** Additional notes for this timeline event */
+  notes?: string;
+  /** Attachments associated with this event (e.g. file URLs or references) */
+  attachments?: string[];
 }
 
 export interface BhAppealTimelineProps extends EngineAwareProps {

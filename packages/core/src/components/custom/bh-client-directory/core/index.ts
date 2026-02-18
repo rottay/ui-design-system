@@ -38,6 +38,21 @@ export interface ClientFilter {
   tier?: ClientTierFilter;
   industry?: string;
   search?: string;
+
+  /** Filter by contract type */
+  contractType?: string;
+
+  /** Filter by assigned recruiter */
+  assignedRecruiterId?: string;
+
+  /** Filter by minimum total revenue */
+  minRevenue?: number;
+
+  /** Filter to only clients with open positions */
+  hasOpenPositions?: boolean;
+
+  /** Sort field for results */
+  sortBy?: 'name' | 'revenue' | 'lastActivity' | 'positions';
 }
 
 export type ViewMode = 'list' | 'grid';
@@ -71,6 +86,18 @@ export interface BhClientDirectoryProps extends EngineAwareProps {
 
   /** Callback when view mode changes */
   onViewModeChange?: (mode: ViewMode) => void;
+
+  /** Total number of clients matching filters (for pagination) */
+  totalCount?: number;
+
+  /** Number of clients per page */
+  pageSize?: number;
+
+  /** Current page index (1-based) */
+  currentPage?: number;
+
+  /** Callback when page changes */
+  onPageChange?: (page: number) => void;
 
   /** Additional CSS class name(s) */
   className?: string;

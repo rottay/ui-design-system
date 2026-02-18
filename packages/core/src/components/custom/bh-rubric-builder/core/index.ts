@@ -10,6 +10,7 @@ import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
 import type { RubricSelect, DimensionSelect } from '@rottay/scoring';
+import { n } from '../../helpers';
 
 export type BhRubricBuilderPreset = 'editor' | 'preview';
 
@@ -33,6 +34,12 @@ export interface ScoringDimension {
   knockoutThreshold?: number;
   maxScore?: number;
   scoringCriteria?: string[];
+  isRequired?: boolean;
+  scoringPrompt?: string;
+  evidencePrompt?: string;
+  keywords?: string[];
+  sortOrder?: number;
+  criteria?: Record<string, unknown>;
 }
 
 export interface ScoreLevel {
@@ -78,6 +85,39 @@ export interface BhRubricBuilderProps extends EngineAwareProps {
 
   /** Whether the form has unsaved changes */
   isDirty?: boolean;
+
+  /** System prompt for scoring */
+  systemPrompt?: string;
+
+  /** Scoring instructions */
+  scoringInstructions?: string;
+
+  /** Evidence instructions */
+  evidenceInstructions?: string;
+
+  /** Output format */
+  outputFormat?: string;
+
+  /** Min score */
+  minScore?: number;
+
+  /** Max score */
+  maxScore?: number;
+
+  /** Passing score */
+  passingScore?: number;
+
+  /** Template flag */
+  isTemplate?: boolean;
+
+  /** Usage stats: times used */
+  timesUsed?: number;
+
+  /** Usage stats: average score */
+  avgScore?: number;
+
+  /** Usage stats: last used at */
+  lastUsedAt?: Date | string;
 
   /** Callbacks */
   onChange?: (field: string, value: unknown) => void;
@@ -186,13 +226,8 @@ export function formatScorableType(type: string): string {
   return type.charAt(0).toUpperCase() + type.slice(1).replace(/_/g, ' ');
 }
 
-/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
-export function n(v: string | number | null | undefined): number {
-  if (v == null) return 0;
-  if (typeof v === 'number') return v;
-  const parsed = Number(v);
-  return isNaN(parsed) ? 0 : parsed;
-}
+/** Re-export n helper for convenience */
+export { n };
 
 /** Re-export DB types for convenience */
 export type { RubricSelect, DimensionSelect };

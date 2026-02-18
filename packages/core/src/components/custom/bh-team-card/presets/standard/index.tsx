@@ -33,12 +33,6 @@ import type { BhTeamCardProps, TeamMetric } from '../../core';
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_METRICS: TeamMetric[] = [
-  { label: 'Hires', value: 18, target: 24 },
-  { label: 'Time to Fill', value: 22, target: 30 },
-  { label: 'Quality Score', value: 87, target: 90 },
-  { label: 'Satisfaction', value: 4.3, target: 5 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Standard Preset                                                    */
@@ -64,7 +58,7 @@ export const StandardBhTeamCard = createPreset<BhTeamCardProps>({
     const memberCount = team?.activeMemberCount ?? 6;
     const status = team?.status ?? 'active';
 
-    const metrics = metricsProp?.length ? metricsProp : MOCK_METRICS;
+    const metrics = metricsProp?.length ? metricsProp : [];
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);

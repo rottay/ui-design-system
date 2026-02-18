@@ -551,6 +551,71 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                 </Box>
               )}
 
+              {/* Webhooks for this provider */}
+              {props.webhooks && props.webhooks.length > 0 && (
+                <Box style={cardBase}>
+                  <Text
+                    style={{
+                      fontSize: tokens.typography.fontSize.lg,
+                      fontWeight: tokens.typography.fontWeight.semibold,
+                      color: tokens.colors.neutral[900],
+                      display: 'block',
+                      marginBottom: tokens.spacing[4],
+                    }}
+                  >
+                    Webhooks
+                  </Text>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                    {props.webhooks.map((webhook, idx) => (
+                      <Box
+                        key={(webhook as any).id ?? idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: tokens.spacing[3],
+                          borderRadius: tokens.borderRadius.md,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                        }}
+                      >
+                        <Box style={{ flex: 1, minWidth: 0 }}>
+                          <Text
+                            style={{
+                              fontSize: tokens.typography.fontSize.sm,
+                              fontWeight: tokens.typography.fontWeight.medium,
+                              color: tokens.colors.neutral[800],
+                              display: 'block',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap' as const,
+                            }}
+                          >
+                            {(webhook as any).url ?? (webhook as any).endpointUrl ?? 'Webhook endpoint'}
+                          </Text>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[1] }}>
+                            {(webhook as any).status && (
+                              <Box style={{
+                                ...createBadgeStyle(tokens, (webhook as any).status === 'active' ? 'success' : 'warning'),
+                                borderRadius: badgeRadius,
+                              }}>
+                                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>
+                                  {(webhook as any).status}
+                                </Text>
+                              </Box>
+                            )}
+                            {(webhook as any).events && Array.isArray((webhook as any).events) && (
+                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                                {(webhook as any).events.length} event(s)
+                              </Text>
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+
               {/* Models for this provider */}
               {models.length > 0 && (
                 <Box style={cardBase}>

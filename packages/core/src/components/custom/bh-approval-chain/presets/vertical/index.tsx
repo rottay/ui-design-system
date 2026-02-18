@@ -32,13 +32,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STEPS: ApprovalChainStep[] = [
-  { id: 'step-1', approverName: 'Sarah Kim', approverRole: 'Hiring Manager', status: 'approved', decidedAt: new Date('2026-02-08T10:00:00'), comment: 'Looks great, strong candidate.', order: 1 },
-  { id: 'step-2', approverName: 'Tom Walsh', approverRole: 'VP Engineering', status: 'approved', decidedAt: new Date('2026-02-09T14:30:00'), comment: 'Approved. Within budget.', order: 2 },
-  { id: 'step-3', approverName: 'Lisa Park', approverRole: 'HR Director', status: 'pending', order: 3 },
-  { id: 'step-4', approverName: 'Mark Rivera', approverRole: 'CFO', status: 'pending', order: 4 },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -71,7 +64,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      steps: rawSteps = MOCK_STEPS,
+      steps: rawSteps = [],
       entityTitle = 'Offer for Sarah Johnson - Sr. Engineer',
       entityType = 'Offer',
       currentStepId,
@@ -81,8 +74,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
       style,
     } = props;
 
-    const steps = Array.isArray(rawSteps) ? rawSteps : MOCK_STEPS;
-
+    const steps = Array.isArray(rawSteps) ? rawSteps : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

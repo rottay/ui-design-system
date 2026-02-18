@@ -28,7 +28,7 @@ import type {
 import {
   Bot, User, Calendar, Clock, Target, AlertTriangle,
   CheckCircle, XCircle, HelpCircle, ChevronDown, ChevronRight,
-  Briefcase, BookOpen, ListChecks, Star, Shield, Eye,
+  Briefcase, BookOpen, ListChecks, Star, Shield, Eye, Globe,
 } from 'lucide-react';
 
 const CHECKLIST_STATUS_CONFIG: Record<ChecklistItem['status'], { colorKey: 'success' | 'error' | 'warning'; label: string }> = {
@@ -182,9 +182,26 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Clock size={14} color={t.colors.neutral[600]} />
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>
-                    {interviewBrief.estimatedDuration} min
+                    {interviewBrief.scheduledDurationMinutes ?? interviewBrief.estimatedDuration} min
                   </Text>
                 </Box>
+                {interviewBrief.timezone && (
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
+                    {interviewBrief.timezone.replace(/_/g, ' ')}
+                  </Text>
+                )}
+                {interviewBrief.proctoringEnabled && (
+                  <Box style={{
+                    ...createBadgeStyle(t, 'warning'),
+                    fontSize: t.typography.fontSize.sm,
+                    padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                    display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                    borderRadius: badgeRadius,
+                  }}>
+                    <Shield size={14} />
+                    <Text style={{ fontSize: t.typography.fontSize.sm }}>Proctored</Text>
+                  </Box>
+                )}
               </Box>
             </Box>
           )}
@@ -223,6 +240,18 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                     }}>
                       {candidateBrief.name}
                     </Text>
+                    {candidateBrief.aiMatchScore != null && (
+                      <Box style={{
+                        ...createBadgeStyle(t, candidateBrief.aiMatchScore >= 80 ? 'success' : candidateBrief.aiMatchScore >= 50 ? 'warning' : 'error'),
+                        borderRadius: badgeRadius,
+                        fontSize: t.typography.fontSize.xs,
+                        marginLeft: t.spacing[2],
+                      }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                          AI Match: {candidateBrief.aiMatchScore}%
+                        </Text>
+                      </Box>
+                    )}
                   </Box>
 
                   <Box style={{

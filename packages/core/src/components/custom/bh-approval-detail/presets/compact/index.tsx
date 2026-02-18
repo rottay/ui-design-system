@@ -28,21 +28,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_APPROVAL: ApprovalDetailData = {
-  id: 'ap-1',
-  entityType: 'offer',
-  entityTitle: 'Offer for Sarah Johnson - Sr. Engineer',
-  requestedBy: 'Tom Walsh',
-  requestedAt: new Date('2026-02-10T14:30:00'),
-  description: 'Offer package for Senior Frontend Engineer at Acme Corp.',
-  priority: 'high',
-  status: 'pending',
-  chain: [
-    { approverName: 'Sarah Kim', status: 'approved', decidedAt: new Date('2026-02-11T10:00:00') },
-    { approverName: 'Lisa Park', status: 'pending' },
-  ],
-};
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -86,7 +71,7 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approval: raw_approval = MOCK_APPROVAL,
+      approval: raw_approval = {} as Partial<ApprovalDetailData>,
       onApprove,
       onReject,
       onClose,
@@ -95,8 +80,8 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
       style,
     } = props;
 
-    const _approval = Array.isArray(raw_approval) ? raw_approval : MOCK_APPROVAL;
-    const approval = _approval ?? MOCK_APPROVAL;
+    const _approval = Array.isArray(raw_approval) ? raw_approval : ({} as Partial<ApprovalDetailData>);
+    const approval = _approval ?? ({} as Partial<ApprovalDetailData>);
 
     const [expanded, setExpanded] = useState(false);
 

@@ -9,7 +9,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Send, Plus, Play, Pause, CheckCircle, FileText,
-  Mail, Eye, MessageSquare, Calendar, ChevronRight,
+  Mail, Eye, MessageSquare, Calendar, ChevronRight, TrendingUp,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -32,14 +32,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_CAMPAIGNS: CampaignData[] = [
-  { id: 'c-1', name: 'Senior Engineers Q1', status: 'active', sent: 245, opened: 178, replied: 42, startDate: new Date(Date.now() - 7 * 86400000) },
-  { id: 'c-2', name: 'Product Designers Outreach', status: 'active', sent: 120, opened: 89, replied: 23, startDate: new Date(Date.now() - 14 * 86400000) },
-  { id: 'c-3', name: 'Data Science Passive Sourcing', status: 'paused', sent: 340, opened: 201, replied: 34, startDate: new Date(Date.now() - 30 * 86400000) },
-  { id: 'c-4', name: 'DevOps Re-engagement', status: 'completed', sent: 180, opened: 145, replied: 52, startDate: new Date(Date.now() - 45 * 86400000) },
-  { id: 'c-5', name: 'Marketing VP Search', status: 'draft', sent: 0, opened: 0, replied: 0, startDate: new Date() },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -86,7 +78,9 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      campaigns: rawCampaigns = MOCK_CAMPAIGNS,
+      campaigns: rawCampaigns = [],
+      activities: rawActivities,
+      avgResponseRate,
       onCampaignClick,
       onCreateCampaign,
       selectedCampaignId,
@@ -95,7 +89,8 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
       style,
     } = props;
 
-    const campaigns = Array.isArray(rawCampaigns) ? rawCampaigns : MOCK_CAMPAIGNS;
+    const campaigns = Array.isArray(rawCampaigns) ? rawCampaigns : [];
+    const activities = Array.isArray(rawActivities) ? rawActivities : [];
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
@@ -184,7 +179,7 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
           {/* Summary stats */}
           <Box style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: `repeat(${3 + (avgResponseRate != null ? 1 : 0) + (activities.length > 0 ? 1 : 0)}, 1fr)`,
             gap: t.spacing[4],
             marginBottom: t.spacing[6],
           }}>
@@ -192,6 +187,8 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
               { label: 'Active Campaigns', value: activeCampaigns, icon: Play, color: t.colors.successScale },
               { label: 'Total Sent', value: totalSent, icon: Mail, color: t.colors.primaryScale },
               { label: 'Total Replies', value: totalReplied, icon: MessageSquare, color: t.colors.infoScale },
+              ...(avgResponseRate != null ? [{ label: 'Avg Response', value: `${avgResponseRate.toFixed(1)}%`, icon: TrendingUp, color: t.colors.warningScale }] : []),
+              ...(activities.length > 0 ? [{ label: 'Activities', value: activities.length, icon: Calendar, color: t.colors.secondaryScale }] : []),
             ].map((stat, i) => {
               const StatIcon = stat.icon;
               return (

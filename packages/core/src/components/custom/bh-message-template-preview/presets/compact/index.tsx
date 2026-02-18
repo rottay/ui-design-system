@@ -7,7 +7,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import {
-  Eye, Send, Mail,
+  Eye, Send, Mail, Globe, Layers, Hash,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -28,13 +28,6 @@ function resolveVariables(text: string, data: Record<string, string>): string {
   return text.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] ?? `{{${key}}}`);
 }
 
-const DEFAULT_SAMPLE: Record<string, string> = {
-  firstName: 'Alex',
-  company: 'TechCorp',
-  position: 'Senior Frontend Engineer',
-  recruiterName: 'Sarah',
-};
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -52,15 +45,20 @@ export const CompactBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
       templateName = 'Initial Outreach',
       subject = 'Exciting opportunity at {{company}}',
       body = 'Hi {{firstName}}, I came across your profile...',
-      sampleData: rawSampleData = DEFAULT_SAMPLE,
+      sampleData: rawSampleData = {},
       recipientName = 'Alex Rivera',
       onSend,
+      templateType,
+      plainTextBody,
+      targetAudience,
+      useCase,
+      language,
+      version,
       className,
       style,
     } = props;
 
-    const sampleData = Array.isArray(rawSampleData) ? rawSampleData : DEFAULT_SAMPLE;
-
+    const sampleData = Array.isArray(rawSampleData) ? rawSampleData : {};
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -142,6 +140,30 @@ export const CompactBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
           } as any}>
             {resolvedBody}
           </Text>
+
+          {/* Metadata badges */}
+          {(templateType || language || version != null) && (
+            <Box style={{ display: 'flex', gap: t.spacing[1], flexWrap: 'wrap', marginTop: t.spacing[2] }}>
+              {templateType && (
+                <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px`, display: 'inline-flex', alignItems: 'center', gap: 2 }}>
+                  <Layers size={9} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{templateType}</Text>
+                </Box>
+              )}
+              {language && (
+                <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px`, display: 'inline-flex', alignItems: 'center', gap: 2 }}>
+                  <Globe size={9} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'uppercase' as const }}>{language}</Text>
+                </Box>
+              )}
+              {version != null && (
+                <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px`, display: 'inline-flex', alignItems: 'center', gap: 2 }}>
+                  <Hash size={9} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>v{version}</Text>
+                </Box>
+              )}
+            </Box>
+          )}
         </Box>
       </Box>
     );

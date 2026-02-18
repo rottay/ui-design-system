@@ -20,6 +20,14 @@ export interface RetroItem {
   category?: 'good' | 'improve' | 'action';
   votes?: number;
   author?: string;
+  /** ISO timestamp when the item was created */
+  createdAt?: string;
+  /** Whether this item has been resolved */
+  resolved?: boolean;
+  /** Person assigned to follow up on this item */
+  assignee?: string;
+  /** Priority level of the retro item */
+  priority?: 'low' | 'medium' | 'high';
 }
 
 export interface BhSprintRetrospectiveProps extends EngineAwareProps {
@@ -42,6 +50,15 @@ export interface BhSprintRetrospectiveProps extends EngineAwareProps {
 
   /** Callback to delete an item */
   onDeleteItem?: (itemId: string) => void;
+
+  /** Sprint goals (from DBTeamSprint.goals JSONB) */
+  goals?: string[];
+
+  /** Overall sprint completion percentage (from DBTeamSprint.completionPercentage) */
+  completionPercentage?: number;
+
+  /** Snapshot of team members at sprint time (from DBTeamSprint.memberSnapshot) */
+  memberSnapshot?: Array<{ recruiterId: string; name: string; placementsMade: number }>;
 
   /** Loading state */
   loading?: boolean;

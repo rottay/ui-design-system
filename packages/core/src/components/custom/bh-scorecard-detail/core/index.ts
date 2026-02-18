@@ -9,6 +9,7 @@
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
 import type { ScorecardSelect, DimensionScoreSelect } from '@rottay/scoring';
+import { n } from '../../helpers';
 
 export type BhScorecardDetailPreset = 'panel' | 'compact' | 'full' | 'summary';
 
@@ -27,10 +28,15 @@ export interface DimensionScore {
   score?: number;
   maxScore?: number;
   weight?: number;
+  weightedScore?: number;
   confidence?: number;
   evidenceCount?: number;
   notes?: string;
   level?: string;
+  scoreLevel?: string;
+  isKnockout?: boolean;
+  knockoutTriggered?: boolean;
+  reasoning?: string;
 }
 
 /** Aggregated scorecard for UI rendering */
@@ -41,12 +47,35 @@ export interface ScorecardDetail {
   jobTitle?: string;
   overallScore?: number;
   maxScore?: number;
+  weightedScore?: number;
+  scoreLevel?: string;
+  passed?: boolean;
   totalWeight?: number;
   dimensions?: DimensionScore[];
   scoredBy?: string;
   scoredAt?: Date | string;
   calibrated?: boolean;
   status?: string;
+  scoringMethod?: string;
+  llmModel?: string;
+  confidence?: number;
+  confidenceFactors?: Record<string, unknown>;
+  summary?: string;
+  strengths?: string[];
+  weaknesses?: string[];
+  recommendations?: string[];
+  reviewedBy?: string;
+  reviewedAt?: Date | string;
+  reviewNotes?: string;
+  originalScore?: number;
+  overrideScore?: number;
+  overriddenBy?: string;
+  overriddenAt?: Date | string;
+  overrideReason?: string;
+  tokensUsed?: number;
+  inputTokens?: number;
+  outputTokens?: number;
+  scoringLatencyMs?: number;
 }
 
 export interface BhScorecardDetailProps extends EngineAwareProps {
@@ -87,13 +116,8 @@ export const BH_SCORECARD_DETAIL_DEFAULTS: Partial<BhScorecardDetailProps> = {
   preset: 'panel',
 };
 
-/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
-export function n(v: string | number | null | undefined): number {
-  if (v == null) return 0;
-  if (typeof v === 'number') return v;
-  const parsed = Number(v);
-  return isNaN(parsed) ? 0 : parsed;
-}
+/** Re-export n helper for convenience */
+export { n };
 
 /** Re-export DB types for convenience */
 export type { ScorecardSelect, DimensionScoreSelect };

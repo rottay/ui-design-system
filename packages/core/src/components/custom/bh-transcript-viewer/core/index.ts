@@ -21,6 +21,12 @@ export interface TranscriptSegment {
   timestamp: string;
   text: string;
   highlights?: TranscriptHighlight[];
+  /** Duration of this segment in seconds */
+  duration?: number;
+  /** Transcription confidence score (0-1) */
+  confidence?: number;
+  /** Language code of the spoken segment (e.g. 'en', 'es') */
+  language?: string;
 }
 
 export interface TranscriptHighlight {
@@ -32,6 +38,10 @@ export interface TranscriptHighlight {
   score: number;
   confidence: number;
   evidenceNote?: string;
+  /** Source type of the evidence */
+  evidenceType?: 'transcript' | 'behavior' | 'assessment';
+  /** AI model used to generate this highlight */
+  modelUsed?: string;
 }
 
 export interface ScoringDimension {
@@ -52,6 +62,20 @@ export interface TranscriptMeta {
   interviewType: string;
   duration: string;
   overallScore?: number;
+  /** Current status of the transcript processing pipeline */
+  transcriptStatus?: 'pending' | 'processing' | 'completed' | 'failed';
+  /** URL to the original recording */
+  recordingUrl?: string;
+  /** Total recording duration in seconds */
+  recordingDuration?: number;
+  /** Transcription service provider name */
+  transcriptionProvider?: string;
+  /** Primary language of the interview */
+  language?: string;
+  /** AI-generated summary of the interview */
+  summary?: string;
+  /** Status of the AI scoring pipeline */
+  aiScoringStatus?: string;
 }
 
 export interface BhTranscriptViewerProps extends EngineAwareProps {
@@ -80,6 +104,12 @@ export interface BhTranscriptViewerProps extends EngineAwareProps {
 
   /** Whether to show timestamps */
   showTimestamps?: boolean;
+
+  /** Whether to show confidence scores per segment */
+  showConfidence?: boolean;
+
+  /** Playback speed multiplier (e.g. 1, 1.5, 2) */
+  playbackSpeed?: number;
 
   /** Additional CSS class name(s) */
   className?: string;

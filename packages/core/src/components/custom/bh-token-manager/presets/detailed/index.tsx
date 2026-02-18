@@ -86,6 +86,9 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
       onTransactionFilterChange,
       onTopUp,
       onAlertConfigChange,
+      autoPurchaseEnabled,
+      lastPurchaseAt,
+      totalLifetimeSpend,
       className,
       style,
     } = props;
@@ -383,6 +386,46 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
             </Text>
           </Box>
         </Box>
+
+        {/* ========== ACCOUNT INFO BAR ========== */}
+        {(autoPurchaseEnabled !== undefined || lastPurchaseAt || totalLifetimeSpend !== undefined) && (
+          <Box
+            style={{
+              ...cardBase,
+              padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: tokens.spacing[4],
+            }}
+          >
+            {autoPurchaseEnabled !== undefined && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Box
+                  style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: tokens.borderRadius.full,
+                    backgroundColor: autoPurchaseEnabled ? tokens.colors.successScale[500] : tokens.colors.neutral[400],
+                  }}
+                />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700] }}>
+                  Auto-purchase: {autoPurchaseEnabled ? 'Enabled' : 'Disabled'}
+                </Text>
+              </Box>
+            )}
+            {lastPurchaseAt && (
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
+                Last purchase: {lastPurchaseAt}
+              </Text>
+            )}
+            {totalLifetimeSpend !== undefined && (
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+                Lifetime spend: {formatCurrency(totalLifetimeSpend)}
+              </Text>
+            )}
+          </Box>
+        )}
 
         {/* ========== TEAM + ALERTS SIDEBAR + MAIN TABLE ========== */}
         <Box style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: tokens.spacing[5] }}>

@@ -25,6 +25,8 @@ export interface ResponseData {
   dayOfWeek: number;
   responseRate: number;
   count: number;
+  channel?: string;
+  sentiment?: 'positive' | 'neutral' | 'negative';
 }
 
 /**
@@ -35,6 +37,11 @@ export interface ResponseAnalytics {
   bestTime?: { hour: number; day: string };
   totalSent: number;
   totalResponses: number;
+  avgResponseTimeHours?: number;
+  sentimentBreakdown?: { positive: number; neutral: number; negative: number };
+  bestChannel?: string;
+  worstChannel?: string;
+  topTemplate?: string;
 }
 
 export interface BhOutreachResponseProps extends EngineAwareProps {
@@ -54,6 +61,12 @@ export interface BhOutreachResponseProps extends EngineAwareProps {
 
   /** Component title */
   title?: string;
+
+  /** Filter by channel */
+  channel?: string;
+
+  /** Time period for the analysis */
+  period?: string;
 
   /** Loading state */
   loading?: boolean;

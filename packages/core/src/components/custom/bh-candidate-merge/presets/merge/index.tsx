@@ -33,19 +33,6 @@ import type { DBCandidate } from '@rottay/recruiter';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_CANDIDATES: DBCandidate[] = [
-  { id: 'mc-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.johnson@gmail.com', phone: '+1 (555) 123-4567', source: 'linkedin' } as DBCandidate,
-  { id: 'mc-2', firstName: 'Sarah M.', lastName: 'Johnson', email: 's.johnson@yahoo.com', phone: '+1 (555) 123-4567', source: 'career_page' } as DBCandidate,
-];
-
-const MOCK_FIELDS: MergeField[] = [
-  { field: 'Name', values: ['Sarah Johnson', 'Sarah M. Johnson'], selectedIndex: 0 },
-  { field: 'Email', values: ['sarah.johnson@gmail.com', 's.johnson@yahoo.com'], selectedIndex: 0 },
-  { field: 'Phone', values: ['+1 (555) 123-4567', '+1 (555) 123-4567'], selectedIndex: 0 },
-  { field: 'Source', values: ['LinkedIn', 'Career Page'], selectedIndex: 0 },
-  { field: 'Applied', values: ['2026-01-10', '2026-01-15'], selectedIndex: 1 },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Stable empty constants                                             */
 /* ------------------------------------------------------------------ */
@@ -225,10 +212,30 @@ export const MergeBhCandidateMerge = createPreset<BhCandidateMergeProps>({
           {localFields.map((field, fi) => {
             const FieldIcon = getFieldIcon(field.field);
             const valuesMatch = field.values.every(v => v === field.values[0]);
+            const prevCategory = fi > 0 ? localFields[fi - 1].category : undefined;
+            const showCategoryHeader = field.category && field.category !== prevCategory;
 
             return (
+              <Box key={field.field}>
+                {showCategoryHeader && (
+                  <Box style={{
+                    padding: `${t.spacing[2]}px 0`,
+                    marginTop: fi > 0 ? t.spacing[3] : 0,
+                    marginBottom: t.spacing[1],
+                    borderBottom: `1px solid ${t.colors.neutral[100]}`,
+                  }}>
+                    <Text style={{
+                      fontSize: t.typography.fontSize.xs,
+                      fontWeight: t.typography.fontWeight.bold,
+                      color: t.colors.neutral[500],
+                      textTransform: ptypo.labelTransform,
+                      letterSpacing: ptypo.labelLetterSpacing,
+                    }}>
+                      {field.category}
+                    </Text>
+                  </Box>
+                )}
               <Box
-                key={field.field}
                 role="listitem"
                 style={{
                   ...animStyle(fi + candidates.length),
@@ -297,6 +304,7 @@ export const MergeBhCandidateMerge = createPreset<BhCandidateMergeProps>({
                     );
                   })}
                 </Box>
+              </Box>
               </Box>
             );
           })}

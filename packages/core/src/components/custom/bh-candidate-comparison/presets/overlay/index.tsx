@@ -25,17 +25,6 @@ import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import type { DBCandidate } from '@rottay/recruiter';
 
-const MOCK_CANDIDATES: ComparisonCandidate[] = [
-  {
-    candidate: { id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', yearsOfExperience: 8 } as unknown as DBCandidate,
-    scores: { 'Technical': 92, 'Communication': 85, 'Leadership': 78, 'Problem Solving': 90, 'Culture Fit': 88 },
-  },
-  {
-    candidate: { id: 'c-2', firstName: 'Michael', lastName: 'Chen', yearsOfExperience: 6 } as unknown as DBCandidate,
-    scores: { 'Technical': 88, 'Communication': 92, 'Leadership': 85, 'Problem Solving': 82, 'Culture Fit': 90 },
-  },
-];
-
 function getCandidateColor(index: number, t: DesignTokens): string {
   const palette = [t.colors.primaryScale[500], t.colors.successScale[500], t.colors.warningScale[500], t.colors.infoScale[500]];
   return palette[index % palette.length];

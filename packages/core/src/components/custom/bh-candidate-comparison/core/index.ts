@@ -23,6 +23,24 @@ export interface ComparisonCandidate {
   candidate: DBCandidate;
   /** Score dimensions (e.g. Technical: 92, Communication: 85) */
   scores: Record<string, number>;
+  /** Current salary amount */
+  currentSalary?: number;
+  /** Expected salary minimum */
+  expectedSalaryMin?: number;
+  /** Expected salary maximum */
+  expectedSalaryMax?: number;
+  /** Expected salary currency (e.g. 'USD') */
+  expectedSalaryCurrency?: string;
+  /** Date from which the candidate is available */
+  availableFrom?: Date;
+  /** Notice period in days */
+  noticePeriodDays?: number;
+  /** AI-computed overall match score (0-100) */
+  aiMatchScore?: number;
+  /** Work authorization status (e.g. 'citizen', 'visa', 'permanent_resident') */
+  workAuthorization?: string;
+  /** Whether the candidate requires visa sponsorship */
+  requiresVisaSponsorship?: boolean;
 }
 
 export interface BhCandidateComparisonProps extends EngineAwareProps {

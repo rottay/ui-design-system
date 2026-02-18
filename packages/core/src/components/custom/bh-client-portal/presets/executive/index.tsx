@@ -17,11 +17,11 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
 } from '../../../helpers';
-import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientPipelineStage } from '../../core';
+import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientPipelineStage, ClientMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import {
   LayoutDashboard, Briefcase, Users, Clock, TrendingUp, Award,
-  Calendar, Video, Phone, MapPin, UsersRound, ChevronRight, BarChart3,
+  Calendar, Video, Phone, MapPin, UsersRound, ChevronRight, BarChart3, DollarSign,
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
@@ -36,43 +36,10 @@ interface ClientDisplay {
 }
 
 const DEFAULT_CLIENT: ClientDisplay = {
-  name: 'Acme Corporation',
-  contactName: 'Jennifer Walsh',
-  contactEmail: 'jennifer.walsh@acme.com',
+  name: 'Acme Corp',
+  contactName: 'John Doe',
+  contactEmail: 'john@acme.com',
 };
-
-const DEFAULT_METRICS = {
-  totalOpenPositions: 8,
-  totalActiveCandidates: 47,
-  avgTimeToFill: 34,
-  fillRate: 78,
-  upcomingInterviews: 12,
-  offersExtended: 3,
-};
-
-const DEFAULT_PIPELINE: ClientPipelineStage[] = [
-  { name: 'Applied', count: 47 },
-  { name: 'Screening', count: 28 },
-  { name: 'Interview', count: 16 },
-  { name: 'Technical', count: 9 },
-  { name: 'Final Round', count: 5 },
-  { name: 'Offer', count: 3 },
-];
-
-const DEFAULT_POSITIONS: ClientPosition[] = [
-  { id: 'p-1', title: 'Senior Frontend Engineer', department: 'Engineering', status: 'open', totalCandidates: 18, activeCandidates: 12, interviewsScheduled: 4, daysOpen: 21, targetHireDate: '2026-03-15' },
-  { id: 'p-2', title: 'Product Manager', department: 'Product', status: 'open', totalCandidates: 14, activeCandidates: 8, interviewsScheduled: 3, daysOpen: 35, targetHireDate: '2026-03-01' },
-  { id: 'p-3', title: 'Staff Backend Engineer', department: 'Engineering', status: 'open', totalCandidates: 9, activeCandidates: 6, interviewsScheduled: 2, daysOpen: 14 },
-  { id: 'p-4', title: 'UX Designer', department: 'Design', status: 'on_hold', totalCandidates: 7, activeCandidates: 3, interviewsScheduled: 0, daysOpen: 45 },
-  { id: 'p-5', title: 'Data Analyst', department: 'Analytics', status: 'filled', totalCandidates: 22, activeCandidates: 0, interviewsScheduled: 0, daysOpen: 28 },
-];
-
-const DEFAULT_INTERVIEWS: ClientInterview[] = [
-  { id: 'iv-1', candidateName: 'Sarah Johnson', positionTitle: 'Senior Frontend Engineer', date: '2026-02-12', time: '10:00 AM', type: 'video', status: 'scheduled' },
-  { id: 'iv-2', candidateName: 'Michael Chen', positionTitle: 'Product Manager', date: '2026-02-12', time: '2:00 PM', type: 'panel', status: 'scheduled' },
-  { id: 'iv-3', candidateName: 'Emily Rodriguez', positionTitle: 'Senior Frontend Engineer', date: '2026-02-13', time: '11:00 AM', type: 'onsite', status: 'scheduled' },
-  { id: 'iv-4', candidateName: 'James Kim', positionTitle: 'Staff Backend Engineer', date: '2026-02-14', time: '3:00 PM', type: 'phone', status: 'scheduled' },
-];
 
 /* ---------------------------------------------------------------------------
  * Helpers
@@ -118,19 +85,22 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
 
     const {
       client: clientProp,
-      positions: rawPositions = DEFAULT_POSITIONS,
-      pipeline: rawPipeline = DEFAULT_PIPELINE,
-      interviews: rawInterviews = DEFAULT_INTERVIEWS,
-      metrics: rawMetrics = DEFAULT_METRICS,
+      positions: rawPositions = [],
+      pipeline: rawPipeline = [],
+      interviews: rawInterviews = [],
+      metrics: rawMetrics = {} as Partial<ClientMetrics>,
+      billingOverview,
+      billingRecords: rawBillingRecords,
       selectedPosition: controlledSelected,
       onPositionSelect,
       className, style,
     } = props;
 
-    const positions = Array.isArray(rawPositions) ? rawPositions : DEFAULT_POSITIONS;
-    const pipeline = Array.isArray(rawPipeline) ? rawPipeline : DEFAULT_PIPELINE;
-    const interviews = Array.isArray(rawInterviews) ? rawInterviews : DEFAULT_INTERVIEWS;
-    const metrics = Array.isArray(rawMetrics) ? rawMetrics : DEFAULT_METRICS;
+    const positions = Array.isArray(rawPositions) ? rawPositions : [];
+    const pipeline = Array.isArray(rawPipeline) ? rawPipeline : [];
+    const interviews = Array.isArray(rawInterviews) ? rawInterviews : [];
+    const metrics = rawMetrics as Partial<ClientMetrics>;
+    const billingRecords = Array.isArray(rawBillingRecords) ? rawBillingRecords : [];
 
     const client: ClientDisplay = useMemo(() => {
       if (!clientProp) return DEFAULT_CLIENT;
@@ -143,7 +113,6 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
     }, [clientProp]);
 
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
-
 
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
@@ -381,6 +350,89 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
                   );
                 })}
               </Box>
+            </Box>
+          )}
+
+          {/* Billing Overview */}
+          {(billingOverview || billingRecords.length > 0) && (
+            <Box style={{
+              ...createCardStyle(t, { elevation: 'sm' }),
+              padding: t.spacing[5], backgroundColor: t.colors.common.white, marginTop: t.spacing[5],
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                <DollarSign size={15} color={t.colors.successScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                  Billing
+                </Text>
+              </Box>
+              {billingOverview && (
+                <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[3], marginBottom: billingRecords.length > 0 ? t.spacing[4] : 0 }}>
+                  {billingOverview.totalBilled != null && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Total Billed</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
+                        {billingOverview.currency ?? '$'}{billingOverview.totalBilled.toLocaleString()}
+                      </Text>
+                    </Box>
+                  )}
+                  {billingOverview.totalPaid != null && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Total Paid</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.successScale[700], display: 'block' }}>
+                        {billingOverview.currency ?? '$'}{billingOverview.totalPaid.toLocaleString()}
+                      </Text>
+                    </Box>
+                  )}
+                  {billingOverview.outstandingBalance != null && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Outstanding</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: billingOverview.outstandingBalance > 0 ? t.colors.warningScale[700] : t.colors.neutral[900], display: 'block' }}>
+                        {billingOverview.currency ?? '$'}{billingOverview.outstandingBalance.toLocaleString()}
+                      </Text>
+                    </Box>
+                  )}
+                  {billingOverview.nextInvoiceDate && (
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Next Invoice</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], display: 'block' }}>
+                        {billingOverview.nextInvoiceDate}
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
+              )}
+              {billingRecords.length > 0 && (
+                <Box role="list" aria-label="Billing records">
+                  <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], marginBottom: t.spacing[2], display: 'block' }}>
+                    Recent Records ({billingRecords.length})
+                  </Text>
+                  {billingRecords.slice(0, 5).map((record, idx) => (
+                    <Box
+                      key={record.id ?? idx}
+                      role="listitem"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: `${t.spacing[2]}px 0`,
+                        borderBottom: idx < Math.min(billingRecords.length, 5) - 1 ? `1px solid ${t.colors.neutral[50]}` : 'none',
+                      }}
+                    >
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                          {(record as any).description || (record as any).invoiceNumber || `Record #${idx + 1}`}
+                        </Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                          {(record as any).date || (record as any).createdAt || ''}
+                        </Text>
+                      </Box>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                        ${Number((record as any).amount ?? 0).toLocaleString()}
+                      </Text>
+                    </Box>
+                  ))}
+                </Box>
+              )}
             </Box>
           )}
         </Box>

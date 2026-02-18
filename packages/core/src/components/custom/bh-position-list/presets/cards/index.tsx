@@ -8,7 +8,7 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
-  Briefcase, Users, Clock, User, ChevronRight,
+  Briefcase, Users, Clock, User, ChevronRight, Filter, ChevronDown,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -27,13 +27,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_POSITIONS: RecruiterPosition[] = [
-  { id: 'pl-1', tenantId: 't', clientId: 'c1', code: 'FE-01', title: 'Senior Frontend Engineer', status: 'open', priority: 'high', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 12 * 86400000) } as any,
-  { id: 'pl-2', tenantId: 't', clientId: 'c2', code: 'PM-01', title: 'Product Manager', status: 'open', priority: 'normal', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 25 * 86400000) } as any,
-  { id: 'pl-3', tenantId: 't', clientId: 'c3', code: 'UX-01', title: 'UX Designer', status: 'on_hold', priority: 'low', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 45 * 86400000) } as any,
-  { id: 'pl-4', tenantId: 't', clientId: 'c1', code: 'BE-01', title: 'Backend Developer', status: 'open', priority: 'high', openings: 2, filledCount: 0, createdAt: new Date(Date.now() - 5 * 86400000) } as any,
-];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -81,14 +74,25 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions: rawPositions = MOCK_POSITIONS,
+      positions: rawPositions = [],
       onPositionClick,
       selectedPositionId,
+      statusFilterOptions,
+      statusFilter: statusFilterProp,
+      onStatusFilterChange,
+      urgencyFilter: urgencyFilterProp,
+      onUrgencyFilterChange,
+      departmentFilter: departmentFilterProp,
+      onDepartmentFilterChange,
+      departments: departmentsProp,
+      teamFilter: teamFilterProp,
+      onTeamFilterChange,
+      teams: teamsProp,
       className,
       style,
     } = props;
 
-    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
+    const positions = Array.isArray(rawPositions) ? rawPositions : [];
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
@@ -106,7 +110,126 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
     }, [onPositionClick]);
 
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], width: '100%', ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[4], width: '100%', ...style }}>
+        {/* Filter bar */}
+        {(statusFilterOptions || departmentsProp || teamsProp || urgencyFilterProp !== undefined) && (
+          <Box style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: t.spacing[2],
+            flexWrap: 'wrap',
+          }} role="toolbar" aria-label="Position filters">
+            <Filter size={13} color={t.colors.neutral[400]} />
+            {statusFilterOptions && statusFilterOptions.length > 0 && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${statusFilterProp && statusFilterProp !== 'all' ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: statusFilterProp && statusFilterProp !== 'all' ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: statusFilterProp && statusFilterProp !== 'all' ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {statusFilterProp && statusFilterProp !== 'all' ? statusFilterProp.replace('_', ' ') : 'All Statuses'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by status"
+                    value={statusFilterProp ?? 'all'}
+                    onChange={(e: any) => onStatusFilterChange?.(e.target.value)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    {statusFilterOptions.map(s => (
+                      <option key={s} value={s}>{s === 'all' ? 'All Statuses' : s.replace('_', ' ')}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+            {departmentsProp && departmentsProp.length > 0 && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${departmentFilterProp ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: departmentFilterProp ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: departmentFilterProp ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {departmentFilterProp ?? 'All Departments'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by department"
+                    value={departmentFilterProp ?? ''}
+                    onChange={(e: any) => onDepartmentFilterChange?.(e.target.value || null)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    <option value="">All Departments</option>
+                    {departmentsProp.map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+            {teamsProp && teamsProp.length > 0 && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${teamFilterProp ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: teamFilterProp ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: teamFilterProp ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {teamFilterProp ?? 'All Teams'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by team"
+                    value={teamFilterProp ?? ''}
+                    onChange={(e: any) => onTeamFilterChange?.(e.target.value || null)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    <option value="">All Teams</option>
+                    {teamsProp.map(tm => (
+                      <option key={tm} value={tm}>{tm}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+            {urgencyFilterProp !== undefined && (
+              <Box style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Box style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  border: `1px solid ${urgencyFilterProp ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: urgencyFilterProp ? t.colors.primaryScale[50] : t.colors.common.white,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1], cursor: 'pointer',
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: urgencyFilterProp ? t.colors.primaryScale[700] : t.colors.neutral[600] }}>
+                    {urgencyFilterProp ? `${urgencyFilterProp} urgency` : 'All Urgencies'}
+                  </Text>
+                  <ChevronDown size={11} color={t.colors.neutral[400]} />
+                  <select
+                    aria-label="Filter by urgency"
+                    value={urgencyFilterProp ?? ''}
+                    onChange={(e: any) => onUrgencyFilterChange?.(e.target.value || null)}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                  >
+                    <option value="">All Urgencies</option>
+                    {(['low', 'normal', 'high', 'urgent', 'critical'] as const).map(u => (
+                      <option key={u} value={u}>{u}</option>
+                    ))}
+                  </select>
+                </Box>
+              </Box>
+            )}
+          </Box>
+        )}
+
         {positions.length === 0 && (
           <Box style={{ ...card, ...createEmptyStateStyle(t) }}>
             <Briefcase size={32} style={{ marginBottom: t.spacing[2], opacity: 0.4 }} />

@@ -89,22 +89,6 @@ const SEVERITY_OPTIONS: ProctoringEventSeverity[] = ['low', 'medium', 'high', 'c
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT: ProctoringReviewEventView = {
-  event: {
-    id: 'pe-1',
-    scorableId: 'int-1',
-    eventType: 'screen_share',
-    severity: 'critical',
-    timestamp: new Date(Date.now() - 300000),
-    metadata: { duration: 45, application: 'Discord', detectedAt: 'question_3' },
-    reviewed: false,
-    dismissed: false,
-  },
-  candidateName: 'Sarah Johnson',
-  description: 'Candidate initiated a screen sharing session with an external application during the coding assessment. The screen share lasted approximately 45 seconds before being automatically terminated.',
-  sessionDuration: 2400,
-};
-
 /* ================================================================== */
 /*  Split Preset                                                       */
 /* ================================================================== */
@@ -119,7 +103,7 @@ export const SplitBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event: rawEventView = MOCK_EVENT,
+      event: rawEventView,
       onSubmitReview,
       onDismiss,
       onSeverityOverride,
@@ -128,7 +112,7 @@ export const SplitBhProctoringReview = createPreset<BhProctoringReviewProps>({
       style,
     } = props;
 
-    const eventView = Array.isArray(rawEventView) ? rawEventView : MOCK_EVENT;
+    const eventView = (rawEventView ?? {}) as Partial<ProctoringReviewEventView>;
 
     /* Safely extract fields from the View wrapper */
     const ev = eventView?.event;
@@ -142,11 +126,13 @@ export const SplitBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const candidateName = eventView?.candidateName ?? 'Unknown';
     const description = eventView?.description ?? '';
     const sessionDuration = eventView?.sessionDuration;
+    const previousReviewNotes = eventView?.previousReviewNotes;
+    const previousReviewedBy = eventView?.previousReviewedBy;
+    const previousReviewedAt = eventView?.previousReviewedAt;
 
     const [notes, setNotes] = useState('');
     const [severityOverride, setSeverityOverride] = useState<ProctoringEventSeverity | undefined>(severity);
     const [showSeverityDropdown, setShowSeverityDropdown] = useState(false);
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -284,6 +270,32 @@ export const SplitBhProctoringReview = createPreset<BhProctoringReviewProps>({
                       </Text>
                     </Box>
                   ))}
+                </Box>
+              </Box>
+            )}
+
+            {/* Previous Review Info */}
+            {previousReviewedBy && (
+              <Box style={{ marginBottom: t.spacing[4] }}>
+                <Text style={{ ...sectionLabel }}>Previous Review</Text>
+                <Box style={{
+                  padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                  backgroundColor: t.colors.successScale[50],
+                  borderRadius: t.borderRadius.md,
+                  border: `1px solid ${t.colors.successScale[100]}`,
+                }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: previousReviewNotes ? t.spacing[1] : 0 }}>
+                    <CheckCircle size={12} color={t.colors.successScale[600]} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[700] }}>
+                      Reviewed by {previousReviewedBy}
+                      {previousReviewedAt && ` - ${formatDistanceToNow(previousReviewedAt instanceof Date ? previousReviewedAt : new Date(previousReviewedAt), { addSuffix: true })}`}
+                    </Text>
+                  </Box>
+                  {previousReviewNotes && (
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[600], marginTop: t.spacing[1], display: 'block' }}>
+                      {previousReviewNotes}
+                    </Text>
+                  )}
                 </Box>
               </Box>
             )}

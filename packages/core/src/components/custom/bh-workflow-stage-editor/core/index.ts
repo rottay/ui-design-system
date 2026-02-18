@@ -21,6 +21,25 @@ export interface WorkflowStage {
   order?: number;
   color?: string;
   actions?: string[];
+
+  /** Description of this stage */
+  description?: string;
+  /** SLA in hours for completing this stage */
+  slaHours?: number;
+  /** Whether this stage is required in the workflow */
+  isRequired?: boolean;
+  /** Stage automation configuration */
+  automations?: { autoAdvance?: boolean; autoReject?: boolean };
+  /** ID of the interview template used in this stage */
+  interviewTemplateId?: string;
+  /** Whether knockout scoring is enabled */
+  knockoutEnabled?: boolean;
+  /** Minimum score threshold for knockout */
+  knockoutThreshold?: number;
+  /** Weight of this stage in overall scoring */
+  weight?: number;
+  /** Estimated duration for this stage (e.g. "2 days") */
+  estimatedDuration?: string;
 }
 
 export interface BhWorkflowStageEditorProps extends EngineAwareProps {

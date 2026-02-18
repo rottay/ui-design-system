@@ -23,6 +23,8 @@ export interface ScheduleCandidate {
   avatar?: string;
   currentStage: string;
   jobTitle: string;
+  /** AI-generated match score for the candidate (0-100) */
+  aiMatchScore?: number;
 }
 
 export interface InterviewTypeConfig {
@@ -32,6 +34,12 @@ export interface InterviewTypeConfig {
   interviewerId?: string;
   interviewerName?: string;
   room?: string;
+  /** Whether proctoring is enabled for this interview type */
+  proctoringEnabled?: boolean;
+  /** Billing mode for the interview (e.g. per_interview, per_minute, token_based) */
+  billingMode?: string;
+  /** Estimated cost for this interview configuration */
+  estimatedCost?: number;
 }
 
 export interface ScheduleData {

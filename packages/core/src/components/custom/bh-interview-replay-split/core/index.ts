@@ -52,6 +52,16 @@ export interface BhInterviewReplaySplitProps extends EngineAwareProps {
   loading?: boolean;
   className?: string;
   style?: CSSProperties;
+  /** Whether proctoring was enabled for this interview */
+  proctoringEnabled?: boolean;
+  /** Proctoring violation flags */
+  proctoringFlags?: string[];
+  /** Candidate's rating of the interview (1-5) */
+  candidateRating?: number;
+  /** Billing status (e.g. pending, settled, disputed) */
+  billingStatus?: string;
+  /** Total token cost for AI interviews */
+  tokenCost?: number;
 }
 
 export const BH_INTERVIEW_REPLAY_SPLIT_DEFAULTS: Partial<BhInterviewReplaySplitProps> = {

@@ -28,12 +28,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RULES: WorkflowRule[] = [
-  { id: 'wr-1', name: 'Auto-reject low scores', trigger: 'WHEN candidate score < 30', conditions: ['IF no interview scheduled'], actions: ['THEN send rejection email'], enabled: true, lastTriggered: new Date(Date.now() - 3600000) },
-  { id: 'wr-2', name: 'Fast-track top candidates', trigger: 'WHEN candidate score > 85', conditions: ['IF position is urgent'], actions: ['THEN schedule interview'], enabled: true },
-  { id: 'wr-3', name: 'Follow-up reminder', trigger: 'WHEN no response after 3 days', conditions: ['IF candidate in active pipeline'], actions: ['THEN send follow-up email'], enabled: false },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -48,15 +42,14 @@ export const CompactBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules: rawRules = MOCK_RULES,
+      rules: rawRules = [],
       onRuleToggle,
       onRuleEdit,
       className,
       style,
     } = props;
 
-    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
-
+    const rules = Array.isArray(rawRules) ? rawRules : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

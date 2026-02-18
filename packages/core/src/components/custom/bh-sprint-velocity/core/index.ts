@@ -19,6 +19,18 @@ export interface SprintVelocityData {
   planned?: number;
   completed?: number;
   carryOver?: number;
+  /** Revenue target for the sprint (from DBTeamSprint.revenueTarget) */
+  revenueTarget?: number;
+  /** Revenue generated in the sprint (from DBTeamSprint.revenueGenerated) */
+  revenueGenerated?: number;
+  /** Sprint duration in weeks (from DBTeamSprint.durationWeeks) */
+  durationWeeks?: number;
+  /** Overall sprint completion percentage (from DBTeamSprint.completionPercentage) */
+  completionPercentage?: number;
+  /** Position target for the sprint (from DBTeamSprint.positionTarget) */
+  positionTarget?: number;
+  /** Positions actually filled (from DBTeamSprint.positionsFilled) */
+  positionsFilled?: number;
 }
 
 export interface BhSprintVelocityProps extends EngineAwareProps {
@@ -38,6 +50,9 @@ export interface BhSprintVelocityProps extends EngineAwareProps {
 
   /** Callback when a sprint bar is clicked */
   onSprintClick?: (sprintName: string) => void;
+
+  /** Currency for revenue display */
+  revenueCurrency?: string;
 
   /** Loading state */
   loading?: boolean;

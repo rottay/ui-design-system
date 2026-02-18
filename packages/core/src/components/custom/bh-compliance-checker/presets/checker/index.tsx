@@ -88,17 +88,6 @@ function getStatusLabel(status: ComplianceRule['status']): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RULES: ComplianceRule[] = [
-  { id: 'c-1', name: 'Equal Opportunity Compliance', category: 'Employment Law', status: 'pass', description: 'All job postings include required equal opportunity statements.', lastChecked: new Date(Date.now() - 3600000) },
-  { id: 'c-2', name: 'Data Retention Policy', category: 'Data Privacy', status: 'pass', description: 'Candidate data is retained within the defined period.', lastChecked: new Date(Date.now() - 7200000) },
-  { id: 'c-3', name: 'GDPR Consent Collection', category: 'Data Privacy', status: 'warning', description: 'Some candidate profiles are missing explicit consent records.', lastChecked: new Date(Date.now() - 14400000) },
-  { id: 'c-4', name: 'Background Check Authorization', category: 'Background Screening', status: 'pass', description: 'All background checks have valid authorization on file.', lastChecked: new Date(Date.now() - 21600000) },
-  { id: 'c-5', name: 'Interview Bias Training', category: 'Training', status: 'fail', description: '3 interviewers have not completed required bias training.', lastChecked: new Date(Date.now() - 43200000) },
-  { id: 'c-6', name: 'Salary Band Compliance', category: 'Compensation', status: 'pass', description: 'All offers fall within approved salary bands.', lastChecked: new Date(Date.now() - 86400000) },
-  { id: 'c-7', name: 'Accessibility Standards', category: 'Accessibility', status: 'warning', description: 'Assessment platform meets WCAG 2.1 AA with minor exceptions.', lastChecked: new Date(Date.now() - 172800000) },
-  { id: 'c-8', name: 'Right to Work Verification', category: 'Employment Law', status: 'na', description: 'Applicable only for international hires.', lastChecked: new Date(Date.now() - 259200000) },
-];
-
 /* ================================================================== */
 /*  Checker Preset                                                     */
 /* ================================================================== */
@@ -169,7 +158,7 @@ export const CheckerBhComplianceChecker = createPreset<BhComplianceCheckerProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules: rawRules = MOCK_RULES,
+      rules: rawRules = [],
       overallScore = 82,
       title = 'Compliance Status',
       onRuleClick,
@@ -179,7 +168,7 @@ export const CheckerBhComplianceChecker = createPreset<BhComplianceCheckerProps>
       style,
     } = props;
 
-    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
+    const rules = Array.isArray(rawRules) ? rawRules : [];
 
     const [hoveredRule, setHoveredRule] = useState<string | null>(null);
 
@@ -416,6 +405,33 @@ export const CheckerBhComplianceChecker = createPreset<BhComplianceCheckerProps>
                       </Box>
 
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexShrink: 0 }}>
+                        {rule.severity && (
+                          <Box style={{
+                            ...createBadgeStyle(t,
+                              rule.severity === 'critical' ? 'error'
+                              : rule.severity === 'high' ? 'error'
+                              : rule.severity === 'medium' ? 'warning'
+                              : 'secondary',
+                            ),
+                            borderRadius: badgeRadius,
+                          }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                              {rule.severity}
+                            </Text>
+                          </Box>
+                        )}
+                        {rule.regulation && (
+                          <Box style={{
+                            padding: `0 ${t.spacing[2]}px`,
+                            borderRadius: badgeRadius,
+                            backgroundColor: t.colors.primaryScale[50],
+                            border: `1px solid ${t.colors.primaryScale[200]}`,
+                          }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.primaryScale[700] }}>
+                              {rule.regulation}
+                            </Text>
+                          </Box>
+                        )}
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Clock size={10} color={t.colors.neutral[400]} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>

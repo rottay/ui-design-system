@@ -9,6 +9,7 @@
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
 import type { CalibrationSelect } from '@rottay/scoring';
+import { n } from '../../helpers';
 
 export type BhCalibrationDashboardPreset = 'dashboard' | 'compact';
 
@@ -40,6 +41,20 @@ export interface CalibrationSessionView {
   startedAt?: Date;
   /** When the session completed (if applicable) */
   completedAt?: Date;
+  /** Pearson correlation between human and LLM scores */
+  overallCorrelation?: number;
+  /** Mean absolute error across all samples */
+  meanAbsoluteError?: number;
+  /** Per-dimension calibration metrics (from CalibrationSelect.dimensionMetrics) */
+  dimensionMetrics?: Record<string, unknown>[];
+  /** LLM model used for scoring in this session */
+  llmModel?: string;
+  /** Prompt version used for scoring */
+  promptVersion?: string;
+  /** Target number of samples for the session */
+  targetSamples?: number;
+  /** Minimum samples required before metrics are valid */
+  minSamples?: number;
 }
 
 export interface CalibrationMetrics {
@@ -86,13 +101,8 @@ export const BH_CALIBRATION_DASHBOARD_DEFAULTS: Partial<BhCalibrationDashboardPr
 /** Backward-compat alias (old name from pre-migration) */
 export type CalibrationSession = CalibrationSessionView;
 
-/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
-export function n(v: string | number | null | undefined): number {
-  if (v == null) return 0;
-  if (typeof v === 'number') return v;
-  const parsed = Number(v);
-  return isNaN(parsed) ? 0 : parsed;
-}
+/** Re-export n helper for convenience */
+export { n };
 
 /** Re-export DB type for convenience */
 export type { CalibrationSelect };

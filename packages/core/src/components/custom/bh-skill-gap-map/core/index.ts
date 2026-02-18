@@ -24,6 +24,10 @@ export interface SkillGapItem {
   priority?: GapPriority;
   candidateCount?: number;
   recommendation?: string;
+  /** Scoring dimension ID from the rubric */
+  dimensionId?: string;
+  /** Overall gap score for the analysis this item belongs to */
+  overallGap?: number;
 }
 
 export interface DimensionHeatmapCell {

@@ -27,15 +27,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SPRINTS: SprintVelocityData[] = [
-  { sprintName: 'Sprint 7', planned: 32, completed: 28, carryOver: 4 },
-  { sprintName: 'Sprint 8', planned: 35, completed: 30, carryOver: 5 },
-  { sprintName: 'Sprint 9', planned: 30, completed: 30, carryOver: 0 },
-  { sprintName: 'Sprint 10', planned: 38, completed: 32, carryOver: 6 },
-  { sprintName: 'Sprint 11', planned: 36, completed: 34, carryOver: 2 },
-  { sprintName: 'Sprint 12', planned: 40, completed: 25, carryOver: 0 },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -51,17 +42,18 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      sprints: rawSprints = MOCK_SPRINTS,
+      sprints: rawSprints = [],
       averageVelocity,
+      activeSprint,
       title,
       onSprintClick,
+      revenueCurrency = 'USD',
       loading = false,
       className,
       style,
     } = props;
 
-    const sprints = Array.isArray(rawSprints) ? rawSprints : MOCK_SPRINTS;
-
+    const sprints = Array.isArray(rawSprints) ? rawSprints : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -171,6 +163,26 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Sprints</Text>
           </Box>
         </Box>
+
+        {/* Active sprint + currency indicator */}
+        {activeSprint && (
+          <Box style={{
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
+              {activeSprint.name ?? 'Active Sprint'}
+            </Text>
+            {activeSprint.revenueTarget !== undefined && (
+              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600] }}>
+                {revenueCurrency} {Number(activeSprint.revenueTarget).toLocaleString()}
+              </Text>
+            )}
+          </Box>
+        )}
 
         {/* Mini bar chart */}
         <Box style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px` }}>

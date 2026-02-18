@@ -9,11 +9,13 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Wallet, AlertTriangle, DollarSign,
+  ShoppingCart, ToggleLeft, ToggleRight, Clock, Bell,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
   createBadgeStyle,
+  createBooleanBadgeStyles,
   createCardHoverStyles,
   createEntranceAnimation,
   createProgressBarStyle,
@@ -21,18 +23,13 @@ import {
   createEmptyStateStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { BhTokenBudgetProps, BudgetAllocation } from '../../core';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-
-const MOCK_ALLOCATIONS: BudgetAllocation[] = [
-  { teamId: 't-1', teamName: 'Engineering', allocated: 5000, used: 3200, alertThreshold: 80 },
-  { teamId: 't-2', teamName: 'Product', allocated: 3000, used: 2700, alertThreshold: 75 },
-  { teamId: 't-3', teamName: 'Design', allocated: 2000, used: 800, alertThreshold: 90 },
-];
 
 /* ================================================================== */
 /*  Compact Preset                                                     */
@@ -48,16 +45,23 @@ export const CompactBhTokenBudget = createPreset<BhTokenBudgetProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      allocations: rawAllocations = MOCK_ALLOCATIONS,
+      allocations: rawAllocations = [],
       totalBudget = 10000,
       totalUsed = 6700,
       currency = '$',
+      lifetimePurchased,
+      lifetimeConsumed,
+      lifetimeExpired,
+      autoPurchaseEnabled,
+      autoPurchaseThreshold,
+      autoPurchaseAmount,
+      lastPurchaseAt,
+      lowBalanceAlertSent,
       className,
       style,
     } = props;
 
-    const allocations = Array.isArray(rawAllocations) ? rawAllocations : MOCK_ALLOCATIONS;
-
+    const allocations = Array.isArray(rawAllocations) ? rawAllocations : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -96,7 +100,7 @@ export const CompactBhTokenBudget = createPreset<BhTokenBudgetProps>({
           justifyContent: 'space-between',
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-            <Wallet size={16} color={t.colors.primaryScale[500]} />
+            <Wallet size={ICON_SIZES.section} color={t.colors.primaryScale[500]} />
             <Text style={{
               fontSize: t.typography.fontSize.sm,
               fontWeight: ptypo.headingWeight,
@@ -154,7 +158,7 @@ export const CompactBhTokenBudget = createPreset<BhTokenBudgetProps>({
                     {alloc.teamName}
                   </Text>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-                    {isOverThreshold && <AlertTriangle size={10} color={t.colors.errorScale[500]} />}
+                    {isOverThreshold && <AlertTriangle size={ICON_SIZES.inline} color={t.colors.errorScale[500]} />}
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                       {usePct.toFixed(0)}%
                     </Text>
@@ -174,6 +178,56 @@ export const CompactBhTokenBudget = createPreset<BhTokenBudgetProps>({
             </Box>
           )}
         </Box>
+
+        {/* Lifetime & Auto-purchase summary */}
+        {(lifetimePurchased != null || autoPurchaseEnabled != null || lowBalanceAlertSent != null) && (
+          <Box style={{
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderTop: `1px solid ${t.colors.neutral[100]}`,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: t.spacing[2],
+            alignItems: 'center',
+          }}>
+            {lifetimePurchased != null && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <DollarSign size={ICON_SIZES.inline} color={t.colors.neutral[400]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  {currency}{lifetimePurchased.toLocaleString()} purchased
+                </Text>
+              </Box>
+            )}
+            {lifetimeConsumed != null && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  {currency}{lifetimeConsumed.toLocaleString()} consumed
+                </Text>
+              </Box>
+            )}
+            {lifetimeExpired != null && lifetimeExpired > 0 && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[500] }}>
+                  {currency}{lifetimeExpired.toLocaleString()} expired
+                </Text>
+              </Box>
+            )}
+            {autoPurchaseEnabled != null && (() => {
+              const autoBadge = createBooleanBadgeStyles(t, autoPurchaseEnabled);
+              return autoBadge && (
+                <Box style={{ ...autoBadge, padding: `0 ${t.spacing[1]}px` }}>
+                  {autoPurchaseEnabled ? <ToggleRight size={ICON_SIZES.inline} /> : <ToggleLeft size={ICON_SIZES.inline} />}
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>Auto</Text>
+                </Box>
+              );
+            })()}
+            {lowBalanceAlertSent && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <Bell size={ICON_SIZES.inline} color={t.colors.warningScale[500]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[600] }}>Alert sent</Text>
+              </Box>
+            )}
+          </Box>
+        )}
       </Box>
     );
   },

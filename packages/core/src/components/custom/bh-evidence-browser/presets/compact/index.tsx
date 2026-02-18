@@ -33,13 +33,6 @@ import { FileSearch, Quote, CheckCircle, Clock, ShieldCheck } from 'lucide-react
 /*  Mock Data (fallback for dev/storybook)                             */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVIDENCE: EvidenceItem[] = [
-  { id: 'ev-1', quote: 'I start by identifying the key requirements and constraints', dimension: 'System Design', dimensionCode: 'SD', impact: 'positive', score: 8, isValidated: true, timestamp: '00:15' },
-  { id: 'ev-2', quote: 'focusing on scalability and reliability', dimension: 'Architecture', dimensionCode: 'ARCH', impact: 'positive', score: 9, isValidated: true, timestamp: '00:22' },
-  { id: 'ev-3', quote: 'For payment systems I prioritize consistency', dimension: 'Trade-off Analysis', dimensionCode: 'TA', impact: 'positive', score: 7, isValidated: false, timestamp: '00:58' },
-  { id: 'ev-4', quote: 'lean toward availability with eventual consistency', dimension: 'Trade-off Analysis', dimensionCode: 'TA', impact: 'neutral', score: 8, isValidated: false, timestamp: '01:05' },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Preset                                                              */
 /* ------------------------------------------------------------------ */
@@ -51,7 +44,7 @@ export const CompactBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
     const isGlass = t.surface.useGlass;
 
     const {
-      evidence: rawEvidence = MOCK_EVIDENCE,
+      evidence: rawEvidence = [],
       selectedEvidenceId: selectedEvidenceIdProp,
       onEvidenceSelect,
       onValidate,
@@ -62,11 +55,10 @@ export const CompactBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
       style,
     } = props;
 
-    const evidence = Array.isArray(rawEvidence) ? rawEvidence : MOCK_EVIDENCE;
+    const evidence = Array.isArray(rawEvidence) ? rawEvidence : [];
 
     /* -- State -------------------------------------------------------- */
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEvidenceIdProp ?? '');
-
 
     const selectedEvidenceId = selectedEvidenceIdProp ?? internalSelectedId;
 

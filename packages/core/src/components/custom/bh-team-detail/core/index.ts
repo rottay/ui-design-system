@@ -25,6 +25,14 @@ export interface TeamPosition {
   title: string;
   status: string;
   assignee?: string;
+  /** Position priority level */
+  priority?: string;
+  /** Number of days the position has been open */
+  daysOpen?: number;
+  /** Total candidates in pipeline for this position */
+  totalCandidates?: number;
+  /** Client name associated with this position */
+  clientName?: string;
 }
 
 /**
@@ -36,6 +44,14 @@ export interface TeamDetailMember {
   role: string;
   avatarInitial: string;
   hireDate?: string;
+  /** Member allocation percentage (from DBTeam.members JSONB) */
+  allocation?: number;
+  /** Number of active positions assigned to this member */
+  activePositions?: number;
+  /** Current utilization percentage */
+  currentUtilization?: number;
+  /** Member specializations */
+  specializations?: string[];
 }
 
 export interface BhTeamDetailProps extends EngineAwareProps {
@@ -58,6 +74,18 @@ export interface BhTeamDetailProps extends EngineAwareProps {
 
   /** Callback when a position is clicked */
   onPositionClick?: (positionId: string) => void;
+
+  /** KPI targets map (from DBTeam.kpiTargets JSONB) */
+  kpiTargets?: Record<string, number>;
+
+  /** KPI actuals map (from DBTeam.kpiActuals JSONB) */
+  kpiActuals?: Record<string, number>;
+
+  /** Team specializations (from DBTeam.specializations JSONB) */
+  specializations?: string[];
+
+  /** Industries the team covers (from DBTeam.industries JSONB) */
+  industries?: string[];
 
   /** Loading state */
   loading?: boolean;

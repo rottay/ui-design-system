@@ -179,6 +179,17 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
       selectedDimension: selectedDimensionProp = null,
       validationErrors: validationErrorsProp = [],
       isDirty: isDirtyProp,
+      systemPrompt,
+      scoringInstructions,
+      evidenceInstructions,
+      outputFormat,
+      minScore,
+      maxScore,
+      passingScore,
+      isTemplate,
+      timesUsed,
+      avgScore,
+      lastUsedAt,
       onChange,
       onDimensionAdd,
       onDimensionRemove,
@@ -723,6 +734,20 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           <Hash size={10} aria-hidden="true" />
                           {dim.code}
                         </Text>
+                        {dim.isRequired && (
+                          <Text
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: tokens.spacing[1],
+                              fontSize: tokens.typography.fontSize.xs,
+                              fontWeight: tokens.typography.fontWeight.medium,
+                              color: tokens.colors.primaryScale[600],
+                            }}
+                          >
+                            Required
+                          </Text>
+                        )}
                         {dim.isKnockout && (
                           <Text
                             style={{
@@ -751,6 +776,27 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         >
                           {dim.description}
                         </Text>
+                      )}
+
+                      {/* Keywords */}
+                      {dim.keywords && dim.keywords.length > 0 && (
+                        <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[1] }}>
+                          {dim.keywords.map((kw, ki) => (
+                            <Text
+                              key={ki}
+                              style={{
+                                display: 'inline-block',
+                                padding: `1px ${tokens.spacing[2]}px`,
+                                borderRadius: badgeRadius,
+                                fontSize: '10px',
+                                backgroundColor: tokens.colors.neutral[100],
+                                color: tokens.colors.neutral[600],
+                              }}
+                            >
+                              {kw}
+                            </Text>
+                          ))}
+                        </Box>
                       )}
 
                       {/* Weight slider */}
@@ -1502,6 +1548,135 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       })()}
                     </svg>
                   </Box>
+                </Box>
+              </Box>
+            )}
+
+            {/* ── Scoring Config ────────────────────────────────── */}
+            {(passingScore !== undefined || minScore !== undefined || maxScore !== undefined || outputFormat) && (
+              <Box>
+                <Box
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: tokens.spacing[2],
+                    marginBottom: tokens.spacing[3],
+                  }}
+                >
+                  <Target size={16} color={tokens.colors.infoScale[600]} aria-hidden="true" />
+                  <Text
+                    style={{
+                      ...sectionHeaderStyle,
+                      marginBottom: 0,
+                    }}
+                  >
+                    Scoring Config
+                  </Text>
+                  {isTemplate && (
+                    <Text style={{
+                      ...createBadgeStyle(tokens, 'primary'),
+                      borderRadius: badgeRadius,
+                      marginLeft: 'auto',
+                    }}>
+                      Template
+                    </Text>
+                  )}
+                </Box>
+                <Box
+                  style={{
+                    ...cardBase,
+                    padding: tokens.spacing[3],
+                    display: 'flex',
+                    flexDirection: 'column' as const,
+                    gap: tokens.spacing[2],
+                  }}
+                >
+                  {minScore !== undefined && (
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Min Score</Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{minScore}</Text>
+                    </Box>
+                  )}
+                  {maxScore !== undefined && (
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Max Score</Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{maxScore}</Text>
+                    </Box>
+                  )}
+                  {passingScore !== undefined && (
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Passing Score</Text>
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.xs,
+                        fontWeight: tokens.typography.fontWeight.semibold,
+                        color: tokens.colors.successScale[700],
+                      }}>{passingScore}</Text>
+                    </Box>
+                  )}
+                  {outputFormat && (
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Output Format</Text>
+                      <Text style={{
+                        ...createBadgeStyle(tokens, 'secondary'),
+                        borderRadius: badgeRadius,
+                        fontSize: tokens.typography.fontSize.xs,
+                      }}>{outputFormat}</Text>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            )}
+
+            {/* ── Usage Stats ────────────────────────────────── */}
+            {(timesUsed !== undefined || avgScore !== undefined || lastUsedAt) && (
+              <Box>
+                <Box
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: tokens.spacing[2],
+                    marginBottom: tokens.spacing[3],
+                  }}
+                >
+                  <BarChart3 size={16} color={tokens.colors.primaryScale[600]} aria-hidden="true" />
+                  <Text
+                    style={{
+                      ...sectionHeaderStyle,
+                      marginBottom: 0,
+                    }}
+                  >
+                    Usage Stats
+                  </Text>
+                </Box>
+                <Box
+                  style={{
+                    ...cardBase,
+                    padding: tokens.spacing[3],
+                    display: 'flex',
+                    flexDirection: 'column' as const,
+                    gap: tokens.spacing[2],
+                  }}
+                >
+                  {timesUsed !== undefined && (
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Times Used</Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{timesUsed}</Text>
+                    </Box>
+                  )}
+                  {avgScore !== undefined && (
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Avg Score</Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{avgScore.toFixed(1)}</Text>
+                    </Box>
+                  )}
+                  {lastUsedAt && (
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Last Used</Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
+                        {new Date(lastUsedAt).toLocaleDateString()}
+                      </Text>
+                    </Box>
+                  )}
                 </Box>
               </Box>
             )}

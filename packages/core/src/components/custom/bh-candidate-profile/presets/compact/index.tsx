@@ -26,7 +26,7 @@ import {
   getCardPadding,
   getAccentAwareLayout,
 } from '../../../helpers';
-import type { BhCandidateProfileProps } from '../../core';
+import type { BhCandidateProfileProps, CandidateStats } from '../../core';
 import { getCandidateFullName, getCandidateRole, getCandidateLocation, getCandidateSkills } from '../../core';
 import type { DBCandidate } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../types';
@@ -38,29 +38,6 @@ import {
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-
-const DEFAULT_CANDIDATE = {
-  id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', avatarUrl: null,
-  currentTitle: 'Senior Frontend Engineer', currentCompany: 'Google',
-  currentLocation: { city: 'San Francisco', state: 'CA' },
-  email: 'sarah.j@google.com', phone: '+1 (415) 555-0127',
-  source: 'linkedin', status: 'active',
-  skills: [
-    { name: 'React', level: 'expert', yearsOfExperience: 6 },
-    { name: 'TypeScript', level: 'expert', yearsOfExperience: 5 },
-    { name: 'Next.js', level: 'advanced', yearsOfExperience: 4 },
-    { name: 'GraphQL', level: 'advanced', yearsOfExperience: 3 },
-    { name: 'Node.js', level: 'intermediate', yearsOfExperience: 5 },
-    { name: 'System Design', level: 'intermediate', yearsOfExperience: 3 },
-  ],
-} as DBCandidate;
-
-const DEFAULT_STATS = {
-  activeApplications: 3,
-  totalInterviews: 7,
-  avgScore: 91,
-  lastActivityDate: new Date(Date.now() - 2 * 60 * 60 * 1000),
-};
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -98,13 +75,12 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
   render: ({ primitives, props, tokens }: PresetContext<BhCandidateProfileProps>) => {
     const { Box, Text } = primitives;
     const t = tokens;
-    const candidate = props.candidate ?? DEFAULT_CANDIDATE;
+    const candidate = props.candidate ?? {} as Partial<DBCandidate> as DBCandidate;
     const fullName = useMemo(() => getCandidateFullName(candidate), [candidate]);
     const role = useMemo(() => getCandidateRole(candidate), [candidate]);
     const location = useMemo(() => getCandidateLocation(candidate), [candidate]);
     const skills = useMemo(() => getCandidateSkills(candidate), [candidate]);
-    const stats = props.stats ?? DEFAULT_STATS;
-
+    const stats = props.stats ?? {} as Partial<CandidateStats> as CandidateStats;
 
     const isGlass = useMemo(() => t.surface.useGlass, [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);

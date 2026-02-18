@@ -7,7 +7,7 @@
  * 10/10 quality: zero raw HTML, personality-driven, glass-aware, ARIA.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -33,24 +33,6 @@ import {
   Plus, X, ChevronUp, ChevronDown, ThumbsUp, ThumbsDown,
   Pause, Eye, Trophy, AlertTriangle, Star, Radar,
 } from 'lucide-react';
-
-/* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_CANDIDATES: ComparisonCandidate[] = [
-  { id: 'c-1', name: 'Sarah Johnson', overallScore: 92, rank: 1, dimensionScores: [{ dimension: 'Technical', score: 95 }, { dimension: 'Leadership', score: 88 }, { dimension: 'Communication', score: 90 }, { dimension: 'Culture Fit', score: 94 }, { dimension: 'Experience', score: 91 }], strengths: ['Deep React expertise', 'Strong system design', 'Google-level experience'], weaknesses: ['Limited backend experience'] },
-  { id: 'c-2', name: 'Michael Chen', overallScore: 88, rank: 2, dimensionScores: [{ dimension: 'Technical', score: 90 }, { dimension: 'Leadership', score: 85 }, { dimension: 'Communication', score: 82 }, { dimension: 'Culture Fit', score: 91 }, { dimension: 'Experience', score: 88 }], strengths: ['Full-stack capability', 'Startup experience at Stripe'], weaknesses: ['Needs mentorship on architecture', 'Shorter tenure history'] },
-  { id: 'c-3', name: 'Emily Rodriguez', overallScore: 85, rank: 3, dimensionScores: [{ dimension: 'Technical', score: 88 }, { dimension: 'Leadership', score: 92 }, { dimension: 'Communication', score: 86 }, { dimension: 'Culture Fit', score: 80 }, { dimension: 'Experience', score: 82 }], strengths: ['Staff engineer at Meta', 'Strong leadership skills'], weaknesses: ['Culture fit concerns', 'Salary expectations high'] },
-];
-
-const DEFAULT_ROWS: ComparisonRow[] = [
-  { dimension: 'Technical', scores: [{ candidateId: 'c-1', score: 95 }, { candidateId: 'c-2', score: 90 }, { candidateId: 'c-3', score: 88 }] },
-  { dimension: 'Leadership', scores: [{ candidateId: 'c-1', score: 88 }, { candidateId: 'c-2', score: 85 }, { candidateId: 'c-3', score: 92 }] },
-  { dimension: 'Communication', scores: [{ candidateId: 'c-1', score: 90 }, { candidateId: 'c-2', score: 82 }, { candidateId: 'c-3', score: 86 }] },
-  { dimension: 'Culture Fit', scores: [{ candidateId: 'c-1', score: 94 }, { candidateId: 'c-2', score: 91 }, { candidateId: 'c-3', score: 80 }] },
-  { dimension: 'Experience', scores: [{ candidateId: 'c-1', score: 91 }, { candidateId: 'c-2', score: 88 }, { candidateId: 'c-3', score: 82 }] },
-];
 
 /* ---------------------------------------------------------------------------
  * ScoreRing - uses Box/Text from parent, passed via closure
@@ -149,24 +131,42 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
     }, [t]);
 
     const {
-      candidates: rawCandidates = DEFAULT_CANDIDATES, comparisonRows: rawComparisonRows = DEFAULT_ROWS,
+      candidates: rawCandidates = [], comparisonRows: rawComparisonRows = [],
       onAddCandidate, onRemoveCandidate, highlightBest: hbp = true,
       onHighlightToggle, decisions: dp, onDecisionChange,
       showRadar: srp = true, onRadarToggle,
       className, style,
     } = props;
 
-    const candidates = Array.isArray(rawCandidates) ? rawCandidates : DEFAULT_CANDIDATES;
-    const comparisonRows = Array.isArray(rawComparisonRows) ? rawComparisonRows : DEFAULT_ROWS;
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
+    const comparisonRows = Array.isArray(rawComparisonRows) ? rawComparisonRows : [];
 
     // Extension helpers
     const extA11y = ext.a11yConfig();
 
+    const expandedRowsProp = props.expandedRows;
+    const onRowToggle = props.onRowToggle;
+
     const [highlightBest, setHighlightBest] = useState(hbp);
     const [showRadar, setShowRadar] = useState(srp);
-    const [expanded, setExpanded] = useState<Set<string>>(new Set());
+    const [expanded, setExpanded] = useState<Set<string>>(new Set(expandedRowsProp ?? []));
     const [iDecisions, setIDecisions] = useState<CandidateDecision[]>([]);
     const decisions = dp ?? iDecisions;
+
+    // Sync expanded from prop
+    useEffect(() => {
+      if (expandedRowsProp) setExpanded(new Set(expandedRowsProp));
+    }, [expandedRowsProp]);
+
+    const handleRowToggle = useCallback((dimension: string) => {
+      setExpanded(prev => {
+        const next = new Set(prev);
+        if (next.has(dimension)) next.delete(dimension);
+        else next.add(dimension);
+        return next;
+      });
+      onRowToggle?.(dimension);
+    }, [onRowToggle]);
 
     const dimensions = useMemo(() => comparisonRows.map(r => r.dimension), [comparisonRows]);
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'md' }), [t]);
@@ -356,34 +356,59 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
           <Box role="table" aria-label="Score comparison" style={{ borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[100]}`, overflow: 'hidden' }}>
             {comparisonRows.map((row, ri) => {
               const maxScore = Math.max(...row.scores.map(s => s.score));
+              const isExpanded = expanded.has(row.dimension);
               return (
                 <Box key={row.dimension} role="row" style={{
                   display: 'grid', gridTemplateColumns: `160px repeat(${candidates.length}, 1fr)`,
                   borderBottom: ri < comparisonRows.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined,
                 }}>
-                  <Box role="rowheader" style={{
+                  <Box
+                    role="rowheader"
+                    tabIndex={0}
+                    aria-expanded={isExpanded}
+                    onClick={() => handleRowToggle(row.dimension)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleRowToggle(row.dimension); } }}
+                    style={{
                     padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
-                    fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
-                    color: t.colors.neutral[700], display: 'flex', alignItems: 'center',
-                    backgroundColor: t.colors.neutral[50],
-                  }}>{row.dimension}</Box>
+                    fontSize: t.typography.fontSize.sm, fontWeight: isExpanded ? t.typography.fontWeight.bold : t.typography.fontWeight.medium,
+                    color: t.colors.neutral[700], display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                    backgroundColor: isExpanded ? t.colors.primaryScale[50] : t.colors.neutral[50],
+                    cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                  }}>
+                    {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                    {row.dimension}
+                  </Box>
                   {row.scores.map(s => {
                     const isBest = highlightBest && s.score === maxScore;
                     const bar = createProgressBarStyle(t, { percent: s.score, color: getScoreColor(s.score, t) });
                     return (
                       <Box key={s.candidateId} role="cell" style={{
-                        padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2],
+                        padding: isExpanded ? `${t.spacing[4]}px ${t.spacing[4]}px` : `${t.spacing[3]}px ${t.spacing[4]}px`,
+                        display: 'flex', flexDirection: isExpanded ? 'column' as const : 'row' as const,
+                        alignItems: isExpanded ? 'stretch' : 'center', justifyContent: isExpanded ? 'flex-start' : 'center', gap: t.spacing[2],
                         backgroundColor: isBest ? getScoreBgColor(s.score, t) : t.colors.common.white,
+                        transition: `padding ${t.motion.hover}`,
                       }}>
-                        <Box style={{ flex: 1, ...bar.track }}>
-                          <Box style={bar.fill} />
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Box style={{ flex: 1, ...bar.track }}>
+                            <Box style={bar.fill} />
+                          </Box>
+                          <Text style={{
+                            fontSize: t.typography.fontSize.sm, fontWeight: isBest ? t.typography.fontWeight.bold : t.typography.fontWeight.medium,
+                            color: getScoreColor(s.score, t), minWidth: 28, textAlign: 'right',
+                          }}>{s.score}</Text>
+                          {isBest && <Star size={12} style={{ color: t.colors.warningScale[500] }} />}
                         </Box>
-                        <Text style={{
-                          fontSize: t.typography.fontSize.sm, fontWeight: isBest ? t.typography.fontWeight.bold : t.typography.fontWeight.medium,
-                          color: getScoreColor(s.score, t), minWidth: 28, textAlign: 'right',
-                        }}>{s.score}</Text>
-                        {isBest && <Star size={12} style={{ color: t.colors.warningScale[500] }} />}
+                        {isExpanded && (
+                          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: t.spacing[1] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                              {s.score >= 80 ? 'Excellent' : s.score >= 60 ? 'Good' : s.score >= 40 ? 'Average' : 'Needs improvement'}
+                            </Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: getScoreColor(s.score, t) }}>
+                              {s.score}/100
+                            </Text>
+                          </Box>
+                        )}
                       </Box>
                     );
                   })}

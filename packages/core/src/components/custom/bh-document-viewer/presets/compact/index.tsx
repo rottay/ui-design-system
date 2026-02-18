@@ -6,7 +6,7 @@
  */
 
 import { useState, useMemo, useEffect } from 'react';
-import { FileText, Download, Eye, MessageSquare } from 'lucide-react';
+import { FileText, Download, Eye, MessageSquare, ExternalLink } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -18,11 +18,6 @@ import {
 import type { BhDocumentViewerProps, DocumentAnnotation } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
-const MOCK_ANNOTATIONS: DocumentAnnotation[] = [
-  { id: 'ann-1', page: 1, x: 30, y: 20, text: 'Good experience section' },
-  { id: 'ann-2', page: 1, x: 60, y: 45, text: 'Verify credentials' },
-];
-
 export const CompactBhDocumentViewer = createPreset<BhDocumentViewerProps>({
   name: 'BhDocumentViewer.Compact',
   render: (ctx: PresetContext<BhDocumentViewerProps>) => {
@@ -33,17 +28,17 @@ export const CompactBhDocumentViewer = createPreset<BhDocumentViewerProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
+      documentUrl,
       documentName = 'Resume_Sarah_Johnson.pdf',
       documentType = 'pdf',
       totalPages = 3,
-      annotations: rawAnnotations = MOCK_ANNOTATIONS,
+      annotations: rawAnnotations = [],
       onDownload,
       className,
       style,
     } = props;
 
-    const annotations = Array.isArray(rawAnnotations) ? rawAnnotations : MOCK_ANNOTATIONS;
-
+    const annotations = Array.isArray(rawAnnotations) ? rawAnnotations : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -120,6 +115,32 @@ export const CompactBhDocumentViewer = createPreset<BhDocumentViewerProps>({
               )}
             </Box>
           </Box>
+
+          {/* Open URL */}
+          {documentUrl && (
+            <Box
+              tabIndex={0}
+              role="link"
+              aria-label="Open document"
+              onClick={() => window.open(documentUrl, '_blank', 'noopener,noreferrer')}
+              onKeyDown={(e: any) => { if (e.key === 'Enter') window.open(documentUrl, '_blank', 'noopener,noreferrer'); }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 28,
+                height: 28,
+                borderRadius: t.borderRadius.md,
+                border: `1px solid ${t.colors.neutral[200]}`,
+                backgroundColor: t.colors.common.white,
+                cursor: 'pointer',
+                flexShrink: 0,
+                transition: `all ${t.motion.hover}`,
+              }}
+            >
+              <ExternalLink size={12} color={t.colors.primaryScale[600]} />
+            </Box>
+          )}
 
           {/* Download */}
           <Box

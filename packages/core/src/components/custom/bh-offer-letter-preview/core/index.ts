@@ -23,6 +23,72 @@ export interface OfferLetterData {
   startDate: string;
   benefits: string[];
   customFields?: Record<string, string>;
+
+  /** Equity type (e.g. options, rsu, percentage) */
+  equityType?: string;
+
+  /** Number of equity shares */
+  equityShares?: number;
+
+  /** Equity percentage (for percentage-based grants) */
+  equityPercentage?: number;
+
+  /** Equity vesting period in months */
+  equityVestingMonths?: number;
+
+  /** Equity cliff period in months */
+  equityCliffMonths?: number;
+
+  /** Equity strike price per share */
+  equityStrikePrice?: number;
+
+  /** Whether relocation is offered */
+  relocationOffered?: boolean;
+
+  /** Relocation allowance amount */
+  relocationAmount?: number;
+
+  /** Type of relocation package */
+  relocationType?: string;
+
+  /** Additional relocation details */
+  relocationDetails?: string;
+
+  /** Annual bonus target as a percentage */
+  annualBonusTargetPercentage?: number;
+
+  /** Commission percentage */
+  commissionPercentage?: number;
+
+  /** Paid time off days per year */
+  ptoDays?: number;
+
+  /** Sick days per year */
+  sickDays?: number;
+
+  /** Parental leave in weeks */
+  parentalLeaveWeeks?: number;
+
+  /** Remote work stipend amount */
+  remoteWorkStipend?: number;
+
+  /** Learning/development budget amount */
+  learningBudget?: number;
+
+  /** Contract type (e.g. full_time, contractor, part_time) */
+  contractType?: string;
+
+  /** Probation period in days */
+  probationPeriodDays?: number;
+
+  /** Work location */
+  workLocation?: string;
+
+  /** Remote work type (e.g. fully_remote, hybrid, on_site) */
+  remoteType?: string;
+
+  /** The job title being offered (may differ from position req title) */
+  jobTitleOffered?: string;
 }
 
 /**

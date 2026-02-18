@@ -31,14 +31,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SOURCES: SourceMetrics[] = [
-  { source: 'LinkedIn', applicants: 420, qualified: 168, hired: 34, hireRate: 8.1, qualityScore: 82 },
-  { source: 'Indeed', applicants: 680, qualified: 136, hired: 22, hireRate: 3.2, qualityScore: 58 },
-  { source: 'Referrals', applicants: 95, qualified: 62, hired: 28, hireRate: 29.5, qualityScore: 94 },
-  { source: 'Career Page', applicants: 310, qualified: 124, hired: 18, hireRate: 5.8, qualityScore: 72 },
-  { source: 'University', applicants: 180, qualified: 90, hired: 15, hireRate: 8.3, qualityScore: 76 },
-];
-
 /* ================================================================== */
 /*  Detailed Preset                                                    */
 /* ================================================================== */
@@ -54,16 +46,17 @@ export const DetailedBhSourceEffectiveness = createPreset<BhSourceEffectivenessP
     const chartCfg = getChartConfig(t);
 
     const {
-      sources: rawSources = MOCK_SOURCES,
+      sources: rawSources = [],
       title = 'Source Effectiveness',
       onSourceClick,
       selectedSource,
+      period,
       loading,
       className,
       style,
     } = props;
 
-    const sources = Array.isArray(rawSources) ? rawSources : MOCK_SOURCES;
+    const sources = Array.isArray(rawSources) ? rawSources : [];
 
     const [hoveredSource, setHoveredSource] = useState<string | null>(null);
 
@@ -123,7 +116,7 @@ export const DetailedBhSourceEffectiveness = createPreset<BhSourceEffectivenessP
                 {title}
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
-                Volume, quality, and hire rate by source
+                Volume, quality, and hire rate by source{period ? ` - ${period}` : ''}
               </Text>
             </Box>
           </Box>

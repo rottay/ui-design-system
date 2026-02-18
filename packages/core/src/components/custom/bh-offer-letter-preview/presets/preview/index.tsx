@@ -29,25 +29,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_LETTER: OfferLetterData = {
-  candidateName: 'Sarah Johnson',
-  position: 'Senior Frontend Engineer',
-  salary: 137000,
-  startDate: 'March 15, 2026',
-  benefits: [
-    'Health, dental, and vision insurance',
-    '401(k) with 4% company match',
-    '20 days PTO + 10 holidays',
-    'Remote work flexibility',
-    'Annual learning budget of $2,500',
-  ],
-  customFields: {
-    'Signing Bonus': '$10,000',
-    'RSU Grant': '2,000 shares vesting over 4 years',
-    'Relocation': 'Up to $5,000 reimbursement',
-  },
-};
-
 /* ------------------------------------------------------------------ */
 /*  Variable highlight component                                       */
 /* ------------------------------------------------------------------ */
@@ -85,7 +66,6 @@ export const PreviewBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
 
     const letterData = letterDataProp
       ?? (offer ? offerToLetterData(offer, candidateNameProp) : { candidateName: '', position: '', salary: 0, startDate: '', benefits: [] });
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

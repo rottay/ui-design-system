@@ -31,6 +31,21 @@ export interface ClientPosition {
   interviewsScheduled: number;
   daysOpen: number;
   targetHireDate?: string;
+
+  /** SLA target in days for filling the position */
+  slaTargetDays?: number;
+
+  /** Position priority level */
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+
+  /** Name of the assigned recruiter (for display) */
+  assignedRecruiterName?: string;
+
+  /** Fee type for this position (e.g. percentage, flat) */
+  feeType?: string;
+
+  /** Fee amount (percentage or flat amount depending on feeType) */
+  feeAmount?: number;
 }
 
 /**
@@ -52,6 +67,15 @@ export interface ClientInterview {
   time: string;
   type: string;
   status: string;
+
+  /** Interview mode (e.g. in-person, video, phone) */
+  interviewMode?: string;
+
+  /** URL or path to candidate avatar image */
+  candidateAvatar?: string;
+
+  /** AI-generated candidate score */
+  aiScore?: number;
 }
 
 /**
@@ -64,6 +88,47 @@ export interface ClientMetrics {
   fillRate: number;
   upcomingInterviews: number;
   offersExtended: number;
+
+  /** Total successful placements */
+  totalPlacements?: number;
+
+  /** Total revenue generated */
+  totalRevenue?: number;
+
+  /** Currency code for revenue values */
+  revenueCurrency?: string;
+
+  /** Average candidates sourced per position */
+  avgCandidatesPerPosition?: number;
+
+  /** Client satisfaction score (0-100 or 0-5) */
+  clientSatisfactionScore?: number;
+
+  /** Total lifetime value of the client */
+  lifetimeValue?: number;
+}
+
+/**
+ * Billing summary for the portal overview.
+ */
+export interface ClientBillingOverview {
+  /** Number of invoices issued */
+  invoiceCount?: number;
+
+  /** Total amount billed */
+  totalBilled?: number;
+
+  /** Total amount paid */
+  totalPaid?: number;
+
+  /** Outstanding balance */
+  outstandingBalance?: number;
+
+  /** Currency code (e.g. 'USD', 'EUR') */
+  currency?: string;
+
+  /** Next invoice date (ISO 8601) */
+  nextInvoiceDate?: string;
 }
 
 export interface BhClientPortalProps extends EngineAwareProps {
@@ -92,6 +157,9 @@ export interface BhClientPortalProps extends EngineAwareProps {
 
   /** Callback when position is selected */
   onPositionSelect?: (positionId: string | null) => void;
+
+  /** Billing overview for the client portal */
+  billingOverview?: ClientBillingOverview;
 
   /** Additional CSS class name(s) */
   className?: string;

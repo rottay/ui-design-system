@@ -36,15 +36,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_APPROVALS: ApprovalItem[] = [
-  { id: 'ap-1', entityType: 'offer', entityTitle: 'Offer for Sarah Johnson - Sr. Engineer', requestedBy: 'Tom Walsh', requestedAt: new Date('2026-02-10T14:30:00'), priority: 'high', status: 'pending' },
-  { id: 'ap-2', entityType: 'position', entityTitle: 'New DevOps Lead Position', requestedBy: 'Emily Chen', requestedAt: new Date('2026-02-11T09:00:00'), priority: 'medium', status: 'pending' },
-  { id: 'ap-3', entityType: 'budget', entityTitle: 'Q2 Recruiting Budget Increase', requestedBy: 'Mark Rivera', requestedAt: new Date('2026-02-09T16:00:00'), priority: 'high', status: 'pending' },
-  { id: 'ap-4', entityType: 'job', entityTitle: 'Senior Data Scientist Job Posting', requestedBy: 'Lisa Park', requestedAt: new Date('2026-02-11T11:30:00'), priority: 'low', status: 'pending' },
-  { id: 'ap-5', entityType: 'offer', entityTitle: 'Offer for Mike Lee - Product Manager', requestedBy: 'Tom Walsh', requestedAt: new Date('2026-02-08T10:00:00'), priority: 'medium', status: 'approved' },
-  { id: 'ap-6', entityType: 'position', entityTitle: 'Junior Frontend Developer', requestedBy: 'Sarah Kim', requestedAt: new Date('2026-02-07T08:30:00'), priority: 'low', status: 'rejected' },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -98,7 +89,7 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approvals: rawApprovals = MOCK_APPROVALS,
+      approvals: rawApprovals = [],
       groupBy = 'entityType',
       onApprovalClick,
       onApprove,
@@ -109,7 +100,7 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
       style,
     } = props;
 
-    const approvals = Array.isArray(rawApprovals) ? rawApprovals : MOCK_APPROVALS;
+    const approvals = Array.isArray(rawApprovals) ? rawApprovals : [];
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 

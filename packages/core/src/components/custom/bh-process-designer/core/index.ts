@@ -22,6 +22,10 @@ export interface KnockoutRule {
   operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains';
   value: string;
   action: 'reject' | 'flag' | 'skip_stage';
+  /** Severity level of the knockout rule */
+  severity?: 'low' | 'medium' | 'high' | 'critical';
+  /** Whether matching candidates are automatically rejected */
+  autoReject?: boolean;
 }
 
 export interface ScoringRubric {
@@ -43,6 +47,14 @@ export interface ProcessStage {
   scoringRubrics?: ScoringRubric[];
   knockoutRules?: KnockoutRule[];
   automations?: string[];
+  /** Estimated duration in hours for this stage */
+  estimatedDuration?: number;
+  /** Weight of this stage in overall process scoring (0-100) */
+  weight?: number;
+  /** Whether this stage can be skipped */
+  isOptional?: boolean;
+  /** Number of approvals required to advance past this stage */
+  requiredApprovals?: number;
 }
 
 export interface ProcessTemplate {

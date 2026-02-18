@@ -34,6 +34,10 @@ export interface SlaBreach {
   actualHours: number;
   assignedRecruiter: string;
   recruiterAvatar?: string;
+  breachedAt?: string;
+  resolvedAt?: string;
+  candidateName?: string;
+  positionId?: string;
 }
 
 /* -- Stage SLA -------------------------------------------------------- */
@@ -56,6 +60,9 @@ export interface AtRiskItem {
   stage: string;
   hoursRemaining: number;
   assignee: string;
+  candidateId?: string;
+  recruiterId?: string;
+  estimatedCompletionHours?: number;
 }
 
 /* -- History ---------------------------------------------------------- */
@@ -73,6 +80,9 @@ export interface SlaConfig {
   limitHours: number;
   alertRecipients: string[];
   escalationRules: string;
+  enabled?: boolean;
+  warningThresholdPercent?: number;
+  notifyOnBreach?: boolean;
 }
 
 /* -- Main Props ------------------------------------------------------- */
@@ -87,6 +97,12 @@ export interface BhSlaMonitorProps extends EngineAwareProps {
   atRiskItems?: AtRiskItem[];
   history?: SlaHistoryPoint[];
   config?: SlaConfig[];
+
+  /** Total number of breaches in the period */
+  totalBreaches?: number;
+
+  /** Number of resolved breaches in the period */
+  resolvedBreaches?: number;
 
   /* state & callbacks */
   timeRange?: string;

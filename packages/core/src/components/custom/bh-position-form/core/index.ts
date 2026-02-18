@@ -21,6 +21,32 @@ export type RecruiterPosition = DBPosition;
  * Form data shape for position creation/editing.
  * Uses a subset of DBPosition fields relevant to the form.
  */
+/** Approval chain step for position budgets */
+export interface ApprovalChainStep {
+  /** Approver's user ID */
+  approverId: string;
+  /** Approver's display name */
+  approverName: string;
+  /** Role of the approver (e.g. 'hiring_manager', 'finance', 'vp') */
+  role: string;
+  /** Order in the approval chain */
+  order: number;
+  /** Whether this step has been approved */
+  approved?: boolean;
+}
+
+/** SLA configuration for the position */
+export interface PositionSlaConfig {
+  /** Maximum days to fill the position */
+  maxDaysToFill?: number;
+  /** Maximum days per hiring stage */
+  maxDaysPerStage?: number;
+  /** Whether to send notifications on SLA breach */
+  notifyOnBreach?: boolean;
+  /** Escalation contact email */
+  escalationEmail?: string;
+}
+
 export interface PositionFormData {
   title: string;
   clientId: string;
@@ -36,6 +62,16 @@ export interface PositionFormData {
     max: number;
     currency: string;
   };
+  /** Total budget allocated for the position */
+  budgetTotal?: number;
+  /** Budget already spent */
+  budgetSpent?: number;
+  /** Budget currency code */
+  budgetCurrency?: string;
+  /** Approval chain for budget/position sign-off */
+  approvalChain?: ApprovalChainStep[];
+  /** SLA configuration for position fill timelines */
+  slaConfig?: PositionSlaConfig;
 }
 
 export interface BhPositionFormProps extends EngineAwareProps {

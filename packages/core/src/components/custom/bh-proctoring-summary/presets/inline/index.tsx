@@ -24,6 +24,7 @@ import {
 import type {
   BhProctoringSummaryProps,
   ProctoringEventSeverity,
+  SeverityEventCounts,
 } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
@@ -58,14 +59,6 @@ function getRiskBadgeKey(score: number): 'error' | 'warning' | 'success' {
 /*  Mock defaults                                                      */
 /* ------------------------------------------------------------------ */
 
-const MOCK_PROPS = {
-  candidateName: 'Sarah Johnson',
-  riskScore: 72,
-  eventCounts: { low: 8, medium: 5, high: 3, critical: 1 },
-  totalEvents: 17,
-  reviewedCount: 12,
-};
-
 /* ================================================================== */
 /*  Inline Preset                                                      */
 /* ================================================================== */
@@ -80,22 +73,16 @@ export const InlineBhProctoringSummary = createPreset<BhProctoringSummaryProps>(
     const ptypo = getPersonalityTypography(t);
 
     const {
-      candidateName: rawCandidateName = MOCK_PROPS.candidateName,
+      candidateName = '',
       candidateAvatar,
-      riskScore: rawRiskScore = MOCK_PROPS.riskScore,
-      eventCounts: rawEventCounts = MOCK_PROPS.eventCounts,
-      totalEvents: rawTotalEvents = MOCK_PROPS.totalEvents,
-      reviewedCount: rawReviewedCount = MOCK_PROPS.reviewedCount,
+      riskScore = 0,
+      eventCounts = {} as SeverityEventCounts,
+      totalEvents = 0,
+      reviewedCount = 0,
       onViewDetails,
       className,
       style,
     } = props;
-
-    const candidateName = Array.isArray(rawCandidateName) ? rawCandidateName : MOCK_PROPS.candidateName;
-    const riskScore = Array.isArray(rawRiskScore) ? rawRiskScore : MOCK_PROPS.riskScore;
-    const eventCounts = Array.isArray(rawEventCounts) ? rawEventCounts : MOCK_PROPS.eventCounts;
-    const totalEvents = Array.isArray(rawTotalEvents) ? rawTotalEvents : MOCK_PROPS.totalEvents;
-    const reviewedCount = Array.isArray(rawReviewedCount) ? rawReviewedCount : MOCK_PROPS.reviewedCount;
 
     const [isHovered, setIsHovered] = useState(false);
 

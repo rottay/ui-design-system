@@ -25,12 +25,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_TEMPLATES: MessageTemplateItem[] = [
-  { id: 'mt-1', name: 'Initial Outreach', category: 'Sourcing', subject: 'Exciting opportunity', preview: 'Hi {{firstName}}...', usageCount: 342, tags: ['sourcing'] },
-  { id: 'mt-2', name: 'Interview Invitation', category: 'Scheduling', subject: 'Interview invitation', preview: 'Dear {{firstName}}...', usageCount: 256, tags: ['scheduling'] },
-  { id: 'mt-3', name: 'Rejection', category: 'Rejection', subject: 'Application update', preview: 'Dear {{firstName}}...', usageCount: 189, tags: ['rejection'] },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -45,14 +39,13 @@ const CompactBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
     const ptypo = getPersonalityTypography(t);
 
     const {
-      templates: rawTemplates = MOCK_TEMPLATES,
+      templates: rawTemplates = [],
       onTemplateClick,
       className,
       style,
     } = props;
 
-    const templates = Array.isArray(rawTemplates) ? rawTemplates : MOCK_TEMPLATES;
-
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

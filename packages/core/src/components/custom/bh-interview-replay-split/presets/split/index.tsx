@@ -76,6 +76,8 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
       onSpeedChange,
       onEvidenceClick,
       candidateName,
+      billingStatus,
+      interview,
       loading = false,
       className,
       style,
@@ -152,6 +154,55 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
             <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900] }}>
               {candidateName ? `${candidateName} - Interview Replay` : 'Interview Replay'}
             </Text>
+            {props.proctoringEnabled && (
+              <Box style={{
+                ...createBadgeStyle(t, props.proctoringFlags?.length ? 'warning' : 'success'),
+                borderRadius: badgeRadius,
+                fontSize: t.typography.fontSize.xs,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  Proctored{props.proctoringFlags?.length ? ` (${props.proctoringFlags.length})` : ''}
+                </Text>
+              </Box>
+            )}
+            {props.tokenCost != null && (
+              <Box style={{
+                ...createBadgeStyle(t, 'info'),
+                borderRadius: badgeRadius,
+                fontSize: t.typography.fontSize.xs,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>${props.tokenCost.toFixed(2)}</Text>
+              </Box>
+            )}
+            {props.candidateRating != null && (
+              <Box style={{
+                ...createBadgeStyle(t, 'warning'),
+                borderRadius: badgeRadius,
+                fontSize: t.typography.fontSize.xs,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Rating: {props.candidateRating}/5</Text>
+              </Box>
+            )}
+            {billingStatus && (
+              <Box style={{
+                ...createBadgeStyle(t, billingStatus === 'settled' ? 'success' : billingStatus === 'disputed' ? 'error' : 'secondary'),
+                borderRadius: badgeRadius,
+                fontSize: t.typography.fontSize.xs,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>Billing: {billingStatus}</Text>
+              </Box>
+            )}
+            {interview && (
+              <Box style={{
+                ...createBadgeStyle(t, 'primary'),
+                borderRadius: badgeRadius,
+                fontSize: t.typography.fontSize.xs,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  {interview.interviewType ?? 'Interview'}{interview.status ? ` - ${interview.status}` : ''}
+                </Text>
+              </Box>
+            )}
           </Box>
 
           {/* Waveform */}

@@ -22,6 +22,27 @@ export interface ApprovalItem {
   requestedAt?: Date;
   priority?: 'high' | 'medium' | 'low' | 'normal' | 'urgent';
   status?: 'pending' | 'approved' | 'rejected' | 'changes_requested' | 'auto_approved' | 'cancelled';
+
+  /** Entity ID for the approval target */
+  entityId?: string;
+  /** Current step number in the approval chain */
+  currentStep?: number;
+  /** Total number of steps in the approval chain */
+  totalSteps?: number;
+  /** Due date for this approval */
+  dueAt?: Date;
+  /** Whether this approval has been escalated */
+  isEscalated?: boolean;
+  /** Reason for escalation */
+  escalationReason?: string;
+  /** Date/time when auto-approval will trigger */
+  autoApproveAt?: Date;
+  /** Role of the person who requested the approval */
+  requesterRole?: string;
+  /** Team name of the requester */
+  requesterTeamName?: string;
+  /** Brief description of the approval request */
+  description?: string;
 }
 
 export interface BhApprovalCenterProps extends EngineAwareProps {

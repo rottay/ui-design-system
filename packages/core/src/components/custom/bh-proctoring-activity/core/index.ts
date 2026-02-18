@@ -32,6 +32,18 @@ export interface ProctoringActivityEvent {
   timestamp?: Date;
   /** Event description (UI-computed) */
   description?: string;
+  /** Event metadata (JSONB from DB) */
+  metadata?: Record<string, unknown>;
+  /** Whether the event has been reviewed */
+  reviewed?: boolean;
+  /** Who reviewed this event (user ID or display name) */
+  reviewedBy?: string;
+  /** When the event was reviewed */
+  reviewedAt?: Date | string;
+  /** Notes left by the reviewer */
+  reviewNotes?: string;
+  /** Whether the event has been dismissed */
+  dismissed?: boolean;
 }
 
 export interface BhProctoringActivityProps extends EngineAwareProps {

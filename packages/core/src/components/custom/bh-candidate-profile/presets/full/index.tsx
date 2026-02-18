@@ -18,6 +18,10 @@ import {
   createCardHoverStyles,
   getPersonalityBadgeRadius,
   getCardPadding,
+  createMetadataFieldStyle,
+  createMetadataValueStyle,
+  createStatValueStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type {
   BhCandidateProfileProps,
@@ -46,64 +50,6 @@ import {
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-
-const DEFAULT_CANDIDATE = {
-  id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', avatarUrl: null,
-  currentTitle: 'Senior Frontend Engineer', currentCompany: 'Google',
-  currentLocation: { city: 'San Francisco', state: 'CA' },
-  email: 'sarah.j@google.com', phone: '+1 (415) 555-0127',
-  source: 'linkedin', status: 'active',
-  skills: [
-    { name: 'React', level: 'expert', yearsOfExperience: 6 },
-    { name: 'TypeScript', level: 'expert', yearsOfExperience: 5 },
-    { name: 'Next.js', level: 'advanced', yearsOfExperience: 4 },
-    { name: 'GraphQL', level: 'advanced', yearsOfExperience: 3 },
-    { name: 'Node.js', level: 'intermediate', yearsOfExperience: 5 },
-    { name: 'System Design', level: 'intermediate', yearsOfExperience: 3 },
-    { name: 'Testing', level: 'advanced', yearsOfExperience: 5 },
-    { name: 'CI/CD', level: 'intermediate', yearsOfExperience: 3 },
-  ],
-  languages: [
-    { language: 'English', proficiency: 'Native' },
-    { language: 'Spanish', proficiency: 'Conversational' },
-  ],
-  linkedinUrl: 'https://linkedin.com/in/sarahjohnson',
-  githubUrl: 'https://github.com/sarahjohnson',
-  portfolioUrl: 'https://sarahjohnson.dev',
-  websiteUrl: null,
-  expectedSalaryMin: 180000, expectedSalaryMax: 220000, expectedSalaryCurrency: 'USD',
-  yearsOfExperience: 8,
-  resumeUrl: null,
-} as unknown as DBCandidate;
-
-const DEFAULT_APPLICATIONS: CandidateApplication[] = [
-  { id: 'a-1', jobName: 'Staff Frontend Engineer', stage: 'Technical Interview', scorePercent: 92, pipelineProgress: 0.6, recruiterName: 'Alex Rivera', status: 'interviewing' },
-  { id: 'a-2', jobName: 'Frontend Lead', stage: 'Offer Pending', scorePercent: 88, pipelineProgress: 0.9, recruiterName: 'Jordan Park', status: 'offer_pending' },
-  { id: 'a-3', jobName: 'Senior React Developer', stage: 'Screening', scorePercent: 75, pipelineProgress: 0.2, recruiterName: 'Sam Lee', status: 'screening' },
-];
-
-const DEFAULT_INTERVIEWS: CandidateInterview[] = [
-  { id: 'i-1', date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), type: 'ai', status: 'scheduled', duration: '45 min', hasReplay: false },
-  { id: 'i-2', date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), type: 'human', status: 'completed', scorePercent: 91, duration: '60 min', hasReplay: true },
-  { id: 'i-3', date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), type: 'ai', status: 'completed', scorePercent: 88, duration: '30 min', hasReplay: true },
-];
-
-const DEFAULT_NOTES: CandidateNote[] = [
-  { id: 'n-1', authorName: 'Alex Rivera', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), content: 'Strong technical skills, excellent communication. Recommend advancing to final round.', isEditable: true },
-  { id: 'n-2', authorName: 'Jordan Park', timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), content: 'Initial screening went well. Candidate is enthusiastic about the role and team culture.', isEditable: false },
-];
-
-const DEFAULT_EVENTS: CandidateEvent[] = [
-  { id: 'e-1', type: 'interview', message: 'Completed AI interview for Staff Frontend Engineer', timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), entityName: 'Staff Frontend Engineer' },
-  { id: 'e-2', type: 'application', message: 'Applied to Frontend Lead position', timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), entityName: 'Frontend Lead' },
-  { id: 'e-3', type: 'note', message: 'Alex Rivera added a note', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-  { id: 'e-4', type: 'stage', message: 'Moved to Technical Interview stage', timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), entityName: 'Staff Frontend Engineer' },
-];
-
-const DEFAULT_STATS: CandidateStats = {
-  activeApplications: 3, totalInterviews: 7, avgScore: 91,
-  lastActivityDate: new Date(Date.now() - 2 * 60 * 60 * 1000),
-};
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -209,7 +155,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
   name: 'BhCandidateProfile.Full',
   render: ({ primitives, props, tokens: t }: PresetContext<BhCandidateProfileProps>) => {
     const { Box, Text } = primitives;
-    const candidate = props.candidate ?? DEFAULT_CANDIDATE;
+    const candidate = props.candidate ?? {} as Partial<DBCandidate> as DBCandidate;
     const fullName = useMemo(() => getCandidateFullName(candidate), [candidate]);
     const role = useMemo(() => getCandidateRole(candidate), [candidate]);
     const location = useMemo(() => getCandidateLocation(candidate), [candidate]);
@@ -217,15 +163,18 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const candidateLanguages = useMemo(() => getCandidateLanguages(candidate), [candidate]);
     const candidateLinks = useMemo(() => getCandidateLinks(candidate), [candidate]);
     const compensationRange = useMemo(() => getCandidateCompensation(candidate) ?? { min: 0, max: 0, currency: 'USD' }, [candidate]);
-    const applications = props.applications ?? DEFAULT_APPLICATIONS;
-    const interviews = props.interviews ?? DEFAULT_INTERVIEWS;
-    const notes = props.notes ?? DEFAULT_NOTES;
-    const events = props.events ?? DEFAULT_EVENTS;
-    const stats = props.stats ?? DEFAULT_STATS;
+    const applications = props.applications ?? [];
+    const interviews = props.interviews ?? [];
+    const notes = props.notes ?? [];
+    const events = props.events ?? [];
+    const stats = props.stats ?? {} as Partial<CandidateStats> as CandidateStats;
     const documents = props.documents ?? [
       { id: 'd-1', name: 'Resume_Sarah_Johnson.pdf', type: 'pdf', uploadedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
       { id: 'd-2', name: 'Cover_Letter.pdf', type: 'pdf', uploadedAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000) },
     ];
+
+    const scoreCards = props.scoreCards ?? [];
+    const documentLinks = props.documentLinks;
 
     const [activeTab, setActiveTab] = useState<CandidateTab>(props.defaultTab ?? 'profile');
     const [newNoteContent, setNewNoteContent] = useState('');
@@ -301,16 +250,62 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
           </SectionCard>
         )}
 
+        {/* Availability info */}
+        {props.availability && (props.availability.availableFrom || props.availability.noticePeriodDays != null) && (
+          <SectionCard title="Availability">
+            <Box style={{ display: 'flex', gap: t.spacing[4], flexWrap: 'wrap' }}>
+              {props.availability.availableFrom && (
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Calendar size={14} color={t.colors.infoScale[500]} />
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Available from</Text>
+                    <Text style={createMetadataValueStyle(t, { weight: 'semibold' })}>
+                      {formatDate(props.availability.availableFrom)}
+                    </Text>
+                  </Box>
+                </Box>
+              )}
+              {props.availability.noticePeriodDays != null && (
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Clock size={14} color={t.colors.warningScale[500]} />
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Notice period</Text>
+                    <Text style={createMetadataValueStyle(t, { weight: 'semibold' })}>
+                      {props.availability.noticePeriodDays} days
+                    </Text>
+                  </Box>
+                </Box>
+              )}
+              {props.availability.requiresVisaSponsorship != null && (
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Globe size={14} color={props.availability.requiresVisaSponsorship ? t.colors.warningScale[500] : t.colors.successScale[500]} />
+                  <Box style={createMetadataFieldStyle(t)}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Visa sponsorship</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: props.availability.requiresVisaSponsorship ? t.colors.warningScale[700] : t.colors.successScale[700] }}>
+                      {props.availability.requiresVisaSponsorship ? 'Required' : 'Not required'}
+                    </Text>
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          </SectionCard>
+        )}
+
         {/* Additional info: compensation, languages, links */}
         <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: t.spacing[4] }}>
           <SectionCard title="Compensation">
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-              <DollarSign size={16} color={t.colors.successScale[500]} />
+              <DollarSign size={ICON_SIZES.section} color={t.colors.successScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                 ${((compensationRange.min ?? 0) / 1000).toFixed(0)}k - ${((compensationRange.max ?? 0) / 1000).toFixed(0)}k
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{compensationRange.currency}</Text>
             </Box>
+            {props.compensation?.currentSalary != null && (
+              <Box style={{ marginTop: t.spacing[2] }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Current: ${((props.compensation.currentSalary) / 1000).toFixed(0)}k {props.compensation.currentSalaryCurrency ?? ''}</Text>
+              </Box>
+            )}
           </SectionCard>
           <SectionCard title="Languages">
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
@@ -330,9 +325,43 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 <Box key={link.label} onClick={() => {}} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], cursor: 'pointer', color: t.colors.primaryScale[600] }}>
                   <Globe size={14} />
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>{link.label}</Text>
-                  <ExternalLink size={12} />
+                  <ExternalLink size={ICON_SIZES.label} />
                 </Box>
-              )) : (
+              )) : null}
+              {/* Document Links from prop (portfolio, github, website, linkedin) */}
+              {documentLinks && (
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2], marginTop: candidateLinks.length > 0 ? t.spacing[2] : 0 }}>
+                  {documentLinks.portfolioUrl && (
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], color: t.colors.primaryScale[600] }}>
+                      <Award size={14} />
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>Portfolio</Text>
+                      <ExternalLink size={ICON_SIZES.label} />
+                    </Box>
+                  )}
+                  {documentLinks.githubUrl && (
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], color: t.colors.primaryScale[600] }}>
+                      <Globe size={14} />
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>GitHub</Text>
+                      <ExternalLink size={ICON_SIZES.label} />
+                    </Box>
+                  )}
+                  {documentLinks.websiteUrl && (
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], color: t.colors.primaryScale[600] }}>
+                      <Globe size={14} />
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>Website</Text>
+                      <ExternalLink size={ICON_SIZES.label} />
+                    </Box>
+                  )}
+                  {documentLinks.linkedinUrl && (
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], color: t.colors.primaryScale[600] }}>
+                      <Globe size={14} />
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>LinkedIn</Text>
+                      <ExternalLink size={ICON_SIZES.label} />
+                    </Box>
+                  )}
+                </Box>
+              )}
+              {candidateLinks.length === 0 && !documentLinks && (
                 <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>No links available</Text>
               )}
             </Box>
@@ -411,7 +440,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 </Box>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                   {interview.scorePercent !== undefined && (
-                    <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: getScoreColor(interview.scorePercent, t) }}>{interview.scorePercent}%</Text>
+                    <Text style={{ ...createStatValueStyle(t, { size: 'lg' }), color: getScoreColor(interview.scorePercent, t) }}>{interview.scorePercent}%</Text>
                   )}
                   <Box style={{ padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: (statusColor as any)[50], color: (statusColor as any)[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' }}>
                     {interview.status}
@@ -423,7 +452,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                       backgroundColor: t.colors.common.white, color: t.colors.neutral[600],
                       fontSize: t.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
                     }}>
-                      <Play size={12} /> Replay
+                      <Play size={ICON_SIZES.label} /> Replay
                     </button>
                   )}
                 </Box>
@@ -545,9 +574,60 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{doc.name}</Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Uploaded {formatDate(doc.uploadedAt)}</Text>
             </Box>
-            <Download size={16} color={t.colors.neutral[400]} />
+            <Download size={ICON_SIZES.section} color={t.colors.neutral[400]} />
           </Box>
         ))}
+      </Box>
+    );
+
+    /* -- Scores Tab -------------------------------------------------- */
+    const renderScoresTab = () => (
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
+        {scoreCards.length > 0 ? scoreCards.map(sc => {
+          const overallColor = getScoreColor(sc.overallScore, t);
+          return (
+            <Box key={sc.applicationId} style={{
+              ...createCardStyle(t, { elevation: 'sm' }),
+              padding: `${t.spacing[5]}px`, border: `1px solid ${t.colors.neutral[100]}`,
+              backgroundColor: t.colors.common.white,
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
+                <Box>
+                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{sc.jobName}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{sc.date}</Text>
+                </Box>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Text style={{ ...createStatValueStyle(t), color: overallColor }}>{sc.overallScore}%</Text>
+                </Box>
+              </Box>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                {sc.dimensions.map(dim => {
+                  const dimMax = (dim as any).maxScore ?? 100;
+                  const dimPct = dimMax > 0 ? Math.round((dim.score / dimMax) * 100) : 0;
+                  const dimColor = getScoreColor(dimPct, t);
+                  const pb = createProgressBarStyle(t, { percent: dimPct, color: dimColor });
+                  return (
+                    <Box key={dim.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700], width: 120, flexShrink: 0, fontWeight: t.typography.fontWeight.medium }}>{dim.name}</Text>
+                      <Box style={{ flex: 1 }}><Box style={{ ...pb.track, height: 6 }}><Box style={{ ...pb.fill, height: 6 }} /></Box></Box>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], width: 48, textAlign: 'right' }}>{dim.score}/{dimMax}</Text>
+                      {dim.weight > 0 && (
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], width: 36, textAlign: 'right' }}>{Math.round(dim.weight * 100)}%</Text>
+                      )}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+          );
+        }) : (
+          <Box style={{
+            padding: `${t.spacing[8]}px`, textAlign: 'center',
+          }}>
+            <BarChart3 size={32} color={t.colors.neutral[300]} style={{ marginBottom: t.spacing[2] }} />
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>No score cards available</Text>
+          </Box>
+        )}
       </Box>
     );
 
@@ -560,7 +640,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
         case 'notes': return renderNotesTab();
         case 'activity': return renderActivityTab();
         case 'documents': return renderDocumentsTab();
-        case 'scores': return renderApplicationsTab(); // scores can share application view
+        case 'scores': return renderScoresTab();
         default: return renderProfileTab();
       }
     };
@@ -614,7 +694,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                     backgroundColor: t.colors.errorScale[50], fontSize: t.typography.fontSize.xs,
                     fontWeight: t.typography.fontWeight.medium, color: t.colors.errorScale[700],
                   }}>
-                    <AlertTriangle size={12} /> Do Not Contact
+                    <AlertTriangle size={ICON_SIZES.label} /> Do Not Contact
                   </Box>
                 )}
               </Box>
@@ -661,7 +741,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, cursor: 'pointer',
                   fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: 4,
                 }}>
-                  <Edit2 size={12} /> Edit
+                  <Edit2 size={ICON_SIZES.label} /> Edit
                 </button>
               )}
             </Box>
@@ -680,7 +760,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               { label: 'Last Activity', value: timeAgo(stats.lastActivityDate), color: t.colors.warningScale[500] },
             ].map(stat => (
               <Box key={stat.label}>
-                <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{stat.value}</Text>
+                <Text style={createStatValueStyle(t)}>{stat.value}</Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{stat.label}</Text>
               </Box>
             ))}
@@ -711,7 +791,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   marginBottom: -1,
                 }}
               >
-                <TabIcon size={16} />
+                <TabIcon size={ICON_SIZES.section} />
                 {tab.label}
               </Box>
             );

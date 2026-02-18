@@ -29,10 +29,6 @@ import type { BhTeamCardProps, TeamMetric } from '../../core';
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_METRICS: TeamMetric[] = [
-  { label: 'Hires', value: 18, target: 24 },
-  { label: 'Quality', value: 87, target: 90 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Compact Preset                                                     */
@@ -58,7 +54,7 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
     const memberCount = team?.activeMemberCount ?? 6;
     const status = team?.status ?? 'active';
 
-    const metrics = metricsProp?.length ? metricsProp : MOCK_METRICS;
+    const metrics = metricsProp?.length ? metricsProp : [];
     const displayMetrics = metrics.slice(0, 2);
 
     /* -- Styles ---------------------------------------------------- */

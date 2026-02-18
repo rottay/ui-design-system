@@ -93,6 +93,22 @@ export interface InterviewInfo {
   date: string;
   duration: number;
   status: string;
+  /** Billing mode (e.g. per_interview, per_minute, token_based) */
+  billingMode?: string;
+  /** Total token cost for AI interviews */
+  tokenCost?: number;
+  /** Proctoring integrity score (0-100) */
+  proctoringScore?: number;
+  /** Proctoring violation flags */
+  proctoringFlags?: string[];
+  /** Candidate's rating of the interview experience (1-5) */
+  candidateRating?: number;
+  /** Candidate's free-text feedback */
+  candidateFeedback?: string;
+  /** Duration of the recording in seconds */
+  recordingDurationSeconds?: number;
+  /** Word count of the transcript */
+  transcriptWordCount?: number;
 }
 
 // ============================================================================

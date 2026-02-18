@@ -82,17 +82,6 @@ import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENTS: ProctoringActivityEvent[] = [
-  { id: 'pa-1', candidateName: 'Sarah Johnson', eventType: 'screen_share', severity: 'critical', timestamp: new Date(Date.now() - 120000), description: 'Screen sharing detected during coding section' },
-  { id: 'pa-2', candidateName: 'Michael Chen', eventType: 'copy_paste', severity: 'high', timestamp: new Date(Date.now() - 480000), description: 'Multiple clipboard paste operations in quick succession' },
-  { id: 'pa-3', candidateName: 'Emily Rodriguez', eventType: 'tab_switch', severity: 'medium', timestamp: new Date(Date.now() - 900000), description: 'Switched to external browser tab for 12 seconds' },
-  { id: 'pa-4', candidateName: 'James Kim', eventType: 'unusual_typing', severity: 'medium', timestamp: new Date(Date.now() - 1500000), description: 'Typing speed anomaly detected: 180 WPM burst' },
-  { id: 'pa-5', candidateName: 'Anna Kowalski', eventType: 'browser_focus_lost', severity: 'low', timestamp: new Date(Date.now() - 2400000), description: 'Browser lost focus for 3 seconds' },
-  { id: 'pa-6', candidateName: 'Sarah Johnson', eventType: 'tab_switch', severity: 'low', timestamp: new Date(Date.now() - 3600000), description: 'Brief tab switch, returned within 2 seconds' },
-  { id: 'pa-7', candidateName: 'David Brown', eventType: 'copy_paste', severity: 'high', timestamp: new Date(Date.now() - 5400000), description: 'Large text block pasted from external source' },
-  { id: 'pa-8', candidateName: 'Michael Chen', eventType: 'browser_focus_lost', severity: 'low', timestamp: new Date(Date.now() - 7200000), description: 'Window minimized briefly' },
-];
-
 /* ================================================================== */
 /*  Feed Preset                                                        */
 /* ================================================================== */
@@ -107,7 +96,7 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events: rawEvents = MOCK_EVENTS,
+      events: rawEvents = [],
       onEventClick,
       maxItems = 20,
       showTimestamps = true,
@@ -116,7 +105,7 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
       style,
     } = props;
 
-    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
 
     const [hoveredEvent, setHoveredEvent] = useState<string | null>(null);
 
@@ -242,6 +231,26 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
               }}>
                 {event.timestamp ? formatDistanceToNow(event.timestamp, { addSuffix: true }) : ''}
               </Text>
+            )}
+            {event.reviewed && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
+                <Box style={{
+                  ...createBadgeStyle(t, event.dismissed ? 'secondary' : 'success'),
+                  borderRadius: badgeRadius,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: t.spacing[1],
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                    {event.dismissed ? 'Dismissed' : 'Reviewed'}
+                  </Text>
+                </Box>
+                {event.reviewedBy && (
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                    by {event.reviewedBy}
+                  </Text>
+                )}
+              </Box>
             )}
           </Box>
 

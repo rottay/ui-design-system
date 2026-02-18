@@ -32,8 +32,6 @@ function generateMockDays(): HeatmapDay[] {
   return days;
 }
 
-const MOCK_DAYS = generateMockDays();
-
 function getHeatColor(count: number, max: number, t: DesignTokens): string {
   if (count === 0) return t.colors.neutral[100];
   const intensity = count / Math.max(max, 1);
@@ -55,14 +53,13 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      days: rawDays = MOCK_DAYS,
+      days: rawDays = undefined,
       activityLabel = 'interviews',
       className,
       style,
     } = props;
 
-    const days = Array.isArray(rawDays) ? rawDays : MOCK_DAYS;
-
+    const days = Array.isArray(rawDays) ? rawDays : [] as HeatmapDay[];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

@@ -41,6 +41,18 @@ export interface KanbanCandidate {
   /** Current stage ID for column placement */
   stageId: string;
   email?: string;
+  /** Priority level for the application (e.g. 'high', 'medium', 'low') */
+  priority?: 'high' | 'medium' | 'low';
+  /** AI-computed overall match score (0-100) */
+  aiMatchScore?: number;
+  /** SLA due date for the current stage */
+  slaDueAt?: Date;
+  /** Whether the SLA has been breached */
+  slaBreached?: boolean;
+  /** ID of the assigned recruiter */
+  assignedRecruiterId?: string;
+  /** Display name of the assigned recruiter */
+  assignedRecruiterName?: string;
 }
 
 export interface KanbanStage {

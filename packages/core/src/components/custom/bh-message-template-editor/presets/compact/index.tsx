@@ -14,9 +14,12 @@ import {
   createCardStyle,
   createBadgeStyle,
   createEntranceAnimation,
+  createMetadataFieldStyle,
+  createMetadataLabelStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalitySectionHeaderStyle,
+  ICON_SIZES,
 } from '../../../helpers';
 import type { BhMessageTemplateEditorProps, TemplateVariable } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -24,12 +27,6 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 /*  Default data                                                       */
 /* ------------------------------------------------------------------ */
-
-const DEFAULT_VARIABLES: TemplateVariable[] = [
-  { key: 'firstName', label: 'First Name', defaultValue: 'John' },
-  { key: 'company', label: 'Company', defaultValue: 'Acme Inc.' },
-  { key: 'position', label: 'Position', defaultValue: 'Software Engineer' },
-];
 
 /* ================================================================== */
 /*  Compact Preset                                                     */
@@ -48,15 +45,22 @@ export const CompactBhMessageTemplateEditor = createPreset<BhMessageTemplateEdit
       templateName = 'New Template',
       subject = 'Exciting opportunity',
       body = 'Hi {{firstName}}, we have a {{position}} role at {{company}}...',
-      variables: rawVariables = DEFAULT_VARIABLES,
+      variables: rawVariables = [],
       onSave,
       onCancel,
+      templateType,
+      targetAudience,
+      useCase,
+      language,
+      isShared,
+      requiresApproval,
+      version,
+      plainTextBody,
       className,
       style,
     } = props;
 
-    const variables = Array.isArray(rawVariables) ? rawVariables : DEFAULT_VARIABLES;
-
+    const variables = Array.isArray(rawVariables) ? rawVariables : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -89,7 +93,7 @@ export const CompactBhMessageTemplateEditor = createPreset<BhMessageTemplateEdit
           justifyContent: 'space-between',
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-            <FileEdit size={16} color={t.colors.primaryScale[500]} />
+            <FileEdit size={ICON_SIZES.section} color={t.colors.primaryScale[500]} />
             <Text style={{
               fontSize: t.typography.fontSize.sm,
               fontWeight: ptypo.headingWeight,
@@ -120,16 +124,16 @@ export const CompactBhMessageTemplateEditor = createPreset<BhMessageTemplateEdit
 
         {/* Compact form */}
         <Box style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Name</Text>
+          <Box style={createMetadataFieldStyle(t)}>
+            <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>Name</Text>
             <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[900] }}>{templateName}</Text>
           </Box>
-          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Subject</Text>
+          <Box style={createMetadataFieldStyle(t)}>
+            <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>Subject</Text>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{subject}</Text>
           </Box>
-          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Body</Text>
+          <Box style={createMetadataFieldStyle(t)}>
+            <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>Body</Text>
             <Text style={{
               fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600],
               overflow: 'hidden', textOverflow: 'ellipsis',
@@ -139,6 +143,53 @@ export const CompactBhMessageTemplateEditor = createPreset<BhMessageTemplateEdit
               {body}
             </Text>
           </Box>
+
+          {/* Metadata row */}
+          <Box style={{ display: 'flex', gap: t.spacing[1], flexWrap: 'wrap', marginTop: t.spacing[1] }}>
+            {templateType && (
+              <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px` }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{templateType}</Text>
+              </Box>
+            )}
+            {language && (
+              <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px` }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'uppercase' as const }}>{language}</Text>
+              </Box>
+            )}
+            {version != null && (
+              <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px` }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>v{version}</Text>
+              </Box>
+            )}
+            {isShared && (
+              <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px` }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Shared</Text>
+              </Box>
+            )}
+            {requiresApproval && (
+              <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeRadius, padding: `0 ${t.spacing[1]}px` }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Approval Required</Text>
+              </Box>
+            )}
+          </Box>
+
+          {/* Target / Use Case */}
+          {(targetAudience || useCase) && (
+            <Box style={{ display: 'flex', gap: t.spacing[3], marginTop: t.spacing[1] }}>
+              {targetAudience && (
+                <Box style={createMetadataFieldStyle(t)}>
+                  <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>Audience</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{targetAudience}</Text>
+                </Box>
+              )}
+              {useCase && (
+                <Box style={createMetadataFieldStyle(t)}>
+                  <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>Use Case</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{useCase}</Text>
+                </Box>
+              )}
+            </Box>
+          )}
 
           {/* Variables */}
           <Box style={{ display: 'flex', gap: t.spacing[1], flexWrap: 'wrap', marginTop: t.spacing[1] }}>

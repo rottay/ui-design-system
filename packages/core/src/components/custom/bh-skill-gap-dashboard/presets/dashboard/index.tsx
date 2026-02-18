@@ -54,16 +54,6 @@ function getPriorityBadgeKey(priority: SkillGapData['priority']): 'error' | 'war
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_SKILLS: SkillGapData[] = [
-  { skill: 'React/TypeScript', required: 95, current: 72, gap: 23, priority: 'high', candidatePool: 145 },
-  { skill: 'System Design', required: 90, current: 65, gap: 25, priority: 'high', candidatePool: 89 },
-  { skill: 'Cloud Architecture', required: 85, current: 70, gap: 15, priority: 'medium', candidatePool: 112 },
-  { skill: 'Machine Learning', required: 80, current: 45, gap: 35, priority: 'high', candidatePool: 67 },
-  { skill: 'DevOps/CI-CD', required: 75, current: 68, gap: 7, priority: 'low', candidatePool: 198 },
-  { skill: 'Data Engineering', required: 70, current: 52, gap: 18, priority: 'medium', candidatePool: 134 },
-  { skill: 'API Design', required: 85, current: 78, gap: 7, priority: 'low', candidatePool: 221 },
-];
-
 /* ================================================================== */
 /*  Dashboard Preset                                                   */
 /* ================================================================== */
@@ -78,7 +68,7 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      skills: rawSkills = MOCK_SKILLS,
+      skills: rawSkills = [],
       department,
       title = 'Skill Gap Analysis',
       onSkillClick,
@@ -87,7 +77,7 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
       style,
     } = props;
 
-    const skills = Array.isArray(rawSkills) ? rawSkills : MOCK_SKILLS;
+    const skills = Array.isArray(rawSkills) ? rawSkills : [];
 
     const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 

@@ -34,23 +34,6 @@ import type { BhTeamDetailProps, TeamPosition } from '../../core';
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_MEMBERS = [
-  { id: 'm1', name: 'Sofia Martinez', role: 'Team Lead', avatarInitial: 'S', hireDate: '2023-01-15' },
-  { id: 'm2', name: 'Alex Kim', role: 'Sr. Recruiter', avatarInitial: 'A', hireDate: '2023-04-20' },
-  { id: 'm3', name: 'Rachel Green', role: 'Recruiter', avatarInitial: 'R', hireDate: '2023-07-10' },
-];
-
-const MOCK_POSITIONS: TeamPosition[] = [
-  { id: 'p1', title: 'Senior Frontend Engineer', status: 'open', assignee: 'Alex Kim' },
-  { id: 'p2', title: 'Backend Engineer', status: 'open' },
-  { id: 'p3', title: 'DevOps Engineer', status: 'filled', assignee: 'Sofia Martinez' },
-  { id: 'p4', title: 'Product Manager', status: 'closed' },
-];
-
-const MOCK_METRICS = [
-  { label: 'Hires', value: 12, target: 18 },
-  { label: 'Quality', value: 85, target: 90 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Compact Preset                                                     */
@@ -76,9 +59,9 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
     const teamName = team?.name ?? 'Engineering Hiring';
     const teamType = team?.type ?? 'general';
 
-    const members = membersProp?.length ? membersProp : MOCK_MEMBERS;
-    const positions = positionsProp?.length ? positionsProp : MOCK_POSITIONS;
-    const metrics = metricsProp?.length ? metricsProp : MOCK_METRICS;
+    const members = membersProp?.length ? membersProp : [];
+    const positions = positionsProp?.length ? positionsProp : [];
+    const metrics = metricsProp?.length ? metricsProp : [];
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);

@@ -71,13 +71,6 @@ function getStatusLabel(status: ComplianceRule['status']): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RULES: ComplianceRule[] = [
-  { id: 'c-1', name: 'Equal Opportunity', category: 'Employment Law', status: 'pass', description: 'EEO statements included.', lastChecked: new Date(Date.now() - 3600000) },
-  { id: 'c-2', name: 'Data Retention', category: 'Data Privacy', status: 'pass', description: 'Data within retention period.', lastChecked: new Date(Date.now() - 7200000) },
-  { id: 'c-3', name: 'GDPR Consent', category: 'Data Privacy', status: 'warning', description: 'Some missing consent records.', lastChecked: new Date(Date.now() - 14400000) },
-  { id: 'c-4', name: 'Bias Training', category: 'Training', status: 'fail', description: '3 interviewers need training.', lastChecked: new Date(Date.now() - 43200000) },
-];
-
 /* ================================================================== */
 /*  Compact Preset                                                     */
 /* ================================================================== */
@@ -92,15 +85,14 @@ export const CompactBhComplianceChecker = createPreset<BhComplianceCheckerProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules: rawRules = MOCK_RULES,
+      rules: rawRules = [],
       overallScore = 82,
       onRuleClick,
       className,
       style,
     } = props;
 
-    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
-
+    const rules = Array.isArray(rawRules) ? rawRules : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

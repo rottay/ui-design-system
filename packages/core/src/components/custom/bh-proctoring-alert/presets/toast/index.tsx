@@ -86,17 +86,17 @@ interface ResolvedAlertEvent {
   summary: string;
 }
 
-const MOCK_EVENT: ResolvedAlertEvent = {
-  id: 'pe-toast-1',
-  candidateName: 'Michael Chen',
-  eventType: 'copy_paste',
-  severity: 'high',
-  timestamp: new Date(Date.now() - 15000),
-  summary: 'Copy/paste activity detected during assessment',
+const FALLBACK_EVENT: ResolvedAlertEvent = {
+  id: 'unknown',
+  candidateName: 'Unknown',
+  eventType: 'tab_switch',
+  severity: 'low',
+  timestamp: new Date(),
+  summary: '',
 };
 
 function resolveAlertEvent(raw: BhProctoringAlertProps['event']): ResolvedAlertEvent {
-  if (!raw) return MOCK_EVENT;
+  if (!raw) return FALLBACK_EVENT;
   const flat = raw as any;
   return {
     id: flat.id ?? flat.event?.id ?? 'unknown',
@@ -123,6 +123,7 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
 
     const {
       event: rawEvent,
+      variant = 'toast',
       onReview,
       onDismiss,
       onClose,
@@ -162,8 +163,9 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
           ...card,
           padding: 0,
           overflow: 'hidden',
-          width: 360,
+          width: variant === 'banner' ? '100%' : 360,
           maxWidth: '100%',
+          ...(variant === 'banner' ? { borderRadius: 0, boxShadow: 'none', borderBottom: `2px solid ${sevColor}` } : {}),
           fontFamily: 'inherit',
           ...animStyle,
           ...style,

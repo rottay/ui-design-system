@@ -27,15 +27,6 @@ import {
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
- * Default Data
- * -------------------------------------------------------------------------*/
-
-const DEFAULT_CANDIDATES: RankedCandidate[] = [
-  { id: 'c-1', rank: 1, name: 'Sarah Johnson', overallScore: 92, stageScores: [{ stage: 'Technical', score: 95 }, { stage: 'Culture', score: 88 }, { stage: 'Leadership', score: 93 }, { stage: 'Experience', score: 91 }], completionPercent: 100, hasKnockout: false, decisionStatus: 'pending', strengths: ['Deep React expertise', 'Google-level experience'], weaknesses: ['Limited backend'] },
-  { id: 'c-2', rank: 2, name: 'Michael Chen', overallScore: 88, stageScores: [{ stage: 'Technical', score: 90 }, { stage: 'Culture', score: 91 }, { stage: 'Leadership', score: 83 }, { stage: 'Experience', score: 88 }], completionPercent: 100, hasKnockout: false, decisionStatus: 'pending', strengths: ['Full-stack at Stripe'], weaknesses: ['Shorter tenure history'] },
-];
-
-/* ---------------------------------------------------------------------------
  * Radar Chart
  * -------------------------------------------------------------------------*/
 

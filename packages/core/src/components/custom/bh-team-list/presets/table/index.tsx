@@ -46,12 +46,6 @@ function getTeamMembers(team: RecruiterTeam): Array<{ id: string; name: string; 
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: RecruiterTeam[] = [
-  { id: 't1', tenantId: 't', companyId: 'c', name: 'Engineering Hiring', code: 'ENG', type: 'technical', description: null, leaderId: 'l1', managerId: null, directorId: null, members: [{ id: 'm1', name: 'Sofia Martinez', role: 'team_lead' }, { id: 'm2', name: 'Alex Kim', role: 'senior_member' }, { id: 'm3', name: 'Rachel Green', role: 'member' }], activeMemberCount: 6, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 12, currentUtilization: 78, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't2', tenantId: 't', companyId: 'c', name: 'Product & Design', code: 'PD', type: 'general', description: null, leaderId: 'l2', managerId: null, directorId: null, members: [{ id: 'm4', name: 'James Chen', role: 'team_lead' }, { id: 'm5', name: 'Priya Sharma', role: 'member' }], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 8, currentUtilization: 65, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't3', tenantId: 't', companyId: 'c', name: 'GTM Recruiting', code: 'GTM', type: 'volume', description: null, leaderId: 'l3', managerId: null, directorId: null, members: [{ id: 'm6', name: 'Marcus Williams', role: 'team_lead' }, { id: 'm7', name: 'Aisha Okafor', role: 'senior_member' }, { id: 'm8', name: 'Liam O\'Brien', role: 'member' }], activeMemberCount: 5, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 10, currentUtilization: 92, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-  { id: 't4', tenantId: 't', companyId: 'c', name: 'Executive Search', code: 'EXEC', type: 'executive', description: null, leaderId: 'l4', managerId: null, directorId: null, members: [{ id: 'm9', name: 'Nina Patel', role: 'team_lead' }, { id: 'm10', name: 'Dave Johnson', role: 'member' }], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 4, currentUtilization: 56, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
-];
 
 /* ------------------------------------------------------------------ */
 /*  Table Preset                                                       */
@@ -66,12 +60,14 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
       teams: teamsProp,
       onTeamClick,
       selectedTeamId,
+      filterStatus,
+      filterType,
       loading,
       className,
       style,
     } = props;
 
-    const teams = teamsProp?.length ? teamsProp : MOCK_TEAMS;
+    const teams = teamsProp?.length ? teamsProp : [];
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 0 }), [t]);
@@ -134,6 +130,20 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
             <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, marginLeft: t.spacing[2] }}>
               <Text style={{ fontSize: 'inherit' }}>{teams.length}</Text>
             </Box>
+            {(filterStatus || filterType) && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginLeft: t.spacing[3] }}>
+                {filterStatus && (
+                  <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>Status: {filterStatus}</Text>
+                  </Box>
+                )}
+                {filterType && (
+                  <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>Type: {filterType}</Text>
+                  </Box>
+                )}
+              </Box>
+            )}
           </Box>
         </Box>
 

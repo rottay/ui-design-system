@@ -71,29 +71,6 @@ function formatRelativeTime(date: Date): string {
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_PROVIDERS: ProviderHealthItem[] = [
-  {
-    id: 'openai', name: 'OpenAI', status: 'healthy', uptimePercent: 99.95, latencyMs: 180,
-    latencyTrend: [190, 180, 175, 185, 170, 180, 165, 175, 180, 185, 170, 160],
-    errorRate: 0.02, requestCount: 15420, circuitBreaker: 'closed', lastChecked: new Date(),
-    incidents: [], region: 'US East',
-  },
-  {
-    id: 'anthropic', name: 'Anthropic', status: 'healthy', uptimePercent: 99.92, latencyMs: 210,
-    latencyTrend: [200, 210, 220, 215, 205, 210, 225, 220, 210, 200, 195, 210],
-    errorRate: 0.03, requestCount: 8320, circuitBreaker: 'closed', lastChecked: new Date(),
-    incidents: [], region: 'US East',
-  },
-  {
-    id: 'elevenlabs', name: 'ElevenLabs', status: 'degraded', uptimePercent: 98.5, latencyMs: 450,
-    latencyTrend: [300, 320, 350, 400, 420, 450, 500, 480, 450, 430, 460, 450],
-    errorRate: 1.2, requestCount: 4200, circuitBreaker: 'half-open', lastChecked: new Date(),
-    incidents: [
-      { id: 'inc-1', providerId: 'elevenlabs', type: 'latency_spike', severity: 'warning', title: 'Elevated latency', startedAt: new Date(Date.now() - 3600000) },
-    ],
-    region: 'EU West',
-  },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Compact Preset                                                     */
@@ -104,16 +81,18 @@ export const CompactBhProviderHealth = createPreset<BhProviderHealthProps>({
     const { Box, Text } = primitives;
 
     const {
-      providers: rawProviders = MOCK_PROVIDERS,
+      providers: rawProviders = [],
       summary: controlledSummary,
       selectedProvider,
       onProviderSelect,
       onRefresh,
+      recentRequests: rawRecentRequests,
+      refreshInterval,
       className,
       style,
     } = props;
 
-    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
@@ -281,6 +260,14 @@ export const CompactBhProviderHealth = createPreset<BhProviderHealthProps>({
               borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             }}
           >
+            {refreshInterval !== undefined && (
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                <RefreshCw size={9} style={{ color: tokens.colors.neutral[400] }} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  {refreshInterval >= 1000 ? `${Math.round(refreshInterval / 1000)}s` : `${refreshInterval}ms`}
+                </Text>
+              </Box>
+            )}
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Uptime</Text>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[800] }}>
@@ -419,6 +406,11 @@ export const CompactBhProviderHealth = createPreset<BhProviderHealthProps>({
                 gap: tokens.spacing[1],
               }}
             >
+              {rawRecentRequests && rawRecentRequests.length > 0 && (
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginRight: tokens.spacing[2] }}>
+                  {rawRecentRequests.length} recent requests
+                </Text>
+              )}
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                 Updated {formatRelativeTime(providers[0].lastChecked)}
               </Text>

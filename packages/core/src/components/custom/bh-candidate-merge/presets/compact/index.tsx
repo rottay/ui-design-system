@@ -21,16 +21,6 @@ import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import type { DBCandidate } from '@rottay/recruiter';
 
-const MOCK_CANDIDATES: DBCandidate[] = [
-  { id: 'mc-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.johnson@gmail.com', source: 'linkedin' } as DBCandidate,
-  { id: 'mc-2', firstName: 'Sarah M.', lastName: 'Johnson', email: 's.johnson@yahoo.com', source: 'career_page' } as DBCandidate,
-];
-
-const MOCK_FIELDS: MergeField[] = [
-  { field: 'Name', values: ['Sarah Johnson', 'Sarah M. Johnson'], selectedIndex: 0 },
-  { field: 'Email', values: ['sarah.johnson@gmail.com', 's.johnson@yahoo.com'], selectedIndex: 0 },
-];
-
 export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
   name: 'BhCandidateMerge.Compact',
   render: (ctx: PresetContext<BhCandidateMergeProps>) => {
@@ -51,7 +41,6 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
 
     const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
     const mergeFields = Array.isArray(rawMergeFields) ? rawMergeFields : [];
-
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

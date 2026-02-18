@@ -33,14 +33,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_POSITIONS: PositionSlaData[] = [
-  { id: 'ps-1', positionTitle: 'Senior Backend Engineer', clientName: 'Acme Corp', slaDeadline: new Date('2026-02-20'), daysRemaining: 8, status: 'on-track', currentStage: 'Technical Interview', candidateCount: 12 },
-  { id: 'ps-2', positionTitle: 'Product Manager', clientName: 'Horizon Labs', slaDeadline: new Date('2026-02-15'), daysRemaining: 3, status: 'at-risk', currentStage: 'Final Round', candidateCount: 4 },
-  { id: 'ps-3', positionTitle: 'UX Designer', clientName: 'Nova Ventures', slaDeadline: new Date('2026-02-10'), daysRemaining: -2, status: 'breached', currentStage: 'Sourcing', candidateCount: 2 },
-  { id: 'ps-4', positionTitle: 'DevOps Lead', clientName: 'Acme Corp', slaDeadline: new Date('2026-02-25'), daysRemaining: 13, status: 'on-track', currentStage: 'Screen', candidateCount: 8 },
-  { id: 'ps-5', positionTitle: 'Data Scientist', clientName: 'Meridian Group', slaDeadline: new Date('2026-02-14'), daysRemaining: 2, status: 'at-risk', currentStage: 'Offer', candidateCount: 1 },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -75,7 +67,7 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions: rawPositions = MOCK_POSITIONS,
+      positions: rawPositions = [],
       onPositionClick,
       selectedPositionId,
       loading = false,
@@ -83,7 +75,7 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
       style,
     } = props;
 
-    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
+    const positions = Array.isArray(rawPositions) ? rawPositions : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -269,6 +261,35 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
                       {pos.daysRemaining <= 0 ? `${Math.abs(pos.daysRemaining)}d over` : `${pos.daysRemaining}d left`}
                     </Text>
                   </Box>
+
+                  {/* Compliance status and breach count */}
+                  {(pos.complianceStatus || pos.totalBreaches != null) && (
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginTop: t.spacing[2] }}>
+                      {pos.complianceStatus && (
+                        <Box style={{
+                          ...createBadgeStyle(t, pos.complianceStatus === 'compliant' ? 'success' : pos.complianceStatus === 'non-compliant' ? 'error' : 'warning'),
+                          borderRadius: badgeRadius,
+                          display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                        }}>
+                          <Shield size={10} />
+                          <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{pos.complianceStatus.replace('-', ' ')}</Text>
+                        </Box>
+                      )}
+                      {pos.totalBreaches != null && pos.totalBreaches > 0 && (
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[600] }}>
+                          <AlertTriangle size={10} />
+                          <Text style={{ fontSize: 'inherit', color: 'inherit' }}>
+                            {pos.totalBreaches} breach{pos.totalBreaches > 1 ? 'es' : ''}
+                          </Text>
+                        </Box>
+                      )}
+                      {pos.milestones && pos.milestones.length > 0 && (
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                          {pos.milestones.filter(m => m.completed).length}/{pos.milestones.length} milestones
+                        </Text>
+                      )}
+                    </Box>
+                  )}
                 </Box>
               );
             })}

@@ -39,29 +39,6 @@ import type { BhTeamDetailProps, TeamPosition } from '../../core';
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_MEMBERS = [
-  { id: 'm1', name: 'Sofia Martinez', role: 'Team Lead', avatarInitial: 'S', hireDate: '2023-01-15' },
-  { id: 'm2', name: 'Alex Kim', role: 'Sr. Recruiter', avatarInitial: 'A', hireDate: '2023-04-20' },
-  { id: 'm3', name: 'Rachel Green', role: 'Recruiter', avatarInitial: 'R', hireDate: '2023-07-10' },
-  { id: 'm4', name: 'Tom Baker', role: 'Jr. Recruiter', avatarInitial: 'T', hireDate: '2024-01-05' },
-  { id: 'm5', name: 'Nina Patel', role: 'Sourcer', avatarInitial: 'N', hireDate: '2024-03-18' },
-];
-
-const MOCK_POSITIONS: TeamPosition[] = [
-  { id: 'p1', title: 'Senior Frontend Engineer', status: 'open', assignee: 'Alex Kim' },
-  { id: 'p2', title: 'Backend Engineer', status: 'open', assignee: 'Rachel Green' },
-  { id: 'p3', title: 'DevOps Engineer', status: 'filled', assignee: 'Sofia Martinez' },
-  { id: 'p4', title: 'QA Engineer', status: 'open' },
-  { id: 'p5', title: 'Product Manager', status: 'closed' },
-  { id: 'p6', title: 'Data Scientist', status: 'open', assignee: 'Tom Baker' },
-];
-
-const MOCK_METRICS = [
-  { label: 'Hires This Quarter', value: 18, target: 24 },
-  { label: 'Avg Time to Fill', value: 22, target: 30 },
-  { label: 'Quality Score', value: 87, target: 90 },
-  { label: 'Offer Acceptance', value: 92, target: 95 },
-];
 
 /* ------------------------------------------------------------------ */
 /*  Full Preset                                                        */
@@ -77,6 +54,10 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
       members: membersProp,
       positions: positionsProp,
       metrics: metricsProp,
+      kpiTargets: kpiTargetsProp,
+      kpiActuals: kpiActualsProp,
+      specializations: specializationsProp,
+      industries: industriesProp,
       onMemberClick,
       onPositionClick,
       loading,
@@ -87,9 +68,13 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
     const teamName = team?.name ?? 'Engineering Hiring';
     const teamType = team?.type ?? 'general';
 
-    const members = membersProp?.length ? membersProp : MOCK_MEMBERS;
-    const positions = positionsProp?.length ? positionsProp : MOCK_POSITIONS;
-    const metrics = metricsProp?.length ? metricsProp : MOCK_METRICS;
+    const members = membersProp?.length ? membersProp : [];
+    const positions = positionsProp?.length ? positionsProp : [];
+    const metrics = metricsProp?.length ? metricsProp : [];
+    const kpiTargets = kpiTargetsProp ?? {};
+    const kpiActuals = kpiActualsProp ?? {};
+    const specializations = Array.isArray(specializationsProp) ? specializationsProp : [];
+    const industries = Array.isArray(industriesProp) ? industriesProp : [];
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);
@@ -162,6 +147,28 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                   <Text style={{ fontSize: 'inherit' }}>{openCount} open</Text>
                 </Box>
               </Box>
+              {/* Specializations */}
+              {specializations.length > 0 && (
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>Specializations:</Text>
+                  {specializations.map((spec) => (
+                    <Box key={spec} style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR }}>
+                      <Text style={{ fontSize: 'inherit' }}>{spec}</Text>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+              {/* Industries */}
+              {industries.length > 0 && (
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>Industries:</Text>
+                  {industries.map((ind) => (
+                    <Box key={ind} style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR }}>
+                      <Text style={{ fontSize: 'inherit' }}>{ind}</Text>
+                    </Box>
+                  ))}
+                </Box>
+              )}
             </Box>
           </Box>
         </Box>
@@ -191,6 +198,40 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
             );
           })}
         </Box>
+
+        {/* ---- KPI Targets vs Actuals ------------------------------ */}
+        {Object.keys(kpiTargets).length > 0 && (
+          <Box style={{ ...card }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Box style={{ color: t.colors.warningScale[500] }}>
+                <Target size={16} />
+              </Box>
+              <Text style={{ ...sectionHdr, marginBottom: 0 }}>KPI Targets vs Actuals</Text>
+            </Box>
+            <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: t.spacing[3] }}>
+              {Object.entries(kpiTargets).map(([key, target], idx) => {
+                const actual = kpiActuals[key] ?? 0;
+                const pct = target > 0 ? Math.min((actual / target) * 100, 100) : 0;
+                const color = pct >= 90 ? t.colors.successScale[500] : pct >= 70 ? t.colors.primaryScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
+                const bar = createProgressBarStyle(t, { color, percent: pct });
+                const entrance = createEntranceAnimation(t, { index: idx });
+
+                return (
+                  <Box key={key} style={{ ...entrance.animate, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], textTransform: 'capitalize' as const }}>{key.replace(/_/g, ' ')}</Text>
+                    <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{actual}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>/ {target}</Text>
+                    </Box>
+                    <Box style={bar.track}>
+                      <Box style={bar.fill} />
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        )}
 
         {/* ---- Two Column: Members + Positions --------------------- */}
         <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[5] }}>

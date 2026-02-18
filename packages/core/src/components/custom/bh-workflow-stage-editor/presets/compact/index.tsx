@@ -26,13 +26,6 @@ import type { DesignTokens } from '../../../../../types';
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_STAGES: WorkflowStage[] = [
-  { id: 'ws-1', name: 'Application Review', type: 'manual', order: 1, actions: ['Screen resume'] },
-  { id: 'ws-2', name: 'AI Screening', type: 'automated', order: 2, actions: ['Score resume'] },
-  { id: 'ws-3', name: 'Phone Screen', type: 'manual', order: 3, actions: ['Schedule call'] },
-  { id: 'ws-4', name: 'Manager Approval', type: 'approval', order: 4, actions: ['Review profile'] },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -59,14 +52,13 @@ export const CompactBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages: rawStages = MOCK_STAGES,
+      stages: rawStages = [],
       onStageEdit,
       className,
       style,
     } = props;
 
-    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
-
+    const stages = Array.isArray(rawStages) ? rawStages : [];
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

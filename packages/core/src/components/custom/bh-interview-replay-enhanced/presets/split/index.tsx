@@ -34,36 +34,6 @@ import {
   User, Bot, Bookmark, Clock, Headphones,
 } from 'lucide-react';
 
-/* ------------------------------------------------------------------ */
-/*  Mock Data                                                          */
-/* ------------------------------------------------------------------ */
-
-const MOCK_TRANSCRIPT: TranscriptSegment[] = [
-  { id: 'seg-1', speaker: 'interviewer', text: 'Welcome to the interview. Could you start by telling me about your experience with distributed systems?', startTime: 0, endTime: 18, confidence: 0.97 },
-  { id: 'seg-2', speaker: 'candidate', text: 'Sure. I spent the last three years building microservices at scale. Our platform handled about 50 million requests per day across 40 services.', startTime: 18, endTime: 42, confidence: 0.94 },
-  { id: 'seg-3', speaker: 'interviewer', text: 'Interesting. How did you handle service discovery and load balancing?', startTime: 42, endTime: 56, confidence: 0.96 },
-  { id: 'seg-4', speaker: 'candidate', text: 'We used Consul for service discovery with health checks, and Envoy as our service mesh proxy. For load balancing, we implemented weighted round-robin with circuit breakers using Hystrix patterns.', startTime: 56, endTime: 88, confidence: 0.92 },
-  { id: 'seg-5', speaker: 'interviewer', text: 'What about data consistency across services? That can be quite challenging.', startTime: 88, endTime: 102, confidence: 0.95 },
-  { id: 'seg-6', speaker: 'candidate', text: 'We adopted the saga pattern for distributed transactions. Each service published domain events through Kafka, and we had a compensation mechanism for rollbacks. We also used eventual consistency with CRDTs for less critical data.', startTime: 102, endTime: 148, confidence: 0.91 },
-  { id: 'seg-7', speaker: 'interviewer', text: 'Can you describe a production incident you handled and how you resolved it?', startTime: 148, endTime: 162, confidence: 0.98 },
-  { id: 'seg-8', speaker: 'candidate', text: 'We had a cascading failure where our payment service went down due to a database connection pool exhaustion. I led the incident response: we isolated the affected service, enabled circuit breakers, and implemented a queue-based retry mechanism to prevent data loss. The incident was resolved in 45 minutes.', startTime: 162, endTime: 218, confidence: 0.93 },
-];
-
-const MOCK_EVIDENCE: EvidenceMarker[] = [
-  { id: 'ev-1', time: 30, label: 'Scale experience', dimensionName: 'Technical Depth', score: 8 },
-  { id: 'ev-2', time: 72, label: 'Infrastructure knowledge', dimensionName: 'System Design', score: 9 },
-  { id: 'ev-3', time: 120, label: 'Distributed patterns', dimensionName: 'Technical Depth', score: 9 },
-  { id: 'ev-4', time: 180, label: 'Incident leadership', dimensionName: 'Leadership', score: 8 },
-  { id: 'ev-5', time: 200, label: 'Problem resolution', dimensionName: 'Problem Solving', score: 7 },
-];
-
-const MOCK_WAVEFORM: number[] = Array.from({ length: 200 }, (_, i) => {
-  const base = 0.15 + Math.sin(i * 0.08) * 0.1;
-  const speech = Math.abs(Math.sin(i * 0.3)) * 0.4;
-  const noise = Math.random() * 0.15;
-  return Math.min(1, Math.max(0.05, base + speech + noise));
-});
-
 const SPEED_OPTIONS = [0.5, 1, 1.5, 2];
 
 /* ------------------------------------------------------------------ */
@@ -99,17 +69,19 @@ export const SplitBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEnha
       currentTime: currentTimeProp,
       isPlaying: isPlayingProp,
       playbackSpeed: speedProp,
-      transcript: rawTranscript = MOCK_TRANSCRIPT,
-      evidenceMarkers: rawEvidenceMarkers = MOCK_EVIDENCE,
-      waveformData: rawWaveformData = MOCK_WAVEFORM,
+      transcript: rawTranscript = [],
+      evidenceMarkers: rawEvidenceMarkers = [],
+      waveformData: rawWaveformData = undefined,
       onPlay, onPause, onSeek, onSpeedChange,
       onEvidenceClick, onTranscriptSegmentClick,
+      billingStatus,
+      interview,
       loading, className, style,
     } = props;
 
-    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
-    const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : MOCK_EVIDENCE;
-    const waveformData = Array.isArray(rawWaveformData) ? rawWaveformData : MOCK_WAVEFORM;
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : [];
+    const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : [];
+    const waveformData = Array.isArray(rawWaveformData) ? rawWaveformData : [] as number[];
 
     const [internalTime, setInternalTime] = useState(currentTimeProp ?? 35);
     const [internalPlaying, setInternalPlaying] = useState(isPlayingProp ?? false);
@@ -261,6 +233,55 @@ export const SplitBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEnha
             }}>
               <Text style={{ fontSize: t.typography.fontSize.xs }}>{evidenceMarkers.length} evidence</Text>
             </Box>
+            {props.proctoringEnabled && (
+              <Box style={{
+                ...createBadgeStyle(t, props.proctoringFlags?.length ? 'warning' : 'success'),
+                borderRadius: badgeRadius,
+                padding: `0 ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  Proctored{props.proctoringFlags?.length ? ` (${props.proctoringFlags.length})` : ''}
+                </Text>
+              </Box>
+            )}
+            {props.tokenCost != null && (
+              <Box style={{
+                ...createBadgeStyle(t, 'info'),
+                borderRadius: badgeRadius,
+                padding: `0 ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>${props.tokenCost.toFixed(2)}</Text>
+              </Box>
+            )}
+            {props.candidateRating != null && (
+              <Box style={{
+                ...createBadgeStyle(t, 'warning'),
+                borderRadius: badgeRadius,
+                padding: `0 ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>Rating: {props.candidateRating}/5</Text>
+              </Box>
+            )}
+            {billingStatus && (
+              <Box style={{
+                ...createBadgeStyle(t, billingStatus === 'settled' ? 'success' : billingStatus === 'disputed' ? 'error' : 'secondary'),
+                borderRadius: badgeRadius,
+                padding: `0 ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>Billing: {billingStatus}</Text>
+              </Box>
+            )}
+            {interview && (
+              <Box style={{
+                ...createBadgeStyle(t, 'primary'),
+                borderRadius: badgeRadius,
+                padding: `0 ${t.spacing[2]}px`,
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  {interview.interviewType ?? 'Interview'}{interview.status ? ` - ${interview.status}` : ''}
+                </Text>
+              </Box>
+            )}
           </Box>
         </Box>
 

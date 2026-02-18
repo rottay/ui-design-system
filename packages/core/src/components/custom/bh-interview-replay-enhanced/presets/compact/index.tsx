@@ -33,32 +33,6 @@ import {
   Bookmark, Clock, Headphones,
 } from 'lucide-react';
 
-/* ------------------------------------------------------------------ */
-/*  Mock Data                                                          */
-/* ------------------------------------------------------------------ */
-
-const MOCK_TRANSCRIPT: TranscriptSegment[] = [
-  { id: 'seg-1', speaker: 'interviewer', text: 'Welcome to the interview. Could you start by telling me about your experience with distributed systems?', startTime: 0, endTime: 18, confidence: 0.97 },
-  { id: 'seg-2', speaker: 'candidate', text: 'Sure. I spent the last three years building microservices at scale. Our platform handled about 50 million requests per day across 40 services.', startTime: 18, endTime: 42, confidence: 0.94 },
-  { id: 'seg-3', speaker: 'interviewer', text: 'Interesting. How did you handle service discovery and load balancing?', startTime: 42, endTime: 56, confidence: 0.96 },
-  { id: 'seg-4', speaker: 'candidate', text: 'We used Consul for service discovery with health checks, and Envoy as our service mesh proxy. For load balancing, we implemented weighted round-robin with circuit breakers.', startTime: 56, endTime: 88, confidence: 0.92 },
-  { id: 'seg-5', speaker: 'interviewer', text: 'What about data consistency across services?', startTime: 88, endTime: 102, confidence: 0.95 },
-  { id: 'seg-6', speaker: 'candidate', text: 'We adopted the saga pattern for distributed transactions. Each service published domain events through Kafka with compensation mechanisms for rollbacks.', startTime: 102, endTime: 148, confidence: 0.91 },
-];
-
-const MOCK_EVIDENCE: EvidenceMarker[] = [
-  { id: 'ev-1', time: 30, label: 'Scale experience', dimensionName: 'Technical Depth', score: 8 },
-  { id: 'ev-2', time: 72, label: 'Infrastructure knowledge', dimensionName: 'System Design', score: 9 },
-  { id: 'ev-3', time: 120, label: 'Distributed patterns', dimensionName: 'Technical Depth', score: 9 },
-];
-
-const MOCK_WAVEFORM: number[] = Array.from({ length: 120 }, (_, i) => {
-  const base = 0.15 + Math.sin(i * 0.1) * 0.1;
-  const speech = Math.abs(Math.sin(i * 0.35)) * 0.35;
-  const noise = Math.random() * 0.12;
-  return Math.min(1, Math.max(0.05, base + speech + noise));
-});
-
 const SPEED_OPTIONS = [0.5, 1, 1.5, 2];
 
 function formatTime(seconds: number): string {
@@ -90,17 +64,19 @@ export const CompactBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEn
       currentTime: currentTimeProp,
       isPlaying: isPlayingProp,
       playbackSpeed: speedProp,
-      transcript: rawTranscript = MOCK_TRANSCRIPT,
-      evidenceMarkers: rawEvidenceMarkers = MOCK_EVIDENCE,
-      waveformData: rawWaveformData = MOCK_WAVEFORM,
+      transcript: rawTranscript = [],
+      evidenceMarkers: rawEvidenceMarkers = [],
+      waveformData: rawWaveformData = undefined,
       onPlay, onPause, onSeek, onSpeedChange,
       onEvidenceClick, onTranscriptSegmentClick,
+      billingStatus,
+      interview,
       loading, className, style,
     } = props;
 
-    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
-    const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : MOCK_EVIDENCE;
-    const waveformData = Array.isArray(rawWaveformData) ? rawWaveformData : MOCK_WAVEFORM;
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : [];
+    const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : [];
+    const waveformData = Array.isArray(rawWaveformData) ? rawWaveformData : [] as number[];
 
     const [internalTime, setInternalTime] = useState(currentTimeProp ?? 35);
     const [internalPlaying, setInternalPlaying] = useState(isPlayingProp ?? false);
@@ -235,6 +211,30 @@ export const CompactBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEn
               <Box style={{ height: '100%', width: `${progressFraction * 100}%`, backgroundColor: t.colors.primaryScale[500], transition: `width ${t.motion.hover}`, borderRadius: t.borderRadius.full }} />
             </Box>
           </Box>
+
+          {/* Billing + Interview badges */}
+          {billingStatus && (
+            <Box style={{
+              ...createBadgeStyle(t, billingStatus === 'settled' ? 'success' : billingStatus === 'disputed' ? 'error' : 'secondary'),
+              borderRadius: badgeRadius,
+              padding: `0 ${t.spacing[1]}px`,
+              flexShrink: 0,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{billingStatus}</Text>
+            </Box>
+          )}
+          {interview && (
+            <Box style={{
+              ...createBadgeStyle(t, 'primary'),
+              borderRadius: badgeRadius,
+              padding: `0 ${t.spacing[1]}px`,
+              flexShrink: 0,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                {interview.interviewType ?? 'Interview'}
+              </Text>
+            </Box>
+          )}
 
           {/* Speed selector */}
           <Box style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>

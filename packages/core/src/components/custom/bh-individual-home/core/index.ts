@@ -33,6 +33,14 @@ export interface PipelinePreview {
   jobId: string;
   jobTitle: string;
   stages: PipelineStage[];
+  /** Number of SLA breaches in this pipeline */
+  slaBreachCount?: number;
+  /** Number of candidates at risk of SLA breach */
+  slaAtRiskCount?: number;
+  /** Total days open for this job */
+  daysOpen?: number;
+  /** Overall pipeline conversion rate (0-100) */
+  conversionRate?: number;
 }
 
 export interface ScheduleItem {
@@ -75,6 +83,14 @@ export interface TokenBalance {
   costPerInterview: number;
   total?: number;
   label?: string;
+  /** Number of tokens used this billing period */
+  usedThisPeriod?: number;
+  /** Date when the current billing period resets */
+  resetDate?: Date;
+  /** Average tokens consumed per day */
+  avgDailyUsage?: number;
+  /** Estimated days until tokens run out at current usage rate */
+  estimatedDaysRemaining?: number;
 }
 
 export interface BhIndividualHomeProps extends EngineAwareProps {
