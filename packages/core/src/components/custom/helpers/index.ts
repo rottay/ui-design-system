@@ -936,3 +936,328 @@ export function getPulseSpeed(tokens: DesignTokens): string {
       return '2s';
   }
 }
+
+/* ================================================================== */
+/*  DATA FORMATTING HELPERS                                            */
+/*  Shared across bh-* components for consistent data display          */
+/* ================================================================== */
+
+/**
+ * Safely converts a Drizzle numeric string (or null/undefined/number) to a JS number.
+ * Handles the common pattern where Drizzle `numeric` columns return strings.
+ * Replaces the duplicated `n()` helper found across many bh-* components.
+ */
+export function numericValue(v: string | number | null | undefined): number {
+  if (v == null) return 0;
+  if (typeof v === 'number') return v;
+  const parsed = Number(v);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+/** Shorthand alias for numericValue */
+export { numericValue as n };
+
+/**
+ * Formats a number as currency with locale-aware formatting.
+ * Defaults to USD if no currency code is provided.
+ */
+export function formatCurrency(
+  amount: number | string | null | undefined,
+  currency: string = 'USD',
+  locale: string = 'en-US',
+): string {
+  const value = numericValue(amount);
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(value);
+  } catch {
+    return `${currency} ${value.toFixed(2)}`;
+  }
+}
+
+/**
+ * Formats a Date or ISO string for display.
+ * Returns a locale-formatted date string.
+ */
+export function formatDate(
+  date: Date | string | null | undefined,
+  options?: Intl.DateTimeFormatOptions,
+  locale: string = 'en-US',
+): string {
+  if (!date) return '--';
+  const d = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(d.getTime())) return '--';
+  return d.toLocaleDateString(locale, options ?? { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+/**
+ * Formats a number as a percentage string.
+ * Input should be a decimal (0.85 = 85%) or raw percentage (85 = 85%).
+ * Auto-detects: values <= 1 are treated as decimals, > 1 as raw percentages.
+ */
+export function formatPercent(
+  value: number | string | null | undefined,
+  decimals: number = 1,
+): string {
+  const v = numericValue(value);
+  const pct = v > 1 ? v : v * 100;
+  return `${pct.toFixed(decimals)}%`;
+}
+
+/**
+ * Formats a number as a score with 1 decimal place.
+ * Optionally includes a max score (e.g., "8.5/10").
+ */
+export function formatScore(
+  value: number | string | null | undefined,
+  maxScore?: number,
+): string {
+  const v = numericValue(value);
+  return maxScore != null ? `${v.toFixed(1)}/${maxScore}` : v.toFixed(1);
+}
+
+/**
+ * Abbreviates large numbers with K/M/B suffixes.
+ * Supports an optional prefix (e.g., "$" for currency).
+ *   formatAbbreviated(1_500_000, '$') => "$1.5M"
+ *   formatAbbreviated(42_300)         => "42.3K"
+ */
+export function formatAbbreviated(
+  value: number | string | null | undefined,
+  prefix: string = '',
+): string {
+  const v = numericValue(value);
+  const abs = Math.abs(v);
+  const sign = v < 0 ? '-' : '';
+  if (abs >= 1_000_000_000) return `${sign}${prefix}${(abs / 1_000_000_000).toFixed(1)}B`;
+  if (abs >= 1_000_000) return `${sign}${prefix}${(abs / 1_000_000).toFixed(1)}M`;
+  if (abs >= 1_000) return `${sign}${prefix}${(abs / 1_000).toFixed(1)}K`;
+  return `${sign}${prefix}${abs.toLocaleString()}`;
+}
+
+/**
+ * Formats a duration in milliseconds to a human-readable string.
+ *   formatDuration(500)      => "500ms"
+ *   formatDuration(3500)     => "3.5s"
+ *   formatDuration(125000)   => "2m"
+ *   formatDuration(7200000)  => "2.0h"
+ */
+export function formatDuration(ms: number): string {
+  const abs = Math.abs(ms);
+  if (abs < 1000) return `${Math.round(abs)}ms`;
+  if (abs < 60_000) return `${(abs / 1000).toFixed(1)}s`;
+  if (abs < 3_600_000) return `${Math.round(abs / 60_000)}m`;
+  if (abs < 86_400_000) return `${(abs / 3_600_000).toFixed(1)}h`;
+  return `${(abs / 86_400_000).toFixed(1)}d`;
+}
+
+/* ================================================================== */
+/*  ICON SIZE STANDARDS                                                */
+/*  Consistent sizing for lucide-react icons across all presets        */
+/* ================================================================== */
+
+/**
+ * Standard icon sizes for consistent visual hierarchy.
+ *   inline      (10) - inside badges, inline with text
+ *   label       (12) - next to field labels, metadata
+ *   section     (16) - section headers, medium prominence
+ *   feature     (20) - feature icons, card headers
+ *   hero        (28) - large icons, stat cards, hero areas
+ *   illustration(48) - empty states, splash screens
+ */
+export const ICON_SIZES = {
+  inline: 10,
+  label: 12,
+  section: 16,
+  feature: 20,
+  hero: 28,
+  illustration: 48,
+} as const;
+
+/* ================================================================== */
+/*  METADATA FIELD STYLE HELPERS                                       */
+/*  Reusable styles for the label+value, grid, boolean badge,          */
+/*  and stat card patterns found across 50+ Bh* components             */
+/* ================================================================== */
+
+/**
+ * Creates a CSS grid layout for metadata fields.
+ * Use for 2-3 column grids of label+value pairs.
+ *
+ *   <Box style={createMetadataGridStyle(t, { columns: 2, withBackground: true })}>
+ *     <Box style={createMetadataFieldStyle(t)}>...</Box>
+ *   </Box>
+ */
+export function createMetadataGridStyle(tokens: DesignTokens, options: {
+  columns?: number | string;
+  withBackground?: boolean;
+  withBorder?: boolean;
+} = {}): CSSProperties {
+  const { columns = 2, withBackground = false, withBorder = false } = options;
+  const style: CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: typeof columns === 'number' ? `repeat(${columns}, 1fr)` : columns,
+    gap: tokens.spacing[3],
+  };
+  if (withBackground) {
+    style.padding = tokens.spacing[4];
+    style.borderRadius = tokens.borderRadius.md;
+    style.backgroundColor = tokens.colors.neutral[50];
+  }
+  if (withBorder || withBackground) {
+    style.border = `1px solid ${tokens.colors.neutral[100]}`;
+  }
+  return style;
+}
+
+/**
+ * Creates styles for a single metadata field container (label + value vertical stack).
+ * Optionally adds a card-like background for grid items.
+ *
+ *   <Box style={createMetadataFieldStyle(t, { withBackground: true })}>
+ *     <Text style={createMetadataLabelStyle(t)}>Label</Text>
+ *     <Text style={createMetadataValueStyle(t)}>Value</Text>
+ *   </Box>
+ */
+export function createMetadataFieldStyle(tokens: DesignTokens, options?: {
+  withBackground?: boolean;
+}): CSSProperties {
+  const style: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: tokens.spacing[1],
+  };
+  if (options?.withBackground) {
+    style.padding = tokens.spacing[3];
+    style.borderRadius = tokens.borderRadius.md;
+    style.backgroundColor = tokens.colors.neutral[50];
+    style.border = `1px solid ${tokens.colors.neutral[100]}`;
+  }
+  return style;
+}
+
+/**
+ * Creates label text styles for metadata fields.
+ * Pass personality for uppercase/capitalize transforms.
+ *
+ *   <Text style={createMetadataLabelStyle(t, { personality: ptypo })}>Label</Text>
+ */
+export function createMetadataLabelStyle(tokens: DesignTokens, options?: {
+  personality?: ReturnType<typeof getPersonalityTypography>;
+}): CSSProperties {
+  const style: CSSProperties = {
+    fontSize: tokens.typography.fontSize.xs,
+    color: tokens.colors.neutral[500],
+  };
+  if (options?.personality) {
+    style.textTransform = options.personality.labelTransform;
+    style.letterSpacing = options.personality.labelLetterSpacing;
+  }
+  return style;
+}
+
+/**
+ * Creates value text styles for metadata fields.
+ * Size controls visual weight: sm (secondary), md (standard), lg (primary).
+ *
+ *   <Text style={createMetadataValueStyle(t, { size: 'lg', weight: 'bold' })}>$42,500</Text>
+ */
+export function createMetadataValueStyle(tokens: DesignTokens, options?: {
+  size?: 'sm' | 'md' | 'lg';
+  weight?: 'medium' | 'semibold' | 'bold';
+}): CSSProperties {
+  const { size = 'sm', weight = 'medium' } = options ?? {};
+  return {
+    fontSize: tokens.typography.fontSize[size],
+    fontWeight: tokens.typography.fontWeight[weight],
+    color: tokens.colors.neutral[size === 'sm' ? 800 : 900],
+  };
+}
+
+/**
+ * Creates badge styles for boolean indicator fields.
+ * Returns null if value is null/undefined (caller should not render).
+ *
+ *   const badgeStyle = createBooleanBadgeStyles(t, isEnabled, { trueColor: 'success' });
+ *   {badgeStyle && (
+ *     <Box style={badgeStyle}>
+ *       <Icon size={ICON_SIZES.inline} />
+ *       <Text style={{ fontSize: t.typography.fontSize.xs }}>Enabled</Text>
+ *     </Box>
+ *   )}
+ */
+export function createBooleanBadgeStyles(tokens: DesignTokens, value: boolean | null | undefined, options?: {
+  trueColor?: 'success' | 'info' | 'primary';
+  falseColor?: 'secondary' | 'warning' | 'error';
+}): CSSProperties | null {
+  if (value == null) return null;
+  const trueColor = options?.trueColor ?? 'success';
+  const falseColor = options?.falseColor ?? 'secondary';
+  return {
+    ...createBadgeStyle(tokens, value ? trueColor : falseColor),
+    borderRadius: getPersonalityBadgeRadius(tokens),
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 4,
+  };
+}
+
+/**
+ * Creates the large number style for stat cards.
+ *
+ *   <Text style={createStatValueStyle(t)}>$42,500</Text>
+ */
+export function createStatValueStyle(tokens: DesignTokens, options?: {
+  size?: 'lg' | 'xl' | '2xl';
+}): CSSProperties {
+  return {
+    fontSize: tokens.typography.fontSize[options?.size ?? 'xl'],
+    fontWeight: tokens.typography.fontWeight.bold,
+    color: tokens.colors.neutral[900],
+    display: 'block' as const,
+  };
+}
+
+/**
+ * Creates the small label style for stat cards.
+ *
+ *   <Text style={createStatLabelStyle(t, { personality: ptypo })}>Total Revenue</Text>
+ */
+export function createStatLabelStyle(tokens: DesignTokens, options?: {
+  personality?: ReturnType<typeof getPersonalityTypography>;
+}): CSSProperties {
+  const style: CSSProperties = {
+    fontSize: tokens.typography.fontSize.xs,
+    color: tokens.colors.neutral[500],
+    display: 'block' as const,
+  };
+  if (options?.personality) {
+    style.textTransform = options.personality.labelTransform;
+    style.letterSpacing = options.personality.labelLetterSpacing;
+  }
+  return style;
+}
+
+/**
+ * Creates a trend indicator style (up/down arrow with percentage).
+ * Returns styles for the container and the text.
+ */
+export function createTrendStyle(tokens: DesignTokens, trend: number): {
+  container: CSSProperties;
+  color: string;
+} {
+  const isPositive = trend > 0;
+  const color = isPositive ? tokens.colors.successScale[600] : tokens.colors.errorScale[600];
+  return {
+    container: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 4,
+    },
+    color,
+  };
+}
