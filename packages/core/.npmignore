@@ -1,0 +1,11 @@
+dist/**/*.map
+dist/**/*.d.ts.map
+src/
+!src/theme/tokens/css/
+*.test.*
+*.spec.*
+*.stories.*
+.storybook/
+vitest.config.ts
+vite.config.ts
+tsconfig*.json

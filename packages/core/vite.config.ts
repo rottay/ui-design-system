@@ -10,6 +10,7 @@ export default defineConfig({
     dts({
       include: ['src/**/*'],
       insertTypesEntry: true,
+      copyDtsFiles: false,
     }),
     preserveDirectives(),
   ],
@@ -79,7 +80,7 @@ export default defineConfig({
         },
       ],
     },
-    sourcemap: true,
+    sourcemap: false,
     minify: 'esbuild',
     // Optimize for tree-shaking
     target: 'esnext',
