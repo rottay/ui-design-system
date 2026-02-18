@@ -4049,3 +4049,34 @@ export type { BhWorkflowStageEditorProps, BhWorkflowStageEditorPreset, WorkflowS
 export { EditorBhWorkflowStageEditor, CompactBhWorkflowStageEditor } from './bh-workflow-stage-editor';
 export { BH_WORKFLOW_STAGE_EDITOR_DEFAULTS } from './bh-workflow-stage-editor';
 
+// BhActivityFeed
+export { BhActivityFeed } from './bh-activity-feed';
+export type {
+  BhActivityFeedProps,
+  BhActivityFeedPreset,
+  ActivityActionType,
+  ActivityEntityType,
+  ActivityActor as BhActivityActor,
+  ActivityItem as BhActivityItem,
+  ActivityFeedStats,
+  ActivityFeedFilter,
+} from './bh-activity-feed';
+export { FullBhActivityFeed } from './bh-activity-feed';
+export { BH_ACTIVITY_FEED_DEFAULTS } from './bh-activity-feed';
+
+// BhDiscussionThread
+export { BhDiscussionThread } from './bh-discussion-thread';
+export type {
+  BhDiscussionThreadProps,
+  BhDiscussionThreadPreset,
+  ThreadStatus,
+  DiscussionEntityType,
+  DiscussionAuthor,
+  CommentReaction as BhCommentReaction,
+  CommentAttachment,
+  DiscussionComment,
+  DiscussionThread,
+} from './bh-discussion-thread';
+export { FullBhDiscussionThread } from './bh-discussion-thread';
+export { BH_DISCUSSION_THREAD_DEFAULTS } from './bh-discussion-thread';
+
