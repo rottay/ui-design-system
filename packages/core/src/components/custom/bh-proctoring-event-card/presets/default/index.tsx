@@ -82,7 +82,7 @@ function getEventTypeIcon(type: string | undefined) {
 }
 
 // Label helpers from scoring domain (centralized, no duplication)
-import { getEventTypeLabel, getSeverityLabel, getEventTypeDescription } from '@rottay/scoring';
+import { getEventTypeLabel, getSeverityLabel, getEventTypeDescription } from '../../../_shared/proctoring-labels';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */

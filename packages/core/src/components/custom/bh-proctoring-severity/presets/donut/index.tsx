@@ -41,7 +41,7 @@ function getSeverityColor(severity: ProctoringEventSeverity | string, t: DesignT
 }
 
 // Label helpers from scoring domain (centralized, no duplication)
-import { getSeverityLabel } from '@rottay/scoring';
+import { getSeverityLabel } from '../../../_shared/proctoring-labels';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */

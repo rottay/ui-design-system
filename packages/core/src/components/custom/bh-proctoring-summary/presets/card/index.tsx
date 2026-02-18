@@ -47,7 +47,7 @@ function getSeverityColor(severity: string | undefined, t: DesignTokens): string
 }
 
 // Label helpers from scoring domain (centralized, no duplication)
-import { getSeverityLabel } from '@rottay/scoring';
+import { getSeverityLabel } from '../../../_shared/proctoring-labels';
 
 function getRiskColor(score: number, t: DesignTokens): string {
   if (score >= 75) return t.colors.errorScale[600];
