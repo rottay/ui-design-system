@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.3.4",
+  "version": "2.3.6",
   "main": "./packages/core/dist/index.cjs",
   "module": "./packages/core/dist/index.js",
   "types": "./packages/core/dist/index.d.ts",
