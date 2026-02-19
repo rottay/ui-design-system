@@ -21,6 +21,10 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type { BhMessageTemplatePreviewProps } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -47,8 +51,8 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       templateName = 'Initial Outreach',
@@ -86,9 +90,16 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
       transition: entrance.transition,
     }), [entrance]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

@@ -6,7 +6,7 @@
  * top 3 highlight cards, and aggregate cost donut.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   DollarSign,
   TrendingUp,
@@ -38,6 +38,11 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhSourceRoiProps,
@@ -131,6 +136,10 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
     const sortedByMetric = useMemo(() => {
       return [...sources].sort((a, b) => {
         if (metricView === 'costPerHire') return a.costPerHire - b.costPerHire;
+        const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+        const divider = useMemo(() => createDividerStyle(t), [t]);
+        const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
         return (b as any)[metricView] - (a as any)[metricView];
       });
     }, [sources, metricView]);
@@ -153,7 +162,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
-    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7] }), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -252,6 +261,8 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
                     role="radio"
                     aria-checked={metricView === opt.value}
                     tabIndex={0}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                       borderRadius: badgeRadius,

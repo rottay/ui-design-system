@@ -27,6 +27,10 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhPipelineStageDrawerProps,
@@ -128,8 +132,8 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] } as StageDetail,
@@ -214,6 +218,11 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
     if (!isOpen) return <Box style={{ display: 'none' }} />;
 
     const allSelected = selectedIds.size === stageCandidates.length && stageCandidates.length > 0;
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

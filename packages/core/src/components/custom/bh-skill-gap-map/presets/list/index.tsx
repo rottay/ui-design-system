@@ -9,7 +9,13 @@
 
 import { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius, createEntranceAnimation, createStaggerDelay, createPersonalityAccentBar } from '../../../helpers';
+import { createCardStyle, getPersonalityBadgeRadius, createEntranceAnimation, createStaggerDelay, createPersonalityAccentBar ,
+  createCardHoverStyles,
+  getPersonalityTypography,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+} from '../../../helpers';
 import type { BhSkillGapMapProps, SkillGapItem, GapPriority } from '../../core';
 import { getPriorityColors } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -25,7 +31,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
   name: 'BhSkillGapMap.List',
   render: ({ primitives, props, tokens: t }: PresetContext<BhSkillGapMapProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const pc = getPriorityColors(t);
 
     const {
@@ -51,6 +57,12 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     });
 
     if (loading) {
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+      const isGlass = t.surface.useGlass;
+
       return (
         <Box className={className} style={{ padding: t.spacing[8], textAlign: 'center', color: t.colors.neutral[500], ...style }}>
           <Text>Loading skill gaps...</Text>
@@ -107,6 +119,8 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                 aria-label={`${gap.dimension ?? 'Unknown'} - ${gapPriority} priority, gap ${gap.gapSize ?? 0}`}
                 onClick={() => onGapSelect?.(gap.id ?? '')}
                 onKeyDown={onGapSelect ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onGapSelect?.(gap.id ?? ''); } } : undefined}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                 ...animStyle(gi),
                 padding: `${t.spacing[4]}px ${t.spacing[6]}px`,

@@ -27,6 +27,9 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhPipelineKanbanCardProps,
@@ -84,8 +87,8 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       candidate: rawCandidate = {} as Partial<KanbanCandidate>,
@@ -130,6 +133,11 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware. Only uses Box and Text primitives.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   BarChart3, TrendingUp, Zap, AlertTriangle, Activity,
 } from 'lucide-react';
@@ -25,6 +25,9 @@ import {
   getPersonalityBadgeRadius,
   getChartConfig,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhSprintVelocityProps, SprintVelocityData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -43,8 +46,8 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass && !!t.glass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const chartCfg = getChartConfig(t);
 
     const {
@@ -101,6 +104,8 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const gap = useMemo(() => (barGroupWidth - barW) / 2, [barGroupWidth, barW]);
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ ...card, ...animStyle(0), ...accentLayout.outer,
           ...style }}>

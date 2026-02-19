@@ -42,6 +42,10 @@ import {
   createStatLabelStyle,
   createTrendStyle,
   ICON_SIZES,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import type {
@@ -91,8 +95,8 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const [expandedJob, setExpandedJob] = useState<string | null>(null);
 
     const isGlass = t.surface.useGlass;
-    const card = useMemo(() => createCardStyle(t, { padding: 28, glass: isGlass }), [t, isGlass]);
-    const compactCard = useMemo(() => createCardStyle(t, { padding: 20, glass: isGlass }), [t, isGlass]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7], glass: isGlass }), [t, isGlass]);
+    const compactCard = useMemo(() => createCardStyle(t, { padding: t.spacing[5], glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
@@ -120,8 +124,16 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
       <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], display: 'block', marginBottom: t.spacing[5], letterSpacing: ptypo.headingLetterSpacing }}>{children}</Text>
     );
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
+      <Box className={className} 
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
         {accentBar && <Box style={accentBar} />}
 
         {/* ── Header ── */}

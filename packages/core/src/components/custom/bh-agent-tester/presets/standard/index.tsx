@@ -25,6 +25,9 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhAgentTesterProps,
@@ -267,6 +270,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
       color: tokens.colors.neutral[600],
       marginBottom: tokens.spacing[1],
     };
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box

@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import {
   Briefcase, Users, Clock, User, ChevronRight, Filter, ChevronDown,
 } from 'lucide-react';
@@ -21,6 +21,11 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhPositionListProps, RecruiterPosition } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -71,8 +76,8 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       positions: rawPositions = [],
@@ -110,6 +115,15 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
     const handleClick = useCallback((id: string) => {
       onPositionClick?.(id);
     }, [onPositionClick]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[4], width: '100%', ...style }}>

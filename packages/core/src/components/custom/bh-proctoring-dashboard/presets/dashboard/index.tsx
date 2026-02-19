@@ -6,7 +6,7 @@
  * stats cards, and recent events feed. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import {
   Shield, AlertTriangle, Eye, EyeOff, Clock, Activity,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -29,6 +29,9 @@ import {
   getChartConfig,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhProctoringDashboardProps,
@@ -119,6 +122,9 @@ function SeverityDonut({ data, tokens: t, size = 160 }: {
 
   const circumference = 2 * Math.PI * r;
 
+  const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
   return (
     <Box style={{ position: 'relative', width: size, height: size }}>
       <svg
@@ -177,8 +183,8 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
     Text = primitives.Text;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const chartCfg = getChartConfig(t);
 
     const {

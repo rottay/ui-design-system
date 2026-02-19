@@ -28,6 +28,9 @@ import {
   getPersonalityBadgeRadius,
   ICON_SIZES,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhMessageTemplateEditorProps, TemplateVariable } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -46,8 +49,8 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       templateName = 'New Template',
@@ -116,9 +119,16 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
       transition: `border-color ${t.motion.hover}`,
     }), [t]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

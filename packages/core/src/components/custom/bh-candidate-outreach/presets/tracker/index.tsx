@@ -21,6 +21,10 @@ import {
   createProgressBarStyle,
   createCardHoverStyles,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhCandidateOutreachProps, OutreachRecipient, CampaignMetrics, ABVariant,
@@ -64,7 +68,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
   name: 'BhCandidateOutreach.Tracker',
   render: ({ primitives, props, tokens: t }: PresetContext<BhCandidateOutreachProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const mc = useMemo(() => getMetricColors(t), [t]);
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -117,6 +121,13 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
       { label: 'Replied', value: campaignMetrics.replied, percent: replyRate, color: t.colors.successScale[500] },
     ], [campaignMetrics, openRate, replyRate, t]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box className={className} style={{
         ...cardBase,
@@ -161,6 +172,8 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
                   tabIndex={0}
                   onClick={() => handleTabChange(tab)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTabChange(tab); } }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
                     border: 'none', backgroundColor: active ? t.colors.primaryScale[50] : 'transparent',

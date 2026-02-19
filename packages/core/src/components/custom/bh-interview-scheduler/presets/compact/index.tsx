@@ -21,6 +21,9 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhInterviewSchedulerProps, InterviewTypeConfig, ScheduleData, AgentOverride } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -48,10 +51,10 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
     const [scheduleData, setScheduleData] = useState<ScheduleData>(externalSchedule ?? { date: '', time: '', timezone: 'America/New_York', estimatedDuration: 30 });
     const [agentConfig, setAgentConfig] = useState<AgentOverride>(externalAgentConfig ?? {});
 
-    const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
-    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
     const entranceAnim = useMemo(() => createEntranceAnimation(tokens, { index: 0 }), [tokens]);
 
@@ -86,6 +89,14 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
     const selectStyle: React.CSSProperties = useMemo(() => ({
       ...inputStyle, appearance: 'none' as const, cursor: 'pointer', transition: `all ${t.motion.hover}`,
     }), [inputStyle, t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     return (
       <Box className={className} style={{ ...cardStyle, ...style }}>
@@ -136,6 +147,8 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
                     aria-pressed={sel}
                     onClick={() => handleTypeChange({ ...interviewType, type: typeKey })}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTypeChange({ ...interviewType, type: typeKey }); } }}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2],
                       padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
@@ -188,6 +201,7 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                 {agents.slice(0, 3).map(a => {
                   const sel = interviewType.agentId === a.id;
+
                   return (
                     <Box
                       key={a.id}

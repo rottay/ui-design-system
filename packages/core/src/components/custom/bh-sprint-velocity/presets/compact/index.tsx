@@ -6,7 +6,7 @@
  * Designed for sidebar or dashboard widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   BarChart3, Zap, Activity,
 } from 'lucide-react';
@@ -20,6 +20,11 @@ import {
   getPersonalityBadgeRadius,
   getChartConfig,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhSprintVelocityProps, SprintVelocityData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -38,8 +43,8 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass && !!t.glass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const chartCfg = getChartConfig(t);
 
     const {
@@ -88,6 +93,10 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     }, [sprints]);
 
     if (loading) {
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
       return (
         <Box className={className} style={{ ...card, ...animStyle, ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[4] }}>
@@ -102,6 +111,8 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
         className={className}
         role="region"
         aria-label="Sprint velocity"
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

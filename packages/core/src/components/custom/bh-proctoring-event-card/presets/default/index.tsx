@@ -7,7 +7,7 @@
  * Glass-aware, personality-driven.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Shield, Eye, EyeOff, CheckCircle, XCircle, Clock,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -27,6 +27,10 @@ import {
   getAccentAwareLayout,
   createDividerStyle,
   formatDistanceToNow,
+
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringEventCardProps,
@@ -98,8 +102,8 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       event: rawEventView,
@@ -183,6 +187,11 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
 
       return items;
     }, [metadata]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

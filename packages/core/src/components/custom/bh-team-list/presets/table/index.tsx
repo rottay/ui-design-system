@@ -28,6 +28,8 @@ import {
   createEmptyStateStyle,
   createPersonalitySkeletonStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhTeamListProps, RecruiterTeam } from '../../core';
 
@@ -96,6 +98,9 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
 
     /* -- Loading State --------------------------------------------- */
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const isGlass = t.surface.useGlass;
+
       return (
         <Box className={className} style={{ ...card, padding: t.spacing[6], ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[3], padding: t.spacing[8] }}>

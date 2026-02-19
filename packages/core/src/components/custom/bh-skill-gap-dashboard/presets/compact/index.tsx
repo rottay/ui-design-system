@@ -5,7 +5,7 @@
  * Condensed skill gap summary widget with top gaps and summary stats.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Target, TrendingDown, ChevronRight,
 } from 'lucide-react';
@@ -19,6 +19,11 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhSkillGapDashboardProps, SkillGapData } from '../../core';
 
@@ -49,8 +54,8 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       skills: rawSkills = [],
@@ -81,9 +86,20 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
       transition: entrance.transition,
     }), [entrance]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

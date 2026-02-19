@@ -25,6 +25,9 @@ import {
   createPersonalityAccentBar,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhTemplateLibraryProps, TemplateItem, TemplateFilter, IndustryGroup } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -600,6 +603,9 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
     };
 
     /* ── Render ──────────────────────────────────────────────────────── */
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
     return (
       <div style={containerStyle} className={className}>
         {accentBar && <Box style={accentBar} />}

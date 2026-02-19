@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Target, BarChart3, FileText, Download, CheckCircle,
   Clock, User, Scale, ChevronRight, AlertCircle, Layers,
@@ -27,6 +27,9 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhScorecardDetailProps,
@@ -65,7 +68,7 @@ function getStatusBadgeKey(status: string): 'primary' | 'warning' | 'success' {
 }
 
 function getStatusLabel(status: string): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -263,8 +266,8 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
     Text = primitives.Text;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       scorecard: rawScorecard = {} as Partial<ScorecardDetail>,
@@ -307,6 +310,8 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     return (
       <Box

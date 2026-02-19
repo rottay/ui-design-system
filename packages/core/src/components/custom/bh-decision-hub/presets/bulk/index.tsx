@@ -20,6 +20,9 @@ import {
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhDecisionHubProps, DecisionCandidate, DecisionAction,
@@ -48,8 +51,11 @@ function ScoreRing({ score, t }: { score: number; t: DesignTokens }) {
   const size = 36; const r = 13; const c = 2 * Math.PI * r;
   const Box = _BBox;
   const Text = _BText;
-  return (
-    <Box style={{ position: 'relative' as const, width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Score: ${score}%`}>
+return (
+    <Box 
+      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+      style={{ position: 'relative' as const, width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Score: ${score}%`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="3" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
@@ -168,6 +174,9 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
     const decisionIcons: Record<DecisionAction, React.ReactNode> = {
       advance: <ThumbsUp size={12} />, reject: <ThumbsDown size={12} />, hold: <Pause size={12} />,
     };
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
     return (
       <Box className={className} style={{
@@ -439,6 +448,7 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Reject category:</Text>
                         {(['not_qualified', 'culture_fit', 'compensation', 'timing', 'other'] as RejectCategory[]).map(cat => {
                           const isActive = existing.rejectCategory === cat;
+
                           return (
                             <Box key={cat} onClick={() => setDecision(candidate.id, 'reject', cat)} role="button" tabIndex={0} aria-label={getRejectCategoryLabel(cat)} aria-pressed={isActive} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDecision(candidate.id, 'reject', cat); } }} style={{
                               padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br,

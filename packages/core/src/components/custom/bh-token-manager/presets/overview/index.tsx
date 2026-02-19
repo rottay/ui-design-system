@@ -25,6 +25,8 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhTokenManagerProps,
@@ -44,7 +46,7 @@ import type { DesignTokens } from '../../../../../core/types/tokens';
 function formatTokenCount(value: number): string {
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
-  return (value || 0).toLocaleString();
+return (value || 0).toLocaleString();
 }
 
 /* ------------------------------------------------------------------ */
@@ -340,6 +342,8 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
     const donutStroke = 24;
     const forecastWidth = 560;
     const forecastHeight = 180;
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
 
     return (
       <Box
@@ -1357,6 +1361,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
                 {teamQuotas.map((team, i) => {
                   const pct = team.limit > 0 ? Math.min((team.used / team.limit) * 100, 100) : 0;
+
                   return (
                     <Box
                       key={team.teamId}

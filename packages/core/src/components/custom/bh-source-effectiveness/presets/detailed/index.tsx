@@ -6,7 +6,7 @@
  * with a hire rate line overlay. Glass-aware, personality-driven.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Globe, Users, Award, TrendingUp, Star,
 } from 'lucide-react';
@@ -23,6 +23,9 @@ import {
   getChartConfig,
   createEmptyStateStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type { BhSourceEffectivenessProps, SourceMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -41,8 +44,8 @@ export const DetailedBhSourceEffectiveness = createPreset<BhSourceEffectivenessP
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const chartCfg = getChartConfig(t);
 
     const {
@@ -81,6 +84,11 @@ export const DetailedBhSourceEffectiveness = createPreset<BhSourceEffectivenessP
       () => [...sources].sort((a, b) => b.hireRate - a.hireRate),
       [sources],
     );
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
 
     return (
       <Box

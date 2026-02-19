@@ -5,7 +5,7 @@
  * Condensed appeal review card for sidebar or list view.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Scale, CheckCircle, XCircle, User, Clock,
 } from 'lucide-react';
@@ -17,6 +17,12 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   formatDistanceToNow,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhAppealReviewProps, AppealData } from '../../core';
 
@@ -58,8 +64,8 @@ export const CompactBhAppealReview = createPreset<BhAppealReviewProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       appeal: rawAppeal = {} as Partial<AppealData>,
@@ -84,9 +90,22 @@ export const CompactBhAppealReview = createPreset<BhAppealReviewProps>({
 
     const isPending = appeal.status === 'pending' || appeal.status === 'under-review';
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

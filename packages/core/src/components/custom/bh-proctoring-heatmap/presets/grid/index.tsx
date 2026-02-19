@@ -6,7 +6,7 @@
  * Color intensity represents event count.
  */
 
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState} from 'react';
 import { Grid } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -16,6 +16,10 @@ import {
   createPersonalitySectionHeaderStyle,
   createPersonalityAccentBar,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringHeatmapProps,
@@ -87,7 +91,7 @@ export const GridBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       data: rawData = undefined,
@@ -129,6 +133,11 @@ export const GridBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>({
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

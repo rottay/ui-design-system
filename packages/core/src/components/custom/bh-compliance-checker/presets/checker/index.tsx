@@ -6,7 +6,7 @@
  * categorized rules, status badges, and recheck action.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Shield, CheckCircle, XCircle, AlertTriangle,
   MinusCircle, RefreshCw, ChevronRight, Clock,
@@ -26,6 +26,8 @@ import {
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
   formatDistanceToNow,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhComplianceCheckerProps, ComplianceRule } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -110,6 +112,9 @@ function ScoreDonut({ score, tokens: t, size = 140 }: {
     : score >= 60 ? t.colors.warningScale[500]
     : t.colors.errorScale[500];
 
+  const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
   return (
     <Box style={{ position: 'relative', width: size, height: size }}>
       <svg
@@ -154,8 +159,8 @@ export const CheckerBhComplianceChecker = createPreset<BhComplianceCheckerProps>
     Text = primitives.Text;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       rules: rawRules = [],

@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   ListOrdered, Clock, CheckCircle, XCircle, Pause, Play,
   RefreshCw, AlertTriangle, ChevronRight, Loader, Zap,
@@ -28,6 +28,8 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createProgressBarStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type {
   BhScoringJobQueueProps,
@@ -52,7 +54,7 @@ function getPriorityColor(priority: ScoringJobPriority, t: DesignTokens): string
 }
 
 function getPriorityLabel(priority: ScoringJobPriority): string {
-  return (priority || '').charAt(0).toUpperCase() + (priority || '').slice(1);
+return (priority || '').charAt(0).toUpperCase() + (priority || '').slice(1);
 }
 
 function getStatusBadgeKey(status: ScoringJobStatus | string): 'primary' | 'success' | 'error' | 'warning' | 'secondary' {
@@ -138,8 +140,8 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       jobs: rawJobs = [],
@@ -208,6 +210,8 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
       { label: 'Completed', value: stats.completed, icon: CheckCircle, color: t.colors.successScale },
       { label: 'Failed', value: stats.failed, icon: XCircle, color: t.colors.errorScale },
     ], [stats, t]);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     return (
       <Box

@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import {
   Briefcase, FileText, X, Save, Loader2,
   DollarSign, AlertCircle, ChevronDown,
@@ -23,6 +23,10 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   getAccentAwareLayout,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type { BhPositionFormProps, PositionFormData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -81,8 +85,8 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       initialData,
@@ -137,9 +141,16 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
       marginBottom: t.spacing[3],
     }), [t, ptypo]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ ...card, ...animStyle, padding: 0, overflow: 'hidden', ...accentLayout.outer,
           ...style }}
       >

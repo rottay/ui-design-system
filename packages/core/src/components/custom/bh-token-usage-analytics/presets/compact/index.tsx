@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Coins,
   TrendingUp,
@@ -28,6 +28,10 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createProgressBarStyle,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type {
   BhTokenUsageAnalyticsProps,
@@ -148,6 +152,12 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
 
     /* -- Loading -------------------------------------------------------- */
     if (loading) {
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />
@@ -162,6 +172,8 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
         className={className}
         role="region"
         aria-label={title}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',
@@ -327,6 +339,7 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
             const barColor = categoryColors[idx % categoryColors.length];
             const bar = createProgressBarStyle(t, { color: barColor, percent: cat.percentage });
             const itemEntrance = createEntranceAnimation(t, { index: idx });
+
             return (
               <Box key={cat.category} style={{
                 ...animStyle(idx),

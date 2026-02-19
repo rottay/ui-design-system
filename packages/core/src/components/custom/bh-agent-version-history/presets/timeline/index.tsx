@@ -21,6 +21,9 @@ import {
   createEmptyStateStyle,
   createProgressBarStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhAgentVersionHistoryProps, AgentVersion } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -79,6 +82,8 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
     }, [versions]);
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />

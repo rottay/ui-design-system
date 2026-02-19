@@ -38,6 +38,10 @@ import {
   createStaggerDelay,
   createProgressBarStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhManagerConsoleProps,
@@ -125,7 +129,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
     }, [onRecruiterClick]);
 
     /* ---- Styles ---- */
-    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7] }), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -167,6 +171,9 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
     });
 
     /* ================================================================ */
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...glassOverride, ...style }}>
         {accentBar && <Box style={accentBar} />}
@@ -197,6 +204,8 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                   tabIndex={0}
                   onClick={() => handleTeamChange((tm.id ?? ''))}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleTeamChange((tm.id ?? '')); }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                     borderRadius: badgeRadius,

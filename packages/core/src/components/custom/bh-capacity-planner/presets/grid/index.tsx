@@ -16,6 +16,12 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhCapacityPlannerProps, RecruiterCapacity, RebalanceSuggestion, CapacitySummary } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -58,8 +64,7 @@ function UtilizationRing({ percent, status, t }: { percent: number; status: stri
   const clamped = Math.min(percent, 150);
   const progress = (Math.min(clamped, 100) / 100) * circ;
   const color = getRingColor(status, t);
-
-  return (
+return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth={stroke} />
       <circle
@@ -67,6 +72,8 @@ function UtilizationRing({ percent, status, t }: { percent: number; status: stri
         stroke={color} strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={`${progress} ${circ}`}
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ transition: `stroke-dasharray ${t.personality.animation.entranceDuration}ms ease` }}
       />
       {percent > 100 && (
@@ -126,6 +133,11 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
       if (controlledSelected === undefined) setInternalSelected(id);
       onRecruiterSelect?.(id);
     }, [controlledSelected, onRecruiterSelect]);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box className={className} style={{
@@ -178,6 +190,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
             {recruiters.map(rec => {
               const isSelected = selected === rec.id;
               const sc = getStatusConfig((rec.status ?? ''), t);
+
               return (
                 <Box key={rec.id}
                   role="button"

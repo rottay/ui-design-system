@@ -5,7 +5,7 @@
  * Condensed diversity overview with mini stacked bars.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Heart,
 } from 'lucide-react';
@@ -17,6 +17,12 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhDiversityDashboardProps, DiversityMetric } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -47,7 +53,7 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const colors = useMemo(() => SEGMENT_COLORS(t), [t]);
 
     const {
@@ -73,9 +79,20 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
       transition: entrance.transition,
     }), [entrance]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

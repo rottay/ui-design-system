@@ -6,7 +6,7 @@
  * and compact event list. Designed for sidebar or widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Shield, AlertTriangle, Eye, EyeOff, Activity,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -26,6 +26,10 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhProctoringDashboardProps,
@@ -75,8 +79,8 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       stats = { totalEvents: 0, unreviewedCount: 0, suspiciousCandidates: 0, averageRiskScore: 0 },
@@ -110,9 +114,16 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
       [severityCounts],
     );
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

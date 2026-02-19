@@ -6,7 +6,7 @@
  * Shows fewer hour labels, tighter spacing.
  */
 
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState} from 'react';
 import { Grid } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -15,6 +15,10 @@ import {
   getPersonalityTypography,
   createPersonalitySectionHeaderStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringHeatmapProps,
@@ -80,7 +84,7 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       data: rawData = undefined,
@@ -122,6 +126,11 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

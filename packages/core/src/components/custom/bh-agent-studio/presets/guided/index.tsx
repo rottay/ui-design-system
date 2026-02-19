@@ -25,6 +25,10 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhAgentStudioProps,
@@ -142,6 +146,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
     const agentTypeConfig = useMemo(() => getAgentTypeConfig(tokens), [tokens]);
     const providerConfig = useMemo(() => getProviderConfig(tokens), [tokens]);
     const validationColors = useMemo(() => getValidationStatusColors(tokens), [tokens]);
@@ -415,6 +421,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   aria-label={`Agent type: ${config.label}`}
                   onClick={() => updateAgent({ type })}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ type }); } }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',

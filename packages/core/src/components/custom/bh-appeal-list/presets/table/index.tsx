@@ -6,7 +6,7 @@
  * priority indicators, and click-to-select interaction.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Scale, Filter, ChevronRight, Clock,
   AlertTriangle, User, Briefcase,
@@ -25,6 +25,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   formatDistanceToNow,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhAppealListProps, AppealListItem } from '../../core';
 
@@ -83,8 +86,8 @@ export const TableBhAppealList = createPreset<BhAppealListProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       appeals: rawAppeals = [],
@@ -121,6 +124,11 @@ export const TableBhAppealList = createPreset<BhAppealListProps>({
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

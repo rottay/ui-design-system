@@ -35,6 +35,11 @@ import {
   createStatValueStyle, createStatLabelStyle,
   createTrendStyle, formatScore, ICON_SIZES,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
@@ -75,7 +80,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
   render: (ctx: PresetContext<BhScoringInsightsProps>) => {
     const { primitives: { Box, Flex, Stack, Text }, props, tokens: t } = ctx;
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       kpis: rawKpis = [],
@@ -115,7 +120,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
       setActiveSection(key);
     }, []);
 
-    const card = useMemo(() => createCardStyle(t, { padding: 28, glass: isGlass }), [t, isGlass]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7], glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
@@ -176,6 +181,13 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], width: '100%', height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
@@ -260,7 +272,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
         </Box>
 
         {/* -- Tab Nav -- */}
-        <Box role="tablist" aria-label="Scoring insights sections" style={{ display: 'flex', gap: t.spacing[1], marginBottom: t.spacing[6], padding: 3, borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[100] }}>
+        <Box role="tablist" aria-label="Scoring insights sections" style={{ display: 'flex', gap: t.spacing[1], marginBottom: t.spacing[6], padding: t.spacing[1], borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[100] }}>
           {TABS.map((tab, i) => {
             const TabIcon = tab.icon;
             const isActive = activeSection === tab.key;
@@ -590,7 +602,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                     const entrance = createEntranceAnimation(t, { index: idx });
                     return (
                       <Box key={tu.date} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
-                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{tu.date}</Text>
                           <Box style={{ display: 'flex', gap: t.spacing[2] }}>
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{tu.totalTokens.toLocaleString()}</Text>

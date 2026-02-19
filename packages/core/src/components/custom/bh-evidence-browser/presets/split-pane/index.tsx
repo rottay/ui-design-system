@@ -9,7 +9,7 @@
  * Aligned with dm-scoring Evidence entity (3-level impact: positive/negative/neutral).
  */
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BhEvidenceBrowserProps, EvidenceImpact, TranscriptSegment, EvidenceItem, EvidenceFilter } from '../../core';
 import { getImpactColors, getImpactLabel, getSpeakerColors, IMPACT_OPTIONS, n } from '../../core';
@@ -127,6 +127,12 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
 
     /* -- Loading state ------------------------------------------------ */
     if (loading) {
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+
       return (
         <Box className={className} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -145,6 +151,8 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
         className={className}
         role="region"
         aria-label={interviewTitle ? `Evidence browser: ${interviewTitle}` : 'Evidence browser'}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...createCardStyle(t, { elevation: 'sm', padding: 0, glass: isGlass }),
           borderRadius: t.borderRadius.lg,

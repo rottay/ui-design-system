@@ -29,6 +29,9 @@ import {
   getHoverTransform,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhCalibrationViewProps,
@@ -201,6 +204,11 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
       { key: 'adjustments', label: 'Adjustments', icon: Lightbulb },
     ], []);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
+
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
         {accentBar && <Box style={accentBar} />}
@@ -259,6 +267,8 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                 aria-selected={isActive}
                 aria-controls={`panel-${tab.key}`}
                 onClick={() => handleTabChange(tab.key)}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

@@ -24,6 +24,9 @@ import {
   createEmptyStateStyle,
   getAccentAwareLayout,
   ICON_SIZES,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import { PlayCircle, BarChart3, Eye, EyeOff, Calendar, Clock, Bot, AlertTriangle, Coins } from 'lucide-react';
 import type { DesignTokens } from '../../../../../types';
@@ -111,6 +114,12 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
     );
 
     if (loading) {
+      const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+
       return (
         <Box className={className} style={{
           ...createEmptyStateStyle(tokens),
@@ -219,6 +228,8 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
               aria-pressed={showOverlay}
               onClick={toggleOverlay}
               onKeyDown={handleOverlayKeyDown}
+              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
               style={{
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                 borderRadius: badgeRadius,
@@ -353,6 +364,7 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
                 {scoreSummary.dimensions.map(dim => {
                   const pct = dim.maxScore > 0 ? (dim.score / dim.maxScore) * 100 : 0;
                   const barColor = getScoreBarColor(dim.score, dim.maxScore, tokens);
+
                   return (
                     <Box key={dim.code}>
                       <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>

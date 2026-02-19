@@ -22,6 +22,10 @@ import {
   getPersonalityBadgeRadius,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createCardHoverStyles,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhTranscriptViewerProps, TranscriptHighlight, TranscriptSegment, TranscriptMeta, ScoringDimension } from '../../core';
 import {
@@ -150,9 +154,16 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
       onDimensionSelect?.(dimId);
     }, [onDimensionSelect]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column' as const,

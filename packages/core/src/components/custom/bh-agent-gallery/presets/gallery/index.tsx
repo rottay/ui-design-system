@@ -27,6 +27,9 @@ import {
   getAccentAwareLayout,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhAgentGalleryProps,
@@ -294,6 +297,9 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       backgroundImage: 'none',
       minWidth: 120,
     }), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box

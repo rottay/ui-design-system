@@ -25,6 +25,10 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhAgentStudioProps,
@@ -116,8 +120,13 @@ interface SectionProps {
 }
 
 function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass, children, badge, Box, Text }: SectionProps) {
+  const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+  const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
   return (
     <Box
+      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
       style={{
         ...createCardStyle(tokens, { glass, elevation: 'sm' }),
         marginBottom: tokens.spacing[4],

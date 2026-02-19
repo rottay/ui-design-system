@@ -30,6 +30,8 @@ import {
   createProgressBarStyle,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhTeamDetailProps, TeamPosition } from '../../core';
 
@@ -66,7 +68,7 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
     const metrics = metricsProp?.length ? metricsProp : [];
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[5] }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -86,6 +88,9 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
     });
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const isGlass = t.surface.useGlass;
+
       return (
         <Box className={className} style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
           <Loader2 size={18} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />

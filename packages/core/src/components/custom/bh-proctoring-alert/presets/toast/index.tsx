@@ -6,7 +6,7 @@
  * Designed for corner placement with shadow and glass.
  */
 
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   AlertTriangle, X, Eye, XCircle,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -21,6 +21,11 @@ import {
   getPersonalityBadgeRadius,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringAlertProps,
@@ -119,8 +124,8 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       event: rawEvent,
@@ -156,11 +161,22 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
       transition: entrance.transition,
     }), [entrance]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
         role="alert"
         aria-live="polite"
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

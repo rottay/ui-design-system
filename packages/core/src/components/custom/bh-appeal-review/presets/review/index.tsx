@@ -6,7 +6,7 @@
  * reviewer notes, and approve/deny actions.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Scale, User, Briefcase, FileText, Clock,
   CheckCircle, XCircle, X, MessageSquare,
@@ -24,6 +24,9 @@ import {
   createPersonalityAccentBar,
   getAccentAwareLayout,
   formatDistanceToNow,
+
+  createCardHoverStyles,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhAppealReviewProps, AppealData } from '../../core';
 
@@ -65,8 +68,8 @@ export const ReviewBhAppealReview = createPreset<BhAppealReviewProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       appeal: rawAppeal = {} as Partial<AppealData>,
@@ -98,9 +101,16 @@ export const ReviewBhAppealReview = createPreset<BhAppealReviewProps>({
 
     const isPending = appeal.status === 'pending' || appeal.status === 'under-review';
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

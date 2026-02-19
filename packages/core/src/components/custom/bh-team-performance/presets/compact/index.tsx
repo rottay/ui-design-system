@@ -5,7 +5,7 @@
  * Horizontal inline bar chart showing a single metric across teams.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   BarChart3,
   TrendingUp,
@@ -26,6 +26,9 @@ import {
   createProgressBarStyle,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhTeamPerformanceProps, TeamPerfData } from '../../core';
 
@@ -63,7 +66,7 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
     const activeMetric = controlledMetric ?? 'hires';
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[5] }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -89,6 +92,11 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
     });
 
     if (loading) {
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const isGlass = t.surface.useGlass;
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+
       return (
         <Box className={className} style={{ ...animStyle(0), ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
           <Loader2 size={18} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -130,6 +138,8 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
                 onKeyDown={onTeamClick ? (e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTeamClick(team.teamName); }
                 } : undefined}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   ...animStyle(idx),
                   display: 'flex',

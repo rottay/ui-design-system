@@ -22,6 +22,11 @@ import {
   createPersonalityAccentBar,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhOnboardingFlowProps, FormField } from '../../core';
 import {
@@ -173,9 +178,20 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
         const rotation = `${Math.random() * 360}deg`;
         const size = 5 + Math.random() * 7;
 
+        const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
+        const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+        const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+        const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
+
         return (
           <div
             key={i}
+            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={{
               position: 'absolute' as const,
               top: -16,

@@ -24,6 +24,10 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhOfferExpirationProps, ExpiringOffer } from '../../core';
 import { offersToExpiringOffers } from '../../core';
@@ -76,8 +80,8 @@ export const CardsBhOfferExpiration = createPreset<BhOfferExpirationProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       dbOffers,
@@ -123,6 +127,13 @@ export const CardsBhOfferExpiration = createPreset<BhOfferExpirationProps>({
     const renderOffer = (offer: ExpiringOffer, idx: number) => {
       const isHovered = hoveredOffer === offer.id;
       const urgencyColor = getUrgencyColor(offer.daysRemaining, t);
+
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
+      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
       return (
         <Box

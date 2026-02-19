@@ -24,6 +24,9 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhInterviewCenterProps, InterviewDisplayStatus, InterviewDisplayMode, InterviewFilter, SortDirection } from '../../core';
 import { BH_INTERVIEW_CENTER_DEFAULTS, isAiInterview, getInterviewModeLabel, getInterviewStatusLabel, getInterviewDateStr, getInterviewDuration, getInterviewScore } from '../../core';
@@ -231,6 +234,11 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
 
     const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
     const clearSearch = useCallback(() => setSearch(''), []);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...style }}>

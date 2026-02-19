@@ -19,6 +19,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   getCardPadding,
+
+  createPersonalityAccentBar,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhOfferNegotiationProps, OfferNegotiation, CompensationPackage } from '../../core';
 import { offerToNegotiation } from '../../core';
@@ -32,7 +35,7 @@ function formatCurrency(value: number): string {
 }
 
 function totalCompValue(comp: CompensationPackage): number {
-  return (comp.baseSalary || 0) + (comp.signingBonus || 0) + (comp.annualBonus || 0) + (comp.equity || 0);
+return (comp.baseSalary || 0) + (comp.signingBonus || 0) + (comp.annualBonus || 0) + (comp.equity || 0);
 }
 
 function getStatusColor(status: string, tokens: DesignTokens): string {
@@ -86,6 +89,11 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
     const items = negotiations.length > 0 ? negotiations : negotiation ? [negotiation] : [];
 
     if (items.length === 0) {
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+
       return (
         <Box className={className} style={{ ...cardBase, padding: tokens.spacing[6], textAlign: 'center' as const, ...style }}>
           <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
@@ -253,6 +261,7 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
                       const val = (comp[field.key] as number) || 0;
                       const initialVal = initialComp ? ((initialComp[field.key] as number) || 0) : 0;
                       const diff = val - initialVal;
+
                       return (
                         <Box key={field.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <Text style={{

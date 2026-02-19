@@ -5,7 +5,7 @@
  * Condensed bulk email widget with recipient count and send button.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo} from 'react';
 import { Mail, Send, Users, CheckSquare, Square } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -15,6 +15,12 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhCandidateBulkEmailProps, BulkEmailRecipient } from '../../core';
 import { getCandidateFullName } from '../../core';
@@ -27,8 +33,8 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       recipients: rawRecipients = [],
@@ -64,9 +70,22 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
       transition: entrance.transition,
     }), [entrance]);
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

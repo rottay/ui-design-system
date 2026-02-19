@@ -25,6 +25,11 @@ import {
   createStaggerDelay,
   createProgressBarStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhTeamCardProps, TeamMetric } from '../../core';
 
@@ -60,7 +65,7 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
     const displayMetrics = metrics.slice(0, 2);
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 16 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[4] }), [t]);
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -75,6 +80,15 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
     const handleClick = useCallback(() => {
       onClick?.();
     }, [onClick]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const isGlass = t.surface.useGlass;
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

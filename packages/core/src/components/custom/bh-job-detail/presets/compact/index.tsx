@@ -15,6 +15,9 @@ import {
   createIconContainerStyle, getPersonalityTypography, getPersonalityBadgeRadius,
   getCardPadding,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhJobDetailProps } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -144,6 +147,10 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
       if (avatar) {
         return <Box style={{ width: size, height: size, borderRadius: tokens.borderRadius.full, backgroundImage: `url(${avatar})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />;
       }
+      const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
       return (
         <Box style={{
           ...createIconContainerStyle(tokens, { size, color: tokens.colors.primaryScale[100] }),
@@ -259,6 +266,8 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
                   aria-label={`View candidate ${c.name}`}
                   onClick={() => onCandidateClick?.(c.id)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCandidateClick?.(c.id); } }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,

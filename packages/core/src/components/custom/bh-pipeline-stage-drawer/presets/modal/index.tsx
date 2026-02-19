@@ -26,6 +26,10 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhPipelineStageDrawerProps,
@@ -78,8 +82,8 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] } as StageDetail,
@@ -146,6 +150,11 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
     }, []);
 
     if (!isOpen) return <Box style={{ display: 'none' }} />;
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       /* Overlay */

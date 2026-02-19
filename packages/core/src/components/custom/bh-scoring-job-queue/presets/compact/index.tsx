@@ -6,7 +6,7 @@
  * Designed for sidebar or widget placement. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   ListOrdered, Clock, CheckCircle, XCircle, Loader,
   Activity, ChevronRight, Zap, AlertTriangle,
@@ -23,6 +23,10 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhScoringJobQueueProps,
@@ -57,7 +61,7 @@ function getStatusBadgeKey(status: ScoringJobStatus | string): 'primary' | 'succ
 }
 
 function getStatusLabel(status: ScoringJobStatus | string): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -74,8 +78,8 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       jobs: rawJobs = [],
@@ -108,10 +112,16 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
         .sort((a, b) => (statusOrder[a.job?.status ?? 'pending'] ?? 2) - (statusOrder[b.job?.status ?? 'pending'] ?? 2))
         .slice(0, 3);
     }, [jobs]);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',
@@ -220,6 +230,7 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
             const status = jv.job?.status ?? 'pending';
             const priority = jv.priorityLabel ?? 'normal';
             const isSelected = selectedJobId === id;
+
             return (
               <Box
                 key={id || i}

@@ -19,6 +19,8 @@ import {
   createMetadataFieldStyle, createMetadataGridStyle, createMetadataValueStyle,
   createStatValueStyle, createStatLabelStyle,
   ICON_SIZES,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import { DollarSign, TrendingUp, AlertCircle, Coins, BarChart3, Activity } from 'lucide-react';
@@ -58,8 +60,13 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const searchCosts = Array.isArray(rawSearchCosts) ? rawSearchCosts : [];
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
       return (
-        <Box className={className} style={{
+        <Box className={className} 
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+          style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: `${tokens.spacing[10]}px`, ...style,
         }}>

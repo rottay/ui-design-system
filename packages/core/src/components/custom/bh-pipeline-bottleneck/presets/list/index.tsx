@@ -27,6 +27,10 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhPipelineBottleneckProps,
@@ -75,8 +79,8 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       stages: rawStages = [],
@@ -114,9 +118,16 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
       transition: entrance.transition,
     }), [entrance]);
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

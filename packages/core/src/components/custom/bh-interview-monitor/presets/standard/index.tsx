@@ -23,6 +23,9 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhInterviewMonitorProps,
@@ -156,6 +159,11 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
       } : {}),
     }), [t, bdr, glassCard, accentBar]);
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box className={className} style={{
         padding: `${t.spacing[6]}px`, backgroundColor: t.colors.neutral[50],
@@ -210,6 +218,8 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                 aria-pressed={autoRefresh}
                 onClick={handleAutoRefreshToggle}
                 onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, handleAutoRefreshToggle)}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: t.spacing[2],
                   padding: `${t.spacing[2]}px ${t.spacing[3]}px`,

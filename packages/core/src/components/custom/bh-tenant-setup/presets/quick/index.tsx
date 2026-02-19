@@ -23,6 +23,10 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhTenantSetupProps,
@@ -75,6 +79,9 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
     const animStyle = (index: number) => ({
       ...entrance.animate,
@@ -187,7 +194,6 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
         {QUICK_STEPS.map((step, idx) => {
           const isPast = idx < quickStep;
           const isCurrent = idx === quickStep;
-
           return (
             <Box key={step.key} style={{
               display: 'flex',
@@ -273,6 +279,8 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
             value={localFormData.orgName}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormData({ orgName: e.target.value })}
             placeholder="Your company name"
+            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={inputStyle}
           />
         </Box>
@@ -619,6 +627,8 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
     };
 
     /* ── Main Render ─────────────────────────────────────────── */
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+
     return (
       <Box className={className} style={containerStyle}>
         <style>{`

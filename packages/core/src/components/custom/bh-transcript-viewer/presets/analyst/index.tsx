@@ -25,6 +25,9 @@ import {
   createPersonalityAccentBar,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhTranscriptViewerProps, TranscriptHighlight, TranscriptSegment, TranscriptMeta, ScoringDimension } from '../../core';
 import {
@@ -158,6 +161,9 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
     });
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box

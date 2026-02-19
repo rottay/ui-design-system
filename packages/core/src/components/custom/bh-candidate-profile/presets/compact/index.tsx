@@ -25,6 +25,10 @@ import {
   formatDistanceToNow,
   getCardPadding,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhCandidateProfileProps, CandidateStats } from '../../core';
 import { getCandidateFullName, getCandidateRole, getCandidateLocation, getCandidateSkills } from '../../core';
@@ -46,7 +50,7 @@ import {
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  return (name || '').charAt(0).toUpperCase();
+return (name || '').charAt(0).toUpperCase();
 }
 
 function getStatusConfig(status: string, tokens: DesignTokens) {
@@ -117,12 +121,18 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
         const r = (size / 2) - 4;
         const circumference = 2 * Math.PI * r;
         const strokeOffset = circumference - (score / 100) * circumference;
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
         return (
           <Box style={{ position: 'relative', width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Score: ${score}`}>
             <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
               <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="3" />
               <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
                 strokeDasharray={circumference} strokeDashoffset={strokeOffset} strokeLinecap="round"
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{ transition: `stroke-dashoffset ${t.motion.hover}` }} />
             </svg>
             <Box style={{ 
@@ -237,6 +247,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               const yoe = skill.yearsOfExperience ?? 0;
               const proficiency = Math.min(100, yoe * 12);
               const progressStyle = createProgressBarStyle(t, { percent: proficiency, color: getScoreColor(proficiency, t) });
+
               return (
                 <Box key={skill.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700], width: 80, flexShrink: 0, fontWeight: t.typography.fontWeight.medium }}>

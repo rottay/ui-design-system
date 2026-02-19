@@ -29,6 +29,8 @@ import {
   createPersonalityAccentBar,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhTemplateLibraryProps, TemplateItem, TemplateFilter } from '../../core';
 import {
@@ -405,6 +407,8 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
     /* ── Sub-component: ExpandedDetail ────────────────────────── */
     const ExpandedDetail = ({ template }: { template: TemplateItem }) => {
       const accentBar = createPersonalityAccentBar(tokens);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
       return (
         <Box
           style={{

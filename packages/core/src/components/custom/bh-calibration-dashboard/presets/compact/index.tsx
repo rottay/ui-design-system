@@ -6,7 +6,7 @@
  * Designed for sidebar or widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Scale, PlayCircle, CheckCircle, PauseCircle,
   Target, ChevronRight, Clock,
@@ -21,6 +21,12 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhCalibrationDashboardProps,
@@ -62,7 +68,7 @@ function getStatusIcon(status: string) {
 }
 
 function getStatusLabel(status: string): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -79,8 +85,8 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       sessions: rawSessions = [],
@@ -107,10 +113,16 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
     }), [entrance]);
 
     const displaySessions = sessions.slice(0, 3);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

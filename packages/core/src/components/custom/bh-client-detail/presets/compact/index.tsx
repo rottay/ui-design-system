@@ -35,6 +35,9 @@ import {
   createProgressBarStyle,
   createDividerStyle,
   createPersonalityAccentBar,
+
+  createEmptyStateStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhClientDetailProps, ClientPosition, RevenuePoint } from '../../core';
 
@@ -86,7 +89,7 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
     const revenueHistory = revenueProp;
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[5] }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -137,6 +140,8 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
     const ContractIcon = contractConfig.icon;
 
     if (loading) {
+      const isGlass = t.surface.useGlass;
+
       return (
         <Box className={className} style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
           <Loader2 size={18} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />

@@ -27,6 +27,9 @@ import {
   createStatValueStyle,
   createStatLabelStyle,
   ICON_SIZES,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhHiringFunnelProps, FunnelStage } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -62,8 +65,8 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       stages: rawStages = [],
@@ -101,6 +104,9 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

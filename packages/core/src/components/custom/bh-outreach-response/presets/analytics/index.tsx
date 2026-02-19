@@ -22,6 +22,10 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhOutreachResponseProps, ResponseData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -68,8 +72,8 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       data: rawData = undefined,
@@ -108,9 +112,16 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
       return t.colors.errorScale[600];
     }, [overallResponseRate, t]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

@@ -19,6 +19,10 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhProviderConfigProps,
@@ -206,6 +210,8 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
     /* ------------------------------------------------------------------ */
     /*  Render                                                             */
     /* ------------------------------------------------------------------ */
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
     return (
       <Box
         className={className}

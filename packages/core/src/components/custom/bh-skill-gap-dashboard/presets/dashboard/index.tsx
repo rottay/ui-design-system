@@ -6,7 +6,7 @@
  * priority badges, candidate pool indicators, and summary stats.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Target, TrendingDown, TrendingUp, Users,
   AlertTriangle, ChevronRight, BarChart3, Zap,
@@ -25,6 +25,9 @@ import {
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhSkillGapDashboardProps, SkillGapData } from '../../core';
 
@@ -64,8 +67,8 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       skills: rawSkills = [],
@@ -110,6 +113,9 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

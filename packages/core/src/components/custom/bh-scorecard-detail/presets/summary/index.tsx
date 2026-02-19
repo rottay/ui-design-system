@@ -7,7 +7,7 @@
  * Follows same pattern as panel/compact presets using actual core types.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Target, TrendingUp, TrendingDown, CheckCircle,
   AlertCircle, Clock, User, ChevronRight, ChevronDown,
@@ -24,6 +24,12 @@ import {
   getPersonalityBadgeRadius,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhScorecardDetailProps,
@@ -68,7 +74,7 @@ function getStatusBadgeKey(status: string): 'primary' | 'warning' | 'success' {
 }
 
 function getStatusLabel(status: string): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -85,8 +91,8 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       scorecard: rawScorecard = {} as Partial<ScorecardDetail>,
@@ -130,6 +136,9 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
     const avgConfidence = dims.length > 0
       ? dims.reduce((sum: number, d: DimensionScore) => sum + n(d.confidence), 0) / dims.length
       : 0;
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
     return (
       <Box
@@ -382,6 +391,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
           {displayDims.map((dim: DimensionScore) => {
             const isHov = hoveredDim === dim.dimensionId;
             const barPct = (n(dim.score) / (n(dim.maxScore) || 1)) * 100;
+
             return (
               <Box key={dim.dimensionId}
                 role="button"

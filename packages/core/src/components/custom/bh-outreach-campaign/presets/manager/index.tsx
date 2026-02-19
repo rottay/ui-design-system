@@ -26,6 +26,9 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhOutreachCampaignProps, CampaignData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -75,8 +78,8 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       campaigns: rawCampaigns = [],
@@ -112,6 +115,9 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

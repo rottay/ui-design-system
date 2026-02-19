@@ -25,6 +25,8 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   getAccentAwareLayout,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type {
   BhPipelineVelocityChartProps,
@@ -92,8 +94,8 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       data: dataProp,
@@ -244,9 +246,14 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
       return { ...d, x: pt.x, y: pt.y };
     }, [hoveredIndex, data, linePoints]);
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

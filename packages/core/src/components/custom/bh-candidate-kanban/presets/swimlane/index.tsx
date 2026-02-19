@@ -16,6 +16,9 @@ import {
   createPersonalityAccentBar,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhCandidateKanbanProps, KanbanCandidate, KanbanStage, AiRecommendation, KanbanFilter } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -48,6 +51,9 @@ let _Text: any;
 function ScoreRing({ score, tokens: t, size = 30 }: { score: number; tokens: DesignTokens; size?: number }) {
   const color = getScoreColor(score, t); const r = (size / 2) - 3; const c = 2 * Math.PI * r;
   const B = _Box;
+  const divider = useMemo(() => createDividerStyle(t), [t]);
+  const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
   return (
     <B style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}
@@ -68,7 +74,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     _Text = Text;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const { jobName = '', totalCandidates = 0, stages: rawStages = [], candidates: rawCp = [], onCandidateClick, onScheduleInterview, onAddNote, onReject, filters: fp, onFilterChange, searchQuery: sqp, onSearchChange, className, style } = props;
 
@@ -83,7 +89,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     const filtered = useMemo(() => cp.filter(c => matchesFilters(c, fp, sq)), [cp, fp, sq]);
     const sources: string[] = ['applied', 'referral', 'sourced', 'agency', 'internal'];
     const bySrc = useMemo(() => { const m: Record<string, KanbanCandidate[]> = {}; sources.forEach(s => { m[s] = filtered.filter(c => c.source === s); }); return m; }, [filtered]);
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);

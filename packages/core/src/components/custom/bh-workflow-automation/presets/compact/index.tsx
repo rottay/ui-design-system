@@ -20,6 +20,12 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhWorkflowAutomationProps, WorkflowRule } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -38,8 +44,8 @@ export const CompactBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       rules: rawRules = [],
@@ -63,9 +69,22 @@ export const CompactBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
       transition: entrance.transition,
     }), [entrance]);
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

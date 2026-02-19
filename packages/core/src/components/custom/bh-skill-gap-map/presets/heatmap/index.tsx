@@ -7,7 +7,7 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -20,6 +20,10 @@ import {
   createPersonalitySectionHeaderStyle,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhSkillGapMapProps, GapPriority, SkillGapItem, DimensionHeatmapCell, GapSummary } from '../../core';
 import { getPriorityColors, getScoreColor, getScoreBgColor } from '../../core';
@@ -36,7 +40,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
   name: 'BhSkillGapMap.Heatmap',
   render: ({ primitives, props, tokens: t }: PresetContext<BhSkillGapMapProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const pc = getPriorityColors(t);
     const isGlass = t.surface.useGlass && !!t.glass;
 
@@ -105,6 +109,8 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const selectedGap = useMemo(() => gaps.find(g => g.id === selectedGapId), [gaps, selectedGapId]);
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} role="status" aria-label="Loading skill gap data" style={{ padding: t.spacing[8], textAlign: 'center', color: t.colors.neutral[500], ...style }}>
           <Text>Loading skill gap data...</Text>

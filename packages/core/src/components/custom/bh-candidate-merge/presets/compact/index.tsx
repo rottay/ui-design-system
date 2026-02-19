@@ -5,7 +5,7 @@
  * Condensed duplicate alert card with quick merge action.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo} from 'react';
 import { GitMerge, AlertTriangle } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -15,6 +15,13 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhCandidateMergeProps, MergeField } from '../../core';
 import { getCandidateFullName } from '../../core';
@@ -27,8 +34,8 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       candidates: rawCandidates = [],
@@ -55,9 +62,24 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
       transition: entrance.transition,
     }), [entrance]);
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

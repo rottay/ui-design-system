@@ -15,6 +15,13 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhOfferExpirationProps, ExpiringOffer } from '../../core';
 import { offersToExpiringOffers } from '../../core';
@@ -33,8 +40,8 @@ export const ListBhOfferExpiration = createPreset<BhOfferExpirationProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       dbOffers,
@@ -66,9 +73,24 @@ export const ListBhOfferExpiration = createPreset<BhOfferExpirationProps>({
       transition: entrance.transition,
     }), [entrance]);
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

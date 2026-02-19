@@ -6,7 +6,7 @@
  * Each item shows: timestamp, event type icon, severity dot, candidate, description.
  */
 
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState} from 'react';
 import {
   Activity, MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
   ChevronRight, Users,
@@ -25,6 +25,9 @@ import {
   getAccentAwareLayout,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringActivityProps,
@@ -92,8 +95,8 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       events: rawEvents = [],
@@ -145,6 +148,11 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
       const EventIcon = getEventTypeIcon(event.eventType ?? 'tab_switch');
       const sevColor = getSeverityColor(event.severity ?? 'low', t);
       const isHovered = hoveredEvent === event.id;
+
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
       return (
         <Box

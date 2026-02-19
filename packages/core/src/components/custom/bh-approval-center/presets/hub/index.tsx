@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import {
   Shield, CheckCircle, XCircle, Clock,
   Briefcase, DollarSign, FileText, Users,
@@ -28,6 +28,8 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalitySectionHeaderStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhApprovalCenterProps, ApprovalItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -85,8 +87,8 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       approvals: rawApprovals = [],
@@ -140,6 +142,9 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
     }, [onReject]);
 
     let globalIdx = 0;
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

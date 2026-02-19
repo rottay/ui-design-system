@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useMemo} from 'react';
 import {
   GitBranch, CheckCircle, XCircle, Clock,
   SkipForward, User, MessageSquare, Shield,
@@ -24,6 +24,10 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type { BhApprovalChainProps, ApprovalChainStep } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -60,8 +64,8 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       steps: rawSteps = [],
@@ -98,9 +102,18 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
       onStepClick?.(id);
     }, [onStepClick]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ ...card, padding: 0, overflow: 'hidden', ...(accentBar ? accentLayout.outer : {}), ...style }}
       >
         {accentBar && <Box style={accentBar} />}

@@ -33,6 +33,11 @@ import {
   createStaggerDelay,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhDiscussionThreadProps,
@@ -135,7 +140,7 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
-    const card = useMemo(() => createCardStyle(t, { padding: 16 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[4] }), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
@@ -154,6 +159,11 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
       if (statusFilter !== 'all' && thread.status !== statusFilter) return false;
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
+        const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+        const divider = useMemo(() => createDividerStyle(t), [t]);
+        const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+        const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
         return (
           thread.title.toLowerCase().includes(q) ||
           thread.entityName.toLowerCase().includes(q) ||
@@ -249,7 +259,7 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
                 padding: `0 ${t.spacing[1]}px`,
                 flexShrink: 0,
               }}>
-                <Text style={{ fontSize: 10, color: 'inherit' }}>{thread.unreadCount}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: 'inherit' }}>{thread.unreadCount}</Text>
               </Box>
             )}
           </Box>
@@ -765,11 +775,11 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
                             alignItems: 'center',
                             justifyContent: 'center',
                             marginLeft: -8,
-                            fontSize: 10,
+                            fontSize: t.typography.fontSize.xs,
                             color: t.colors.neutral[500],
                             fontWeight: t.typography.fontWeight.medium,
                           }}>
-                            <Text style={{ fontSize: 10 }}>+{selectedThread.participants.length - 5}</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs }}>+{selectedThread.participants.length - 5}</Text>
                           </Box>
                         )}
                       </Box>

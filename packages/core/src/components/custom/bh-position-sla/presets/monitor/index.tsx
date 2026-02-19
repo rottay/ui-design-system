@@ -6,7 +6,7 @@
  * and position details. Personality-driven, glass-aware.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import {
   Clock, AlertTriangle, Shield, Users,
   ChevronRight, Target, TrendingDown, CheckCircle,
@@ -25,6 +25,9 @@ import {
   createEmptyStateStyle,
   createCardHoverStyles,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type { BhPositionSlaProps, PositionSlaData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -63,8 +66,8 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       positions: rawPositions = [],
@@ -106,6 +109,11 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
     const handleClick = useCallback((id: string) => {
       onPositionClick?.(id);
     }, [onPositionClick]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
 
     return (
       <Box

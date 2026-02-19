@@ -24,6 +24,8 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhWorkflowStageEditorProps, WorkflowStage } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -82,8 +84,8 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       stages: rawStages = [],
@@ -120,6 +122,9 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

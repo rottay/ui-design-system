@@ -6,7 +6,7 @@
  * Click a segment to filter by severity.
  */
 
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState} from 'react';
 import { Shield } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -18,6 +18,10 @@ import {
   createPersonalitySectionHeaderStyle,
   createPersonalityAccentBar,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringSeverityProps,
@@ -57,9 +61,9 @@ export const DonutBhProctoringSeverity = createPreset<BhProctoringSeverityProps>
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const chartCfg = getChartConfig(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       severityCounts: rawSeverityCounts = [],
@@ -109,6 +113,11 @@ export const DonutBhProctoringSeverity = createPreset<BhProctoringSeverityProps>
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

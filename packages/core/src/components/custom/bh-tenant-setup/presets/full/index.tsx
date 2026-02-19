@@ -24,6 +24,10 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhTenantSetupProps,
@@ -88,6 +92,9 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
     const animStyle = (index: number) => ({
       ...entrance.animate,
@@ -256,7 +263,6 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
           const isCurrentStep = idx === localCurrentStep;
           const isPast = step.isComplete;
           const stepIcon = STEP_ICONS[step.key] ?? <Text style={{ fontSize: tokens.typography.fontSize.sm }}>{idx + 1}</Text>;
-
           return (
             <Box key={step.key}>
               <Box
@@ -266,6 +272,8 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     onStepChange?.(idx);
                   }
                 }}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   ...hoverTransition,
                   display: 'flex',

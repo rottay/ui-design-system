@@ -7,7 +7,7 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -25,6 +25,12 @@ import {
   createStatLabelStyle,
   ICON_SIZES,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhClientDirectoryProps, ClientFilter,
@@ -192,6 +198,15 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
     const filtered = useMemo(() => filterClients(clients, filters), [clients, filters]);
     const selected = useMemo(() => clients.find(c => c.id === selectedId) ?? null, [clients, selectedId]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box className={className} role="region" aria-label="Client Directory" style={{
         ...createCardStyle(t, { elevation: 'md' }),
@@ -224,6 +239,8 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
                     tabIndex={0}
                     aria-pressed={viewMode === mode}
                     aria-label={`${mode} view`}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       padding: `${t.spacing[1]}px ${t.spacing[2]}px`,

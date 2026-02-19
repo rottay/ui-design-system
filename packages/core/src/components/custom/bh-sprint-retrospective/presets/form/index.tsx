@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware. Only uses Box and Text primitives.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   ThumbsUp, Trash2, Plus, Smile, AlertTriangle, Zap,
   MessageCircle, Users, Activity, Target, CheckCircle2,
@@ -29,6 +29,8 @@ import {
   getAccentAwareLayout,
   createMetadataFieldStyle, createMetadataGridStyle,
   createStatValueStyle, createStatLabelStyle, ICON_SIZES,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhSprintRetrospectiveProps, RetroItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -84,8 +86,8 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass && !!t.glass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       items: rawItems = [],
@@ -152,6 +154,8 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
     const totalVotes = useMemo(() => items.reduce((s, i) => s + (i.votes ?? 0), 0), [items]);
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ ...card, ...animStyle(0), ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8] }}>
@@ -166,6 +170,8 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
         className={className}
         role="region"
         aria-label={`Sprint Retrospective - ${sprintName}`}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

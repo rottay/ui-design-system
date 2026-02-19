@@ -20,6 +20,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import {
   PatternKanbanBoard,
@@ -110,7 +113,7 @@ function getSlaBarColor(status: SlaStatus, t: DesignTokens): string {
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  return (parts[0]?.[0] ?? '').toUpperCase();
+return (parts[0]?.[0] ?? '').toUpperCase();
 }
 
 function matchesFilters(c: KanbanCandidate, f: KanbanFilter | undefined, q: string): boolean {
@@ -154,7 +157,7 @@ function ScoreRing({ score, tokens: t, size = 40 }: { score: number; tokens: Des
       <B style={{
         position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: size <= 30 ? 8 : t.typography.fontSize.xs,
+        fontSize: size <= 30 ? 8 : tokens.typography.fontSize.xs,
         fontWeight: t.typography.fontWeight.bold, color,
       }}>
         {score}
@@ -176,8 +179,8 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     _Text = Text;
 
     const isGlass = t.surface.useGlass;
-    const br = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       jobName = '', totalCandidates = 0,
@@ -254,14 +257,14 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
       const sla = getStageSlaStatus(col.items, stage);
 
       return (
-        <Box style={{ marginBottom: t.spacing[1] }} role="heading" aria-level={3}>
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], letterSpacing: ptypo.headingLetterSpacing }}>{stage.name}</Text>
+        <Box style={{ marginBottom: tokens.spacing[1] }} role="heading" aria-level={3}>
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], letterSpacing: ptypo.headingLetterSpacing }}>{stage.name}</Text>
               <Text style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 22, height: 22,
                 borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], color: t.colors.neutral[600],
-                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, padding: `0 ${t.spacing[2]}px`,
+                fontSize: tokens.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, padding: `0 ${tokens.spacing[2]}px`,
               }}>{count}</Text>
             </Box>
           </Box>
@@ -293,7 +296,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
           style={{
             ...cardBase,
             ...hoverStyles.base,
-            padding: `${t.spacing[4]}px`,
+            padding: `${tokens.spacing[4]}px`,
             cursor: 'grab',
             borderColor: isSel ? t.colors.primaryScale[400] : isBulk ? t.colors.primaryScale[200] : t.colors.neutral[100],
             backgroundColor: isSel ? t.colors.primaryScale[50] : isBulk ? t.colors.primaryScale[50] ?? t.colors.common.white : t.colors.common.white,
@@ -310,18 +313,18 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             <button onClick={e => { e.stopPropagation(); toggleBulk(c.id); }}
               aria-label={isBulk ? `Deselect ${c.name}` : `Select ${c.name}`}
               aria-pressed={isBulk}
-              style={{ position: 'absolute', top: t.spacing[2], left: t.spacing[2], width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: isBulk ? t.colors.primaryScale[600] : t.colors.neutral[300], zIndex: 2 }}>
+              style={{ position: 'absolute', top: tokens.spacing[2], left: tokens.spacing[2], width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: isBulk ? t.colors.primaryScale[600] : t.colors.neutral[300], zIndex: 2 }}>
               {isBulk ? <CheckSquare size={14} /> : <Square size={14} />}
             </button>
           )}
 
           {/* Avatar + Name + Score */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
             <Box style={{
               width: 38, height: 38, borderRadius: t.borderRadius.full,
               backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[700],
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
+              fontSize: tokens.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
               overflow: 'hidden', flexShrink: 0, border: `2px solid ${t.colors.common.white}`, boxShadow: `0 0 0 1px ${t.colors.neutral[100]}`,
             }}>
               {c.avatar
@@ -330,18 +333,18 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
               }
             </Box>
             <Box style={{ flex: 1, minWidth: 0 }}>
-              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: ptypo.headingLetterSpacing, display: 'block' }}>{c.name}</Text>
-              {c.email && <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{c.email}</Text>}
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: ptypo.headingLetterSpacing, display: 'block' }}>{c.name}</Text>
+              {c.email && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: t.colors.neutral[400], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{c.email}</Text>}
             </Box>
             <ScoreRing score={c.scorePercent} tokens={t} />
           </Box>
 
           {/* Metadata row */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3], flexWrap: 'wrap' }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3], flexWrap: 'wrap' }}>
             {c.priority && (
               <Text style={{
-                display: 'inline-flex', padding: `1px ${t.spacing[2]}px`, borderRadius: br,
-                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
+                display: 'inline-flex', padding: `1px ${tokens.spacing[2]}px`, borderRadius: br,
+                fontSize: tokens.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
                 backgroundColor: c.priority === 'high' ? t.colors.errorScale[50] : c.priority === 'medium' ? t.colors.warningScale[50] : t.colors.neutral[50],
                 color: c.priority === 'high' ? t.colors.errorScale[700] : c.priority === 'medium' ? t.colors.warningScale[700] : t.colors.neutral[600],
               }}>
@@ -351,17 +354,17 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             {c.slaBreached && (
               <Text style={{
                 display: 'inline-flex', alignItems: 'center', gap: 3,
-                padding: `1px ${t.spacing[2]}px`, borderRadius: br,
-                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
+                padding: `1px ${tokens.spacing[2]}px`, borderRadius: br,
+                fontSize: tokens.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
                 backgroundColor: t.colors.errorScale[50], color: t.colors.errorScale[700],
               }}>
                 SLA
               </Text>
             )}
-            <Text style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: t.typography.fontSize.xs, color: c.daysInStage >= 3 ? t.colors.warningScale[600] : t.colors.neutral[500] }}>
+            <Text style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: tokens.typography.fontSize.xs, color: c.daysInStage >= 3 ? t.colors.warningScale[600] : t.colors.neutral[500] }}>
               <Clock size={11} />{c.daysInStage}d
             </Text>
-            <Text style={{ display: 'inline-flex', padding: `1px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: src.bg, color: src.text }}>
+            <Text style={{ display: 'inline-flex', padding: `1px ${tokens.spacing[2]}px`, borderRadius: br, fontSize: tokens.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: src.bg, color: src.text }}>
               {src.label}
             </Text>
             <Box style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}
@@ -373,12 +376,12 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
               {showTip && (
                 <Box role="tooltip" style={{
                   position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
-                  marginBottom: 4, padding: `3px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md,
+                  marginBottom: 4, padding: `3px ${tokens.spacing[2]}px`, borderRadius: t.borderRadius.md,
                   backgroundColor: t.colors.neutral[900], color: t.colors.common.white,
-                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                  fontSize: tokens.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
                   whiteSpace: 'nowrap', zIndex: 10, boxShadow: t.shadows.lg,
                 }}>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white }}>{getAiLabel(c.aiRecommendation)}</Text>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: t.colors.common.white }}>{getAiLabel(c.aiRecommendation)}</Text>
                 </Box>
               )}
             </Box>
@@ -386,12 +389,12 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
 
           {/* Tags */}
           {c.tags.length > 0 && (
-            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexWrap: 'wrap' }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], flexWrap: 'wrap' }}>
               {c.tags.slice(0, 2).map((tag, i) => (
                 <Text key={i} style={{
                   display: 'inline-flex', alignItems: 'center', gap: 3,
-                  padding: `1px ${t.spacing[2]}px`, borderRadius: br,
-                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                  padding: `1px ${tokens.spacing[2]}px`, borderRadius: br,
+                  fontSize: tokens.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
                   backgroundColor: t.colors.neutral[50], color: t.colors.neutral[600],
                   border: `1px solid ${t.colors.neutral[100]}`,
                 }}>
@@ -399,7 +402,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                 </Text>
               ))}
               {c.tags.length > 2 && (
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>+{c.tags.length - 2}</Text>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: t.colors.neutral[400] }}>+{c.tags.length - 2}</Text>
               )}
             </Box>
           )}
@@ -408,8 +411,8 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
           {isH && (
             <Box style={{
               position: 'absolute', bottom: 0, left: 0, right: 0,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1],
-              padding: `${t.spacing[3]}px 0 ${t.spacing[2]}px`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[1],
+              padding: `${tokens.spacing[3]}px 0 ${tokens.spacing[2]}px`,
               background: `linear-gradient(transparent, ${t.colors.common.white} 40%)`,
               borderRadius: `0 0 ${t.borderRadius.lg} ${t.borderRadius.lg}`,
             }} role="toolbar" aria-label="Candidate actions">
@@ -440,47 +443,47 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     /* Toolbar */
     const toolbar = (
       <Box style={{
-        padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+        padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
         backgroundColor: t.colors.common.white,
         borderBottom: `1px solid ${t.colors.neutral[100]}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: t.spacing[4],
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: tokens.spacing[4],
         ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg } : {}),
       }} role="toolbar" aria-label="Kanban toolbar">
-        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], minWidth: 0 }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], minWidth: 0 }}>
           <Box style={{
             width: 36, height: 36, borderRadius: t.borderRadius.lg, backgroundColor: t.colors.primaryScale[50],
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
           }}>
             <Briefcase size={18} style={{ color: t.colors.primaryScale[600] }} />
           </Box>
-          <Box style={{ minWidth: 0, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: ptypo.headingLetterSpacing, display: 'block' }}>
+          <Box style={{ minWidth: 0, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: ptypo.headingLetterSpacing, display: 'block' }}>
               {jobName}
             </Text>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>
               {totalFiltered} of {totalCandidates} candidates
-              {hasFilters && <Text style={{ color: t.colors.primaryScale[600], marginLeft: t.spacing[1] }}>(filtered)</Text>}
+              {hasFilters && <Text style={{ color: t.colors.primaryScale[600], marginLeft: tokens.spacing[1] }}>(filtered)</Text>}
             </Text>
           </Box>
         </Box>
 
-        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flex: 1, maxWidth: 440 }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], flex: 1, maxWidth: 440 }}>
           <Box style={{ position: 'relative', flex: 1 }}>
-            <Search size={15} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400], pointerEvents: 'none' }} />
+            <Search size={15} style={{ position: 'absolute', left: tokens.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400], pointerEvents: 'none' }} />
             <input type="text" placeholder="Search candidates..." value={sq}
               aria-label="Search candidates"
               onChange={e => setSearch(e.target.value)}
               style={{
-                width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px ${t.spacing[2]}px 36px`,
+                width: '100%', padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px ${tokens.spacing[2]}px 36px`,
                 border: `1px solid ${t.colors.neutral[200]}`, borderRadius: t.borderRadius.lg,
-                fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800],
+                fontSize: tokens.typography.fontSize.sm, color: t.colors.neutral[800],
                 backgroundColor: t.colors.neutral[50], outline: 'none', fontFamily: 'inherit',
                 transition: `border-color ${t.motion.hover}`, boxSizing: 'border-box',
               }} />
             {sq && (
               <button onClick={() => setSearch('')}
                 aria-label="Clear search"
-                style={{ position: 'absolute', right: t.spacing[2], top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 2, color: t.colors.neutral[400], display: 'flex' }}>
+                style={{ position: 'absolute', right: tokens.spacing[2], top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 2, color: t.colors.neutral[400], display: 'flex' }}>
                 <X size={14} />
               </button>
             )}
@@ -489,13 +492,13 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             aria-expanded={showFilter}
             aria-label="Toggle filters"
             style={{
-              display: 'flex', alignItems: 'center', gap: t.spacing[1],
-              padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
+              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
               border: `1px solid ${hasFilters ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
               borderRadius: t.borderRadius.lg,
               backgroundColor: hasFilters ? t.colors.primaryScale[50] : t.colors.common.white,
               color: hasFilters ? t.colors.primaryScale[700] : t.colors.neutral[600],
-              fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
+              fontSize: tokens.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
               cursor: 'pointer', whiteSpace: 'nowrap',
             }}>
             <Filter size={14} /> Filters
@@ -503,12 +506,12 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
           </button>
         </Box>
 
-        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
           {bulk.length > 0 && (
             <Box style={{
-              display: 'flex', alignItems: 'center', gap: t.spacing[2],
-              padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
-              backgroundColor: t.colors.primaryScale[50], fontSize: t.typography.fontSize.xs,
+              display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
+              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: t.borderRadius.lg,
+              backgroundColor: t.colors.primaryScale[50], fontSize: tokens.typography.fontSize.xs,
               fontWeight: t.typography.fontWeight.medium, color: t.colors.primaryScale[700],
             }} role="status" aria-live="polite">
               {bulk.length} selected
@@ -533,6 +536,13 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
       </Box>
     );
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: t.colors.neutral[50], fontFamily: 'inherit', ...style }}
         {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}>
@@ -543,12 +553,12 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
         {/* Filter panel */}
         {showFilter && (
           <Box style={{
-            padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
+            padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
             backgroundColor: t.colors.common.white, borderBottom: `1px solid ${t.colors.neutral[100]}`,
-            display: 'flex', alignItems: 'center', gap: t.spacing[4], flexWrap: 'wrap',
+            display: 'flex', alignItems: 'center', gap: tokens.spacing[4], flexWrap: 'wrap',
             ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg } : {}),
           }} role="group" aria-label="Filter options">
-            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <Text style={{ ...sectionLabel, marginBottom: 0 }}>Source</Text>
               {(['applied', 'referral', 'sourced', 'agency', 'internal'] as string[]).map(src => {
                 const active = filters.source?.includes(src);
@@ -561,7 +571,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                       const next = active ? cur.filter(s => s !== src) : [...cur, src];
                       setFilters({ ...filters, source: next.length > 0 ? next : undefined });
                     }} style={{
-                      padding: `2px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs,
+                      padding: `2px ${tokens.spacing[2]}px`, borderRadius: br, fontSize: tokens.typography.fontSize.xs,
                       fontWeight: t.typography.fontWeight.medium,
                       border: `1px solid ${active ? sc.text : t.colors.neutral[200]}`,
                       backgroundColor: active ? sc.bg : t.colors.common.white,
@@ -571,7 +581,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                 );
               })}
             </Box>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <Text style={{ ...sectionLabel, marginBottom: 0 }}>AI</Text>
               {(['advance', 'hold', 'reject'] as AiRecommendation[]).map(rec => {
                 const active = filters.aiRecommendation?.includes(rec);
@@ -584,7 +594,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                       const next = active ? cur.filter(r => r !== rec) : [...cur, rec];
                       setFilters({ ...filters, aiRecommendation: next.length > 0 ? next : undefined });
                     }} style={{
-                      padding: `2px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs,
+                      padding: `2px ${tokens.spacing[2]}px`, borderRadius: br, fontSize: tokens.typography.fontSize.xs,
                       fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' as const,
                       border: `1px solid ${active ? ac : t.colors.neutral[200]}`,
                       backgroundColor: active ? t.colors.neutral[50] : t.colors.common.white,
@@ -597,7 +607,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             {hasFilters && (
               <button onClick={() => setFilters({})} aria-label="Clear all filters" style={{
                 display: 'flex', alignItems: 'center', gap: 4,
-                padding: `2px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs,
+                padding: `2px ${tokens.spacing[2]}px`, borderRadius: br, fontSize: tokens.typography.fontSize.xs,
                 fontWeight: t.typography.fontWeight.medium, border: 'none',
                 backgroundColor: t.colors.errorScale[50], color: t.colors.errorScale[600], cursor: 'pointer',
                 transition: `all ${t.motion.hover}`,
@@ -616,15 +626,15 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             onItemClick={item => setSelected(item.id)}
             itemKey={c => c.id}
             columnMinWidth={280}
-            columnGap={t.spacing[3]}
+            columnGap={tokens.spacing[3]}
             emptyColumn={
               <Box style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                padding: `${t.spacing[8]}px ${t.spacing[4]}px`, color: t.colors.neutral[300],
-                fontSize: t.typography.fontSize.sm, textAlign: 'center',
+                padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`, color: t.colors.neutral[300],
+                fontSize: tokens.typography.fontSize.sm, textAlign: 'center',
               }}>
-                <Users size={28} style={{ marginBottom: t.spacing[2], opacity: 0.4 }} />
-                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[300] }}>No candidates in this stage</Text>
+                <Users size={28} style={{ marginBottom: tokens.spacing[2], opacity: 0.4 }} />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: t.colors.neutral[300] }}>No candidates in this stage</Text>
               </Box>
             }
             engine={engine}
@@ -641,10 +651,10 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             backgroundColor: t.overlay?.light, zIndex: 1000,
           }} role="dialog" aria-modal={true} aria-label="Confirm rejection" onClick={() => setConfirmRejectId(null)}>
             <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} style={{
-              ...cardBase, padding: `${t.spacing[6]}px`, maxWidth: 380, width: '90%',
+              ...cardBase, padding: `${tokens.spacing[6]}px`, maxWidth: 380, width: '90%',
               backgroundColor: t.colors.common.white, boxShadow: t.shadows.xl,
             }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[4] }}>
                 <Box style={{
                   width: 40, height: 40, borderRadius: t.borderRadius.full,
                   backgroundColor: t.colors.errorScale[50], color: t.colors.errorScale[600],
@@ -652,22 +662,22 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                 }}>
                   <ThumbsDown size={18} />
                 </Box>
-                <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing }}>Confirm Rejection</Text>
+                <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing }}>Confirm Rejection</Text>
               </Box>
-              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600], marginBottom: t.spacing[5], lineHeight: t.typography.lineHeight.relaxed, display: 'block' }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: t.colors.neutral[600], marginBottom: tokens.spacing[5], lineHeight: t.typography.lineHeight.relaxed, display: 'block' }}>
                 Are you sure you want to reject this candidate? They will be moved to the rejected pool and notified.
               </Text>
-              <Box style={{ display: 'flex', gap: t.spacing[3], justifyContent: 'flex-end' }}>
+              <Box style={{ display: 'flex', gap: tokens.spacing[3], justifyContent: 'flex-end' }}>
                 <button onClick={() => setConfirmRejectId(null)} aria-label="Cancel rejection" style={{
-                  padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.lg,
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: t.borderRadius.lg,
                   border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
-                  color: t.colors.neutral[700], fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+                  color: t.colors.neutral[700], fontSize: tokens.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
                   transition: `all ${t.motion.hover}`,
                 }}>Cancel</button>
                 <button onClick={() => { onReject?.(confirmRejectId); setConfirmRejectId(null); }} aria-label="Confirm reject candidate" style={{
-                  padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.lg,
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: t.borderRadius.lg,
                   border: 'none', backgroundColor: t.colors.errorScale[600], color: t.colors.common.white,
-                  fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+                  fontSize: tokens.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
                   transition: `all ${t.motion.hover}`,
                 }}>Reject Candidate</button>
               </Box>

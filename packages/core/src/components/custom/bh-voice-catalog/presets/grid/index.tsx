@@ -18,6 +18,9 @@ import {
   createPersonalitySectionHeaderStyle,
   createStaggerDelay,
   createEmptyStateStyle,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhVoiceCatalogProps, VoiceProfile } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -108,6 +111,9 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
     }, [voices, filterLanguage, filterGender]);
 
     if (loading) {
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />

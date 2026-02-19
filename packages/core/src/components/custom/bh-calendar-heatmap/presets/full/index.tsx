@@ -6,7 +6,7 @@
  * Personality-driven colors and glass-aware surface.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import { Calendar, Activity } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -19,6 +19,11 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhCalendarHeatmapProps, HeatmapDay } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -69,8 +74,8 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       days: rawDays = undefined,
@@ -154,6 +159,13 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

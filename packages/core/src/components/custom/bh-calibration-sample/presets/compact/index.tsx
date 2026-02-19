@@ -6,7 +6,7 @@
  * Designed for sidebar or widget placement. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Scale, User, Bot, Check, X, ChevronRight,
   AlertTriangle, Target,
@@ -22,6 +22,11 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhCalibrationSampleProps,
@@ -66,7 +71,7 @@ function getStatusBadgeKey(status: CalibrationSampleStatus): 'secondary' | 'succ
 }
 
 function getStatusLabel(status: CalibrationSampleStatus): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -83,8 +88,8 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       sample: rawSample = {} as Partial<CalibrationSampleView>,
@@ -113,10 +118,16 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
     }, [sample.dimensions]);
 
     const agreementPct = Math.round(n(sample.agreementRate) * 100);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',
@@ -267,6 +278,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
             <Box role="list" aria-label="Top disagreements">
               {topDisagreements.map((dim) => {
                 const devColor = getDeviationColor(n(dim.deviation), t);
+
                 return (
                   <Box
                     key={dim.dimensionName}

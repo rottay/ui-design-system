@@ -6,7 +6,7 @@
  * Click a bar to filter by severity.
  */
 
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState} from 'react';
 import { Shield } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -19,6 +19,10 @@ import {
   createPersonalityAccentBar,
   createProgressBarStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringSeverityProps,
@@ -58,7 +62,7 @@ export const BarsBhProctoringSeverity = createPreset<BhProctoringSeverityProps>(
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const chartCfg = getChartConfig(t);
 
     const {
@@ -93,6 +97,11 @@ export const BarsBhProctoringSeverity = createPreset<BhProctoringSeverityProps>(
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

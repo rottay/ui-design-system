@@ -19,6 +19,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhInterviewPlayerProps,
@@ -138,6 +141,9 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
             return next;
           });
         }, 100);
+        const divider = useMemo(() => createDividerStyle(t), [t]);
+        const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
         return () => clearInterval(interval);
       }
     }, [audioUrl, isPlaying, playbackSpeed, audioDuration]);

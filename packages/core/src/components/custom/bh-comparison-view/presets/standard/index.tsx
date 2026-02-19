@@ -21,6 +21,10 @@ import {
   createProgressBarStyle,
   createCardHoverStyles,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhComparisonViewProps, ComparisonCandidate, ComparisonRow, CandidateDecision,
@@ -46,12 +50,14 @@ function ScoreRingInner({ score, t, size = 56, Box, Text }: {
   const color = getScoreColor(score, t);
   const r = (size / 2) - 4;
   const c = 2 * Math.PI * r;
-  return (
+return (
     <Box style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="3" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
           strokeDasharray={c} strokeDashoffset={c - (score / 100) * c} strokeLinecap="round"
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{ transition: `stroke-dashoffset ${t.motion.hover}` }} />
       </svg>
       <Box style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -119,7 +125,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
   name: 'BhComparisonView.Standard',
   render: ({ primitives, props, tokens: t, ext }: PresetContext<BhComparisonViewProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const dc = useMemo(() => getDecisionColors(t), [t]);
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -191,6 +197,11 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
       onDecisionChange?.(newDec);
       if (!dp) setIDecisions(prev => [...prev.filter(d => d.candidateId !== candidateId), newDec]);
     }, [dp, onDecisionChange]);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const isGlass = t.surface.useGlass;
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box className={className} style={{
@@ -384,6 +395,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
                   {row.scores.map(s => {
                     const isBest = highlightBest && s.score === maxScore;
                     const bar = createProgressBarStyle(t, { percent: s.score, color: getScoreColor(s.score, t) });
+
                     return (
                       <Box key={s.candidateId} role="cell" style={{
                         padding: isExpanded ? `${t.spacing[4]}px ${t.spacing[4]}px` : `${t.spacing[3]}px ${t.spacing[4]}px`,

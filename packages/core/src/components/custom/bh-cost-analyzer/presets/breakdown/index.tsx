@@ -20,6 +20,9 @@ import {
   getPersonalityBadgeRadius, createIconContainerStyle,
   createMetadataFieldStyle, ICON_SIZES,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import { DollarSign, TrendingUp, Layers, Activity } from 'lucide-react';
@@ -38,7 +41,7 @@ function MiniSparkline({ color }: { color: string }) {
     const pts = [0.4, 0.6, 0.35, 0.7, 0.55];
     return pts.map((v, i) => `${i * 10},${(1 - v) * 16}`).join(' ');
   }, []);
-  return (
+return (
     <svg width={40} height={16} style={{ flexShrink: 0 }}>
       <polyline points={points} fill="none" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -184,6 +187,9 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     });
 
     if (loading) {
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
       return (
         <Box className={className} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -286,6 +292,7 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
           <Box style={{ display: 'flex', gap: tokens.spacing[5], flexWrap: 'wrap' as const, alignItems: 'center' }}>
             {providers.map(p => {
               const dotColor = providerColorMap[p.providerName] ?? tokens.colors.primaryScale[500];
+
               return (
                 <Box key={p.providerId} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],

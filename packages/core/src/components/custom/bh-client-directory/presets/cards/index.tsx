@@ -7,7 +7,7 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -27,6 +27,10 @@ import {
   formatAbbreviated,
   ICON_SIZES,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhClientDirectoryProps, ClientFilter,
@@ -202,6 +206,13 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
       onClientSelect?.(id);
     }, [expandedCard, onClientSelect]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box className={className} role="region" aria-label="Client Directory Cards" style={{
         ...createCardStyle(t, { elevation: 'md' }),
@@ -238,6 +249,8 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                     tabIndex={0}
                     aria-pressed={viewMode === mode}
                     aria-label={`${mode} view`}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       padding: `${t.spacing[1]}px ${t.spacing[2]}px`,

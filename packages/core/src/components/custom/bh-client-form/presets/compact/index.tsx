@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import {
   Building2, User, Mail, Save, X, Loader2,
 } from 'lucide-react';
@@ -17,6 +17,11 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhClientFormProps, ClientFormData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -60,8 +65,8 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       initialData,
@@ -101,9 +106,20 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
       return form.displayName.trim() !== '';
     }, [form]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           ...animStyle,

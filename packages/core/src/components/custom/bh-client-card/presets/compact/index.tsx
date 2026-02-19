@@ -28,6 +28,11 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhClientCardProps } from '../../core';
 
@@ -55,7 +60,7 @@ export const CompactBhClientCard = createPreset<BhClientCardProps>({
     const revenue = Number(client?.totalRevenue ?? 125000);
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 14 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[3] }), [t]);
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -94,6 +99,15 @@ export const CompactBhClientCard = createPreset<BhClientCardProps>({
 
     const TierIcon = tierBadge.icon;
     const ContractIcon = contractBadge.icon;
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const isGlass = t.surface.useGlass;
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

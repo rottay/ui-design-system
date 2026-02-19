@@ -6,7 +6,7 @@
  * Suitable for table rows or list items.
  */
 
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState} from 'react';
 import {
   User, ChevronRight, Shield,
 } from 'lucide-react';
@@ -21,6 +21,11 @@ import {
   getPersonalityBadgeRadius,
   createProgressBarStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringSummaryProps,
@@ -70,8 +75,8 @@ export const InlineBhProctoringSummary = createPreset<BhProctoringSummaryProps>(
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       candidateName = '',
@@ -104,6 +109,13 @@ export const InlineBhProctoringSummary = createPreset<BhProctoringSummaryProps>(
     }), [entrance]);
 
     const severities: ProctoringEventSeverity[] = ['critical', 'high', 'medium', 'low'];
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

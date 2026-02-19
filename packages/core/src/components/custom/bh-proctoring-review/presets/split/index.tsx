@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Shield, AlertTriangle, MonitorOff, Clipboard, ScreenShare,
   Keyboard, Globe, Clock, FileText, CheckCircle, XCircle,
@@ -26,6 +26,9 @@ import {
   getAccentAwareLayout,
   createDividerStyle,
   formatDistanceToNow,
+
+  createCardHoverStyles,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type {
   BhProctoringReviewProps,
@@ -99,8 +102,8 @@ export const SplitBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       event: rawEventView,
@@ -170,9 +173,14 @@ export const SplitBhProctoringReview = createPreset<BhProctoringReviewProps>({
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',

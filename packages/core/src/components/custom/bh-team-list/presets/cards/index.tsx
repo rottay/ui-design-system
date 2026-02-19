@@ -26,6 +26,8 @@ import {
   createStaggerDelay,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhTeamListProps, RecruiterTeam } from '../../core';
 
@@ -70,7 +72,7 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
     const teams = teamsProp?.length ? teamsProp : [];
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[5] }), [t]);
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -91,6 +93,9 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
 
     /* -- Loading State --------------------------------------------- */
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const isGlass = t.surface.useGlass;
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />

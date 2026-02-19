@@ -29,6 +29,8 @@ import {
   getCardPadding,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import type { BhAdminCenterProps, DateRangeValue } from '../../core';
@@ -228,6 +230,9 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
       const lineD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
       const areaD = `${lineD} L ${((data.length - 1) * stepX).toFixed(1)} ${height} L 0 ${height} Z`;
       const gradientId = `billing-area-${Math.random().toString(36).slice(2, 8)}`;
+
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
       return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: 'block' }}>

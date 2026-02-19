@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Scale, User, Bot, Check, X, ChevronDown, ChevronUp,
   Send, AlertTriangle, Target, Percent, FileText,
@@ -28,6 +28,9 @@ import {
   createEmptyStateStyle,
   createProgressBarStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhCalibrationSampleProps,
@@ -79,7 +82,7 @@ function getStatusBadgeKey(status: CalibrationSampleStatus): 'secondary' | 'succ
 }
 
 function getStatusLabel(status: CalibrationSampleStatus): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -96,8 +99,8 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       sample: rawSample = {} as Partial<CalibrationSampleView>,
@@ -147,10 +150,14 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
     const gaugeR = 38;
     const gaugeCircumference = 2 * Math.PI * gaugeR;
     const gaugeFill = n(sample.agreementRate) * gaugeCircumference;
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

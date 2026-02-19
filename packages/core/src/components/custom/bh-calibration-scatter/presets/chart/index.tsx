@@ -8,7 +8,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   ScatterChart, TrendingUp, Target, BarChart3,
   CheckCircle, AlertTriangle, Info,
@@ -27,6 +27,9 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhCalibrationScatterProps,
@@ -99,8 +102,8 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
     Text = primitives.Text;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       points: rawPoints = [],
@@ -161,6 +164,9 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
       { label: 'Samples', value: String(n(stats.sampleCount)), icon: BarChart3, color: t.colors.infoScale },
       { label: 'Agreement', value: `${(n(stats.agreementRate) * 100).toFixed(0)}%`, icon: CheckCircle, color: n(stats.agreementRate) >= 0.7 ? t.colors.successScale : t.colors.warningScale },
     ], [stats, t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

@@ -23,6 +23,9 @@ import {
   createProgressBarStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhProcessDesignerProps, ProcessStage, ProcessTemplate, StageType } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -68,7 +71,7 @@ function getStageIcon(type: StageType, size: number = 16) {
 }
 
 function getStageTypeLabel(type: StageType): string {
-  return (type || '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+return (type || '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
 /* ================================================================== */
@@ -81,8 +84,8 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass && !!t.glass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       template: rawTemplate = {} as Partial<ProcessTemplate>, selectedStage, onStageSelect, onStageReorder,
@@ -118,11 +121,17 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
     }), [entrance, t]);
 
     if (!template) {
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
       return (
         <Box
           className={className}
           role="region"
           aria-label="Process designer"
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{
             ...card,
             ...createEmptyStateStyle(t),

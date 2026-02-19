@@ -40,6 +40,10 @@ import {
   createStatLabelStyle,
   createTrendStyle,
   ICON_SIZES,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import type {
@@ -111,7 +115,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const [selectedKpi, setSelectedKpi] = useState<string | null>(selectedMetricProp ?? null);
 
     const isGlass = t.surface.useGlass;
-    const card = useMemo(() => createCardStyle(t, { padding: 28, glass: isGlass }), [t, isGlass]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7], glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -147,6 +151,11 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
         {action}
       </Box>
     );
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>

@@ -25,6 +25,8 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhWorkflowNotificationProps, NotificationRule } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -74,8 +76,8 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       rules: rawRules = [],
@@ -116,6 +118,9 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
       transition: `${entrance.transition}, background-color ${t.motion.hover}, opacity ${t.motion.hover}`,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

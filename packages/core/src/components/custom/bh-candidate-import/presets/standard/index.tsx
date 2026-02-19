@@ -21,6 +21,9 @@ import {
   createProgressBarStyle,
   createCardHoverStyles,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type {
   BhCandidateImportProps, ImportStep, FieldMapping, DedupMatch,
@@ -69,7 +72,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
   name: 'BhCandidateImport.Standard',
   render: ({ primitives, props, tokens: t }: PresetContext<BhCandidateImportProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const stepColors = useMemo(() => getStepStatusColors(t), [t]);
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -139,6 +142,9 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
       { key: 'integration' as ImportMethod, icon: <Link2 size={22} />, title: 'Integration Sync', desc: 'Import from LinkedIn Recruiter, Greenhouse, etc.' },
     ], []);
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box className={className} style={{
         ...cardBase,
@@ -171,6 +177,8 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
               aria-label="Cancel import"
               onClick={handleCancel}
               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCancel(); } }}
+              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32,
                 borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[200]}`,

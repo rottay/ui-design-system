@@ -6,7 +6,7 @@
  * candidate info, and quick-action buttons. Glass-aware, personality-driven.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Shield, Eye, EyeOff, CheckCircle, XCircle,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -26,6 +26,9 @@ import {
   getAccentAwareLayout,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type {
   BhProctoringEventListProps,
@@ -115,8 +118,8 @@ export const CardsBhProctoringEventList = createPreset<BhProctoringEventListProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       events: rawEvents = [],
@@ -210,6 +213,11 @@ export const CardsBhProctoringEventList = createPreset<BhProctoringEventListProp
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
 
     return (
       <Box

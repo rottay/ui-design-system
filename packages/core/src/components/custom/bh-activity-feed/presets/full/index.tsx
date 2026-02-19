@@ -37,6 +37,12 @@ import {
   createStaggerDelay,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhActivityFeedProps,
@@ -156,7 +162,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
-    const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[5] }), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
@@ -186,6 +192,11 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
 
     const StatCard = ({ label, value, icon, scaleKey }: { label: string; value: string | number; icon: React.ReactNode; scaleKey: string }) => {
       const s = (t.colors as any)[scaleKey] ?? t.colors.neutral;
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
       return (
         <Box style={{
           ...card,

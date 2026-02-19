@@ -6,7 +6,7 @@
  * and key metadata. No charts. Designed for sidebar or list placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Target, TrendingUp, TrendingDown, CheckCircle,
   AlertCircle, Clock, User, ChevronRight,
@@ -23,6 +23,11 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhScorecardDetailProps,
@@ -55,7 +60,7 @@ function getStatusBadgeKey(status: string): 'primary' | 'warning' | 'success' {
 }
 
 function getStatusLabel(status: string): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -72,8 +77,8 @@ export const CompactBhScorecardDetail = createPreset<BhScorecardDetailProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       scorecard: rawScorecard = {} as Partial<ScorecardDetail>,
@@ -110,9 +115,20 @@ export const CompactBhScorecardDetail = createPreset<BhScorecardDetailProps>({
     const overallPct = (n(scorecard.overallScore) / (n(scorecard.maxScore) || 1)) * 100;
     const overallColor = getScoreColor(n(scorecard.overallScore), n(scorecard.maxScore) || 1, t);
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

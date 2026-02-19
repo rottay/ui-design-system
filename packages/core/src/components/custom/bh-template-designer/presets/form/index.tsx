@@ -22,6 +22,10 @@ import {
   createPersonalityAccentBar,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhTemplateDesignerProps,
@@ -217,9 +221,15 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
     /* ================================================================ */
     /*  RENDER                                                          */
     /* ================================================================ */
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column' as const,

@@ -7,7 +7,7 @@
  * help tooltips, and celebration animation on completion
  */
 
-import {useState, useEffect, useCallback, useMemo} from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -25,6 +25,11 @@ import {
   createPersonalityAccentBar,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhOnboardingFlowProps, FormField } from '../../core';
 import {
@@ -170,9 +175,20 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
         const rotation = `${Math.random() * 360}deg`;
         const size = 6 + Math.random() * 6;
 
+        const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
+        const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+        const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+        const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
+
         return (
           <div
             key={i}
+            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={{
               position: 'absolute' as const,
               top: -20,

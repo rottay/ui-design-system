@@ -19,6 +19,10 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhCandidateComparisonProps, ComparisonCandidate } from '../../core';
 import { getCandidateFullName } from '../../core';
@@ -36,8 +40,8 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       candidates: rawCandidates = [],
@@ -87,6 +91,13 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

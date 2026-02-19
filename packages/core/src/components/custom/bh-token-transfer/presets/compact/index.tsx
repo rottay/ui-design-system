@@ -26,6 +26,9 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhTokenTransferProps, TokenTransfer } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -100,6 +103,8 @@ export const CompactBhTokenTransfer = createPreset<BhTokenTransferProps>({
     }, [onRequestTransfer]);
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[6], ...style }}>
           <Coins size={18} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />

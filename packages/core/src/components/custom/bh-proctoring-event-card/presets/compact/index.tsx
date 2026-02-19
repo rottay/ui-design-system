@@ -7,7 +7,7 @@
  * Ideal for sidebar lists and dense layouts.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Eye, EyeOff, CheckCircle, XCircle, ChevronRight, Clock,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -24,6 +24,10 @@ import {
   getPersonalityBadgeRadius,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringEventCardProps,
@@ -95,8 +99,8 @@ export const CompactBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       event: rawEventView,
@@ -160,6 +164,13 @@ export const CompactBhProctoringEventCard = createPreset<BhProctoringEventCardPr
       if (m.typingSpeedWpm !== undefined) parts.push(`${m.typingSpeedWpm} WPM`);
       return parts.join(' | ');
     }, [metadata]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

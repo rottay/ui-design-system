@@ -25,6 +25,10 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhAgentGalleryProps,
@@ -273,6 +277,11 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
     });
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box

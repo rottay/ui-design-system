@@ -24,6 +24,10 @@ import {
   getPersonalityBadgeRadius,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhProviderHealthProps, ProviderHealthItem } from '../../core';
 import {
@@ -169,6 +173,9 @@ export const CompactBhProviderHealth = createPreset<BhProviderHealthProps>({
       transition: `all ${tokens.motion.hover}`,
       transitionDelay: `${index * 50}ms`,
     }), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box

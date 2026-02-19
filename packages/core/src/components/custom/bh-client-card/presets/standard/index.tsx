@@ -33,6 +33,9 @@ import {
   createPersonalityAccentBar,
   createDividerStyle,
   getAccentAwareLayout,
+
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhClientCardProps } from '../../core';
 
@@ -61,7 +64,7 @@ export const StandardBhClientCard = createPreset<BhClientCardProps>({
     const contactName = (client as any)?.contactName ?? '';
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[6] }), [t]);
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -104,6 +107,13 @@ export const StandardBhClientCard = createPreset<BhClientCardProps>({
 
     const TierIcon = tierColor.icon;
     const ContractIcon = contractColor.icon;
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const isGlass = t.surface.useGlass;
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

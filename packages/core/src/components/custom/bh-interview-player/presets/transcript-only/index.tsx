@@ -17,6 +17,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhInterviewPlayerProps,
@@ -150,6 +153,11 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
       { key: 'download', label: 'Download', icon: <Download size={14} />, onClick: onDownloadTranscript, color: 'primary' },
     ];
     const hasActions = actions.some(a => !!a.onClick);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box className={className} style={{

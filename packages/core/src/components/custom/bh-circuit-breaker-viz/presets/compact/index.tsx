@@ -17,6 +17,9 @@ import {
   createStaggerDelay,
   formatDistanceToNow,
   createEmptyStateStyle,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhCircuitBreakerVizProps, CircuitNode } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -86,6 +89,9 @@ export const CompactBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
     }, [nodes]);
 
     if (loading) {
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[6], ...style }}>
           <Activity size={18} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />

@@ -14,6 +14,11 @@ import {
   createIconContainerStyle, createEmptyStateStyle, getPersonalityTypography,
   getPersonalityBadgeRadius, getCardPadding,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhJobBoardProps, JobDisplayStatus, JobHiringUrgency, JobBoardFilter, ViewMode, SortDirection } from '../../core';
 import type { DBJob } from '@rottay/recruiter';
@@ -180,6 +185,9 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const cardPadding = useMemo(() => getCardPadding(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
     const handleFilterChange = useCallback((f: JobBoardFilter) => { if (controlledFilters === undefined) setInternalFilters(f); onFilterChange?.(f); }, [controlledFilters, onFilterChange]);
     const handleSearchChange = useCallback((q: string) => { if (controlledSearchQuery === undefined) setInternalSearchQuery(q); onSearchChange?.(q); }, [controlledSearchQuery, onSearchChange]);
@@ -535,7 +543,7 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
         {ext.section('toolbar', renderFilterBar)}
         {ext.slot('toolbar:end')}
         {filteredJobs.length === 0 ? (ext.hasSlot('empty') ? ext.slot('empty') : renderEmptyState()) : (
-          <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${gridCols}, 1fr)`, gap: typeof extLayout.gap === 'number' ? extLayout.gap : 16 }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${gridCols}, 1fr)`, gap: typeof extLayout.gap === 'number' ? extLayout.gap : tokens.spacing[4] }}>
             {filteredJobs.map((job, i) => renderJobCard(job, i))}
           </Box>
         )}

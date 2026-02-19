@@ -25,6 +25,8 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhMessageTemplateItemGalleryProps, MessageTemplateItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -43,8 +45,8 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       templates: rawTemplates = [],
@@ -92,6 +94,9 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

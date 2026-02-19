@@ -21,6 +21,10 @@ import {
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhIndividualHomeProps, ScheduleItem, RecentCandidate } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -143,6 +147,11 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
       transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
     }), [entrance, tokens]);
 
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
+
     return (
       <Box className={className} style={{
         padding: `${tokens.spacing[6]}px`, backgroundColor: tokens.colors.neutral[50],
@@ -168,6 +177,8 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
               }}>
                 {welcome.avatar ? (
                   <Box
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{ width: '100%', height: '100%', backgroundImage: `url(${welcome.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                     role="img"
                     aria-label={welcome.name}

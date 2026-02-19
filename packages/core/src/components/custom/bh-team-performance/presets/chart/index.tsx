@@ -27,6 +27,9 @@ import {
   createEmptyStateStyle,
   createFilterPillStyle,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhTeamPerformanceProps, TeamPerfData } from '../../core';
 
@@ -66,7 +69,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
     const activeMetric = controlledMetric ?? internalMetric;
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[6] }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -112,6 +115,11 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
 
     /* -- Loading --------------------------------------------------- */
     if (loading) {
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const isGlass = t.surface.useGlass;
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+
       return (
         <Box className={className} style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -154,6 +162,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
             const isActive = activeMetric === opt.key;
             const pillStyle = createFilterPillStyle(t, { active: isActive });
             const IconComp = opt.icon;
+
             return (
               <Box
                 key={opt.key}
@@ -165,6 +174,8 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
                 onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMetricChange(opt.key); }
                 }}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{ ...pillStyle, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}
               >
                 <IconComp size={12} />

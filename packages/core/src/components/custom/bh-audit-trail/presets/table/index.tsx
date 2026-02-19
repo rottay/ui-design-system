@@ -44,6 +44,9 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -143,7 +146,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     });
     const entityColors = useMemo(() => getEntityTypeColors(t), [t]);
     const actionColors = useMemo(() => getActionTypeColors(t), [t]);
-    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7] }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -190,6 +193,8 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     /* -- Stat Card -------------------------------------------------- */
     const StatCard = ({ label, value, icon, scale }: { label: string; value: string | number; icon: React.ReactNode; scale: string }) => {
       const s = (t.colors as any)[scale];
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
       return (
         <Box style={{ ...card, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
           <Box style={{

@@ -6,7 +6,7 @@
  * evidence fields, and action buttons. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   FileText, User, Briefcase, AlertCircle,
   Send, X, Scale,
@@ -22,6 +22,9 @@ import {
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
   getAccentAwareLayout,
+
+  createCardHoverStyles,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhAppealFormProps } from '../../core';
 
@@ -35,8 +38,8 @@ export const FormBhAppealForm = createPreset<BhAppealFormProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       candidateName = 'John Smith',
@@ -88,9 +91,16 @@ export const FormBhAppealForm = createPreset<BhAppealFormProps>({
       transition: `border-color ${t.motion.hover}`,
     }), [t]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

@@ -14,6 +14,10 @@ import {
   createCardHoverStyles, createIconContainerStyle,
   getPersonalityTypography, getPersonalityBadgeRadius, getCardPadding,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhJobBoardProps, JobItem, JobStatus, JobUrgency, JobBoardFilter, ViewMode, SortDirection } from '../../core';
 import { BH_JOB_BOARD_DEFAULTS } from '../../core';
@@ -194,6 +198,10 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       const pts = stages.map((s, i) => `${stages.length > 1 ? i * step : w / 2},${h - (s.count / max) * (h - 4) - 2}`).join(' ');
       const lastX = stages.length > 1 ? (stages.length - 1) * step : w / 2;
       const lastY = h - (stages[stages.length - 1].count / max) * (h - 4) - 2;
+      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
       return (
         <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ display: 'block' }}>
           <polyline points={pts} fill="none" stroke={tokens.colors.primaryScale[400]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />

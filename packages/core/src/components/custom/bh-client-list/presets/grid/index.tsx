@@ -34,6 +34,8 @@ import {
   createPersonalityAccentBar,
   createDividerStyle,
   getAccentAwareLayout,
+
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type { BhClientListProps, RecruiterClient } from '../../core';
 
@@ -93,7 +95,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
     const clients = clientsProp?.length ? clientsProp : [];
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[5] }), [t]);
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -116,6 +118,9 @@ export const GridBhClientList = createPreset<BhClientListProps>({
     }, []);
 
     if (loading) {
+      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+      const isGlass = t.surface.useGlass;
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />

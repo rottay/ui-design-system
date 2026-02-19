@@ -20,6 +20,9 @@ import {
   formatDistanceToNow,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhCircuitBreakerVizProps, CircuitNode } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -100,7 +103,6 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
-
     const selectedNode = useMemo(() => nodes.find(n => n.id === selectedNodeId), [nodes, selectedNodeId]);
 
     // Arrange nodes in a grid layout for the SVG diagram
@@ -128,6 +130,9 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
     }, [nodes]);
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
       return (
         <Box className={className} style={{ ...animStyle(0), display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />
@@ -158,6 +163,7 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
           <Box style={{ display: 'flex', gap: t.spacing[4], marginBottom: t.spacing[4] }}>
             {(['closed', 'open', 'half-open'] as const).map(state => {
               const sc = getStateColor(state, t);
+
               return (
                 <Box key={state} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Box style={{ width: 10, height: 10, borderRadius: t.borderRadius.full, backgroundColor: sc.fill }} />
@@ -203,6 +209,8 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
               return (
                 <g
                   key={node.id}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{ cursor: 'pointer' }}
                   onClick={() => handleNodeClick(node.id)}
                 >

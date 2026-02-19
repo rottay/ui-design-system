@@ -14,6 +14,14 @@ import {
   createEntranceAnimation,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhOfferLetterPreviewProps, OfferLetterData } from '../../core';
 import { offerToLetterData } from '../../core';
@@ -25,8 +33,8 @@ export const CompactBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       offer,
@@ -50,9 +58,24 @@ export const CompactBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
       transition: entrance.transition,
     }), [entrance]);
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

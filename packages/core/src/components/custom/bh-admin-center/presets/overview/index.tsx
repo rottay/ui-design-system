@@ -28,6 +28,8 @@ import {
   getCardPadding,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import type { BhAdminCenterProps, DateRangeValue } from '../../core';
@@ -216,6 +218,9 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
       const radius = 36;
       const circumference = 2 * Math.PI * radius;
       const strokeDashoffset = circumference - (pct / 100) * circumference;
+
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
       return (
         <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: tokens.spacing[5], gap: tokens.spacing[3] }}>

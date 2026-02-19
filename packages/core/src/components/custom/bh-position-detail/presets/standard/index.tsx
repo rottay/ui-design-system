@@ -25,6 +25,9 @@ import {
   createPersonalitySectionHeaderStyle,
   createIconContainerStyle,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhPositionDetailProps,
@@ -225,6 +228,8 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
     /* ---- derived values ---- */
     const statusColors = getPositionStatusColors(positionInfo.status, tokens);

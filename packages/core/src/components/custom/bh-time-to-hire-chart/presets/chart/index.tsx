@@ -6,7 +6,7 @@
  * with rolling average overlay and target line. Glass-aware, personality-driven.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Clock, TrendingUp, Target, BarChart3,
 } from 'lucide-react';
@@ -22,6 +22,9 @@ import {
   getChartConfig,
   createEmptyStateStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type { BhTimeToHireChartProps, TimeToHireDataPoint, DepartmentConfig } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -64,8 +67,8 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const chartCfg = getChartConfig(t);
 
     const {
@@ -181,6 +184,11 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
 
     return (
       <Box

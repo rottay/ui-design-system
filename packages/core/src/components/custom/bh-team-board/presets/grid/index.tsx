@@ -44,6 +44,8 @@ import {
   createDividerStyle,
   createOverlayStyle,
   getPersonalityTypography,
+
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
@@ -58,7 +60,7 @@ import type {
 /*  Helpers                                                             */
 /* ------------------------------------------------------------------ */
 function getTeamLeadName(team: RecruiterTeam): string {
-  return (team as any).leaderName ?? 'Unassigned';
+return (team as any).leaderName ?? 'Unassigned';
 }
 
 function getTeamPerformanceScore(team: RecruiterTeam): number {
@@ -162,7 +164,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
     );
 
     /* -- Styles ------------------------------------------------------ */
-    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7] }), [t]);
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -216,6 +218,9 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
         color: isSelected ? t.colors.primaryScale[500] : t.colors.neutral[200],
       });
       const progressBar = createProgressBarStyle(t, { color: capColor(capPct), percent: capPct });
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
       return (
         <Box

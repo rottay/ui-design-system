@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import {
   Shield, X, CheckCircle, XCircle, Clock,
   FileText, Briefcase, DollarSign, Users,
@@ -28,6 +28,9 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalitySectionHeaderStyle,
+
+  createCardHoverStyles,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhApprovalDetailProps, ApprovalDetailData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -80,8 +83,8 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       approval: raw_approval = {} as Partial<ApprovalDetailData>,
@@ -125,9 +128,16 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
       [approval.chain],
     );
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           ...animStyle,

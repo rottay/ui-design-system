@@ -24,6 +24,8 @@ import {
   getPersonalityTypography,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhTokenManagerProps,
@@ -41,7 +43,7 @@ import type { DesignTokens } from '../../../../../core/types/tokens';
 function formatTokenCount(value: number): string {
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
-  return (value || 0).toLocaleString();
+return (value || 0).toLocaleString();
 }
 
 function formatCurrency(value: number): string {
@@ -247,6 +249,8 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
     };
 
     const activeAlerts = alerts.filter((a) => a.enabled);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
 
     return (
       <Box
@@ -531,6 +535,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   activeAlerts.map((alert, i) => {
                     const badgeColor = alert.type === 'low_balance' ? 'error' : alert.type === 'high_usage' ? 'warning' : 'info';
                     const label = alert.type === 'low_balance' ? 'Low Balance' : alert.type === 'high_usage' ? 'High Usage' : 'Quota Exceeded';
+
                     return (
                       <Box
                         key={alert.id}

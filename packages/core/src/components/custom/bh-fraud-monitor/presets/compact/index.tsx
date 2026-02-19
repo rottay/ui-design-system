@@ -17,6 +17,8 @@ import {
   getPersonalityBadgeRadius, createIconContainerStyle,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import { ShieldAlert, AlertTriangle, Clock } from 'lucide-react';
@@ -60,6 +62,8 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     }, []);
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
       return (
         <Box className={className} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',

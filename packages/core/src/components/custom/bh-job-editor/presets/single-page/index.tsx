@@ -19,6 +19,10 @@ import {
   createPersonalitySectionHeaderStyle,
   createIconContainerStyle,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhJobEditorProps } from '../../core';
 import type { JobFormData, SkillTag, ScreeningQuestion, WorkArrangement } from '../../core';
@@ -195,6 +199,10 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>({
 
     const OptionBtn = useCallback(({ selected, label, onClick, scale, flexOne }: { selected: boolean; label: string; onClick: () => void; scale?: any; flexOne?: boolean }) => {
       const s = scale ?? t.colors.primaryScale;
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
       return (
         <Box
           role="button"
@@ -203,6 +211,8 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>({
           aria-pressed={selected}
           onClick={onClick}
           onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, onClick)}
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{ ...(flexOne ? { flex: 1 } : {}), padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, fontWeight: selected ? t.typography.fontWeight.semibold : t.typography.fontWeight.normal, color: selected ? s[700] : t.colors.neutral[600], backgroundColor: selected ? s[50] : t.colors.common.white, border: `${bdr} ${selected ? s[300] : t.colors.neutral[300]}`, borderRadius: t.borderRadius.md, cursor: 'pointer', transition: `all ${t.motion.hover}`, textAlign: 'center' as const }}
         >
           <Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{label}</Text>

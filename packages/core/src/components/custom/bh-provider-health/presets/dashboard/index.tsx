@@ -23,6 +23,9 @@ import {
   getHoverTransform,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhProviderHealthProps, ProviderHealthItem, HealthIncident } from '../../core';
 import {
@@ -165,6 +168,9 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
         case 'info': return 'info';
       }
     }, []);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box

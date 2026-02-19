@@ -27,6 +27,10 @@ import {
   createStatValueStyle,
   createStatLabelStyle,
   ICON_SIZES,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhRecruiterHomeProps, KpiStat, PipelineJob, UpcomingInterview,
@@ -84,7 +88,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
   name: 'BhRecruiterHome.Overview',
   render: ({ primitives, props, tokens: t }: PresetContext<BhRecruiterHomeProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
@@ -145,6 +149,11 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     const handleSuggestionAccept = useCallback((id: string) => { onSuggestionAccept?.(id); }, [onSuggestionAccept]);
     const handleSuggestionDismiss = useCallback((id: string) => { onSuggestionDismiss?.(id); }, [onSuggestionDismiss]);
     const handleActivityClick = useCallback((id: string) => { onActivityClick?.(id); }, [onActivityClick]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box className={className} style={{
@@ -221,6 +230,8 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                       aria-label="Dismiss notification"
                       onClick={() => handleNotifDismiss(n.id ?? '')}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss(n.id ?? ''); } }}
+                      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                       style={{ color: t.colors.neutral[400], cursor: 'pointer', flexShrink: 0 }}
                     ><X size={ICON_SIZES.label} /></Box>
                   )}

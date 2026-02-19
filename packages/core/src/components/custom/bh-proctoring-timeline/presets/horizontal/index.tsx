@@ -7,7 +7,7 @@
  * and severity-based coloring. Glass-aware, personality-driven.
  */
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import {
   Shield, ZoomIn, ZoomOut, Clock,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -27,6 +27,9 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhProctoringTimelineProps,
@@ -116,8 +119,8 @@ export const HorizontalBhProctoringTimeline = createPreset<BhProctoringTimelineP
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       events: rawEvents = [],
@@ -190,6 +193,11 @@ export const HorizontalBhProctoringTimeline = createPreset<BhProctoringTimelineP
 
     /* Severity legend */
     const severityLegend: ProctoringEventSeverity[] = ['critical', 'high', 'medium', 'low'];
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box

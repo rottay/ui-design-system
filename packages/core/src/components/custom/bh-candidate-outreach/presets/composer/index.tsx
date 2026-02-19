@@ -20,6 +20,9 @@ import {
   createBadgeStyle,
   createCardHoverStyles,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type {
   BhCandidateOutreachProps, OutreachRecipient, OutreachTemplate,
@@ -49,7 +52,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
   name: 'BhCandidateOutreach.Composer',
   render: ({ primitives, props, tokens: t }: PresetContext<BhCandidateOutreachProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const channelColors = useMemo(() => getChannelColors(t), [t]);
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -125,6 +128,11 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
         .replace('{role}', 'Senior Frontend Engineer');
     }, [message]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box className={className} style={{
         ...cardBase,
@@ -158,6 +166,8 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
               aria-pressed={previewMode}
               onClick={handleTogglePreview}
               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTogglePreview(); } }}
+              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
               style={{
                 display: 'flex', alignItems: 'center', gap: t.spacing[1],
                 padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,

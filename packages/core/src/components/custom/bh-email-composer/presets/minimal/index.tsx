@@ -5,7 +5,7 @@
  * Condensed email compose widget with subject and body.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import { Mail, Send, Wand2, Paperclip, Clock, Eye, MousePointerClick, Users } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -15,6 +15,14 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   ICON_SIZES,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhEmailComposerProps, EmailVariable } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -25,8 +33,8 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       variables: rawVariables = [],
@@ -60,9 +68,22 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
       transition: entrance.transition,
     }), [entrance]);
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

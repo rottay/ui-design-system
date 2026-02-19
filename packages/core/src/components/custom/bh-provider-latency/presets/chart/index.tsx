@@ -17,6 +17,9 @@ import {
   getPersonalityBadgeRadius,
   createPersonalitySectionHeaderStyle,
   createEmptyStateStyle,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhProviderLatencyProps, LatencyDataPoint } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -125,6 +128,11 @@ export const ChartBhProviderLatency = createPreset<BhProviderLatencyProps>({
     });
 
     if (loading) {
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />
@@ -148,6 +156,7 @@ export const ChartBhProviderLatency = createPreset<BhProviderLatencyProps>({
           <Box style={{ display: 'flex', gap: t.spacing[1] }}>
             {providers.map(p => {
               const isActive = selectedProvider === p;
+
               return (
                 <Box
                   key={p}
@@ -155,6 +164,8 @@ export const ChartBhProviderLatency = createPreset<BhProviderLatencyProps>({
                   tabIndex={0}
                   aria-selected={isActive}
                   onClick={() => handleProviderChange(p)}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                     borderRadius: badgeRadius,

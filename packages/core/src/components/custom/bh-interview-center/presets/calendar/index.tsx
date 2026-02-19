@@ -10,7 +10,11 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, getPersonalityTypography, getPersonalityBadgeRadius, createEntranceAnimation, createStaggerDelay, createPersonalityAccentBar } from '../../../helpers';
+import { createCardStyle, createSurfaceStyle, getPersonalityTypography, getPersonalityBadgeRadius, createEntranceAnimation, createStaggerDelay, createPersonalityAccentBar ,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+} from '../../../helpers';
 import type {
   BhInterviewCenterProps, InterviewDisplayStatus, InterviewDisplayMode,
   InterviewFilter, CalendarView, SortDirection,
@@ -51,6 +55,10 @@ function getStatusCfg(status: string | null | undefined) {
 }
 
 function sc(t: DesignTokens, scale: string, shade: number) {
+  const divider = useMemo(() => createDividerStyle(t), [t]);
+  const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+  const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
   return ((t.colors as any)[scale])?.[shade] ?? (t.colors.neutral as any)[shade];
 }
 

@@ -16,6 +16,9 @@ import {
   getCardPadding, createMetadataFieldStyle, createMetadataGridStyle,
   createMetadataLabelStyle, createMetadataValueStyle,
   createStatValueStyle, createStatLabelStyle, ICON_SIZES,
+
+  createPersonalityAccentBar,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhOfferWorkspaceProps, ApprovalStep,
@@ -233,6 +236,13 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
         ? Math.max(0, Math.min(100, ((offerData.baseSalary - marketMin) / (marketMax - marketMin)) * 100))
         : 50;
 
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
       return (
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[5] }}>
           <Box style={{ ...secTitle }}>
@@ -249,6 +259,8 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   type="number"
                   value={offerData.baseSalary}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange('baseSalary', Number(e.target.value))}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={inp}
                 />
               ) : (

@@ -6,7 +6,7 @@
  * severity badges, type icons, and inline review actions.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Shield, Eye, EyeOff, ChevronRight, CheckCircle, XCircle,
   MonitorOff, Clipboard, ScreenShare, Keyboard, Globe,
@@ -120,8 +120,8 @@ export const TableBhProctoringEventList = createPreset<BhProctoringEventListProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       events: rawEvents = [],

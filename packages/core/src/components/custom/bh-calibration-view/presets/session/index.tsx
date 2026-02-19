@@ -32,6 +32,9 @@ import {
   getHoverTransform,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhCalibrationViewProps,
@@ -243,6 +246,11 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
     /* ----- heatmap data (per-dimension alignment) ----- */
     const perDimAlignment = alignmentMetrics?.perDimensionAlignment ?? [];
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
+
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
         {accentBar && <Box style={accentBar} />}
@@ -345,6 +353,8 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                     aria-label="Previous sample"
                     onClick={() => handleSampleChange(Math.max(0, currentSampleIndex - 1))}
                     disabled={currentSampleIndex === 0}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.sm,

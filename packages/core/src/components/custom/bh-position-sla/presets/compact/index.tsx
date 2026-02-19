@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { Clock, AlertTriangle, ChevronRight } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -17,6 +17,12 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhPositionSlaProps, PositionSlaData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -47,8 +53,8 @@ export const CompactBhPositionSla = createPreset<BhPositionSlaProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       positions: rawPositions = [],
@@ -82,9 +88,22 @@ export const CompactBhPositionSla = createPreset<BhPositionSlaProps>({
       onPositionClick?.(id);
     }, [onPositionClick]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ ...card, ...animStyle, padding: 0, overflow: 'hidden', ...style }}
       >
         {accentBar && <Box style={accentBar} />}

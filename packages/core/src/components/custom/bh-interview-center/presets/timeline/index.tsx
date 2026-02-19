@@ -22,6 +22,9 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   getCardHoverShadow,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhInterviewCenterProps, InterviewDisplayStatus, InterviewDisplayMode, InterviewFilter, SortDirection } from '../../core';
 import { BH_INTERVIEW_CENTER_DEFAULTS, isAiInterview, getInterviewModeLabel, getInterviewStatusLabel, getInterviewDateStr, getInterviewDuration, getInterviewScore } from '../../core';
@@ -65,6 +68,9 @@ function getDisplayName(iv: DBInterview, field: string, fallback: string): strin
 }
 
 function sc(t: DesignTokens, scale: string, shade: number) {
+  const divider = useMemo(() => createDividerStyle(t), [t]);
+  const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
   return ((t.colors as any)[scale])?.[shade] ?? (t.colors.neutral as any)[shade];
 }
 

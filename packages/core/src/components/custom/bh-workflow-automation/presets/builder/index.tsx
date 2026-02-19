@@ -25,6 +25,8 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhWorkflowAutomationProps, WorkflowRule } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -56,8 +58,8 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       rules: rawRules = [],
@@ -91,6 +93,9 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

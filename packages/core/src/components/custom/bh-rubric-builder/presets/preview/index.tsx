@@ -28,6 +28,10 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhRubricBuilderProps,
@@ -245,6 +249,9 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     /* ================================================================ */
     /*  RENDER                                                          */
     /* ================================================================ */
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
     return (
       <Box
         className={className}

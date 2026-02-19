@@ -48,6 +48,9 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -192,7 +195,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     });
     const entityColors = useMemo(() => getEntityTypeColors(t), [t]);
     const actionColors = useMemo(() => getActionTypeColors(t), [t]);
-    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7] }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -227,6 +230,8 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     /* -- Stat Card -------------------------------------------------- */
     const StatCard = ({ label, value, icon, scale }: { label: string; value: string | number; icon: React.ReactNode; scale: string }) => {
       const s = (t.colors as any)[scale] as ColorScale;
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
       return (
         <Box style={{ ...card, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
           <Box style={{
@@ -632,7 +637,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                 <Box
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   style={{
-                    ...createCardStyle(t, { padding: 32 }),
+                    ...createCardStyle(t, { padding: t.spacing[8] }),
                     width: '100%', maxWidth: 700, maxHeight: '85vh', overflowY: 'auto' as const,
                     backgroundColor: t.colors.common.white,
                   }}

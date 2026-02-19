@@ -36,6 +36,11 @@ import {
   createStaggerDelay,
   ICON_SIZES,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhSlaMonitorProps,
@@ -118,7 +123,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
     const histRange = histMax - histMin || 1;
 
     /* ---- Styles ---- */
-    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7] }), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -142,6 +147,9 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
     });
 
     /* ================================================================ */
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, width: '100%', gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...glassStyle, ...style }} role="region" aria-label="SLA Monitor Dashboard">
         {accentBar && <Box style={accentBar} />}
@@ -172,6 +180,8 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                 role="radio"
                 aria-checked={timeRange === opt.value}
                 tabIndex={0}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                   borderRadius: badgeRadius,

@@ -21,6 +21,9 @@ import {
   createEmptyStateStyle,
   createProgressBarStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhAgentGalleryEnhancedProps, AgentCard } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -112,6 +115,8 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
 
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />

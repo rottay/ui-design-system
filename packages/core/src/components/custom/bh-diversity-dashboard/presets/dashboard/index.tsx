@@ -6,7 +6,7 @@
  * segment legend, stats summary, and click-to-filter interaction.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Heart, Users, BarChart3, PieChart,
   ChevronRight,
@@ -24,6 +24,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhDiversityDashboardProps, DiversityMetric } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -57,8 +60,8 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       metrics: rawMetrics = [],
@@ -89,9 +92,14 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

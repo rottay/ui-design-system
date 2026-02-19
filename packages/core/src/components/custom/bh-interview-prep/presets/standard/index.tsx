@@ -20,6 +20,10 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhInterviewPrepProps,
@@ -116,6 +120,13 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
       ...glassCard,
       ...accentBar,
     }), [t, bdr, glassCard, accentBar]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
 
     return (
       <Box className={className} style={{
@@ -362,6 +373,8 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                             aria-expanded={isExpanded}
                             onClick={() => handleSectionToggle(section.title)}
                             onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => handleSectionToggle(section.title))}
+                            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                             style={{
                               padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                               display: 'flex', alignItems: 'center', justifyContent: 'space-between',

@@ -36,6 +36,11 @@ import {
   createStaggerDelay,
   createProgressBarStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
@@ -50,7 +55,7 @@ import type {
 /*  Helpers                                                             */
 /* ------------------------------------------------------------------ */
 function getTeamLeadName(team: RecruiterTeam): string {
-  return (team as any).leaderName ?? 'Unassigned';
+return (team as any).leaderName ?? 'Unassigned';
 }
 
 function getTeamPerformanceScore(team: RecruiterTeam): number {
@@ -99,7 +104,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
     const activeTeam = teams.find(tm => tm.id === selectedTeam) ?? teams[0];
 
     /* ---- Styles ---- */
-    const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[6] }), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -114,6 +119,11 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
 
     /* ================================================================ */
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+
     return (
       <Box className={className} style={{ display: 'flex', width: '100%', height: '100%', backgroundColor: t.colors.neutral[50], ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}), ...style }}>
         {accentBar && <Box style={accentBar} />}
@@ -149,6 +159,8 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                 aria-pressed={isSelected}
                 onClick={() => handleTeamSelect(tm.id)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleTeamSelect(tm.id); }}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                   cursor: 'pointer',
@@ -328,6 +340,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                   {targets.map((tgt, idx) => {
                     const pct = (tgt.current / Math.max(tgt.value, 1)) * 100;
                     const isOnTrack = pct >= 75;
+
                     return (
                       <Box key={idx} style={{ ...animStyle(idx), marginBottom: t.spacing[4] }}>
                         <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>

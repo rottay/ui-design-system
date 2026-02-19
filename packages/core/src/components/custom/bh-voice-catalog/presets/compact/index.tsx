@@ -13,6 +13,12 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type { BhVoiceCatalogProps, VoiceProfile } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -65,6 +71,11 @@ export const CompactBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
     }, [voices, filterLanguage, filterGender]);
 
     if (loading) {
+      const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[6], ...style }}>
           <Activity size={18} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />

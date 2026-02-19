@@ -19,6 +19,10 @@ import {
   createPersonalitySectionHeaderStyle,
   createStaggerDelay,
   createEmptyStateStyle,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhInterviewReplaySplitProps, ReplayTranscriptSegment, ReplayEvidenceMarker } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -138,6 +142,11 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
     const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
     if (loading) {
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />
@@ -220,6 +229,8 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
               aria-valuemin={0}
               aria-valuemax={duration}
               aria-valuenow={currentTime}
+              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
               style={{ position: 'relative' as const, height: 80, cursor: 'pointer' }}
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -478,6 +489,7 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
                       <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[1], marginTop: t.spacing[2] }}>
                         {segmentMarkers.map(marker => {
                           const msc = getSeverityColor(marker.severity, t);
+
                           return (
                             <Box
                               key={marker.id}

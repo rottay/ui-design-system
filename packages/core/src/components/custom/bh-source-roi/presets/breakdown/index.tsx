@@ -6,7 +6,7 @@
  * cost analysis, and per-source drill-down panels.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   DollarSign,
   TrendingUp,
@@ -40,6 +40,11 @@ import {
   createProgressBarStyle,
   createEntranceAnimation,
   createStaggerDelay,
+
+  createPersonalityAccentBar,
+  createDividerStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhSourceRoiProps,
@@ -141,7 +146,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
-    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[7] }), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -167,6 +172,10 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
         const y = height - (d.hires / maxH) * (height - 4);
         return `${x},${y}`;
       }).join(' ');
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
       return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Hire trend for source`}>
           <polyline points={points} fill="none" stroke={t.colors.primaryScale[400]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
@@ -181,6 +190,8 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
         role="columnheader"
         tabIndex={0}
         aria-sort={sortBy === field ? (sortAsc ? 'ascending' : 'descending') : 'none'}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           width,
           cursor: 'pointer',
@@ -368,7 +379,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
                         { label: 'Cost per Candidate', value: formatCurrency(src.costPerCandidate), sub: 'per applicant' },
                         { label: '90-day Retention', value: src.retentionRate90d ? `${src.retentionRate90d}%` : 'N/A', sub: 'post-hire retention' },
                       ].map((metric, i) => (
-                        <Box key={i} style={{ ...animStyle(i), display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...createCardStyle(t, { padding: 20 }) }}>
+                        <Box key={i} style={{ ...animStyle(i), display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...createCardStyle(t, { padding: t.spacing[5] }) }}>
                           <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>{metric.label}</Text>
                           <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                             {metric.value}

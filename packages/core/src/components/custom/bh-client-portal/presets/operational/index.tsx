@@ -6,7 +6,7 @@
  * and compact metrics. Slite-inspired warm design with clean data density.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -16,6 +16,12 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -148,6 +154,15 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
       alignItems: 'center',
     }), [t]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box className={className} role="region" aria-label="Client Portal Operations" style={{
         ...createCardStyle(t, { elevation: 'md' }),
@@ -246,6 +261,8 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
                       tabIndex={0}
                       aria-selected={isSelected}
                       aria-label={`${pos.title} - ${sc.label}`}
+                      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                       style={{
                         display: 'grid',
                         gridTemplateColumns: POS_GRID,

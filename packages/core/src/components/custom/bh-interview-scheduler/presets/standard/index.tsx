@@ -22,6 +22,10 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhInterviewSchedulerProps, ScheduleCandidate, InterviewTypeConfig, ScheduleData, AgentOverride } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -53,11 +57,11 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
     const [agentConfig, setAgentConfig] = useState<AgentOverride>(externalAgentConfig ?? {});
     const [showConfirmation, setShowConfirmation] = useState(externalShowConfirmation);
 
-    const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
-    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
-    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
 
     const handleTypeChange = useCallback((c: InterviewTypeConfig) => { setInterviewType(c); onTypeChange?.(c); }, [onTypeChange]);
@@ -107,6 +111,14 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     return (
       <Box className={className} style={{ padding: t.spacing[5], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...style }}>
@@ -186,6 +198,8 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                         handleTypeChange({ ...interviewType, type: typeKey });
                       }
                     }}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       ...cardHover.base,
                       padding: t.spacing[4],
@@ -251,6 +265,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
                   {interviewers.map((interviewer, idx) => {
                     const sel = interviewType.interviewerId === interviewer.id;
+
                     return (
                       <Box
                         key={interviewer.id}

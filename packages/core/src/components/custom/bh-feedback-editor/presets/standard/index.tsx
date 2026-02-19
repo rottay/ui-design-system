@@ -21,6 +21,9 @@ import {
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhFeedbackEditorProps,
@@ -182,6 +185,11 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box className={className} style={{

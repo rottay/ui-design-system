@@ -7,7 +7,7 @@
  * and action buttons. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import {
   Scale, Activity, CheckCircle, PauseCircle, PlayCircle,
   Users, BarChart3, TrendingUp, TrendingDown, Plus,
@@ -27,6 +27,9 @@ import {
   createPersonalityAccentBar,
   createEmptyStateStyle,
   formatDistanceToNow,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhCalibrationDashboardProps,
@@ -68,7 +71,7 @@ function getStatusIcon(status: string) {
 }
 
 function getStatusLabel(status: string): string {
-  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
+return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 function getAgreementColor(rate: number, t: DesignTokens): string {
@@ -91,8 +94,8 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       sessions: rawSessions = [],
@@ -141,6 +144,8 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     return (
       <Box

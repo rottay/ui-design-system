@@ -79,7 +79,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
     const industries = Array.isArray(industriesProp) ? industriesProp : [];
 
     /* -- Styles ---------------------------------------------------- */
-    const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: t.spacing[6] }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -119,6 +119,8 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
 
     /* -- Loading --------------------------------------------------- */
     if (loading) {
+      const isGlass = t.surface.useGlass;
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />

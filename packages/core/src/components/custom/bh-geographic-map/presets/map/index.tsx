@@ -23,6 +23,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhGeographicMapProps, GeoRegion } from '../../core';
 
@@ -52,8 +55,8 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       regions: rawRegions = [],
@@ -96,6 +99,9 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
       ...entrance.animate,
       transition: entrance.transition,
     }), [entrance]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
 
     return (
       <Box

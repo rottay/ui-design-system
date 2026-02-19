@@ -45,6 +45,8 @@ import {
   createStatValueStyle, createStatLabelStyle,
   createTrendStyle, formatScore, ICON_SIZES,
   createPersonalityAccentBar,
+
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
@@ -126,7 +128,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
     const { Box, Text } = primitives;
     const t = tokens;
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       kpis: kpisProp,
@@ -217,15 +219,17 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
     });
 
     /* ---- Styles ---- */
-    const card = createCardStyle(t, { padding: 28, glass: isGlass });
+    const card = createCardStyle(t, { padding: t.spacing[7], glass: isGlass });
     const hoverStyles = createCardHoverStyles(t);
     const sectionLabel = createPersonalitySectionHeaderStyle(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     /* ---- Reusable components ---- */
     const SectionHeader = ({ section }: { section: SectionDef }) => {
       const Icon = section.icon;
       const isOpen = expandedSections.has(section.id);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
       return (
         <Box
           role="button"
@@ -234,6 +238,8 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
           aria-controls={`section-content-${section.id}`}
           onClick={() => toggleSection(section.id)}
           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection(section.id); } }}
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{
             display: 'flex',
             alignItems: 'center',

@@ -25,6 +25,11 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  getPersonalityTypography,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type {
   BhCandidateProfileProps,
@@ -61,7 +66,7 @@ import {
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  return (name || '').charAt(0).toUpperCase();
+return (name || '').charAt(0).toUpperCase();
 }
 
 function getStatusConfig(status: string, t: DesignTokens) {
@@ -123,6 +128,8 @@ function ScoreRing({ score, tokens: t, size = 64 }: { score: number; tokens: Des
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="4" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="4"
           strokeDasharray={circumference} strokeDashoffset={strokeOffset} strokeLinecap="round"
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
       </svg>
       <div style={{
@@ -158,6 +165,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
   name: 'BhCandidateProfile.Full',
   render: ({ primitives, props, tokens: t }: PresetContext<BhCandidateProfileProps>) => {
     const { Box, Text } = primitives;
+    const isGlass = t.surface.useGlass;
     const candidate = props.candidate ?? {} as Partial<DBCandidate> as DBCandidate;
     const fullName = useMemo(() => getCandidateFullName(candidate), [candidate]);
     const role = useMemo(() => getCandidateRole(candidate), [candidate]);
@@ -190,7 +198,12 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const [newNoteContent, setNewNoteContent] = useState('');
 
     const statusConfig = getStatusConfig((candidate.status as string) ?? 'active', t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     const handleTabChange = useCallback((tab: CandidateTab) => {
       setActiveTab(tab);
@@ -226,6 +239,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               const yoe = skill.yearsOfExperience ?? 0;
               const proficiency = Math.min(100, yoe * 12); // approximate proficiency from years
               const pb = createProgressBarStyle(t, { percent: proficiency, color: getScoreColor(proficiency, t) });
+
               return (
                 <Box key={skill.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], width: 120, flexShrink: 0, fontWeight: t.typography.fontWeight.medium }}>{skill.name}</Text>
@@ -788,6 +802,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
           {TAB_CONFIG.map(tab => {
             const isActive = activeTab === tab.key;
             const TabIcon = tab.icon;
+
             return (
               <Box
                 key={tab.key}

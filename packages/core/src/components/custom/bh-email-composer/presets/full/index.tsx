@@ -25,6 +25,11 @@ import {
   getPersonalityBadgeRadius,
   getAccentAwareLayout,
   ICON_SIZES,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhEmailComposerProps, EmailTemplate, EmailVariable } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -43,8 +48,8 @@ export const FullBhEmailComposer = createPreset<BhEmailComposerProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       templates: rawTemplates = [],
@@ -119,9 +124,18 @@ export const FullBhEmailComposer = createPreset<BhEmailComposerProps>({
       transition: entrance.transition,
     }), [entrance]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

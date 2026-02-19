@@ -29,6 +29,10 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type {
   BhRubricBuilderProps,
@@ -375,11 +379,17 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     /* ================================================================ */
     /*  RENDER                                                          */
     /* ================================================================ */
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
     return (
       <Box
         className={className}
         role="region"
         aria-label={`Rubric editor: ${rubricName}`}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...animStyle(0),
           display: 'flex',

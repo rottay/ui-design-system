@@ -5,7 +5,7 @@
  * Condensed monthly summary with mini heatmap strips.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo} from 'react';
 import { Calendar } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -16,6 +16,12 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createPersonalitySkeletonStyle,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhCalendarHeatmapProps, HeatmapDay } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -50,8 +56,8 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       days: rawDays = undefined,
@@ -89,9 +95,22 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
       transition: entrance.transition,
     }), [entrance]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

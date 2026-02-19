@@ -25,6 +25,8 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   createPersonalityAccentBar,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhRecruiterPerformanceProps, RecruiterPerformanceItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -60,8 +62,8 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       recruiters: rawRecruiters = [],
@@ -111,9 +113,14 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
 
     const gridLevels = [0.25, 0.5, 0.75, 1.0];
 
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

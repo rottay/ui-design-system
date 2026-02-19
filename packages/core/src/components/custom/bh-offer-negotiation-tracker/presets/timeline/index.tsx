@@ -23,6 +23,9 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type { BhOfferNegotiationTrackerProps, NegotiationRound } from '../../core';
 import { offerToNegotiationRounds } from '../../core';
@@ -77,8 +80,8 @@ export const TimelineBhOfferNegotiationTracker = createPreset<BhOfferNegotiation
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const ptypo = getPersonalityTypography(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
       offer,
@@ -124,6 +127,11 @@ export const TimelineBhOfferNegotiationTracker = createPreset<BhOfferNegotiation
       transition: entrance.transition,
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
 
     return (
       <Box

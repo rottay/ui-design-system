@@ -16,6 +16,9 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhCapacityPlannerProps, RecruiterCapacity, CapacitySummary } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -86,6 +89,11 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
     }, [onAcceptSuggestion]);
 
     const COLUMNS = ['Recruiter', 'Department', 'Assigned', 'Capacity', 'Utilization', 'Positions', 'Candidates', 'Status'];
+
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box

@@ -7,7 +7,7 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -17,6 +17,13 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   createPersonalityAccentBar,
+
+  createCardHoverStyles,
+  createDividerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientPipelineStage, ClientMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -142,6 +149,15 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
 
     const scheduledInterviews = useMemo(() => interviews.filter(i => i.status === 'scheduled'), [interviews]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+
+
     return (
       <Box className={className} role="region" aria-label="Client Portal Dashboard" style={{
         ...createCardStyle(t, { elevation: 'md' }),
@@ -164,6 +180,8 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
                   <img
                     src={client.logo}
                     alt={`${client.name} logo`}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </Box>

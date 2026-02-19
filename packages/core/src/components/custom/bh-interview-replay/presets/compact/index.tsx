@@ -25,6 +25,8 @@ import {
   createEmptyStateStyle,
   getAccentAwareLayout,
   ICON_SIZES,
+
+  createDividerStyle,
 } from '../../../helpers';
 import { MessageSquare, Bookmark, Users, Clock } from 'lucide-react';
 import type { DesignTokens } from '../../../../../types';
@@ -39,6 +41,9 @@ function TimelineScrubber({ transcript, speakerColors, tokens, primitives }: {
     const w = 100 / transcript.length;
     return transcript.map(e => ({ id: e.id, color: speakerColors[e.speaker]?.color ?? tokens.colors.neutral[400], width: `${w}%` }));
   }, [transcript, speakerColors, tokens]);
+
+  const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
 
   return (
     <Box style={{ display: 'flex', height: 6, borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const, background: tokens.colors.neutral[100] }}>

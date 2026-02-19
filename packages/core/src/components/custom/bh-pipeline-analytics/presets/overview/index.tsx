@@ -16,6 +16,14 @@ import {
   createStatValueStyle,
   createStatLabelStyle,
   ICON_SIZES,
+
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  getPersonalityTypography,
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhPipelineAnalyticsProps, PipelineStage, PipelineSummary, PipelineBottleneck } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -114,6 +122,19 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
       'Overall Conversion': <BarChart3 size={ICON_SIZES.section} color={tokens.colors.infoScale[500]} />,
       'Bottlenecks': <AlertTriangle size={ICON_SIZES.section} color={tokens.colors.errorScale[500]} />,
     };
+
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box className={className} style={{
@@ -237,6 +258,8 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
             <Flex justify="center">
               <svg
                 viewBox={`0 0 ${funnelWidth} ${funnelHeight}`}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{ width: '100%', maxWidth: funnelWidth, height: 'auto' }}
                 preserveAspectRatio="xMidYMid meet"
               >

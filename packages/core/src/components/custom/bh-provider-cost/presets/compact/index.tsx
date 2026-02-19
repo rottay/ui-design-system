@@ -23,6 +23,8 @@ import {
   createProgressBarStyle,
   createEmptyStateStyle,
   getChartConfig,
+
+  createDividerStyle,
 } from '../../../helpers';
 import type {
   BhProviderCostProps,
@@ -126,6 +128,8 @@ export const CompactBhProviderCost = createPreset<BhProviderCostProps>({
     });
 
     if (loading) {
+      const divider = useMemo(() => createDividerStyle(t), [t]);
+
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[6], ...style }}>
           <Loader2 size={18} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />

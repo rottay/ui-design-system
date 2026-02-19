@@ -6,7 +6,7 @@
  * and sprint progress summary. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   TrendingDown, Calendar, Target, Activity, Flame, Briefcase,
 } from 'lucide-react';
@@ -26,6 +26,9 @@ import {
   getPersonalityBadgeRadius,
   getChartConfig,
   getAccentAwareLayout,
+
+  createDividerStyle,
+  formatAbbreviated,
 } from '../../../helpers';
 import type { BhSprintBurndownProps, BurndownDataPoint } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -41,7 +44,7 @@ import type { DesignTokens } from '../../../../../types';
 function getPointsOnTrack(data: BurndownDataPoint[]): boolean {
   if ((data ?? []).length < 2) return true;
   const last = data[data.length - 1];
-  return (last?.actual ?? 0) <= (last?.ideal ?? 0) * 1.15;
+return (last?.actual ?? 0) <= (last?.ideal ?? 0) * 1.15;
 }
 
 function getVelocityStatus(data: BurndownDataPoint[], t: DesignTokens): { label: string; color: string; bg: string } {
@@ -64,8 +67,8 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass && !!t.glass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const chartCfg = getChartConfig(t);
 
     const {
@@ -137,6 +140,10 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     }, [maxPoints]);
 
     if (loading) {
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
       return (
         <Box className={className} style={{ ...card, ...animStyle(0), ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8] }}>
@@ -151,6 +158,8 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
         className={className}
         role="region"
         aria-label={`${title} - ${sprintName}`}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -205,6 +214,7 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
               { label: 'Completed', value: `${Math.round(((totalPoints - remainingPoints) / totalPoints) * 100)}%`, icon: Activity },
             ].map((stat, i) => {
               const Icon = stat.icon;
+
               return (
                 <Box key={stat.label} role="status" aria-label={`${stat.label}: ${stat.value}`} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
                   textAlign: 'center',

@@ -6,7 +6,7 @@
  * connector line, icons, and event details.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback} from 'react';
 import {
   Scale, FileText, UserPlus, Eye, Gavel,
   Bell, Clock, ChevronRight,
@@ -23,6 +23,10 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   formatDistanceToNow,
+
+  createPersonalityAccentBar,
+  createCardHoverStyles,
+  createDividerStyle,
 } from '../../../helpers';
 import type { BhAppealTimelineProps, AppealTimelineEvent } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -85,8 +89,8 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const ptypo = getPersonalityTypography(t);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     const {
       events: rawEvents = [],
@@ -118,9 +122,18 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
 
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
+    const divider = useMemo(() => createDividerStyle(t), [t]);
+
+
     return (
       <Box
         className={className}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

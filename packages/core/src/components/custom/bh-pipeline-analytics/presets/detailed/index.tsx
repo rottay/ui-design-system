@@ -16,6 +16,13 @@ import {
   createStatValueStyle,
   createStatLabelStyle,
   ICON_SIZES,
+
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  getPersonalityTypography,
+  createDividerStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhPipelineAnalyticsProps, PipelineStage, PipelineSummary, PipelineBottleneck } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -83,6 +90,17 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
     const chartColors = getChartColors(tokens);
     const maxTime = useMemo(() => (stages ?? []).length > 0 ? Math.max(...(stages ?? []).map(s => s.avgTimeInStageDays ?? 0)) : 1, [stages]);
+
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
+
 
     return (
       <Box className={className} style={{

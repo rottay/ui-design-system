@@ -16,6 +16,10 @@ import {
   getCardPadding, createMetadataFieldStyle, createMetadataGridStyle,
   createMetadataLabelStyle, createMetadataValueStyle,
   createStatValueStyle, createStatLabelStyle, ICON_SIZES,
+
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
+  createPersonalitySkeletonStyle,
 } from '../../../helpers';
 import type { BhOfferWorkspaceProps, ApprovalStep } from '../../core';
 import { getOfferStatusConfig, getOfferPipelineSteps, formatCurrency, getOfferCompensation } from '../../core';
@@ -163,6 +167,12 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       const steps = getOfferPipelineSteps();
       const curIdx = steps.findIndex((s) => s.key === status);
       const declined = status === 'declined';
+      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+
       return (
         <Section k="pipeline" icon={<BarChart3 size={18} color={p[600]} />} title="Status Pipeline">
           <Box style={{ padding: `${sp[3]}px 0`, overflowX: 'auto' as const }}>
@@ -269,6 +279,8 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   aria-label="Send offer to candidate"
                   onClick={onSendOffer}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSendOffer(); } }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     ...hov, padding: `${sp[2]}px ${sp[4]}px`, borderRadius: t.borderRadius.md,
                     backgroundColor: p[600], color: c.common.white,
@@ -317,6 +329,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
           <Section k="approval" icon={<Shield size={18} color={p[600]} />} title="Approval Chain" extra={`${approvedCt}/${approvalSteps.length}`}>
             {approvalSteps.map((step, idx) => {
               const sc = stepScale(step);
+
               return (
                 <Box key={idx}>
                   <Box style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[3]}px 0` }}>
