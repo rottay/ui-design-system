@@ -53,7 +53,6 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-
     const handleKeyNav = useCallback((e: React.KeyboardEvent, action: () => void) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action(); }
     }, []);
@@ -157,7 +156,6 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
 
     return (
       <Box className={className} style={{

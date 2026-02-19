@@ -94,16 +94,13 @@ export const CompactBhPositionSla = createPreset<BhPositionSlaProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     const divider = useMemo(() => createDividerStyle(t), [t]);
-
-
 
     return (
       <Box
         className={className}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ ...card, ...animStyle, padding: 0, overflow: 'hidden', ...style }}
       >
         {accentBar && <Box style={accentBar} />}

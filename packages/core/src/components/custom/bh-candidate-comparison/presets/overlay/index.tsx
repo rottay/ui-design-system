@@ -98,7 +98,6 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

@@ -159,8 +159,8 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                 aria-pressed={isSelected}
                 onClick={() => handleTeamSelect(tm.id)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleTeamSelect(tm.id); }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                   cursor: 'pointer',

@@ -156,7 +156,6 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
         {accentBar && <Box style={accentBar} />}

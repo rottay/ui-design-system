@@ -122,14 +122,15 @@ function ScoreRing({ score, tokens: t, size = 64 }: { score: number; tokens: Des
   const r = (size / 2) - 5;
   const circumference = 2 * Math.PI * r;
   const strokeOffset = circumference - (score / 100) * circumference;
+  const hoverStyles = createCardHoverStyles(t);
   return (
     <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="4" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="4"
           strokeDasharray={circumference} strokeDashoffset={strokeOffset} strokeLinecap="round"
-          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+          onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
       </svg>
       <div style={{

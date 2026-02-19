@@ -128,12 +128,11 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box
         className={className}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

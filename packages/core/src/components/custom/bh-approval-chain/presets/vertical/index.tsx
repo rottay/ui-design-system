@@ -108,12 +108,11 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
 
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-
     return (
       <Box
         className={className}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ ...card, padding: 0, overflow: 'hidden', ...(accentBar ? accentLayout.outer : {}), ...style }}
       >
         {accentBar && <Box style={accentBar} />}

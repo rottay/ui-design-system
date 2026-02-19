@@ -228,8 +228,6 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
     const SectionHeader = ({ section }: { section: SectionDef }) => {
       const Icon = section.icon;
       const isOpen = expandedSections.has(section.id);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
       return (
         <Box
           role="button"
@@ -238,8 +236,8 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
           aria-controls={`section-content-${section.id}`}
           onClick={() => toggleSection(section.id)}
           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection(section.id); } }}
-          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+          onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -480,7 +478,6 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             {expandedSections.has('kpis') && (
               <Box role="region" id="section-content-kpis" aria-label="Key Performance Indicators" style={{ padding: t.spacing[5], display: 'grid', gridTemplateColumns: `repeat(${Math.min(kpis.length, 5)}, 1fr)`, gap: t.spacing[4] }}>
                 {kpis.map((kpi, i) => {
-                  const entrance = createEntranceAnimation(t, { index: i });
                   return (
                     <Box key={i} style={{ ...animStyle(i), ...entrance.animate, transition: entrance.transition }}>
                       <KpiCard kpi={kpi} />
@@ -497,7 +494,6 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 {levelDistribution.map((level, idx) => {
                   const barPct = (level.count / distMax) * 100;
                   const barColor = resolveLevelColor(level, t);
-                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box key={idx} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ width: 12, height: 12, borderRadius: t.borderRadius.sm, backgroundColor: barColor, flexShrink: 0 }} />
@@ -647,7 +643,6 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   const pct = stat.totalEvaluations > 0 ? (stat.knockoutCount / stat.totalEvaluations) * 100 : 0;
                   const barW = (stat.knockoutCount / knockoutMax) * 100;
                   const barColor = pct >= 5 ? t.colors.errorScale[500] : pct >= 2 ? t.colors.warningScale[500] : t.colors.neutral[400];
-                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box key={idx} style={{ ...animStyle(idx), ...card, marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
@@ -744,7 +739,6 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 {cohortComparisons.map((cohort, idx) => {
                   const barW = (cohort.avgScore / cohortMax) * 100;
                   const scoreColor = getScoreColor(cohort.avgScore, t);
-                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box
                       key={idx}
@@ -818,7 +812,6 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   const isPositive = gap.gapFromTarget >= 0;
                   const gapColor = isPositive ? t.colors.successScale[600] : t.colors.errorScale[600];
                   const gapBg = isPositive ? t.colors.successScale[50] : t.colors.errorScale[50];
-                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box
                       key={idx}

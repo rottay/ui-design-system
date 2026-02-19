@@ -102,7 +102,6 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

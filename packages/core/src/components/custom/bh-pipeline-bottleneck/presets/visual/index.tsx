@@ -120,7 +120,6 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

@@ -149,11 +149,6 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
       const sevColor = getSeverityColor(event.severity ?? 'low', t);
       const isHovered = hoveredEvent === event.id;
 
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
-
       return (
         <Box
           key={event.id}

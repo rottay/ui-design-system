@@ -131,7 +131,6 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

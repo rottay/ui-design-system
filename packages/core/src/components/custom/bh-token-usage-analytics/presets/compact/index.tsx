@@ -151,13 +151,9 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
     }, [categories]);
 
     /* -- Loading -------------------------------------------------------- */
-    if (loading) {
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />
@@ -172,8 +168,8 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
         className={className}
         role="region"
         aria-label={title}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

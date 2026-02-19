@@ -110,20 +110,14 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
     const ScoreRing = useCallback(({ score, size = 72 }: { score: number; size?: number }) => {
       const color = getScoreBarColor(score, t);
       const r = (size / 2) - 5; const c = 2 * Math.PI * r;
-    const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
-    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-
       return (
         <Box style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
           <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }} role="img" aria-label={`Score: ${score}`}>
             <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="4" />
             <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="4"
               strokeDasharray={`${c}`} strokeDashoffset={c - (score / 100) * c} strokeLinecap="round"
-              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+              onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+              onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
               style={{ transition: `stroke-dashoffset ${t.personality.animation.entranceDuration}ms ease` }} />
           </svg>
           <Box style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }}>
@@ -133,6 +127,8 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
         </Box>
       );
     }, [t, Box, Text]);
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box className={className} style={{

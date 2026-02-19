@@ -187,9 +187,6 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     });
 
     if (loading) {
-    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-
       return (
         <Box className={className} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',

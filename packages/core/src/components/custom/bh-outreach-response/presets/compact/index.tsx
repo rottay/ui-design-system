@@ -49,7 +49,6 @@ export const CompactBhOutreachResponse = createPreset<BhOutreachResponseProps>({
       style,
     } = props;
 
-
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const progressBar = useMemo(
@@ -72,12 +71,11 @@ export const CompactBhOutreachResponse = createPreset<BhOutreachResponseProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           padding: 0,

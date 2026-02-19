@@ -236,13 +236,6 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
         ? Math.max(0, Math.min(100, ((offerData.baseSalary - marketMin) / (marketMax - marketMin)) * 100))
         : 50;
 
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
-
       return (
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[5] }}>
           <Box style={{ ...secTitle }}>
@@ -259,8 +252,8 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   type="number"
                   value={offerData.baseSalary}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange('baseSalary', Number(e.target.value))}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={inp}
                 />
               ) : (
@@ -997,6 +990,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       relocation: renderRelocation, terms: renderTerms,
       approval: renderApproval, documents: renderDocuments, pipeline: renderPipeline,
     };
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box className={className} style={{

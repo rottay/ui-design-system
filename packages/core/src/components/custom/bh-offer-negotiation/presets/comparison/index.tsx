@@ -89,11 +89,6 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
     const items = negotiations.length > 0 ? negotiations : negotiation ? [negotiation] : [];
 
     if (items.length === 0) {
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
-    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
-    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
-
       return (
         <Box className={className} style={{ ...cardBase, padding: tokens.spacing[6], textAlign: 'center' as const, ...style }}>
           <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>

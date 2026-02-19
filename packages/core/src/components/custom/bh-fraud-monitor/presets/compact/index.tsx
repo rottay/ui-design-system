@@ -62,8 +62,6 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     }, []);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-
       return (
         <Box className={className} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',

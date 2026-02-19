@@ -109,12 +109,9 @@ export const CompactBhInterviewReplaySplit = createPreset<BhInterviewReplaySplit
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
 
-    if (loading) {
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[6], ...style }}>
           <Activity size={18} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />
@@ -162,8 +159,8 @@ export const CompactBhInterviewReplaySplit = createPreset<BhInterviewReplaySplit
             tabIndex={0}
             aria-label="Rewind"
             onClick={() => handleSeek(Math.max(0, currentTime - 10))}
-            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+            onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, cursor: 'pointer', color: t.colors.neutral[500] }}
           >
             <SkipBack size={12} strokeWidth={1.5} />

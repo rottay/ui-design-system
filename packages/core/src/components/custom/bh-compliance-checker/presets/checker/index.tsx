@@ -112,9 +112,6 @@ function ScoreDonut({ score, tokens: t, size = 140 }: {
     : score >= 60 ? t.colors.warningScale[500]
     : t.colors.errorScale[500];
 
-  const divider = useMemo(() => createDividerStyle(t), [t]);
-
-
   return (
     <Box style={{ position: 'relative', width: size, height: size }}>
       <svg

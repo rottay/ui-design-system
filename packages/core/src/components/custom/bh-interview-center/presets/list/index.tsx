@@ -239,7 +239,6 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...style }}>
         {/* Header */}

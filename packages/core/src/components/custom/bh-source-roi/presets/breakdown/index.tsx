@@ -172,10 +172,6 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
         const y = height - (d.hires / maxH) * (height - 4);
         return `${x},${y}`;
       }).join(' ');
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
       return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Hire trend for source`}>
           <polyline points={points} fill="none" stroke={t.colors.primaryScale[400]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
@@ -190,8 +186,8 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
         role="columnheader"
         tabIndex={0}
         aria-sort={sortBy === field ? (sortAsc ? 'ascending' : 'descending') : 'none'}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           width,
           cursor: 'pointer',

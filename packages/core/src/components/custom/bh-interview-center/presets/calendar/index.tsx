@@ -55,10 +55,6 @@ function getStatusCfg(status: string | null | undefined) {
 }
 
 function sc(t: DesignTokens, scale: string, shade: number) {
-  const divider = useMemo(() => createDividerStyle(t), [t]);
-  const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-  const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
   return ((t.colors as any)[scale])?.[shade] ?? (t.colors.neutral as any)[shade];
 }
 

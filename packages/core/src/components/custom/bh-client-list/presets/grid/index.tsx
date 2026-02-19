@@ -78,6 +78,7 @@ function getStatusInfo(status: string | null | undefined) {
 export const GridBhClientList = createPreset<BhClientListProps>({
   name: 'BhClientList.Grid',
   render: ({ primitives, props, tokens }: PresetContext<BhClientListProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -118,9 +119,6 @@ export const GridBhClientList = createPreset<BhClientListProps>({
     }, []);
 
     if (loading) {
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-      const isGlass = t.surface.useGlass;
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -171,7 +169,6 @@ export const GridBhClientList = createPreset<BhClientListProps>({
         <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: t.spacing[4] }}>
           {clients.map((client, idx) => {
             const isSelected = selectedClientId === client.id;
-            const entrance = createEntranceAnimation(t, { index: idx });
             const clientDisplayName = getClientName(client);
             const ti = getTierInfo(client.tier, t);
             const ci = getStatusInfo(client.status);
@@ -204,12 +201,12 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                   transition: `all ${t.motion.hover}`,
                   ...entrance.animate,
                 }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+                onMouseEnter={(e: any) => {
                   const el = e.currentTarget;
                   if (cardHover.hover.transform) el.style.transform = cardHover.hover.transform;
                   if (cardHover.hover.boxShadow) el.style.boxShadow = cardHover.hover.boxShadow;
                 }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+                onMouseLeave={(e: any) => {
                   const el = e.currentTarget;
                   el.style.transform = 'none';
                   el.style.boxShadow = (card.boxShadow as string) || '';

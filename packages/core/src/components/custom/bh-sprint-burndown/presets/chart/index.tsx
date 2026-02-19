@@ -139,11 +139,9 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
       return Array.from({ length: count + 1 }, (_, i) => Math.round((maxPoints / count) * i));
     }, [maxPoints]);
 
-    if (loading) {
-    const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ ...card, ...animStyle(0), ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8] }}>
@@ -158,8 +156,8 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
         className={className}
         role="region"
         aria-label={`${title} - ${sprintName}`}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

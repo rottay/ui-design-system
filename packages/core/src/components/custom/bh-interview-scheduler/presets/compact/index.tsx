@@ -51,6 +51,9 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
     const [scheduleData, setScheduleData] = useState<ScheduleData>(externalSchedule ?? { date: '', time: '', timezone: 'America/New_York', estimatedDuration: 30 });
     const [agentConfig, setAgentConfig] = useState<AgentOverride>(externalAgentConfig ?? {});
 
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
+    const t = tokens;
+
     const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
@@ -62,9 +65,6 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
     const handleScheduleChange = useCallback((d: Partial<ScheduleData>) => { const u = { ...scheduleData, ...d }; setScheduleData(u); onScheduleChange?.(u); }, [scheduleData, onScheduleChange]);
     const handleAgentConfigChange = useCallback((c: Partial<AgentOverride>) => { const u = { ...agentConfig, ...c }; setAgentConfig(u); onAgentConfigChange?.(u); }, [agentConfig, onAgentConfigChange]);
     const handleConfirm = useCallback(() => { onConfirm?.(); }, [onConfirm]);
-
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const t = tokens;
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
 
     const cardStyle = useMemo(() => ({
@@ -147,8 +147,8 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
                     aria-pressed={sel}
                     onClick={() => handleTypeChange({ ...interviewType, type: typeKey })}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTypeChange({ ...interviewType, type: typeKey }); } }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                    onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2],
                       padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,

@@ -62,7 +62,6 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
-
     const glassCard = useMemo(() =>
       isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${bdr} ${t.glass.border}` } : {},
       [isGlass, t, bdr]
@@ -126,7 +125,6 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
 
     return (
       <Box className={className} style={{
@@ -373,8 +371,8 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                             aria-expanded={isExpanded}
                             onClick={() => handleSectionToggle(section.title)}
                             onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => handleSectionToggle(section.title))}
-                            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                            onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                            onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                             style={{
                               padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                               display: 'flex', alignItems: 'center', justifyContent: 'space-between',

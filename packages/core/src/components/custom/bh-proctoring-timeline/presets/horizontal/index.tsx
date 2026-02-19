@@ -198,7 +198,6 @@ export const HorizontalBhProctoringTimeline = createPreset<BhProctoringTimelineP
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

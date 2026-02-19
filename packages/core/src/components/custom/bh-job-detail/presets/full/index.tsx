@@ -156,11 +156,10 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
       <Text style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, backgroundColor: bg, color, border: `${bdr} ${border}`, textTransform: 'capitalize' as const }}>{children}</Text>
     ), [t, bdr]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+
     const Avatar_ = useCallback(({ avatar, name, size = 28 }: { avatar?: string; name: string; size?: number }) => {
       if (avatar) return <img src={avatar} alt={name} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' as const }} />;
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
       return (
         <Text style={{ width: size, height: size, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[600], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>{(name || '').charAt(0).toUpperCase()}</Text>
@@ -182,8 +181,8 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
 
     const Toggle_ = useCallback(({ on }: { on: boolean }) => (
       <Box 
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ width: 36, height: 20, borderRadius: t.borderRadius.full, backgroundColor: on ? t.colors.successScale[500] : t.colors.neutral[300], position: 'relative' as const, cursor: 'pointer', transition: `all ${t.motion.hover}` }} role="switch" aria-checked={on}>
         <Box style={{ width: 16, height: 16, borderRadius: t.borderRadius.full, backgroundColor: t.colors.common.white, position: 'absolute' as const, top: 2, left: on ? 18 : 2, transition: `all ${t.motion.hover}`, boxShadow: t.shadows.sm }} />
       </Box>

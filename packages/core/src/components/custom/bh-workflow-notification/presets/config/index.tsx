@@ -121,7 +121,6 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

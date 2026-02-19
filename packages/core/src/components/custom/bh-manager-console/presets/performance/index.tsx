@@ -174,8 +174,8 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 tabIndex={0}
                 onClick={() => handleDateRangeChange(opt)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleDateRangeChange(opt); }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                   borderRadius: badgeRadius,

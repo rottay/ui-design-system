@@ -102,7 +102,6 @@ export const BarsBhProctoringSeverity = createPreset<BhProctoringSeverityProps>(
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

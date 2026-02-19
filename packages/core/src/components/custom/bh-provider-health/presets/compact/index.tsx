@@ -176,7 +176,6 @@ export const CompactBhProviderHealth = createPreset<BhProviderHealthProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box
         className={className}

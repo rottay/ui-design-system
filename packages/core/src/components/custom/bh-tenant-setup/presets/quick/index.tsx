@@ -279,8 +279,8 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
             value={localFormData.orgName}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormData({ orgName: e.target.value })}
             placeholder="Your company name"
-            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+            onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={inputStyle}
           />
         </Box>

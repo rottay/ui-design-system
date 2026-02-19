@@ -51,9 +51,6 @@ let _Text: any;
 function ScoreRing({ score, tokens: t, size = 30 }: { score: number; tokens: DesignTokens; size?: number }) {
   const color = getScoreColor(score, t); const r = (size / 2) - 3; const c = 2 * Math.PI * r;
   const B = _Box;
-  const divider = useMemo(() => createDividerStyle(t), [t]);
-  const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
   return (
     <B style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}

@@ -96,7 +96,6 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
 
-
     // Get unique languages and genders
     const languages = useMemo(() => Array.from(new Set(voices.map(v => v.language))), [voices]);
     const genders = useMemo(() => Array.from(new Set(voices.map(v => v.gender))), [voices]);
@@ -111,9 +110,6 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
     }, [voices, filterLanguage, filterGender]);
 
     if (loading) {
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />

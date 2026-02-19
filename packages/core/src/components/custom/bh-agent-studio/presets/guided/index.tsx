@@ -421,8 +421,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   aria-label={`Agent type: ${config.label}`}
                   onClick={() => updateAgent({ type })}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ type }); } }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',

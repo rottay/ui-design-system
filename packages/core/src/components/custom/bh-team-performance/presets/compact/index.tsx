@@ -49,6 +49,7 @@ const METRIC_LABELS: Record<string, string> = {
 export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
   name: 'BhTeamPerformance.Compact',
   render: ({ primitives, props, tokens }: PresetContext<BhTeamPerformanceProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -91,12 +92,9 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
 
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const isGlass = t.surface.useGlass;
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ ...animStyle(0), ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
           <Loader2 size={18} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -138,8 +136,8 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
                 onKeyDown={onTeamClick ? (e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTeamClick(team.teamName); }
                 } : undefined}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   ...animStyle(idx),
                   display: 'flex',

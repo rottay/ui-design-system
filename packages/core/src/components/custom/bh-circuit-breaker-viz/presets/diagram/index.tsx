@@ -130,9 +130,6 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
     }, [nodes]);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-
       return (
         <Box className={className} style={{ ...animStyle(0), display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />
@@ -209,8 +206,8 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
               return (
                 <g
                   key={node.id}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{ cursor: 'pointer' }}
                   onClick={() => handleNodeClick(node.id)}
                 >

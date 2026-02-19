@@ -135,7 +135,6 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box className={className} style={{
         display: 'flex', flexDirection: 'column' as const,
@@ -258,8 +257,8 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
             <Flex justify="center">
               <svg
                 viewBox={`0 0 ${funnelWidth} ${funnelHeight}`}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{ width: '100%', maxWidth: funnelWidth, height: 'auto' }}
                 preserveAspectRatio="xMidYMid meet"
               >

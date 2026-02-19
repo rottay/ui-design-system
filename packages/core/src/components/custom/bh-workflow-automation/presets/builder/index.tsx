@@ -96,7 +96,6 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

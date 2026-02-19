@@ -57,6 +57,9 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
     const [agentConfig, setAgentConfig] = useState<AgentOverride>(externalAgentConfig ?? {});
     const [showConfirmation, setShowConfirmation] = useState(externalShowConfirmation);
 
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
+    const t = tokens;
+
     const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
@@ -72,9 +75,6 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
       setShowConfirmation(true);
       onConfirm?.();
     }, [onConfirm]);
-
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const t = tokens;
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
 
@@ -198,8 +198,8 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                         handleTypeChange({ ...interviewType, type: typeKey });
                       }
                     }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                    onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       ...cardHover.base,
                       padding: t.spacing[4],

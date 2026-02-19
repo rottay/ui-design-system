@@ -142,7 +142,6 @@ export const DetailedBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>(
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

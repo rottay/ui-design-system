@@ -190,8 +190,6 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
 
     const barWidth = useMemo(() => {
       if (scoreDistribution.length === 0) return 0;
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (barInnerWidth / scoreDistribution.length) * 0.7;
     }, [scoreDistribution.length, barInnerWidth]);
 

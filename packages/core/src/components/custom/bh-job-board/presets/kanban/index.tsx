@@ -163,13 +163,6 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
       const isSelected = selectedJobs.includes(job.id);
       const itemEntrance = createEntranceAnimation(tokens, { index: idx });
 
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
-
-
       return (
         <Box key={job.id} role="button" tabIndex={0} aria-label={`${job.title} - ${urgencyCfg.label} urgency`} aria-grabbed={isDragging}
           draggable

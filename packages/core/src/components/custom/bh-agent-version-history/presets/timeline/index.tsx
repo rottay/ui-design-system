@@ -75,15 +75,12 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
-
     // Sort versions by date descending
     const sortedVersions = useMemo(() => {
       return [...versions].sort((a, b) => (b.createdAt?.getTime?.() ?? 0) - (a.createdAt?.getTime?.() ?? 0));
     }, [versions]);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />

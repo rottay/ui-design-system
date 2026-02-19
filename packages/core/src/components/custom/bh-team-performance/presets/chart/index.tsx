@@ -50,6 +50,7 @@ const METRIC_OPTIONS = [
 export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
   name: 'BhTeamPerformance.Chart',
   render: ({ primitives, props, tokens }: PresetContext<BhTeamPerformanceProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -114,12 +115,9 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
     const barW = teams.length > 0 ? Math.max((usableW - barPad * (teams.length + 1)) / teams.length, 20) : 40;
 
     /* -- Loading --------------------------------------------------- */
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const isGlass = t.surface.useGlass;
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -174,8 +172,8 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
                 onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMetricChange(opt.key); }
                 }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{ ...pillStyle, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}
               >
                 <IconComp size={12} />

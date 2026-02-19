@@ -113,13 +113,9 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
       [tokens],
     );
 
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
-    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
 
+    if (loading) {
       return (
         <Box className={className} style={{
           ...createEmptyStateStyle(tokens),
@@ -228,8 +224,8 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
               aria-pressed={showOverlay}
               onClick={toggleOverlay}
               onKeyDown={handleOverlayKeyDown}
-              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+              onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+              onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
               style={{
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                 borderRadius: badgeRadius,

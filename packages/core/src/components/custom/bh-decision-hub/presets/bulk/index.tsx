@@ -51,10 +51,11 @@ function ScoreRing({ score, t }: { score: number; t: DesignTokens }) {
   const size = 36; const r = 13; const c = 2 * Math.PI * r;
   const Box = _BBox;
   const Text = _BText;
+  const hoverStyles = createCardHoverStyles(t);
 return (
     <Box 
-      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+      onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+      onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
       style={{ position: 'relative' as const, width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Score: ${score}%`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="3" />

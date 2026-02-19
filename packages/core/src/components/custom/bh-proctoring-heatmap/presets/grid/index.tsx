@@ -138,7 +138,6 @@ export const GridBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

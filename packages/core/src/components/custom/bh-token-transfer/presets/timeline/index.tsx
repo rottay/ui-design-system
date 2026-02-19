@@ -116,10 +116,9 @@ export const TimelineBhTokenTransfer = createPreset<BhTokenTransferProps>({
       onRequestTransfer?.();
     }, [onRequestTransfer]);
 
-    if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Coins size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />
@@ -166,8 +165,8 @@ export const TimelineBhTokenTransfer = createPreset<BhTokenTransferProps>({
                 aria-label="Request new transfer"
                 onClick={handleRequestTransfer}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleRequestTransfer(); } }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: t.spacing[2],
                   padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
@@ -305,7 +304,6 @@ export const TimelineBhTokenTransfer = createPreset<BhTokenTransferProps>({
                 const StatusIcon = statusCfg.icon;
                 const isPending = transfer.status === 'pending';
                 const stagger = createStaggerDelay(t, index);
-                const hoverStyles = createCardHoverStyles(t);
 
                 return (
                   <Box

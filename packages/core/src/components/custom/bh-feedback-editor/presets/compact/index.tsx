@@ -125,7 +125,6 @@ export const CompactBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box className={className} style={{ ...cardStyle, ...accentLayout.outer, ...style }}>
         {accentBar && <Box style={accentBar} />}
@@ -186,8 +185,8 @@ export const CompactBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                 aria-pressed={isActive}
                 onClick={() => setChannel(ch)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setChannel(ch); } }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: badgeRadius,

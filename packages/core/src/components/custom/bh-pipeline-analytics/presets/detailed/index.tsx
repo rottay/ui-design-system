@@ -101,7 +101,6 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box className={className} style={{
         display: 'flex', flexDirection: 'column' as const,

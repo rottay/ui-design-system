@@ -64,6 +64,7 @@ function UtilizationRing({ percent, status, t }: { percent: number; status: stri
   const clamped = Math.min(percent, 150);
   const progress = (Math.min(clamped, 100) / 100) * circ;
   const color = getRingColor(status, t);
+  const hoverStyles = createCardHoverStyles(t);
 return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth={stroke} />
@@ -72,8 +73,8 @@ return (
         stroke={color} strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={`${progress} ${circ}`}
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ transition: `stroke-dasharray ${t.personality.animation.entranceDuration}ms ease` }}
       />
       {percent > 100 && (

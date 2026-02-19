@@ -50,7 +50,6 @@ export const CompactBhAppealForm = createPreset<BhAppealFormProps>({
       style,
     } = props;
 
-
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
@@ -77,12 +76,11 @@ export const CompactBhAppealForm = createPreset<BhAppealFormProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

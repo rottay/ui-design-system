@@ -144,7 +144,6 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box className={className} style={{
         ...cardBase,
@@ -177,8 +176,8 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
               aria-label="Cancel import"
               onClick={handleCancel}
               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCancel(); } }}
-              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+              onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+              onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32,
                 borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[200]}`,

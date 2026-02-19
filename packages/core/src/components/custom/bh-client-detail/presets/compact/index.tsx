@@ -63,6 +63,7 @@ function sparkline(data: RevenuePoint[], w: number, h: number, pad = 2): string 
 export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
   name: 'BhClientDetail.Compact',
   render: ({ primitives, props, tokens }: PresetContext<BhClientDetailProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -140,8 +141,6 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
     const ContractIcon = contractConfig.icon;
 
     if (loading) {
-      const isGlass = t.surface.useGlass;
-
       return (
         <Box className={className} style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
           <Loader2 size={18} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -247,8 +246,8 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
                       cursor: 'pointer',
                       transition: `background-color ${t.motion.hover}`,
                     }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.primaryScale[50]; }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                    onMouseEnter={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.primaryScale[50]; }}
+                    onMouseLeave={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
                   >
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
                       {position.title}

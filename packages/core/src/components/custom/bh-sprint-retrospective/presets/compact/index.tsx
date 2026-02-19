@@ -122,11 +122,9 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
       [items],
     );
 
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ ...card, ...animStyle, ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[4] }}>
@@ -141,8 +139,8 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
         className={className}
         role="region"
         aria-label={`Retrospective - ${sprintName}`}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',
@@ -268,6 +266,7 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
             topItems.map(item => {
               const Icon = getCategoryIcon(item.category);
               const catColor = getCategoryColor(item.category, t);
+
               return (
                 <Box
                   key={item.id}

@@ -121,18 +121,14 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
         const r = (size / 2) - 4;
         const circumference = 2 * Math.PI * r;
         const strokeOffset = circumference - (score / 100) * circumference;
-    const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
         return (
           <Box style={{ position: 'relative', width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Score: ${score}`}>
             <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
               <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="3" />
               <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
                 strokeDasharray={circumference} strokeDashoffset={strokeOffset} strokeLinecap="round"
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{ transition: `stroke-dashoffset ${t.motion.hover}` }} />
             </svg>
             <Box style={{ 

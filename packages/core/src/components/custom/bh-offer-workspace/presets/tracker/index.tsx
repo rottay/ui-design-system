@@ -167,12 +167,6 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       const steps = getOfferPipelineSteps();
       const curIdx = steps.findIndex((s) => s.key === status);
       const declined = status === 'declined';
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
-
       return (
         <Section k="pipeline" icon={<BarChart3 size={18} color={p[600]} />} title="Status Pipeline">
           <Box style={{ padding: `${sp[3]}px 0`, overflowX: 'auto' as const }}>
@@ -223,6 +217,8 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
 
     const stepBadge = (s: ApprovalStep) => s.status === 'approved' ? 'success' as const : s.status === 'rejected' ? 'error' as const : 'warning' as const;
     const stepScale = (s: ApprovalStep) => s.status === 'approved' ? c.successScale : s.status === 'rejected' ? c.errorScale : c.warningScale;
+
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box className={className} style={{
@@ -279,8 +275,8 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   aria-label="Send offer to candidate"
                   onClick={onSendOffer}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSendOffer(); } }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     ...hov, padding: `${sp[2]}px ${sp[4]}px`, borderRadius: t.borderRadius.md,
                     backgroundColor: p[600], color: c.common.white,

@@ -300,7 +300,6 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box
         className={className}

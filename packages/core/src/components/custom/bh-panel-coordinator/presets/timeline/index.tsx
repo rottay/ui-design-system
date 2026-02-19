@@ -79,11 +79,9 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
       transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
     });
 
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
 
+    if (loading) {
       return (
         <Flex align="center" justify="center" style={{ padding: tokens.spacing[10], ...style }} className={className}>
           <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>Loading panel data...</Text>
@@ -284,8 +282,8 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                 const memberStage = stages.find(s => s.id === m.stageId);
                 return (
                   <Box key={m.id} role="button" tabIndex={0} aria-label={`Panelist: ${m.name}`} aria-pressed={isSelected} onClick={() => handleMemberSelect(m.id)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleMemberSelect(m.id); }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                    onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={createListItemStyle(tokens, { active: isSelected, interactive: true })}>
                     <Flex justify="between" align="center">
                       <Stack gap={2}>
@@ -449,6 +447,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                     .filter(([, count]) => count > 0)
                     .map(([rec, count]) => {
                       const rc = recColors[rec as keyof typeof recColors];
+
                       return (
                         <Flex key={rec} justify="between" align="center">
                           <Flex gap={6} align="center">

@@ -144,7 +144,6 @@ export const CompactBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanban
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

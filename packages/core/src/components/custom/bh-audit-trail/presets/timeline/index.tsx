@@ -230,8 +230,6 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     /* -- Stat Card -------------------------------------------------- */
     const StatCard = ({ label, value, icon, scale }: { label: string; value: string | number; icon: React.ReactNode; scale: string }) => {
       const s = (t.colors as any)[scale] as ColorScale;
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
       return (
         <Box style={{ ...card, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
           <Box style={{
@@ -475,8 +473,8 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                           transition: `all ${t.motion.hover}`,
                           boxShadow: isSelected ? t.shadows.md : card.boxShadow,
                         }}
-                        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.boxShadow = t.shadows.md; }}
-                        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.boxShadow = isSelected ? t.shadows.md : (card.boxShadow as string) || ''; }}
+                        onMouseEnter={(e: any) => { e.currentTarget.style.boxShadow = t.shadows.md; }}
+                        onMouseLeave={(e: any) => { e.currentTarget.style.boxShadow = isSelected ? t.shadows.md : (card.boxShadow as string) || ''; }}
                       >
                         {/* Header */}
                         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>

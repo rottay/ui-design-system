@@ -104,8 +104,6 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const gap = useMemo(() => (barGroupWidth - barW) / 2, [barGroupWidth, barW]);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} style={{ ...card, ...animStyle(0), ...accentLayout.outer,
           ...style }}>

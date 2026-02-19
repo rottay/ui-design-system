@@ -127,7 +127,6 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} style={{
         ...cardBase,
@@ -172,8 +171,8 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
                   tabIndex={0}
                   onClick={() => handleTabChange(tab)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTabChange(tab); } }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
                     border: 'none', backgroundColor: active ? t.colors.primaryScale[50] : 'transparent',

@@ -222,10 +222,6 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
 
     const OptionBtn = useCallback(({ selected, label, onClick, scale, flexOne }: { selected: boolean; label: string; onClick: () => void; scale?: any; flexOne?: boolean }) => {
       const s = scale ?? t.colors.primaryScale;
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
       return (
         <Box role="button" tabIndex={0} aria-label={`Select ${label}`} aria-pressed={selected} onClick={onClick} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, onClick)} style={{ ...(flexOne ? { flex: 1 } : {}), padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, fontWeight: selected ? t.typography.fontWeight.semibold : t.typography.fontWeight.normal, color: selected ? s[700] : t.colors.neutral[600], backgroundColor: selected ? s[50] : t.colors.common.white, border: `${bdr} ${selected ? s[300] : t.colors.neutral[300]}`, borderRadius: t.borderRadius.md, cursor: 'pointer', transition: `all ${t.motion.hover}`, textAlign: 'center' as const }}>
           <Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{label}</Text>
@@ -253,8 +249,8 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
       return (
         <Box>
           <Box 
-            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+            onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, backgroundColor: t.colors.neutral[50], border: `${bdr} ${t.colors.neutral[300]}`, borderBottom: 'none', borderRadius: `${t.borderRadius.md} ${t.borderRadius.md} 0 0` }}>
             {[Bold, Italic, Underline].map((I, idx) => <Box key={idx} as="button" role="button" tabIndex={0} aria-label={['Bold', 'Italic', 'Underline'][idx]} style={tbBtn}><I size={14} /></Box>)}
             <Box style={{ width: 1, height: 20, backgroundColor: t.colors.neutral[300], margin: `0 ${t.spacing[1]}px` }} />
@@ -644,7 +640,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
     /* -- Main render ----------------------------------------------- */
 
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box style={{ display: 'flex', flexDirection: 'column' as const, height: '100%', backgroundColor: t.colors.neutral[50], fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }} className={className}>

@@ -157,7 +157,6 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} role="region" aria-label="Client Portal Dashboard" style={{
         ...createCardStyle(t, { elevation: 'md' }),
@@ -180,8 +179,8 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
                   <img
                     src={client.logo}
                     alt={`${client.name} logo`}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                    onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </Box>

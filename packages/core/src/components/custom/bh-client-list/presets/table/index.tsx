@@ -79,6 +79,7 @@ function getStatusBadge(status: string | null | undefined) {
 export const TableBhClientList = createPreset<BhClientListProps>({
   name: 'BhClientList.Table',
   render: ({ primitives, props, tokens }: PresetContext<BhClientListProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -124,9 +125,6 @@ export const TableBhClientList = createPreset<BhClientListProps>({
 
     /* -- Loading --------------------------------------------------- */
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const isGlass = t.surface.useGlass;
-
       return (
         <Box className={className} style={{ ...card, padding: t.spacing[6], ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[3], padding: t.spacing[8] }}>
@@ -234,7 +232,6 @@ export const TableBhClientList = createPreset<BhClientListProps>({
         {/* Rows */}
         {clients.map((client, idx) => {
           const isSelected = selectedClientId === client.id;
-          const entrance = createEntranceAnimation(t, { index: idx });
           const clientDisplayName = getClientName(client);
           const tb = getTierBadge(client.tier);
           const cb = getStatusBadge(client.status);
@@ -266,10 +263,10 @@ export const TableBhClientList = createPreset<BhClientListProps>({
                 transition: `all ${t.motion.hover}`,
                 ...entrance.animate,
               }}
-              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+              onMouseEnter={(e: any) => {
                 if (!isSelected) e.currentTarget.style.backgroundColor = t.colors.neutral[50];
               }}
-              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+              onMouseLeave={(e: any) => {
                 if (!isSelected) e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >

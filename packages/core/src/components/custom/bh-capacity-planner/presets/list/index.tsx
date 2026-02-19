@@ -94,7 +94,6 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box
         className={className}
@@ -192,10 +191,10 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                       transition: `background-color ${tokens.motion.hover}`,
                       alignItems: 'center',
                     }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+                    onMouseEnter={(e: any) => {
                       if (!isSelected) e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
                     }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+                    onMouseLeave={(e: any) => {
                       e.currentTarget.style.backgroundColor = isSelected ? tokens.colors.primaryScale[50] : 'transparent';
                     }}
                   >

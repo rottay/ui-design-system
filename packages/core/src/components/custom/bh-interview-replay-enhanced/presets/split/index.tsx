@@ -190,12 +190,9 @@ export const SplitBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEnha
     });
 
     // Loading state
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ ...createEmptyStateStyle(t), ...style }}>
           <Text style={{ color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}>Loading enhanced replay...</Text>
@@ -320,8 +317,8 @@ export const SplitBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEnha
                     aria-label={`Evidence: ${em.label} at ${formatTime(em.time)}`}
                     onClick={() => handleEvidenceClick(em.id)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEvidenceClick(em.id); } }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                    onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: t.spacing[1],
                       padding: `0 ${t.spacing[2]}px`, borderRadius: badgeRadius,

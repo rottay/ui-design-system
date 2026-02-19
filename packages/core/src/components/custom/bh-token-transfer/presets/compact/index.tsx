@@ -103,8 +103,6 @@ export const CompactBhTokenTransfer = createPreset<BhTokenTransferProps>({
     }, [onRequestTransfer]);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[6], ...style }}>
           <Coins size={18} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[2] }} />
@@ -173,8 +171,6 @@ export const CompactBhTokenTransfer = createPreset<BhTokenTransferProps>({
               const statusCfg = getStatusConfig(transfer.status, t);
               const isPending = transfer.status === 'pending';
               const stagger = createStaggerDelay(t, index);
-              const hoverStyles = createCardHoverStyles(t);
-
               return (
                 <Box
                   key={transfer.id}

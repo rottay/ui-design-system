@@ -206,7 +206,6 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} role="region" aria-label="Client Directory" style={{
         ...createCardStyle(t, { elevation: 'md' }),
@@ -239,8 +238,8 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
                     tabIndex={0}
                     aria-pressed={viewMode === mode}
                     aria-label={`${mode} view`}
-                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                    onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                    onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       padding: `${t.spacing[1]}px ${t.spacing[2]}px`,

@@ -85,9 +85,6 @@ function ScoreRingInner({ score, tokens: t, size = 48, Box, Text }: { score: num
   const circumference = 2 * Math.PI * r;
   const strokeOffset = circumference - (score / 100) * circumference;
 
-  const divider = useMemo(() => createDividerStyle(t), [t]);
-
-
   return (
     <Box style={{ position: 'relative', width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Match score: ${score}`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>

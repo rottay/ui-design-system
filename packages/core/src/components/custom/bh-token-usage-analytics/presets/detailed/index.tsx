@@ -169,8 +169,6 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
 
     /* -- Loading -------------------------------------------------------- */
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Loader2 size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />
@@ -185,8 +183,8 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
         className={className}
         role="region"
         aria-label={title}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column' as const,

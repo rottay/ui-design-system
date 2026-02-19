@@ -138,7 +138,6 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

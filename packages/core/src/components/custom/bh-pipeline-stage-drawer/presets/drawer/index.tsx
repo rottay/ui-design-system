@@ -223,7 +223,6 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

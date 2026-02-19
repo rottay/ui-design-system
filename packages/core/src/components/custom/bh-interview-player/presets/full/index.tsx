@@ -67,7 +67,6 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-
     const glassCard = useMemo(() =>
       isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${bdr} ${t.glass.border}` } : {},
       [isGlass, t, bdr]
@@ -141,9 +140,6 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
             return next;
           });
         }, 100);
-        const divider = useMemo(() => createDividerStyle(t), [t]);
-        const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
         return () => clearInterval(interval);
       }
     }, [audioUrl, isPlaying, playbackSpeed, audioDuration]);

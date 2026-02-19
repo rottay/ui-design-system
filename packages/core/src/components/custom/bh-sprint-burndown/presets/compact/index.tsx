@@ -132,10 +132,6 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     }, [data, maxDay, maxPts]);
 
     if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-
       return (
         <Box className={className} style={{ ...card, ...animStyle, ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[4] }}>
@@ -144,14 +140,15 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
         </Box>
       );
     }
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box
         className={className}
         role="region"
         aria-label={`Burndown: ${sprintName}`}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',

@@ -122,9 +122,6 @@ function SeverityDonut({ data, tokens: t, size = 160 }: {
 
   const circumference = 2 * Math.PI * r;
 
-  const divider = useMemo(() => createDividerStyle(t), [t]);
-
-
   return (
     <Box style={{ position: 'relative', width: size, height: size }}>
       <svg

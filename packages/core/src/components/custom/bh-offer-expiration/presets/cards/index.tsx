@@ -128,13 +128,6 @@ export const CardsBhOfferExpiration = createPreset<BhOfferExpirationProps>({
       const isHovered = hoveredOffer === offer.id;
       const urgencyColor = getUrgencyColor(offer.daysRemaining, t);
 
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
-
       return (
         <Box
           key={offer.id}

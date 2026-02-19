@@ -143,13 +143,12 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
       </Box>
     ), [tokens, badgeRadius, Box]);
 
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
     const AvatarBox = useCallback(({ avatar, name, size = 24 }: { avatar?: string; name: string; size?: number }) => {
       if (avatar) {
         return <Box style={{ width: size, height: size, borderRadius: tokens.borderRadius.full, backgroundImage: `url(${avatar})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />;
       }
-      const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
       return (
         <Box style={{
@@ -266,8 +265,8 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
                   aria-label={`View candidate ${c.name}`}
                   onClick={() => onCandidateClick?.(c.id)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCandidateClick?.(c.id); } }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,

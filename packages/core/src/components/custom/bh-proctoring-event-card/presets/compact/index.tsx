@@ -171,7 +171,6 @@ export const CompactBhProctoringEventCard = createPreset<BhProctoringEventCardPr
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

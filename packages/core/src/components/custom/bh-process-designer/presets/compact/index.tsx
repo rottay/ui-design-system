@@ -116,19 +116,16 @@ export const CompactBhProcessDesigner = createPreset<BhProcessDesignerProps>({
       transition: entrance.transition,
     }), [entrance]);
 
-    if (!template) {
-    const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (!template) {
       return (
         <Box
           className={className}
           role="region"
           aria-label="Process designer"
-          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+          onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{
             ...card,
             ...createEmptyStateStyle(t),

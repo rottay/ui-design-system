@@ -192,11 +192,6 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
 
     const StatCard = ({ label, value, icon, scaleKey }: { label: string; value: string | number; icon: React.ReactNode; scaleKey: string }) => {
       const s = (t.colors as any)[scaleKey] ?? t.colors.neutral;
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
       return (
         <Box style={{
           ...card,
@@ -314,8 +309,8 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
               transition: `all ${t.motion.hover}`,
               boxShadow: isSelected ? t.shadows.md : card.boxShadow,
             }}
-            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.boxShadow = t.shadows.md; }}
-            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.boxShadow = isSelected ? t.shadows.md : (card.boxShadow as string) || ''; }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.boxShadow = t.shadows.md; }}
+            onMouseLeave={(e: any) => { e.currentTarget.style.boxShadow = isSelected ? t.shadows.md : (card.boxShadow as string) || ''; }}
           >
             {/* Header row */}
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>

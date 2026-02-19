@@ -114,7 +114,6 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
 
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

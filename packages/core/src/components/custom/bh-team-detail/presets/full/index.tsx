@@ -48,6 +48,7 @@ import type { BhTeamDetailProps, TeamPosition } from '../../core';
 export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
   name: 'BhTeamDetail.Full',
   render: ({ primitives, props, tokens }: PresetContext<BhTeamDetailProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -119,8 +120,6 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
 
     /* -- Loading --------------------------------------------------- */
     if (loading) {
-      const isGlass = t.surface.useGlass;
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -191,8 +190,6 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
             const pct = metric.target > 0 ? Math.min((metric.value / metric.target) * 100, 100) : 0;
             const color = pct >= 90 ? t.colors.successScale[500] : pct >= 70 ? t.colors.primaryScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
             const bar = createProgressBarStyle(t, { color, percent: pct });
-            const entrance = createEntranceAnimation(t, { index: idx });
-
             return (
               <Box key={metric.label} style={{ ...animStyle(idx), ...card, ...entrance.animate, display: 'flex', flexDirection: 'column' as const }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
@@ -226,8 +223,6 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                 const pct = target > 0 ? Math.min((actual / target) * 100, 100) : 0;
                 const color = pct >= 90 ? t.colors.successScale[500] : pct >= 70 ? t.colors.primaryScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
                 const bar = createProgressBarStyle(t, { color, percent: pct });
-                const entrance = createEntranceAnimation(t, { index: idx });
-
                 return (
                   <Box key={key} style={{ ...entrance.animate, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50] }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], textTransform: 'capitalize' as const }}>{key.replace(/_/g, ' ')}</Text>
@@ -272,7 +267,6 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
             </Box>
 
             {members.map((member, idx) => {
-              const entrance = createEntranceAnimation(t, { index: idx });
               return (
                 <Box
                   key={member.id}
@@ -295,8 +289,8 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                     width: '100%',
                     ...entrance.animate,
                   }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  onMouseEnter={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                  onMouseLeave={(e: any) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                     <Box style={{
@@ -349,7 +343,6 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
             </Box>
 
             {positions.map((position, idx) => {
-              const entrance = createEntranceAnimation(t, { index: idx });
               return (
                 <Box
                   key={position.id}
@@ -372,8 +365,8 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                     width: '100%',
                     ...entrance.animate,
                   }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  onMouseEnter={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                  onMouseLeave={(e: any) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
                   <Box style={{ flex: 1, minWidth: 0 }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800], display: 'block' }}>

@@ -201,13 +201,6 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
         { label: 'Avg Approval Time', value: `${(externalStats.avgApprovalTime ?? 0).toFixed(1)}h`, icon: <TrendingUp size={16} color={t.colors.successScale[600]} />, bg: t.colors.successScale[50] },
       ];
 
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
-
       return (
         <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: t.spacing[3] }}>
           {statItems.map((item, idx) => {
@@ -240,8 +233,8 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
               return (
                 <Box key={cat} role="tab" tabIndex={0} aria-selected={isActive} aria-label={`${CATEGORY_LABELS[cat]} category`}
                   onClick={() => handleCategoryChange(cat)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => handleCategoryChange(cat))}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{ ...hoverTransition, display: 'inline-flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, border: isActive ? `${bdr} ${catColor.border}` : `${t.surface.borderWidth} solid transparent`, backgroundColor: isActive ? catColor.bg : 'transparent', color: isActive ? catColor.color : t.colors.neutral[600], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}
                 >
                   {CATEGORY_ICONS[cat]}
@@ -503,6 +496,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
 
     /* ---- Main Layout ---- */
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     return (
       <Box className={className} style={containerStyle}>

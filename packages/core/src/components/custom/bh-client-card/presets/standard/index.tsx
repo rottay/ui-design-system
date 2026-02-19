@@ -114,7 +114,6 @@ export const StandardBhClientCard = createPreset<BhClientCardProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

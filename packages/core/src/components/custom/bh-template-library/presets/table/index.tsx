@@ -406,9 +406,6 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
 
     /* ── Sub-component: ExpandedDetail ────────────────────────── */
     const ExpandedDetail = ({ template }: { template: TemplateItem }) => {
-      const accentBar = createPersonalityAccentBar(tokens);
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
-
       return (
         <Box
           style={{
@@ -581,6 +578,8 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
     };
 
     /* ── Main Render ──────────────────────────────────────────── */
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+
     return (
       <Box
         className={className}

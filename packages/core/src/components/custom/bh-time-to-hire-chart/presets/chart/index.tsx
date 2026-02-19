@@ -189,7 +189,6 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
 
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

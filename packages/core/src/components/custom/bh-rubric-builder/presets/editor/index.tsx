@@ -388,8 +388,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
         className={className}
         role="region"
         aria-label={`Rubric editor: ${rubricName}`}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...animStyle(0),
           display: 'flex',

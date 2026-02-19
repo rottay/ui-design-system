@@ -101,11 +101,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
       return null;
     }, [variants, status]);
 
-
     if (loading) {
-      const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />

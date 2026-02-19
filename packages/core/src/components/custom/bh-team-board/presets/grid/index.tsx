@@ -213,15 +213,10 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
       const sw = 4;
       const sz = (r + sw) * 2;
       const ring = perfRing(perfScore, r);
-      const entrance = createEntranceAnimation(t, { index: idx });
       const accent = createPersonalityAccentBar(t, {
         color: isSelected ? t.colors.primaryScale[500] : t.colors.neutral[200],
       });
       const progressBar = createProgressBarStyle(t, { color: capColor(capPct), percent: capPct });
-    const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
-
       return (
         <Box
           role="button"
@@ -245,12 +240,12 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
             transition: `all ${t.motion.hover}`,
             ...entrance.animate,
           }}
-          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+          onMouseEnter={(e: any) => {
             const el = e.currentTarget;
             if (cardHover.hover.transform) el.style.transform = cardHover.hover.transform;
             if (cardHover.hover.boxShadow) el.style.boxShadow = cardHover.hover.boxShadow;
           }}
-          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+          onMouseLeave={(e: any) => {
             const el = e.currentTarget;
             el.style.transform = 'none';
             el.style.boxShadow = (card.boxShadow as string) || '';
@@ -575,8 +570,8 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                           transition: `background-color ${t.motion.hover}`,
                           cursor: 'pointer',
                         }}
-                        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
-                        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                        onMouseEnter={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                        onMouseLeave={(e: any) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                       >
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                           <Box style={{

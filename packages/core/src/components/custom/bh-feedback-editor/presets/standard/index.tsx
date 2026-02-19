@@ -190,7 +190,6 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box className={className} style={{
         display: 'flex', flexDirection: 'column' as const, width: '100%', height: '100%',

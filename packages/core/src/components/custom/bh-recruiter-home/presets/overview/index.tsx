@@ -154,7 +154,6 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} style={{
         display: 'flex', flexDirection: 'column', gap: t.spacing[6],
@@ -230,8 +229,8 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                       aria-label="Dismiss notification"
                       onClick={() => handleNotifDismiss(n.id ?? '')}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss(n.id ?? ''); } }}
-                      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                      onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                      onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                       style={{ color: t.colors.neutral[400], cursor: 'pointer', flexShrink: 0 }}
                     ><X size={ICON_SIZES.label} /></Box>
                   )}

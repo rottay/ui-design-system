@@ -51,14 +51,15 @@ function ScoreRing({ score, tokens: t, size = 56 }: { score: number; tokens: Des
   const r = (size / 2) - 4; const c = 2 * Math.PI * r;
   const Box = _Box;
   const Text = _Text;
+  const hoverStyles = createCardHoverStyles(t);
 return (
     <Box style={{ position: 'relative' as const, width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Score: ${score}%`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={getScoreTrackColor(t)} strokeWidth="3" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
           strokeDasharray={c} strokeDashoffset={c - (score / 100) * c} strokeLinecap="round"
-          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+          onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{ transition: `stroke-dashoffset ${t.motion.hover}` }} />
       </svg>
       <Box style={{ position: 'absolute' as const, top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }}>

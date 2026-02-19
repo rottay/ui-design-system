@@ -139,7 +139,6 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} style={{
         ...cardStyle,
@@ -169,8 +168,8 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                 aria-label={`Compare ${selected.length} selected candidates`}
                 onClick={() => onCompare(selected)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') onCompare(selected); }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 4,
                   padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,

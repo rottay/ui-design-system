@@ -138,7 +138,6 @@ export const OverlayBhPipelineComparison = createPreset<BhPipelineComparisonProp
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

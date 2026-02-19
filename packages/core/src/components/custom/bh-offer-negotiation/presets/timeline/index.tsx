@@ -111,11 +111,6 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
     }, [onAction, negotiation]);
 
     if (!negotiation) {
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
-    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
-    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
-
       return (
         <Box className={className} style={{ ...cardBase, padding: tokens.spacing[6], textAlign: 'center' as const, ...style }}>
           <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>

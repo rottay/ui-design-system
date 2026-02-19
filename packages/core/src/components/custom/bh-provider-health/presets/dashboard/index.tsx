@@ -171,7 +171,6 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box
         className={className}

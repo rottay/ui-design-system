@@ -159,11 +159,6 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
       if (statusFilter !== 'all' && thread.status !== statusFilter) return false;
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
-        const divider = useMemo(() => createDividerStyle(t), [t]);
-        const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-        const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
         return (
           thread.title.toLowerCase().includes(q) ||
           thread.entityName.toLowerCase().includes(q) ||
@@ -223,10 +218,10 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
             cursor: 'pointer',
             transition: `all ${t.motion.hover}`,
           }}
-          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+          onMouseEnter={(e: any) => {
             if (!isSelected) e.currentTarget.style.backgroundColor = t.colors.neutral[50];
           }}
-          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+          onMouseLeave={(e: any) => {
             if (!isSelected) e.currentTarget.style.backgroundColor = 'transparent';
           }}
         >

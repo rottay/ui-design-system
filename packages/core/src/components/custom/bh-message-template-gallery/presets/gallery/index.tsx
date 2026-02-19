@@ -97,7 +97,6 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

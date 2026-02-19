@@ -160,12 +160,9 @@ export const CompactBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEn
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     });
 
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
-    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ ...createEmptyStateStyle(t), ...style }}>
           <Text style={{ color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}>Loading replay...</Text>
@@ -192,8 +189,8 @@ export const CompactBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEn
             aria-label={isPlaying ? 'Pause' : 'Play'}
             onClick={handlePlayPause}
             onKeyDown={handlePlayPauseKeyDown}
-            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+            onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={{
               width: 28, height: 28, borderRadius: t.borderRadius.full,
               backgroundColor: t.colors.primaryScale[600],

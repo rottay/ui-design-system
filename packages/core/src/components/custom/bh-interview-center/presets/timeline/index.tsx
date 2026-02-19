@@ -68,9 +68,6 @@ function getDisplayName(iv: DBInterview, field: string, fallback: string): strin
 }
 
 function sc(t: DesignTokens, scale: string, shade: number) {
-  const divider = useMemo(() => createDividerStyle(t), [t]);
-  const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
   return ((t.colors as any)[scale])?.[shade] ?? (t.colors.neutral as any)[shade];
 }
 
@@ -119,7 +116,6 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const [searchQuery, setSearchQuery] = useState('');
     const [nowPos, setNowPos] = useState(getNowPos());
     const timelineRef = useRef<HTMLDivElement>(null);
-
 
     const filters = controlledFilters ?? internalFilters;
     const selectedInterview = controlledSelectedInterview ?? internalSelected;

@@ -178,20 +178,11 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
         const rotation = `${Math.random() * 360}deg`;
         const size = 5 + Math.random() * 7;
 
-        const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
-
-        const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-
-        const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-
-        const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
-
-
         return (
           <div
             key={i}
-            onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-            onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+            onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+            onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
             style={{
               position: 'absolute' as const,
               top: -16,
@@ -975,6 +966,8 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
     };
 
     /* ── Main Layout ───────────────────────────────────────────── */
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
     return (
       <div className={className} style={containerStyle}>
         {accentBar && <Box style={accentBar} />}

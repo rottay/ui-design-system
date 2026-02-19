@@ -218,7 +218,6 @@ export const CardsBhProctoringEventList = createPreset<BhProctoringEventListProp
 
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

@@ -60,12 +60,10 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const searchCosts = Array.isArray(rawSearchCosts) ? rawSearchCosts : [];
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-
       return (
         <Box className={className} 
-          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+          onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+          onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
           style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: `${tokens.spacing[10]}px`, ...style,

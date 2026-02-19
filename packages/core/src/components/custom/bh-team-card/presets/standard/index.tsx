@@ -105,7 +105,6 @@ export const StandardBhTeamCard = createPreset<BhTeamCardProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

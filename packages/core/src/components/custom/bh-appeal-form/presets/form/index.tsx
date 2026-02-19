@@ -56,7 +56,6 @@ export const FormBhAppealForm = createPreset<BhAppealFormProps>({
       style,
     } = props;
 
-
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
@@ -95,12 +94,11 @@ export const FormBhAppealForm = createPreset<BhAppealFormProps>({
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box
         className={className}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

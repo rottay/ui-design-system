@@ -188,7 +188,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], width: '100%', height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
         {accentBar && <Box style={accentBar} />}
@@ -246,8 +245,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
             const Icon = icons[idx % icons.length];
             const colorScales = [t.colors.primaryScale, t.colors.successScale, t.colors.warningScale, t.colors.infoScale];
             const cs = colorScales[idx % colorScales.length];
-            const entrance = kpiEntrance(idx);
-
             return (
               <Box
                 key={kpi.label}
@@ -302,7 +299,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
                 {levelDistribution.map((level, idx) => {
                   const barColor = resolveLevelColor(level, t);
-                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box key={level.level} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
@@ -327,7 +323,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                     const maxPct = Math.max(...scoreDistributionBuckets.map(b => b.percentage ?? 0), 1);
                     const barWidth = (bucket.percentage ?? 0) / maxPct * 100;
                     const bucketColor = (bucket.rangeMax ?? 0) >= 80 ? t.colors.successScale[400] : (bucket.rangeMax ?? 0) >= 60 ? t.colors.warningScale[400] : t.colors.errorScale[400];
-                    const entrance = createEntranceAnimation(t, { index: idx });
                     return (
                       <Box key={`${bucket.rangeMin}-${bucket.rangeMax}`} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
@@ -353,7 +348,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
                 {sortedCohorts.map((cohort, i) => {
                   const cs = cohort.avgScore >= 75 ? t.colors.successScale : cohort.avgScore >= 65 ? t.colors.warningScale : t.colors.errorScale;
-                  const entrance = createEntranceAnimation(t, { index: i });
                   return (
                     <Box key={cohort.groupName} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: i === 0 ? cs[50] : t.colors.neutral[50], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ width: 28, height: 28, borderRadius: t.borderRadius.full, backgroundColor: cs[100], display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -399,7 +393,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 {knockoutStats.map((k, idx) => {
                   const rate = ((k.knockoutCount / k.totalEvaluations) * 100).toFixed(1);
                   const isHigh = k.knockoutCount > 10;
-                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box key={k.dimension} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: isHigh ? t.colors.errorScale[50] : t.colors.neutral[50], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -452,7 +445,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               {sortedGaps.map((gap, idx) => {
                 const severity = Math.abs(gap.gapFromTarget) > 15 ? 'error' : Math.abs(gap.gapFromTarget) > 8 ? 'warning' : 'success';
                 const barColor = severity === 'error' ? t.colors.errorScale[500] : severity === 'warning' ? t.colors.warningScale[500] : t.colors.successScale[500];
-                const entrance = createEntranceAnimation(t, { index: idx });
                 return (
                   <Box key={gap.dimension} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
@@ -485,7 +477,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   {modelPerformance.map((mp, idx) => {
                     const latencyColor = mp.avgLatencyMs < 3000 ? t.colors.successScale : mp.avgLatencyMs < 8000 ? t.colors.warningScale : t.colors.errorScale;
                     const errorColor = mp.errorRate < 0.02 ? t.colors.successScale : mp.errorRate < 0.1 ? t.colors.warningScale : t.colors.errorScale;
-                    const entrance = createEntranceAnimation(t, { index: idx });
                     return (
                       <Box key={mp.model} style={{
                         ...animStyle(idx),
@@ -599,7 +590,6 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   </Text>
                   {tokenUsageTrends.map((tu, idx) => {
                     const maxTokens = Math.max(...tokenUsageTrends.map(x => x.totalTokens), 1);
-                    const entrance = createEntranceAnimation(t, { index: idx });
                     return (
                       <Box key={tu.date} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>

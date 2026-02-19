@@ -193,8 +193,6 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     /* -- Stat Card -------------------------------------------------- */
     const StatCard = ({ label, value, icon, scale }: { label: string; value: string | number; icon: React.ReactNode; scale: string }) => {
       const s = (t.colors as any)[scale];
-      const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
-
       return (
         <Box style={{ ...card, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
           <Box style={{
@@ -395,8 +393,8 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                         transition: `background-color ${t.motion.hover}`,
                         alignItems: 'center',
                       }}
-                      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { if (!isSelected) e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
-                      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { if (!isSelected) e.currentTarget.style.backgroundColor = t.colors.common.white; }}
+                      onMouseEnter={(e: any) => { if (!isSelected) e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                      onMouseLeave={(e: any) => { if (!isSelected) e.currentTarget.style.backgroundColor = t.colors.common.white; }}
                     >
                       {/* Expand toggle */}
                       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

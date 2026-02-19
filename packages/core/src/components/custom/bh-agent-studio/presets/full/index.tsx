@@ -120,13 +120,11 @@ interface SectionProps {
 }
 
 function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass, children, badge, Box, Text }: SectionProps) {
-  const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
-  const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-
+  const hoverStyles = createCardHoverStyles(tokens);
   return (
     <Box
-      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+      onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+      onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
       style={{
         ...createCardStyle(tokens, { glass, elevation: 'sm' }),
         marginBottom: tokens.spacing[4],
@@ -407,6 +405,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
     /* ================================================================ */
     /*  Render                                                          */
     /* ================================================================ */
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
     return (
       <Box
         className={className}
@@ -2426,6 +2426,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     : result.status === 'fail'
                     ? XCircle
                     : AlertTriangle;
+
                 return (
                   <Box
                     key={idx}

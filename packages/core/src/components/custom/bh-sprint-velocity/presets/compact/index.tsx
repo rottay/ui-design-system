@@ -92,11 +92,9 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
       return Math.round(((recentAvg - olderAvg) / Math.max(olderAvg, 1)) * 100);
     }, [sprints]);
 
-    if (loading) {
-      const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ ...card, ...animStyle, ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[4] }}>
@@ -111,8 +109,8 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
         className={className}
         role="region"
         aria-label="Sprint velocity"
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           ...card,
           width: '100%',
@@ -210,6 +208,7 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
             <Box style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 48 }}>
               {sprints.map(sprint => {
                 const pct = ((sprint.completed ?? 0) / maxVal) * 100;
+
                 return (
                   <Box
                     key={sprint.sprintName}

@@ -47,13 +47,9 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
       transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
     });
 
-    if (loading) {
-      const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
-      const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
-      const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-      const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
 
+    if (loading) {
       return (
         <Flex align="center" justify="center" style={{ padding: tokens.spacing[8], ...style }} className={className}>
           <Text style={{ color: tokens.colors.neutral[500], fontSize: tokens.typography.fontSize.xs }}>Loading...</Text>
@@ -63,8 +59,8 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
 
     return (
       <Box className={className} 
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{ ...createCardStyle(tokens, { glass: isGlass, padding: 0 }), overflow: 'hidden', ...style }}>
         {/* Header */}
         <Flex align="center" justify="between" style={createPanelHeaderStyle(tokens)}>
@@ -141,6 +137,7 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
               <Flex gap={8}>
                 {(Object.entries(consensus.distribution) as [string, number][]).filter(([, c]) => c > 0).map(([rec, count]) => {
                   const rc = recColors[rec as keyof typeof recColors];
+
                   return (
                     <Flex key={rec} gap={3} align="center">
                       <Box style={createStatusDotStyle(tokens, rc.color)} />

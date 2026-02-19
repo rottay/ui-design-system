@@ -72,6 +72,7 @@ function areaPoints(data: RevenuePoint[], w: number, h: number, pad = 4): string
 export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
   name: 'BhClientDetail.Dashboard',
   render: ({ primitives, props, tokens }: PresetContext<BhClientDetailProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -162,9 +163,9 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
     const ContractIcon = contractConfig.icon;
 
     /* -- Loading --------------------------------------------------- */
-    if (loading) {
-      const isGlass = t.surface.useGlass;
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
+    if (loading) {
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -217,7 +218,6 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
             { label: 'Closed', value: closedCount, icon: XCircle, scale: 'primaryScale' },
           ].map((kpi, idx) => {
             const s = t.colors[kpi.scale as keyof typeof t.colors] as Record<number, string>;
-            const entrance = createEntranceAnimation(t, { index: idx });
             const KpiIcon = kpi.icon;
             return (
               <Box key={kpi.label} style={{
@@ -276,7 +276,6 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
 
             {/* Rows */}
             {positions.map((position, idx) => {
-              const entrance = createEntranceAnimation(t, { index: idx });
               return (
                 <Box
                   key={position.id}
@@ -299,8 +298,8 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
                     width: '100%',
                     ...entrance.animate,
                   }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  onMouseEnter={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                  onMouseLeave={(e: any) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, minWidth: 0 }}>
                     {position.title}
@@ -459,9 +458,9 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
 
             {/* Billing rows */}
             {billingRecords.slice(0, 10).map((record: any, idx: number) => {
-              const entrance = createEntranceAnimation(t, { index: idx });
               const billingStatus = record.status ?? record.billingStatus ?? 'pending';
               const statusBadge: 'success' | 'error' | 'warning' = billingStatus === 'paid' ? 'success' : billingStatus === 'overdue' ? 'error' : 'warning';
+
               return (
                 <Box
                   key={record.id ?? idx}

@@ -154,8 +154,6 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
     const totalVotes = useMemo(() => items.reduce((s, i) => s + (i.votes ?? 0), 0), [items]);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} style={{ ...card, ...animStyle(0), ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8] }}>
@@ -170,8 +168,8 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
         className={className}
         role="region"
         aria-label={`Sprint Retrospective - ${sprintName}`}
-        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+        onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+        onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
         style={{
           display: 'flex',
           flexDirection: 'column',

@@ -132,7 +132,6 @@ export const TimelineBhOfferNegotiationTracker = createPreset<BhOfferNegotiation
 
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

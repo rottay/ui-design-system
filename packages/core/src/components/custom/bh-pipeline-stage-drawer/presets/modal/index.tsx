@@ -155,7 +155,6 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       /* Overlay */
       <Box

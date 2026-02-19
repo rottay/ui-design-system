@@ -204,8 +204,8 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                   tabIndex={0}
                   onClick={() => handleTeamChange((tm.id ?? ''))}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleTeamChange((tm.id ?? '')); }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                  onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                  onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                   style={{
                     padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                     borderRadius: badgeRadius,

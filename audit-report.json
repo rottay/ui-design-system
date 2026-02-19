@@ -1,0 +1,1754 @@
+{
+  "total": 272,
+  "avgScore": "16.0",
+  "minScore": 16,
+  "maxScore": 16,
+  "indicators": [
+    {
+      "id": "entrance",
+      "name": "Entrance animation",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "stagger",
+      "name": "Stagger delays on .map()",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "accentBar",
+      "name": "Personality accent bar",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "cardHover",
+      "name": "Card hover (onMouseEnter/Leave)",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "ptypo",
+      "name": "Personality typography",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "badgeRadius",
+      "name": "Badge personality radius",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "divider",
+      "name": "Dividers between sections",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "sectionHeader",
+      "name": "Section headers",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "glass",
+      "name": "Glass-aware surfaces",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "tokenSpacing",
+      "name": "Token spacing (no hardcoded px)",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "tokenTypo",
+      "name": "Token typography (no hardcoded fontSize)",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "emptyState",
+      "name": "Empty states for arrays",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton loading",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "useMemo",
+      "name": "useMemo on helpers",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "deadImports",
+      "name": "No dead imports",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    },
+    {
+      "id": "formatters",
+      "name": "Uses formatters for data",
+      "pass": 272,
+      "fail": 0,
+      "failFiles": []
+    }
+  ],
+  "files": [
+    {
+      "file": "bh-activity-feed/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-admin-center/presets/billing/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-admin-center/presets/overview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-ab-test/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-ab-test/presets/config/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-gallery-enhanced/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-gallery-enhanced/presets/gallery/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-gallery/presets/gallery/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-gallery/presets/list/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-studio/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-studio/presets/guided/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-tester/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-version-history/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-agent-version-history/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-analytics-hub/presets/executive/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-analytics-hub/presets/operational/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-form/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-form/presets/form/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-list/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-list/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-review/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-review/presets/review/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-timeline/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-appeal-timeline/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-approval-center/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-approval-center/presets/hub/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-approval-chain/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-approval-chain/presets/vertical/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-approval-detail/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-approval-detail/presets/drawer/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-approval-queue/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-audit-trail/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-audit-trail/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calendar-heatmap/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calendar-heatmap/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-dashboard/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-dashboard/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-sample/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-sample/presets/review/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-scatter/presets/chart/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-scatter/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-view/presets/results/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-calibration-view/presets/session/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-bulk-email/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-bulk-email/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-comparison/presets/overlay/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-comparison/presets/side-by-side/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-import/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-kanban/presets/board/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-kanban/presets/swimlane/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-merge/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-merge/presets/merge/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-outreach/presets/composer/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-outreach/presets/tracker/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-profile/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-profile/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-candidate-search/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-capacity-planner/presets/grid/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-capacity-planner/presets/list/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-circuit-breaker-viz/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-circuit-breaker-viz/presets/diagram/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-card/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-card/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-detail/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-detail/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-directory/presets/cards/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-directory/presets/directory/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-form/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-form/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-list/presets/grid/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-list/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-portal/presets/executive/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-client-portal/presets/operational/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-comparison-view/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-compliance-checker/presets/checker/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-compliance-checker/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-conversation-analytics/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-conversation-analytics/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-cost-analyzer/presets/breakdown/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-cost-analyzer/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-decision-hub/presets/bulk/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-decision-hub/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-discussion-thread/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-diversity-dashboard/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-diversity-dashboard/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-document-viewer/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-document-viewer/presets/viewer/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-email-composer/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-email-composer/presets/minimal/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-evidence-browser/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-evidence-browser/presets/split-pane/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-feedback-editor/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-feedback-editor/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-fraud-monitor/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-fraud-monitor/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-geographic-map/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-geographic-map/presets/map/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-hiring-funnel/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-hiring-funnel/presets/funnel/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-individual-home/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-center/presets/calendar/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-center/presets/list/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-center/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-monitor/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-player/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-player/presets/transcript-only/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-prep/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-replay-enhanced/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-replay-enhanced/presets/split/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-replay-split/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-replay-split/presets/split/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-replay/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-replay/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-scheduler/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-interview-scheduler/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-job-board/presets/grid/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-job-board/presets/kanban/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-job-board/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-job-detail/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-job-detail/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-job-editor/presets/single-page/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-job-editor/presets/wizard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-manager-console/presets/overview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-manager-console/presets/performance/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-message-template-editor/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-message-template-editor/presets/editor/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-message-template-gallery/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-message-template-gallery/presets/gallery/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-message-template-preview/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-message-template-preview/presets/preview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-expiration/presets/cards/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-expiration/presets/list/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-letter-preview/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-letter-preview/presets/preview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-negotiation-tracker/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-negotiation-tracker/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-negotiation/presets/comparison/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-negotiation/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-workspace/presets/editor/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-offer-workspace/presets/tracker/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-onboarding-flow/presets/admin-setup/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-onboarding-flow/presets/recruiter-welcome/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-outreach-campaign/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-outreach-campaign/presets/manager/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-outreach-response/presets/analytics/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-outreach-response/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-panel-coordinator/presets/summary/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-panel-coordinator/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-analytics/presets/detailed/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-analytics/presets/overview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-bottleneck/presets/list/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-bottleneck/presets/visual/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-comparison/presets/overlay/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-comparison/presets/side-by-side/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-filter-bar/presets/dropdown/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-filter-bar/presets/horizontal/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-global-kanban/presets/board/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-global-kanban/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-kanban-card/presets/minimal/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-kanban-card/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-stage-drawer/presets/drawer/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-stage-drawer/presets/modal/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-stats-bar/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-stats-bar/presets/detailed/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-velocity-chart/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-pipeline-velocity-chart/presets/line/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-position-detail/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-position-form/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-position-form/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-position-list/presets/cards/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-position-list/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-position-sla/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-position-sla/presets/monitor/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-process-designer/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-process-designer/presets/visual/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-activity/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-activity/presets/feed/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-alert/presets/banner/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-alert/presets/toast/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-dashboard/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-dashboard/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-event-card/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-event-card/presets/default/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-event-list/presets/cards/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-event-list/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-heatmap/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-heatmap/presets/grid/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-review/presets/split/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-review/presets/stacked/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-severity/presets/bars/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-severity/presets/donut/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-summary/presets/card/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-summary/presets/inline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-timeline/presets/horizontal/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-proctoring-timeline/presets/vertical/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-config/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-config/presets/detail/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-cost/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-cost/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-health/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-health/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-latency/presets/chart/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-provider-latency/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-ranking-board/presets/comparison/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-ranking-board/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-recruiter-home/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-recruiter-home/presets/overview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-recruiter-performance/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-recruiter-performance/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-recruiter-workload/presets/balancer/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-recruiter-workload/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-rubric-builder/presets/editor/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-rubric-builder/presets/preview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scorecard-detail/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scorecard-detail/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scorecard-detail/presets/panel/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scorecard-detail/presets/summary/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scoring-insights/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scoring-insights/presets/detailed/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scoring-job-queue/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-scoring-job-queue/presets/list/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-skill-gap-dashboard/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-skill-gap-dashboard/presets/dashboard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-skill-gap-map/presets/heatmap/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-skill-gap-map/presets/list/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-sla-monitor/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-source-effectiveness/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-source-effectiveness/presets/detailed/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-source-roi/presets/breakdown/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-source-roi/presets/summary/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-sprint-burndown/presets/chart/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-sprint-burndown/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-sprint-retrospective/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-sprint-retrospective/presets/form/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-sprint-velocity/presets/chart/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-sprint-velocity/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-board/presets/detail/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-board/presets/grid/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-card/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-card/presets/standard/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-detail/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-detail/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-list/presets/cards/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-list/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-performance/presets/chart/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-team-performance/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-template-designer/presets/canvas/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-template-designer/presets/form/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-template-library/presets/cards/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-template-library/presets/table/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-tenant-setup/presets/full/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-tenant-setup/presets/quick/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-time-to-hire-chart/presets/chart/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-time-to-hire-chart/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-budget/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-budget/presets/config/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-manager/presets/detailed/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-manager/presets/overview/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-transfer/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-transfer/presets/timeline/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-usage-analytics/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-token-usage-analytics/presets/detailed/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-transcript-viewer/presets/analyst/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-transcript-viewer/presets/reader/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-voice-catalog/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-voice-catalog/presets/grid/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-workflow-automation/presets/builder/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-workflow-automation/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-workflow-notification/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-workflow-notification/presets/config/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-workflow-stage-editor/presets/compact/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    },
+    {
+      "file": "bh-workflow-stage-editor/presets/editor/index.tsx",
+      "score": 16,
+      "total": 16,
+      "missing": []
+    }
+  ]
+}

@@ -164,7 +164,6 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(tokens), [tokens]);
 
-
     return (
       <Box
         className={className}

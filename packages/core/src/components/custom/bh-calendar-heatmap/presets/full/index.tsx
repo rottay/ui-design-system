@@ -166,7 +166,6 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

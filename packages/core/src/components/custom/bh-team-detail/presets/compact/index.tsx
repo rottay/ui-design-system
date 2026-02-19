@@ -45,6 +45,7 @@ import type { BhTeamDetailProps, TeamPosition } from '../../core';
 export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
   name: 'BhTeamDetail.Compact',
   render: ({ primitives, props, tokens }: PresetContext<BhTeamDetailProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -88,9 +89,6 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
     });
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const isGlass = t.surface.useGlass;
-
       return (
         <Box className={className} style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
           <Loader2 size={18} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -173,8 +171,8 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
                   cursor: 'pointer',
                   transition: `background-color ${t.motion.hover}`,
                 }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.primaryScale[50]; }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                onMouseEnter={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.primaryScale[50]; }}
+                onMouseLeave={(e: any) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
               >
                 <Box style={{
                   ...createIconContainerStyle(t, { size: 22, color: t.colors.secondaryScale[100] }),

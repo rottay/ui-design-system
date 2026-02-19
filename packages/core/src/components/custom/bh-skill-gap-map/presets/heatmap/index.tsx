@@ -109,8 +109,6 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const selectedGap = useMemo(() => gaps.find(g => g.id === selectedGapId), [gaps, selectedGapId]);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-
       return (
         <Box className={className} role="status" aria-label="Loading skill gap data" style={{ padding: t.spacing[8], textAlign: 'center', color: t.colors.neutral[500], ...style }}>
           <Text>Loading skill gap data...</Text>

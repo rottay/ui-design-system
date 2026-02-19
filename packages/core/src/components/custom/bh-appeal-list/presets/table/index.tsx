@@ -129,7 +129,6 @@ export const TableBhAppealList = createPreset<BhAppealListProps>({
 
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-
     return (
       <Box
         className={className}

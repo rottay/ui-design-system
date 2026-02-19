@@ -554,8 +554,8 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
                 }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[50]; }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                onMouseEnter={(e: any) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[50]; }}
+                onMouseLeave={(e: any) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 <Text style={{
                   fontSize: tokens.typography.fontSize.sm,

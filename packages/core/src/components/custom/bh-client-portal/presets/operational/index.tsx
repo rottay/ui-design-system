@@ -162,7 +162,6 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     return (
       <Box className={className} role="region" aria-label="Client Portal Operations" style={{
         ...createCardStyle(t, { elevation: 'md' }),
@@ -261,8 +260,8 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
                       tabIndex={0}
                       aria-selected={isSelected}
                       aria-label={`${pos.title} - ${sc.label}`}
-                      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                      onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                      onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                       style={{
                         display: 'grid',
                         gridTemplateColumns: POS_GRID,

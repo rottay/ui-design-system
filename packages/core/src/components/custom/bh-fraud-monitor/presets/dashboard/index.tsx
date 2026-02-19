@@ -87,8 +87,6 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const severityOptions: EventSeverity[] = useMemo(() => ['critical', 'high', 'medium', 'low'], []);
 
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
-
       return (
         <Box className={className} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -176,8 +174,8 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                 aria-label={`Filter by ${sev} severity`}
                 aria-pressed={isActive}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSeverity(sev); } }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
+                onMouseEnter={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.hover); }}
+                onMouseLeave={(e: any) => { Object.assign(e.currentTarget.style, hoverStyles.base); }}
                 style={{
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: badgeRadius,

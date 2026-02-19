@@ -57,6 +57,7 @@ function getTeamMembers(team: RecruiterTeam): Array<{ id: string; name: string; 
 export const TableBhTeamList = createPreset<BhTeamListProps>({
   name: 'BhTeamList.Table',
   render: ({ primitives, props, tokens }: PresetContext<BhTeamListProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -98,9 +99,6 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
 
     /* -- Loading State --------------------------------------------- */
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const isGlass = t.surface.useGlass;
-
       return (
         <Box className={className} style={{ ...card, padding: t.spacing[6], ...style }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[3], padding: t.spacing[8] }}>
@@ -190,8 +188,6 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
         {/* Rows */}
         {teams.map((team, idx) => {
           const isSelected = selectedTeamId === team.id;
-          const entrance = createEntranceAnimation(t, { index: idx });
-
           return (
             <Box
               key={team.id}
@@ -221,10 +217,10 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
                 width: '100%',
                 ...entrance.animate,
               }}
-              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+              onMouseEnter={(e: any) => {
                 if (!isSelected) e.currentTarget.style.backgroundColor = t.colors.neutral[50];
               }}
-              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+              onMouseLeave={(e: any) => {
                 if (!isSelected) e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >

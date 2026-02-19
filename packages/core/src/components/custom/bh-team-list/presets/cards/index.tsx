@@ -55,6 +55,7 @@ function getTeamMembers(team: RecruiterTeam): Array<{ id: string; name: string; 
 export const CardsBhTeamList = createPreset<BhTeamListProps>({
   name: 'BhTeamList.Cards',
   render: ({ primitives, props, tokens }: PresetContext<BhTeamListProps>) => {
+    const isGlass = tokens.surface.useGlass;
     const { Box, Text } = primitives;
     const t = tokens;
 
@@ -93,9 +94,6 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
 
     /* -- Loading State --------------------------------------------- */
     if (loading) {
-      const divider = useMemo(() => createDividerStyle(t), [t]);
-      const isGlass = t.surface.useGlass;
-
       return (
         <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[8], ...style }}>
           <Loader2 size={20} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
@@ -162,7 +160,6 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
         >
           {teams.map((team, idx) => {
             const isSelected = selectedTeamId === team.id;
-            const entrance = createEntranceAnimation(t, { index: idx });
             const accent = createPersonalityAccentBar(t, {
               color: isSelected ? t.colors.primaryScale[500] : t.colors.neutral[200],
             });
@@ -194,12 +191,12 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
                   transition: `all ${t.motion.hover}`,
                   ...entrance.animate,
                 }}
-                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+                onMouseEnter={(e: any) => {
                   const el = e.currentTarget;
                   if (cardHover.hover.transform) el.style.transform = cardHover.hover.transform;
                   if (cardHover.hover.boxShadow) el.style.boxShadow = cardHover.hover.boxShadow;
                 }}
-                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+                onMouseLeave={(e: any) => {
                   const el = e.currentTarget;
                   el.style.transform = 'none';
                   el.style.boxShadow = (card.boxShadow as string) || '';

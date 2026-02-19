@@ -120,10 +120,7 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
 
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
 
-
     const divider = useMemo(() => createDividerStyle(t), [t]);
-
-
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[4], width: '100%', ...style }}>
