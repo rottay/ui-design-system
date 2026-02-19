@@ -1,9 +1,15 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "main": "./packages/core/dist/index.cjs",
   "module": "./packages/core/dist/index.js",
   "types": "./packages/core/dist/index.d.ts",
+  "files": [
+    "packages/core/dist",
+    "packages/core/src/theme/tokens/css",
+    "LICENSE",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "types": "./packages/core/dist/index.d.ts",
