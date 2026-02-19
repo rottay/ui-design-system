@@ -1,6 +1,7 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.3.7",
+  "version": "2.4.0",
+  "sideEffects": ["*.css"],
   "main": "./packages/core/dist/index.cjs",
   "module": "./packages/core/dist/index.js",
   "types": "./packages/core/dist/index.d.ts",
@@ -26,10 +27,6 @@
     "./components/*": {
       "types": "./packages/core/dist/components/*.d.ts",
       "import": "./packages/core/dist/components/*.js"
-    },
-    "./components/custom/*": {
-      "types": "./packages/core/dist/components/custom/*/index.d.ts",
-      "import": "./packages/core/dist/components/custom/*/index.js"
     },
     "./system/*": {
       "types": "./packages/core/dist/system/*.d.ts",
