@@ -22,6 +22,8 @@ import {
   getCardPadding,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type { BhProviderHealthProps, ProviderHealthItem } from '../../core';
 import {
@@ -144,6 +146,12 @@ export const CompactBhProviderHealth = createPreset<BhProviderHealthProps>({
       if (overallStatus === 'degraded') return <AlertTriangle size={12} strokeWidth={1.5} />;
       return <CheckCircle2 size={12} strokeWidth={1.5} />;
     }, [overallStatus]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ---- Status config helper ---- */
     const getStatusDotColor = useCallback((status: ProviderHealthItem['status']): string => {
@@ -307,6 +315,7 @@ export const CompactBhProviderHealth = createPreset<BhProviderHealthProps>({
                   onClick={() => handleSelect(provider.id)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(provider.id); } }}
                   style={{
+                    ...animStyle(index),
                     display: 'flex',
                     alignItems: 'center',
                     gap: tokens.spacing[3],

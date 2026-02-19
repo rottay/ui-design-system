@@ -5,7 +5,7 @@
  * Condensed recruiter leaderboard with key metrics.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Award, TrendingUp, ChevronRight,
 } from 'lucide-react';

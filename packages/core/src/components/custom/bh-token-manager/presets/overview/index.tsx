@@ -23,6 +23,8 @@ import {
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhTokenManagerProps,
@@ -260,6 +262,12 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
     const totalCost = useMemo(() => {
       return costBreakdown.reduce((sum, item) => sum + item.amount, 0);
     }, [costBreakdown]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ---------- Trend color ---------- */
     const trendColor = (trend: 'up' | 'down' | 'stable') => {
@@ -576,7 +584,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                 />
                 {/* Data points */}
                 {consumptionData.map((d, i) => {
-                  const amounts = consumptionData.map((p) => p.amount);
+                  const amounts = consumptionData.map((p, i) => p.amount);
                   const max = Math.max(...amounts);
                   const min = Math.min(...amounts);
                   const range = max - min || 1;
@@ -787,7 +795,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
             </Box>
 
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
-              {teamQuotas.map((team) => {
+              {teamQuotas.map((team, i) => {
                 const pct = team.limit > 0 ? Math.min((team.used / team.limit) * 100, 100) : 0;
                 const barColor = quotaColor(team.used, team.limit);
                 return (
@@ -800,6 +808,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                     onClick={() => handleTeamSelect(selectedTeam === team.teamId ? null : team.teamId)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTeamSelect(selectedTeam === team.teamId ? null : team.teamId); } }}
                     style={{
+                      ...animStyle(i),
                       ...hoverStyle,
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
@@ -915,10 +924,11 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                 </tr>
               </thead>
               <tbody>
-                {filteredTransactions.map((tx) => (
+                {filteredTransactions.map((tx, i) => (
                   <tr
                     key={tx.id}
                     style={{
+                      ...animStyle(i),
                       borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                       transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
@@ -988,10 +998,11 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
           <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[5] }}>
             <Text style={{ ...sectionHeader }}>Alert Configuration</Text>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
-              {alerts.map((alert) => (
+              {alerts.map((alert, i) => (
                 <Box
                   key={alert.id}
                   style={{
+                    ...animStyle(i),
                     display: 'flex',
                     alignItems: 'center',
                     gap: tokens.spacing[3],
@@ -1164,8 +1175,8 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                 />
                 {/* Projected data points */}
                 {forecast.map((d, i) => {
-                  const allMin = Math.min(...forecast.map((f) => f.confidenceLow));
-                  const allMax = Math.max(...forecast.map((f) => f.confidenceHigh));
+                  const allMin = Math.min(...forecast.map((f, i) => f.confidenceLow));
+                  const allMax = Math.max(...forecast.map((f, i) => f.confidenceHigh));
                   const range = allMax - allMin || 1;
                   const stepX = (forecastWidth - chartPadding * 2) / (forecast.length - 1 || 1);
                   const x = chartPadding + i * stepX;
@@ -1187,7 +1198,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                 {/* X-axis labels */}
                 {forecast
                   .filter((_, i) => i % Math.max(1, Math.floor(forecast.length / 5)) === 0)
-                  .map((d) => {
+                  .map((d, i) => {
                     const idx = forecast.indexOf(d);
                     const stepX = (forecastWidth - chartPadding * 2) / (forecast.length - 1 || 1);
                     const x = chartPadding + idx * stepX;
@@ -1344,12 +1355,13 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
               </Box>
 
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
-                {teamQuotas.map((team) => {
+                {teamQuotas.map((team, i) => {
                   const pct = team.limit > 0 ? Math.min((team.used / team.limit) * 100, 100) : 0;
                   return (
                     <Box
                       key={team.teamId}
                       style={{
+                        ...animStyle(i),
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,

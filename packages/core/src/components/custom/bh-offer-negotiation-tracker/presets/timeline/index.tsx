@@ -6,7 +6,7 @@
  * and progression. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   DollarSign, TrendingUp, TrendingDown, ArrowRight,
   CheckCircle, XCircle, Clock, MessageSquare,

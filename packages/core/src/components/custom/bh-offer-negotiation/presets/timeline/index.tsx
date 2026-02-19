@@ -87,6 +87,11 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
     const sectionHeader = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
     const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const cardPadding = useMemo(() => getCardPadding(tokens), [tokens]);
@@ -302,8 +307,8 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
                       { label: 'Equity', value: comp.equity || 0, diff: prevComp ? (comp.equity || 0) - (prevComp.equity || 0) : 0 },
                       { label: 'Signing Bonus', value: comp.signingBonus || 0, diff: prevComp ? (comp.signingBonus || 0) - (prevComp.signingBonus || 0) : 0 },
                       { label: 'Annual Bonus', value: comp.annualBonus || 0, diff: prevComp ? (comp.annualBonus || 0) - (prevComp.annualBonus || 0) : 0 },
-                    ].map((item) => (
-                      <Box key={item.label} style={{ textAlign: 'center' as const, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                    ].map((item, i) => (
+                      <Box key={item.label} style={{ ...animStyle(i), textAlign: 'center' as const, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                         <Text style={{
                           fontSize: tokens.typography.fontSize.xs,
                           color: tokens.colors.neutral[500],

@@ -6,7 +6,7 @@
  * and color-coded differences. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   ArrowLeftRight, Briefcase, Users, Clock, ArrowRight,
   TrendingUp, TrendingDown, Minus, BarChart3, ChevronRight,

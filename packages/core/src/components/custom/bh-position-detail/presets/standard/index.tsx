@@ -150,6 +150,11 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
 
     const {
@@ -219,6 +224,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
     const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
 
     /* ---- derived values ---- */
     const statusColors = getPositionStatusColors(positionInfo.status, tokens);
@@ -681,6 +687,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
               const barColor = allocationColors[idx % allocationColors.length];
               return (
                 <Box key={team.teamName} style={{
+                  ...animStyle(idx),
                   padding: tokens.spacing[3],
                   backgroundColor: tokens.colors.neutral[50],
                   borderRadius: tokens.borderRadius.md,
@@ -992,6 +999,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
 
                   return (
                     <Flex key={idx} align="center" gap={8} style={{
+                      ...animStyle(idx),
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       backgroundColor: milestoneColor.bg,
                       borderRadius: tokens.borderRadius.md,
@@ -1052,6 +1060,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
               const isLast = idx === Math.min(events.length, 15) - 1;
               return (
                 <Flex key={event.id} gap={8} style={{
+                  ...animStyle(idx),
                   position: 'relative' as const,
                   paddingBottom: isLast ? 0 : tokens.spacing[3],
                 }}>
@@ -1118,6 +1127,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
         } : {}),
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {renderHeader()}
         {renderTabs()}
 

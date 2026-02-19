@@ -98,7 +98,7 @@ const DEFAULT_STEPS: JobEditorStep[] = [
 
 function generateJobCode(title: string): string {
   if (!title) return '';
-  const prefix = title.trim().split(/\s+/).map((w) => w[0]?.toUpperCase() || '').join('').slice(0, 4);
+  const prefix = title.trim().split(/\s+/).map((w, i) => w[0]?.toUpperCase() || '').join('').slice(0, 4);
   return `${prefix}-${Math.floor(Math.random() * 9000) + 1000}`;
 }
 
@@ -114,6 +114,11 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const { formData: formDataProp, steps: stepsProp, currentStep: currentStepProp, validationErrors: validationErrorsProp, onChange, onStepChange, onSave, onPublish, onPreview, isDirty: isDirtyProp, templates: rawTemplates = [], clients: rawClients = [], className, style } = props;
@@ -175,7 +180,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
     }, [formData.screeningQuestions, updateField]);
 
     const updateSQ = useCallback((id: string, field: keyof ScreeningQuestion, value: unknown) => {
-      updateField('screeningQuestions', (formData.screeningQuestions ?? []).map((q) => q.id === id ? { ...q, [field]: value } : q));
+      updateField('screeningQuestions', (formData.screeningQuestions ?? []).map((q, i) => q.id === id ? { ...q, [field]: value } : q));
     }, [formData.screeningQuestions, updateField]);
 
     const removeSQ = useCallback((id: string) => {
@@ -198,6 +203,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
 
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
     const cardStyle = useMemo(() => createCardStyle(t, { glass: isGlass, elevation: 'sm', padding: t.spacing[6] }), [t, isGlass]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const inputStyle: React.CSSProperties = useMemo(() => ({ width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.normal, color: t.colors.neutral[900], backgroundColor: t.colors.common.white, border: `${bdr} ${t.colors.neutral[300]}`, borderRadius: t.borderRadius.md, outline: 'none', transition: `all ${t.motion.hover}`, boxSizing: 'border-box' as const }), [t, bdr]);
     const selectStyle: React.CSSProperties = useMemo(() => ({ ...inputStyle, appearance: 'none' as const, backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: `right ${t.spacing[3]}px center`, paddingRight: t.spacing[8] }), [inputStyle, t]);
     const labelStyle: React.CSSProperties = useMemo(() => ({ display: 'block', fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1] }), [t]);
@@ -239,9 +245,9 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
       return (
         <Box>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, backgroundColor: t.colors.neutral[50], border: `${bdr} ${t.colors.neutral[300]}`, borderBottom: 'none', borderRadius: `${t.borderRadius.md} ${t.borderRadius.md} 0 0` }}>
-            {[Bold, Italic, Underline].map((I, i) => <Box key={i} as="button" role="button" tabIndex={0} aria-label={['Bold', 'Italic', 'Underline'][i]} style={tbBtn}><I size={14} /></Box>)}
+            {[Bold, Italic, Underline].map((I, idx) => <Box key={idx} as="button" role="button" tabIndex={0} aria-label={['Bold', 'Italic', 'Underline'][idx]} style={tbBtn}><I size={14} /></Box>)}
             <Box style={{ width: 1, height: 20, backgroundColor: t.colors.neutral[300], margin: `0 ${t.spacing[1]}px` }} />
-            {[List, ListOrdered, Link].map((I, i) => <Box key={i} as="button" role="button" tabIndex={0} aria-label={['Bullet list', 'Numbered list', 'Link'][i]} style={tbBtn}><I size={14} /></Box>)}
+            {[List, ListOrdered, Link].map((I, idx) => <Box key={idx} as="button" role="button" tabIndex={0} aria-label={['Bullet list', 'Numbered list', 'Link'][idx]} style={tbBtn}><I size={14} /></Box>)}
             <Box style={{ flex: 1 }} />
             <Box as="button" role="button" tabIndex={0} aria-label="AI Assist" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.secondaryScale[700], backgroundColor: t.colors.secondaryScale[50], border: `${bdr} ${t.colors.secondaryScale[200]}`, borderRadius: t.borderRadius.md, cursor: 'pointer' }}>
               <Sparkles size={12} /> <Text style={{ fontSize: 'inherit', color: 'inherit' }}>AI Assist</Text>
@@ -302,9 +308,9 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
               <Box role="button" tabIndex={0} aria-label="Generate job code" onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => updateField('code', generateJobCode(formData.title ?? '')))} onClick={() => updateField('code', generateJobCode(formData.title ?? ''))} style={secondaryBtn}><Text style={{ fontSize: 'inherit', color: 'inherit' }}>Generate</Text></Box>
             </Box>
           </Field>
-          <Field fieldKey="department" label="Department *"><select aria-label="Department" style={selectStyle} value={formData.department ?? ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('department', e.target.value)}><option value="">Select department...</option>{DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}</select></Field>
+          <Field fieldKey="department" label="Department *"><select aria-label="Department" style={selectStyle} value={formData.department ?? ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('department', e.target.value)}><option value="">Select department...</option>{DEPARTMENTS.map((d, i) => <option key={d} value={d}>{d}</option>)}</select></Field>
           <Field fieldKey="seniority" label="Seniority Level *"><Box role="radiogroup" aria-label="Seniority level" style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[2] }}>{SENIORITY_OPTIONS.map((o) => <OptionBtn key={o.value} selected={formData.seniority === o.value} label={o.label} onClick={() => updateField('seniority', o.value)} />)}</Box></Field>
-          <Field fieldKey="employmentType" label="Employment Type *"><Box role="radiogroup" aria-label="Employment type" style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[2] }}>{EMPLOYMENT_TYPES.map((o) => <OptionBtn key={o.value} selected={formData.employmentType === o.value} label={o.label} onClick={() => updateField('employmentType', o.value)} />)}</Box></Field>
+          <Field fieldKey="employmentType" label="Employment Type *"><Box role="radiogroup" aria-label="Employment type" style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[2] }}>{EMPLOYMENT_TYPES.map((o, i) => <OptionBtn key={o.value} selected={formData.employmentType === o.value} label={o.label} onClick={() => updateField('employmentType', o.value)} />)}</Box></Field>
           <Field fieldKey="urgency" label="Urgency"><Box role="radiogroup" aria-label="Urgency" style={{ display: 'flex', gap: t.spacing[2] }}>{URGENCY_OPTIONS.map((o) => <OptionBtn key={o.value} selected={formData.urgency === o.value} label={o.label} onClick={() => updateField('urgency', o.value)} scale={t.colors[o.scale]} flexOne />)}</Box></Field>
         </Box>
       ),
@@ -323,10 +329,10 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
           <StepTitle icon={MapPin} label="Location & Work Arrangement" />
           <Field fieldKey="workArrangement" label="Work Arrangement *">
             <Box role="radiogroup" aria-label="Work arrangement" style={{ display: 'flex', gap: t.spacing[3] }}>
-              {ARRANGEMENT_OPTIONS.map((o) => {
+              {ARRANGEMENT_OPTIONS.map((o, i) => {
                 const sel = formData.workArrangement === o.value;
                 return (
-                  <Box key={o.value} role="radio" tabIndex={0} aria-checked={sel} aria-label={o.label} onClick={() => updateField('workArrangement', o.value)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => updateField('workArrangement', o.value))} style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[4]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, fontWeight: sel ? t.typography.fontWeight.semibold : t.typography.fontWeight.normal, color: sel ? t.colors.primaryScale[700] : t.colors.neutral[600], backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${sel ? t.colors.primaryScale[400] : t.colors.neutral[200]}`, borderRadius: t.borderRadius.lg, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box key={o.value} role="radio" tabIndex={0} aria-checked={sel} aria-label={o.label} onClick={() => updateField('workArrangement', o.value)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => updateField('workArrangement', o.value))} style={{ ...animStyle(i), flex: 1, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[4]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, fontWeight: sel ? t.typography.fontWeight.semibold : t.typography.fontWeight.normal, color: sel ? t.colors.primaryScale[700] : t.colors.neutral[600], backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${sel ? t.colors.primaryScale[400] : t.colors.neutral[200]}`, borderRadius: t.borderRadius.lg, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Box style={{ color: sel ? t.colors.primaryScale[500] : t.colors.neutral[400] }}><o.icon size={16} /></Box><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{o.label}</Text>
                   </Box>
                 );
@@ -344,7 +350,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
       compensation: () => (
         <Box style={cardStyle}>
           <StepTitle icon={DollarSign} label="Compensation & Benefits" />
-          <Field fieldKey="currency" label="Currency"><select aria-label="Currency" style={{ ...selectStyle, maxWidth: 160 }} value={formData.currency ?? 'USD'} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('currency', e.target.value)}>{CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></Field>
+          <Field fieldKey="currency" label="Currency"><select aria-label="Currency" style={{ ...selectStyle, maxWidth: 160 }} value={formData.currency ?? 'USD'} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('currency', e.target.value)}>{CURRENCIES.map((c, i) => <option key={c} value={c}>{c}</option>)}</select></Field>
           <Box style={fgStyle}>
             <Text as="label" style={labelStyle}>Salary Range</Text>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
@@ -367,10 +373,10 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
           <Box style={fgStyle}>
             <Text as="label" style={labelStyle}>Benefits</Text>
             <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: t.spacing[2] }}>
-              {BENEFITS_OPTIONS.map((b) => {
+              {BENEFITS_OPTIONS.map((b, i) => {
                 const ch = (formData.benefits ?? []).includes(b);
                 return (
-                  <Box key={b} role="checkbox" tabIndex={0} aria-checked={ch} aria-label={b} onClick={() => toggleBenefit(b)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => toggleBenefit(b))} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, color: ch ? t.colors.primaryScale[700] : t.colors.neutral[600], backgroundColor: ch ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${ch ? t.colors.primaryScale[200] : t.colors.neutral[200]}`, borderRadius: t.borderRadius.md, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box key={b} role="checkbox" tabIndex={0} aria-checked={ch} aria-label={b} onClick={() => toggleBenefit(b)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => toggleBenefit(b))} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, color: ch ? t.colors.primaryScale[700] : t.colors.neutral[600], backgroundColor: ch ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${ch ? t.colors.primaryScale[200] : t.colors.neutral[200]}`, borderRadius: t.borderRadius.md, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Box style={{ width: 16, height: 16, borderRadius: t.borderRadius.sm, border: `${bdr} ${ch ? t.colors.primaryScale[500] : t.colors.neutral[300]}`, backgroundColor: ch ? t.colors.primaryScale[500] : t.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       {ch && <Check size={10} color={t.colors.common.white} />}
                     </Box>
@@ -390,7 +396,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
             <Text as="label" style={labelStyle}>Skills</Text>
             <Box style={{ display: 'flex', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
               <input type="text" aria-label="Skill name" style={{ ...inputStyle, flex: 1 }} placeholder="Add a skill..." value={newSkillName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSkillName(e.target.value)} onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') { e.preventDefault(); addSkill(); } }} />
-              <select aria-label="Proficiency level" style={{ ...selectStyle, width: 140 }} value={newSkillProficiency} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSkillProficiency(e.target.value as SkillTag['proficiency'])}>{PROFICIENCY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
+              <select aria-label="Proficiency level" style={{ ...selectStyle, width: 140 }} value={newSkillProficiency} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSkillProficiency(e.target.value as SkillTag['proficiency'])}>{PROFICIENCY_OPTIONS.map((o, i) => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
               <Box role="button" tabIndex={0} aria-label="Add skill" onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, addSkill)} onClick={addSkill} style={primaryBtn}><Plus size={14} /> <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Add</Text></Box>
             </Box>
             <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[2] }}>{(formData.skills ?? []).map((s, i) => <SkillTag_ key={`${s.name}-${i}`} skill={s} idx={i} />)}</Box>
@@ -408,7 +414,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
               {(formData.screeningQuestions ?? []).map((q, idx) => (
-                <Box key={q.id} style={{ padding: t.spacing[4], backgroundColor: t.colors.neutral[50], border: `${bdr} ${t.colors.neutral[200]}`, borderRadius: t.borderRadius.md }}>
+                <Box key={q.id} style={{ ...animStyle(idx), padding: t.spacing[4], backgroundColor: t.colors.neutral[50], border: `${bdr} ${t.colors.neutral[200]}`, borderRadius: t.borderRadius.md }}>
                   <Box style={{ display: 'flex', alignItems: 'flex-start', gap: t.spacing[3] }}>
                     <Box style={{ color: t.colors.neutral[400], paddingTop: t.spacing[2] }}><GripVertical size={14} /></Box>
                     <Box style={{ flex: 1 }}>
@@ -416,7 +422,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
                         <input type="text" aria-label={`Question ${idx + 1}`} style={{ ...inputStyle, flex: 1 }} placeholder={`Question ${idx + 1}...`} value={q.question} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSQ(q.id, 'question', e.target.value)} />
                         <select aria-label={`Question ${idx + 1} type`} style={{ ...selectStyle, width: 120 }} value={q.type} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateSQ(q.id, 'type', e.target.value)}><option value="text">Text</option><option value="boolean">Yes/No</option><option value="choice">Choice</option></select>
                       </Box>
-                      {q.type === 'choice' && <input type="text" aria-label="Choice options" style={{ ...inputStyle, marginBottom: t.spacing[2] }} placeholder="Options (comma-separated)" value={(q.options ?? []).join(', ')} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSQ(q.id, 'options', e.target.value.split(',').map((s) => s.trim()))} />}
+                      {q.type === 'choice' && <input type="text" aria-label="Choice options" style={{ ...inputStyle, marginBottom: t.spacing[2] }} placeholder="Options (comma-separated)" value={(q.options ?? []).join(', ')} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSQ(q.id, 'options', e.target.value.split(',').map((s, i) => s.trim()))} />}
                       <Box role="checkbox" tabIndex={0} aria-checked={q.required} aria-label="Required question" onClick={() => updateSQ(q.id, 'required', !q.required)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => updateSQ(q.id, 'required', !q.required))} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], cursor: 'pointer' }}>
                         <Box style={{ width: 14, height: 14, borderRadius: t.borderRadius.sm, border: `${bdr} ${q.required ? t.colors.primaryScale[500] : t.colors.neutral[300]}`, backgroundColor: q.required ? t.colors.primaryScale[500] : t.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{q.required && <Check size={8} color={t.colors.common.white} />}</Box>
                         <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Required</Text>
@@ -442,11 +448,11 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
           <Box style={fgStyle}>
             <Text as="label" style={labelStyle}>Visibility *</Text>
             <Box role="radiogroup" aria-label="Visibility" style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
-              {VISIBILITY_OPTIONS.map((o) => <RadioCard key={o.value} selected={(formData.visibility ?? 'public') === o.value} icon={<o.icon size={18} />} label={o.label} description={o.description} onClick={() => updateField('visibility', o.value)} />)}
+              {VISIBILITY_OPTIONS.map((o, i) => <RadioCard key={o.value} selected={(formData.visibility ?? 'public') === o.value} icon={<o.icon size={18} />} label={o.label} description={o.description} onClick={() => updateField('visibility', o.value)} />)}
             </Box>
           </Box>
           <Field fieldKey="openings" label="Number of Openings"><input type="number" aria-label="Number of openings" style={{ ...inputStyle, maxWidth: 120 }} min={1} value={formData.openings ?? 1} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('openings', Number(e.target.value))} /></Field>
-          {templates.length > 0 && <Field fieldKey="templateId" label="Job Template"><select aria-label="Job template" style={selectStyle} value={formData.templateId ?? ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { updateField('templateId', e.target.value); setSelectedTemplate(e.target.value); }}><option value="">None - Start from scratch</option>{templates.map((tp) => <option key={tp.id} value={tp.id}>{tp.name}</option>)}</select></Field>}
+          {templates.length > 0 && <Field fieldKey="templateId" label="Job Template"><select aria-label="Job template" style={selectStyle} value={formData.templateId ?? ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { updateField('templateId', e.target.value); setSelectedTemplate(e.target.value); }}><option value="">None - Start from scratch</option>{templates.map((tp, i) => <option key={tp.id} value={tp.id}>{tp.name}</option>)}</select></Field>}
           {clients.length > 0 && <Field fieldKey="clientId" label="Client Association"><select aria-label="Client association" style={selectStyle} value={formData.clientId ?? ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('clientId', e.target.value)}><option value="">No client association</option>{clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></Field>}
 
           {/* Work Mode */}
@@ -457,7 +463,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
                 { value: 'remote', label: 'Remote' },
                 { value: 'hybrid', label: 'Hybrid' },
                 { value: 'flexible', label: 'Flexible' },
-              ].map((o) => (
+              ].map((o, i) => (
                 <OptionBtn key={o.value} selected={(formData.workMode ?? 'onsite') === o.value} label={o.label} onClick={() => updateField('workMode', o.value as any)} flexOne />
               ))}
             </Box>
@@ -504,7 +510,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
               <Box style={{ gridColumn: '1 / -1' }}>
                 <Text style={{ ...rvLbl, display: 'block' }}>Benefits</Text>
                 <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[1] }}>
-                  {(formData.benefits ?? []).length > 0 ? (formData.benefits ?? []).map((b) => <Text key={b} style={createBadgeStyle(t, 'primary')}>{b}</Text>) : <Text style={rvVal}>None specified</Text>}
+                  {(formData.benefits ?? []).length > 0 ? (formData.benefits ?? []).map((b, i) => <Text key={b} style={createBadgeStyle(t, 'primary')}>{b}</Text>) : <Text style={rvVal}>None specified</Text>}
                 </Box>
               </Box>
             </Box>
@@ -516,7 +522,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
                 {pair('Education', formData.educationLevel)}
               </Box>
               <Box style={{ marginTop: t.spacing[2] }}><Text style={{ ...rvLbl, display: 'block' }}>Skills</Text><Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[1] }}>{(formData.skills ?? []).length > 0 ? (formData.skills ?? []).map((s, i) => <Text key={i} style={createBadgeStyle(t, 'info')}>{s.name} ({s.proficiency})</Text>) : <Text style={rvVal}>None specified</Text>}</Box></Box>
-              <Box style={{ marginTop: t.spacing[2] }}><Text style={{ ...rvLbl, display: 'block' }}>Screening Questions</Text>{(formData.screeningQuestions ?? []).length > 0 ? (formData.screeningQuestions ?? []).map((q, i) => <Text key={q.id} style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], padding: `${t.spacing[1]}px 0`, display: 'block' }}>{i + 1}. {q.question || 'Untitled'} ({q.type}){q.required ? ' *' : ''}</Text>) : <Text style={rvVal}>None</Text>}</Box>
+              <Box style={{ marginTop: t.spacing[2] }}><Text style={{ ...rvLbl, display: 'block' }}>Screening Questions</Text>{(formData.screeningQuestions ?? []).length > 0 ? (formData.screeningQuestions ?? []).map((q, qi) => <Text key={q.id} style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], padding: `${t.spacing[1]}px 0`, display: 'block' }}>{qi + 1}. {q.question || 'Untitled'} ({q.type}){q.required ? ' *' : ''}</Text>) : <Text style={rvVal}>None</Text>}</Box>
             </Box>
           ),
           configuration: <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3] }}>{pair('Visibility', formData.visibility)}{pair('Openings', formData.openings)}{pair('Template', templates.find((tp) => tp.id === formData.templateId)?.name)}{pair('Client', clients.find((c) => c.id === formData.clientId)?.name)}</Box>,
@@ -628,6 +634,7 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
 
     return (
       <Box style={{ display: 'flex', flexDirection: 'column' as const, height: '100%', backgroundColor: t.colors.neutral[50], fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }} className={className}>
+        {accentBar && <Box style={accentBar} />}
         {renderStepIndicator}
         <Box style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
           <Box style={{ flex: 1, overflow: 'auto', padding: t.spacing[6] }} role="main">{stepRenderers[currentStep]?.() ?? stepRenderers.basics?.()}</Box>

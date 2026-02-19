@@ -14,6 +14,8 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhCapacityPlannerProps, RecruiterCapacity, RebalanceSuggestion, CapacitySummary } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -95,6 +97,13 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
     const { Box, Text } = primitives;
     const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
@@ -126,6 +135,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
         ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}),
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -263,6 +273,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
                 {suggestions.map((sug, i) => (
                   <Box key={i} style={{
+                    ...animStyle(i),
                     padding: `${t.spacing[4]}px ${t.spacing[4]}px`,
                     borderRadius: t.borderRadius.lg,
                     border: `1px solid ${t.colors.warningScale[200]}`,

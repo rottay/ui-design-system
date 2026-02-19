@@ -6,7 +6,7 @@
  * based on latitude/longitude. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Globe, MapPin, Users,
 } from 'lucide-react';
@@ -22,6 +22,7 @@ import {
   createEmptyStateStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhGeographicMapProps, GeoRegion } from '../../core';
 
@@ -72,6 +73,7 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((id: string) => {
       onRegionClick?.(id);
@@ -109,6 +111,7 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

@@ -18,6 +18,7 @@ import {
   createProgressBarStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhSkillGapDashboardProps, SkillGapData } from '../../core';
 
@@ -62,6 +63,7 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((skill: string) => {
       onSkillClick?.(skill);
@@ -91,6 +93,7 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

@@ -7,7 +7,7 @@
  * 10/10 quality: zero raw HTML, personality-driven, glass-aware, ARIA.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,

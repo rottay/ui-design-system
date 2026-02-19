@@ -24,6 +24,7 @@ import {
   createStatValueStyle,
   createStatLabelStyle,
   ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhClientDirectoryProps, ClientFilter,
@@ -168,6 +169,12 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
     const [internalFilters, setInternalFilters] = useState<ClientFilter>(filtersProp ?? { type: 'all', status: 'all', tier: 'all', search: '' });
 
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const selectedId = selectedProp ?? internalSelected;
     const filters = filtersProp ?? internalFilters;
 
@@ -193,6 +200,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
         ...entrance.animate, transition: entrance.transition,
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[4]}px ${t.spacing[6]}px`,
@@ -344,6 +352,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
                   aria-selected={isActive}
                   aria-label={`${client.name}, ${sc.label}, ${tc.label}`}
                   style={{
+                    ...animStyle(idx),
                     display: 'flex', alignItems: 'center', gap: t.spacing[3],
                     padding: `${t.spacing[3]}px ${t.spacing[5]}px`, cursor: 'pointer',
                     borderBottom: `1px solid ${t.colors.neutral[50]}`,
@@ -459,6 +468,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
                 </Box>
                 {selected.contacts.map((c, ci) => (
                   <Box key={ci} style={{
+                    ...animStyle(ci),
                     padding: `${t.spacing[3]}px`, borderRadius: t.borderRadius.lg, marginBottom: t.spacing[2],
                     border: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.neutral[50],
                     display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],

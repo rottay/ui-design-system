@@ -20,6 +20,7 @@ import {
   formatDistanceToNow,
   createEmptyStateStyle,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhAgentVersionHistoryProps, AgentVersion } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -69,6 +70,7 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
 
     // Sort versions by date descending
@@ -87,6 +89,7 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[4], ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
           <GitBranch size={20} strokeWidth={1.5} style={{ color: t.colors.primaryScale[600] }} />

@@ -7,7 +7,7 @@
  * Slite-inspired warm design with generous whitespace and soft surfaces.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,

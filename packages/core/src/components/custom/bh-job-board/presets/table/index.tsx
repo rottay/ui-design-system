@@ -10,8 +10,10 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle, createCardStyle, createSurfaceStyle, createHoverStyle,
-  createEntranceAnimation, createCardHoverStyles, createIconContainerStyle,
+  createEntranceAnimation, createStaggerDelay,
+  createCardHoverStyles, createIconContainerStyle,
   getPersonalityTypography, getPersonalityBadgeRadius, getCardPadding,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhJobBoardProps, JobItem, JobStatus, JobUrgency, JobBoardFilter, ViewMode, SortDirection } from '../../core';
 import { BH_JOB_BOARD_DEFAULTS } from '../../core';
@@ -149,10 +151,16 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
     const sortDirection = controlledSortDirection ?? internalSortDirection;
 
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
 
     const handleFilterChange = useCallback((f: JobBoardFilter) => { if (controlledFilters === undefined) setInternalFilters(f); onFilterChange?.(f); }, [controlledFilters, onFilterChange]);
     const handleSearchChange = useCallback((q: string) => { if (controlledSearchQuery === undefined) setInternalSearchQuery(q); onSearchChange?.(q); }, [controlledSearchQuery, onSearchChange]);
@@ -220,7 +228,7 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
         </Box>
         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
           {/* View toggle */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: 2, padding: 3, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[0], padding: tokens.spacing[1], borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
             {([{ mode: 'grid' as ViewMode, icon: <LayoutGrid size={14} /> }, { mode: 'table' as ViewMode, icon: <List size={14} /> }, { mode: 'kanban' as ViewMode, icon: <Columns3 size={14} /> }]).map(({ mode, icon }) => (
               <Box key={mode} role="button" tabIndex={0} aria-label={`${mode} view`} aria-pressed={mode === 'table'}
                 onClick={() => onViewModeChange?.(mode)}
@@ -247,7 +255,7 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       const statusOptions: (JobStatus | null)[] = [null, 'published', 'draft', 'paused', 'closed'];
       return (
         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, backgroundColor: tokens.colors.common.white, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, flexWrap: 'wrap' as const }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: 2, padding: 3, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[0], padding: tokens.spacing[1], borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
             {statusOptions.map((status) => {
               const isActive = filters.status === status || (status === null && !filters.status);
               return (
@@ -297,7 +305,7 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
           </Box>
 
           {selectedJobs.length > 0 && (
-            <Box style={{ padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, backgroundColor: tokens.colors.primaryScale[600], display: 'inline-flex', alignItems: 'center' }}>
+            <Box style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, backgroundColor: tokens.colors.primaryScale[600], display: 'inline-flex', alignItems: 'center' }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>{selectedJobs.length} selected</Text>
             </Box>
           )}
@@ -360,7 +368,7 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
         case 'status':
           return (
             <Box style={{ flex: '0 0 120px', padding: cellPad }}>
-              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: statusCfg.bgColor, color: statusCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}` }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: statusCfg.bgColor, color: statusCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}` }}>
                 <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: statusCfg.dotColor }} />
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusCfg.color }}>{statusCfg.label}</Text>
               </Box>
@@ -375,7 +383,7 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
         case 'urgency':
           return (
             <Box style={{ flex: '0 0 100px', padding: cellPad }}>
-              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${urgencyCfg.borderColor}` }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${urgencyCfg.borderColor}` }}>
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: urgencyCfg.color }}>{urgencyCfg.label}</Text>
               </Box>
             </Box>
@@ -407,7 +415,7 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
             <Box style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
               <Box style={{ display: 'flex', alignItems: 'center' }}>
                 {(job.recruiterAvatars || []).slice(0, 3).map((avatar, idx) => (
-                  <Box key={idx} style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: idx > 0 ? -6 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 3 - idx }}>
+                  <Box key={idx} style={{ ...animStyle(idx), width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: idx > 0 ? -6 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 3 - idx }}>
                     {!avatar && <Users size={9} color={tokens.colors.primaryScale[600]} />}
                   </Box>
                 ))}
@@ -549,9 +557,10 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
     };
 
     return (
-      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}
+      <Box className={className} style={{ padding: tokens.spacing[7], backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}
         {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}
         {...(extA11y.role ? { role: extA11y.role } : {})}>
+        {accentBar && <Box style={accentBar} />}
         {ext.slot('header:start')}
         {ext.section('header', renderHeader)}
         {ext.slot('header:end')}

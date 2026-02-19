@@ -33,6 +33,8 @@ import {
   createBadgeStyle,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhManagerConsoleProps,
@@ -128,10 +130,18 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
       t.colors.neutral[400],
       t.colors.warningScale[300],
     ], [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* ================================================================ */
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}), ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* === Header === */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -176,7 +186,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
         {/* === KPI Cards === */}
         <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: t.spacing[4] }}>
           {kpis.map((kpi, i) => (
-            <Box key={i} style={{ ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate }}>
+            <Box key={i} style={{ ...animStyle(i), ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate }}>
               <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>{kpi.label}</Text>
               <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[2] }}>
                 <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
@@ -233,7 +243,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 aria-sort={sortCol === col ? (sortAsc ? 'ascending' : 'descending') : undefined}
                 onClick={() => handleSort(col)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleSort(col); }}
-                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, userSelect: 'none' as const }}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1], userSelect: 'none' as const }}
               >
                 <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: sortCol === col ? t.colors.primaryScale[600] : t.colors.neutral[500], textTransform: personalityTypo.labelTransform, letterSpacing: personalityTypo.labelLetterSpacing }}>
                   {col}
@@ -255,6 +265,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 onClick={() => handleRecruiterClick((rec.recruiterId ?? ''))}
                 onKeyDown={onRecruiterClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick((rec.recruiterId ?? '')); } : undefined}
                 style={{
+                  ...animStyle(idx),
                   display: 'grid',
                   gridTemplateColumns: `48px 180px repeat(${PERF_COLUMNS.length}, 1fr)`,
                   gap: t.spacing[2],

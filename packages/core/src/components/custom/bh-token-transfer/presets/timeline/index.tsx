@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware, entrance animated.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   ArrowRight, CheckCircle, XCircle, Clock, Coins,
   Plus, User, Calendar, MessageSquare, Shield,

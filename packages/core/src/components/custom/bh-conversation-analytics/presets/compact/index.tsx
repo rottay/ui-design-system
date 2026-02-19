@@ -106,6 +106,11 @@ export const CompactBhConversationAnalytics = createPreset<BhConversationAnalyti
         .sort((a, b) => b.avgScore - a.avgScore)
         .slice(0, 3);
     }, [agentPerformance]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* --- Agent click handler --- */
     const handleAgentClick = useCallback((agentId: string) => {
@@ -255,6 +260,7 @@ export const CompactBhConversationAnalytics = createPreset<BhConversationAnalyti
                       }
                     }}
                     style={{
+                      ...animStyle(index),
                       display: 'flex',
                       alignItems: 'center',
                       gap: t.spacing[2],

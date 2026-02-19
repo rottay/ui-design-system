@@ -5,7 +5,7 @@
  * Condensed campaign list with status and basic metrics.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Send, Play, Pause, CheckCircle, FileText, ChevronRight,
 } from 'lucide-react';

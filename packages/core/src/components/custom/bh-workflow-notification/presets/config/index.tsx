@@ -6,7 +6,7 @@
  * toggle switches, recipient lists, and add/edit actions.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Bell, Mail, MessageSquare, Inbox,
   Plus, Settings, ToggleLeft, ToggleRight,

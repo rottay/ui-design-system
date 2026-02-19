@@ -136,6 +136,11 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
 
     /* ---- Styles ---- */
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
@@ -231,7 +236,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
           ].map((kpi, i) => {
             const Icon = kpi.icon;
             return (
-              <Box key={i} style={{ ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate, transition: createEntranceAnimation(t, { index: i }).transition }}>
+              <Box key={i} style={{ ...animStyle(i), ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate, transition: createEntranceAnimation(t, { index: i }).transition }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
                   <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[50] })}>
                     <Icon size={16} color={kpi.color} />
@@ -363,7 +368,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
                         { label: 'Cost per Candidate', value: formatCurrency(src.costPerCandidate), sub: 'per applicant' },
                         { label: '90-day Retention', value: src.retentionRate90d ? `${src.retentionRate90d}%` : 'N/A', sub: 'post-hire retention' },
                       ].map((metric, i) => (
-                        <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...createCardStyle(t, { padding: 20 }) }}>
+                        <Box key={i} style={{ ...animStyle(i), display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...createCardStyle(t, { padding: 20 }) }}>
                           <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>{metric.label}</Text>
                           <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                             {metric.value}

@@ -7,13 +7,14 @@
  * dimension breakdown, and score level distribution.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
   createCardHoverStyles,
   createEntranceAnimation,
+  createStaggerDelay,
   createHoverStyle,
   createIconContainerStyle,
   createPanelHeaderStyle,
@@ -180,6 +181,11 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
     const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     /* ── Glass header style ───────────────────────────────────────── */
@@ -504,6 +510,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       onClick={() => handleDimSelect((sortedDimensions[idx].id ?? ''))}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimSelect((sortedDimensions[idx].id ?? '')); } }}
                       style={{
+                        ...animStyle(idx),
                         ...cardBase,
                         ...cardHover.base,
                         ...scoreEntrance.animate,
@@ -518,6 +525,8 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         borderWidth: isKnockoutFailed || selectedDim === sortedDimensions[idx].id ? '2px' : tokens.surface.borderWidth,
                         borderStyle: 'solid',
                       }}
+                      onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => { Object.assign(e.currentTarget.style, cardHover.hover); }}
+                      onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = cardHover.base.transform ?? 'none'; e.currentTarget.style.boxShadow = ''; if (cardHover.hover.backgroundColor) e.currentTarget.style.backgroundColor = ''; }}
                     >
                       <Box
                         style={{
@@ -690,6 +699,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     key={idx}
                     role="listitem"
                     style={{
+                      ...animStyle(idx),
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[3],
@@ -916,6 +926,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     key={d.id}
                     role="listitem"
                     style={{
+                      ...animStyle(i),
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[2],

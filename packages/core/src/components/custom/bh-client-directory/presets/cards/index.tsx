@@ -26,6 +26,7 @@ import {
   createStatLabelStyle,
   formatAbbreviated,
   ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhClientDirectoryProps, ClientFilter,
@@ -176,6 +177,12 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
     const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const [internalFilters, setInternalFilters] = useState<ClientFilter>(
       filtersProp ?? { type: 'all', status: 'all', tier: 'all', search: '' },
@@ -203,6 +210,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
         ...entrance.animate, transition: entrance.transition,
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -381,6 +389,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
 
               return (
                 <Box key={client.id} style={{
+                  ...animStyle(idx),
                   borderRadius: t.borderRadius.xl, border: `1px solid ${isExpanded ? t.colors.primaryScale[300] : t.colors.neutral[100]}`,
                   backgroundColor: t.colors.common.white, overflow: 'hidden', transition: `border-color ${t.motion.hover}`,
                   ...itemEntrance.animate,
@@ -456,6 +465,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                       </Box>
                       {client.contacts.map((contact, ci) => (
                         <Box key={ci} style={{
+                          ...animStyle(ci),
                           display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[2],
                           padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
                           backgroundColor: t.colors.common.white, border: `1px solid ${t.colors.neutral[100]}`,

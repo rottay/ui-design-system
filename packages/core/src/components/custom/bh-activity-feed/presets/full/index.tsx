@@ -34,6 +34,7 @@ import {
   createIconContainerStyle,
   createBadgeStyle,
   createEntranceAnimation,
+  createStaggerDelay,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
 } from '../../../helpers';
@@ -150,6 +151,11 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
 
     /* -- Styles ------------------------------------------------------ */
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -619,8 +625,8 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
               }} />
 
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
-                {grouped.map((group) => (
-                  <Box key={group.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
+                {grouped.map((group, i) => (
+                  <Box key={group.label} style={{ ...animStyle(i), display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
                     {/* Date group header */}
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], paddingLeft: t.spacing[10] + t.spacing[3] }}>
                       <Text style={{

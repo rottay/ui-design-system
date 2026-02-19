@@ -320,7 +320,7 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                 <Box key={b.stageId ?? 'unknown'}
                   onClick={() => b.stageId && onBottleneckSelect?.(b.stageId)}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: 12,
+                    display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                     ...hov, padding: tokens.spacing[4],
                     borderRadius: tokens.borderRadius.lg,
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getSeverityColor(b.severity ?? 'low', tokens)}30`,

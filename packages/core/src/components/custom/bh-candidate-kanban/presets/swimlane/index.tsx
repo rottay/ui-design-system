@@ -6,7 +6,7 @@
  * score rings, AI badges, and stage columns. Slite-inspired warm design.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -86,6 +86,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     const br = getPersonalityBadgeRadius(t);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -94,6 +95,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: t.colors.neutral[50], ...animStyle, ...style }}>
+        {accentBar && <Box style={accentBar} />}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`, backgroundColor: t.colors.common.white,
           borderBottom: `1px solid ${t.colors.neutral[100]}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between',

@@ -5,7 +5,7 @@
  * Condensed geographic widget with mini dot map and top regions.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   Globe, MapPin,
 } from 'lucide-react';
@@ -17,6 +17,7 @@ import {
   createEmptyStateStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhGeographicMapProps, GeoRegion } from '../../core';
 
@@ -59,6 +60,7 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((id: string) => {
       onRegionClick?.(id);
@@ -99,6 +101,7 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

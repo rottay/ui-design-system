@@ -19,6 +19,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhProctoringAlertProps,
@@ -152,6 +153,7 @@ export const BannerBhProctoringAlert = createPreset<BhProctoringAlertProps>({
     const sevColor = useMemo(() => getSeverityColor(event.severity, t), [event.severity, t]);
     const sevBg = useMemo(() => getSeverityBg(event.severity, t), [event.severity, t]);
     const sevBorder = useMemo(() => getSeverityBorderColor(event.severity, t), [event.severity, t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleReview = useCallback(() => {
       onReview?.(event.id);
@@ -196,6 +198,7 @@ export const BannerBhProctoringAlert = createPreset<BhProctoringAlertProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Severity icon */}
         <Box style={createIconContainerStyle(t, { size: 36, color: sevBg })}>
           <EventIcon size={18} color={sevColor} />

@@ -6,7 +6,7 @@
  * token usage trends, cost allocation, and spend forecasting.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -120,6 +120,11 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
 
     const hoverStylesBilling = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const entranceBilling = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entranceBilling.animate,
+      transition: entranceBilling.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const sectionHeaderBilling = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const handleDateRange = useCallback((range: DateRangeValue) => {
@@ -822,6 +827,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                           onClick={() => onProviderClick?.(provider.id)}
                           onKeyDown={onProviderClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onProviderClick?.(provider.id); } } : undefined}
                           style={{
+                            ...animStyle(i),
                             display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                             padding: tokens.spacing[3],
                             borderRadius: tokens.borderRadius.md,
@@ -866,6 +872,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                   <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: tokens.spacing[3] }}>
                     {kpis.slice(0, 4).map((kpi, i) => (
                       <Box key={i} style={{
+                        ...animStyle(i),
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.neutral[50],
@@ -965,12 +972,13 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                     <Text style={sectionTitle}>Quick Actions</Text>
                   </Box>
                   <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                    {quickActions.map((action) => (
+                    {quickActions.map((action, i) => (
                       <Box
                         as="button"
                         key={action.key}
                         onClick={() => onQuickAction?.(action.key)}
                         style={{
+                          ...animStyle(i),
                           display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                           padding: tokens.spacing[3],
                           borderRadius: tokens.borderRadius.md,

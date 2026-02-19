@@ -14,6 +14,8 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhCapacityPlannerProps, RecruiterCapacity, CapacitySummary } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -66,6 +68,13 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const handleRecruiterClick = useCallback((id: string) => {
       const isSelected = selectedRecruiter === id;
@@ -94,6 +103,7 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Summary */}
         {summary && (
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
@@ -104,7 +114,7 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
               { label: 'Underutilized', value: String(summary.underutilizedCount) },
               { label: 'Open Reqs', value: String(summary.totalOpenReqs) },
             ].map((stat, idx) => (
-              <Box key={stat.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[4], textAlign: 'center' as const, ...createEntranceAnimation(tokens, { index: idx }).animate }}>
+              <Box key={stat.label} style={{ ...animStyle(idx), display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[4], textAlign: 'center' as const, ...createEntranceAnimation(tokens, { index: idx }).animate }}>
                 <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                   {stat.value}
                 </Text>
@@ -150,7 +160,7 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
               </Box>
 
               {/* Table Body */}
-              {recruiters.map((rec) => {
+              {recruiters.map((rec, i) => {
                 const isSelected = selectedRecruiter === rec.id;
                 const statusColor = getStatusColor((rec.status ?? ''), tokens);
                 const statusBg = getStatusBg((rec.status ?? ''), tokens);
@@ -165,6 +175,7 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                     onClick={() => handleRecruiterClick((rec.id ?? ''))}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick((rec.id ?? '')); }}
                     style={{
+                      ...animStyle(i),
                       display: 'grid',
                       gridTemplateColumns: '1.5fr 1fr 80px 80px 140px 80px 100px 120px',
                       borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
@@ -279,6 +290,7 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                 <Box
                   key={i}
                   style={{
+                    ...animStyle(i),
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',

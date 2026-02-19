@@ -10,9 +10,11 @@ import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle, createHoverStyle, createEntranceAnimation,
+  createStaggerDelay,
   createCardHoverStyles, createPersonalitySectionHeaderStyle,
   createIconContainerStyle, getPersonalityTypography, getPersonalityBadgeRadius,
   getCardPadding,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhJobDetailProps } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -104,10 +106,16 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const cardPadding = useMemo(() => getCardPadding(tokens), [tokens]);
     const iconContainer = useMemo(() => createIconContainerStyle(tokens, { size: 32 }), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
 
     const sc = statusColors(jobInfo.status, tokens);
     const uc = urgencyColors(jobInfo.urgency, tokens);
@@ -154,6 +162,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
             <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(metrics.length, 4)}, 1fr)`, gap: tokens.spacing[2] }}>
               {metrics.slice(0, 4).map((m, i) => (
                 <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
+                  ...animStyle(i),
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   backgroundColor: tokens.colors.neutral[50],
                   borderRadius: tokens.borderRadius.md,
@@ -317,6 +326,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
         ...entrance.animate, transition: entrance.transition,
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',

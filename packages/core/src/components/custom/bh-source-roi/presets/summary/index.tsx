@@ -148,6 +148,11 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
 
     /* ---- Styles ---- */
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
@@ -193,7 +198,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
                 borderRadius: badgeRadius,
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 4,
+                gap: t.spacing[1],
               }}>
                 <DollarSign size={10} />
                 <Text style={{ fontSize: t.typography.fontSize.xs }}>Budget: {formatCurrency(budget)}</Text>
@@ -209,7 +214,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
             ].map((kpi, i) => {
               const Icon = kpi.icon;
               return (
-                <Box key={i} style={{ ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate, transition: createEntranceAnimation(t, { index: i }).transition }}>
+                <Box key={i} style={{ ...animStyle(i), ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate, transition: createEntranceAnimation(t, { index: i }).transition }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
                     <Box style={createIconContainerStyle(t, { size: 36, color: t.colors.neutral[50] })}>
                       <Icon size={18} color={kpi.color} />
@@ -280,6 +285,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
                     aria-selected={isSelected}
                     aria-label={`${src.name}: ${metricView === 'costPerHire' ? formatCurrency(val) : metricView === 'hireRate' ? `${val.toFixed(1)}%` : val}`}
                     style={{
+                      ...animStyle(idx),
                       display: 'flex',
                       alignItems: 'center',
                       gap: t.spacing[3],
@@ -375,7 +381,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
               </Box>
               {/* Legend */}
               {sources.map((src, idx) => (
-                <Box key={src.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                <Box key={src.id} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                     <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: sourceColors[idx % sourceColors.length], flexShrink: 0 }} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{src.name}</Text>
@@ -395,7 +401,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
                 const medalColor = medalColors[idx];
                 const medalBg = idx === 0 ? t.colors.warningScale[50] : 'transparent';
                 return (
-                  <Box key={src.id} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], padding: t.spacing[2], borderRadius: t.borderRadius.md, backgroundColor: medalBg }}>
+                  <Box key={src.id} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], padding: t.spacing[2], borderRadius: t.borderRadius.md, backgroundColor: medalBg }}>
                     <Box style={{ width: 24, height: 24, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: medalColor }}>
                         {idx + 1}

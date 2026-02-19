@@ -18,6 +18,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhCalibrationScatterProps,
@@ -69,6 +70,7 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((id: string) => {
       onPointClick?.(id);
@@ -107,6 +109,7 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

@@ -91,6 +91,11 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
@@ -150,6 +155,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
     const cardInteractive = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass, interactive: true }), [t, isGlass]);
     const hoverTransition = useMemo(() => createHoverStyle(t), [t]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
 
     const containerStyle: React.CSSProperties = useMemo(() => ({
@@ -196,7 +202,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
           {statItems.map((item, idx) => {
             const itemEntrance = createEntranceAnimation(t, { index: idx });
             return (
-              <Box key={item.label} style={{ ...cardBase, ...itemEntrance.animate, transition: itemEntrance.transition }}>
+              <Box key={item.label} style={{ ...animStyle(idx), ...cardBase, ...itemEntrance.animate, transition: itemEntrance.transition }}>
                 <Stack direction="horizontal" align="center" gap={t.spacing[3]}>
                   <Box style={{ ...createIconContainerStyle(t, { size: 28 }), backgroundColor: item.bg }}>{item.icon}</Box>
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
@@ -268,7 +274,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
             return (
               <Box key={item.id} role="button" tabIndex={0} aria-label={`Approval: ${item.entityName}`} aria-selected={isSelected}
                 onClick={() => handleApprovalSelect(item.id)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => handleApprovalSelect(item.id))}
-                style={{ ...createCardStyle(t, { elevation: isSelected ? 'md' : 'sm', glass: isGlass, interactive: true }), borderLeft: `4px solid ${uColor.dot}`, cursor: 'pointer', transition: `all ${t.motion.hover}`, ...(isSelected ? { outline: `${bdr} ${t.colors.primaryScale[400]}` } : {}), ...itemEntrance.animate }}
+                style={{ ...animStyle(idx), ...createCardStyle(t, { elevation: isSelected ? 'md' : 'sm', glass: isGlass, interactive: true }), borderLeft: `4px solid ${uColor.dot}`, cursor: 'pointer', transition: `all ${t.motion.hover}`, ...(isSelected ? { outline: `${bdr} ${t.colors.primaryScale[400]}` } : {}), ...itemEntrance.animate }}
               >
                 <Stack direction="horizontal" align="start" justify="space-between" style={{ marginBottom: t.spacing[2] }}>
                   <Box style={{ flex: 1 }}>
@@ -356,7 +362,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                   <Text style={{ ...sectionHeader, display: 'block', marginBottom: t.spacing[2] }}>Related Data</Text>
                   <Box style={{ borderRadius: t.borderRadius.md, overflow: 'hidden', border: `${bdr} ${t.colors.neutral[200]}` }}>
                     {(externalDetail.relatedData ?? []).map((data, idx) => (
-                      <Box key={idx} style={{ display: 'grid', gridTemplateColumns: '160px 1fr', borderBottom: idx < (externalDetail.relatedData ?? []).length - 1 ? `${bdr} ${t.colors.neutral[100]}` : 'none' }}>
+                      <Box key={idx} style={{ ...animStyle(idx), display: 'grid', gridTemplateColumns: '160px 1fr', borderBottom: idx < (externalDetail.relatedData ?? []).length - 1 ? `${bdr} ${t.colors.neutral[100]}` : 'none' }}>
                         <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, backgroundColor: t.colors.neutral[50], fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], borderRight: `${bdr} ${t.colors.neutral[200]}` }}>
                           <Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{data.label}</Text>
                         </Box>
@@ -378,7 +384,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                       return (
                         <React.Fragment key={idx}>
                           {idx > 0 && (
-                            <Box style={{ width: 32, height: 2, backgroundColor: step.status === 'approved' || (externalDetail.chainSteps ?? [])[idx - 1]?.status === 'approved' ? t.colors.successScale[300] : t.colors.neutral[200], flexShrink: 0 }} />
+                            <Box style={{ ...animStyle(idx), width: 32, height: 2, backgroundColor: step.status === 'approved' || (externalDetail.chainSteps ?? [])[idx - 1]?.status === 'approved' ? t.colors.successScale[300] : t.colors.neutral[200], flexShrink: 0 }} />
                           )}
                           <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
                             <Box style={{ width: 36, height: 36, borderRadius: t.borderRadius.full, backgroundColor: stepColor.bg, border: `${bdr} ${stepColor.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stepColor.color }}>
@@ -448,11 +454,11 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
           ) : (
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3], position: 'relative' as const }}>
               <Box style={{ position: 'absolute' as const, left: 15, top: 8, bottom: 8, width: 2, backgroundColor: t.colors.neutral[200] }} />
-              {externalHistory.map((h) => {
+              {externalHistory.map((h, i) => {
                 const oColor = outcomeColors[h.outcome];
                 const catColor = categoryColors[h.type];
                 return (
-                  <Box key={h.id} style={{ display: 'flex', gap: t.spacing[3], position: 'relative' as const }}>
+                  <Box key={h.id} style={{ ...animStyle(i), display: 'flex', gap: t.spacing[3], position: 'relative' as const }}>
                     <Box style={{ width: 32, flexShrink: 0, display: 'flex', justifyContent: 'center', paddingTop: t.spacing[2], zIndex: 1 }}>
                       <Box style={{ width: 12, height: 12, borderRadius: t.borderRadius.full, backgroundColor: h.outcome === 'approved' ? t.colors.successScale[500] : t.colors.errorScale[500], border: `${bdr} ${t.colors.common.white}` }} />
                     </Box>
@@ -485,6 +491,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
     /* ---- Main Layout ---- */
     return (
       <Box className={className} style={containerStyle}>
+        {accentBar && <Box style={accentBar} />}
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], maxWidth: 1400, margin: '0 auto' }}>
           {renderStatsBar()}
           {renderCategoryTabs()}

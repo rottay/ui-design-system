@@ -6,7 +6,7 @@
  * and click-to-drill. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Filter, ChevronDown, Users, TrendingDown,
 } from 'lucide-react';

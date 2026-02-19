@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   Users, Award, Briefcase, GraduationCap, ArrowUpDown,
 } from 'lucide-react';

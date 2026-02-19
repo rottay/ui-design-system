@@ -20,6 +20,11 @@ import {
   createProgressBarStyle,
   createSectionHeaderStyle,
   createSurfaceStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type { BhOnboardingFlowProps, FormField } from '../../core';
 import {
@@ -81,6 +86,15 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const validateCurrentStep = useCallback((): boolean => {
       const errors: Record<string, string> = {};
@@ -515,6 +529,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
               <Stack direction="horizontal" align="center" gap={tokens.spacing[2]} style={{ marginBottom: tokens.spacing[2] }}>
                 <span style={{
                   ...createBadgeStyle(tokens, 'primary'),
+                  borderRadius: badgeRadius,
                   fontSize: tokens.typography.fontSize.xs,
                 }}>
                   Step {currentStep + 1} of {steps.length}
@@ -767,6 +782,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
               {previewItems.map((item, idx) => (
                 <div key={idx}>
                   <p style={{
+                    ...animStyle(idx),
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     color: tokens.colors.neutral[400],
@@ -803,6 +819,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
     /* ── Main Layout ───────────────────────────────────────────── */
     return (
       <div className={className} style={containerStyle}>
+        {accentBar && <Box style={accentBar} />}
         {renderCelebration()}
 
         <div style={{
@@ -821,8 +838,8 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
               <div>
                 <h1 style={{
                   fontSize: tokens.typography.fontSize.xl,
-                  fontWeight: tokens.typography.fontWeight.bold,
-                  letterSpacing: '-0.02em',
+                  fontWeight: ptypo.headingWeight,
+                  letterSpacing: ptypo.headingLetterSpacing,
                   color: tokens.colors.neutral[900],
                   margin: 0,
                 }}>

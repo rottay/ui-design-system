@@ -5,7 +5,7 @@
  * Condensed compliance status widget with score and rule summary.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   Shield, CheckCircle, XCircle, AlertTriangle,
   MinusCircle, ChevronRight,
@@ -19,6 +19,7 @@ import {
   createEmptyStateStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhComplianceCheckerProps, ComplianceRule } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -111,6 +112,7 @@ export const CompactBhComplianceChecker = createPreset<BhComplianceCheckerProps>
       percent: overallScore,
       color: scoreColor,
     }), [t, overallScore, scoreColor]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const failedRules = useMemo(() => rules.filter(r => r.status === 'fail' || r.status === 'warning'), [rules]);
 
@@ -130,6 +132,7 @@ export const CompactBhComplianceChecker = createPreset<BhComplianceCheckerProps>
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

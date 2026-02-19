@@ -14,6 +14,7 @@ import {
   createEntranceAnimation,
   getPersonalityTypography,
   createPersonalitySectionHeaderStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhProctoringHeatmapProps,
@@ -98,6 +99,7 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const scale = useMemo(() => getColorScale(colorScale, t), [colorScale, t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const dataMap = useMemo(() => {
       const map = new Map<string, number>();
@@ -132,6 +134,7 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           display: 'flex',

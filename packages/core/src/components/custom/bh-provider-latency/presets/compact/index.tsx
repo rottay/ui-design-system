@@ -5,7 +5,7 @@
  * Mini sparkline per provider with current p50/p95/p99 values.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,

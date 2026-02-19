@@ -23,6 +23,8 @@ import {
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhAgentStudioProps,
@@ -181,7 +183,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
 
     const updateTrait = useCallback(
       (name: string, value: number) => {
-        const updated = agentData.personalityTraits.map((t) =>
+        const updated = agentData.personalityTraits.map((t, i) =>
           t.name === name ? { ...t, value } : t,
         );
         updateAgent({ personalityTraits: updated });
@@ -212,7 +214,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
 
     const updateScriptSection = useCallback(
       (id: string, partial: Partial<ScriptSection>) => {
-        const updated = agentData.scriptSections.map((s) =>
+        const updated = agentData.scriptSections.map((s, i) =>
           s.id === id ? { ...s, ...partial } : s,
         );
         updateAgent({ scriptSections: updated });
@@ -279,6 +281,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
     const sortedSections = useMemo(() => {
       return [...agentData.scriptSections].sort((a, b) => a.order - b.order);
     }, [agentData.scriptSections]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const isLastStep = currentStep === steps.length - 1;
     const isFirstStep = currentStep === 0;
@@ -497,7 +505,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 transition: `all ${tokens.motion.hover}`,
               }}
             >
-              {languages.map((lang) => (
+              {languages.map((lang, i) => (
                 <option key={lang} value={lang}>{lang}</option>
               ))}
             </select>
@@ -559,7 +567,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             Voice Provider
           </Text>
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
-            {providers.map((provider) => {
+            {providers.map((provider, i) => {
               const config = providerConfig[provider];
               const isSelected = agentData.voiceProvider === provider;
               return (
@@ -572,6 +580,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   onClick={() => updateAgent({ voiceProvider: provider })}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ voiceProvider: provider }); } }}
                   style={{
+                    ...animStyle(i),
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -724,7 +733,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                 {voices
                   .filter((v) => v.provider === agentData.voiceProvider)
-                  .map((voice) => (
+                  .map((voice, i) => (
                     <Box
                       key={voice.id}
                       role="radio"
@@ -734,6 +743,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                       onClick={() => updateAgent({ voiceId: voice.id })}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ voiceId: voice.id }); } }}
                       style={{
+                        ...animStyle(i),
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -841,9 +851,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             Personality Traits
           </Text>
           <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
-            {agentData.personalityTraits.map((trait) => (
+            {agentData.personalityTraits.map((trait, i) => (
               <Box key={trait.name}>
-                <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
+                <Box style={{ ...animStyle(i), display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700] }}>
                     {trait.name}
                   </Text>
@@ -934,7 +944,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               transition: `all ${tokens.motion.hover}`,
             }}
           >
-            {models.map((m) => (
+            {models.map((m, i) => (
               <option key={m.id} value={m.id}>
                 {m.name} {m.description ? `- ${m.description}` : ''}
               </option>
@@ -1044,7 +1054,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             Click to insert variable
           </Text>
           <Box style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
-            {SYSTEM_PROMPT_VARIABLES.map((variable) => (
+            {SYSTEM_PROMPT_VARIABLES.map((variable, i) => (
               <Box
                 key={variable}
                 role="button"
@@ -1053,6 +1063,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 onClick={() => insertVariable(variable)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); insertVariable(variable); } }}
                 style={{
+                  ...animStyle(i),
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,

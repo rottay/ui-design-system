@@ -6,7 +6,7 @@
  * alert thresholds, and save action. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   Wallet, AlertTriangle, TrendingUp, Save,
   Settings, DollarSign, Users, Bell,

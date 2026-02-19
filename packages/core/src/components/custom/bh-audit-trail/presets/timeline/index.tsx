@@ -47,6 +47,7 @@ import {
   createOverlayStyle,
   createEntranceAnimation,
   createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -184,6 +185,11 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
 
     /* -- Styles ------------------------------------------------------ */
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const entityColors = useMemo(() => getEntityTypeColors(t), [t]);
     const actionColors = useMemo(() => getActionTypeColors(t), [t]);
     const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
@@ -191,6 +197,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const overlayStyle = useMemo(() => createOverlayStyle(t, 'medium'), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const glassStyle = useMemo(() => {
       if (t.surface.useGlass && t.glass) {
@@ -312,6 +319,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         <style>{pulseKeyframes}</style>
 
         <Box style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
@@ -442,7 +450,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                   const itemEntrance = createEntranceAnimation(t, { index: idx });
 
                   return (
-                    <Box key={event.id} style={{ display: 'flex', gap: t.spacing[3], position: 'relative' as const, ...itemEntrance.animate, transition: itemEntrance.transition }}>
+                    <Box key={event.id} style={{ ...animStyle(idx), display: 'flex', gap: t.spacing[3], position: 'relative' as const, ...itemEntrance.animate, transition: itemEntrance.transition }}>
                       {/* Timeline dot */}
                       <Box style={{ width: 40, flexShrink: 0, display: 'flex', justifyContent: 'center', paddingTop: t.spacing[3], zIndex: 1 }}>
                         <Box style={{ width: 14, height: 14, borderRadius: t.borderRadius.full, backgroundColor: eColor.dot, border: `3px solid ${t.colors.common.white}`, boxShadow: t.shadows.sm }} />
@@ -570,6 +578,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                 const itemEntrance = createEntranceAnimation(t, { index: idx });
                 return (
                   <Box key={aiEvent.id ?? `ai-${idx}`} style={{
+                    ...animStyle(idx),
                     display: 'flex', alignItems: 'center', gap: t.spacing[3],
                     padding: `${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
                     backgroundColor: t.colors.neutral[50],
@@ -699,7 +708,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                     <Box>
                       <Text style={{ ...sectionHdr, marginBottom: t.spacing[2], display: 'block' }}>Related Events</Text>
                       <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
-                        {selectedObj.relatedEvents.map((relId) => {
+                        {selectedObj.relatedEvents.map((relId, i) => {
                           const relEvent = events.find((e) => e.id === relId);
                           if (!relEvent) return null;
                           const relEColor = entityColors[relEvent.entityType];
@@ -712,6 +721,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                               onClick={() => handleSelect(relId)}
                               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(relId); } }}
                               style={{
+                                ...animStyle(i),
                                 ...card, cursor: 'pointer',
                                 transition: `all ${t.motion.hover}`,
                               }}

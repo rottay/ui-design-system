@@ -23,6 +23,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhScorecardDetailProps,
@@ -101,6 +102,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleDimClick = useCallback((dimId: string) => {
       onDimensionClick?.(dimId);
@@ -141,6 +143,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[4]}px ${t.spacing[5]}px`,

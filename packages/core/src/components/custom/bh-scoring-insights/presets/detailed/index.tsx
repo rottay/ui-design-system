@@ -36,6 +36,7 @@ import {
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
   createEntranceAnimation,
+  createStaggerDelay,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createDividerStyle,
@@ -43,6 +44,7 @@ import {
   createMetadataFieldStyle,
   createStatValueStyle, createStatLabelStyle,
   createTrendStyle, formatScore, ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
@@ -206,6 +208,13 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
       if (!searchQuery) return skillGaps;
       return skillGaps.filter(g => (g.dimension || '').toLowerCase().includes(searchQuery.toLowerCase()));
     }, [skillGaps, searchQuery]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* ---- Styles ---- */
     const card = createCardStyle(t, { padding: 28, glass: isGlass });
@@ -284,6 +293,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
     /* ================================================================ */
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, width: '100%', height: '100%', backgroundColor: t.colors.neutral[50], ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* === Header === */}
         <Box style={{
@@ -466,7 +476,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 {kpis.map((kpi, i) => {
                   const entrance = createEntranceAnimation(t, { index: i });
                   return (
-                    <Box key={i} style={{ ...entrance.animate, transition: entrance.transition }}>
+                    <Box key={i} style={{ ...animStyle(i), ...entrance.animate, transition: entrance.transition }}>
                       <KpiCard kpi={kpi} />
                     </Box>
                   );
@@ -483,7 +493,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   const barColor = resolveLevelColor(level, t);
                   const entrance = createEntranceAnimation(t, { index: idx });
                   return (
-                    <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
+                    <Box key={idx} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ width: 12, height: 12, borderRadius: t.borderRadius.sm, backgroundColor: barColor, flexShrink: 0 }} />
                       <Text style={{ width: 140, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium, flexShrink: 0 }}>
                         {level.level}
@@ -605,7 +615,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                               alignItems: 'center',
                               justifyContent: 'center',
                               minHeight: 44,
-                              gap: 2,
+                              gap: t.spacing[0],
                             }}
                           >
                             <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: getScoreColor(score, t) }}>
@@ -633,7 +643,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   const barColor = pct >= 5 ? t.colors.errorScale[500] : pct >= 2 ? t.colors.warningScale[500] : t.colors.neutral[400];
                   const entrance = createEntranceAnimation(t, { index: idx });
                   return (
-                    <Box key={idx} style={{ ...card, marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
+                    <Box key={idx} style={{ ...animStyle(idx), ...card, marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.medium }}>
                           {stat.dimension}
@@ -738,6 +748,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                       onClick={() => handleDrilldown(drilldownEntity === cohort.groupName ? null : cohort.groupName)}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDrilldown(drilldownEntity === cohort.groupName ? null : cohort.groupName); } }}
                       style={{
+                        ...animStyle(idx),
                         ...card,
                         marginBottom: t.spacing[3],
                         cursor: 'pointer',
@@ -806,6 +817,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                     <Box
                       key={idx}
                       style={{
+                        ...animStyle(idx),
                         ...card,
                         marginBottom: t.spacing[3],
                         borderLeft: `3px solid ${gapColor}`,

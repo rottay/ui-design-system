@@ -91,6 +91,11 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const surfMd = useMemo(() => createSurfaceStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
     const hov = useMemo(() => createHoverStyle(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const cardPadding = useMemo(() => getCardPadding(t), [t]);
@@ -285,6 +290,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
               const statEntrance = createEntranceAnimation(t, { index: i });
               return (
                 <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
+                  ...animStyle(i),
                   ...card, textAlign: 'center' as const,
                   ...statEntrance.animate, transition: statEntrance.transition,
                 }}>
@@ -313,7 +319,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
               const sc = stepScale(step);
               return (
                 <Box key={idx}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[3]}px 0` }}>
+                  <Box style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[3]}px 0` }}>
                     <Box style={{
                       ...createIconContainerStyle(t, { size: 32, color: sc[500] }),
                       backgroundColor: sc[500],
@@ -427,6 +433,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
           <Section k="documents" icon={<FileText size={18} color={p[600]} />} title="Documents" extra={`${signedDocs}/${documents.length}`}>
             {documents.map((doc, i) => (
               <Box key={i} style={{
+                ...animStyle(i),
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: `${sp[2]}px 0`,
                 borderBottom: i < documents.length - 1 ? `${t.surface.borderWidth} ${t.surface.borderStyle} ${n[100]}` : 'none',
@@ -524,6 +531,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
             <Section k="history" icon={<History size={18} color={p[600]} />} title="Negotiation History" extra={`${negotiationHistory.length} versions`}>
               {negotiationHistory.map((ver, vi) => (
                 <Box key={vi} style={{
+                  ...animStyle(vi),
                   padding: `${sp[3]}px 0`,
                   borderBottom: vi < negotiationHistory.length - 1 ? `${t.surface.borderWidth} ${t.surface.borderStyle} ${n[100]}` : 'none',
                 }}>

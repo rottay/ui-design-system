@@ -14,6 +14,7 @@ import {
   createBadgeStyle,
   createCardHoverStyles,
   createEntranceAnimation,
+  createStaggerDelay,
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
   getPersonalityTypography,
@@ -175,6 +176,12 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
       () => createIconContainerStyle(tokens, { size: 40, color: tokens.colors.primaryScale[100] }),
       [tokens],
     );
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     return (
       <Box className={className} style={{
@@ -312,6 +319,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                 <Box style={{ marginBottom: tokens.spacing[3] }}>
                   {context.scoreHighlights.map((h, i) => (
                     <Box key={i} style={{
+                      ...animStyle(i),
                       display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginBottom: tokens.spacing[1],
                     }}>
                       <Star size={10} color={tokens.colors.warningScale[500]} />
@@ -331,6 +339,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                   </Text>
                   {context.keyEvidence.map((ev, i) => (
                     <Box key={i} style={{
+                      ...animStyle(i),
                       display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[1],
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[50],
@@ -403,7 +412,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                       {isExpanded ? <ChevronDown size={12} color={tokens.colors.neutral[400]} /> : <ChevronRight size={12} color={tokens.colors.neutral[400]} />}
                     </Box>
 
-                    {isExpanded && categoryTemplates.map((template) => {
+                    {isExpanded && categoryTemplates.map((template, i) => {
                       const isSelected = template.id === selectedTemplateId;
                       const isHovered = template.id === hoveredTemplateId;
                       return (
@@ -418,6 +427,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                           onMouseEnter={() => setHoveredTemplateId(template.id)}
                           onMouseLeave={() => setHoveredTemplateId(null)}
                           style={{
+                            ...animStyle(i),
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                             padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px ${tokens.spacing[2]}px ${tokens.spacing[7]}px`,
                             backgroundColor: isSelected ? tokens.colors.primaryScale[50] : isHovered ? tokens.colors.neutral[50] : 'transparent',
@@ -482,7 +492,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
               borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
               backgroundColor: tokens.colors.common.white,
             }}>
-              {(['email', 'sms', 'whatsapp', 'linkedin'] as FeedbackChannel[]).map((ch) => {
+              {(['email', 'sms', 'whatsapp', 'linkedin'] as FeedbackChannel[]).map((ch, i) => {
                 const config = channelConfig[ch];
                 const isActive = channel === ch;
                 return (
@@ -495,6 +505,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                     onClick={() => setChannel(ch)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setChannel(ch); } }}
                     style={{
+                      ...animStyle(i),
                       display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                       borderBottom: isActive ? `2px solid ${config.color}` : '2px solid transparent',
@@ -553,7 +564,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
               }}>
                 Tone:
               </Text>
-              {(['encouraging', 'neutral', 'professional'] as FeedbackTone[]).map((t) => {
+              {(['encouraging', 'neutral', 'professional'] as FeedbackTone[]).map((t, i) => {
                 const config = toneConfig[t];
                 const isActive = tone === t;
                 return (
@@ -566,6 +577,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                     onClick={() => setTone(t)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTone(t); } }}
                     style={{
+                      ...animStyle(i),
                       display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-start',
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.lg,
@@ -605,7 +617,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginRight: tokens.spacing[1] }}>
                   Insert:
                 </Text>
-                {FEEDBACK_VARIABLES.map((v) => (
+                {FEEDBACK_VARIABLES.map((v, i) => (
                   <Box
                     key={v.key}
                     role="button"
@@ -614,6 +626,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                     onClick={() => handleInsertVariable(v.key)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleInsertVariable(v.key); } }}
                     style={{
+                      ...animStyle(i),
                       display: 'inline-flex', alignItems: 'center',
                       padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
                       borderRadius: badgeRadius,

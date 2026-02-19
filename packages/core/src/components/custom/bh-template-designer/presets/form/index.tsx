@@ -17,6 +17,11 @@ import {
   createSectionHeaderStyle,
   createSurfaceStyle,
   getHoverTransform,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type {
   BhTemplateDesignerProps,
@@ -163,6 +168,15 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ── Handlers ─────────────────────────────────────────────────── */
     const toggleStageExpand = useCallback((stageId: string) => {
@@ -216,6 +230,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* ── Header ───────────────────────────────────────────────── */}
         <div
           style={{
@@ -240,7 +255,8 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
               }}
               style={{
                 fontSize: tokens.typography.fontSize.lg,
-                fontWeight: tokens.typography.fontWeight.semibold,
+                fontWeight: ptypo.headingWeight,
+                letterSpacing: ptypo.headingLetterSpacing,
                 color: tokens.colors.neutral[900],
                 border: 'none',
                 outline: 'none',
@@ -250,7 +266,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 minWidth: 200,
               }}
               placeholder="Template Name"
-            
+
               onFocus={(e) => {
                 e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
                 e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
@@ -260,8 +276,8 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
-            <span style={{ ...createBadgeStyle(tokens, 'primary') }}>{category}</span>
-            <span style={{ ...createBadgeStyle(tokens, 'secondary') }}>{industry}</span>
+            <span style={{ ...createBadgeStyle(tokens, 'primary'), borderRadius: badgeRadius }}>{category}</span>
+            <span style={{ ...createBadgeStyle(tokens, 'secondary'), borderRadius: badgeRadius }}>{industry}</span>
             <span
               style={{
                 display: 'inline-flex',
@@ -390,7 +406,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-              {sortedStages.map((stage) => {
+              {sortedStages.map((stage, i) => {
                 const isExpanded = expandedStages.has(stage.id);
                 const sc = stageColors[stage.type];
 
@@ -398,6 +414,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   <div
                     key={stage.id}
                     style={{
+                      ...animStyle(i),
                       ...cardBase,
                       padding: 0,
                       overflow: 'hidden',
@@ -559,7 +576,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                             }}
                           >
                             <option value="">Select agent...</option>
-                            {agents.map((a) => (
+                            {agents.map((a, i) => (
                               <option key={a.id} value={a.id}>
                                 {a.name}
                               </option>
@@ -598,7 +615,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                             }}
                           >
                             <option value="">Select rubric...</option>
-                            {rubrics.map((r) => (
+                            {rubrics.map((r, i) => (
                               <option key={r.id} value={r.id}>
                                 {r.name}
                               </option>
@@ -799,10 +816,11 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     No automation rules configured
                   </div>
                 ) : (
-                  localRules.map((rule) => (
+                  localRules.map((rule, i) => (
                     <div
                       key={rule.id}
                       style={{
+                        ...animStyle(i),
                         ...cardBase,
                         display: 'flex',
                         alignItems: 'center',
@@ -916,6 +934,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                         <div
                           key={idx}
                           style={{
+                            ...animStyle(idx),
                             display: 'flex',
                             alignItems: 'center',
                             gap: tokens.spacing[2],
@@ -1000,10 +1019,11 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     No versions recorded yet
                   </div>
                 ) : (
-                  versions.map((ver) => (
+                  versions.map((ver, i) => (
                     <div
                       key={ver.version}
                       style={{
+                        ...animStyle(i),
                         ...cardBase,
                         display: 'flex',
                         alignItems: 'flex-start',

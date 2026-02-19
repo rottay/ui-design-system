@@ -233,12 +233,19 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
         .filter(d => human[d] !== undefined && ai[d] !== undefined)
         .map(d => ({ dimension: d, humanScore: n(human[d]), aiScore: n(ai[d]) }));
     }, [currentSample, humanScores, dimensions]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ----- heatmap data (per-dimension alignment) ----- */
     const perDimAlignment = alignmentMetrics?.perDimensionAlignment ?? [];
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* ===== 1. Session Header ===== */}
         <Box style={{
@@ -486,6 +493,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         aria-label={`${dimension} dimension, score ${value}`}
                         aria-expanded={selectedDimension === dimension}
                         style={{
+                          ...animStyle(dimIdx),
                           padding: tokens.spacing[3],
                           borderRadius: tokens.borderRadius.md,
                           border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${selectedDimension === dimension ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
@@ -696,6 +704,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                     <Box
                       key={dimension}
                       style={{
+                        ...animStyle(cIdx),
                         ...surfaceBorder,
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
@@ -915,6 +924,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           <Box
                             key={idx}
                             style={{
+                              ...animStyle(idx),
                               padding: tokens.spacing[2],
                               borderRadius: tokens.borderRadius.md,
                               backgroundColor: getAgreementBgColor(n(item.agreement), tokens),
@@ -971,6 +981,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       <Box
                         key={idx}
                         style={{
+                          ...animStyle(idx),
                           ...glassCard,
                           padding: tokens.spacing[4],
                           borderLeft: `3px solid ${getMisalignmentColor(n(adj.misalignment), tokens)}`,

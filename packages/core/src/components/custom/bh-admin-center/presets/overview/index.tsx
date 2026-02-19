@@ -6,7 +6,7 @@
  * KPIs, users, events, cost breakdown, compliance, quick actions
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -119,6 +119,11 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
 
     const hoverStylesAdmin = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const entranceAdmin = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entranceAdmin.animate,
+      transition: entranceAdmin.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const handleDateRange = useCallback((range: DateRangeValue) => {
@@ -642,7 +647,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                   </Box>
                 </Box>
                 <Box style={gridThree}>
-                  {filteredProviders.map((provider) => {
+                  {filteredProviders.map((provider, i) => {
                     const sc = providerStatusColors[provider.status];
                     const cb = circuitBreakerColors[provider.circuitBreaker];
                     return (
@@ -654,6 +659,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                         onClick={() => onProviderClick?.(provider.id)}
                         onKeyDown={onProviderClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onProviderClick?.(provider.id); } } : undefined}
                         style={{
+                          ...animStyle(i),
                           ...cardBase,
                           cursor: onProviderClick ? 'pointer' : 'default',
                           transition: `all ${tokens.motion.hover}`,
@@ -777,7 +783,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                 </Box>
                 <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[4] }}>
                   {kpis.slice(0, 6).map((kpi, i) => (
-                    <Box key={i} style={{ ...cardBase }}>
+                    <Box key={i} style={{ ...animStyle(i), ...cardBase }}>
                       <Text style={{ ...sectionSub, marginBottom: tokens.spacing[1] }}>{kpi.label ?? ''}</Text>
                       <Box style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
                         <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
@@ -872,7 +878,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                       No events to display
                     </Box>
                   ) : (
-                    filteredEvents.map((evt) => {
+                    filteredEvents.map((evt, i) => {
                       const sc = severityColors[evt.severity ?? 'low'] ?? severityColors.low;
                       return (
                         <Box
@@ -883,6 +889,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                           onClick={() => onEventClick?.(evt.id)}
                           onKeyDown={onEventClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onEventClick?.(evt.id); } } : undefined}
                           style={{
+                            ...animStyle(i),
                             display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3],
                             padding: tokens.spacing[3],
                             borderRadius: tokens.borderRadius.md,
@@ -1036,7 +1043,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                   <Text style={sectionTitle}>Quick Actions</Text>
                 </Box>
                 <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: tokens.spacing[3] }}>
-                  {quickActions.map((action) => (
+                  {quickActions.map((action, i) => (
                     <Box
                       key={action.key}
                       role="button"
@@ -1045,6 +1052,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                       onClick={() => onQuickAction?.(action.key)}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onQuickAction?.(action.key); } }}
                       style={{
+                        ...animStyle(i),
                         ...cardBase,
                         display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3],
                         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,

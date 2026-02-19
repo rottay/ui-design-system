@@ -20,6 +20,11 @@ import {
   createStatusDotStyle,
   createSurfaceStyle,
   getHoverTransform,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type { BhTemplateLibraryProps, TemplateItem, TemplateFilter, IndustryGroup } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -92,7 +97,7 @@ function getIndustryColor(industry: string, tokens: DesignTokens) {
 function getAgentInitials(name: string): string {
   return name
     .split(' ')
-    .map((w) => w[0])
+    .map((w, i) => w[0])
     .join('')
     .toUpperCase()
     .slice(0, 2);
@@ -228,6 +233,15 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const hoverTransform = getHoverTransform(tokens);
 
     /* ── Styles ─────────────────────────────────────────────────────── */
@@ -355,7 +369,8 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
 
     const cardTitleStyle: React.CSSProperties = {
       fontSize: tokens.typography.fontSize.md,
-      fontWeight: tokens.typography.fontWeight.semibold,
+      fontWeight: ptypo.headingWeight,
+      letterSpacing: ptypo.headingLetterSpacing,
       color: tokens.colors.neutral[900],
       lineHeight: tokens.typography.lineHeight.tight,
     };
@@ -587,6 +602,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
     /* ── Render ──────────────────────────────────────────────────────── */
     return (
       <div style={containerStyle} className={className}>
+        {accentBar && <Box style={accentBar} />}
         {/* Filter Bar */}
         <div style={filterBarStyle}>
           {/* Search */}
@@ -641,7 +657,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
             >
               All
             </span>
-            {industries.map((ind) => (
+            {industries.map((ind, i) => (
               <span
                 key={ind}
                 role="tab"
@@ -789,7 +805,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                 </span>
               </div>
             ) : (
-              groups.map((group) => {
+              groups.map((group, i) => {
                 const isCollapsed = collapsedIndustries.has(group.industry);
                 const industryScale = getIndustryColor(group.industry, tokens);
 
@@ -808,7 +824,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                       {isCollapsed ? (
                         <ChevronRight
                           size={16}
-                          style={{ color: tokens.colors.neutral[500] }}
+                          style={{ ...animStyle(i), color: tokens.colors.neutral[500] }}
                         />
                       ) : (
                         <ChevronDown
@@ -847,7 +863,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                     {/* Template cards grid */}
                     {!isCollapsed && (
                       <div style={gridStyle}>
-                        {group.templates.map((template) => {
+                        {group.templates.map((template, i) => {
                           const statusCfg = getStatusConfig(template.status, tokens);
                           const indScale = getIndustryColor(template.industry, tokens);
                           const isHovered = hoveredCard === template.id;
@@ -866,7 +882,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                             >
                               {/* Card header */}
                               <div style={cardHeaderStyle}>
-                                <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ ...animStyle(i), flex: 1, minWidth: 0 }}>
                                   <div style={cardTitleStyle}>{template.name}</div>
                                   <div
                                     style={{
@@ -905,6 +921,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                                 <span
                                   style={{
                                     ...createBadgeStyle(tokens, 'info'),
+                                    borderRadius: badgeRadius,
                                     gap: tokens.spacing[1],
                                   }}
                                 >
@@ -1123,7 +1140,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                 {selectedTemplate.stages.map((stage, i) => (
                   <div key={i} style={stageRowStyle}>
                     <div style={stageDotStyle(i)} />
-                    <span style={{ flex: 1, fontWeight: tokens.typography.fontWeight.medium }}>
+                    <span style={{ ...animStyle(i), flex: 1, fontWeight: tokens.typography.fontWeight.medium }}>
                       {stage.name}
                     </span>
                     <span
@@ -1145,7 +1162,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                   <div style={chipRowStyle}>
                     {selectedTemplate.agentNames.map((name, i) => (
                       <span key={i} style={chipStyle}>
-                        <Users size={10} style={{ marginRight: tokens.spacing[1] }} />
+                        <Users size={10} style={{ ...animStyle(i), marginRight: tokens.spacing[1] }} />
                         {name}
                       </span>
                     ))}

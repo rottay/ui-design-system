@@ -43,6 +43,7 @@ import {
   createDividerStyle,
   createEntranceAnimation,
   createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -135,12 +136,18 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
 
     /* -- Styles ------------------------------------------------------ */
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const entityColors = useMemo(() => getEntityTypeColors(t), [t]);
     const actionColors = useMemo(() => getActionTypeColors(t), [t]);
     const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const glassStyle = useMemo(() => {
       if (t.surface.useGlass && t.glass) {
@@ -254,6 +261,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         <style>{pulseKeyframes}</style>
 
         <Box style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
@@ -355,7 +363,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
               </Box>
 
               {/* Rows */}
-              {filteredSorted.map((event) => {
+              {filteredSorted.map((event, i) => {
                 const eColor = entityColors[event.entityType];
                 const aColor = actionColors[event.actionType];
                 const isExpanded = expandedRows.has(event.id);
@@ -371,6 +379,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                       aria-selected={isSelected}
                       aria-label={`${event.userName} ${getActionLabel(event.actionType).toLowerCase()} ${event.entityName}`}
                       style={{
+                        ...animStyle(i),
                         display: 'grid',
                         gridTemplateColumns: '32px 140px 160px 110px 110px 1fr 120px',
                         gap: t.spacing[2],

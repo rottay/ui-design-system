@@ -6,7 +6,7 @@
  * and usage stats. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   LayoutGrid, Search, Tag, Mail, Clock,
   ChevronRight, Hash, FileText,
@@ -24,6 +24,7 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhMessageTemplateItemGalleryProps, MessageTemplateItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -65,6 +66,7 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const categories = useMemo(() => {
       const cats = new Set((templates ?? []).map(t => t.category ?? ''));
@@ -105,6 +107,7 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

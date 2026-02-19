@@ -15,9 +15,11 @@ import {
   createCardStyle, createBadgeStyle, createHoverStyle,
   createSectionHeaderStyle, createStatusDotStyle,
   createCardHoverStyles, createEntranceAnimation,
+  createStaggerDelay,
   createPersonalitySectionHeaderStyle, getPersonalityTypography,
   getPersonalityBadgeRadius, createIconContainerStyle,
   createMetadataFieldStyle, ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import { DollarSign, TrendingUp, Layers, Activity } from 'lucide-react';
@@ -173,6 +175,13 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
       border: `1px solid ${tokens.colors.neutral[100]}`,
       ...style,
     }), [tokens, style]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -189,6 +198,7 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
 
     return (
       <Box className={className} style={cardStyle}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,

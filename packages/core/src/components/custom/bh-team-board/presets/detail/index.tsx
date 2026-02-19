@@ -33,7 +33,9 @@ import {
   createBadgeStyle,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
@@ -102,11 +104,19 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const isGlass = t.surface.useGlass && !!t.glass;
 
     /* ================================================================ */
     return (
       <Box className={className} style={{ display: 'flex', width: '100%', height: '100%', backgroundColor: t.colors.neutral[50], ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}), ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* === Left sidebar: team list === */}
         <Box style={{
@@ -319,7 +329,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                     const pct = (tgt.current / Math.max(tgt.value, 1)) * 100;
                     const isOnTrack = pct >= 75;
                     return (
-                      <Box key={idx} style={{ marginBottom: t.spacing[4] }}>
+                      <Box key={idx} style={{ ...animStyle(idx), marginBottom: t.spacing[4] }}>
                         <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>
                             {tgt.metric}

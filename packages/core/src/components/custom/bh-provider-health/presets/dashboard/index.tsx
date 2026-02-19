@@ -21,6 +21,8 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   getHoverTransform,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type { BhProviderHealthProps, ProviderHealthItem, HealthIncident } from '../../core';
 import {
@@ -138,9 +140,15 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
 
     const allIncidents = useMemo(() => {
       return providers
-        .flatMap((p) => p.incidents.map((i) => ({ ...i, providerName: p.name })))
+        .flatMap((p) => p.incidents.map((inc, idx) => ({ ...inc, providerName: p.name })))
         .sort((a, b) => (b.startedAt?.getTime?.() ?? 0) - (a.startedAt?.getTime?.() ?? 0));
     }, [providers]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const statusConfig = useCallback((status: ProviderHealthItem['status']) => {
       switch (status) {
@@ -244,10 +252,11 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
             { label: 'Avg Latency', value: `${summary.avgLatency}ms`, color: tokens.colors.infoScale, icon: <Zap size={20} strokeWidth={1.5} /> },
             { label: 'Avg Uptime', value: `${summary.avgUptime}%`, color: tokens.colors.primaryScale, icon: <TrendingUp size={20} strokeWidth={1.5} /> },
             { label: 'Open Incidents', value: summary.openIncidents, color: summary.openIncidents > 0 ? tokens.colors.warningScale : tokens.colors.successScale, icon: <Shield size={20} strokeWidth={1.5} /> },
-          ].map((stat) => (
+          ].map((stat, i) => (
             <Box
               key={stat.label}
               style={{
+                ...animStyle(i),
                 ...cardBase,
                 padding: padding,
                 backgroundColor: stat.color[50],
@@ -279,7 +288,7 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
             <Text style={{ ...sectionHeader, marginBottom: 0 }}>Providers</Text>
           </Box>
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: tokens.spacing[4] }}>
-            {providers.map((provider) => {
+            {providers.map((provider, i) => {
               const sc = statusConfig(provider.status);
               const isSelected = selectedProvider === provider.id;
 
@@ -293,6 +302,7 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
                   onClick={() => handleSelect(provider.id)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(provider.id); } }}
                   style={{
+                    ...animStyle(i),
                     ...cardBase,
                     padding: padding,
                     cursor: 'pointer',
@@ -421,10 +431,11 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
             </Box>
             <Box style={divider} />
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3], marginTop: tokens.spacing[3] }}>
-              {allIncidents.slice(0, 10).map((incident) => (
+              {allIncidents.slice(0, 10).map((incident, i) => (
                 <Box
                   key={incident.id}
                   style={{
+                    ...animStyle(i),
                     display: 'flex',
                     alignItems: 'flex-start',
                     gap: tokens.spacing[3],

@@ -35,6 +35,7 @@ import {
   createEntranceAnimation,
   createStaggerDelay,
   ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhSlaMonitorProps,
@@ -132,10 +133,18 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
       }
       return {};
     }, [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* ================================================================ */
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, width: '100%', gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...glassStyle, ...style }} role="region" aria-label="SLA Monitor Dashboard">
+        {accentBar && <Box style={accentBar} />}
 
         {/* === Header === */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -577,7 +586,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexWrap: 'wrap' }}>
                           <Users size={ICON_SIZES.inline} color={t.colors.neutral[400]} />
                           {cfg.alertRecipients.map((email, i) => (
-                            <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                            <Text key={i} style={{ ...animStyle(i), fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                               {email}{i < cfg.alertRecipients.length - 1 ? ',' : ''}
                             </Text>
                           ))}

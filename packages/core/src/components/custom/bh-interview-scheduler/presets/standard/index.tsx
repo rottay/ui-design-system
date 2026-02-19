@@ -101,6 +101,12 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
       ['Duration', `${scheduleData.estimatedDuration} minutes`],
       ...(templateStage ? [['Stage', templateStage] as [string, string]] : []),
     ], [selectedCandidate, interviewType, scheduleData, templateStage]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     return (
       <Box className={className} style={{ padding: t.spacing[5], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...style }}>
@@ -202,7 +208,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
               <Box>
                 <Text style={labelStyle}>Select AI Agent</Text>
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
-                  {agents.map((a) => {
+                  {agents.map((a, i) => {
                     const sel = interviewType.agentId === a.id;
                     return (
                       <Box
@@ -219,6 +225,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                           }
                         }}
                         style={{
+                          ...animStyle(i),
                           padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
                           backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white,
                           border: `${bdr} ${sel ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
@@ -242,23 +249,24 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
               <Box>
                 <Text style={labelStyle}>Select Interviewer</Text>
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
-                  {interviewers.map((i) => {
-                    const sel = interviewType.interviewerId === i.id;
+                  {interviewers.map((interviewer, idx) => {
+                    const sel = interviewType.interviewerId === interviewer.id;
                     return (
                       <Box
-                        key={i.id}
+                        key={interviewer.id}
                         role="button"
                         tabIndex={0}
-                        aria-label={`Select interviewer ${i.name}`}
+                        aria-label={`Select interviewer ${interviewer.name}`}
                         aria-pressed={sel}
-                        onClick={() => handleTypeChange({ ...interviewType, interviewerId: i.id, interviewerName: i.name })}
+                        onClick={() => handleTypeChange({ ...interviewType, interviewerId: interviewer.id, interviewerName: interviewer.name })}
                         onKeyDown={(e: React.KeyboardEvent) => {
                           if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
-                            handleTypeChange({ ...interviewType, interviewerId: i.id, interviewerName: i.name });
+                            handleTypeChange({ ...interviewType, interviewerId: interviewer.id, interviewerName: interviewer.name });
                           }
                         }}
                         style={{
+                          ...animStyle(idx),
                           padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
                           backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white,
                           border: `${bdr} ${sel ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
@@ -268,8 +276,8 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                       >
                         <User size={16} color={sel ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
                         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
-                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{i.name}</Text>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{i.role}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{interviewer.name}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{interviewer.role}</Text>
                         </Box>
                         {sel && <CheckCircle size={16} color={t.colors.primaryScale[600]} />}
                       </Box>
@@ -329,7 +337,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>Timezone</Text>
                 </Box>
                 <select value={scheduleData.timezone} onChange={(e: any) => handleScheduleChange({ timezone: e.target.value })} style={selectStyle} aria-label="Timezone">
-                  {TIMEZONE_OPTIONS.map((tz) => (
+                  {TIMEZONE_OPTIONS.map((tz, i) => (
                     <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
                   ))}
                 </select>
@@ -340,7 +348,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>Duration</Text>
                 </Box>
                 <select value={scheduleData.estimatedDuration} onChange={(e: any) => handleScheduleChange({ estimatedDuration: parseInt(e.target.value, 10) })} style={selectStyle} aria-label="Duration">
-                  {DURATION_OPTIONS.map((d) => (
+                  {DURATION_OPTIONS.map((d, i) => (
                     <option key={d} value={d}>{d} minutes</option>
                   ))}
                 </select>

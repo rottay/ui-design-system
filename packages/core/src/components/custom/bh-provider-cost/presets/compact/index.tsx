@@ -117,6 +117,13 @@ export const CompactBhProviderCost = createPreset<BhProviderCostProps>({
     const activeAlertCount = useMemo(() => {
       return alerts.length;
     }, [alerts]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -129,6 +136,7 @@ export const CompactBhProviderCost = createPreset<BhProviderCostProps>({
 
     return (
       <Box className={className} style={{ ...cardBase, padding: 0, ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           display: 'flex',
@@ -209,6 +217,7 @@ export const CompactBhProviderCost = createPreset<BhProviderCostProps>({
                   onClick={() => handleProviderClick(entry.provider)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleProviderClick(entry.provider); } }}
                   style={{
+                    ...animStyle(index),
                     display: 'flex',
                     alignItems: 'center',
                     gap: t.spacing[3],

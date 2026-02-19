@@ -16,6 +16,7 @@ import {
   createEntranceAnimation,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhClientFormProps, ClientFormData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -80,6 +81,7 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -110,6 +112,7 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
             <Building2 size={16} color={t.colors.primaryScale[500]} />

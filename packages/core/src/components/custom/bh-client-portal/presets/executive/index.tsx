@@ -16,6 +16,7 @@ import {
   createIconContainerStyle,
   createEntranceAnimation,
   createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientPipelineStage, ClientMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -115,6 +116,12 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
 
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const selected = controlledSelected !== undefined ? controlledSelected : internalSelected;
     const handleSelect = useCallback((id: string | null) => {
@@ -143,6 +150,7 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
         ...entrance.animate, transition: entrance.transition,
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Client Header */}
         {client && (
           <Box style={{
@@ -190,6 +198,7 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
                 const itemEntrance = createEntranceAnimation(t, { index: idx });
                 return (
                   <Box key={m.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
+                    ...animStyle(idx),
                     ...createCardStyle(t, { elevation: 'sm' }),
                     padding: `${t.spacing[4]}px ${t.spacing[4]}px`,
                     backgroundColor: t.colors.common.white, textAlign: 'center',
@@ -225,7 +234,7 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
               {pipeline.map((stage, i) => {
                 const barPct = pipelineMax > 0 ? (stage.count / pipelineMax) * 100 : 0;
                 return (
-                  <Box key={stage.name} role="listitem" aria-label={`${stage.name}: ${stage.count} candidates`} style={{ marginBottom: i < pipeline.length - 1 ? t.spacing[3] : 0 }}>
+                  <Box key={stage.name} role="listitem" aria-label={`${stage.name}: ${stage.count} candidates`} style={{ ...animStyle(i), marginBottom: i < pipeline.length - 1 ? t.spacing[3] : 0 }}>
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{stage.name}</Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{stage.count}</Text>
@@ -411,6 +420,7 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
                       key={record.id ?? idx}
                       role="listitem"
                       style={{
+                        ...animStyle(idx),
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',

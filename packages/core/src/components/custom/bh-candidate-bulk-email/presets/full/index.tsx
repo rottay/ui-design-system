@@ -6,7 +6,7 @@
  * and per-candidate preview panel. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Mail, Send, Users, Eye, CheckSquare,
   Square, User, ChevronRight,

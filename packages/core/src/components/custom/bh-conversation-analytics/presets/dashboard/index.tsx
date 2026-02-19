@@ -195,6 +195,12 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
       if (scoreDistribution.length === 0) return 0;
       return (barInnerWidth / scoreDistribution.length) * 0.3;
     }, [scoreDistribution.length, barInnerWidth]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* --- Agent click handler --- */
     const handleAgentClick = useCallback((agentId: string) => {
@@ -268,6 +274,7 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
               <Box
                 key={kpi.key}
                 style={{
+                  ...animStyle(index),
                   ...cardBase,
                   padding: t.spacing[4],
                   display: 'flex',
@@ -562,6 +569,7 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
                       }
                     }}
                     style={{
+                      ...animStyle(index),
                       display: 'grid',
                       gridTemplateColumns: '2fr 1fr 2fr 1fr 1fr',
                       gap: t.spacing[3],

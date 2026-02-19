@@ -7,7 +7,7 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -155,6 +155,13 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
       bulkDecisions.forEach(d => { if (d.decision === 'advance') advance++; else if (d.decision === 'reject') reject++; else hold++; });
       return { advance, reject, hold, undecided: candidates.length - bulkDecisions.length };
     }, [bulkDecisions, candidates]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const allSelected = selectedIds.size === candidates.length && candidates.length > 0;
 
@@ -168,6 +175,7 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
         display: 'flex', flexDirection: 'column' as const, height: '100%',
         backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -403,7 +411,7 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                           <ThumbsDown size={10} /> Concerns
                         </Text>
                         {candidate.cons.map((c, i) => (
-                          <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 3 }}>
+                          <Box key={i} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: 4, marginBottom: 3 }}>
                             <X size={10} style={{ color: t.colors.errorScale[500] }} />
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{c}</Text>
                           </Box>
@@ -416,6 +424,7 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                       <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[1] }}>
                         {candidate.riskFactors.map((risk, i) => (
                           <Box key={i} style={{
+                            ...animStyle(i),
                             display: 'inline-flex', alignItems: 'center', gap: 3,
                             padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br,
                             backgroundColor: t.colors.warningScale[50], fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[700],

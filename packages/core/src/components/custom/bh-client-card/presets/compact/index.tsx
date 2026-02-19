@@ -27,6 +27,7 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhClientCardProps } from '../../core';
 
@@ -59,6 +60,7 @@ export const CompactBhClientCard = createPreset<BhClientCardProps>({
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t, { index: 0 }), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const tierBadge = useMemo(() => {
       switch (tier) {
@@ -101,6 +103,7 @@ export const CompactBhClientCard = createPreset<BhClientCardProps>({
         aria-label={onClick ? `View client ${clientName}` : undefined}
         onClick={handleClick}
         onKeyDown={onClick ? (e: React.KeyboardEvent) => {
+        {accentBar && <Box style={accentBar} />}
           if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); }
         } : undefined}
         style={{

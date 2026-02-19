@@ -6,7 +6,7 @@
  * Right: scrolling transcript with evidence markers highlighted.
  */
 
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -127,6 +127,12 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
     const markersInView = useMemo(() => {
       return evidenceMarkers.filter(m => Math.abs(m.time - currentTime) < 30);
     }, [evidenceMarkers, currentTime]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     // Speed options
     const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -422,7 +428,7 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
           {/* Scrolling transcript */}
           <Box style={{ flex: 1, overflow: 'auto' as const, padding: t.spacing[3] }}>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
-              {transcript.map((segment) => {
+              {transcript.map((segment, i) => {
                 const isActive = activeSegment?.id === segment.id;
                 const sc = getSpeakerColor(segment.speaker, t);
                 const hasEvidence = evidenceMarkers.some(m => m.time >= segment.startTime && m.time <= segment.endTime);
@@ -438,6 +444,7 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
                     aria-label={`${segment.speaker}: ${segment.text.substring(0, 40)}`}
                     onClick={() => handleSeek(segment.startTime)}
                     style={{
+                      ...animStyle(i),
                       padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                       borderRadius: t.borderRadius.md,
                       backgroundColor: isActive ? sc.bg : 'transparent',

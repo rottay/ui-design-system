@@ -188,6 +188,12 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
         return { dimension: dim, avgHuman, avgAI, diff: avgHuman - avgAI };
       });
     }, [dimensions, samples]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const tabs = useMemo<Array<{ key: typeof activeTab; label: string; icon: typeof BarChart3 }>>(() => [
       { key: 'overview', label: 'Overview', icon: PieChart },
@@ -197,6 +203,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* ===== Header ===== */}
         <Box style={{
@@ -370,8 +377,8 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                 </Box>
 
                 <Stack direction="vertical" spacing="sm">
-                  {dimAvgScores.map((item) => (
-                    <Box key={item.dimension} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flexWrap: 'wrap' as const }}>
+                  {dimAvgScores.map((item, i) => (
+                    <Box key={item.dimension} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flexWrap: 'wrap' as const }}>
                       <Text style={{ width: 120, minWidth: 80, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontWeight: tokens.typography.fontWeight.medium, flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {item.dimension}
                       </Text>
@@ -438,6 +445,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         <Box
                           key={idx}
                           style={{
+                            ...animStyle(idx),
                             padding: tokens.spacing[3],
                             borderRadius: tokens.borderRadius.md,
                             backgroundColor: getAgreementBg(n(item.agreement), tokens),
@@ -473,6 +481,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                   <Box
                     key={sample.id}
                     style={{
+                      ...animStyle(sIdx),
                       ...surfaceStyle,
                       borderRadius: tokens.borderRadius.lg,
                       backgroundColor: tokens.colors.common.white,
@@ -537,6 +546,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                             const dimEntrance = createEntranceAnimation(tokens, { index: dimIdx });
                             return (
                               <Box key={dim} style={{
+                                ...animStyle(dimIdx),
                                 padding: tokens.spacing[3],
                                 borderRadius: tokens.borderRadius.md,
                                 backgroundColor: isClose ? tokens.colors.successScale[50] : tokens.colors.errorScale[50],
@@ -597,6 +607,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                     <Box
                       key={idx}
                       style={{
+                        ...animStyle(idx),
                         ...surfaceStyle,
                         borderRadius: tokens.borderRadius.lg,
                         backgroundColor: tokens.colors.common.white,

@@ -20,6 +20,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhProctoringSummaryProps,
@@ -91,6 +92,7 @@ export const InlineBhProctoringSummary = createPreset<BhProctoringSummaryProps>(
     const riskColor = useMemo(() => getRiskColor(riskScore, t), [riskScore, t]);
     const reviewPct = useMemo(() => totalEvents > 0 ? Math.round((reviewedCount / totalEvents) * 100) : 0, [reviewedCount, totalEvents]);
     const progressBar = useMemo(() => createProgressBarStyle(t, { percent: reviewPct, color: t.colors.successScale[500] }), [t, reviewPct]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback(() => {
       onViewDetails?.();
@@ -131,6 +133,7 @@ export const InlineBhProctoringSummary = createPreset<BhProctoringSummaryProps>(
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Avatar */}
         <Box style={{
           ...createIconContainerStyle(t, { size: 36, color: t.colors.neutral[100] }),

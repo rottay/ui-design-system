@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Columns3, Plus, Users, AlertTriangle, Star,
   Clock, GripVertical, ChevronRight, Tag,
@@ -151,6 +151,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleCardClick = useCallback((id: string) => {
       onCardClick?.(id);
@@ -189,6 +190,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Board Header */}
         <Box style={{
           padding: `${t.spacing[4]}px ${t.spacing[6]}px`,

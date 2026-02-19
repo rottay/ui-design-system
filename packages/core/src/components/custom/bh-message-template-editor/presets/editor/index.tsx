@@ -6,7 +6,7 @@
  * and body textarea with variable highlighting. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   FileEdit, Save, X, Variable, Tag,
   Type, AlignLeft, AtSign, Globe,
@@ -27,6 +27,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhMessageTemplateEditorProps, TemplateVariable } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -77,6 +78,7 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -128,6 +130,7 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

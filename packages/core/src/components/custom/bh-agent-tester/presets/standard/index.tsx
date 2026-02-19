@@ -23,6 +23,8 @@ import {
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhAgentTesterProps,
@@ -230,6 +232,12 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
       const warn = validationResults.filter((v) => v.status === 'warning').length;
       return { pass, fail, warn, total: validationResults.length };
     }, [validationResults]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ---- Panel tabs ---- */
     const panels: { key: typeof activePanel; label: string; icon: React.ReactNode }[] = [
@@ -686,10 +694,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       alignItems: 'center',
                     }}
                   >
-                    {[0, 1, 2].map((dot) => (
+                    {[0, 1, 2].map((dot, i) => (
                       <Box
                         key={dot}
                         style={{
+                          ...animStyle(i),
                           width: tokens.spacing[2],
                           height: tokens.spacing[2],
                           borderRadius: tokens.borderRadius.full,
@@ -778,6 +787,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       <Box
                         key={i}
                         style={{
+                          ...animStyle(i),
                           flex: 1,
                           height,
                           borderRadius: tokens.borderRadius.sm,
@@ -809,7 +819,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     fontFamily: 'inherit',
                   }}
                 >
-                  {speedOptions.map((s) => (
+                  {speedOptions.map((s, i) => (
                     <option key={s} value={s}>{s}x</option>
                   ))}
                 </select>
@@ -921,7 +931,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}
             >
-              {panels.map((panel) => {
+              {panels.map((panel, i) => {
                 const isActive = activePanel === panel.key;
                 return (
                   <Box
@@ -933,6 +943,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     onClick={() => setActivePanel(panel.key)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActivePanel(panel.key); } }}
                     style={{
+                      ...animStyle(i),
                       flex: 1,
                       display: 'flex',
                       alignItems: 'center',
@@ -1272,6 +1283,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       <Box
                         key={row.label}
                         style={{
+                          ...animStyle(i),
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',

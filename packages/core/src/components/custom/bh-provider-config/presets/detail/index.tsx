@@ -17,6 +17,8 @@ import {
   getCardPadding,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhProviderConfigProps,
@@ -145,6 +147,12 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
       if (activeModelFilter === 'all') return models;
       return models.filter((m) => m.type === activeModelFilter);
     }, [models, activeModelFilter]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const handleProviderSelect = useCallback((providerId: string) => {
       setInternalSelectedProvider(providerId);
@@ -248,7 +256,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
             </Text>
           </Box>
           <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[2] }}>
-            {providers.map((provider) => {
+            {providers.map((provider, i) => {
               const isSelected = activeSelectedProvider === provider.id;
               const sc = statusConfig(provider.status);
 
@@ -262,6 +270,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                   onClick={() => handleProviderSelect(provider.id)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleProviderSelect(provider.id); } }}
                   style={{
+                    ...animStyle(i),
                     padding: tokens.spacing[3],
                     borderRadius: tokens.borderRadius.md,
                     marginBottom: tokens.spacing[1],
@@ -308,10 +317,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     </Text>
                   </Box>
                   <Box style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
-                    {provider.types.map((type) => (
+                    {provider.types.map((type, i) => (
                       <Box
                         key={type}
                         style={{
+                          ...animStyle(i),
                           padding: `0 ${tokens.spacing[1]}px`,
                           borderRadius: tokens.borderRadius.sm,
                           backgroundColor: tokens.colors.neutral[100],
@@ -398,10 +408,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                   { label: 'Latency', value: `${selectedProviderData.latencyMs}ms`, scale: selectedProviderData.latencyMs < 200 ? tokens.colors.successScale : selectedProviderData.latencyMs < 500 ? tokens.colors.warningScale : tokens.colors.errorScale },
                   { label: 'Models', value: `${selectedProviderData.modelCount}`, scale: tokens.colors.infoScale },
                   { label: 'Circuit', value: circuitConfig(selectedProviderData.circuitBreaker).label, scale: selectedProviderData.circuitBreaker === 'closed' ? tokens.colors.successScale : selectedProviderData.circuitBreaker === 'open' ? tokens.colors.errorScale : tokens.colors.warningScale },
-                ].map((stat) => (
+                ].map((stat, i) => (
                   <Box
                     key={stat.label}
                     style={{
+                      ...animStyle(i),
                       ...cardBase,
                       backgroundColor: stat.scale[50],
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${stat.scale[200]}`,
@@ -452,8 +463,8 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                   Capabilities
                 </Text>
                 <Box style={{ display: 'flex', gap: tokens.spacing[2], flexWrap: 'wrap' as const }}>
-                  {selectedProviderData.types.map((type) => (
-                    <Box key={type} style={{ ...createBadgeStyle(tokens, typeColor(type)), padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px` }}>
+                  {selectedProviderData.types.map((type, i) => (
+                    <Box key={type} style={{ ...animStyle(i), ...createBadgeStyle(tokens, typeColor(type)), padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px` }}>
                       <Text>{type}</Text>
                     </Box>
                   ))}
@@ -475,10 +486,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     API Keys
                   </Text>
                   <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                    {apiKeys.map((key) => (
+                    {apiKeys.map((key, i) => (
                       <Box
                         key={key.id}
                         style={{
+                          ...animStyle(i),
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -570,6 +582,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                       <Box
                         key={(webhook as any).id ?? idx}
                         style={{
+                          ...animStyle(idx),
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -653,10 +666,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     </Box>
                   </Box>
                   <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                    {filteredModels.map((model) => (
+                    {filteredModels.map((model, i) => (
                       <Box
                         key={model.id}
                         style={{
+                          ...animStyle(i),
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',

@@ -5,7 +5,7 @@
  * Condensed preview card showing resolved subject and body snippet.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Eye, Send, Mail, Globe, Layers, Hash,
 } from 'lucide-react';

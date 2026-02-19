@@ -17,6 +17,11 @@ import {
   createPanelHeaderStyle,
   createProgressBarStyle,
   createSurfaceStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type { BhOnboardingFlowProps, FormField } from '../../core';
 import {
@@ -80,6 +85,15 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const currentTooltip = helpTooltips.find((t) => t.targetStep === currentStepData?.key);
 
@@ -253,8 +267,8 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
               <div>
                 <h1 style={{
                   fontSize: tokens.typography.fontSize.lg,
-                  fontWeight: tokens.typography.fontWeight.bold,
-                  letterSpacing: '-0.02em',
+                  fontWeight: ptypo.headingWeight,
+                  letterSpacing: ptypo.headingLetterSpacing,
                   color: tokens.colors.neutral[900],
                   margin: 0,
                 }}>
@@ -364,6 +378,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
           }}>
             {features.map((feature, idx) => (
               <div key={idx} style={{
+                ...animStyle(idx),
                 ...cardBase,
                 padding: tokens.spacing[4],
                 display: 'flex',
@@ -442,6 +457,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
             <div style={{ marginTop: tokens.spacing[3] }}>
               <span style={{
                 ...createBadgeStyle(tokens, exploredFeatures.size >= 3 ? 'success' : 'primary'),
+                borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
               }}>
                 {exploredFeatures.size}/{Math.min(3, exploreAreas.length)} explored
@@ -454,7 +470,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: tokens.spacing[4],
           }}>
-            {exploreAreas.map((area) => {
+            {exploreAreas.map((area, i) => {
               const isExplored = exploredFeatures.has(area.key);
               return (
                 <div
@@ -465,6 +481,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                     setExploredFeatures(next);
                   }}
                   style={{
+                    ...animStyle(i),
                     ...createCardStyle(tokens, { elevation: isExplored ? 'md' : 'sm', glass: isGlass, interactive: true }),
                     padding: tokens.spacing[4],
                     cursor: 'pointer',
@@ -944,6 +961,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
     /* ── Main Layout ───────────────────────────────────────────── */
     return (
       <div className={className} style={containerStyle}>
+        {accentBar && <Box style={accentBar} />}
         {renderCelebration()}
         {renderProgressHeader()}
         <div style={{ flex: 1, overflowY: 'auto' as const }}>

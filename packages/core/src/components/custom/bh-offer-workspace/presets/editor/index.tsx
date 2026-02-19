@@ -114,6 +114,11 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const surfMd = useMemo(() => createSurfaceStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
     const hov = useMemo(() => createHoverStyle(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const cardPadding = useMemo(() => getCardPadding(t), [t]);
@@ -414,6 +419,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
         {benefits.map((cat, ci) => (
           <Box key={ci} style={card}>
             <Text style={{
+              ...animStyle(ci),
               fontSize: ty.fontSize.md,
               fontWeight: typo.headingWeight,
               color: n[800],
@@ -519,9 +525,9 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
             <Text style={secTitle}>Employment Terms</Text>
           </Box>
           <Box style={createMetadataGridStyle(t, { columns: 2 })}>
-            {termFields.map((tf) => (
+            {termFields.map((tf, i) => (
               <Box key={tf.label} style={card}>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[2] }}>
+                <Box style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[2] }}>
                   <tf.Icon size={16} color={tf.iconColor} />
                   <Text style={{ ...lbl, marginBottom: 0 }}>{tf.label}</Text>
                 </Box>
@@ -622,7 +628,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 const cfg = stepCfg(step);
                 return (
                   <Box key={idx}>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[3]}px 0` }}>
+                    <Box style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[3]}px 0` }}>
                       <Box style={{
                         ...createIconContainerStyle(t, { size: 36, color: cfg.scale[500] }),
                         backgroundColor: cfg.scale[500],
@@ -677,7 +683,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 {approvalChain.map((chain, idx) => {
                   const chainColor = chain.status === 'approved' ? c.successScale : chain.status === 'rejected' ? c.errorScale : c.warningScale;
                   return (
-                    <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+                    <Box key={idx} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: sp[2] }}>
                       <Box style={{ padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: chainColor[50], border: `1px solid ${chainColor[200]}`, display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
                         <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: chainColor[700] }}>Step {chain.step}</Text>
                         {chain.approverName && <Text style={{ fontSize: ty.fontSize.xs, color: n[600] }}>{chain.approverName}</Text>}
@@ -721,7 +727,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
             <Text style={secTitle}>Negotiation History</Text>
           </Box>
           {negotiationHistory.map((ver, vi) => (
-            <Box key={vi} style={{ ...card, borderLeft: `3px solid ${p[400]}` }}>
+            <Box key={vi} style={{ ...animStyle(vi), ...card, borderLeft: `3px solid ${p[400]}` }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[3] }}>
                 <Box style={createBadgeStyle(t, 'primary')}>
                   <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>v{ver.version}</Text>
@@ -785,7 +791,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
           </Box>
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: sp[3] }}>
             {localDocuments.map((doc, i) => (
-              <Box key={i} style={{ ...card, ...cardHover.base, cursor: 'pointer', display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
+              <Box key={i} style={{ ...animStyle(i), ...card, ...cardHover.base, cursor: 'pointer', display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
                 <Box style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: sp[1] }}>
                   <Box style={createIconContainerStyle(t, { size: 36, color: p[50] })}>
                     <FileText size={18} color={p[600]} />
@@ -1076,7 +1082,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
           {/* Main layout */}
           <Box style={{ display: 'flex', gap: sp[4], alignItems: 'flex-start' }}>
             <Box style={{ ...card, padding: sp[3], display: 'flex', flexDirection: 'column' as const, gap: sp[1], minWidth: 200 }}>
-              {sections.map((s) => (
+              {sections.map((s, i) => (
                 <Box
                   key={s.key}
                   role="button"
@@ -1089,6 +1095,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 >
                   <s.Icon size={16} />
                   <Text style={{
+                    ...animStyle(i),
                     fontSize: ty.fontSize.sm,
                     fontWeight: activeSection === s.key ? ty.fontWeight.semibold : ty.fontWeight.medium,
                     color: activeSection === s.key ? p[700] : n[600],

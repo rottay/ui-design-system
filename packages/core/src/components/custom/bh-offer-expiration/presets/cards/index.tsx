@@ -6,7 +6,7 @@
  * and quick actions. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Clock, AlertTriangle, Bell, RefreshCw,
   User, Briefcase, CheckCircle, XCircle,

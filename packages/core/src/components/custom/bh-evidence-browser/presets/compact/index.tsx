@@ -8,7 +8,7 @@
  * Aligned with dm-scoring Evidence entity (3-level impact: positive/negative/neutral).
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BhEvidenceBrowserProps, EvidenceItem, EvidenceFilter } from '../../core';
 import { getImpactColors, getImpactLabel, IMPACT_OPTIONS, n } from '../../core';

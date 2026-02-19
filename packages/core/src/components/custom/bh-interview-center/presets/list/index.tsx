@@ -9,7 +9,7 @@
  * Uses DBInterview from @rottay/recruiter (single source of truth).
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,

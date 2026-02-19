@@ -24,8 +24,10 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createEmptyStateStyle,
   createPersonalitySkeletonStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhTeamListProps, RecruiterTeam } from '../../core';
 
@@ -35,7 +37,7 @@ import type { BhTeamListProps, RecruiterTeam } from '../../core';
 function getTeamMembers(team: RecruiterTeam): Array<{ id: string; name: string; role: string; avatarInitial: string }> {
   const members = team.members as Array<Record<string, any>> | null;
   if (!Array.isArray(members)) return [];
-  return members.map((m: any) => ({
+  return members.map((m: any, i) => ({
     id: m.id ?? '',
     name: m.name ?? '',
     role: m.role ?? 'member',
@@ -77,6 +79,13 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const skeleton = useMemo(() => createPersonalitySkeletonStyle(t), [t]);
     const emptyStyle = useMemo(() => createEmptyStateStyle(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const handleTeamClick = useCallback(
       (teamId: string) => {
@@ -118,6 +127,7 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
 
     return (
       <Box className={className} style={{ ...card, overflow: 'hidden', width: '100%', ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px`, borderBottom: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}` }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -133,12 +143,12 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
             {(filterStatus || filterType) && (
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginLeft: t.spacing[3] }}>
                 {filterStatus && (
-                  <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>Status: {filterStatus}</Text>
                   </Box>
                 )}
                 {filterType && (
-                  <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>Type: {filterType}</Text>
                   </Box>
                 )}
@@ -192,6 +202,7 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
                 }
               }}
               style={{
+                ...animStyle(idx),
                 display: 'grid',
                 gridTemplateColumns: '2fr 1fr 100px 100px 40px',
                 gap: t.spacing[3],
@@ -235,6 +246,7 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
                           <Box
                             key={member.id}
                             style={{
+                              ...animStyle(mIdx),
                               width: 22,
                               height: 22,
                               borderRadius: t.borderRadius.full,
@@ -279,7 +291,7 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
 
               {/* Type */}
               <Box>
-                <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Building2 size={11} />
                   <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{team.type ?? 'general'}</Text>
                 </Box>
@@ -292,7 +304,7 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
 
               {/* Open positions */}
               <Box style={{ textAlign: 'center' as const }}>
-                <Box style={{ ...createBadgeStyle(t, (team.currentActivePositions ?? 0) > 8 ? 'warning' : 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, (team.currentActivePositions ?? 0) > 8 ? 'warning' : 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Briefcase size={11} />
                   <Text style={{ fontSize: 'inherit' }}>{team.currentActivePositions ?? 0}</Text>
                 </Box>

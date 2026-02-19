@@ -5,7 +5,7 @@
  * Condensed notification rules summary for sidebar or widget.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   Bell, Mail, MessageSquare, Inbox,
   ToggleLeft, ToggleRight,
@@ -18,6 +18,7 @@ import {
   createEmptyStateStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhWorkflowNotificationProps, NotificationRule } from '../../core';
 
@@ -62,6 +63,7 @@ export const CompactBhWorkflowNotification = createPreset<BhWorkflowNotification
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleToggle = useCallback((id: string) => {
       onRuleToggle?.(id);
@@ -86,6 +88,7 @@ export const CompactBhWorkflowNotification = createPreset<BhWorkflowNotification
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

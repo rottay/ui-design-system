@@ -15,6 +15,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhCalendarHeatmapProps, HeatmapDay } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -63,6 +64,7 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const maxCount = useMemo(() => Math.max(...days.map(d => d.count ?? 0), 1), [days]);
     const total = useMemo(() => days.reduce((s, d) => s + (d.count ?? 0), 0), [days]);
@@ -99,6 +101,7 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
           borderBottom: `1px solid ${t.colors.neutral[100]}`,

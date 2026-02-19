@@ -19,6 +19,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   getChartConfig,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhSprintVelocityProps, SprintVelocityData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -57,6 +58,7 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -109,6 +111,7 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

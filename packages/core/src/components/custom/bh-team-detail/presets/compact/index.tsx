@@ -26,8 +26,10 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhTeamDetailProps, TeamPosition } from '../../core';
 
@@ -75,6 +77,13 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
     const openCount = useMemo(() => positions.filter((p) => p.status === 'open').length, [positions]);
     const filledCount = useMemo(() => positions.filter((p) => p.status === 'filled').length, [positions]);
     const closedCount = useMemo(() => positions.filter((p) => p.status === 'closed').length, [positions]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -87,6 +96,7 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
 
     return (
       <Box className={className} style={{ ...card, width: '100%', ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
           <Box style={{
@@ -113,13 +123,13 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
 
         {/* Metrics row */}
         <Box style={{ display: 'flex', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
-          {metrics.slice(0, 3).map((metric) => {
+          {metrics.slice(0, 3).map((metric, i) => {
             const pct = metric.target > 0 ? Math.min((metric.value / metric.target) * 100, 100) : 0;
             const color = pct >= 90 ? t.colors.successScale[500] : pct >= 70 ? t.colors.primaryScale[500] : t.colors.warningScale[500];
             const bar = createProgressBarStyle(t, { color, percent: pct });
 
             return (
-              <Box key={metric.label} style={{ flex: 1 }}>
+              <Box key={metric.label} style={{ ...animStyle(i), flex: 1 }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{metric.label}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{metric.value}/{metric.target}</Text>
@@ -136,7 +146,7 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
         <Box style={{ marginBottom: t.spacing[4] }}>
           <Text style={{ ...sectionHdr }}>Members</Text>
           <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[2] }}>
-            {members.map((member) => (
+            {members.map((member, i) => (
               <Box
                 key={member.id}
                 role="button"
@@ -147,6 +157,7 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMemberClick(member.id); }
                 }}
                 style={{
+                  ...animStyle(i),
                   display: 'flex',
                   alignItems: 'center',
                   gap: t.spacing[2],
@@ -178,15 +189,15 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
         <Box>
           <Text style={{ ...sectionHdr }}>Positions</Text>
           <Box style={{ display: 'flex', gap: t.spacing[2] }}>
-            <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
               <Clock size={11} />
               <Text style={{ fontSize: 'inherit' }}>{openCount} open</Text>
             </Box>
-            <Box style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <Box style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
               <CheckCircle2 size={11} />
               <Text style={{ fontSize: 'inherit' }}>{filledCount} filled</Text>
             </Box>
-            <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
               <XCircle size={11} />
               <Text style={{ fontSize: 'inherit' }}>{closedCount} closed</Text>
             </Box>

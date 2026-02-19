@@ -6,7 +6,7 @@
  * and bottleneck warning pulse. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   TrendingUp, TrendingDown, Minus, Clock, AlertTriangle,
   Users, Briefcase, ArrowRight, BarChart3, Activity,

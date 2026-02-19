@@ -22,8 +22,10 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhTeamPerformanceProps, TeamPerfData } from '../../core';
 
@@ -65,11 +67,9 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
-    const entrance = useMemo(() => createEntranceAnimation(t, { index: 0 }), [t]);
-
     const handleTeamClick = useCallback((teamName: string) => { onTeamClick?.(teamName); }, [onTeamClick]);
 
-    const values = useMemo(() => teams.map((team) => team[activeMetric]), [teams, activeMetric]);
+    const values = useMemo(() => teams.map((team, i) => team[activeMetric]), [teams, activeMetric]);
     const maxValue = useMemo(() => Math.max(...values, 1), [values]);
 
     const barColors = useMemo(() => [
@@ -80,10 +80,17 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
       t.colors.secondaryScale[500],
       t.colors.errorScale[500],
     ], [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
-        <Box className={className} style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
+        <Box className={className} style={{ ...animStyle(0), ...card, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>
           <Loader2 size={18} style={{ color: t.colors.primaryScale[500], animation: 'spin 1s linear infinite' }} />
           <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginLeft: t.spacing[2] }}>Loading...</Text>
         </Box>
@@ -92,6 +99,7 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
 
     return (
       <Box className={className} style={{ ...card, width: '100%', ...entrance.animate, ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
           <BarChart3 size={16} style={{ color: t.colors.primaryScale[500] }} />
@@ -123,6 +131,7 @@ export const CompactBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTeamClick(team.teamName); }
                 } : undefined}
                 style={{
+                  ...animStyle(idx),
                   display: 'flex',
                   alignItems: 'center',
                   gap: t.spacing[3],

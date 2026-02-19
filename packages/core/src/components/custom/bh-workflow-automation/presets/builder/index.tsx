@@ -6,7 +6,7 @@
  * and action management. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Zap, GitBranch, Play, Pause, Pencil, Trash2, Plus,
   Clock, ChevronRight, AlertTriangle, CheckCircle,
@@ -24,6 +24,7 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhWorkflowAutomationProps, WorkflowRule } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -77,6 +78,7 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleToggle = useCallback((id: string) => { onRuleToggle?.(id); }, [onRuleToggle]);
     const handleEdit = useCallback((id: string) => { onRuleEdit?.(id); }, [onRuleEdit]);
@@ -104,6 +106,7 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

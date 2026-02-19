@@ -21,6 +21,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhCalibrationSampleProps,
@@ -96,6 +97,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -124,6 +126,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

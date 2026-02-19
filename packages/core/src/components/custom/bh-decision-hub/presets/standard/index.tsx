@@ -6,7 +6,7 @@
  * decision form, and history timeline. Slite-inspired warm design.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -79,7 +79,13 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
     const dac = useMemo(() => getDecisionActionConfig(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const {
       jobName = '', pendingCount = 0,
@@ -124,6 +130,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
         ...createCardStyle(t, { elevation: 'md', glass: isGlass }),
         display: 'flex', height: '100%', backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Left: Candidate queue */}
         <Box style={{
           width: 280, flexShrink: 0, borderRight: `1px solid ${t.colors.neutral[100]}`,
@@ -195,7 +202,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{activeCand.name}</Text>
                     <Box style={{ display: 'flex', gap: t.spacing[2] }}>
                       {activeCand.highlights.map((h, i) => (
-                        <Box key={i} style={{ padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: t.colors.neutral[50], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{h}</Box>
+                        <Box key={i} style={{ ...animStyle(i), padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: t.colors.neutral[50], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{h}</Box>
                       ))}
                     </Box>
                   </Box>
@@ -232,7 +239,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[600], textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: t.spacing[1] }}>Cons</Text>
                     {activeCand.cons.map((c, i) => (
-                      <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Box key={i} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                         <ThumbsDown size={10} style={{ color: t.colors.errorScale[500], flexShrink: 0 }} />
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{c}</Text>
                       </Box>
@@ -241,7 +248,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.warningScale[600], textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: t.spacing[1] }}>Risk Factors</Text>
                     {activeCand.riskFactors.length > 0 ? activeCand.riskFactors.map((r, i) => (
-                      <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Box key={i} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                         <AlertTriangle size={10} style={{ color: t.colors.warningScale[500], flexShrink: 0 }} />
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{r}</Text>
                       </Box>
@@ -387,6 +394,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
               const cfg = dac[h.decision];
               return (
                 <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
+                  ...animStyle(i),
                   padding: `${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
                   backgroundColor: t.colors.common.white, border: `1px solid ${t.colors.neutral[100]}`,
                   marginBottom: t.spacing[2],

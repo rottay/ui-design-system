@@ -23,6 +23,8 @@ import {
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhAgentStudioProps,
@@ -283,7 +285,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
 
     const updateScriptSection = useCallback(
       (id: string, partial: Partial<ScriptSection>) => {
-        const updated = agentData.scriptSections.map((s) =>
+        const updated = agentData.scriptSections.map((s, i) =>
           s.id === id ? { ...s, ...partial } : s,
         );
         updateAgent({ scriptSections: updated });
@@ -346,7 +348,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
     /* ---------- Personality trait update ---------- */
     const updateTrait = useCallback(
       (name: string, value: number) => {
-        const updated = agentData.personalityTraits.map((t) =>
+        const updated = agentData.personalityTraits.map((t, i) =>
           t.name === name ? { ...t, value } : t,
         );
         updateAgent({ personalityTraits: updated });
@@ -382,6 +384,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
     const sortedSections = useMemo(() => {
       return [...agentData.scriptSections].sort((a, b) => a.order - b.order);
     }, [agentData.scriptSections]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const passCount = validationResults.filter((v) => v.status === 'pass').length;
     const failCount = validationResults.filter((v) => v.status === 'fail').length;
@@ -785,7 +793,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   transition: `all ${tokens.motion.hover}`,
                 }}
               >
-                {languages.map((lang) => (
+                {languages.map((lang, i) => (
                   <option key={lang} value={lang}>
                     {lang}
                   </option>
@@ -861,7 +869,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               Voice Provider
             </Text>
             <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
-              {providers.map((provider) => {
+              {providers.map((provider, i) => {
                 const config = providerConfig[provider];
                 const isSelected = agentData.voiceProvider === provider;
                 return (
@@ -874,6 +882,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     aria-checked={isSelected}
                     aria-label={`Voice provider: ${config.label}`}
                     style={{
+                      ...animStyle(i),
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
@@ -1090,7 +1099,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                 {voices
                   .filter((v) => v.provider === agentData.voiceProvider)
-                  .map((voice) => (
+                  .map((voice, i) => (
                     <Box
                       key={voice.id}
                       onClick={() => updateAgent({ voiceId: voice.id })}
@@ -1100,6 +1109,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       aria-checked={agentData.voiceId === voice.id}
                       aria-label={`Voice: ${voice.name}${voice.accent ? ` (${voice.accent})` : ''}`}
                       style={{
+                        ...animStyle(i),
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -1265,10 +1275,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               Personality Traits
             </Text>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
-              {agentData.personalityTraits.map((trait) => (
+              {agentData.personalityTraits.map((trait, i) => (
                 <Box key={trait.name}>
                   <Box
                     style={{
+                      ...animStyle(i),
                       display: 'flex',
                       justifyContent: 'space-between',
                       marginBottom: tokens.spacing[1],
@@ -1381,7 +1392,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 transition: `all ${tokens.motion.hover}`,
               }}
             >
-              {models.map((model) => (
+              {models.map((model, i) => (
                 <option key={model.id} value={model.id}>
                   {model.name} {model.description ? `- ${model.description}` : ''}
                 </option>
@@ -1572,7 +1583,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               Available Variables
             </Text>
             <Box style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
-              {SYSTEM_PROMPT_VARIABLES.map((variable) => (
+              {SYSTEM_PROMPT_VARIABLES.map((variable, i) => (
                 <Box
                   key={variable}
                   onClick={() => insertVariable(variable)}
@@ -1581,6 +1592,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   tabIndex={0}
                   aria-label={`Insert variable ${variable}`}
                   style={{
+                    ...animStyle(i),
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.md,
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
@@ -1667,6 +1679,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     onDrop={(e) => handleScriptDrop(e, section.id)}
                     onDragEnd={handleScriptDragEnd}
                     style={{
+                      ...animStyle(idx),
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${

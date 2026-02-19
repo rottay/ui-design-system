@@ -5,7 +5,7 @@
  * Condensed list of expiring offers with countdown.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { Clock, AlertTriangle, ChevronRight } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {

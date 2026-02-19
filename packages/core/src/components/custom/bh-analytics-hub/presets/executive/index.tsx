@@ -6,7 +6,7 @@
  * trend chart, recruiter leaderboard, and source effectiveness.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -116,7 +116,13 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleDateRange = useCallback((range: DateRangePreset) => {
       setActiveDateRange(range);
@@ -144,6 +150,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* ── Header ── */}
         <Flex align="center" justify="between" style={{ marginBottom: t.spacing[7] }}>
@@ -172,7 +179,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
 
         {/* ── KPI Cards ── */}
         <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: t.spacing[4], marginBottom: t.spacing[7] }}>
-          {kpis.map((kpi) => {
+          {kpis.map((kpi, i) => {
             const Icon = kpi.icon;
             const isPositive = kpi.trend > 0;
             const isNeutral = kpi.trend === 0;
@@ -181,12 +188,12 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             const TrendIcon = isPositive ? ArrowUpRight : isNeutral ? Minus : ArrowDownRight;
 
             return (
-              <Box key={kpi.label} role="button" tabIndex={0} aria-label={`${kpi.label}: ${kpi.value}`} onClick={() => { setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); }} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); } }} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card, cursor: 'pointer', ...hoverStyles.base, border: selectedKpi === kpi.label ? `2px solid ${t.colors.primaryScale[300]}` : card.border }} onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
+              <Box key={kpi.label} role="button" tabIndex={0} aria-label={`${kpi.label}: ${kpi.value}`} onClick={() => { setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); }} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); } }} style={{ ...animStyle(i), display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card, cursor: 'pointer', ...hoverStyles.base, border: selectedKpi === kpi.label ? `2px solid ${t.colors.primaryScale[300]}` : card.border }} onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
                   <Box style={createIconContainerStyle(t, { size: 40, color: kpi.color[50] })}>
                     <Icon size={ICON_SIZES.feature} color={kpi.color[600]} />
                   </Box>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <TrendIcon size={ICON_SIZES.label} color={trendColor} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(kpi.trend)}%</Text>
                   </Box>
@@ -212,7 +219,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                 const colors = [t.colors.primaryScale[500], t.colors.primaryScale[400], t.colors.infoScale[500], t.colors.warningScale[500], t.colors.successScale[500]];
                 return (
                   <Box key={stage.name}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                    <Box style={{ ...animStyle(i), display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{stage.name}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{(stage.count ?? 0).toLocaleString()}</Text>
@@ -252,7 +259,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     return <g key={p}><line x1={pad} y1={y} x2={cW - pad} y2={y} stroke={t.colors.neutral[100]} /><text x={pad - 8} y={y + 4} textAnchor="end" fill={t.colors.neutral[400]} fontSize="10">{Math.round(minV + p * range)}</text></g>;
                   })}
                   {trendData.map((d, i) => <text key={i} x={pad + i * stepX} y={cH - 8} textAnchor="middle" fill={t.colors.neutral[400]} fontSize="10">{d.date ?? ''}</text>)}
-                  {comparisonPeriod && <polyline points={prev.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke={t.colors.neutral[300]} strokeWidth="2" strokeDasharray="4 4" />}
+                  {comparisonPeriod && <polyline points={prev.map((p, i) => `${p.x},${p.y}`).join(' ')} fill="none" stroke={t.colors.neutral[300]} strokeWidth="2" strokeDasharray="4 4" />}
                   <defs><linearGradient id="exec-trend-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.colors.primaryScale[500]} stopOpacity="0.15" /><stop offset="100%" stopColor={t.colors.primaryScale[500]} stopOpacity="0" /></linearGradient></defs>
                   <polygon points={`${cur[0].x},${cH - pad} ${cur.map((p) => `${p.x},${p.y}`).join(' ')} ${cur[cur.length - 1].x},${cH - pad}`} fill="url(#exec-trend-g)" />
                   <polyline points={cur.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke={t.colors.primaryScale[500]} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -268,17 +275,17 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
 
           {/* Leaderboard */}
           <Box style={card}>
-            <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Award size={ICON_SIZES.label} /> Top Performers</Box>}>
+            <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}><Award size={ICON_SIZES.label} /> Top Performers</Box>}>
               Recruiter Leaderboard
             </SectionTitle>
             <Box style={{ display: 'flex', flexDirection: 'column' }}>
               <Box style={{ display: 'grid', gridTemplateColumns: '40px 1fr 70px 70px 90px 70px 56px', gap: t.spacing[2], padding: `${t.spacing[2]}px 0`, borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
-                {['#', 'Recruiter', 'Hires', 'Velocity', 'Pipeline', 'CSAT', 'Trend'].map((h) => (
-                  <Text key={h} style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.04em' }}>{h}</Text>
+                {['#', 'Recruiter', 'Hires', 'Velocity', 'Pipeline', 'CSAT', 'Trend'].map((h, i) => (
+                  <Text key={h} style={{ ...animStyle(i), fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.04em' }}>{h}</Text>
                 ))}
               </Box>
               {recruiterData.map((rec, i) => (
-                <Box key={rec.name} style={{ display: 'grid', gridTemplateColumns: '40px 1fr 70px 70px 90px 70px 56px', gap: t.spacing[2], padding: `${t.spacing[3]}px 0`, borderBottom: `1px solid ${t.colors.neutral[100]}`, alignItems: 'center' }}>
+                <Box key={rec.name} style={{ ...animStyle(i), display: 'grid', gridTemplateColumns: '40px 1fr 70px 70px 90px 70px 56px', gap: t.spacing[2], padding: `${t.spacing[3]}px 0`, borderBottom: `1px solid ${t.colors.neutral[100]}`, alignItems: 'center' }}>
                   <Box style={{ width: 24, height: 24, borderRadius: t.borderRadius.full, backgroundColor: i === 0 ? t.colors.warningScale[100] : t.colors.neutral[100], display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: i === 0 ? t.colors.warningScale[700] : t.colors.neutral[600] }}>{i + 1}</Text>
                   </Box>
@@ -300,13 +307,13 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
           {(drilldownEntityProp || exportFormatProp) && (
             <Box style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
               {drilldownEntityProp && (
-                <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <BarChart3 size={ICON_SIZES.label} />
                   <Text style={{ fontSize: t.typography.fontSize.xs }}>Drilldown: {drilldownEntityProp}</Text>
                 </Box>
               )}
               {exportFormatProp && (
-                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Download size={ICON_SIZES.label} />
                   <Text style={{ fontSize: t.typography.fontSize.xs }}>Export: {exportFormatProp.toUpperCase()}</Text>
                 </Box>
@@ -318,12 +325,12 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
           <Box style={card}>
             <SectionTitle>Source Quality</SectionTitle>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
-              {sourceData.map((src) => {
+              {sourceData.map((src, i) => {
                 const maxC = Math.max(...sourceData.map((s) => s.candidateCount ?? 0), 1);
                 const qColor = (src.qualityScore ?? 0) >= 80 ? t.colors.successScale : (src.qualityScore ?? 0) >= 70 ? t.colors.warningScale : t.colors.errorScale;
                 return (
                   <Box key={src.source}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                    <Box style={{ ...animStyle(i), display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{src.source}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{src.candidateCount ?? 0}</Text>
@@ -342,14 +349,14 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
         {/* Diversity Data */}
         {diversityData.length > 0 && (
           <Box style={{ ...card, marginTop: t.spacing[6] }}>
-            <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Users size={ICON_SIZES.label} /> Diversity</Box>}>Diversity Breakdown</SectionTitle>
+            <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}><Users size={ICON_SIZES.label} /> Diversity</Box>}>Diversity Breakdown</SectionTitle>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
-              {diversityData.map((item) => {
+              {diversityData.map((item, i) => {
                 const pct = item.total > 0 ? (item.value / item.total) * 100 : 0;
                 const barColor = pct >= 40 ? t.colors.successScale[400] : pct >= 25 ? t.colors.warningScale[400] : t.colors.errorScale[400];
                 return (
                   <Box key={item.category}>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                    <Box style={{ ...animStyle(i), display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{item.category}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{item.value}</Text>

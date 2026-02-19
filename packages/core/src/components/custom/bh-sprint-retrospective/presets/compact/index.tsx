@@ -23,6 +23,7 @@ import {
   createStatValueStyle,
   createStatLabelStyle,
   ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhSprintRetrospectiveProps, RetroItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -95,6 +96,7 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleVote = useCallback((itemId: string) => {
       onVote?.(itemId);
@@ -140,6 +142,7 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

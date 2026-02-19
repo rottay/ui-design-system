@@ -6,7 +6,7 @@
  * and action buttons. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Eye, Send, Pencil, X, Mail, User, AtSign,
   Globe, Layers, Target, Tag, Hash,
@@ -20,6 +20,7 @@ import {
   createPersonalitySectionHeaderStyle,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhMessageTemplatePreviewProps } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -75,6 +76,7 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const resolvedSubject = useMemo(() => resolveVariables(subject, sampleData), [subject, sampleData]);
     const resolvedBody = useMemo(() => resolveVariables(body, sampleData), [body, sampleData]);
@@ -98,6 +100,7 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

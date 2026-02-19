@@ -5,7 +5,7 @@
  * Condensed pipeline stage list for sidebar placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Layers, User, Cpu, ShieldCheck, ChevronRight,
 } from 'lucide-react';

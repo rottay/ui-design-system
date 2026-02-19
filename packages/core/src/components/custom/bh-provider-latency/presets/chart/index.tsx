@@ -11,6 +11,7 @@ import {
   createCardStyle,
   createBadgeStyle,
   createEntranceAnimation,
+  createStaggerDelay,
   createCardHoverStyles,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
@@ -116,6 +117,12 @@ export const ChartBhProviderLatency = createPreset<BhProviderLatencyProps>({
       const last = providerData[providerData.length - 1];
       return { p50: last.p50, p95: last.p95, p99: last.p99 };
     }, [providerData]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -275,7 +282,7 @@ export const ChartBhProviderLatency = createPreset<BhProviderLatencyProps>({
                 x={xScale(i) - 10} y={CHART_PAD.top}
                 width={20} height={innerHeight}
                 fill="transparent"
-                style={{ cursor: 'pointer' }}
+                style={{ ...animStyle(i), cursor: 'pointer' }}
                 onClick={() => onDataPointClick?.(d)}
               />
             ))}

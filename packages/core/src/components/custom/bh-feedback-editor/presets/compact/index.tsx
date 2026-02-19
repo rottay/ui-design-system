@@ -13,6 +13,7 @@ import {
   createBadgeStyle,
   createCardHoverStyles,
   createEntranceAnimation,
+  createStaggerDelay,
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
   getPersonalityTypography,
@@ -108,6 +109,12 @@ export const CompactBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
       maxWidth: 520,
       ...entranceAnim.animate, transition: entranceAnim.transition,
     }), [tokens, isGlass, entranceAnim]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     return (
       <Box className={className} style={{ ...cardStyle, ...accentLayout.outer, ...style }}>

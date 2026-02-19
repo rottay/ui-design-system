@@ -18,6 +18,7 @@ import {
   createStaggerDelay,
   formatDistanceToNow,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhAgentGalleryEnhancedProps, AgentCard } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -90,6 +91,13 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
         return true;
       });
     }, [agents, selectedCategory, searchQuery]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -102,6 +110,7 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
 
     return (
       <Box className={className} style={{ ...cardBase, padding: 0, ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header with search */}
         <Box style={{
           display: 'flex', alignItems: 'center', gap: t.spacing[2],
@@ -168,6 +177,7 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                   onClick={() => onAgentClick?.(agent.id)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAgentClick?.(agent.id); } }}
                   style={{
+                    ...animStyle(index),
                     display: 'flex',
                     alignItems: 'center',
                     gap: t.spacing[3],

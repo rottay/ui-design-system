@@ -5,7 +5,7 @@
  * Condensed document card with thumbnail and metadata.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { FileText, Download, Eye, MessageSquare, ExternalLink } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -14,6 +14,7 @@ import {
   createEntranceAnimation,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhDocumentViewerProps, DocumentAnnotation } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -42,6 +43,7 @@ export const CompactBhDocumentViewer = createPreset<BhDocumentViewerProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -60,6 +62,7 @@ export const CompactBhDocumentViewer = createPreset<BhDocumentViewerProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         <Box style={{
           display: 'flex',
           alignItems: 'center',

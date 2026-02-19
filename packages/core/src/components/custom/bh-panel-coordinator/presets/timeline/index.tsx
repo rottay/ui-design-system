@@ -25,6 +25,8 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import {
   Users, UserCheck, CheckCircle2, Clock, AlertCircle,
@@ -64,6 +66,14 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
 
     const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -108,12 +118,14 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
         display: 'flex', flexDirection: 'column' as const,
         gap: tokens.spacing[5], ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* ── Header ───────────────────────────────────── */}
         <Flex align="center" justify="between">
           <Stack gap={2}>
             <Text style={{
               fontSize: tokens.typography.fontSize.lg,
-              fontWeight: tokens.typography.fontWeight.bold,
+              fontWeight: ptypo.headingWeight,
+              letterSpacing: ptypo.headingLetterSpacing,
               color: tokens.colors.neutral[900],
             }}>
               {candidateName ?? 'Panel Coordination'}
@@ -161,7 +173,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
               const stageMembers = members.filter(m => m.stageId === stage.id);
               const memberScores = stageMembers.map(m => m.overallScore ?? 0);
               return (
-                <Box key={stage.id} role="button" tabIndex={0} aria-label={`Stage: ${stage.name}`} aria-pressed={isSelected} onClick={() => handleStageSelect(stage.id)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleStageSelect(stage.id); }} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
+                <Box key={stage.id} role="button" tabIndex={0} aria-label={`Stage: ${stage.name}`} aria-pressed={isSelected} onClick={() => handleStageSelect(stage.id)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleStageSelect(stage.id); }} style={{ ...animStyle(i), display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                   flex: 1, padding: `${tokens.spacing[4]}px ${tokens.spacing[3]}px`,
                   borderRight: i < sortedStages.length - 1
                     ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`

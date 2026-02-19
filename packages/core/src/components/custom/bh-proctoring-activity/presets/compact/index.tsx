@@ -21,6 +21,7 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhProctoringActivityProps,
@@ -95,6 +96,7 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const displayEvents = useMemo(() => {
       const sorted = [...events].sort((a, b) => (b.timestamp?.getTime?.() ?? 0) - (a.timestamp?.getTime?.() ?? 0));
@@ -122,6 +124,7 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[2]}px ${t.spacing[3]}px`,

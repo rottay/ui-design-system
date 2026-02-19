@@ -13,6 +13,7 @@ import {
   createCardStyle,
   createCardHoverStyles,
   createEntranceAnimation,
+  createStaggerDelay,
   createIconContainerStyle,
   createPersonalityAccentBar,
   getAccentAwareLayout,
@@ -71,6 +72,11 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     /* ── Glass header style ────────────────────────────────────── */
@@ -207,7 +213,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                 </Box>
                 {/* Candidate rows */}
                 {cands.map((cand, ci) => (
-                  <Box key={cand} role="row" style={{ display: 'flex', borderBottom: ci < cands.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined }}>
+                  <Box key={cand} role="row" style={{ ...animStyle(ci), display: 'flex', borderBottom: ci < cands.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined }}>
                     <Box role="rowheader" style={{
                       width: 120, minWidth: 120, padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                       display: 'flex', alignItems: 'center',
@@ -260,6 +266,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleGapSelect(gap.id ?? ''); } }}
                   aria-label={`${gap.dimension ?? 'Unknown'}: ${gapPriority} priority, gap size ${gap.gapSize ?? 0}`}
                   style={{
+                  ...animStyle(gi),
                   ...cardHover.base,
                   ...gapEntrance.animate,
                   padding: `${t.spacing[3]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.lg,
@@ -267,7 +274,10 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                   backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
                   cursor: 'pointer', transition: `all ${t.motion.hover}`,
                   borderLeft: `3px solid ${colors.color}`,
-                }}>
+                }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => { Object.assign(e.currentTarget.style, cardHover.hover); }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = cardHover.base.transform ?? 'none'; e.currentTarget.style.boxShadow = ''; if (cardHover.hover.backgroundColor) e.currentTarget.style.backgroundColor = ''; }}
+                >
                   <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{gap.dimension ?? 'Unknown'}</Text>

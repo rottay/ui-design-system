@@ -15,6 +15,7 @@ import {
   createIconContainerStyle,
   createEntranceAnimation,
   createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientMetrics } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -116,6 +117,12 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
 
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const selected = controlledSelected !== undefined ? controlledSelected : internalSelected;
     const handleSelect = useCallback((id: string | null) => {
@@ -149,6 +156,7 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
         ...entrance.animate, transition: entrance.transition,
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -414,6 +422,7 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
                       key={record.id ?? idx}
                       role="listitem"
                       style={{
+                        ...animStyle(idx),
                         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                         padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                         borderBottom: idx < Math.min(billingRecords.length, 5) - 1 ? `1px solid ${t.colors.neutral[50]}` : 'none',

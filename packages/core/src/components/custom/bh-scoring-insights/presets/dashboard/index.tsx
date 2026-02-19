@@ -27,12 +27,14 @@ import {
   createCardHoverStyles,
   createIconContainerStyle,
   createEntranceAnimation,
+  createStaggerDelay,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createMetadataFieldStyle, createMetadataGridStyle,
   createMetadataLabelStyle, createMetadataValueStyle,
   createStatValueStyle, createStatLabelStyle,
   createTrendStyle, formatScore, ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
@@ -118,9 +120,9 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     /* Memoized computed values */
-    const maxCount = useMemo(() => Math.max(...levelDistribution.map((l) => l.count), 1), [levelDistribution]);
-    const dimensions = useMemo(() => [...new Set(heatmapData.map((h) => h.dimension))], [heatmapData]);
-    const jobs = useMemo(() => [...new Set(heatmapData.map((h) => h.job))], [heatmapData]);
+    const maxCount = useMemo(() => Math.max(...levelDistribution.map((l, i) => l.count), 1), [levelDistribution]);
+    const dimensions = useMemo(() => [...new Set(heatmapData.map((h, i) => h.dimension))], [heatmapData]);
+    const jobs = useMemo(() => [...new Set(heatmapData.map((h, i) => h.job))], [heatmapData]);
     const sortedCohorts = useMemo(() => [...cohortComparisons].sort((a, b) => b.avgScore - a.avgScore), [cohortComparisons]);
     const sortedGaps = useMemo(() => [...skillGaps].sort((a, b) => a.gapFromTarget - b.gapFromTarget), [skillGaps]);
 
@@ -167,9 +169,17 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
       }
       return tabs;
     }, [modelPerformance.length, tokenUsageTrends.length]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], width: '100%', height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* -- Header -- */}
         <Flex align="center" justify="between" style={{ ...headerStyle, ...headerEntrance.animate, transition: headerEntrance.transition }}>
@@ -229,7 +239,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
             return (
               <Box
                 key={kpi.label}
-                style={{ ...card, ...hoverStyles.base, ...entrance.animate, transition: entrance.transition }}
+                style={{ ...animStyle(idx), ...card, ...hoverStyles.base, ...entrance.animate, transition: entrance.transition }}
                 onMouseEnter={(e: any) => Object.assign(e.currentTarget.style, hoverStyles.hover)}
                 onMouseLeave={(e: any) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}
               >
@@ -251,7 +261,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
 
         {/* -- Tab Nav -- */}
         <Box role="tablist" aria-label="Scoring insights sections" style={{ display: 'flex', gap: t.spacing[1], marginBottom: t.spacing[6], padding: 3, borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[100] }}>
-          {TABS.map((tab) => {
+          {TABS.map((tab, i) => {
             const TabIcon = tab.icon;
             const isActive = activeSection === tab.key;
             return (
@@ -263,7 +273,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 tabIndex={isActive ? 0 : -1}
                 onClick={() => handleSetActiveSection(tab.key)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSetActiveSection(tab.key); } }}
-                style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}
+                style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}
               >
                 <TabIcon size={16} /> <Text style={{ fontSize: t.typography.fontSize.sm }}>{tab.label}</Text>
               </Box>
@@ -282,7 +292,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   const barColor = resolveLevelColor(level, t);
                   const entrance = createEntranceAnimation(t, { index: idx });
                   return (
-                    <Box key={level.level} style={{ ...entrance.animate, transition: entrance.transition }}>
+                    <Box key={level.level} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{level.level}</Text>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{level.count}</Text>
@@ -307,7 +317,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                     const bucketColor = (bucket.rangeMax ?? 0) >= 80 ? t.colors.successScale[400] : (bucket.rangeMax ?? 0) >= 60 ? t.colors.warningScale[400] : t.colors.errorScale[400];
                     const entrance = createEntranceAnimation(t, { index: idx });
                     return (
-                      <Box key={`${bucket.rangeMin}-${bucket.rangeMax}`} style={{ ...entrance.animate, transition: entrance.transition }}>
+                      <Box key={`${bucket.rangeMin}-${bucket.rangeMax}`} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{bucket.rangeMin}-{bucket.rangeMax}</Text>
                           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -327,13 +337,13 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
 
             {/* Cohort Comparison */}
             <Box style={card}>
-              <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Users size={12} /> By Source</Box>}>Cohort Comparison</SectionTitle>
+              <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}><Users size={12} /> By Source</Box>}>Cohort Comparison</SectionTitle>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
                 {sortedCohorts.map((cohort, i) => {
                   const cs = cohort.avgScore >= 75 ? t.colors.successScale : cohort.avgScore >= 65 ? t.colors.warningScale : t.colors.errorScale;
                   const entrance = createEntranceAnimation(t, { index: i });
                   return (
-                    <Box key={cohort.groupName} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: i === 0 ? cs[50] : t.colors.neutral[50], ...entrance.animate, transition: entrance.transition }}>
+                    <Box key={cohort.groupName} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: i === 0 ? cs[50] : t.colors.neutral[50], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ width: 28, height: 28, borderRadius: t.borderRadius.full, backgroundColor: cs[100], display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: cs[700] }}>{i + 1}</Text>
                       </Box>
@@ -353,7 +363,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               <SectionTitle>Score Trend</SectionTitle>
               {trendData.length > 0 && (() => {
                 const cW = 480; const cH = 180; const pad = 32;
-                const vals = trendData.map((d) => d.value);
+                const vals = trendData.map((d, i) => d.value);
                 const maxV = Math.max(...vals); const minV = Math.min(...vals); const range = maxV - minV || 1;
                 const stepX = (cW - pad * 2) / (trendData.length - 1 || 1);
                 const pts = trendData.map((d, i) => ({ x: pad + i * stepX, y: cH - pad - ((d.value - minV) / range) * (cH - pad * 2) }));
@@ -379,7 +389,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   const isHigh = k.knockoutCount > 10;
                   const entrance = createEntranceAnimation(t, { index: idx });
                   return (
-                    <Box key={k.dimension} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: isHigh ? t.colors.errorScale[50] : t.colors.neutral[50], ...entrance.animate, transition: entrance.transition }}>
+                    <Box key={k.dimension} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: isHigh ? t.colors.errorScale[50] : t.colors.neutral[50], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                         {isHigh && <AlertTriangle size={16} color={t.colors.errorScale[500]} />}
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{k.dimension}</Text>
@@ -402,16 +412,16 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
             <SectionTitle>Dimension x Job Heatmap</SectionTitle>
             <Box role="img" aria-label="Heatmap grid showing average scores by dimension and job" style={{ display: 'grid', gridTemplateColumns: `150px repeat(${jobs.length}, 1fr)`, gap: t.spacing[1] }}>
               <Box />
-              {jobs.map((j) => <Text key={j} style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textAlign: 'center' as const, padding: t.spacing[2] }}>{j}</Text>)}
+              {jobs.map((j, i) => <Text key={j} style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textAlign: 'center' as const, padding: t.spacing[2] }}>{j}</Text>)}
               {dimensions.map((dim) => (
                 <>
                   <Text key={dim} style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], padding: t.spacing[2], display: 'flex', alignItems: 'center' }}>{dim}</Text>
-                  {jobs.map((job) => {
+                  {jobs.map((job, ji) => {
                     const cell = heatmapData.find((h) => h.dimension === dim && h.job === job);
                     const score = cell?.avgScore ?? 0;
                     const hc = getHeatmapColor(score);
                     return (
-                      <Box key={`${dim}-${job}`} style={{ backgroundColor: hc.bg, borderRadius: t.borderRadius.sm, padding: t.spacing[3], textAlign: 'center' as const, transition: `all ${t.motion.hover}` }}>
+                      <Box key={`${dim}-${job}`} style={{ ...animStyle(ji), backgroundColor: hc.bg, borderRadius: t.borderRadius.sm, padding: t.spacing[3], textAlign: 'center' as const, transition: `all ${t.motion.hover}` }}>
                         <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: hc.text }}>{score}</Text>
                       </Box>
                     );
@@ -432,7 +442,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 const barColor = severity === 'error' ? t.colors.errorScale[500] : severity === 'warning' ? t.colors.warningScale[500] : t.colors.successScale[500];
                 const entrance = createEntranceAnimation(t, { index: idx });
                 return (
-                  <Box key={gap.dimension} style={{ ...entrance.animate, transition: entrance.transition }}>
+                  <Box key={gap.dimension} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{gap.dimension}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -466,6 +476,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                     const entrance = createEntranceAnimation(t, { index: idx });
                     return (
                       <Box key={mp.model} style={{
+                        ...animStyle(idx),
                         padding: t.spacing[3],
                         borderRadius: t.borderRadius.md,
                         backgroundColor: t.colors.neutral[50],
@@ -578,7 +589,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                     const maxTokens = Math.max(...tokenUsageTrends.map(x => x.totalTokens), 1);
                     const entrance = createEntranceAnimation(t, { index: idx });
                     return (
-                      <Box key={tu.date} style={{ ...entrance.animate, transition: entrance.transition }}>
+                      <Box key={tu.date} style={{ ...animStyle(idx), ...entrance.animate, transition: entrance.transition }}>
                         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{tu.date}</Text>
                           <Box style={{ display: 'flex', gap: t.spacing[2] }}>

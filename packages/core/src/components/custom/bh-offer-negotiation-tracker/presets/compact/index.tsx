@@ -5,7 +5,7 @@
  * Condensed negotiation summary with salary progression bar.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { DollarSign, CheckCircle, Clock, ArrowRight } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {

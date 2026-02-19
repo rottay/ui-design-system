@@ -31,8 +31,10 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
   createDividerStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhClientDetailProps, ClientPosition, RevenuePoint } from '../../core';
 
@@ -123,6 +125,13 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
       if (totalRevenue >= 1000) return `$${(totalRevenue / 1000).toFixed(0)}K`;
       return `$${totalRevenue}`;
     }, [totalRevenue]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const TierIcon = tierConfig.icon;
     const ContractIcon = contractConfig.icon;
@@ -138,6 +147,7 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
 
     return (
       <Box className={className} style={{ ...card, width: '100%', ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
           <Box style={{
@@ -210,7 +220,7 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
               {positions
                 .filter((p) => p.status === 'open')
                 .slice(0, 3)
-                .map((position) => (
+                .map((position, i) => (
                   <Box
                     key={position.id}
                     role="button"
@@ -221,6 +231,7 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
                       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePositionClick(position.id); }
                     }}
                     style={{
+                      ...animStyle(i),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',

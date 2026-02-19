@@ -19,6 +19,11 @@ import {
   createStatusDotStyle,
   createSurfaceStyle,
   getHoverTransform,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type {
   BhTemplateDesignerProps,
@@ -243,6 +248,15 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
     const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
     const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const hoverTransform = getHoverTransform(tokens);
 
     /* ── Handlers ─────────────────────────────────────────────────── */
@@ -339,6 +353,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* ── Template Header ──────────────────────────────────────── */}
         <div
           style={{
@@ -391,6 +406,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
             <span
               style={{
                 ...createBadgeStyle(tokens, 'primary'),
+                borderRadius: badgeRadius,
                 gap: tokens.spacing[1],
               }}
             >
@@ -401,6 +417,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
             <span
               style={{
                 ...createBadgeStyle(tokens, 'secondary'),
+                borderRadius: badgeRadius,
                 gap: tokens.spacing[1],
               }}
             >
@@ -527,6 +544,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   {idx > 0 && (
                     <div
                       style={{
+                        ...animStyle(idx),
                         display: 'flex',
                         flexDirection: 'column' as const,
                         alignItems: 'center',
@@ -935,10 +953,11 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-                  {localRules.map((rule) => (
+                  {localRules.map((rule, i) => (
                     <div
                       key={rule.id}
                       style={{
+                        ...animStyle(i),
                         ...cardBase,
                         display: 'flex',
                         alignItems: 'center',
@@ -1079,6 +1098,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                         <div
                           key={idx}
                           style={{
+                            ...animStyle(idx),
                             display: 'flex',
                             alignItems: 'center',
                             gap: tokens.spacing[2],
@@ -1144,7 +1164,8 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     <Text
                       style={{
                         fontSize: tokens.typography.fontSize.md,
-                        fontWeight: tokens.typography.fontWeight.semibold,
+                        fontWeight: ptypo.headingWeight,
+                        letterSpacing: ptypo.headingLetterSpacing,
                         color: tokens.colors.neutral[900],
                       }}
                     >
@@ -1231,7 +1252,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     }}
                   >
                     <option value="">Select agent...</option>
-                    {agents.map((a) => (
+                    {agents.map((a, i) => (
                       <option key={a.id} value={a.id}>
                         {a.name} {a.compatible === false ? '(incompatible)' : ''}
                       </option>
@@ -1299,7 +1320,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     }}
                   >
                     <option value="">Select rubric...</option>
-                    {rubrics.map((r) => (
+                    {rubrics.map((r, i) => (
                       <option key={r.id} value={r.id}>
                         {r.name}
                       </option>
@@ -1382,6 +1403,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                       <div
                         key={s.id}
                         style={{
+                          ...animStyle(i),
                           display: 'flex',
                           alignItems: 'center',
                           gap: tokens.spacing[2],
@@ -1661,10 +1683,11 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   </Text>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
-                    {versions.map((ver) => (
+                    {versions.map((ver, i) => (
                       <div
                         key={ver.version}
                         style={{
+                          ...animStyle(i),
                           position: 'relative' as const,
                           paddingLeft: tokens.spacing[5],
                         }}

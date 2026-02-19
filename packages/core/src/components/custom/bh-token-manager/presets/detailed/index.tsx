@@ -22,6 +22,8 @@ import {
   getCardPadding,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhTokenManagerProps,
@@ -192,6 +194,12 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
       const totalSpend = transactions.filter((t) => t.type === 'usage').reduce((s, t) => s + t.cost, 0);
       return { totalUsage, totalPurchases, totalCredits, totalSpend };
     }, [transactions]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ---------- Transaction type badge ---------- */
     const txTypeBadge = (type: 'usage' | 'purchase' | 'credit') => {
@@ -461,7 +469,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                 >
                   All Teams
                 </Box>
-                {teamQuotas.map((team) => {
+                {teamQuotas.map((team, i) => {
                   const pct = team.limit > 0 ? Math.min((team.used / team.limit) * 100, 100) : 0;
                   return (
                     <Box
@@ -473,6 +481,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                       onClick={() => handleTeamSelect(team.teamId)}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTeamSelect(team.teamId); } }}
                       style={{
+                        ...animStyle(i),
                         ...hoverStyle,
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md,
@@ -519,13 +528,14 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
               <Text style={{ ...sectionHeader }}>Active Alerts</Text>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                 {activeAlerts.length > 0 ? (
-                  activeAlerts.map((alert) => {
+                  activeAlerts.map((alert, i) => {
                     const badgeColor = alert.type === 'low_balance' ? 'error' : alert.type === 'high_usage' ? 'warning' : 'info';
                     const label = alert.type === 'low_balance' ? 'Low Balance' : alert.type === 'high_usage' ? 'High Usage' : 'Quota Exceeded';
                     return (
                       <Box
                         key={alert.id}
                         style={{
+                          ...animStyle(i),
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -644,6 +654,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                         key={i}
                         onClick={col.key ? () => handleSort(col.key!) : undefined}
                         style={{
+                          ...animStyle(i),
                           padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                           textAlign: 'left' as const,
                           fontWeight: tokens.typography.fontWeight.semibold,
@@ -662,10 +673,11 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedTransactions.map((tx) => (
+                  {paginatedTransactions.map((tx, i) => (
                     <tr
                       key={tx.id}
                       style={{
+                        ...animStyle(i),
                         borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}

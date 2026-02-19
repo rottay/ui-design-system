@@ -6,7 +6,7 @@
  * token balance, trend chart, generous whitespace and warm neutrals.
  */
 
-import { useMemo, useCallback, useEffect, useState } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BhCostAnalyzerProps, ProviderCost } from '../../core';
 import { getAlertSeverityColors, getTrendColors, formatCurrency, formatTokens } from '../../core';
@@ -32,9 +32,15 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
     const alertColors = useMemo(() => getAlertSeverityColors(tokens), [tokens]);
     const trendColors = useMemo(() => getTrendColors(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
 
     const {
       providers: rawProviders = [], models: rawModels = [], trends: rawTrends = [], tokenBalance,
@@ -81,6 +87,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
 
     return (
       <Box className={className} style={{ ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Summary Stats */}
         {summary && (
           <Box style={{
@@ -339,6 +346,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                 const barHeight = Math.max(6, (point.cost / maxCost) * 88);
                 return (
                   <Box key={i} style={{
+                    ...animStyle(i),
                     flex: 1, display: 'flex', flexDirection: 'column' as const,
                     alignItems: 'center', gap: tokens.spacing[1],
                   }}>
@@ -387,6 +395,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
             <Box style={{ display: 'flex', flexDirection: 'column' as const }}>
               {searchCosts.slice(0, 10).map((sc, idx) => (
                 <Box key={(sc as any).id ?? idx} style={{
+                  ...animStyle(idx),
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
                   borderBottom: `1px solid ${tokens.colors.neutral[100]}`,

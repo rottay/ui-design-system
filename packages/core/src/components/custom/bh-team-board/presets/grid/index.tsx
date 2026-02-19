@@ -40,6 +40,7 @@ import {
   createProgressBarStyle,
   createPersonalityAccentBar,
   createEntranceAnimation,
+  createStaggerDelay,
   createDividerStyle,
   createOverlayStyle,
   getPersonalityTypography,
@@ -167,6 +168,12 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const divider = useMemo(() => createDividerStyle(t), [t]);
     const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const isGlass = t.surface.useGlass && !!t.glass;
 
     const perfColor = (score: number) =>
@@ -290,11 +297,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
 
           {/* Stat badges */}
           <Box style={{ display: 'flex', gap: t.spacing[2], flexWrap: 'wrap' as const, flex: viewMode === 'list' ? 1 : undefined }}>
-            <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
               <Users size={12} />
               <Text style={{ fontSize: 'inherit' }}>{team.activeMemberCount ?? 0} members</Text>
             </Box>
-            <Box style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <Box style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
               <Briefcase size={12} />
               <Text style={{ fontSize: 'inherit' }}>{team.currentActivePositions ?? 0} jobs</Text>
             </Box>
@@ -400,7 +407,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
               border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`,
               overflow: 'hidden',
             }}>
-              {([{ key: 'grid' as const, icon: <LayoutGrid size={14} /> }, { key: 'list' as const, icon: <List size={14} /> }]).map((m) => (
+              {([{ key: 'grid' as const, icon: <LayoutGrid size={14} /> }, { key: 'list' as const, icon: <List size={14} /> }]).map((m, i) => (
                 <Box
                   key={m.key}
                   role="tab"
@@ -409,6 +416,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                   onClick={() => switchView(m.key)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') switchView(m.key); }}
                   style={{
+                    ...animStyle(i),
                     padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
                     backgroundColor: viewMode === m.key ? t.colors.primaryScale[50] : t.colors.common.white,
                     color: viewMode === m.key ? t.colors.primaryScale[700] : t.colors.neutral[500],
@@ -544,7 +552,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                   </Box>
 
                   {/* Rows */}
-                  {members.map((member) => {
+                  {members.map((member, i) => {
                     const allocColor = member.allocationPercent >= 90 ? t.colors.errorScale[500] : member.allocationPercent >= 70 ? t.colors.warningScale[500] : t.colors.primaryScale[500];
                     const allocBar = createProgressBarStyle(t, { color: allocColor, percent: member.allocationPercent });
 
@@ -552,6 +560,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                       <Box
                         key={member.id}
                         style={{
+                          ...animStyle(i),
                           display: 'grid',
                           gridTemplateColumns: '2fr 1fr 1fr 70px 70px 50px',
                           gap: t.spacing[2],
@@ -641,10 +650,10 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                       { label: 'Completed', value: sprint.completed ?? 0, color: t.colors.successScale[500] },
                       { label: 'In Progress', value: sprint.inProgress ?? 0, color: t.colors.primaryScale[500] },
                       { label: 'Blocked', value: sprint.blocked ?? 0, color: t.colors.errorScale[500] },
-                    ].map((item) => {
+                    ].map((item, i) => {
                       const bar = createProgressBarStyle(t, { color: item.color, percent: clamp(item.value, sprint.total ?? 0) });
                       return (
-                        <Box key={item.label} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+                        <Box key={item.label} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], width: 80, flexShrink: 0 }}>{item.label}</Text>
                           <Box style={{ ...bar.track, flex: 1, height: 8 }}>
                             <Box style={bar.fill} />
@@ -719,6 +728,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
 
                       return (
                         <Box key={idx} style={{
+                          ...animStyle(idx),
                           padding: t.spacing[4],
                           borderRadius: t.borderRadius.lg,
                           backgroundColor: cs[50],

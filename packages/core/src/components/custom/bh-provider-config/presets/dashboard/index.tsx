@@ -26,6 +26,8 @@ import {
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhProviderConfigProps,
@@ -236,8 +238,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
     /* ---------- Cost chart max ---------- */
     const maxCost = useMemo(() => {
       if (models.length === 0) return 1;
-      return Math.max(...models.map((m) => m.costPer1kTokens), 0.001);
+      return Math.max(...models.map((m, i) => m.costPer1kTokens), 0.001);
     }, [models]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ------------------------------------------------------------------ */
     /*  Render                                                             */
@@ -246,6 +254,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
       <Box
         className={className}
         style={{
+          ...animStyle(0),
           height: '100%',
           overflow: 'auto',
           backgroundColor: tokens.colors.neutral[50],
@@ -313,7 +322,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
             marginBottom: tokens.spacing[6],
           }}
         >
-          {providers.map((provider) => {
+          {providers.map((provider, i) => {
             const isSelected = activeSelectedProvider === provider.id;
             const sc = statusConfig(provider.status);
             const testResult = getTestResult(provider.id);
@@ -328,6 +337,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 onClick={() => handleProviderSelect(provider.id)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleProviderSelect(provider.id); } }}
                 style={{
+                  ...animStyle(i),
                   ...cardInteractive,
                   border: isSelected
                     ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
@@ -394,7 +404,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     marginBottom: tokens.spacing[3],
                   }}
                 >
-                  {provider.types.map((type) => (
+                  {provider.types.map((type, i) => (
                     <Text as="span" key={type} style={createBadgeStyle(tokens, typeColor(type))}>
                       {type}
                     </Text>
@@ -521,7 +531,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 Provider Health
               </Text>
               <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: tokens.spacing[3] }}>
-                {providers.map((provider) => {
+                {providers.map((provider, i) => {
                   const sc = statusConfig(provider.status);
                   const cb = circuitConfig(provider.circuitBreaker);
 
@@ -529,6 +539,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     <Box
                       key={provider.id}
                       style={{
+                        ...animStyle(i),
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -692,6 +703,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         <Box
                           key={chainItem.providerId}
                           style={{
+                            ...animStyle(idx),
                             display: 'flex',
                             alignItems: 'center',
                             gap: 0,
@@ -872,10 +884,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
 
                 {/* Model rows */}
                 <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                  {filteredModels.map((model) => (
+                  {filteredModels.map((model, i) => (
                     <Box
                       key={model.id}
                       style={{
+                        ...animStyle(i),
                         display: 'grid',
                         gridTemplateColumns: '2fr 80px 100px 100px 1.5fr 60px',
                         gap: tokens.spacing[2],
@@ -939,10 +952,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           : model.contextWindow}
                       </Text>
                       <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[1] }}>
-                        {model.features.slice(0, 3).map((feat) => (
+                        {model.features.slice(0, 3).map((feat, i) => (
                           <Text
                             key={feat}
                             style={{
+                              ...animStyle(i),
                               padding: `0 ${tokens.spacing[1]}px`,
                               borderRadius: tokens.borderRadius.sm,
                               backgroundColor: tokens.colors.neutral[100],
@@ -1036,7 +1050,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       .filter((m) => !m.deprecated)
                       .sort((a, b) => a.costPer1kTokens - b.costPer1kTokens)
                       .slice(0, 10)
-                      .map((model) => {
+                      .map((model, i) => {
                         const pct = (model.costPer1kTokens / maxCost) * 100;
                         const barColors = [
                           tokens.colors.primaryScale[500],
@@ -1051,6 +1065,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           <Box
                             key={model.id}
                             style={{
+                              ...animStyle(i),
                               display: 'grid',
                               gridTemplateColumns: '140px 1fr 80px',
                               alignItems: 'center',
@@ -1122,10 +1137,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     {models
                       .filter((m) => !m.deprecated)
                       .sort((a, b) => a.costPer1kTokens - b.costPer1kTokens)
-                      .map((model) => (
+                      .map((model, i) => (
                         <Box
                           key={model.id}
                           style={{
+                            ...animStyle(i),
                             display: 'grid',
                             gridTemplateColumns: '2fr 1fr 1fr',
                             gap: tokens.spacing[2],
@@ -1196,10 +1212,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
               </Box>
 
               <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                {apiKeys.map((key) => (
+                {apiKeys.map((key, i) => (
                   <Box
                     key={key.id}
                     style={{
+                      ...animStyle(i),
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -1315,7 +1332,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 Connectivity
               </Text>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                {providers.map((provider) => {
+                {providers.map((provider, i) => {
                   const testResult = getTestResult(provider.id);
                   const isTesting = testResult?.status === 'testing';
                   const isSuccess = testResult?.status === 'success';
@@ -1325,6 +1342,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     <Box
                       key={provider.id}
                       style={{
+                        ...animStyle(i),
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -1486,7 +1504,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       Capabilities
                     </Text>
                     <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[1] }}>
-                      {selectedProviderData.types.map((type) => (
+                      {selectedProviderData.types.map((type, i) => (
                         <Text as="span" key={type} style={createBadgeStyle(tokens, typeColor(type))}>
                           {type}
                         </Text>

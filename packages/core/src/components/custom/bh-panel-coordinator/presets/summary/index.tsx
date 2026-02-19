@@ -15,6 +15,8 @@ import {
   createListItemStyle,
   createStatusDotStyle,
   createFilterPillStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 
 export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
@@ -31,6 +33,12 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
     const members = Array.isArray(rawMembers) ? rawMembers : [];
 
     const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     if (loading) {
       return (

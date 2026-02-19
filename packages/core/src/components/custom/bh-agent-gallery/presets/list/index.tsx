@@ -22,6 +22,9 @@ import {
   getCardPadding,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhAgentGalleryProps,
@@ -263,6 +266,13 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
       cols.push(columnWidths.actions);
       return cols.join(' ');
     }, [columnWidths, activeTab]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     return (
       <Box
@@ -276,6 +286,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* =========================================================== */}
         {/*  1. Tab Bar                                                  */}
         {/* =========================================================== */}
@@ -470,7 +481,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 </Box>
 
                 {/* Data rows */}
-                {filteredAgents.map((agent) => {
+                {filteredAgents.map((agent, i) => {
                   const statusInfo = getStatusInfo(agent.status, tokens);
                   const isSelected = selectedAgent === agent.id;
 
@@ -484,6 +495,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       onClick={() => handleSelect(agent.id)}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(agent.id); } }}
                       style={{
+                        ...animStyle(i),
                         display: 'grid',
                         gridTemplateColumns: gridCols,
                         alignItems: 'center',
@@ -713,8 +725,8 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                     { label: 'Language', value: getLanguageLabel(selectedAgentData.language) },
                     { label: 'Provider', value: selectedAgentData.voiceProvider },
                     ...(selectedAgentData.author ? [{ label: 'Author', value: selectedAgentData.author }] : []),
-                  ].map((item) => (
-                    <Box key={item.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], justifyContent: 'space-between', padding: `${tokens.spacing[2]}px 0`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+                  ].map((item, i) => (
+                    <Box key={item.label} style={{ ...animStyle(i), display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], justifyContent: 'space-between', padding: `${tokens.spacing[2]}px 0`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{item.label}</Text>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>{item.value}</Text>
                     </Box>

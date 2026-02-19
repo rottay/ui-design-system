@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   X, Users, Clock, TrendingUp, ChevronRight,
   ArrowRight, XCircle, Mail, CheckSquare, Square,
@@ -96,6 +96,11 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
@@ -244,10 +249,10 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                 { label: 'Candidates', value: String(stage.candidateCount ?? 0), icon: Users },
                 { label: 'Avg Days', value: (stage.avgDays ?? 0).toFixed(1), icon: Clock },
                 { label: 'Conversion', value: `${((stage.conversionRate ?? 0) * 100).toFixed(0)}%`, icon: TrendingUp },
-              ].map((stat) => {
+              ].map((stat, i) => {
                 const Icon = stat.icon;
                 return (
-                  <Box key={stat.label} style={{ textAlign: 'center' }} role="status" aria-label={`${stat.label}: ${stat.value}`}>
+                  <Box key={stat.label} style={{ ...animStyle(i), textAlign: 'center' }} role="status" aria-label={`${stat.label}: ${stat.value}`}>
                     <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
                       {stat.value}
                     </Text>
@@ -284,7 +289,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                   { action: 'advance' as BulkActionType, icon: ArrowRight, label: 'Advance', color: t.colors.successScale },
                   { action: 'reject' as BulkActionType, icon: XCircle, label: 'Reject', color: t.colors.errorScale },
                   { action: 'send_email' as BulkActionType, icon: Mail, label: 'Email', color: t.colors.infoScale },
-                ].map((ba) => {
+                ].map((ba, i) => {
                   const Icon = ba.icon;
                   return (
                     <button
@@ -292,6 +297,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                       onClick={() => handleBulkAction(ba.action)}
                       aria-label={`${ba.label} selected`}
                       style={{
+                        ...animStyle(i),
                         display: 'inline-flex', alignItems: 'center', gap: 4,
                         padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
                         borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs,
@@ -334,6 +340,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                   onMouseLeave={() => setHoveredCandidate(null)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCandidateClick((candidate.id ?? '')); } }}
                   style={{
+                    ...animStyle(i),
                     display: 'flex', alignItems: 'center', gap: t.spacing[3],
                     padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
                     borderBottom: `1px solid ${t.colors.neutral[50]}`,

@@ -6,7 +6,7 @@
  * transcript with evidence highlights, and action buttons.
  */
 
-import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -84,6 +84,7 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
 
     const transcriptRef = useRef<HTMLDivElement>(null);
     const levelColors = useMemo(() => getLevelColors(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const currentLevelColor = levelColors[scorecard.overallLevel];
 
     const filteredTranscript = useMemo(() => {
@@ -155,6 +156,7 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
         display: 'flex', flexDirection: 'column' as const, height: '100%',
         backgroundColor: t.colors.neutral[50], overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           display: 'flex', alignItems: 'center', gap: t.spacing[3],

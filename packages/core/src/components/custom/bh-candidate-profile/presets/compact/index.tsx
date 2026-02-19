@@ -8,7 +8,7 @@
  * Personality-driven, glass-aware, zero raw HTML.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,

@@ -20,6 +20,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhPositionListProps, RecruiterPosition } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -98,6 +99,7 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useCallback((index: number) => ({
       ...entrance.animate,
@@ -111,6 +113,7 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[4], width: '100%', ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Filter bar */}
         {(statusFilterOptions || departmentsProp || teamsProp || urgencyFilterProp !== undefined) && (
           <Box style={{

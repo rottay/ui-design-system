@@ -6,7 +6,7 @@
  * Designed for sidebar or widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Wallet, AlertTriangle, DollarSign,
   ShoppingCart, ToggleLeft, ToggleRight, Clock, Bell,

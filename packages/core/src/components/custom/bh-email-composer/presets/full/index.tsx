@@ -6,7 +6,7 @@
  * AI rewrite button, and preview. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Mail, Send, Wand2, FileText, ChevronDown,
   User, AtSign, Variable, Sparkles,

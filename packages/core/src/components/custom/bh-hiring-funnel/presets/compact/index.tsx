@@ -6,7 +6,7 @@
  * Designed for sidebar or dashboard widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Filter, ChevronRight } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -16,6 +16,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhHiringFunnelProps, FunnelStage } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -62,6 +63,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const maxCount = useMemo(() => Math.max(...stages.map(s => s.count ?? 0), 1), [stages]);
 
     const handleClick = useCallback((name: string) => {
@@ -84,6 +86,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

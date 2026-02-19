@@ -22,6 +22,7 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhScoringJobQueueProps,
@@ -89,6 +90,7 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((id: string) => {
       onJobClick?.(id);
@@ -119,6 +121,7 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

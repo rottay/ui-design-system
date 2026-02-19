@@ -6,7 +6,7 @@
  * and campaign analytics. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Send, Plus, Play, Pause, CheckCircle, FileText,
   Mail, Eye, MessageSquare, Calendar, ChevronRight, TrendingUp,
@@ -25,6 +25,7 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhOutreachCampaignProps, CampaignData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -98,6 +99,7 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((id: string) => { onCampaignClick?.(id); }, [onCampaignClick]);
 
@@ -124,6 +126,7 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

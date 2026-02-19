@@ -20,6 +20,7 @@ import {
   createBadgeStyle,
   createProgressBarStyle,
   createCardHoverStyles,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhCandidateImportProps, ImportStep, FieldMapping, DedupMatch,
@@ -125,6 +126,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
     }, [onDedupAction]);
 
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'md' }), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const importProgressBar = useMemo(() => {
       if (!ipp) return null;
@@ -143,6 +145,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
         display: 'flex', flexDirection: 'column', height: '100%',
         ...glassCardBg, overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

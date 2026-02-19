@@ -23,6 +23,7 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createEmptyStateStyle,
   createPersonalityAccentBar,
 } from '../../../helpers';
@@ -34,7 +35,7 @@ import type { BhTeamListProps, RecruiterTeam } from '../../core';
 function getTeamMembers(team: RecruiterTeam): Array<{ id: string; name: string; role: string; avatarInitial: string }> {
   const members = team.members as Array<Record<string, any>> | null;
   if (!Array.isArray(members)) return [];
-  return members.map((m: any) => ({
+  return members.map((m: any, i) => ({
     id: m.id ?? '',
     name: m.name ?? '',
     role: m.role ?? 'member',
@@ -74,6 +75,12 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const emptyStyle = useMemo(() => createEmptyStateStyle(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const handleTeamClick = useCallback(
       (teamId: string) => {
@@ -170,6 +177,7 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
                   }
                 }}
                 style={{
+                  ...animStyle(idx),
                   ...card,
                   position: 'relative' as const,
                   overflow: 'hidden',
@@ -225,6 +233,7 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
                         <Box
                           key={member.id}
                           style={{
+                            ...animStyle(mIdx),
                             width: 28,
                             height: 28,
                             borderRadius: t.borderRadius.full,
@@ -270,11 +279,11 @@ export const CardsBhTeamList = createPreset<BhTeamListProps>({
 
                 {/* Stats row */}
                 <Box style={{ display: 'flex', gap: t.spacing[2] }}>
-                  <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <Users size={11} />
                     <Text style={{ fontSize: 'inherit' }}>{team.activeMemberCount ?? 0}</Text>
                   </Box>
-                  <Box style={{ ...createBadgeStyle(t, (team.currentActivePositions ?? 0) > 8 ? 'warning' : 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <Box style={{ ...createBadgeStyle(t, (team.currentActivePositions ?? 0) > 8 ? 'warning' : 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <Briefcase size={11} />
                     <Text style={{ fontSize: 'inherit' }}>{team.currentActivePositions ?? 0} open</Text>
                   </Box>

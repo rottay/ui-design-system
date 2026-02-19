@@ -16,6 +16,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhPositionSlaProps, PositionSlaData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -60,6 +61,7 @@ export const CompactBhPositionSla = createPreset<BhPositionSlaProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -85,6 +87,7 @@ export const CompactBhPositionSla = createPreset<BhPositionSlaProps>({
         className={className}
         style={{ ...card, ...animStyle, padding: 0, overflow: 'hidden', ...style }}
       >
+        {accentBar && <Box style={accentBar} />}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
           borderBottom: `1px solid ${t.colors.neutral[100]}`,

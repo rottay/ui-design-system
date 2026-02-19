@@ -7,7 +7,7 @@
  * highlighted active segment. Personality-driven, glass-aware, accessible.
  */
 
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -179,6 +179,12 @@ export const SplitBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEnha
     const waveW = 600;
     const waveH = 80;
     const barWidth = useMemo(() => waveformData.length > 0 ? waveW / waveformData.length : 3, [waveformData]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     // Loading state
     if (loading) {
@@ -551,6 +557,7 @@ export const SplitBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEnha
                     onClick={() => handleSegmentClick(seg.id)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSegmentClick(seg.id); } }}
                     style={{
+                      ...animStyle(idx),
                       padding: `${t.spacing[3]}px ${t.spacing[5]}px`,
                       borderBottom: `1px solid ${t.colors.neutral[50]}`,
                       borderLeft: isActive ? `3px solid ${sc.color}` : '3px solid transparent',

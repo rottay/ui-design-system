@@ -19,6 +19,7 @@ import {
   createPersonalitySectionHeaderStyle,
   createBadgeStyle,
   createCardHoverStyles,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhCandidateOutreachProps, OutreachRecipient, OutreachTemplate,
@@ -115,6 +116,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
     const handleSend = useCallback(() => { onSend?.(); }, [onSend]);
 
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'md' }), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const previewMessage = useMemo(() => {
       return message
@@ -129,6 +131,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
         display: 'flex', flexDirection: 'column', height: '100%',
         ...glassCardBg, overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,

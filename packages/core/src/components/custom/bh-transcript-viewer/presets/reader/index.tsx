@@ -20,6 +20,8 @@ import {
   getCardPadding,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type { BhTranscriptViewerProps, TranscriptHighlight, TranscriptSegment, TranscriptMeta, ScoringDimension } from '../../core';
 import {
@@ -85,6 +87,12 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
     const emptyState = useMemo(() => createEmptyStateStyle(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ---- Highlight helper (uses Box primitive) ---- */
     const renderHighlightedText = useCallback((
@@ -215,7 +223,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
             </Box>
             <Box style={{ ...divider, marginTop: tokens.spacing[3], marginBottom: tokens.spacing[3] }} />
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-              {segments.length > 0 ? segments.map((seg) => {
+              {segments.length > 0 ? segments.map((seg, segIdx) => {
                 const isSelected = selectedSegment === seg.id;
                 const isInterviewer = seg.speaker === 'interviewer';
 
@@ -229,6 +237,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                     onClick={() => handleSegmentClick(seg.id)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSegmentClick(seg.id); } }}
                     style={{
+                      ...animStyle(segIdx),
                       ...hoverStyle,
                       display: 'flex',
                       gap: tokens.spacing[3],
@@ -295,7 +304,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                   </Text>
                 </Box>
 
-                {dimensions.map((dim) => {
+                {dimensions.map((dim, i) => {
                   const isActive = selectedDimension === dim.id;
                   return (
                     <Box
@@ -307,6 +316,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                       onClick={() => handleDimensionClick(isActive ? null : dim.id)}
                       onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionClick(isActive ? null : dim.id); } }}
                       style={{
+                        ...animStyle(i),
                         ...hoverStyle,
                         padding: tokens.spacing[2],
                         borderRadius: badgeRadius,

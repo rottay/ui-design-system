@@ -6,7 +6,7 @@
  * and saved preset dropdown. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Filter, X, Search, Save, ChevronDown,
   Briefcase, User, Calendar, Flag, Globe, Bookmark,

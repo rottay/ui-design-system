@@ -20,6 +20,7 @@ import {
   createBadgeStyle,
   createProgressBarStyle,
   createCardHoverStyles,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhComparisonViewProps, ComparisonCandidate, ComparisonRow, CandidateDecision,
@@ -170,6 +171,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
 
     const dimensions = useMemo(() => comparisonRows.map(r => r.dimension), [comparisonRows]);
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'md' }), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const getDecision = useCallback((id: string) => decisions.find(d => d.candidateId === id), [decisions]);
 
@@ -197,6 +199,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
         ...glassCardBg, overflow: 'hidden', ...style,
       }}
         {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}>
+        {accentBar && <Box style={accentBar} />}
         {ext.slot('header:start')}
         {/* Header */}
         <Box style={{

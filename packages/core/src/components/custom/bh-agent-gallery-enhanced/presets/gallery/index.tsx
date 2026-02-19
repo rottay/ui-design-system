@@ -20,6 +20,7 @@ import {
   formatDistanceToNow,
   createEmptyStateStyle,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhAgentGalleryEnhancedProps, AgentCard } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -87,6 +88,7 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const categories = useMemo(() => {
       if (propCategories && propCategories.length > 0) return propCategories;
@@ -120,6 +122,7 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Search Bar */}
         <Box style={{
           display: 'flex', alignItems: 'center', gap: t.spacing[3],

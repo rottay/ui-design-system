@@ -5,7 +5,7 @@
  * Condensed template editor for inline or sidebar use.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   FileEdit, Save, X, Variable,
 } from 'lucide-react';

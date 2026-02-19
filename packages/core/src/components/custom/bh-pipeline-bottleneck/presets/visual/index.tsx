@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   AlertTriangle, Users, Clock, ArrowRight,
   ChevronRight, Zap, Activity,

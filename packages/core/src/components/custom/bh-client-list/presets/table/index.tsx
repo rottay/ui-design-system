@@ -31,7 +31,9 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhClientListProps, RecruiterClient } from '../../core';
 
@@ -98,6 +100,13 @@ export const TableBhClientList = createPreset<BhClientListProps>({
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const emptyStyle = useMemo(() => createEmptyStateStyle(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const handleClientClick = useCallback((clientId: string) => { onClientClick?.(clientId); }, [onClientClick]);
     const handleSortChange = useCallback((field: string) => { onSortChange?.(field); }, [onSortChange]);
@@ -154,6 +163,7 @@ export const TableBhClientList = createPreset<BhClientListProps>({
 
     return (
       <Box className={className} style={{ ...card, overflow: 'hidden', width: '100%', ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px`, borderBottom: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}` }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -237,6 +247,7 @@ export const TableBhClientList = createPreset<BhClientListProps>({
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClientClick(client.id); }
               }}
               style={{
+                ...animStyle(idx),
                 display: 'grid',
                 gridTemplateColumns: gridCols,
                 gap: t.spacing[2],

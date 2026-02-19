@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware. Only uses Box and Text primitives.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,

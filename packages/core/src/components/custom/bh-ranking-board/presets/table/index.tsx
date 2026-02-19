@@ -14,6 +14,8 @@ import {
   getPersonalityTypography,
   createCardHoverStyles,
   createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhRankingBoardProps, RankedCandidate, ScoreDistribution,
@@ -116,6 +118,13 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
     );
 
     const cardStyle = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     return (
       <Box className={className} style={{
@@ -125,6 +134,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
         ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}),
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -243,6 +253,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                 onClick={() => h.col && toggleSort(h.col)}
                 onKeyDown={h.col ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') toggleSort(h.col!); } : undefined}
                 style={{
+                  ...animStyle(i),
                   display: 'flex', alignItems: 'center', padding: `${t.spacing[2]}px 0`,
                   fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold,
                   color: t.colors.neutral[500], cursor: h.col ? 'pointer' : 'default',
@@ -392,20 +403,20 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600], marginBottom: t.spacing[1] }}>Strengths</Text>
                       {(c.strengths ?? []).map((s, i) => (
-                        <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {s}</Text>
+                        <Text key={i} style={{ ...animStyle(i), fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {s}</Text>
                       ))}
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[600], marginBottom: t.spacing[1] }}>Weaknesses</Text>
                       {(c.weaknesses ?? []).map((w, i) => (
-                        <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {w}</Text>
+                        <Text key={i} style={{ ...animStyle(i), fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {w}</Text>
                       ))}
                     </Box>
                     {c.recommendations && c.recommendations.length > 0 && (
                       <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.infoScale[600], marginBottom: t.spacing[1] }}>Recommendations</Text>
                         {c.recommendations.map((r, i) => (
-                          <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {r}</Text>
+                          <Text key={i} style={{ ...animStyle(i), fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {r}</Text>
                         ))}
                       </Box>
                     )}

@@ -6,7 +6,7 @@
  * Designed for sidebar or widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   Zap, GitBranch, Play, Pause, ChevronRight,
 } from 'lucide-react';

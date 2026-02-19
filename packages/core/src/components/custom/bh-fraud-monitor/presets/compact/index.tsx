@@ -16,6 +16,7 @@ import {
   createPersonalitySectionHeaderStyle, getPersonalityTypography,
   getPersonalityBadgeRadius, createIconContainerStyle,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { DesignTokens } from '../../../../../types';
 import { ShieldAlert, AlertTriangle, Clock } from 'lucide-react';
@@ -35,6 +36,13 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const { events: rawEvents = [], stats, timeRange, selectedEventId, onEventSelect, loading, className, style } = props;
 
     const events = Array.isArray(rawEvents) ? rawEvents : [];
@@ -85,6 +93,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
         border: `1px solid ${tokens.colors.neutral[100]}`,
         overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -169,7 +178,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
 
         {/* Event list */}
         <Box style={{ maxHeight: 380, overflowY: 'auto' as const }}>
-          {events.slice(0, 15).map((ev: ProctoringEvent) => {
+          {events.slice(0, 15).map((ev: ProctoringEvent, i) => {
             const isHovered = hoveredId === ev.id;
             const isSelected = selectedEventId === ev.id;
             const typeInd = getTypeIndicator(ev.type);
@@ -188,6 +197,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                 aria-selected={selectedEventId === ev.id}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEventSelect(ev.id); } }}
                 style={{
+                  ...animStyle(i),
                   padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
                   borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
                   borderLeft: `3px solid ${sevBadge.dot}`,

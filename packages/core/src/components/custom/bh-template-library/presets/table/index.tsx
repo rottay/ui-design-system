@@ -105,7 +105,7 @@ function getIndustryScale(industry: string, tokens: any) {
 }
 
 function getAgentInitials(name: string): string {
-  return name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2);
+  return name.split(' ').map((w, i) => w[0]).join('').toUpperCase().slice(0, 2);
 }
 
 function filterTemplates(templates: TemplateItem[], filters: TemplateFilter): TemplateItem[] {
@@ -232,6 +232,12 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
     const sorted = useMemo(() => sortTemplates(filtered, sortField, sortDir), [filtered, sortField, sortDir]);
     const industries = useMemo(() => Array.from(new Set(templates.map((t) => t.industry))), [templates]);
     const categories = useMemo(() => Array.from(new Set(templates.map((t) => t.category))), [templates]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ── Reusable style helpers ───────────────────────────────── */
     const thBaseStyle: React.CSSProperties = {
@@ -298,6 +304,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
             key={i}
             title={name}
             style={{
+              ...animStyle(i),
               width: 24,
               height: 24,
               borderRadius: tokens.borderRadius.full,
@@ -418,6 +425,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                   <Box
                     key={i}
                     style={{
+                      ...animStyle(i),
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[2],
@@ -453,6 +461,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                       key={i}
                       title={stage.name}
                       style={{
+                        ...animStyle(i),
                         flex: 1,
                         backgroundColor: stageColors[i % stageColors.length] + '60',
                         borderRight:
@@ -498,6 +507,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                       <Box
                         key={i}
                         style={{
+                          ...animStyle(i),
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: tokens.spacing[1],
@@ -525,6 +535,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                       <Box
                         key={i}
                         style={{
+                          ...animStyle(i),
                           display: 'inline-flex',
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                           borderRadius: badgeRadius,
@@ -639,7 +650,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
           {/* Industry pills */}
           <Box style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
             <FilterPill label="All" active={filters.industry === ''} onClick={() => handleFilterChange({ industry: '' })} />
-            {industries.map((ind) => (
+            {industries.map((ind, i) => (
               <FilterPill key={ind} label={ind} active={filters.industry === ind} onClick={() => handleFilterChange({ industry: ind })} />
             ))}
           </Box>
@@ -767,7 +778,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                   </tr>
                 </thead>
                 <tbody>
-                  {sorted.map((template) => {
+                  {sorted.map((template, i) => {
                     const statusCfg = getStatusConfig(template.status, tokens);
                     const indScale = getIndustryScale(template.industry, tokens);
                     const isExpanded = expandedRow === template.id;
@@ -778,6 +789,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                       <React.Fragment key={template.id}>
                         <tr
                           style={{
+                            ...animStyle(i),
                             cursor: 'pointer',
                             transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                             backgroundColor: isSelected

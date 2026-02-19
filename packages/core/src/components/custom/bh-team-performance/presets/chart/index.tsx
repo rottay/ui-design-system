@@ -23,8 +23,10 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createEmptyStateStyle,
   createFilterPillStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhTeamPerformanceProps, TeamPerfData } from '../../core';
 
@@ -68,7 +70,6 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
-    const entrance = useMemo(() => createEntranceAnimation(t, { index: 0 }), [t]);
     const emptyStyle = useMemo(() => createEmptyStateStyle(t), [t]);
 
     const handleMetricChange = useCallback((metric: typeof activeMetric) => {
@@ -80,7 +81,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
     }, [onTeamClick]);
 
     /* -- Chart Data ------------------------------------------------ */
-    const values = useMemo(() => teams.map((team) => team[activeMetric]), [teams, activeMetric]);
+    const values = useMemo(() => teams.map((team, i) => team[activeMetric]), [teams, activeMetric]);
     const maxValue = useMemo(() => Math.max(...values, 1), [values]);
 
     const barColors = useMemo(() => [
@@ -91,6 +92,13 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
       t.colors.secondaryScale[500],
       t.colors.errorScale[500],
     ], [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* -- SVG Chart dimensions -------------------------------------- */
     const chartW = 560;
@@ -127,6 +135,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
 
     return (
       <Box className={className} style={{ ...card, width: '100%', ...entrance.animate, ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[5] }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -156,7 +165,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
                 onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMetricChange(opt.key); }
                 }}
-                style={{ ...pillStyle, display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                style={{ ...pillStyle, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}
               >
                 <IconComp size={12} />
                 <Text style={{ fontSize: 'inherit' }}>{opt.label}</Text>
@@ -174,7 +183,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
             style={{ display: 'block', maxWidth: '100%' }}
           >
             {/* Y-axis grid lines */}
-            {[0, 0.25, 0.5, 0.75, 1].map((pct) => {
+            {[0, 0.25, 0.5, 0.75, 1].map((pct, i) => {
               const y = usableH - pct * usableH;
               const val = Math.round(pct * maxValue);
               return (
@@ -211,7 +220,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
               return (
                 <g
                   key={team.teamName}
-                  style={{ cursor: onTeamClick ? 'pointer' : 'default' }}
+                  style={{ ...animStyle(idx), cursor: onTeamClick ? 'pointer' : 'default' }}
                   onClick={() => handleTeamClick(team.teamName)}
                 >
                   {/* Bar */}
@@ -255,7 +264,7 @@ export const ChartBhTeamPerformance = createPreset<BhTeamPerformanceProps>({
         {/* Legend */}
         <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[3], marginTop: t.spacing[4] }}>
           {teams.map((team, idx) => (
-            <Box key={team.teamName} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            <Box key={team.teamName} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
               <Box style={{ width: 10, height: 10, borderRadius: t.borderRadius.sm, backgroundColor: barColors[idx % barColors.length], flexShrink: 0 }} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{team.teamName}</Text>
             </Box>

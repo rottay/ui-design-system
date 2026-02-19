@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   Users, Award, Clock, TrendingUp, Activity, Briefcase,
   ChevronRight,
@@ -24,6 +24,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhRecruiterPerformanceProps, RecruiterPerformanceItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -77,6 +78,7 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((id: string) => { onRecruiterClick?.(id); }, [onRecruiterClick]);
 
@@ -122,6 +124,7 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

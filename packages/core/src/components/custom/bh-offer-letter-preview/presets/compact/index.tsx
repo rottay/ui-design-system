@@ -5,7 +5,7 @@
  * Condensed offer summary card with key terms.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { FileText, DollarSign, Calendar, Award } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {

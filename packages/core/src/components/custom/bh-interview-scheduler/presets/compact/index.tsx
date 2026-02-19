@@ -13,6 +13,7 @@ import {
   createCardStyle,
   createCardHoverStyles,
   createEntranceAnimation,
+  createStaggerDelay,
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
   getPersonalityTypography,
@@ -71,6 +72,12 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
       ...entranceAnim.animate,
       transition: entranceAnim.transition,
     }), [t, isGlass, entranceAnim]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const inputStyle: React.CSSProperties = useMemo(() => ({
       width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[300]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[900], outline: 'none', boxSizing: 'border-box' as const,

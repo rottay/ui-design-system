@@ -102,6 +102,11 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     const isGlass = t.surface.useGlass && !!t.glass;
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const JOB_INFO_DEFAULT: JobInfo = { title: '', code: '', status: 'draft', clientName: '', daysOpen: 0, urgency: 'low' };
@@ -130,6 +135,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     const glassCard = isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.glass.border}` } : {};
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
 
     const tabs: { key: JobDetailTab; label: string; icon: React.ReactNode }[] = [
@@ -373,7 +379,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                 const em = eventIcon(ev.type, t);
                 const isLast = idx === Math.min(events.length, 15) - 1;
                 return (
-                  <Box key={ev.id} style={{ display: 'flex', gap: t.spacing[3], position: 'relative' as const, paddingBottom: isLast ? 0 : t.spacing[3] }}>
+                  <Box key={ev.id} style={{ ...animStyle(idx), display: 'flex', gap: t.spacing[3], position: 'relative' as const, paddingBottom: isLast ? 0 : t.spacing[3] }}>
                     {!isLast && <Box style={{ position: 'absolute' as const, left: 11, top: 24, bottom: 0, width: 2, backgroundColor: t.colors.neutral[200] }} />}
                     <Box style={{ width: 24, height: 24, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], color: em.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>{em.icon}</Box>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, minWidth: 0 }}>
@@ -411,7 +417,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
           <Box style={{ ...cardBase, padding: t.spacing[4] }}>
             <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], marginBottom: t.spacing[3] }}>Source Breakdown</Text>
             {sources.map((src, idx) => (
-              <Box key={src.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[2] }}>
+              <Box key={src.name} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[2] }}>
                 <Text style={{ width: 100, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, textAlign: 'right' as const, flexShrink: 0 }}>{src.name}</Text>
                 <Box style={{ flex: 1, maxWidth: 300, height: 18, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
                   <Box style={{ width: `${(src.count / maxSrc) * 100}%`, height: '100%', backgroundColor: t.colors[SOURCE_COLORS[idx % SOURCE_COLORS.length]][idx === 5 ? 400 : 500], borderRadius: t.borderRadius.sm, transition: `width ${t.transitions?.normal || t.motion.hover}` }} />
@@ -505,6 +511,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, backgroundColor: t.colors.common.white, borderRadius: t.borderRadius.lg, border: `${bdr} ${t.colors.neutral[100]}`, boxShadow: t.shadows.lg, width: '100%', overflow: 'hidden', ...entrance.animate, transition: entrance.transition, ...glassCard, ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {renderHeader()}
         {renderTabs()}
         {activeTab === 'overview' && <>{renderMetrics()}{renderFunnel()}{renderCandidates()}{renderTemplate()}{jobInfo.benefits && jobInfo.benefits.length > 0 && (

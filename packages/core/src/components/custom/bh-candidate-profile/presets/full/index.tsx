@@ -22,6 +22,9 @@ import {
   createMetadataValueStyle,
   createStatValueStyle,
   ICON_SIZES,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhCandidateProfileProps,
@@ -163,6 +166,13 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const candidateLanguages = useMemo(() => getCandidateLanguages(candidate), [candidate]);
     const candidateLinks = useMemo(() => getCandidateLinks(candidate), [candidate]);
     const compensationRange = useMemo(() => getCandidateCompensation(candidate) ?? { min: 0, max: 0, currency: 'USD' }, [candidate]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const applications = props.applications ?? [];
     const interviews = props.interviews ?? [];
     const notes = props.notes ?? [];
@@ -529,7 +539,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const renderActivityTab = () => (
       <Box style={{ display: 'flex', flexDirection: 'column' }}>
         {events.map((event, idx) => (
-          <Box key={event.id} style={{ display: 'flex', gap: t.spacing[4], position: 'relative' }}>
+          <Box key={event.id} style={{ ...animStyle(idx), display: 'flex', gap: t.spacing[4], position: 'relative' }}>
             {/* Timeline line */}
             {idx < events.length - 1 && (
               <Box style={{
@@ -651,6 +661,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
         display: 'flex', flexDirection: 'column', height: '100%',
         backgroundColor: t.colors.neutral[50], ...props.style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

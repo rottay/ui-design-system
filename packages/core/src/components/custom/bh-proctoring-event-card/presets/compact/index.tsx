@@ -23,6 +23,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhProctoringEventCardProps,
@@ -127,6 +128,7 @@ export const CompactBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const sevColor = useMemo(() => getSeverityColor(severity, t), [severity, t]);
     const sevBg = useMemo(() => getSeverityBg(severity, t), [severity, t]);
     const EventIcon = useMemo(() => getEventTypeIcon(eventType), [eventType]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback(() => {
       onClick?.();
@@ -183,6 +185,7 @@ export const CompactBhProctoringEventCard = createPreset<BhProctoringEventCardPr
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Icon */}
         <Box style={createIconContainerStyle(t, { size: 36, color: sevBg })}>
           <EventIcon size={16} color={sevColor} />

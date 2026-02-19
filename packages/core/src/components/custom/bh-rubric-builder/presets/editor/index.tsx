@@ -6,7 +6,7 @@
  * score level config, knockout rules, scorecard preview, and validation panel.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -244,7 +244,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     );
 
     const codesUnique = useMemo(() => {
-      const codes = localDimensions.map((d) => d.code);
+      const codes = localDimensions.map((d, i) => d.code);
       return new Set(codes).size === codes.length;
     }, [localDimensions]);
 
@@ -267,6 +267,11 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
     const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     /* ── Glass header style ───────────────────────────────────────── */
@@ -302,7 +307,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const handleWeightChange = useCallback(
       (dimId: string, newWeight: number) => {
         setLocalDimensions((prev) =>
-          prev.map((d) => (d.id === dimId ? { ...d, weight: newWeight } : d))
+          prev.map((d, i) => (d.id === dimId ? { ...d, weight: newWeight } : d))
         );
         onChange?.(`dimensions.${dimId}.weight`, newWeight);
         setLocalIsDirty(true);
@@ -359,7 +364,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     /* ── Sample scores for preview radar chart ────────────────────── */
     const sampleScores = useMemo(
       () =>
-        sortedDimensions.map((d) => ({
+        sortedDimensions.map((d, i) => ({
           label: d.code || (d.name ?? '').substring(0, 4),
           value: 60 + Math.floor(Math.random() * 35),
           maxValue: 100,
@@ -376,6 +381,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
         role="region"
         aria-label={`Rubric editor: ${rubricName}`}
         style={{
+          ...animStyle(0),
           display: 'flex',
           flexDirection: 'column' as const,
           height: '100%',
@@ -645,6 +651,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     onDragEnd={handleDragEnd}
                     onClick={() => handleDimensionSelect(dim.id!)}
                     style={{
+                      ...animStyle(idx),
                       ...cardInteractive,
                       ...cardHover.base,
                       ...dimEntrance.animate,
@@ -785,6 +792,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             <Text
                               key={ki}
                               style={{
+                                ...animStyle(ki),
                                 display: 'inline-block',
                                 padding: `1px ${tokens.spacing[2]}px`,
                                 borderRadius: badgeRadius,
@@ -1071,6 +1079,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionSelect(d.id!); } }}
                         aria-label={`${d.name}: ${n(d.weight).toFixed(0)}%`}
                         style={{
+                          ...animStyle(i),
                           display: 'flex',
                           alignItems: 'center',
                           gap: tokens.spacing[2],
@@ -1162,6 +1171,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     key={idx}
                     role="row"
                     style={{
+                      ...animStyle(idx),
                       display: 'grid',
                       gridTemplateColumns: '24px 1fr 100px',
                       gap: tokens.spacing[3],
@@ -1286,11 +1296,12 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   </Box>
                 ) : (
                   <Box role="list" aria-label="Knockout rules" style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-                    {knockoutDimensions.map((dim) => (
+                    {knockoutDimensions.map((dim, i) => (
                       <Box
                         key={dim.id}
                         role="listitem"
                         style={{
+                          ...animStyle(i),
                           display: 'flex',
                           alignItems: 'center',
                           gap: tokens.spacing[2],
@@ -1405,6 +1416,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         <Box key={dim.id} role="listitem" aria-label={`${dim.name}: score ${sampleScore}`}>
                           <Box
                             style={{
+                              ...animStyle(idx),
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'space-between',
@@ -1842,6 +1854,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       <Box
                         key={idx}
                         style={{
+                          ...animStyle(idx),
                           display: 'flex',
                           alignItems: 'flex-start',
                           gap: tokens.spacing[2],

@@ -22,6 +22,8 @@ import {
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhTenantSetupProps,
@@ -86,6 +88,12 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const isLastStep = localCurrentStep >= steps.length - 1;
     const currentStepData = steps[localCurrentStep];
@@ -568,7 +576,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
             gridTemplateColumns: '1fr 1fr',
             gap: tokens.spacing[4],
           }}>
-            {billingOptions.map((option) => {
+            {billingOptions.map((option, i) => {
               const isSelected = localFormData.billingMode === option.mode;
 
               return (
@@ -576,6 +584,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   key={option.mode}
                   onClick={() => updateFormData({ billingMode: option.mode })}
                   style={{
+                    ...animStyle(i),
                     ...cardBase,
                     ...hoverTransition,
                     cursor: 'pointer',
@@ -723,7 +732,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               gridTemplateColumns: 'repeat(3, 1fr)',
               gap: tokens.spacing[3],
             }}>
-              {providers.map((prov) => {
+              {providers.map((prov, i) => {
                 const isSelected = localFormData.providerConfig.provider === prov.value;
 
                 return (
@@ -733,6 +742,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                       providerConfig: { ...localFormData.providerConfig, provider: prov.value },
                     })}
                     style={{
+                      ...animStyle(i),
                       ...cardBase,
                       ...hoverTransition,
                       cursor: 'pointer',
@@ -944,6 +954,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
 
           {localTeams.map((team, teamIdx) => (
             <Box key={teamIdx} style={{
+              ...animStyle(teamIdx),
               ...cardBase,
               position: 'relative' as const,
             }}>
@@ -993,6 +1004,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                 }}>
                   {team.specializations.map((spec, sIdx) => (
                     <Text key={sIdx} style={{
+                      ...animStyle(sIdx),
                       ...createBadgeStyle(tokens, 'primary'),
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -1134,6 +1146,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
 
           {localInvitations.map((invite, idx) => (
             <Box key={idx} style={{
+              ...animStyle(idx),
               ...cardBase,
               position: 'relative' as const,
             }}>
@@ -1455,6 +1468,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
             }}>
               {nextSteps.map((step, idx) => (
                 <Box key={idx} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2],
+                  ...animStyle(idx),
                   ...cardBase,
                   ...hoverTransition,
                   cursor: 'pointer',

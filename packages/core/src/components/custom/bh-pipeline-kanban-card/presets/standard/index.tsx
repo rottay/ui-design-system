@@ -7,7 +7,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   GripVertical, ArrowRight, XCircle, CalendarClock,
   Tag, Star, Clock, Maximize2,

@@ -5,7 +5,7 @@
  * Condensed template list for sidebar or widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   LayoutGrid, Mail, ChevronRight,
 } from 'lucide-react';

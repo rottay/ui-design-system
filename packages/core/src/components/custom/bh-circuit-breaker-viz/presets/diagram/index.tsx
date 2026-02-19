@@ -5,7 +5,7 @@
  * Visual node layout with colored circles per circuit state and connection lines.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -19,6 +19,7 @@ import {
   createStaggerDelay,
   formatDistanceToNow,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhCircuitBreakerVizProps, CircuitNode } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -90,8 +91,14 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
 
     const selectedNode = useMemo(() => nodes.find(n => n.id === selectedNodeId), [nodes, selectedNodeId]);
@@ -122,7 +129,7 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
 
     if (loading) {
       return (
-        <Box className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
+        <Box className={className} style={{ ...animStyle(0), display: 'flex', alignItems: 'center', justifyContent: 'center', padding: t.spacing[10], ...style }}>
           <Activity size={24} color={t.colors.neutral[300]} style={{ marginRight: t.spacing[3] }} />
           <Text style={{ color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}>Loading circuit diagram...</Text>
         </Box>
@@ -142,6 +149,7 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
 
     return (
       <Box className={className} style={{ display: 'flex', width: '100%', gap: t.spacing[4], ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Diagram area */}
         <Box style={{ ...cardBase, flex: 1, padding: t.spacing[4], overflow: 'auto' as const }}>
           <Text style={{ ...sectionLabel }}>Circuit Breaker Topology</Text>

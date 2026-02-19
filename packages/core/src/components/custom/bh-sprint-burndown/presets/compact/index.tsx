@@ -20,6 +20,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   getChartConfig,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhSprintBurndownProps, BurndownDataPoint } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -99,6 +100,7 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     );
 
     const progress = useMemo(() => createProgressBarStyle(t, { percent: completedPct }), [t, completedPct]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     /* Mini sparkline */
     const sparkW = 200;
@@ -149,6 +151,7 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

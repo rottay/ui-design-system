@@ -20,6 +20,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   formatDistanceToNow,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhProctoringAlertProps,
@@ -136,6 +137,7 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const EventIcon = useMemo(() => getEventTypeIcon(event.eventType), [event.eventType]);
     const sevColor = useMemo(() => getSeverityColor(event.severity, t), [event.severity, t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleReview = useCallback(() => {
       onReview?.(event.id);
@@ -171,6 +173,7 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Severity accent bar at top */}
         <Box style={{
           height: 3,

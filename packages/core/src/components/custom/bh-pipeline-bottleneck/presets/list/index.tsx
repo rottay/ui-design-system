@@ -7,7 +7,7 @@
  * Designed for sidebar or widget placement.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   AlertTriangle, Clock, Users, ChevronRight, Zap,
   TrendingUp, ArrowRight,

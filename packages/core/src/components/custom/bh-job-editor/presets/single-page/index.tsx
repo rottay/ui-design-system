@@ -182,6 +182,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>({
 
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
     const cardStyle = useMemo(() => createCardStyle(t, { glass: isGlass, elevation: 'sm', padding: t.spacing[6] }), [t, isGlass]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const inputStyle: React.CSSProperties = useMemo(() => ({ width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.normal, color: t.colors.neutral[900], backgroundColor: t.colors.common.white, border: `${bdr} ${t.colors.neutral[300]}`, borderRadius: t.borderRadius.md, outline: 'none', transition: `all ${t.motion.hover}`, boxSizing: 'border-box' as const }), [t, bdr]);
     const selectStyle: React.CSSProperties = useMemo(() => ({ ...inputStyle, appearance: 'none' as const, backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: `right ${t.spacing[3]}px center`, paddingRight: t.spacing[8] }), [inputStyle, t]);
     const labelStyle: React.CSSProperties = useMemo(() => ({ display: 'block', fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1] }), [t]);
@@ -510,6 +511,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>({
 
     return (
       <Box style={{ display: 'flex', height: '100%', backgroundColor: t.colors.neutral[50], fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }} className={className}>
+        {accentBar && <Box style={accentBar} />}
         {/* Nav sidebar */}
         <Box style={{ width: 220, backgroundColor: t.colors.common.white, borderRight: `${bdr} ${t.colors.neutral[200]}`, padding: t.spacing[4], display: 'flex', flexDirection: 'column' as const, position: 'sticky' as const, top: 0, height: '100%', overflow: 'auto' }} role="navigation" aria-label="Job editor sections">
           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, letterSpacing: ptypo.headingLetterSpacing, color: t.colors.neutral[800], marginBottom: t.spacing[4], padding: `0 ${t.spacing[2]}px` }}>Sections</Text>

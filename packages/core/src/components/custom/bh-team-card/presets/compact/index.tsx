@@ -22,7 +22,9 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhTeamCardProps, TeamMetric } from '../../core';
 
@@ -62,7 +64,13 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
-    const entrance = useMemo(() => createEntranceAnimation(t, { index: 0 }), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const handleClick = useCallback(() => {
       onClick?.();
@@ -76,6 +84,7 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
         aria-label={onClick ? `View team ${teamName}` : undefined}
         onClick={handleClick}
         onKeyDown={onClick ? (e: React.KeyboardEvent) => {
+        {accentBar && <Box style={accentBar} />}
           if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); }
         } : undefined}
         style={{
@@ -126,13 +135,13 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
         </Box>
 
         {/* Inline metrics */}
-        {displayMetrics.map((metric) => {
+        {displayMetrics.map((metric, i) => {
           const pct = metric.target > 0 ? Math.min((metric.value / metric.target) * 100, 100) : 0;
           const color = pct >= 90 ? t.colors.successScale[500] : pct >= 70 ? t.colors.primaryScale[500] : t.colors.warningScale[500];
           const bar = createProgressBarStyle(t, { color, percent: pct });
 
           return (
-            <Box key={metric.label} style={{ width: 80, flexShrink: 0 }}>
+            <Box key={metric.label} style={{ ...animStyle(i), width: 80, flexShrink: 0 }}>
               <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{metric.label}</Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{metric.value}</Text>

@@ -7,9 +7,9 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import { createCardStyle, getPersonalityBadgeRadius, createEntranceAnimation, createStaggerDelay, createPersonalityAccentBar } from '../../../helpers';
 import type { BhSkillGapMapProps, SkillGapItem, GapPriority } from '../../core';
 import { getPriorityColors } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -42,6 +42,13 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
       gaps.forEach(g => { if (g.priority && c[g.priority] !== undefined) c[g.priority]++; });
       return c;
     }, [gaps]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -57,6 +64,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
         display: 'flex', flexDirection: 'column', width: '100%', height: '100%',
         backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -100,6 +108,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                 onClick={() => onGapSelect?.(gap.id ?? '')}
                 onKeyDown={onGapSelect ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onGapSelect?.(gap.id ?? ''); } } : undefined}
                 style={{
+                ...animStyle(gi),
                 padding: `${t.spacing[4]}px ${t.spacing[6]}px`,
                 borderBottom: gi < gaps.length - 1 ? `1px solid ${t.colors.neutral[50]}` : undefined,
                 borderLeft: `3px solid ${colors.color}`,

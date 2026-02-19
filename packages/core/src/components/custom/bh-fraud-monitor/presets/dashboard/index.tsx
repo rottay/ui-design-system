@@ -30,7 +30,13 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
 
     const {
       events: rawEvents = [], similarityChecks: rawSimilarityChecks = [], stats,
@@ -97,6 +103,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
 
     return (
       <Box className={className} style={{ ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Time Range indicator */}
         {timeRange && (
           <Box style={{

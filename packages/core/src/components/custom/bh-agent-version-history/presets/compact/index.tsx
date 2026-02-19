@@ -14,6 +14,9 @@ import {
   getPersonalityBadgeRadius,
   formatDistanceToNow,
   createEmptyStateStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhAgentVersionHistoryProps, AgentVersion } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -73,6 +76,13 @@ export const CompactBhAgentVersionHistory = createPreset<BhAgentVersionHistoryPr
     const sortedVersions = useMemo(() => {
       return [...versions].sort((a, b) => (b.createdAt?.getTime?.() ?? 0) - (a.createdAt?.getTime?.() ?? 0));
     }, [versions]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -85,6 +95,7 @@ export const CompactBhAgentVersionHistory = createPreset<BhAgentVersionHistoryPr
 
     return (
       <Box className={className} style={{ ...cardBase, padding: 0, ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2],
           padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
@@ -118,6 +129,7 @@ export const CompactBhAgentVersionHistory = createPreset<BhAgentVersionHistoryPr
                   onClick={() => handleVersionClick(version.id)}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVersionClick(version.id); } }}
                   style={{
+                    ...animStyle(index),
                     display: 'flex',
                     alignItems: 'center',
                     gap: t.spacing[2],

@@ -6,13 +6,15 @@
  * side-by-side stage score breakdowns, and quick decision actions.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhRankingBoardProps, RankedCandidate, DecisionAction,
@@ -92,6 +94,13 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
     }, [onDecisionChange]);
 
     const cardStyle = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* ScoreRing using primitives */
     const ScoreRing = useCallback(({ score, size = 72 }: { score: number; size?: number }) => {
@@ -121,6 +130,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
         ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}),
         ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -147,7 +157,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
                 {compared.map((c, i) => {
                   const colors = [t.colors.primaryScale[500], t.colors.successScale[500], t.colors.warningScale[500]];
                   return (
-                    <Box key={c.id} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                    <Box key={c.id} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: colors[i % colors.length] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{c.name}</Text>
                     </Box>
@@ -163,6 +173,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
               const rb = getRankBadgeColors(c.rank, t);
               return (
                 <Box key={c.id} style={{
+                  ...animStyle(idx),
                   padding: `${t.spacing[5]}px`, borderRadius: t.borderRadius.xl,
                   border: `1px solid ${t.colors.neutral[100]}`, textAlign: 'center' as const,
                   ...createEntranceAnimation(t, { index: idx }).animate,
@@ -204,6 +215,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
               const maxScore = Math.max(...scores);
               return (
                 <Box key={stage} role="row" style={{
+                  ...animStyle(si),
                   display: 'grid', gridTemplateColumns: `120px repeat(${compared.length}, 1fr)`,
                   borderBottom: si < stages.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined,
                 }}>
@@ -213,7 +225,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
                   {scores.map((score, ci) => {
                     const isBest = score === maxScore;
                     return (
-                      <Box key={ci} role="cell" style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[2], backgroundColor: isBest ? t.colors.successScale[50] : t.colors.common.white }}>
+                      <Box key={ci} role="cell" style={{ ...animStyle(ci), padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[2], backgroundColor: isBest ? t.colors.successScale[50] : t.colors.common.white }}>
                         <Box style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }} role="progressbar" aria-valuenow={score} aria-valuemin={0} aria-valuemax={100}>
                           <Box style={{ height: '100%', width: `${score}%`, backgroundColor: getScoreBarColor(score, t), borderRadius: t.borderRadius.full }} />
                         </Box>
@@ -236,7 +248,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
                 <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[2] }}>{c.name}</Text>
                 <Box style={{ marginBottom: t.spacing[3] }}>
                   {(c.strengths ?? []).map((s, i) => (
-                    <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: 4 }}>
+                    <Box key={i} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: 4 }}>
                       <ThumbsUp size={10} style={{ color: t.colors.successScale[500] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[700] }}>{s}</Text>
                     </Box>
@@ -244,7 +256,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
                 </Box>
                 <Box>
                   {(c.weaknesses ?? []).map((w, i) => (
-                    <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: 4 }}>
+                    <Box key={i} style={{ ...animStyle(i), display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: 4 }}>
                       <AlertTriangle size={10} style={{ color: t.colors.errorScale[500] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[700] }}>{w}</Text>
                     </Box>

@@ -14,6 +14,8 @@ import {
   getPersonalityBadgeRadius,
   createPersonalitySectionHeaderStyle,
   createEmptyStateStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type { BhInterviewReplaySplitProps, ReplayTranscriptSegment, ReplayEvidenceMarker } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -96,6 +98,12 @@ export const CompactBhInterviewReplaySplit = createPreset<BhInterviewReplaySplit
     const activeSegment = useMemo(() => {
       return transcript.find(seg => currentTime >= seg.startTime && currentTime <= seg.endTime);
     }, [transcript, currentTime]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (

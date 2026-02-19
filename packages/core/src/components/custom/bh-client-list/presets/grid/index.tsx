@@ -29,6 +29,7 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createEmptyStateStyle,
   createPersonalityAccentBar,
   createDividerStyle,
@@ -99,6 +100,12 @@ export const GridBhClientList = createPreset<BhClientListProps>({
     const emptyStyle = useMemo(() => createEmptyStateStyle(t), [t]);
     const divider = useMemo(() => createDividerStyle(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const handleClientClick = useCallback((clientId: string) => { onClientClick?.(clientId); }, [onClientClick]);
 
@@ -179,6 +186,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClientClick(client.id); }
                 }}
                 style={{
+                  ...animStyle(idx),
                   ...card,
                   ...accentLayout.outer,
                   position: 'relative' as const,

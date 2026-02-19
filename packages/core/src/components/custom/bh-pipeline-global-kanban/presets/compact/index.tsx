@@ -6,7 +6,7 @@
  * Designed for sidebar or reduced viewport. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Columns3, Plus, Users, AlertTriangle,
   Clock, ChevronRight, Star,

@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   TrendingUp, TrendingDown, Activity,
 } from 'lucide-react';
@@ -96,6 +96,7 @@ export const CompactBhPipelineVelocityChart = createPreset<BhPipelineVelocityCha
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     /* Metrics */
     const metrics = useMemo(() => {
@@ -157,6 +158,7 @@ export const CompactBhPipelineVelocityChart = createPreset<BhPipelineVelocityCha
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

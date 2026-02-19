@@ -94,6 +94,7 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleClick = useCallback((id: string) => {
       onEventClick?.(id);
@@ -120,6 +121,7 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,

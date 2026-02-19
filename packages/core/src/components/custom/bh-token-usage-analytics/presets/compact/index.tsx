@@ -113,6 +113,11 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
     const isGlass = t.surface.useGlass && !!t.glass;
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
@@ -291,6 +296,7 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
             </Text>
             {topProviders.slice(0, 3).map((provider, idx) => (
               <Box key={provider.name} style={{
+                ...animStyle(idx),
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1],
               }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -323,6 +329,7 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
             const itemEntrance = createEntranceAnimation(t, { index: idx });
             return (
               <Box key={cat.category} style={{
+                ...animStyle(idx),
                 display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2],
                 ...itemEntrance.animate,
               }}>

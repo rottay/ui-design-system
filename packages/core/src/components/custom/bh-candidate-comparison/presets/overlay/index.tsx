@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Users, ArrowUpDown } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {

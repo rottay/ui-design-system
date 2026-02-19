@@ -178,6 +178,12 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
       ...entranceAnim.animate,
       transition: entranceAnim.transition,
     }), [tokens, isGlass, entranceAnim]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     if (loading) {
       return (

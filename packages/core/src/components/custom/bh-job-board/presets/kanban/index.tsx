@@ -10,8 +10,10 @@ import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle, createHoverStyle, createEntranceAnimation,
+  createStaggerDelay,
   createCardHoverStyles, createIconContainerStyle,
   getPersonalityTypography, getPersonalityBadgeRadius, getCardPadding,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhJobBoardProps, JobItem, JobStatus, JobUrgency, JobBoardFilter, ViewMode } from '../../core';
 import { BH_JOB_BOARD_DEFAULTS } from '../../core';
@@ -59,7 +61,7 @@ function getUrgencyConfig(tokens: DesignTokens): Record<JobUrgency, UrgencyConfi
 
 const STAGE_SCALE_KEYS = ['primaryScale', 'infoScale', 'warningScale', 'successScale', 'secondaryScale', 'errorScale'] as const;
 function getStageColors(tokens: DesignTokens): string[] {
-  return STAGE_SCALE_KEYS.map((k) => tokens.colors[k][k === 'errorScale' ? 400 : 500]);
+  return STAGE_SCALE_KEYS.map((k, i) => tokens.colors[k][k === 'errorScale' ? 400 : 500]);
 }
 
 /* ------------------------------------------------------------------ */
@@ -103,12 +105,18 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
     const selectedJobs = controlledSelectedJobs ?? internalSelectedJobs;
 
     const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
     const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const cardPadding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
 
     const handleFilterChange = useCallback((f: JobBoardFilter) => { if (controlledFilters === undefined) setInternalFilters(f); onFilterChange?.(f); }, [controlledFilters, onFilterChange]);
     const handleSearchChange = useCallback((q: string) => { if (controlledSearchQuery === undefined) setInternalSearchQuery(q); onSearchChange?.(q); }, [controlledSearchQuery, onSearchChange]);
@@ -160,7 +168,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onJobClick?.(job.id); } }}
           onMouseEnter={() => setHoveredJobId(job.id)} onMouseLeave={() => setHoveredJobId(null)}
           style={{
-            ...cardBase, padding: 16,
+            ...cardBase, padding: tokens.spacing[4],
             border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[100]}`,
             boxShadow: isHovered ? tokens.shadows.md : tokens.shadows.sm,
             cursor: 'grab', opacity: isDragging ? 0.5 : 1,
@@ -170,10 +178,10 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
           }}>
 
           {/* Drag handle + urgency + checkbox */}
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <GripVertical size={12} color={tokens.colors.neutral[300]} />
-              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: `2px 8px`, borderRadius: tokens.borderRadius.md, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${urgencyCfg.borderColor}` }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${urgencyCfg.borderColor}` }}>
                 <AlertCircle size={9} />
                 <Text style={{ fontSize: '10px', fontWeight: tokens.typography.fontWeight.medium, color: urgencyCfg.color }}>{urgencyCfg.label}</Text>
               </Box>
@@ -186,10 +194,10 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             </Box>
           </Box>
 
-          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight, marginBottom: 4 }}>{job.title}</Text>
-          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: 10 }}>{job.code} - {job.department}</Text>
+          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight, marginBottom: tokens.spacing[1] }}>{job.title}</Text>
+          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[3] }}>{job.code} - {job.department}</Text>
 
-          <Box style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 10 }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginBottom: tokens.spacing[3] }}>
             {job.isRemote ? <><Globe size={10} color={tokens.colors.neutral[500]} /><Text style={{ fontSize: '10px', color: tokens.colors.neutral[500] }}>Remote</Text></> : <><MapPin size={10} color={tokens.colors.neutral[500]} /><Text style={{ fontSize: '10px', color: tokens.colors.neutral[500] }}>{job.location}</Text></>}
             {job.clientName && <>
               <Text style={{ fontSize: '10px', color: tokens.colors.neutral[300] }}>-</Text>
@@ -198,8 +206,8 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             </>}
           </Box>
 
-          <Box style={{ marginBottom: 10 }}>
-            <Text style={{ fontSize: '10px', color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium, marginBottom: 4 }}>{job.candidateCount} candidates</Text>
+          <Box style={{ marginBottom: tokens.spacing[3] }}>
+            <Text style={{ fontSize: '10px', color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium, marginBottom: tokens.spacing[1] }}>{job.candidateCount} candidates</Text>
             {/* SVG mini-bar - allowed */}
             {(() => {
               const total = (job.candidatesByStage || []).reduce((sum, s) => sum + s.count, 0);
@@ -215,15 +223,15 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             })()}
           </Box>
 
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: tokens.spacing[3], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                 <Clock size={10} color={job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500]} />
                 <Text style={{ fontSize: '10px', fontWeight: tokens.typography.fontWeight.medium, color: job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500] }}>{job.daysOpen}d</Text>
               </Box>
               <Box style={{ display: 'flex', alignItems: 'center' }}>
                 {(job.recruiterAvatars || []).slice(0, 2).map((avatar, ai) => (
-                  <Box key={ai} style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, marginLeft: ai > 0 ? -7 : 0, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 2 - ai }}>
+                  <Box key={ai} style={{ ...animStyle(ai), width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, marginLeft: ai > 0 ? -7 : 0, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 2 - ai }}>
                     {!avatar && <Users size={8} color={tokens.colors.primaryScale[600]} />}
                   </Box>
                 ))}
@@ -234,7 +242,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                 )}
               </Box>
             </Box>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: 4, opacity: isHovered ? 1 : 0, transition: `opacity ${tokens.motion.hover}` }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], opacity: isHovered ? 1 : 0, transition: `opacity ${tokens.motion.hover}` }}>
               {[
                 { icon: <Eye size={10} />, label: 'View', onClick: (e: React.MouseEvent) => { e.stopPropagation(); onJobClick?.(job.id); } },
                 { icon: <Pencil size={10} />, label: 'Edit', onClick: (e: React.MouseEvent) => { e.stopPropagation(); } },
@@ -242,7 +250,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                 <Box key={i} role="button" tabIndex={0} aria-label={act.label}
                   onClick={act.onClick}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act.onClick(e as any); } }}
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
+                  style={{ ...animStyle(i), display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
                   {act.icon}
                 </Box>
               ))}
@@ -254,13 +262,13 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
 
     /* Header */
     const renderHeader = () => (
-      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[6] }}>
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
           <Text style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight }}>Jobs</Text>
           <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500]}}>Manage and track all your open positions</Text>
         </Box>
-        <Box style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: 2, padding: 3, borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.neutral[100] }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[0], padding: tokens.spacing[1], borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.neutral[100] }}>
             {([{ mode: 'grid' as ViewMode, icon: <LayoutGrid size={14} /> }, { mode: 'table' as ViewMode, icon: <List size={14} /> }, { mode: 'kanban' as ViewMode, icon: <Columns3 size={14} /> }]).map(({ mode, icon }) => (
               <Box key={mode} role="button" tabIndex={0} aria-label={`${mode} view`} aria-pressed={mode === 'kanban'}
                 onClick={() => onViewModeChange?.(mode)}
@@ -273,7 +281,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
           {onCreateJob && (
             <Box role="button" tabIndex={0} aria-label="Create new job" onClick={onCreateJob}
               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCreateJob(); } }}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: `10px 18px`, borderRadius: tokens.borderRadius.lg, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+              style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, borderRadius: tokens.borderRadius.lg, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
               <Plus size={16} color={tokens.colors.common.white} />
               <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>New Job</Text>
             </Box>
@@ -284,8 +292,8 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
 
     /* Filter bar */
     const renderFilterBar = () => (
-      <Box style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap' as const }}>
-        <Box style={{ display: 'flex', alignItems: 'center', gap: 8, padding: `6px 14px`, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, minWidth: 220 }}>
+      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[5], flexWrap: 'wrap' as const }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, minWidth: 220 }}>
           <Search size={14} color={tokens.colors.neutral[400]} />
           <input type="text" placeholder="Search jobs..." value={searchQuery} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearchChange(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], backgroundColor: 'transparent', flex: 1, padding: 0, fontFamily: 'inherit' }} />
           {searchQuery && <Box role="button" tabIndex={0} aria-label="Clear search" onClick={() => handleSearchChange('')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSearchChange(''); } }} style={{ display: 'flex', cursor: 'pointer', outline: 'none' }}><X size={13} color={tokens.colors.neutral[400]} /></Box>}
@@ -296,17 +304,17 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             <Box role="button" tabIndex={0} aria-label="Filter by department" aria-expanded={showDeptDropdown}
               onClick={() => setShowDeptDropdown(!showDeptDropdown)}
               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowDeptDropdown(!showDeptDropdown); } }}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: `5px 12px`, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.department ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`, backgroundColor: filters.department ? tokens.colors.primaryScale[50] : tokens.colors.common.white, color: filters.department ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, outline: 'none', fontFamily: 'inherit' }}>
+              style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.department ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`, backgroundColor: filters.department ? tokens.colors.primaryScale[50] : tokens.colors.common.white, color: filters.department ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, outline: 'none', fontFamily: 'inherit' }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: filters.department ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600] }}>{filters.department ?? 'All Departments'}</Text>
             </Box>
             {showDeptDropdown && (
-              <Box style={{ position: 'absolute' as const, top: '100%', left: 0, marginTop: 4, minWidth: 180, backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, zIndex: 50, padding: '4px 0' }}>
+              <Box style={{ position: 'absolute' as const, top: '100%', left: 0, marginTop: tokens.spacing[1], minWidth: 180, backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, zIndex: 50, padding: `${tokens.spacing[1]}px 0` }}>
                 {[null, ...departments].map(dept => {
                   const isActive = dept === null ? !filters.department : filters.department === dept;
                   return (
                     <Box key={dept ?? 'all'} role="option" aria-selected={isActive}
                       onClick={() => { handleFilterChange({ ...filters, department: dept }); setShowDeptDropdown(false); }}
-                      style={{ padding: `8px 14px`, fontSize: tokens.typography.fontSize.sm, color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[700], backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent', cursor: 'pointer', transition: `all ${tokens.motion.hover}`, borderRadius: tokens.borderRadius.md, margin: '0 4px' }}>
+                      style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, fontSize: tokens.typography.fontSize.sm, color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[700], backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent', cursor: 'pointer', transition: `all ${tokens.motion.hover}`, borderRadius: tokens.borderRadius.md, margin: `0 ${tokens.spacing[1]}px` }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[700] }}>{dept ?? 'All Departments'}</Text>
                     </Box>
                   );
@@ -323,7 +331,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             <Box key={urgency} role="button" tabIndex={0} aria-label={`Filter urgency ${cfg.label}`} aria-pressed={isActive}
               onClick={() => handleFilterChange({ ...filters, urgency: isActive ? null : urgency })}
               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, urgency: isActive ? null : urgency }); } }}
-              style={{ display: 'inline-flex', alignItems: 'center', padding: `5px 10px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[100], color: isActive ? tokens.colors.common.white : tokens.colors.neutral[600], outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+              style={{ display: 'inline-flex', alignItems: 'center', padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[100], color: isActive ? tokens.colors.common.white : tokens.colors.neutral[600], outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: isActive ? tokens.colors.common.white : tokens.colors.neutral[600] }}>{cfg.label}</Text>
             </Box>
           );
@@ -345,8 +353,8 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
           style={{ flex: 1, minWidth: 280, display: 'flex', flexDirection: 'column' as const, maxHeight: '100%', ...colEntrance.animate, transition: colEntrance.transition }}
           onDragOver={(e: React.DragEvent) => handleDragOver(e, col.key)} onDragLeave={handleDragLeave} onDrop={() => handleDrop(col.key)}>
           {/* Column header */}
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `10px 14px`, backgroundColor: col.headerBg, borderRadius: `${tokens.borderRadius.lg} ${tokens.borderRadius.lg} 0 0`, borderTop: `3px solid ${col.accentBorder}` }}>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, backgroundColor: col.headerBg, borderRadius: `${tokens.borderRadius.lg} ${tokens.borderRadius.lg} 0 0`, borderTop: `3px solid ${col.accentBorder}` }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: col.dotColor, flexShrink: 0 }} />
               <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: col.color }}>{col.label}</Text>
               <Box style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 22, height: 22, padding: '0 6px', borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.common.white, boxShadow: tokens.shadows.sm }}>
@@ -364,15 +372,15 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
           </Box>
 
           {/* Column body */}
-          <Box style={{ flex: 1, backgroundColor: isDraggedOver ? tokens.colors.primaryScale[50] : tokens.colors.neutral[50], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isDraggedOver ? tokens.colors.primaryScale[300] : tokens.colors.neutral[100]}`, borderTop: 'none', borderRadius: `0 0 ${tokens.borderRadius.lg} ${tokens.borderRadius.lg}`, padding: 8, display: 'flex', flexDirection: 'column' as const, gap: 8, overflowY: 'auto' as const, transition: `all ${tokens.motion.hover}`, minHeight: 200 }}>
+          <Box style={{ flex: 1, backgroundColor: isDraggedOver ? tokens.colors.primaryScale[50] : tokens.colors.neutral[50], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isDraggedOver ? tokens.colors.primaryScale[300] : tokens.colors.neutral[100]}`, borderTop: 'none', borderRadius: `0 0 ${tokens.borderRadius.lg} ${tokens.borderRadius.lg}`, padding: tokens.spacing[2], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2], overflowY: 'auto' as const, transition: `all ${tokens.motion.hover}`, minHeight: 200 }}>
             {columnJobs.length === 0 ? (
-              <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '32px 16px', textAlign: 'center' as const }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`, textAlign: 'center' as const }}>
                 <Briefcase size={20} color={tokens.colors.neutral[300]} />
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: 8 }}>No {col.label.toLowerCase()} jobs</Text>
-                {isDraggedOver && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[500], fontWeight: tokens.typography.fontWeight.medium, marginTop: 4 }}>Drop here to move</Text>}
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: tokens.spacing[2] }}>No {col.label.toLowerCase()} jobs</Text>
+                {isDraggedOver && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[500], fontWeight: tokens.typography.fontWeight.medium, marginTop: tokens.spacing[1] }}>Drop here to move</Text>}
               </Box>
             ) : columnJobs.map((job, idx) => renderKanbanCard(job, idx))}
-            {isDraggedOver && columnJobs.length > 0 && <Box style={{ height: 2, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.primaryScale[400], margin: '4px 0' }} />}
+            {isDraggedOver && columnJobs.length > 0 && <Box style={{ height: 2, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.primaryScale[400], margin: `${tokens.spacing[1]}px 0` }} />}
           </Box>
         </Box>
       );
@@ -381,8 +389,9 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
     const showGlobalEmpty = filteredJobs.length === 0 && !!(searchQuery || filters.department || filters.urgency || filters.clientId);
 
     return (
-      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', display: 'flex', flexDirection: 'column' as const, ...entrance.animate, transition: entrance.transition, ...style }}
+      <Box className={className} style={{ padding: tokens.spacing[7], backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', display: 'flex', flexDirection: 'column' as const, ...entrance.animate, transition: entrance.transition, ...style }}
         {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}>
+        {accentBar && <Box style={accentBar} />}
         {ext.slot('header:start')}
         {ext.section('header', renderHeader)}
         {ext.slot('header:end')}
@@ -391,18 +400,18 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
         {ext.slot('toolbar:end')}
         {showGlobalEmpty ? (
           ext.hasSlot('empty') ? ext.slot('empty') : (
-            <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '64px 32px', textAlign: 'center' as const }}>
+            <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[16]}px ${tokens.spacing[8]}px`, textAlign: 'center' as const }}>
               {extEmptyState?.icon || (
                 <Box style={createIconContainerStyle(tokens, { size: 72, color: tokens.colors.primaryScale[50] })}>
                   <Briefcase size={30} color={tokens.colors.primaryScale[400]} />
                 </Box>
               )}
-              <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, color: tokens.colors.neutral[900], marginBottom: 8, marginTop: 20 }}>{extEmptyState?.title || emptyText}</Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, color: tokens.colors.neutral[900], marginBottom: tokens.spacing[2], marginTop: tokens.spacing[5] }}>{extEmptyState?.title || emptyText}</Text>
               <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>{extEmptyState?.description || 'Try adjusting your filters or search query.'}</Text>
             </Box>
           )
         ) : (
-          <Box style={{ display: 'flex', gap: 16, flex: 1, overflowX: 'auto' as const, paddingBottom: 8 }}>
+          <Box style={{ display: 'flex', gap: tokens.spacing[4], flex: 1, overflowX: 'auto' as const, paddingBottom: tokens.spacing[2] }}>
             {STATUS_COLUMNS.map((col, i) => renderKanbanColumn(col, i))}
           </Box>
         )}

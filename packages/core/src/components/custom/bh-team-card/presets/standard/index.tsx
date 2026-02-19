@@ -25,6 +25,7 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
   createPersonalityAccentBar,
 } from '../../../helpers';
@@ -65,11 +66,16 @@ export const StandardBhTeamCard = createPreset<BhTeamCardProps>({
     const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
-    const entrance = useMemo(() => createEntranceAnimation(t, { index: 0 }), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const accent = useMemo(
       () => createPersonalityAccentBar(t, { color: status === 'active' ? t.colors.successScale[500] : t.colors.neutral[400] }),
       [t, status],
     );
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const handleClick = useCallback(() => {
       onClick?.();
@@ -141,7 +147,7 @@ export const StandardBhTeamCard = createPreset<BhTeamCardProps>({
               </Box>
             </Box>
           </Box>
-          <Box style={{ ...createBadgeStyle(t, status === 'active' ? 'success' : 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+          <Box style={{ ...createBadgeStyle(t, status === 'active' ? 'success' : 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
             {status === 'active' ? <CheckCircle2 size={11} /> : <AlertCircle size={11} />}
             <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{status}</Text>
           </Box>
@@ -149,7 +155,7 @@ export const StandardBhTeamCard = createPreset<BhTeamCardProps>({
 
         {/* Member count badge */}
         <Box style={{ marginBottom: t.spacing[4] }}>
-          <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+          <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
             <Users size={11} />
             <Text style={{ fontSize: 'inherit' }}>{memberCount} members</Text>
           </Box>
@@ -157,14 +163,14 @@ export const StandardBhTeamCard = createPreset<BhTeamCardProps>({
 
         {/* Metrics */}
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
-          {metrics.map((metric) => {
+          {metrics.map((metric, i) => {
             const pct = metric.target > 0 ? Math.min((metric.value / metric.target) * 100, 100) : 0;
             const color = pctColor(metric.value, metric.target);
             const bar = createProgressBarStyle(t, { color, percent: pct });
 
             return (
               <Box key={metric.label}>
-                <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                <Box style={{ ...animStyle(i), display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{metric.label}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>
                     {metric.value} / {metric.target}

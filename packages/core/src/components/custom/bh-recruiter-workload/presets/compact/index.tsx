@@ -5,7 +5,7 @@
  * Condensed workload bars for sidebar or widget placement.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Scale, AlertTriangle,
 } from 'lucide-react';

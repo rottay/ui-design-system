@@ -35,7 +35,9 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhManagerConsoleProps,
@@ -156,10 +158,18 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
       yellow: { dot: t.colors.warningScale[500], bg: t.colors.warningScale[50] },
       red: { dot: t.colors.errorScale[500], bg: t.colors.errorScale[50] },
     }), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* ================================================================ */
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...glassOverride, ...style }}>
+        {accentBar && <Box style={accentBar} />}
 
         {/* === Header === */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -231,7 +241,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
         {/* === KPI Ribbon === */}
         <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: t.spacing[4] }}>
           {kpis.map((kpi, i) => (
-            <Box key={i} style={{ ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate }}>
+            <Box key={i} style={{ ...animStyle(i), ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate }}>
               <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>{kpi.label ?? ''}</Text>
               <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[2] }}>
                 <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
@@ -408,7 +418,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
           <Box style={{ ...card }} aria-label="Pipeline funnel">
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Pipeline Funnel</Text>
             {(pipeline ?? []).map((stage, idx) => (
-              <Box key={stage.name ?? idx} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
+              <Box key={stage.name ?? idx} style={{ ...animStyle(idx), display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
                 <Text style={{ width: 80, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, flexShrink: 0 }}>
                   {stage.name ?? ''}
                 </Text>

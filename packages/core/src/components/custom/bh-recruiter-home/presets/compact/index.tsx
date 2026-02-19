@@ -7,7 +7,7 @@
  * 10/10 quality: zero raw HTML, personality-driven, glass-aware, ARIA.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -22,6 +22,7 @@ import {
   createCardHoverStyles,
   formatDistanceToNow,
   ICON_SIZES,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhRecruiterHomeProps, KpiStat, PipelineJob, UpcomingInterview,
@@ -103,6 +104,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
       : recruiterNameProp;
 
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm' }), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handleQuickAction = useCallback((key: string) => { onQuickAction?.(key); }, [onQuickAction]);
     const handlePipelineClick = useCallback((id: string) => { onPipelineJobClick?.(id); }, [onPipelineJobClick]);
@@ -114,6 +116,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
         display: 'flex', flexDirection: 'column', gap: t.spacing[4],
         padding: `${t.spacing[5]}px`, maxWidth: 600, ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...entrance.animate, transition: entrance.transition }}>
           <Text style={{

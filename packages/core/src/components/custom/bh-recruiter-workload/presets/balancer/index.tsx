@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Scale, Users, Briefcase, Calendar, ListTodo,
   AlertTriangle, ChevronRight,
@@ -24,6 +24,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhRecruiterWorkloadItemProps, RecruiterWorkloadItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -78,6 +79,7 @@ const BalancerBhRecruiterWorkloadItem = createPreset<BhRecruiterWorkloadItemProp
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const overloadedCount = useMemo(() => (recruiters ?? []).filter(r => (r.activePositions ?? 0) > (r.capacity ?? 0)).length, [recruiters]);
     const avgUtilization = useMemo(() => {
@@ -106,6 +108,7 @@ const BalancerBhRecruiterWorkloadItem = createPreset<BhRecruiterWorkloadItemProp
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

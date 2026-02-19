@@ -6,7 +6,7 @@
  * differences between two jobs. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   ArrowLeftRight, Briefcase, Users, Clock, BarChart3,
   TrendingUp, TrendingDown, Minus, Layers,

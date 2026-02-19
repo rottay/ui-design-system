@@ -7,7 +7,7 @@
  * breakdown table. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Coins,
   TrendingUp,
@@ -32,6 +32,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhTokenUsageAnalyticsProps,
@@ -116,6 +117,7 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const categoryColors = useMemo(() => getCategoryColors(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const glassStyle = useMemo(() => {
       if (isGlass && t.glass) {
@@ -192,6 +194,7 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

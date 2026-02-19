@@ -151,6 +151,12 @@ export const CompactBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEn
     const waveW = 500;
     const waveH = 48;
     const barWidth = useMemo(() => waveformData.length > 0 ? waveW / waveformData.length : 3, [waveformData]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     if (loading) {
       return (
@@ -347,6 +353,7 @@ export const CompactBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEn
                 onClick={() => handleSegmentClick(seg.id)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSegmentClick(seg.id); } }}
                 style={{
+                  ...animStyle(idx),
                   display: 'flex', gap: t.spacing[2], alignItems: 'flex-start',
                   padding: `${t.spacing[2]}px ${t.spacing[5]}px`,
                   borderBottom: `1px solid ${t.colors.neutral[50]}`,

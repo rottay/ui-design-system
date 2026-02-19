@@ -10,7 +10,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle } from '../../../helpers';
+import { createCardStyle, createSurfaceStyle, getPersonalityTypography, getPersonalityBadgeRadius, createEntranceAnimation, createStaggerDelay, createPersonalityAccentBar } from '../../../helpers';
 import type {
   BhInterviewCenterProps, InterviewDisplayStatus, InterviewDisplayMode,
   InterviewFilter, CalendarView, SortDirection,
@@ -168,6 +168,8 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
 
     const glassCard = isModern && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${bdr} ${t.glass.border}` } : {};
     const glassSurface = isModern && t.glass ? { backdropFilter: t.glass.blurSm, WebkitBackdropFilter: t.glass.blurSm, backgroundColor: t.glass.bgLight, border: `${bdr} ${t.glass.borderLight}` } : {};
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const handleFilterChange = useCallback((f: InterviewFilter) => { if (controlledFilters === undefined) setInternalFilters(f); onFilterChange?.(f); }, [controlledFilters, onFilterChange]);
     const handleCalendarViewChange = useCallback((v: CalendarView) => { if (controlledCalendarView === undefined) setInternalCalendarView(v); onCalendarViewChange?.(v); }, [controlledCalendarView, onCalendarViewChange]);
@@ -222,6 +224,13 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
 
     const getForDate = (date: Date) => interviewsByDate[`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`] || [];
     const selectedData = useMemo(() => selectedInterview ? interviews.find(i => i.id === selectedInterview) ?? null : null, [selectedInterview, interviews]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     // --- Stats Bar ---
     const renderStatsBar = () => {
@@ -246,7 +255,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       return (
         <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(items.length, 6)}, 1fr)`, gap: t.spacing[3], marginBottom: t.spacing[4] }}>
           {items.map((item, idx) => (
-            <div key={idx} style={{ ...createCardStyle(t, { elevation: 'sm', glass: isModern }), padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2], ...(isModern ? glassSurface : {}) }}>
+            <div key={idx} style={{ ...animStyle(idx), ...createCardStyle(t, { elevation: 'sm', glass: isModern }), padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2], ...(isModern ? glassSurface : {}) }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ width: 32, height: 32, borderRadius: t.borderRadius.md, backgroundColor: sc(t, item.scale, 50), display: 'flex', alignItems: 'center', justifyContent: 'center', color: sc(t, item.scale, 600) }}>{item.icon}</div>
                 {item.pulse && <span style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: t.colors.warningScale[500], boxShadow: `0 0 0 3px ${t.colors.warningScale[100]}` }} />}
@@ -343,7 +352,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               const aiCt = dayIvs.filter(i => isAiInterview(i)).length;
               const humanCt = dayIvs.filter(i => !isAiInterview(i)).length;
               return (
-                <div key={idx} style={{ minHeight: 90, padding: t.spacing[2], borderRight: (idx + 1) % 7 !== 0 ? `${bdr} ${t.colors.neutral[100]}` : 'none', borderBottom: idx < days.length - 7 ? `${bdr} ${t.colors.neutral[100]}` : 'none', backgroundColor: isToday ? t.colors.primaryScale[50] : isCurMonth ? t.colors.common.white : t.colors.neutral[50], cursor: dayIvs.length > 0 ? 'pointer' : 'default' }}>
+                <div key={idx} style={{ ...animStyle(idx), minHeight: 90, padding: t.spacing[2], borderRight: (idx + 1) % 7 !== 0 ? `${bdr} ${t.colors.neutral[100]}` : 'none', borderBottom: idx < days.length - 7 ? `${bdr} ${t.colors.neutral[100]}` : 'none', backgroundColor: isToday ? t.colors.primaryScale[50] : isCurMonth ? t.colors.common.white : t.colors.neutral[50], cursor: dayIvs.length > 0 ? 'pointer' : 'default' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: isToday ? t.typography.fontWeight.bold : t.typography.fontWeight.medium, color: isToday ? t.colors.common.white : isCurMonth ? t.colors.neutral[800] : t.colors.neutral[400], backgroundColor: isToday ? t.colors.primaryScale[600] : 'transparent' }}>{day.getDate()}</span>
                     {dayIvs.length > 0 && <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 18, height: 18, borderRadius: t.borderRadius.full, fontSize: '10px', fontWeight: t.typography.fontWeight.bold, backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[700], padding: `0 ${t.spacing[1]}px` }}>{dayIvs.length}</span>}
@@ -523,10 +532,11 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     // --- Main ---
     return (
       <div className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', position: 'relative' as const, ...style }}>
+        {accentBar && <div style={accentBar} />}
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
           <div>
-            <h1 style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], margin: 0, lineHeight: t.typography.lineHeight.tight }}>Interview Center</h1>
+            <h1 style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: ptypo.headingWeight, letterSpacing: ptypo.headingLetterSpacing, color: t.colors.neutral[900], margin: 0, lineHeight: t.typography.lineHeight.tight }}>Interview Center</h1>
             <p style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], margin: 0, marginTop: t.spacing[1] }}>Manage and track all interviews across your pipeline</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>

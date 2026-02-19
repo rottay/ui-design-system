@@ -6,7 +6,7 @@
  * and bottleneck warning. Designed for dashboard headers.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   TrendingUp, TrendingDown, Minus, Clock, AlertTriangle,
   Users, Briefcase, ArrowRight, Activity,

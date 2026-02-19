@@ -6,7 +6,7 @@
  * annotation markers, and download. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   FileText, Download, ZoomIn, ZoomOut,
   ChevronLeft, ChevronRight, MessageSquare,

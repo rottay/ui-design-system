@@ -6,7 +6,7 @@
  * and reordering controls. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   GripVertical, Plus, Pencil, Trash2, ChevronUp, ChevronDown,
   User, Cpu, ShieldCheck, Layers,
@@ -23,6 +23,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhWorkflowStageEditorProps, WorkflowStage } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -102,6 +103,7 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const sortedStages = useMemo(() => [...stages].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)), [stages]);
 
@@ -133,6 +135,7 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,

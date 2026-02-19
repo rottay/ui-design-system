@@ -25,6 +25,8 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   getAccentAwareLayout,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhAgentGalleryProps,
@@ -252,6 +254,12 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       const provs = new Set(agents.map((a) => a.voiceProvider));
       return ['all', ...Array.from(provs)];
     }, [agents]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     /* ---- Reusable icon button style ---- */
     const iconBtnStyle = useCallback((bg: string, color: string): React.CSSProperties => ({
@@ -494,7 +502,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                     {filteredAgents
                       .filter((a) => a.rating && a.rating >= 4.5)
                       .slice(0, 3)
-                      .map((agent) => (
+                      .map((agent, i) => (
                         <Box
                           key={`featured-${agent.id}`}
                           role="button"
@@ -503,6 +511,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                           onClick={() => handleSelect(agent.id)}
                           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(agent.id); } }}
                           style={{
+                            ...animStyle(i),
                             ...cardBase,
                             padding: padding,
                             cursor: 'pointer',
@@ -587,7 +596,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
 
               {/* Main grid */}
               <Box role="list" aria-label="Agent cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: tokens.spacing[4] }}>
-                {filteredAgents.map((agent) => {
+                {filteredAgents.map((agent, i) => {
                   const statusInfo = getStatusInfo(agent.status, tokens);
                   const isSelected = selectedAgent === agent.id;
 
@@ -597,6 +606,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       role="listitem"
                       onClick={() => handleSelect(agent.id)}
                       style={{
+                        ...animStyle(i),
                         ...cardBase,
                         padding: 0,
                         cursor: 'pointer',

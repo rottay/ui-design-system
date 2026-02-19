@@ -5,7 +5,7 @@
  * Condensed response rate summary with best time indicator.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   BarChart3, TrendingUp, Star, Clock,
 } from 'lucide-react';

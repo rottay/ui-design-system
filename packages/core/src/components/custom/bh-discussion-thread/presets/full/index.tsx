@@ -30,6 +30,7 @@ import {
   createCardStyle,
   createIconContainerStyle,
   createEntranceAnimation,
+  createStaggerDelay,
   getPersonalityTypography,
   getPersonalityBadgeRadius,
 } from '../../../helpers';
@@ -129,6 +130,11 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
 
     /* -- Styles ------------------------------------------------------ */
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
     const card = useMemo(() => createCardStyle(t, { padding: 16 }), [t]);
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
@@ -367,8 +373,9 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
             {/* Attachments */}
             {comment.attachments && comment.attachments.length > 0 && (
               <Box style={{ display: 'flex', gap: t.spacing[2], flexWrap: 'wrap' as const, marginBottom: t.spacing[2] }}>
-                {comment.attachments.map((att) => (
+                {comment.attachments.map((att, i) => (
                   <Box key={att.id} style={{
+                    ...animStyle(i),
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: t.spacing[1],
@@ -396,6 +403,7 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
                     tabIndex={0}
                     aria-label={`React with ${reaction.emoji}`}
                     style={{
+                      ...animStyle(ri),
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: t.spacing[1],
@@ -553,8 +561,10 @@ export const FullBhDiscussionThread = createPreset<BhDiscussionThreadProps>({
                 </Box>
               ) : (
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                  {filteredThreads.map((thread) => (
-                    <ThreadListItem key={thread.id} thread={thread} />
+                  {filteredThreads.map((thread, i) => (
+                    <Box key={thread.id} style={animStyle(i)}>
+                      <ThreadListItem thread={thread} />
+                    </Box>
                   ))}
                 </Box>
               )}

@@ -23,6 +23,8 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createPersonalityAccentBar,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type { BhTranscriptViewerProps, TranscriptHighlight, TranscriptSegment, TranscriptMeta, ScoringDimension } from '../../core';
 import {
@@ -150,6 +152,12 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
       }
       return selectedDimension ? evidence.filter((e) => e.highlight.dimensionId === selectedDimension) : evidence;
     }, [segments, selectedDimension]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     return (
       <Box
@@ -228,7 +236,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
           >
             <Text>All ({segments.reduce((s, seg) => s + (seg.highlights?.length || 0), 0)})</Text>
           </Box>
-          {dimensions.map((dim) => (
+          {dimensions.map((dim, i) => (
             <Box
               key={dim.id}
               role="button"
@@ -238,6 +246,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
               onClick={() => handleDimensionClick(dim.id)}
               onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionClick(dim.id); } }}
               style={{
+                ...animStyle(i),
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: tokens.spacing[1],
@@ -268,7 +277,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
             </Box>
             <Box style={divider} />
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3], marginTop: tokens.spacing[3] }}>
-              {segments.map((seg) => {
+              {segments.map((seg, segIdx) => {
                 const isSelected = selectedSegment === seg.id;
                 const isInterviewer = seg.speaker === 'interviewer';
                 return (
@@ -281,6 +290,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                     onClick={() => handleSegmentClick(seg.id)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSegmentClick(seg.id); } }}
                     style={{
+                      ...animStyle(segIdx),
                       ...cardHover.base,
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.lg,
@@ -309,7 +319,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                       {seg.highlights && seg.highlights.length > 0 && (
                         <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                           {[...new Set(seg.highlights.map((h) => h.color))].map((color, ci) => (
-                            <Box key={ci} style={{ width: 7, height: 7, borderRadius: tokens.borderRadius.full, backgroundColor: color }} />
+                            <Box key={ci} style={{ ...animStyle(ci), width: 7, height: 7, borderRadius: tokens.borderRadius.full, backgroundColor: color }} />
                           ))}
                         </Box>
                       )}
@@ -344,6 +354,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                     onClick={() => onSegmentSelect?.(ev.segmentId)}
                     onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSegmentSelect?.(ev.segmentId); } }}
                     style={{
+                      ...animStyle(i),
                       ...cardHover.base,
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.lg,

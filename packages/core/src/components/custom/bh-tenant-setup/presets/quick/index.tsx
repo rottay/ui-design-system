@@ -21,6 +21,8 @@ import {
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhTenantSetupProps,
@@ -73,6 +75,12 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    });
 
     const containerStyle: React.CSSProperties = {
       ...surfaceMd,
@@ -313,7 +321,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
           <Box>
             <Text style={labelStyle}>Provider</Text>
             <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
-              {['openai', 'anthropic', 'google'].map((prov) => {
+              {['openai', 'anthropic', 'google'].map((prov, i) => {
                 const isSelected = localFormData.providerConfig.provider === prov;
                 return (
                   <Box
@@ -322,6 +330,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
                       providerConfig: { ...localFormData.providerConfig, provider: prov },
                     })}
                     style={{
+                      ...animStyle(i),
                       ...hoverTransition,
                       flex: 1,
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -470,6 +479,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
 
           {localInvitations.map((invite, idx) => (
             <Box key={idx} style={{
+              ...animStyle(idx),
               display: 'flex',
               gap: tokens.spacing[2],
               alignItems: 'flex-end',

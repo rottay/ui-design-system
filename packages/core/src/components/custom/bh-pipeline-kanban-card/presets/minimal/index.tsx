@@ -6,7 +6,7 @@
  * Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   GripVertical, ArrowRight, XCircle, CalendarClock,
   Star, Clock,
@@ -103,6 +103,7 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
     }, [onQuickAction, candidateId]);
 
     const daysInStage = useMemo(() => getDaysInStage(candidate.appliedAt), [candidate.appliedAt]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -135,6 +136,7 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Drag handle */}
         <Box
           style={{ color: t.colors.neutral[300], cursor: 'grab', flexShrink: 0, display: 'flex', alignItems: 'center' }}

@@ -36,6 +36,7 @@ import {
   createEmptyStateStyle,
   createDividerStyle,
   createProgressBarStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhClientDetailProps, ClientPosition, RevenuePoint } from '../../core';
 
@@ -101,6 +102,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
     const typo = useMemo(() => getPersonalityTypography(t), [t]);
     const divider = useMemo(() => createDividerStyle(t), [t]);
     const emptyStyle = useMemo(() => createEmptyStateStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const handlePositionClick = useCallback((positionId: string) => { onPositionClick?.(positionId); }, [onPositionClick]);
 
@@ -168,6 +170,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], width: '100%', ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* ---- Client Header ---------------------------------------- */}
         <Box style={{ ...card }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

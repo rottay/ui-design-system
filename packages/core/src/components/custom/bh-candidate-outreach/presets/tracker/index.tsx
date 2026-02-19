@@ -20,6 +20,7 @@ import {
   createBadgeStyle,
   createProgressBarStyle,
   createCardHoverStyles,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type {
   BhCandidateOutreachProps, OutreachRecipient, CampaignMetrics, ABVariant,
@@ -101,6 +102,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
     [campaignMetrics]);
 
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'md' }), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const metricCards = useMemo(() => [
       { label: 'Sent', value: campaignMetrics.sent, color: mc.sent.color, bg: mc.sent.bgColor, icon: <Send size={18} /> },
@@ -121,6 +123,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
         display: 'flex', flexDirection: 'column', height: '100%',
         ...glassCardBg, overflow: 'hidden', ...style,
       }}>
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,

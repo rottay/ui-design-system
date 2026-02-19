@@ -8,7 +8,7 @@
  * Personality-driven, glass-aware, zero raw HTML.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -593,6 +593,12 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
       { label: 'Export', icon: <Download size={14} />, onClick: () => onExport?.(selectedCandidates) },
       ...(selectedCandidates.length >= 2 ? [{ label: 'Compare', icon: <GitCompare size={14} />, onClick: () => onCompare?.(selectedCandidates) }] : []),
     ], [selectedCandidates, onAddToJob, onSendOutreach, onExport, onCompare]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     const renderRangeBar = useCallback((min: number, max: number, rangeMax: number, color: string) => (
       <svg width="100%" height="6" viewBox="0 0 240 6" preserveAspectRatio="none" style={{ borderRadius: t.borderRadius.full, marginTop: 4 }}>
@@ -718,6 +724,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   onClick={() => { handleQueryChange(term); setShowAutocomplete(false); }}
                   onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleQueryChange(term); setShowAutocomplete(false); } }}
                   style={{
+                    ...animStyle(idx),
                     display: 'flex', alignItems: 'center', gap: t.spacing[2],
                     padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                     borderRadius: t.borderRadius.md, cursor: 'pointer',

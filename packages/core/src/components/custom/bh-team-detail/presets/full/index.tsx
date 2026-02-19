@@ -30,9 +30,11 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
   createEntranceAnimation,
+  createStaggerDelay,
   createProgressBarStyle,
   createDividerStyle,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhTeamDetailProps, TeamPosition } from '../../core';
 
@@ -107,6 +109,13 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
 
     const openCount = useMemo(() => positions.filter((p) => p.status === 'open').length, [positions]);
     const filledCount = useMemo(() => positions.filter((p) => p.status === 'filled').length, [positions]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const animStyle = (index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    });
 
     /* -- Loading --------------------------------------------------- */
     if (loading) {
@@ -120,6 +129,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], width: '100%', ...style }}>
+        {accentBar && <Box style={accentBar} />}
         {/* ---- Team Header ----------------------------------------- */}
         <Box style={{ ...card }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
@@ -138,11 +148,11 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                   <Building2 size={13} style={{ color: t.colors.neutral[400] }} />
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], textTransform: 'capitalize' as const }}>{teamType}</Text>
                 </Box>
-                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Users size={11} />
                   <Text style={{ fontSize: 'inherit' }}>{members.length} members</Text>
                 </Box>
-                <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Briefcase size={11} />
                   <Text style={{ fontSize: 'inherit' }}>{openCount} open</Text>
                 </Box>
@@ -151,8 +161,8 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
               {specializations.length > 0 && (
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>Specializations:</Text>
-                  {specializations.map((spec) => (
-                    <Box key={spec} style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR }}>
+                  {specializations.map((spec, i) => (
+                    <Box key={spec} style={{ ...animStyle(i), ...createBadgeStyle(t, 'primary'), borderRadius: badgeR }}>
                       <Text style={{ fontSize: 'inherit' }}>{spec}</Text>
                     </Box>
                   ))}
@@ -162,8 +172,8 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
               {industries.length > 0 && (
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>Industries:</Text>
-                  {industries.map((ind) => (
-                    <Box key={ind} style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR }}>
+                  {industries.map((ind, i) => (
+                    <Box key={ind} style={{ ...animStyle(i), ...createBadgeStyle(t, 'success'), borderRadius: badgeR }}>
                       <Text style={{ fontSize: 'inherit' }}>{ind}</Text>
                     </Box>
                   ))}
@@ -182,7 +192,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
             const entrance = createEntranceAnimation(t, { index: idx });
 
             return (
-              <Box key={metric.label} style={{ ...card, ...entrance.animate, display: 'flex', flexDirection: 'column' as const }}>
+              <Box key={metric.label} style={{ ...animStyle(idx), ...card, ...entrance.animate, display: 'flex', flexDirection: 'column' as const }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
                   <Target size={14} style={{ color: t.colors.primaryScale[500] }} />
                   <Text style={{ ...sectionHdr, marginBottom: 0 }}>{metric.label}</Text>
@@ -349,6 +359,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePositionClick(position.id); }
                   }}
                   style={{
+                    ...animStyle(idx),
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -374,7 +385,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                     )}
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                    <Box style={{ ...createBadgeStyle(t, positionStatusBadge(position.status)), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <Box style={{ ...createBadgeStyle(t, positionStatusBadge(position.status)), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                       {positionStatusIcon(position.status)}
                       <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{position.status}</Text>
                     </Box>

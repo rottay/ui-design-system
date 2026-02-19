@@ -6,7 +6,7 @@
  * overall rate gauge, and best time recommendation. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   BarChart3, Clock, TrendingUp, Star,
 } from 'lucide-react';
@@ -21,6 +21,7 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
+  createPersonalityAccentBar,
 } from '../../../helpers';
 import type { BhOutreachResponseProps, ResponseData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -87,6 +88,7 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
 
     const heatmapGrid = useMemo(() => {
       const grid: Record<string, ResponseData> = {};
@@ -119,6 +121,7 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
           ...style,
         }}
       >
+        {accentBar && <Box style={accentBar} />}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[6]}px ${t.spacing[7]}px`,
