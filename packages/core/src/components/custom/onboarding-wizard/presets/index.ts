@@ -1,5 +1,5 @@
-import React from 'react';
-import type { OnboardingWizardPreset } from '../core';
+import type { ComponentType } from 'react';
+import type { OnboardingWizardPreset, OnboardingWizardProps } from '../core';
 
 import stepperPreset from './stepper';
 import cardsPreset from './cards';
@@ -9,7 +9,7 @@ export const stepper = stepperPreset;
 export const cards = cardsPreset;
 export const minimal = minimalPreset;
 
-export const PRESETS: Record<OnboardingWizardPreset, React.ComponentType<any>> = {
+export const PRESETS: Record<OnboardingWizardPreset, ComponentType<OnboardingWizardProps>> = {
   stepper: stepperPreset,
   cards: cardsPreset,
   minimal: minimalPreset,

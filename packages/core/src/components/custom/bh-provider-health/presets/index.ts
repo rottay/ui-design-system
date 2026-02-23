@@ -2,11 +2,12 @@
  * BhProviderHealth - Preset Registry
  */
 
-import type { BhProviderHealthPreset } from '../core';
+import type { BhProviderHealthPreset, BhProviderHealthProps } from '../core';
+import type { ComponentType } from 'react';
 import { DashboardBhProviderHealth } from './dashboard';
 import { CompactBhProviderHealth } from './compact';
 
-export const BH_PROVIDER_HEALTH_PRESETS: Record<BhProviderHealthPreset, React.ComponentType<any>> = {
+export const BH_PROVIDER_HEALTH_PRESETS: Record<BhProviderHealthPreset, ComponentType<BhProviderHealthProps>> = {
   dashboard: DashboardBhProviderHealth,
   compact: CompactBhProviderHealth,
 };

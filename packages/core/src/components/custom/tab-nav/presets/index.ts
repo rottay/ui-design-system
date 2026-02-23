@@ -1,11 +1,11 @@
-import React from 'react';
-import type { TabNavPreset } from '../core';
+import type { ComponentType } from 'react';
+import type { TabNavPreset, TabNavProps } from '../core';
 
 import Underline from './underline';
 import Pills from './pills';
 import Boxed from './boxed';
 
-export const PRESETS: Record<TabNavPreset, React.ComponentType<any>> = {
+export const PRESETS: Record<TabNavPreset, ComponentType<TabNavProps>> = {
   underline: Underline,
   pills: Pills,
   boxed: Boxed,

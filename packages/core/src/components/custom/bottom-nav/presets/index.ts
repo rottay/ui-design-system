@@ -1,10 +1,10 @@
-import React from 'react';
-import type { BottomNavPreset } from '../core';
+import type { ComponentType } from 'react';
+import type { BottomNavPreset, BottomNavProps } from '../core';
 
 import Standard from './standard';
 import Labeled from './labeled';
 
-export const PRESETS: Record<BottomNavPreset, React.ComponentType<any>> = {
+export const PRESETS: Record<BottomNavPreset, ComponentType<BottomNavProps>> = {
   standard: Standard,
   labeled: Labeled,
 };

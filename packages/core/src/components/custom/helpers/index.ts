@@ -669,11 +669,27 @@ export function getChartConfig(tokens: DesignTokens): {
 /**
  * Typography adjustments from personality tokens.
  */
+interface TypographyPreset {
+  fontSize: string;
+  fontWeight?: number;
+  letterSpacing?: string;
+  textTransform?: 'uppercase' | 'capitalize' | 'none';
+  color?: string;
+}
+
 export function getPersonalityTypography(tokens: DesignTokens): {
   headingWeight: number;
   labelTransform: 'uppercase' | 'capitalize' | 'none';
   labelLetterSpacing: string;
   headingLetterSpacing: string;
+  heading: TypographyPreset;
+  title: TypographyPreset;
+  subtitle: TypographyPreset;
+  body: TypographyPreset;
+  caption: TypographyPreset;
+  description: TypographyPreset;
+  label: TypographyPreset;
+  icon: TypographyPreset;
 } {
   const typo = tokens.personality.typography;
 
@@ -710,6 +726,14 @@ export function getPersonalityTypography(tokens: DesignTokens): {
     labelTransform,
     labelLetterSpacing,
     headingLetterSpacing: typo.headingLetterSpacing,
+    heading: { fontSize: tokens.typography.fontSize.xl, fontWeight: headingWeight, letterSpacing: typo.headingLetterSpacing },
+    title: { fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, letterSpacing: typo.headingLetterSpacing },
+    subtitle: { fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.medium },
+    body: { fontSize: tokens.typography.fontSize.md },
+    caption: { fontSize: tokens.typography.fontSize.xs },
+    description: { fontSize: tokens.typography.fontSize.sm },
+    label: { fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, textTransform: labelTransform, letterSpacing: labelLetterSpacing },
+    icon: { fontSize: tokens.typography.fontSize.md },
   };
 }
 
@@ -1077,6 +1101,12 @@ export const ICON_SIZES = {
   feature: 20,
   hero: 28,
   illustration: 48,
+  xxs: 10,
+  xs: 10,
+  sm: 12,
+  md: 16,
+  lg: 20,
+  xl: 28,
 } as const;
 
 /* ================================================================== */

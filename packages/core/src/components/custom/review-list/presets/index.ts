@@ -1,10 +1,10 @@
-import React from 'react';
-import type { ReviewListPreset } from '../core';
+import type { ComponentType } from 'react';
+import type { ReviewListPreset, ReviewListProps } from '../core';
 
 import Standard from './standard';
 import Compact from './compact';
 
-export const PRESETS: Record<ReviewListPreset, React.ComponentType<any>> = {
+export const PRESETS: Record<ReviewListPreset, ComponentType<ReviewListProps>> = {
   standard: Standard,
   compact: Compact,
 };

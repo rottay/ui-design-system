@@ -2,11 +2,12 @@
  * BhComparisonView - All Presets
  */
 
-import type { BhComparisonViewPreset } from '../core';
+import type { BhComparisonViewPreset, BhComparisonViewProps } from '../core';
+import type { ComponentType } from 'react';
 import { StandardBhComparisonView } from './standard';
 
 export { StandardBhComparisonView } from './standard';
 
-export const BH_COMPARISON_VIEW_PRESETS: Record<BhComparisonViewPreset, React.ComponentType<any>> = {
+export const BH_COMPARISON_VIEW_PRESETS: Record<BhComparisonViewPreset, ComponentType<BhComparisonViewProps>> = {
   standard: StandardBhComparisonView,
 };

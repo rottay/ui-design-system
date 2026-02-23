@@ -1,5 +1,5 @@
-import React from 'react';
-import type { ChartCardPreset } from '../core';
+import type { ComponentType } from 'react';
+import type { ChartCardPreset, ChartCardProps } from '../core';
 
 import areaPreset from './area';
 import barPreset from './bar';
@@ -11,7 +11,7 @@ export const bar = barPreset;
 export const donut = donutPreset;
 export const line = linePreset;
 
-export const PRESETS: Record<ChartCardPreset, React.ComponentType<any>> = {
+export const PRESETS: Record<ChartCardPreset, ComponentType<ChartCardProps>> = {
   area: areaPreset,
   bar: barPreset,
   donut: donutPreset,

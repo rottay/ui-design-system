@@ -1,10 +1,10 @@
-import React from 'react';
-import type { CheckoutFormPreset } from '../core';
+import type { ComponentType } from 'react';
+import type { CheckoutFormPreset, CheckoutFormProps } from '../core';
 
 import MultiStep from './multi-step';
 import SinglePage from './single-page';
 
-export const PRESETS: Record<CheckoutFormPreset, React.ComponentType<any>> = {
+export const PRESETS: Record<CheckoutFormPreset, ComponentType<CheckoutFormProps>> = {
   'multi-step': MultiStep,
   'single-page': SinglePage,
 };
