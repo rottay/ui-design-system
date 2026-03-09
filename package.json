@@ -1,7 +1,9 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.4.1",
-  "sideEffects": ["*.css"],
+  "version": "2.4.2",
+  "sideEffects": [
+    "*.css"
+  ],
   "main": "./packages/core/dist/index.cjs",
   "module": "./packages/core/dist/index.js",
   "types": "./packages/core/dist/index.d.ts",
