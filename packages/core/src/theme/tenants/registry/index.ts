@@ -32,6 +32,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     branding: {
       companyName: 'Rottay',
       primaryColor: '#6366f1',
+      secondaryColor: '#4F46E5',
       accentColor: '#a855f7',
       logo: undefined,
     },
@@ -97,6 +98,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     branding: {
       companyName: 'BitHire',
       primaryColor: '#0A66C2',
+      secondaryColor: '#004182',
       accentColor: '#7FC15E',
       logo: undefined,
     },
@@ -162,6 +164,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     branding: {
       companyName: 'Evnto',
       primaryColor: '#f97316',
+      secondaryColor: '#EA580C',
       accentColor: '#06b6d4',
       logo: undefined,
     },

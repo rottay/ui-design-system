@@ -15,6 +15,7 @@ export interface TenantBranding {
   favicon?: string;
   companyName: string;
   primaryColor?: string;
+  secondaryColor?: string;
   accentColor?: string;
 }
 

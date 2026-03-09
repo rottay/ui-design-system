@@ -65,6 +65,7 @@ export function createTenantConfig(partial: Partial<TenantConfig> & { slug: stri
       logoMark: partial.branding?.logoMark,
       favicon: partial.branding?.favicon,
       primaryColor: partial.branding?.primaryColor,
+      secondaryColor: partial.branding?.secondaryColor,
       accentColor: partial.branding?.accentColor,
     },
   };
