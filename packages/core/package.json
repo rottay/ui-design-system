@@ -21,8 +21,8 @@
       "require": "./dist/icons.js"
     },
     "./components/*": {
-      "types": "./dist/components/*.d.ts",
-      "import": "./dist/components/*.js"
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/components/*/index.js"
     },
     "./system/*": {
       "types": "./dist/system/*.d.ts",
