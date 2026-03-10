@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",
   "main": "./dist/index.cjs",
