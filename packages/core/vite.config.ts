@@ -36,8 +36,6 @@ export default defineConfig({
         'react',
         'react-dom',
         'react/jsx-runtime',
-        'antd',
-        '@ant-design/icons',
         '@heroui/react',
         'framer-motion',
         'lucide-react',
@@ -45,8 +43,6 @@ export default defineConfig({
         // @rottay domain modules (provided by consuming app)
         /^@rottay\/.*/,
         // Externalize submodules for better tree-shaking
-        /^antd\/.*/,
-        /^@ant-design\/icons\/.*/,
         /^@heroui\/.*/,
         /^lucide-react\/.*/,
         /^dayjs\/.*/,
@@ -62,7 +58,6 @@ export default defineConfig({
             react: 'React',
             'react-dom': 'ReactDOM',
             'react/jsx-runtime': 'jsxRuntime',
-            antd: 'antd',
           },
         },
         {
@@ -75,7 +70,6 @@ export default defineConfig({
             react: 'React',
             'react-dom': 'ReactDOM',
             'react/jsx-runtime': 'jsxRuntime',
-            antd: 'antd',
           },
         },
       ],
