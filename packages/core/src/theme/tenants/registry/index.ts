@@ -218,6 +218,70 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px' },
     },
   },
+
+  /**
+   * The Management Miami - Premium hospitality and talent recruiting
+   * Green primary, professional, LinkedIn-style structure
+   */
+  themanagementmiami: {
+    slug: 'themanagementmiami',
+    name: 'The Management Miami',
+    engine: 'classic' as EngineName,
+    theme: 'base',
+    plan: 'enterprise',
+    features: ['*'],
+    branding: {
+      companyName: 'The Management Miami',
+      primaryColor: '#16a34a',
+      accentColor: '#15803d',
+      logo: undefined,
+    },
+    personality: {
+      animation: {
+        intensity: 0.4,
+        staggerDelay: 30,
+        staggerMax: 200,
+        entrance: 'fade',
+        entranceDuration: 150,
+        hoverLift: 0,
+        hoverScale: 1.0,
+        useSpring: false,
+        springTension: 170,
+        springFriction: 26,
+        pulseSpeed: 'slow',
+        skeletonStyle: 'pulse',
+        countUpEnabled: true,
+      },
+      chart: {
+        animateOnMount: true,
+        mountDuration: 400,
+        lineStyle: 'sharp',
+        showDots: true,
+        useGradientFill: false,
+        tooltipStyle: 'detailed',
+      },
+      typography: {
+        headingWeightBias: 'heavier',
+        headingLetterSpacing: '-0.01em',
+        labelStyle: 'uppercase',
+      },
+      accent: {
+        barPosition: 'left',
+        barThickness: 3,
+        barStyle: 'solid',
+        iconContainerShape: 'circle',
+        badgeShape: 'pill',
+        dividerStyle: 'solid',
+      },
+      card: {
+        defaultElevation: 'sm',
+        hoverElevation: 'lift-one',
+        showBorder: true,
+        hoverTint: false,
+        paddingDensity: 'compact',
+      },
+    },
+  },
 };
 
 /**
