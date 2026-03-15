@@ -63,7 +63,7 @@
 
 import React from 'react';
 import type { ReactNode, CSSProperties } from 'react';
-import type { ButtonSize, ButtonVariant, ButtonShape } from '../../types';
+import type { ButtonSize, ButtonVariant, ButtonShape } from '../../Button.types';
 
 export interface ButtonGroupProps {
   /** Group children (Button components) */

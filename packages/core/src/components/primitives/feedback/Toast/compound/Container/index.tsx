@@ -21,8 +21,8 @@
 import React, { useEffect, useRef } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import type { ToastPosition, ToastState } from '../../types';
-import { TOAST_CONTAINER_DEFAULTS, TOAST_ANIMATION, POSITION_MAP } from '../../types';
+import type { ToastPosition, ToastState } from '../../Toast.types';
+import { TOAST_CONTAINER_DEFAULTS, TOAST_ANIMATION, POSITION_MAP } from '../../Toast.types';
 import { useToastContext } from '../../utils/ToastProvider';
 import { injectToastStyles, getToastAnimationStyle } from '../../utils/animations';
 import { BaseToast } from '../../base';

@@ -113,7 +113,7 @@ import {
   mergePersonalityStyle,
   resolveDividerPersonalityDefaults,
 } from '../../../../personality/primitives';
-import type { DividerProps } from './types';
+import type { DividerProps } from './Divider.types';
 
 // ============================================================================
 // TYPE AND CONSTANT EXPORTS
@@ -135,7 +135,7 @@ export {
   THICKNESS_MAP,
   DEFAULT_COLORS,
   getThicknessValue,
-} from './types';
+} from './Divider.types';
 
 // ============================================================================
 // BASE COMPONENT EXPORTS

@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 
-import { DEFAULT_COLORS, SPACING_MAP } from '../types';
+import { DEFAULT_COLORS, SPACING_MAP } from '../Divider.types';
 import ClassicDivider from '../engines/classic';
 import ModernDivider from '../engines/modern';
 import RusticDivider from '../engines/rustic';

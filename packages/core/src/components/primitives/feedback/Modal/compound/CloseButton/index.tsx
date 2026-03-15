@@ -66,7 +66,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ModalCloseButtonProps } from '../../types';
+import type { ModalCloseButtonProps } from '../../Modal.types';
 
 // ============================================================================
 // Constants

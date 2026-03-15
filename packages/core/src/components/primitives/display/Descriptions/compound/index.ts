@@ -4,4 +4,4 @@
  */
 
 export { DescriptionsItem } from './Item';
-export type { DescriptionsItemProps } from '../types';
+export type { DescriptionsItemProps } from '../Descriptions.types';

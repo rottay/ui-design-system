@@ -93,7 +93,7 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { TreeSelectProps } from './types';
+import type { TreeSelectProps } from './TreeSelect.types';
 
 // Export types
 export {
@@ -102,7 +102,7 @@ export {
   type TreeSelectValue,
   type TreeSelectSize,
   TREESELECT_DEFAULTS,
-} from './types';
+} from './TreeSelect.types';
 
 /**
  * Create engine-aware TreeSelect component.

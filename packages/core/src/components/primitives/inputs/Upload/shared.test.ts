@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { createUploadFile, removeUploadFile, resolveAcceptedUploadFiles } from './shared';
-import type { UploadFile } from './types';
+import type { UploadFile } from './Upload.types';
 
 function makeFile(name: string, type = 'text/plain') {
   return new File([`contents:${name}`], name, { type });

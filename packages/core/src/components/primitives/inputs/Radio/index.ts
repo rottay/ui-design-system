@@ -97,7 +97,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { RadioProps } from './types';
+import type { RadioProps } from './Radio.types';
 import { RadioGroup } from './compound';
 
 export {
@@ -109,7 +109,7 @@ export {
   type RadioGroupProps,
   RADIO_DEFAULTS,
   RADIO_GROUP_DEFAULTS,
-} from './types';
+} from './Radio.types';
 
 export { RadioGroup } from './compound';
 

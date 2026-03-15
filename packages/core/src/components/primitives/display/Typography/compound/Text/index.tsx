@@ -59,7 +59,7 @@ import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
 } from '../../../../../../personality/primitives';
-import type { TextProps } from '../../types';
+import type { TextProps } from '../../Typography.types';
 import { ClassicText } from '../../engines/classic';
 import { ModernText } from '../../engines/modern';
 import { RusticText } from '../../engines/rustic';

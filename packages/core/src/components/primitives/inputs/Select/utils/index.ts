@@ -10,7 +10,7 @@
  */
 
 import type React from 'react';
-import type { SelectOption, SelectOptionGroup } from '../types';
+import type { SelectOption, SelectOptionGroup } from '../Select.types';
 
 // ---------------------------------------------------------------------------
 // Virtual scroll defaults

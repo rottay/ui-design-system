@@ -12,7 +12,7 @@ import {
   SPACING_MAP,
   THICKNESS_MAP,
   getThicknessValue,
-} from '../types';
+} from '../Divider.types';
 
 // Mock the engine factory to avoid async loading issues in tests
 vi.mock('../../../../../core/engines/factory', () => ({

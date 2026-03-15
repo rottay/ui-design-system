@@ -8,7 +8,7 @@
 'use client';
 
 import { forwardRef } from 'react';
-import type { DescriptionsItemProps } from '../../types';
+import type { DescriptionsItemProps } from '../../Descriptions.types';
 
 /**
  * Descriptions.Item component.

@@ -9,7 +9,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { ToastProps } from './types';
+import type { ToastProps } from './Toast.types';
 
 export const BaseToast = createEngineComponent<ToastProps>('Toast', {
   classic: () => import('./engines/classic'),

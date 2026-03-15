@@ -17,7 +17,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { TreeNodeProps } from '../../types';
+import type { TreeNodeProps } from '../../Tree.types';
 
 /**
  * TreeNode component for declarative tree structure.

@@ -56,7 +56,7 @@
 import React, { forwardRef } from 'react';
 import type { ModalHeaderProps } from '../../../../../../contracts/primitives/feedback/Modal';
 import { ModalCloseButton } from '../CloseButton';
-import { PADDING_MAP } from '../../types';
+import { PADDING_MAP } from '../../Modal.types';
 
 // ============================================================================
 // Component

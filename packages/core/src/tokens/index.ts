@@ -9,8 +9,8 @@
  * import { colors, spacing, buttonTokens } from '@rottay/design-system/tokens';
  */
 
-// Re-export TypeScript token definitions from theme/tokens
-export * from '../theme/tokens';
+// TypeScript token definitions (canonical source)
+export * from './ts';
 
 // Export typography scale
 export { typographyScale } from './typography-scale';

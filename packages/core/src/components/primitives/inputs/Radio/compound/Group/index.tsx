@@ -70,8 +70,8 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useId } from 'react';
 import type { CSSProperties } from 'react';
-import type { RadioGroupProps, RadioOption, RadioSize, RadioVariant } from '../../types';
-import { RADIO_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
+import type { RadioGroupProps, RadioOption, RadioSize, RadioVariant } from '../../Radio.types';
+import { RADIO_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../Radio.types';
 
 // Context for radio group
 interface RadioGroupContextValue {

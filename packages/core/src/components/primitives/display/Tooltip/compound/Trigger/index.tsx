@@ -40,7 +40,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { TooltipTriggerProps } from '../../types';
+import type { TooltipTriggerProps } from '../../Tooltip.types';
 
 /**
  * Tooltip trigger component for manual trigger control.

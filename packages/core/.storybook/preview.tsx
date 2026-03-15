@@ -5,9 +5,9 @@ import type { EngineName } from '../src/core/types/engine';
 import React from 'react';
 
 // Import tenant CSS files
-import '../src/theme/tokens/css/themes/default.css';
-import '../src/theme/tokens/css/tenants/rottay/index.css';
-import '../src/theme/tokens/css/tenants/bithire/index.css';
+import '../src/tokens/css/themes/default.css';
+import '../src/tokens/css/tenants/rottay/index.css';
+import '../src/tokens/css/tenants/bithire/index.css';
 
 // Storybook preview styles
 import './preview-styles.css';

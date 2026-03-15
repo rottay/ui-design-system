@@ -35,13 +35,13 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { DividerProps, DividerVariant, DividerTextPosition } from '../../types';
+import type { DividerProps, DividerVariant, DividerTextPosition } from '../../Divider.types';
 import {
   DIVIDER_DEFAULTS,
   SPACING_MAP,
   getThicknessValue,
   DEFAULT_COLORS,
-} from '../../types';
+} from '../../Divider.types';
 
 /**
  * Rustic Divider component.

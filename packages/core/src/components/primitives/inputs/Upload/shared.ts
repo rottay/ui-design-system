@@ -1,6 +1,6 @@
 'use client';
 
-import type { UploadFile, UploadProps } from './types';
+import type { UploadFile, UploadProps } from './Upload.types';
 
 /**
  * Normaliza la creación del descriptor interno de archivo para que todos los

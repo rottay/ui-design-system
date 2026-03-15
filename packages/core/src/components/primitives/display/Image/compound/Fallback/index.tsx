@@ -8,7 +8,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ImageFallbackProps } from '../../types';
+import type { ImageFallbackProps } from '../../Image.types';
 
 /**
  * Image.Fallback component for displaying fallback content when image load fails.

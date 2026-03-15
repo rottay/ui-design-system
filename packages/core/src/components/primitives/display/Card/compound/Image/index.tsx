@@ -53,7 +53,7 @@
 
 import React, { useState } from 'react';
 import type { CSSProperties } from 'react';
-import type { CardImageProps } from '../../types';
+import type { CardImageProps } from '../../Card.types';
 
 /**
  * Border radius to CSS value mapping.

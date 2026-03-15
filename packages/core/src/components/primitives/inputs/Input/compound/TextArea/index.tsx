@@ -9,8 +9,8 @@ import React, {
   type CSSProperties,
 } from 'react';
 
-import type { InputTextAreaProps } from '../../types';
-import { SIZE_MAP } from '../../types';
+import type { InputTextAreaProps } from '../../Input.types';
+import { SIZE_MAP } from '../../Input.types';
 
 export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>(
   (props, ref) => {

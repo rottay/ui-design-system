@@ -49,7 +49,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { CarouselItemProps } from '../../types';
+import type { CarouselItemProps } from '../../Carousel.types';
 
 /**
  * Props for the CarouselItem component.

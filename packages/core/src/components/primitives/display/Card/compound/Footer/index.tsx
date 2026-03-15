@@ -43,7 +43,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { CardFooterProps } from '../../types';
+import type { CardFooterProps } from '../../Card.types';
 
 /**
  * Padding size to CSS value mapping.

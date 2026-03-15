@@ -90,7 +90,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { DatePickerProps, RangePickerProps } from './types';
+import type { DatePickerProps, RangePickerProps } from './DatePicker.types';
 
 // Export types
 export {
@@ -101,7 +101,7 @@ export {
   type DatePickerPlacement,
   type DatePickerMode,
   DATE_PICKER_DEFAULTS,
-} from './types';
+} from './DatePicker.types';
 
 /**
  * Create engine-aware DatePicker component.

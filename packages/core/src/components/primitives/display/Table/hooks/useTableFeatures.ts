@@ -12,7 +12,7 @@
  */
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import type { Key, RefObject } from 'react';
-import type { TableProps, ColumnType, SortOrder, EditingCell } from '../types';
+import type { TableProps, ColumnType, SortOrder, EditingCell } from '../Table.types';
 
 // ---------------------------------------------------------------------------
 // Key helpers

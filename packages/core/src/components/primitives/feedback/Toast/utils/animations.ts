@@ -39,8 +39,8 @@
 
 import type { CSSProperties } from 'react';
 
-import type { ToastPosition } from '../types';
-import { TOAST_ANIMATION } from '../types';
+import type { ToastPosition } from '../Toast.types';
+import { TOAST_ANIMATION } from '../Toast.types';
 
 function readRootCssVariable(name: string): string | null {
   if (typeof window === 'undefined') {

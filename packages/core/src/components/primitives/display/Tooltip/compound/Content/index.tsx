@@ -45,7 +45,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { TooltipContentProps } from '../../types';
+import type { TooltipContentProps } from '../../Tooltip.types';
 
 /**
  * Tooltip content component for displaying tooltip information.

@@ -49,7 +49,7 @@
 
 import React, { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
-import type { StepContentProps } from '../../types';
+import type { StepContentProps } from '../../Stepper.types';
 
 // ============================================================================
 // Internal Props Interface

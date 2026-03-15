@@ -8,7 +8,7 @@ import type {
   FormListProps,
   FormErrorListProps,
   FormInstance,
-} from '../../types';
+} from '../../Form.types';
 
 // Re-export useForm hook from Ant Design
 export const useForm = AntForm.useForm;

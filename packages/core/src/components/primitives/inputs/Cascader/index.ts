@@ -98,7 +98,7 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { CascaderProps } from './types';
+import type { CascaderProps } from './Cascader.types';
 
 // Export types
 export {
@@ -108,7 +108,7 @@ export {
   type CascaderSize,
   type CascaderExpandTrigger,
   CASCADER_DEFAULTS,
-} from './types';
+} from './Cascader.types';
 
 /**
  * Create engine-aware Cascader component.

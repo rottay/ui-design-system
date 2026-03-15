@@ -18,15 +18,15 @@
       "import": "./dist/tokens.js",
       "require": "./dist/tokens.cjs"
     },
-    "./tokens/css": "./src/theme/tokens/css/index.css",
-    "./tokens/css/*": "./src/theme/tokens/css/*",
+    "./tokens/css": "./src/tokens/css/index.css",
+    "./tokens/css/*": "./src/tokens/css/*",
     "./i18n": {
       "types": "./dist/i18n.d.ts",
       "import": "./dist/i18n.js",
       "require": "./dist/i18n.cjs"
     },
-    "./styles": "./src/theme/tokens/css/index.css",
-    "./styles.css": "./src/theme/tokens/css/index.css",
+    "./styles": "./src/tokens/css/index.css",
+    "./styles.css": "./src/tokens/css/index.css",
     "./icons": {
       "types": "./dist/icons.d.ts",
       "import": "./dist/icons.js",
@@ -50,7 +50,7 @@
     "dist/**/*.cjs",
     "dist/**/*.d.ts",
     "!dist/**/*.d.ts.map",
-    "src/theme/tokens/css",
+    "src/tokens/css",
     "README.md"
   ],
   "scripts": {

@@ -41,7 +41,7 @@
 'use client';
 
 import { forwardRef } from 'react';
-import type { TimelineItemProps } from '../../types';
+import type { TimelineItemProps } from '../../Timeline.types';
 
 /**
  * Timeline.Item component for individual timeline entries.

@@ -49,7 +49,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { MenuDividerProps } from '../../types';
+import type { MenuDividerProps } from '../../Menu.types';
 
 // ============================================================================
 // MenuDivider Component

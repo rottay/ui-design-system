@@ -48,8 +48,8 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { StepProps, StepStatus } from '../../types';
-import { SIZE_MAP, FONT_SIZE_MAP } from '../../types';
+import type { StepProps, StepStatus } from '../../Stepper.types';
+import { SIZE_MAP, FONT_SIZE_MAP } from '../../Stepper.types';
 
 // ============================================================================
 // Icon Components

@@ -89,14 +89,14 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { TransferProps } from './types';
+import type { TransferProps } from './Transfer.types';
 
 // Export types
 export {
   type TransferProps,
   type TransferItem,
   TRANSFER_DEFAULTS,
-} from './types';
+} from './Transfer.types';
 
 /**
  * Create engine-aware Transfer component.

@@ -87,7 +87,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { CheckboxProps } from './types';
+import type { CheckboxProps } from './Checkbox.types';
 import { CheckboxGroup } from './compound';
 
 // Export types
@@ -99,8 +99,8 @@ export type {
   CheckboxLabelPlacement,
   CheckboxGroupProps,
   CheckboxOption,
-} from './types';
-export { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP, RADIUS_MAP } from './types';
+} from './Checkbox.types';
+export { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP, RADIUS_MAP } from './Checkbox.types';
 
 // Export compound components
 export { CheckboxGroup };

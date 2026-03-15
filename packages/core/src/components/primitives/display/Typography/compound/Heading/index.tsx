@@ -49,7 +49,7 @@ import {
   mergePersonalityStyle,
   resolveTypographyHeadingStyle,
 } from '../../../../../../personality/primitives';
-import type { HeadingProps } from '../../types';
+import type { HeadingProps } from '../../Typography.types';
 import { ClassicHeading } from '../../engines/classic';
 import { ModernHeading } from '../../engines/modern';
 import { RusticHeading } from '../../engines/rustic';

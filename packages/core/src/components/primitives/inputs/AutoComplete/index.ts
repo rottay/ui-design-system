@@ -89,7 +89,7 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { AutoCompleteProps } from './types';
+import type { AutoCompleteProps } from './AutoComplete.types';
 
 // Export types
 export {
@@ -97,7 +97,7 @@ export {
   type AutoCompleteOption,
   type AutoCompleteSize,
   AUTOCOMPLETE_DEFAULTS,
-} from './types';
+} from './AutoComplete.types';
 
 /**
  * Create engine-aware AutoComplete component.

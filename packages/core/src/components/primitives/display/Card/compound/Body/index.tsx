@@ -37,7 +37,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { CardBodyProps } from '../../types';
+import type { CardBodyProps } from '../../Card.types';
 
 /**
  * Padding size to CSS value mapping.

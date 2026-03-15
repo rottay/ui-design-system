@@ -77,7 +77,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { ToggleProps } from './types';
+import type { ToggleProps } from './Toggle.types';
 
 export {
   type ToggleProps,
@@ -87,7 +87,7 @@ export {
   TOGGLE_DEFAULTS,
   SIZE_MAP,
   COLOR_MAP,
-} from './types';
+} from './Toggle.types';
 
 
 export const Toggle = createEngineComponent<ToggleProps>('Toggle', {

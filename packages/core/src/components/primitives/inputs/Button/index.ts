@@ -94,7 +94,7 @@ import {
   mergePersonalityStyle,
   resolveButtonPersonalityStyle,
 } from '../../../../personality/primitives';
-import type { ButtonProps } from './types';
+import type { ButtonProps } from './Button.types';
 import { ButtonGroup, ButtonIcon } from './compound';
 
 // Export types
@@ -107,8 +107,8 @@ export type {
   ButtonGroupProps as ButtonGroupPropsType,
   IconButtonProps,
   ButtonLoadingConfig,
-} from './types';
-export { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from './types';
+} from './Button.types';
+export { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from './Button.types';
 
 // Export compound components
 export { ButtonGroup, ButtonIcon };

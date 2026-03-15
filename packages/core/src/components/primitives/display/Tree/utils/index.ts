@@ -10,7 +10,7 @@
  */
 
 import type React from 'react';
-import type { TreeDataNode } from '../types';
+import type { TreeDataNode } from '../Tree.types';
 
 // ---------------------------------------------------------------------------
 // Key type and normalization

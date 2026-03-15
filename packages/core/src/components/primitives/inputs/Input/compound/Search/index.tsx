@@ -1,7 +1,7 @@
 'use client';
 
 import type { KeyboardEvent } from 'react';
-import type { InputSearchProps } from '../../types';
+import type { InputSearchProps } from '../../Input.types';
 import { BaseInput } from '../../base';
 
 const SearchIcon = () => (

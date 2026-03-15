@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { InputPasswordProps } from '../../types';
+import type { InputPasswordProps } from '../../Input.types';
 import { BaseInput } from '../../base';
 
 const EyeIcon = () => (

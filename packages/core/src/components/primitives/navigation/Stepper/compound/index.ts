@@ -48,4 +48,4 @@ export { StepperContent } from './Content';
 // Type Exports
 // ============================================================================
 
-export type { StepProps, StepContentProps } from '../types';
+export type { StepProps, StepContentProps } from '../Stepper.types';

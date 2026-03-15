@@ -63,8 +63,8 @@ import type {
   ToastOptions,
   ToastMethods,
   ToastProviderConfig,
-} from '../types';
-import { TOAST_DEFAULTS, TOAST_CONTAINER_DEFAULTS } from '../types';
+} from '../Toast.types';
+import { TOAST_DEFAULTS, TOAST_CONTAINER_DEFAULTS } from '../Toast.types';
 import { injectToastStyles } from './animations';
 import { clearToastMethods, setToastMethods } from './useToast';
 

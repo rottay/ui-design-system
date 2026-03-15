@@ -6,5 +6,4 @@
  * documentation-only path.
  */
 
-export * from './theme/tokens';
-export { default } from './theme/tokens';
+export * from './tokens/index';

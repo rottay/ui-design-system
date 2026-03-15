@@ -87,7 +87,7 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { MentionsProps } from './types';
+import type { MentionsProps } from './Mentions.types';
 
 // Export types
 export {
@@ -96,7 +96,7 @@ export {
   type MentionsPlacement,
   type MentionsStatus,
   MENTIONS_DEFAULTS,
-} from './types';
+} from './Mentions.types';
 
 /**
  * Create engine-aware Mentions component.

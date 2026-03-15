@@ -40,4 +40,4 @@
 export { TooltipTrigger } from './Trigger';
 export { TooltipContent } from './Content';
 
-export type { TooltipTriggerProps, TooltipContentProps } from '../types';
+export type { TooltipTriggerProps, TooltipContentProps } from '../Tooltip.types';

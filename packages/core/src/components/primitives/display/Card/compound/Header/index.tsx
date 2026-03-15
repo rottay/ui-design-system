@@ -44,7 +44,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { CardHeaderProps } from '../../types';
+import type { CardHeaderProps } from '../../Card.types';
 
 /**
  * Padding size to CSS value mapping.

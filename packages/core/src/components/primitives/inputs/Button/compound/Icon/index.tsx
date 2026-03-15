@@ -69,8 +69,8 @@
 
 import React, { forwardRef, useState } from 'react';
 import type { ReactNode, CSSProperties, MouseEvent } from 'react';
-import type { ButtonSize, ButtonVariant } from '../../types';
-import { SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from '../../types';
+import type { ButtonSize, ButtonVariant } from '../../Button.types';
+import { SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from '../../Button.types';
 
 export interface ButtonIconProps {
   /** Icon to display */

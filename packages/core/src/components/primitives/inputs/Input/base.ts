@@ -10,7 +10,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { InputProps } from './types';
+import type { InputProps } from './Input.types';
 
 export const BaseInput = createEngineComponent<InputProps>('Input', {
   classic: () => import('./engines/classic'),

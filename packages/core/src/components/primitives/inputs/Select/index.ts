@@ -97,7 +97,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { SelectProps } from './types';
+import type { SelectProps } from './Select.types';
 import { SelectOption, SelectOptGroup } from './compound';
 
 // Export types
@@ -113,7 +113,7 @@ export type {
   SelectOptGroupProps,
   SelectSearchState,
   SelectDropdownState,
-} from './types';
+} from './Select.types';
 
 // Export constants
 export {
@@ -121,7 +121,7 @@ export {
   SIZE_MAP,
   SELECT_CSS_PREFIX,
   SELECT_CSS_VARS,
-} from './types';
+} from './Select.types';
 
 // Export compound components
 export { SelectOption, SelectOptGroup };

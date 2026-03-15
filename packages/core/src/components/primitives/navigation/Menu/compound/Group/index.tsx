@@ -44,7 +44,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { MenuGroupProps } from '../../types';
+import type { MenuGroupProps } from '../../Menu.types';
 
 // ============================================================================
 // MenuGroup Component

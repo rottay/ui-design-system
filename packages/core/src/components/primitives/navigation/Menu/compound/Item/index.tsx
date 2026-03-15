@@ -41,7 +41,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { MenuItemProps } from '../../types';
+import type { MenuItemProps } from '../../Menu.types';
 
 // ============================================================================
 // MenuItem Component

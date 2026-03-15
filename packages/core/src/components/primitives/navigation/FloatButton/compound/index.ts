@@ -49,7 +49,7 @@
 // Type Exports
 // ============================================================================
 
-export type { FloatButtonGroupProps, FloatButtonBackTopProps } from '../types';
+export type { FloatButtonGroupProps, FloatButtonBackTopProps } from '../FloatButton.types';
 
 // Note: FloatButtonGroup and FloatButtonBackTop are implemented as compound components
 // on the main FloatButton export via the engine factory pattern.

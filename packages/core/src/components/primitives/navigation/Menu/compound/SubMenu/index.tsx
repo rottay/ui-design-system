@@ -55,7 +55,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import type { CSSProperties } from 'react';
-import type { MenuSubMenuProps } from '../../types';
+import type { MenuSubMenuProps } from '../../Menu.types';
 
 // ============================================================================
 // MenuSubMenu Component

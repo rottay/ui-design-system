@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Transfer as ModernTransfer } from './engines/modern';
 import { Transfer as RusticTransfer } from './engines/rustic';
-import type { TransferItem } from './types';
+import type { TransferItem } from './Transfer.types';
 import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
 
 const dataSource: TransferItem[] = [

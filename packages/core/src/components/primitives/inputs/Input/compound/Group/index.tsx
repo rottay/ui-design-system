@@ -7,7 +7,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { InputGroupProps } from '../../types';
+import type { InputGroupProps } from '../../Input.types';
 
 export function InputGroup({
   children,

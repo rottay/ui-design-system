@@ -109,7 +109,7 @@ import type {
   FormListProps,
   FormErrorListProps,
   FormInstance,
-} from './types';
+} from './Form.types';
 import * as classicEngine from './engines/classic';
 import * as modernEngine from './engines/modern';
 import * as rusticEngine from './engines/rustic';
@@ -130,7 +130,7 @@ export {
   type FormListOperation,
   FORM_DEFAULTS,
   FORM_ITEM_DEFAULTS,
-} from './types';
+} from './Form.types';
 
 // Create the base Form component with engine routing
 const FormBase = createEngineComponent<FormProps>('Form', {

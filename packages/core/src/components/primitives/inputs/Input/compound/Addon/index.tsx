@@ -7,8 +7,8 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { InputAddonProps } from '../../types';
-import { SIZE_MAP } from '../../types';
+import type { InputAddonProps } from '../../Input.types';
+import { SIZE_MAP } from '../../Input.types';
 
 export function InputAddon({
   children,

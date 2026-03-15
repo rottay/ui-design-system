@@ -111,7 +111,7 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { UploadProps, DraggerProps } from './types';
+import type { UploadProps, DraggerProps } from './Upload.types';
 
 export {
   type UploadProps,
@@ -121,7 +121,7 @@ export {
   type UploadListType,
   type UploadRequestOption,
   UPLOAD_DEFAULTS,
-} from './types';
+} from './Upload.types';
 
 const UploadBase = createEngineComponent<UploadProps>('Upload', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Upload })),

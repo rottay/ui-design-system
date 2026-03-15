@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Mentions } from './';
-import type { MentionsOption } from './types';
+import type { MentionsOption } from './Mentions.types';
 import { DesignSystemProvider } from '../../../../design-system';
 import { EngineComparison, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 

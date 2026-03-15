@@ -91,7 +91,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { TimePickerProps, TimeRangePickerProps } from './types';
+import type { TimePickerProps, TimeRangePickerProps } from './TimePicker.types';
 
 // Export types
 export {
@@ -101,7 +101,7 @@ export {
   type TimePickerStatus,
   type TimePickerPlacement,
   TIME_PICKER_DEFAULTS,
-} from './types';
+} from './TimePicker.types';
 
 // Create base TimePicker component
 const TimePickerBase = createEngineComponent<TimePickerProps>('TimePicker', {

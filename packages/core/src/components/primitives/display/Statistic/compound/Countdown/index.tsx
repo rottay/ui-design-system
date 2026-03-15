@@ -54,8 +54,8 @@
 'use client';
 
 import React, { forwardRef, useState, useEffect, useCallback } from 'react';
-import type { CountdownProps } from '../../types';
-import { STATISTIC_DEFAULTS } from '../../types';
+import type { CountdownProps } from '../../Statistic.types';
+import { STATISTIC_DEFAULTS } from '../../Statistic.types';
 
 /**
  * Props for the Countdown component.

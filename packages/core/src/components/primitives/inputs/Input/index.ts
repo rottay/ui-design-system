@@ -98,7 +98,7 @@
  * @package @rottay/design-system
  */
 
-import type { InputProps } from './types';
+import type { InputProps } from './Input.types';
 import { BaseInput } from './base';
 import { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea } from './compound';
 
@@ -111,8 +111,8 @@ export type {
   InputType,
   InputGroupProps,
   InputAddonProps,
-} from './types';
-export { INPUT_DEFAULTS } from './types';
+} from './Input.types';
+export { INPUT_DEFAULTS } from './Input.types';
 
 // Export compound components
 export { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea };

@@ -8,8 +8,8 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ImageSkeletonProps } from '../../types';
-import { RADIUS_MAP } from '../../types';
+import type { ImageSkeletonProps } from '../../Image.types';
+import { RADIUS_MAP } from '../../Image.types';
 
 /**
  * Image.Skeleton component for displaying loading state.

@@ -131,14 +131,14 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { AffixProps } from './types';
+import type { AffixProps } from './Affix.types';
 
 // ============================================================================
 // Type Exports
 // ============================================================================
 
-export type { AffixProps, AffixState } from './types';
-export { AFFIX_DEFAULTS } from './types';
+export type { AffixProps, AffixState } from './Affix.types';
+export { AFFIX_DEFAULTS } from './Affix.types';
 
 // ============================================================================
 // Base Component Export

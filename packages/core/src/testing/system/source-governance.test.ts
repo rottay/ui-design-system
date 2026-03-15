@@ -78,7 +78,7 @@ describe('source governance', () => {
   it('keeps the public token mirror out of runtime implementation code', () => {
     const runtimeFiles = collectSourceFiles(SRC_ROOT).filter(
       (filePath) =>
-        !filePath.includes('/theme/tokens/') &&
+        !filePath.includes('/tokens/') &&
         !filePath.includes('/testing/') &&
         !filePath.includes('/__tests__/')
     );
@@ -87,7 +87,7 @@ describe('source governance', () => {
     for (const file of runtimeFiles) {
       const source = readFileSync(file, 'utf8');
 
-      if (source.includes('theme/tokens/ts')) {
+      if (source.includes('tokens/ts')) {
         matches.push(file);
       }
     }

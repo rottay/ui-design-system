@@ -49,4 +49,4 @@ export { MenuDivider } from './Divider';
 // Type Exports
 // ============================================================================
 
-export type { MenuItemProps, MenuGroupProps, MenuSubMenuProps, MenuDividerProps } from '../types';
+export type { MenuItemProps, MenuGroupProps, MenuSubMenuProps, MenuDividerProps } from '../Menu.types';

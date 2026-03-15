@@ -41,4 +41,4 @@ export { TypographyText } from './Text';
 export { TypographyParagraph } from './Paragraph';
 export { TypographyLink } from './Link';
 
-export type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../types';
+export type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../Typography.types';

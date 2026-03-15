@@ -69,8 +69,8 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useId } from 'react';
 import type { CSSProperties } from 'react';
-import type { CheckboxGroupProps, CheckboxOption, CheckboxSize, CheckboxVariant } from '../../types';
-import { CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
+import type { CheckboxGroupProps, CheckboxOption, CheckboxSize, CheckboxVariant } from '../../Checkbox.types';
+import { CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../Checkbox.types';
 
 // Context for checkbox group
 interface CheckboxGroupContextValue {

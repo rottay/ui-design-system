@@ -53,7 +53,7 @@ import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
 } from '../../../../../../personality/primitives';
-import type { ParagraphProps } from '../../types';
+import type { ParagraphProps } from '../../Typography.types';
 import { ClassicParagraph } from '../../engines/classic';
 import { ModernParagraph } from '../../engines/modern';
 import { RusticParagraph } from '../../engines/rustic';

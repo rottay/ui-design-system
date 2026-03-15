@@ -43,7 +43,7 @@
 
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
-import type { LinkProps } from '../../types';
+import type { LinkProps } from '../../Typography.types';
 import { ClassicLink } from '../../engines/classic';
 import { ModernLink } from '../../engines/modern';
 import { RusticLink } from '../../engines/rustic';
