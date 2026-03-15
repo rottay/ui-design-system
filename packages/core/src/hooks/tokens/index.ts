@@ -151,7 +151,7 @@ const OVERLAY_TOKENS: OverlayTokens = {
  * @returns {DesignTokens} Object containing all design tokens
  */
 export function useTokens(): DesignTokens {
-  const { config } = useTenant();
+  const { config, vertical } = useTenant();
   const { profile } = useProductProfile();
   const { engine } = useEngineContext();
 
@@ -191,32 +191,41 @@ export function useTokens(): DesignTokens {
       : productProfileMotion;
     const densityScale = tenantTokenOverrides?.densityScale ?? productProfileDensityScale;
 
-    // 4. Personality: defaults + product profile + tenant overrides.
+    // 4. Personality: defaults + vertical + product profile + tenant overrides.
+    //
+    // Merge chain (lowest to highest priority):
+    //   DEFAULT_PERSONALITY -> vertical.personality -> productProfile.personality -> tenant.personality
+    const verticalPersonality = vertical?.personality;
     const productPersonality = profile.personality;
     const tenantPersonality = config.personality;
     const personality: PersonalityTokens = {
       animation: {
         ...DEFAULT_PERSONALITY.animation,
+        ...verticalPersonality?.animation,
         ...productPersonality?.animation,
         ...tenantPersonality?.animation,
       },
       chart: {
         ...DEFAULT_PERSONALITY.chart,
+        ...verticalPersonality?.chart,
         ...productPersonality?.chart,
         ...tenantPersonality?.chart,
       },
       typography: {
         ...DEFAULT_PERSONALITY.typography,
+        ...verticalPersonality?.typography,
         ...productPersonality?.typography,
         ...tenantPersonality?.typography,
       },
       accent: {
         ...DEFAULT_PERSONALITY.accent,
+        ...verticalPersonality?.accent,
         ...productPersonality?.accent,
         ...tenantPersonality?.accent,
       },
       card: {
         ...DEFAULT_PERSONALITY.card,
+        ...verticalPersonality?.card,
         ...productPersonality?.card,
         ...tenantPersonality?.card,
       },
@@ -298,6 +307,7 @@ export function useTokens(): DesignTokens {
     config.branding.secondaryColor,
     config.branding.accentColor,
     profile,
+    vertical,
   ]);
 }
 

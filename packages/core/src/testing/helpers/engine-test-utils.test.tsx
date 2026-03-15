@@ -90,12 +90,12 @@ describe('engine-test-utils', () => {
     expect(isStableEngine('classic')).toBe(true);
     expect(isStableEngine('modern')).toBe(true);
     expect(isStableEngine('rustic')).toBe(true);
-    expect(isStableEngine('athena')).toBe(false);
+    expect(isStableEngine('custom')).toBe(false);
     expect(isStableEngine('unknown')).toBe(false);
 
     expect(getEngineDisplayName('classic')).toContain('Classic');
     expect(getEngineDisplayName('modern')).toContain('Modern');
     expect(getEngineDisplayName('rustic')).toContain('Rustic');
-    expect(getEngineDisplayName('athena')).toContain('Athena');
+    expect(getEngineDisplayName('custom')).toContain('Custom');
   });
 });

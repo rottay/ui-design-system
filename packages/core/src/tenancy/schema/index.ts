@@ -26,7 +26,7 @@ export function isValidPlan(plan: unknown): plan is TenantPlan {
  * Validate engine name
  */
 export function isValidEngineName(engine: unknown): engine is EngineName {
-  return engine === 'classic' || engine === 'modern' || engine === 'rustic' || engine === 'athena';
+  return engine === 'classic' || engine === 'modern' || engine === 'rustic' || engine === 'custom';
 }
 
 /**
@@ -53,7 +53,9 @@ export function isValidTenantConfig(config: unknown): config is TenantConfig {
       (c.fallbackLocale === undefined || isValidLocale(c.fallbackLocale)) &&
       isValidPlan(c.plan) &&
       Array.isArray(c.features) &&
-      isValidBranding(c.branding)
+      isValidBranding(c.branding) &&
+      (c.vertical === undefined || typeof c.vertical === 'string') &&
+      (c.componentPack === undefined || typeof c.componentPack === 'string')
   );
 }
 
@@ -81,5 +83,7 @@ export function createTenantConfig(partial: Partial<TenantConfig> & { slug: stri
       accentColor: partial.branding?.accentColor,
     },
     customTranslations: partial.customTranslations,
+    vertical: partial.vertical,
+    componentPack: partial.componentPack,
   };
 }

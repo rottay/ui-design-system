@@ -12,7 +12,7 @@
  * - **Context-aware**: Respects EngineProvider settings
  * - **Override support**: Per-component engine override via prop
  * - **Error handling**: Built-in error boundary with fallbacks
- * - **Athena support**: Custom component registration
+ * - **Custom engine support**: Custom component registration
  *
  * @example Creating a component
  * ```tsx
@@ -42,7 +42,7 @@ import {
   type RefAttributes,
 } from 'react';
 import { useEngineContext } from './EngineProvider';
-import { createAthenaWrapper } from './athena';
+import { createCustomWrapper } from './custom';
 import { EngineErrorBoundary } from './boundary';
 import type { EngineName } from '../contracts';
 
@@ -56,8 +56,8 @@ export interface EngineLoaders<P> {
   modern: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
   /** Loader for Rustic engine (Vanilla HTML/CSS) */
   rustic: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
-  /** Optional loader for Athena engine (custom implementations) */
-  athena?: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
+  /** Optional loader for Custom engine (custom implementations) */
+  custom?: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
 }
 
 /**
@@ -66,8 +66,8 @@ export interface EngineLoaders<P> {
 export interface CreateEngineComponentOptions {
   /** Custom fallback UI displayed while the component is lazy loading */
   fallback?: React.ReactNode;
-  /** Whether to wrap with Athena for custom component support (default: true) */
-  athenaEnabled?: boolean;
+  /** Whether to wrap with custom engine for custom component support (default: true) */
+  customEnabled?: boolean;
   /** Fallback engine to use if the primary engine fails to load */
   fallbackEngine?: EngineName;
   /** Callback invoked when engine loading encounters an error */
@@ -83,19 +83,19 @@ export function createEngineComponent<P extends object>(
   loaders: EngineLoaders<P>,
   options: CreateEngineComponentOptions = {}
 ): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> {
-  const { fallback = null, athenaEnabled = true, fallbackEngine, onError } = options;
+  const { fallback = null, customEnabled = true, fallbackEngine, onError } = options;
 
-  // Create Athena wrapper that checks for registered components
-  const athenaLoader = athenaEnabled
-    ? createAthenaWrapper<P>(displayName, loaders.athena || loaders.rustic)
-    : (loaders.athena || loaders.rustic);
+  // Create custom engine wrapper that checks for registered components
+  const customLoader = customEnabled
+    ? createCustomWrapper<P>(displayName, loaders.custom || loaders.rustic)
+    : (loaders.custom || loaders.rustic);
 
   // Create lazy components for each engine
   const components: Record<EngineName, LazyExoticComponent<ComponentType<any>>> = {
     classic: lazy(loaders.classic as () => Promise<{ default: ComponentType<any> }>),
     modern: lazy(loaders.modern as () => Promise<{ default: ComponentType<any> }>),
     rustic: lazy(loaders.rustic as () => Promise<{ default: ComponentType<any> }>),
-    athena: lazy(athenaLoader as () => Promise<{ default: ComponentType<any> }>),
+    custom: lazy(customLoader as () => Promise<{ default: ComponentType<any> }>),
   };
 
   // Create the router component

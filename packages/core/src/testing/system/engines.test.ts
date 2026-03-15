@@ -18,28 +18,28 @@ describe('Engine Registry', () => {
       expect(ENGINE_REGISTRY.classic).toBeDefined();
       expect(ENGINE_REGISTRY.modern).toBeDefined();
       expect(ENGINE_REGISTRY.rustic).toBeDefined();
-      expect(ENGINE_REGISTRY.athena).toBeDefined();
+      expect(ENGINE_REGISTRY.custom).toBeDefined();
     });
 
     it('should have correct engine names', () => {
       expect(ENGINE_REGISTRY.classic.name).toBe('classic');
       expect(ENGINE_REGISTRY.modern.name).toBe('modern');
       expect(ENGINE_REGISTRY.rustic.name).toBe('rustic');
-      expect(ENGINE_REGISTRY.athena.name).toBe('athena');
+      expect(ENGINE_REGISTRY.custom.name).toBe('custom');
     });
 
     it('should have correct library assignments', () => {
       expect(ENGINE_REGISTRY.classic.library).toBe('antd');
       expect(ENGINE_REGISTRY.modern.library).toBe('daisyui');
       expect(ENGINE_REGISTRY.rustic.library).toBe('html');
-      expect(ENGINE_REGISTRY.athena.library).toBe('custom');
+      expect(ENGINE_REGISTRY.custom.library).toBe('custom');
     });
 
     it('should have status for each engine', () => {
       expect(ENGINE_REGISTRY.classic.status).toBe('stable');
       expect(ENGINE_REGISTRY.modern.status).toBe('stable');
       expect(ENGINE_REGISTRY.rustic.status).toBe('stable');
-      expect(ENGINE_REGISTRY.athena.status).toBe('experimental');
+      expect(ENGINE_REGISTRY.custom.status).toBe('experimental');
     });
   });
 
@@ -54,7 +54,7 @@ describe('Engine Registry', () => {
       expect(getEngine('classic').library).toBe('antd');
       expect(getEngine('modern').library).toBe('daisyui');
       expect(getEngine('rustic').library).toBe('html');
-      expect(getEngine('athena').library).toBe('custom');
+      expect(getEngine('custom').library).toBe('custom');
     });
   });
 
@@ -64,7 +64,7 @@ describe('Engine Registry', () => {
       expect(engines).toContain('classic');
       expect(engines).toContain('modern');
       expect(engines).toContain('rustic');
-      expect(engines).toContain('athena');
+      expect(engines).toContain('custom');
     });
 
     it('should return exactly 4 engines', () => {
@@ -78,7 +78,7 @@ describe('Engine Registry', () => {
       expect(stableEngines).toContain('classic');
       expect(stableEngines).toContain('modern');
       expect(stableEngines).toContain('rustic');
-      expect(stableEngines).not.toContain('athena');
+      expect(stableEngines).not.toContain('custom');
     });
 
     it('should return 3 stable engines', () => {
@@ -91,7 +91,7 @@ describe('Engine Registry', () => {
       expect(isValidEngine('classic')).toBe(true);
       expect(isValidEngine('modern')).toBe(true);
       expect(isValidEngine('rustic')).toBe(true);
-      expect(isValidEngine('athena')).toBe(true);
+      expect(isValidEngine('custom')).toBe(true);
     });
 
     it('should return false for invalid engine names', () => {

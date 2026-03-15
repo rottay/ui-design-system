@@ -82,12 +82,12 @@ type Shape = 'circle' | 'square' | 'rounded';
 
 ### EngineName
 ```typescript
-type EngineName = 'classic' | 'modern' | 'rustic' | 'athena';
+type EngineName = 'classic' | 'modern' | 'rustic' | 'custom';
 ```
 - `classic`: Ant Design (enterprise, feature-rich)
 - `modern`: DaisyUI/Tailwind (lightweight, utility-first)
 - `rustic`: Vanilla HTML/CSS (minimal, accessible)
-- `athena`: Pluggable custom implementations (experimental)
+- `custom`: Pluggable custom implementations (experimental)
 
 ### EngineAwareProps
 ```typescript

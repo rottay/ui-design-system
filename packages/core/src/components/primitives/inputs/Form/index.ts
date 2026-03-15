@@ -152,10 +152,10 @@ const FORM_ENGINES = {
   classic: classicEngine as unknown as FormEngineBinding,
   modern: modernEngine as unknown as FormEngineBinding,
   rustic: rusticEngine as unknown as FormEngineBinding,
-} as const satisfies Record<Exclude<EngineName, 'athena'>, FormEngineBinding>;
+} as const satisfies Record<Exclude<EngineName, 'custom'>, FormEngineBinding>;
 
 function resolveFormEngine(engine: EngineName) {
-  if (engine === 'athena') {
+  if (engine === 'custom') {
     return classicEngine;
   }
 

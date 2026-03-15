@@ -111,11 +111,11 @@ describe('css-test-utils', () => {
     expect(hasEngineClasses(element, 'classic')).toBe(true);
     expect(hasEngineClasses(element, 'modern')).toBe(true);
     expect(hasEngineClasses(element, 'rustic')).toBe(true);
-    expect(hasEngineClasses(element, 'athena')).toBe(false);
+    expect(hasEngineClasses(element, 'custom')).toBe(false);
     expect(getEngineClasses(element, 'classic')).toEqual(['ant-btn', 'ant-btn-primary']);
     expect(getEngineClasses(element, 'modern')).toEqual(['btn', 'btn-primary']);
     expect(getEngineClasses(element, 'rustic')).toEqual(['ds-button']);
-    expect(getEngineClasses(element, 'athena')).toEqual([]);
+    expect(getEngineClasses(element, 'custom')).toEqual([]);
   });
 
   it('creates and loads tenant CSS fixtures', async () => {

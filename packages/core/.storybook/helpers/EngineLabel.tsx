@@ -33,8 +33,8 @@ const ENGINE_CONFIG: Record<EngineName, { label: string; description: string; co
     color: '#059669',
     bg: '#d1fae5',
   },
-  athena: {
-    label: 'Athena',
+  custom: {
+    label: 'Custom',
     description: 'Custom Engine',
     color: '#dc2626',
     bg: '#fee2e2',

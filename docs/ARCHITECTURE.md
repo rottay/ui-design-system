@@ -95,6 +95,45 @@ factory: useEngineContext() → ¿Qué engine está activo?
 | **Hermes** | Tailwind 4.x / DaisyUI | 76 components + theme.css (1,047 lines) |
 | **Apollo** | Vanilla CSS | 76 components + theme.css (1,087 lines) |
 
+### 1.3.1 Vertical Presets
+
+Verticals represent industry-specific configuration bundles. Each Rottay application maps to a vertical that provides a complete set of defaults: engine, personality, density, and surface preferences.
+
+| Vertical | App | Engine | Density | Personality |
+|----------|-----|--------|---------|-------------|
+| **evnto** | app-evnto | modern | spacious | Playful, bounce entrance, spring physics |
+| **bithire** | app-bithire | classic | compact | Formal, fade entrance, data-dense |
+| **platform** | app-platform | classic | comfortable | Neutral, balanced animations |
+
+**Resolution chain (highest to lowest priority):**
+
+```
+DesignSystemProvider props (forceEngine, productProfile)
+  > Tenant config (personality, tokenOverrides)
+    > Vertical preset (personality, engine, defaultProductProfile)
+      > Product profile (personality, tokenOverrides)
+        > Engine defaults
+          > DEFAULT_PERSONALITY
+```
+
+**Usage:**
+
+```tsx
+<DesignSystemProvider vertical="evnto" tenantSlug="acme">
+  <App />
+</DesignSystemProvider>
+```
+
+When a vertical is provided:
+- Its `engine` is used as the default (unless `forceEngine` overrides it)
+- Its `defaultProductProfile` is used when no explicit `productProfile` prop is given
+- Its `personality` is merged into the personality chain between DEFAULT and product profile
+
+Files:
+- `src/verticals/types.ts` -- VerticalKey, VerticalPreset types
+- `src/verticals/registry.ts` -- VERTICAL_REGISTRY, getVerticalPreset()
+- `src/verticals/index.ts` -- Barrel exports
+
 ### 1.4 Token System (CSS Cascade) - IMPORTANTE
 
 **Concepto clave:** Los valores hardcodeados van en `default.css` y `tenants/`. Los engines SOLO usan `var(--ds-*)`.

@@ -44,6 +44,11 @@ export * from './tenancy';
 export * from './product-profiles';
 
 // ============================================
+// VERTICALS (presets, registry, types)
+// ============================================
+export * from './verticals';
+
+// ============================================
 // I18N (locales, provider, hooks)
 // ============================================
 export * from './i18n';

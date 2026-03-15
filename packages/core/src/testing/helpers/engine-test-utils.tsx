@@ -9,7 +9,7 @@ import { DesignSystemProvider } from '../../bootstrap';
 import type { EngineName, TenantConfig } from '../../contracts';
 
 /**
- * Stable engines for testing (excludes experimental 'athena')
+ * Stable engines for testing (excludes experimental 'custom')
  */
 export const STABLE_ENGINES: readonly EngineName[] = ['classic', 'modern', 'rustic'] as const;
 export type StableEngineName = (typeof STABLE_ENGINES)[number];
@@ -203,7 +203,7 @@ export function getEngineDisplayName(engine: EngineName): string {
     classic: 'Classic (Ant Design)',
     modern: 'Modern (DaisyUI)',
     rustic: 'Rustic (Vanilla)',
-    athena: 'Athena (Custom)',
+    custom: 'Custom (Pluggable)',
   };
   return names[engine];
 }

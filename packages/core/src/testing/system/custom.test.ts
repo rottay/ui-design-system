@@ -1,110 +1,110 @@
 /**
- * Athena Pluggable Engine Tests
+ * Custom Pluggable Engine Tests
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
-  registerAthenaComponent,
-  registerAthenaComponents,
-  unregisterAthenaComponent,
-  clearAthenaRegistry,
-  hasAthenaComponent,
-  getAthenaComponent,
+  registerCustomComponent,
+  registerCustomComponents,
+  unregisterCustomComponent,
+  clearCustomRegistry,
+  hasCustomComponent,
+  getCustomComponent,
   getRegisteredComponents,
   getRegisteredComponentCount,
-  configureAthena,
-  getAthenaConfig,
-  createAthenaWrapper,
-  useAthenaStatus,
-} from '../../engines/athena';
+  configureCustomEngine,
+  getCustomEngineConfig,
+  createCustomWrapper,
+  useCustomStatus,
+} from '../../engines/custom';
 
-describe('Athena Engine', () => {
+describe('Custom Engine', () => {
   beforeEach(() => {
-    clearAthenaRegistry();
+    clearCustomRegistry();
     // Reset config to defaults
-    configureAthena({
+    configureCustomEngine({
       fallbackEngine: 'classic',
       warnOnFallback: true,
       logger: undefined,
     });
   });
 
-  describe('registerAthenaComponent', () => {
+  describe('registerCustomComponent', () => {
     it('should register a component', () => {
       const MockButton = () => null;
-      registerAthenaComponent('Button', MockButton);
-      expect(hasAthenaComponent('Button')).toBe(true);
+      registerCustomComponent('Button', MockButton);
+      expect(hasCustomComponent('Button')).toBe(true);
     });
 
     it('should allow retrieving registered component', () => {
       const MockButton = () => null;
-      registerAthenaComponent('Button', MockButton);
-      expect(getAthenaComponent('Button')).toBe(MockButton);
+      registerCustomComponent('Button', MockButton);
+      expect(getCustomComponent('Button')).toBe(MockButton);
     });
   });
 
-  describe('registerAthenaComponents', () => {
+  describe('registerCustomComponents', () => {
     it('should register multiple components at once', () => {
       const MockButton = () => null;
       const MockAlert = () => null;
       const MockCard = () => null;
 
-      registerAthenaComponents({
+      registerCustomComponents({
         Button: MockButton,
         Alert: MockAlert,
         Card: MockCard,
       });
 
-      expect(hasAthenaComponent('Button')).toBe(true);
-      expect(hasAthenaComponent('Alert')).toBe(true);
-      expect(hasAthenaComponent('Card')).toBe(true);
+      expect(hasCustomComponent('Button')).toBe(true);
+      expect(hasCustomComponent('Alert')).toBe(true);
+      expect(hasCustomComponent('Card')).toBe(true);
     });
   });
 
-  describe('unregisterAthenaComponent', () => {
+  describe('unregisterCustomComponent', () => {
     it('should remove a registered component', () => {
       const MockButton = () => null;
-      registerAthenaComponent('Button', MockButton);
-      expect(hasAthenaComponent('Button')).toBe(true);
+      registerCustomComponent('Button', MockButton);
+      expect(hasCustomComponent('Button')).toBe(true);
 
-      const result = unregisterAthenaComponent('Button');
+      const result = unregisterCustomComponent('Button');
       expect(result).toBe(true);
-      expect(hasAthenaComponent('Button')).toBe(false);
+      expect(hasCustomComponent('Button')).toBe(false);
     });
 
     it('should return false for non-existent component', () => {
-      const result = unregisterAthenaComponent('NonExistent');
+      const result = unregisterCustomComponent('NonExistent');
       expect(result).toBe(false);
     });
   });
 
-  describe('clearAthenaRegistry', () => {
+  describe('clearCustomRegistry', () => {
     it('should remove all registered components', () => {
-      registerAthenaComponents({
+      registerCustomComponents({
         Button: () => null,
         Alert: () => null,
       });
       expect(getRegisteredComponentCount()).toBe(2);
 
-      clearAthenaRegistry();
+      clearCustomRegistry();
       expect(getRegisteredComponentCount()).toBe(0);
     });
   });
 
-  describe('hasAthenaComponent', () => {
+  describe('hasCustomComponent', () => {
     it('should return true for registered components', () => {
-      registerAthenaComponent('Button', () => null);
-      expect(hasAthenaComponent('Button')).toBe(true);
+      registerCustomComponent('Button', () => null);
+      expect(hasCustomComponent('Button')).toBe(true);
     });
 
     it('should return false for unregistered components', () => {
-      expect(hasAthenaComponent('NonExistent')).toBe(false);
+      expect(hasCustomComponent('NonExistent')).toBe(false);
     });
   });
 
   describe('getRegisteredComponents', () => {
     it('should return list of registered component names', () => {
-      registerAthenaComponents({
+      registerCustomComponents({
         Button: () => null,
         Alert: () => null,
         Card: () => null,
@@ -125,68 +125,68 @@ describe('Athena Engine', () => {
     it('should return correct count', () => {
       expect(getRegisteredComponentCount()).toBe(0);
 
-      registerAthenaComponent('Button', () => null);
+      registerCustomComponent('Button', () => null);
       expect(getRegisteredComponentCount()).toBe(1);
 
-      registerAthenaComponent('Alert', () => null);
+      registerCustomComponent('Alert', () => null);
       expect(getRegisteredComponentCount()).toBe(2);
     });
   });
 
-  describe('configureAthena', () => {
+  describe('configureCustomEngine', () => {
     it('should update configuration', () => {
-      configureAthena({
+      configureCustomEngine({
         fallbackEngine: 'modern',
         warnOnFallback: false,
       });
 
-      const config = getAthenaConfig();
+      const config = getCustomEngineConfig();
       expect(config.fallbackEngine).toBe('modern');
       expect(config.warnOnFallback).toBe(false);
     });
 
     it('should preserve unmodified config values', () => {
-      configureAthena({ warnOnFallback: false });
-      const config = getAthenaConfig();
+      configureCustomEngine({ warnOnFallback: false });
+      const config = getCustomEngineConfig();
       expect(config.fallbackEngine).toBe('classic'); // default
     });
 
     it('should invoke the logger during register / unregister / clear flows', () => {
       const logger = vi.fn();
-      configureAthena({ logger });
+      configureCustomEngine({ logger });
 
-      registerAthenaComponent('Button', () => null);
-      unregisterAthenaComponent('Button');
-      clearAthenaRegistry();
+      registerCustomComponent('Button', () => null);
+      unregisterCustomComponent('Button');
+      clearCustomRegistry();
 
-      expect(logger).toHaveBeenCalledWith('Registered Athena component: Button', 'info');
-      expect(logger).toHaveBeenCalledWith('Unregistered Athena component: Button', 'info');
-      expect(logger).toHaveBeenCalledWith('Cleared all Athena components', 'info');
+      expect(logger).toHaveBeenCalledWith('Registered custom component: Button', 'info');
+      expect(logger).toHaveBeenCalledWith('Unregistered custom component: Button', 'info');
+      expect(logger).toHaveBeenCalledWith('Cleared all custom components', 'info');
     });
   });
 
-  describe('getAthenaConfig', () => {
+  describe('getCustomEngineConfig', () => {
     it('should return default config', () => {
-      const config = getAthenaConfig();
+      const config = getCustomEngineConfig();
       expect(config.fallbackEngine).toBe('classic');
       expect(config.warnOnFallback).toBe(true);
     });
 
     it('should return a copy of config', () => {
-      const config1 = getAthenaConfig();
-      const config2 = getAthenaConfig();
+      const config1 = getCustomEngineConfig();
+      const config2 = getCustomEngineConfig();
       expect(config1).not.toBe(config2);
       expect(config1).toEqual(config2);
     });
   });
 
-  describe('createAthenaWrapper', () => {
-    it('should resolve registered athena components before falling back', async () => {
+  describe('createCustomWrapper', () => {
+    it('should resolve registered custom components before falling back', async () => {
       const MockButton = () => null;
       const fallbackLoader = vi.fn(async () => ({ default: (() => null) as any }));
 
-      registerAthenaComponent('Button', MockButton);
-      const loader = createAthenaWrapper('Button', fallbackLoader);
+      registerCustomComponent('Button', MockButton);
+      const loader = createCustomWrapper('Button', fallbackLoader);
       const resolved = await loader();
 
       expect(resolved.default).toBe(MockButton);
@@ -198,44 +198,44 @@ describe('Athena Engine', () => {
       const Fallback = () => null;
       const fallbackLoader = vi.fn(async () => ({ default: Fallback }));
 
-      configureAthena({
+      configureCustomEngine({
         fallbackEngine: 'rustic',
         warnOnFallback: true,
         logger,
       });
 
-      const loader = createAthenaWrapper('Input', fallbackLoader);
+      const loader = createCustomWrapper('Input', fallbackLoader);
       const resolved = await loader();
 
       expect(resolved.default).toBe(Fallback);
       expect(fallbackLoader).toHaveBeenCalledTimes(1);
       expect(logger).toHaveBeenCalledWith(
-        'No Athena implementation for "Input", using rustic fallback',
+        'No custom implementation for "Input", using rustic fallback',
         'warn'
       );
     });
 
     it('should skip fallback warnings when warnOnFallback is disabled', async () => {
       const logger = vi.fn();
-      configureAthena({
+      configureCustomEngine({
         fallbackEngine: 'modern',
         warnOnFallback: false,
         logger,
       });
 
-      const loader = createAthenaWrapper('Card', async () => ({ default: (() => null) as any }));
+      const loader = createCustomWrapper('Card', async () => ({ default: (() => null) as any }));
       await loader();
 
       expect(logger).not.toHaveBeenCalled();
     });
   });
 
-  describe('useAthenaStatus', () => {
+  describe('useCustomStatus', () => {
     it('should expose the current registry and config snapshot', () => {
-      registerAthenaComponent('Alert', () => null);
-      configureAthena({ fallbackEngine: 'modern', warnOnFallback: false });
+      registerCustomComponent('Alert', () => null);
+      configureCustomEngine({ fallbackEngine: 'modern', warnOnFallback: false });
 
-      const status = useAthenaStatus();
+      const status = useCustomStatus();
 
       expect(status.registeredComponents).toContain('Alert');
       expect(status.componentCount).toBe(1);

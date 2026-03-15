@@ -6,9 +6,9 @@ import type { ComponentExtensions } from '../extensions';
  * - classic: Ant Design (enterprise, structured, corporate)
  * - modern: DaisyUI/Tailwind (contemporary, rounded, glassmorphism)
  * - rustic: Vanilla HTML/CSS (minimal, spacious, understated)
- * - athena: Pluggable custom implementations
+ * - custom: Pluggable custom implementations
  */
-export type EngineName = 'classic' | 'modern' | 'rustic' | 'athena';
+export type EngineName = 'classic' | 'modern' | 'rustic' | 'custom';
 
 /**
  * Props que permiten seleccionar el engine de renderizado.

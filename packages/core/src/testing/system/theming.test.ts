@@ -400,7 +400,7 @@ describe('Engine-Specific CSS Variables', () => {
 
     it('all engines have defined class prefixes', () => {
       STABLE_ENGINES.forEach((engine) => {
-        if (engine !== 'athena') {
+        if (engine !== 'custom') {
           expect(ENGINE_CLASS_PREFIXES[engine as keyof typeof ENGINE_CLASS_PREFIXES]).toBeDefined();
         }
       });

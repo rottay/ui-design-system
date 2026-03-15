@@ -85,6 +85,8 @@ import { FeatureProvider } from '../features';
 import { I18nProvider } from '../i18n';
 import type { TenantConfig, EngineName, ProductProfile, ProductProfileKey } from '../contracts';
 import type { LocaleTranslations, SupportedLocale } from '../i18n/types';
+import type { VerticalKey, VerticalPreset } from '../verticals/types';
+import { getVerticalPreset } from '../verticals/registry';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenancy/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 
@@ -116,6 +118,18 @@ export interface DesignSystemProviderProps {
    * can move fast locally without turning the DS into a bottleneck.
    */
   productProfile?: ProductProfileKey | ProductProfile;
+  /**
+   * Industry vertical preset.
+   *
+   * Accepts a registered vertical key (e.g., 'evnto', 'bithire', 'platform')
+   * or an inline VerticalPreset object. When provided, the vertical's engine
+   * is used as the default (unless forceEngine overrides it) and the vertical's
+   * defaultProductProfile is used when no explicit productProfile is given.
+   *
+   * The vertical personality is merged into the personality chain between
+   * DEFAULT_PERSONALITY and the product profile personality.
+   */
+  vertical?: VerticalKey | VerticalPreset;
   /** Force a specific engine */
   forceEngine?: EngineName;
   /** Force a specific theme */
@@ -284,6 +298,7 @@ export function DesignSystemProvider({
   tenantConfig: propTenantConfig,
   tenantOverrides,
   productProfile,
+  vertical,
   forceEngine,
   forceTheme,
   locale: forcedLocale,
@@ -335,7 +350,16 @@ export function DesignSystemProvider({
     return <LoadingScreen />;
   }
 
-  const engine = forceEngine ?? tenantConfig.engine ?? 'classic';
+  // Resolve the vertical preset (if any)
+  const resolvedVertical: VerticalPreset | undefined =
+    vertical == null
+      ? undefined
+      : typeof vertical === 'string'
+        ? getVerticalPreset(vertical)
+        : vertical;
+
+  // Engine: forceEngine > tenant config > vertical preset > 'classic'
+  const engine = forceEngine ?? tenantConfig.engine ?? resolvedVertical?.engine ?? 'classic';
   const theme = forceTheme ?? tenantConfig.theme ?? 'base';
   const locale = forcedLocale ?? tenantConfig.locale ?? 'en';
   const fallbackLocale = forcedFallbackLocale ?? tenantConfig.fallbackLocale ?? locale;
@@ -344,9 +368,12 @@ export function DesignSystemProvider({
     appCustomTranslations
   );
 
+  // Product profile: explicit prop > vertical default > undefined (falls back to generic.default)
+  const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
+
   return (
-    <TenantProvider config={tenantConfig}>
-      <ProductProfileProvider profile={productProfile}>
+    <TenantProvider config={tenantConfig} vertical={resolvedVertical}>
+      <ProductProfileProvider profile={resolvedProductProfile}>
         <I18nProvider
           locale={locale}
           fallbackLocale={fallbackLocale}

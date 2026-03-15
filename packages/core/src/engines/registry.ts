@@ -14,7 +14,7 @@
  * - `classic`: Ant Design (stable) - Enterprise, structured
  * - `modern`: DaisyUI (stable) - Contemporary, rounded
  * - `rustic`: Vanilla (stable) - Minimal, spacious
- * - `athena`: Pluggable (experimental) - Custom implementations
+ * - `custom`: Pluggable (experimental) - Custom implementations
  *
  * @example Get engine info
  * ```tsx
@@ -46,7 +46,7 @@ import type { EngineName, EngineConfig } from '../contracts';
  * - classic: Ant Design - Enterprise, structured, corporate feel
  * - modern: DaisyUI/Tailwind - Contemporary, rounded, glassmorphism
  * - rustic: Pure HTML/CSS - Minimal, spacious, understated
- * - athena: Pluggable - Custom implementation support
+ * - custom: Pluggable - Custom implementation support
  */
 export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
   classic: {
@@ -67,9 +67,9 @@ export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
     library: 'html',
     status: 'stable',
   },
-  athena: {
-    name: 'athena',
-    displayName: 'Athena (Pluggable)',
+  custom: {
+    name: 'custom',
+    displayName: 'Custom (Pluggable)',
     library: 'custom',
     status: 'experimental',
   },
@@ -78,7 +78,7 @@ export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
 /**
  * Retrieves the configuration for a specific engine by name.
  *
- * @param name - The engine name ('classic', 'modern', 'rustic', or 'athena')
+ * @param name - The engine name ('classic', 'modern', 'rustic', or 'custom')
  * @returns The engine configuration object containing name, displayName, library, and status
  */
 export const getEngine = (name: EngineName): EngineConfig => {

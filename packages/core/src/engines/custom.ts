@@ -1,10 +1,10 @@
 /**
- * @fileoverview Athena Engine - Rottay Design System
+ * @fileoverview Custom Engine - Rottay Design System
  * @description Pluggable engine system that allows developers to register
  * custom component implementations, overriding default engine behavior.
  *
  * @remarks
- * Athena enables complete component customization:
+ * The Custom engine enables complete component customization:
  *
  * - **Registration**: Add custom implementations for any component
  * - **Fallback**: Gracefully fall back to other engines when not registered
@@ -19,17 +19,17 @@
  *
  * @example Register custom component
  * ```tsx
- * import { registerAthenaComponent } from '@rottay/design-system';
+ * import { registerCustomComponent } from '@rottay/design-system';
  *
- * registerAthenaComponent('Button', MyCustomButton);
- * registerAthenaComponent('Card', MyCustomCard);
+ * registerCustomComponent('Button', MyCustomButton);
+ * registerCustomComponent('Card', MyCustomCard);
  * ```
  *
- * @example Configure Athena
+ * @example Configure Custom Engine
  * ```tsx
- * import { configureAthena } from '@rottay/design-system';
+ * import { configureCustomEngine } from '@rottay/design-system';
  *
- * configureAthena({
+ * configureCustomEngine({
  *   fallbackEngine: 'rustic',
  *   warnOnFallback: false,
  * });
@@ -37,14 +37,14 @@
  *
  * @example Check registration status
  * ```tsx
- * const { registeredComponents, hasComponent } = useAthenaStatus();
+ * const { registeredComponents, hasComponent } = useCustomStatus();
  * console.log(registeredComponents); // ['Button', 'Card']
  * ```
  *
- * @see {@link registerAthenaComponent} - Register components
- * @see {@link configureAthena} - Configure behavior
- * @see {@link useAthenaStatus} - Check status
- * @module System/Engines/Athena
+ * @see {@link registerCustomComponent} - Register components
+ * @see {@link configureCustomEngine} - Configure behavior
+ * @see {@link useCustomStatus} - Check status
+ * @module System/Engines/Custom
  * @category System
  * @package @rottay/design-system
  */
@@ -57,14 +57,14 @@ import type { ComponentType, ForwardRefExoticComponent, PropsWithoutRef, RefAttr
 type ComponentRegistry = Map<string, ComponentType<unknown>>;
 
 /**
- * Global registry of custom Athena implementations
+ * Global registry of custom engine implementations
  */
-const athenaRegistry: ComponentRegistry = new Map();
+const customRegistry: ComponentRegistry = new Map();
 
 /**
- * Configuration for Athena engine
+ * Configuration for Custom engine
  */
-export interface AthenaConfig {
+export interface CustomEngineConfig {
   /** Fallback engine when component is not registered */
   fallbackEngine?: 'classic' | 'modern' | 'rustic';
   /** Whether to warn when using fallback */
@@ -73,21 +73,21 @@ export interface AthenaConfig {
   logger?: (message: string, level: 'info' | 'warn' | 'error') => void;
 }
 
-let athenaConfig: AthenaConfig = {
+let customConfig: CustomEngineConfig = {
   fallbackEngine: 'classic',
   warnOnFallback: true,
 };
 
 /**
- * Configures the Athena engine globally with custom options.
+ * Configures the Custom engine globally with custom options.
  * Call this at application startup to customize fallback behavior and logging.
  *
  * @example
  * ```tsx
- * import { configureAthena } from '@rottay/design-system';
+ * import { configureCustomEngine } from '@rottay/design-system';
  *
  * // Configure at app initialization
- * configureAthena({
+ * configureCustomEngine({
  *   fallbackEngine: 'rustic',
  *   warnOnFallback: process.env.NODE_ENV === 'development',
  *   logger: (message, level) => {
@@ -98,26 +98,26 @@ let athenaConfig: AthenaConfig = {
  *
  * @param config - Partial configuration options to merge with existing config
  */
-export function configureAthena(config: Partial<AthenaConfig>): void {
-  athenaConfig = { ...athenaConfig, ...config };
+export function configureCustomEngine(config: Partial<CustomEngineConfig>): void {
+  customConfig = { ...customConfig, ...config };
 }
 
 /**
- * Returns a copy of the current Athena engine configuration.
+ * Returns a copy of the current Custom engine configuration.
  *
  * @example
  * ```tsx
- * import { getAthenaConfig } from '@rottay/design-system';
+ * import { getCustomEngineConfig } from '@rottay/design-system';
  *
- * const config = getAthenaConfig();
+ * const config = getCustomEngineConfig();
  * console.log(config.fallbackEngine); // 'classic'
  * console.log(config.warnOnFallback); // true
  * ```
  *
- * @returns A copy of the current Athena configuration object
+ * @returns A copy of the current Custom engine configuration object
  */
-export function getAthenaConfig(): AthenaConfig {
-  return { ...athenaConfig };
+export function getCustomEngineConfig(): CustomEngineConfig {
+  return { ...customConfig };
 }
 
 /**
@@ -128,20 +128,20 @@ export function getAthenaConfig(): AthenaConfig {
  *
  * @example
  * ```tsx
- * import { registerAthenaComponent } from '@rottay/design-system';
+ * import { registerCustomComponent } from '@rottay/design-system';
  * import { MyCustomButton } from './MyCustomButton';
  *
- * registerAthenaComponent('Button', MyCustomButton);
+ * registerCustomComponent('Button', MyCustomButton);
  * ```
  */
-export function registerAthenaComponent<P>(
+export function registerCustomComponent<P>(
   componentName: string,
   implementation: ComponentType<P>
 ): void {
-  athenaRegistry.set(componentName, implementation as ComponentType<unknown>);
+  customRegistry.set(componentName, implementation as ComponentType<unknown>);
 
-  if (athenaConfig.logger) {
-    athenaConfig.logger(`Registered Athena component: ${componentName}`, 'info');
+  if (customConfig.logger) {
+    customConfig.logger(`Registered custom component: ${componentName}`, 'info');
   }
 }
 
@@ -152,104 +152,104 @@ export function registerAthenaComponent<P>(
  *
  * @example
  * ```tsx
- * registerAthenaComponents({
+ * registerCustomComponents({
  *   Button: MyButton,
  *   Alert: MyAlert,
  *   Card: MyCard,
  * });
  * ```
  */
-export function registerAthenaComponents(
+export function registerCustomComponents(
   components: Record<string, ComponentType<unknown>>
 ): void {
   Object.entries(components).forEach(([name, impl]) => {
-    registerAthenaComponent(name, impl);
+    registerCustomComponent(name, impl);
   });
 }
 
 /**
- * Removes a custom component from the Athena registry.
+ * Removes a custom component from the custom engine registry.
  * After unregistering, the component will fall back to the default engine implementation.
  *
  * @example
  * ```tsx
- * import { unregisterAthenaComponent, hasAthenaComponent } from '@rottay/design-system';
+ * import { unregisterCustomComponent, hasCustomComponent } from '@rottay/design-system';
  *
  * // Remove a custom implementation
- * const wasRemoved = unregisterAthenaComponent('Button');
+ * const wasRemoved = unregisterCustomComponent('Button');
  * console.log(wasRemoved); // true if it was registered, false otherwise
  *
  * // Verify removal
- * console.log(hasAthenaComponent('Button')); // false
+ * console.log(hasCustomComponent('Button')); // false
  * ```
  *
  * @param componentName - The name of the component to unregister
  * @returns True if the component was removed, false if it was not registered
  */
-export function unregisterAthenaComponent(componentName: string): boolean {
-  const result = athenaRegistry.delete(componentName);
+export function unregisterCustomComponent(componentName: string): boolean {
+  const result = customRegistry.delete(componentName);
 
-  if (result && athenaConfig.logger) {
-    athenaConfig.logger(`Unregistered Athena component: ${componentName}`, 'info');
+  if (result && customConfig.logger) {
+    customConfig.logger(`Unregistered custom component: ${componentName}`, 'info');
   }
 
   return result;
 }
 
 /**
- * Removes all custom components from the Athena registry.
+ * Removes all custom components from the custom engine registry.
  * Useful for testing or when switching contexts.
  *
  * @example
  * ```tsx
- * import { clearAthenaRegistry, getRegisteredComponentCount } from '@rottay/design-system';
+ * import { clearCustomRegistry, getRegisteredComponentCount } from '@rottay/design-system';
  *
  * // In test cleanup
  * afterEach(() => {
- *   clearAthenaRegistry();
+ *   clearCustomRegistry();
  *   expect(getRegisteredComponentCount()).toBe(0);
  * });
  * ```
  */
-export function clearAthenaRegistry(): void {
-  athenaRegistry.clear();
+export function clearCustomRegistry(): void {
+  customRegistry.clear();
 
-  if (athenaConfig.logger) {
-    athenaConfig.logger('Cleared all Athena components', 'info');
+  if (customConfig.logger) {
+    customConfig.logger('Cleared all custom components', 'info');
   }
 }
 
 /**
- * Checks if a component has a custom Athena implementation registered.
+ * Checks if a component has a custom implementation registered.
  *
  * @example
  * ```tsx
- * import { hasAthenaComponent, registerAthenaComponent } from '@rottay/design-system';
+ * import { hasCustomComponent, registerCustomComponent } from '@rottay/design-system';
  *
  * // Check before registering to avoid duplicates
- * if (!hasAthenaComponent('Button')) {
- *   registerAthenaComponent('Button', MyCustomButton);
+ * if (!hasCustomComponent('Button')) {
+ *   registerCustomComponent('Button', MyCustomButton);
  * }
  *
  * // Conditionally render based on availability
- * const ButtonImpl = hasAthenaComponent('Button')
- *   ? getAthenaComponent('Button')
+ * const ButtonImpl = hasCustomComponent('Button')
+ *   ? getCustomComponent('Button')
  *   : DefaultButton;
  * ```
  *
  * @param componentName - The name of the component to check
- * @returns True if the component is registered in Athena, false otherwise
+ * @returns True if the component is registered in the custom engine, false otherwise
  */
-export function hasAthenaComponent(componentName: string): boolean {
-  return athenaRegistry.has(componentName);
+export function hasCustomComponent(componentName: string): boolean {
+  return customRegistry.has(componentName);
 }
 
 /**
- * Retrieves a registered custom component implementation from the Athena registry.
+ * Retrieves a registered custom component implementation from the custom engine registry.
  *
  * @example
  * ```tsx
- * import { getAthenaComponent } from '@rottay/design-system';
+ * import { getCustomComponent } from '@rottay/design-system';
  *
  * // Get a registered component with type safety
  * interface ButtonProps {
@@ -257,7 +257,7 @@ export function hasAthenaComponent(componentName: string): boolean {
  *   onClick: () => void;
  * }
  *
- * const CustomButton = getAthenaComponent<ButtonProps>('Button');
+ * const CustomButton = getCustomComponent<ButtonProps>('Button');
  * if (CustomButton) {
  *   return <CustomButton label="Click me" onClick={handleClick} />;
  * }
@@ -266,14 +266,14 @@ export function hasAthenaComponent(componentName: string): boolean {
  * @param componentName - The name of the component to retrieve
  * @returns The component implementation or undefined if not registered
  */
-export function getAthenaComponent<P>(
+export function getCustomComponent<P>(
   componentName: string
 ): ComponentType<P> | undefined {
-  return athenaRegistry.get(componentName) as ComponentType<P> | undefined;
+  return customRegistry.get(componentName) as ComponentType<P> | undefined;
 }
 
 /**
- * Returns an array of all component names that have custom Athena implementations.
+ * Returns an array of all component names that have custom implementations.
  *
  * @example
  * ```tsx
@@ -296,11 +296,11 @@ export function getAthenaComponent<P>(
  * @returns Array of registered component names
  */
 export function getRegisteredComponents(): string[] {
-  return Array.from(athenaRegistry.keys());
+  return Array.from(customRegistry.keys());
 }
 
 /**
- * Returns the number of custom components registered in Athena.
+ * Returns the number of custom components registered in the custom engine.
  *
  * @example
  * ```tsx
@@ -315,33 +315,33 @@ export function getRegisteredComponents(): string[] {
  * @returns The count of registered components
  */
 export function getRegisteredComponentCount(): number {
-  return athenaRegistry.size;
+  return customRegistry.size;
 }
 
 /**
- * Creates a lazy-loadable wrapper that resolves to either a registered Athena
+ * Creates a lazy-loadable wrapper that resolves to either a registered custom
  * component or a fallback implementation.
  * Used internally by the engine factory to support custom component overrides.
  *
  * @example
  * ```tsx
- * import { createAthenaWrapper } from '@rottay/design-system';
+ * import { createCustomWrapper } from '@rottay/design-system';
  *
  * // Internal usage in engine factory
- * const athenaLoader = createAthenaWrapper<ButtonProps>(
+ * const customLoader = createCustomWrapper<ButtonProps>(
  *   'Button',
  *   () => import('./engines/rustic')
  * );
  *
  * // The wrapper returns a Promise for lazy loading
- * const { default: ButtonComponent } = await athenaLoader();
+ * const { default: ButtonComponent } = await customLoader();
  * ```
  *
  * @param componentName - Name of the component to look up in the registry
  * @param getFallback - Function that returns a Promise for the fallback component
  * @returns A function that returns a Promise resolving to the component module
  */
-export function createAthenaWrapper<P extends object>(
+export function createCustomWrapper<P extends object>(
   componentName: string,
   getFallback: () => Promise<{
     default:
@@ -354,16 +354,16 @@ export function createAthenaWrapper<P extends object>(
     | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
 }> {
   return async () => {
-    const registered = getAthenaComponent<P>(componentName);
+    const registered = getCustomComponent<P>(componentName);
 
     if (registered) {
       return { default: registered };
     }
 
     // Warn about fallback if configured
-    if (athenaConfig.warnOnFallback && athenaConfig.logger) {
-      athenaConfig.logger(
-        `No Athena implementation for "${componentName}", using ${athenaConfig.fallbackEngine} fallback`,
+    if (customConfig.warnOnFallback && customConfig.logger) {
+      customConfig.logger(
+        `No custom implementation for "${componentName}", using ${customConfig.fallbackEngine} fallback`,
         'warn'
       );
     }
@@ -373,15 +373,15 @@ export function createAthenaWrapper<P extends object>(
 }
 
 /**
- * React hook that provides the current Athena engine status.
+ * React hook that provides the current custom engine status.
  * Useful for debugging or building admin interfaces that show component registration.
  *
  * @example
  * ```tsx
- * import { useAthenaStatus } from '@rottay/design-system';
+ * import { useCustomStatus } from '@rottay/design-system';
  *
- * function AthenaDebugPanel() {
- *   const { registeredComponents, componentCount, config, hasComponent } = useAthenaStatus();
+ * function CustomEngineDebugPanel() {
+ *   const { registeredComponents, componentCount, config, hasComponent } = useCustomStatus();
  *
  *   return (
  *     <div>
@@ -398,13 +398,13 @@ export function createAthenaWrapper<P extends object>(
  * }
  * ```
  *
- * @returns Object containing Athena status and utility functions
+ * @returns Object containing custom engine status and utility functions
  */
-export function useAthenaStatus() {
+export function useCustomStatus() {
   return {
     registeredComponents: getRegisteredComponents(),
     componentCount: getRegisteredComponentCount(),
-    config: getAthenaConfig(),
-    hasComponent: hasAthenaComponent,
+    config: getCustomEngineConfig(),
+    hasComponent: hasCustomComponent,
   };
 }

@@ -118,7 +118,7 @@ The design system ships three stable engines and one experimental engine:
 | `classic` | Ant Design | Enterprise, structured, corporate |
 | `modern` | DaisyUI/Tailwind | Contemporary, rounded, glass effects |
 | `rustic` | Vanilla HTML/CSS | Minimal, spacious, understated |
-| `athena` | Custom (pluggable) | Your own implementation |
+| `custom` | Custom (pluggable) | Your own implementation |
 
 ### Global switch via provider
 

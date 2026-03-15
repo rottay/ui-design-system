@@ -54,6 +54,7 @@
 
 import React, { createContext, useContext, ReactNode, useEffect, useMemo } from 'react';
 import type { TenantConfig, TenantContextValue } from '../contracts';
+import type { VerticalPreset } from '../verticals/types';
 
 const TenantContext = createContext<TenantContextValue | null>(null);
 
@@ -61,12 +62,15 @@ export interface TenantProviderProps {
   children: ReactNode;
   config: TenantConfig;
   isLoading?: boolean;
+  /** Resolved vertical preset passed from DesignSystemProvider */
+  vertical?: VerticalPreset;
 }
 
 export function TenantProvider({
   children,
   config,
   isLoading = false,
+  vertical,
 }: TenantProviderProps): React.ReactElement {
   // Set data-tenant attribute on HTML element for CSS theming
   useEffect(() => {
@@ -83,8 +87,8 @@ export function TenantProvider({
   }, [config?.slug]);
 
   const value = useMemo<TenantContextValue>(
-    () => ({ config, isLoading }),
-    [config, isLoading],
+    () => ({ config, isLoading, vertical }),
+    [config, isLoading, vertical],
   );
 
   return (

@@ -10,11 +10,11 @@
  * - **Classic**: Ant Design - Enterprise, structured components
  * - **Modern**: DaisyUI/Tailwind - Contemporary, rounded
  * - **Rustic**: Vanilla HTML/CSS - Minimal, spacious
- * - **Athena**: Pluggable - Custom implementations
+ * - **Custom**: Pluggable - Custom implementations
  *
  * @see {@link createEngineComponent} - Component factory
  * @see {@link ENGINE_REGISTRY} - Engine metadata
- * @see {@link registerAthenaComponent} - Custom components
+ * @see {@link registerCustomComponent} - Custom components
  * @module System/Engines
  * @category System
  * @package @rottay/design-system
@@ -23,5 +23,5 @@ export * from './registry';
 export * from './factory';
 export * from './binding';
 export * from './boundary';
-export * from './athena';
+export * from './custom';
 export * from './EngineProvider';

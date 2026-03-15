@@ -186,10 +186,10 @@ const messageEngines = {
   classic: classicEngine,
   modern: modernEngine,
   rustic: rusticEngine,
-} as const satisfies Record<Exclude<EngineName, 'athena'>, typeof classicEngine>;
+} as const satisfies Record<Exclude<EngineName, 'custom'>, typeof classicEngine>;
 
 function resolveMessageEngine(engine: EngineName) {
-  if (engine === 'athena') {
+  if (engine === 'custom') {
     return classicEngine;
   }
 

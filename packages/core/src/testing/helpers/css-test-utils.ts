@@ -146,7 +146,7 @@ export const TENANT_CSS_EXPECTATIONS: Record<TestTenantName, Record<string, stri
 /**
  * Expected class prefixes for each engine
  */
-export const ENGINE_CLASS_PREFIXES: Record<Exclude<EngineName, 'athena'>, string> = {
+export const ENGINE_CLASS_PREFIXES: Record<Exclude<EngineName, 'custom'>, string> = {
   classic: 'ant-',
   modern: 'btn',
   rustic: 'ds-',
@@ -156,7 +156,7 @@ export const ENGINE_CLASS_PREFIXES: Record<Exclude<EngineName, 'athena'>, string
  * Checks if an element has classes matching an engine's pattern
  */
 export function hasEngineClasses(element: Element, engine: EngineName): boolean {
-  if (engine === 'athena') return false;
+  if (engine === 'custom') return false;
 
   const prefix = ENGINE_CLASS_PREFIXES[engine as keyof typeof ENGINE_CLASS_PREFIXES];
   const classes = Array.from(element.classList);
@@ -168,7 +168,7 @@ export function hasEngineClasses(element: Element, engine: EngineName): boolean 
  * Gets all classes that match an engine's pattern
  */
 export function getEngineClasses(element: Element, engine: EngineName): string[] {
-  if (engine === 'athena') return [];
+  if (engine === 'custom') return [];
 
   const prefix = ENGINE_CLASS_PREFIXES[engine as keyof typeof ENGINE_CLASS_PREFIXES];
   return Array.from(element.classList).filter((className) => className.startsWith(prefix));

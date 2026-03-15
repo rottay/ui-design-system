@@ -4611,7 +4611,7 @@ import { EngineErrorBoundary } from '../boundary';
 // En CreateEngineComponentOptions agregar:
 export interface CreateEngineComponentOptions {
   fallback?: React.ReactNode;
-  athenaEnabled?: boolean;
+  customEnabled?: boolean;
   fallbackEngine?: EngineName;  // NUEVO
   onError?: (error: Error) => void;  // NUEVO
 }

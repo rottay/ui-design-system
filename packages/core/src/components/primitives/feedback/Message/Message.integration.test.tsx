@@ -23,7 +23,7 @@ const TEST_TENANT_CONFIG: TenantConfig = {
   },
 };
 
-function renderMessageHarness(engine: Exclude<EngineName, 'athena'>) {
+function renderMessageHarness(engine: Exclude<EngineName, 'custom'>) {
   let apiRef: ReturnType<typeof useMessage>[0] | undefined;
 
   function Tester() {

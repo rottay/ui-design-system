@@ -18,9 +18,9 @@ describe('engine registry', () => {
         status: 'stable',
       })
     );
-    expect(getEngine('athena')).toEqual(
+    expect(getEngine('custom')).toEqual(
       expect.objectContaining({
-        name: 'athena',
+        name: 'custom',
         library: 'custom',
         status: 'experimental',
       })
@@ -36,7 +36,7 @@ describe('engine registry', () => {
     expect(isValidEngine('classic')).toBe(true);
     expect(isValidEngine('modern')).toBe(true);
     expect(isValidEngine('rustic')).toBe(true);
-    expect(isValidEngine('athena')).toBe(true);
+    expect(isValidEngine('custom')).toBe(true);
     expect(isValidEngine('legacy')).toBe(false);
     expect(getDefaultEngine()).toBe('classic');
   });

@@ -24,8 +24,8 @@ describe('engine entrypoint contracts', () => {
       expect(
         exportNames.some(
           (name) =>
-            ['classic', 'modern', 'rustic', 'athena'].includes(name) ||
-            /classic|modern|rustic|athena/i.test(name)
+            ['classic', 'modern', 'rustic', 'custom'].includes(name) ||
+            /classic|modern|rustic|custom/i.test(name)
         ),
         modulePath
       ).toBe(true);

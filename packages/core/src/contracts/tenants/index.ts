@@ -49,9 +49,16 @@ export interface TenantConfig {
   tokenOverrides?: TenantTokenOverrides;
   /** Optional tenant-owned copy overrides merged on top of DS locale dictionaries */
   customTranslations?: Partial<LocaleTranslations>;
+
+  /** Industry vertical this tenant belongs to (evnto, bithire, platform, etc.) */
+  vertical?: string;
+  /** Custom component pack for future engine-level component overrides */
+  componentPack?: string;
 }
 
 export interface TenantContextValue {
   config: TenantConfig;
   isLoading: boolean;
+  /** Resolved vertical preset, if one was provided to DesignSystemProvider */
+  vertical?: import('../../verticals/types').VerticalPreset;
 }

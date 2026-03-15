@@ -1,7 +1,7 @@
 {
   "name": "@rottay/design-system",
   "version": "2.4.4",
-  "description": "Multi-tenant, multi-engine design system with classic, modern, rustic, and experimental Athena engines",
+  "description": "Multi-tenant, multi-engine design system with classic, modern, rustic, and experimental custom engines",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
