@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 
 import { STABLE_ENGINES } from '../../../../../testing/helpers/engine-test-utils';
 import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
-import type { TenantConfig } from '../../../../core/types';
+import type { TenantConfig } from '../../../../contracts';
 
 const OPTIONS = [
   { label: 'Alpha', value: 'alpha' },

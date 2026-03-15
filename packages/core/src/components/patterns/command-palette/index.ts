@@ -7,7 +7,7 @@
  * and shortcut display. Inspired by VS Code / Spotlight.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { CommandPaletteProps } from './CommandPalette.types';
 
 export type { CommandPaletteProps, CommandItem } from './CommandPalette.types';

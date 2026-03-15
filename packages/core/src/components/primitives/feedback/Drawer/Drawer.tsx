@@ -93,7 +93,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { DrawerProps } from './Drawer.types';
 import { DrawerHeader, DrawerBody, DrawerFooter } from './compound';
 

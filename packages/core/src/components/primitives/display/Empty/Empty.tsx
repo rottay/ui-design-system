@@ -66,7 +66,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { EmptyProps } from './Empty.types';
 
 // Export types

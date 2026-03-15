@@ -85,7 +85,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { TreeProps } from './Tree.types';
 import { TreeNode } from './compound';
 

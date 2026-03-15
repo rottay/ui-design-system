@@ -42,7 +42,7 @@ export type {
   TooltipPlacement,
   TooltipTrigger,
   TooltipState,
-} from '../../../../core/types/primitives/display/Tooltip';
+} from '../../../../contracts/primitives/display/Tooltip';
 
 import type { BaseComponentProps } from '../../../../types/common';
 

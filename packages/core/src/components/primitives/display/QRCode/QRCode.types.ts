@@ -20,9 +20,9 @@ export type {
   QRCodeStatus,
   QRCodeErrorLevel,
   QRCodeType,
-} from '../../../../core/types/primitives/display/QRCode';
+} from '../../../../contracts/primitives/display/QRCode';
 
 export {
   QRCODE_DEFAULTS,
   SIZE_MAP,
-} from '../../../../core/types/primitives/display/QRCode';
+} from '../../../../contracts/primitives/display/QRCode';

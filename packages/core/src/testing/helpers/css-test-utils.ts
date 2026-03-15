@@ -3,7 +3,7 @@
  * @description Utilities for testing CSS variables, computed styles, and theme application
  */
 
-import type { EngineName } from '../../core/types';
+import type { EngineName } from '../../contracts';
 import type { TestTenantName } from './tenant-test-utils';
 
 /**

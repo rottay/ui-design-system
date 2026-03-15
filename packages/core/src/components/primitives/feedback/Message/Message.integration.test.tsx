@@ -3,7 +3,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '../../../../core/providers';
-import type { EngineName, TenantConfig } from '../../../../core/types';
+import type { EngineName, TenantConfig } from '../../../../contracts';
 import { MessageProvider, useMessage } from '.';
 
 const TEST_TENANT_CONFIG: TenantConfig = {

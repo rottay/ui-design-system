@@ -3,7 +3,7 @@
  * Validation and type guards for tenant configuration
  */
 
-import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../core/types';
+import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../contracts';
 import type { SupportedLocale } from '../../i18n/types';
 
 /**

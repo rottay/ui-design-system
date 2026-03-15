@@ -116,7 +116,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { AnchorProps, AnchorLinkProps } from './Anchor.types';
 
 // ============================================================================

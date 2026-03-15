@@ -164,7 +164,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { MenuProps } from './Menu.types';
 import { MenuItem, MenuGroup, MenuSubMenu, MenuDivider } from './compound';
 

@@ -16,7 +16,7 @@ import {
   getAthenaConfig,
   createAthenaWrapper,
   useAthenaStatus,
-} from '../../core/engines/athena';
+} from '../../engines/athena';
 
 describe('Athena Engine', () => {
   beforeEach(() => {

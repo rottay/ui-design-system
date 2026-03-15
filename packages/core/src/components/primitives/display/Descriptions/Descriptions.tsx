@@ -71,7 +71,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { DescriptionsProps, DescriptionsItemProps } from './Descriptions.types';
 import { DescriptionsItem } from './compound';
 

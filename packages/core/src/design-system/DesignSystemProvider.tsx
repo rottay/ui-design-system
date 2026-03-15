@@ -78,12 +78,12 @@
 
 import React, { ReactNode, useState, useEffect, memo } from 'react';
 import { EngineProvider } from '../engines/EngineProvider';
-import { ThemeProvider } from '../core/providers/theme';
+import { ThemeProvider } from '../theming';
 import { TenantProvider } from '../tenancy/TenantProvider';
 import { ProductProfileProvider } from '../product-profiles/ProductProfileProvider';
-import { FeatureProvider } from '../core/providers/features';
+import { FeatureProvider } from '../features';
 import { I18nProvider } from '../i18n';
-import type { TenantConfig, EngineName, ProductProfile, ProductProfileKey } from '../core/types';
+import type { TenantConfig, EngineName, ProductProfile, ProductProfileKey } from '../contracts';
 import type { LocaleTranslations, SupportedLocale } from '../i18n/types';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenancy/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';

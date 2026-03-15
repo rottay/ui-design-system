@@ -3,7 +3,7 @@
  * Design System Rottay - Wave 0 - Agente D
  */
 
-import { errorInDev } from '../../../core/utils/runtime-logger';
+import { errorInDev } from '../../../utils/runtime-logger';
 
 /**
  * Formatea una fecha según el locale.

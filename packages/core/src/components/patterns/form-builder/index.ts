@@ -8,7 +8,7 @@
  * grid, steps), and controlled/uncontrolled modes.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { FormBuilderProps } from './FormBuilder.types';
 
 export type { FormBuilderProps } from './FormBuilder.types';

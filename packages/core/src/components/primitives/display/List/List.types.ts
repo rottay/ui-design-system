@@ -51,6 +51,6 @@ export type {
   ListItemMetaProps,
   ListItemProps,
   ListProps,
-} from '../../../../core/types/primitives/display/List';
+} from '../../../../contracts/primitives/display/List';
 
-export { LIST_DEFAULTS, LIST_SIZE_MAP } from '../../../../core/types/primitives/display/List';
+export { LIST_DEFAULTS, LIST_SIZE_MAP } from '../../../../contracts/primitives/display/List';

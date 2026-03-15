@@ -17,7 +17,7 @@
  */
 
 import { useMemo } from 'react';
-import { useTokens } from '../../core/hooks';
+import { useTokens } from '../../hooks';
 import { useProductProfile } from '../../product-profiles';
 import type { CardVariant } from '../primitives/display/Card/types';
 import type { TabsType } from '../primitives/navigation/Tabs';

@@ -7,7 +7,7 @@
  * Follows the Slack/Vercel/Notion pattern.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { WorkspaceSwitcherProps } from './WorkspaceSwitcher.types';
 
 export type { WorkspaceSwitcherProps, Workspace } from './WorkspaceSwitcher.types';

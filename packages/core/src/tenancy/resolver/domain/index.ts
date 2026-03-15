@@ -3,7 +3,7 @@
  * Resolves tenant from custom domain via API lookup
  */
 
-import { errorInDev, warnOnceInDev } from '../../../core/utils/runtime-logger';
+import { errorInDev, warnOnceInDev } from '../../../utils/runtime-logger';
 
 export interface DomainLookupResult {
   slug: string;

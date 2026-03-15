@@ -76,12 +76,12 @@
 
 import { createElement, forwardRef } from 'react';
 
-import { createEngineComponent } from '../../../../core/engines/factory';
-import { useOptionalTokens } from '../../../../core/hooks';
+import { createEngineComponent } from '../../../../engines/factory';
+import { useOptionalTokens } from '../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveStatisticPersonalityStyle,
-} from '../../../../core/personality/primitives';
+} from '../../../../personality/primitives';
 import type { StatisticProps, CountdownProps } from './Statistic.types';
 import { Countdown } from './compound';
 

@@ -1,2 +1,2 @@
-/** Backward-compatibility proxy -> core/types/primitives/feedback */
-export * from '../../../core/types/primitives/feedback';
+/** Backward-compatibility proxy -> contracts/primitives/feedback */
+export * from '../../../contracts/primitives/feedback';

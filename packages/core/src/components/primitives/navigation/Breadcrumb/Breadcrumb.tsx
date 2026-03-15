@@ -118,7 +118,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { BreadcrumbProps } from './Breadcrumb.types';
 import { BreadcrumbItem } from './compound';
 

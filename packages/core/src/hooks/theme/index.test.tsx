@@ -1,11 +1,15 @@
+/**
+ * @deprecated Tests have moved to theming/tests/useTheme.test.tsx
+ * This file remains for backward compatibility.
+ */
 import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { ThemeContext } from '../../core/providers/theme';
+import { ThemeContext } from '../../theming';
 import { useTheme, useThemeContext } from '.';
 
-describe('useTheme hook', () => {
+describe('useTheme hook (backward compat proxy)', () => {
   it('throws when used outside ThemeContext', () => {
     expect(() => renderHook(() => useTheme())).toThrow('useTheme must be used within ThemeProvider');
   });

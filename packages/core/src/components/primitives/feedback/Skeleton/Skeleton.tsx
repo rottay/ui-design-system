@@ -98,12 +98,12 @@
 
 import { createElement, forwardRef } from 'react';
 
-import { createEngineComponent } from '../../../../core/engines/factory';
-import { useOptionalTokens } from '../../../../core/hooks';
+import { createEngineComponent } from '../../../../engines/factory';
+import { useOptionalTokens } from '../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveSkeletonPersonalityDefaults,
-} from '../../../../core/personality/primitives';
+} from '../../../../personality/primitives';
 import type { SkeletonProps } from './Skeleton.types';
 import {
   SkeletonAvatar,

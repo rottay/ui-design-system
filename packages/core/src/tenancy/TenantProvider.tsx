@@ -53,7 +53,7 @@
  */
 
 import React, { createContext, useContext, ReactNode, useEffect, useMemo } from 'react';
-import type { TenantConfig, TenantContextValue } from '../core/types';
+import type { TenantConfig, TenantContextValue } from '../contracts';
 
 const TenantContext = createContext<TenantContextValue | null>(null);
 

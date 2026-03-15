@@ -3,7 +3,7 @@
  * Default tenant configuration for standalone mode
  */
 
-import type { TenantConfig } from '../../core/types';
+import type { TenantConfig } from '../../contracts';
 
 export const DEFAULT_TENANT_CONFIG: TenantConfig = {
   slug: 'default',

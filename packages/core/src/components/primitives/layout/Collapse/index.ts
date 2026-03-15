@@ -134,7 +134,7 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { CollapseProps, CollapsePanelProps } from './types';
 
 export {

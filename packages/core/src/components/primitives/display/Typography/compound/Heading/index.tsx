@@ -44,11 +44,11 @@
 
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
-import { useOptionalTokens } from '../../../../../../core/hooks';
+import { useOptionalTokens } from '../../../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveTypographyHeadingStyle,
-} from '../../../../../../core/personality/primitives';
+} from '../../../../../../personality/primitives';
 import type { HeadingProps } from '../../types';
 import { ClassicHeading } from '../../engines/classic';
 import { ModernHeading } from '../../engines/modern';

@@ -6,7 +6,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineName } from '../../core/types';
+import type { EngineName } from '../../contracts';
 
 /**
  * Base props for all pattern components.

@@ -6,7 +6,7 @@
  * Engine-aware activity timeline with filtering for entity-level action history.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { ActivityLogProps } from './ActivityLog.types';
 
 export type { ActivityLogProps, Activity, ActivityFilter } from './ActivityLog.types';

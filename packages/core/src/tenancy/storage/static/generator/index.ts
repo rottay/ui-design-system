@@ -1,4 +1,4 @@
-import type { TenantConfig } from '../../../../core/types';
+import type { TenantConfig } from '../../../../contracts';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 

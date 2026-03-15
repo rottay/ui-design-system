@@ -8,7 +8,7 @@
  * pagination, sorting, filtering, and mobile card view.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { DataTablePatternProps } from './DataTable.types';
 
 export type { DataTablePatternProps } from './DataTable.types';

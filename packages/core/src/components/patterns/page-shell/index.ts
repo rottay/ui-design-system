@@ -6,7 +6,7 @@
  * Engine-aware page shell with breadcrumbs, tabs, and actions.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { PageShellProps } from './PageShell.types';
 
 export type { PageShellProps } from './PageShell.types';

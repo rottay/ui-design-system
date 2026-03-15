@@ -78,7 +78,7 @@
  * @category Display
  * @package @rottay/design-system
  */
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { ListProps, ListItemProps, ListItemMetaProps } from './List.types';
 
 export {

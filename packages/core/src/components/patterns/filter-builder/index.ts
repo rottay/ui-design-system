@@ -7,7 +7,7 @@
  * Inspired by Airtable's filter builder pattern.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { FilterBuilderProps } from './FilterBuilder.types';
 
 export type {

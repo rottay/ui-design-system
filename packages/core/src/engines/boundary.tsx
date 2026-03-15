@@ -47,8 +47,8 @@
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react';
-import type { EngineName } from '../core/types';
-import { errorInDev } from '../core/utils/runtime-logger';
+import type { EngineName } from '../contracts';
+import { errorInDev } from '../utils/runtime-logger';
 
 export interface EngineErrorBoundaryProps {
   /** Child components to render */

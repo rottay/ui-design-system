@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '../../../core/providers/root';
 import { useTokens } from '..';
-import type { TenantConfig } from '../../../core/types';
+import type { TenantConfig } from '../../../contracts';
 
 const TOKEN_TEST_TENANT: TenantConfig = {
   slug: 'token-test',

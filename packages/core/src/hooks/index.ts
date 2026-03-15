@@ -107,7 +107,7 @@
 // Engine hooks -- exported from src/engines/, not re-exported here
 
 // Theme hooks
-export { useTheme, useThemeContext } from './theme';
+export { useTheme, useThemeContext } from '../theming/useTheme';
 
 // Tenant hooks -- exported from src/tenancy/, not re-exported here
 // Product profile hooks -- exported from src/product-profiles/, not re-exported here
@@ -134,7 +134,7 @@ export type {
 } from './tokens';
 
 // Feature hooks
-export { useFeatures, useHasFeature, useFeatureContext } from './features';
+export { useFeatures, useHasFeature, useFeatureContext } from '../features';
 
 // Responsive hooks
 export {

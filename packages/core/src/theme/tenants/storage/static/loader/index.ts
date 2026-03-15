@@ -3,7 +3,7 @@
  * Loads tenant config from static JSON files
  */
 
-import type { TenantConfig } from '../../../../../core/types';
+import type { TenantConfig } from '../../../../../contracts';
 import { isValidTenantConfig } from '../../../schema';
 
 const STATIC_PATH = '/.designsystem/tenants';

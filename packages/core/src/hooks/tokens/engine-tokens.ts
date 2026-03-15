@@ -4,7 +4,7 @@
  * so that Classic, Modern, and Rustic actually look distinct.
  */
 
-import type { SurfaceTokens, MotionTokens } from '../../core/types';
+import type { SurfaceTokens, MotionTokens } from '../../contracts';
 
 export interface EngineTokenOverrides {
   borderRadius: {

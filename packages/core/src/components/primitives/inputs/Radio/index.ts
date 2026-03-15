@@ -96,7 +96,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { RadioProps } from './types';
 import { RadioGroup } from './compound';
 

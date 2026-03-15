@@ -89,7 +89,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { DatePickerProps, RangePickerProps } from './types';
 
 // Export types

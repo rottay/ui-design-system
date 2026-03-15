@@ -7,7 +7,7 @@
  * and production switch warnings. Follows the Stripe pattern.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { EnvironmentToggleProps } from './EnvironmentToggle.types';
 
 export type { EnvironmentToggleProps, EnvironmentDef } from './EnvironmentToggle.types';

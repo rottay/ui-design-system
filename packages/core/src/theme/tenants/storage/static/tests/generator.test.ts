@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { TenantConfig } from '../../../../../core/types';
+import type { TenantConfig } from '../../../../../contracts';
 import {
   buildTenantSelector,
   generateTenantCss,

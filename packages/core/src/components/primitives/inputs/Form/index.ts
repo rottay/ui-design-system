@@ -100,9 +100,9 @@
  */
 
 import React from 'react';
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import { useEngineContext } from '../../../../engines/EngineProvider';
-import type { EngineName } from '../../../../core/types';
+import type { EngineName } from '../../../../contracts';
 import type {
   FormProps,
   FormItemProps,

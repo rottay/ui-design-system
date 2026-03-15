@@ -1,2 +1,2 @@
-/** Backward-compatibility proxy -> core/types/common */
-export * from '../../core/types/common';
+/** Backward-compatibility proxy -> contracts/common */
+export * from '../../contracts/common';

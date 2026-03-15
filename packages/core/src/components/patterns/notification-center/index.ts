@@ -6,7 +6,7 @@
  * Engine-aware notification bell with dropdown list, unread badges, and actions.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { NotificationCenterProps } from './NotificationCenter.types';
 
 export type { NotificationCenterProps, Notification } from './NotificationCenter.types';

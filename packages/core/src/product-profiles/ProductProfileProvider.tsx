@@ -9,7 +9,7 @@
  */
 
 import React, { createContext, useContext, useMemo, type ReactNode } from 'react';
-import type { ProductProfile, ProductProfileContextValue, ProductProfileKey } from '../core/types/product-profiles';
+import type { ProductProfile, ProductProfileContextValue, ProductProfileKey } from '../contracts/product-profiles';
 import { getProductProfile } from './registry';
 
 const DEFAULT_CONTEXT_VALUE: ProductProfileContextValue = {

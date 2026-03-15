@@ -79,7 +79,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { AvatarProps } from './Avatar.types';
 import { AvatarGroup, AvatarBadge, AvatarFallback } from './compound';
 

@@ -15,7 +15,7 @@ import type {
 } from '../../types';
 import { LOCALE_CONFIGS } from '../../types';
 import { es, en, pt, fr, ar } from '../../locales';
-import { warnOnceInDev } from '../../../core/utils/runtime-logger';
+import { warnOnceInDev } from '../../../utils/runtime-logger';
 
 // Mapa de traducciones
 const TRANSLATIONS = {

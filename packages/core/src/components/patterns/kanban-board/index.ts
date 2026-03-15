@@ -7,7 +7,7 @@
  * configurable columns, card rendering, and item management.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { KanbanBoardProps } from './KanbanBoard.types';
 
 export type { KanbanBoardProps } from './KanbanBoard.types';

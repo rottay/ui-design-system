@@ -3,7 +3,7 @@
  * Fetches tenant config from API
  */
 
-import type { TenantConfig } from '../../../../core/types';
+import type { TenantConfig } from '../../../../contracts';
 import { isValidTenantConfig } from '../../schema';
 
 let apiEndpoint: string | null = null;

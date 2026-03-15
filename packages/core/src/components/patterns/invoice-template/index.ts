@@ -6,7 +6,7 @@
  * Engine-aware printable invoice document layout.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { InvoiceTemplateProps } from './InvoiceTemplate.types';
 
 export type { InvoiceTemplateProps, InvoiceData, InvoiceCompany, InvoiceClient, InvoiceLineItem } from './InvoiceTemplate.types';

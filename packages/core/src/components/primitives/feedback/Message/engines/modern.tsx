@@ -68,7 +68,7 @@ import type {
   MessageType,
 } from '../Message.types';
 import { MESSAGE_DEFAULTS } from '../Message.types';
-import { warnOnceInDev } from '../../../../../core/utils/runtime-logger';
+import { warnOnceInDev } from '../../../../../utils/runtime-logger';
 
 // ============================================================================
 // Internal Types

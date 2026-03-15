@@ -6,7 +6,7 @@
  * Engine-aware file browser with folder tree, file list, and upload support.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { FileManagerProps } from './FileManager.types';
 
 export type { FileManagerProps, FileItem, FolderItem, FileSystemItem } from './FileManager.types';

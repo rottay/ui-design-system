@@ -7,7 +7,7 @@
  * variant styles, and custom stat rendering.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { StatsGridProps } from './StatsGrid.types';
 
 export type { StatsGridProps } from './StatsGrid.types';

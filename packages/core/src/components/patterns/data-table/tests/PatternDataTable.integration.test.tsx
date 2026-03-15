@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 
 import { STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
 import { DesignSystemProvider } from '../../../../core/providers';
-import type { TenantConfig } from '../../../../core/types';
+import type { TenantConfig } from '../../../../contracts';
 import { PatternDataTable } from '..';
 
 const rows = [

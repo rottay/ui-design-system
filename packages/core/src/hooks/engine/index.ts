@@ -38,7 +38,7 @@
  */
 import { useContext } from 'react';
 import { EngineContext } from '../../core/providers/engine';
-import type { EngineContextValue } from '../../core/types';
+import type { EngineContextValue } from '../../contracts';
 
 /**
  * Hook to access and control the current UI rendering engine.

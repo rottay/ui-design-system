@@ -8,9 +8,9 @@
  * when onboarding new tenants.
  */
 
-import type { TenantConfig, EngineName, TenantPlan } from '../../core/types';
-import type { PersonalityTokens } from '../../core/types/tokens/personality';
-import type { TenantTokenOverrides } from '../../core/types/tenants';
+import type { TenantConfig, EngineName, TenantPlan } from '../../contracts';
+import type { PersonalityTokens } from '../../contracts/tokens/personality';
+import type { TenantTokenOverrides } from '../../contracts/tenants';
 import { resolvePersonalityPreset, type PersonalityPreset } from './personality-presets';
 
 export interface TenantCreationConfig {

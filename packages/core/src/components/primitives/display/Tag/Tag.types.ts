@@ -36,7 +36,7 @@ export type {
   TagProps,
   TagSize,
   TagVariant,
-} from '../../../../core/types/primitives/display/Tag';
+} from '../../../../contracts/primitives/display/Tag';
 
 /**
  * Tag radius options for border-radius customization.

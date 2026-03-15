@@ -68,7 +68,7 @@ export type {
   ModalFooterProps,
   ModalButtonConfig,
   ModalConfirmProps,
-} from '../../../../core/types/primitives/feedback/Modal';
+} from '../../../../contracts/primitives/feedback/Modal';
 
 // Use Size from central types
 import type { Size } from '../../../../types/common';

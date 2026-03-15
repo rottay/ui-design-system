@@ -155,7 +155,7 @@
 
 import React from 'react';
 import { useEngineContext } from '../../../../engines/EngineProvider';
-import type { EngineName } from '../../../../core/types';
+import type { EngineName } from '../../../../contracts';
 import * as classicEngine from './engines/classic';
 import * as modernEngine from './engines/modern';
 import * as rusticEngine from './engines/rustic';

@@ -44,7 +44,7 @@ import {
 import { useEngineContext } from './EngineProvider';
 import { createAthenaWrapper } from './athena';
 import { EngineErrorBoundary } from './boundary';
-import type { EngineName } from '../core/types';
+import type { EngineName } from '../contracts';
 
 /**
  * Configuration object containing dynamic import functions for each engine.

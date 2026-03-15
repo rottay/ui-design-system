@@ -37,7 +37,7 @@
  * @package @rottay/design-system
  */
 
-import type { EngineName, EngineConfig } from '../core/types';
+import type { EngineName, EngineConfig } from '../contracts';
 
 /**
  * Registry of all available engines

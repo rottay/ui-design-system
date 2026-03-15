@@ -6,7 +6,7 @@
  * Engine-aware timeline component for displaying chronological events.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { TimelinePatternProps } from './Timeline.types';
 
 export type { TimelinePatternProps, TimelineItem } from './Timeline.types';

@@ -92,7 +92,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { TreeSelectProps } from './types';
 
 // Export types

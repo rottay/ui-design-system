@@ -7,7 +7,7 @@
  * Inspired by Airtable/Linear view management patterns.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { SavedViewsBarProps } from './SavedViews.types';
 
 export type { SavedViewsBarProps, SavedView, SavedViewConfig, ViewMenuAction } from './SavedViews.types';

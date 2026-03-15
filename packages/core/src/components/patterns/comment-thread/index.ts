@@ -6,7 +6,7 @@
  * Engine-aware nested comment thread with replies, editing, and reactions.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { CommentThreadProps } from './CommentThread.types';
 
 export type { CommentThreadProps, Comment, CommentReaction } from './CommentThread.types';

@@ -20,7 +20,7 @@ import type {
   DesignTokens,
   MotionTokens,
   PersonalityTokens,
-} from '../../core/types';
+} from '../../contracts';
 
 // ---------------------------------------------------------------------------
 // Slice types

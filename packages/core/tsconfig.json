@@ -31,7 +31,7 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
-      "@types/*": ["./core/types/*"],
+      "@types/*": ["./contracts/*"],
       "@components/*": ["./components/*"],
       "@core/*": ["./core/*"]
     }

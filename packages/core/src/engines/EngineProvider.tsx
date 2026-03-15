@@ -28,14 +28,14 @@
  */
 
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
-import type { EngineName, EngineContextValue, EngineProviderProps } from '../core/types';
+import type { EngineName, EngineContextValue, EngineProviderProps } from '../contracts';
 import { getDefaultEngine, isValidEngine } from './registry';
-import { warnOnceInDev } from '../core/utils/runtime-logger';
+import { warnOnceInDev } from '../utils/runtime-logger';
 
 const EngineContext = createContext<EngineContextValue | null>(null);
 
 // Re-export type from types (single source of truth)
-export type { EngineProviderProps } from '../core/types';
+export type { EngineProviderProps } from '../contracts';
 
 export function EngineProvider({
   children,

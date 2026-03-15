@@ -6,7 +6,7 @@
 import React, { ReactElement, Suspense } from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { DesignSystemProvider } from '../../core/providers';
-import type { EngineName, TenantConfig } from '../../core/types';
+import type { EngineName, TenantConfig } from '../../contracts';
 
 /**
  * Stable engines for testing (excludes experimental 'athena')

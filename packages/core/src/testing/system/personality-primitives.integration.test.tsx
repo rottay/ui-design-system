@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '../../core/providers';
-import type { EngineName, ProductProfileKey, TenantConfig } from '../../core/types';
+import type { EngineName, ProductProfileKey, TenantConfig } from '../../contracts';
 import {
   Badge,
   Button,

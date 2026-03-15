@@ -1,6 +1,6 @@
 'use client';
 
-import type { PersonalityTokens } from '../../../core/types';
+import type { PersonalityTokens } from '../../../contracts';
 
 export interface ResolvedStatsGridMotion {
   animate: boolean;

@@ -2,7 +2,7 @@ import React, { type ReactNode } from 'react';
 import type { Decorator } from '@storybook/react-vite';
 
 import { DesignSystemProvider } from '../../../core/providers/root';
-import type { ProductProfileKey, TenantConfig } from '../../../core/types';
+import type { ProductProfileKey, TenantConfig } from '../../../contracts';
 import type { LocaleTranslations, SupportedLocale } from '../../../i18n/types';
 
 const BASE_STORY_TENANT: TenantConfig = {

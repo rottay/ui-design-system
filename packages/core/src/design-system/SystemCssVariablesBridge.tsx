@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { useTokens } from '../hooks/tokens';
-import { resolvePersonalityCssVariables } from '../core/personality/primitives';
+import { resolvePersonalityCssVariables } from '../personality/primitives';
 
 /**
  * Bridges resolved runtime tokens into CSS variables that non-React styling

@@ -80,7 +80,7 @@
  */
 
 import React from 'react';
-import { createEngineComponent } from '../../../../core/engines/factory';
+import { createEngineComponent } from '../../../../engines/factory';
 import type { TableProps } from './Table.types';
 
 // Export types

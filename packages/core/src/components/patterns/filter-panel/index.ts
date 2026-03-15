@@ -7,7 +7,7 @@
  * layouts (inline, stacked, sidebar), and collapsible sections.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { FilterPanelProps } from './FilterPanel.types';
 
 export type { FilterPanelProps } from './FilterPanel.types';

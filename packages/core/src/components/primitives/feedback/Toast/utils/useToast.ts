@@ -78,7 +78,7 @@
 import { useCallback } from 'react';
 import type { ToastMethods, ToastOptions, ToastState } from '../types';
 import { useToastContext } from './ToastProvider';
-import { warnOnceInDev } from '../../../../../core/utils/runtime-logger';
+import { warnOnceInDev } from '../../../../../utils/runtime-logger';
 
 // ============================================================================
 // Hook Return Type

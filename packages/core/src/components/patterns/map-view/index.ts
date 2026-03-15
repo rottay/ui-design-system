@@ -7,7 +7,7 @@
  * Designed to be extended with Leaflet/Mapbox by consumers.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { MapViewProps } from './MapView.types';
 
 export type { MapViewProps, MapMarker } from './MapView.types';

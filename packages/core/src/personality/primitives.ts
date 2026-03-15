@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 
-import type { DesignTokens } from '../core/types';
+import type { DesignTokens } from '../contracts';
 
 type CssVariableMap = Record<`--${string}`, string | number>;
 type VariableStyle = CSSProperties & Record<`--${string}`, string | number>;

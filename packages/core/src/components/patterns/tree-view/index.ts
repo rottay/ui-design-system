@@ -7,7 +7,7 @@
  * Used by: OrgCharts (bh), CategoryHierarchy (bar), PermissionTree (pl), MenuEditor (pl)
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { TreeViewProps } from './TreeView.types';
 
 export type { TreeViewProps, TreeNode } from './TreeView.types';

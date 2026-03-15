@@ -28,7 +28,7 @@
  */
 
 import { useCallback, useRef } from 'react';
-import type { TenantConfig } from '../../core/types';
+import type { TenantConfig } from '../../contracts';
 import {
   createTenantConfig as createConfig,
   type TenantCreationConfig,

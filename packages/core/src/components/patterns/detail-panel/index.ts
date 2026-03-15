@@ -7,7 +7,7 @@
  * Supports breadcrumbs, status badges, and configurable sidebar layout.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { DetailPanelProps } from './DetailPanel.types';
 
 export type { DetailPanelProps, DetailTab, DetailAction } from './DetailPanel.types';

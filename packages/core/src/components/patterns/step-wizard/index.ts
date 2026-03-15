@@ -7,7 +7,7 @@
  * Used by: Onboarding flows (bh/ev/pl), EventCreation (ev), JobPosting (bh), TenantSetup (pl)
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { StepWizardProps } from './StepWizard.types';
 
 export type { StepWizardProps, WizardStep } from './StepWizard.types';

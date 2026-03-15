@@ -33,7 +33,7 @@
 export type {
   EmptyProps,
   EmptyImageType,
-} from '../../../../core/types/primitives/display/Empty';
+} from '../../../../contracts/primitives/display/Empty';
 
 /**
  * Default configuration values for the Empty component.

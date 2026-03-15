@@ -11,7 +11,7 @@
  * 6. Default config (rottay)
  */
 
-import type { TenantConfig } from '../../core/types';
+import type { TenantConfig } from '../../contracts';
 import { loadStaticTenantConfig } from './static';
 import { fetchRemoteTenantConfig } from './remote';
 import { getDefaultTenantConfig } from '../defaults';

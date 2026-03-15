@@ -12,7 +12,7 @@
 // ============================================
 export * from './engines';
 export * from './core/providers';
-export * from './core/types';
+export * from './contracts';
 export * from './errors';
 
 // ============================================

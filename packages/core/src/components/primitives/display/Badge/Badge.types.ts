@@ -44,7 +44,7 @@ export type {
   BadgeStatus,
   BadgeRibbonProps,
   BadgeCountProps,
-} from '../../../../core/types/primitives/display/Badge';
+} from '../../../../contracts/primitives/display/Badge';
 
 /**
  * Default configuration values for the Badge component.

@@ -10,7 +10,7 @@ import {
   getStableEngines,
   isValidEngine,
   getDefaultEngine,
-} from '../../core/engines/registry';
+} from '../../engines/registry';
 
 describe('Engine Registry', () => {
   describe('ENGINE_REGISTRY', () => {

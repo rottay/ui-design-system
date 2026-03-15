@@ -4,7 +4,7 @@
  * Produces behavior identical to the pre-personality system.
  */
 
-import type { PersonalityTokens } from '../core/types/tokens/personality';
+import type { PersonalityTokens } from '../contracts/tokens/personality';
 
 export const DEFAULT_PERSONALITY: PersonalityTokens = {
   animation: {

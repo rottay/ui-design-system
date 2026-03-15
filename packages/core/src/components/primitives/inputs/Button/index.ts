@@ -88,12 +88,12 @@
 
 import { createElement, forwardRef } from 'react';
 
-import { createEngineComponent } from '../../../../core/engines/factory';
-import { useOptionalTokens } from '../../../../core/hooks';
+import { createEngineComponent } from '../../../../engines/factory';
+import { useOptionalTokens } from '../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveButtonPersonalityStyle,
-} from '../../../../core/personality/primitives';
+} from '../../../../personality/primitives';
 import type { ButtonProps } from './types';
 import { ButtonGroup, ButtonIcon } from './compound';
 

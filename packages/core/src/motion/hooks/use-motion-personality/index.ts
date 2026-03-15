@@ -2,7 +2,7 @@
 
 import { useReducedMotion } from 'framer-motion';
 
-import { useTokens } from '../../../core/hooks';
+import { useTokens } from '../../../hooks';
 
 /**
  * Central motion defaults resolved from product profile + tenant/theme tokens.

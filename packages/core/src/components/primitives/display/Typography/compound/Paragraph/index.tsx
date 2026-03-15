@@ -48,11 +48,11 @@
 
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
-import { useOptionalTokens } from '../../../../../../core/hooks';
+import { useOptionalTokens } from '../../../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
-} from '../../../../../../core/personality/primitives';
+} from '../../../../../../personality/primitives';
 import type { ParagraphProps } from '../../types';
 import { ClassicParagraph } from '../../engines/classic';
 import { ModernParagraph } from '../../engines/modern';

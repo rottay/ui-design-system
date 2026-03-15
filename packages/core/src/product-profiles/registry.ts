@@ -6,7 +6,7 @@
  * structure through surface configs in the app.
  */
 
-import type { ProductProfile, ProductProfileKey } from '../core/types/product-profiles';
+import type { ProductProfile, ProductProfileKey } from '../contracts/product-profiles';
 
 /**
  * A neutral fallback used when no explicit product profile is provided.

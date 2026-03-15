@@ -29,7 +29,7 @@ import { useProductProfile } from '../product-profile';
 import { useEngineContext } from '../../core/providers/engine';
 import { getEngineTokens } from './engine-tokens';
 import { DEFAULT_PERSONALITY } from './personality-defaults';
-import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../core/types';
+import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../contracts';
 
 export { getEngineTokens, ENGINE_TOKENS } from './engine-tokens';
 export type { EngineTokenOverrides } from './engine-tokens';

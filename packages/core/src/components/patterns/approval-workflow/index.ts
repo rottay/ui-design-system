@@ -7,7 +7,7 @@
  * Used by: Offer approvals (bh), PurchaseOrders (bar), ShiftSwaps (staff), Refunds (pm)
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { ApprovalWorkflowProps } from './ApprovalWorkflow.types';
 
 export type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from './ApprovalWorkflow.types';

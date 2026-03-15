@@ -11,7 +11,7 @@
  * The CSS styles for these tenants are included in the design system bundle.
  */
 
-import type { TenantConfig, EngineName } from '../../../core/types';
+import type { TenantConfig, EngineName } from '../../../contracts';
 
 /**
  * Known tenant configurations

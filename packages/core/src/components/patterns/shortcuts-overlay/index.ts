@@ -8,7 +8,7 @@
  * key display. Inspired by Linear/Figma shortcuts dialog.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { ShortcutsOverlayProps } from './ShortcutsOverlay.types';
 
 export type { ShortcutsOverlayProps, ShortcutDisplayItem } from './ShortcutsOverlay.types';

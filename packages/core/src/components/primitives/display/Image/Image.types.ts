@@ -37,7 +37,7 @@ export type {
   ImageProps,
   ImageGroupProps,
   ImageLoadState,
-} from '../../../../core/types/primitives/display/Image';
+} from '../../../../contracts/primitives/display/Image';
 
 /**
  * Image radius options for border-radius styling.

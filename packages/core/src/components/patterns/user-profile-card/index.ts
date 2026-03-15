@@ -6,7 +6,7 @@
  * Engine-aware user profile card with avatar, actions, and status.
  */
 
-import { createEngineComponent } from '../../../core/engines/factory';
+import { createEngineComponent } from '../../../engines/factory';
 import type { UserProfileCardProps } from './UserProfileCard.types';
 
 export type { UserProfileCardProps, UserProfile, ProfileAction } from './UserProfileCard.types';

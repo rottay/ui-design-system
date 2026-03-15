@@ -7,7 +7,7 @@
  * single keyword.
  */
 
-import type { PersonalityTokens } from '../../core/types/tokens/personality';
+import type { PersonalityTokens } from '../../contracts/tokens/personality';
 
 export type PersonalityPreset = 'formal' | 'neutral' | 'playful' | 'expressive';
 

@@ -42,7 +42,7 @@ export type {
   DescriptionsLayout,
   DescriptionsSize,
   ResponsiveColumn,
-} from '../../../../core/types/primitives/display/Descriptions';
+} from '../../../../contracts/primitives/display/Descriptions';
 
 /**
  * Default values for the Descriptions component.
