@@ -341,7 +341,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        boxShadow: '0 6px 16px 0 rgba(0, 0, 0, 0.08)',
+        boxShadow: 'var(--ds-message-shadow, var(--ds-shadow-md))',
         ...style,
       }}
     >
@@ -358,6 +358,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
             cursor: 'pointer',
             padding: '0',
             marginLeft: '8px',
+            color: 'var(--ds-message-close-color, var(--ds-color-text-tertiary))',
           }}
         >
           {closeIcon || '×'}

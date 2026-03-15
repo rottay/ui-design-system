@@ -163,4 +163,53 @@ describe('PatternCommentThread', () => {
       expect(onDelete).toHaveBeenCalledWith('c1');
     },
   );
+
+  it.each(STABLE_ENGINES)(
+    'renders loading state and hides the composer without a current user in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const { container, rerender } = renderWithEngine(<Component {...createProps({ loading: true })} />, engine);
+
+      expect(container.querySelector('.loading-spinner') || screen.queryByText(/loading/i)).toBeTruthy();
+
+      rerender(
+        <Component
+          {...createProps({
+            currentUser: undefined,
+            onAdd: vi.fn(),
+            loading: false,
+          })}
+        />
+      );
+
+      expect(screen.queryByPlaceholderText('Write a comment...')).not.toBeInTheDocument();
+    },
+  );
+
+  it.each(STABLE_ENGINES)(
+    'respects maxDepth and cancel flows in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const onReply = vi.fn();
+      const onEdit = vi.fn();
+
+      renderWithEngine(
+        <Component
+          {...createProps({
+            maxDepth: 0,
+            onReply,
+            onEdit,
+          })}
+        />,
+        engine,
+      );
+
+      expect(screen.queryByText('Reply')).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getAllByText('Edit')[0]);
+      fireEvent.click(screen.getByText('Cancel'));
+      expect(onEdit).not.toHaveBeenCalled();
+      expect(screen.getByText('This looks great!')).toBeInTheDocument();
+    },
+  );
 });

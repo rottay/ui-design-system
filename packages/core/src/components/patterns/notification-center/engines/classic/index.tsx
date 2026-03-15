@@ -18,10 +18,10 @@ import {
 import type { NotificationCenterProps, Notification } from '../../types';
 
 const typeIcons: Record<string, React.ReactNode> = {
-  info: <InfoCircleOutlined style={{ color: '#1890ff' }} />,
-  success: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
-  warning: <WarningOutlined style={{ color: '#faad14' }} />,
-  error: <CloseCircleOutlined style={{ color: '#f5222d' }} />,
+  info: <InfoCircleOutlined style={{ color: 'var(--ds-color-info)' }} />,
+  success: <CheckCircleOutlined style={{ color: 'var(--ds-color-success)' }} />,
+  warning: <WarningOutlined style={{ color: 'var(--ds-color-warning)' }} />,
+  error: <CloseCircleOutlined style={{ color: 'var(--ds-color-error)' }} />,
 };
 
 const typeColors: Record<string, string> = {
@@ -77,8 +77,8 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
   const content = (
     <div style={{ width: 360, maxHeight: 420, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid #f0f0f0' }}>
-        <span style={{ fontWeight: 600, fontSize: 14 }}>Notifications</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-200, #e5e7eb))' }}>
+        <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ds-color-text-primary, var(--ds-color-neutral-900, #171717))' }}>Notifications</span>
         <Space size="small">
           {onReadAll && displayCount > 0 && (
             <Button type="link" size="small" onClick={() => { onReadAll(); }}>
@@ -105,7 +105,9 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
                 key={item.id}
                 style={{
                   padding: '10px 12px',
-                  background: item.read ? undefined : 'rgba(24, 144, 255, 0.04)',
+                  background: item.read
+                    ? undefined
+                    : 'var(--ds-notification-center-unread-bg, var(--ds-color-primary-50))',
                   cursor: 'pointer',
                 }}
                 onClick={() => onRead?.(item.id)}
@@ -123,16 +125,36 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
                   title={
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ fontSize: 13, fontWeight: item.read ? 400 : 600 }}>{item.title}</span>
-                      {!item.read && <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#1890ff' }} />}
+                      {!item.read && (
+                        <div
+                          style={{
+                            width: 6,
+                            height: 6,
+                            borderRadius: '50%',
+                            background: 'var(--ds-notification-center-unread-dot, var(--ds-color-primary-500))',
+                          }}
+                        />
+                      )}
                     </div>
                   }
                   description={
                     <div>
-                      <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', marginBottom: 4 }}>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: 'var(--ds-notification-center-message-color, var(--ds-color-text-secondary))',
+                          marginBottom: 4,
+                        }}
+                      >
                         {item.message}
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: 11, color: 'rgba(0,0,0,0.3)' }}>
+                        <span
+                          style={{
+                            fontSize: 11,
+                            color: 'var(--ds-notification-center-timestamp-color, var(--ds-color-text-tertiary))',
+                          }}
+                        >
                           {formatTimestamp(item.timestamp)}
                         </span>
                         {item.action && (

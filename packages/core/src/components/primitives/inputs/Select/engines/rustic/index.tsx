@@ -402,7 +402,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     backgroundColor: 'var(--ds-select-dropdown-bg)',
     border: `1px solid var(--ds-select-dropdown-border)`,
     borderRadius: 'var(--ds-select-dropdown-radius)',
-    boxShadow: 'var(--ds-card-shadow, 0 6px 16px -4px rgba(0, 0, 0, 0.12), 0 3px 6px -2px rgba(0, 0, 0, 0.08))',
+    boxShadow: 'var(--ds-select-dropdown-shadow, var(--ds-card-shadow-hover, var(--ds-shadow-lg)))',
     maxHeight: virtualEnabled ? `${containerHeight}px` : '16rem',
     overflowY: 'auto',
     zIndex: 1050,

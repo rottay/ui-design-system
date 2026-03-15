@@ -24,8 +24,8 @@ const MenuItem: React.FC<{
         role="separator"
         style={{
           height: 1,
-          backgroundColor: 'var(--ds-color-neutral-200, #e5e7eb)',
-          margin: '4px 0',
+          backgroundColor: 'var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb))',
+          margin: '6px 0',
         }}
       />
     );
@@ -35,10 +35,12 @@ const MenuItem: React.FC<{
     return (
       <div
         style={{
-          padding: '4px 12px',
+          padding: '6px 12px 4px',
           fontSize: 12,
-          color: 'var(--ds-color-text-secondary, #6b7280)',
-          fontWeight: 500,
+          color: 'var(--ds-dropdown-group-color, var(--ds-color-text-secondary, #6b7280))',
+          fontWeight: 600,
+          letterSpacing: '0.02em',
+          textTransform: 'uppercase',
         }}
       >
         {item.label}
@@ -66,19 +68,23 @@ const MenuItem: React.FC<{
         background: 'transparent',
         cursor: item.disabled ? 'not-allowed' : 'pointer',
         opacity: item.disabled ? 0.5 : 1,
-        color: item.danger ? 'var(--ds-color-error-500, #ef4444)' : 'inherit',
+        color: item.danger ? 'var(--ds-dropdown-danger-color, var(--ds-color-error-500, #ef4444))' : 'var(--ds-dropdown-item-color, inherit)',
         textAlign: 'left',
         fontSize: 14,
         lineHeight: 1.5,
         fontFamily: 'inherit',
+        borderRadius: 'var(--ds-radius-sm, 6px)',
+        transition: 'background-color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease), color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease), transform var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease)',
       }}
       onMouseEnter={(e) => {
         if (!item.disabled) {
-          e.currentTarget.style.backgroundColor = 'var(--ds-color-neutral-100, #f3f4f6)';
+          e.currentTarget.style.backgroundColor = 'var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6))';
+          e.currentTarget.style.transform = 'translateX(2px)';
         }
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = 'transparent';
+        e.currentTarget.style.transform = 'translateX(0)';
       }}
     >
       <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -86,7 +92,7 @@ const MenuItem: React.FC<{
         {item.label}
       </span>
       {item.shortcut && (
-        <span style={{ fontSize: 12, color: 'var(--ds-color-text-secondary, #999)' }}>
+        <span style={{ fontSize: 12, color: 'var(--ds-dropdown-shortcut-color, var(--ds-color-text-secondary, #6b7280))' }}>
           {item.shortcut}
         </span>
       )}
@@ -161,13 +167,14 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
             left: position.left,
             zIndex: 1060,
             minWidth: 180,
-            backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
-            borderRadius: 8,
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08)',
-            padding: '4px 0',
-            border: '1px solid var(--ds-color-neutral-200, #e5e7eb)',
+            backgroundColor: 'var(--ds-dropdown-bg, var(--ds-color-bg-elevated, #fff))',
+            borderRadius: 'var(--ds-dropdown-radius, var(--ds-radius-lg, 12px))',
+            boxShadow: 'var(--ds-dropdown-shadow, var(--ds-shadow-lg))',
+            padding: '6px',
+            border: '1px solid var(--ds-dropdown-border-color, var(--ds-color-neutral-200, #e5e7eb))',
             fontFamily: 'var(--ds-font-family-base, inherit)',
-            ...overlayStyle,
+            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
+          ...overlayStyle,
           }}
         >
           {items.map((item) => (

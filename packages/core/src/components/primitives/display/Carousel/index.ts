@@ -57,7 +57,7 @@
  * @example Compound Components
  * ```tsx
  * <Carousel>
- *   <Carousel.Item backgroundColor="#f0f0f0">
+ *   <Carousel.Item backgroundColor="var(--ds-color-neutral-100)">
  *     <h2>Welcome</h2>
  *   </Carousel.Item>
  *   <Carousel.Item backgroundImage="/hero.jpg">

@@ -69,9 +69,9 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
     const { hasImage = false, lines = 3, className = '', style = {} } = props;
 
     const containerStyle: React.CSSProperties = {
-      borderRadius: '8px',
+      borderRadius: 'var(--ds-radius-lg, 8px)',
       overflow: 'hidden',
-      border: '1px solid var(--ds-skeleton-border, #e5e7eb)',
+      border: '1px solid var(--ds-skeleton-border, var(--ds-color-border))',
       ...style,
     };
 
@@ -86,7 +86,14 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
             }}
           />
         )}
-        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div
+          style={{
+            padding: 'var(--ds-card-body-padding, 16px)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+          }}
+        >
           {/* Title line */}
           <div
             style={{

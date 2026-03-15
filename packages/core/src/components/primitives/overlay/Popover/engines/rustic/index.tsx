@@ -239,12 +239,14 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           style={{
             position: 'fixed',
             zIndex,
-            backgroundColor: 'var(--ds-popover-bg, #fff)',
-            borderRadius: 'var(--ds-popover-radius, 8px)',
-            boxShadow: 'var(--ds-popover-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
+            backgroundColor: 'var(--ds-popover-bg, var(--ds-color-bg-elevated, #fff))',
+            borderRadius: 'var(--ds-popover-radius, var(--ds-radius-lg, 12px))',
+            boxShadow: 'var(--ds-popover-shadow, var(--ds-shadow-lg))',
             padding: 'var(--ds-popover-padding, 12px 16px)',
             minWidth: 'var(--ds-popover-min-width, 150px)',
             maxWidth: 'var(--ds-popover-max-width, 350px)',
+            border: '1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb))',
+            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
             ...position,
             ...overlayStyle,
           }}
@@ -271,7 +273,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
                 position: 'absolute',
                 width: 'var(--ds-popover-arrow-size, 10px)',
                 height: 'var(--ds-popover-arrow-size, 10px)',
-                backgroundColor: 'var(--ds-popover-bg, #fff)',
+                backgroundColor: 'var(--ds-popover-bg, var(--ds-color-bg-elevated, #fff))',
                 transform: 'rotate(45deg)',
                 boxShadow: 'var(--ds-popover-arrow-shadow, -2px -2px 4px rgba(0, 0, 0, 0.05))',
               }}

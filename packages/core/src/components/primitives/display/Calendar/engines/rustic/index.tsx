@@ -86,20 +86,20 @@ const styles = {
     cursor: 'pointer',
     borderRadius: 'var(--ds-calendar-nav-radius, 4px)',
     fontSize: '16px',
-    color: 'var(--ds-calendar-nav-color, #666)',
+    color: 'var(--ds-calendar-nav-color, var(--ds-color-text-secondary))',
   },
   modeButton: {
     padding: '4px 12px',
-    border: '1px solid var(--ds-calendar-border, #d9d9d9)',
-    background: 'var(--ds-calendar-bg, #fff)',
+    border: '1px solid var(--ds-calendar-border, var(--ds-color-border))',
+    background: 'var(--ds-calendar-bg, var(--ds-color-bg-elevated))',
     cursor: 'pointer',
     borderRadius: 'var(--ds-calendar-nav-radius, 4px)',
     fontSize: '14px',
   },
   modeButtonActive: {
-    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
-    color: 'var(--ds-calendar-primary-text, #fff)',
-    borderColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
+    background: 'var(--ds-calendar-primary, var(--ds-color-primary-500))',
+    color: 'var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
+    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500))',
   },
   daysHeader: {
     display: 'grid',
@@ -111,7 +111,7 @@ const styles = {
     textAlign: 'center' as const,
     fontSize: 'var(--ds-calendar-header-font-size, 12px)',
     fontWeight: 500,
-    color: 'var(--ds-calendar-header-color, #666)',
+    color: 'var(--ds-calendar-header-color, var(--ds-color-text-secondary))',
     padding: '8px',
   },
   daysGrid: {
@@ -133,11 +133,11 @@ const styles = {
     transition: 'var(--ds-calendar-transition, background-color 0.2s)',
   },
   dayCellToday: {
-    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
+    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500))',
   },
   dayCellSelected: {
-    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
-    color: 'var(--ds-calendar-primary-text, #fff)',
+    background: 'var(--ds-calendar-primary, var(--ds-color-primary-500))',
+    color: 'var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
   },
   dayCellDisabled: {
     opacity: 'var(--ds-calendar-disabled-opacity, 0.3)',
@@ -158,11 +158,11 @@ const styles = {
     transition: 'var(--ds-calendar-transition, background-color 0.2s)',
   },
   monthCellCurrent: {
-    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
+    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500))',
   },
   monthCellSelected: {
-    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
-    color: 'var(--ds-calendar-primary-text, #fff)',
+    background: 'var(--ds-calendar-primary, var(--ds-color-primary-500))',
+    color: 'var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
   },
 };
 

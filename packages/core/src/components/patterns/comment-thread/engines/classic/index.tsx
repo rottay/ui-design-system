@@ -99,16 +99,22 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
             <span style={{ fontWeight: 600, fontSize: 14 }}>{comment.author.name}</span>
-            <span style={{ color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>
+            <span style={{ color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))', fontSize: 12 }}>
               {formatTimestamp(comment.timestamp)}
             </span>
             {comment.edited && (
-              <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: 11, fontStyle: 'italic' }}>
+              <span
+                style={{
+                  color: 'var(--ds-color-text-tertiary, rgba(0,0,0,0.3))',
+                  fontSize: 11,
+                  fontStyle: 'italic',
+                }}
+              >
                 (edited)
               </span>
             )}
           </div>
-
+ 
           {editing ? (
             <div style={{ marginBottom: 8 }}>
               <TextArea
@@ -146,7 +152,14 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
           )}
 
           {/* Actions */}
-          <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: 16,
+              fontSize: 12,
+              color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))',
+            }}
+          >
             {actions.map((action, i) => (
               <span key={i} style={{ cursor: 'pointer' }}>{action}</span>
             ))}
@@ -175,7 +188,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
 
       {/* Nested replies */}
       {comment.replies && comment.replies.length > 0 && depth < maxDepth && (
-        <div style={{ borderLeft: '2px solid #f0f0f0', paddingLeft: 12 }}>
+        <div style={{ borderLeft: '2px solid var(--ds-color-border-secondary, #f0f0f0)', paddingLeft: 12 }}>
           {comment.replies.map(reply => (
             <CommentNode
               key={reply.id}
@@ -224,7 +237,7 @@ export default function ClassicCommentThread(props: CommentThreadProps) {
   if (loading) {
     return (
       <div className={className} style={{ textAlign: 'center', padding: 48, ...style }}>
-        <span>Loading...</span>
+        <span style={{ color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))' }}>Loading...</span>
       </div>
     );
   }

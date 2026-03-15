@@ -10,8 +10,12 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import type { PricingTableProps, PricingPlan, PricingFeature } from '../../types';
 
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
-  if (value === true) return <CheckOutlined style={{ color: '#52c41a', fontSize: 16 }} />;
-  if (value === false || value === undefined) return <CloseOutlined style={{ color: '#d9d9d9', fontSize: 16 }} />;
+  if (value === true) {
+    return <CheckOutlined style={{ color: 'var(--ds-color-success-600, #16a34a)', fontSize: 16 }} />;
+  }
+  if (value === false || value === undefined) {
+    return <CloseOutlined style={{ color: 'var(--ds-color-border-primary, #d4d4d8)', fontSize: 16 }} />;
+  }
   return <span style={{ fontSize: 13 }}>{value}</span>;
 }
 
@@ -64,7 +68,15 @@ export default function ClassicPricingTable(props: PricingTableProps) {
           <thead>
             <tr>
               <th style={{ padding: 16, textAlign: 'left', width: 200, verticalAlign: 'bottom' }}>
-                <span style={{ fontSize: 14, fontWeight: 600, color: 'rgba(0,0,0,0.45)' }}>Features</span>
+                <span
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))',
+                  }}
+                >
+                  Features
+                </span>
               </th>
               {plans.map(plan => {
                 const isHighlighted = plan.id === highlightedPlan || plan.popular;
@@ -73,8 +85,8 @@ export default function ClassicPricingTable(props: PricingTableProps) {
                     {renderPlanHeader ? renderPlanHeader(plan) : (
                       <Card
                         style={{
-                          border: isHighlighted ? '2px solid #1890ff' : undefined,
-                          background: isHighlighted ? '#f0f5ff' : undefined,
+                          border: isHighlighted ? '2px solid var(--ds-color-primary-500, #1677ff)' : undefined,
+                          background: isHighlighted ? 'var(--ds-color-primary-50, #eff6ff)' : undefined,
                         }}
                         styles={{ body: { padding: 16 } }}
                       >
@@ -84,10 +96,20 @@ export default function ClassicPricingTable(props: PricingTableProps) {
                           {typeof plan.price === 'number' ? `${currency}${plan.price}` : plan.price}
                         </div>
                         {plan.priceNote && (
-                          <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{plan.priceNote}</div>
+                          <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))' }}>
+                            {plan.priceNote}
+                          </div>
                         )}
                         {plan.description && (
-                          <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', marginTop: 4 }}>{plan.description}</div>
+                          <div
+                            style={{
+                              fontSize: 12,
+                              color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))',
+                              marginTop: 4,
+                            }}
+                          >
+                            {plan.description}
+                          </div>
                         )}
                         <Button
                           type={isHighlighted ? 'primary' : 'default'}
@@ -120,15 +142,15 @@ export default function ClassicPricingTable(props: PricingTableProps) {
                           fontWeight: 700,
                           fontSize: 13,
                           textTransform: 'uppercase',
-                          color: 'rgba(0,0,0,0.45)',
-                          borderTop: '1px solid #f0f0f0',
+                          color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))',
+                          borderTop: '1px solid var(--ds-color-border-secondary, #f0f0f0)',
                         }}
                       >
                         {feature.category}
                       </td>
                     </tr>
                   )}
-                  <tr style={{ borderTop: '1px solid #f0f0f0' }}>
+                  <tr style={{ borderTop: '1px solid var(--ds-color-border-secondary, #f0f0f0)' }}>
                     <td style={{ padding: '12px 16px', fontSize: 13 }}>
                       {feature.description ? (
                         <Tooltip title={feature.description}>{feature.label}</Tooltip>

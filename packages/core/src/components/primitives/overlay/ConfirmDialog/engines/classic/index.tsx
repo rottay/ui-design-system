@@ -90,18 +90,31 @@ export default function ClassicConfirmDialog(props: ConfirmDialogProps): React.R
     >
       <div style={{ display: 'flex', gap: '12px' }} data-testid={dataTestId}>
         {displayIcon && (
-          <div style={{ color: colors.icon, flexShrink: 0, marginTop: '2px' }}>
+          <div
+            style={{
+              color: colors.icon,
+              backgroundColor: colors.bg,
+              flexShrink: 0,
+              marginTop: '2px',
+              width: '44px',
+              height: '44px',
+              borderRadius: '9999px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             {displayIcon}
           </div>
         )}
         <div style={{ flex: 1 }}>
           {title && (
-            <div style={{ fontSize: '16px', fontWeight: 600, marginBottom: '8px', color: 'var(--ds-color-text-primary, #1a1a1a)' }}>
+            <div style={{ fontSize: 'var(--ds-modal-title-font-size, 16px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', marginBottom: '8px', color: 'var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a))' }}>
               {title}
             </div>
           )}
           {description && (
-            <div style={{ fontSize: '14px', color: 'var(--ds-color-text-secondary, #666)' }}>
+            <div style={{ fontSize: '14px', color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666))', lineHeight: 1.5 }}>
               {description}
             </div>
           )}

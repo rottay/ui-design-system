@@ -65,13 +65,33 @@ export default function ClassicInvoiceTemplate(props: InvoiceTemplateProps) {
             <img src={invoice.company.logo} alt={invoice.company.name} style={{ height: 48, marginBottom: 8 }} />
           )}
           <div style={{ fontSize: 20, fontWeight: 700 }}>{invoice.company.name}</div>
-          {invoice.company.address && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{invoice.company.address}</div>}
-          {invoice.company.city && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{invoice.company.city}{invoice.company.country ? `, ${invoice.company.country}` : ''}</div>}
-          {invoice.company.taxId && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>Tax ID: {invoice.company.taxId}</div>}
-          {invoice.company.email && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{invoice.company.email}</div>}
+          {invoice.company.address && (
+            <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>{invoice.company.address}</div>
+          )}
+          {invoice.company.city && (
+            <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>
+              {invoice.company.city}
+              {invoice.company.country ? `, ${invoice.company.country}` : ''}
+            </div>
+          )}
+          {invoice.company.taxId && (
+            <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Tax ID: {invoice.company.taxId}</div>
+          )}
+          {invoice.company.email && (
+            <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>{invoice.company.email}</div>
+          )}
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 28, fontWeight: 800, color: 'rgba(0,0,0,0.15)', marginBottom: 8 }}>INVOICE</div>
+          <div
+            style={{
+              fontSize: 28,
+              fontWeight: 800,
+              color: 'var(--ds-invoice-watermark-color, var(--ds-color-text-tertiary))',
+              marginBottom: 8,
+            }}
+          >
+            INVOICE
+          </div>
           <div style={{ fontSize: 14 }}><strong>Invoice #:</strong> {invoice.number}</div>
           <div style={{ fontSize: 14 }}><strong>Date:</strong> {invoice.date}</div>
           {invoice.dueDate && <div style={{ fontSize: 14 }}><strong>Due:</strong> {invoice.dueDate}</div>}
@@ -84,13 +104,35 @@ export default function ClassicInvoiceTemplate(props: InvoiceTemplateProps) {
       </div>
 
       {/* Bill To */}
-      <div style={{ marginBottom: 24, padding: 16, background: '#fafafa', borderRadius: 8 }}>
-        <div style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: 'rgba(0,0,0,0.3)', marginBottom: 4 }}>Bill To</div>
+      <div
+        style={{
+          marginBottom: 24,
+          padding: 16,
+          background: 'var(--ds-invoice-panel-bg, var(--ds-color-bg-secondary))',
+          borderRadius: 8,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            color: 'var(--ds-invoice-label-color, var(--ds-color-text-tertiary))',
+            marginBottom: 4,
+          }}
+        >
+          Bill To
+        </div>
         <div style={{ fontWeight: 600 }}>{invoice.client.name}</div>
-        {invoice.client.address && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{invoice.client.address}</div>}
-        {invoice.client.city && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{invoice.client.city}{invoice.client.country ? `, ${invoice.client.country}` : ''}</div>}
-        {invoice.client.taxId && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>Tax ID: {invoice.client.taxId}</div>}
-        {invoice.client.email && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{invoice.client.email}</div>}
+        {invoice.client.address && <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>{invoice.client.address}</div>}
+        {invoice.client.city && (
+          <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>
+            {invoice.client.city}
+            {invoice.client.country ? `, ${invoice.client.country}` : ''}
+          </div>
+        )}
+        {invoice.client.taxId && <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Tax ID: {invoice.client.taxId}</div>}
+        {invoice.client.email && <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>{invoice.client.email}</div>}
       </div>
 
       {/* Line Items */}
@@ -110,7 +152,15 @@ export default function ClassicInvoiceTemplate(props: InvoiceTemplateProps) {
             <span>Subtotal</span>
             <span>{formatCurrency(invoice.subtotal)}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, color: 'rgba(0,0,0,0.45)' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '6px 0',
+              fontSize: 14,
+              color: 'var(--ds-color-text-secondary)',
+            }}
+          >
             <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
             <span>{formatCurrency(invoice.tax)}</span>
           </div>
@@ -124,9 +174,28 @@ export default function ClassicInvoiceTemplate(props: InvoiceTemplateProps) {
 
       {/* Notes */}
       {invoice.notes && (
-        <div style={{ marginTop: 32, padding: 16, background: '#fafafa', borderRadius: 8 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: 'rgba(0,0,0,0.3)', marginBottom: 4 }}>Notes</div>
-          <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.65)', whiteSpace: 'pre-wrap' }}>{invoice.notes}</div>
+        <div
+          style={{
+            marginTop: 32,
+            padding: 16,
+            background: 'var(--ds-invoice-panel-bg, var(--ds-color-bg-secondary))',
+            borderRadius: 8,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              color: 'var(--ds-invoice-label-color, var(--ds-color-text-tertiary))',
+              marginBottom: 4,
+            }}
+          >
+            Notes
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--ds-invoice-notes-color, var(--ds-color-text-secondary))', whiteSpace: 'pre-wrap' }}>
+            {invoice.notes}
+          </div>
         </div>
       )}
     </Card>

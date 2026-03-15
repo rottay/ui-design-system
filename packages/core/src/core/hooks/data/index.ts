@@ -345,3 +345,20 @@ export function useSurfaceQuery<T>(
     surfaceProps,
   };
 }
+
+// ============================================================================
+// Re-exports
+// ============================================================================
+
+export { useTableExport } from './table-export';
+export type {
+  TableExportColumn,
+  UseTableExportOptions,
+  UseTableExportReturn,
+} from './table-export';
+
+export { useOptimisticUpdate } from './optimistic';
+export type {
+  UseOptimisticUpdateOptions,
+  UseOptimisticUpdateReturn,
+} from './optimistic';

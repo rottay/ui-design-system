@@ -81,7 +81,7 @@
  *     ],
  *   }}
  * >
- *   <div style={{ padding: 20, background: '#f0f0f0' }}>
+ *   <div style={{ padding: 20, background: 'var(--ds-color-neutral-100)' }}>
  *     Right-click me
  *   </div>
  * </Dropdown>

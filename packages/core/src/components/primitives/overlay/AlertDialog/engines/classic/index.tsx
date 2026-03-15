@@ -65,6 +65,7 @@ export default function ClassicAlertDialog(props: AlertDialogProps): React.React
               alignItems: 'center',
               justifyContent: 'center',
               color: 'var(--ds-color-error-500, #ff4d4f)',
+              boxShadow: 'inset 0 0 0 1px var(--ds-color-alpha-white-20, rgba(255, 255, 255, 0.2))',
             }}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -75,12 +76,12 @@ export default function ClassicAlertDialog(props: AlertDialogProps): React.React
           </div>
           <div style={{ flex: 1 }}>
             {title && (
-              <div style={{ fontSize: '16px', fontWeight: 600, marginBottom: '8px', color: 'var(--ds-color-text-primary, #1a1a1a)' }}>
+              <div style={{ fontSize: 'var(--ds-modal-title-font-size, 16px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', marginBottom: '8px', color: 'var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a))' }}>
                 {title}
               </div>
             )}
             {description && (
-              <div style={{ fontSize: '14px', color: 'var(--ds-color-text-secondary, #666)', lineHeight: 1.5 }}>
+              <div style={{ fontSize: '14px', color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666))', lineHeight: 1.5 }}>
                 {description}
               </div>
             )}

@@ -52,7 +52,7 @@
  *   content="DRAFT"
  *   rotate={-30}
  *   gap={[150, 150]}
- *   font={{ color: 'rgba(255,0,0,0.1)', fontSize: 24, fontWeight: 'bold' }}
+ *   font={{ color: 'var(--ds-watermark-color)', fontSize: 24, fontWeight: 'bold' }}
  * >
  *   <div>Draft document</div>
  * </Watermark>

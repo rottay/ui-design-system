@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
@@ -136,4 +136,71 @@ describe('PatternFileManager', () => {
       promptSpy.mockRestore();
     },
   );
+
+  it('covers classic uploads, drag-drop, breadcrumbs, custom icons, selection toggles, and grid mode actions', () => {
+    const onUpload = vi.fn();
+    const onRename = vi.fn();
+    const onNavigate = vi.fn();
+    const onDelete = vi.fn();
+    const onSelectionChange = vi.fn();
+    const onViewModeChange = vi.fn();
+    const promptSpy = vi.spyOn(window, 'prompt').mockReturnValue('renamed-report.pdf');
+
+    const props = createProps({
+      currentPath: ['Documents'],
+      onUpload,
+      onRename,
+      onNavigate,
+      onDelete,
+      onSelectionChange,
+      onViewModeChange,
+      renderFileIcon: (file) => <span data-testid={`custom-icon-${file.id}`}>icon</span>,
+    });
+
+    const { rerender } = renderWithEngine(<ClassicFileManager {...props} />, 'classic');
+
+    fireEvent.click(screen.getByText('Root'));
+    expect(onNavigate).toHaveBeenCalledWith(null);
+
+    const fileInput = screen.getByTestId('file-input');
+    const uploadFile = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+    fireEvent.change(fileInput, { target: { files: [uploadFile] } });
+    expect(onUpload).toHaveBeenCalledWith([uploadFile]);
+
+    fireEvent.drop(screen.getByText('report.pdf').closest('div') ?? screen.getByText('report.pdf'), {
+      dataTransfer: { files: [uploadFile] },
+    });
+    expect(onUpload).toHaveBeenCalledTimes(2);
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    expect(onSelectionChange).toHaveBeenCalledWith(['d1']);
+
+    const folderRow = screen
+      .getAllByText('Documents')
+      .map((node) => node.closest('tr'))
+      .find((node): node is HTMLTableRowElement => node instanceof HTMLTableRowElement);
+    if (!(folderRow instanceof HTMLTableRowElement)) {
+      throw new Error('Expected classic folder row');
+    }
+    const renameButton = within(folderRow).getAllByRole('button')[0];
+    fireEvent.click(renameButton);
+    expect(onRename).toHaveBeenCalledWith('d1', 'renamed-report.pdf');
+
+    const gridToggle = screen
+      .getAllByRole('button')
+      .find((button) => button.textContent?.trim() === '');
+    if (!(gridToggle instanceof HTMLButtonElement)) {
+      throw new Error('Expected classic grid toggle button');
+    }
+    fireEvent.click(gridToggle);
+    expect(onViewModeChange).toHaveBeenCalledWith('grid');
+
+    rerender(<ClassicFileManager {...props} viewMode="grid" selectedItems={['f1']} />);
+    expect(screen.getByTestId('custom-icon-f1')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Delete (1)'));
+    expect(onDelete).toHaveBeenCalledWith(['f1']);
+
+    promptSpy.mockRestore();
+  });
 });

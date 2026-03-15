@@ -88,8 +88,8 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
         <div
           style={{
             ...rowStyle,
-            borderBottom: '1px solid var(--ds-skeleton-border, #e5e7eb)',
-            backgroundColor: 'var(--ds-skeleton-header-bg, rgba(0,0,0,0.02))',
+            borderBottom: '1px solid var(--ds-skeleton-border, var(--ds-color-border))',
+            backgroundColor: 'var(--ds-skeleton-header-bg, var(--ds-color-bg-secondary))',
           }}
         >
           {Array.from({ length: columns }).map((_, col) => (
@@ -111,7 +111,10 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
             key={`row-${row}`}
             style={{
               ...rowStyle,
-              borderBottom: row < rows - 1 ? '1px solid var(--ds-skeleton-border, #e5e7eb)' : undefined,
+              borderBottom:
+                row < rows - 1
+                  ? '1px solid var(--ds-skeleton-border, var(--ds-color-border))'
+                  : undefined,
             }}
           >
             {Array.from({ length: columns }).map((_, col) => (

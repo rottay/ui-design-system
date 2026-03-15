@@ -16,7 +16,7 @@
  * Implementation details:
  * - MenuItem component renders items, dividers, and groups
  * - Hover effects via onMouseEnter/onMouseLeave
- * - Danger items styled with red color (#ef4444)
+ * - Danger items styled from semantic danger tokens
  * - Menu positioned absolutely based on trigger getBoundingClientRect()
  * - Uses createPortal for proper overlay stacking
  *

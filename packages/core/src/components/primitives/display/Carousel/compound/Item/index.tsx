@@ -24,7 +24,7 @@
  *
  * @example Basic Usage
  * ```tsx
- * <Carousel.Item backgroundColor="#f0f0f0">
+ * <Carousel.Item backgroundColor="var(--ds-color-neutral-100)">
  *   <h2>Slide Content</h2>
  * </Carousel.Item>
  * ```
@@ -73,7 +73,7 @@ export interface CarouselItemComponentProps extends CarouselItemProps {
  * @example
  * ```tsx
  * <Carousel>
- *   <Carousel.Item backgroundColor="#f0f0f0">
+ *   <Carousel.Item backgroundColor="var(--ds-color-neutral-100)">
  *     <h2>Slide Content</h2>
  *   </Carousel.Item>
  * </Carousel>

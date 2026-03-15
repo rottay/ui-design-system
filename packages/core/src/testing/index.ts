@@ -1,6 +1,7 @@
 /**
  * Testing Utilities Exports
- * Helpers, Fixtures
+ * Helpers, Fixtures, Accessibility
  */
 
 export * from './helpers';
+export * from './a11y';

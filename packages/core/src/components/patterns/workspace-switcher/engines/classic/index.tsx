@@ -82,8 +82,8 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
       aria-label="Workspaces"
     >
       {/* Header */}
-      <div style={{ padding: '8px 12px', borderBottom: '1px solid #f0f0f0' }}>
-        <span style={{ fontWeight: 600, fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>Workspaces</span>
+      <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-200, #e5e7eb))' }}>
+        <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--ds-color-text-secondary, var(--ds-color-neutral-500, #737373))' }}>Workspaces</span>
       </div>
 
       {/* Workspace list */}
@@ -103,8 +103,14 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
                 gap: 10,
                 padding: '8px 12px',
                 cursor: 'pointer',
-                background: isFocused ? '#f5f5f5' : isActive ? 'rgba(24,144,255,0.04)' : undefined,
-                borderLeft: isActive ? '3px solid #1890ff' : '3px solid transparent',
+                background: isFocused
+                  ? 'var(--ds-workspace-switcher-hover-bg, var(--ds-color-bg-secondary))'
+                  : isActive
+                    ? 'var(--ds-workspace-switcher-active-bg, var(--ds-color-primary-50))'
+                    : undefined,
+                borderLeft: isActive
+                  ? '3px solid var(--ds-workspace-switcher-active-border, var(--ds-color-primary-500))'
+                  : '3px solid transparent',
               }}
               onClick={() => {
                 onSwitch(ws.id);
@@ -118,7 +124,13 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
                 <Avatar
                   size={36}
                   shape="square"
-                  style={{ borderRadius: 8, background: '#1890ff', fontSize: 14, fontWeight: 600 }}
+                  style={{
+                    borderRadius: 8,
+                    background: 'var(--ds-workspace-switcher-avatar-bg, var(--ds-color-primary-500))',
+                    color: 'var(--ds-workspace-switcher-avatar-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
+                    fontSize: 14,
+                    fontWeight: 600,
+                  }}
                 >
                   {getInitials(ws.name)}
                 </Avatar>
@@ -134,9 +146,24 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
                   }}>
                     {ws.name}
                   </span>
-                  {isActive && <CheckOutlined style={{ fontSize: 11, color: '#1890ff' }} />}
+                  {isActive && (
+                    <CheckOutlined
+                      style={{
+                        fontSize: 11,
+                        color: 'var(--ds-workspace-switcher-active-indicator, var(--ds-color-primary-500))',
+                      }}
+                    />
+                  )}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'rgba(0,0,0,0.45)' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    fontSize: 11,
+                    color: 'var(--ds-workspace-switcher-meta-color, var(--ds-color-text-secondary))',
+                  }}
+                >
                   {ws.role && <span>{ws.role}</span>}
                   {ws.plan && <span style={{ textTransform: 'capitalize' }}>{ws.plan}</span>}
                   {typeof ws.online === 'number' && (
@@ -202,7 +229,15 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
             {currentUser.avatar ? (
               <Avatar src={currentUser.avatar} size={28} />
             ) : (
-              <Avatar size={28} style={{ background: '#87d068', fontSize: 12 }}>
+              <Avatar
+                size={28}
+                style={{
+                  background:
+                    'var(--ds-workspace-switcher-user-avatar-bg, var(--ds-color-success-500, var(--ds-color-success)))',
+                  color: 'var(--ds-workspace-switcher-user-avatar-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
+                  fontSize: 12,
+                }}
+              >
                 {getInitials(currentUser.name)}
               </Avatar>
             )}
@@ -211,7 +246,15 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
                 {currentUser.name}
               </div>
               {currentUser.email && (
-                <div style={{ fontSize: 11, color: 'rgba(0,0,0,0.45)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: 'var(--ds-workspace-switcher-meta-color, var(--ds-color-text-secondary))',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
                   {currentUser.email}
                 </div>
               )}
@@ -240,7 +283,13 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
         <Avatar
           size={position === 'sidebar' ? 32 : 24}
           shape="square"
-          style={{ borderRadius: 6, background: '#1890ff', fontSize: position === 'sidebar' ? 14 : 11, fontWeight: 600 }}
+          style={{
+            borderRadius: 6,
+            background: 'var(--ds-workspace-switcher-avatar-bg, var(--ds-color-primary-500))',
+            color: 'var(--ds-workspace-switcher-avatar-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
+            fontSize: position === 'sidebar' ? 14 : 11,
+            fontWeight: 600,
+          }}
         >
           {activeWorkspace ? getInitials(activeWorkspace.name) : '?'}
         </Avatar>
@@ -258,7 +307,12 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
           </div>
         </div>
       )}
-      <SwapOutlined style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }} />
+      <SwapOutlined
+        style={{
+          fontSize: 12,
+          color: 'var(--ds-workspace-switcher-meta-color, var(--ds-color-text-secondary))',
+        }}
+      />
     </div>
   );
 

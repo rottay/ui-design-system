@@ -8,8 +8,16 @@ import React, { type CSSProperties } from 'react';
 import type { PricingTableProps, PricingPlan, PricingFeature } from '../../types';
 
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
-  if (value === true) return <span style={{ color: 'var(--ds-color-success, #22c55e)', fontSize: 16, fontWeight: 700 }}>{'\u2713'}</span>;
-  if (value === false || value === undefined) return <span style={{ color: 'var(--ds-color-neutral-300, #d1d5db)', fontSize: 16 }}>{'\u2717'}</span>;
+  if (value === true) {
+    return (
+      <span style={{ color: 'var(--ds-color-success-600, #16a34a)', fontSize: 16, fontWeight: 700 }}>
+        {'\u2713'}
+      </span>
+    );
+  }
+  if (value === false || value === undefined) {
+    return <span style={{ color: 'var(--ds-color-border-primary, #d1d5db)', fontSize: 16 }}>{'\u2717'}</span>;
+  }
   return <span style={{ fontSize: 13 }}>{value}</span>;
 }
 
@@ -22,9 +30,9 @@ const btnBase: CSSProperties = {
   width: '100%',
   padding: '8px 16px',
   borderRadius: 'var(--ds-radius-md, 6px)',
-  border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
-  background: 'var(--ds-color-background, #fff)',
-  color: 'var(--ds-color-text)',
+  border: '1px solid var(--ds-color-border-primary, #d1d5db)',
+  background: 'var(--ds-color-surface, var(--ds-color-background, #fff))',
+  color: 'var(--ds-color-text-primary, var(--ds-color-text, #111827))',
   cursor: 'pointer',
   fontWeight: 600,
   fontSize: 'var(--ds-font-size-sm, 13px)',
@@ -33,9 +41,9 @@ const btnBase: CSSProperties = {
 
 const primaryBtn: CSSProperties = {
   ...btnBase,
-  background: 'var(--ds-color-primary)',
-  color: 'var(--ds-color-primary-foreground, #fff)',
-  borderColor: 'var(--ds-color-primary)',
+  background: 'var(--ds-button-primary-bg, var(--ds-color-primary))',
+  color: 'var(--ds-button-primary-color, var(--ds-color-primary-foreground, #fff))',
+  borderColor: 'var(--ds-button-primary-border, var(--ds-color-primary))',
 };
 
 export default function RusticPricingTable(props: PricingTableProps) {
@@ -87,7 +95,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                 width: 18,
                 height: 18,
                 borderRadius: '50%',
-                background: '#fff',
+                background: 'var(--ds-color-white, #fff)',
                 top: 3,
                 left: billingCycle === 'yearly' ? 23 : 3,
                 transition: 'left 0.2s',
@@ -100,8 +108,8 @@ export default function RusticPricingTable(props: PricingTableProps) {
               marginLeft: 6,
               padding: '2px 6px',
               borderRadius: 'var(--ds-radius-sm, 4px)',
-              background: 'var(--ds-color-success, #22c55e)',
-              color: '#fff',
+              background: 'var(--ds-color-success-600, #16a34a)',
+              color: 'var(--ds-color-text-on-primary, #fff)',
               fontSize: 10,
               fontWeight: 600,
             }}>Save 20%</span>
@@ -125,7 +133,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                       <div style={{
                         padding: 16,
                         borderRadius: 'var(--ds-radius-lg, 8px)',
-                        border: isHighlighted ? '2px solid var(--ds-color-primary)' : '1px solid var(--ds-color-neutral-200, #e5e7eb)',
+                        border: isHighlighted ? '2px solid var(--ds-color-primary)' : '1px solid var(--ds-color-border-secondary, #e5e7eb)',
                         background: isHighlighted ? 'var(--ds-color-primary-50, #eff6ff)' : undefined,
                       }}>
                         {plan.popular && (
@@ -134,7 +142,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                             padding: '2px 8px',
                             borderRadius: 'var(--ds-radius-sm, 4px)',
                             background: 'var(--ds-color-primary)',
-                            color: '#fff',
+                            color: 'var(--ds-color-text-on-primary, #fff)',
                             fontSize: 10,
                             fontWeight: 600,
                             marginBottom: 8,

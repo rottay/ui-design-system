@@ -25,10 +25,16 @@ function getFileIcon(item: FileItem): React.ReactNode {
     return <img src={item.thumbnail} alt={item.name} style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: 4 }} />;
   }
   const mime = item.mimeType || '';
-  if (mime.startsWith('image/')) return <FileImageOutlined style={{ fontSize: 24, color: '#1890ff' }} />;
-  if (mime === 'application/pdf') return <FilePdfOutlined style={{ fontSize: 24, color: '#f5222d' }} />;
-  if (mime.startsWith('text/')) return <FileTextOutlined style={{ fontSize: 24, color: '#52c41a' }} />;
-  return <FileOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />;
+  if (mime.startsWith('image/')) {
+    return <FileImageOutlined style={{ fontSize: 24, color: 'var(--ds-color-primary-500, #1677ff)' }} />;
+  }
+  if (mime === 'application/pdf') {
+    return <FilePdfOutlined style={{ fontSize: 24, color: 'var(--ds-color-error-600, #dc2626)' }} />;
+  }
+  if (mime.startsWith('text/')) {
+    return <FileTextOutlined style={{ fontSize: 24, color: 'var(--ds-color-success-600, #16a34a)' }} />;
+  }
+  return <FileOutlined style={{ fontSize: 24, color: 'var(--ds-color-text-tertiary, #8c8c8c)' }} />;
 }
 
 function formatSize(bytes?: number): string {
@@ -125,7 +131,7 @@ export default function ClassicFileManager(props: FileManagerProps) {
       render: (_: unknown, record: FileSystemItem) => (
         <Space>
           {record.type === 'folder'
-            ? <FolderOutlined style={{ fontSize: 18, color: '#faad14' }} />
+            ? <FolderOutlined style={{ fontSize: 18, color: 'var(--ds-color-warning-500, #faad14)' }} />
             : renderFileIcon
               ? renderFileIcon(record as FileItem)
               : getFileIcon(record as FileItem)}
@@ -195,14 +201,16 @@ export default function ClassicFileManager(props: FileManagerProps) {
         padding: 12,
         textAlign: 'center',
         borderRadius: 8,
-        border: selectedItems.includes(item.id) ? '2px solid #1890ff' : '2px solid transparent',
+        border: selectedItems.includes(item.id)
+          ? '2px solid var(--ds-color-primary-500, #1677ff)'
+          : '2px solid transparent',
         cursor: 'pointer',
-        background: selectedItems.includes(item.id) ? '#e6f7ff' : undefined,
+        background: selectedItems.includes(item.id) ? 'var(--ds-color-primary-50, #e6f7ff)' : undefined,
       }}
     >
       <div style={{ fontSize: 36, marginBottom: 8 }}>
         {item.type === 'folder'
-          ? <FolderOutlined style={{ color: '#faad14' }} />
+          ? <FolderOutlined style={{ color: 'var(--ds-color-warning-500, #faad14)' }} />
           : renderFileIcon
             ? renderFileIcon(item as FileItem)
             : getFileIcon(item as FileItem)}
@@ -255,7 +263,13 @@ export default function ClassicFileManager(props: FileManagerProps) {
         style={{ minHeight: 200 }}
       >
         {items.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: 48, color: 'rgba(0,0,0,0.45)' }}>
+          <div
+            style={{
+              textAlign: 'center',
+              padding: 48,
+              color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))',
+            }}
+          >
             {emptyMessage}
           </div>
         ) : viewMode === 'list' ? (

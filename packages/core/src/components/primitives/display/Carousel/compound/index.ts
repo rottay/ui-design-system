@@ -14,7 +14,7 @@
  * import { Carousel } from '@rottay/design-system';
  *
  * <Carousel>
- *   <Carousel.Item backgroundColor="#f0f0f0" align="center">
+ *   <Carousel.Item backgroundColor="var(--ds-color-neutral-100)" align="center">
  *     <h2>Slide Content</h2>
  *   </Carousel.Item>
  *   <Carousel.Item backgroundImage="/hero.jpg">

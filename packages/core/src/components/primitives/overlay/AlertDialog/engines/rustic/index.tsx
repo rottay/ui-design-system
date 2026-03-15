@@ -60,21 +60,23 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
   const backdropStyle: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
     fontFamily: 'var(--ds-font-family-base)',
+    padding: 'var(--ds-space-4, 1rem)',
   };
 
   const dialogStyle: React.CSSProperties = {
-    backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
-    borderRadius: 'var(--ds-radius-lg, 12px)',
+    backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff))',
+    borderRadius: 'var(--ds-modal-radius, var(--ds-radius-xl, 16px))',
     padding: '24px',
     maxWidth: '420px',
     width: '90vw',
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+    border: '1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb))',
+    boxShadow: 'var(--ds-modal-shadow, var(--ds-shadow-2xl))',
     ...style,
   };
 
@@ -96,10 +98,10 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
     fontSize: '14px',
     fontWeight: 500,
     cursor: 'pointer',
-    backgroundColor: 'transparent',
-    color: 'var(--ds-color-text-primary, #1a1a1a)',
-    border: '1px solid var(--ds-color-neutral-300, #d9d9d9)',
-    transition: 'opacity 0.2s ease',
+    backgroundColor: 'var(--ds-color-bg-primary, transparent)',
+    color: 'var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a))',
+    border: '1px solid var(--ds-modal-footer-border, var(--ds-color-neutral-300, #d9d9d9))',
+    transition: 'opacity var(--ds-personality-animation-entrance-duration, 220ms) var(--ds-input-transition-timing, ease), box-shadow var(--ds-personality-animation-entrance-duration, 220ms) var(--ds-input-transition-timing, ease)',
   };
 
   return (
@@ -133,7 +135,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
                   fontSize: '16px',
                   fontWeight: 600,
                   marginBottom: '8px',
-                  color: 'var(--ds-color-text-primary, #1a1a1a)',
+                  color: 'var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a))',
                 }}
               >
                 {title}
@@ -144,7 +146,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
                 id="alert-dialog-desc"
                 style={{
                   fontSize: '14px',
-                  color: 'var(--ds-color-text-secondary, #666)',
+                  color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666))',
                   lineHeight: 1.5,
                 }}
               >

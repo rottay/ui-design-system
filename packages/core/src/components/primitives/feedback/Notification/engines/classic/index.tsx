@@ -367,7 +367,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         padding: '16px 24px',
         borderRadius: '8px',
         backgroundColor: 'var(--ds-color-bg-elevated)',
-        boxShadow: '0 6px 16px 0 rgba(0, 0, 0, 0.08)',
+        boxShadow: 'var(--ds-notification-shadow, var(--ds-shadow-lg))',
         cursor: onClick ? 'pointer' : 'default',
         ...typeStyles[type],
         ...style,
@@ -392,7 +392,12 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
 
           {/* Description */}
           {description && (
-            <div style={{ color: 'rgba(0, 0, 0, 0.65)', fontSize: '14px' }}>
+            <div
+              style={{
+                color: 'var(--ds-notification-description-color, var(--ds-color-text-secondary))',
+                fontSize: '14px',
+              }}
+            >
               {description}
             </div>
           )}
@@ -413,7 +418,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
               background: 'none',
               cursor: 'pointer',
               padding: '0',
-              color: 'rgba(0, 0, 0, 0.45)',
+              color: 'var(--ds-notification-close-color, var(--ds-color-text-tertiary))',
               fontSize: '14px',
             }}
             aria-label="Close"

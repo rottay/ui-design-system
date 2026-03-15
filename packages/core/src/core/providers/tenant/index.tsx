@@ -52,7 +52,7 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect, useMemo } from 'react';
 import type { TenantConfig, TenantContextValue } from '../../types';
 
 const TenantContext = createContext<TenantContextValue | null>(null);
@@ -82,10 +82,10 @@ export function TenantProvider({
     };
   }, [config?.slug]);
 
-  const value: TenantContextValue = {
-    config,
-    isLoading,
-  };
+  const value = useMemo<TenantContextValue>(
+    () => ({ config, isLoading }),
+    [config, isLoading],
+  );
 
   return (
     <TenantContext.Provider value={value}>

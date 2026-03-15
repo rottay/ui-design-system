@@ -293,10 +293,11 @@ export default function RusticStatsGrid(props: StatsGridProps) {
         ...style,
       }}
     >
-      {stats.map((stat) => {
+      {stats.map((stat, index) => {
+        const statKey = stat.key ?? `${stat.label ?? 'stat'}-${index}`;
         const defaultRender = (
           <StatCard
-            key={stat.key}
+            key={statKey}
             stat={stat}
             sparkline={sparkline}
             variant={variant}
@@ -306,7 +307,7 @@ export default function RusticStatsGrid(props: StatsGridProps) {
           />
         );
         return (
-          <React.Fragment key={stat.key}>
+          <React.Fragment key={statKey}>
             {renderStat ? renderStat(stat, defaultRender) : defaultRender}
           </React.Fragment>
         );

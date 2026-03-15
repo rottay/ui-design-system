@@ -81,7 +81,7 @@
  * // Thick colored divider
  * <Divider
  *   thickness="thick"
- *   color="#3b82f6"
+ *   color="var(--ds-color-primary)"
  *   spacing="lg"
  * />
  *

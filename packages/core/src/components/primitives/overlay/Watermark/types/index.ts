@@ -16,7 +16,7 @@
  * import type { WatermarkProps, WatermarkFont } from '@rottay/design-system';
  *
  * const font: WatermarkFont = {
- *   color: 'rgba(0, 0, 0, 0.15)',
+ *   color: 'var(--ds-watermark-color)',
  *   fontSize: 16,
  *   fontWeight: 'bold',
  *   fontFamily: 'Arial',
@@ -42,7 +42,7 @@ import type { ReactNode, CSSProperties } from 'react';
  * @example
  * ```tsx
  * const font: WatermarkFont = {
- *   color: 'rgba(0, 0, 0, 0.15)',
+ *   color: 'var(--ds-watermark-color)',
  *   fontSize: 16,
  *   fontWeight: 'bold',
  *   fontFamily: 'Arial',
@@ -72,7 +72,7 @@ export interface WatermarkFont {
  *   content: 'Confidential',
  *   rotate: -22,
  *   gap: [100, 100],
- *   font: { color: 'rgba(0, 0, 0, 0.15)' },
+ *   font: { color: 'var(--ds-watermark-color)' },
  * };
  * ```
  */
@@ -115,7 +115,7 @@ export const WATERMARK_DEFAULTS: Partial<WatermarkProps> = {
   offset: [0, 0],
   zIndex: 9,
   font: {
-    color: 'rgba(0, 0, 0, 0.15)',
+    color: 'var(--ds-watermark-color, rgba(0, 0, 0, 0.15))',
     fontSize: 16,
     fontWeight: 'normal',
     fontFamily: 'sans-serif',

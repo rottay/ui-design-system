@@ -78,8 +78,8 @@ import React, { forwardRef } from 'react';
  * <Progress.Line
  *   percent={75}
  *   size="lg"
- *   strokeColor="#1890ff"
- *   trailColor="#f0f0f0"
+ *   strokeColor="var(--ds-color-primary)"
+ *   trailColor="var(--ds-color-neutral-200)"
  *   showInfo
  *   format={(p) => `${p}%`}
  *   className="my-progress"

@@ -10,10 +10,17 @@ import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import type { UserProfileCardProps } from '../../types';
 
 const statusColors: Record<string, string> = {
-  active: '#52c41a',
-  away: '#faad14',
-  busy: '#f5222d',
-  offline: '#8c8c8c',
+  active: 'var(--ds-color-success)',
+  away: 'var(--ds-color-warning)',
+  busy: 'var(--ds-color-error)',
+  offline: 'var(--ds-color-text-tertiary)',
+};
+
+const statusTagColors: Record<string, string> = {
+  active: 'success',
+  away: 'warning',
+  busy: 'error',
+  offline: 'default',
 };
 
 const statusLabels: Record<string, string> = {
@@ -72,14 +79,14 @@ export default function ClassicUserProfileCard(props: UserProfileCardProps) {
             height: 10,
             borderRadius: '50%',
             background: isOnline ? statusColors.active : statusColors.offline,
-            border: '2px solid #fff',
+            border: '2px solid var(--ds-color-bg-base)',
           }} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 600, fontSize: s.titleSize, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {user.name}
           </div>
-          <div style={{ fontSize: s.descSize, color: 'rgba(0,0,0,0.45)' }}>
+          <div style={{ fontSize: s.descSize, color: 'var(--ds-color-text-secondary)' }}>
             {user.role}
           </div>
         </div>
@@ -109,13 +116,13 @@ export default function ClassicUserProfileCard(props: UserProfileCardProps) {
           height: 12,
           borderRadius: '50%',
           background: isOnline ? statusColors.active : statusColors.offline,
-          border: '2px solid #fff',
+          border: '2px solid var(--ds-color-bg-base)',
         }} />
       </div>
 
       <div style={{ marginBottom: 4 }}>
         <div style={{ fontWeight: 600, fontSize: s.titleSize }}>{user.name}</div>
-        <div style={{ fontSize: s.descSize, color: 'rgba(0,0,0,0.45)', marginTop: 2 }}>{user.role}</div>
+        <div style={{ fontSize: s.descSize, color: 'var(--ds-color-text-secondary)', marginTop: 2 }}>{user.role}</div>
       </div>
 
       {user.department && (
@@ -123,14 +130,14 @@ export default function ClassicUserProfileCard(props: UserProfileCardProps) {
       )}
 
       {user.email && (
-        <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', marginBottom: 12 }}>
+        <div style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)', marginBottom: 12 }}>
           <MailOutlined style={{ marginRight: 4 }} />
           {user.email}
         </div>
       )}
 
       {user.status && (
-        <Tag color={statusColors[user.status]} style={{ marginBottom: 12 }}>
+        <Tag color={statusTagColors[user.status]} style={{ marginBottom: 12 }}>
           {statusLabels[user.status]}
         </Tag>
       )}

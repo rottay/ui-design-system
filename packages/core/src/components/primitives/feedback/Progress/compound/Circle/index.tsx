@@ -41,8 +41,8 @@
  * ```tsx
  * <Progress.Circle
  *   percent={100}
- *   strokeColor="#52c41a"
- *   trailColor="#f0f0f0"
+ *   strokeColor="var(--ds-color-success)"
+ *   trailColor="var(--ds-color-neutral-200)"
  * />
  * ```
  *
@@ -81,8 +81,8 @@ import React, { forwardRef } from 'react';
  *   percent={75}
  *   size={120}
  *   strokeWidth={8}
- *   strokeColor="#1890ff"
- *   trailColor="#f0f0f0"
+ *   strokeColor="var(--ds-color-primary)"
+ *   trailColor="var(--ds-color-neutral-200)"
  *   showInfo
  *   format={(p) => `${p}%`}
  *   className="my-progress"

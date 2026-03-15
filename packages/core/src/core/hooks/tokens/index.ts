@@ -35,6 +35,24 @@ export { getEngineTokens, ENGINE_TOKENS } from './engine-tokens';
 export type { EngineTokenOverrides } from './engine-tokens';
 export { DEFAULT_PERSONALITY } from './personality-defaults';
 
+// Granular sub-hooks for subscribing to specific token slices
+export {
+  useColorTokens,
+  useSpacingTokens,
+  useMotionTokens,
+  useTypographyTokens,
+  useCardTokens,
+  useAccentTokens,
+} from './sub-hooks';
+export type {
+  ColorTokens,
+  SpacingTokens,
+  MotionTokenSlice,
+  TypographyTokenSlice,
+  CardTokens,
+  AccentTokens,
+} from './sub-hooks';
+
 /**
  * Creates a CSS variable-based color scale for a semantic color category.
  * These reference CSS custom properties that tenants can override.

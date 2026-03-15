@@ -191,4 +191,68 @@ describe('Transfer runtime engine coverage', () => {
 
     expect(container.querySelector('.rottay-transfer--rustic')).toBeTruthy();
   });
+
+  it('covers rustic pagination, default filtering, select-all toggles, focus rings, and button interaction states', () => {
+    const handleChange = vi.fn();
+    const handleSelectChange = vi.fn();
+    const handleSearch = vi.fn();
+
+    renderWithEngine(
+      <RusticTransfer
+        dataSource={[
+          { key: 'alpha', title: 'Alpha' },
+          { key: 'beta', title: 'Beta' },
+          { key: 'delta', title: 'Delta' },
+          { key: 'echo', title: 'Echo' },
+        ]}
+        defaultTargetKeys={['delta', 'echo']}
+        showSearch
+        showSelectAll
+        pagination={{ pageSize: 1 }}
+        onChange={handleChange}
+        onSelectChange={handleSelectChange}
+        onSearch={handleSearch}
+      />,
+      'rustic'
+    );
+
+    const searchBoxes = screen.getAllByPlaceholderText('Search');
+    const sourceSearch = searchBoxes[0] as HTMLInputElement;
+    const targetSearch = searchBoxes[1] as HTMLInputElement;
+
+    fireEvent.focus(sourceSearch);
+    expect(sourceSearch.style.borderColor).toBe('var(--ds-color-primary, #1677ff)');
+    fireEvent.blur(sourceSearch);
+    expect(sourceSearch.style.boxShadow).toBe('none');
+
+    fireEvent.change(targetSearch, { target: { value: 'ec' } });
+    expect(handleSearch).toHaveBeenCalledWith('right', 'ec');
+    expect(screen.getByText('Echo')).toBeInTheDocument();
+    expect(screen.queryByText('Delta')).not.toBeInTheDocument();
+
+    const nextButtons = screen.getAllByRole('button', { name: '›' });
+    fireEvent.click(nextButtons[0]);
+    expect(screen.getByText('Beta')).toBeInTheDocument();
+
+    const prevButtons = screen.getAllByRole('button', { name: '‹' });
+    fireEvent.click(prevButtons[0]);
+    expect(screen.getByText('Alpha')).toBeInTheDocument();
+
+    const selectAllBoxes = screen.getAllByRole('checkbox').filter((checkbox) => {
+      const input = checkbox as HTMLInputElement;
+      return !input.getAttribute('aria-label') && !input.closest('label');
+    });
+    fireEvent.click(selectAllBoxes[0]);
+    expect(handleSelectChange).toHaveBeenCalledWith(['alpha', 'beta'], []);
+
+    const pushButton = screen.getByRole('button', { name: '>' });
+    fireEvent.mouseEnter(pushButton);
+    expect(pushButton.style.transform).toBe('translateY(-1px) scale(1.02)');
+    fireEvent.mouseDown(pushButton);
+    expect(pushButton.style.transform).toBe('scale(0.97)');
+    fireEvent.mouseUp(pushButton);
+    expect(pushButton.style.transform).toBe('translateY(-1px) scale(1.02)');
+    fireEvent.mouseLeave(pushButton);
+    expect(pushButton.style.transform).toBe('translateY(0) scale(1)');
+  });
 });

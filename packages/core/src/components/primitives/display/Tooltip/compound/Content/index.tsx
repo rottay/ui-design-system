@@ -78,11 +78,11 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     // Content container styles using design system CSS variables
     const contentStyles: React.CSSProperties = {
       padding: 'var(--ds-tooltip-padding, 0.5rem 0.75rem)',
-      backgroundColor: 'var(--ds-tooltip-bg, rgba(0, 0, 0, 0.9))',
-      color: 'var(--ds-tooltip-color, white)',
+      backgroundColor: 'var(--ds-tooltip-bg, var(--ds-color-text-primary))',
+      color: 'var(--ds-tooltip-color, var(--ds-color-bg-base))',
       fontSize: 'var(--ds-tooltip-font-size, 0.875rem)',
       borderRadius: 'var(--ds-tooltip-radius, 0.375rem)',
-      boxShadow: 'var(--ds-tooltip-shadow, 0 4px 6px rgba(0, 0, 0, 0.1))',
+      boxShadow: 'var(--ds-tooltip-shadow, var(--ds-shadow-lg))',
       ...style,
     };
 
@@ -99,7 +99,7 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
       position: 'absolute',
       width: 'var(--ds-tooltip-arrow-size, 8px)',
       height: 'var(--ds-tooltip-arrow-size, 8px)',
-      backgroundColor: 'var(--ds-tooltip-bg, rgba(0, 0, 0, 0.9))',
+      backgroundColor: 'var(--ds-tooltip-bg, var(--ds-color-text-primary))',
       transform: 'rotate(45deg)',
       ...arrowPositions[side],
     };

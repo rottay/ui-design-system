@@ -58,12 +58,14 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
     const base: React.CSSProperties = {
       position: 'fixed',
       zIndex: 1060,
-      backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
-      boxShadow: '0 -4px 24px rgba(0, 0, 0, 0.12)',
+      backgroundColor: 'var(--ds-drawer-bg, var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff)))',
+      color: 'var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a))',
+      boxShadow: 'var(--ds-modal-shadow, var(--ds-shadow-xl))',
       fontFamily: 'var(--ds-font-family-base, inherit)',
       display: 'flex',
       flexDirection: 'column',
-      transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
+      transition: 'transform var(--ds-modal-animation-duration, 300ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1)), box-shadow var(--ds-modal-animation-duration, 300ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
+      border: '1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb))',
     };
 
     switch (side) {
@@ -112,9 +114,10 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))))',
             zIndex: 1059,
-            transition: 'opacity 0.3s',
+            transition: 'opacity var(--ds-modal-animation-duration, 300ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
+            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
           }}
           onClick={closeOnOverlayClick ? () => onOpenChange(false) : undefined}
         />
@@ -153,10 +156,10 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '12px 16px',
-              borderBottom: '1px solid var(--ds-color-neutral-200, #e5e7eb)',
+              borderBottom: '1px solid var(--ds-modal-header-border, var(--ds-color-neutral-200, #e5e7eb))',
             }}
           >
-            <span style={{ fontSize: 18, fontWeight: 600 }}>{title}</span>
+            <span style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', color: 'var(--ds-modal-title-color, inherit)' }}>{title}</span>
             <button
               type="button"
               onClick={() => onOpenChange(false)}
@@ -168,7 +171,8 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
                 cursor: 'pointer',
                 padding: '4px 8px',
                 borderRadius: 4,
-                color: 'var(--ds-color-text-secondary, #6b7280)',
+                color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #6b7280))',
+                transition: 'background-color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease), color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease)',
               }}
             >
               x

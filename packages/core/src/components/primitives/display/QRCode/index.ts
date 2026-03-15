@@ -33,8 +33,8 @@
  * <QRCode
  *   value="https://example.com"
  *   size={200}
- *   color="#1890ff"
- *   bgColor="#f0f0f0"
+ *   color="var(--ds-color-primary)"
+ *   bgColor="var(--ds-color-neutral-100)"
  * />
  * ```
  *

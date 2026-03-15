@@ -83,21 +83,25 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
   const backdropStyle: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
     fontFamily: 'var(--ds-font-family-base)',
+    padding: 'var(--ds-space-4, 1rem)',
   };
 
   const dialogStyle: React.CSSProperties = {
-    backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
-    borderRadius: 'var(--ds-radius-lg, 12px)',
+    backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff))',
+    color: 'var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a))',
+    borderRadius: 'var(--ds-modal-radius, var(--ds-radius-xl, 16px))',
     padding: '24px',
     maxWidth: '420px',
     width: '90vw',
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+    border: '1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb))',
+    boxShadow: 'var(--ds-modal-shadow, var(--ds-shadow-2xl))',
+    backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
     ...style,
   };
 
@@ -108,7 +112,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
     fontWeight: 500,
     cursor: loading ? 'not-allowed' : 'pointer',
     border: 'none',
-    transition: 'opacity 0.2s ease',
+    transition: 'transform var(--ds-personality-animation-entrance-duration, 220ms) var(--ds-input-transition-timing, ease), opacity var(--ds-personality-animation-entrance-duration, 220ms) var(--ds-input-transition-timing, ease), box-shadow var(--ds-personality-animation-entrance-duration, 220ms) var(--ds-input-transition-timing, ease)',
   };
 
   return (
@@ -128,7 +132,21 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
       >
         <div style={{ display: 'flex', gap: '12px' }}>
           {displayIcon && (
-            <div style={{ color: colors.icon, flexShrink: 0, marginTop: '2px' }}>
+            <div
+              style={{
+                color: colors.icon,
+                backgroundColor: colors.bg,
+                flexShrink: 0,
+                marginTop: '2px',
+                width: '44px',
+                height: '44px',
+                borderRadius: '9999px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: 'inset 0 0 0 1px var(--ds-color-alpha-white-20, rgba(255, 255, 255, 0.2))',
+              }}
+            >
               {displayIcon}
             </div>
           )}
@@ -140,7 +158,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
                   fontSize: '16px',
                   fontWeight: 600,
                   marginBottom: '8px',
-                  color: 'var(--ds-color-text-primary, #1a1a1a)',
+                  color: 'var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a))',
                 }}
               >
                 {title}
@@ -151,7 +169,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
                 id="confirm-desc"
                 style={{
                   fontSize: '14px',
-                  color: 'var(--ds-color-text-secondary, #666)',
+                  color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666))',
                   lineHeight: 1.5,
                 }}
               >
@@ -165,9 +183,9 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
             type="button"
             style={{
               ...buttonBaseStyle,
-              backgroundColor: 'transparent',
-              color: 'var(--ds-color-text-primary, #1a1a1a)',
-              border: '1px solid var(--ds-color-neutral-300, #d9d9d9)',
+              backgroundColor: 'var(--ds-color-bg-primary, transparent)',
+              color: 'var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a))',
+              border: '1px solid var(--ds-modal-footer-border, var(--ds-color-neutral-300, #d9d9d9))',
             }}
             onClick={onCancel}
             disabled={loading}
@@ -179,8 +197,9 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
             style={{
               ...buttonBaseStyle,
               backgroundColor: colors.button,
-              color: '#fff',
+              color: 'var(--ds-color-primary-foreground, #fff)',
               opacity: loading ? 0.7 : 1,
+              boxShadow: 'var(--ds-button-primary-shadow, var(--ds-shadow-sm))',
             }}
             onClick={handleConfirm}
             disabled={loading}

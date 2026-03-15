@@ -105,4 +105,45 @@ describe('PatternPricingTable', () => {
       expect(screen.getAllByText('Unlimited')).toHaveLength(2);
     },
   );
+
+  it.each(STABLE_ENGINES)(
+    'renders loading state in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const { container } = renderWithEngine(<Component {...createProps({ loading: true })} />, engine);
+
+      if (engine === 'modern') {
+        expect(container.querySelector('.loading-spinner')).toBeTruthy();
+        return;
+      }
+
+      expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    },
+  );
+
+  it.each(STABLE_ENGINES)(
+    'switches billing cycle and honors custom headers in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const onBillingCycleChange = vi.fn();
+
+      renderWithEngine(
+        <Component
+          {...createProps({
+            billingCycle: 'monthly',
+            onBillingCycleChange,
+            renderPlanHeader: (plan) => <div data-testid={`custom-header-${plan.id}`}>{plan.name} header</div>,
+          })}
+        />,
+        engine,
+      );
+
+      expect(screen.getByTestId('custom-header-free')).toBeInTheDocument();
+      expect(screen.queryByText('Most Popular')).not.toBeInTheDocument();
+
+      const billingToggle = screen.getByRole(engine === 'classic' ? 'switch' : 'checkbox');
+      fireEvent.click(billingToggle);
+      expect(onBillingCycleChange).toHaveBeenCalledWith('yearly');
+    },
+  );
 });

@@ -15,7 +15,7 @@
  *
  * Implementation details:
  * - Position calculated based on trigger getBoundingClientRect()
- * - Button colors based on okType (danger=#ef4444, primary=#3b82f6)
+ * - Button colors resolve from semantic confirm/danger tokens
  * - Loading state disables confirm button and reduces opacity
  * - Uses scroll offsets for scroll-aware positioning
  *
@@ -192,12 +192,14 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             left: position.left,
             transform: placement?.includes('bottom') ? 'translateX(-50%)' : 'translate(-50%, -100%)',
             zIndex: 'var(--ds-popconfirm-z-index, 1050)' as unknown as number,
-            backgroundColor: 'var(--ds-popconfirm-bg, #fff)',
-            borderRadius: 'var(--ds-popconfirm-radius, 8px)',
-            boxShadow: 'var(--ds-popconfirm-shadow, 0 4px 16px rgba(0, 0, 0, 0.15))',
+            backgroundColor: 'var(--ds-popconfirm-bg, var(--ds-color-bg-elevated, #fff))',
+            borderRadius: 'var(--ds-popconfirm-radius, var(--ds-radius-lg, 12px))',
+            boxShadow: 'var(--ds-popconfirm-shadow, var(--ds-shadow-lg))',
             padding: 'var(--ds-popconfirm-padding, 16px)',
             minWidth: 'var(--ds-popconfirm-min-width, 220px)',
             maxWidth: 'var(--ds-popconfirm-max-width, 350px)',
+            border: '1px solid var(--ds-popconfirm-border-color, var(--ds-color-neutral-200, #e5e7eb))',
+            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
             ...overlayStyle,
           }}
         >
@@ -231,7 +233,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                 padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
                 borderRadius: 'var(--ds-popconfirm-button-radius, 6px)',
                 border: '1px solid var(--ds-popconfirm-cancel-border, var(--ds-color-neutral-300, #d1d5db))',
-                backgroundColor: 'var(--ds-popconfirm-cancel-bg, #fff)',
+                backgroundColor: 'var(--ds-popconfirm-cancel-bg, var(--ds-color-bg-primary, #fff))',
                 cursor: 'pointer',
                 fontWeight: 500,
                 fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',

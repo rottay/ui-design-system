@@ -24,7 +24,7 @@
  *     { key: 'delete', label: 'Delete', danger: true },
  *   ]}
  *   onSelect={(key) => console.log('Selected:', key)}
- *   trigger={<div style={{ padding: 40, background: '#f0f0f0' }}>Right-click me</div>}
+ *   trigger={<div style={{ padding: 40, background: 'var(--ds-color-neutral-100)' }}>Right-click me</div>}
  * />
  * ```
  *

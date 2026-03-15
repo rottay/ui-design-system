@@ -138,8 +138,8 @@ const baseStyles = {
   },
   pageButtonHover: {
     transform: 'translateY(-1px) scale(1.02)',
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
-    borderColor: 'var(--ds-color-primary, #1677ff)',
+    boxShadow: 'var(--ds-table-page-button-hover-shadow, var(--ds-shadow-sm))',
+    borderColor: 'var(--ds-color-primary)',
   },
   pageButtonActive: {
     transform: 'scale(0.97)',
@@ -521,7 +521,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         textAlign: column.align,
         ...(isSortable ? baseStyles.thSortable : {}),
         ...(isSortHovered ? {
-          backgroundColor: 'var(--ds-table-header-bg-hover, var(--ds-color-bg-tertiary, rgba(0,0,0,0.04)))',
+          backgroundColor: 'var(--ds-table-header-bg-hover, var(--ds-color-bg-tertiary))',
         } : {}),
         ...getFixedStyle(column),
         ...(stickyConfig.enabled
@@ -582,7 +582,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     if (!hasFilters) return null;
     const cellStyle = getCellStyle();
     return (
-      <tr style={{ backgroundColor: 'var(--ds-table-filter-row-bg, var(--ds-color-bg-secondary, #fafafa))' }}>
+      <tr style={{ backgroundColor: 'var(--ds-table-filter-row-bg, var(--ds-color-bg-secondary))' }}>
         {rowSelection && <th style={{ ...cellStyle, width: '48px' }} />}
         {showExpandCol && <th style={{ ...cellStyle, width: '48px' }} />}
         {leafColumns.map((col, i) => {
@@ -599,8 +599,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 value={columnFilters[field || ''] || ''}
                 onChange={(e) => field && handleColumnFilter(field, e.target.value)}
                 onFocus={(e) => Object.assign(e.currentTarget.style, {
-                  borderColor: 'var(--ds-color-primary, #1677ff)',
-                  boxShadow: '0 0 0 3px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15)), 0 0 8px rgba(22, 119, 255, 0.08)',
+                  borderColor: 'var(--ds-color-primary)',
+                  boxShadow:
+                    'var(--ds-table-filter-focus-shadow, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200))',
                 })}
                 onBlur={(e) => Object.assign(e.currentTarget.style, {
                   borderColor: 'var(--ds-color-border-secondary, var(--ds-color-neutral-300))',
@@ -646,12 +647,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           : {}),
         ...(rowHoverable ? baseStyles.rowHover : {}),
         backgroundColor: isHovered && rowHoverable
-          ? 'var(--ds-table-row-bg-hover, rgba(0, 0, 0, 0.02))'
+          ? 'var(--ds-table-row-bg-hover, var(--ds-color-bg-secondary))'
           : isSelected
-            ? 'var(--ds-table-row-bg-selected, rgba(24, 144, 255, 0.1))'
+            ? 'var(--ds-table-row-bg-selected, var(--ds-color-primary-100))'
             : undefined,
         boxShadow: isHovered && rowHoverable && !isSelected
-          ? 'inset 3px 0 0 var(--ds-color-primary, #1677ff)'
+          ? 'inset 3px 0 0 var(--ds-color-primary)'
           : undefined,
       };
 

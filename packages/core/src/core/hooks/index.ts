@@ -39,6 +39,22 @@
  * - `ShortcutProvider` - Context provider for the shortcut registry
  * - `formatShortcutKey` - Format shortcut key strings for display
  *
+ * **State Hooks:**
+ * - `useUndoRedo` - State management with full undo/redo history
+ * - `useLayoutPreference` - Persisted layout preferences (sidebar, columns, density)
+ *
+ * **Routing Hooks:**
+ * - `useRouterState` - Sync surface state with URL query params (framework-agnostic)
+ *
+ * **Data Hooks:**
+ * - `useSurfaceQuery` - Data fetching for Surface components
+ * - `useTableExport` - Export table data to CSV, JSON, or clipboard
+ * - `useOptimisticUpdate` - Optimistic mutations with automatic rollback
+ *
+ * **Form Hooks:**
+ * - `useAutoSave` - Debounced auto-save with status tracking
+ * - `useDraftSave` - localStorage draft persistence with TTL expiration
+ *
  * @example Engine selection
  * ```tsx
  * const { engine, setEngine } = useEngine();
@@ -99,6 +115,24 @@ export { useProductProfile } from './product-profile';
 // Token hooks
 export { useTokens, useOptionalTokens } from './tokens';
 
+// Granular token sub-hooks (subscribe to specific slices only)
+export {
+  useColorTokens,
+  useSpacingTokens,
+  useMotionTokens,
+  useTypographyTokens,
+  useCardTokens,
+  useAccentTokens,
+} from './tokens';
+export type {
+  ColorTokens,
+  SpacingTokens,
+  MotionTokenSlice,
+  TypographyTokenSlice,
+  CardTokens,
+  AccentTokens,
+} from './tokens';
+
 // Feature hooks
 export { useFeatures, useHasFeature, useFeatureContext } from './features';
 
@@ -142,13 +176,35 @@ export type {
 } from './shortcuts';
 
 // Data hooks
-export { useSurfaceQuery } from './data';
+export { useSurfaceQuery, useTableExport, useOptimisticUpdate } from './data';
 export type {
   SurfaceQueryParams,
   SurfaceQueryResult,
   UseSurfaceQueryOptions,
   UseSurfaceQueryReturn,
+  TableExportColumn,
+  UseTableExportOptions,
+  UseTableExportReturn,
+  UseOptimisticUpdateOptions,
+  UseOptimisticUpdateReturn,
 } from './data';
+
+// Form hooks
+export { useAutoSave, useDraftSave } from './form';
+export type {
+  AutoSaveStatus,
+  UseAutoSaveOptions,
+  UseAutoSaveReturn,
+  UseDraftSaveOptions,
+  UseDraftSaveReturn,
+} from './form';
+
+// Routing hooks
+export { useRouterState } from './routing';
+export type {
+  UseRouterStateOptions,
+  UseRouterStateReturn,
+} from './routing';
 
 // AI hooks
 export { useStreamingText, useChat } from './ai';
@@ -159,3 +215,14 @@ export type {
   UseChatOptions,
   UseChatReturn,
 } from './ai';
+
+// State hooks
+export { useUndoRedo, useLayoutPreference } from './state';
+export type {
+  UseUndoRedoOptions,
+  UseUndoRedoReturn,
+  ColumnPreference,
+  LayoutPreference,
+  UseLayoutPreferenceOptions,
+  UseLayoutPreferenceReturn,
+} from './state';

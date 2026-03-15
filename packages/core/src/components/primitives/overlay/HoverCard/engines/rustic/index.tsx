@@ -113,12 +113,13 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
             zIndex: 1060,
             minWidth: 240,
             maxWidth: 320,
-            backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
-            borderRadius: 12,
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)',
+            backgroundColor: 'var(--ds-popover-bg, var(--ds-color-bg-elevated, #fff))',
+            borderRadius: 'var(--ds-popover-radius, var(--ds-radius-lg, 12px))',
+            boxShadow: 'var(--ds-popover-shadow, var(--ds-shadow-lg))',
             padding: 16,
-            border: '1px solid var(--ds-color-neutral-200, #e5e7eb)',
+            border: '1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb))',
             fontFamily: 'var(--ds-font-family-base, inherit)',
+            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
             ...overlayStyle,
           }}
         >

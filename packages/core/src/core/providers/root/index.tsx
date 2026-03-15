@@ -76,7 +76,7 @@
  * @package @rottay/design-system
  */
 
-import React, { ReactNode, useState, useEffect } from 'react';
+import React, { ReactNode, useState, useEffect, memo } from 'react';
 import { EngineProvider } from '../engine';
 import { ThemeProvider } from '../theme';
 import { TenantProvider } from '../tenant';
@@ -146,6 +146,22 @@ export interface DesignSystemProviderProps {
  * Simple loading component - minimal to avoid SSR issues
  */
 const LoadingScreen: React.FC = () => null;
+
+/**
+ * Memoized children boundary.
+ *
+ * Prevents the entire children subtree from re-rendering when a provider
+ * higher in the composition chain re-renders due to its own state changes
+ * (e.g., ThemeProvider loading state). Children will only re-render when
+ * they consume a context whose value actually changed.
+ */
+const MemoizedChildren = memo(function MemoizedChildren({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return <>{children}</>;
+});
 
 /**
  * Merges a resolved tenant with app-level overrides.
@@ -347,7 +363,7 @@ export function DesignSystemProvider({
             >
               <FeatureProvider features={tenantConfig.features ?? []}>
                 <SystemCssVariablesBridge />
-                {children}
+                <MemoizedChildren>{children}</MemoizedChildren>
               </FeatureProvider>
             </ThemeProvider>
           </EngineProvider>

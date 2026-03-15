@@ -17,7 +17,7 @@
  * - getTargetElement resolves selectors, refs, and functions
  * - useEffect adds keyboard listener for Escape key
  * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
- * - Primary type adds blue border (#3b82f6) to dialog
+ * - Primary type adds a semantic primary border to the dialog
  * - Step indicators are circular divs with conditional colors
  *
  * This implementation is ideal for:
