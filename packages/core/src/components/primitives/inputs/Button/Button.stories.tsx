@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import {
   EngineComparison,
   VariantEngineMatrix,

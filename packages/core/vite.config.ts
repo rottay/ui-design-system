@@ -29,9 +29,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      '@types': resolve(__dirname, 'src/core/types'),
+      '@types': resolve(__dirname, 'src/contracts'),
       '@components': resolve(__dirname, 'src/components'),
-      '@core': resolve(__dirname, 'src/core'),
     },
   },
   build: {

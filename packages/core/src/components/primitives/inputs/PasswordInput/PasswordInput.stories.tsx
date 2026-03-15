@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { PasswordInput } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof PasswordInput> = {

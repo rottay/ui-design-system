@@ -32,8 +32,7 @@
     "paths": {
       "@/*": ["./*"],
       "@types/*": ["./contracts/*"],
-      "@components/*": ["./components/*"],
-      "@core/*": ["./core/*"]
+      "@components/*": ["./components/*"]
     }
   },
   "include": ["src"],

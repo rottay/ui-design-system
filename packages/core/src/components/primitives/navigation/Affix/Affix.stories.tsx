@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState, useRef } from 'react';
 import { Affix } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Affix> = {
@@ -34,7 +34,7 @@ The Affix component makes elements stick to the viewport when scrolling past a t
 
 ## Usage
 \`\`\`tsx
-import { Affix } from '@rottay/design-system';
+import { Affix } from '@rottay/bootstrap';
 
 // Basic sticky header
 <Affix offsetTop={0}>

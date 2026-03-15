@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { DesignSystemProvider } from '../../design-system';
+import { DesignSystemProvider } from '../../bootstrap';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../contracts';
 import {
   Badge,

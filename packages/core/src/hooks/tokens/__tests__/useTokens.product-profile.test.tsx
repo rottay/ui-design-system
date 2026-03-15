@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { DesignSystemProvider } from '../../../design-system';
+import { DesignSystemProvider } from '../../../bootstrap';
 import { useTokens } from '..';
 import type { TenantConfig } from '../../../contracts';
 

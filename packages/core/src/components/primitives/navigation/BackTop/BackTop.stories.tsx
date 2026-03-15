@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useRef } from 'react';
 import { BackTop } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof BackTop> = {
@@ -34,7 +34,7 @@ The BackTop component provides a button that scrolls to the top of the page when
 
 ## Usage
 \`\`\`tsx
-import { BackTop } from '@rottay/design-system';
+import { BackTop } from '@rottay/bootstrap';
 
 <BackTop />
 

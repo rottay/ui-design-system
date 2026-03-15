@@ -14,7 +14,7 @@ export * from './engines';
 export { ThemeProvider, ThemeContext } from './theming';
 export type { ThemeProviderProps, ThemeConfig, ThemeContextValue } from './theming';
 export * from './features';
-export * from './design-system';
+export * from './bootstrap';
 export * from './contracts';
 export * from './errors';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { DesignSystemProvider } from '../../../design-system';
+import { DesignSystemProvider } from '../../../bootstrap';
 import type { TenantConfig } from '../../../contracts';
 import { useChartPersonality } from './hooks';
 import { mockMatchMedia } from '../../../testing/helpers/match-media';

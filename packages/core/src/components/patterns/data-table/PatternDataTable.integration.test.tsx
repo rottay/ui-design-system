@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 import { STABLE_ENGINES } from '../../../testing/helpers/engine-test-utils';
-import { DesignSystemProvider } from '../../../design-system';
+import { DesignSystemProvider } from '../../../bootstrap';
 import type { TenantConfig } from '../../../contracts';
 import { PatternDataTable } from '.';
 

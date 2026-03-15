@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { HoverCard } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 
 const meta: Meta<typeof HoverCard> = {
   title: 'Primitives/Overlay/HoverCard',

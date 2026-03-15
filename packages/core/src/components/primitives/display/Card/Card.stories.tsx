@@ -11,7 +11,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Card } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 /**

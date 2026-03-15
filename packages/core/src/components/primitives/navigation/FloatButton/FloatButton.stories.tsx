@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { FloatButton } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof FloatButton> = {
@@ -38,7 +38,7 @@ The FloatButton component provides a floating action button for quick actions.
 
 ## Usage
 \`\`\`tsx
-import { FloatButton } from '@rottay/design-system';
+import { FloatButton } from '@rottay/bootstrap';
 
 <FloatButton icon={<PlusIcon />} />
 

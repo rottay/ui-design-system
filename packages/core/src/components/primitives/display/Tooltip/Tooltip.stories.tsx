@@ -9,7 +9,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tooltip } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 /**

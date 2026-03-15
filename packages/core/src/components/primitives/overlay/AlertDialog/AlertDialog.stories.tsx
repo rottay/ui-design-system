@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { AlertDialog } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 
 const meta: Meta<typeof AlertDialog> = {
   title: 'Primitives/Overlay/AlertDialog',

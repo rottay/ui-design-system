@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { ContextMenu } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 
 const meta: Meta<typeof ContextMenu> = {
   title: 'Primitives/Overlay/ContextMenu',

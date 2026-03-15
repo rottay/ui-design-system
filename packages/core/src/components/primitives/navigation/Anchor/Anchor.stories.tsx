@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Anchor } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Anchor> = {
@@ -34,7 +34,7 @@ The Anchor component provides navigation within a page by linking to different s
 
 ## Usage
 \`\`\`tsx
-import { Anchor } from '@rottay/design-system';
+import { Anchor } from '@rottay/bootstrap';
 
 <Anchor>
   <Anchor.Link href="#section1" title="Section 1" />

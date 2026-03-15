@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Segmented } from './';
-import { DesignSystemProvider } from '../../../../design-system';
+import { DesignSystemProvider } from '../../../../bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Segmented> = {
@@ -36,7 +36,7 @@ The Segmented component is used to display multiple options and allows users to 
 
 ## Usage
 \`\`\`tsx
-import { Segmented } from '@rottay/design-system';
+import { Segmented } from '@rottay/bootstrap';
 
 <Segmented
   options={['Daily', 'Weekly', 'Monthly']}
