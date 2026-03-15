@@ -351,12 +351,14 @@ export function DesignSystemProvider({
   }
 
   // Resolve the vertical preset (if any)
+  // Priority: explicit `vertical` prop > tenantConfig.vertical (from DB) > undefined
+  const verticalSource = vertical ?? tenantConfig.vertical ?? undefined;
   const resolvedVertical: VerticalPreset | undefined =
-    vertical == null
+    verticalSource == null
       ? undefined
-      : typeof vertical === 'string'
-        ? getVerticalPreset(vertical)
-        : vertical;
+      : typeof verticalSource === 'string'
+        ? getVerticalPreset(verticalSource)
+        : verticalSource;
 
   // Engine: forceEngine > tenant config > vertical preset > 'classic'
   const engine = forceEngine ?? tenantConfig.engine ?? resolvedVertical?.engine ?? 'classic';

@@ -12,6 +12,7 @@ import {
   getCustomComponent,
   getRegisteredComponents,
   getRegisteredComponentCount,
+  getRegisteredPacks,
   configureCustomEngine,
   getCustomEngineConfig,
   createCustomWrapper,
@@ -242,6 +243,188 @@ describe('Custom Engine', () => {
       expect(status.config.fallbackEngine).toBe('modern');
       expect(status.hasComponent('Alert')).toBe(true);
       expect(status.hasComponent('Missing')).toBe(false);
+    });
+  });
+
+  // ── Pack-scoped registration tests ──
+
+  describe('pack-scoped registration', () => {
+    it('should isolate components between different packs', () => {
+      const AcmeButton = () => null;
+      const GlobexButton = () => null;
+
+      registerCustomComponent('Button', AcmeButton, 'acme-pack');
+      registerCustomComponent('Button', GlobexButton, 'globex-pack');
+
+      expect(getCustomComponent('Button', 'acme-pack')).toBe(AcmeButton);
+      expect(getCustomComponent('Button', 'globex-pack')).toBe(GlobexButton);
+
+      // Default pack should not have Button
+      expect(hasCustomComponent('Button')).toBe(false);
+    });
+
+    it('should not cross-contaminate between packs and default', () => {
+      const DefaultButton = () => null;
+      const AcmeButton = () => null;
+
+      registerCustomComponent('Button', DefaultButton);
+      registerCustomComponent('Button', AcmeButton, 'acme-pack');
+
+      expect(getCustomComponent('Button')).toBe(DefaultButton);
+      expect(getCustomComponent('Button', 'acme-pack')).toBe(AcmeButton);
+    });
+
+    it('should track counts per pack independently', () => {
+      registerCustomComponent('Button', () => null, 'acme-pack');
+      registerCustomComponent('Alert', () => null, 'acme-pack');
+      registerCustomComponent('Card', () => null, 'globex-pack');
+
+      expect(getRegisteredComponentCount('acme-pack')).toBe(2);
+      expect(getRegisteredComponentCount('globex-pack')).toBe(1);
+      expect(getRegisteredComponentCount()).toBe(0); // default pack empty
+    });
+
+    it('should list components per pack', () => {
+      registerCustomComponent('Button', () => null, 'acme-pack');
+      registerCustomComponent('Alert', () => null, 'acme-pack');
+      registerCustomComponent('Card', () => null, 'globex-pack');
+
+      expect(getRegisteredComponents('acme-pack')).toEqual(
+        expect.arrayContaining(['Button', 'Alert'])
+      );
+      expect(getRegisteredComponents('globex-pack')).toEqual(['Card']);
+      expect(getRegisteredComponents()).toEqual([]); // default pack
+    });
+
+    it('should register multiple components into a specific pack', () => {
+      const AcmeButton = () => null;
+      const AcmeCard = () => null;
+
+      registerCustomComponents(
+        { Button: AcmeButton, Card: AcmeCard },
+        'acme-pack'
+      );
+
+      expect(hasCustomComponent('Button', 'acme-pack')).toBe(true);
+      expect(hasCustomComponent('Card', 'acme-pack')).toBe(true);
+      expect(hasCustomComponent('Button')).toBe(false); // not in default
+    });
+
+    it('should unregister from a specific pack without affecting others', () => {
+      registerCustomComponent('Button', () => null, 'acme-pack');
+      registerCustomComponent('Button', () => null, 'globex-pack');
+
+      unregisterCustomComponent('Button', 'acme-pack');
+
+      expect(hasCustomComponent('Button', 'acme-pack')).toBe(false);
+      expect(hasCustomComponent('Button', 'globex-pack')).toBe(true);
+    });
+
+    it('should clear only the specified pack', () => {
+      registerCustomComponent('Button', () => null, 'acme-pack');
+      registerCustomComponent('Alert', () => null, 'acme-pack');
+      registerCustomComponent('Card', () => null, 'globex-pack');
+
+      clearCustomRegistry('acme-pack');
+
+      expect(getRegisteredComponentCount('acme-pack')).toBe(0);
+      expect(getRegisteredComponentCount('globex-pack')).toBe(1);
+    });
+
+    it('should clear all packs when called without argument', () => {
+      registerCustomComponent('Button', () => null, 'acme-pack');
+      registerCustomComponent('Card', () => null, 'globex-pack');
+      registerCustomComponent('Alert', () => null); // default
+
+      clearCustomRegistry();
+
+      expect(getRegisteredComponentCount('acme-pack')).toBe(0);
+      expect(getRegisteredComponentCount('globex-pack')).toBe(0);
+      expect(getRegisteredComponentCount()).toBe(0);
+    });
+
+    it('should list all registered packs via getRegisteredPacks', () => {
+      registerCustomComponent('Button', () => null); // default pack
+      registerCustomComponent('Alert', () => null, 'acme-pack');
+      registerCustomComponent('Card', () => null, 'globex-pack');
+
+      const packs = getRegisteredPacks();
+      expect(packs).toContain('__default__');
+      expect(packs).toContain('acme-pack');
+      expect(packs).toContain('globex-pack');
+      expect(packs).toHaveLength(3);
+    });
+
+    it('should include pack info in logger messages', () => {
+      const logger = vi.fn();
+      configureCustomEngine({ logger });
+
+      registerCustomComponent('Button', () => null, 'acme-pack');
+      expect(logger).toHaveBeenCalledWith(
+        'Registered custom component: Button [pack: acme-pack]',
+        'info'
+      );
+
+      unregisterCustomComponent('Button', 'acme-pack');
+      expect(logger).toHaveBeenCalledWith(
+        'Unregistered custom component: Button [pack: acme-pack]',
+        'info'
+      );
+
+      registerCustomComponent('Card', () => null, 'acme-pack');
+      clearCustomRegistry('acme-pack');
+      expect(logger).toHaveBeenCalledWith(
+        'Cleared custom components [pack: acme-pack]',
+        'info'
+      );
+    });
+
+    it('should resolve pack-scoped components in createCustomWrapper', async () => {
+      const AcmeButton = () => null;
+      const GlobexButton = () => null;
+      const Fallback = () => null;
+      const fallbackLoader = vi.fn(async () => ({ default: Fallback as any }));
+
+      registerCustomComponent('Button', AcmeButton, 'acme-pack');
+      registerCustomComponent('Button', GlobexButton, 'globex-pack');
+
+      // Acme pack should resolve to AcmeButton
+      const acmeLoader = createCustomWrapper('Button', fallbackLoader, 'acme-pack');
+      const acmeResult = await acmeLoader();
+      expect(acmeResult.default).toBe(AcmeButton);
+
+      // Globex pack should resolve to GlobexButton
+      const globexLoader = createCustomWrapper('Button', fallbackLoader, 'globex-pack');
+      const globexResult = await globexLoader();
+      expect(globexResult.default).toBe(GlobexButton);
+
+      // Unknown pack should fall back
+      const unknownLoader = createCustomWrapper('Button', fallbackLoader, 'unknown-pack');
+      const unknownResult = await unknownLoader();
+      expect(unknownResult.default).toBe(Fallback);
+
+      // Default pack should also fall back (Button was only registered in named packs)
+      const defaultLoader = createCustomWrapper('Button', fallbackLoader);
+      const defaultResult = await defaultLoader();
+      expect(defaultResult.default).toBe(Fallback);
+    });
+
+    it('should scope useCustomStatus to a specific pack', () => {
+      registerCustomComponent('Button', () => null, 'acme-pack');
+      registerCustomComponent('Alert', () => null, 'globex-pack');
+      registerCustomComponent('Card', () => null); // default
+
+      const acmeStatus = useCustomStatus('acme-pack');
+      expect(acmeStatus.registeredComponents).toEqual(['Button']);
+      expect(acmeStatus.componentCount).toBe(1);
+      expect(acmeStatus.hasComponent('Button')).toBe(true);
+      expect(acmeStatus.hasComponent('Alert')).toBe(false);
+
+      const defaultStatus = useCustomStatus();
+      expect(defaultStatus.registeredComponents).toEqual(['Card']);
+      expect(defaultStatus.componentCount).toBe(1);
+      expect(defaultStatus.packs).toContain('acme-pack');
+      expect(defaultStatus.packs).toContain('globex-pack');
     });
   });
 });

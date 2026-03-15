@@ -1,5 +1,6 @@
 import type { FeedItem } from '../patterns';
 import type {
+  ActivitySurfaceConfig,
   AuditSurfaceConfig,
   AuthSurfaceConfig,
   BillingSurfaceConfig,
@@ -10,20 +11,25 @@ import type {
   DetailSurfaceConfig,
   EditorSurfaceConfig,
   EmptyStateSurfaceConfig,
+  FileBrowserSurfaceConfig,
   FormSurfaceConfig,
   HeaderSurfaceConfig,
   ImportExportSurfaceConfig,
+  IntegrationSurfaceConfig,
+  KanbanSurfaceConfig,
   ListSurfaceConfig,
   MediaSurfaceConfig,
   NotificationSurfaceConfig,
   OnboardingSurfaceConfig,
   OperationalSurfaceConfig,
+  PricingSurfaceConfig,
   ProfileSurfaceConfig,
   ReportSurfaceConfig,
   SchedulerSurfaceConfig,
   SearchSurfaceConfig,
   SettingsSurfaceConfig,
   SidebarSurfaceConfig,
+  TeamSurfaceConfig,
   VisualizationSurfaceConfig,
   WizardSurfaceConfig,
 } from './types';
@@ -185,5 +191,41 @@ export function createImportExportSurfaceConfig(
 export function createReportSurfaceConfig(
   config: ReportSurfaceConfig
 ): ReportSurfaceConfig {
+  return config;
+}
+
+export function createTeamSurfaceConfig(
+  config: TeamSurfaceConfig
+): TeamSurfaceConfig {
+  return config;
+}
+
+export function createIntegrationSurfaceConfig(
+  config: IntegrationSurfaceConfig
+): IntegrationSurfaceConfig {
+  return config;
+}
+
+export function createKanbanSurfaceConfig(
+  config: KanbanSurfaceConfig
+): KanbanSurfaceConfig {
+  return config;
+}
+
+export function createActivitySurfaceConfig(
+  config: ActivitySurfaceConfig
+): ActivitySurfaceConfig {
+  return config;
+}
+
+export function createFileBrowserSurfaceConfig(
+  config: FileBrowserSurfaceConfig
+): FileBrowserSurfaceConfig {
+  return config;
+}
+
+export function createPricingSurfaceConfig(
+  config: PricingSurfaceConfig
+): PricingSurfaceConfig {
   return config;
 }

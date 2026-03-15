@@ -57,9 +57,29 @@ import type { ComponentType, ForwardRefExoticComponent, PropsWithoutRef, RefAttr
 type ComponentRegistry = Map<string, ComponentType<unknown>>;
 
 /**
- * Global registry of custom engine implementations
+ * Pack-scoped registries of custom engine implementations.
+ * Each pack (identified by a string key) has its own independent ComponentRegistry,
+ * enabling different tenants to use different component packs in the same runtime.
  */
-const customRegistry: ComponentRegistry = new Map();
+const packRegistries: Map<string, ComponentRegistry> = new Map();
+
+/**
+ * Default pack key used when no explicit pack is specified.
+ * Maintains backward compatibility with code that predates pack-scoped registries.
+ */
+const DEFAULT_PACK = '__default__';
+
+/**
+ * Returns the ComponentRegistry for the given pack, creating one if it doesn't exist.
+ */
+function getPackRegistry(pack: string): ComponentRegistry {
+  let registry = packRegistries.get(pack);
+  if (!registry) {
+    registry = new Map();
+    packRegistries.set(pack, registry);
+  }
+  return registry;
+}
 
 /**
  * Configuration for Custom engine
@@ -125,23 +145,31 @@ export function getCustomEngineConfig(): CustomEngineConfig {
  *
  * @param componentName - The name of the component (e.g., 'Button', 'Alert')
  * @param implementation - The React component implementation
+ * @param pack - Optional pack identifier for tenant-scoped registries. Defaults to DEFAULT_PACK.
  *
  * @example
  * ```tsx
  * import { registerCustomComponent } from '@rottay/design-system';
  * import { MyCustomButton } from './MyCustomButton';
  *
+ * // Register in default pack
  * registerCustomComponent('Button', MyCustomButton);
+ *
+ * // Register in a tenant-specific pack
+ * registerCustomComponent('Button', AcmeButton, 'acme-pack');
  * ```
  */
 export function registerCustomComponent<P>(
   componentName: string,
-  implementation: ComponentType<P>
+  implementation: ComponentType<P>,
+  pack?: string
 ): void {
-  customRegistry.set(componentName, implementation as ComponentType<unknown>);
+  const packKey = pack ?? DEFAULT_PACK;
+  const registry = getPackRegistry(packKey);
+  registry.set(componentName, implementation as ComponentType<unknown>);
 
   if (customConfig.logger) {
-    customConfig.logger(`Registered custom component: ${componentName}`, 'info');
+    customConfig.logger(`Registered custom component: ${componentName}${pack ? ` [pack: ${pack}]` : ''}`, 'info');
   }
 }
 
@@ -149,6 +177,7 @@ export function registerCustomComponent<P>(
  * Register multiple components at once
  *
  * @param components - Object mapping component names to implementations
+ * @param pack - Optional pack identifier for tenant-scoped registries
  *
  * @example
  * ```tsx
@@ -157,13 +186,17 @@ export function registerCustomComponent<P>(
  *   Alert: MyAlert,
  *   Card: MyCard,
  * });
+ *
+ * // Register an entire pack for a tenant
+ * registerCustomComponents({ Button: AcmeButton, Card: AcmeCard }, 'acme-pack');
  * ```
  */
 export function registerCustomComponents(
-  components: Record<string, ComponentType<unknown>>
+  components: Record<string, ComponentType<unknown>>,
+  pack?: string
 ): void {
   Object.entries(components).forEach(([name, impl]) => {
-    registerCustomComponent(name, impl);
+    registerCustomComponent(name, impl, pack);
   });
 }
 
@@ -175,22 +208,27 @@ export function registerCustomComponents(
  * ```tsx
  * import { unregisterCustomComponent, hasCustomComponent } from '@rottay/design-system';
  *
- * // Remove a custom implementation
+ * // Remove a custom implementation from default pack
  * const wasRemoved = unregisterCustomComponent('Button');
  * console.log(wasRemoved); // true if it was registered, false otherwise
  *
- * // Verify removal
- * console.log(hasCustomComponent('Button')); // false
+ * // Remove from a specific pack
+ * unregisterCustomComponent('Button', 'acme-pack');
  * ```
  *
  * @param componentName - The name of the component to unregister
+ * @param pack - Optional pack identifier. Defaults to DEFAULT_PACK.
  * @returns True if the component was removed, false if it was not registered
  */
-export function unregisterCustomComponent(componentName: string): boolean {
-  const result = customRegistry.delete(componentName);
+export function unregisterCustomComponent(componentName: string, pack?: string): boolean {
+  const packKey = pack ?? DEFAULT_PACK;
+  const registry = packRegistries.get(packKey);
+  if (!registry) return false;
+
+  const result = registry.delete(componentName);
 
   if (result && customConfig.logger) {
-    customConfig.logger(`Unregistered custom component: ${componentName}`, 'info');
+    customConfig.logger(`Unregistered custom component: ${componentName}${pack ? ` [pack: ${pack}]` : ''}`, 'info');
   }
 
   return result;
@@ -198,24 +236,41 @@ export function unregisterCustomComponent(componentName: string): boolean {
 
 /**
  * Removes all custom components from the custom engine registry.
- * Useful for testing or when switching contexts.
+ * When called without a pack argument, clears ALL packs. When called with
+ * a pack, clears only that pack's registry.
  *
  * @example
  * ```tsx
  * import { clearCustomRegistry, getRegisteredComponentCount } from '@rottay/design-system';
  *
- * // In test cleanup
+ * // Clear everything (all packs)
  * afterEach(() => {
  *   clearCustomRegistry();
  *   expect(getRegisteredComponentCount()).toBe(0);
  * });
+ *
+ * // Clear only a specific pack
+ * clearCustomRegistry('acme-pack');
  * ```
+ *
+ * @param pack - Optional pack identifier. If omitted, clears all packs.
  */
-export function clearCustomRegistry(): void {
-  customRegistry.clear();
+export function clearCustomRegistry(pack?: string): void {
+  if (pack !== undefined) {
+    const registry = packRegistries.get(pack);
+    if (registry) {
+      registry.clear();
+      packRegistries.delete(pack);
+    }
+  } else {
+    packRegistries.clear();
+  }
 
   if (customConfig.logger) {
-    customConfig.logger('Cleared all custom components', 'info');
+    customConfig.logger(
+      pack ? `Cleared custom components [pack: ${pack}]` : 'Cleared all custom components',
+      'info'
+    );
   }
 }
 
@@ -226,22 +281,23 @@ export function clearCustomRegistry(): void {
  * ```tsx
  * import { hasCustomComponent, registerCustomComponent } from '@rottay/design-system';
  *
- * // Check before registering to avoid duplicates
+ * // Check in default pack
  * if (!hasCustomComponent('Button')) {
  *   registerCustomComponent('Button', MyCustomButton);
  * }
  *
- * // Conditionally render based on availability
- * const ButtonImpl = hasCustomComponent('Button')
- *   ? getCustomComponent('Button')
- *   : DefaultButton;
+ * // Check in a specific pack
+ * hasCustomComponent('Button', 'acme-pack');
  * ```
  *
  * @param componentName - The name of the component to check
+ * @param pack - Optional pack identifier. Defaults to DEFAULT_PACK.
  * @returns True if the component is registered in the custom engine, false otherwise
  */
-export function hasCustomComponent(componentName: string): boolean {
-  return customRegistry.has(componentName);
+export function hasCustomComponent(componentName: string, pack?: string): boolean {
+  const packKey = pack ?? DEFAULT_PACK;
+  const registry = packRegistries.get(packKey);
+  return registry?.has(componentName) ?? false;
 }
 
 /**
@@ -251,25 +307,24 @@ export function hasCustomComponent(componentName: string): boolean {
  * ```tsx
  * import { getCustomComponent } from '@rottay/design-system';
  *
- * // Get a registered component with type safety
- * interface ButtonProps {
- *   label: string;
- *   onClick: () => void;
- * }
- *
+ * // Get from default pack
  * const CustomButton = getCustomComponent<ButtonProps>('Button');
- * if (CustomButton) {
- *   return <CustomButton label="Click me" onClick={handleClick} />;
- * }
+ *
+ * // Get from a specific tenant pack
+ * const AcmeButton = getCustomComponent<ButtonProps>('Button', 'acme-pack');
  * ```
  *
  * @param componentName - The name of the component to retrieve
+ * @param pack - Optional pack identifier. Defaults to DEFAULT_PACK.
  * @returns The component implementation or undefined if not registered
  */
 export function getCustomComponent<P>(
-  componentName: string
+  componentName: string,
+  pack?: string
 ): ComponentType<P> | undefined {
-  return customRegistry.get(componentName) as ComponentType<P> | undefined;
+  const packKey = pack ?? DEFAULT_PACK;
+  const registry = packRegistries.get(packKey);
+  return registry?.get(componentName) as ComponentType<P> | undefined;
 }
 
 /**
@@ -279,24 +334,21 @@ export function getCustomComponent<P>(
  * ```tsx
  * import { getRegisteredComponents } from '@rottay/design-system';
  *
+ * // Default pack
  * const components = getRegisteredComponents();
  * console.log(components); // ['Button', 'Input', 'Card']
  *
- * // Display in a debug panel
- * <DebugPanel>
- *   <h3>Custom Components:</h3>
- *   <ul>
- *     {getRegisteredComponents().map(name => (
- *       <li key={name}>{name}</li>
- *     ))}
- *   </ul>
- * </DebugPanel>
+ * // Specific pack
+ * const acmeComponents = getRegisteredComponents('acme-pack');
  * ```
  *
+ * @param pack - Optional pack identifier. Defaults to DEFAULT_PACK.
  * @returns Array of registered component names
  */
-export function getRegisteredComponents(): string[] {
-  return Array.from(customRegistry.keys());
+export function getRegisteredComponents(pack?: string): string[] {
+  const packKey = pack ?? DEFAULT_PACK;
+  const registry = packRegistries.get(packKey);
+  return registry ? Array.from(registry.keys()) : [];
 }
 
 /**
@@ -306,16 +358,20 @@ export function getRegisteredComponents(): string[] {
  * ```tsx
  * import { getRegisteredComponentCount } from '@rottay/design-system';
  *
+ * // Default pack count
  * console.log(`${getRegisteredComponentCount()} custom components registered`);
  *
- * // Use in tests
- * expect(getRegisteredComponentCount()).toBe(3);
+ * // Specific pack count
+ * console.log(`${getRegisteredComponentCount('acme-pack')} in acme pack`);
  * ```
  *
+ * @param pack - Optional pack identifier. Defaults to DEFAULT_PACK.
  * @returns The count of registered components
  */
-export function getRegisteredComponentCount(): number {
-  return customRegistry.size;
+export function getRegisteredComponentCount(pack?: string): number {
+  const packKey = pack ?? DEFAULT_PACK;
+  const registry = packRegistries.get(packKey);
+  return registry?.size ?? 0;
 }
 
 /**
@@ -333,12 +389,17 @@ export function getRegisteredComponentCount(): number {
  *   () => import('./engines/rustic')
  * );
  *
- * // The wrapper returns a Promise for lazy loading
- * const { default: ButtonComponent } = await customLoader();
+ * // With pack-scoped lookup
+ * const customLoader = createCustomWrapper<ButtonProps>(
+ *   'Button',
+ *   () => import('./engines/rustic'),
+ *   'acme-pack'
+ * );
  * ```
  *
  * @param componentName - Name of the component to look up in the registry
  * @param getFallback - Function that returns a Promise for the fallback component
+ * @param pack - Optional pack identifier for tenant-scoped lookup
  * @returns A function that returns a Promise resolving to the component module
  */
 export function createCustomWrapper<P extends object>(
@@ -347,14 +408,15 @@ export function createCustomWrapper<P extends object>(
     default:
       | ComponentType<P>
       | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
-  }>
+  }>,
+  pack?: string
 ): () => Promise<{
   default:
     | ComponentType<P>
     | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
 }> {
   return async () => {
-    const registered = getCustomComponent<P>(componentName);
+    const registered = getCustomComponent<P>(componentName, pack);
 
     if (registered) {
       return { default: registered };
@@ -363,13 +425,30 @@ export function createCustomWrapper<P extends object>(
     // Warn about fallback if configured
     if (customConfig.warnOnFallback && customConfig.logger) {
       customConfig.logger(
-        `No custom implementation for "${componentName}", using ${customConfig.fallbackEngine} fallback`,
+        `No custom implementation for "${componentName}"${pack ? ` [pack: ${pack}]` : ''}, using ${customConfig.fallbackEngine} fallback`,
         'warn'
       );
     }
 
     return getFallback();
   };
+}
+
+/**
+ * Returns a list of all registered pack identifiers.
+ *
+ * @example
+ * ```tsx
+ * import { getRegisteredPacks } from '@rottay/design-system';
+ *
+ * const packs = getRegisteredPacks();
+ * console.log(packs); // ['__default__', 'acme-pack', 'globex-pack']
+ * ```
+ *
+ * @returns Array of pack identifiers that have registrations
+ */
+export function getRegisteredPacks(): string[] {
+  return Array.from(packRegistries.keys());
 }
 
 /**
@@ -398,13 +477,15 @@ export function createCustomWrapper<P extends object>(
  * }
  * ```
  *
+ * @param pack - Optional pack identifier for scoped status
  * @returns Object containing custom engine status and utility functions
  */
-export function useCustomStatus() {
+export function useCustomStatus(pack?: string) {
   return {
-    registeredComponents: getRegisteredComponents(),
-    componentCount: getRegisteredComponentCount(),
+    registeredComponents: getRegisteredComponents(pack),
+    componentCount: getRegisteredComponentCount(pack),
     config: getCustomEngineConfig(),
-    hasComponent: hasCustomComponent,
+    hasComponent: (name: string) => hasCustomComponent(name, pack),
+    packs: getRegisteredPacks(),
   };
 }

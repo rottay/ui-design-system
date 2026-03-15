@@ -1335,3 +1335,323 @@ export interface ReportSurfaceConfig {
   behavior: ReportSurfaceBehaviorConfig;
   permissions?: SurfacePermissionsConfig;
 }
+
+/**
+ * Team surface contracts
+ */
+export interface TeamMember {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: ReactNode;
+  role: string;
+  status?: 'active' | 'invited' | 'disabled';
+  joinedAt?: string;
+}
+
+export interface TeamRole {
+  id: string;
+  label: string;
+  description?: string;
+}
+
+export interface TeamSurfaceVisualConfig {
+  maxWidth?: number | string;
+  layout?: 'table' | 'cards';
+}
+
+export interface TeamSurfacePresentationConfig {
+  chrome: SurfacePageChrome;
+  emptyState?: ReactNode;
+  renderMember?: (member: TeamMember) => ReactNode;
+}
+
+export interface TeamSurfaceBehaviorConfig {
+  members: TeamMember[];
+  roles: TeamRole[];
+  onInvite?: () => void;
+  onRemove?: (memberId: string) => void;
+  onRoleChange?: (memberId: string, roleId: string) => void;
+  onEditMember?: (memberId: string) => void;
+  actions?: SurfaceAction<void>[];
+}
+
+export interface TeamSurfaceConfig {
+  visual: TeamSurfaceVisualConfig;
+  presentation: TeamSurfacePresentationConfig;
+  behavior: TeamSurfaceBehaviorConfig;
+  permissions?: SurfacePermissionsConfig;
+}
+
+/**
+ * Integration surface contracts
+ */
+export interface IntegrationApiKey {
+  id: string;
+  name: string;
+  key: string;
+  createdAt: string;
+  lastUsedAt?: string;
+  expiresAt?: string;
+  status?: 'active' | 'expired' | 'revoked';
+}
+
+export interface IntegrationWebhook {
+  id: string;
+  url: string;
+  events: string[];
+  status?: 'active' | 'paused' | 'failed';
+  createdAt?: string;
+  lastTriggeredAt?: string;
+}
+
+export interface IntegrationConnectedApp {
+  id: string;
+  name: string;
+  icon?: ReactNode;
+  description?: string;
+  status?: 'connected' | 'disconnected' | 'error';
+  connectedAt?: string;
+}
+
+export interface IntegrationSurfaceVisualConfig {
+  maxWidth?: number | string;
+  layout?: 'tabs' | 'sections';
+}
+
+export interface IntegrationSurfacePresentationConfig {
+  chrome: SurfacePageChrome;
+  emptyState?: ReactNode;
+}
+
+export interface IntegrationSurfaceBehaviorConfig {
+  apiKeys?: IntegrationApiKey[];
+  webhooks?: IntegrationWebhook[];
+  connectedApps?: IntegrationConnectedApp[];
+  onCreateKey?: () => void;
+  onRevokeKey?: (keyId: string) => void;
+  onCreateWebhook?: () => void;
+  onDeleteWebhook?: (webhookId: string) => void;
+  onToggleWebhook?: (webhookId: string) => void;
+  onDisconnectApp?: (appId: string) => void;
+  actions?: SurfaceAction<void>[];
+}
+
+export interface IntegrationSurfaceConfig {
+  visual: IntegrationSurfaceVisualConfig;
+  presentation: IntegrationSurfacePresentationConfig;
+  behavior: IntegrationSurfaceBehaviorConfig;
+  permissions?: SurfacePermissionsConfig;
+}
+
+/**
+ * Kanban surface contracts
+ */
+export interface KanbanSurfaceCard {
+  id: string;
+  title: ReactNode;
+  description?: ReactNode;
+  meta?: ReactNode;
+  tags?: ReactNode;
+  assignee?: ReactNode;
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  data?: unknown;
+}
+
+export interface KanbanSurfaceColumn {
+  id: string;
+  title: ReactNode;
+  items: KanbanSurfaceCard[];
+  limit?: number;
+  color?: string;
+}
+
+export interface KanbanSurfaceVisualConfig {
+  maxWidth?: number | string;
+  columnMinWidth?: number | string;
+  columnGap?: number | string;
+}
+
+export interface KanbanSurfacePresentationConfig {
+  chrome: SurfacePageChrome;
+  emptyState?: ReactNode;
+  renderCard?: (card: KanbanSurfaceCard, columnId: string) => ReactNode;
+  renderColumnHeader?: (column: KanbanSurfaceColumn, itemCount: number) => ReactNode;
+}
+
+export interface KanbanSurfaceBehaviorConfig {
+  columns: KanbanSurfaceColumn[];
+  onCardMove?: (cardId: string, fromColumn: string, toColumn: string, position: number) => void;
+  onCardCreate?: (columnId: string) => void;
+  onCardClick?: (card: KanbanSurfaceCard, columnId: string) => void;
+  filters?: FilterDef[];
+  filterValues?: Record<string, unknown>;
+  onFilterChange?: (values: Record<string, unknown>) => void;
+  actions?: SurfaceAction<void>[];
+}
+
+export interface KanbanSurfaceConfig {
+  visual: KanbanSurfaceVisualConfig;
+  presentation: KanbanSurfacePresentationConfig;
+  behavior: KanbanSurfaceBehaviorConfig;
+  permissions?: SurfacePermissionsConfig;
+}
+
+/**
+ * Activity surface contracts
+ */
+export interface ActivitySurfaceItem {
+  id: string;
+  user: {
+    name: string;
+    avatar?: string;
+  };
+  action: string;
+  timestamp: string;
+  entityType?: string;
+  entityId?: string;
+  diff?: Record<string, { from: unknown; to: unknown }>;
+  metadata?: Record<string, unknown>;
+}
+
+export interface ActivitySurfaceFilter {
+  type?: string[];
+  user?: string[];
+  dateFrom?: string;
+  dateTo?: string;
+}
+
+export interface ActivitySurfaceVisualConfig {
+  maxWidth?: number | string;
+}
+
+export interface ActivitySurfacePresentationConfig {
+  chrome: SurfacePageChrome;
+  emptyState?: ReactNode;
+  renderActivity?: (activity: ActivitySurfaceItem) => ReactNode;
+}
+
+export interface ActivitySurfaceBehaviorConfig {
+  activities: ActivitySurfaceItem[];
+  filters?: ActivitySurfaceFilter;
+  onFilterChange?: (filters: ActivitySurfaceFilter) => void;
+  actionTypes?: string[];
+  users?: { name: string; avatar?: string }[];
+  onActivityClick?: (activity: ActivitySurfaceItem) => void;
+  pagination?: PaginationConfig;
+  actions?: SurfaceAction<void>[];
+}
+
+export interface ActivitySurfaceConfig {
+  visual: ActivitySurfaceVisualConfig;
+  presentation: ActivitySurfacePresentationConfig;
+  behavior: ActivitySurfaceBehaviorConfig;
+  permissions?: SurfacePermissionsConfig;
+}
+
+/**
+ * File browser surface contracts
+ */
+export interface FileBrowserFile {
+  id: string;
+  name: string;
+  type: 'file';
+  mimeType?: string;
+  size?: number;
+  thumbnail?: string;
+  modifiedAt?: string;
+  createdAt?: string;
+  parentId?: string | null;
+}
+
+export interface FileBrowserFolder {
+  id: string;
+  name: string;
+  type: 'folder';
+  parentId?: string | null;
+  childCount?: number;
+  modifiedAt?: string;
+  createdAt?: string;
+}
+
+export interface FileBrowserSurfaceVisualConfig {
+  maxWidth?: number | string;
+  viewMode?: 'grid' | 'list';
+}
+
+export interface FileBrowserSurfacePresentationConfig {
+  chrome: SurfacePageChrome;
+  emptyState?: ReactNode;
+  renderFileIcon?: (file: FileBrowserFile) => ReactNode;
+}
+
+export interface FileBrowserSurfaceBehaviorConfig {
+  files: FileBrowserFile[];
+  folders: FileBrowserFolder[];
+  currentPath?: string[];
+  selectedItems?: string[];
+  onUpload?: (files: File[]) => void;
+  onDelete?: (ids: string[]) => void;
+  onNavigate?: (folderId: string | null) => void;
+  onSelectionChange?: (ids: string[]) => void;
+  onViewModeChange?: (mode: 'grid' | 'list') => void;
+  onRename?: (id: string, newName: string) => void;
+  actions?: SurfaceAction<void>[];
+}
+
+export interface FileBrowserSurfaceConfig {
+  visual: FileBrowserSurfaceVisualConfig;
+  presentation: FileBrowserSurfacePresentationConfig;
+  behavior: FileBrowserSurfaceBehaviorConfig;
+  permissions?: SurfacePermissionsConfig;
+}
+
+/**
+ * Pricing surface contracts
+ */
+export interface PricingSurfacePlan {
+  id: string;
+  name: string;
+  price: number | string;
+  description?: string;
+  features: Record<string, boolean | string>;
+  cta: string;
+  popular?: boolean;
+  priceNote?: string;
+}
+
+export interface PricingSurfaceFeature {
+  key: string;
+  label: string;
+  description?: string;
+  category?: string;
+}
+
+export interface PricingSurfaceVisualConfig {
+  maxWidth?: number | string;
+}
+
+export interface PricingSurfacePresentationConfig {
+  chrome: SurfacePageChrome;
+  intro?: ReactNode;
+  footer?: ReactNode;
+  renderPlanHeader?: (plan: PricingSurfacePlan) => ReactNode;
+}
+
+export interface PricingSurfaceBehaviorConfig {
+  plans: PricingSurfacePlan[];
+  features: PricingSurfaceFeature[];
+  currentPlan?: string;
+  onSelectPlan?: (planId: string) => void;
+  billingCycle?: 'monthly' | 'yearly';
+  onBillingCycleChange?: (cycle: 'monthly' | 'yearly') => void;
+  currency?: string;
+  actions?: SurfaceAction<void>[];
+}
+
+export interface PricingSurfaceConfig {
+  visual: PricingSurfaceVisualConfig;
+  presentation: PricingSurfacePresentationConfig;
+  behavior: PricingSurfaceBehaviorConfig;
+  permissions?: SurfacePermissionsConfig;
+}
