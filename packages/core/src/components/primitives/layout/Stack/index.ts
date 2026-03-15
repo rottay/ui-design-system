@@ -108,7 +108,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { StackProps } from './types';
+import type { StackProps } from './Stack.types';
 
 // ============================================================================
 // TYPE EXPORTS
@@ -125,7 +125,7 @@ export type {
   StackJustify,
   StackSpacing,
   StackSpacingPreset,
-} from './types';
+} from './Stack.types';
 
 // ============================================================================
 // CONSTANT EXPORTS
@@ -141,7 +141,7 @@ export {
   ALIGN_MAP,
   JUSTIFY_MAP,
   resolveSpacing,
-} from './types';
+} from './Stack.types';
 
 // ============================================================================
 // NOTE ON UTILITY FUNCTIONS
@@ -149,7 +149,7 @@ export {
 
 // Utility functions (buildStackStyles, renderStackChildren, resolveSpacing)
 // are implemented within each engine file to allow engine-specific optimizations.
-// The resolveSpacing function is exported from './types' for external use.
+// The resolveSpacing function is exported from './Stack.types' for external use.
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

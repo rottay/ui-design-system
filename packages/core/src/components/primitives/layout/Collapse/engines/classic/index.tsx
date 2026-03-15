@@ -43,7 +43,7 @@
  */
 import React, { useMemo } from 'react';
 import { Collapse as AntCollapse } from 'antd';
-import type { CollapseProps, CollapsePanelProps } from '../../types';
+import type { CollapseProps, CollapsePanelProps } from '../../Collapse.types';
 import { useCollapseTokens } from '../../../../../../hooks/components';
 
 function convertCollapseChildren(children: React.ReactNode): NonNullable<React.ComponentProps<typeof AntCollapse>['items']> {

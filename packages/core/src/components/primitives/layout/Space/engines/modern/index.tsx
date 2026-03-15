@@ -32,8 +32,8 @@
  * @package @rottay/design-system
  */
 import React, { Children, Fragment } from 'react';
-import type { SpaceProps } from '../../types';
-import { SPACE_DEFAULTS, SPACE_SIZE_MAP } from '../../types';
+import type { SpaceProps } from '../../Space.types';
+import { SPACE_DEFAULTS, SPACE_SIZE_MAP } from '../../Space.types';
 
 const ALIGN_CLASSES: Record<string, string> = {
   start: 'items-start',

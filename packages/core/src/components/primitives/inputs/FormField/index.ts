@@ -47,15 +47,15 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { FormFieldProps } from './types';
+import type { FormFieldProps } from './FormField.types';
 
 // Type Exports
 export type {
   FormFieldProps,
   FormFieldLayout,
   FormFieldSize,
-} from './types';
-export { FORMFIELD_DEFAULTS } from './types';
+} from './FormField.types';
+export { FORMFIELD_DEFAULTS } from './FormField.types';
 
 // Main Component
 export const FormField = createEngineComponent<FormFieldProps>('FormField', {

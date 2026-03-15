@@ -135,13 +135,13 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { CollapseProps, CollapsePanelProps } from './types';
+import type { CollapseProps, CollapsePanelProps } from './Collapse.types';
 
 export {
   type CollapseProps,
   type CollapsePanelProps,
   COLLAPSE_DEFAULTS,
-} from './types';
+} from './Collapse.types';
 
 const CollapseBase = createEngineComponent<CollapseProps>('Collapse', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Collapse })),

@@ -129,7 +129,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { ModalProps } from './types';
+import type { ModalProps } from './Modal.types';
 import { ModalHeader, ModalBody, ModalFooter, ModalCloseButton } from './compound';
 
 // Export types
@@ -143,8 +143,8 @@ export type {
   ModalButtonConfig,
   ModalConfirmProps,
   ModalCloseButtonProps,
-} from './types';
-export { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } from './types';
+} from './Modal.types';
+export { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } from './Modal.types';
 
 // Export compound components
 export { ModalHeader, ModalBody, ModalFooter, ModalCloseButton };

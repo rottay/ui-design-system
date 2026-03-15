@@ -11,8 +11,8 @@
  */
 
 import React, { useState, useCallback, useId, useRef } from 'react';
-import type { TagInputProps } from '../../types';
-import { TAGINPUT_DEFAULTS } from '../../types';
+import type { TagInputProps } from '../../TagInput.types';
+import { TAGINPUT_DEFAULTS } from '../../TagInput.types';
 
 const SIZE_CLASSES = {
   sm: 'input-sm',

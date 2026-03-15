@@ -42,8 +42,8 @@
 'use client';
 
 import React, { forwardRef, type CSSProperties, type ElementType, type ReactNode, type Ref } from 'react';
-import type { StackProps, StackSpacingPreset, StackAlign, StackJustify, StackDirection, StackSpacing } from '../../types';
-import { STACK_DEFAULTS, SPACING_MAP, ALIGN_MAP, JUSTIFY_MAP } from '../../types';
+import type { StackProps, StackSpacingPreset, StackAlign, StackJustify, StackDirection, StackSpacing } from '../../Stack.types';
+import { STACK_DEFAULTS, SPACING_MAP, ALIGN_MAP, JUSTIFY_MAP } from '../../Stack.types';
 
 /**
  * Converts a spacing value to its CSS equivalent.

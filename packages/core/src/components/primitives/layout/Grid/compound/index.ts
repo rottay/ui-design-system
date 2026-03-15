@@ -50,8 +50,8 @@
 'use client';
 
 import React, { forwardRef, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { GridItemProps } from '../types';
-import { GRID_ITEM_DEFAULTS } from '../types';
+import type { GridItemProps } from '../Grid.types';
+import { GRID_ITEM_DEFAULTS } from '../Grid.types';
 
 // Inline utility function
 const buildGridItemStyles = (props: GridItemProps): CSSProperties => {

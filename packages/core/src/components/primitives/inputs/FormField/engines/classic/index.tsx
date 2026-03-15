@@ -12,8 +12,8 @@
 
 import React from 'react';
 import { Form } from 'antd';
-import type { FormFieldProps } from '../../types';
-import { FORMFIELD_DEFAULTS } from '../../types';
+import type { FormFieldProps } from '../../FormField.types';
+import { FORMFIELD_DEFAULTS } from '../../FormField.types';
 
 /**
  * Classic Engine implementation of the FormField component.

@@ -12,8 +12,8 @@
 
 import React, { useCallback, useId } from 'react';
 import { Select as AntSelect } from 'antd';
-import type { TagInputProps } from '../../types';
-import { TAGINPUT_DEFAULTS } from '../../types';
+import type { TagInputProps } from '../../TagInput.types';
+import { TAGINPUT_DEFAULTS } from '../../TagInput.types';
 
 const ANT_SIZE_MAP = {
   sm: 'small' as const,

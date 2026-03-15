@@ -34,13 +34,13 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { TagInputProps } from './types';
+import type { TagInputProps } from './TagInput.types';
 
 export {
   type TagInputProps,
   type TagInputSize,
   TAGINPUT_DEFAULTS,
-} from './types';
+} from './TagInput.types';
 
 export const TagInput = createEngineComponent<TagInputProps>('TagInput', {
   classic: () => import('./engines/classic'),

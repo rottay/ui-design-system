@@ -31,8 +31,8 @@
  */
 
 import React from 'react';
-import type { FlexProps } from '../../types';
-import { FLEX_DEFAULTS } from '../../types';
+import type { FlexProps } from '../../Flex.types';
+import { FLEX_DEFAULTS } from '../../Flex.types';
 
 const DIRECTION_CLASSES: Record<string, string> = {
   row: 'flex-row',

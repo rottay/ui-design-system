@@ -40,7 +40,7 @@ import type {
   LayoutSiderProps,
   LayoutContentProps,
   LayoutFooterProps,
-} from '../../types';
+} from '../../Layout.types';
 
 export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
   (props, ref) => {

@@ -11,8 +11,8 @@
  */
 
 import React from 'react';
-import type { FormFieldProps } from '../../types';
-import { FORMFIELD_DEFAULTS } from '../../types';
+import type { FormFieldProps } from '../../FormField.types';
+import { FORMFIELD_DEFAULTS } from '../../FormField.types';
 
 /**
  * Size style mappings for Rustic engine.

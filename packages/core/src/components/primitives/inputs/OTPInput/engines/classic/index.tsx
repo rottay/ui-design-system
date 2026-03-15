@@ -11,8 +11,8 @@
  */
 
 import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
-import type { OTPInputProps } from '../../types';
-import { OTPINPUT_DEFAULTS } from '../../types';
+import type { OTPInputProps } from '../../OTPInput.types';
+import { OTPINPUT_DEFAULTS } from '../../OTPInput.types';
 
 const SIZE_STYLES: Record<string, { width: number; height: number; fontSize: number }> = {
   sm: { width: 36, height: 36, fontSize: 16 },

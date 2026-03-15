@@ -32,8 +32,8 @@
  */
 
 import React from 'react';
-import type { ContainerProps } from '../../types';
-import { CONTAINER_DEFAULTS } from '../../types';
+import type { ContainerProps } from '../../Container.types';
+import { CONTAINER_DEFAULTS } from '../../Container.types';
 
 const MAX_WIDTH_CLASSES: Record<string, string> = {
   sm: 'max-w-screen-sm',

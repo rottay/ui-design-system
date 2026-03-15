@@ -34,7 +34,7 @@
  */
 import React from 'react';
 import { Splitter as AntSplitter } from 'antd';
-import type { SplitterProps, SplitterPanelProps } from '../../types';
+import type { SplitterProps, SplitterPanelProps } from '../../Splitter.types';
 
 export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
   (props, _ref) => {

@@ -126,13 +126,13 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { SplitterProps, SplitterPanelProps } from './types';
+import type { SplitterProps, SplitterPanelProps } from './Splitter.types';
 
 export {
   type SplitterProps,
   type SplitterPanelProps,
   SPLITTER_DEFAULTS,
-} from './types';
+} from './Splitter.types';
 
 const SplitterBase = createEngineComponent<SplitterProps>('Splitter', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Splitter })),

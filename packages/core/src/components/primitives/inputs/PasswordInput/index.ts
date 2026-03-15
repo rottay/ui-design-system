@@ -41,7 +41,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { PasswordInputProps } from './types';
+import type { PasswordInputProps } from './PasswordInput.types';
 
 export {
   type PasswordInputProps,
@@ -51,7 +51,7 @@ export {
   PASSWORD_INPUT_DEFAULTS,
   STRENGTH_COLORS,
   STRENGTH_WIDTHS,
-} from './types';
+} from './PasswordInput.types';
 
 
 export const PasswordInput = createEngineComponent<PasswordInputProps>('PasswordInput', {

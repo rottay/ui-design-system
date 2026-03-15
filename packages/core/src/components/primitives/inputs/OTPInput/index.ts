@@ -35,14 +35,14 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { OTPInputProps } from './types';
+import type { OTPInputProps } from './OTPInput.types';
 
 export {
   type OTPInputProps,
   type OTPInputType,
   type OTPInputSize,
   OTPINPUT_DEFAULTS,
-} from './types';
+} from './OTPInput.types';
 
 export const OTPInput = createEngineComponent<OTPInputProps>('OTPInput', {
   classic: () => import('./engines/classic'),

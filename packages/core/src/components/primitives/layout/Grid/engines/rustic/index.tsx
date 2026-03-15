@@ -51,8 +51,8 @@
 'use client';
 
 import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { GridProps, GridItemProps, GridGap, ResponsiveValue } from '../../types';
-import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from '../../types';
+import type { GridProps, GridItemProps, GridGap, ResponsiveValue } from '../../Grid.types';
+import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from '../../Grid.types';
 import {
   generateResponsiveGridCSS,
   isResponsiveGridValue,

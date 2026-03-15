@@ -11,8 +11,8 @@
 
 import React, { useState, useCallback, useId } from 'react';
 import { Input as AntInput } from 'antd';
-import type { PasswordInputProps } from '../../types';
-import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../../types';
+import type { PasswordInputProps } from '../../PasswordInput.types';
+import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../../PasswordInput.types';
 
 const ANT_SIZE_MAP = {
   xs: 'small' as const,

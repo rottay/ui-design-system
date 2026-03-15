@@ -110,7 +110,7 @@
  * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
-import type { SpaceProps } from './types';
+import type { SpaceProps } from './Space.types';
 
 // Export types
 export {
@@ -121,7 +121,7 @@ export {
   SPACE_DEFAULTS,
   SPACE_SIZE_MAP,
   SPACE_ALIGN_MAP,
-} from './types';
+} from './Space.types';
 
 /**
  * Space component with multi-engine support.

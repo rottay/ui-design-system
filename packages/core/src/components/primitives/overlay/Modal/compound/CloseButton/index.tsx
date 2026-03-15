@@ -6,7 +6,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ModalCloseButtonProps } from '../../types';
+import type { ModalCloseButtonProps } from '../../Modal.types';
 
 const SIZE_MAP = {
   sm: { button: 24, icon: 14 },

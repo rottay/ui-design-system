@@ -113,7 +113,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { ContainerProps } from './types';
+import type { ContainerProps } from './Container.types';
 
 // ============================================================================
 // TYPE AND CONSTANT EXPORTS
@@ -129,7 +129,7 @@ export {
   CONTAINER_DEFAULTS,
   CONTAINER_MAX_WIDTHS,
   CONTAINER_PADDINGS,
-} from './types';
+} from './Container.types';
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

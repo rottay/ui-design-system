@@ -40,8 +40,8 @@
 'use client';
 
 import React, { forwardRef, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { BoxProps, BoxSpacing, BoxBorderRadius, BoxShadow } from '../../types';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../../types';
+import type { BoxProps, BoxSpacing, BoxBorderRadius, BoxShadow } from '../../Box.types';
+import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../../Box.types';
 
 /**
  * Builds CSSProperties from BoxProps

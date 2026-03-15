@@ -12,7 +12,7 @@
 
 import React, { useEffect, useCallback, useRef, useState } from 'react';
 import type { ModalProps } from '../../../../../../contracts/primitives/feedback/Modal';
-import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../../types';
+import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../../Modal.types';
 import { Portal } from '../../utils/Portal';
 import { useTranslation } from '../../../../../../i18n';
 

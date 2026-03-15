@@ -96,7 +96,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { BoxProps } from './types';
+import type { BoxProps } from './Box.types';
 
 // ============================================================================
 // TYPE EXPORTS
@@ -114,7 +114,7 @@ export type {
   BoxDisplay,
   BoxPosition,
   BoxOverflow,
-} from './types';
+} from './Box.types';
 
 // ============================================================================
 // CONSTANT EXPORTS
@@ -124,7 +124,7 @@ export type {
  * Re-export default values and mapping constants.
  * Useful for building custom components that extend Box behavior.
  */
-export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './types';
+export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './Box.types';
 
 // ============================================================================
 // BASE COMPONENT EXPORTS

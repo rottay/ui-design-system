@@ -47,8 +47,8 @@ import type {
   LayoutSiderProps,
   LayoutContentProps,
   LayoutFooterProps,
-} from '../../types';
-import { LAYOUT_DEFAULTS } from '../../types';
+} from '../../Layout.types';
+import { LAYOUT_DEFAULTS } from '../../Layout.types';
 
 const styles = {
   layout: {

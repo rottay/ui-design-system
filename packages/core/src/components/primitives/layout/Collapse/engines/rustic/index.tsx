@@ -42,8 +42,8 @@
  * @package @rottay/design-system
  */
 import React, { useState, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
-import type { CollapseProps, CollapsePanelProps } from '../../types';
-import { COLLAPSE_DEFAULTS } from '../../types';
+import type { CollapseProps, CollapsePanelProps } from '../../Collapse.types';
+import { COLLAPSE_DEFAULTS } from '../../Collapse.types';
 
 const styles = {
   container: {

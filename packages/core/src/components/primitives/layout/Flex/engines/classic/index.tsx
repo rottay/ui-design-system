@@ -30,8 +30,8 @@
 
 import React from 'react';
 import { Flex as AntFlex } from 'antd';
-import type { FlexProps } from '../../types';
-import { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from '../../types';
+import type { FlexProps } from '../../Flex.types';
+import { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from '../../Flex.types';
 
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {

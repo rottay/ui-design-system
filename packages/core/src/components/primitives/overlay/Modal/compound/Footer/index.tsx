@@ -7,7 +7,7 @@
 
 import React, { forwardRef } from 'react';
 import type { ModalFooterProps } from '../../../../../../contracts/primitives/feedback/Modal';
-import { PADDING_MAP } from '../../types';
+import { PADDING_MAP } from '../../Modal.types';
 
 export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
   (props, ref) => {

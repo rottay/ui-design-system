@@ -10,8 +10,8 @@
 'use client';
 
 import React, { useState, useCallback, useId } from 'react';
-import type { PasswordInputProps } from '../../types';
-import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../../types';
+import type { PasswordInputProps } from '../../PasswordInput.types';
+import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../../PasswordInput.types';
 
 const SIZE_STYLES: Record<string, React.CSSProperties> = {
   xs: { height: '24px', fontSize: '12px', padding: '0 8px' },

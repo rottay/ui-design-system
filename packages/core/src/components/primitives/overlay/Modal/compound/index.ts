@@ -7,4 +7,4 @@ export { ModalBody } from './Body';
 export { ModalFooter } from './Footer';
 export { ModalCloseButton } from './CloseButton';
 
-export type { ModalCloseButtonProps } from '../types';
+export type { ModalCloseButtonProps } from '../Modal.types';

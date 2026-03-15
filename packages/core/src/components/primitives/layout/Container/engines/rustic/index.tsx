@@ -33,12 +33,12 @@
  */
 
 import React from 'react';
-import type { ContainerProps } from '../../types';
+import type { ContainerProps } from '../../Container.types';
 import {
   CONTAINER_DEFAULTS,
   CONTAINER_MAX_WIDTHS,
   CONTAINER_PADDINGS,
-} from '../../types';
+} from '../../Container.types';
 
 export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   (props, ref) => {

@@ -31,8 +31,8 @@
  */
 import React from 'react';
 import { Space as AntSpace } from 'antd';
-import type { SpaceProps } from '../../types';
-import { SPACE_DEFAULTS } from '../../types';
+import type { SpaceProps } from '../../Space.types';
+import { SPACE_DEFAULTS } from '../../Space.types';
 
 export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   (props, ref) => {

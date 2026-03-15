@@ -40,8 +40,8 @@
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useCallback, Children, cloneElement, isValidElement } from 'react';
-import type { SplitterProps, SplitterPanelProps } from '../../types';
-import { SPLITTER_DEFAULTS } from '../../types';
+import type { SplitterProps, SplitterPanelProps } from '../../Splitter.types';
+import { SPLITTER_DEFAULTS } from '../../Splitter.types';
 
 export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { size?: number }>(
   (props, ref) => {

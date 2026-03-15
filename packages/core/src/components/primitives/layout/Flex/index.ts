@@ -126,7 +126,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { FlexProps } from './types';
+import type { FlexProps } from './Flex.types';
 
 // ============================================================================
 // TYPE AND CONSTANT EXPORTS
@@ -144,7 +144,7 @@ export {
   FLEX_DEFAULTS,
   FLEX_JUSTIFY_MAP,
   FLEX_ALIGN_MAP,
-} from './types';
+} from './Flex.types';
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

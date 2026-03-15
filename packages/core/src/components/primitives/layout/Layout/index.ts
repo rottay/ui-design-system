@@ -135,7 +135,7 @@ import type {
   LayoutSiderProps,
   LayoutContentProps,
   LayoutFooterProps,
-} from './types';
+} from './Layout.types';
 
 export {
   type LayoutProps,
@@ -144,7 +144,7 @@ export {
   type LayoutContentProps,
   type LayoutFooterProps,
   LAYOUT_DEFAULTS,
-} from './types';
+} from './Layout.types';
 
 const LayoutBase = createEngineComponent<LayoutProps>('Layout', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Layout })),

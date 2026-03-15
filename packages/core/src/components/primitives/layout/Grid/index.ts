@@ -111,7 +111,7 @@
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
-import type { GridProps } from './types';
+import type { GridProps } from './Grid.types';
 import { GridItem } from './compound';
 
 // ============================================================================
@@ -137,7 +137,7 @@ export type {
   GridJustifyContent,
   GridPlaceItems,
   ResponsiveValue,
-} from './types';
+} from './Grid.types';
 
 // ============================================================================
 // CONSTANT EXPORTS
@@ -153,7 +153,7 @@ export {
   GAP_MAP,
   ALIGN_ITEMS_MAP,
   JUSTIFY_ITEMS_MAP,
-} from './types';
+} from './Grid.types';
 
 // ============================================================================
 // COMPOUND COMPONENT EXPORTS
