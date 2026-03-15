@@ -104,3 +104,13 @@ export { SPLITTER_DEFAULTS } from './Splitter';
 export { Collapse } from './Collapse';
 export type { CollapseProps, CollapsePanelProps } from './Collapse';
 export { COLLAPSE_DEFAULTS } from './Collapse';
+
+// AspectRatio
+export { AspectRatio } from './AspectRatio';
+export type { AspectRatioProps, AspectRatioPreset } from './AspectRatio';
+export { ASPECT_RATIO_DEFAULTS, RATIO_PRESETS } from './AspectRatio';
+
+// ScrollArea
+export { ScrollArea } from './ScrollArea';
+export type { ScrollAreaProps, ScrollAreaOrientation, ScrollAreaScrollbarSize } from './ScrollArea';
+export { SCROLL_AREA_DEFAULTS, SCROLLBAR_SIZES } from './ScrollArea';

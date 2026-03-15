@@ -79,7 +79,17 @@ describe('Link', () => {
 
   it('handles click event', () => {
     const handleClick = vi.fn();
-    render(<Link href="/test" onClick={handleClick}>Click Me</Link>);
+    render(
+      <Link
+        href="/test"
+        onClick={(event) => {
+          event.preventDefault();
+          handleClick();
+        }}
+      >
+        Click Me
+      </Link>
+    );
     fireEvent.click(screen.getByTestId('link'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });

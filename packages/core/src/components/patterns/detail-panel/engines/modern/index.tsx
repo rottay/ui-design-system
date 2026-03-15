@@ -116,7 +116,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-xl font-semibold truncate">{title}</h2>
                 {status && (
-                  <div className={`badge ${status.color ? '' : 'badge-neutral'}`} style={status.color ? { backgroundColor: status.color, color: '#fff' } : undefined}>
+                  <div className={`badge ${status.color ? '' : 'badge-neutral'}`} style={status.color ? { backgroundColor: status.color, color: 'var(--ds-color-text-on-primary)' } : undefined}>
                     {status.label}
                   </div>
                 )}

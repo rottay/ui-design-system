@@ -5,6 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { NotificationProvider, useNotification } from '../';
+import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
 
 const NotificationTester = ({ onMount }: { onMount: (api: any) => void }) => {
   const [notificationApi, contextHolder] = useNotification();
@@ -172,6 +173,65 @@ describe('Notification', () => {
       });
     });
 
+    it.each(['modern', 'rustic'] as const)(
+      'updates notifications with the same key in the live %s engine',
+      async (engine) => {
+        let notificationApi: any;
+        renderWithEngine(
+          <NotificationProvider engine={engine}>
+            <NotificationTester onMount={(api) => (notificationApi = api)} />
+          </NotificationProvider>,
+          engine
+        );
+
+        act(() => {
+          notificationApi.info({
+            key: 'sync',
+            message: 'Syncing',
+            duration: 0,
+          });
+        });
+
+        expect(await screen.findByText('Syncing')).toBeInTheDocument();
+
+        act(() => {
+          notificationApi.success({
+            key: 'sync',
+            message: 'Synced',
+            duration: 0,
+          });
+        });
+
+        await waitFor(() => {
+          expect(screen.queryByText('Syncing')).not.toBeInTheDocument();
+          expect(screen.getByText('Synced')).toBeInTheDocument();
+        });
+      }
+    );
+
+    it.each(['modern', 'rustic'] as const)(
+      'enforces maxCount in the live %s engine',
+      async (engine) => {
+        let notificationApi: any;
+        renderWithEngine(
+          <NotificationProvider engine={engine} maxCount={1}>
+            <NotificationTester onMount={(api) => (notificationApi = api)} />
+          </NotificationProvider>,
+          engine
+        );
+
+        act(() => {
+          notificationApi.info({ message: 'First', duration: 0 });
+          notificationApi.warning({ message: 'Second', duration: 0 });
+        });
+
+        await waitFor(() => {
+          expect(screen.queryByText('First')).not.toBeInTheDocument();
+          expect(screen.getByText('Second')).toBeInTheDocument();
+        });
+      }
+    );
+
     // Skipped: Ant Design's destroy() method relies on internal state management
     // that doesn't work reliably in jsdom. Test in browser environment instead.
     it.skip('destroys all notifications', async () => {
@@ -216,7 +276,7 @@ describe('Notification', () => {
         notificationApi.open({
           message: 'Action Notification',
           description: 'Has a button',
-          btn: <button>Click me</button>,
+          actions: <button>Click me</button>,
         });
       });
 

@@ -157,7 +157,7 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
     // Wave animation uses gradient background
     return {
       background:
-        'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, rgba(190,190,190,0.2) 25%, rgba(129,129,129,0.24) 37%, rgba(190,190,190,0.2) 63%))',
+        'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
       backgroundSize: '400% 100%',
       animation: 'rottay-skeleton-wave 1.4s ease-in-out infinite',
     };
@@ -172,7 +172,7 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
    * Includes background color and animation.
    */
   const baseSkeletonStyle: React.CSSProperties = {
-    backgroundColor: 'var(--ds-skeleton-bg, rgba(190, 190, 190, 0.2))',
+    backgroundColor: 'var(--ds-skeleton-bg)',
     ...getAnimationStyle(),
   };
 

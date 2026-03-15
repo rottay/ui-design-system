@@ -76,7 +76,7 @@ export default function ClassicTreeView(props: TreeViewProps) {
   }
 
   return (
-    <Card className={className} style={style} bodyStyle={{ padding: '12px 16px' }}>
+    <Card className={className} style={style} styles={{ body: { padding: '12px 16px' } }}>
       {searchable && (
         <Search
           placeholder={searchPlaceholder}

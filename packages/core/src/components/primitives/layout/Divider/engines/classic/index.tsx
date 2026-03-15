@@ -139,7 +139,10 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       whiteSpace: 'nowrap',
       fontSize: plain ? 'inherit' : '16px',
       fontWeight: plain ? 'inherit' : 500,
-      color: plain ? 'inherit' : 'rgba(0, 0, 0, 0.85)',
+      color:
+        plain
+          ? 'inherit'
+          : 'var(--ds-divider-text-color, var(--ds-color-text-primary, var(--ds-color-neutral-900, rgba(0, 0, 0, 0.85))))',
     };
 
     // Render with text

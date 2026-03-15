@@ -12,81 +12,83 @@
      ======================================================================== */
 
   /* XS - Extra Small */
-  --input-xs-height: 1.5rem;            /* 24px */
-  --input-xs-padding-x: 0.5rem;         /* 8px */
-  --input-xs-padding-y: 0.125rem;       /* 2px */
-  --input-xs-font-size: 0.75rem;        /* 12px */
-  --input-xs-line-height: 1.25rem;      /* 20px */
-  --input-xs-icon-size: 0.875rem;       /* 14px */
-  --input-xs-border-radius: var(--radius-sm);
+  --ds-input-xs-height: 1.5rem;            /* 24px */
+  --ds-input-xs-padding-x: 0.5rem;         /* 8px */
+  --ds-input-xs-padding-y: 0.125rem;       /* 2px */
+  --ds-input-xs-font-size: 0.75rem;        /* 12px */
+  --ds-input-xs-line-height: 1.25rem;      /* 20px */
+  --ds-input-xs-icon-size: 0.875rem;       /* 14px */
+  --ds-input-xs-border-radius: var(--ds-radius-sm);
 
   /* SM - Small */
-  --input-sm-height: 2rem;              /* 32px */
-  --input-sm-padding-x: 0.625rem;       /* 10px */
-  --input-sm-padding-y: 0.25rem;        /* 4px */
-  --input-sm-font-size: 0.8125rem;      /* 13px */
-  --input-sm-line-height: 1.5rem;       /* 24px */
-  --input-sm-icon-size: 1rem;           /* 16px */
-  --input-sm-border-radius: var(--radius-md);
+  --ds-input-sm-height: 2rem;              /* 32px */
+  --ds-input-sm-padding-x: 0.625rem;       /* 10px */
+  --ds-input-sm-padding-y: 0.25rem;        /* 4px */
+  --ds-input-sm-font-size: 0.8125rem;      /* 13px */
+  --ds-input-sm-line-height: 1.5rem;       /* 24px */
+  --ds-input-sm-icon-size: 1rem;           /* 16px */
+  --ds-input-sm-border-radius: var(--ds-radius-md);
 
   /* MD - Medium (Default) */
-  --input-md-height: 2.5rem;            /* 40px */
-  --input-md-padding-x: 0.75rem;        /* 12px */
-  --input-md-padding-y: 0.5rem;         /* 8px */
-  --input-md-font-size: 0.875rem;       /* 14px */
-  --input-md-line-height: 1.5rem;       /* 24px */
-  --input-md-icon-size: 1.25rem;        /* 20px */
-  --input-md-border-radius: var(--radius-md);
+  --ds-input-md-height: 2.5rem;            /* 40px */
+  --ds-input-md-padding-x: 0.75rem;        /* 12px */
+  --ds-input-md-padding-y: 0.5rem;         /* 8px */
+  --ds-input-md-font-size: 0.875rem;       /* 14px */
+  --ds-input-md-line-height: 1.5rem;       /* 24px */
+  --ds-input-md-icon-size: 1.25rem;        /* 20px */
+  --ds-input-md-border-radius: var(--ds-radius-md);
 
   /* LG - Large */
-  --input-lg-height: 3rem;              /* 48px */
-  --input-lg-padding-x: 0.875rem;       /* 14px */
-  --input-lg-padding-y: 0.75rem;        /* 12px */
-  --input-lg-font-size: 1rem;           /* 16px */
-  --input-lg-line-height: 1.75rem;      /* 28px */
-  --input-lg-icon-size: 1.5rem;         /* 24px */
-  --input-lg-border-radius: var(--radius-lg);
+  --ds-input-lg-height: 3rem;              /* 48px */
+  --ds-input-lg-padding-x: 0.875rem;       /* 14px */
+  --ds-input-lg-padding-y: 0.75rem;        /* 12px */
+  --ds-input-lg-font-size: 1rem;           /* 16px */
+  --ds-input-lg-line-height: 1.75rem;      /* 28px */
+  --ds-input-lg-icon-size: 1.5rem;         /* 24px */
+  --ds-input-lg-border-radius: var(--ds-radius-lg);
 
   /* XL - Extra Large */
-  --input-xl-height: 3.5rem;            /* 56px */
-  --input-xl-padding-x: 1rem;           /* 16px */
-  --input-xl-padding-y: 1rem;           /* 16px */
-  --input-xl-font-size: 1.125rem;       /* 18px */
-  --input-xl-line-height: 2rem;         /* 32px */
-  --input-xl-icon-size: 1.75rem;        /* 28px */
-  --input-xl-border-radius: var(--radius-lg);
+  --ds-input-xl-height: 3.5rem;            /* 56px */
+  --ds-input-xl-padding-x: 1rem;           /* 16px */
+  --ds-input-xl-padding-y: 1rem;           /* 16px */
+  --ds-input-xl-font-size: 1.125rem;       /* 18px */
+  --ds-input-xl-line-height: 2rem;         /* 32px */
+  --ds-input-xl-icon-size: 1.75rem;        /* 28px */
+  --ds-input-xl-border-radius: var(--ds-radius-lg);
 
   /* Default size */
-  --input-default-height: var(--input-md-height);
-  --input-default-padding-x: var(--input-md-padding-x);
-  --input-default-padding-y: var(--input-md-padding-y);
-  --input-default-font-size: var(--input-md-font-size);
+  --ds-input-default-height: var(--ds-input-md-height);
+  --ds-input-default-padding-x: var(--ds-input-md-padding-x);
+  --ds-input-default-padding-y: var(--ds-input-md-padding-y);
+  --ds-input-default-font-size: var(--ds-input-md-font-size);
 
   /* Textarea specific */
-  --textarea-min-height: 6rem;          /* 96px */
-  --textarea-max-height: 24rem;         /* 384px */
+  --ds-textarea-min-height: 6rem;       /* 96px */
+  --ds-textarea-max-height: 24rem;      /* 384px */
+  --textarea-min-height: var(--ds-textarea-min-height);
+  --textarea-max-height: var(--ds-textarea-max-height);
 
   /* ========================================================================
      DEFAULT STATE - Base Appearance
      Default input styling
      ======================================================================== */
-  --input-bg: var(--color-white);
-  --input-bg-hover: var(--color-white);
-  --input-bg-focus: var(--color-white);
-  --input-bg-disabled: var(--color-neutral-50);
+  --ds-input-bg: var(--ds-color-white);
+  --ds-input-bg-hover: var(--ds-color-white);
+  --ds-input-bg-focus: var(--ds-color-white);
+  --ds-input-bg-disabled: var(--ds-color-neutral-50);
 
-  --input-color: var(--color-neutral-900);
-  --input-color-placeholder: var(--color-neutral-400);
-  --input-color-disabled: var(--color-neutral-400);
+  --ds-input-color: var(--ds-color-neutral-900);
+  --ds-input-color-placeholder: var(--ds-color-neutral-400);
+  --ds-input-color-disabled: var(--ds-color-neutral-400);
 
-  --input-border-color: var(--color-neutral-300);
-  --input-border-color-hover: var(--color-neutral-400);
-  --input-border-color-focus: var(--color-primary-500);
-  --input-border-color-disabled: var(--color-neutral-200);
+  --ds-input-border-color: var(--ds-color-neutral-300);
+  --ds-input-border-color-hover: var(--ds-color-neutral-400);
+  --ds-input-border-color-focus: var(--ds-color-primary-500);
+  --ds-input-border-color-disabled: var(--ds-color-neutral-200);
 
-  --input-border-width: 1px;
-  --input-border-width-focus: 2px;
-  --input-border-style: solid;
+  --ds-input-border-width: 1px;
+  --ds-input-border-width-focus: 2px;
+  --ds-input-border-style: solid;
 
   /* ========================================================================
      VARIANTS - Semantic States
@@ -94,186 +96,186 @@
      ======================================================================== */
 
   /* Success variant */
-  --input-success-border-color: var(--color-success-500);
-  --input-success-border-color-focus: var(--color-success-600);
-  --input-success-shadow-focus: var(--shadow-focus-ring-success);
-  --input-success-icon-color: var(--color-success-500);
+  --ds-input-success-border-color: var(--ds-color-success-500);
+  --ds-input-success-border-color-focus: var(--ds-color-success-600);
+  --ds-input-success-shadow-focus: var(--ds-shadow-focus-ring-success);
+  --ds-input-success-icon-color: var(--ds-color-success-500);
 
   /* Warning variant */
-  --input-warning-border-color: var(--color-warning-500);
-  --input-warning-border-color-focus: var(--color-warning-600);
-  --input-warning-shadow-focus: var(--shadow-focus-ring-warning);
-  --input-warning-icon-color: var(--color-warning-500);
+  --ds-input-warning-border-color: var(--ds-color-warning-500);
+  --ds-input-warning-border-color-focus: var(--ds-color-warning-600);
+  --ds-input-warning-shadow-focus: var(--ds-shadow-focus-ring-warning);
+  --ds-input-warning-icon-color: var(--ds-color-warning-500);
 
   /* Error variant */
-  --input-error-border-color: var(--color-error-500);
-  --input-error-border-color-focus: var(--color-error-600);
-  --input-error-shadow-focus: var(--shadow-focus-ring-error);
-  --input-error-icon-color: var(--color-error-500);
+  --ds-input-error-border-color: var(--ds-color-error-500);
+  --ds-input-error-border-color-focus: var(--ds-color-error-600);
+  --ds-input-error-shadow-focus: var(--ds-shadow-focus-ring-error);
+  --ds-input-error-icon-color: var(--ds-color-error-500);
 
   /* ========================================================================
      SHADOWS
      Focus and state shadows
      ======================================================================== */
-  --input-shadow-rest: var(--shadow-input-rest);
-  --input-shadow-focus: var(--shadow-input-focus);
-  --input-shadow-error-focus: var(--shadow-input-error);
+  --ds-input-shadow-rest: var(--ds-shadow-input-rest);
+  --ds-input-shadow-focus: var(--ds-shadow-input-focus);
+  --ds-input-shadow-error-focus: var(--ds-shadow-input-error);
 
   /* ========================================================================
      ADDONS - Prefix/Suffix
      Settings for input addons and affixes
      ======================================================================== */
-  --input-addon-bg: var(--color-neutral-50);
-  --input-addon-color: var(--color-neutral-600);
-  --input-addon-border-color: var(--color-neutral-300);
-  --input-addon-padding-x: 0.75rem;
+  --ds-input-addon-bg: var(--ds-color-neutral-50);
+  --ds-input-addon-color: var(--ds-color-neutral-600);
+  --ds-input-addon-border-color: var(--ds-color-neutral-300);
+  --ds-input-addon-padding-x: 0.75rem;
 
-  --input-affix-gap: 0.5rem;            /* Gap between affix and input text */
-  --input-affix-color: var(--color-neutral-500);
+  --ds-input-affix-gap: 0.5rem;            /* Gap between affix and input text */
+  --ds-input-affix-color: var(--ds-color-neutral-500);
 
   /* ========================================================================
      ICONS - Prefix/Suffix Icons
      Settings for icons inside inputs
      ======================================================================== */
-  --input-icon-color: var(--color-neutral-500);
-  --input-icon-color-hover: var(--color-neutral-600);
-  --input-icon-gap: 0.5rem;
+  --ds-input-icon-color: var(--ds-color-neutral-500);
+  --ds-input-icon-color-hover: var(--ds-color-neutral-600);
+  --ds-input-icon-gap: 0.5rem;
 
   /* ========================================================================
      CLEAR BUTTON
      Settings for the clear button (x icon)
      ======================================================================== */
-  --input-clear-size: 1rem;
-  --input-clear-color: var(--color-neutral-400);
-  --input-clear-color-hover: var(--color-neutral-600);
-  --input-clear-bg-hover: var(--color-neutral-100);
-  --input-clear-radius: var(--radius-full);
+  --ds-input-clear-size: 1rem;
+  --ds-input-clear-color: var(--ds-color-neutral-400);
+  --ds-input-clear-color-hover: var(--ds-color-neutral-600);
+  --ds-input-clear-bg-hover: var(--ds-color-neutral-100);
+  --ds-input-clear-radius: var(--ds-radius-full);
 
   /* ========================================================================
      PASSWORD TOGGLE
      Settings for password visibility toggle
      ======================================================================== */
-  --input-password-toggle-size: 1.25rem;
-  --input-password-toggle-color: var(--color-neutral-500);
-  --input-password-toggle-color-hover: var(--color-neutral-700);
+  --ds-input-password-toggle-size: 1.25rem;
+  --ds-input-password-toggle-color: var(--ds-color-neutral-500);
+  --ds-input-password-toggle-color-hover: var(--ds-color-neutral-700);
 
   /* ========================================================================
      CHARACTER COUNT
      Settings for character counter
      ======================================================================== */
-  --input-count-color: var(--color-neutral-500);
-  --input-count-color-warning: var(--color-warning-600);
-  --input-count-color-error: var(--color-error-600);
-  --input-count-font-size: var(--font-size-sm);
-  --input-count-margin-top: 0.25rem;
+  --ds-input-count-color: var(--ds-color-neutral-500);
+  --ds-input-count-color-warning: var(--ds-color-warning-600);
+  --ds-input-count-color-error: var(--ds-color-error-600);
+  --ds-input-count-font-size: var(--ds-font-size-sm);
+  --ds-input-count-margin-top: 0.25rem;
 
   /* ========================================================================
      LABEL
      Settings for input labels
      ======================================================================== */
-  --input-label-color: var(--color-neutral-700);
-  --input-label-color-disabled: var(--color-neutral-400);
-  --input-label-font-size: var(--font-size-sm);
-  --input-label-font-weight: var(--font-weight-medium);
-  --input-label-margin-bottom: 0.375rem;
-  --input-label-required-color: var(--color-error-500);
+  --ds-input-label-color: var(--ds-color-neutral-700);
+  --ds-input-label-color-disabled: var(--ds-color-neutral-400);
+  --ds-input-label-font-size: var(--ds-font-size-sm);
+  --ds-input-label-font-weight: var(--ds-font-weight-medium);
+  --ds-input-label-margin-bottom: 0.375rem;
+  --ds-input-label-required-color: var(--ds-color-error-500);
 
   /* ========================================================================
      HELPER TEXT
      Settings for helper/description text
      ======================================================================== */
-  --input-helper-color: var(--color-neutral-600);
-  --input-helper-font-size: var(--font-size-sm);
-  --input-helper-margin-top: 0.25rem;
-  --input-helper-line-height: var(--line-height-snug);
+  --ds-input-helper-color: var(--ds-color-neutral-600);
+  --ds-input-helper-font-size: var(--ds-font-size-sm);
+  --ds-input-helper-margin-top: 0.25rem;
+  --ds-input-helper-line-height: var(--ds-line-height-snug);
 
   /* ========================================================================
      ERROR MESSAGE
      Settings for error message text
      ======================================================================== */
-  --input-error-message-color: var(--color-error-600);
-  --input-error-message-font-size: var(--font-size-sm);
-  --input-error-message-margin-top: 0.25rem;
-  --input-error-message-icon-size: 1rem;
+  --ds-input-error-message-color: var(--ds-color-error-600);
+  --ds-input-error-message-font-size: var(--ds-font-size-sm);
+  --ds-input-error-message-margin-top: 0.25rem;
+  --ds-input-error-message-icon-size: 1rem;
 
   /* ========================================================================
      SUCCESS MESSAGE
      Settings for success message text
      ======================================================================== */
-  --input-success-message-color: var(--color-success-600);
-  --input-success-message-font-size: var(--font-size-sm);
-  --input-success-message-margin-top: 0.25rem;
+  --ds-input-success-message-color: var(--ds-color-success-600);
+  --ds-input-success-message-font-size: var(--ds-font-size-sm);
+  --ds-input-success-message-margin-top: 0.25rem;
 
   /* ========================================================================
      GROUP/COMPACT
      Settings for input groups
      ======================================================================== */
-  --input-group-gap: 0;
-  --input-group-border-radius-first: var(--radius-md) 0 0 var(--radius-md);
-  --input-group-border-radius-last: 0 var(--radius-md) var(--radius-md) 0;
-  --input-group-border-radius-middle: 0;
+  --ds-input-group-gap: 0;
+  --ds-input-group-border-radius-first: var(--ds-radius-md) 0 0 var(--ds-radius-md);
+  --ds-input-group-border-radius-last: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
+  --ds-input-group-border-radius-middle: 0;
 
   /* ========================================================================
      SEARCH INPUT
      Specific settings for search inputs
      ======================================================================== */
-  --input-search-icon-color: var(--color-neutral-500);
-  --input-search-clear-color: var(--color-neutral-400);
+  --ds-input-search-icon-color: var(--ds-color-neutral-500);
+  --ds-input-search-clear-color: var(--ds-color-neutral-400);
 
   /* ========================================================================
      NUMBER INPUT
      Specific settings for number inputs
      ======================================================================== */
-  --input-number-controls-width: 1.5rem;
-  --input-number-controls-bg: var(--color-neutral-50);
-  --input-number-controls-bg-hover: var(--color-neutral-100);
-  --input-number-controls-color: var(--color-neutral-600);
-  --input-number-controls-border-color: var(--color-neutral-300);
+  --ds-input-number-controls-width: 1.5rem;
+  --ds-input-number-controls-bg: var(--ds-color-neutral-50);
+  --ds-input-number-controls-bg-hover: var(--ds-color-neutral-100);
+  --ds-input-number-controls-color: var(--ds-color-neutral-600);
+  --ds-input-number-controls-border-color: var(--ds-color-neutral-300);
 
   /* ========================================================================
      FILE INPUT
      Specific settings for file inputs
      ======================================================================== */
-  --input-file-button-bg: var(--color-neutral-100);
-  --input-file-button-bg-hover: var(--color-neutral-200);
-  --input-file-button-color: var(--color-neutral-700);
-  --input-file-button-padding: 0.5rem 1rem;
+  --ds-input-file-button-bg: var(--ds-color-neutral-100);
+  --ds-input-file-button-bg-hover: var(--ds-color-neutral-200);
+  --ds-input-file-button-color: var(--ds-color-neutral-700);
+  --ds-input-file-button-padding: 0.5rem 1rem;
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --input-transition-duration: 0.2s;
-  --input-transition-timing: ease-in-out;
-  --input-transition: all var(--input-transition-duration) var(--input-transition-timing);
+  --ds-input-transition-duration: 0.2s;
+  --ds-input-transition-timing: ease-in-out;
+  --ds-input-transition: all var(--ds-input-transition-duration) var(--ds-input-transition-timing);
 
   /* ========================================================================
      TYPOGRAPHY
      Font settings for input text
      ======================================================================== */
-  --input-font-family: var(--font-family-base);
-  --input-font-weight: var(--font-weight-normal);
-  --input-letter-spacing: normal;
+  --ds-input-font-family: var(--ds-font-family-base);
+  --ds-input-font-weight: var(--ds-font-weight-normal);
+  --ds-input-letter-spacing: normal;
 
   /* ========================================================================
      DISABLED STATE
      Appearance when disabled
      ======================================================================== */
-  --input-disabled-opacity: 0.6;
-  --input-disabled-cursor: not-allowed;
+  --ds-input-disabled-opacity: 0.6;
+  --ds-input-disabled-cursor: not-allowed;
 
   /* ========================================================================
      READ-ONLY STATE
      Appearance when read-only
      ======================================================================== */
-  --input-readonly-bg: var(--color-neutral-50);
-  --input-readonly-cursor: default;
-  --input-readonly-border-style: dashed;
+  --ds-input-readonly-bg: var(--ds-color-neutral-50);
+  --ds-input-readonly-cursor: default;
+  --ds-input-readonly-border-style: dashed;
 
   /* ========================================================================
      AUTOFILL
      Browser autofill appearance
      ======================================================================== */
-  --input-autofill-bg: var(--color-primary-50);
-  --input-autofill-color: var(--color-neutral-900);
+  --ds-input-autofill-bg: var(--ds-color-primary-50);
+  --ds-input-autofill-color: var(--ds-color-neutral-900);
 }

@@ -7,23 +7,23 @@
 
 // Spinner Sizes
 export const spinnerSize = {
-  sm: 'var(--spinner-sm-size)',
-  md: 'var(--spinner-md-size)',
-  lg: 'var(--spinner-lg-size)',
-  xl: 'var(--spinner-xl-size)',
+  sm: 'var(--ds-spinner-sm-size)',
+  md: 'var(--ds-spinner-md-size)',
+  lg: 'var(--ds-spinner-lg-size)',
+  xl: 'var(--ds-spinner-xl-size)',
 } as const;
 
 // Spinner Colors
 export const spinnerColor = {
-  default: 'var(--spinner-default-color)',
-  track: 'var(--spinner-track-color)',
+  default: 'var(--ds-spinner-default-color)',
+  track: 'var(--ds-spinner-track-color)',
 } as const;
 
 // Spinner Animation
 export const spinnerAnimation = {
-  duration: 'var(--spinner-animation-duration)',
-  timing: 'var(--spinner-animation-timing)',
-  strokeWidth: 'var(--spinner-stroke-width)',
+  duration: 'var(--ds-spinner-animation-duration)',
+  timing: 'var(--ds-spinner-animation-timing)',
+  strokeWidth: 'var(--ds-spinner-stroke-width)',
 } as const;
 
 // Combined spinner tokens
@@ -31,7 +31,7 @@ export const spinnerTokens = {
   size: spinnerSize,
   color: spinnerColor,
   animation: spinnerAnimation,
-  defaultSize: 'var(--spinner-default-size)',
+  defaultSize: 'var(--ds-spinner-default-size)',
 } as const;
 
 // Type exports

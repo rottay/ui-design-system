@@ -260,7 +260,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                     width: '8px',
                     height: '8px',
                     borderRadius: '50%',
-                    backgroundColor: index === currentStep ? '#3b82f6' : '#e5e7eb',
+                    backgroundColor: index === currentStep ? 'var(--ds-color-primary)' : 'var(--ds-color-border)',
                   }}
                 />
               ))}
@@ -275,8 +275,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                   style={{
                     padding: '8px 16px',
                     borderRadius: '6px',
-                    border: '1px solid #d1d5db',
-                    backgroundColor: '#fff',
+                    border: '1px solid var(--ds-color-border-secondary)',
+                    backgroundColor: 'var(--ds-color-bg-elevated)',
                     cursor: 'pointer',
                     fontSize: '14px',
                     fontWeight: 500,
@@ -292,8 +292,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                   padding: '8px 16px',
                   borderRadius: '6px',
                   border: 'none',
-                  backgroundColor: isPrimary ? '#3b82f6' : '#374151',
-                  color: '#fff',
+                  backgroundColor: isPrimary ? 'var(--ds-color-primary)' : 'var(--ds-color-neutral-700)',
+                  color: 'var(--ds-color-text-on-primary)',
                   cursor: 'pointer',
                   fontSize: '14px',
                   fontWeight: 500,

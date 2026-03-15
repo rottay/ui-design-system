@@ -13,6 +13,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
     currentStep: controlledStep,
     onStepChange,
     onComplete,
+    actionsDisabled = false,
+    completeDisabled = false,
+    showCompleteAction = true,
     allowSkip = false,
     showProgress = true,
     orientation = 'horizontal',
@@ -27,16 +30,67 @@ export default function ModernStepWizard(props: StepWizardProps) {
   } = props;
 
   const [internalStep, setInternalStep] = useState(0);
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
+  const [isValidating, setIsValidating] = useState(false);
   const current = controlledStep ?? internalStep;
 
   const setCurrent = (step: number) => {
     if (controlledStep == null) setInternalStep(step);
     onStepChange?.(step);
+    setValidationMessage(null);
   };
 
   const isLast = current === steps.length - 1;
   const currentDef = steps[current];
   const progress = Math.round(((current + 1) / steps.length) * 100);
+
+  const validateCurrentStep = async (): Promise<boolean> => {
+    if (!currentDef?.validate) {
+      setValidationMessage(null);
+      return true;
+    }
+
+    setIsValidating(true);
+
+    try {
+      const result = await currentDef.validate();
+
+      if (result === true || result === undefined) {
+        setValidationMessage(null);
+        return true;
+      }
+
+      setValidationMessage(
+        typeof result === 'string'
+          ? result
+          : 'Please complete this step before continuing.'
+      );
+
+      return false;
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleAdvance = async () => {
+    const isValid = await validateCurrentStep();
+
+    if (!isValid) {
+      return;
+    }
+
+    setCurrent(current + 1);
+  };
+
+  const handleComplete = async () => {
+    const isValid = await validateCurrentStep();
+
+    if (!isValid) {
+      return;
+    }
+
+    await onComplete?.();
+  };
 
   if (loading) {
     return (
@@ -84,11 +138,17 @@ export default function ModernStepWizard(props: StepWizardProps) {
           </>
         )}
 
+        {validationMessage && (
+          <div className="alert alert-error mt-4">
+            <span>{validationMessage}</span>
+          </div>
+        )}
+
         {/* Navigation */}
         <div className="flex justify-between items-center mt-6">
           <div>
             {current > 0 && (
-              <button className="btn btn-ghost btn-sm" onClick={() => setCurrent(current - 1)}>
+              <button className="btn btn-ghost btn-sm" disabled={isValidating || actionsDisabled} onClick={() => setCurrent(current - 1)}>
                 {prevLabel}
               </button>
             )}
@@ -96,14 +156,22 @@ export default function ModernStepWizard(props: StepWizardProps) {
           <div className="flex items-center gap-2">
             {footer}
             {allowSkip && currentDef?.optional && !isLast && (
-              <button className="btn btn-ghost btn-sm" onClick={() => setCurrent(current + 1)}>
+              <button className="btn btn-ghost btn-sm" disabled={isValidating || actionsDisabled} onClick={() => setCurrent(current + 1)}>
                 {skipLabel}
               </button>
             )}
             {isLast ? (
-              <button className="btn btn-primary btn-sm" onClick={onComplete}>{completeLabel}</button>
+              showCompleteAction ? (
+                <button
+                  className="btn btn-primary btn-sm"
+                  disabled={isValidating || actionsDisabled || completeDisabled}
+                  onClick={handleComplete}
+                >
+                  {completeLabel}
+                </button>
+              ) : null
             ) : (
-              <button className="btn btn-primary btn-sm" onClick={() => setCurrent(current + 1)}>{nextLabel}</button>
+              <button className="btn btn-primary btn-sm" disabled={isValidating || actionsDisabled} onClick={handleAdvance}>{nextLabel}</button>
             )}
           </div>
         </div>

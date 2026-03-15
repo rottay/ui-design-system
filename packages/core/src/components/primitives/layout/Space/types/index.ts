@@ -147,14 +147,14 @@ export const SPACE_DEFAULTS: Partial<SpaceProps> = {
  *
  * @remarks
  * These CSS variables should be defined in the theme:
- * - `--space-small-size`: Default 8px
- * - `--space-middle-size`: Default 16px
- * - `--space-large-size`: Default 24px
+ * - `--ds-space-small-size`: Default 8px
+ * - `--ds-space-middle-size`: Default 16px
+ * - `--ds-space-large-size`: Default 24px
  */
 export const SPACE_SIZE_MAP: Record<SpaceSize, string> = {
-  small: 'var(--space-small-size)',
-  middle: 'var(--space-middle-size)',
-  large: 'var(--space-large-size)',
+  small: 'var(--ds-space-small-size)',
+  middle: 'var(--ds-space-middle-size)',
+  large: 'var(--ds-space-large-size)',
 };
 
 /**

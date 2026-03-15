@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { memo, useEffect, useRef } from 'react';
+import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select } from 'd3';
 
 import type { ChartBaseProps, DataPoint, Series } from '../types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../types';
-import { useChartDimensions } from '../hooks';
+import { useChartDimensions, useChartPersonality } from '../hooks';
+import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 export interface BarChartProps extends ChartBaseProps {
   data: DataPoint[];
@@ -20,7 +21,7 @@ export interface BarChartProps extends ChartBaseProps {
   yAxisLabel?: string;
 }
 
-export function BarChart({
+export const BarChart = memo(function BarChart({
   data,
   orientation = 'vertical',
   stacked = false,
@@ -39,21 +40,37 @@ export function BarChart({
   title,
   subtitle,
   legend = false,
-  animate = true,
+  animate,
   responsive = true,
   colors = DEFAULT_COLORS,
-  tooltip = true,
+  tooltip,
   margin = DEFAULT_MARGIN,
 }: BarChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
+  const summary = {
+    caption: title ? `${title} data summary` : 'Bar chart data summary',
+    headers: ['Label', 'Value'],
+    rows: data.map((item) => [item.label, item.value]),
+  };
+  const legendNode = legend ? (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      {data.map((d, i) => (
+        <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+        </div>
+      ))}
+    </div>
+  ) : null;
 
   useEffect(() => {
     if (!svgRef.current || !data || data.length === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
     const innerWidth = chartWidth - margin.left - margin.right;
@@ -66,29 +83,27 @@ export function BarChart({
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (orientation === 'vertical') {
-      const x = d3
-        .scaleBand()
+      const x = scaleBand()
         .domain(data.map((d) => d.label))
         .range([0, innerWidth])
         .padding(barGap);
 
-      const y = d3
-        .scaleLinear()
-        .domain([0, d3.max(data, (d) => d.value) ?? 0])
+      const y = scaleLinear()
+        .domain([0, max(data, (d) => d.value) ?? 0])
         .nice()
         .range([innerHeight, 0]);
 
       // X axis
       g.append('g')
         .attr('transform', `translate(0,${innerHeight})`)
-        .call(d3.axisBottom(x))
+        .call(axisBottom(x))
         .selectAll('text')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
       // Y axis
       g.append('g')
-        .call(d3.axisLeft(y).ticks(5))
+        .call(axisLeft(y).ticks(5))
         .selectAll('text')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
@@ -96,7 +111,7 @@ export function BarChart({
       // Grid lines
       g.append('g')
         .attr('class', 'grid')
-        .call(d3.axisLeft(y).ticks(5).tickSize(-innerWidth).tickFormat(() => ''))
+        .call(axisLeft(y).ticks(5).tickSize(-innerWidth).tickFormat(() => ''))
         .selectAll('line')
         .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
@@ -116,16 +131,16 @@ export function BarChart({
         .attr('ry', barRadius)
         .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
 
-      if (tooltip) {
+      if (chartPersonality.tooltip) {
         bars.append('title').text((d) => `${d.label}: ${d.value}`);
       }
 
-      if (animate) {
+      if (chartPersonality.animate) {
         bars
           .attr('y', innerHeight)
           .attr('height', 0)
           .transition()
-          .duration(800)
+          .duration(chartPersonality.animationDuration)
           .delay((_, i) => i * 50)
           .attr('y', (d) => y(d.value))
           .attr('height', (d) => innerHeight - y(d.value));
@@ -149,27 +164,25 @@ export function BarChart({
       }
     } else {
       // Horizontal orientation
-      const y = d3
-        .scaleBand()
+      const y = scaleBand()
         .domain(data.map((d) => d.label))
         .range([0, innerHeight])
         .padding(barGap);
 
-      const x = d3
-        .scaleLinear()
-        .domain([0, d3.max(data, (d) => d.value) ?? 0])
+      const x = scaleLinear()
+        .domain([0, max(data, (d) => d.value) ?? 0])
         .nice()
         .range([0, innerWidth]);
 
       g.append('g')
         .attr('transform', `translate(0,${innerHeight})`)
-        .call(d3.axisBottom(x).ticks(5))
+        .call(axisBottom(x).ticks(5))
         .selectAll('text')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
       g.append('g')
-        .call(d3.axisLeft(y))
+        .call(axisLeft(y))
         .selectAll('text')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
@@ -186,16 +199,16 @@ export function BarChart({
         .attr('ry', barRadius)
         .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
 
-      if (tooltip) {
+      if (chartPersonality.tooltip) {
         bars.append('title').text((d) => `${d.label}: ${d.value}`);
       }
 
-      if (animate) {
+      if (chartPersonality.animate) {
         bars
           .attr('x', 0)
           .attr('width', 0)
           .transition()
-          .duration(800)
+          .duration(chartPersonality.animationDuration)
           .delay((_, i) => i * 50)
           .attr('width', (d) => x(d.value));
       } else {
@@ -244,37 +257,28 @@ export function BarChart({
     // Style axis lines
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [data, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, animate, colors, margin, tooltip, xAxisLabel, yAxisLabel]);
-
-  if (loading) {
-    return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>
-          Loading...
-        </div>
-      </div>
-    );
-  }
+  }, [data, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, colors, margin, xAxisLabel, yAxisLabel]);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
-      {title && (
-        <div style={{ marginBottom: 4 }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
-          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
-        </div>
-      )}
-      <svg ref={svgRef} />
-      {legend && (
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-          {data.map((d, i) => (
-            <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
-              <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <ChartScaffold
+      containerRef={containerRef}
+      svgRef={svgRef}
+      width={width}
+      height={height}
+      className={className}
+      style={style}
+      loading={loading}
+      loadingLabel={chartPersonality.loadingLabel}
+      title={title}
+      subtitle={subtitle}
+      ariaLabel={title ?? 'Bar chart'}
+      ariaDescription={describeChart('Bar chart', data.length, subtitle, [
+        orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.',
+        xAxisLabel ? `X axis: ${xAxisLabel}.` : null,
+        yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
+      ].filter(Boolean).join(' '))}
+      summary={summary}
+      legend={legendNode}
+    />
   );
-}
+});

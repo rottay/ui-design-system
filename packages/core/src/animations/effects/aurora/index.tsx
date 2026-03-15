@@ -1,21 +1,49 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { useReducedMotion } from 'framer-motion';
 import type { AuroraProps } from '../../types';
+import { useMotionPersonality } from '../../hooks';
 
 export const Aurora: React.FC<AuroraProps> = ({
-  colors = ['var(--ds-color-primary-500, #8b5cf6)', 'var(--ds-color-secondary-500, #3b82f6)', '#ec4899'],
+  colors = ['var(--ds-color-primary-500)', 'var(--ds-color-secondary-500)', 'var(--ds-color-accent)'],
   speed = 1,
   children,
   className,
   style,
 }) => {
-  const shouldReduceMotion = useReducedMotion();
+  const motionPersonality = useMotionPersonality();
+  const shouldReduceMotion = motionPersonality.shouldReduceMotion;
+  const pulseDurationMap = {
+    none: 0,
+    slow: 1.2,
+    normal: 1,
+    fast: 0.8,
+  } as const;
 
   const blobs = useMemo(
-    () => colors.map((color, i) => ({ color, duration: (20 + i * 5) / speed, delay: i * 2, size: 40 + i * 10, top: 20 + i * 15, left: 10 + i * 20 })),
-    [colors, speed]
+    () => {
+      const baseDuration = Math.max(
+        motionPersonality.durationSeconds * 18 * (pulseDurationMap[motionPersonality.pulseSpeed] || 1),
+        6
+      );
+      const normalizedSpeed = speed <= 0 ? 1 : speed;
+
+      return colors.map((color, i) => ({
+        color,
+        duration: (baseDuration + i * 3) / normalizedSpeed,
+        delay: i * Math.max(motionPersonality.delaySeconds * 4, 0.2),
+        size: 40 + i * 10,
+        top: 20 + i * 15,
+        left: 10 + i * 20,
+      }));
+    },
+    [
+      colors,
+      motionPersonality.delaySeconds,
+      motionPersonality.durationSeconds,
+      motionPersonality.pulseSpeed,
+      speed,
+    ]
   );
 
   return (
@@ -34,7 +62,7 @@ export const Aurora: React.FC<AuroraProps> = ({
               background: blob.color,
               borderRadius: '50%',
               filter: 'blur(60px)',
-              opacity: 0.3,
+              opacity: motionPersonality.skeletonStyle === 'wave' ? 0.34 : 0.28,
               animation: shouldReduceMotion ? 'none' : `ds-aurora-blob ${blob.duration}s ease-in-out ${blob.delay}s infinite`,
               willChange: shouldReduceMotion ? 'auto' : 'transform',
             }}

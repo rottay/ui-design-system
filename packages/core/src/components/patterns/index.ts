@@ -78,6 +78,26 @@ export type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from './appr
 export { PatternStepWizard } from './step-wizard';
 export type { StepWizardProps, WizardStep } from './step-wizard';
 
+// Assistant UI
+export {
+  AssistantStatusBadge,
+  StreamingText,
+  TypingIndicator,
+  ToolCallCard,
+  MessageBubble,
+} from './assistant';
+export type {
+  AssistantMessageRole,
+  AssistantDeliveryStatus,
+  AssistantToolStatus,
+  AssistantMessagePart,
+  AssistantStatusBadgeProps,
+  StreamingTextProps,
+  TypingIndicatorProps,
+  ToolCallCardProps,
+  MessageBubbleProps,
+} from './assistant';
+
 // LiveFeed
 export { PatternLiveFeed } from './live-feed';
 export type { LiveFeedProps, FeedItem } from './live-feed';
@@ -85,6 +105,74 @@ export type { LiveFeedProps, FeedItem } from './live-feed';
 // TreeView
 export { PatternTreeView } from './tree-view';
 export type { TreeViewProps, TreeNode } from './tree-view';
+
+// FileManager
+export { PatternFileManager } from './file-manager';
+export type { FileManagerProps, FileItem, FolderItem, FileSystemItem } from './file-manager';
+
+// ActivityLog
+export { PatternActivityLog } from './activity-log';
+export type { ActivityLogProps, Activity, ActivityFilter } from './activity-log';
+
+// CommentThread
+export { PatternCommentThread } from './comment-thread';
+export type { CommentThreadProps, Comment, CommentReaction } from './comment-thread';
+
+// NotificationCenter
+export { PatternNotificationCenter } from './notification-center';
+export type { NotificationCenterProps, Notification } from './notification-center';
+
+// UserProfileCard
+export { PatternUserProfileCard } from './user-profile-card';
+export type { UserProfileCardProps, UserProfile, ProfileAction } from './user-profile-card';
+
+// PricingTable
+export { PatternPricingTable } from './pricing-table';
+export type { PricingTableProps, PricingPlan, PricingFeature } from './pricing-table';
+
+// InvoiceTemplate
+export { PatternInvoiceTemplate } from './invoice-template';
+export type { InvoiceTemplateProps, InvoiceData, InvoiceCompany, InvoiceClient, InvoiceLineItem } from './invoice-template';
+
+// ShortcutsOverlay
+export { PatternShortcutsOverlay } from './shortcuts-overlay';
+export type { ShortcutsOverlayProps, ShortcutDisplayItem } from './shortcuts-overlay';
+
+// WorkspaceSwitcher
+export { PatternWorkspaceSwitcher } from './workspace-switcher';
+export type { WorkspaceSwitcherProps, Workspace } from './workspace-switcher';
+
+// EnvironmentToggle
+export { PatternEnvironmentToggle } from './environment-toggle';
+export type { EnvironmentToggleProps, EnvironmentDef } from './environment-toggle';
+
+// SavedViewsBar
+export { PatternSavedViewsBar } from './saved-views';
+export type { SavedViewsBarProps, SavedView, SavedViewConfig, ViewMenuAction } from './saved-views';
+
+// FilterBuilder
+export { PatternFilterBuilder } from './filter-builder';
+export type {
+  FilterBuilderProps,
+  FilterRule,
+  FilterGroup,
+  FilterFieldDefinition,
+  FilterFieldType,
+  FilterOperator,
+  OperatorDefinition,
+} from './filter-builder';
+export {
+  isFilterGroup,
+  isFilterRule,
+  generateFilterId,
+  getOperatorsForField,
+  OPERATOR_DEFINITIONS,
+  DEFAULT_OPERATORS_BY_TYPE,
+} from './filter-builder';
+
+// TenantPreview
+export { PatternTenantPreview } from './tenant-preview';
+export type { TenantPreviewProps, PreviewComponent } from './tenant-preview';
 
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';

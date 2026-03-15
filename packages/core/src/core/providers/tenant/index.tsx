@@ -72,7 +72,6 @@ export function TenantProvider({
   useEffect(() => {
     if (config?.slug && typeof document !== 'undefined') {
       document.documentElement.setAttribute('data-tenant', config.slug);
-      console.log(`[TenantProvider] Set data-tenant="${config.slug}"`);
     }
 
     return () => {

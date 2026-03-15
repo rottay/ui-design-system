@@ -11,8 +11,8 @@ const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
     color: 'var(--ds-color-neutral-900)',
-    background: 'var(--ds-color-neutral-0, #fff)',
-    border: '1px solid var(--ds-color-neutral-200)',
+    background: 'var(--ds-live-feed-bg, var(--ds-color-bg-elevated))',
+    border: '1px solid var(--ds-live-feed-border, var(--ds-color-border))',
     borderRadius: 'var(--ds-radius-lg)',
     padding: '1.5rem',
   } as React.CSSProperties,
@@ -27,7 +27,7 @@ const s = {
     border: 'none',
     cursor: 'pointer',
     padding: '0.25rem',
-    color: 'var(--ds-color-neutral-500)',
+    color: 'var(--ds-live-feed-refresh-color, var(--ds-color-text-secondary))',
     fontSize: '1rem',
     borderRadius: 'var(--ds-radius-sm)',
   } as React.CSSProperties,
@@ -35,13 +35,13 @@ const s = {
     textAlign: 'center' as const,
     padding: '0.5rem',
     marginBottom: '0.75rem',
-    background: 'var(--ds-color-primary-50, #eff6ff)',
+    background: 'var(--ds-live-feed-new-bg, var(--ds-color-info-bg))',
     borderRadius: 'var(--ds-radius-md)',
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-color-primary-600)',
+    color: 'var(--ds-live-feed-new-color, var(--ds-color-info))',
     fontWeight: 500,
-    border: '1px solid var(--ds-color-primary-200, #bfdbfe)',
+    border: '1px solid var(--ds-live-feed-new-border, var(--ds-color-info-border))',
   } as React.CSSProperties,
   newBadge: {
     display: 'inline-block',
@@ -49,14 +49,14 @@ const s = {
     borderRadius: 'var(--ds-radius-full, 9999px)',
     fontSize: 'var(--ds-font-size-xs)',
     fontWeight: 600,
-    background: 'var(--ds-color-primary-600)',
-    color: '#fff',
+    background: 'var(--ds-live-feed-badge-bg, var(--ds-color-primary))',
+    color: 'var(--ds-live-feed-badge-color, var(--ds-color-text-on-primary))',
     marginRight: '0.375rem',
   } as React.CSSProperties,
   empty: {
     textAlign: 'center' as const,
     padding: '2rem 0',
-    color: 'var(--ds-color-neutral-400)',
+    color: 'var(--ds-live-feed-empty-color, var(--ds-color-text-muted))',
     fontSize: 'var(--ds-font-size-sm)',
   } as React.CSSProperties,
   feedList: {
@@ -70,7 +70,7 @@ const s = {
     background: 'none',
     border: 'none',
     cursor: 'pointer',
-    color: 'var(--ds-color-primary-600)',
+    color: 'var(--ds-live-feed-load-more-color, var(--ds-color-primary))',
     fontSize: 'var(--ds-font-size-sm)',
     fontWeight: 500,
     padding: '0.25rem 0.75rem',
@@ -80,7 +80,7 @@ const s = {
     width: w,
     height: h,
     borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-neutral-200)',
+    background: 'var(--ds-live-feed-skeleton-bg, var(--ds-color-bg-tertiary))',
     animation: 'pulse 1.5s ease-in-out infinite',
   } as React.CSSProperties),
 };
@@ -129,7 +129,7 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
 
   return (
     <div className={className} style={{ ...s.container, ...style }}>
-      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} } @keyframes feedPulse { 0%{background:var(--ds-color-primary-50,#eff6ff)} 100%{background:transparent} }`}</style>
+      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} } @keyframes feedPulse { 0%{background:var(--ds-live-feed-new-bg,var(--ds-color-info-bg))} 100%{background:transparent} }`}</style>
 
       {(header || onRefresh) && (
         <div style={s.headerRow}>

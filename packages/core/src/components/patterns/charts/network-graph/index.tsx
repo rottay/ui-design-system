@@ -1,11 +1,21 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { memo, useEffect, useRef } from 'react';
+import {
+  drag,
+  forceCenter,
+  forceCollide,
+  forceLink,
+  forceManyBody,
+  forceSimulation,
+  select,
+  type SimulationNodeDatum,
+} from 'd3';
 
 import type { ChartBaseProps } from '../types';
 import { DEFAULT_COLORS } from '../types';
-import { useChartDimensions } from '../hooks';
+import { useChartDimensions, useChartPersonality } from '../hooks';
+import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 export interface NetworkNode {
   id: string;
@@ -28,7 +38,7 @@ export interface NetworkGraphProps extends ChartBaseProps {
   directed?: boolean;
 }
 
-export function NetworkGraph({
+export const NetworkGraph = memo(function NetworkGraph({
   nodes,
   links,
   directed = false,
@@ -47,13 +57,22 @@ export function NetworkGraph({
 }: NetworkGraphProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
+  const summary = {
+    caption: title ? `${title} data summary` : 'Network graph data summary',
+    headers: ['Kind', 'Primary', 'Secondary'],
+    rows: [
+      ...nodes.map((node) => ['Node', node.label ?? node.id, node.group ?? '']),
+      ...links.map((link) => ['Link', link.source, link.target]),
+    ],
+  };
 
   useEffect(() => {
     if (!svgRef.current || !nodes || nodes.length === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
     svg.attr('width', chartWidth).attr('height', chartHeight);
@@ -83,21 +102,19 @@ export function NetworkGraph({
         .attr('fill', 'var(--ds-color-border-primary)');
     }
 
-    const simNodes: (NetworkNode & d3.SimulationNodeDatum)[] = nodes.map((n) => ({ ...n }));
+    const simNodes: (NetworkNode & SimulationNodeDatum)[] = nodes.map((n) => ({ ...n }));
     const simLinks = links.map((l) => ({ ...l }));
 
-    const simulation = d3
-      .forceSimulation(simNodes as any)
+    const simulation = forceSimulation(simNodes as any)
       .force(
         'link',
-        d3
-          .forceLink(simLinks as any)
+        forceLink(simLinks as any)
           .id((d: any) => d.id)
           .distance(80),
       )
-      .force('charge', d3.forceManyBody().strength(-200))
-      .force('center', d3.forceCenter(chartWidth / 2, chartHeight / 2))
-      .force('collision', d3.forceCollide().radius(20));
+      .force('charge', forceManyBody().strength(-200))
+      .force('center', forceCenter(chartWidth / 2, chartHeight / 2))
+      .force('collision', forceCollide().radius(20));
 
     const linkElements = svg
       .selectAll('.link')
@@ -120,8 +137,7 @@ export function NetworkGraph({
       .append('g')
       .attr('class', 'node')
       .call(
-        d3
-          .drag<SVGGElement, any>()
+        drag<SVGGElement, any>()
           .on('start', (event, d) => {
             if (!event.active) simulation.alphaTarget(0.3).restart();
             d.fx = d.x;
@@ -145,7 +161,7 @@ export function NetworkGraph({
       .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 2);
 
-    if (tooltip) {
+    if (chartPersonality.tooltip) {
       nodeElements.append('title').text((d) => d.label ?? d.id);
     }
 
@@ -169,7 +185,7 @@ export function NetworkGraph({
       nodeElements.attr('transform', (d: any) => `translate(${d.x},${d.y})`);
     });
 
-    if (!animate) {
+    if (!chartPersonality.animate) {
       simulation.stop();
       for (let i = 0; i < 300; i++) simulation.tick();
       simulation.on('tick', null);
@@ -186,37 +202,36 @@ export function NetworkGraph({
     return () => {
       simulation.stop();
     };
-  }, [nodes, links, chartWidth, chartHeight, directed, animate, colors, tooltip]);
-
-  if (loading) {
-    return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>Loading...</div>
-      </div>
-    );
-  }
+  }, [nodes, links, chartWidth, chartHeight, directed, chartPersonality.animate, colors, chartPersonality.tooltip]);
 
   const groups = [...new Set(nodes.map((n) => n.group).filter(Boolean))] as string[];
+  const legendNode = legend && groups.length > 0 ? (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      {groups.map((group, i) => (
+        <div key={group} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{group}</span>
+        </div>
+      ))}
+    </div>
+  ) : null;
 
   return (
-    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
-      {title && (
-        <div style={{ marginBottom: 4 }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
-          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
-        </div>
-      )}
-      <svg ref={svgRef} />
-      {legend && groups.length > 0 && (
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-          {groups.map((group, i) => (
-            <div key={group} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-              <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors[i % colors.length], display: 'inline-block' }} />
-              <span style={{ color: 'var(--ds-color-text-secondary)' }}>{group}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <ChartScaffold
+      containerRef={containerRef}
+      svgRef={svgRef}
+      width={width}
+      height={height}
+      className={className}
+      style={style}
+      loading={loading}
+      loadingLabel={chartPersonality.loadingLabel}
+      title={title}
+      subtitle={subtitle}
+      ariaLabel={title ?? 'Network graph'}
+      ariaDescription={describeChart('Network graph', nodes.length + links.length, subtitle, directed ? 'Directed edges are shown with arrows.' : undefined)}
+      summary={summary}
+      legend={legendNode}
+    />
   );
-}
+});

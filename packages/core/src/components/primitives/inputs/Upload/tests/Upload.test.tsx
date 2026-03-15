@@ -1,183 +1,178 @@
-/**
- * Upload Tests
- * Colocated with component following approved architecture
- */
+import React, { createRef } from 'react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Upload } from '../';
+import { Upload } from '..';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../../testing/helpers/engine-test-utils';
 
-// Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../core/engines/factory', () => ({
-  createEngineComponent: (name: string) => {
-    if (name === 'Upload.Dragger') {
-      const MockDragger = ({
-        children,
-        disabled,
-        height,
-        accept,
-        multiple,
-        showUploadList,
-        ...props
-      }: any) => (
-        <div
-          data-testid="upload-dragger"
-          data-disabled={disabled}
-          data-height={height}
-          data-accept={accept}
-          data-multiple={multiple}
-          data-show-upload-list={showUploadList}
-          {...props}
-        >
-          {children || 'Drop files here'}
-        </div>
-      );
-      MockDragger.displayName = 'Upload.Dragger';
-      return MockDragger;
-    }
+function makeFile(name: string, type = 'text/plain') {
+  return new File([`file:${name}`], name, { type });
+}
 
-    const MockUpload = ({
-      children,
-      disabled,
-      listType,
-      accept,
-      multiple,
-      maxCount,
-      showUploadList,
-      ...props
-    }: any) => (
-      <div
-        data-testid="upload"
-        data-disabled={disabled}
-        data-list-type={listType}
-        data-accept={accept}
-        data-multiple={multiple}
-        data-max-count={maxCount}
-        data-show-upload-list={showUploadList}
-        {...props}
-      >
-        {children || 'Upload'}
-      </div>
+function getHiddenFileInput(container: HTMLElement): HTMLInputElement {
+  const input = container.querySelector('input[type="file"]');
+
+  if (!(input instanceof HTMLInputElement)) {
+    throw new Error('Expected upload input[type="file"] to exist');
+  }
+
+  return input;
+}
+
+describe('Upload integration', () => {
+  it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {
+    const ref = createRef<HTMLDivElement>();
+
+    const { container } = renderWithEngine(
+      <Upload ref={ref} engine={engine}>
+        Upload contract
+      </Upload>,
+      engine
     );
-    MockUpload.displayName = 'Upload';
-    return MockUpload;
-  },
-}));
 
-describe('Upload', () => {
-  it('renders correctly', () => {
-    render(<Upload>Click to upload</Upload>);
-    expect(screen.getByTestId('upload')).toBeInTheDocument();
-    expect(screen.getByText('Click to upload')).toBeInTheDocument();
+    expect(await screen.findByText('Upload contract')).toBeInTheDocument();
+    expect(ref.current).toBeTruthy();
+    expect(getHiddenFileInput(container)).toBeInTheDocument();
+  });
+});
+
+describe.each(['modern', 'rustic'] as const)('Upload live %s engine', (engine) => {
+  it('adds selected files and respects maxCount inside a single change event', async () => {
+    const handleChange = vi.fn();
+    const { container } = renderWithEngine(
+      <Upload engine={engine} maxCount={1} onChange={handleChange}>
+        Upload files
+      </Upload>,
+      engine
+    );
+
+    expect(await screen.findByText('Upload files')).toBeInTheDocument();
+    const input = getHiddenFileInput(container);
+
+    await act(async () => {
+      fireEvent.change(input, {
+        target: {
+          files: [makeFile('one.txt'), makeFile('two.txt')],
+        },
+      });
+    });
+
+    expect(await screen.findByText('one.txt')).toBeInTheDocument();
+    expect(screen.queryByText('two.txt')).not.toBeInTheDocument();
+    expect(handleChange).toHaveBeenCalledTimes(1);
+    expect(handleChange.mock.calls[0]?.[0]?.fileList).toHaveLength(1);
   });
 
-  it('renders with default children when none provided', () => {
-    render(<Upload />);
-    expect(screen.getByTestId('upload')).toBeInTheDocument();
-    expect(screen.getByText('Upload')).toBeInTheDocument();
+  it('honors beforeUpload when it rejects a file', async () => {
+    const beforeUpload = vi.fn().mockResolvedValue(false);
+    const handleChange = vi.fn();
+    const { container } = renderWithEngine(
+      <Upload engine={engine} beforeUpload={beforeUpload} onChange={handleChange}>
+        Upload files
+      </Upload>,
+      engine
+    );
+
+    expect(await screen.findByText('Upload files')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.change(getHiddenFileInput(container), {
+        target: {
+          files: [makeFile('blocked.txt')],
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(beforeUpload).toHaveBeenCalledTimes(1);
+    });
+
+    expect(screen.queryByText('blocked.txt')).not.toBeInTheDocument();
+    expect(handleChange).not.toHaveBeenCalled();
   });
 
-  it('renders disabled state', () => {
-    render(<Upload disabled>Upload</Upload>);
-    expect(screen.getByTestId('upload')).toHaveAttribute('data-disabled', 'true');
+  it('removes files and lets onRemove block the deletion', async () => {
+    const onRemove = vi
+      .fn()
+      .mockResolvedValueOnce(false)
+      .mockResolvedValueOnce(true);
+
+    const { container, unmount } = renderWithEngine(
+      <Upload
+        engine={engine}
+        onRemove={onRemove}
+        defaultFileList={[
+          { uid: '1', name: 'keep.txt', status: 'done' },
+        ]}
+      >
+        Upload files
+      </Upload>,
+      engine
+    );
+
+    expect(await screen.findByText('keep.txt')).toBeInTheDocument();
+
+    const firstRemoveButton = await screen.findByRole('button', { name: 'Remove keep.txt' });
+
+    await act(async () => {
+      fireEvent.click(firstRemoveButton);
+    });
+
+    expect(onRemove).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('keep.txt')).toBeInTheDocument();
+
+    unmount();
+
+    renderWithEngine(
+      <Upload
+        engine={engine}
+        onRemove={onRemove}
+        defaultFileList={[
+          { uid: '2', name: 'drop.txt', status: 'done' },
+        ]}
+      >
+        Upload files
+      </Upload>,
+      engine
+    );
+
+    expect(await screen.findByText('drop.txt')).toBeInTheDocument();
+    const secondRemoveButton = await screen.findByRole('button', { name: 'Remove drop.txt' });
+
+    await act(async () => {
+      fireEvent.click(secondRemoveButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText('drop.txt')).not.toBeInTheDocument();
+    });
+
+    expect(onRemove).toHaveBeenCalledTimes(2);
   });
 
-  it.each(['text', 'picture', 'picture-card', 'picture-circle'] as const)(
-    'renders listType %s',
-    (listType) => {
-      render(<Upload listType={listType}>Upload</Upload>);
-      expect(screen.getByTestId('upload')).toHaveAttribute('data-list-type', listType);
+  it('processes dropped files through the dragger flow', async () => {
+    const onDrop = vi.fn();
+    renderWithEngine(
+      <Upload.Dragger engine={engine} onDrop={onDrop}>
+        Drop files here
+      </Upload.Dragger>,
+      engine
+    );
+
+    expect(await screen.findByText('Drop files here')).toBeInTheDocument();
+    const file = makeFile('dropped.txt');
+    const dropTarget = screen.getByText('Drop files here').closest('div');
+
+    if (!dropTarget) {
+      throw new Error('Expected dragger drop target');
     }
-  );
 
-  it('renders with accept prop', () => {
-    render(<Upload accept="image/*">Upload</Upload>);
-    expect(screen.getByTestId('upload')).toHaveAttribute('data-accept', 'image/*');
-  });
+    await act(async () => {
+      fireEvent.drop(dropTarget, {
+        dataTransfer: { files: [file] },
+      });
+    });
 
-  it('renders with multiple prop', () => {
-    render(<Upload multiple>Upload</Upload>);
-    expect(screen.getByTestId('upload')).toHaveAttribute('data-multiple', 'true');
-  });
-
-  it('renders with maxCount prop', () => {
-    render(<Upload maxCount={5}>Upload</Upload>);
-    expect(screen.getByTestId('upload')).toHaveAttribute('data-max-count', '5');
-  });
-
-  it('renders with showUploadList false', () => {
-    render(<Upload showUploadList={false}>Upload</Upload>);
-    expect(screen.getByTestId('upload')).toHaveAttribute('data-show-upload-list', 'false');
-  });
-
-  it('applies custom className', () => {
-    render(<Upload className="custom-class">Upload</Upload>);
-    expect(screen.getByTestId('upload')).toHaveClass('custom-class');
-  });
-
-  it('passes style prop to component', () => {
-    const customStyle = { backgroundColor: 'red' };
-    render(<Upload style={customStyle}>Upload</Upload>);
-    expect(screen.getByTestId('upload')).toBeInTheDocument();
-  });
-
-  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
-    render(<Upload engine={engine}>Upload with {engine}</Upload>);
-    expect(screen.getByTestId('upload')).toBeInTheDocument();
-    expect(screen.getByText(`Upload with ${engine}`)).toBeInTheDocument();
-  });
-});
-
-describe('Upload.Dragger', () => {
-  it('renders correctly', () => {
-    render(<Upload.Dragger>Drag files here</Upload.Dragger>);
-    expect(screen.getByTestId('upload-dragger')).toBeInTheDocument();
-    expect(screen.getByText('Drag files here')).toBeInTheDocument();
-  });
-
-  it('renders with default children when none provided', () => {
-    render(<Upload.Dragger />);
-    expect(screen.getByTestId('upload-dragger')).toBeInTheDocument();
-    expect(screen.getByText('Drop files here')).toBeInTheDocument();
-  });
-
-  it('renders disabled state', () => {
-    render(<Upload.Dragger disabled>Drop files</Upload.Dragger>);
-    expect(screen.getByTestId('upload-dragger')).toHaveAttribute('data-disabled', 'true');
-  });
-
-  it('renders with height prop', () => {
-    render(<Upload.Dragger height={300}>Drop files</Upload.Dragger>);
-    expect(screen.getByTestId('upload-dragger')).toHaveAttribute('data-height', '300');
-  });
-
-  it('renders with accept prop', () => {
-    render(<Upload.Dragger accept=".pdf,.doc">Drop files</Upload.Dragger>);
-    expect(screen.getByTestId('upload-dragger')).toHaveAttribute('data-accept', '.pdf,.doc');
-  });
-
-  it('renders with multiple prop', () => {
-    render(<Upload.Dragger multiple>Drop files</Upload.Dragger>);
-    expect(screen.getByTestId('upload-dragger')).toHaveAttribute('data-multiple', 'true');
-  });
-
-  it('applies custom className', () => {
-    render(<Upload.Dragger className="custom-dragger">Drop files</Upload.Dragger>);
-    expect(screen.getByTestId('upload-dragger')).toHaveClass('custom-dragger');
-  });
-
-  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
-    render(<Upload.Dragger engine={engine}>Drag files to {engine}</Upload.Dragger>);
-    expect(screen.getByTestId('upload-dragger')).toBeInTheDocument();
-    expect(screen.getByText(`Drag files to ${engine}`)).toBeInTheDocument();
-  });
-});
-
-describe('Upload tenants', () => {
-  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
-    document.documentElement.setAttribute('data-tenant', tenant);
-    render(<Upload>Upload</Upload>);
-    expect(screen.getByTestId('upload')).toBeInTheDocument();
-    document.documentElement.removeAttribute('data-tenant');
+    expect(onDrop).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText('dropped.txt')).toBeInTheDocument();
   });
 });

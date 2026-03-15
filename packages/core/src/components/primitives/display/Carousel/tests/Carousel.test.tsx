@@ -23,6 +23,9 @@ vi.mock('../../../../../core/engines/factory', () => ({
       dotPosition,
       className,
       style,
+      autoplaySpeed: _autoplaySpeed,
+      initialSlide: _initialSlide,
+      pauseOnHover: _pauseOnHover,
       ...props
     }: any) => {
       const slides = Array.isArray(children) ? children : [children];

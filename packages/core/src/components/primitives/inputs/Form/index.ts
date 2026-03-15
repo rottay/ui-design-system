@@ -99,11 +99,20 @@
  * @package @rottay/design-system
  */
 
+import React from 'react';
 import { createEngineComponent } from '../../../../core/engines/factory';
-import type { FormProps, FormItemProps, FormListProps, FormErrorListProps } from './types';
-
-// Import compound components from Classic engine (they work across all engines)
-import { Form as ClassicForm } from './engines/classic';
+import { useEngineContext } from '../../../../core/providers/engine';
+import type { EngineName } from '../../../../core/types';
+import type {
+  FormProps,
+  FormItemProps,
+  FormListProps,
+  FormErrorListProps,
+  FormInstance,
+} from './types';
+import * as classicEngine from './engines/classic';
+import * as modernEngine from './engines/modern';
+import * as rusticEngine from './engines/rustic';
 
 export {
   type FormProps,
@@ -130,16 +139,68 @@ const FormBase = createEngineComponent<FormProps>('Form', {
   rustic: () => import('./engines/rustic'),
 });
 
-// Re-export useForm from each engine
-// Note: In a real multi-engine scenario, you'd want to import based on current engine
-export { useForm } from './engines/classic';
+type FormEngineBinding = {
+  Form: {
+    Item: React.ComponentType<FormItemProps>;
+    List: React.ComponentType<FormListProps>;
+    ErrorList: React.ComponentType<FormErrorListProps>;
+  };
+  useForm: <T = unknown>() => [FormInstance<T>];
+};
+
+const FORM_ENGINES = {
+  classic: classicEngine as unknown as FormEngineBinding,
+  modern: modernEngine as unknown as FormEngineBinding,
+  rustic: rusticEngine as unknown as FormEngineBinding,
+} as const satisfies Record<Exclude<EngineName, 'athena'>, FormEngineBinding>;
+
+function resolveFormEngine(engine: EngineName) {
+  if (engine === 'athena') {
+    return classicEngine;
+  }
+
+  return FORM_ENGINES[engine];
+}
+
+/**
+ * Las compounds tienen que seguir el engine activo; si las atamos al shared
+ * clásico, `Form.Item/List/ErrorList` terminan montando contexto de Ant Design
+ * incluso cuando el formulario base es Modern o Rustic.
+ */
+const EngineAwareFormItem: React.FC<FormItemProps> = (props) => {
+  const { engine } = useEngineContext();
+  const Item = resolveFormEngine(engine).Form.Item;
+  return React.createElement(Item, props);
+};
+
+const EngineAwareFormList: React.FC<FormListProps> = (props) => {
+  const { engine } = useEngineContext();
+  const List = resolveFormEngine(engine).Form.List;
+  return React.createElement(List, props);
+};
+
+const EngineAwareFormErrorList: React.FC<FormErrorListProps> = (props) => {
+  const { engine } = useEngineContext();
+  const ErrorList = resolveFormEngine(engine).Form.ErrorList;
+  return React.createElement(ErrorList, props);
+};
+
+/**
+ * `useForm` también tiene que resolver contra el engine activo para mantener
+ * el mismo contrato que el componente `Form`. Fuera de un provider cae en
+ * classic vía `useEngineContext()`.
+ */
+export function useForm<T = unknown>(): [FormInstance<T>] {
+  const { engine } = useEngineContext();
+  return resolveFormEngine(engine).useForm<T>() as [FormInstance<T>];
+}
 
 // Export the Form component with compound components attached
 // Compound components (Item, List, ErrorList) are attached from the Classic engine
 // They work with any engine since they render children normally
 export const Form = Object.assign(FormBase, {
-  Item: ClassicForm.Item,
-  List: ClassicForm.List,
-  ErrorList: ClassicForm.ErrorList,
-  useForm: ClassicForm.useForm,
+  Item: EngineAwareFormItem,
+  List: EngineAwareFormList,
+  ErrorList: EngineAwareFormErrorList,
+  useForm,
 });

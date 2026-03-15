@@ -8,202 +8,202 @@
 // Select Sizes
 export const selectSize = {
   xs: {
-    height: 'var(--select-xs-height)',
-    fontSize: 'var(--select-xs-font-size)',
-    padding: 'var(--select-xs-padding)',
-    paddingX: 'var(--select-xs-padding-x)',
-    iconSize: 'var(--select-xs-icon-size)',
-    borderRadius: 'var(--select-xs-border-radius)',
+    height: 'var(--ds-select-xs-height)',
+    fontSize: 'var(--ds-select-xs-font-size)',
+    padding: 'var(--ds-select-xs-padding)',
+    paddingX: 'var(--ds-select-xs-padding-x)',
+    iconSize: 'var(--ds-select-xs-icon-size)',
+    borderRadius: 'var(--ds-select-xs-border-radius)',
   },
   sm: {
-    height: 'var(--select-sm-height)',
-    fontSize: 'var(--select-sm-font-size)',
-    padding: 'var(--select-sm-padding)',
-    paddingX: 'var(--select-sm-padding-x)',
-    iconSize: 'var(--select-sm-icon-size)',
-    borderRadius: 'var(--select-sm-border-radius)',
+    height: 'var(--ds-select-sm-height)',
+    fontSize: 'var(--ds-select-sm-font-size)',
+    padding: 'var(--ds-select-sm-padding)',
+    paddingX: 'var(--ds-select-sm-padding-x)',
+    iconSize: 'var(--ds-select-sm-icon-size)',
+    borderRadius: 'var(--ds-select-sm-border-radius)',
   },
   md: {
-    height: 'var(--select-md-height)',
-    fontSize: 'var(--select-md-font-size)',
-    padding: 'var(--select-md-padding)',
-    paddingX: 'var(--select-md-padding-x)',
-    iconSize: 'var(--select-md-icon-size)',
-    borderRadius: 'var(--select-md-border-radius)',
+    height: 'var(--ds-select-md-height)',
+    fontSize: 'var(--ds-select-md-font-size)',
+    padding: 'var(--ds-select-md-padding)',
+    paddingX: 'var(--ds-select-md-padding-x)',
+    iconSize: 'var(--ds-select-md-icon-size)',
+    borderRadius: 'var(--ds-select-md-border-radius)',
   },
   lg: {
-    height: 'var(--select-lg-height)',
-    fontSize: 'var(--select-lg-font-size)',
-    padding: 'var(--select-lg-padding)',
-    paddingX: 'var(--select-lg-padding-x)',
-    iconSize: 'var(--select-lg-icon-size)',
-    borderRadius: 'var(--select-lg-border-radius)',
+    height: 'var(--ds-select-lg-height)',
+    fontSize: 'var(--ds-select-lg-font-size)',
+    padding: 'var(--ds-select-lg-padding)',
+    paddingX: 'var(--ds-select-lg-padding-x)',
+    iconSize: 'var(--ds-select-lg-icon-size)',
+    borderRadius: 'var(--ds-select-lg-border-radius)',
   },
   xl: {
-    height: 'var(--select-xl-height)',
-    fontSize: 'var(--select-xl-font-size)',
-    padding: 'var(--select-xl-padding)',
-    paddingX: 'var(--select-xl-padding-x)',
-    iconSize: 'var(--select-xl-icon-size)',
-    borderRadius: 'var(--select-xl-border-radius)',
+    height: 'var(--ds-select-xl-height)',
+    fontSize: 'var(--ds-select-xl-font-size)',
+    padding: 'var(--ds-select-xl-padding)',
+    paddingX: 'var(--ds-select-xl-padding-x)',
+    iconSize: 'var(--ds-select-xl-icon-size)',
+    borderRadius: 'var(--ds-select-xl-border-radius)',
   },
 } as const;
 
 // Select Default State
 export const selectDefault = {
-  bg: 'var(--select-bg)',
-  bgHover: 'var(--select-bg-hover)',
-  bgFocus: 'var(--select-bg-focus)',
-  bgDisabled: 'var(--select-bg-disabled)',
-  color: 'var(--select-color)',
-  colorPlaceholder: 'var(--select-color-placeholder)',
-  colorDisabled: 'var(--select-color-disabled)',
-  borderColor: 'var(--select-border-color)',
-  borderColorHover: 'var(--select-border-color-hover)',
-  borderColorFocus: 'var(--select-border-color-focus)',
-  borderColorDisabled: 'var(--select-border-color-disabled)',
-  borderWidth: 'var(--select-border-width)',
-  borderStyle: 'var(--select-border-style)',
+  bg: 'var(--ds-select-bg)',
+  bgHover: 'var(--ds-select-bg-hover)',
+  bgFocus: 'var(--ds-select-bg-focus)',
+  bgDisabled: 'var(--ds-select-bg-disabled)',
+  color: 'var(--ds-select-color)',
+  colorPlaceholder: 'var(--ds-select-color-placeholder)',
+  colorDisabled: 'var(--ds-select-color-disabled)',
+  borderColor: 'var(--ds-select-border-color)',
+  borderColorHover: 'var(--ds-select-border-color-hover)',
+  borderColorFocus: 'var(--ds-select-border-color-focus)',
+  borderColorDisabled: 'var(--ds-select-border-color-disabled)',
+  borderWidth: 'var(--ds-select-border-width)',
+  borderStyle: 'var(--ds-select-border-style)',
 } as const;
 
 // Select Variants
 export const selectVariant = {
   outline: {
-    bg: 'var(--select-outline-bg)',
-    borderColor: 'var(--select-outline-border-color)',
+    bg: 'var(--ds-select-outline-bg)',
+    borderColor: 'var(--ds-select-outline-border-color)',
   },
   filled: {
-    bg: 'var(--select-filled-bg)',
-    bgHover: 'var(--select-filled-bg-hover)',
-    borderColor: 'var(--select-filled-border-color)',
+    bg: 'var(--ds-select-filled-bg)',
+    bgHover: 'var(--ds-select-filled-bg-hover)',
+    borderColor: 'var(--ds-select-filled-border-color)',
   },
   flushed: {
-    borderRadius: 'var(--select-flushed-border-radius)',
-    borderWidth: 'var(--select-flushed-border-width)',
+    borderRadius: 'var(--ds-select-flushed-border-radius)',
+    borderWidth: 'var(--ds-select-flushed-border-width)',
   },
 } as const;
 
 // Select Status
 export const selectStatus = {
   success: {
-    borderColor: 'var(--select-success-border-color)',
-    borderColorFocus: 'var(--select-success-border-color-focus)',
-    shadowFocus: 'var(--select-success-shadow-focus)',
+    borderColor: 'var(--ds-select-success-border-color)',
+    borderColorFocus: 'var(--ds-select-success-border-color-focus)',
+    shadowFocus: 'var(--ds-select-success-shadow-focus)',
   },
   warning: {
-    borderColor: 'var(--select-warning-border-color)',
-    borderColorFocus: 'var(--select-warning-border-color-focus)',
-    shadowFocus: 'var(--select-warning-shadow-focus)',
+    borderColor: 'var(--ds-select-warning-border-color)',
+    borderColorFocus: 'var(--ds-select-warning-border-color-focus)',
+    shadowFocus: 'var(--ds-select-warning-shadow-focus)',
   },
   error: {
-    borderColor: 'var(--select-error-border-color)',
-    borderColorFocus: 'var(--select-error-border-color-focus)',
-    shadowFocus: 'var(--select-error-shadow-focus)',
+    borderColor: 'var(--ds-select-error-border-color)',
+    borderColorFocus: 'var(--ds-select-error-border-color-focus)',
+    shadowFocus: 'var(--ds-select-error-shadow-focus)',
   },
 } as const;
 
 // Select Dropdown
 export const selectDropdown = {
-  bg: 'var(--select-dropdown-bg)',
-  borderColor: 'var(--select-dropdown-border-color)',
-  borderRadius: 'var(--select-dropdown-border-radius)',
-  shadow: 'var(--select-dropdown-shadow)',
-  maxHeight: 'var(--select-dropdown-max-height)',
-  padding: 'var(--select-dropdown-padding)',
-  zIndex: 'var(--select-dropdown-z-index)',
+  bg: 'var(--ds-select-dropdown-bg)',
+  borderColor: 'var(--ds-select-dropdown-border-color)',
+  borderRadius: 'var(--ds-select-dropdown-border-radius)',
+  shadow: 'var(--ds-select-dropdown-shadow)',
+  maxHeight: 'var(--ds-select-dropdown-max-height)',
+  padding: 'var(--ds-select-dropdown-padding)',
+  zIndex: 'var(--ds-select-dropdown-z-index)',
 } as const;
 
 // Select Option
 export const selectOption = {
-  height: 'var(--select-option-height)',
-  padding: 'var(--select-option-padding)',
-  fontSize: 'var(--select-option-font-size)',
-  borderRadius: 'var(--select-option-border-radius)',
-  bg: 'var(--select-option-bg)',
-  bgHover: 'var(--select-option-bg-hover)',
-  bgSelected: 'var(--select-option-bg-selected)',
-  bgFocused: 'var(--select-option-bg-focused)',
-  bgDisabled: 'var(--select-option-bg-disabled)',
-  color: 'var(--select-option-color)',
-  colorSelected: 'var(--select-option-color-selected)',
-  colorDisabled: 'var(--select-option-color-disabled)',
+  height: 'var(--ds-select-option-height)',
+  padding: 'var(--ds-select-option-padding)',
+  fontSize: 'var(--ds-select-option-font-size)',
+  borderRadius: 'var(--ds-select-option-border-radius)',
+  bg: 'var(--ds-select-option-bg)',
+  bgHover: 'var(--ds-select-option-bg-hover)',
+  bgSelected: 'var(--ds-select-option-bg-selected)',
+  bgFocused: 'var(--ds-select-option-bg-focused)',
+  bgDisabled: 'var(--ds-select-option-bg-disabled)',
+  color: 'var(--ds-select-option-color)',
+  colorSelected: 'var(--ds-select-option-color-selected)',
+  colorDisabled: 'var(--ds-select-option-color-disabled)',
 } as const;
 
 // Select Icons
 export const selectIcon = {
   arrow: {
-    color: 'var(--select-arrow-color)',
-    colorHover: 'var(--select-arrow-color-hover)',
-    size: 'var(--select-arrow-size)',
-    transition: 'var(--select-arrow-transition)',
+    color: 'var(--ds-select-arrow-color)',
+    colorHover: 'var(--ds-select-arrow-color-hover)',
+    size: 'var(--ds-select-arrow-size)',
+    transition: 'var(--ds-select-arrow-transition)',
   },
   clear: {
-    color: 'var(--select-clear-color)',
-    colorHover: 'var(--select-clear-color-hover)',
-    size: 'var(--select-clear-size)',
-    bgHover: 'var(--select-clear-bg-hover)',
-    radius: 'var(--select-clear-radius)',
+    color: 'var(--ds-select-clear-color)',
+    colorHover: 'var(--ds-select-clear-color-hover)',
+    size: 'var(--ds-select-clear-size)',
+    bgHover: 'var(--ds-select-clear-bg-hover)',
+    radius: 'var(--ds-select-clear-radius)',
   },
 } as const;
 
 // Select Tags (Multi-select)
 export const selectTag = {
-  height: 'var(--select-tag-height)',
-  padding: 'var(--select-tag-padding)',
-  fontSize: 'var(--select-tag-font-size)',
-  borderRadius: 'var(--select-tag-border-radius)',
-  bg: 'var(--select-tag-bg)',
-  color: 'var(--select-tag-color)',
-  gap: 'var(--select-tag-gap)',
+  height: 'var(--ds-select-tag-height)',
+  padding: 'var(--ds-select-tag-padding)',
+  fontSize: 'var(--ds-select-tag-font-size)',
+  borderRadius: 'var(--ds-select-tag-border-radius)',
+  bg: 'var(--ds-select-tag-bg)',
+  color: 'var(--ds-select-tag-color)',
+  gap: 'var(--ds-select-tag-gap)',
   close: {
-    size: 'var(--select-tag-close-size)',
-    color: 'var(--select-tag-close-color)',
-    colorHover: 'var(--select-tag-close-color-hover)',
+    size: 'var(--ds-select-tag-close-size)',
+    color: 'var(--ds-select-tag-close-color)',
+    colorHover: 'var(--ds-select-tag-close-color-hover)',
   },
 } as const;
 
 // Select Search
 export const selectSearch = {
-  bg: 'var(--select-search-bg)',
-  borderColor: 'var(--select-search-border-color)',
-  padding: 'var(--select-search-padding)',
-  margin: 'var(--select-search-margin)',
+  bg: 'var(--ds-select-search-bg)',
+  borderColor: 'var(--ds-select-search-border-color)',
+  padding: 'var(--ds-select-search-padding)',
+  margin: 'var(--ds-select-search-margin)',
 } as const;
 
 // Select Loading
 export const selectLoading = {
-  size: 'var(--select-loading-size)',
-  color: 'var(--select-loading-color)',
+  size: 'var(--ds-select-loading-size)',
+  color: 'var(--ds-select-loading-color)',
 } as const;
 
 // Select Empty
 export const selectEmpty = {
-  padding: 'var(--select-empty-padding)',
-  color: 'var(--select-empty-color)',
-  fontSize: 'var(--select-empty-font-size)',
+  padding: 'var(--ds-select-empty-padding)',
+  color: 'var(--ds-select-empty-color)',
+  fontSize: 'var(--ds-select-empty-font-size)',
 } as const;
 
 // Select Group
 export const selectGroup = {
-  labelPadding: 'var(--select-group-label-padding)',
-  labelFontSize: 'var(--select-group-label-font-size)',
-  labelFontWeight: 'var(--select-group-label-font-weight)',
-  labelColor: 'var(--select-group-label-color)',
-  labelTextTransform: 'var(--select-group-label-text-transform)',
-  dividerColor: 'var(--select-group-divider-color)',
+  labelPadding: 'var(--ds-select-group-label-padding)',
+  labelFontSize: 'var(--ds-select-group-label-font-size)',
+  labelFontWeight: 'var(--ds-select-group-label-font-weight)',
+  labelColor: 'var(--ds-select-group-label-color)',
+  labelTextTransform: 'var(--ds-select-group-label-text-transform)',
+  dividerColor: 'var(--ds-select-group-divider-color)',
 } as const;
 
 // Select Transition
 export const selectTransition = {
-  duration: 'var(--select-transition-duration)',
-  timing: 'var(--select-transition-timing)',
-  all: 'var(--select-transition)',
+  duration: 'var(--ds-select-transition-duration)',
+  timing: 'var(--ds-select-transition-timing)',
+  all: 'var(--ds-select-transition)',
 } as const;
 
 // Select Disabled
 export const selectDisabled = {
-  opacity: 'var(--select-disabled-opacity)',
-  cursor: 'var(--select-disabled-cursor)',
+  opacity: 'var(--ds-select-disabled-opacity)',
+  cursor: 'var(--ds-select-disabled-cursor)',
 } as const;
 
 // Combined select tokens

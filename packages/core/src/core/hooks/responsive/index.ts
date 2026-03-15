@@ -48,6 +48,15 @@
 // Media query hook
 export { useMediaQuery } from './useMediaQuery';
 
+// Breakpoint constants and helpers
+export {
+  RESPONSIVE_BREAKPOINTS,
+  RESPONSIVE_BREAKPOINT_ORDER,
+  buildMinWidthQuery,
+  buildRangeQuery,
+} from './breakpoints';
+export type { ResponsiveBreakpointKey } from './breakpoints';
+
 // Breakpoint detection hook
 export { useBreakpoints } from './useBreakpoints';
 export type { UseBreakpointsResult } from './useBreakpoints';

@@ -133,9 +133,9 @@ function DataList() {
 
 Each component has three implementations:
 
-1. **Titan** (Ant Design) - Full-featured with enterprise UI
-2. **Hermes** (DaisyUI) - Lightweight with Tailwind CSS classes
-3. **Apollo** (Pure HTML/CSS) - Zero dependencies with CSS variables
+1. **Classic** (Ant Design) - Full-featured with enterprise UI
+2. **Modern** (DaisyUI) - Lightweight with Tailwind CSS classes
+3. **Rustic** (Pure HTML/CSS) - Zero dependencies with CSS variables
 
 ## Engine Selection
 
@@ -144,7 +144,7 @@ The active engine is determined by the EngineProvider:
 ```tsx
 import { EngineProvider } from '@rottay/design-system';
 
-<EngineProvider engine="titan">
+<EngineProvider engine="classic">
   <App />
 </EngineProvider>
 ```
@@ -168,21 +168,21 @@ All components support:
 navigation/
 ├── tabs/
 │   ├── core/index.ts       # Interface & defaults
-│   ├── titan/index.tsx     # Ant Design implementation
-│   ├── hermes/index.tsx    # DaisyUI implementation
-│   ├── apollo/index.tsx    # Pure HTML/CSS implementation
+│   ├── classic/index.tsx   # Ant Design implementation
+│   ├── modern/index.tsx    # DaisyUI implementation
+│   ├── rustic/index.tsx    # Pure HTML/CSS implementation
 │   └── index.ts            # Router
 ├── breadcrumb/
 │   ├── core/index.ts
-│   ├── titan/index.tsx
-│   ├── hermes/index.tsx
-│   ├── apollo/index.tsx
+│   ├── classic/index.tsx
+│   ├── modern/index.tsx
+│   ├── rustic/index.tsx
 │   └── index.ts
 ├── pagination/
 │   ├── core/index.ts
-│   ├── titan/index.tsx
-│   ├── hermes/index.tsx
-│   ├── apollo/index.tsx
+│   ├── classic/index.tsx
+│   ├── modern/index.tsx
+│   ├── rustic/index.tsx
 │   └── index.ts
 └── index.ts                # Barrel exports
 ```

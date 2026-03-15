@@ -7,6 +7,9 @@
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../../types';
 
+const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+
 export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const {
     columns,
@@ -123,7 +126,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 style={{
                   padding: '10px 14px',
                   marginBottom: 8,
-                  borderRadius: 4,
+                  borderRadius: 'var(--ds-radius-sm, 4px)',
                   background: 'var(--ds-color-surface, #f5f5f5)',
                   borderTop: column.color
                     ? `3px solid ${column.color}`
@@ -151,8 +154,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       {column.icon}
                       <span
                         style={{
-                          fontWeight: 600,
+                          fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
                           fontSize: 13,
+                          letterSpacing: 'var(--ds-typography-heading-letter-spacing, 0.01em)',
                           color: 'var(--ds-color-text, #1a1a1a)',
                         }}
                       >
@@ -173,7 +177,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                             ? 'var(--ds-color-danger, #ef4444)'
                             : 'var(--ds-color-border, #e0e0e0)',
                           color: isOverLimit
-                            ? '#fff'
+                            ? 'var(--ds-color-text-on-primary)'
                             : 'var(--ds-color-text-muted, #666)',
                         }}
                       >
@@ -190,16 +194,16 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 <div
                   style={{
                     flex: 1,
-                    borderRadius: 4,
+                    borderRadius: 'var(--ds-radius-sm, 4px)',
                     padding: 8,
                     minHeight: 100,
                     background: isDropping
-                      ? 'var(--ds-color-primary-subtle, #eef2ff)'
+                      ? 'var(--ds-color-primary-50, rgba(99, 102, 241, 0.06))'
                       : 'var(--ds-color-background, #fff)',
                     border: isDropping
                       ? '2px dashed var(--ds-color-primary, #3b82f6)'
                       : '1px solid var(--ds-color-border, #e0e0e0)',
-                    transition: 'background 0.15s, border 0.15s',
+                    transition: `background ${RUSTIC_DURATION} ${RUSTIC_EASING}, border ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
                   }}
                   onDragOver={(e) =>
                     handleDragOver(e, column.id, column.items.length)
@@ -217,42 +221,52 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       {emptyColumn}
                     </div>
                   ) : (
-                    column.items.map((item, index) => (
-                      <div
-                        key={itemKey(item)}
-                        draggable
-                        onDragStart={(e) =>
-                          handleDragStart(e, item, column.id)
-                        }
-                        onDragOver={(e) =>
-                          handleDragOver(e, column.id, index)
-                        }
-                        onDrop={(e) => handleDrop(e, column.id, index)}
-                        onDragEnd={handleDragEnd}
-                        onClick={() => onItemClick?.(item, column.id)}
-                        style={{
-                          marginBottom: 8,
-                          padding: 12,
-                          borderRadius: 4,
-                          background: 'var(--ds-color-surface, #fff)',
-                          border: '1px solid var(--ds-color-border, #e0e0e0)',
-                          cursor: onItemClick ? 'pointer' : 'grab',
-                          opacity:
-                            dragData?.itemId === itemKey(item) ? 0.4 : 1,
-                          transition: 'opacity 0.15s, box-shadow 0.15s',
-                        }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.boxShadow =
-                            '0 2px 8px var(--ds-color-shadow, rgba(0,0,0,0.08))';
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.boxShadow =
-                            'none';
-                        }}
-                      >
-                        {renderCard(item, column.id)}
-                      </div>
-                    ))
+                    column.items.map((item, index) => {
+                      const isDragging = dragData?.itemId === itemKey(item);
+                      return (
+                        <div
+                          key={itemKey(item)}
+                          draggable
+                          onDragStart={(e) =>
+                            handleDragStart(e, item, column.id)
+                          }
+                          onDragOver={(e) =>
+                            handleDragOver(e, column.id, index)
+                          }
+                          onDrop={(e) => handleDrop(e, column.id, index)}
+                          onDragEnd={handleDragEnd}
+                          onClick={() => onItemClick?.(item, column.id)}
+                          style={{
+                            marginBottom: 8,
+                            padding: 12,
+                            borderRadius: 'var(--ds-radius-sm, 4px)',
+                            background: 'var(--ds-color-surface, #fff)',
+                            border: '1px solid var(--ds-color-border, #e0e0e0)',
+                            boxShadow: 'var(--ds-card-shadow, none)',
+                            cursor: isDragging ? 'grabbing' : onItemClick ? 'pointer' : 'grab',
+                            opacity: isDragging ? 0.6 : 1,
+                            transform: isDragging ? 'rotate(2deg) scale(1.02)' : 'translateY(0)',
+                            transition: `opacity ${RUSTIC_DURATION} ${RUSTIC_EASING}, transform ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isDragging) {
+                              const el = e.currentTarget as HTMLDivElement;
+                              el.style.boxShadow = 'var(--ds-card-shadow-hover, var(--ds-shadow-md))';
+                              el.style.transform = 'var(--ds-card-hover-transform, translateY(-2px))';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isDragging) {
+                              const el = e.currentTarget as HTMLDivElement;
+                              el.style.boxShadow = 'var(--ds-card-shadow, none)';
+                              el.style.transform = 'translateY(0)';
+                            }
+                          }}
+                        >
+                          {renderCard(item, column.id)}
+                        </div>
+                      );
+                    })
                   )}
 
                   {onAddItem && (
@@ -264,7 +278,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         padding: '8px 0',
                         border:
                           '1px dashed var(--ds-color-border, #d0d0d0)',
-                        borderRadius: 4,
+                        borderRadius: 'var(--ds-radius-sm, 4px)',
                         background: 'transparent',
                         color: 'var(--ds-color-text-muted, #888)',
                         fontSize: 13,
@@ -273,6 +287,19 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: 6,
+                        transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
+                      }}
+                      onMouseEnter={(e) => {
+                        const el = e.currentTarget as HTMLButtonElement;
+                        el.style.borderColor = 'var(--ds-color-primary, #3b82f6)';
+                        el.style.color = 'var(--ds-color-primary, #3b82f6)';
+                        el.style.background = 'var(--ds-color-primary-50, rgba(99,102,241,0.04))';
+                      }}
+                      onMouseLeave={(e) => {
+                        const el = e.currentTarget as HTMLButtonElement;
+                        el.style.borderColor = 'var(--ds-color-border, #d0d0d0)';
+                        el.style.color = 'var(--ds-color-text-muted, #888)';
+                        el.style.background = 'transparent';
                       }}
                     >
                       <span style={{ fontSize: 16, lineHeight: 1 }}>+</span>

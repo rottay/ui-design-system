@@ -1,16 +1,22 @@
 'use client';
 
 import React, { forwardRef, type MouseEvent } from 'react';
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import type { MagneticProps } from '../../types';
+import { useMotionPersonality } from '../../hooks';
 
 export const Magnetic = forwardRef<HTMLDivElement, MagneticProps>(
   ({ children, strength = 0.3, className, style }, ref) => {
-    const shouldReduceMotion = useReducedMotion();
+    const motionPersonality = useMotionPersonality();
+    const shouldReduceMotion = motionPersonality.shouldReduceMotion;
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
-    const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
+    const springConfig = {
+      damping: motionPersonality.springFriction,
+      stiffness: motionPersonality.springTension,
+      mass: 0.1,
+    };
     const springX = useSpring(x, springConfig);
     const springY = useSpring(y, springConfig);
 

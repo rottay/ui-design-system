@@ -9,6 +9,9 @@ dist/
 build/
 .next/
 /out/
+storybook-static/
+packages/core/storybook-static/
+packages/core/*.tgz
 
 # Test coverage
 coverage/

@@ -7,33 +7,33 @@
 
 // Rate Sizes
 export const rateSize = {
-  xs: 'var(--rate-xs-size)',
-  sm: 'var(--rate-sm-size)',
-  md: 'var(--rate-md-size)',
-  lg: 'var(--rate-lg-size)',
-  xl: 'var(--rate-xl-size)',
+  xs: 'var(--ds-rate-xs-size)',
+  sm: 'var(--ds-rate-sm-size)',
+  md: 'var(--ds-rate-md-size)',
+  lg: 'var(--ds-rate-lg-size)',
+  xl: 'var(--ds-rate-xl-size)',
 } as const;
 
 // Rate Colors
 export const rateColor = {
-  active: 'var(--rate-active-color)',
-  inactive: 'var(--rate-inactive-color)',
-  hover: 'var(--rate-hover-color)',
+  active: 'var(--ds-rate-active-color)',
+  inactive: 'var(--ds-rate-inactive-color)',
+  hover: 'var(--ds-rate-hover-color)',
 } as const;
 
 // Rate Interactions
 export const rateInteraction = {
-  hoverScale: 'var(--rate-hover-scale)',
-  focusRingWidth: 'var(--rate-focus-ring-width)',
-  focusRingColor: 'var(--rate-focus-ring-color)',
-  focusRingOffset: 'var(--rate-focus-ring-offset)',
+  hoverScale: 'var(--ds-rate-hover-scale)',
+  focusRingWidth: 'var(--ds-rate-focus-ring-width)',
+  focusRingColor: 'var(--ds-rate-focus-ring-color)',
+  focusRingOffset: 'var(--ds-rate-focus-ring-offset)',
 } as const;
 
 // Rate Transition
 export const rateTransition = {
-  duration: 'var(--rate-transition-duration)',
-  timing: 'var(--rate-transition-timing)',
-  all: 'var(--rate-transition)',
+  duration: 'var(--ds-rate-transition-duration)',
+  timing: 'var(--ds-rate-transition-timing)',
+  all: 'var(--ds-rate-transition)',
 } as const;
 
 // Combined rate tokens
@@ -42,8 +42,8 @@ export const rateTokens = {
   color: rateColor,
   interaction: rateInteraction,
   transition: rateTransition,
-  defaultSize: 'var(--rate-default-size)',
-  gap: 'var(--rate-gap)',
+  defaultSize: 'var(--ds-rate-default-size)',
+  gap: 'var(--ds-rate-gap)',
 } as const;
 
 // Type exports

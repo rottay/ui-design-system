@@ -19,24 +19,24 @@
       "import": "./packages/core/dist/index.js",
       "require": "./packages/core/dist/index.cjs"
     },
+    "./tokens": {
+      "types": "./packages/core/dist/tokens.d.ts",
+      "import": "./packages/core/dist/tokens.js",
+      "require": "./packages/core/dist/tokens.cjs"
+    },
+    "./tokens/css": "./packages/core/src/theme/tokens/css/index.css",
+    "./tokens/css/*": "./packages/core/src/theme/tokens/css/*",
+    "./i18n": {
+      "types": "./packages/core/dist/i18n.d.ts",
+      "import": "./packages/core/dist/i18n.js",
+      "require": "./packages/core/dist/i18n.cjs"
+    },
     "./styles": "./packages/core/src/theme/tokens/css/index.css",
     "./styles.css": "./packages/core/src/theme/tokens/css/index.css",
     "./icons": {
       "types": "./packages/core/dist/icons.d.ts",
       "import": "./packages/core/dist/icons.js",
-      "require": "./packages/core/dist/icons.js"
-    },
-    "./components/*": {
-      "types": "./packages/core/dist/components/*.d.ts",
-      "import": "./packages/core/dist/components/*.js"
-    },
-    "./system/*": {
-      "types": "./packages/core/dist/system/*.d.ts",
-      "import": "./packages/core/dist/system/*.js"
-    },
-    "./config/*": {
-      "types": "./packages/core/dist/config/*.d.ts",
-      "import": "./packages/core/dist/config/*.js"
+      "require": "./packages/core/dist/icons.cjs"
     }
   },
   "workspaces": [
@@ -50,8 +50,10 @@
     "storybook": "pnpm --filter @rottay/design-system run storybook",
     "build-storybook": "pnpm --filter @rottay/design-system run build-storybook",
     "test": "pnpm --filter @rottay/design-system run test",
+    "test:coverage": "pnpm --filter @rottay/design-system run test:coverage",
     "typecheck": "pnpm -r run typecheck",
     "typecheck:core": "pnpm --filter @rottay/design-system run typecheck",
+    "verify:core": "pnpm --filter @rottay/design-system run typecheck && pnpm --filter @rottay/design-system exec vitest run && pnpm --filter @rottay/design-system run build && pnpm --filter @rottay/design-system run build-storybook",
     "next:free": "kill-port 3000 && kill-port 6006 && kill-port 6007"
   },
   "engines": {

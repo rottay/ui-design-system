@@ -176,8 +176,10 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
     transition: 'var(--ds-toggle-transition)',
     flexShrink: 0,
     border: error ? '2px solid var(--ds-toggle-error-color)' : 'none',
-    outline: isFocused ? 'var(--ds-toggle-focus-ring)' : 'none',
-    outlineOffset: '2px',
+    outline: 'none',
+    boxShadow: isFocused
+      ? '0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1)'
+      : 'none',
   };
 
   const dotStyle: React.CSSProperties = {
@@ -189,8 +191,10 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
     height: sizeVars.dot,
     borderRadius: '50%',
     backgroundColor: 'var(--ds-toggle-dot-bg)',
-    transition: 'var(--ds-toggle-transition)',
-    boxShadow: 'var(--ds-toggle-dot-shadow)',
+    transition: 'left 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background-color 0.15s',
+    boxShadow: isChecked
+      ? '0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1)'
+      : 'var(--ds-toggle-dot-shadow, 0 1px 2px rgba(0, 0, 0, 0.15))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

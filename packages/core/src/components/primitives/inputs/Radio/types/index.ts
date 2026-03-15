@@ -46,7 +46,7 @@
  *
  * console.log(RADIO_DEFAULTS.size);  // 'md'
  * console.log(RADIO_DEFAULTS.color); // 'primary'
- * console.log(COLOR_MAP.success.bg); // 'var(--color-success, #52c41a)'
+ * console.log(COLOR_MAP.success.bg); // 'var(--ds-color-success, #52c41a)'
  * ```
  *
  * @see {@link Radio} for the main component

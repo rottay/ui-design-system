@@ -78,6 +78,7 @@
 import { useCallback } from 'react';
 import type { ToastMethods, ToastOptions, ToastState } from '../types';
 import { useToastContext } from './ToastProvider';
+import { warnOnceInDev } from '../../../../../core/utils/runtime-logger';
 
 // ============================================================================
 // Hook Return Type
@@ -222,6 +223,10 @@ export function setToastMethods(methods: ToastMethods): void {
   toastMethods = methods;
 }
 
+export function clearToastMethods(): void {
+  toastMethods = null;
+}
+
 /**
  * Gets the current toast methods.
  *
@@ -297,7 +302,7 @@ export const toast = {
    */
   show: (options: ToastOptions): string | null => {
     if (!toastMethods) {
-      console.warn('Toast: ToastProvider not mounted');
+      warnOnceInDev('toast:provider-missing', 'Toast: ToastProvider not mounted');
       return null;
     }
     return toastMethods.show(options);
@@ -316,7 +321,7 @@ export const toast = {
     options?: Partial<ToastOptions>
   ): string | null => {
     if (!toastMethods) {
-      console.warn('Toast: ToastProvider not mounted');
+      warnOnceInDev('toast:provider-missing', 'Toast: ToastProvider not mounted');
       return null;
     }
     return toastMethods.success(title, description, options);
@@ -335,7 +340,7 @@ export const toast = {
     options?: Partial<ToastOptions>
   ): string | null => {
     if (!toastMethods) {
-      console.warn('Toast: ToastProvider not mounted');
+      warnOnceInDev('toast:provider-missing', 'Toast: ToastProvider not mounted');
       return null;
     }
     return toastMethods.error(title, description, options);
@@ -354,7 +359,7 @@ export const toast = {
     options?: Partial<ToastOptions>
   ): string | null => {
     if (!toastMethods) {
-      console.warn('Toast: ToastProvider not mounted');
+      warnOnceInDev('toast:provider-missing', 'Toast: ToastProvider not mounted');
       return null;
     }
     return toastMethods.warning(title, description, options);
@@ -373,7 +378,7 @@ export const toast = {
     options?: Partial<ToastOptions>
   ): string | null => {
     if (!toastMethods) {
-      console.warn('Toast: ToastProvider not mounted');
+      warnOnceInDev('toast:provider-missing', 'Toast: ToastProvider not mounted');
       return null;
     }
     return toastMethods.info(title, description, options);
@@ -385,7 +390,7 @@ export const toast = {
    */
   dismiss: (id: string): void => {
     if (!toastMethods) {
-      console.warn('Toast: ToastProvider not mounted');
+      warnOnceInDev('toast:provider-missing', 'Toast: ToastProvider not mounted');
       return;
     }
     toastMethods.dismiss(id);
@@ -396,7 +401,7 @@ export const toast = {
    */
   dismissAll: (): void => {
     if (!toastMethods) {
-      console.warn('Toast: ToastProvider not mounted');
+      warnOnceInDev('toast:provider-missing', 'Toast: ToastProvider not mounted');
       return;
     }
     toastMethods.dismissAll();

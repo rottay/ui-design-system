@@ -35,9 +35,9 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       padding: 0,
       margin: 0,
       border: 'none',
-      borderRadius: 'var(--modal-close-button-radius, 6px)',
+      borderRadius: 'var(--ds-modal-close-button-radius, var(--ds-radius-sm, 6px))',
       backgroundColor: 'transparent',
-      color: 'var(--modal-close-button-color, rgba(0, 0, 0, 0.45))',
+      color: 'var(--ds-modal-close-button-color, var(--ds-modal-close-color, var(--ds-color-text-tertiary)))',
       cursor: 'pointer',
       transition: 'all 0.2s ease-in-out',
       flexShrink: 0,
@@ -50,13 +50,16 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
     };
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.backgroundColor = 'var(--modal-close-button-hover-bg, rgba(0, 0, 0, 0.06))';
-      e.currentTarget.style.color = 'var(--modal-close-button-hover-color, rgba(0, 0, 0, 0.88))';
+      e.currentTarget.style.backgroundColor =
+        'var(--ds-modal-close-button-hover-bg, var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary)))';
+      e.currentTarget.style.color =
+        'var(--ds-modal-close-button-hover-color, var(--ds-modal-close-color-hover, var(--ds-color-text-primary)))';
     };
 
     const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.currentTarget.style.backgroundColor = 'transparent';
-      e.currentTarget.style.color = 'var(--modal-close-button-color, rgba(0, 0, 0, 0.45))';
+      e.currentTarget.style.color =
+        'var(--ds-modal-close-button-color, var(--ds-modal-close-color, var(--ds-color-text-tertiary)))';
     };
 
     return (

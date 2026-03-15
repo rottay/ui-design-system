@@ -154,14 +154,14 @@ Visualize the progress of an operation.
 
 ## Engine Comparison
 
-### Titan (Ant Design)
+### Classic (Ant Design)
 
 **Best for:** Enterprise applications, admin dashboards
 
 ```tsx
 import { EngineProvider } from '@rottay/design-system';
 
-<EngineProvider engine="titan">
+<EngineProvider engine="classic">
   <Alert type="success" message="Using Ant Design" />
 </EngineProvider>
 ```
@@ -172,14 +172,14 @@ import { EngineProvider } from '@rottay/design-system';
 - Built-in accessibility
 - ~300KB bundle impact
 
-### Hermes (DaisyUI)
+### Modern (DaisyUI)
 
 **Best for:** Modern web apps, Tailwind projects
 
 ```tsx
 import { EngineProvider } from '@rottay/design-system';
 
-<EngineProvider engine="hermes">
+<EngineProvider engine="modern">
   <Alert type="success" message="Using DaisyUI" />
 </EngineProvider>
 ```
@@ -190,14 +190,14 @@ import { EngineProvider } from '@rottay/design-system';
 - Lightweight (~50KB)
 - Rapid development
 
-### Apollo (Pure CSS)
+### Rustic (Pure CSS)
 
 **Best for:** Performance-critical apps, zero dependencies
 
 ```tsx
 import { EngineProvider } from '@rottay/design-system';
 
-<EngineProvider engine="apollo">
+<EngineProvider engine="rustic">
   <Alert type="success" message="Using Pure CSS" />
 </EngineProvider>
 ```

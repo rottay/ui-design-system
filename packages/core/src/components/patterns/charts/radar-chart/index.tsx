@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { memo, useEffect, useRef } from 'react';
+import { max, scaleLinear, select } from 'd3';
 
 import type { ChartBaseProps } from '../types';
 import { DEFAULT_COLORS } from '../types';
-import { useChartDimensions } from '../hooks';
+import { useChartDimensions, useChartPersonality } from '../hooks';
+import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 export interface RadarChartProps extends ChartBaseProps {
   data: { axis: string; value: number }[];
@@ -15,7 +16,7 @@ export interface RadarChartProps extends ChartBaseProps {
   showLabels?: boolean;
 }
 
-export function RadarChart({
+export const RadarChart = memo(function RadarChart({
   data,
   series,
   maxValue: maxValueProp,
@@ -29,15 +30,34 @@ export function RadarChart({
   title,
   subtitle,
   legend = true,
-  animate = true,
+  animate,
   responsive = true,
   colors = DEFAULT_COLORS,
-  tooltip = true,
+  tooltip,
 }: RadarChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = height;
+  const allSeries = series ?? [{ name: 'Data', data, color: colors[0] }];
+  const summary = {
+    caption: title ? `${title} data summary` : 'Radar chart data summary',
+    headers: ['Series', 'Axis', 'Value'],
+    rows: allSeries.flatMap((currentSeries) =>
+      currentSeries.data.map((point) => [currentSeries.name, point.axis, point.value])
+    ),
+  };
+  const legendNode = legend && allSeries.length > 1 ? (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      {allSeries.map((s, i) => (
+        <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+        </div>
+      ))}
+    </div>
+  ) : null;
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -49,11 +69,11 @@ export function RadarChart({
     const n = axes.length;
     if (n === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
     const radius = Math.min(chartWidth, chartHeight) / 2 - 40;
-    const maxValue = maxValueProp ?? d3.max(allSeries.flatMap((s) => s.data.map((d) => d.value))) ?? 1;
+    const maxValue = maxValueProp ?? max(allSeries.flatMap((s) => s.data.map((d) => d.value))) ?? 1;
     const angleSlice = (2 * Math.PI) / n;
 
     const g = svg
@@ -62,7 +82,7 @@ export function RadarChart({
       .append('g')
       .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
-    const rScale = d3.scaleLinear().domain([0, maxValue]).range([0, radius]);
+    const rScale = scaleLinear().domain([0, maxValue]).range([0, radius]);
 
     // Grid levels
     for (let level = 1; level <= levels; level++) {
@@ -124,11 +144,11 @@ export function RadarChart({
         .attr('stroke', color)
         .attr('stroke-width', 2);
 
-      if (animate) {
+      if (chartPersonality.animate) {
         polygon
           .attr('opacity', 0)
           .transition()
-          .duration(600)
+          .duration(chartPersonality.animationDuration)
           .delay(si * 150)
           .attr('opacity', 1);
       }
@@ -146,42 +166,29 @@ export function RadarChart({
           .attr('stroke', 'var(--ds-color-bg-primary)')
           .attr('stroke-width', 1.5);
 
-        if (tooltip) {
+        if (chartPersonality.tooltip) {
           dot.append('title').text(`${d.axis}: ${d.value}`);
         }
       });
     });
-  }, [data, series, chartWidth, chartHeight, maxValueProp, levels, showLabels, animate, colors, tooltip]);
-
-  if (loading) {
-    return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>Loading...</div>
-      </div>
-    );
-  }
-
-  const allSeries = series ?? [{ name: 'Data', data, color: colors[0] }];
+  }, [data, series, chartWidth, chartHeight, maxValueProp, levels, showLabels, chartPersonality, colors]);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
-      {title && (
-        <div style={{ marginBottom: 4, textAlign: 'center' }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
-          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
-        </div>
-      )}
-      <svg ref={svgRef} />
-      {legend && allSeries.length > 1 && (
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-          {allSeries.map((s, i) => (
-            <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? colors[i % colors.length], display: 'inline-block' }} />
-              <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <ChartScaffold
+      containerRef={containerRef}
+      svgRef={svgRef}
+      width={width}
+      height={height}
+      className={className}
+      style={style}
+      loading={loading}
+      loadingLabel={chartPersonality.loadingLabel}
+      title={title}
+      subtitle={subtitle}
+      ariaLabel={title ?? 'Radar chart'}
+      ariaDescription={describeChart('Radar chart', summary.rows.length, subtitle, showLabels ? 'Axis labels are visible.' : undefined)}
+      summary={summary}
+      legend={legendNode}
+    />
   );
-}
+});

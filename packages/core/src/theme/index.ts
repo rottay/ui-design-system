@@ -1,9 +1,8 @@
 /**
  * Theme Exports
- * Tokens, Tenants, Presets, i18n
+ * Tokens, Tenants, Product Profiles, i18n
  */
 
 export * from './tenants';
-export * from './presets';
+export * from './product-profiles';
 export * from './i18n';
-// Tokens are CSS files, exported via package.json

@@ -27,7 +27,7 @@ These SIZE_MAP constants are currently used for:
 #### Badge
 - **Location:** `components/primitives/display/Badge/types/index.ts`
 - **Maps:** `SIZE_MAP`, `DOT_SIZE_MAP`
-- **Used in:** base, engines (titan, hermes, apollo)
+- **Used in:** base, engines (classic, modern, rustic)
 - **Values:**
   - SIZE_MAP: `{ sm, md, lg }` with `minWidth`, `height`, `fontSize`
   - DOT_SIZE_MAP: `{ sm: 6, md: 8, lg: 10 }`
@@ -35,13 +35,13 @@ These SIZE_MAP constants are currently used for:
 #### Tag
 - **Location:** `components/primitives/display/Tag/types/index.ts`
 - **Maps:** `SIZE_MAP`
-- **Used in:** base, engines (apollo)
+- **Used in:** base, engines (rustic)
 - **Values:** `{ sm, md, lg }` with `padding`, `fontSize`, `height`
 
 #### Timeline
 - **Location:** `types/primitives/display/Timeline/index.ts`
 - **Maps:** `TIMELINE_SIZE_MAP`
-- **Used in:** base, engines (apollo)
+- **Used in:** base, engines (rustic)
 - **Values:** `dotSize`, `dotBorderWidth`, `itemPadding`, `dotOffset`, `lineWidth`
 
 #### QRCode
@@ -59,13 +59,13 @@ These SIZE_MAP constants are currently used for:
 #### Button
 - **Location:** `components/primitives/inputs/Button/types/index.ts`
 - **Maps:** `SIZE_MAP`
-- **Used in:** base, compound/Icon, engines (titan, apollo)
+- **Used in:** base, compound/Icon, engines (classic, rustic)
 - **Engine-specific:** Titan has own `SIZE_MAP` mapping to Ant Design sizes
 
 #### Input
 - **Location:** `components/primitives/inputs/Input/types/index.ts`
 - **Maps:** `SIZE_MAP`, `ANT_SIZE_MAP`, `DAISY_SIZE_MAP`
-- **Used in:** base, compound/Addon, compound/TextArea, engines (titan, hermes, apollo)
+- **Used in:** base, compound/Addon, compound/TextArea, engines (classic, modern, rustic)
 - **Values:**
   - SIZE_MAP: `{ sm, md, lg }` with `height`, `fontSize`, `padding`
   - ANT_SIZE_MAP: Maps to Ant Design size strings
@@ -112,7 +112,7 @@ These SIZE_MAP constants are currently used for:
 ### Feedback Components
 
 #### Modal (duplicate in feedback)
-- **Location:** `components/primitives/feedback/Modal/engines/titan/index.tsx`
+- **Location:** `components/primitives/feedback/Modal/engines/classic/index.tsx`
 - **Maps:** Local `SIZE_MAP`
 - **Note:** Appears to be a duplicate modal component
 
@@ -131,11 +131,11 @@ These SIZE_MAP constants are currently used for:
 - **Used in:** compound/Step, engines
 
 #### Pagination
-- **Location:** `components/primitives/navigation/Pagination/engines/titan/index.tsx`
+- **Location:** `components/primitives/navigation/Pagination/engines/classic/index.tsx`
 - **Maps:** Uses size mapping for Ant Design
 
 #### Tabs
-- **Location:** `components/primitives/navigation/Tabs/engines/titan/index.tsx`
+- **Location:** `components/primitives/navigation/Tabs/engines/classic/index.tsx`
 - **Maps:** Uses size mapping for Ant Design
 
 ### Icons
@@ -195,18 +195,18 @@ For each SIZE_MAP, the migration would involve:
 1. **Create CSS tokens** in `tokens/css/components/{component}.css`:
    ```css
    :root {
-     --button-sm-height: 2rem;
-     --button-md-height: 2.5rem;
-     --button-lg-height: 3rem;
+     --ds-button-sm-height: 2rem;
+     --ds-button-md-height: 2.5rem;
+     --ds-button-lg-height: 3rem;
    }
    ```
 
 2. **Update TypeScript** to reference CSS variables:
    ```typescript
    export const buttonSize = {
-     sm: { height: 'var(--button-sm-height)' },
-     md: { height: 'var(--button-md-height)' },
-     lg: { height: 'var(--button-lg-height)' },
+     sm: { height: 'var(--ds-button-sm-height)' },
+     md: { height: 'var(--ds-button-md-height)' },
+     lg: { height: 'var(--ds-button-lg-height)' },
    };
    ```
 

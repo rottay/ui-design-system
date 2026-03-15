@@ -46,7 +46,7 @@ export const typographyScale: Record<string, CSSProperties> = {
     fontWeight: 500,
   },
   code: {
-    fontFamily: 'var(--font-geist-mono, monospace)',
+    fontFamily: 'var(--ds-font-family-mono, monospace)',
     fontSize: '0.8125rem',
     lineHeight: 1.5,
   },

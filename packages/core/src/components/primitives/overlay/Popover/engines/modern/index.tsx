@@ -24,7 +24,7 @@
  * import { Popover, Button } from '@rottay/design-system';
  *
  * <Popover
- *   engine="hermes"
+ *   engine="modern"
  *   content="Tailwind styled content"
  *   title="Hermes Popover"
  *   trigger="hover"

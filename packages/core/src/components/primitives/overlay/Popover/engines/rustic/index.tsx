@@ -29,7 +29,7 @@
  * import { Popover, Button } from '@rottay/design-system';
  *
  * <Popover
- *   engine="apollo"
+ *   engine="rustic"
  *   content="Pure CSS styled content"
  *   title="Apollo Popover"
  *   placement="right"

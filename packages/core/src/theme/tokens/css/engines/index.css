@@ -19,6 +19,6 @@
 @import './collapse.css';
 
 /* Engine-specific themes */
-@import './titan/theme.css';
-@import './hermes/theme.css';
-@import './apollo/theme.css';
+@import './classic/theme.css';
+@import './modern/theme.css';
+@import './rustic/theme.css';

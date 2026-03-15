@@ -58,7 +58,17 @@ export { Timeline } from './Timeline';
 export type { TimelineProps, TimelineItemProps, TimelineMode } from './Timeline';
 
 export { Tree } from './Tree';
-export type { TreeProps, TreeNodeProps, TreeDataNode } from './Tree';
+export type { TreeProps, TreeNodeProps, TreeDataNode, TreeDropInfo, TreeDragStartInfo } from './Tree';
 
 export { QRCode } from './QRCode';
 export type { QRCodeProps, QRCodeStatus, QRCodeErrorLevel, QRCodeType } from './QRCode';
+
+// Kbd
+export { Kbd } from './Kbd';
+export type { KbdProps, KbdSize } from './Kbd';
+export { KBD_DEFAULTS } from './Kbd';
+
+// Callout
+export { Callout } from './Callout';
+export type { CalloutProps, CalloutVariant } from './Callout';
+export { CALLOUT_DEFAULTS, CALLOUT_COLORS } from './Callout';

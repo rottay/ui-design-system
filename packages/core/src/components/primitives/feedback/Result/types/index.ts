@@ -37,7 +37,7 @@
  * console.log(RESULT_DEFAULTS.status); // 'info'
  *
  * // Get color for a status
- * console.log(RESULT_COLORS.success); // '#52c41a'
+ * console.log(RESULT_COLORS.success); // 'var(--ds-color-success)'
  *
  * // Get icon character for a status
  * console.log(RESULT_ICONS.error); // '✕'
@@ -249,11 +249,11 @@ export const RESULT_ICONS: Record<ResultStatus, string> = {
  * @constant
  *
  * @remarks
- * These colors follow the Rottay Design System color conventions:
- * - Green (#52c41a) for positive/success states
- * - Red (#ff4d4f) for negative/error states
- * - Blue (#1677ff) for neutral/informational states
- * - Yellow/Orange (#faad14) for warning/caution states
+ * These values follow the Rottay Design System semantic token conventions:
+ * - `var(--ds-color-success)` for positive/success states
+ * - `var(--ds-color-error)` for negative/error states
+ * - `var(--ds-color-info)` for neutral/informational states
+ * - `var(--ds-color-warning)` for warning/caution states
  *
  * @example Using Color Mappings
  * ```tsx
@@ -263,23 +263,23 @@ export const RESULT_ICONS: Record<ResultStatus, string> = {
  *   return RESULT_COLORS[status];
  * };
  *
- * console.log(getColorForStatus('success')); // '#52c41a'
- * console.log(getColorForStatus('error'));   // '#ff4d4f'
+ * console.log(getColorForStatus('success')); // 'var(--ds-color-success)'
+ * console.log(getColorForStatus('error'));   // 'var(--ds-color-error)'
  * ```
  */
 export const RESULT_COLORS: Record<ResultStatus, string> = {
   /** Green - successful operations */
-  success: '#52c41a',
+  success: 'var(--ds-color-success)',
   /** Red - failed operations */
-  error: '#ff4d4f',
+  error: 'var(--ds-color-error)',
   /** Blue - informational messages */
-  info: '#1677ff',
+  info: 'var(--ds-color-info)',
   /** Yellow/Orange - warning messages */
-  warning: '#faad14',
+  warning: 'var(--ds-color-warning)',
   /** Blue - page not found (informational context) */
-  '404': '#1677ff',
+  '404': 'var(--ds-color-info)',
   /** Yellow/Orange - access denied (warning context) */
-  '403': '#faad14',
+  '403': 'var(--ds-color-warning)',
   /** Red - server error (error context) */
-  '500': '#ff4d4f',
+  '500': 'var(--ds-color-error)',
 };

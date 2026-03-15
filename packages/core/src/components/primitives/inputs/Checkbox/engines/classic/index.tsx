@@ -52,8 +52,8 @@
 
 import React from 'react';
 import { Checkbox as AntCheckbox } from 'antd';
-import type { CheckboxProps, CheckboxGroupProps } from '../../types';
-import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
+import type { CheckboxProps } from '../../types';
+import { CHECKBOX_DEFAULTS, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
 
 export default function ClassicCheckbox(props: CheckboxProps): React.ReactElement {
   const {
@@ -105,42 +105,4 @@ export default function ClassicCheckbox(props: CheckboxProps): React.ReactElemen
   );
 }
 
-// Checkbox Group component
-export function ClassicCheckboxGroup(props: CheckboxGroupProps): React.ReactElement {
-  const {
-    options = [],
-    value,
-    defaultValue,
-    disabled = CHECKBOX_GROUP_DEFAULTS.disabled,
-    direction = CHECKBOX_GROUP_DEFAULTS.direction,
-    onChange,
-    className = '',
-    style,
-  } = props;
-
-  const handleChange = (checkedValues: any[]) => {
-    onChange?.(checkedValues);
-  };
-
-  const groupStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: direction === 'horizontal' ? 'row' : 'column',
-    gap: direction === 'horizontal' ? '16px' : '8px',
-    ...style,
-  };
-
-  return (
-    <AntCheckbox.Group
-      options={options as any}
-      value={value}
-      defaultValue={defaultValue}
-      disabled={disabled}
-      onChange={handleChange}
-      className={`rottay-checkbox-group-classic ${className}`}
-      style={groupStyle}
-    />
-  );
-}
-
 ClassicCheckbox.displayName = 'ClassicCheckbox';
-ClassicCheckbox.Group = ClassicCheckboxGroup;

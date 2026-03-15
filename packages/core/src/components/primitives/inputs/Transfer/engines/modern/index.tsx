@@ -2,10 +2,18 @@
 
 /**
  * Transfer - Modern Engine (DaisyUI/Tailwind)
+ *
+ * Features:
+ * - showSearch: search input at top of each panel, filters items
+ * - pagination: page size + navigation controls at bottom of each panel
+ * - titles: custom header text for left/right panels
+ * - render: custom item render function
+ * - notFoundContent: empty state (via locale.notFoundContent)
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TransferProps, TransferItem } from '../../types';
 import { TRANSFER_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 interface TransferListProps {
   title: React.ReactNode;
@@ -21,7 +29,10 @@ interface TransferListProps {
   showSelectAll?: boolean;
   locale?: TransferProps['locale'];
   listStyle?: React.CSSProperties;
+  pagination?: boolean | { pageSize?: number };
 }
+
+const DEFAULT_PAGE_SIZE = 10;
 
 const TransferList: React.FC<TransferListProps> = ({
   title,
@@ -37,11 +48,33 @@ const TransferList: React.FC<TransferListProps> = ({
   showSelectAll,
   locale,
   listStyle,
+  pagination,
 }) => {
+  const { t } = useTranslation('components');
+  const [currentPage, setCurrentPage] = useState(1);
+
   const filteredItems = useMemo(() => {
     if (!searchValue || !filterOption) return items;
     return items.filter((item) => filterOption(searchValue, item));
   }, [items, searchValue, filterOption]);
+
+  // Reset page on filter change
+  const prevFilteredLength = React.useRef(filteredItems.length);
+  React.useEffect(() => {
+    if (filteredItems.length !== prevFilteredLength.current) {
+      setCurrentPage(1);
+      prevFilteredLength.current = filteredItems.length;
+    }
+  }, [filteredItems.length]);
+
+  // Pagination logic
+  const pageSize = pagination
+    ? (typeof pagination === 'object' && pagination.pageSize ? pagination.pageSize : DEFAULT_PAGE_SIZE)
+    : 0;
+  const totalPages = pageSize > 0 ? Math.max(1, Math.ceil(filteredItems.length / pageSize)) : 1;
+  const paginatedItems = pageSize > 0
+    ? filteredItems.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    : filteredItems;
 
   const selectableItems = filteredItems.filter((item) => !item.disabled);
   const allSelected = selectableItems.length > 0 && selectableItems.every((item) => selectedKeys.has(item.key));
@@ -66,9 +99,9 @@ const TransferList: React.FC<TransferListProps> = ({
   };
 
   return (
-    <div className="flex flex-col border border-base-300 rounded-lg" style={{ width: '200px', ...listStyle }}>
+    <div className="flex flex-col border border-base-300 rounded-lg overflow-hidden" style={{ width: '200px', ...listStyle }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-2 border-b border-base-300 bg-base-200">
+      <div className="flex items-center justify-between p-2 border-b border-base-300 bg-base-200 font-medium">
         {showSelectAll && (
           <input
             type="checkbox"
@@ -92,8 +125,8 @@ const TransferList: React.FC<TransferListProps> = ({
         <div className="p-2 border-b border-base-300">
           <input
             type="text"
-            className="input input-sm input-bordered w-full"
-            placeholder={locale?.searchPlaceholder}
+            className="input input-sm input-bordered w-full focus:input-primary transition-all duration-200"
+            placeholder={locale?.searchPlaceholder || t('transfer.search_placeholder')}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
             disabled={disabled}
@@ -103,12 +136,12 @@ const TransferList: React.FC<TransferListProps> = ({
 
       {/* Items */}
       <div className="flex-1 overflow-auto max-h-60">
-        {filteredItems.length > 0 ? (
+        {paginatedItems.length > 0 ? (
           <ul className="menu p-1">
-            {filteredItems.map((item) => (
+            {paginatedItems.map((item) => (
               <li key={item.key}>
                 <label
-                  className={`flex items-center gap-2 cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`flex items-center gap-2 cursor-pointer transition-all duration-200 hover:bg-base-200/50 hover:border-l-2 hover:border-primary/50 ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <input
                     type="checkbox"
@@ -126,10 +159,35 @@ const TransferList: React.FC<TransferListProps> = ({
           </ul>
         ) : (
           <div className="p-4 text-center text-base-content/50">
-            {locale?.notFoundContent}
+            {locale?.notFoundContent || t('transfer.not_found')}
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {pagination && totalPages > 1 && (
+        <div className="flex items-center justify-center gap-1 p-2 border-t border-base-300">
+          <button
+            type="button"
+            className="btn btn-xs btn-ghost"
+            disabled={currentPage <= 1}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          >
+            ‹
+          </button>
+          <span className="text-xs text-base-content/70">
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            type="button"
+            className="btn btn-xs btn-ghost"
+            disabled={currentPage >= totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          >
+            ›
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -153,6 +211,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       locale = TRANSFER_DEFAULTS.locale,
       showSelectAll = TRANSFER_DEFAULTS.showSelectAll,
       oneWay,
+      pagination,
       className,
       style,
     } = props;
@@ -170,6 +229,13 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
 
     const sourceItems = dataSource.filter((item) => !targetKeysSet.has(item.key));
     const targetItems = dataSource.filter((item) => targetKeysSet.has(item.key));
+
+    // Default filter function when showSearch is enabled but no filterOption provided
+    const effectiveFilterOption = filterOption ?? (showSearch
+      ? (input: string, item: TransferItem) =>
+          item.title.toLowerCase().includes(input.toLowerCase())
+      : undefined
+    );
 
     const handleMove = useCallback((direction: 'left' | 'right') => {
       const keysToMove = direction === 'right'
@@ -227,17 +293,18 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           showSearch={showSearch}
           searchValue={sourceSearch}
           onSearch={handleSourceSearch}
-          filterOption={filterOption}
+          filterOption={effectiveFilterOption}
           render={render}
           showSelectAll={showSelectAll}
           locale={locale}
           listStyle={listStyle}
+          pagination={pagination}
         />
 
         <div className="flex flex-col gap-2">
           <button
             type="button"
-            className="btn btn-sm btn-primary"
+            className="btn btn-circle btn-sm btn-ghost hover:btn-primary transition-all duration-200 hover:scale-110"
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
           >
@@ -246,7 +313,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           {!oneWay && (
             <button
               type="button"
-              className="btn btn-sm btn-primary"
+              className="btn btn-circle btn-sm btn-ghost hover:btn-primary transition-all duration-200 hover:scale-110"
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}
             >
@@ -264,11 +331,12 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           showSearch={showSearch}
           searchValue={targetSearch}
           onSearch={handleTargetSearch}
-          filterOption={filterOption}
+          filterOption={effectiveFilterOption}
           render={render}
           showSelectAll={showSelectAll}
           locale={locale}
           listStyle={listStyle}
+          pagination={pagination}
         />
       </div>
     );

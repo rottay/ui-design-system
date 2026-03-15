@@ -61,24 +61,57 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle, useEffect } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../types';
+
+// Feedback Icons
+const FeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'validating' }> = ({ status }) => {
+  switch (status) {
+    case 'success':
+      return (
+        <span className="text-success ml-2 inline-flex items-center" aria-label="Validation passed" style={{ animation: 'rottay-form-feedback-in 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+        </span>
+      );
+    case 'error':
+      return (
+        <span className="text-error ml-2 inline-flex items-center" aria-label="Validation failed" style={{ animation: 'rottay-form-feedback-in 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        </span>
+      );
+    case 'warning':
+      return (
+        <span className="text-warning ml-2 inline-flex items-center" aria-label="Validation warning" style={{ animation: 'rottay-form-feedback-in 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.832c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+        </span>
+      );
+    case 'validating':
+      return (
+        <span className="text-info ml-2 inline-flex items-center animate-spin" aria-label="Validating">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+        </span>
+      );
+  }
+};
 
 // Form Context
 interface FormContextValue {
   values: Record<string, unknown>;
   errors: Record<string, string[]>;
   touched: Record<string, boolean>;
+  validating: Record<string, boolean>;
   setValue: (name: string, value: unknown) => void;
   setError: (name: string, errors: string[]) => void;
   setTouched: (name: string, touched: boolean) => void;
-  registerField: (name: string, initialValue?: unknown) => void;
+  registerField: (name: string, initialValue?: unknown, rules?: FormRule[]) => void;
   layout?: 'horizontal' | 'vertical' | 'inline';
   size?: 'small' | 'default' | 'large';
   disabled?: boolean;
   colon?: boolean;
   requiredMark?: boolean | 'optional';
+  hasFeedback?: boolean;
   validateField: (name: string, rules?: FormRule[]) => Promise<string[]>;
+  getFieldRules: (name: string) => FormRule[] | undefined;
 }
 
 const FormContext = createContext<FormContextValue | null>(null);
@@ -172,6 +205,8 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     size = 'default',
     disabled = false,
     requiredMark = true,
+    scrollToFirstError = false,
+    hasFeedback: formHasFeedback = false,
     name,
     onValuesChange,
     onFinish,
@@ -181,44 +216,57 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     style,
     autoComplete = 'on',
   } = props;
+  const [internalForm] = useForm();
+  const resolvedForm = form ?? internalForm;
+  const formElementRef = useRef<HTMLFormElement | null>(null);
 
   const [values, setValues] = useState<Record<string, unknown>>(initialValues as Record<string, unknown>);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [validating, setValidating] = useState<Record<string, boolean>>({});
+  const fieldRulesRef = useRef<Record<string, FormRule[] | undefined>>({});
+  const valuesRef = useRef<Record<string, unknown>>(initialValues as Record<string, unknown>);
+
+  const getFieldRules = useCallback((fieldName: string) => {
+    return fieldRulesRef.current[fieldName];
+  }, []);
 
   // Wrap form instance methods to sync with component state
   // This works with ANY form instance (Classic/Ant Design, Modern, or Rustic)
   React.useEffect(() => {
-    if (form) {
-      // Store original methods
-      const originalSetFieldsValue = form.setFieldsValue;
-      const originalSetFieldValue = form.setFieldValue;
-      const originalResetFields = form.resetFields;
+    if (resolvedForm) {
+      // Store original methods so the engine can stay in sync with the
+      // externally visible FormInstance API without forking behavior.
+      const originalSetFieldsValue = resolvedForm.setFieldsValue;
+      const originalSetFieldValue = resolvedForm.setFieldValue;
+      const originalResetFields = resolvedForm.resetFields;
+      const originalSubmit = resolvedForm.submit;
 
       // Wrap setFieldsValue to also update component state
-      form.setFieldsValue = (newValues: Record<string, unknown>) => {
-        console.log('[ModernForm] setFieldsValue called with:', newValues);
+      resolvedForm.setFieldsValue = (newValues: Record<string, unknown>) => {
         // Call original method
-        originalSetFieldsValue.call(form, newValues);
+        originalSetFieldsValue.call(resolvedForm, newValues);
         // Update component state
-        setValues(prev => ({ ...prev, ...newValues }));
+        const nextValues = { ...valuesRef.current, ...newValues };
+        valuesRef.current = nextValues;
+        setValues(nextValues);
       };
 
       // Wrap setFieldValue to also update component state
-      form.setFieldValue = (fieldName: string | number | (string | number)[], value: unknown) => {
-        console.log('[ModernForm] setFieldValue called:', fieldName, value);
+      resolvedForm.setFieldValue = (fieldName: string | number | (string | number)[], value: unknown) => {
         // Call original method
-        originalSetFieldValue.call(form, fieldName, value);
+        originalSetFieldValue.call(resolvedForm, fieldName, value);
         // Update component state
         const key = Array.isArray(fieldName) ? fieldName.join('.') : String(fieldName);
-        setValues(prev => ({ ...prev, [key]: value }));
+        const nextValues = { ...valuesRef.current, [key]: value };
+        valuesRef.current = nextValues;
+        setValues(nextValues);
       };
 
       // Wrap resetFields to also reset component state
-      form.resetFields = (fields?: (string | number | (string | number)[])[]) => {
-        console.log('[ModernForm] resetFields called:', fields);
+      resolvedForm.resetFields = (fields?: (string | number | (string | number)[])[]) => {
         // Call original method
-        originalResetFields.call(form, fields);
+        originalResetFields.call(resolvedForm, fields);
         // Reset component state
         if (fields) {
           setValues(prev => {
@@ -227,28 +275,41 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
               const key = Array.isArray(field) ? field.join('.') : String(field);
               delete newValues[key];
             });
+            valuesRef.current = newValues;
             return newValues;
           });
         } else {
+          valuesRef.current = initialValues as Record<string, unknown>;
           setValues(initialValues as Record<string, unknown>);
         }
       };
 
+      resolvedForm.submit = () => {
+        if (formElementRef.current?.requestSubmit) {
+          formElementRef.current.requestSubmit();
+          return;
+        }
+
+        formElementRef.current?.dispatchEvent(
+          new Event('submit', { bubbles: true, cancelable: true })
+        );
+      };
+
       // Cleanup: restore original methods
       return () => {
-        form.setFieldsValue = originalSetFieldsValue;
-        form.setFieldValue = originalSetFieldValue;
-        form.resetFields = originalResetFields;
+        resolvedForm.setFieldsValue = originalSetFieldsValue;
+        resolvedForm.setFieldValue = originalSetFieldValue;
+        resolvedForm.resetFields = originalResetFields;
+        resolvedForm.submit = originalSubmit;
       };
     }
-  }, [form, initialValues]);
+  }, [resolvedForm, initialValues]);
 
   const setValue = useCallback((fieldName: string, value: unknown) => {
-    setValues((prev) => {
-      const newValues = { ...prev, [fieldName]: value };
-      onValuesChange?.({ [fieldName]: value } as Partial<unknown>, newValues as unknown);
-      return newValues;
-    });
+    const nextValues = { ...valuesRef.current, [fieldName]: value };
+    valuesRef.current = nextValues;
+    setValues(nextValues);
+    onValuesChange?.({ [fieldName]: value } as Partial<unknown>, nextValues as unknown);
   }, [onValuesChange]);
 
   const setError = useCallback((fieldName: string, fieldErrors: string[]) => {
@@ -259,16 +320,21 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     setTouched((prev) => ({ ...prev, [fieldName]: isTouched }));
   }, []);
 
-  const registerField = useCallback((fieldName: string, initialValue?: unknown) => {
+  const registerField = useCallback((fieldName: string, initialValue?: unknown, rules?: FormRule[]) => {
+    fieldRulesRef.current[fieldName] = rules;
     if (initialValue !== undefined && values[fieldName] === undefined) {
-      setValues((prev) => ({ ...prev, [fieldName]: initialValue }));
+      const nextValues = { ...valuesRef.current, [fieldName]: initialValue };
+      valuesRef.current = nextValues;
+      setValues(nextValues);
     }
   }, [values]);
 
   const validateField = useCallback(async (fieldName: string, rules?: FormRule[]): Promise<string[]> => {
     if (!rules || rules.length === 0) return [];
 
-    const value = values[fieldName];
+    setValidating((prev) => ({ ...prev, [fieldName]: true }));
+
+    const value = valuesRef.current[fieldName];
     const fieldErrors: string[] = [];
 
     for (const rule of rules) {
@@ -293,6 +359,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
       }
     }
 
+    setValidating((prev) => ({ ...prev, [fieldName]: false }));
     setError(fieldName, fieldErrors);
     return fieldErrors;
   }, [values, setError]);
@@ -300,18 +367,42 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate all fields
-    const allErrors: FieldData[] = [];
-    for (const [fieldName, fieldErrors] of Object.entries(errors)) {
-      if (fieldErrors.length > 0) {
-        allErrors.push({ name: fieldName, errors: fieldErrors });
-      }
-    }
+    // Validate every registered field during submit so failed submits are based
+    // on the current form state instead of whatever happened to be validated last.
+    const validationEntries = await Promise.all(
+      Object.entries(fieldRulesRef.current).map(async ([fieldName, fieldRules]) => {
+        const fieldErrors = await validateField(fieldName, fieldRules);
+        return [fieldName, fieldErrors] as const;
+      })
+    );
+
+    const allErrors: FieldData[] = validationEntries
+      .filter(([, fieldErrors]) => fieldErrors.length > 0)
+      .map(([fieldName, fieldErrors]) => ({
+        name: fieldName,
+        errors: fieldErrors,
+      }));
 
     if (allErrors.length > 0) {
-      onFinishFailed?.({ values: values as unknown, errorFields: allErrors, outOfDate: false });
+      onFinishFailed?.({ values: valuesRef.current as unknown, errorFields: allErrors, outOfDate: false });
+
+      // Scroll to first error field
+      if (scrollToFirstError && formElementRef.current) {
+        const firstErrorName = allErrors[0]?.name;
+        if (firstErrorName) {
+          const fieldKey = Array.isArray(firstErrorName) ? firstErrorName.join('.') : String(firstErrorName);
+          const errorEl = formElementRef.current.querySelector(`[id="form-${fieldKey}"]`) ||
+            formElementRef.current.querySelector(`[name="${fieldKey}"]`);
+          if (errorEl) {
+            const scrollOpts: ScrollIntoViewOptions = typeof scrollToFirstError === 'object'
+              ? scrollToFirstError
+              : { behavior: 'smooth', block: 'center' };
+            errorEl.scrollIntoView(scrollOpts);
+          }
+        }
+      }
     } else {
-      onFinish?.(values as unknown);
+      onFinish?.(valuesRef.current as unknown);
     }
   };
 
@@ -319,6 +410,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     values,
     errors,
     touched,
+    validating,
     setValue,
     setError,
     setTouched: setFieldTouched,
@@ -328,10 +420,12 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     disabled,
     colon,
     requiredMark,
+    hasFeedback: formHasFeedback,
     validateField,
-  }), [values, errors, touched, setValue, setError, setFieldTouched, registerField, layout, size, disabled, colon, requiredMark, validateField]);
+    getFieldRules,
+  }), [values, errors, touched, validating, setValue, setError, setFieldTouched, registerField, layout, size, disabled, colon, requiredMark, formHasFeedback, validateField, getFieldRules]);
 
-  useImperativeHandle(ref, () => form as FormInstance, [form]);
+  useImperativeHandle(ref, () => resolvedForm as FormInstance, [resolvedForm]);
 
   const layoutClasses = {
     horizontal: 'flex flex-row flex-wrap items-start gap-4',
@@ -341,8 +435,11 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 
   return (
     <FormContext.Provider value={contextValue}>
+      <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-form-error-slide{from{opacity:0;transform:translateY(-4px);max-height:0}to{opacity:1;transform:translateY(0);max-height:40px}}@keyframes rottay-form-feedback-in{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}` }} />
       <form
+        ref={formElementRef}
         name={name}
+        role="form"
         className={`${layoutClasses[layout]} ${className}`}
         style={style}
         onSubmit={handleSubmit}
@@ -366,11 +463,13 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     extra,
     help,
     validateStatus,
-    hasFeedback,
+    hasFeedback: itemHasFeedback,
     initialValue,
     hidden,
     tooltip,
+    valuePropName = 'value',
     colon: itemColon,
+    dependencies,
     children,
     className = '',
     style,
@@ -382,29 +481,76 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   }
 
   const fieldName = Array.isArray(name) ? name.join('.') : String(name || '');
-  const { values, errors, setValue, registerField, layout, colon, size, disabled, requiredMark, validateField } = context;
+  const {
+    values,
+    errors,
+    touched,
+    validating: validatingMap,
+    setValue,
+    registerField,
+    layout,
+    colon,
+    size,
+    disabled,
+    requiredMark,
+    hasFeedback: formHasFeedback,
+    validateField,
+    getFieldRules,
+  } = context;
 
   // Register field with initial value
   React.useEffect(() => {
     if (fieldName) {
-      registerField(fieldName, initialValue);
+      registerField(fieldName, initialValue, rules);
     }
-  }, [fieldName, initialValue, registerField]);
+  }, [fieldName, initialValue, registerField, rules]);
+
+  // Field dependencies: when a dependency changes, re-validate this field
+  const depsKey = dependencies?.map((d) => {
+    const k = Array.isArray(d) ? d.join('.') : String(d);
+    return `${k}:${JSON.stringify(values[k])}`;
+  }).join('|');
+
+  useEffect(() => {
+    if (!dependencies || !fieldName || !rules) return;
+    // Only re-validate if the field has been touched (avoid validating on mount)
+    if (touched[fieldName]) {
+      validateField(fieldName, rules);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [depsKey]);
 
   const fieldValue = fieldName ? values[fieldName] : undefined;
   const fieldErrors = fieldName ? (errors[fieldName] || []) : [];
+  const isFieldValidating = fieldName ? !!validatingMap[fieldName] : false;
   const hasError = validateStatus === 'error' || fieldErrors.length > 0;
+  const isSuccess = validateStatus === 'success' || (touched[fieldName] && fieldErrors.length === 0 && !isFieldValidating && fieldValue !== undefined && fieldValue !== '');
+  const isWarning = validateStatus === 'warning';
   const isRequired = required || rules?.some((r) => r.required);
   const showColon = itemColon ?? colon;
+  const generatedControlId = fieldName ? `form-${fieldName}` : undefined;
+  const showFeedback = itemHasFeedback ?? formHasFeedback;
+
+  const computedFeedbackStatus = (): 'success' | 'error' | 'warning' | 'validating' | null => {
+    if (validateStatus === 'validating' || isFieldValidating) return 'validating';
+    if (validateStatus === 'error' || hasError) return 'error';
+    if (validateStatus === 'warning' || isWarning) return 'warning';
+    if (validateStatus === 'success' || isSuccess) return 'success';
+    return null;
+  };
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement> | unknown) => {
     if (!fieldName) return;
-    const value = (e as React.ChangeEvent<HTMLInputElement>)?.target?.value ?? e;
+    const target = (e as React.ChangeEvent<HTMLInputElement>)?.target;
+    const value =
+      valuePropName === 'checked'
+        ? target?.checked ?? Boolean(e)
+        : target?.value ?? e;
     setValue(fieldName, value);
     if (rules) {
       validateField(fieldName, rules);
     }
-  }, [fieldName, setValue, rules, validateField]);
+  }, [fieldName, setValue, rules, validateField, valuePropName]);
 
   if (hidden) return null;
 
@@ -415,9 +561,15 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   };
 
   const childrenWithProps = React.Children.map(children, (child) => {
-    if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean }>(child)) {
+    if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean; checked?: boolean; id?: string }>(child)) {
+      const usesCheckedValue = valuePropName === 'checked' || (child.props as { type?: string }).type === 'checkbox';
+      const childId = (child.props as { id?: string }).id ?? generatedControlId;
+
       return React.cloneElement(child, {
-        value: fieldValue,
+        id: childId,
+        [usesCheckedValue ? 'checked' : valuePropName]: usesCheckedValue
+          ? Boolean(fieldValue)
+          : (fieldValue ?? ''),
         onChange: handleChange,
         disabled: disabled || (child as React.ReactElement<any>).props.disabled,
       });
@@ -425,31 +577,38 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     return child;
   });
 
+  const feedbackStatus = computedFeedbackStatus();
+
   return (
     <div
       className={`form-control w-full ${layout === 'horizontal' ? 'flex-row items-center' : ''} ${className}`}
       style={style}
     >
       {label && (
-        <label className={`label ${layout === 'horizontal' ? 'w-1/4' : ''}`}>
-          <span className={`label-text ${sizeClasses[size || 'default']} ${isRequired && requiredMark ? 'after:content-["*"] after:text-error after:ml-1' : ''}`}>
+        <label
+          className={`label ${layout === 'horizontal' ? 'w-1/4' : ''}`}
+          htmlFor={generatedControlId}
+        >
+          <span className={`label-text font-medium tracking-tight ${sizeClasses[size || 'default']} ${isRequired && requiredMark ? 'after:content-["*"] after:text-error after:ml-1 after:animate-pulse' : ''}`}>
             {label}
             {showColon && ':'}
           </span>
           {tooltip && (
             <span className="label-text-alt tooltip" data-tip={tooltip}>
-              ℹ️
+              ?
             </span>
           )}
         </label>
       )}
       <div className={`${layout === 'horizontal' ? 'flex-1' : 'w-full'}`}>
-        {childrenWithProps}
-        {hasFeedback && hasError && (
-          <span className="text-error ml-2">⚠️</span>
-        )}
+        <div className="flex items-center">
+          <div className="flex-1">{childrenWithProps}</div>
+          {showFeedback && feedbackStatus && (
+            <FeedbackIcon status={feedbackStatus} />
+          )}
+        </div>
         {(help || fieldErrors.length > 0) && (
-          <label className="label">
+          <label className="label" style={{ animation: hasError ? 'rottay-form-error-slide 0.2s ease-out' : undefined }}>
             <span className={`label-text-alt ${hasError ? 'text-error' : ''}`}>
               {help || fieldErrors[0]}
             </span>

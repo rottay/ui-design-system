@@ -68,6 +68,13 @@ const TimePickerBase = React.forwardRef<unknown, TimePickerProps>((props, ref) =
     cellRender,
   } = props;
 
+  const popupClassNames = popupClassName
+    ? ({ popup: { root: popupClassName } } as const)
+    : undefined;
+  const popupStyles = popupStyle
+    ? ({ popup: { root: popupStyle } } as const)
+    : undefined;
+
   const handleChange = (time: Dayjs | null, timeString: string | string[]) => {
     onChange?.(toDate(time), Array.isArray(timeString) ? timeString[0] : timeString);
   };
@@ -88,8 +95,8 @@ const TimePickerBase = React.forwardRef<unknown, TimePickerProps>((props, ref) =
       status={status}
       placeholder={placeholder}
       placement={placement}
-      popupClassName={popupClassName}
-      popupStyle={popupStyle}
+      classNames={popupClassNames as any}
+      styles={popupStyles as any}
       allowClear={allowClear}
       open={open}
       prefix={prefix}
@@ -148,6 +155,13 @@ const TimeRangePicker = React.forwardRef<unknown, TimeRangePickerProps>((props, 
     renderExtraFooter,
   } = props;
 
+  const popupClassNames = popupClassName
+    ? ({ popup: { root: popupClassName } } as const)
+    : undefined;
+  const popupStyles = popupStyle
+    ? ({ popup: { root: popupStyle } } as const)
+    : undefined;
+
   const handleChange = (times: [Dayjs | null, Dayjs | null] | null, timeStrings: [string, string]) => {
     if (!times) {
       onChange?.(null, timeStrings);
@@ -171,8 +185,8 @@ const TimeRangePicker = React.forwardRef<unknown, TimeRangePickerProps>((props, 
       status={status}
       placeholder={placeholder}
       placement={placement}
-      popupClassName={popupClassName}
-      popupStyle={popupStyle}
+      classNames={popupClassNames as any}
+      styles={popupStyles as any}
       allowClear={allowClear}
       open={open}
       suffixIcon={suffixIcon}

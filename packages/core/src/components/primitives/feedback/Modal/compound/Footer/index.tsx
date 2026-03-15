@@ -15,7 +15,7 @@
  * - CSS custom property theming
  *
  * **Styling via CSS Custom Properties:**
- * - `--modal-footer-border`: Divider border color
+ * - `--ds-modal-footer-border`: Divider border color
  *
  * @example Basic Usage
  * ```tsx
@@ -149,7 +149,7 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
 
       // Visual - optional top border for separation
       borderTop: divider
-        ? '1px solid var(--modal-footer-border, rgba(0, 0, 0, 0.1))'
+        ? '1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1))'
         : 'none',
 
       // Prevent shrinking when content overflows

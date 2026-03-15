@@ -62,6 +62,13 @@ const DatePickerBase = React.forwardRef<unknown, DatePickerProps>((props, ref) =
     cellRender,
   } = props;
 
+  const popupClassNames = popupClassName
+    ? ({ popup: { root: popupClassName } } as const)
+    : undefined;
+  const popupStyles = popupStyle
+    ? ({ popup: { root: popupStyle } } as const)
+    : undefined;
+
   const handleChange = (date: Dayjs | null, dateString: string | string[]) => {
     onChange?.(toDate(date), Array.isArray(dateString) ? dateString[0] : dateString);
   };
@@ -89,8 +96,8 @@ const DatePickerBase = React.forwardRef<unknown, DatePickerProps>((props, ref) =
       status={status}
       placeholder={placeholder}
       placement={placement}
-      popupClassName={popupClassName}
-      popupStyle={popupStyle}
+      classNames={popupClassNames as any}
+      styles={popupStyles as any}
       allowClear={allowClear}
       open={open}
       prefix={prefix}
@@ -153,6 +160,13 @@ const RangePicker = React.forwardRef<unknown, RangePickerProps>((props, ref) => 
     cellRender,
   } = props;
 
+  const popupClassNames = popupClassName
+    ? ({ popup: { root: popupClassName } } as const)
+    : undefined;
+  const popupStyles = popupStyle
+    ? ({ popup: { root: popupStyle } } as const)
+    : undefined;
+
   const handleChange = (dates: [Dayjs | null, Dayjs | null] | null, dateStrings: [string, string]) => {
     if (!dates) {
       onChange?.(null, dateStrings);
@@ -178,8 +192,8 @@ const RangePicker = React.forwardRef<unknown, RangePickerProps>((props, ref) => 
       status={status}
       placeholder={placeholder}
       placement={placement}
-      popupClassName={popupClassName}
-      popupStyle={popupStyle}
+      classNames={popupClassNames as any}
+      styles={popupStyles as any}
       allowClear={allowClear}
       open={open}
       suffixIcon={suffixIcon}

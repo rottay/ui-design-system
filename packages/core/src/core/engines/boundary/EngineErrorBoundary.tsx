@@ -48,6 +48,7 @@
 
 import { Component, ErrorInfo, ReactNode } from 'react';
 import type { EngineName } from '../../types';
+import { errorInDev } from '../../utils/runtime-logger';
 
 export interface EngineErrorBoundaryProps {
   /** Child components to render */
@@ -90,7 +91,7 @@ export class EngineErrorBoundary extends Component<EngineErrorBoundaryProps, Sta
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[EngineErrorBoundary] Engine loading failed:', error);
+    errorInDev('[EngineErrorBoundary] Engine loading failed:', error);
     this.props.onError?.(error, errorInfo);
   }
 
@@ -110,10 +111,10 @@ export class EngineErrorBoundary extends Component<EngineErrorBoundaryProps, Sta
         <div
           style={{
             padding: '16px',
-            color: '#dc2626',
-            background: '#fef2f2',
-            border: '1px solid #fecaca',
-            borderRadius: '4px',
+            color: 'var(--ds-color-error-700)',
+            background: 'var(--ds-color-error-bg)',
+            border: '1px solid var(--ds-color-error-border)',
+            borderRadius: 'var(--ds-radius-sm)',
           }}
         >
           <strong>Engine Error:</strong> Failed to load component.

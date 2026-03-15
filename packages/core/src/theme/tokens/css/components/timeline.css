@@ -11,59 +11,59 @@
      ======================================================================== */
 
   /* Dot sizes */
-  --timeline-dot-size: 12px;
-  --timeline-dot-border-width: 2px;
+  --ds-timeline-dot-size: 12px;
+  --ds-timeline-dot-border-width: 2px;
 
   /* Line settings */
-  --timeline-line-width: 2px;
+  --ds-timeline-line-width: 2px;
 
   /* Item spacing */
-  --timeline-item-padding: 20px;
-  --timeline-dot-offset: 24px;
+  --ds-timeline-item-padding: 20px;
+  --ds-timeline-dot-offset: 24px;
 
   /* ========================================================================
      TIMELINE COLORS - Dot color variants
      ======================================================================== */
 
   /* Preset colors */
-  --timeline-color-blue: #1890ff;
-  --timeline-color-red: #ff4d4f;
-  --timeline-color-green: #52c41a;
-  --timeline-color-gray: #d9d9d9;
+  --ds-timeline-color-blue: #1890ff;
+  --ds-timeline-color-red: #ff4d4f;
+  --ds-timeline-color-green: #52c41a;
+  --ds-timeline-color-gray: #d9d9d9;
 
   /* Semantic colors (reference global tokens) */
-  --timeline-color-primary: var(--color-primary, #1890ff);
-  --timeline-color-success: var(--color-success, #52c41a);
-  --timeline-color-warning: var(--color-warning, #faad14);
-  --timeline-color-error: var(--color-error, #ff4d4f);
+  --ds-timeline-color-primary: var(--ds-color-primary, #1890ff);
+  --ds-timeline-color-success: var(--ds-color-success, #52c41a);
+  --ds-timeline-color-warning: var(--ds-color-warning, #faad14);
+  --ds-timeline-color-error: var(--ds-color-error, #ff4d4f);
 
   /* Line color */
-  --timeline-line-color: var(--color-neutral-200, #e5e7eb);
+  --ds-timeline-line-color: var(--ds-color-neutral-200, #e5e7eb);
 
   /* ========================================================================
      TIMELINE CONTENT - Typography and spacing
      ======================================================================== */
 
   /* Content styling */
-  --timeline-content-font-size: 14px;
-  --timeline-content-line-height: 1.5;
-  --timeline-content-color: var(--color-neutral-700, #374151);
+  --ds-timeline-content-font-size: 14px;
+  --ds-timeline-content-line-height: 1.5;
+  --ds-timeline-content-color: var(--ds-color-neutral-700, #374151);
 
   /* Label styling */
-  --timeline-label-font-size: 12px;
-  --timeline-label-color: var(--color-neutral-500, #6b7280);
+  --ds-timeline-label-font-size: 12px;
+  --ds-timeline-label-color: var(--ds-color-neutral-500, #6b7280);
 
   /* ========================================================================
      TIMELINE PENDING - Loading state
      ======================================================================== */
 
-  --timeline-pending-dot-color: var(--color-primary, #1890ff);
-  --timeline-pending-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --ds-timeline-pending-dot-color: var(--ds-color-primary, #1890ff);
+  --ds-timeline-pending-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   /* ========================================================================
      TIMELINE TRANSITIONS
      ======================================================================== */
 
-  --timeline-transition-duration: 0.2s;
-  --timeline-transition-timing: ease-in-out;
+  --ds-timeline-transition-duration: 0.2s;
+  --ds-timeline-transition-timing: ease-in-out;
 }

@@ -48,6 +48,11 @@
 
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { useOptionalTokens } from '../../../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveTypographyTextStyle,
+} from '../../../../../../core/personality/primitives';
 import type { ParagraphProps } from '../../types';
 import { ClassicParagraph } from '../../engines/classic';
 import { ModernParagraph } from '../../engines/modern';
@@ -93,8 +98,19 @@ const engineMap: Record<
  */
 export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   ({ engine = 'classic', ...props }, ref) => {
+    const tokens = useOptionalTokens();
     const Component = engineMap[engine] || ClassicParagraph;
-    return <Component ref={ref} {...props} />;
+
+    return (
+      <Component
+        ref={ref}
+        {...props}
+        style={mergePersonalityStyle(
+          props.style,
+          tokens ? resolveTypographyTextStyle(tokens, false) : undefined
+        )}
+      />
+    );
   }
 );
 

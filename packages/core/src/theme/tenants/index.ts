@@ -8,7 +8,7 @@ export {
   isValidBranding,
   isValidPlan,
   isValidEngineName,
-  createTenantConfig
+  createTenantConfig as createTenantSchemaConfig,
 } from './schema';
 
 // Defaults
@@ -30,11 +30,15 @@ export type { ResolverOptions } from './resolver';
 export {
   getTenantConfig,
   loadStaticTenantConfig,
+  generateTenantCss,
+  generateTenantCssFile,
+  buildTenantSelector,
   fetchRemoteTenantConfig,
   configureTenantApi,
   clearTenantCache,
   preloadTenantConfig,
 } from './storage';
+export type { GenerateTenantCssOptions } from './storage';
 
 // Registry (known tenants)
 export {

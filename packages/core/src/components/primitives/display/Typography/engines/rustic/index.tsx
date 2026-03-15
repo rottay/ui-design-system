@@ -27,13 +27,13 @@
  * ```tsx
  * import { Typography } from '@rottay/design-system';
  *
- * <Typography.Heading engine="apollo" level="h1">
+ * <Typography.Heading engine="rustic" level="h1">
  *   Lightweight Heading
  * </Typography.Heading>
  * ```
  *
  * @see {@link Typography} for the main component
- * @module Typography/engines/apollo
+ * @module Typography/engines/rustic
  * @category Display
  * @package @rottay/design-system
  */

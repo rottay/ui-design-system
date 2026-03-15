@@ -1,0 +1,645 @@
+/**
+ * Personality CSS Overrides - Rottay Design System
+ *
+ * Cross-engine rules that consume personality CSS custom properties
+ * pushed by SystemCssVariablesBridge via resolvePersonalityCssVariables().
+ *
+ * These rules apply personality tokens to ALL three engines
+ * (Classic/Ant, Modern/DaisyUI, Rustic/Vanilla) via the CSS cascade.
+ * Zero engine file changes required.
+ */
+
+/* ========================================================================
+   CARD PERSONALITY
+   Applies personality-driven shadow, padding, and hover to cards.
+   ======================================================================== */
+
+.ant-card,
+.card:where(:not(.card-compact)),
+[data-engine] .ds-card {
+  box-shadow: var(--ds-card-shadow);
+  transition: box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
+              transform var(--ds-personality-animation-entrance-duration, 300ms),
+              background-color var(--ds-personality-animation-entrance-duration, 300ms);
+}
+
+.ant-card .ant-card-head,
+.card .card-title {
+  padding-inline: var(--ds-card-header-padding);
+}
+
+.ant-card .ant-card-body,
+.card .card-body {
+  padding: var(--ds-card-body-padding);
+}
+
+.ant-card:hover,
+.card:hover:where(:not(.card-compact)),
+[data-engine] .ds-card:hover {
+  box-shadow: var(--ds-card-shadow-hover);
+  transform: var(--ds-card-hover-transform, translateY(0) scale(1));
+  background-color: var(--ds-card-bg-hover);
+}
+
+/* ========================================================================
+   BADGE PERSONALITY
+   Applies personality-driven border-radius to badge indicators.
+   ======================================================================== */
+
+.ant-badge .ant-badge-count,
+.badge,
+[data-engine] .ds-badge {
+  border-radius: var(--ds-badge-radius);
+}
+
+/* ========================================================================
+   TYPOGRAPHY PERSONALITY
+   Applies personality-driven heading weight, spacing, and label casing.
+   ======================================================================== */
+
+h1, h2, h3, h4, h5, h6,
+.ant-typography h1,
+.ant-typography h2,
+.ant-typography h3,
+.ant-typography h4,
+.ant-typography h5,
+.ant-typography h6,
+[data-engine] .ds-heading {
+  font-weight: var(--ds-typography-heading-font-weight);
+  letter-spacing: var(--ds-typography-heading-letter-spacing);
+}
+
+.ant-form-item-label > label,
+.label,
+[data-engine] .ds-label {
+  text-transform: var(--ds-typography-label-transform);
+}
+
+/* ========================================================================
+   BUTTON HOVER PERSONALITY
+   Applies personality-driven hover transform and transition to buttons.
+   ======================================================================== */
+
+.ant-btn,
+.btn,
+[data-engine] .ds-button {
+  transition: transform var(--ds-personality-animation-entrance-duration, 300ms),
+              box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
+              background-color var(--ds-personality-animation-entrance-duration, 300ms),
+              border-color var(--ds-personality-animation-entrance-duration, 300ms),
+              color var(--ds-personality-animation-entrance-duration, 300ms);
+}
+
+.ant-btn:hover,
+.btn:hover,
+[data-engine] .ds-button:hover {
+  transform: var(--ds-button-hover-transform, translateY(0) scale(1));
+}
+
+.ant-btn:active,
+.btn:active,
+[data-engine] .ds-button:active {
+  transform: var(--ds-button-active-transform, scale(0.98));
+}
+
+/* ========================================================================
+   DIVIDER PERSONALITY
+   Applies personality-driven border-style to dividers.
+   ======================================================================== */
+
+.ant-divider,
+.divider,
+[data-engine] .ds-divider {
+  border-style: var(--ds-divider-style);
+  border-color: var(--ds-divider-color);
+}
+
+/* ========================================================================
+   SKELETON PERSONALITY
+   Applies personality-driven animation duration to skeletons.
+   ======================================================================== */
+
+.ant-skeleton .ant-skeleton-content .ant-skeleton-title,
+.ant-skeleton .ant-skeleton-content .ant-skeleton-paragraph > li,
+.skeleton,
+[data-engine] .ds-skeleton {
+  animation-duration: var(--ds-skeleton-animation-duration);
+}
+
+/* ========================================================================
+   MODAL PERSONALITY
+   Applies personality-driven animation timing to modals/drawers.
+   ======================================================================== */
+
+.ant-modal,
+.modal,
+[data-engine] .ds-modal {
+  transition-duration: var(--ds-modal-animation-duration, 300ms);
+  transition-timing-function: var(--ds-modal-animation-timing);
+}
+
+/* ========================================================================
+   PREMIUM BUTTON HOVER (GLOW)
+   Adds a subtle glow effect on primary button hover.
+   ======================================================================== */
+
+.ant-btn-primary:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
+[data-engine] .ds-button-primary:hover:not(:disabled) {
+  box-shadow: var(--ds-card-shadow-hover), 0 0 20px rgba(var(--ds-color-primary-rgb, 99, 102, 241), 0.15);
+}
+
+/* ========================================================================
+   PREMIUM FOCUS RINGS (GLOW + OFFSET RING)
+   Accessible, visually polished focus indicators for buttons and inputs.
+   ======================================================================== */
+
+.ant-btn:focus-visible,
+.btn:focus-visible,
+[data-engine] .ds-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8);
+}
+
+.ant-input:focus-visible,
+.ant-select-focused .ant-select-selector,
+input:focus-visible,
+[data-engine] .ds-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8);
+}
+
+/* ========================================================================
+   PREMIUM MODAL OVERLAY (GLASSMORPHISM)
+   Frosted-glass backdrop and elevated shadow for modals.
+   ======================================================================== */
+
+.ant-modal-mask,
+.modal-backdrop,
+[data-engine] .ds-modal-overlay {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.ant-modal-content,
+.modal-box,
+[data-engine] .ds-modal-content {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* ========================================================================
+   PREMIUM DROPDOWN/SELECT ANIMATION
+   Smooth scale-in entrance for dropdowns, popovers, and selects.
+   ======================================================================== */
+
+.ant-select-dropdown,
+.ant-dropdown,
+.ant-popover-inner,
+[data-engine] .ds-dropdown {
+  animation: ds-dropdown-enter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ds-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* ========================================================================
+   BADGE HOVER INTERACTION
+   Subtle scale-up on badge hover for interactive feel.
+   ======================================================================== */
+
+.ant-badge .ant-badge-count:hover,
+.badge:hover,
+[data-engine] .ds-badge:hover {
+  transform: scale(1.1);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ========================================================================
+   CUSTOM SCROLLBAR STYLING
+   Thin, minimal scrollbars for dropdowns and tables.
+   ======================================================================== */
+
+.ant-select-dropdown::-webkit-scrollbar,
+.ant-table-body::-webkit-scrollbar,
+[data-engine] .ds-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ant-select-dropdown::-webkit-scrollbar-track,
+.ant-table-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ant-select-dropdown::-webkit-scrollbar-thumb,
+.ant-table-body::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-300, #d4d4d8);
+  border-radius: 3px;
+}
+
+.ant-select-dropdown::-webkit-scrollbar-thumb:hover,
+.ant-table-body::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-color-neutral-400, #a1a1aa);
+}
+
+/* ========================================================================
+   INPUT PERSONALITY
+   Applies personality-driven transition timing to text inputs.
+   ======================================================================== */
+
+.ant-input,
+.input,
+[data-engine] .ds-input {
+  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   SELECT PERSONALITY
+   Applies personality-driven transition timing to select triggers.
+   ======================================================================== */
+
+.ant-select .ant-select-selector,
+.select,
+[data-engine] .ds-select {
+  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-select-transition-timing, ease-in-out),
+              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-select-transition-timing, ease-in-out),
+              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-select-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   CHECKBOX PERSONALITY
+   Applies personality-driven animation timing to checkbox state changes.
+   ======================================================================== */
+
+.ant-checkbox .ant-checkbox-inner,
+.checkbox,
+[data-engine] .ds-checkbox {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-checkbox-transition-timing, ease-in-out),
+              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-checkbox-transition-timing, ease-in-out),
+              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-checkbox-transition-timing, ease-in-out);
+}
+
+.ant-checkbox-checked .ant-checkbox-inner::after,
+[data-engine] .ds-checkbox-check {
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.12, 0.4, 0.29, 1.46);
+}
+
+/* ========================================================================
+   RADIO PERSONALITY
+   Applies personality-driven animation timing to radio dot transitions.
+   ======================================================================== */
+
+.ant-radio .ant-radio-inner,
+[data-engine] .ds-radio {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out),
+              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out),
+              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out);
+}
+
+.ant-radio-checked .ant-radio-inner::after,
+[data-engine] .ds-radio-dot {
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.12, 0.4, 0.29, 1.46),
+              opacity var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   TOGGLE / SWITCH PERSONALITY
+   Applies personality-driven slide timing to toggle components.
+   ======================================================================== */
+
+.ant-switch,
+[data-engine] .ds-toggle,
+[data-engine] .ds-switch {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-toggle-transition-timing, ease-in-out),
+              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-toggle-transition-timing, ease-in-out);
+}
+
+.ant-switch-handle,
+[data-engine] .ds-toggle-dot,
+[data-engine] .ds-switch-handle {
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========================================================================
+   SLIDER PERSONALITY
+   Applies personality-driven styling to slider track and thumb.
+   ======================================================================== */
+
+.ant-slider .ant-slider-rail,
+.rottay-slider__rail,
+[data-engine] .ds-slider-rail {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+.ant-slider .ant-slider-track,
+.rottay-slider__track,
+[data-engine] .ds-slider-track {
+  transition: width var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              height var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+.ant-slider .ant-slider-handle,
+.rottay-slider__handle,
+[data-engine] .ds-slider-handle {
+  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              transform var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+.ant-slider .ant-slider-handle:hover,
+.rottay-slider__handle:hover,
+[data-engine] .ds-slider-handle:hover {
+  transform: scale(1.2);
+}
+
+/* ========================================================================
+   DATEPICKER PERSONALITY
+   Applies personality-driven transition and animation to calendar panels.
+   ======================================================================== */
+
+.ant-picker,
+[data-engine] .ds-datepicker {
+  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+.ant-picker-dropdown,
+[data-engine] .ds-datepicker-panel {
+  animation: ds-dropdown-enter var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ant-picker-cell-inner,
+[data-engine] .ds-datepicker-cell {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   TABLE PERSONALITY
+   Applies personality-driven row hover transition and header styling.
+   ======================================================================== */
+
+.ant-table-thead > tr > th,
+[data-engine] .ds-table-header th {
+  font-weight: var(--ds-typography-heading-font-weight, 600);
+  letter-spacing: var(--ds-typography-heading-letter-spacing, normal);
+  text-transform: var(--ds-typography-label-transform, none);
+}
+
+.ant-table-tbody > tr,
+.table tbody tr,
+[data-engine] .ds-table-row {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+.ant-table-tbody > tr:hover > td,
+.table tbody tr:hover,
+[data-engine] .ds-table-row:hover {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   TABS PERSONALITY
+   Applies personality-driven indicator animation to tab navigation.
+   ======================================================================== */
+
+.ant-tabs-ink-bar,
+[data-engine] .ds-tabs-indicator {
+  transition: left var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.35, 0, 0.25, 1),
+              width var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+.ant-tabs-tab,
+[data-engine] .ds-tab {
+  transition: color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   PROGRESS PERSONALITY
+   Applies personality-driven bar animation to progress indicators.
+   ======================================================================== */
+
+.ant-progress-bg,
+.progress,
+[data-engine] .ds-progress-bar {
+  transition: width var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.08, 0.82, 0.17, 1);
+}
+
+.ant-progress-circle-path,
+.radial-progress,
+[data-engine] .ds-progress-circle {
+  transition: stroke-dashoffset var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.08, 0.82, 0.17, 1);
+}
+
+/* ========================================================================
+   TOOLTIP PERSONALITY
+   Applies personality-driven entrance animation to tooltips.
+   ======================================================================== */
+
+.ant-tooltip,
+.tooltip::before,
+.rottay-tooltip,
+[data-engine] .ds-tooltip {
+  animation: ds-tooltip-enter var(--ds-personality-animation-entrance-duration, 150ms) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ds-tooltip-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ========================================================================
+   DRAWER PERSONALITY
+   Applies personality-driven slide timing to drawer panels.
+   ======================================================================== */
+
+.ant-drawer .ant-drawer-content-wrapper,
+.drawer-side,
+.rottay-drawer,
+[data-engine] .ds-drawer {
+  transition: transform var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ant-drawer-mask,
+.drawer-overlay,
+.rottay-drawer-overlay,
+[data-engine] .ds-drawer-overlay {
+  transition: opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ========================================================================
+   ALERT PERSONALITY
+   Applies personality-driven border accent and transition to alerts.
+   ======================================================================== */
+
+.ant-alert,
+.alert,
+.rottay-alert,
+[data-engine] .ds-alert {
+  border-left-width: var(--ds-personality-accent-bar-thickness, 4px);
+  border-left-style: var(--ds-personality-accent-bar-style, solid);
+  transition: opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out),
+              transform var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   TAG PERSONALITY
+   Applies personality-driven border-radius to tags.
+   ======================================================================== */
+
+.ant-tag,
+[data-engine] .ds-tag {
+  border-radius: var(--ds-badge-radius, var(--ds-tag-default-radius));
+  transition: opacity var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   AVATAR PERSONALITY
+   Applies personality-driven border-radius to avatar components.
+   ======================================================================== */
+
+.ant-avatar,
+[data-engine] .ds-avatar {
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+.ant-avatar:hover,
+[data-engine] .ds-avatar:hover {
+  transform: var(--ds-button-hover-transform, scale(1.05));
+}
+
+/* ========================================================================
+   TOAST / MESSAGE / NOTIFICATION PERSONALITY
+   Applies personality-driven entrance animation to feedback overlays.
+   ======================================================================== */
+
+.ant-message-notice,
+.ant-notification-notice,
+.rottay-toast-container > *,
+[data-engine] .ds-toast,
+[data-engine] .ds-message,
+[data-engine] .ds-notification {
+  animation: ds-toast-enter var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ds-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ========================================================================
+   COLLAPSE / ACCORDION PERSONALITY
+   Applies personality-driven expand/collapse animation.
+   ======================================================================== */
+
+.ant-collapse-content,
+.collapse-content,
+[data-engine] .ds-collapse-content {
+  transition: max-height var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1),
+              opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+.ant-collapse-header,
+.collapse-title,
+[data-engine] .ds-collapse-header {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   POPOVER PERSONALITY
+   Applies personality-driven entrance animation to popovers.
+   ======================================================================== */
+
+.ant-popover,
+.popover,
+[data-engine] .ds-popover {
+  animation: ds-dropdown-enter var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ========================================================================
+   PAGINATION PERSONALITY
+   Applies personality-driven transitions to page buttons.
+   ======================================================================== */
+
+.ant-pagination-item,
+.join .btn,
+[data-engine] .ds-pagination-item {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   MENU PERSONALITY
+   Applies personality-driven hover transitions to menu items.
+   ======================================================================== */
+
+.ant-menu-item,
+.menu li > a,
+.menu li > button,
+[data-engine] .ds-menu-item {
+  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
+              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+}
+
+/* ========================================================================
+   SELECTION COLOR
+   Brand-tinted text selection for a cohesive feel.
+   ======================================================================== */
+
+::selection {
+  background-color: var(--ds-color-primary-100, #e0e7ff);
+  color: var(--ds-color-primary-900, #312e81);
+}
+
+/* ========================================================================
+   SMOOTH SCROLL
+   Enables smooth scrolling with reduced-motion respect.
+   ======================================================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Disable all personality animations when reduced-motion is preferred */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

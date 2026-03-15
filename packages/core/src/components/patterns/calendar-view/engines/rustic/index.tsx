@@ -155,7 +155,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                           marginTop: 2,
                           borderRadius: 'var(--ds-radius-xs, 3px)',
                           background: ev.color ?? 'var(--ds-color-primary, #1677ff)',
-                          color: '#fff',
+                          color: 'var(--ds-color-text-on-primary)',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',

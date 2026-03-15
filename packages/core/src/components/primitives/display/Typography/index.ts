@@ -25,12 +25,12 @@
  * - `Typography.Paragraph` - Block-level body text
  *
  * **CSS Custom Properties:**
- * - `--color-text-primary` - Default text color
- * - `--color-text-secondary` - Muted text color
- * - `--color-primary` - Primary accent color
- * - `--color-success` - Success state color
- * - `--color-warning` - Warning state color
- * - `--color-error` - Error state color
+ * - `--ds-color-text-primary` - Default text color
+ * - `--ds-color-text-secondary` - Muted text color
+ * - `--ds-color-primary` - Primary accent color
+ * - `--ds-color-success` - Success state color
+ * - `--ds-color-warning` - Warning state color
+ * - `--ds-color-error` - Error state color
  *
  * @example Compound Pattern
  * ```tsx

@@ -10,7 +10,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { TextareaProps } from '../../types';
 import { TEXTAREA_DEFAULTS } from '../../types';
 
@@ -58,6 +58,20 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
 
   const [charCount, setCharCount] = useState(value?.length || defaultValue?.length || 0);
   const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setCharCount(value.length);
+      return;
+    }
+
+    if (defaultValue !== undefined) {
+      setCharCount(defaultValue.length);
+      return;
+    }
+
+    setCharCount(0);
+  }, [defaultValue, value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;

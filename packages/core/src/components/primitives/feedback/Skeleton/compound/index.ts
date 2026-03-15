@@ -60,3 +60,18 @@ export type { SkeletonTextProps } from './Text';
 
 export { SkeletonButton } from './Button';
 export type { SkeletonButtonProps } from './Button';
+
+export { SkeletonCard } from './Card';
+export type { SkeletonCardProps } from './Card';
+
+export { SkeletonListItem } from './ListItem';
+export type { SkeletonListItemProps } from './ListItem';
+
+export { SkeletonTable } from './Table';
+export type { SkeletonTableProps } from './Table';
+
+export { SkeletonForm } from './FormSkeleton';
+export type { SkeletonFormProps } from './FormSkeleton';
+
+export { SkeletonParagraph } from './Paragraph';
+export type { SkeletonParagraphProps } from './Paragraph';

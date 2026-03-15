@@ -45,7 +45,7 @@ export const ImageSkeleton = forwardRef<HTMLDivElement, ImageSkeletonProps>(
     const skeletonStyles: React.CSSProperties = {
       width: typeof width === 'number' ? `${width}px` : width || '100%',
       height: typeof height === 'number' ? `${height}px` : height || '100%',
-      backgroundColor: 'var(--color-neutral-200, #e5e5e5)',
+      backgroundColor: 'var(--ds-color-neutral-200, #e5e5e5)',
       borderRadius: radiusValue,
       animation: animate ? 'rottayImageSkeletonPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
       ...style,

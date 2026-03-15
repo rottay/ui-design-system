@@ -43,18 +43,11 @@
 import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
 import type { GridProps, GridItemProps, GridGap, ResponsiveValue } from '../../types';
 import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from '../../types';
-
-// Breakpoint values (mobile-first)
-const BREAKPOINTS = {
-  xs: 0,
-  sm: 576,
-  md: 768,
-  lg: 992,
-  xl: 1200,
-  '2xl': 1400,
-} as const;
-
-type BreakpointKey = keyof typeof BREAKPOINTS;
+import {
+  generateResponsiveGridCSS,
+  isResponsiveGridValue,
+  type ResponsiveGridTemplateValue,
+} from '../../shared/responsive';
 
 // Inline utility functions
 const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
@@ -63,58 +56,13 @@ const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   return GAP_MAP[gap as GridGap] || String(gap);
 };
 
-const resolveColumns = (columns: number | string | 'auto' | 'none' | undefined): string | undefined => {
+const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): string | undefined => {
   if (columns === undefined) return undefined;
   if (columns === 'auto') return 'auto';
   if (columns === 'none') return 'none';
   if (typeof columns === 'number') return `repeat(${columns}, 1fr)`;
   if (typeof columns === 'string') return columns; // Support for custom templates like '2fr 1fr'
   return undefined;
-};
-
-// Check if value is a responsive object
-const isResponsiveValue = (value: unknown): value is ResponsiveValue<number | string> => {
-  if (typeof value !== 'object' || value === null) return false;
-  const keys = Object.keys(value);
-  return keys.some(k => ['xs', 'sm', 'md', 'lg', 'xl', '2xl'].includes(k));
-};
-
-// Generate responsive CSS for columns
-const generateResponsiveCSS = (
-  gridId: string,
-  columns: ResponsiveValue<number | string>,
-  rows?: ResponsiveValue<number | string>
-): string => {
-  const breakpointOrder: BreakpointKey[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
-  let css = '';
-
-  // Mobile-first: start with xs (no media query needed for base)
-  const xsColumns = columns.xs;
-  if (xsColumns !== undefined) {
-    css += `[data-grid-id="${gridId}"] { grid-template-columns: ${resolveColumns(xsColumns)}; }\n`;
-  }
-
-  // Add media queries for larger breakpoints
-  for (const bp of breakpointOrder) {
-    if (bp === 'xs') continue; // Already handled as base
-    const colValue = columns[bp as keyof ResponsiveValue<number | string>];
-    const rowValue = rows ? rows[bp as keyof ResponsiveValue<number | string>] : undefined;
-
-    if (colValue !== undefined || rowValue !== undefined) {
-      css += `@media (min-width: ${BREAKPOINTS[bp]}px) {\n`;
-      css += `  [data-grid-id="${gridId}"] {\n`;
-      if (colValue !== undefined) {
-        css += `    grid-template-columns: ${resolveColumns(colValue)};\n`;
-      }
-      if (rowValue !== undefined) {
-        css += `    grid-template-rows: ${resolveColumns(rowValue)};\n`;
-      }
-      css += `  }\n`;
-      css += `}\n`;
-    }
-  }
-
-  return css;
 };
 
 const buildGridStyles = (props: GridProps, skipColumns = false): CSSProperties => {
@@ -128,14 +76,14 @@ const buildGridStyles = (props: GridProps, skipColumns = false): CSSProperties =
 
   if (templateColumns) {
     computedStyle.gridTemplateColumns = templateColumns;
-  } else if (!skipColumns && columns !== undefined && !isResponsiveValue(columns)) {
-    computedStyle.gridTemplateColumns = resolveColumns(columns as number | 'auto' | 'none');
+  } else if (!skipColumns && columns !== undefined && !isResponsiveGridValue(columns)) {
+    computedStyle.gridTemplateColumns = resolveColumns(columns as ResponsiveGridTemplateValue);
   }
 
   if (templateRows) {
     computedStyle.gridTemplateRows = templateRows;
-  } else if (!skipColumns && rows !== undefined && !isResponsiveValue(rows)) {
-    computedStyle.gridTemplateRows = resolveColumns(rows as number | 'auto' | 'none');
+  } else if (!skipColumns && rows !== undefined && !isResponsiveGridValue(rows)) {
+    computedStyle.gridTemplateRows = resolveColumns(rows as ResponsiveGridTemplateValue);
   }
 
   if (templateAreas) computedStyle.gridTemplateAreas = templateAreas;
@@ -195,6 +143,9 @@ const ClassicGrid = forwardRef<HTMLElement, GridProps>(
       children,
       columns,
       rows,
+      id,
+      'aria-label': ariaLabel,
+      'data-testid': dataTestId,
     } = props;
 
     // Generate unique ID for responsive grids
@@ -202,8 +153,8 @@ const ClassicGrid = forwardRef<HTMLElement, GridProps>(
     const gridId = `grid-${reactId.replace(/:/g, '')}`;
 
     // Check if we need responsive CSS
-    const hasResponsiveColumns = isResponsiveValue(columns);
-    const hasResponsiveRows = isResponsiveValue(rows);
+    const hasResponsiveColumns = isResponsiveGridValue(columns);
+    const hasResponsiveRows = isResponsiveGridValue(rows);
     const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
 
     // Build styles - skip columns if they're responsive (handled by CSS)
@@ -211,10 +162,11 @@ const ClassicGrid = forwardRef<HTMLElement, GridProps>(
 
     // Generate responsive CSS if needed
     const responsiveCSS = needsResponsiveCSS
-      ? generateResponsiveCSS(
+      ? generateResponsiveGridCSS(
           gridId,
-          hasResponsiveColumns ? (columns as ResponsiveValue<number | string>) : { xs: columns as number },
-          hasResponsiveRows ? (rows as ResponsiveValue<number | string>) : undefined
+          resolveColumns,
+          hasResponsiveColumns ? (columns as ResponsiveValue<ResponsiveGridTemplateValue>) : undefined,
+          hasResponsiveRows ? (rows as ResponsiveValue<ResponsiveGridTemplateValue>) : undefined
         )
       : null;
 
@@ -231,6 +183,9 @@ const ClassicGrid = forwardRef<HTMLElement, GridProps>(
             ref: ref as Ref<HTMLElement>,
             className: `rottay-grid rottay-grid--classic ${className}`.trim(),
             style: computedStyle,
+            id,
+            'aria-label': ariaLabel,
+            'data-testid': dataTestId,
             'data-component': 'grid',
             'data-grid-id': needsResponsiveCSS ? gridId : undefined,
           },

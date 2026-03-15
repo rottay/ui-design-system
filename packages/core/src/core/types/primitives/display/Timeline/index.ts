@@ -105,23 +105,23 @@ export const TIMELINE_DEFAULTS = {
  * Color mapping for timeline dots to CSS values.
  */
 export const TIMELINE_COLOR_MAP: Record<string, string> = {
-  blue: '#1890ff',
-  red: '#ff4d4f',
-  green: '#52c41a',
-  gray: '#d9d9d9',
-  primary: 'var(--color-primary)',
-  success: 'var(--color-success)',
-  warning: 'var(--color-warning)',
-  error: 'var(--color-error)',
+  blue: 'var(--ds-color-info)',
+  red: 'var(--ds-color-error)',
+  green: 'var(--ds-color-success)',
+  gray: 'var(--ds-color-border-secondary)',
+  primary: 'var(--ds-color-primary)',
+  success: 'var(--ds-color-success)',
+  warning: 'var(--ds-color-warning)',
+  error: 'var(--ds-color-error)',
 };
 
 /**
  * Size values for timeline elements using CSS variables.
  */
 export const TIMELINE_SIZE_MAP = {
-  dotSize: 'var(--timeline-dot-size)',
-  dotBorderWidth: 'var(--timeline-dot-border-width)',
-  lineWidth: 'var(--timeline-line-width)',
-  itemPadding: 'var(--timeline-item-padding)',
-  dotOffset: 'var(--timeline-dot-offset)',
+  dotSize: 'var(--ds-timeline-dot-size)',
+  dotBorderWidth: 'var(--ds-timeline-dot-border-width)',
+  lineWidth: 'var(--ds-timeline-line-width)',
+  itemPadding: 'var(--ds-timeline-item-padding)',
+  dotOffset: 'var(--ds-timeline-dot-offset)',
 } as const;

@@ -178,7 +178,7 @@ export const WithAction: Story = {
       notification.open({
         message: 'Action Required',
         description: 'Click the button to perform an action.',
-        btn: (
+        actions: (
           <button
             onClick={() => {
               notification.destroy();

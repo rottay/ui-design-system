@@ -15,6 +15,8 @@ let tenantLoadedCallbacks: Map<string, () => void> = new Map();
 
 // Track timeouts for cleanup
 let pendingTimeouts: NodeJS.Timeout[] = [];
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
 
 // Test component that uses the theme hook
 function TestConsumer() {
@@ -37,6 +39,8 @@ describe('ThemeProvider', () => {
     linkBehavior = 'success';
     tenantLoadedCallbacks.clear();
     pendingTimeouts = [];
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Mock document.createElement for link elements
     document.createElement = vi.fn((tagName: string) => {
@@ -68,6 +72,8 @@ describe('ThemeProvider', () => {
     // Clean up DOM
     document.head.innerHTML = '';
     document.createElement = originalCreateElement;
+    consoleErrorSpy.mockRestore();
+    consoleWarnSpy.mockRestore();
     vi.clearAllMocks();
   });
 
@@ -122,15 +128,9 @@ describe('ThemeProvider', () => {
   });
 
   it('throws error when useThemeContext used outside provider', () => {
-    // Suppress console.error for this test
-    const originalError = console.error;
-    console.error = vi.fn();
-
     expect(() => {
       render(<TestConsumer />);
     }).toThrow('useThemeContext must be used within ThemeProvider');
-
-    console.error = originalError;
   });
 
   it('calls onError callback when theme fails to load', async () => {
@@ -233,7 +233,7 @@ describe('ThemeProvider', () => {
       () => {
         const emergencyStyle = document.getElementById('rottay-emergency-tokens');
         expect(emergencyStyle).toBeTruthy();
-        expect(emergencyStyle?.textContent).toContain('--color-primary-500');
+        expect(emergencyStyle?.textContent).toContain('--ds-color-primary-500');
       },
       { timeout: 6000 }
     );
@@ -242,6 +242,7 @@ describe('ThemeProvider', () => {
   it('applies branding CSS variables', async () => {
     const branding = {
       primaryColor: '#FF0000',
+      secondaryColor: '#0000FF',
       accentColor: '#00FF00',
     };
 
@@ -252,11 +253,15 @@ describe('ThemeProvider', () => {
     );
 
     await waitFor(() => {
-      const primaryColor = document.documentElement.style.getPropertyValue('--tenant-primary');
-      const accentColor = document.documentElement.style.getPropertyValue('--tenant-accent');
+      const primaryColor = document.documentElement.style.getPropertyValue('--ds-color-primary');
+      const secondaryColor = document.documentElement.style.getPropertyValue('--ds-color-secondary');
+      const accentColor = document.documentElement.style.getPropertyValue('--ds-color-accent');
+      const primaryAlpha = document.documentElement.style.getPropertyValue('--ds-color-alpha-primary-10');
 
       expect(primaryColor).toBe('#FF0000');
+      expect(secondaryColor).toBe('#0000FF');
       expect(accentColor).toBe('#00FF00');
+      expect(primaryAlpha).toBe('rgba(255, 0, 0, 0.10)');
     });
   });
 
@@ -275,6 +280,20 @@ describe('ThemeProvider', () => {
         const link = links[0] as HTMLLinkElement;
         expect(link.href).toContain('cdn.example.com');
       }
+    });
+  });
+
+  it('syncs dark theme state to document attributes and color scheme', async () => {
+    render(
+      <ThemeProvider theme="dark">
+        <TestConsumer />
+      </ThemeProvider>
+    );
+
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+      expect(document.documentElement.classList.contains('dark')).toBe(true);
+      expect(document.documentElement.style.colorScheme).toBe('dark');
     });
   });
 });

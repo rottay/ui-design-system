@@ -50,9 +50,14 @@
 
 'use client';
 
-import React, { forwardRef, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { GridProps, GridItemProps, GridGap } from '../../types';
+import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
+import type { GridProps, GridItemProps, GridGap, ResponsiveValue } from '../../types';
 import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from '../../types';
+import {
+  generateResponsiveGridCSS,
+  isResponsiveGridValue,
+  type ResponsiveGridTemplateValue,
+} from '../../shared/responsive';
 
 // Inline utility functions
 const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
@@ -61,15 +66,16 @@ const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   return GAP_MAP[gap as GridGap] || String(gap);
 };
 
-const resolveColumns = (columns: number | 'auto' | 'none' | undefined): string | undefined => {
+const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): string | undefined => {
   if (columns === undefined) return undefined;
   if (columns === 'auto') return 'auto';
   if (columns === 'none') return 'none';
   if (typeof columns === 'number') return `repeat(${columns}, 1fr)`;
+  if (typeof columns === 'string') return columns;
   return undefined;
 };
 
-const buildGridStyles = (props: GridProps): CSSProperties => {
+const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSProperties => {
   const {
     columns, rows, gap, spacing, columnGap, rowGap, templateColumns, templateRows,
     templateAreas, autoFlow, autoColumns, autoRows, alignItems, justifyItems,
@@ -78,9 +84,9 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   const effectiveGap = gap ?? spacing ?? GRID_DEFAULTS.gap;
   const computedStyle: CSSProperties = { display: inline ? 'inline-grid' : 'grid', ...style };
   if (templateColumns) computedStyle.gridTemplateColumns = templateColumns;
-  else if (columns !== undefined && typeof columns !== 'object') computedStyle.gridTemplateColumns = resolveColumns(columns as number | 'auto' | 'none');
+  else if (!skipResponsiveTemplate && columns !== undefined && !isResponsiveGridValue(columns)) computedStyle.gridTemplateColumns = resolveColumns(columns as ResponsiveGridTemplateValue);
   if (templateRows) computedStyle.gridTemplateRows = templateRows;
-  else if (rows !== undefined && typeof rows !== 'object') computedStyle.gridTemplateRows = resolveColumns(rows as number | 'auto' | 'none');
+  else if (!skipResponsiveTemplate && rows !== undefined && !isResponsiveGridValue(rows)) computedStyle.gridTemplateRows = resolveColumns(rows as ResponsiveGridTemplateValue);
   if (templateAreas) computedStyle.gridTemplateAreas = templateAreas;
   const resolvedGap = resolveGap(effectiveGap);
   if (resolvedGap) computedStyle.gap = resolvedGap;
@@ -135,21 +141,48 @@ const RusticGrid = forwardRef<HTMLElement, GridProps>(
       as: Component = GRID_DEFAULTS.as,
       className = '',
       children,
+      columns,
+      rows,
+      id,
+      'aria-label': ariaLabel,
+      'data-testid': dataTestId,
     } = props;
 
-    const computedStyle = buildGridStyles(props);
+    const reactId = useId();
+    const gridId = `grid-${reactId.replace(/:/g, '')}`;
+    const hasResponsiveColumns = isResponsiveGridValue(columns);
+    const hasResponsiveRows = isResponsiveGridValue(rows);
+    const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
+    const computedStyle = buildGridStyles(props, needsResponsiveCSS);
+    const responsiveCSS = needsResponsiveCSS
+      ? generateResponsiveGridCSS(
+          gridId,
+          resolveColumns,
+          hasResponsiveColumns ? (columns as ResponsiveValue<ResponsiveGridTemplateValue>) : undefined,
+          hasResponsiveRows ? (rows as ResponsiveValue<ResponsiveGridTemplateValue>) : undefined
+        )
+      : null;
 
     const ElementType = Component as ElementType;
 
-    return React.createElement(
-      ElementType,
-      {
-        ref: ref as Ref<HTMLElement>,
-        className: `rottay-grid rottay-grid--rustic ${className}`.trim(),
-        style: computedStyle,
-        'data-component': 'grid',
-      },
-      children
+    return (
+      <>
+        {responsiveCSS && <style dangerouslySetInnerHTML={{ __html: responsiveCSS }} />}
+        {React.createElement(
+          ElementType,
+          {
+            ref: ref as Ref<HTMLElement>,
+            className: `rottay-grid rottay-grid--rustic ${className}`.trim(),
+            style: computedStyle,
+            id,
+            'aria-label': ariaLabel,
+            'data-testid': dataTestId,
+            'data-component': 'grid',
+            'data-grid-id': needsResponsiveCSS ? gridId : undefined,
+          },
+          children
+        )}
+      </>
     );
   }
 );

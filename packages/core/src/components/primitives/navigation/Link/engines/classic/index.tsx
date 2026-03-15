@@ -67,12 +67,12 @@ const { Link: AntLink } = Typography;
  * Used to apply custom colors while leveraging Ant Design's Link component.
  */
 const typeColorMap: Record<string, string> = {
-  default: '#1890ff',
-  primary: '#1677ff',
-  secondary: '#722ed1',
-  success: '#52c41a',
-  warning: '#faad14',
-  danger: '#ff4d4f',
+  default: 'var(--ds-color-link)',
+  primary: 'var(--ds-color-primary)',
+  secondary: 'var(--ds-color-secondary)',
+  success: 'var(--ds-color-success)',
+  warning: 'var(--ds-color-warning)',
+  danger: 'var(--ds-color-error)',
 };
 
 // ============================================================================

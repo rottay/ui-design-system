@@ -17,8 +17,8 @@ export const GlassCard: React.FC<GlassCardProps> = ({
       style={{
         backdropFilter: `blur(var(--ds-glass-blur, ${blur}px))`,
         WebkitBackdropFilter: `blur(var(--ds-glass-blur, ${blur}px))`,
-        background: `var(--ds-glass-bg, rgba(255, 255, 255, ${bgOpacity}))`,
-        border: `1px solid var(--ds-glass-border, rgba(255, 255, 255, ${borderOpacity}))`,
+        background: `var(--ds-glass-bg, var(--ds-color-alpha-white-10, rgba(255, 255, 255, ${bgOpacity})))`,
+        border: `1px solid var(--ds-glass-border, var(--ds-color-alpha-white-20, rgba(255, 255, 255, ${borderOpacity})))`,
         borderRadius: 'var(--ds-radius-lg, 12px)',
         position: 'relative',
         overflow: 'hidden',

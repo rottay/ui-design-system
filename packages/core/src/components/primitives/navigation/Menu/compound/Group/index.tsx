@@ -98,10 +98,10 @@ export function MenuGroup({
    * Title header styles using CSS variables.
    */
   const titleStyle: CSSProperties = {
-    padding: 'var(--menu-group-title-padding, 8px 16px 4px)',
-    fontSize: 'var(--menu-group-title-font-size, 12px)',
-    fontWeight: 'var(--menu-group-title-font-weight, 600)',
-    color: 'var(--menu-group-title-color, rgba(0, 0, 0, 0.45))',
+    padding: 'var(--ds-menu-group-title-padding, 8px 16px 4px)',
+    fontSize: 'var(--ds-menu-group-title-font-size, 12px)',
+    fontWeight: 'var(--ds-menu-group-title-font-weight, 600)',
+    color: 'var(--ds-menu-group-title-color, var(--ds-color-text-muted))',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     userSelect: 'none',

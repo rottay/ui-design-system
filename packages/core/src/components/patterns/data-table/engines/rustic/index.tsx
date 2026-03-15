@@ -8,6 +8,9 @@ import React, { useMemo, useState, useCallback } from 'react';
 import type { DataTablePatternProps } from '../../types';
 import { resolveAccessor, resolveRowKey } from '../../types';
 
+const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+
 const styles = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
@@ -17,14 +20,17 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '1rem',
+    marginBottom: 'var(--ds-card-body-padding, 1rem)',
     gap: '0.75rem',
+    paddingBottom: '0.75rem',
+    borderBottom: '1px solid var(--ds-color-neutral-100)',
   } as React.CSSProperties,
   bulkBar: {
     display: 'flex',
     alignItems: 'center',
     gap: '0.5rem',
     fontSize: 'var(--ds-font-size-sm)',
+    animation: `ds-bulk-slide-down ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   bulkBtn: {
     padding: '0.25rem 0.75rem',
@@ -33,11 +39,13 @@ const styles = {
     background: 'transparent',
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm)',
+    transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   tableWrap: {
     overflowX: 'auto' as const,
     border: '1px solid var(--ds-color-neutral-200)',
     borderRadius: 'var(--ds-radius-md)',
+    position: 'relative' as const,
   } as React.CSSProperties,
   table: {
     width: '100%',
@@ -47,30 +55,62 @@ const styles = {
   th: {
     padding: '0.75rem 1rem',
     textAlign: 'left' as const,
-    fontWeight: 600,
+    fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
     fontSize: 'var(--ds-font-size-xs)',
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
+    textTransform: 'var(--ds-typography-label-transform, uppercase)' as unknown as React.CSSProperties['textTransform'],
+    letterSpacing: 'var(--ds-typography-heading-letter-spacing, 0.05em)',
     color: 'var(--ds-color-neutral-500)',
     borderBottom: '1px solid var(--ds-color-neutral-200)',
+    borderRight: '1px solid var(--ds-color-neutral-100)',
     background: 'var(--ds-color-neutral-50)',
     whiteSpace: 'nowrap' as const,
     userSelect: 'none' as const,
   } as React.CSSProperties,
+  thLast: {
+    borderRight: 'none',
+  } as React.CSSProperties,
   td: {
     padding: '0.75rem 1rem',
     borderBottom: '1px solid var(--ds-color-neutral-100)',
+    transition: `background-color ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   tdCompact: {
     padding: '0.375rem 0.75rem',
     borderBottom: '1px solid var(--ds-color-neutral-100)',
+    transition: `background-color ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   empty: {
-    padding: '3rem',
+    padding: '4rem 2rem',
     textAlign: 'center' as const,
     color: 'var(--ds-color-neutral-400)',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 200,
+    fontSize: 'var(--ds-font-size-sm)',
   } as React.CSSProperties,
-  loading: {
+  loadingOverlay: {
+    position: 'absolute' as const,
+    inset: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'var(--ds-table-loading-overlay-bg, var(--ds-modal-loading-overlay-bg))',
+    backdropFilter: 'blur(2px)',
+    WebkitBackdropFilter: 'blur(2px)',
+    zIndex: 5,
+    borderRadius: 'var(--ds-radius-md)',
+  } as React.CSSProperties,
+  loadingSpinner: {
+    width: 28,
+    height: 28,
+    border: '3px solid var(--ds-color-neutral-200)',
+    borderTopColor: 'var(--ds-color-primary-500)',
+    borderRadius: '50%',
+    animation: 'ds-spin 0.6s linear infinite',
+  } as React.CSSProperties,
+  loadingFallback: {
     padding: '3rem',
     textAlign: 'center' as const,
     color: 'var(--ds-color-neutral-400)',
@@ -90,6 +130,7 @@ const styles = {
     background: 'var(--ds-color-neutral-50)',
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm)',
+    transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   checkbox: {
     width: 16,
@@ -102,6 +143,7 @@ const styles = {
     cursor: 'pointer',
     padding: '0.25rem',
     color: 'var(--ds-color-neutral-500)',
+    transition: `color ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
 };
 
@@ -189,7 +231,13 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
                   style={{
                     ...styles.bulkBtn,
                     ...(action.variant === 'danger' ? { color: 'var(--ds-color-error-600)', borderColor: 'var(--ds-color-error-300)' } : {}),
-                    ...(action.variant === 'primary' ? { background: 'var(--ds-color-primary-500)', color: '#fff', borderColor: 'var(--ds-color-primary-500)' } : {}),
+                    ...(action.variant === 'primary'
+                      ? {
+                          background: 'var(--ds-color-primary-500)',
+                          color: 'var(--ds-color-text-on-primary)',
+                          borderColor: 'var(--ds-color-primary-500)',
+                        }
+                      : {}),
                   }}
                   disabled={action.disabled}
                   onClick={() => {
@@ -206,8 +254,16 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
       )}
 
       <div style={{ ...styles.tableWrap, ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}), ...(bordered ? {} : { border: 'none' }) }}>
-        {loading ? (
-          <div style={styles.loading}>Loading...</div>
+        <style>{`@keyframes ds-spin { to { transform: rotate(360deg); } } @keyframes ds-bulk-slide-down { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+        {loading && data.length > 0 && (
+          <div style={styles.loadingOverlay} role="status" aria-label="Loading">
+            <div style={styles.loadingSpinner} aria-hidden="true" />
+          </div>
+        )}
+        {loading && data.length === 0 ? (
+          <div style={styles.loadingFallback} role="status" aria-label="Loading">
+            <div style={{ ...styles.loadingSpinner, margin: '0 auto' }} aria-hidden="true" />
+          </div>
         ) : data.length === 0 ? (
           <div style={styles.empty}>{emptyState ?? 'No data'}</div>
         ) : (
@@ -225,11 +281,12 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
                   </th>
                 )}
                 {expandedRow && <th style={{ ...styles.th, width: 36 }} />}
-                {visibleColumns.map((col) => (
+                {visibleColumns.map((col, colIdx) => (
                   <th
                     key={col.key}
                     style={{
                       ...styles.th,
+                      ...(colIdx === visibleColumns.length - 1 && !actions ? styles.thLast : {}),
                       width: col.width,
                       textAlign: col.align ?? 'left',
                       cursor: col.sortable ? 'pointer' : undefined,
@@ -243,7 +300,7 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
                     )}
                   </th>
                 ))}
-                {actions && <th style={{ ...styles.th, width: 'auto', textAlign: 'right' }} />}
+                {actions && <th style={{ ...styles.th, ...styles.thLast, width: 'auto', textAlign: 'right' }} />}
               </tr>
             </thead>
             <tbody>

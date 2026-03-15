@@ -24,13 +24,13 @@
  *
  * **Multi-Tenant Theming:**
  * Modal appearance can be customized per tenant via CSS custom properties:
- * - `--modal-title-font-size`: Title text size
- * - `--modal-title-font-weight`: Title weight
- * - `--modal-title-color`: Title color
- * - `--modal-body-color`: Body text color
- * - `--modal-close-color`: Close button color
- * - `--modal-header-border`: Header border color
- * - `--modal-footer-border`: Footer border color
+ * - `--ds-modal-title-font-size`: Title text size
+ * - `--ds-modal-title-font-weight`: Title weight
+ * - `--ds-modal-title-color`: Title color
+ * - `--ds-modal-body-color`: Body text color
+ * - `--ds-modal-close-color`: Close button color
+ * - `--ds-modal-header-border`: Header border color
+ * - `--ds-modal-footer-border`: Footer border color
  *
  * @example Basic Usage
  * ```tsx
@@ -117,8 +117,8 @@
  * ```tsx
  * // Tenant-specific modal styling
  * <div style={{
- *   '--modal-title-color': 'var(--tenant-primary)',
- *   '--modal-header-border': 'var(--tenant-border)'
+ *   '--ds-modal-title-color': 'var(--ds-color-primary)',
+ *   '--ds-modal-header-border': 'var(--tenant-border)'
  * }}>
  *   <Modal open={open} onClose={onClose} title="Branded Modal">
  *     Content with tenant-specific theming

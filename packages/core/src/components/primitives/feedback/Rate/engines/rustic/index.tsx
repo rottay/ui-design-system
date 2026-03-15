@@ -99,7 +99,7 @@ const createStyles = (
     /** Container styles */
     container: {
       display: 'inline-flex',
-      gap: 'var(--rate-gap, 0.25rem)',
+      gap: 'var(--ds-rate-gap, 0.25rem)',
       alignItems: 'center',
     } as React.CSSProperties,
 

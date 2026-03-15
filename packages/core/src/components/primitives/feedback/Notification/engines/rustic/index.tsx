@@ -64,6 +64,7 @@ import type {
   NotificationPlacement,
 } from '../../types';
 import { NOTIFICATION_DEFAULTS, NOTIFICATION_ICONS } from '../../types';
+import { warnOnceInDev } from '../../../../../../core/utils/runtime-logger';
 
 // ============================================================================
 // Internal Types
@@ -162,10 +163,11 @@ const styles = {
       gap: '12px',
       padding: 'var(--ds-notification-padding, 16px 24px)',
       borderRadius: 'var(--ds-notification-radius, 8px)',
-      backgroundColor: 'var(--ds-notification-bg, #fff)',
+      backgroundColor: 'var(--ds-notification-bg, var(--ds-color-bg-elevated, #fff))',
       boxShadow: 'var(--ds-notification-shadow, 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05))',
       pointerEvents: 'auto' as const,
-      animation: 'notificationSlideIn 0.3s ease-out',
+      animation:
+        'notificationSlideIn var(--ds-notification-enter-duration, 240ms) var(--ds-notification-enter-easing, cubic-bezier(0.22, 1, 0.36, 1))',
       minWidth: 'var(--ds-notification-min-width, 300px)',
     } as React.CSSProperties,
     success: { borderLeft: '4px solid var(--ds-notification-success-color, var(--ds-color-success-500, #52c41a))' },
@@ -238,7 +240,7 @@ const styles = {
     color: 'var(--ds-notification-close-color, rgba(0, 0, 0, 0.45))',
     fontSize: '14px',
     lineHeight: 1,
-    transition: 'color 0.2s',
+    transition: 'color var(--ds-duration-fast, 200ms)',
     marginLeft: '8px',
   } as React.CSSProperties,
 };
@@ -268,7 +270,7 @@ const injectStyles = () => {
     @keyframes notificationSlideIn {
       from {
         opacity: 0;
-        transform: translateX(100%);
+        transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
       }
       to {
         opacity: 1;
@@ -282,7 +284,7 @@ const injectStyles = () => {
       }
       to {
         opacity: 0;
-        transform: translateX(100%);
+        transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
       }
     }
   `;
@@ -378,7 +380,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         icon: config.icon,
         className: config.className,
         style: config.style,
-        btn: config.btn,
+        actions: config.actions,
         closeIcon: config.closeIcon,
         closable: config.closable ?? NOTIFICATION_DEFAULTS.closable,
         placement: config.placement || placement,
@@ -470,13 +472,17 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
           role="log"
           aria-live="polite"
         >
-          {items.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              {...notification}
-              onRemove={removeNotification}
-            />
-          ))}
+          {items.map((notification) => {
+            const { key: _notificationKey, ...notificationProps } = notification;
+
+            return (
+              <NotificationItem
+                key={notification.id}
+                {...notificationProps}
+                onRemove={removeNotification}
+              />
+            );
+          })}
         </div>
       ))}
     </NotificationContext.Provider>
@@ -582,7 +588,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   icon,
   className = '',
   style,
-  btn,
+  actions,
   closeIcon,
   closable = NOTIFICATION_DEFAULTS.closable,
   onRemove,
@@ -623,7 +629,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     setTimeout(() => {
       onRemove?.(id);
       onClose?.();
-    }, 300);
+    }, 240);
   };
 
   // ========================================================================
@@ -655,7 +661,12 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   const notificationStyle: React.CSSProperties = {
     ...styles.notification.base,
     ...styles.notification[type],
-    ...(isExiting ? { animation: 'notificationSlideOut 0.3s ease-out forwards' } : {}),
+    ...(isExiting
+      ? {
+          animation:
+            'notificationSlideOut var(--ds-notification-exit-duration, 180ms) var(--ds-notification-exit-easing, cubic-bezier(0.4, 0, 1, 1)) forwards',
+        }
+      : {}),
     cursor: onClick ? 'pointer' : 'default',
     ...style,
   };
@@ -684,7 +695,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         {description && <div style={styles.description}>{description}</div>}
 
         {/* Action Button */}
-        {btn && <div style={styles.btnContainer}>{btn}</div>}
+        {actions && <div style={styles.btnContainer}>{actions}</div>}
       </div>
 
       {/* Close Button */}
@@ -737,12 +748,12 @@ NotificationItem.displayName = 'NotificationItem.Rustic';
  * ```
  */
 export const notification: NotificationInstance = {
-  success: () => console.warn('Rustic notification: Please use NotificationProvider and useNotification hook'),
-  error: () => console.warn('Rustic notification: Please use NotificationProvider and useNotification hook'),
-  info: () => console.warn('Rustic notification: Please use NotificationProvider and useNotification hook'),
-  warning: () => console.warn('Rustic notification: Please use NotificationProvider and useNotification hook'),
-  open: () => console.warn('Rustic notification: Please use NotificationProvider and useNotification hook'),
-  destroy: () => console.warn('Rustic notification: Please use NotificationProvider and useNotification hook'),
+  success: () => warnOnceInDev('notification-rustic:provider-required', 'Rustic notification: Please use NotificationProvider and useNotification hook'),
+  error: () => warnOnceInDev('notification-rustic:provider-required', 'Rustic notification: Please use NotificationProvider and useNotification hook'),
+  info: () => warnOnceInDev('notification-rustic:provider-required', 'Rustic notification: Please use NotificationProvider and useNotification hook'),
+  warning: () => warnOnceInDev('notification-rustic:provider-required', 'Rustic notification: Please use NotificationProvider and useNotification hook'),
+  open: () => warnOnceInDev('notification-rustic:provider-required', 'Rustic notification: Please use NotificationProvider and useNotification hook'),
+  destroy: () => warnOnceInDev('notification-rustic:provider-required', 'Rustic notification: Please use NotificationProvider and useNotification hook'),
 };
 
 // ============================================================================

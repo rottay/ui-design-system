@@ -33,6 +33,10 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       style,
     } = props;
 
+    const popupClassNames = popupClassName
+      ? ({ popup: { root: popupClassName } } as const)
+      : undefined;
+
     return (
       <div ref={ref} className={className} style={style}>
         <AntAutoComplete
@@ -49,11 +53,11 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           autoFocus={autoFocus}
           defaultOpen={defaultOpen}
           open={open}
-          onDropdownVisibleChange={onDropdownVisibleChange}
+          onOpenChange={onDropdownVisibleChange}
           size={size}
           status={status}
           notFoundContent={notFoundContent}
-          popupClassName={popupClassName}
+          classNames={popupClassNames as any}
           popupMatchSelectWidth={popupMatchSelectWidth}
           style={{ width: '100%' }}
         />

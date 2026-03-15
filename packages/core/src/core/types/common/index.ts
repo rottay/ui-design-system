@@ -52,6 +52,10 @@ export interface BaseComponentProps {
   id?: string;
   /** Data attributes para testing */
   'data-testid'?: string;
+  /** Accessible label for non-textual or landmark-style containers */
+  'aria-label'?: string;
+  /** Accessible description relationship for richer semantics */
+  'aria-describedby'?: string;
 }
 
 /**

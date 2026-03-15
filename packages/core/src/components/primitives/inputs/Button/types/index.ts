@@ -19,9 +19,9 @@
  *
  * **CSS Custom Properties:**
  * The type definitions include mappings to CSS variables for consistent theming:
- * - Size: `--button-{size}-height`, `--button-{size}-padding`, `--button-{size}-font-size`
- * - Variant: `--button-{variant}-bg`, `--button-{variant}-color`, etc.
- * - Shape: `--button-border-radius`, `--button-border-radius-round`, etc.
+ * - Size: `--ds-button-{size}-height`, `--ds-button-{size}-padding`, `--ds-button-{size}-font-size`
+ * - Variant: `--ds-button-{variant}-bg`, `--ds-button-{variant}-color`, etc.
+ * - Shape: `--ds-button-border-radius`, `--ds-button-border-radius-round`, etc.
  *
  * @example Using Types
  * ```tsx
@@ -46,7 +46,7 @@
  * console.log(BUTTON_DEFAULTS.size);    // 'md'
  *
  * // Access CSS variable mappings
- * console.log(SIZE_MAP.lg.height); // 'var(--button-lg-height)'
+ * console.log(SIZE_MAP.lg.height); // 'var(--ds-button-lg-height)'
  * ```
  *
  * @see {@link Button} for the main component
@@ -121,9 +121,9 @@ export const BUTTON_DEFAULTS = {
  * @example
  * ```css
  * :root {
- *   --button-md-height: 40px;
- *   --button-md-padding: 0 16px;
- *   --button-md-font-size: 14px;
+ *   --ds-button-md-height: 40px;
+ *   --ds-button-md-padding: 0 16px;
+ *   --ds-button-md-font-size: 14px;
  * }
  * ```
  */
@@ -151,9 +151,9 @@ export const SIZE_MAP = {
  * @example
  * ```css
  * :root {
- *   --button-primary-bg: #0066CC;
- *   --button-primary-color: #FFFFFF;
- *   --button-primary-hover-bg: #0052A3;
+ *   --ds-button-primary-bg: #0066CC;
+ *   --ds-button-primary-color: #FFFFFF;
+ *   --ds-button-primary-hover-bg: #0052A3;
  * }
  * ```
  */
@@ -233,9 +233,9 @@ export const VARIANT_MAP = {
  * @example
  * ```css
  * :root {
- *   --button-border-radius: 6px;
- *   --button-border-radius-round: 9999px;
- *   --button-border-radius-circle: 50%;
+ *   --ds-button-border-radius: 6px;
+ *   --ds-button-border-radius-round: 9999px;
+ *   --ds-button-border-radius-circle: 50%;
  * }
  * ```
  */

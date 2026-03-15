@@ -132,13 +132,13 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
    * Uses design system tokens with fallbacks.
    */
   const cssVars: React.CSSProperties = {
-    '--badge-bg': color,
-    '--badge-color': 'var(--ds-badge-text-color, #ffffff)',
-    '--badge-min-width': sizeValues.minWidth,
-    '--badge-height': sizeValues.height,
-    '--badge-font-size': sizeValues.fontSize,
-    '--badge-dot-size': dotSize,
-    '--badge-border-radius': radius === 'full' ? 'var(--ds-badge-radius-full, 9999px)' :
+    '--ds-badge-bg': color,
+    '--ds-badge-color': 'var(--ds-badge-text-color, #ffffff)',
+    '--ds-badge-min-width': sizeValues.minWidth,
+    '--ds-badge-height': sizeValues.height,
+    '--ds-badge-font-size': sizeValues.fontSize,
+    '--ds-badge-dot-size': dotSize,
+    '--ds-badge-border-radius': radius === 'full' ? 'var(--ds-badge-radius-full, 9999px)' :
                              radius === 'lg' ? 'var(--ds-badge-radius-lg, 8px)' :
                              radius === 'md' ? 'var(--ds-badge-radius-md, 4px)' :
                              radius === 'sm' ? 'var(--ds-badge-radius-sm, 2px)' : 'var(--ds-badge-radius-none, 0)',
@@ -163,23 +163,23 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
       case 'outline':
         return {
           backgroundColor: 'transparent',
-          color: 'var(--badge-bg)',
-          border: '1px solid var(--badge-bg)',
+          color: 'var(--ds-badge-bg)',
+          border: '1px solid var(--ds-badge-bg)',
         };
       case 'soft':
         return {
           backgroundColor: `${color}26`, // 15% opacity hex
-          color: 'var(--badge-bg)',
+          color: 'var(--ds-badge-bg)',
         };
       case 'ghost':
         return {
           backgroundColor: 'transparent',
-          color: 'var(--badge-bg)',
+          color: 'var(--ds-badge-bg)',
         };
       default: // solid
         return {
-          backgroundColor: 'var(--badge-bg)',
-          color: 'var(--badge-color)',
+          backgroundColor: 'var(--ds-badge-bg)',
+          color: 'var(--ds-badge-color)',
         };
     }
   };
@@ -208,13 +208,13 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: dot ? 'var(--badge-dot-size)' : 'var(--badge-min-width)',
-    height: dot ? 'var(--badge-dot-size)' : 'var(--badge-height)',
+    minWidth: dot ? 'var(--ds-badge-dot-size)' : 'var(--ds-badge-min-width)',
+    height: dot ? 'var(--ds-badge-dot-size)' : 'var(--ds-badge-height)',
     padding: dot ? 0 : '0 6px',
-    fontSize: 'var(--badge-font-size)',
+    fontSize: 'var(--ds-badge-font-size)',
     fontWeight: 500,
     lineHeight: 1,
-    borderRadius: 'var(--badge-border-radius)',
+    borderRadius: 'var(--ds-badge-border-radius)',
     border: bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : 'none',
     boxShadow: bordered ? `0 0 0 1px ${color}` : 'none',
     cursor: clickable || onClick ? 'pointer' : 'default',

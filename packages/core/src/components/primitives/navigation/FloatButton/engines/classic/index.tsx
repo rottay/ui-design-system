@@ -63,11 +63,11 @@ import type { FloatButtonProps, FloatButtonGroupProps, FloatButtonBackTopProps }
  * - Supports href for link behavior
  *
  * @param props - {@link FloatButtonProps}
- * @param _ref - Ref (not forwarded to Ant Design component)
+ * @param ref - Ref forwarded to a stable wrapper node around Ant Design
  * @returns Ant Design FloatButton element
  */
 export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>(
-  (props, _ref) => {
+  (props, ref) => {
     const {
       icon,
       description,
@@ -83,19 +83,21 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
     } = props;
 
     return (
-      <AntFloatButton
-        icon={icon}
-        description={description}
-        tooltip={tooltip}
-        type={type}
-        shape={shape}
-        onClick={onClick}
-        href={href}
-        target={target}
-        badge={badge}
-        className={className}
-        style={style}
-      />
+      <div ref={ref as unknown as React.Ref<HTMLDivElement>}>
+        <AntFloatButton
+          icon={icon}
+          description={description}
+          tooltip={tooltip}
+          type={type}
+          shape={shape}
+          onClick={onClick}
+          href={href}
+          target={target}
+          badge={badge}
+          className={className}
+          style={style}
+        />
+      </div>
     );
   }
 );

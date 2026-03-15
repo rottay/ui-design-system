@@ -82,11 +82,12 @@ type Shape = 'circle' | 'square' | 'rounded';
 
 ### EngineName
 ```typescript
-type EngineName = 'titan' | 'hermes' | 'apollo';
+type EngineName = 'classic' | 'modern' | 'rustic' | 'athena';
 ```
-- `titan`: Ant Design (enterprise, feature-rich)
-- `hermes`: DaisyUI/Tailwind (lightweight, utility-first)
-- `apollo`: Vanilla HTML/CSS (minimal, accessible)
+- `classic`: Ant Design (enterprise, feature-rich)
+- `modern`: DaisyUI/Tailwind (lightweight, utility-first)
+- `rustic`: Vanilla HTML/CSS (minimal, accessible)
+- `athena`: Pluggable custom implementations (experimental)
 
 ### EngineAwareProps
 ```typescript
@@ -172,9 +173,9 @@ const MyButton: React.FC<ButtonProps> = (props) => {
 - ✅ **Composable**: Props mixins reutilizables
 - ✅ **React 18**: Compatible con React 18 types
 
-## Próximos Pasos (Wave 2)
+## Engines Actuales
 
-Los componentes que usarán estos tipos se implementarán en Wave 2:
-- `/packages/core/src/components/primitives/titan/` - Implementaciones con Ant Design
-- `/packages/core/src/components/primitives/hermes/` - Implementaciones con DaisyUI
-- `/packages/core/src/components/primitives/apollo/` - Implementaciones vanilla
+Los tipos ya están alineados con la estructura real del core:
+- `/packages/core/src/components/**/engines/classic/` - Implementaciones con Ant Design
+- `/packages/core/src/components/**/engines/modern/` - Implementaciones con DaisyUI/Tailwind
+- `/packages/core/src/components/**/engines/rustic/` - Implementaciones vanilla

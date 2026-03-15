@@ -33,7 +33,7 @@ export default function ClassicEmptyState(props: EmptyStateProps) {
   if (loading) {
     return (
       <div className={className} style={{ textAlign: 'center', padding: s.padding, ...style }}>
-        <span>Loading...</span>
+        <span style={{ color: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))' }}>Loading...</span>
       </div>
     );
   }
@@ -42,11 +42,24 @@ export default function ClassicEmptyState(props: EmptyStateProps) {
     <div className={`ds-pattern-empty-state ds-engine-classic ${className ?? ''}`} style={{ padding: s.padding, ...style }}>
       <Empty
         image={image ? <img src={image} alt={title} style={{ height: s.iconSize }} /> : icon ? <div style={{ fontSize: s.iconSize, lineHeight: 1 }}>{icon}</div> : undefined}
-        imageStyle={{ height: s.iconSize }}
+        styles={{ image: { height: s.iconSize } }}
         description={
           <div>
-            <div style={{ fontSize: s.titleSize, fontWeight: 600, marginBottom: 8 }}>{title}</div>
-            {description && <div style={{ fontSize: s.descSize, color: 'rgba(0,0,0,0.45)' }}>{description}</div>}
+            <div
+              style={{
+                fontSize: s.titleSize,
+                fontWeight: 600,
+                marginBottom: 8,
+                color: 'var(--ds-color-text, var(--ds-color-text-primary))',
+              }}
+            >
+              {title}
+            </div>
+            {description && (
+              <div style={{ fontSize: s.descSize, color: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))' }}>
+                {description}
+              </div>
+            )}
           </div>
         }
       >

@@ -107,6 +107,79 @@ function convertMenuItems(items: MenuItemInterface[]): ItemType[] {
   });
 }
 
+function convertMenuChildren(children: React.ReactNode): ItemType[] {
+  return React.Children.toArray(children).reduce<ItemType[]>((items, child, index) => {
+    if (!React.isValidElement(child)) {
+      return items;
+    }
+
+    const displayName =
+      typeof child.type === 'string'
+        ? child.type
+        : ((child.type as { displayName?: string }).displayName ?? '');
+
+    if (displayName === 'Menu.Divider') {
+      items.push({ type: 'divider' as const, key: `divider-${index}` });
+      return items;
+    }
+
+    if (displayName === 'Menu.Group') {
+      const groupProps = child.props as {
+        title: React.ReactNode;
+        children?: React.ReactNode;
+      };
+
+      items.push({
+        type: 'group' as const,
+        key: `group-${String(groupProps.title)}`,
+        label: groupProps.title,
+        children: convertMenuChildren(groupProps.children),
+      });
+      return items;
+    }
+
+    if (displayName === 'Menu.SubMenu') {
+      const subMenuProps = child.props as {
+        itemKey: string;
+        title: React.ReactNode;
+        icon?: React.ReactNode;
+        disabled?: boolean;
+        children?: React.ReactNode;
+      };
+
+      items.push({
+        key: subMenuProps.itemKey,
+        label: subMenuProps.title,
+        icon: subMenuProps.icon,
+        disabled: subMenuProps.disabled,
+        children: convertMenuChildren(subMenuProps.children),
+      });
+      return items;
+    }
+
+    if (displayName === 'Menu.Item') {
+      const itemProps = child.props as {
+        itemKey: string;
+        icon?: React.ReactNode;
+        disabled?: boolean;
+        danger?: boolean;
+        children?: React.ReactNode;
+      };
+
+      items.push({
+        key: itemProps.itemKey,
+        label: itemProps.children,
+        icon: itemProps.icon,
+        disabled: itemProps.disabled,
+        danger: itemProps.danger,
+      });
+      return items;
+    }
+
+    return items;
+  }, []);
+}
+
 // ============================================================================
 // ClassicMenu Component
 // ============================================================================
@@ -169,8 +242,16 @@ export default function ClassicMenu(props: MenuProps): React.ReactElement {
    * Memoized conversion of items to Ant Design format.
    */
   const antItems = useMemo(() => {
-    return items ? convertMenuItems(items) : undefined;
-  }, [items]);
+    if (items) {
+      return convertMenuItems(items);
+    }
+
+    if (children) {
+      return convertMenuChildren(children);
+    }
+
+    return undefined;
+  }, [children, items]);
 
   // ========================================================================
   // Event Handlers
@@ -218,7 +299,7 @@ export default function ClassicMenu(props: MenuProps): React.ReactElement {
     defaultOpenKeys,
     multiple,
     selectable,
-    inlineCollapsed,
+    ...(mode === 'inline' ? { inlineCollapsed } : {}),
     expandIcon,
     onSelect: handleSelect as AntMenuProps['onSelect'],
     onClick: handleClick,
@@ -232,15 +313,6 @@ export default function ClassicMenu(props: MenuProps): React.ReactElement {
   // ========================================================================
   // Render
   // ========================================================================
-
-  // If using children instead of items, render them directly
-  if (children && !items) {
-    return (
-      <AntMenu {...antMenuProps}>
-        {children}
-      </AntMenu>
-    );
-  }
 
   return <AntMenu {...antMenuProps} />;
 }

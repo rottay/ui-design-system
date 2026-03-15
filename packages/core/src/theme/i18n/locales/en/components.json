@@ -48,33 +48,67 @@
     "next": "Next",
     "page": "Page {current} of {total}",
     "go_to": "Go to page",
-    "items_per_page": "{count} per page"
+    "items_per_page": "{count} per page",
+    "total_items": "Total {total} items"
   },
   "table": {
     "empty": "No data",
-    "loading": "Loading data...",
+    "loading": "Loading...",
     "sort_asc": "Sort ascending",
     "sort_desc": "Sort descending",
     "filter": "Filter",
+    "filter_column": "Filter {column}...",
     "clear_filters": "Clear filters",
-    "rows_selected": "{count} rows selected"
+    "rows_selected": "{count} rows selected",
+    "select_all": "Select all rows",
+    "select_row": "Select row {index}",
+    "expand_row": "Expand row",
+    "collapse_row": "Collapse row",
+    "page": "Page {current}",
+    "previous_page": "Previous page",
+    "next_page": "Next page",
+    "resize_column": "Resize column {column}",
+    "edit_cell": "Edit cell"
   },
   "upload": {
-    "drag_drop": "Drag files here or click to select",
+    "button": "Upload",
+    "drag_drop": "Click or drag files to upload",
     "uploading": "Uploading...",
     "success": "File uploaded successfully",
     "error": "Error uploading file",
     "remove": "Remove file",
+    "remove_named": "Remove {name}",
+    "preview": "Preview {name}",
+    "close_preview": "Close preview",
+    "add_file": "Add file",
+    "upload_file": "Upload file",
+    "drop_hint": "Drop files here or click to upload",
     "max_size": "Max size: {size}",
-    "accepted_formats": "Accepted formats: {formats}"
+    "accepted_formats": "Accepted formats: {formats}",
+    "progress": "Upload progress: {percent}%"
   },
   "datepicker": {
-    "placeholder": "Select a date",
+    "placeholder": "Select date",
     "today": "Today",
+    "now": "Now",
     "clear": "Clear",
+    "clear_date": "Clear date",
+    "clear_dates": "Clear dates",
     "ok": "OK",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "start_date": "Start date",
+    "end_date": "End date",
+    "previous_month": "Previous month",
+    "next_month": "Next month",
+    "previous_year": "Previous year",
+    "next_year": "Next year",
+    "previous_decade": "Previous decade",
+    "next_decade": "Next decade",
+    "date_picker": "Date picker",
+    "calendar_dates": "Calendar dates",
+    "hour": "Hour",
+    "minute": "Minute"
   },
   "timepicker": {
     "placeholder": "Select a time",
@@ -114,7 +148,115 @@
   "alert": {
     "close": "Close"
   },
+  "transfer": {
+    "source_title": "Source",
+    "target_title": "Target",
+    "search_placeholder": "Search",
+    "not_found": "No data",
+    "item_unit": "item",
+    "items_unit": "items",
+    "select_all": "Select all",
+    "move_right": ">",
+    "move_left": "<"
+  },
+  "treeselect": {
+    "placeholder": "Please select",
+    "search_placeholder": "Search...",
+    "not_found": "No data",
+    "clear": "Clear",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  },
   "empty": {
     "description": "No data"
+  },
+  "chart": {
+    "loading": "Loading chart..."
+  },
+  "surfaces": {
+    "states": {
+      "loading_title": "Loading surface",
+      "loading_description": "Preparing data and layout for this view.",
+      "empty_title": "Nothing to show yet",
+      "empty_description": "This surface does not have any data to render right now.",
+      "error_title": "Surface failed to render",
+      "retry": "Try again"
+    },
+    "list": {
+      "empty_title": "No results available",
+      "empty_description": "Adjust your filters or create a new record to populate this list.",
+      "view_table": "Table",
+      "view_cards": "Cards",
+      "filters_title": "Filters"
+    },
+    "detail": {
+      "empty_title": "No detail data available",
+      "empty_description": "This surface did not receive an entity to render.",
+      "loading": "Loading"
+    },
+    "detail_form": {
+      "form_title": "Form",
+      "summary_title": "Summary"
+    },
+    "search": {
+      "placeholder": "Search",
+      "empty_query_title": "Start typing to search",
+      "empty_query_description_one": "Enter at least {count} character to run the search.",
+      "empty_query_description_other": "Enter at least {count} characters to run the search.",
+      "empty_results_title": "No results found",
+      "empty_results_description": "Try adjusting the query or filters.",
+      "preview_title": "Preview"
+    },
+    "media": {
+      "empty_title": "No media items",
+      "empty_description": "Provide one or more media items to render the gallery.",
+      "preview_title": "Preview",
+      "details_title": "Details"
+    },
+    "sidebar": {
+      "expand": "Expand",
+      "collapse": "Collapse"
+    },
+    "compare": {
+      "empty_title": "No comparison data",
+      "empty_description": "Add subjects and rows to render a comparison surface.",
+      "criteria": "Criteria"
+    },
+    "scheduler": {
+      "empty_title": "No scheduled events",
+      "empty_description": "Populate the scheduler with events to render the calendar."
+    },
+    "operational": {
+      "empty_title": "No operational modules configured",
+      "empty_description": "Add queue, feed, or panel content to render this surface.",
+      "primary_panel": "Primary panel",
+      "secondary_panel": "Secondary panel",
+      "queue": "Queue",
+      "live_feed": "Live feed"
+    },
+    "wizard": {
+      "empty_step_title": "Empty wizard step",
+      "empty_step_description": "This step does not expose any visible content.",
+      "empty_title": "No wizard steps available",
+      "empty_description": "This flow does not have any steps configured yet.",
+      "step_error_fallback": "Please review this step.",
+      "complete": "Complete"
+    },
+    "chat": {
+      "conversation_title": "Conversation",
+      "empty_title": "No messages yet",
+      "empty_description": "Send the first message to start the conversation.",
+      "composer_title": "Composer",
+      "placeholder": "Write a message",
+      "send": "Send",
+      "typing": "Assistant is typing"
+    },
+    "editor": {
+      "title": "Editor"
+    },
+    "visualization": {
+      "empty_title": "No visualizations configured",
+      "empty_description": "Add one or more views to render this surface."
+    }
   }
 }

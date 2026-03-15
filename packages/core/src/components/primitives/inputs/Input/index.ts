@@ -17,7 +17,7 @@
  *
  * **Multi-Tenant Support:**
  * Input appearance adapts to tenant themes via CSS custom properties
- * (--input-*), ensuring consistent branding across tenants.
+ * (--ds-input-*), ensuring consistent branding across tenants.
  *
  * **Compound Components:**
  * - `Input.Group` - Groups input with addons
@@ -98,8 +98,8 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
 import type { InputProps } from './types';
+import { BaseInput } from './base';
 import { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea } from './compound';
 
 // Export types
@@ -119,13 +119,8 @@ export { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea };
 
 // Export base component
 
-// Create engine-aware Input component
 export const Input = Object.assign(
-  createEngineComponent<InputProps>('Input', {
-    classic: () => import('./engines/classic'),
-    modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
-  }),
+  BaseInput,
   {
     Group: InputGroup,
     Addon: InputAddon,

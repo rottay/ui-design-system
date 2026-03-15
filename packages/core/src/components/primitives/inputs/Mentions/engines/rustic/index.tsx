@@ -10,9 +10,12 @@
  * @package @rottay/design-system
  */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
 import type { MentionsProps, MentionsOption } from '../../types';
 import { MENTIONS_DEFAULTS } from '../../types';
+
+// Safe useLayoutEffect that falls back to useEffect on SSR
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
@@ -28,6 +31,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       placeholder,
       disabled,
       readOnly,
+      autoSize,
       rows = MENTIONS_DEFAULTS.rows,
       status,
       placement = MENTIONS_DEFAULTS.placement,
@@ -52,6 +56,30 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const prefixes = (Array.isArray(prefix) ? prefix : [prefix]).filter((p): p is string => !!p);
+
+    // Auto-size: dynamically adjust textarea height based on content
+    const adjustTextareaHeight = useCallback(() => {
+      const textarea = textareaRef.current;
+      if (!textarea || !autoSize) return;
+
+      textarea.style.height = 'auto';
+      const scrollHeight = textarea.scrollHeight;
+
+      if (typeof autoSize === 'object') {
+        const lineHeight = parseInt(getComputedStyle(textarea).lineHeight) || 20;
+        const minH = autoSize.minRows ? autoSize.minRows * lineHeight : 0;
+        const maxH = autoSize.maxRows ? autoSize.maxRows * lineHeight : Infinity;
+        textarea.style.height = `${Math.min(Math.max(scrollHeight, minH), maxH)}px`;
+        textarea.style.overflowY = scrollHeight > maxH ? 'auto' : 'hidden';
+      } else {
+        textarea.style.height = `${scrollHeight}px`;
+        textarea.style.overflowY = 'hidden';
+      }
+    }, [autoSize]);
+
+    useIsomorphicLayoutEffect(() => {
+      adjustTextareaHeight();
+    }, [value, adjustTextareaHeight]);
 
     const filteredOptions = useMemo(() => {
       if (!filterOption) return options;
@@ -256,9 +284,16 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}
-          rows={rows}
-          style={textareaStyle}
+          rows={typeof autoSize === 'object' ? autoSize.minRows || 1 : autoSize === true ? 1 : rows}
+          style={{
+            ...textareaStyle,
+            ...(autoSize ? { resize: 'none' as const } : {}),
+          }}
           className="rottay-mentions__input"
+          role="textbox"
+          aria-multiline="true"
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
         />
 
         {isOpen && (

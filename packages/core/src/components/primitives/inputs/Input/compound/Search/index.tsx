@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent } from 'react';
 import type { InputSearchProps } from '../../types';
-import { Input } from '../../';
+import { BaseInput } from '../../base';
 
 const SearchIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -50,7 +50,7 @@ export const InputSearch = (props: InputSearchProps) => {
   ) : null;
 
   return (
-    <Input
+    <BaseInput
       {...inputProps}
       type="text"
       suffix={searchButton}

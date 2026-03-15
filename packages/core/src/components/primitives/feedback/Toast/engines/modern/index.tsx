@@ -49,6 +49,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../../types';
 import { TOAST_DEFAULTS, TOAST_ANIMATION } from '../../types';
+import { getToastAnimationStyle } from '../../utils/animations';
 
 // ============================================================================
 // Helper Functions
@@ -291,9 +292,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       style={{
         position: 'relative',
         overflow: 'hidden',
-        animation: isExiting
-          ? `toast-fade-out ${TOAST_ANIMATION.exitDuration}ms ease-in forwards`
-          : `toast-fade-in ${TOAST_ANIMATION.enterDuration}ms ease-out forwards`,
+        ...getToastAnimationStyle('top-right', isExiting ? 'out' : 'in', 'fade'),
         ...style,
       }}
       onMouseEnter={handleMouseEnter}

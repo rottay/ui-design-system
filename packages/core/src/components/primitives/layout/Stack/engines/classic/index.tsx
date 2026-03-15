@@ -1,29 +1,29 @@
 /**
- * @fileoverview Stack Titan Engine - Rottay Design System
- * @description Titan (Ant Design) implementation of the Stack component.
+ * @fileoverview Stack Classic Engine - Rottay Design System
+ * @description Classic (Ant Design) implementation of the Stack component.
  * Provides full-featured Stack using Ant Design styling conventions.
  *
  * @remarks
  * The Titan engine implementation uses Ant Design's design system principles
  * while maintaining full compatibility with the Stack API. It applies the
- * `rottay-stack--titan` class for engine-specific styling hooks.
+ * `rottay-stack--classic` class for engine-specific styling hooks.
  *
  * CSS Classes Applied:
  * - `rottay-stack`: Base class for all Stack components
- * - `rottay-stack--titan`: Engine-specific class for Titan styling
+ * - `rottay-stack--classic`: Engine-specific class for Classic styling
  *
  * @example Using Titan Engine
  * ```tsx
  * import { Stack } from '@rottay/design-system';
  *
- * // Automatically uses Titan if default engine
+ * // Automatically uses Classic if default engine
  * <Stack spacing="md" direction="vertical">
  *   <Item>First</Item>
  *   <Item>Second</Item>
  * </Stack>
  *
  * // Or explicitly specify engine
- * <Stack engine="titan" spacing="lg" align="center">
+ * <Stack engine="classic" spacing="lg" align="center">
  *   Ant Design styled stack
  * </Stack>
  * ```
@@ -31,7 +31,7 @@
  * @see {@link Stack} - The main engine-aware component
  * @see {@link HermesStack} - Tailwind implementation
  * @see {@link ApolloStack} - Pure HTML/CSS implementation
- * @module Stack/Engines/Titan
+ * @module Stack/Engines/Classic
  * @category Layout
  * @package @rottay/design-system
  */
@@ -116,7 +116,7 @@ function renderStackChildren(
 }
 
 /**
- * Titan Stack component.
+ * Classic Stack component.
  * Uses Ant Design's styling conventions while maintaining
  * compatibility with the Stack API.
  */
@@ -132,10 +132,10 @@ const TitanStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const computedStyle = buildStackStyles(props);
   const renderedChildren = renderStackChildren(children, divider, direction);
 
-  // Build class names with Titan-specific prefixes
+  // Build class names with Classic-specific prefixes
   const classNames = [
     'rottay-stack',
-    'rottay-stack--titan',
+    'rottay-stack--classic',
     className,
   ].filter(Boolean).join(' ');
 
@@ -152,6 +152,6 @@ const TitanStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   );
 });
 
-TitanStack.displayName = 'TitanStack';
+TitanStack.displayName = 'ClassicStack';
 
 export default TitanStack;

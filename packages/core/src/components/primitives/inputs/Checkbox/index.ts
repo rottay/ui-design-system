@@ -17,7 +17,7 @@
  *
  * **Multi-Tenant Support:**
  * Checkbox appearance adapts to tenant themes via CSS custom properties
- * (--checkbox-*), ensuring consistent branding across tenants.
+ * (--ds-checkbox-*), ensuring consistent branding across tenants.
  *
  * **Compound Components:**
  * - `Checkbox.Group` - Groups multiple checkboxes with shared state management

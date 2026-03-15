@@ -12,51 +12,51 @@
      ======================================================================== */
 
   /* XS - Extra Small (16px) */
-  --rate-xs-size: 1rem;              /* 16px */
+  --ds-rate-xs-size: 1rem;              /* 16px */
 
   /* SM - Small (20px) */
-  --rate-sm-size: 1.25rem;           /* 20px */
+  --ds-rate-sm-size: 1.25rem;           /* 20px */
 
   /* MD - Medium (24px - Default) */
-  --rate-md-size: 1.5rem;            /* 24px */
+  --ds-rate-md-size: 1.5rem;            /* 24px */
 
   /* LG - Large (32px) */
-  --rate-lg-size: 2rem;              /* 32px */
+  --ds-rate-lg-size: 2rem;              /* 32px */
 
   /* XL - Extra Large (40px) */
-  --rate-xl-size: 2.5rem;            /* 40px */
+  --ds-rate-xl-size: 2.5rem;            /* 40px */
 
   /* Default size */
-  --rate-default-size: var(--rate-md-size);
+  --ds-rate-default-size: var(--ds-rate-md-size);
 
   /* ========================================================================
      COLORS
      Rate star colors for active and inactive states
      ======================================================================== */
-  --rate-active-color: var(--color-warning-400);
-  --rate-inactive-color: var(--color-neutral-300);
-  --rate-hover-color: var(--color-warning-500);
+  --ds-rate-active-color: var(--ds-color-warning-400);
+  --ds-rate-inactive-color: var(--ds-color-neutral-300);
+  --ds-rate-hover-color: var(--ds-color-warning-500);
 
   /* ========================================================================
      SPACING
      Gap between stars
      ======================================================================== */
-  --rate-gap: 0.25rem;               /* 4px */
+  --ds-rate-gap: 0.25rem;               /* 4px */
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --rate-transition-duration: 0.2s;
-  --rate-transition-timing: ease-in-out;
-  --rate-transition: all var(--rate-transition-duration) var(--rate-transition-timing);
+  --ds-rate-transition-duration: 0.2s;
+  --ds-rate-transition-timing: ease-in-out;
+  --ds-rate-transition: all var(--ds-rate-transition-duration) var(--ds-rate-transition-timing);
 
   /* ========================================================================
      INTERACTIONS
      Hover and focus states
      ======================================================================== */
-  --rate-hover-scale: 1.1;
-  --rate-focus-ring-width: 2px;
-  --rate-focus-ring-color: var(--color-primary-500);
-  --rate-focus-ring-offset: 2px;
+  --ds-rate-hover-scale: 1.1;
+  --ds-rate-focus-ring-width: 2px;
+  --ds-rate-focus-ring-color: var(--ds-color-primary-500);
+  --ds-rate-focus-ring-offset: 2px;
 }

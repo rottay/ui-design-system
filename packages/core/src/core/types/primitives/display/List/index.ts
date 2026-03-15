@@ -129,7 +129,7 @@ export const LIST_DEFAULTS = {
  * Size mapping for List styling using CSS variables
  */
 export const LIST_SIZE_MAP: Record<ListSize, { padding: string; fontSize: string }> = {
-  small: { padding: 'var(--list-sm-padding-vertical) var(--list-sm-padding-horizontal)', fontSize: 'var(--list-sm-font-size)' },
-  default: { padding: 'var(--list-default-padding-vertical) var(--list-default-padding-horizontal)', fontSize: 'var(--list-default-font-size)' },
-  large: { padding: 'var(--list-lg-padding-vertical) var(--list-lg-padding-horizontal)', fontSize: 'var(--list-lg-font-size)' },
+  small: { padding: 'var(--ds-list-sm-padding-vertical) var(--ds-list-sm-padding-horizontal)', fontSize: 'var(--ds-list-sm-font-size)' },
+  default: { padding: 'var(--ds-list-default-padding-vertical) var(--ds-list-default-padding-horizontal)', fontSize: 'var(--ds-list-default-font-size)' },
+  large: { padding: 'var(--ds-list-lg-padding-vertical) var(--ds-list-lg-padding-horizontal)', fontSize: 'var(--ds-list-lg-font-size)' },
 };

@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { memo, useEffect, useRef } from 'react';
+import { max, select } from 'd3';
 
 import type { ChartBaseProps, DataPoint } from '../types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../types';
-import { useChartDimensions } from '../hooks';
+import { useChartDimensions, useChartPersonality } from '../hooks';
+import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 export interface FunnelChartProps extends ChartBaseProps {
   data: DataPoint[];
@@ -14,7 +15,7 @@ export interface FunnelChartProps extends ChartBaseProps {
   orientation?: 'vertical' | 'horizontal';
 }
 
-export function FunnelChart({
+export const FunnelChart = memo(function FunnelChart({
   data,
   showPercentage = true,
   showConversion = false,
@@ -27,21 +28,42 @@ export function FunnelChart({
   title,
   subtitle,
   legend = false,
-  animate = true,
+  animate,
   responsive = true,
   colors = DEFAULT_COLORS,
-  tooltip = true,
+  tooltip,
   margin = DEFAULT_MARGIN,
 }: FunnelChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
+  const maxValue = data.length > 0 ? Math.max(...data.map((item) => item.value)) : 0;
+  const summary = {
+    caption: title ? `${title} data summary` : 'Funnel chart data summary',
+    headers: ['Stage', 'Value', 'Percentage'],
+    rows: data.map((item) => [
+      item.label,
+      item.value,
+      maxValue === 0 ? '0%' : `${((item.value / maxValue) * 100).toFixed(1)}%`,
+    ]),
+  };
+  const legendNode = legend ? (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      {data.map((d, i) => (
+        <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+        </div>
+      ))}
+    </div>
+  ) : null;
 
   useEffect(() => {
     if (!svgRef.current || !data || data.length === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
     const innerWidth = chartWidth - margin.left - margin.right;
@@ -53,7 +75,7 @@ export function FunnelChart({
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const maxValue = d3.max(data, (d) => d.value) ?? 1;
+    const maxValue = max(data, (d) => d.value) ?? 1;
     const n = data.length;
 
     if (orientation === 'vertical') {
@@ -82,11 +104,16 @@ export function FunnelChart({
           .attr('points', points.map((p) => p.join(',')).join(' '))
           .attr('fill', color);
 
-        if (animate) {
-          polygon.attr('opacity', 0).transition().duration(500).delay(i * 100).attr('opacity', 1);
+        if (chartPersonality.animate) {
+          polygon
+            .attr('opacity', 0)
+            .transition()
+            .duration(chartPersonality.animationDuration)
+            .delay(i * 100)
+            .attr('opacity', 1);
         }
 
-        if (tooltip) {
+        if (chartPersonality.tooltip) {
           polygon.append('title').text(`${d.label}: ${d.value}`);
         }
 
@@ -96,7 +123,7 @@ export function FunnelChart({
           .attr('x', innerWidth / 2)
           .attr('y', centerY - 6)
           .attr('text-anchor', 'middle')
-          .style('fill', '#fff')
+          .style('fill', 'var(--ds-color-text-on-primary)')
           .style('font-size', '13px')
           .style('font-weight', '600')
           .style('pointer-events', 'none')
@@ -109,7 +136,7 @@ export function FunnelChart({
           .attr('x', innerWidth / 2)
           .attr('y', centerY + 10)
           .attr('text-anchor', 'middle')
-          .style('fill', 'rgba(255,255,255,0.8)')
+          .style('fill', 'color-mix(in srgb, var(--ds-color-text-on-primary) 80%, transparent)')
           .style('font-size', '11px')
           .style('pointer-events', 'none')
           .text(valueText);
@@ -153,11 +180,16 @@ export function FunnelChart({
           .attr('points', points.map((p) => p.join(',')).join(' '))
           .attr('fill', color);
 
-        if (animate) {
-          polygon.attr('opacity', 0).transition().duration(500).delay(i * 100).attr('opacity', 1);
+        if (chartPersonality.animate) {
+          polygon
+            .attr('opacity', 0)
+            .transition()
+            .duration(chartPersonality.animationDuration)
+            .delay(i * 100)
+            .attr('opacity', 1);
         }
 
-        if (tooltip) {
+        if (chartPersonality.tooltip) {
           polygon.append('title').text(`${d.label}: ${d.value}`);
         }
 
@@ -165,42 +197,31 @@ export function FunnelChart({
           .attr('x', xPos + segmentWidth / 2)
           .attr('y', innerHeight / 2)
           .attr('text-anchor', 'middle')
-          .style('fill', '#fff')
+          .style('fill', 'var(--ds-color-text-on-primary)')
           .style('font-size', '12px')
           .style('font-weight', '600')
           .style('pointer-events', 'none')
           .text(d.label);
       });
     }
-  }, [data, chartWidth, chartHeight, orientation, showPercentage, showConversion, animate, colors, margin, tooltip]);
-
-  if (loading) {
-    return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>Loading...</div>
-      </div>
-    );
-  }
+  }, [data, chartWidth, chartHeight, orientation, showPercentage, showConversion, chartPersonality, colors, margin]);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
-      {title && (
-        <div style={{ marginBottom: 4 }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
-          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
-        </div>
-      )}
-      <svg ref={svgRef} />
-      {legend && (
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-          {data.map((d, i) => (
-            <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
-              <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <ChartScaffold
+      containerRef={containerRef}
+      svgRef={svgRef}
+      width={width}
+      height={height}
+      className={className}
+      style={style}
+      loading={loading}
+      loadingLabel={chartPersonality.loadingLabel}
+      title={title}
+      subtitle={subtitle}
+      ariaLabel={title ?? 'Funnel chart'}
+      ariaDescription={describeChart('Funnel chart', data.length, subtitle, orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.')}
+      summary={summary}
+      legend={legendNode}
+    />
   );
-}
+});

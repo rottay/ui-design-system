@@ -94,6 +94,8 @@ export type {
   TableLayout,
   SortOrder,
   FilterMode,
+  TableCellFieldType,
+  EditingCell,
 } from './types';
 
 export { TABLE_DEFAULTS } from './types';

@@ -127,5 +127,27 @@ describe('i18n System', () => {
 
       expect(result.current.t('common.yes')).toBe('Oui');
     });
+
+    it('should support Arabic and expose rtl direction', () => {
+      const { result } = renderHook(() => useLocale(), {
+        wrapper: ({ children }) => (
+          <I18nProvider locale="ar">{children}</I18nProvider>
+        ),
+      });
+
+      expect(result.current.locale).toBe('ar');
+      expect(result.current.config.direction).toBe('rtl');
+    });
+
+    it('should use real Arabic copy instead of falling back to English', () => {
+      const { result } = renderHook(() => useTranslation('components'), {
+        wrapper: ({ children }) => (
+          <I18nProvider locale="ar">{children}</I18nProvider>
+        ),
+      });
+
+      expect(result.current.t('button.save')).toBe('حفظ');
+      expect(result.current.t('surfaces.chat.send')).toBe('إرسال');
+    });
   });
 });

@@ -55,7 +55,7 @@ export function SelectOptGroup({
     padding: '8px 12px 4px',
     fontSize: '12px',
     fontWeight: 600,
-    color: 'var(--color-text-secondary, #666)',
+    color: 'var(--ds-color-text-secondary, #666)',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     userSelect: 'none',

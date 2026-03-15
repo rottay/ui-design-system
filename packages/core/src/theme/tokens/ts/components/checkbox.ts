@@ -8,94 +8,94 @@
 // Checkbox Sizes
 export const checkboxSize = {
   xs: {
-    size: 'var(--checkbox-xs-size)',
-    fontSize: 'var(--checkbox-xs-font-size)',
-    borderWidth: 'var(--checkbox-xs-border-width)',
+    size: 'var(--ds-checkbox-xs-size)',
+    fontSize: 'var(--ds-checkbox-xs-font-size)',
+    borderWidth: 'var(--ds-checkbox-xs-border-width)',
   },
   sm: {
-    size: 'var(--checkbox-sm-size)',
-    fontSize: 'var(--checkbox-sm-font-size)',
-    borderWidth: 'var(--checkbox-sm-border-width)',
+    size: 'var(--ds-checkbox-sm-size)',
+    fontSize: 'var(--ds-checkbox-sm-font-size)',
+    borderWidth: 'var(--ds-checkbox-sm-border-width)',
   },
   md: {
-    size: 'var(--checkbox-md-size)',
-    fontSize: 'var(--checkbox-md-font-size)',
-    borderWidth: 'var(--checkbox-md-border-width)',
+    size: 'var(--ds-checkbox-md-size)',
+    fontSize: 'var(--ds-checkbox-md-font-size)',
+    borderWidth: 'var(--ds-checkbox-md-border-width)',
   },
   lg: {
-    size: 'var(--checkbox-lg-size)',
-    fontSize: 'var(--checkbox-lg-font-size)',
-    borderWidth: 'var(--checkbox-lg-border-width)',
+    size: 'var(--ds-checkbox-lg-size)',
+    fontSize: 'var(--ds-checkbox-lg-font-size)',
+    borderWidth: 'var(--ds-checkbox-lg-border-width)',
   },
   xl: {
-    size: 'var(--checkbox-xl-size)',
-    fontSize: 'var(--checkbox-xl-font-size)',
-    borderWidth: 'var(--checkbox-xl-border-width)',
+    size: 'var(--ds-checkbox-xl-size)',
+    fontSize: 'var(--ds-checkbox-xl-font-size)',
+    borderWidth: 'var(--ds-checkbox-xl-border-width)',
   },
 } as const;
 
 // Checkbox Radius
 export const checkboxRadius = {
-  none: 'var(--checkbox-radius-none)',
-  sm: 'var(--checkbox-radius-sm)',
-  md: 'var(--checkbox-radius-md)',
-  lg: 'var(--checkbox-radius-lg)',
-  full: 'var(--checkbox-radius-full)',
+  none: 'var(--ds-checkbox-radius-none)',
+  sm: 'var(--ds-checkbox-radius-sm)',
+  md: 'var(--ds-checkbox-radius-md)',
+  lg: 'var(--ds-checkbox-radius-lg)',
+  full: 'var(--ds-checkbox-radius-full)',
 } as const;
 
 // Checkbox Variants
 export const checkboxVariant = {
   default: {
-    bg: 'var(--checkbox-default-bg)',
-    border: 'var(--checkbox-default-border)',
-    check: 'var(--checkbox-default-check)',
+    bg: 'var(--ds-checkbox-default-bg)',
+    border: 'var(--ds-checkbox-default-border)',
+    check: 'var(--ds-checkbox-default-check)',
   },
   primary: {
-    bg: 'var(--checkbox-primary-bg)',
-    border: 'var(--checkbox-primary-border)',
-    check: 'var(--checkbox-primary-check)',
+    bg: 'var(--ds-checkbox-primary-bg)',
+    border: 'var(--ds-checkbox-primary-border)',
+    check: 'var(--ds-checkbox-primary-check)',
   },
   secondary: {
-    bg: 'var(--checkbox-secondary-bg)',
-    border: 'var(--checkbox-secondary-border)',
-    check: 'var(--checkbox-secondary-check)',
+    bg: 'var(--ds-checkbox-secondary-bg)',
+    border: 'var(--ds-checkbox-secondary-border)',
+    check: 'var(--ds-checkbox-secondary-check)',
   },
   success: {
-    bg: 'var(--checkbox-success-bg)',
-    border: 'var(--checkbox-success-border)',
-    check: 'var(--checkbox-success-check)',
+    bg: 'var(--ds-checkbox-success-bg)',
+    border: 'var(--ds-checkbox-success-border)',
+    check: 'var(--ds-checkbox-success-check)',
   },
   warning: {
-    bg: 'var(--checkbox-warning-bg)',
-    border: 'var(--checkbox-warning-border)',
-    check: 'var(--checkbox-warning-check)',
+    bg: 'var(--ds-checkbox-warning-bg)',
+    border: 'var(--ds-checkbox-warning-border)',
+    check: 'var(--ds-checkbox-warning-check)',
   },
   error: {
-    bg: 'var(--checkbox-error-bg)',
-    border: 'var(--checkbox-error-border)',
-    check: 'var(--checkbox-error-check)',
+    bg: 'var(--ds-checkbox-error-bg)',
+    border: 'var(--ds-checkbox-error-border)',
+    check: 'var(--ds-checkbox-error-check)',
   },
 } as const;
 
 // Checkbox States
 export const checkboxState = {
-  uncheckedBg: 'var(--checkbox-unchecked-bg)',
-  uncheckedBorder: 'var(--checkbox-unchecked-border)',
-  disabledOpacity: 'var(--checkbox-disabled-opacity)',
+  uncheckedBg: 'var(--ds-checkbox-unchecked-bg)',
+  uncheckedBorder: 'var(--ds-checkbox-unchecked-border)',
+  disabledOpacity: 'var(--ds-checkbox-disabled-opacity)',
 } as const;
 
 // Checkbox Transition
 export const checkboxTransition = {
-  duration: 'var(--checkbox-transition-duration)',
-  timing: 'var(--checkbox-transition-timing)',
-  all: 'var(--checkbox-transition)',
+  duration: 'var(--ds-checkbox-transition-duration)',
+  timing: 'var(--ds-checkbox-transition-timing)',
+  all: 'var(--ds-checkbox-transition)',
 } as const;
 
 // Checkbox Focus
 export const checkboxFocus = {
-  ringWidth: 'var(--checkbox-focus-ring-width)',
-  ringOffset: 'var(--checkbox-focus-ring-offset)',
-  ringColor: 'var(--checkbox-focus-ring-color)',
+  ringWidth: 'var(--ds-checkbox-focus-ring-width)',
+  ringOffset: 'var(--ds-checkbox-focus-ring-offset)',
+  ringColor: 'var(--ds-checkbox-focus-ring-color)',
 } as const;
 
 // Combined checkbox tokens
@@ -106,7 +106,7 @@ export const checkboxTokens = {
   state: checkboxState,
   transition: checkboxTransition,
   focus: checkboxFocus,
-  labelGap: 'var(--checkbox-label-gap)',
+  labelGap: 'var(--ds-checkbox-label-gap)',
 } as const;
 
 // Type exports

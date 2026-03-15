@@ -182,64 +182,69 @@ export const POSITION_MAP: Record<string, { vertical: 'top' | 'bottom'; horizont
  * ```tsx
  * // Access colors programmatically
  * const successColors = VARIANT_COLORS.success;
- * // { bg: '#f0fdf4', color: '#166534', borderColor: '#86efac', iconColor: '#22c55e' }
+ * // {
+ * //   bg: 'var(--ds-toast-success-bg, var(--ds-color-success-bg))',
+ * //   color: 'var(--ds-toast-success-color, var(--ds-color-success-700))',
+ * //   borderColor: 'var(--ds-toast-success-border, var(--ds-color-success-border))',
+ * //   iconColor: 'var(--ds-toast-success-icon, var(--ds-color-success))'
+ * // }
  * ```
  */
 export const VARIANT_COLORS = {
   /** Default/neutral variant colors */
   default: {
-    bg: '#ffffff',
-    color: '#1f2937',
-    borderColor: '#e5e7eb',
-    iconColor: '#6b7280',
+    bg: 'var(--ds-toast-default-bg, var(--ds-color-bg-elevated))',
+    color: 'var(--ds-toast-default-color, var(--ds-color-text-primary))',
+    borderColor: 'var(--ds-toast-default-border, var(--ds-color-border-primary))',
+    iconColor: 'var(--ds-toast-default-icon, var(--ds-color-text-secondary))',
   },
   /** Success variant colors - green tones */
   success: {
-    bg: '#f0fdf4',
-    color: '#166534',
-    borderColor: '#86efac',
-    iconColor: '#22c55e',
+    bg: 'var(--ds-toast-success-bg, var(--ds-color-success-bg))',
+    color: 'var(--ds-toast-success-color, var(--ds-color-success-700))',
+    borderColor: 'var(--ds-toast-success-border, var(--ds-color-success-border))',
+    iconColor: 'var(--ds-toast-success-icon, var(--ds-color-success))',
   },
   /** Error variant colors - red tones */
   error: {
-    bg: '#fef2f2',
-    color: '#991b1b',
-    borderColor: '#fecaca',
-    iconColor: '#ef4444',
+    bg: 'var(--ds-toast-error-bg, var(--ds-color-error-bg))',
+    color: 'var(--ds-toast-error-color, var(--ds-color-error-700))',
+    borderColor: 'var(--ds-toast-error-border, var(--ds-color-error-border))',
+    iconColor: 'var(--ds-toast-error-icon, var(--ds-color-error))',
   },
   /** Warning variant colors - amber/yellow tones */
   warning: {
-    bg: '#fffbeb',
-    color: '#92400e',
-    borderColor: '#fde68a',
-    iconColor: '#f59e0b',
+    bg: 'var(--ds-toast-warning-bg, var(--ds-color-warning-bg))',
+    color: 'var(--ds-toast-warning-color, var(--ds-color-warning-700))',
+    borderColor: 'var(--ds-toast-warning-border, var(--ds-color-warning-border))',
+    iconColor: 'var(--ds-toast-warning-icon, var(--ds-color-warning))',
   },
   /** Info variant colors - blue tones */
   info: {
-    bg: '#eff6ff',
-    color: '#1e40af',
-    borderColor: '#bfdbfe',
-    iconColor: '#3b82f6',
+    bg: 'var(--ds-toast-info-bg, var(--ds-color-info-bg))',
+    color: 'var(--ds-toast-info-color, var(--ds-color-info-700))',
+    borderColor: 'var(--ds-toast-info-border, var(--ds-color-info-border))',
+    iconColor: 'var(--ds-toast-info-icon, var(--ds-color-info))',
   },
   /** Primary variant colors - blue tones */
   primary: {
-    bg: '#eff6ff',
-    color: '#1e40af',
-    borderColor: '#bfdbfe',
-    iconColor: '#3b82f6',
+    bg: 'var(--ds-toast-primary-bg, var(--ds-color-alpha-primary-10))',
+    color: 'var(--ds-toast-primary-color, var(--ds-color-primary-700))',
+    borderColor: 'var(--ds-toast-primary-border, var(--ds-color-alpha-primary-20))',
+    iconColor: 'var(--ds-toast-primary-icon, var(--ds-color-primary))',
   },
   /** Secondary variant colors - purple tones */
   secondary: {
-    bg: '#f5f3ff',
-    color: '#5b21b6',
-    borderColor: '#c4b5fd',
-    iconColor: '#8b5cf6',
+    bg: 'var(--ds-toast-secondary-bg, var(--ds-color-alpha-secondary-10))',
+    color: 'var(--ds-toast-secondary-color, var(--ds-color-secondary-700))',
+    borderColor: 'var(--ds-toast-secondary-border, var(--ds-color-alpha-secondary-20))',
+    iconColor: 'var(--ds-toast-secondary-icon, var(--ds-color-secondary))',
   },
   /** Gradient variant - decorative gradient background */
   gradient: {
-    bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    color: '#ffffff',
+    bg: 'var(--ds-toast-gradient-bg, var(--ds-gradient-primary))',
+    color: 'var(--ds-toast-gradient-color, var(--ds-color-text-on-primary))',
     borderColor: 'transparent',
-    iconColor: '#ffffff',
+    iconColor: 'var(--ds-toast-gradient-icon, var(--ds-color-text-on-primary))',
   },
 };

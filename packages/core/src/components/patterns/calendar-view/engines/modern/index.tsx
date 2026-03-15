@@ -127,7 +127,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                         key={ev.id}
                         onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
                         className="text-[11px] px-1 mt-0.5 rounded text-white truncate cursor-pointer"
-                        style={{ background: ev.color ?? '#6366f1' }}
+                        style={{ background: ev.color ?? 'var(--ds-color-primary)' }}
                       >
                         {renderEvent ? renderEvent(ev) : ev.title}
                       </div>

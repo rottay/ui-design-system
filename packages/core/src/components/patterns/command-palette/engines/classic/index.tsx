@@ -104,7 +104,7 @@ export default function ClassicCommandPalette(props: CommandPaletteProps) {
       width={560}
       styles={{ body: { padding: 0 } }}
     >
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid #f0f0f0' }}>
+      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--ds-command-palette-border, var(--ds-color-border))' }}>
         <Input
           ref={inputRef}
           placeholder={placeholder}
@@ -113,7 +113,7 @@ export default function ClassicCommandPalette(props: CommandPaletteProps) {
           onKeyDown={handleKeyDown}
           allowClear
           size="large"
-          bordered={false}
+          variant="borderless"
         />
       </div>
       <div style={{ maxHeight, overflowY: 'auto', padding: '8px 0' }}>
@@ -133,7 +133,7 @@ export default function ClassicCommandPalette(props: CommandPaletteProps) {
                     padding: '8px 12px',
                     cursor: item.disabled ? 'not-allowed' : 'pointer',
                     opacity: item.disabled ? 0.5 : 1,
-                    background: activeIndex === idx ? '#f5f5f5' : 'transparent',
+                    background: activeIndex === idx ? 'var(--ds-color-bg-secondary)' : 'transparent',
                     borderRadius: 6,
                     display: 'flex',
                     alignItems: 'center',
@@ -175,7 +175,7 @@ export default function ClassicCommandPalette(props: CommandPaletteProps) {
                     padding: '8px 16px',
                     cursor: item.disabled ? 'not-allowed' : 'pointer',
                     opacity: item.disabled ? 0.5 : 1,
-                    background: activeIndex === idx ? '#f5f5f5' : 'transparent',
+                    background: activeIndex === idx ? 'var(--ds-color-bg-secondary)' : 'transparent',
                     borderRadius: 0,
                     display: 'flex',
                     alignItems: 'center',

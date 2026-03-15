@@ -3,6 +3,8 @@
  * Resolves tenant from custom domain via API lookup
  */
 
+import { errorInDev, warnOnceInDev } from '../../../../core/utils/runtime-logger';
+
 export interface DomainLookupResult {
   slug: string;
   found: boolean;
@@ -22,7 +24,10 @@ export function configureDomainLookup(endpoint: string): void {
  */
 export async function resolveFromDomain(hostname: string): Promise<string | null> {
   if (!domainLookupEndpoint) {
-    console.warn('Domain lookup endpoint not configured');
+    warnOnceInDev(
+      'tenant-domain-resolver:not-configured',
+      'Domain lookup endpoint not configured'
+    );
     return null;
   }
 
@@ -35,7 +40,7 @@ export async function resolveFromDomain(hostname: string): Promise<string | null
 
     return data.found ? data.slug : null;
   } catch (error) {
-    console.error('Domain lookup failed:', error);
+    errorInDev('Domain lookup failed:', error);
     return null;
   }
 }

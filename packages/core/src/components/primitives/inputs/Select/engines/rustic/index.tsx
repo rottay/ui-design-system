@@ -1,12 +1,11 @@
 /**
  * @fileoverview Select Rustic Engine - Rottay Design System
  * @description Pure HTML/CSS implementation of the Select component using CSS variables.
- * Part of the Rottay Design System's input primitives collection.
  *
- * @remarks
- * The Rustic engine provides a headless select implementation using only
- * native HTML elements and CSS variables for theming. This ensures
- * multi-tenant support through the CSS cascade.
+ * Features:
+ * - Option groups: group options under headers with visual separator
+ * - Virtual scrolling: only render visible options + buffer, fixed height container
+ * - tokenSeparators: auto-create tags in multiple mode when separator typed
  *
  * @module RusticSelect
  * @category Inputs
@@ -15,27 +14,34 @@
 
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useImperativeHandle,
+} from 'react';
 import type { SelectProps, SelectOption } from '../../types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../../types';
 import { useTranslation } from '../../../../../../theme/i18n';
+import {
+  getLabelText,
+  buildRenderableList,
+  flatOptionsFromGroups,
+  DEFAULT_ITEM_HEIGHT,
+  DEFAULT_CONTAINER_HEIGHT,
+  VIRTUAL_BUFFER,
+} from '../../utils';
 
-/**
- * Utility to get label text from option
- */
-function getLabelText(label: React.ReactNode): string {
-  if (typeof label === 'string') return label;
-  if (typeof label === 'number') return String(label);
-  return '';
-}
-
-export default function RusticSelect(props: SelectProps): React.ReactElement {
+const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const { t } = useTranslation('components');
 
   const {
     value,
     defaultValue,
-    options = [],
+    options: flatOptions = [],
     placeholder,
     size = SELECT_DEFAULTS.size,
     variant = SELECT_DEFAULTS.variant,
@@ -60,6 +66,10 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
     autoFocus,
     allowClear,
     showSearch,
+    // New features
+    optionGroups,
+    virtual,
+    tokenSeparators,
   } = props;
 
   // Use translation as default, allow prop override
@@ -73,6 +83,14 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
   // Determine effective status
   const effectiveStatus = error ? 'error' : status;
 
+  // Merge flat options with group options
+  const allOptions = useMemo(() => {
+    if (optionGroups && optionGroups.length > 0) {
+      return flatOptionsFromGroups(optionGroups);
+    }
+    return flatOptions;
+  }, [flatOptions, optionGroups]);
+
   // State
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -82,10 +100,15 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
     return Array.isArray(initial) ? initial : [initial];
   });
   const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [scrollTop, setScrollTop] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => {
+    return inputRef.current ?? containerRef.current ?? document.createElement('div');
+  }, []);
 
   // Sync with controlled value
   useEffect(() => {
@@ -103,15 +126,50 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
 
   // Filtered options based on search
   const filteredOptions = useMemo(() => {
-    if (!isSearchable || !searchValue) return options;
+    if (!isSearchable || !searchValue) return allOptions;
     const filterFn = filterOption || defaultFilter;
-    return options.filter((opt) => filterFn(searchValue, opt));
-  }, [options, searchValue, isSearchable, filterOption, defaultFilter]);
+    return allOptions.filter((opt) => filterFn(searchValue, opt));
+  }, [allOptions, searchValue, isSearchable, filterOption, defaultFilter]);
+
+  // Build renderable list (with group headers if applicable)
+  const renderableItems = useMemo(() => {
+    if (isSearchable && searchValue) {
+      return filteredOptions.map((opt) => ({ type: 'option' as const, option: opt }));
+    }
+    return buildRenderableList(filteredOptions, optionGroups);
+  }, [filteredOptions, optionGroups, isSearchable, searchValue]);
+
+  // Virtual scroll config
+  const virtualEnabled = !!virtual;
+  const itemHeight = virtual && typeof virtual === 'object' && virtual.itemHeight
+    ? virtual.itemHeight
+    : DEFAULT_ITEM_HEIGHT;
+  const containerHeight = virtual && typeof virtual === 'object' && virtual.containerHeight
+    ? virtual.containerHeight
+    : DEFAULT_CONTAINER_HEIGHT;
+
+  // Virtual scroll: compute visible range
+  const { visibleItems, totalHeight, offsetY } = useMemo(() => {
+    if (!virtualEnabled) {
+      return { visibleItems: renderableItems, totalHeight: 0, offsetY: 0 };
+    }
+    const total = renderableItems.length * itemHeight;
+    const startIdx = Math.max(0, Math.floor(scrollTop / itemHeight) - VIRTUAL_BUFFER);
+    const endIdx = Math.min(
+      renderableItems.length,
+      Math.ceil((scrollTop + containerHeight) / itemHeight) + VIRTUAL_BUFFER,
+    );
+    return {
+      visibleItems: renderableItems.slice(startIdx, endIdx),
+      totalHeight: total,
+      offsetY: startIdx * itemHeight,
+    };
+  }, [renderableItems, virtualEnabled, scrollTop, itemHeight, containerHeight]);
 
   // Get selected options
   const selectedOptions = useMemo(() => {
-    return options.filter((opt) => internalValue.includes(opt.value));
-  }, [options, internalValue]);
+    return allOptions.filter((opt) => internalValue.includes(opt.value));
+  }, [allOptions, internalValue]);
 
   // Handle selection
   const handleSelect = useCallback((optionValue: string | number, option: SelectOption) => {
@@ -133,13 +191,13 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
     setSearchValue('');
 
     if (onChange) {
-      const selectedOpts = options.filter((opt) => newValue.includes(opt.value));
+      const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
       onChange(
         multiple ? newValue : newValue[0],
         multiple ? selectedOpts : selectedOpts[0]
       );
     }
-  }, [multiple, internalValue, onChange, options]);
+  }, [multiple, internalValue, onChange, allOptions]);
 
   // Handle clear
   const handleClear = useCallback((e: React.MouseEvent) => {
@@ -150,15 +208,50 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
     onClear?.();
   }, [multiple, onChange, onClear]);
 
+  // Handle token separators
+  const handleSearchInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+
+    if (tokenSeparators && tokenSeparators.length > 0 && multiple) {
+      const lastChar = rawValue.slice(-1);
+      if (tokenSeparators.includes(lastChar)) {
+        const token = rawValue.slice(0, -1).trim();
+        if (token) {
+          const matchOption = allOptions.find(
+            (opt) => getLabelText(opt.label).toLowerCase() === token.toLowerCase()
+              || String(opt.value) === token,
+          );
+          if (matchOption && !internalValue.includes(matchOption.value)) {
+            const newValue = [...internalValue, matchOption.value];
+            setInternalValue(newValue);
+            const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
+            onChange?.(newValue, selectedOpts);
+          }
+          setSearchValue('');
+          onSearch?.('');
+          return;
+        }
+      }
+    }
+
+    setSearchValue(rawValue);
+    onSearch?.(rawValue);
+    setFocusedIndex(0);
+  }, [tokenSeparators, multiple, allOptions, internalValue, onChange, onSearch]);
+
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (disabled) return;
 
+    // Count only option items for keyboard navigation
+    const optionItems = renderableItems.filter((item) => item.type === 'option');
+
     switch (e.key) {
       case 'Enter':
         e.preventDefault();
-        if (isOpen && focusedIndex >= 0 && filteredOptions[focusedIndex]) {
-          handleSelect(filteredOptions[focusedIndex].value, filteredOptions[focusedIndex]);
+        if (isOpen && focusedIndex >= 0 && optionItems[focusedIndex]) {
+          const opt = optionItems[focusedIndex].option!;
+          handleSelect(opt.value, opt);
         } else if (!isOpen) {
           setIsOpen(true);
         }
@@ -174,7 +267,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
           setFocusedIndex(0);
         } else {
           setFocusedIndex((prev) => {
-            const next = prev < filteredOptions.length - 1 ? prev + 1 : 0;
+            const next = prev < optionItems.length - 1 ? prev + 1 : 0;
             scrollOptionIntoView(next);
             return next;
           });
@@ -184,7 +277,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
         e.preventDefault();
         if (isOpen) {
           setFocusedIndex((prev) => {
-            const next = prev > 0 ? prev - 1 : filteredOptions.length - 1;
+            const next = prev > 0 ? prev - 1 : optionItems.length - 1;
             scrollOptionIntoView(next);
             return next;
           });
@@ -200,7 +293,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
       case 'End':
         if (isOpen) {
           e.preventDefault();
-          const lastIndex = filteredOptions.length - 1;
+          const lastIndex = optionItems.length - 1;
           setFocusedIndex(lastIndex);
           scrollOptionIntoView(lastIndex);
         }
@@ -209,7 +302,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
         if (multiple && !searchValue && internalValue.length > 0) {
           const newValue = internalValue.slice(0, -1);
           setInternalValue(newValue);
-          const selectedOpts = options.filter((opt) => newValue.includes(opt.value));
+          const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
           onChange?.(newValue, selectedOpts);
         }
         break;
@@ -217,7 +310,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
         setIsOpen(false);
         break;
     }
-  }, [disabled, isOpen, focusedIndex, filteredOptions, handleSelect, multiple, searchValue, internalValue, options, onChange]);
+  }, [disabled, isOpen, focusedIndex, renderableItems, handleSelect, multiple, searchValue, internalValue, allOptions, onChange]);
 
   // Scroll focused option into view
   const scrollOptionIntoView = useCallback((index: number) => {
@@ -285,8 +378,10 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
       : variant === 'filled'
         ? 'var(--ds-select-filled-bg)'
         : 'var(--ds-select-bg)',
-    border: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
-    borderBottom: variant === 'flushed' ? `2px solid ${getBorderColor()}` : undefined,
+    borderTop: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
+    borderRight: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
+    borderLeft: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
+    borderBottom: variant === 'flushed' ? `2px solid ${getBorderColor()}` : `1px solid ${getBorderColor()}`,
     borderRadius: variant === 'flushed' ? 0 : 'var(--ds-select-radius)',
     fontSize: `${sizeConfig.fontSize}px`,
     color: 'var(--ds-select-color)',
@@ -307,10 +402,12 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
     backgroundColor: 'var(--ds-select-dropdown-bg)',
     border: `1px solid var(--ds-select-dropdown-border)`,
     borderRadius: 'var(--ds-select-dropdown-radius)',
-    boxShadow: 'var(--ds-select-dropdown-shadow)',
-    maxHeight: '16rem',
+    boxShadow: 'var(--ds-card-shadow, 0 6px 16px -4px rgba(0, 0, 0, 0.12), 0 3px 6px -2px rgba(0, 0, 0, 0.08))',
+    maxHeight: virtualEnabled ? `${containerHeight}px` : '16rem',
     overflowY: 'auto',
     zIndex: 1050,
+    animation: 'rottay-select-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
+    transformOrigin: 'top center',
   };
 
   // Build class names
@@ -350,7 +447,11 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
                 color: 'var(--ds-select-tag-color)',
                 borderRadius: 'var(--ds-select-tag-radius)',
                 fontSize: '0.875em',
+                transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s',
+                cursor: 'default',
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
             >
               {opt.icon && <span>{opt.icon}</span>}
               {opt.label}
@@ -368,7 +469,10 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
                   fontSize: '0.75rem',
                   lineHeight: 1,
                   color: 'var(--ds-select-clear-color)',
+                  transition: 'color 0.15s',
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ds-form-error-color, #ef4444)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ds-select-clear-color)'; }}
                 aria-label={`Remove ${opt.label}`}
               >
                 ×
@@ -401,6 +505,129 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
       </span>
     );
   }, [selectedOptions, multiple, maxTagCount, handleSelect]);
+
+  const handleDropdownScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setScrollTop(e.currentTarget.scrollTop);
+  };
+
+  // Build a map from option value to its option-only index for keyboard focus
+  const optionIndexMap = useMemo(() => {
+    const map = new Map<string | number, number>();
+    let idx = 0;
+    for (const item of renderableItems) {
+      if (item.type === 'option' && item.option) {
+        map.set(item.option.value, idx);
+        idx++;
+      }
+    }
+    return map;
+  }, [renderableItems]);
+
+  const renderOptionItem = (option: SelectOption, optionIdx: number) => {
+    const isSelected = internalValue.includes(option.value);
+    const isFocused = focusedIndex === optionIdx;
+
+    return (
+      <div
+        key={option.value}
+        id={`${id || 'select'}-option-${optionIdx}`}
+        className={[
+          'rottay-select__option',
+          isSelected && 'rottay-select__option--selected',
+          option.disabled && 'rottay-select__option--disabled',
+          isFocused && 'rottay-select__option--focused',
+        ].filter(Boolean).join(' ')}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          padding: '0.5rem 0.75rem',
+          height: virtualEnabled ? `${itemHeight}px` : undefined,
+          fontSize: `${sizeConfig.fontSize}px`,
+          backgroundColor: isSelected
+            ? 'var(--ds-select-option-bg-selected)'
+            : isFocused
+              ? 'var(--ds-select-option-bg-hover)'
+              : 'transparent',
+          color: isSelected
+            ? 'var(--ds-select-option-color-selected)'
+            : option.disabled
+              ? 'var(--ds-select-option-color-disabled)'
+              : 'var(--ds-select-color)',
+          cursor: option.disabled ? 'not-allowed' : 'pointer',
+          opacity: option.disabled ? 0.5 : 1,
+          transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s',
+          borderLeft: isFocused && !isSelected
+            ? '3px solid var(--ds-color-primary, #1677ff)'
+            : isSelected
+              ? '3px solid var(--ds-select-check-color, var(--ds-color-primary))'
+              : '3px solid transparent',
+          boxShadow: isFocused && !isSelected
+            ? 'inset 0 0 0 1px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15))'
+            : 'none',
+        }}
+        onClick={() => handleSelect(option.value, option)}
+        onMouseEnter={() => setFocusedIndex(optionIdx)}
+        role="option"
+        aria-selected={isSelected}
+        aria-disabled={option.disabled}
+      >
+        {multiple && (
+          <span
+            style={{
+              width: '1rem',
+              height: '1rem',
+              border: `1px solid var(--ds-select-border)`,
+              borderRadius: '0.1875rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: isSelected ? 'var(--ds-select-check-color)' : 'transparent',
+              color: 'white',
+              fontSize: '0.625rem',
+              flexShrink: 0,
+              transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
+              transform: isSelected ? 'scale(1)' : 'scale(0.9)',
+            }}
+          >
+            {isSelected && <span style={{ animation: 'rottay-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}>✓</span>}
+          </span>
+        )}
+        {option.icon && <span style={{ flexShrink: 0 }}>{option.icon}</span>}
+        <span>{option.label}</span>
+        {!multiple && isSelected && (
+          <span style={{
+            marginLeft: 'auto',
+            color: 'var(--ds-select-check-color)',
+            animation: 'rottay-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+            display: 'inline-block',
+          }}>
+            ✓
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  const renderGroupHeader = (label: React.ReactNode, key: string | number) => (
+    <div
+      key={key}
+      style={{
+        padding: '0.5rem 0.75rem 0.25rem',
+        fontSize: '0.7rem',
+        fontWeight: 600,
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+        color: 'var(--ds-select-color-placeholder)',
+        borderTop: '1px solid var(--ds-select-dropdown-border)',
+        height: virtualEnabled ? `${itemHeight}px` : undefined,
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      {label}
+    </div>
+  );
 
   return (
     <div
@@ -445,11 +672,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
             type="text"
             className="rottay-select__search"
             value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              onSearch?.(e.target.value);
-              setFocusedIndex(0);
-            }}
+            onChange={handleSearchInput}
             placeholder={selectedOptions.length === 0 ? displayPlaceholder : ''}
             style={{
               border: 'none',
@@ -459,6 +682,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
               fontSize: 'inherit',
               minWidth: '3rem',
               color: 'var(--ds-select-color)',
+              caretColor: 'var(--ds-color-primary, #1677ff)',
             }}
             onClick={(e) => e.stopPropagation()}
             aria-autocomplete="list"
@@ -501,7 +725,7 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
             width="14"
             height="14"
             viewBox="0 0 24 24"
-            style={{ animation: 'spin 1s linear infinite' }}
+            style={{ animation: 'spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite' }}
           >
             <circle
               cx="12"
@@ -543,87 +767,56 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
           role="listbox"
           aria-multiselectable={multiple}
           aria-activedescendant={focusedIndex >= 0 ? `${id || 'select'}-option-${focusedIndex}` : undefined}
+          onScroll={virtualEnabled ? handleDropdownScroll : undefined}
         >
-          {filteredOptions.length === 0 ? (
-            <div
-              style={{
-                padding: '0.5rem 0.75rem',
-                color: 'var(--ds-select-color-placeholder)',
-                textAlign: 'center',
-              }}
-            >
-              {noOptionsText}
+          {virtualEnabled ? (
+            /* Virtual scrolling */
+            <div style={{ height: `${totalHeight}px`, position: 'relative' }}>
+              <div style={{ position: 'absolute', top: `${offsetY}px`, left: 0, right: 0 }}>
+                {visibleItems.length === 0 ? (
+                  <div
+                    style={{
+                      padding: '0.5rem 0.75rem',
+                      color: 'var(--ds-select-color-placeholder)',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {noOptionsText}
+                  </div>
+                ) : (
+                  visibleItems.map((item, idx) => {
+                    if (item.type === 'group-header') {
+                      return renderGroupHeader(item.groupLabel, `gh-${idx}`);
+                    }
+                    const optIdx = optionIndexMap.get(item.option!.value) ?? -1;
+                    return renderOptionItem(item.option!, optIdx);
+                  })
+                )}
+              </div>
             </div>
           ) : (
-            filteredOptions.map((option, index) => {
-              const isSelected = internalValue.includes(option.value);
-              const isFocused = focusedIndex === index;
-
-              return (
+            /* Normal rendering */
+            <>
+              {renderableItems.length === 0 ? (
                 <div
-                  key={option.value}
-                  id={`${id || 'select'}-option-${index}`}
-                  className={[
-                    'rottay-select__option',
-                    isSelected && 'rottay-select__option--selected',
-                    option.disabled && 'rottay-select__option--disabled',
-                    isFocused && 'rottay-select__option--focused',
-                  ].filter(Boolean).join(' ')}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
                     padding: '0.5rem 0.75rem',
-                    fontSize: `${sizeConfig.fontSize}px`,
-                    backgroundColor: isSelected
-                      ? 'var(--ds-select-option-bg-selected)'
-                      : isFocused
-                        ? 'var(--ds-select-option-bg-hover)'
-                        : 'transparent',
-                    color: isSelected
-                      ? 'var(--ds-select-option-color-selected)'
-                      : option.disabled
-                        ? 'var(--ds-select-option-color-disabled)'
-                        : 'var(--ds-select-color)',
-                    cursor: option.disabled ? 'not-allowed' : 'pointer',
-                    opacity: option.disabled ? 0.5 : 1,
-                    transition: 'var(--ds-select-transition)',
+                    color: 'var(--ds-select-color-placeholder)',
+                    textAlign: 'center',
                   }}
-                  onClick={() => handleSelect(option.value, option)}
-                  onMouseEnter={() => setFocusedIndex(index)}
-                  role="option"
-                  aria-selected={isSelected}
-                  aria-disabled={option.disabled}
                 >
-                  {multiple && (
-                    <span
-                      style={{
-                        width: '1rem',
-                        height: '1rem',
-                        border: `1px solid var(--ds-select-border)`,
-                        borderRadius: '0.1875rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: isSelected ? 'var(--ds-select-check-color)' : 'transparent',
-                        color: 'white',
-                        fontSize: '0.625rem',
-                        flexShrink: 0,
-                      }}
-                    >
-                      {isSelected && '✓'}
-                    </span>
-                  )}
-                  {option.icon && <span style={{ flexShrink: 0 }}>{option.icon}</span>}
-                  <span>{option.label}</span>
-                  {!multiple && isSelected && (
-                    <span style={{ marginLeft: 'auto', color: 'var(--ds-select-check-color)' }}>
-                      ✓
-                    </span>
-                  )}
+                  {noOptionsText}
                 </div>
-              );
-            })
+              ) : (
+                renderableItems.map((item, idx) => {
+                  if (item.type === 'group-header') {
+                    return renderGroupHeader(item.groupLabel, `gh-${idx}`);
+                  }
+                  const optIdx = optionIndexMap.get(item.option!.value) ?? -1;
+                  return renderOptionItem(item.option!, optIdx);
+                })
+              )}
+            </>
           )}
         </div>
       )}
@@ -634,9 +827,19 @@ export default function RusticSelect(props: SelectProps): React.ReactElement {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
+        @keyframes rottay-select-dropdown-in {
+          from { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
+          to { opacity: 1; transform: scaleY(1) translateY(0); }
+        }
+        @keyframes rottay-select-check-in {
+          from { opacity: 0; transform: scale(0); }
+          to { opacity: 1; transform: scale(1); }
+        }
       `}</style>
     </div>
   );
-}
+});
 
 RusticSelect.displayName = 'RusticSelect';
+
+export default RusticSelect;

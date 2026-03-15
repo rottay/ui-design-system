@@ -7,109 +7,109 @@
 
 // Border Widths
 export const borderWidth = {
-  0: 'var(--border-width-0)',
-  1: 'var(--border-width-1)',
-  2: 'var(--border-width-2)',
-  4: 'var(--border-width-4)',
-  8: 'var(--border-width-8)',
+  0: 'var(--ds-border-width-0)',
+  1: 'var(--ds-border-width-1)',
+  2: 'var(--ds-border-width-2)',
+  4: 'var(--ds-border-width-4)',
+  8: 'var(--ds-border-width-8)',
   // Semantic
-  none: 'var(--border-width-none)',
-  thin: 'var(--border-width-thin)',
-  default: 'var(--border-width-default)',
-  medium: 'var(--border-width-medium)',
-  thick: 'var(--border-width-thick)',
+  none: 'var(--ds-border-width-none)',
+  thin: 'var(--ds-border-width-thin)',
+  default: 'var(--ds-border-width-default)',
+  medium: 'var(--ds-border-width-medium)',
+  thick: 'var(--ds-border-width-thick)',
 } as const;
 
 // Border Radius
 export const radius = {
-  none: 'var(--radius-none)',
-  xs: 'var(--radius-xs)',
-  sm: 'var(--radius-sm)',
-  md: 'var(--radius-md)',
-  lg: 'var(--radius-lg)',
-  xl: 'var(--radius-xl)',
-  '2xl': 'var(--radius-2xl)',
-  '3xl': 'var(--radius-3xl)',
-  full: 'var(--radius-full)',
+  none: 'var(--ds-radius-none)',
+  xs: 'var(--ds-radius-xs)',
+  sm: 'var(--ds-radius-sm)',
+  md: 'var(--ds-radius-md)',
+  lg: 'var(--ds-radius-lg)',
+  xl: 'var(--ds-radius-xl)',
+  '2xl': 'var(--ds-radius-2xl)',
+  '3xl': 'var(--ds-radius-3xl)',
+  full: 'var(--ds-radius-full)',
   // Component-specific
-  button: 'var(--radius-button)',
-  input: 'var(--radius-input)',
-  card: 'var(--radius-card)',
-  modal: 'var(--radius-modal)',
-  badge: 'var(--radius-badge)',
-  avatar: 'var(--radius-avatar)',
+  button: 'var(--ds-radius-button)',
+  input: 'var(--ds-radius-input)',
+  card: 'var(--ds-radius-card)',
+  modal: 'var(--ds-radius-modal)',
+  badge: 'var(--ds-radius-badge)',
+  avatar: 'var(--ds-radius-avatar)',
 } as const;
 
 // Border Styles
 export const borderStyle = {
-  none: 'var(--border-style-none)',
-  solid: 'var(--border-style-solid)',
-  dashed: 'var(--border-style-dashed)',
-  dotted: 'var(--border-style-dotted)',
-  double: 'var(--border-style-double)',
+  none: 'var(--ds-border-style-none)',
+  solid: 'var(--ds-border-style-solid)',
+  dashed: 'var(--ds-border-style-dashed)',
+  dotted: 'var(--ds-border-style-dotted)',
+  double: 'var(--ds-border-style-double)',
 } as const;
 
 // Border Colors
 export const borderColor = {
-  default: 'var(--border-color-default)',
-  muted: 'var(--border-color-muted)',
-  strong: 'var(--border-color-strong)',
+  default: 'var(--ds-border-color-default)',
+  muted: 'var(--ds-border-color-muted)',
+  strong: 'var(--ds-border-color-strong)',
   // Interactive
-  hover: 'var(--border-color-hover)',
-  focus: 'var(--border-color-focus)',
-  active: 'var(--border-color-active)',
+  hover: 'var(--ds-border-color-hover)',
+  focus: 'var(--ds-border-color-focus)',
+  active: 'var(--ds-border-color-active)',
   // Semantic
-  primary: 'var(--border-color-primary)',
-  secondary: 'var(--border-color-secondary)',
-  success: 'var(--border-color-success)',
-  warning: 'var(--border-color-warning)',
-  error: 'var(--border-color-error)',
-  info: 'var(--border-color-info)',
+  primary: 'var(--ds-border-color-primary)',
+  secondary: 'var(--ds-border-color-secondary)',
+  success: 'var(--ds-border-color-success)',
+  warning: 'var(--ds-border-color-warning)',
+  error: 'var(--ds-border-color-error)',
+  info: 'var(--ds-border-color-info)',
   // Utility
-  transparent: 'var(--border-color-transparent)',
+  transparent: 'var(--ds-border-color-transparent)',
 } as const;
 
 // Divider
 export const divider = {
-  width: 'var(--divider-width)',
-  color: 'var(--divider-color)',
-  style: 'var(--divider-style)',
+  width: 'var(--ds-divider-width)',
+  color: 'var(--ds-divider-color)',
+  style: 'var(--ds-divider-style)',
   spacing: {
-    sm: 'var(--divider-spacing-sm)',
-    md: 'var(--divider-spacing-md)',
-    lg: 'var(--divider-spacing-lg)',
+    sm: 'var(--ds-divider-spacing-sm)',
+    md: 'var(--ds-divider-spacing-md)',
+    lg: 'var(--ds-divider-spacing-lg)',
   },
 } as const;
 
 // Outline
 export const outline = {
-  width: 'var(--outline-width)',
-  offset: 'var(--outline-offset)',
-  style: 'var(--outline-style)',
+  width: 'var(--ds-outline-width)',
+  offset: 'var(--ds-outline-offset)',
+  style: 'var(--ds-outline-style)',
   color: {
-    default: 'var(--outline-color-default)',
-    error: 'var(--outline-color-error)',
+    default: 'var(--ds-outline-color-default)',
+    error: 'var(--ds-outline-color-error)',
   },
 } as const;
 
 // Composite Borders
 export const border = {
-  default: 'var(--border-default)',
-  muted: 'var(--border-muted)',
-  strong: 'var(--border-strong)',
-  hover: 'var(--border-hover)',
-  focus: 'var(--border-focus)',
+  default: 'var(--ds-border-default)',
+  muted: 'var(--ds-border-muted)',
+  strong: 'var(--ds-border-strong)',
+  hover: 'var(--ds-border-hover)',
+  focus: 'var(--ds-border-focus)',
   // Semantic
-  primary: 'var(--border-primary)',
-  secondary: 'var(--border-secondary)',
-  success: 'var(--border-success)',
-  warning: 'var(--border-warning)',
-  error: 'var(--border-error)',
-  info: 'var(--border-info)',
+  primary: 'var(--ds-border-primary)',
+  secondary: 'var(--ds-border-secondary)',
+  success: 'var(--ds-border-success)',
+  warning: 'var(--ds-border-warning)',
+  error: 'var(--ds-border-error)',
+  info: 'var(--ds-border-info)',
   // Variants
-  dashed: 'var(--border-dashed)',
-  dashedMuted: 'var(--border-dashed-muted)',
-  transparent: 'var(--border-transparent)',
+  dashed: 'var(--ds-border-dashed)',
+  dashedMuted: 'var(--ds-border-dashed-muted)',
+  transparent: 'var(--ds-border-transparent)',
 } as const;
 
 // Combined borders export

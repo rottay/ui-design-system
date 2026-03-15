@@ -53,6 +53,8 @@ export interface ChartPersonalityTokens {
   useGradientFill: boolean;
   /** Tooltip style */
   tooltipStyle: 'minimal' | 'detailed' | 'glass';
+  /** Color scheme for chart palettes */
+  colorScheme?: 'default' | 'pastel' | 'vibrant' | 'monochrome' | 'accessible';
 }
 
 /** Typography personality tokens */

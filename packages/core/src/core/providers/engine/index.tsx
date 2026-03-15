@@ -30,6 +30,7 @@
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import type { EngineName, EngineContextValue, EngineProviderProps } from '../../types';
 import { getDefaultEngine, isValidEngine } from '../../engines/registry';
+import { warnOnceInDev } from '../../utils/runtime-logger';
 
 const EngineContext = createContext<EngineContextValue | null>(null);
 
@@ -53,7 +54,10 @@ export function EngineProvider({
     if (isValidEngine(newEngine)) {
       setEngineState(newEngine);
     } else {
-      console.warn(`Invalid engine: ${newEngine}. Using default.`);
+      warnOnceInDev(
+        `engine-provider:invalid:${String(newEngine)}`,
+        `Invalid engine: ${newEngine}. Using default.`
+      );
       setEngineState(getDefaultEngine());
     }
   }, []);
@@ -77,7 +81,10 @@ export function EngineProvider({
 const defaultContextValue: EngineContextValue = {
   engine: getDefaultEngine(),
   setEngine: () => {
-    console.warn('setEngine called outside of EngineProvider. Wrap your app with EngineProvider to enable engine switching.');
+    warnOnceInDev(
+      'engine-provider:missing',
+      'setEngine called outside of EngineProvider. Wrap your app with EngineProvider to enable engine switching.'
+    );
   },
 };
 

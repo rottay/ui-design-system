@@ -134,16 +134,16 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     width: fullScreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md,
     maxWidth: fullScreen ? '100vw' : '90vw',
     maxHeight: fullScreen ? '100vh' : MAX_HEIGHT_MAP[size] || MAX_HEIGHT_MAP.md,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--ds-color-bg-elevated)',
     borderRadius: fullScreen ? '0' : RADIUS_MAP[radius] || RADIUS_MAP.lg,
-    boxShadow: shadow ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)' : 'none',
+    boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-shadow-2xl))' : 'none',
     overflow: 'hidden',
     cursor: 'default',
-    transform: open ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-10px)',
+    transform: open ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-8px)',
     opacity: open ? 1 : 0,
     transition: disableAnimation
       ? 'none'
-      : 'transform 0.2s ease-out, opacity 0.2s ease-out',
+      : 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
     ...style,
   };
 
@@ -154,7 +154,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     justifyContent: 'space-between',
     gap: '12px',
     padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-    borderBottom: divider ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+    borderBottom: divider ? '1px solid var(--ds-modal-header-border, var(--ds-color-border-primary))' : 'none',
     flexShrink: 0,
   };
 
@@ -184,7 +184,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     justifyContent: 'flex-end',
     gap: '12px',
     padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-    borderTop: divider ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+    borderTop: divider ? '1px solid var(--ds-modal-footer-border, var(--ds-color-border-primary))' : 'none',
     flexShrink: 0,
   };
 
@@ -200,7 +200,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     border: 'none',
     borderRadius: '6px',
     backgroundColor: 'transparent',
-    color: 'rgba(0, 0, 0, 0.45)',
+    color: 'var(--ds-modal-close-color, var(--ds-color-text-tertiary))',
     cursor: 'pointer',
     transition: 'all 0.2s ease-in-out',
     flexShrink: 0,
@@ -215,7 +215,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
         visible={open && showBackdrop}
         onClick={handleBackdropClick}
         clickable={closeOnBackdropClick}
-        blur={blurBackdrop}
+        blur={blurBackdrop !== false}
+        blurAmount={blurBackdrop ? 8 : 4}
         zIndex={zIndex}
         disableAnimation={disableAnimation}
       >
@@ -245,12 +246,15 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
                       onClick={onClose}
                       aria-label={t('modal.close')}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.06)';
-                        e.currentTarget.style.color = 'rgba(0, 0, 0, 0.88)';
+                        e.currentTarget.style.backgroundColor =
+                          'var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary))';
+                        e.currentTarget.style.color =
+                          'var(--ds-modal-close-color-hover, var(--ds-color-text-primary))';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = 'rgba(0, 0, 0, 0.45)';
+                        e.currentTarget.style.color =
+                          'var(--ds-modal-close-color, var(--ds-color-text-tertiary))';
                       }}
                     >
                       <svg
@@ -274,7 +278,13 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
               {/* Body */}
               <div style={bodyStyle}>
                 {description && (
-                  <p id="modal-description" style={{ marginTop: 0, color: 'rgba(0, 0, 0, 0.65)' }}>
+                  <p
+                    id="modal-description"
+                    style={{
+                      marginTop: 0,
+                      color: 'var(--ds-modal-body-color, var(--ds-color-text-secondary))',
+                    }}
+                  >
                     {description}
                   </p>
                 )}

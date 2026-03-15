@@ -106,9 +106,9 @@ export interface DrawerBodyProps {
  */
 const PADDING_MAP: Record<DrawerBodyProps['padding'] & string, string> = {
   none: '0',
-  sm: 'var(--spacing-3, 12px)',
-  md: 'var(--spacing-4, 16px)',
-  lg: 'var(--spacing-6, 24px)',
+  sm: 'var(--ds-spacing-3, 12px)',
+  md: 'var(--ds-spacing-4, 16px)',
+  lg: 'var(--ds-spacing-6, 24px)',
 };
 
 // ============================================================================
@@ -181,10 +181,10 @@ export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
       overflowX: 'hidden',
 
       // Background - transparent by default, customizable via CSS var
-      backgroundColor: 'var(--drawer-body-bg, transparent)',
+      backgroundColor: 'var(--ds-drawer-body-bg, transparent)',
 
       // Typography - inherit from parent for theme compatibility
-      color: 'var(--drawer-body-color, inherit)',
+      color: 'var(--ds-drawer-body-color, inherit)',
 
       // Merge user styles (takes precedence)
       ...style,

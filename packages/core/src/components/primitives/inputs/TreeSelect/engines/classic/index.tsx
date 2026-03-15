@@ -35,10 +35,15 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       onDropdownVisibleChange,
       fieldNames,
       treeLine,
+      loadData,
       className,
       style,
       popupClassName,
     } = props;
+
+    const popupClassNames = popupClassName
+      ? ({ popup: { root: popupClassName } } as const)
+      : undefined;
 
     return (
       <div ref={ref} className={className} style={style}>
@@ -55,7 +60,12 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           treeDefaultExpandAll={treeDefaultExpandAll}
           treeDefaultExpandedKeys={treeDefaultExpandedKeys}
           treeExpandedKeys={treeExpandedKeys}
-          onTreeExpand={onTreeExpand}
+          /**
+           * Ant Design's rc-tree uses a narrower internal safe-key type than
+           * our public DS contract. The values we pass are still string/number
+           * keys, so this cast only bridges that library boundary.
+           */
+          onTreeExpand={onTreeExpand as any}
           placeholder={placeholder}
           disabled={disabled}
           allowClear={allowClear}
@@ -65,10 +75,11 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           notFoundContent={notFoundContent}
           loading={loading}
           open={open}
-          onDropdownVisibleChange={onDropdownVisibleChange}
+          onOpenChange={onDropdownVisibleChange}
           fieldNames={fieldNames}
           treeLine={treeLine}
-          popupClassName={popupClassName}
+          loadData={loadData as any}
+          classNames={popupClassNames as any}
           style={{ width: '100%' }}
         />
       </div>

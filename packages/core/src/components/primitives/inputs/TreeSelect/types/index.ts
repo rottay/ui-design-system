@@ -133,11 +133,22 @@ export interface TreeSelectProps {
   multiple?: boolean;
   /** Show checkbox before tree node */
   treeCheckable?: boolean;
-  /** Check all children when parent is checked */
+  /**
+   * When true, parent/child checkbox selections are independent.
+   * Checking a parent does NOT auto-check children, unchecking a child
+   * does NOT uncheck its parent.
+   */
   treeCheckStrictly?: boolean;
   /** Show search input */
   showSearch?: boolean;
-  /** Custom filter function */
+  /**
+   * Custom filter function for search.
+   * - `true` uses default title-match filter
+   * - `false` disables filtering
+   * - A function receives (inputValue, treeNode) and returns boolean
+   *
+   * When filtering is active, matching parent nodes are auto-expanded.
+   */
   filterTreeNode?: boolean | ((inputValue: string, treeNode: TreeSelectNode) => boolean);
   /** Expand all tree nodes by default */
   treeDefaultExpandAll?: boolean;
@@ -167,14 +178,39 @@ export interface TreeSelectProps {
   open?: boolean;
   /** Callback when dropdown visibility changes */
   onDropdownVisibleChange?: (open: boolean) => void;
-  /** Field names mapping */
+  /**
+   * Custom field name mapping for tree data.
+   * Allows using data with non-standard property names without transformation.
+   *
+   * @example
+   * ```tsx
+   * <TreeSelect
+   *   treeData={[{ name: 'Dept', id: '1', subItems: [] }]}
+   *   fieldNames={{ title: 'name', value: 'id', children: 'subItems' }}
+   * />
+   * ```
+   */
   fieldNames?: {
-    label?: string;
+    title?: string;
     value?: string;
     children?: string;
   };
-  /** Show tree line */
+  /** Show tree line connector between nodes */
   treeLine?: boolean;
+  /**
+   * Lazy load children for a node. Return a Promise that resolves with
+   * child nodes. A loading spinner is shown on the node while loading.
+   *
+   * @example
+   * ```tsx
+   * <TreeSelect
+   *   loadData={(node) => fetchChildren(node.value).then(children => {
+   *     setTreeData(prev => appendChildren(prev, node.value, children));
+   *   })}
+   * />
+   * ```
+   */
+  loadData?: (node: TreeSelectNode) => Promise<void>;
   /** Additional class name */
   className?: string;
   /** Additional styles */

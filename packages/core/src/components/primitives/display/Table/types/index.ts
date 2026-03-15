@@ -57,6 +57,20 @@ export type TableScrollBehavior = 'smooth' | 'auto';
 export type SortOrder = 'ascend' | 'descend' | null;
 export type FilterMode = 'menu' | 'tree';
 
+/**
+ * Supported field types for inline cell editing.
+ * Determines which input control is rendered in edit mode.
+ */
+export type TableCellFieldType = 'text' | 'number' | 'select' | 'date' | 'checkbox';
+
+/**
+ * Identifies a cell currently being edited by row key and column key.
+ */
+export interface EditingCell {
+  rowKey: string;
+  columnKey: string;
+}
+
 export interface ColumnType<T = unknown> {
   /** Column key */
   key?: Key;
@@ -110,6 +124,29 @@ export interface ColumnType<T = unknown> {
   responsive?: ('xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl')[];
   /** Column tooltip */
   tooltip?: string;
+  /**
+   * Whether this column supports inline cell editing.
+   * - `true`: always editable
+   * - `(record, index) => boolean`: conditionally editable per row
+   */
+  editable?: boolean | ((record: T, index: number) => boolean);
+  /**
+   * Custom render function for the edit mode input.
+   * If not provided, a default input is rendered based on `fieldType`.
+   * @param value - Current cell value
+   * @param record - Full row record
+   * @param save - Callback to save the new value and exit edit mode
+   */
+  editRender?: (value: unknown, record: T, save: (value: unknown) => void) => ReactNode;
+  /**
+   * The type of input to render in edit mode when `editRender` is not specified.
+   * @default 'text'
+   */
+  fieldType?: TableCellFieldType;
+  /**
+   * Options for `fieldType: 'select'`. Each option has a label and value.
+   */
+  selectOptions?: Array<{ label: ReactNode; value: string | number }>;
 }
 
 export interface TablePaginationConfig {
@@ -264,6 +301,19 @@ export interface TableProps<T = unknown> {
   style?: CSSProperties;
   /** ID */
   id?: string;
+  /**
+   * Callback fired when a cell value is saved via inline editing.
+   * @param key - Row key of the edited record
+   * @param dataIndex - Column dataIndex (field name) that was edited
+   * @param value - New value
+   * @param record - Full row record before the edit
+   */
+  onCellEdit?: (key: string, dataIndex: string, value: unknown, record: T) => void;
+  /**
+   * Controlled editing cell state. Set to `null` to clear.
+   * When provided, the component operates in controlled mode for editing.
+   */
+  editingCell?: EditingCell | null;
 }
 
 export const TABLE_DEFAULTS: Partial<TableProps> = {

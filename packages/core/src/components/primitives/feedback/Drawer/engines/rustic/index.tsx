@@ -285,7 +285,7 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
     // Base styles with CSS custom property theming
     const baseStyle: React.CSSProperties = {
       position: 'fixed',
-      backgroundColor: 'var(--ds-drawer-bg, #fff)',
+      backgroundColor: 'var(--ds-drawer-bg, var(--ds-color-bg-elevated))',
       boxShadow: 'var(--ds-drawer-shadow, 0 8px 30px rgba(0, 0, 0, 0.12))',
       transition: 'var(--ds-drawer-transition, transform 0.3s ease-in-out)',
       overflowY: 'auto',
@@ -340,7 +340,7 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
    */
   const headerStyle: React.CSSProperties = {
     padding: 'var(--ds-drawer-header-padding, 16px 24px)',
-    borderBottom: '1px solid var(--ds-drawer-border-color, #f0f0f0)',
+    borderBottom: '1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -363,7 +363,7 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
    */
   const footerStyle: React.CSSProperties = {
     padding: 'var(--ds-drawer-footer-padding, 10px 16px)',
-    borderTop: '1px solid var(--ds-drawer-border-color, #f0f0f0)',
+    borderTop: '1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle))',
     flexShrink: 0,
   };
 
@@ -382,7 +382,7 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'var(--ds-drawer-close-color, #666)',
+    color: 'var(--ds-drawer-close-color, var(--ds-color-text-secondary))',
   };
 
   // ---------------------------------------------------------------------------

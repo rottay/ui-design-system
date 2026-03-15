@@ -11,8 +11,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
-import type { CheckboxProps, CheckboxGroupProps } from '../../types';
-import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS } from '../../types';
+import type { CheckboxProps } from '../../types';
+import { CHECKBOX_DEFAULTS } from '../../types';
 
 // Size mapping using CSS variables
 const SIZE_VAR_MAP: Record<string, string> = {
@@ -142,9 +142,11 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
       : disabled
         ? 'var(--ds-checkbox-bg-disabled)'
         : 'var(--ds-checkbox-bg)',
-    transition: 'var(--ds-checkbox-transition)',
-    outline: isFocused ? 'var(--ds-checkbox-focus-ring)' : 'none',
-    outlineOffset: '2px',
+    transition: 'border-color 0.15s, background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s',
+    outline: 'none',
+    boxShadow: isFocused
+      ? '0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1)'
+      : 'none',
   };
 
   const inputStyle: React.CSSProperties = {
@@ -169,14 +171,18 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
 
   const displayLabel = label || children;
 
-  // Checkmark SVG for checked state
+  // Checkmark SVG for checked state with scale entrance animation
   const CheckmarkIcon = () => (
     <svg
       width={sizeNumeric * 0.6}
       height={sizeNumeric * 0.6}
       viewBox="0 0 12 12"
       fill="none"
-      style={{ display: isChecked && !indeterminate ? 'block' : 'none' }}
+      style={{
+        display: isChecked && !indeterminate ? 'block' : 'none',
+        transform: isChecked ? 'scale(1)' : 'scale(0)',
+        transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      }}
     >
       <path
         d="M2 6L5 9L10 3"
@@ -258,172 +264,4 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   );
 }
 
-// Checkbox Group component
-export function RusticCheckboxGroup(props: CheckboxGroupProps): React.ReactElement {
-  const {
-    size = CHECKBOX_GROUP_DEFAULTS.size,
-    color = CHECKBOX_GROUP_DEFAULTS.color,
-    options = [],
-    value: controlledValue,
-    defaultValue = [],
-    disabled = CHECKBOX_GROUP_DEFAULTS.disabled,
-    direction = CHECKBOX_GROUP_DEFAULTS.direction,
-    spacing = CHECKBOX_GROUP_DEFAULTS.spacing,
-    onChange,
-    children,
-    className = '',
-    style,
-    name,
-  } = props;
-
-  const generatedId = useId();
-
-  // Internal state for uncontrolled mode
-  const [internalValue, setInternalValue] = useState<(string | number)[]>(defaultValue);
-  const isControlled = controlledValue !== undefined;
-  const currentValue = isControlled ? controlledValue : internalValue;
-
-  const handleItemChange = (itemValue: string | number, checked: boolean) => {
-    let newValue: (string | number)[];
-
-    if (checked) {
-      newValue = [...currentValue, itemValue];
-    } else {
-      newValue = currentValue.filter((v) => v !== itemValue);
-    }
-
-    if (!isControlled) {
-      setInternalValue(newValue);
-    }
-
-    onChange?.(newValue);
-  };
-
-  // Spacing values using CSS variables
-  const spacingMap: Record<string, string> = {
-    sm: 'var(--ds-spacing-2)',
-    md: 'var(--ds-spacing-3)',
-    lg: 'var(--ds-spacing-4)',
-  };
-
-  const groupStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: direction === 'horizontal' ? 'row' : 'column',
-    gap: spacingMap[spacing] || spacingMap.md,
-    flexWrap: direction === 'horizontal' ? 'wrap' : 'nowrap',
-    ...style,
-  };
-
-  const sizeVar = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
-  const sizeNumeric = SIZE_NUMERIC_MAP[size] || SIZE_NUMERIC_MAP.md;
-
-  // Get colors based on color prop
-  const getCheckedBg = () => {
-    if (color === 'primary') return 'var(--ds-checkbox-checked-bg)';
-    if (color === 'success') return 'var(--ds-color-success-500)';
-    if (color === 'warning') return 'var(--ds-color-warning-500)';
-    if (color === 'error') return 'var(--ds-color-error-500)';
-    if (color === 'secondary') return 'var(--ds-color-secondary-500)';
-    return 'var(--ds-checkbox-checked-bg)';
-  };
-
-  const renderOptions = () => {
-    if (options.length === 0) return children;
-
-    return options.map((option) => {
-      const isChecked = currentValue.includes(option.value);
-      const isDisabled = disabled || option.disabled;
-
-      return (
-        <label
-          key={String(option.value)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 'var(--ds-checkbox-label-gap)',
-            cursor: isDisabled ? 'not-allowed' : 'pointer',
-            opacity: isDisabled ? 0.5 : 1,
-          }}
-        >
-          <span
-            style={{
-              position: 'relative',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: sizeVar,
-              height: sizeVar,
-              borderRadius: 'var(--ds-checkbox-radius)',
-              border: `2px solid ${isChecked ? getCheckedBg() : 'var(--ds-checkbox-border)'}`,
-              backgroundColor: isChecked
-                ? getCheckedBg()
-                : isDisabled
-                  ? 'var(--ds-checkbox-bg-disabled)'
-                  : 'var(--ds-checkbox-bg)',
-              transition: 'var(--ds-checkbox-transition)',
-            }}
-          >
-            <input
-              type="checkbox"
-              name={name || `checkbox-group-${generatedId}`}
-              value={option.value}
-              checked={isChecked}
-              disabled={isDisabled}
-              onChange={(e) => handleItemChange(option.value, e.target.checked)}
-              style={{
-                position: 'absolute',
-                opacity: 0,
-                width: '100%',
-                height: '100%',
-                margin: 0,
-                padding: 0,
-                cursor: isDisabled ? 'not-allowed' : 'pointer',
-              }}
-            />
-            {isChecked && (
-              <svg
-                width={sizeNumeric * 0.6}
-                height={sizeNumeric * 0.6}
-                viewBox="0 0 12 12"
-                fill="none"
-              >
-                <path
-                  d="M2 6L5 9L10 3"
-                  stroke="var(--ds-checkbox-checked-color)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </span>
-          <span
-            style={{
-              fontSize: `${sizeNumeric * 0.9}px`,
-              userSelect: 'none',
-              color: isDisabled
-                ? 'var(--ds-checkbox-label-color-disabled)'
-                : 'var(--ds-checkbox-label-color)',
-            }}
-          >
-            {option.label}
-          </span>
-        </label>
-      );
-    });
-  };
-
-  return (
-    <div
-      className={`rottay-checkbox-group rottay-checkbox-group--rustic ${className}`}
-      style={groupStyle}
-      role="group"
-      aria-label="Checkbox group"
-    >
-      {renderOptions()}
-    </div>
-  );
-}
-
 RusticCheckbox.displayName = 'RusticCheckbox';
-RusticCheckbox.Group = RusticCheckboxGroup;

@@ -6,6 +6,7 @@
 import type { EngineName } from '../engine';
 import type { PersonalityTokens } from '../tokens/personality';
 import type { SurfaceTokens, MotionTokens } from '../tokens';
+import type { LocaleTranslations, SupportedLocale } from '../../../theme/i18n/types';
 
 export type TenantPlan = 'starter' | 'pro' | 'enterprise';
 
@@ -34,6 +35,8 @@ export interface TenantConfig {
 
   engine: EngineName;
   theme: string;
+  locale?: SupportedLocale;
+  fallbackLocale?: SupportedLocale;
 
   plan: TenantPlan;
   features: string[];
@@ -44,6 +47,8 @@ export interface TenantConfig {
   personality?: Partial<PersonalityTokens>;
   /** Direct token overrides that supersede engine defaults */
   tokenOverrides?: TenantTokenOverrides;
+  /** Optional tenant-owned copy overrides merged on top of DS locale dictionaries */
+  customTranslations?: Partial<LocaleTranslations>;
 }
 
 export interface TenantContextValue {

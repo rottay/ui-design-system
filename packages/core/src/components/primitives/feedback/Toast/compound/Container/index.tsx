@@ -24,8 +24,8 @@ import { createPortal } from 'react-dom';
 import type { ToastPosition, ToastState } from '../../types';
 import { TOAST_CONTAINER_DEFAULTS, TOAST_ANIMATION, POSITION_MAP } from '../../types';
 import { useToastContext } from '../../utils/ToastProvider';
-import { injectToastStyles, getAnimationName } from '../../utils/animations';
-import { Toast } from '../..';
+import { injectToastStyles, getToastAnimationStyle } from '../../utils/animations';
+import { BaseToast } from '../../base';
 
 // ============================================================================
 // Type Definitions
@@ -118,7 +118,7 @@ function getContainerPosition(position: ToastPosition): CSSProperties {
   const posMap = POSITION_MAP[position];
   const base: CSSProperties = {
     position: 'fixed',
-    zIndex: 'var(--toast-z-index, 9999)',
+    zIndex: 'var(--ds-toast-z-index, 9999)',
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
@@ -313,9 +313,6 @@ export function ToastContainer({
   // ========================================================================
 
   // Get animation name based on position
-  const enterAnimation = getAnimationName(position, 'in');
-  const exitAnimation = getAnimationName(position, 'out');
-
   // ========================================================================
   // Render Content
   // ========================================================================
@@ -349,14 +346,12 @@ export function ToastContainer({
             key={toast.id}
             style={{
               pointerEvents: 'auto',
-              animation: toast.visible
-                ? `${enterAnimation} ${TOAST_ANIMATION.enterDuration}ms ease-out forwards`
-                : `${exitAnimation} ${TOAST_ANIMATION.exitDuration}ms ease-in forwards`,
+              ...getToastAnimationStyle(position, toast.visible ? 'in' : 'out'),
             }}
             onMouseEnter={() => handlePause(toast.id)}
             onMouseLeave={() => handleResume(toast.id)}
           >
-            <Toast
+            <BaseToast
               {...toast.options}
               visible={toast.visible}
               onClose={() => handleDismiss(toast.id)}

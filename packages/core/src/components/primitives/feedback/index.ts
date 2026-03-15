@@ -37,8 +37,27 @@ export type {
   ToastContainerProps,
 } from './Toast';
 
-export { Skeleton } from './Skeleton';
-export type { SkeletonProps, SkeletonVariant, SkeletonAnimation } from './Skeleton';
+export {
+  Skeleton,
+  SkeletonAvatar,
+  SkeletonText,
+  SkeletonButton,
+  SkeletonCard,
+  SkeletonListItem,
+  SkeletonTable,
+  SkeletonForm,
+  SkeletonParagraph,
+} from './Skeleton';
+export type {
+  SkeletonProps,
+  SkeletonVariant,
+  SkeletonAnimation,
+  SkeletonCardProps,
+  SkeletonListItemProps,
+  SkeletonTableProps,
+  SkeletonFormProps,
+  SkeletonParagraphProps,
+} from './Skeleton';
 
 export { Drawer } from './Drawer';
 export type { DrawerProps, DrawerPlacement, DrawerSize } from './Drawer';

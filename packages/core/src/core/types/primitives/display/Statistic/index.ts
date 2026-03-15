@@ -96,6 +96,19 @@ export interface StatisticProps extends BaseComponentProps, LoadableProps, Engin
   formatter?: (value: StatisticValue) => ReactNode;
 
   /**
+   * Enables animated count-up behavior for numeric values.
+   * When omitted, the active personality profile decides the default.
+   */
+  animateValue?: boolean;
+
+  /**
+   * Starting value used by count-up animations.
+   * Only applies when `animateValue` is enabled and the value is numeric.
+   * @default 0
+   */
+  countFrom?: number;
+
+  /**
    * Semantic type affecting the value color.
    * - default: Standard text color
    * - positive: Success/green color (for increases)

@@ -61,7 +61,7 @@ const styles = {
     justifyContent: 'center',
     border: 'none',
     cursor: 'pointer',
-    boxShadow: 'var(--ds-floatbutton-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
+    boxShadow: 'var(--ds-floatbutton-shadow, var(--ds-shadow-dialog))',
     transition: 'all 0.2s',
     position: 'relative',
   } as React.CSSProperties,
@@ -82,19 +82,20 @@ const styles = {
 
   /** Default type color scheme */
   buttonDefault: {
-    backgroundColor: 'var(--ds-floatbutton-default-bg, #fff)',
-    color: 'var(--ds-floatbutton-default-color, var(--ds-color-neutral-600, #595959))',
+    backgroundColor: 'var(--ds-floatbutton-default-bg, var(--ds-color-bg-elevated))',
+    color: 'var(--ds-floatbutton-default-color, var(--ds-color-text-secondary))',
   } as React.CSSProperties,
 
   /** Primary type color scheme */
   buttonPrimary: {
-    backgroundColor: 'var(--ds-floatbutton-primary-bg, var(--ds-color-primary-500, #1890ff))',
-    color: 'var(--ds-floatbutton-primary-color, #fff)',
+    backgroundColor: 'var(--ds-floatbutton-primary-bg, var(--ds-color-primary))',
+    color: 'var(--ds-floatbutton-primary-color, var(--ds-color-text-on-primary))',
   } as React.CSSProperties,
 
   /** Hover state transformation */
   buttonHover: {
     transform: 'scale(1.05)',
+    boxShadow: 'var(--ds-floatbutton-hover-shadow, var(--ds-shadow-lg))',
   } as React.CSSProperties,
 
   /** Fixed positioning for floating behavior */
@@ -140,8 +141,8 @@ const styles = {
     fontSize: 12,
     lineHeight: '18px',
     textAlign: 'center',
-    backgroundColor: 'var(--ds-floatbutton-badge-bg, var(--ds-color-error-500, #ff4d4f))',
-    color: 'var(--ds-floatbutton-badge-color, #fff)',
+    backgroundColor: 'var(--ds-floatbutton-badge-bg, var(--ds-color-error))',
+    color: 'var(--ds-floatbutton-badge-color, var(--ds-color-text-on-primary))',
     borderRadius: 9,
   } as React.CSSProperties,
 
@@ -157,6 +158,7 @@ const styles = {
   description: {
     fontSize: 12,
     marginTop: 2,
+    color: 'var(--ds-floatbutton-description-color, var(--ds-color-text-secondary))',
   } as React.CSSProperties,
 };
 

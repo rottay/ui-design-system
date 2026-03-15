@@ -63,6 +63,11 @@ export { Anchor } from './Anchor';
 export type { AnchorProps, AnchorLinkProps } from './Anchor';
 export { ANCHOR_DEFAULTS } from './Anchor';
 
+// Link (exported as NavLink to avoid conflict with Typography.Link)
+export { Link as NavLink } from './Link';
+export type { LinkProps as NavLinkProps, LinkType as NavLinkType } from './Link';
+export { LINK_DEFAULTS as NAV_LINK_DEFAULTS, LINK_TYPE_COLORS as NAV_LINK_TYPE_COLORS } from './Link';
+
 export { FloatButton } from './FloatButton';
 export type {
   FloatButtonProps,

@@ -90,7 +90,7 @@
  */
 
 import { createEngineComponent } from '../../../../core/engines/factory';
-import type { DatePickerProps } from './types';
+import type { DatePickerProps, RangePickerProps } from './types';
 
 // Export types
 export {
@@ -117,8 +117,18 @@ export {
  * Compound components:
  * - **DatePicker.RangePicker**: Select a date range with start and end
  */
-export const DatePicker = createEngineComponent<DatePickerProps>('DatePicker', {
+const DatePickerBase = createEngineComponent<DatePickerProps>('DatePicker', {
   classic: () => import('./engines/classic'),
   modern: () => import('./engines/modern'),
   rustic: () => import('./engines/rustic'),
+});
+
+const DateRangePicker = createEngineComponent<RangePickerProps>('DateRangePicker', {
+  classic: () => import('./engines/classic').then((m) => ({ default: (m.default as any).RangePicker })),
+  modern: () => import('./engines/modern').then((m) => ({ default: (m.default as any).RangePicker })),
+  rustic: () => import('./engines/rustic').then((m) => ({ default: (m.default as any).RangePicker })),
+});
+
+export const DatePicker = Object.assign(DatePickerBase, {
+  RangePicker: DateRangePicker,
 });

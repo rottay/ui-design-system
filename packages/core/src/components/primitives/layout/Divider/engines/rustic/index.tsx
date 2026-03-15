@@ -88,7 +88,7 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       `divider--${orientation}`,
       `divider--${variant}`,
       hasChildren ? 'divider--with-text' : '',
-      hasChildren ? `divider--text-${textPosition}` : '',
+      hasChildren ? `divider--ds-text-${textPosition}` : '',
       plain && hasChildren ? 'divider--plain' : '',
       className,
     ].filter(Boolean).join(' ');

@@ -75,10 +75,10 @@ const MODERN_TOKENS: EngineTokenOverrides = {
     full: '9999px',
   },
   shadows: {
-    sm: '0 1px 3px rgba(0,0,0,0.04), 0 4px 6px var(--color-primary-50, rgba(0,0,0,0.02))',
-    md: '0 4px 6px rgba(0,0,0,0.03), 0 10px 20px var(--color-primary-50, rgba(0,0,0,0.04))',
-    lg: '0 10px 25px rgba(0,0,0,0.05), 0 20px 40px var(--color-primary-100, rgba(0,0,0,0.06))',
-    xl: '0 15px 35px rgba(0,0,0,0.06), 0 25px 60px var(--color-primary-100, rgba(0,0,0,0.08))',
+    sm: '0 1px 3px rgba(0,0,0,0.04), 0 4px 6px var(--ds-color-primary-50, rgba(0,0,0,0.02))',
+    md: '0 4px 6px rgba(0,0,0,0.03), 0 10px 20px var(--ds-color-primary-50, rgba(0,0,0,0.04))',
+    lg: '0 10px 25px rgba(0,0,0,0.05), 0 20px 40px var(--ds-color-primary-100, rgba(0,0,0,0.06))',
+    xl: '0 15px 35px rgba(0,0,0,0.06), 0 25px 60px var(--ds-color-primary-100, rgba(0,0,0,0.08))',
   },
   surface: {
     borderWidth: '0',

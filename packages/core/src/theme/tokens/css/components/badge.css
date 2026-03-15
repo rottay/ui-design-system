@@ -12,48 +12,48 @@
      ======================================================================== */
 
   /* XS - Extra Small */
-  --badge-xs-min-width: 0.875rem;       /* 14px */
-  --badge-xs-height: 0.875rem;          /* 14px */
-  --badge-xs-font-size: 0.5625rem;      /* 9px */
+  --ds-badge-xs-min-width: 0.875rem;       /* 14px */
+  --ds-badge-xs-height: 0.875rem;          /* 14px */
+  --ds-badge-xs-font-size: 0.5625rem;      /* 9px */
 
   /* SM - Small */
-  --badge-sm-min-width: 1rem;           /* 16px */
-  --badge-sm-height: 1rem;              /* 16px */
-  --badge-sm-font-size: 0.625rem;       /* 10px */
+  --ds-badge-sm-min-width: 1rem;           /* 16px */
+  --ds-badge-sm-height: 1rem;              /* 16px */
+  --ds-badge-sm-font-size: 0.625rem;       /* 10px */
 
   /* MD - Medium (Default) */
-  --badge-md-min-width: 1.25rem;        /* 20px */
-  --badge-md-height: 1.25rem;           /* 20px */
-  --badge-md-font-size: 0.75rem;        /* 12px */
+  --ds-badge-md-min-width: 1.25rem;        /* 20px */
+  --ds-badge-md-height: 1.25rem;           /* 20px */
+  --ds-badge-md-font-size: 0.75rem;        /* 12px */
 
   /* LG - Large */
-  --badge-lg-min-width: 1.5rem;         /* 24px */
-  --badge-lg-height: 1.5rem;            /* 24px */
-  --badge-lg-font-size: 0.875rem;       /* 14px */
+  --ds-badge-lg-min-width: 1.5rem;         /* 24px */
+  --ds-badge-lg-height: 1.5rem;            /* 24px */
+  --ds-badge-lg-font-size: 0.875rem;       /* 14px */
 
   /* XL - Extra Large */
-  --badge-xl-min-width: 1.75rem;        /* 28px */
-  --badge-xl-height: 1.75rem;           /* 28px */
-  --badge-xl-font-size: 1rem;           /* 16px */
+  --ds-badge-xl-min-width: 1.75rem;        /* 28px */
+  --ds-badge-xl-height: 1.75rem;           /* 28px */
+  --ds-badge-xl-font-size: 1rem;           /* 16px */
 
   /* Default size (can be overridden) */
-  --badge-default-min-width: var(--badge-md-min-width);
-  --badge-default-height: var(--badge-md-height);
-  --badge-default-font-size: var(--badge-md-font-size);
+  --ds-badge-default-min-width: var(--ds-badge-md-min-width);
+  --ds-badge-default-height: var(--ds-badge-md-height);
+  --ds-badge-default-font-size: var(--ds-badge-md-font-size);
 
   /* ========================================================================
      DOT SIZES - Badge Dot Indicator Dimensions
      Diameter of dot badges for each size variant
      ======================================================================== */
 
-  --badge-dot-xs-size: 0.25rem;         /* 4px */
-  --badge-dot-sm-size: 0.375rem;        /* 6px */
-  --badge-dot-md-size: 0.5rem;          /* 8px */
-  --badge-dot-lg-size: 0.625rem;        /* 10px */
-  --badge-dot-xl-size: 0.75rem;         /* 12px */
+  --ds-badge-dot-xs-size: 0.25rem;         /* 4px */
+  --ds-badge-dot-sm-size: 0.375rem;        /* 6px */
+  --ds-badge-dot-md-size: 0.5rem;          /* 8px */
+  --ds-badge-dot-lg-size: 0.625rem;        /* 10px */
+  --ds-badge-dot-xl-size: 0.75rem;         /* 12px */
 
   /* Default dot size */
-  --badge-dot-default-size: var(--badge-dot-md-size);
+  --ds-badge-dot-default-size: var(--ds-badge-dot-md-size);
 
   /* ========================================================================
      VARIANTS - Badge Color Variants
@@ -61,107 +61,107 @@
      ======================================================================== */
 
   /* Default variant (neutral) */
-  --badge-default-bg: #d9d9d9;
-  --badge-default-color: var(--color-white, #ffffff);
+  --ds-badge-default-bg: #d9d9d9;
+  --ds-badge-default-color: var(--ds-color-white, #ffffff);
 
   /* Primary variant */
-  --badge-primary-bg: #1890ff;
-  --badge-primary-color: var(--color-white, #ffffff);
+  --ds-badge-primary-bg: #1890ff;
+  --ds-badge-primary-color: var(--ds-color-white, #ffffff);
 
   /* Secondary variant */
-  --badge-secondary-bg: #722ed1;
-  --badge-secondary-color: var(--color-white, #ffffff);
+  --ds-badge-secondary-bg: #722ed1;
+  --ds-badge-secondary-color: var(--ds-color-white, #ffffff);
 
   /* Success variant */
-  --badge-success-bg: #52c41a;
-  --badge-success-color: var(--color-white, #ffffff);
+  --ds-badge-success-bg: #52c41a;
+  --ds-badge-success-color: var(--ds-color-white, #ffffff);
 
   /* Warning variant */
-  --badge-warning-bg: #faad14;
-  --badge-warning-color: var(--color-white, #ffffff);
+  --ds-badge-warning-bg: #faad14;
+  --ds-badge-warning-color: var(--ds-color-white, #ffffff);
 
   /* Error variant */
-  --badge-error-bg: #ff4d4f;
-  --badge-error-color: var(--color-white, #ffffff);
+  --ds-badge-error-bg: #ff4d4f;
+  --ds-badge-error-color: var(--ds-color-white, #ffffff);
 
   /* Info variant */
-  --badge-info-bg: #1890ff;
-  --badge-info-color: var(--color-white, #ffffff);
+  --ds-badge-info-bg: #1890ff;
+  --ds-badge-info-color: var(--ds-color-white, #ffffff);
 
   /* ========================================================================
      STATUS INDICATORS
      Color indicators for processing/default/success/error/warning states
      ======================================================================== */
 
-  --badge-status-processing-color: #1890ff;
-  --badge-status-default-color: #d9d9d9;
-  --badge-status-success-color: #52c41a;
-  --badge-status-error-color: #ff4d4f;
-  --badge-status-warning-color: #faad14;
+  --ds-badge-status-processing-color: #1890ff;
+  --ds-badge-status-default-color: #d9d9d9;
+  --ds-badge-status-success-color: #52c41a;
+  --ds-badge-status-error-color: #ff4d4f;
+  --ds-badge-status-warning-color: #faad14;
 
   /* ========================================================================
      BORDER RADIUS
      Border radius options for badges
      ======================================================================== */
 
-  --badge-radius-none: 0;
-  --badge-radius-sm: 0.125rem;          /* 2px */
-  --badge-radius-md: 0.25rem;           /* 4px */
-  --badge-radius-lg: 0.5rem;            /* 8px */
-  --badge-radius-full: 9999px;
+  --ds-badge-radius-none: 0;
+  --ds-badge-radius-sm: 0.125rem;          /* 2px */
+  --ds-badge-radius-md: 0.25rem;           /* 4px */
+  --ds-badge-radius-lg: 0.5rem;            /* 8px */
+  --ds-badge-radius-full: 9999px;
 
   /* Default border radius */
-  --badge-default-radius: var(--badge-radius-full);
+  --ds-badge-default-radius: var(--ds-badge-radius-full);
 
   /* ========================================================================
      SPACING
      Padding and spacing for badges
      ======================================================================== */
 
-  --badge-padding-x: 0.375rem;          /* 6px */
-  --badge-padding-y: 0;
-  --badge-icon-gap: 0.25rem;            /* 4px */
-  --badge-close-gap: 0.25rem;           /* 4px */
+  --ds-badge-padding-x: 0.375rem;          /* 6px */
+  --ds-badge-padding-y: 0;
+  --ds-badge-icon-gap: 0.25rem;            /* 4px */
+  --ds-badge-close-gap: 0.25rem;           /* 4px */
 
   /* ========================================================================
      BORDER
      Border settings for bordered badges
      ======================================================================== */
 
-  --badge-border-width: 2px;
-  --badge-border-color: var(--color-white, #ffffff);
+  --ds-badge-border-width: 2px;
+  --ds-badge-border-color: var(--ds-color-white, #ffffff);
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
 
-  --badge-transition-duration: 0.2s;
-  --badge-transition-timing: ease-in-out;
-  --badge-transition: all var(--badge-transition-duration) var(--badge-transition-timing);
+  --ds-badge-transition-duration: 0.2s;
+  --ds-badge-transition-timing: ease-in-out;
+  --ds-badge-transition: all var(--ds-badge-transition-duration) var(--ds-badge-transition-timing);
 
   /* ========================================================================
      PULSE ANIMATION
      Settings for attention-grabbing pulse animation
      ======================================================================== */
 
-  --badge-pulse-duration: 1.5s;
-  --badge-pulse-timing: ease-in-out;
-  --badge-pulse-opacity: 0.6;
-  --badge-pulse-scale: 1.05;
+  --ds-badge-pulse-duration: 1.5s;
+  --ds-badge-pulse-timing: ease-in-out;
+  --ds-badge-pulse-opacity: 0.6;
+  --ds-badge-pulse-scale: 1.05;
 
   /* ========================================================================
      TYPOGRAPHY
      Font settings for badge content
      ======================================================================== */
 
-  --badge-font-weight: 500;
-  --badge-line-height: 1;
+  --ds-badge-font-weight: 500;
+  --ds-badge-line-height: 1;
 
   /* ========================================================================
      Z-INDEX
      Stacking context for positioned badges
      ======================================================================== */
 
-  --badge-z-index: 1;
+  --ds-badge-z-index: 1;
 }

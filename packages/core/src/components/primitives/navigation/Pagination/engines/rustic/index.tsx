@@ -30,8 +30,8 @@
  *   current={page}
  *   total={200}
  *   style={{
- *     '--color-primary': '#8B5CF6',
- *     '--color-neutral-300': '#E5E7EB',
+ *     '--ds-color-primary': '#8B5CF6',
+ *     '--ds-color-neutral-300': '#E5E7EB',
  *   }}
  *   onChange={handleChange}
  * />
@@ -49,6 +49,7 @@
 import React from 'react';
 import type { PaginationProps, PaginationSize } from '../../types';
 import { PAGINATION_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 // ============================================================================
 // Size Styles
@@ -99,6 +100,8 @@ const SIZE_STYLES: Record<PaginationSize, { padding: string; fontSize: string }>
  * ```
  */
 export default function RusticPagination(props: PaginationProps): React.ReactElement {
+  const { t } = useTranslation('components');
+
   const {
     current,
     total,
@@ -226,7 +229,7 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
       {/* Total items display */}
       {showTotal && (
         <div style={{ fontSize: '0.875rem', color: 'var(--ds-pagination-total-color, var(--ds-color-neutral-600, #666))' }}>
-          Total {total} items
+          {t('pagination.total_items', { total })}
         </div>
       )}
 

@@ -252,6 +252,6 @@ export function getThicknessValue(thickness: DividerThickness | undefined): stri
  */
 export const DEFAULT_COLORS = {
   classic: '#d9d9d9',
-  modern: 'oklch(var(--bc) / 0.2)',
+  modern: 'var(--ds-color-border-primary, rgba(0, 0, 0, 0.12))',
   rustic: '#e0e0e0',
 };

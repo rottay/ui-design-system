@@ -61,11 +61,11 @@ export default function ClassicLiveFeed<T extends FeedItem>(props: LiveFeedProps
             textAlign: 'center',
             padding: '8px 0',
             marginBottom: 12,
-            background: '#e6f4ff',
+            background: 'var(--ds-color-info-bg)',
             borderRadius: 6,
             cursor: 'pointer',
             fontSize: 13,
-            color: '#1677ff',
+            color: 'var(--ds-color-info)',
             fontWeight: 500,
           }}
           onClick={onShowNewItems}

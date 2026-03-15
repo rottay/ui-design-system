@@ -1,0 +1,3 @@
+{"total": {"lines":{"total":447,"covered":432,"skipped":0,"pct":96.64},"statements":{"total":447,"covered":432,"skipped":0,"pct":96.64},"functions":{"total":26,"covered":26,"skipped":0,"pct":100},"branches":{"total":230,"covered":200,"skipped":0,"pct":86.95},"branchesTrue":{"total":0,"covered":0,"skipped":0,"pct":"Unknown"}}
+,"/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/theme/tenants/storage/static/generator/index.ts": {"lines":{"total":447,"covered":432,"skipped":0,"pct":96.64},"functions":{"total":26,"covered":26,"skipped":0,"pct":100},"statements":{"total":447,"covered":432,"skipped":0,"pct":96.64},"branches":{"total":230,"covered":200,"skipped":0,"pct":86.95}}
+}

@@ -46,3 +46,6 @@ export function useChartDimensions(
 
   return { containerRef, dimensions };
 }
+
+export { useChartPersonality } from './use-chart-personality';
+export type { ChartPersonalityOptions, ResolvedChartPersonality } from './use-chart-personality';

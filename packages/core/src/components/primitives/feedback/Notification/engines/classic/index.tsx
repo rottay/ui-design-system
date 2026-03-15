@@ -213,7 +213,7 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
           className: config.className,
           style: config.style,
           placement: config.placement ? placementMap[config.placement] : undefined,
-          btn: config.btn,
+          actions: config.actions,
           closeIcon: config.closeIcon,
           onClose: config.onClose,
           onClick: config.onClick,
@@ -289,7 +289,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   icon,
   className,
   style,
-  btn,
+  actions,
   closeIcon,
   closable = NOTIFICATION_DEFAULTS.closable,
   onRemove,
@@ -338,10 +338,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
    * Type-specific border styles.
    */
   const typeStyles: Record<NotificationType, React.CSSProperties> = {
-    success: { borderLeft: '4px solid #52c41a' },
-    error: { borderLeft: '4px solid #ff4d4f' },
-    info: { borderLeft: '4px solid #1677ff' },
-    warning: { borderLeft: '4px solid #faad14' },
+    success: { borderLeft: '4px solid var(--ds-color-success)' },
+    error: { borderLeft: '4px solid var(--ds-color-error)' },
+    info: { borderLeft: '4px solid var(--ds-color-info)' },
+    warning: { borderLeft: '4px solid var(--ds-color-warning)' },
     open: {},
   };
 
@@ -349,11 +349,11 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
    * Type-specific icon colors.
    */
   const iconColors: Record<NotificationType, string> = {
-    success: '#52c41a',
-    error: '#ff4d4f',
-    info: '#1677ff',
-    warning: '#faad14',
-    open: '#1677ff',
+    success: 'var(--ds-color-success)',
+    error: 'var(--ds-color-error)',
+    info: 'var(--ds-color-info)',
+    warning: 'var(--ds-color-warning)',
+    open: 'var(--ds-color-info)',
   };
 
   // ========================================================================
@@ -366,7 +366,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       style={{
         padding: '16px 24px',
         borderRadius: '8px',
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--ds-color-bg-elevated)',
         boxShadow: '0 6px 16px 0 rgba(0, 0, 0, 0.08)',
         cursor: onClick ? 'pointer' : 'default',
         ...typeStyles[type],
@@ -398,7 +398,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           )}
 
           {/* Action Button */}
-          {btn && <div style={{ marginTop: '12px' }}>{btn}</div>}
+          {actions && <div style={{ marginTop: '12px' }}>{actions}</div>}
         </div>
 
         {/* Close Button */}
@@ -475,7 +475,7 @@ export const notification: NotificationInstance = {
       className: config.className,
       style: config.style,
       placement: config.placement ? placementMap[config.placement] : undefined,
-      btn: config.btn,
+      actions: config.actions,
       closeIcon: config.closeIcon,
       onClose: config.onClose,
       onClick: config.onClick,
@@ -495,7 +495,7 @@ export const notification: NotificationInstance = {
       className: config.className,
       style: config.style,
       placement: config.placement ? placementMap[config.placement] : undefined,
-      btn: config.btn,
+      actions: config.actions,
       closeIcon: config.closeIcon,
       onClose: config.onClose,
       onClick: config.onClick,
@@ -515,7 +515,7 @@ export const notification: NotificationInstance = {
       className: config.className,
       style: config.style,
       placement: config.placement ? placementMap[config.placement] : undefined,
-      btn: config.btn,
+      actions: config.actions,
       closeIcon: config.closeIcon,
       onClose: config.onClose,
       onClick: config.onClick,
@@ -535,7 +535,7 @@ export const notification: NotificationInstance = {
       className: config.className,
       style: config.style,
       placement: config.placement ? placementMap[config.placement] : undefined,
-      btn: config.btn,
+      actions: config.actions,
       closeIcon: config.closeIcon,
       onClose: config.onClose,
       onClick: config.onClick,
@@ -555,7 +555,7 @@ export const notification: NotificationInstance = {
       className: config.className,
       style: config.style,
       placement: config.placement ? placementMap[config.placement] : undefined,
-      btn: config.btn,
+      actions: config.actions,
       closeIcon: config.closeIcon,
       onClose: config.onClose,
       onClick: config.onClick,

@@ -15,8 +15,8 @@
  * - Fills available space between header and footer
  *
  * **Styling via CSS Custom Properties:**
- * - `--modal-body-color`: Body text color
- * - `--modal-body-font-size`: Body font size (default: 14px)
+ * - `--ds-modal-body-color`: Body text color
+ * - `--ds-modal-body-font-size`: Body font size (default: 14px)
  *
  * @example Basic Usage
  * ```tsx
@@ -130,8 +130,8 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
       overflowX: 'hidden',
 
       // Typography - uses CSS custom properties for tenant theming
-      color: 'var(--modal-body-color, inherit)',
-      fontSize: 'var(--modal-body-font-size, 14px)',
+      color: 'var(--ds-modal-body-color, inherit)',
+      fontSize: 'var(--ds-modal-body-font-size, 14px)',
       lineHeight: 1.6,
 
       // Merge user styles (takes precedence)

@@ -4,14 +4,14 @@
  * Main entry point for all design tokens.
  *
  * This module exports:
- * - TypeScript token values (for use in JS/TS code)
+ * - Public token mirrors for JS/TS consumers
  *
  * For CSS tokens, import the CSS file directly:
  * import '@rottay/design-system/tokens/css/index.css';
  *
  * Usage Examples:
  *
- * // Import TypeScript tokens
+ * // Import public token mirrors
  * import { colors, spacing, buttonTokens } from '@rottay/design-system/tokens';
  *
  * // Import combined tokens object

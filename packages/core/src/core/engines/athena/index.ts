@@ -49,7 +49,7 @@
  * @package @rottay/design-system
  */
 
-import type { ComponentType } from 'react';
+import type { ComponentType, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes } from 'react';
 
 /**
  * Component registry for custom implementations
@@ -343,8 +343,16 @@ export function getRegisteredComponentCount(): number {
  */
 export function createAthenaWrapper<P extends object>(
   componentName: string,
-  getFallback: () => Promise<{ default: ComponentType<P> }>
-): () => Promise<{ default: ComponentType<P> }> {
+  getFallback: () => Promise<{
+    default:
+      | ComponentType<P>
+      | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
+  }>
+): () => Promise<{
+  default:
+    | ComponentType<P>
+    | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
+}> {
   return async () => {
     const registered = getAthenaComponent<P>(componentName);
 

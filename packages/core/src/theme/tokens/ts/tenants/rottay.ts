@@ -1,127 +1,110 @@
 /**
  * Rottay Tenant Tokens - TypeScript Mirror
  *
- * TypeScript representation of Rottay-specific CSS custom properties.
- * Use these for type-safe Rottay tenant token references.
+ * This file only mirrors tenant tokens that exist in the live DS runtime.
+ * The previous version exposed a fantasy token API that did not match the
+ * actual CSS shipped by the package.
  */
 
-// Rottay Accent Colors - Teal
-export const accentTeal = {
-  50: 'var(--color-accent-teal-50)',
-  100: 'var(--color-accent-teal-100)',
-  200: 'var(--color-accent-teal-200)',
-  300: 'var(--color-accent-teal-300)',
-  400: 'var(--color-accent-teal-400)',
-  500: 'var(--color-accent-teal-500)',
-  600: 'var(--color-accent-teal-600)',
-  700: 'var(--color-accent-teal-700)',
-  800: 'var(--color-accent-teal-800)',
-  900: 'var(--color-accent-teal-900)',
+export const rottayBrand = {
+  primary: 'var(--ds-color-primary)',
+  primaryHover: 'var(--ds-color-primary-hover)',
+  secondary: 'var(--ds-color-secondary)',
+  accent: 'var(--ds-color-accent)',
+  accentHover: 'var(--ds-color-accent-hover)',
 } as const;
 
-// Rottay Accent Colors - Orange
-export const accentOrange = {
-  50: 'var(--color-accent-orange-50)',
-  100: 'var(--color-accent-orange-100)',
-  200: 'var(--color-accent-orange-200)',
-  300: 'var(--color-accent-orange-300)',
-  400: 'var(--color-accent-orange-400)',
-  500: 'var(--color-accent-orange-500)',
-  600: 'var(--color-accent-orange-600)',
-  700: 'var(--color-accent-orange-700)',
-  800: 'var(--color-accent-orange-800)',
-  900: 'var(--color-accent-orange-900)',
+export const rottayBackground = {
+  primary: 'var(--ds-color-bg-primary)',
+  secondary: 'var(--ds-color-bg-secondary)',
+  tertiary: 'var(--ds-color-bg-tertiary)',
+  elevated: 'var(--ds-color-bg-elevated)',
+  surface: 'var(--ds-color-bg-surface)',
+  overlay: 'var(--ds-color-bg-overlay)',
 } as const;
 
-// Rottay Background Colors
-export const background = {
-  primary: 'var(--color-background-primary)',
-  secondary: 'var(--color-background-secondary)',
-  tertiary: 'var(--color-background-tertiary)',
-  inverse: 'var(--color-background-inverse)',
-  primarySubtle: 'var(--color-background-primary-subtle)',
-  secondarySubtle: 'var(--color-background-secondary-subtle)',
+export const rottayText = {
+  primary: 'var(--ds-color-text-primary)',
+  secondary: 'var(--ds-color-text-secondary)',
+  tertiary: 'var(--ds-color-text-tertiary)',
+  muted: 'var(--ds-color-text-muted)',
+  disabled: 'var(--ds-color-text-disabled)',
+  onPrimary: 'var(--ds-color-text-on-primary)',
 } as const;
 
-// Rottay Text Colors
-export const text = {
-  primary: 'var(--color-text-primary)',
-  secondary: 'var(--color-text-secondary)',
-  tertiary: 'var(--color-text-tertiary)',
-  disabled: 'var(--color-text-disabled)',
-  inverse: 'var(--color-text-inverse)',
-  brand: 'var(--color-text-brand)',
-  link: 'var(--color-text-link)',
-  linkHover: 'var(--color-text-link-hover)',
-} as const;
-
-// Rottay Border Colors
 export const rottayBorder = {
-  default: 'var(--color-border-default)',
-  muted: 'var(--color-border-muted)',
-  strong: 'var(--color-border-strong)',
-  brand: 'var(--color-border-brand)',
+  default: 'var(--ds-color-border)',
+  primary: 'var(--ds-color-border-primary)',
+  secondary: 'var(--ds-color-border-secondary)',
+  tertiary: 'var(--ds-color-border-tertiary)',
+  focus: 'var(--ds-color-border-focus)',
 } as const;
 
-// Rottay Surface Colors
-export const surface = {
-  default: 'var(--color-surface-default)',
-  elevated: 'var(--color-surface-elevated)',
-  overlay: 'var(--color-surface-overlay)',
-  brand: 'var(--color-surface-brand)',
-  brandStrong: 'var(--color-surface-brand-strong)',
+export const rottayStatus = {
+  success: 'var(--ds-color-success)',
+  successBg: 'var(--ds-color-success-bg)',
+  successBorder: 'var(--ds-color-success-border)',
+  warning: 'var(--ds-color-warning)',
+  warningBg: 'var(--ds-color-warning-bg)',
+  warningBorder: 'var(--ds-color-warning-border)',
+  error: 'var(--ds-color-error)',
+  errorBg: 'var(--ds-color-error-bg)',
+  errorBorder: 'var(--ds-color-error-border)',
+  info: 'var(--ds-color-info)',
+  infoBg: 'var(--ds-color-info-bg)',
+  infoBorder: 'var(--ds-color-info-border)',
 } as const;
 
-// Rottay Gradients
-export const gradient = {
-  brandPrimary: 'var(--gradient-brand-primary)',
-  brandSecondary: 'var(--gradient-brand-secondary)',
-  brandAccent: 'var(--gradient-brand-accent)',
-  brandVibrant: 'var(--gradient-brand-vibrant)',
-  subtlePrimary: 'var(--gradient-subtle-primary)',
-  subtleSecondary: 'var(--gradient-subtle-secondary)',
+export const rottayLink = {
+  default: 'var(--ds-color-link)',
+  hover: 'var(--ds-color-link-hover)',
+  visited: 'var(--ds-color-link-visited)',
 } as const;
 
-// Rottay Shadow Colors
-export const shadowColor = {
-  primary: 'var(--shadow-color-primary)',
-  secondary: 'var(--shadow-color-secondary)',
-  neutral: 'var(--shadow-color-neutral)',
+export const rottayTypography = {
+  fontFamilyBase: 'var(--ds-font-family-base)',
+  fontFamilyHeading: 'var(--ds-font-family-heading)',
+  fontFamilyMono: 'var(--ds-font-family-mono)',
+  fontFamilyDisplay: 'var(--ds-font-family-display)',
+  letterSpacingDisplay: 'var(--ds-letter-spacing-display)',
+  letterSpacingHeading: 'var(--ds-letter-spacing-heading)',
+  letterSpacingBody: 'var(--ds-letter-spacing-body)',
+  letterSpacingMono: 'var(--ds-letter-spacing-mono)',
+  lineHeightDisplay: 'var(--ds-line-height-display)',
+  lineHeightHeading: 'var(--ds-line-height-heading)',
+  lineHeightBody: 'var(--ds-line-height-body)',
+  lineHeightTight: 'var(--ds-line-height-tight)',
+  lineHeightRelaxed: 'var(--ds-line-height-relaxed)',
 } as const;
 
-// Rottay State Colors
-export const state = {
-  hover: {
-    primary: 'var(--color-hover-primary)',
-    secondary: 'var(--color-hover-secondary)',
-    neutral: 'var(--color-hover-neutral)',
-  },
-  active: {
-    primary: 'var(--color-active-primary)',
-    secondary: 'var(--color-active-secondary)',
-    neutral: 'var(--color-active-neutral)',
-  },
-  focus: {
-    ring: 'var(--color-focus-ring)',
-    ringOffset: 'var(--color-focus-ring-offset)',
-  },
+export const rottayRadius = {
+  sm: 'var(--ds-radius-sm)',
+  md: 'var(--ds-radius-md)',
+  lg: 'var(--ds-radius-lg)',
+  xl: 'var(--ds-radius-xl)',
+  full: 'var(--ds-radius-full)',
 } as const;
 
-// Combined Rottay tenant tokens
+export const rottayShadows = {
+  sm: 'var(--ds-shadow-sm)',
+  md: 'var(--ds-shadow-md)',
+  lg: 'var(--ds-shadow-lg)',
+  xl: 'var(--ds-shadow-xl)',
+} as const;
+
 export const rottayTokens = {
-  accent: {
-    teal: accentTeal,
-    orange: accentOrange,
-  },
-  background,
-  text,
+  brand: rottayBrand,
+  background: rottayBackground,
+  text: rottayText,
   border: rottayBorder,
-  surface,
-  gradient,
-  shadowColor,
-  state,
+  status: rottayStatus,
+  link: rottayLink,
+  typography: rottayTypography,
+  radius: rottayRadius,
+  shadows: rottayShadows,
 } as const;
 
-// Type exports
-export type AccentTealScale = keyof typeof accentTeal;
-export type AccentOrangeScale = keyof typeof accentOrange;
+export type RottayBrandKey = keyof typeof rottayBrand;
+export type RottayBackgroundKey = keyof typeof rottayBackground;
+export type RottayTextKey = keyof typeof rottayText;
+export type RottayBorderKey = keyof typeof rottayBorder;

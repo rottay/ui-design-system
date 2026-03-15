@@ -1,0 +1,139 @@
+import React from 'react';
+import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, screen } from '@testing-library/react';
+
+import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
+import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import type { FileManagerProps } from '../types';
+import ClassicFileManager from '../engines/classic';
+import ModernFileManager from '../engines/modern';
+import RusticFileManager from '../engines/rustic';
+
+const COMPONENTS: Record<StableEngineName, React.ComponentType<FileManagerProps>> = {
+  classic: ClassicFileManager,
+  modern: ModernFileManager,
+  rustic: RusticFileManager,
+};
+
+function createProps(overrides: Partial<FileManagerProps> = {}): FileManagerProps {
+  return {
+    files: [
+      { id: 'f1', name: 'report.pdf', type: 'file', mimeType: 'application/pdf', size: 1024 },
+      { id: 'f2', name: 'photo.jpg', type: 'file', mimeType: 'image/jpeg', size: 2048 },
+    ],
+    folders: [
+      { id: 'd1', name: 'Documents', type: 'folder', childCount: 5 },
+    ],
+    ...overrides,
+  };
+}
+
+describe('PatternFileManager', () => {
+  it.each(STABLE_ENGINES)(
+    'renders files and folders with the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      renderWithEngine(<Component {...createProps()} />, engine);
+
+      expect(screen.getByText('Documents')).toBeInTheDocument();
+      expect(screen.getByText('report.pdf')).toBeInTheDocument();
+      expect(screen.getByText('photo.jpg')).toBeInTheDocument();
+    },
+  );
+
+  it.each(STABLE_ENGINES)(
+    'shows empty message when no items in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      renderWithEngine(
+        <Component {...createProps({ files: [], folders: [], emptyMessage: 'Nothing here' })} />,
+        engine,
+      );
+
+      expect(screen.getByText('Nothing here')).toBeInTheDocument();
+    },
+  );
+
+  it.each(STABLE_ENGINES)(
+    'renders upload button when onUpload is provided in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const onUpload = vi.fn();
+      renderWithEngine(<Component {...createProps({ onUpload })} />, engine);
+
+      expect(screen.getByText('Upload')).toBeInTheDocument();
+    },
+  );
+
+  it.each(STABLE_ENGINES)(
+    'renders delete button for selected items in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const onDelete = vi.fn();
+      renderWithEngine(
+        <Component {...createProps({ onDelete, selectedItems: ['f1'] })} />,
+        engine,
+      );
+
+      const deleteBtn = screen.getByText(/Delete \(1\)/);
+      expect(deleteBtn).toBeInTheDocument();
+      fireEvent.click(deleteBtn);
+      expect(onDelete).toHaveBeenCalledWith(['f1']);
+    },
+  );
+
+  it.each(STABLE_ENGINES)(
+    'renders Root breadcrumb in the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      renderWithEngine(<Component {...createProps()} />, engine);
+
+      expect(screen.getByText('Root')).toBeInTheDocument();
+    },
+  );
+
+  it.each([
+    ['modern', ModernFileManager],
+    ['rustic', RusticFileManager],
+  ] as const)(
+    'covers upload, selection, view toggles, rename, and navigation in the %s engine',
+    (engine, Component) => {
+      const onUpload = vi.fn();
+      const onRename = vi.fn();
+      const onNavigate = vi.fn();
+      const onSelectionChange = vi.fn();
+      const onViewModeChange = vi.fn();
+      const promptSpy = vi.spyOn(window, 'prompt').mockReturnValue('renamed-item');
+
+      const props = createProps({
+        onUpload,
+        onRename,
+        onNavigate,
+        onSelectionChange,
+        onViewModeChange,
+      });
+
+      const { rerender } = renderWithEngine(<Component {...props} />, engine);
+
+      const fileInput = screen.getByTestId('file-input');
+      const uploadFile = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+      fireEvent.change(fileInput, { target: { files: [uploadFile] } });
+      expect(onUpload).toHaveBeenCalledWith([uploadFile]);
+
+      fireEvent.click(screen.getAllByRole('checkbox')[0]);
+      expect(onSelectionChange).toHaveBeenCalledWith(['d1']);
+
+      fireEvent.click(screen.getByTitle(/switch to grid/i));
+      expect(onViewModeChange).toHaveBeenCalledWith('grid');
+
+      fireEvent.click(screen.getAllByText('Rename')[0]);
+      expect(onRename).toHaveBeenCalledWith('d1', 'renamed-item');
+
+      rerender(<Component {...props} viewMode="grid" />);
+      fireEvent.click(screen.getByText('Documents'));
+      expect(onNavigate).toHaveBeenCalledWith('d1');
+
+      promptSpy.mockRestore();
+    },
+  );
+});

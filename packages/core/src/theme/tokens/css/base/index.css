@@ -1,11 +1,11 @@
 /**
  * Base Tokens Index - Rottay Design System
  *
- * Central import file for all base design tokens.
- * Import this file to get access to all foundational design tokens.
+ * Supplemental semantic token layer for the DS-prefixed runtime.
+ * Import this file to get the extended spacing, border, shadow, typography,
+ * and z-index aliases that sit on top of the canonical theme palettes.
  */
 
-@import './colors.css';
 @import './spacing.css';
 @import './typography.css';
 @import './shadows.css';

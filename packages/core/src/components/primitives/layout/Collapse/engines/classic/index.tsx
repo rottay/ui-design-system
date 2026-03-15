@@ -46,6 +46,43 @@ import { Collapse as AntCollapse } from 'antd';
 import type { CollapseProps, CollapsePanelProps } from '../../types';
 import { useCollapseTokens } from '../../../../../../core/hooks/components';
 
+function convertCollapseChildren(children: React.ReactNode): NonNullable<React.ComponentProps<typeof AntCollapse>['items']> {
+  return React.Children.toArray(children).flatMap((child) => {
+    if (!React.isValidElement(child)) {
+      return [];
+    }
+
+    const displayName =
+      typeof child.type === 'string'
+        ? child.type
+        : ((child.type as { displayName?: string }).displayName ?? '');
+
+    if (!displayName.startsWith('Collapse.Panel')) {
+      return [];
+    }
+
+    const panelProps = child.props as CollapsePanelProps;
+
+    return [{
+      key: panelProps.panelKey ?? 'panel',
+      label: panelProps.header,
+      children: panelProps.children,
+      extra: panelProps.extra,
+      showArrow: panelProps.showArrow,
+      forceRender: panelProps.forceRender,
+      collapsible: panelProps.disabled ? 'disabled' : undefined,
+      className: [
+        'ds-collapse-panel',
+        panelProps.disabled && 'ds-collapse-panel--disabled',
+        panelProps.className,
+      ]
+        .filter(Boolean)
+        .join(' '),
+      style: panelProps.style,
+    }];
+  });
+}
+
 /**
  * Classic (Ant Design) implementation of Collapse with token architecture.
  *
@@ -80,6 +117,8 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       style,
     });
 
+    const items = useMemo(() => convertCollapseChildren(children), [children]);
+
     return (
       <div ref={ref} className={classNames.root} style={rootStyle}>
         <AntCollapse
@@ -92,9 +131,8 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
           onChange={onChange}
           collapsible={collapsible}
           size={size}
-        >
-          {children}
-        </AntCollapse>
+          items={items.length > 0 ? items : undefined}
+        />
       </div>
     );
   }

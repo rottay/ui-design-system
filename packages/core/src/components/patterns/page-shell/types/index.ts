@@ -3,7 +3,7 @@ import type { PatternBaseProps } from '../../types';
 
 export interface PageShellProps extends PatternBaseProps {
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   breadcrumbs?: { label: string; href?: string; onClick?: () => void }[];
   actions?: ReactNode;
   tabs?: { key: string; label: string; content: ReactNode }[];

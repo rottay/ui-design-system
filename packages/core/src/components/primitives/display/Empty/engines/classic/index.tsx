@@ -116,7 +116,7 @@ const ClassicEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       >
         <AntEmpty
           image={resolveImage()}
-          imageStyle={imageStyle}
+          styles={imageStyle ? { image: imageStyle } : undefined}
           description={displayDescription}
         >
           {children}

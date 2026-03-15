@@ -115,7 +115,7 @@ export default function ClassicApprovalWorkflow(props: ApprovalWorkflowProps) {
       />
 
       {footer && (
-        <div style={{ marginTop: 16, borderTop: '1px solid #f0f0f0', paddingTop: 16 }}>
+        <div style={{ marginTop: 16, borderTop: '1px solid var(--ds-color-border-subtle)', paddingTop: 16 }}>
           {footer}
         </div>
       )}

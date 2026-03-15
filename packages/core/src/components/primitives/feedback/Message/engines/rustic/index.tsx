@@ -69,6 +69,7 @@ import type {
   MessageType,
 } from '../../types';
 import { MESSAGE_DEFAULTS, MESSAGE_ICONS } from '../../types';
+import { warnOnceInDev } from '../../../../../../core/utils/runtime-logger';
 
 // ============================================================================
 // Internal Types
@@ -147,31 +148,32 @@ const styles = {
       padding: 'var(--ds-message-padding, 10px 16px)',
       borderRadius: 'var(--ds-message-radius, 8px)',
       boxShadow: 'var(--ds-message-shadow, 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05))',
-      backgroundColor: 'var(--ds-message-bg, #fff)',
+      backgroundColor: 'var(--ds-message-bg, var(--ds-color-bg-elevated))',
       pointerEvents: 'auto' as const,
-      animation: 'messageSlideIn 0.3s ease-out',
+      animation:
+        'messageSlideIn var(--ds-message-enter-duration, 220ms) var(--ds-message-enter-easing, cubic-bezier(0.22, 1, 0.36, 1))',
       maxWidth: 'var(--ds-message-max-width, 400px)',
       minWidth: 'var(--ds-message-min-width, 200px)',
     } as React.CSSProperties,
     success: {
-      backgroundColor: 'var(--ds-message-success-bg, #f6ffed)',
-      border: '1px solid var(--ds-message-success-border, #b7eb8f)',
+      backgroundColor: 'var(--ds-message-success-bg, var(--ds-color-success-bg))',
+      border: '1px solid var(--ds-message-success-border, var(--ds-color-success-border))',
     },
     error: {
-      backgroundColor: 'var(--ds-message-error-bg, #fff2f0)',
-      border: '1px solid var(--ds-message-error-border, #ffccc7)',
+      backgroundColor: 'var(--ds-message-error-bg, var(--ds-color-error-bg))',
+      border: '1px solid var(--ds-message-error-border, var(--ds-color-error-border))',
     },
     info: {
-      backgroundColor: 'var(--ds-message-info-bg, #e6f4ff)',
-      border: '1px solid var(--ds-message-info-border, #91caff)',
+      backgroundColor: 'var(--ds-message-info-bg, var(--ds-color-info-bg))',
+      border: '1px solid var(--ds-message-info-border, var(--ds-color-info-border))',
     },
     warning: {
-      backgroundColor: 'var(--ds-message-warning-bg, #fffbe6)',
-      border: '1px solid var(--ds-message-warning-border, #ffe58f)',
+      backgroundColor: 'var(--ds-message-warning-bg, var(--ds-color-warning-bg))',
+      border: '1px solid var(--ds-message-warning-border, var(--ds-color-warning-border))',
     },
     loading: {
-      backgroundColor: 'var(--ds-message-loading-bg, #e6f4ff)',
-      border: '1px solid var(--ds-message-loading-border, #91caff)',
+      backgroundColor: 'var(--ds-message-loading-bg, var(--ds-color-info-bg))',
+      border: '1px solid var(--ds-message-loading-border, var(--ds-color-info-border))',
     },
   },
 
@@ -187,11 +189,11 @@ const styles = {
       height: '16px',
       fontSize: '14px',
     } as React.CSSProperties,
-    success: { color: 'var(--ds-message-success-color, var(--ds-color-success-500, #52c41a))' },
-    error: { color: 'var(--ds-message-error-color, var(--ds-color-error-500, #ff4d4f))' },
-    info: { color: 'var(--ds-message-info-color, var(--ds-color-primary-500, #1677ff))' },
-    warning: { color: 'var(--ds-message-warning-color, var(--ds-color-warning-500, #faad14))' },
-    loading: { color: 'var(--ds-message-loading-color, var(--ds-color-primary-500, #1677ff))' },
+    success: { color: 'var(--ds-message-success-color, var(--ds-color-success))' },
+    error: { color: 'var(--ds-message-error-color, var(--ds-color-error))' },
+    info: { color: 'var(--ds-message-info-color, var(--ds-color-info))' },
+    warning: { color: 'var(--ds-message-warning-color, var(--ds-color-warning))' },
+    loading: { color: 'var(--ds-message-loading-color, var(--ds-color-info))' },
   },
 
   /**
@@ -201,7 +203,7 @@ const styles = {
     flex: 1,
     fontSize: 'var(--ds-message-font-size, 14px)',
     lineHeight: 'var(--ds-message-line-height, 22px)',
-    color: 'var(--ds-message-text-color, rgba(0, 0, 0, 0.88))',
+    color: 'var(--ds-message-text-color, var(--ds-color-text-primary))',
   } as React.CSSProperties,
 
   /**
@@ -213,10 +215,10 @@ const styles = {
     cursor: 'pointer',
     padding: '0',
     marginLeft: '8px',
-    color: 'var(--ds-message-close-color, rgba(0, 0, 0, 0.45))',
+    color: 'var(--ds-message-close-color, var(--ds-color-text-tertiary))',
     fontSize: '14px',
     lineHeight: 1,
-    transition: 'color 0.2s',
+    transition: 'color var(--ds-duration-fast, 200ms)',
   } as React.CSSProperties,
 
   /**
@@ -226,10 +228,10 @@ const styles = {
     display: 'inline-block',
     width: '14px',
     height: '14px',
-    border: '2px solid var(--ds-message-loading-color, var(--ds-color-primary-500, #1677ff))',
+    border: '2px solid var(--ds-message-loading-color, var(--ds-color-info))',
     borderTopColor: 'transparent',
     borderRadius: '50%',
-    animation: 'messageSpin 0.8s linear infinite',
+    animation: 'messageSpin var(--ds-spinner-duration, 0.8s) linear infinite',
   } as React.CSSProperties,
 };
 
@@ -254,7 +256,7 @@ const injectStyles = () => {
     @keyframes messageSlideIn {
       from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
       }
       to {
         opacity: 1;
@@ -268,7 +270,7 @@ const injectStyles = () => {
       }
       to {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
       }
     }
     @keyframes messageSpin {
@@ -426,12 +428,8 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     <MessageContext.Provider value={messageApi}>
       {children}
       <div style={styles.container(placement, top)} role="log" aria-live="polite">
-        {messages.map((msg) => (
-          <MessageItem
-            key={msg.id}
-            {...msg}
-            onRemove={removeMessage}
-          />
+        {messages.map(({ key: _messageKey, ...msg }) => (
+          <MessageItem key={msg.id} {...msg} onRemove={removeMessage} />
         ))}
       </div>
     </MessageContext.Provider>
@@ -576,7 +574,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     setTimeout(() => {
       onRemove?.(id);
       onClose?.();
-    }, 300); // Animation duration
+    }, 220);
   };
 
   /**
@@ -600,7 +598,12 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   const messageStyle: React.CSSProperties = {
     ...styles.message.base,
     ...styles.message[type],
-    ...(isExiting ? { animation: 'messageSlideOut 0.3s ease-out forwards' } : {}),
+    ...(isExiting
+      ? {
+          animation:
+            'messageSlideOut var(--ds-message-exit-duration, 160ms) var(--ds-message-exit-easing, cubic-bezier(0.4, 0, 1, 1)) forwards',
+        }
+      : {}),
     ...style,
   };
 
@@ -619,10 +622,12 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           style={styles.closeButton}
           aria-label="Close message"
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = 'rgba(0, 0, 0, 0.88)';
+            e.currentTarget.style.color =
+              'var(--ds-message-close-color-hover, var(--ds-color-text-primary))';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = 'rgba(0, 0, 0, 0.45)';
+            e.currentTarget.style.color =
+              'var(--ds-message-close-color, var(--ds-color-text-tertiary))';
           }}
         >
           {closeIcon || '×'}
@@ -661,43 +666,64 @@ MessageItem.displayName = 'MessageItem.Rustic';
  */
 export const message: MessageInstance = {
   success: () => {
-    console.warn('Rustic message: Please use MessageProvider and useMessage hook');
+    warnOnceInDev(
+      'message-rustic:provider-required',
+      'Rustic message: Please use MessageProvider and useMessage hook'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   error: () => {
-    console.warn('Rustic message: Please use MessageProvider and useMessage hook');
+    warnOnceInDev(
+      'message-rustic:provider-required',
+      'Rustic message: Please use MessageProvider and useMessage hook'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   info: () => {
-    console.warn('Rustic message: Please use MessageProvider and useMessage hook');
+    warnOnceInDev(
+      'message-rustic:provider-required',
+      'Rustic message: Please use MessageProvider and useMessage hook'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   warning: () => {
-    console.warn('Rustic message: Please use MessageProvider and useMessage hook');
+    warnOnceInDev(
+      'message-rustic:provider-required',
+      'Rustic message: Please use MessageProvider and useMessage hook'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   loading: () => {
-    console.warn('Rustic message: Please use MessageProvider and useMessage hook');
+    warnOnceInDev(
+      'message-rustic:provider-required',
+      'Rustic message: Please use MessageProvider and useMessage hook'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   open: () => {
-    console.warn('Rustic message: Please use MessageProvider and useMessage hook');
+    warnOnceInDev(
+      'message-rustic:provider-required',
+      'Rustic message: Please use MessageProvider and useMessage hook'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   destroy: () => {
-    console.warn('Rustic message: Please use MessageProvider and useMessage hook');
+    warnOnceInDev(
+      'message-rustic:provider-required',
+      'Rustic message: Please use MessageProvider and useMessage hook'
+    );
   },
 };
 

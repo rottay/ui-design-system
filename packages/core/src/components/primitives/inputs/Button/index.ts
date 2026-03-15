@@ -17,7 +17,7 @@
  *
  * **Multi-Tenant Support:**
  * Button appearance automatically adapts to the active tenant's theme through
- * CSS custom properties (--button-*), ensuring consistent branding across tenants.
+ * CSS custom properties (--ds-button-*), ensuring consistent branding across tenants.
  *
  * @example Basic Usage
  * ```tsx
@@ -86,7 +86,14 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef } from 'react';
+
 import { createEngineComponent } from '../../../../core/engines/factory';
+import { useOptionalTokens } from '../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveButtonPersonalityStyle,
+} from '../../../../core/personality/primitives';
 import type { ButtonProps } from './types';
 import { ButtonGroup, ButtonIcon } from './compound';
 
@@ -110,12 +117,27 @@ export type { ButtonGroupProps, ButtonIconProps } from './compound';
 // Export base component
 
 // Create engine-aware Button component with compound components attached
-export const Button = Object.assign(
-  createEngineComponent<ButtonProps>('Button', {
+const ButtonBase = createEngineComponent<ButtonProps>('Button', {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
     rustic: () => import('./engines/rustic'),
-  }),
+  });
+
+const ButtonComponent = forwardRef<any, ButtonProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const { style, ...rest } = props;
+
+  return createElement(ButtonBase, {
+    ref,
+    ...rest,
+    style: tokens ? mergePersonalityStyle(style, resolveButtonPersonalityStyle(tokens)) : style,
+  });
+});
+
+ButtonComponent.displayName = 'Button';
+
+export const Button = Object.assign(
+  ButtonComponent,
   {
     Group: ButtonGroup,
     Icon: ButtonIcon,

@@ -29,10 +29,10 @@
  * - `Card.Image` - Cover image with overlay support
  *
  * **CSS Custom Properties:**
- * - `--card-{variant}-bg` - Background color per variant
- * - `--card-{size}-padding` - Content padding
- * - `--card-{size}-shadow` - Shadow elevation
- * - `--card-border-default` - Border color
+ * - `--ds-card-{variant}-bg` - Background color per variant
+ * - `--ds-card-{size}-padding` - Content padding
+ * - `--ds-card-{size}-shadow` - Shadow elevation
+ * - `--ds-card-border-default` - Border color
  *
  * @example Basic Card
  * ```tsx
@@ -69,7 +69,14 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef } from 'react';
+
 import { createEngineComponent } from '../../../../core/engines/factory';
+import { useOptionalTokens } from '../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveCardPersonalityDefaults,
+} from '../../../../core/personality/primitives';
 import type { CardProps } from './types';
 import { CardHeader, CardBody, CardFooter, CardImage } from './compound';
 
@@ -111,12 +118,37 @@ export { CardHeader, CardBody, CardFooter, CardImage };
  * @see {@link CardFooter} for footer configuration
  * @see {@link CardImage} for image configuration
  */
-export const Card = Object.assign(
-  createEngineComponent<CardProps>('Card', {
+const CardBase = createEngineComponent<CardProps>('Card', {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
     rustic: () => import('./engines/rustic'),
-  }),
+  });
+
+const CardComponent = forwardRef<any, CardProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const defaults = tokens ? resolveCardPersonalityDefaults(tokens) : null;
+  const {
+    padding,
+    bordered,
+    hoverable,
+    style,
+    ...rest
+  } = props;
+
+  return createElement(CardBase, {
+    ref,
+    ...rest,
+    padding: padding ?? defaults?.padding,
+    bordered: bordered ?? defaults?.bordered,
+    hoverable: hoverable ?? defaults?.hoverable,
+    style: mergePersonalityStyle(style, undefined),
+  });
+});
+
+CardComponent.displayName = 'Card';
+
+export const Card = Object.assign(
+  CardComponent,
   {
     /** Header compound component for card title area */
     Header: CardHeader,

@@ -15,10 +15,10 @@
  * - CSS custom property theming
  *
  * **Styling via CSS Custom Properties:**
- * - `--modal-title-font-size`: Title text size (default: 18px)
- * - `--modal-title-font-weight`: Title weight (default: 600)
- * - `--modal-title-color`: Title text color
- * - `--modal-header-border`: Divider border color
+ * - `--ds-modal-title-font-size`: Title text size (default: 18px)
+ * - `--ds-modal-title-font-weight`: Title weight (default: 600)
+ * - `--ds-modal-title-color`: Title text color
+ * - `--ds-modal-header-border`: Divider border color
  *
  * @example Basic Usage
  * ```tsx
@@ -122,7 +122,7 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
 
       // Visual - optional bottom border for separation
       borderBottom: divider
-        ? '1px solid var(--modal-header-border, rgba(0, 0, 0, 0.1))'
+        ? '1px solid var(--ds-modal-header-border, rgba(0, 0, 0, 0.1))'
         : 'none',
 
       // Prevent shrinking when content overflows
@@ -142,12 +142,12 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
       margin: 0,
 
       // Typography - uses CSS custom properties for tenant theming
-      fontSize: 'var(--modal-title-font-size, 18px)',
-      fontWeight: 'var(--modal-title-font-weight, 600)',
+      fontSize: 'var(--ds-modal-title-font-size, 18px)',
+      fontWeight: 'var(--ds-modal-title-font-weight, 600)',
       lineHeight: 1.4,
 
       // Color - inherits or uses custom property
-      color: 'var(--modal-title-color, inherit)',
+      color: 'var(--ds-modal-title-color, inherit)',
     };
 
     // -------------------------------------------------------------------------

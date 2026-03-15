@@ -125,6 +125,28 @@ export type CascaderValue = (string | number)[];
  * />
  * ```
  */
+/**
+ * Field names mapping for custom data structures.
+ * Allows options to use different property names for label, value, and children.
+ *
+ * @example
+ * ```tsx
+ * const fieldNames: CascaderFieldNames = {
+ *   label: 'name',
+ *   value: 'id',
+ *   children: 'items',
+ * };
+ * ```
+ */
+export interface CascaderFieldNames {
+  /** Key for the display label property (default: 'label') */
+  label?: string;
+  /** Key for the value property (default: 'value') */
+  value?: string;
+  /** Key for the children property (default: 'children') */
+  children?: string;
+}
+
 export interface CascaderProps {
   /** Options data */
   options: CascaderOption[];
@@ -163,11 +185,15 @@ export interface CascaderProps {
   /** Max tag count (multiple mode) */
   maxTagCount?: number | 'responsive';
   /** Field names mapping */
-  fieldNames?: {
-    label?: string;
-    value?: string;
-    children?: string;
-  };
+  fieldNames?: CascaderFieldNames;
+  /**
+   * Async load data callback. Called when a node is expanded that has
+   * `isLeaf: false` but no children loaded yet. The implementation should
+   * mutate the option's `children` (or the corresponding fieldNames.children)
+   * then resolve. The engine will show a loading spinner on the node while
+   * the promise is pending.
+   */
+  loadData?: (selectedOptions: CascaderOption[]) => Promise<void>;
   /** Additional class name */
   className?: string;
   /** Additional styles */

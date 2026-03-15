@@ -68,6 +68,7 @@ import type {
   MessageType,
 } from '../../types';
 import { MESSAGE_DEFAULTS } from '../../types';
+import { warnOnceInDev } from '../../../../../../core/utils/runtime-logger';
 
 // ============================================================================
 // Internal Types
@@ -257,12 +258,8 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
         className={placementClasses[placement]}
         style={{ marginTop: placement === 'top' ? top : undefined }}
       >
-        {messages.map((msg) => (
-          <MessageItem
-            key={msg.id}
-            {...msg}
-            onRemove={removeMessage}
-          />
+        {messages.map(({ key: _messageKey, ...msg }) => (
+          <MessageItem key={msg.id} {...msg} onRemove={removeMessage} />
         ))}
       </div>
     </MessageContext.Provider>
@@ -521,43 +518,64 @@ export const setGlobalMessageHandler = (
  */
 export const message: MessageInstance = {
   success: (_content, _duration, _onClose) => {
-    console.warn('Modern message: Please use MessageProvider and useMessage hook for full functionality');
+    warnOnceInDev(
+      'message-modern:provider-required',
+      'Modern message: Please use MessageProvider and useMessage hook for full functionality'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   error: (_content, _duration, _onClose) => {
-    console.warn('Modern message: Please use MessageProvider and useMessage hook for full functionality');
+    warnOnceInDev(
+      'message-modern:provider-required',
+      'Modern message: Please use MessageProvider and useMessage hook for full functionality'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   info: (_content, _duration, _onClose) => {
-    console.warn('Modern message: Please use MessageProvider and useMessage hook for full functionality');
+    warnOnceInDev(
+      'message-modern:provider-required',
+      'Modern message: Please use MessageProvider and useMessage hook for full functionality'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   warning: (_content, _duration, _onClose) => {
-    console.warn('Modern message: Please use MessageProvider and useMessage hook for full functionality');
+    warnOnceInDev(
+      'message-modern:provider-required',
+      'Modern message: Please use MessageProvider and useMessage hook for full functionality'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   loading: (_content, _duration, _onClose) => {
-    console.warn('Modern message: Please use MessageProvider and useMessage hook for full functionality');
+    warnOnceInDev(
+      'message-modern:provider-required',
+      'Modern message: Please use MessageProvider and useMessage hook for full functionality'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   open: (_config) => {
-    console.warn('Modern message: Please use MessageProvider and useMessage hook for full functionality');
+    warnOnceInDev(
+      'message-modern:provider-required',
+      'Modern message: Please use MessageProvider and useMessage hook for full functionality'
+    );
     const result = () => {};
     result.then = () => {};
     return result;
   },
   destroy: () => {
-    console.warn('Modern message: Please use MessageProvider and useMessage hook for full functionality');
+    warnOnceInDev(
+      'message-modern:provider-required',
+      'Modern message: Please use MessageProvider and useMessage hook for full functionality'
+    );
   },
 };
 

@@ -65,7 +65,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Select as AntSelect } from 'antd';
 import type { SelectProps, SelectOption } from '../../types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../../types';
@@ -105,7 +105,7 @@ const ANT_STATUS_MAP = {
   success: undefined, // Ant doesn't have success status
 };
 
-export default function ClassicSelect(props: SelectProps): React.ReactElement {
+const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
   const { t } = useTranslation('components');
 
   const {
@@ -221,6 +221,7 @@ export default function ClassicSelect(props: SelectProps): React.ReactElement {
 
   return (
     <AntSelect
+      ref={ref}
       value={value}
       defaultValue={defaultValue}
       options={antOptions}
@@ -248,6 +249,8 @@ export default function ClassicSelect(props: SelectProps): React.ReactElement {
       {...antProps}
     />
   );
-}
+});
 
 ClassicSelect.displayName = 'ClassicSelect';
+
+export default ClassicSelect;

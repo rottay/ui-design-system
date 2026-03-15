@@ -3,6 +3,8 @@
  * Design System Rottay - Wave 0 - Agente D
  */
 
+import { errorInDev } from '../../../../core/utils/runtime-logger';
+
 /**
  * Formatea una fecha según el locale.
  */
@@ -21,7 +23,7 @@ export function formatDate(
 
     return new Intl.DateTimeFormat(locale, defaultOptions).format(date);
   } catch (error) {
-    console.error('Error formatting date:', error);
+    errorInDev('Error formatting date:', error);
     return date.toLocaleDateString();
   }
 }
@@ -37,7 +39,7 @@ export function formatNumber(
   try {
     return new Intl.NumberFormat(locale, options).format(value);
   } catch (error) {
-    console.error('Error formatting number:', error);
+    errorInDev('Error formatting number:', error);
     return value.toString();
   }
 }
@@ -56,7 +58,7 @@ export function formatCurrency(
       currency,
     }).format(value);
   } catch (error) {
-    console.error('Error formatting currency:', error);
+    errorInDev('Error formatting currency:', error);
     return `${currency} ${value.toFixed(2)}`;
   }
 }
@@ -97,7 +99,7 @@ export function formatRelativeTime(
            locale.startsWith('fr') ? 'maintenant' :
            'now';
   } catch (error) {
-    console.error('Error formatting relative time:', error);
+    errorInDev('Error formatting relative time:', error);
     return formatDate(date, locale, {
       year: 'numeric',
       month: 'short',
@@ -121,7 +123,7 @@ export function formatPercent(
       maximumFractionDigits: decimals,
     }).format(value);
   } catch (error) {
-    console.error('Error formatting percent:', error);
+    errorInDev('Error formatting percent:', error);
     return `${(value * 100).toFixed(decimals)}%`;
   }
 }
@@ -156,7 +158,7 @@ export function formatDateRange(
     const separator = locale.startsWith('es') || locale.startsWith('pt') ? ' - ' : ' – ';
     return `${start}${separator}${end}`;
   } catch (error) {
-    console.error('Error formatting date range:', error);
+    errorInDev('Error formatting date range:', error);
     return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
   }
 }
@@ -216,7 +218,7 @@ export function formatList(
 
     return items.slice(0, -1).join(', ') + separator + items[items.length - 1];
   } catch (error) {
-    console.error('Error formatting list:', error);
+    errorInDev('Error formatting list:', error);
     return items.join(', ');
   }
 }

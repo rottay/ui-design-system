@@ -183,7 +183,7 @@ export function Example6_CustomBranding() {
           style={{
             marginTop: 16,
             padding: 16,
-            background: 'var(--tenant-primary)',
+            background: 'var(--ds-color-primary)',
             color: 'white',
           }}
         >
@@ -194,7 +194,7 @@ export function Example6_CustomBranding() {
           style={{
             marginTop: 8,
             padding: 16,
-            background: 'var(--tenant-accent)',
+            background: 'var(--ds-color-accent)',
             color: 'white',
           }}
         >

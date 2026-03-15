@@ -144,6 +144,91 @@
   --ds-color-alpha-white-90: rgba(255, 255, 255, 0.9);
 
   /* ─────────────────────────────────────────────────────────────────────────────
+     1.10 COLORS - Semantic aliases consumed by primitives, patterns and surfaces
+     Keep these close to the primitive palettes so tenant runtime overrides only
+     need to replace one family of variables (`--ds-color-*`).
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-primary: var(--ds-color-primary-500);
+  --ds-color-primary-hover: var(--ds-color-primary-600);
+  --ds-color-primary-subtle: var(--ds-color-primary-100);
+  --ds-color-primary-foreground: #ffffff;
+  --ds-color-primary-rgb: 23, 23, 23;
+
+  --ds-color-secondary: var(--ds-color-secondary-500);
+  --ds-color-secondary-hover: var(--ds-color-secondary-600);
+  --ds-color-secondary-rgb: 184, 168, 152;
+
+  --ds-color-success: var(--ds-color-success-500);
+  --ds-color-warning: var(--ds-color-warning-500);
+  --ds-color-error: var(--ds-color-error-500);
+  --ds-color-danger: var(--ds-color-error);
+  --ds-color-info: var(--ds-color-info-500);
+  --ds-color-neutral-0: var(--ds-color-white);
+
+  --ds-color-accent: var(--ds-color-secondary);
+  --ds-color-accent-hover: var(--ds-color-secondary-hover);
+  --ds-color-accent-live: var(--ds-color-success);
+  --ds-color-accent-live-bg: rgba(34, 197, 94, 0.08);
+
+  --ds-color-alpha-primary-10: rgba(var(--ds-color-primary-rgb), 0.10);
+  --ds-color-alpha-primary-20: rgba(var(--ds-color-primary-rgb), 0.20);
+  --ds-color-alpha-secondary-10: rgba(var(--ds-color-secondary-rgb), 0.10);
+  --ds-color-alpha-secondary-20: rgba(var(--ds-color-secondary-rgb), 0.20);
+  --ds-color-alpha-success-10: rgba(34, 197, 94, 0.10);
+  --ds-color-alpha-success-20: rgba(34, 197, 94, 0.20);
+  --ds-color-alpha-warning-10: rgba(245, 158, 11, 0.10);
+  --ds-color-alpha-warning-20: rgba(245, 158, 11, 0.20);
+  --ds-color-alpha-error-10: rgba(239, 68, 68, 0.10);
+  --ds-color-alpha-error-20: rgba(239, 68, 68, 0.20);
+  --ds-color-alpha-info-10: rgba(59, 130, 246, 0.10);
+  --ds-color-alpha-info-20: rgba(59, 130, 246, 0.20);
+
+  --ds-color-bg-primary: #ffffff;
+  --ds-color-bg-secondary: #fafafa;
+  --ds-color-bg-tertiary: #f5f5f5;
+  --ds-color-bg-subtle: #fafafa;
+  --ds-color-bg-hover: #f5f5f5;
+  --ds-color-bg-canvas: #ffffff;
+  --ds-color-bg-elevated: #ffffff;
+  --ds-color-bg-input: #ffffff;
+  --ds-color-bg-info: var(--ds-color-info-50);
+  --ds-color-bg-overlay: var(--ds-color-alpha-black-50);
+  --ds-color-bg-surface: var(--ds-color-bg-secondary);
+  --ds-color-bg: var(--ds-color-bg-primary);
+  --ds-color-background: var(--ds-color-bg-primary);
+
+  --ds-color-text-primary: #171717;
+  --ds-color-text-secondary: #525252;
+  --ds-color-text-tertiary: #737373;
+  --ds-color-text-muted: #a3a3a3;
+  --ds-color-text-disabled: #a3a3a3;
+  --ds-color-text-on-primary: #ffffff;
+  --ds-color-text: var(--ds-color-text-primary);
+
+  --ds-color-border: #e5e5e5;
+  --ds-color-border-primary: #e5e5e5;
+  --ds-color-border-secondary: #d4d4d4;
+  --ds-color-border-subtle: #f5f5f5;
+  --ds-color-border-tertiary: #f5f5f5;
+  --ds-color-border-focus: var(--ds-color-primary);
+
+  --ds-color-surface: var(--ds-color-bg-primary);
+  --ds-color-surface-secondary: var(--ds-color-bg-secondary);
+  --ds-color-shadow: var(--ds-color-alpha-black-20);
+  --ds-color-link: var(--ds-color-primary);
+  --ds-color-link-hover: var(--ds-color-primary-hover);
+  --ds-color-link-visited: var(--ds-color-neutral-600);
+
+  --ds-color-success-bg: var(--ds-color-success-50);
+  --ds-color-success-border: rgba(34, 197, 94, 0.2);
+  --ds-color-warning-bg: var(--ds-color-warning-50);
+  --ds-color-warning-border: rgba(245, 158, 11, 0.2);
+  --ds-color-error-bg: var(--ds-color-error-50);
+  --ds-color-error-border: rgba(239, 68, 68, 0.2);
+  --ds-color-info-bg: var(--ds-color-info-50);
+  --ds-color-info-border: rgba(59, 130, 246, 0.2);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
      2. TYPOGRAPHY - Geist/Inter Style
      ───────────────────────────────────────────────────────────────────────────── */
 
@@ -305,25 +390,35 @@
      ═══════════════════════════════════════════════════════════════════════════ */
 
   /* Text Colors */
-  --ds-text-primary: #171717;
-  --ds-text-secondary: #525252;
-  --ds-text-tertiary: #737373;
-  --ds-text-disabled: #a3a3a3;
-  --ds-text-inverse: #ffffff;
+  --ds-text-primary: var(--ds-color-text-primary);
+  --ds-text-secondary: var(--ds-color-text-secondary);
+  --ds-text-tertiary: var(--ds-color-text-tertiary);
+  --ds-text-muted: var(--ds-color-text-muted);
+  --ds-text-disabled: var(--ds-color-text-disabled);
+  --ds-text-inverse: var(--ds-color-text-on-primary);
 
   /* Background Colors */
-  --ds-bg-primary: #ffffff;
-  --ds-bg-secondary: #fafafa;
-  --ds-bg-tertiary: #f5f5f5;
-  --ds-bg-hover: #f5f5f5;
-  --ds-bg-active: #e5e5e5;
-  --ds-bg-disabled: #f5f5f5;
+  --ds-bg-primary: var(--ds-color-bg-primary);
+  --ds-bg-secondary: var(--ds-color-bg-secondary);
+  --ds-bg-tertiary: var(--ds-color-bg-tertiary);
+  --ds-bg-hover: var(--ds-color-bg-hover);
+  --ds-bg-active: var(--ds-color-neutral-200);
+  --ds-bg-disabled: var(--ds-color-bg-subtle);
 
   /* Border Colors */
-  --ds-border-color: #e5e5e5;
-  --ds-border-color-hover: #d4d4d4;
-  --ds-border-color-focus: #171717;
-  --ds-border-color-disabled: #e5e5e5;
+  --ds-border-color: var(--ds-color-border);
+  --ds-border-color-default: var(--ds-color-border-primary);
+  --ds-border-color-muted: var(--ds-color-border-subtle);
+  --ds-border-color-strong: var(--ds-color-border-secondary);
+  --ds-border-color-hover: var(--ds-color-border-secondary);
+  --ds-border-color-focus: var(--ds-color-border-focus);
+  --ds-border-color-disabled: var(--ds-color-border-subtle);
+
+  /* Interactive colors */
+  --ds-color-interactive-border: var(--ds-color-border-secondary);
+  --ds-color-interactive-bg-hover: var(--ds-color-bg-hover);
+  --ds-color-interactive-bg-active: var(--ds-color-alpha-primary-10);
+  --ds-color-interactive-bg-muted: var(--ds-color-bg-subtle);
 
   /* Sidebar Colors - Uses only existing palette tokens */
   --ds-sidebar-bg: var(--ds-color-primary-900);
@@ -567,7 +662,18 @@
   --ds-card-title-font-size: var(--ds-font-size-lg);
   --ds-card-title-font-weight: 600;
   --ds-card-title-color: #171717;
+  --ds-card-subtitle-font-size: var(--ds-font-size-sm);
   --ds-card-subtitle-color: #737373;
+  --ds-card-image-placeholder-bg: #f5f5f5;
+  --ds-card-image-placeholder-color: #a3a3a3;
+  --ds-card-image-loading-track: #e5e5e5;
+  --ds-card-image-loading-active: var(--ds-color-primary-500);
+  --ds-card-cover-overlay-bg: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
 
   /* Card Body */
   --ds-card-body-padding: var(--ds-card-padding-md);
@@ -580,6 +686,8 @@
 
   /* Card Common */
   --ds-card-transition: var(--ds-transition-normal);
+  --ds-divider-text-color: var(--ds-color-text-primary);
+  --ds-page-shell-subtitle-color: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      MODAL
@@ -602,6 +710,7 @@
   --ds-modal-padding: 1.5rem;
 
   /* Modal Overlay */
+  --ds-overlay-bg: rgba(0, 0, 0, 0.5);
   --ds-modal-overlay-bg: rgba(0, 0, 0, 0.5);
   --ds-modal-overlay-backdrop: blur(4px);
 
@@ -628,6 +737,10 @@
   --ds-modal-close-color: #737373;
   --ds-modal-close-color-hover: #171717;
   --ds-modal-close-bg-hover: #f5f5f5;
+
+  /* Message Close */
+  --ds-message-close-color: #737373;
+  --ds-message-close-color-hover: #171717;
 
   /* Modal Animation */
   --ds-modal-animation-duration: 0.2s;
@@ -1302,25 +1415,35 @@
 
   /* Upload Button */
   --ds-upload-button-padding: 0.5rem 1rem;
-  --ds-upload-button-bg: #ffffff;
-  --ds-upload-button-border: #e5e5e5;
+  --ds-upload-button-bg: var(--ds-color-bg-input);
+  --ds-upload-button-border: var(--ds-color-border);
   --ds-upload-button-radius: var(--ds-radius-md);
-  --ds-upload-button-color: #525252;
+  --ds-upload-button-color: var(--ds-color-text-secondary);
 
   /* Upload Dragger */
-  --ds-upload-dragger-bg: #fafafa;
-  --ds-upload-dragger-bg-hover: #f5f5f5;
-  --ds-upload-dragger-border: #e5e5e5;
-  --ds-upload-dragger-border-active: #171717;
+  --ds-upload-dragger-bg: var(--ds-color-bg-secondary);
+  --ds-upload-dragger-bg-hover: var(--ds-color-bg-hover);
+  --ds-upload-dragger-border: var(--ds-color-border);
+  --ds-upload-dragger-border-active: var(--ds-color-text-primary);
   --ds-upload-dragger-radius: var(--ds-radius-lg);
-  --ds-upload-dragger-icon-color: #a3a3a3;
-  --ds-upload-dragger-text-color: #525252;
+  --ds-upload-dragger-icon-color: var(--ds-color-text-muted);
+  --ds-upload-dragger-text-color: var(--ds-color-text-secondary);
 
   /* Upload File List */
-  --ds-upload-file-bg: #fafafa;
+  --ds-upload-file-bg: var(--ds-color-bg-secondary);
   --ds-upload-file-radius: var(--ds-radius-sm);
-  --ds-upload-file-color: #525252;
-  --ds-upload-file-remove-color: #ef4444;
+  --ds-upload-file-color: var(--ds-color-text-secondary);
+  --ds-upload-file-remove-color: var(--ds-color-error);
+  --ds-upload-progress-track: var(--ds-color-border-subtle);
+  --ds-upload-progress-bar: var(--ds-color-primary);
+  --ds-upload-card-border: var(--ds-color-border-secondary);
+  --ds-upload-card-bg: var(--ds-color-bg-tertiary);
+  --ds-upload-error-border: var(--ds-color-error);
+  --ds-upload-preview-overlay: var(--ds-color-alpha-black-50);
+  --ds-upload-preview-backdrop: var(--ds-color-alpha-black-60);
+  --ds-upload-preview-close-bg: var(--ds-color-error);
+  --ds-upload-preview-close-color: var(--ds-color-text-on-primary);
+  --ds-upload-overlay-action-color: var(--ds-color-text-on-primary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      AUTOCOMPLETE
@@ -1409,6 +1532,7 @@
   --ds-table-row-bg-striped: #fafafa;
   --ds-table-row-bg-selected: #f5f5f5;
   --ds-table-row-border: #e5e5e5;
+  --ds-table-loading-overlay-bg: rgba(255, 255, 255, 0.7);
 
   /* Table Cell */
   --ds-table-cell-padding: 0.75rem 1rem;
@@ -1447,6 +1571,12 @@
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-skeleton-bg: #e5e5e5;
   --ds-skeleton-highlight: #f5f5f5;
+  --ds-skeleton-wave-gradient: linear-gradient(
+    90deg,
+    var(--ds-skeleton-bg) 25%,
+    var(--ds-skeleton-highlight) 50%,
+    var(--ds-skeleton-bg) 75%
+  );
   --ds-skeleton-radius: var(--ds-radius-md);
   --ds-skeleton-animation-duration: 1.5s;
 
@@ -1555,6 +1685,23 @@
   --ds-menu-item-radius: var(--ds-radius-md);
   --ds-menu-group-title-color: #a3a3a3;
   --ds-menu-divider-color: #e5e5e5;
+  --ds-menu-border-radius: var(--ds-radius-md);
+  --ds-menu-item-gap: 0.5rem;
+  --ds-menu-item-padding: 0.5rem 1rem;
+  --ds-menu-item-height: 2.5rem;
+  --ds-menu-item-hover-bg: var(--ds-color-bg-hover);
+  --ds-menu-item-selected-bg: var(--ds-color-alpha-primary-10);
+  --ds-menu-item-selected-color: var(--ds-color-primary);
+  --ds-menu-item-danger-color: var(--ds-color-error);
+  --ds-menu-submenu-bg: var(--ds-color-bg-secondary);
+  --ds-menu-submenu-indent: 1.5rem;
+  --ds-menu-group-title-padding: 0.5rem 1rem 0.25rem;
+  --ds-menu-group-title-font-size: var(--ds-font-size-xs);
+  --ds-menu-group-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-menu-divider-margin: 0.5rem 0;
+  --ds-menu-focus-ring-color: var(--ds-color-primary);
+  --ds-menu-dark-bg: var(--ds-color-neutral-900);
+  --ds-menu-dark-item-color: var(--ds-color-alpha-white-70);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      STEPS
@@ -1624,6 +1771,14 @@
   --ds-result-icon-info: #3b82f6;
   --ds-result-title-color: #171717;
   --ds-result-subtitle-color: #737373;
+  --ds-result-success-color: var(--ds-color-success);
+  --ds-result-error-color: var(--ds-color-error);
+  --ds-result-warning-color: var(--ds-color-warning);
+  --ds-result-info-color: var(--ds-color-info);
+  --ds-result-404-color: var(--ds-color-info);
+  --ds-result-403-color: var(--ds-color-warning);
+  --ds-result-500-color: var(--ds-color-error);
+  --ds-result-icon-color: var(--ds-color-text-on-primary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      SEGMENTED CONTROL
@@ -1666,6 +1821,74 @@
   --ds-list-item-bg-hover: #fafafa;
   --ds-list-item-border: #e5e5e5;
   --ds-list-item-padding: 0.75rem 1rem;
+  --ds-list-border-color: var(--ds-color-border);
+  --ds-list-split-color: var(--ds-color-border-subtle);
+  --ds-list-skeleton-bg: var(--ds-color-bg-tertiary);
+  --ds-list-meta-description-color: var(--ds-color-text-secondary);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     FLOAT BUTTON
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-floatbutton-shadow: var(--ds-shadow-dialog);
+  --ds-floatbutton-hover-shadow: var(--ds-shadow-lg);
+  --ds-floatbutton-default-bg: var(--ds-color-bg-elevated);
+  --ds-floatbutton-default-color: var(--ds-color-text-secondary);
+  --ds-floatbutton-primary-bg: var(--ds-color-primary);
+  --ds-floatbutton-primary-color: var(--ds-color-text-on-primary);
+  --ds-floatbutton-badge-bg: var(--ds-color-error);
+  --ds-floatbutton-badge-color: var(--ds-color-text-on-primary);
+  --ds-floatbutton-description-color: var(--ds-color-text-secondary);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     COMMAND PALETTE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-command-palette-backdrop: var(--ds-color-bg-overlay);
+  --ds-command-palette-bg: var(--ds-color-bg-elevated);
+  --ds-command-palette-shadow: var(--ds-shadow-dialog);
+  --ds-command-palette-border: var(--ds-color-border);
+  --ds-command-palette-item-hover-bg: var(--ds-color-bg-hover);
+  --ds-command-palette-group-color: var(--ds-color-text-muted);
+  --ds-command-palette-empty-color: var(--ds-color-text-muted);
+  --ds-command-palette-shortcut-border: var(--ds-color-border);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     LIVE FEED
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-live-feed-bg: var(--ds-color-bg-elevated);
+  --ds-live-feed-border: var(--ds-color-border);
+  --ds-live-feed-refresh-color: var(--ds-color-text-secondary);
+  --ds-live-feed-new-bg: var(--ds-color-info-bg);
+  --ds-live-feed-new-border: var(--ds-color-info-border);
+  --ds-live-feed-new-color: var(--ds-color-info);
+  --ds-live-feed-badge-bg: var(--ds-color-primary);
+  --ds-live-feed-badge-color: var(--ds-color-text-on-primary);
+  --ds-live-feed-empty-color: var(--ds-color-text-muted);
+  --ds-live-feed-load-more-color: var(--ds-color-primary);
+  --ds-live-feed-skeleton-bg: var(--ds-color-bg-tertiary);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     STATS GRID
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-stats-grid-card-bg: var(--ds-color-bg-elevated);
+  --ds-stats-grid-card-border: var(--ds-color-border);
+  --ds-stats-grid-card-filled-bg: var(--ds-color-bg-secondary);
+  --ds-stats-grid-card-glass-bg: var(--ds-color-alpha-white-50);
+  --ds-stats-grid-card-glass-border: var(--ds-color-alpha-white-20);
+  --ds-stats-grid-hover-shadow: var(--ds-shadow-md);
+  --ds-stats-grid-label-color: var(--ds-color-text-secondary);
+  --ds-stats-grid-value-color: var(--ds-color-text-primary);
+  --ds-stats-grid-description-color: var(--ds-color-text-muted);
+  --ds-stats-grid-trend-positive: var(--ds-color-success);
+  --ds-stats-grid-trend-negative: var(--ds-color-error);
+  --ds-stats-grid-trend-neutral: var(--ds-color-text-muted);
+  --ds-stats-grid-skeleton-bg: var(--ds-color-bg-tertiary);
+  --ds-stats-grid-skeleton-wave-gradient:
+    linear-gradient(
+      90deg,
+      var(--ds-color-alpha-black-10) 25%,
+      var(--ds-color-alpha-black-20) 37%,
+      var(--ds-color-alpha-black-10) 63%
+    );
 
   /* ─────────────────────────────────────────────────────────────────────────────
      DESCRIPTIONS
@@ -1701,4 +1924,92 @@
      WATERMARK
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-watermark-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────────
+   DARK THEME
+   ─────────────────────────────────────────────────────────────────────────────── */
+:root[data-theme='dark'],
+html[data-theme='dark'],
+html.dark {
+  color-scheme: dark;
+
+  --ds-color-bg-primary: #0b1220;
+  --ds-color-bg-secondary: #111827;
+  --ds-color-bg-tertiary: #172033;
+  --ds-color-bg-elevated: #182235;
+  --ds-color-bg-overlay: rgba(2, 6, 23, 0.88);
+  --ds-color-surface: #101826;
+  --ds-color-surface-muted: #152033;
+
+  --ds-color-text-primary: #f3f4f6;
+  --ds-color-text-secondary: #cbd5e1;
+  --ds-color-text-tertiary: #94a3b8;
+  --ds-color-text-muted: #94a3b8;
+  --ds-color-text-on-primary: #ffffff;
+  --ds-color-text-inverse: #020617;
+
+  --ds-color-border-primary: #334155;
+  --ds-color-border-secondary: #1e293b;
+  --ds-color-border-focus: var(--ds-color-primary-400);
+
+  --ds-color-neutral-0: #020617;
+  --ds-color-neutral-50: #0b1220;
+  --ds-color-neutral-100: #111827;
+  --ds-color-neutral-200: #1f2937;
+  --ds-color-neutral-300: #334155;
+  --ds-color-neutral-400: #475569;
+  --ds-color-neutral-500: #64748b;
+  --ds-color-neutral-600: #94a3b8;
+  --ds-color-neutral-700: #cbd5e1;
+  --ds-color-neutral-800: #e2e8f0;
+  --ds-color-neutral-900: #f8fafc;
+
+  --ds-text-primary: var(--ds-color-text-primary);
+  --ds-text-secondary: var(--ds-color-text-secondary);
+  --ds-bg-primary: var(--ds-color-bg-primary);
+  --ds-bg-secondary: var(--ds-color-bg-secondary);
+
+  --ds-card-bg: var(--ds-color-bg-elevated);
+  --ds-card-border-default: var(--ds-color-border-secondary);
+  --ds-card-shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.35);
+  --ds-card-shadow-md: 0 10px 24px rgba(2, 6, 23, 0.35);
+
+  --ds-input-bg: var(--ds-color-bg-tertiary);
+  --ds-input-color: var(--ds-color-text-primary);
+  --ds-input-border: var(--ds-color-border-primary);
+  --ds-input-border-focus: var(--ds-color-primary-400);
+  --ds-input-placeholder: var(--ds-color-text-tertiary);
+
+  --ds-list-background-color: var(--ds-color-bg-elevated);
+  --ds-list-item-background-color: var(--ds-color-bg-elevated);
+  --ds-list-item-hover-background-color: color-mix(in srgb, var(--ds-color-primary-500) 10%, var(--ds-color-bg-elevated));
+  --ds-list-border-color: var(--ds-color-border-secondary);
+  --ds-list-text-color: var(--ds-color-text-primary);
+  --ds-list-secondary-text-color: var(--ds-color-text-secondary);
+
+  --ds-modal-title-color: var(--ds-color-text-primary);
+  --ds-modal-body-color: var(--ds-color-text-secondary);
+  --ds-modal-header-border: var(--ds-color-border-secondary);
+  --ds-modal-footer-border: var(--ds-color-border-secondary);
+  --ds-modal-close-color: var(--ds-color-text-secondary);
+
+  --ds-menu-dark-bg: var(--ds-color-bg-secondary);
+  --ds-menu-dark-item-color: var(--ds-color-text-secondary);
+  --ds-menu-item-color: var(--ds-color-text-secondary);
+  --ds-menu-item-color-hover: var(--ds-color-text-primary);
+  --ds-menu-item-bg-hover: color-mix(in srgb, var(--ds-color-primary-500) 14%, transparent);
+  --ds-menu-item-bg-active: color-mix(in srgb, var(--ds-color-primary-500) 18%, transparent);
+
+  --ds-descriptions-label-color: var(--ds-color-text-tertiary);
+  --ds-descriptions-content-color: var(--ds-color-text-primary);
+  --ds-descriptions-border: var(--ds-color-border-secondary);
+  --ds-descriptions-bg: var(--ds-color-bg-secondary);
+
+  --ds-anchor-link-color: var(--ds-color-text-secondary);
+  --ds-anchor-link-color-active: var(--ds-color-text-primary);
+  --ds-anchor-ink-color: var(--ds-color-primary-400);
+  --ds-anchor-border-color: var(--ds-color-border-secondary);
+
+  --ds-watermark-color: rgba(255, 255, 255, 0.06);
 }

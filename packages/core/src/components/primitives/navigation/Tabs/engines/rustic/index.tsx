@@ -38,7 +38,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState } from 'react';
+import React, { useCallback, useId, useRef, useState } from 'react';
 import type { TabsProps, TabItem, TabsSize } from '../../types';
 import { TABS_DEFAULTS } from '../../types';
 
@@ -99,6 +99,8 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     className,
     style,
   } = props;
+  const tabsId = useId().replace(/:/g, '');
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   // ============================================================================
   // State Management
@@ -118,6 +120,51 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     if (!activeKey) setActive(key);
     onChange?.(key);
   };
+
+  const enabledItems = items.filter((item) => !item.disabled);
+
+  const focusAndActivate = useCallback(
+    (key: string) => {
+      handleChange(key);
+      tabRefs.current[key]?.focus();
+    },
+    [tabRefs]
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>, key: string) => {
+      const enabledIndex = enabledItems.findIndex((item) => item.key === key);
+
+      if (enabledIndex === -1) return;
+
+      let nextKey: string | undefined;
+
+      switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          nextKey = enabledItems[(enabledIndex + 1) % enabledItems.length]?.key;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          nextKey = enabledItems[(enabledIndex - 1 + enabledItems.length) % enabledItems.length]?.key;
+          break;
+        case 'Home':
+          nextKey = enabledItems[0]?.key;
+          break;
+        case 'End':
+          nextKey = enabledItems[enabledItems.length - 1]?.key;
+          break;
+        default:
+          return;
+      }
+
+      if (!nextKey) return;
+
+      event.preventDefault();
+      focusAndActivate(nextKey);
+    },
+    [enabledItems, focusAndActivate]
+  );
 
   // ============================================================================
   // Derived Values
@@ -178,10 +225,18 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
         {items.map((item: TabItem) => (
           <button
             key={item.key}
+            ref={(node) => {
+              tabRefs.current[item.key] = node;
+            }}
+            id={`tabs-tab-${tabsId}-${item.key}`}
             role="tab"
+            aria-selected={item.key === currentKey}
+            aria-controls={`tabs-panel-${tabsId}-${item.key}`}
+            tabIndex={item.key === currentKey ? 0 : -1}
             style={getTabStyle(item.key === currentKey, item.disabled)}
             disabled={item.disabled}
             onClick={() => handleChange(item.key)}
+            onKeyDown={(event) => handleKeyDown(event, item.key)}
           >
             {item.icon} {item.label}
           </button>
@@ -190,7 +245,15 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
 
       {/* Tab Panel */}
       {activeItem?.children && (
-        <div style={{ padding: '1rem' }}>{activeItem.children}</div>
+        <div
+          id={`tabs-panel-${tabsId}-${activeItem.key}`}
+          role="tabpanel"
+          aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
+          tabIndex={0}
+          style={{ padding: '1rem' }}
+        >
+          {activeItem.children}
+        </div>
       )}
     </div>
   );

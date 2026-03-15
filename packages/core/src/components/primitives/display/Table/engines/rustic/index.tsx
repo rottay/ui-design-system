@@ -2,56 +2,52 @@
 
 /**
  * @fileoverview Table Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS table implementation with maximum accessibility.
+ * @description Pure HTML/CSS table with full feature parity with Classic.
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
  * This engine provides a lightweight, dependency-free table using only
- * inline styles and semantic HTML elements.
+ * inline styles via CSS custom properties (var(--ds-*)) and semantic HTML.
  *
- * **Implementation Details:**
- * - Uses semantic `<table>`, `<thead>`, `<tbody>` elements
- * - Inline styles for all visual properties
- * - ARIA attributes for screen readers
- * - Keyboard navigation support
- * - Custom sorting implementation
+ * **Supported Features:**
+ * - Column sorting (single column, toggle ascend/descend/none)
+ * - Column filtering (text input per column)
  * - Client-side pagination
+ * - Row selection (checkbox/radio)
+ * - Expandable rows with custom render
+ * - Virtual scrolling for large datasets
+ * - Fixed/sticky columns and headers
+ * - Column resize via drag handles
+ * - Nested column groups (multi-row headers)
+ * - Summary rows (tfoot)
+ * - Title and footer render functions
  *
- * **Accessibility Features:**
- * - `role="table"` for proper semantics
- * - `aria-sort` on sortable columns
- * - `aria-label` on interactive elements
+ * **ARIA Compliance:**
+ * - role="grid" on table element
+ * - aria-sort on sortable header cells
+ * - aria-expanded on expandable rows
+ * - aria-label on interactive controls
  * - Keyboard-accessible controls
- * - High contrast support
- *
- * **Advantages:**
- * - Zero external dependencies
- * - Smallest bundle size
- * - Maximum browser compatibility
- * - Full accessibility compliance
- *
- * @example Basic Usage
- * ```tsx
- * import { Table } from '@rottay/design-system';
- *
- * <Table
- *   engine="rustic"
- *   dataSource={data}
- *   columns={columns}
- *   size="small"
- * />
- * ```
  *
  * @see {@link Table} for the main component
  * @module Table/engines/rustic
  * @category Display
  * @package @rottay/design-system
  */
-import { useState, useMemo, useCallback } from 'react';
-import type { Key } from 'react';
-import type { TableProps, ColumnType, SortOrder } from '../../types';
+import React, { useState, Fragment, useRef, useEffect, useCallback } from 'react';
+import type { CSSProperties } from 'react';
+import type { TableProps, ColumnType, SortOrder, TableCellFieldType } from '../../types';
+import {
+  useTableFeatures,
+  columnFieldKey,
+  type HeaderCell,
+} from '../../hooks/useTableFeatures';
+import { useTranslation } from '../../../../../../theme/i18n';
 
-const styles = {
+// ---------------------------------------------------------------------------
+// Style definitions using CSS custom properties
+// ---------------------------------------------------------------------------
+const baseStyles = {
   wrapper: {
     position: 'relative' as const,
   },
@@ -70,23 +66,30 @@ const styles = {
     fontSize: 'var(--ds-font-size-lg, 16px)',
   },
   tableBordered: {
-    border: '1px solid var(--ds-table-border, #e8e8e8)',
+    border: '1px solid var(--ds-table-border, var(--ds-color-border-primary))',
   },
   th: {
     padding: 'var(--ds-table-cell-padding, 12px 16px)',
-    backgroundColor: 'var(--ds-table-header-bg, #fafafa)',
-    borderBottom: '1px solid var(--ds-table-border, #e8e8e8)',
+    backgroundColor: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
+    borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border-primary))',
     textAlign: 'left' as const,
-    fontWeight: 'var(--ds-table-header-font-weight, 500)',
+    fontWeight: 'var(--ds-table-header-font-weight, 500)' as any,
     color: 'var(--ds-table-header-color)',
+    position: 'relative' as const,
   },
   thSortable: {
     cursor: 'pointer',
     userSelect: 'none' as const,
+    transition: 'background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+  },
+  thSticky: {
+    position: 'sticky' as const,
+    zIndex: 20,
+    backgroundColor: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
   },
   td: {
     padding: 'var(--ds-table-cell-padding, 12px 16px)',
-    borderBottom: '1px solid var(--ds-table-row-border, #e8e8e8)',
+    borderBottom: '1px solid var(--ds-table-row-border, var(--ds-color-border-primary))',
   },
   tdSmall: {
     padding: '8px 12px',
@@ -95,24 +98,26 @@ const styles = {
     padding: '16px 20px',
   },
   rowHover: {
-    transition: 'background-color 0.2s',
+    transition: 'background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
   },
   rowSelected: {
-    backgroundColor: 'var(--ds-table-row-bg-selected, rgba(24, 144, 255, 0.1))',
+    backgroundColor: 'var(--ds-table-row-bg-selected, var(--ds-color-info-bg))',
   },
   emptyCell: {
     textAlign: 'center' as const,
-    padding: '32px',
-    color: 'var(--ds-color-text-secondary, #999)',
+    padding: '48px 32px',
+    color: 'var(--ds-color-text-secondary)',
+    fontStyle: 'italic',
+    letterSpacing: '0.01em',
   },
   loading: {
     position: 'absolute' as const,
     inset: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: 'var(--ds-table-loading-overlay-bg, var(--ds-color-alpha-white-70))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10,
+    zIndex: 30,
   },
   pagination: {
     display: 'flex',
@@ -124,10 +129,21 @@ const styles = {
   },
   pageButton: {
     padding: '4px 12px',
-    border: '1px solid var(--ds-color-neutral-300, #d9d9d9)',
+    border: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300))',
     borderRadius: 'var(--ds-radius-sm, 4px)',
-    backgroundColor: 'var(--ds-table-bg, #fff)',
+    backgroundColor: 'var(--ds-table-bg, var(--ds-color-bg-elevated))',
     cursor: 'pointer',
+    fontSize: 'inherit',
+    transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
+  },
+  pageButtonHover: {
+    transform: 'translateY(-1px) scale(1.02)',
+    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
+    borderColor: 'var(--ds-color-primary, #1677ff)',
+  },
+  pageButtonActive: {
+    transform: 'scale(0.97)',
+    boxShadow: 'none',
   },
   pageButtonDisabled: {
     opacity: 0.5,
@@ -141,263 +157,808 @@ const styles = {
   sortIcon: {
     marginLeft: '4px',
     fontSize: '10px',
+    opacity: 0.6,
+    display: 'inline-block',
+    transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s',
+  },
+  resizeHandle: {
+    position: 'absolute' as const,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: '4px',
+    cursor: 'col-resize',
+    userSelect: 'none' as const,
+  },
+  resizeHandleActive: {
+    backgroundColor: 'var(--ds-color-primary, #1677ff)',
+    opacity: 0.6,
+  },
+  filterInput: {
+    width: '100%',
+    padding: '2px 6px',
+    border: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300))',
+    borderRadius: 'var(--ds-radius-sm, 4px)',
+    fontSize: 'var(--ds-font-size-xs, 12px)',
+    backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
+    outline: 'none',
+    transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+  },
+  filterInputFocus: {
+    borderColor: 'var(--ds-color-primary, #1677ff)',
+    boxShadow: '0 0 0 3px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15)), 0 0 8px rgba(22, 119, 255, 0.08)',
+  },
+  expandButton: {
+    padding: '2px 6px',
+    border: 'none',
+    background: 'none',
+    cursor: 'pointer',
+    fontSize: '12px',
+    color: 'var(--ds-color-text-secondary)',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s',
+  },
+  expandedRowCell: {
+    padding: '16px',
+    backgroundColor: 'var(--ds-table-row-bg-expanded, var(--ds-color-bg-secondary, #fafafa))',
+    animation: 'var(--ds-personality-animation-entrance-duration, 0.2s) cubic-bezier(0.16, 1, 0.3, 1) rottay-table-expand-in',
+  },
+  fixedLeft: {
+    position: 'sticky' as const,
+    left: 0,
+    zIndex: 10,
+    backgroundColor: 'var(--ds-table-bg, var(--ds-color-bg-elevated, #fff))',
+  },
+  fixedRight: {
+    position: 'sticky' as const,
+    right: 0,
+    zIndex: 10,
+    backgroundColor: 'var(--ds-table-bg, var(--ds-color-bg-elevated, #fff))',
+  },
+  titleBar: {
+    marginBottom: '8px',
+    fontWeight: 600,
+    color: 'var(--ds-color-text-primary)',
+  },
+  footerBar: {
+    marginTop: '8px',
+    fontSize: 'var(--ds-font-size-sm, 13px)',
+    color: 'var(--ds-color-text-secondary)',
+  },
+  tfoot: {
+    fontWeight: 600,
+    backgroundColor: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
+  },
+  editableCellHover: {
+    outline: '1px dashed var(--ds-color-primary-light, rgba(22, 119, 255, 0.4))',
+    outlineOffset: '-1px',
+    cursor: 'pointer',
+    backgroundColor: 'var(--ds-color-alpha-primary-5, rgba(22, 119, 255, 0.03))',
+    transition: 'outline 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
+  },
+  editInput: {
+    width: '100%',
+    padding: '2px 6px',
+    border: '1px solid var(--ds-color-primary, #1677ff)',
+    borderRadius: 'var(--ds-radius-sm, 4px)',
+    fontSize: 'inherit',
+    backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+  },
+  editSelect: {
+    width: '100%',
+    padding: '2px 6px',
+    border: '1px solid var(--ds-color-primary, #1677ff)',
+    borderRadius: 'var(--ds-radius-sm, 4px)',
+    fontSize: 'inherit',
+    backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+  },
+  editCheckbox: {
+    width: '16px',
+    height: '16px',
+    cursor: 'pointer',
   },
 };
 
 export const Table = <T extends object = object>(props: TableProps<T>) => {
+  const { t } = useTranslation('components');
+
   const {
-    dataSource = [],
     columns = [],
-    rowKey = 'key',
     loading = false,
     size = 'default',
     bordered = false,
     pagination = {},
     rowSelection,
+    expandable,
+    scroll,
     showHeader = true,
+    title,
+    footer,
     locale,
     rowClassName,
     rowHoverable = true,
     onRow,
+    summary,
     className = '',
     style,
     id,
   } = props;
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(
-    pagination && typeof pagination === 'object' ? pagination.pageSize || 10 : 10
-  );
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>(
-    rowSelection?.defaultSelectedRowKeys || rowSelection?.selectedRowKeys || []
-  );
-  const [sortState, setSortState] = useState<{ field?: string; order?: SortOrder }>({});
-  const [hoveredRow, setHoveredRow] = useState<Key | null>(null);
+  const features = useTableFeatures({ props });
+  const {
+    displayData,
+    leafColumns,
+    headerRows,
+    sortState,
+    handleSort,
+    columnFilters,
+    handleColumnFilter,
+    currentPage,
+    pageSize,
+    totalItems,
+    setCurrentPage,
+    paginationRange,
+    selectedRowKeys,
+    handleSelectAll,
+    handleSelectRow,
+    isAllSelected,
+    expandedRowKeys,
+    handleToggleExpand,
+    isRowExpandable,
+    virtualEnabled,
+    scrollContainerRef,
+    virtualSlice,
+    columnWidths,
+    handleResizeStart,
+    resizingColumn,
+    stickyConfig,
+    hasSummary,
+    editingCell,
+    isCellEditing,
+    isCellEditable,
+    handleCellClick,
+    handleCellSave,
+    handleCellCancel,
+    handleCellKeyNav,
+    getRowKey,
+    getValue,
+    totalColSpan,
+    processedData,
+  } = features;
 
-  const getRowKey = (record: T, index: number): Key => {
-    if (typeof rowKey === 'function') {
-      return rowKey(record);
+  const { onCellEdit } = props;
+  const [hoveredRow, setHoveredRow] = useState<string | number | null>(null);
+  const [hoveredEditableCell, setHoveredEditableCell] = useState<string | null>(null);
+  const [hoveredSortCol, setHoveredSortCol] = useState<string | null>(null);
+  const [activePageBtn, setActivePageBtn] = useState<'prev' | 'next' | null>(null);
+  const [hoveredPageBtn, setHoveredPageBtn] = useState<'prev' | 'next' | null>(null);
+
+  const hasExpandable = !!expandable?.expandedRowRender;
+  const showExpandCol = hasExpandable && expandable?.showExpandColumn !== false;
+  const hasFilters = leafColumns.some((c) => c.filterSearch || c.filters);
+
+  // ---- Style helpers ----
+  const getTableStyle = (): CSSProperties => {
+    const base: CSSProperties = { ...baseStyles.table };
+    if (size === 'small') Object.assign(base, baseStyles.tableSmall);
+    if (size === 'large') Object.assign(base, baseStyles.tableLarge);
+    if (bordered) Object.assign(base, baseStyles.tableBordered);
+    if (props.tableLayout === 'fixed') base.tableLayout = 'fixed';
+    const scrollXValue = scroll?.x;
+    if (scrollXValue) {
+      base.width = typeof scrollXValue === 'number' ? scrollXValue : scrollXValue === true ? '100%' : scrollXValue;
     }
-    return (record as Record<string, Key>)[rowKey] || index;
+    return base;
   };
 
-  const getValue = (record: T, dataIndex?: string | string[]): unknown => {
-    if (!dataIndex) return undefined;
-    if (Array.isArray(dataIndex)) {
-      return dataIndex.reduce<unknown>((obj, key) => (obj as Record<string, unknown>)?.[key], record as unknown);
-    }
-    return (record as Record<string, unknown>)[dataIndex];
+  const getCellStyle = (): CSSProperties => {
+    const base: CSSProperties = { ...baseStyles.td };
+    if (size === 'small') Object.assign(base, baseStyles.tdSmall);
+    if (size === 'large') Object.assign(base, baseStyles.tdLarge);
+    return base;
   };
 
-  const sortedData = useMemo(() => {
-    if (!sortState.field || !sortState.order) return dataSource;
+  const getFixedStyle = (col: ColumnType<T>): CSSProperties => {
+    if (!col.fixed) return {};
+    if (col.fixed === 'left' || col.fixed === true) return baseStyles.fixedLeft;
+    if (col.fixed === 'right') return baseStyles.fixedRight;
+    return {};
+  };
 
-    const column = columns.find(
-      (col) => (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : col.dataIndex) === sortState.field
+  const getColumnWidth = (col: ColumnType<T>): number | string | undefined => {
+    const field = columnFieldKey(col) || String(col.key);
+    if (columnWidths[field]) return columnWidths[field];
+    return col.width;
+  };
+
+  // ---- Inline editable cell component (Rustic - pure inline styles) ----
+  const EditableCellInput = ({
+    value: initialValue,
+    record,
+    index,
+    column,
+    colIndex,
+  }: {
+    value: unknown;
+    record: T;
+    index: number;
+    column: ColumnType<T>;
+    colIndex: number;
+  }) => {
+    const [cellValue, setCellValue] = useState(initialValue);
+    const inputRef = useRef<HTMLInputElement | HTMLSelectElement>(null);
+    const fieldType: TableCellFieldType = column.fieldType || 'text';
+
+    useEffect(() => {
+      inputRef.current?.focus();
+    }, []);
+
+    const save = useCallback(
+      (val?: unknown) => {
+        handleCellSave(record, index, column, val !== undefined ? val : cellValue);
+      },
+      [record, index, column, cellValue]
     );
 
-    if (!column || typeof column.sorter !== 'function') return dataSource;
+    const onKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Escape') {
+        if (e.key !== 'Escape') {
+          save();
+        }
+        handleCellKeyNav(e, record, index, column, colIndex);
+      }
+    };
 
-    return [...dataSource].sort((a, b) => {
-      const result = (column.sorter as (a: T, b: T) => number)(a, b);
-      return sortState.order === 'descend' ? -result : result;
-    });
-  }, [dataSource, columns, sortState]);
+    // Custom editRender
+    if (column.editRender) {
+      return (
+        <div onKeyDown={onKeyDown}>
+          {column.editRender(initialValue, record, (val) => save(val))}
+        </div>
+      );
+    }
 
-  const paginatedData = useMemo(() => {
-    if (pagination === false) return sortedData;
-    const start = (currentPage - 1) * pageSize;
-    return sortedData.slice(start, start + pageSize);
-  }, [sortedData, currentPage, pageSize, pagination]);
+    if (fieldType === 'checkbox') {
+      return (
+        <input
+          ref={inputRef as React.RefObject<HTMLInputElement>}
+          type="checkbox"
+          style={baseStyles.editCheckbox}
+          checked={!!cellValue}
+          onChange={(e) => {
+            setCellValue(e.target.checked);
+            save(e.target.checked);
+          }}
+          onKeyDown={onKeyDown}
+          onBlur={() => save()}
+          aria-label={t('table.edit_cell')}
+        />
+      );
+    }
 
-  const handleSort = useCallback((column: ColumnType<T>) => {
-    if (!column.sorter) return;
-    const field = Array.isArray(column.dataIndex) ? column.dataIndex.join('.') : column.dataIndex;
-    setSortState((prev) => {
-      if (prev.field !== field) return { field, order: 'ascend' };
-      if (prev.order === 'ascend') return { field, order: 'descend' };
-      return {};
-    });
-  }, []);
+    if (fieldType === 'select') {
+      return (
+        <select
+          ref={inputRef as React.RefObject<HTMLSelectElement>}
+          style={baseStyles.editSelect}
+          value={String(cellValue ?? '')}
+          onChange={(e) => {
+            setCellValue(e.target.value);
+            save(e.target.value);
+          }}
+          onKeyDown={onKeyDown}
+          onBlur={() => save()}
+          aria-label={t('table.edit_cell')}
+        >
+          {(column.selectOptions || []).map((opt) => (
+            <option key={String(opt.value)} value={String(opt.value)}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      );
+    }
 
-  const handleSelectAll = useCallback((checked: boolean) => {
-    const allKeys = checked ? paginatedData.map((record, i) => getRowKey(record, i)) : [];
-    setSelectedRowKeys(allKeys);
-    rowSelection?.onChange?.(allKeys, checked ? paginatedData : [], { type: checked ? 'all' : 'none' });
-  }, [paginatedData, rowSelection]);
+    if (fieldType === 'date') {
+      return (
+        <input
+          ref={inputRef as React.RefObject<HTMLInputElement>}
+          type="date"
+          style={baseStyles.editInput}
+          value={String(cellValue ?? '')}
+          onChange={(e) => setCellValue(e.target.value)}
+          onKeyDown={onKeyDown}
+          onBlur={() => save()}
+          aria-label={t('table.edit_cell')}
+        />
+      );
+    }
 
-  const handleSelectRow = useCallback((record: T, index: number, checked: boolean) => {
-    const key = getRowKey(record, index);
-    setSelectedRowKeys((prev) => {
-      const next = checked ? [...prev, key] : prev.filter((k) => k !== key);
-      const selectedRows = paginatedData.filter((r, i) => next.includes(getRowKey(r, i)));
-      rowSelection?.onChange?.(next, selectedRows, { type: 'single' });
-      return next;
-    });
-  }, [paginatedData, rowSelection]);
-
-  const getTableStyle = () => {
-    const base = { ...styles.table };
-    if (size === 'small') Object.assign(base, styles.tableSmall);
-    if (size === 'large') Object.assign(base, styles.tableLarge);
-    if (bordered) Object.assign(base, styles.tableBordered);
-    return base;
+    // text or number
+    return (
+      <input
+        ref={inputRef as React.RefObject<HTMLInputElement>}
+        type={fieldType === 'number' ? 'number' : 'text'}
+        style={baseStyles.editInput}
+        value={cellValue == null ? '' : String(cellValue)}
+        onChange={(e) =>
+          setCellValue(fieldType === 'number' ? Number(e.target.value) : e.target.value)
+        }
+        onKeyDown={onKeyDown}
+        onBlur={() => save()}
+        aria-label={t('table.edit_cell')}
+      />
+    );
   };
 
-  const getCellStyle = () => {
-    const base = { ...styles.td };
-    if (size === 'small') Object.assign(base, styles.tdSmall);
-    if (size === 'large') Object.assign(base, styles.tdLarge);
-    return base;
+  // ---- Render header cells for one row of nested column groups ----
+  const renderHeaderRow = (cells: HeaderCell<T>[], rowIndex: number) => {
+    return cells.map((cell, cellIndex) => {
+      const { column, colSpan, rowSpan } = cell;
+      const field = columnFieldKey(column);
+      const isSortable = !!column.sorter;
+      const isCurrentSort = sortState.field === field;
+      const width = getColumnWidth(column);
+
+      let ariaSortValue: 'ascending' | 'descending' | 'none' | undefined;
+      if (isSortable) {
+        if (isCurrentSort && sortState.order === 'ascend') ariaSortValue = 'ascending';
+        else if (isCurrentSort && sortState.order === 'descend') ariaSortValue = 'descending';
+        else ariaSortValue = 'none';
+      }
+
+      const isSortHovered = isSortable && hoveredSortCol === (field || String(column.key));
+      const thStyle: CSSProperties = {
+        ...baseStyles.th,
+        width,
+        minWidth: column.minWidth,
+        textAlign: column.align,
+        ...(isSortable ? baseStyles.thSortable : {}),
+        ...(isSortHovered ? {
+          backgroundColor: 'var(--ds-table-header-bg-hover, var(--ds-color-bg-tertiary, rgba(0,0,0,0.04)))',
+        } : {}),
+        ...getFixedStyle(column),
+        ...(stickyConfig.enabled
+          ? { ...baseStyles.thSticky, top: stickyConfig.offsetHeader + rowIndex * 40 }
+          : {}),
+        ...column.style,
+      };
+
+      return (
+        <th
+          key={column.key || field || `${rowIndex}-${cellIndex}`}
+          colSpan={colSpan > 1 ? colSpan : undefined}
+          rowSpan={rowSpan > 1 ? rowSpan : undefined}
+          style={thStyle}
+          onClick={() => isSortable && handleSort(column)}
+          onMouseEnter={() => isSortable && setHoveredSortCol(field || String(column.key))}
+          onMouseLeave={() => isSortable && setHoveredSortCol(null)}
+          aria-sort={ariaSortValue}
+          role="columnheader"
+        >
+          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{
+              flex: 1,
+              ...(isSortHovered ? { textDecoration: 'underline', textUnderlineOffset: '3px' } : {}),
+            }}>{column.title}</span>
+            {isSortable && (
+              <span style={{
+                ...baseStyles.sortIcon,
+                transform: isCurrentSort && sortState.order === 'descend' ? 'rotate(180deg)' : 'rotate(0deg)',
+                opacity: isCurrentSort ? 1 : isSortHovered ? 0.8 : 0.4,
+              }}>
+                {isCurrentSort ? '\u25B2' : '\u21C5'}
+              </span>
+            )}
+          </span>
+          {/* Resize handle */}
+          {colSpan <= 1 && (
+            <span
+              style={{
+                ...baseStyles.resizeHandle,
+                ...(resizingColumn === field ? baseStyles.resizeHandleActive : {}),
+              }}
+              onMouseDown={(e) => {
+                e.stopPropagation();
+                if (field) handleResizeStart(field, e.clientX);
+              }}
+              role="separator"
+              aria-label={t('table.resize_column', { column: String(column.title || '') })}
+            />
+          )}
+        </th>
+      );
+    });
   };
+
+  // ---- Filter row ----
+  const renderFilterRow = () => {
+    if (!hasFilters) return null;
+    const cellStyle = getCellStyle();
+    return (
+      <tr style={{ backgroundColor: 'var(--ds-table-filter-row-bg, var(--ds-color-bg-secondary, #fafafa))' }}>
+        {rowSelection && <th style={{ ...cellStyle, width: '48px' }} />}
+        {showExpandCol && <th style={{ ...cellStyle, width: '48px' }} />}
+        {leafColumns.map((col, i) => {
+          const field = columnFieldKey(col);
+          if (!col.filterSearch && !col.filters) {
+            return <th key={col.key || field || i} style={cellStyle} />;
+          }
+          return (
+            <th key={col.key || field || i} style={{ ...cellStyle, padding: '4px 8px' }}>
+              <input
+                type="text"
+                style={baseStyles.filterInput}
+                placeholder={t('table.filter_column', { column: String(col.title || '') })}
+                value={columnFilters[field || ''] || ''}
+                onChange={(e) => field && handleColumnFilter(field, e.target.value)}
+                onFocus={(e) => Object.assign(e.currentTarget.style, {
+                  borderColor: 'var(--ds-color-primary, #1677ff)',
+                  boxShadow: '0 0 0 3px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15)), 0 0 8px rgba(22, 119, 255, 0.08)',
+                })}
+                onBlur={(e) => Object.assign(e.currentTarget.style, {
+                  borderColor: 'var(--ds-color-border-secondary, var(--ds-color-neutral-300))',
+                  boxShadow: 'none',
+                })}
+                aria-label={t('table.filter_column', { column: String(col.title || '') })}
+              />
+            </th>
+          );
+        })}
+      </tr>
+    );
+  };
+
+  // ---- Body rows ----
+  const renderBodyRows = () => {
+    const cellStyle = getCellStyle();
+
+    if (displayData.length === 0) {
+      return (
+        <tr>
+          <td colSpan={totalColSpan} style={baseStyles.emptyCell}>
+            {locale?.emptyText || t('table.empty')}
+          </td>
+        </tr>
+      );
+    }
+
+    const indexOffset = virtualEnabled ? virtualSlice.start : 0;
+
+    return displayData.map((record, displayIdx) => {
+      const actualIndex = indexOffset + displayIdx;
+      const key = getRowKey(record, actualIndex);
+      const isSelected = selectedRowKeys.includes(key);
+      const isHovered = hoveredRow === key;
+      const isExpanded = expandedRowKeys.has(key);
+      const canExpand = isRowExpandable(record);
+      const rowClass = typeof rowClassName === 'function' ? rowClassName(record, actualIndex) : rowClassName;
+
+      const rowStyle: CSSProperties = {
+        ...(isSelected
+          ? baseStyles.rowSelected
+          : {}),
+        ...(rowHoverable ? baseStyles.rowHover : {}),
+        backgroundColor: isHovered && rowHoverable
+          ? 'var(--ds-table-row-bg-hover, rgba(0, 0, 0, 0.02))'
+          : isSelected
+            ? 'var(--ds-table-row-bg-selected, rgba(24, 144, 255, 0.1))'
+            : undefined,
+        boxShadow: isHovered && rowHoverable && !isSelected
+          ? 'inset 3px 0 0 var(--ds-color-primary, #1677ff)'
+          : undefined,
+      };
+
+      return (
+        <Fragment key={key}>
+          <tr
+            className={rowClass || undefined}
+            style={rowStyle}
+            onMouseEnter={() => rowHoverable && setHoveredRow(key)}
+            onMouseLeave={() => rowHoverable && setHoveredRow(null)}
+            aria-expanded={hasExpandable ? isExpanded : undefined}
+            {...(onRow?.(record, actualIndex) || {})}
+          >
+            {/* Expand column */}
+            {showExpandCol && (
+              <td style={{ ...cellStyle, width: expandable?.columnWidth || '48px', textAlign: 'center' }}>
+                {canExpand ? (
+                  expandable?.expandIcon ? (
+                    expandable.expandIcon({
+                      expanded: isExpanded,
+                      onExpand: () => handleToggleExpand(record, actualIndex),
+                      record,
+                    })
+                  ) : (
+                    <button
+                      style={{
+                        ...baseStyles.expandButton,
+                        transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                      }}
+                      onClick={() => handleToggleExpand(record, actualIndex)}
+                      aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
+                    >
+                      {'\u25B6'}
+                    </button>
+                  )
+                ) : null}
+              </td>
+            )}
+
+            {/* Selection column */}
+            {rowSelection && (
+              <td style={{ ...cellStyle, width: rowSelection.columnWidth || '48px' }}>
+                <input
+                  type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
+                  style={baseStyles.checkbox}
+                  checked={isSelected}
+                  onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
+                  name={rowSelection.type === 'radio' ? 'table-row-selection' : undefined}
+                  aria-label={t('table.select_row', { index: actualIndex + 1 })}
+                />
+              </td>
+            )}
+
+            {/* Data columns */}
+            {leafColumns.map((column, colIndex) => {
+              const value = getValue(record, column.dataIndex);
+              const field = columnFieldKey(column) || String(column.key) || '';
+              const width = getColumnWidth(column);
+              const cellEditable = onCellEdit && isCellEditable(column, record, actualIndex);
+              const cellIsEditing = isCellEditing(key, field);
+              const cellHoverKey = `${key}-${field}`;
+              const isCellHovered = hoveredEditableCell === cellHoverKey;
+
+              const content = cellIsEditing ? (
+                <EditableCellInput
+                  value={value}
+                  record={record}
+                  index={actualIndex}
+                  column={column}
+                  colIndex={colIndex}
+                />
+              ) : column.render ? (
+                column.render(value, record, actualIndex)
+              ) : (
+                String(value ?? '')
+              );
+
+              const tdStyle: CSSProperties = {
+                ...cellStyle,
+                textAlign: column.align,
+                width,
+                ...(column.ellipsis
+                  ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '200px' }
+                  : {}),
+                ...getFixedStyle(column),
+                ...column.style,
+                ...(cellEditable && !cellIsEditing && isCellHovered
+                  ? baseStyles.editableCellHover
+                  : {}),
+                ...(cellEditable && !cellIsEditing ? { cursor: 'pointer' } : {}),
+              };
+
+              return (
+                <td
+                  key={column.key || field || colIndex}
+                  style={tdStyle}
+                  role="gridcell"
+                  onClick={
+                    cellEditable && !cellIsEditing
+                      ? () => handleCellClick(record, actualIndex, column)
+                      : undefined
+                  }
+                  onMouseEnter={
+                    cellEditable && !cellIsEditing
+                      ? () => setHoveredEditableCell(cellHoverKey)
+                      : undefined
+                  }
+                  onMouseLeave={
+                    cellEditable && !cellIsEditing
+                      ? () => setHoveredEditableCell(null)
+                      : undefined
+                  }
+                  {...(column.onCell?.(record, actualIndex) || {})}
+                >
+                  {content}
+                </td>
+              );
+            })}
+          </tr>
+
+          {/* Expanded row content */}
+          {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
+            <tr>
+              <td colSpan={totalColSpan} style={baseStyles.expandedRowCell}>
+                {expandable.expandedRowRender(record, actualIndex, expandable.indentSize || 0, true)}
+              </td>
+            </tr>
+          )}
+        </Fragment>
+      );
+    });
+  };
+
+  // ---- Scroll dimensions ----
+  const scrollYValue = typeof scroll?.y === 'number' ? scroll.y : typeof scroll?.y === 'string' ? scroll.y : undefined;
+
+  const tableElement = (
+    <table style={getTableStyle()} role="grid">
+      {/* colgroup */}
+      <colgroup>
+        {showExpandCol && <col style={{ width: expandable?.columnWidth || 48 }} />}
+        {rowSelection && <col style={{ width: rowSelection.columnWidth || 48 }} />}
+        {leafColumns.map((col, i) => {
+          const field = columnFieldKey(col) || String(col.key) || String(i);
+          const w = getColumnWidth(col);
+          return <col key={field} style={{ width: w, minWidth: col.minWidth }} />;
+        })}
+      </colgroup>
+
+      {/* Header */}
+      {showHeader && (
+        <thead>
+          {headerRows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {/* Expand + Selection header cells only on first header row */}
+              {rowIndex === 0 && showExpandCol && (
+                <th
+                  rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
+                  style={{
+                    ...baseStyles.th,
+                    width: expandable?.columnWidth || '48px',
+                    ...(stickyConfig.enabled ? { ...baseStyles.thSticky, top: stickyConfig.offsetHeader } : {}),
+                  }}
+                >
+                  {expandable?.columnTitle || ''}
+                </th>
+              )}
+              {rowIndex === 0 && rowSelection && (
+                <th
+                  rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
+                  style={{
+                    ...baseStyles.th,
+                    width: rowSelection.columnWidth || '48px',
+                    ...(stickyConfig.enabled ? { ...baseStyles.thSticky, top: stickyConfig.offsetHeader } : {}),
+                  }}
+                >
+                  {rowSelection.type !== 'radio' && !rowSelection.hideSelectAll && (
+                    <input
+                      type="checkbox"
+                      style={baseStyles.checkbox}
+                      checked={isAllSelected}
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      aria-label={t('table.select_all')}
+                    />
+                  )}
+                </th>
+              )}
+              {renderHeaderRow(row, rowIndex)}
+            </tr>
+          ))}
+          {renderFilterRow()}
+        </thead>
+      )}
+
+      {/* Body */}
+      <tbody>
+        {virtualEnabled && virtualSlice.offsetTop > 0 && (
+          <tr style={{ height: virtualSlice.offsetTop }} aria-hidden="true">
+            <td colSpan={totalColSpan} />
+          </tr>
+        )}
+        {renderBodyRows()}
+        {virtualEnabled && (
+          <tr
+            style={{
+              height: Math.max(
+                0,
+                virtualSlice.totalHeight -
+                  virtualSlice.offsetTop -
+                  (virtualSlice.end - virtualSlice.start) * 48
+              ),
+            }}
+            aria-hidden="true"
+          >
+            <td colSpan={totalColSpan} />
+          </tr>
+        )}
+      </tbody>
+
+      {/* Summary / tfoot */}
+      {hasSummary && summary && (
+        <tfoot style={baseStyles.tfoot}>{summary(processedData)}</tfoot>
+      )}
+    </table>
+  );
 
   return (
-    <div className={className} style={{ ...styles.wrapper, ...style }} id={id}>
+    <div className={className} style={{ ...baseStyles.wrapper, ...style }} id={id}>
+      {/* Title */}
+      {title && (
+        <div style={baseStyles.titleBar}>{title(processedData)}</div>
+      )}
+
+      {/* Loading overlay */}
       {loading && (
-        <div style={styles.loading}>
-          <span>Loading...</span>
+        <div style={baseStyles.loading}>
+          <span>{t('table.loading')}</span>
         </div>
       )}
 
-      <div style={styles.tableContainer}>
-        <table style={getTableStyle()} role="table">
-          {showHeader && (
-            <thead>
-              <tr>
-                {rowSelection && (
-                  <th style={{ ...styles.th, width: '48px' }}>
-                    {rowSelection.type !== 'radio' && (
-                      <input
-                        type="checkbox"
-                        style={styles.checkbox}
-                        checked={selectedRowKeys.length === paginatedData.length && paginatedData.length > 0}
-                        onChange={(e) => handleSelectAll(e.target.checked)}
-                        aria-label="Select all rows"
-                      />
-                    )}
-                  </th>
-                )}
-                {columns.filter((c) => !c.hidden).map((column, i) => (
-                  <th
-                    key={column.key || String(column.dataIndex) || i}
-                    style={{
-                      ...styles.th,
-                      width: column.width,
-                      minWidth: column.minWidth,
-                      textAlign: column.align,
-                      ...(column.sorter ? styles.thSortable : {}),
-                      ...column.style,
-                    }}
-                    onClick={() => column.sorter && handleSort(column)}
-                    aria-sort={sortState.field === (Array.isArray(column.dataIndex) ? column.dataIndex.join('.') : column.dataIndex)
-                      ? sortState.order === 'ascend' ? 'ascending' : 'descending'
-                      : undefined}
-                  >
-                    {column.title}
-                    {column.sorter && (
-                      <span style={styles.sortIcon}>
-                        {sortState.field === (Array.isArray(column.dataIndex) ? column.dataIndex.join('.') : column.dataIndex)
-                          ? sortState.order === 'ascend' ? '▲' : '▼'
-                          : '⇅'}
-                      </span>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-          )}
-          <tbody>
-            {paginatedData.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={columns.length + (rowSelection ? 1 : 0)}
-                  style={styles.emptyCell}
-                >
-                  {locale?.emptyText || 'No data'}
-                </td>
-              </tr>
-            ) : (
-              paginatedData.map((record, index) => {
-                const key = getRowKey(record, index);
-                const isSelected = selectedRowKeys.includes(key);
-                const isHovered = hoveredRow === key;
-                const rowClass = typeof rowClassName === 'function' ? rowClassName(record, index) : rowClassName;
-
-                return (
-                  <tr
-                    key={key}
-                    className={rowClass}
-                    style={{
-                      ...(isSelected ? styles.rowSelected : {}),
-                      ...(rowHoverable ? styles.rowHover : {}),
-                      backgroundColor: isHovered && rowHoverable ? 'var(--ds-table-row-bg-hover, #f5f5f5)' : isSelected ? 'var(--ds-table-row-bg-selected, rgba(24, 144, 255, 0.1))' : undefined,
-                    }}
-                    onMouseEnter={() => rowHoverable && setHoveredRow(key)}
-                    onMouseLeave={() => rowHoverable && setHoveredRow(null)}
-                    {...(onRow?.(record, index) || {})}
-                  >
-                    {rowSelection && (
-                      <td style={getCellStyle()}>
-                        <input
-                          type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
-                          style={styles.checkbox}
-                          checked={isSelected}
-                          onChange={(e) => handleSelectRow(record, index, e.target.checked)}
-                          name={rowSelection.type === 'radio' ? 'table-row-selection' : undefined}
-                          aria-label={`Select row ${index + 1}`}
-                        />
-                      </td>
-                    )}
-                    {columns.filter((c) => !c.hidden).map((column, colIndex) => {
-                      const value = getValue(record, column.dataIndex);
-                      const content = column.render
-                        ? column.render(value, record, index)
-                        : String(value ?? '');
-
-                      return (
-                        <td
-                          key={column.key || String(column.dataIndex) || colIndex}
-                          style={{
-                            ...getCellStyle(),
-                            textAlign: column.align,
-                            ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '200px' } : {}),
-                            ...column.style,
-                          }}
-                          {...(column.onCell?.(record, index) || {})}
-                        >
-                          {content}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+      {/* Table scroll container */}
+      <div
+        ref={virtualEnabled ? scrollContainerRef : undefined}
+        style={{
+          ...baseStyles.tableContainer,
+          ...(loading ? { opacity: 0.5 } : {}),
+          ...(resizingColumn ? { userSelect: 'none' } : {}),
+          maxHeight: scrollYValue,
+          overflowY: scrollYValue ? 'auto' : undefined,
+        }}
+      >
+        {tableElement}
       </div>
 
+      {/* Footer */}
+      {footer && (
+        <div style={baseStyles.footerBar}>{footer(processedData)}</div>
+      )}
+
+      {/* Rustic animations */}
+      <style>{`
+        @keyframes rottay-table-expand-in {
+          from { opacity: 0; max-height: 0; }
+          to { opacity: 1; max-height: 500px; }
+        }
+      `}</style>
+
+      {/* Pagination */}
       {pagination !== false && (
-        <div style={styles.pagination}>
+        <div style={baseStyles.pagination}>
           <span style={{ color: 'var(--ds-color-text-secondary, #666)' }}>
-            {(currentPage - 1) * pageSize + 1}-{Math.min(currentPage * pageSize, sortedData.length)} of {sortedData.length}
+            {paginationRange}
           </span>
           <button
-            style={{ ...styles.pageButton, ...(currentPage === 1 ? styles.pageButtonDisabled : {}) }}
+            style={{
+              ...baseStyles.pageButton,
+              ...(currentPage === 1 ? baseStyles.pageButtonDisabled : {}),
+              ...(hoveredPageBtn === 'prev' && currentPage !== 1 ? baseStyles.pageButtonHover : {}),
+              ...(activePageBtn === 'prev' && currentPage !== 1 ? baseStyles.pageButtonActive : {}),
+            }}
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage((p) => p - 1)}
-            aria-label="Previous page"
+            onClick={() => setCurrentPage(currentPage - 1)}
+            onMouseEnter={() => setHoveredPageBtn('prev')}
+            onMouseLeave={() => { setHoveredPageBtn(null); setActivePageBtn(null); }}
+            onMouseDown={() => setActivePageBtn('prev')}
+            onMouseUp={() => setActivePageBtn(null)}
+            aria-label={t('table.previous_page')}
           >
-            «
+            &#171;
           </button>
-          <span>Page {currentPage}</span>
+          <span>{t('table.page', { current: currentPage })}</span>
           <button
-            style={{ ...styles.pageButton, ...(currentPage * pageSize >= sortedData.length ? styles.pageButtonDisabled : {}) }}
-            disabled={currentPage * pageSize >= sortedData.length}
-            onClick={() => setCurrentPage((p) => p + 1)}
-            aria-label="Next page"
+            style={{
+              ...baseStyles.pageButton,
+              ...(currentPage * pageSize >= totalItems ? baseStyles.pageButtonDisabled : {}),
+              ...(hoveredPageBtn === 'next' && currentPage * pageSize < totalItems ? baseStyles.pageButtonHover : {}),
+              ...(activePageBtn === 'next' && currentPage * pageSize < totalItems ? baseStyles.pageButtonActive : {}),
+            }}
+            disabled={currentPage * pageSize >= totalItems}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            onMouseEnter={() => setHoveredPageBtn('next')}
+            onMouseLeave={() => { setHoveredPageBtn(null); setActivePageBtn(null); }}
+            onMouseDown={() => setActivePageBtn('next')}
+            onMouseUp={() => setActivePageBtn(null)}
+            aria-label={t('table.next_page')}
           >
-            »
+            &#187;
           </button>
         </div>
       )}

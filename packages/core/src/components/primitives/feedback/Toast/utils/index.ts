@@ -77,7 +77,7 @@ export type {
  * useToast - Hook for triggering and managing toasts.
  * @see {@link UseToastReturn} for available methods
  */
-export { useToast, toast, setToastMethods, getToastMethods } from './useToast';
+export { useToast, toast, setToastMethods, clearToastMethods, getToastMethods } from './useToast';
 
 /**
  * Type definitions for the useToast hook.
@@ -93,10 +93,8 @@ export type { UseToastReturn } from './useToast';
  * @see {@link TOAST_KEYFRAMES} for CSS keyframe definitions
  */
 export {
-  getSlideDirection,
-  getEnterAnimation,
-  getExitAnimation,
   getAnimationName,
+  getToastAnimationStyle,
   injectToastStyles,
   TOAST_KEYFRAMES,
 } from './animations';

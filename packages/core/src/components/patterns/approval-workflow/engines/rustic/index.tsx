@@ -131,11 +131,11 @@ const s = {
     };
     if (variant === 'approve') {
       base.background = 'var(--ds-color-success-600, #16a34a)';
-      base.color = '#fff';
+      base.color = 'var(--ds-color-text-on-primary)';
       base.borderColor = 'var(--ds-color-success-600, #16a34a)';
     } else if (variant === 'reject') {
       base.background = 'var(--ds-color-error-600, #dc2626)';
-      base.color = '#fff';
+      base.color = 'var(--ds-color-text-on-primary)';
       base.borderColor = 'var(--ds-color-error-600, #dc2626)';
     } else {
       base.background = 'transparent';

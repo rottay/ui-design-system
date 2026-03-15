@@ -66,9 +66,53 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle, useEffect } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../types';
 import { useTranslation } from '../../../../../../theme/i18n';
+
+// Feedback Icons (pure inline SVG, no external deps)
+const feedbackIcons: Record<string, { svg: string; color: string; label: string }> = {
+  success: {
+    svg: 'M5 13l4 4L19 7',
+    color: 'var(--ds-form-success-color, #22c55e)',
+    label: 'Validation passed',
+  },
+  error: {
+    svg: 'M6 18L18 6M6 6l12 12',
+    color: 'var(--ds-form-error-color, #ef4444)',
+    label: 'Validation failed',
+  },
+  warning: {
+    svg: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.832c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z',
+    color: 'var(--ds-form-warning-color, #f59e0b)',
+    label: 'Validation warning',
+  },
+  validating: {
+    svg: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
+    color: 'var(--ds-form-info-color, #3b82f6)',
+    label: 'Validating',
+  },
+};
+
+const RusticFeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'validating' }> = ({ status }) => {
+  const { svg, color, label } = feedbackIcons[status];
+  const iconStyle: React.CSSProperties = {
+    marginLeft: 8,
+    display: 'inline-flex',
+    alignItems: 'center',
+    color,
+    animation: status === 'validating'
+      ? 'spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite'
+      : 'rottay-form-feedback-in 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+  };
+  return (
+    <span style={iconStyle} aria-label={label}>
+      <svg width={16} height={16} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={svg} />
+      </svg>
+    </span>
+  );
+};
 
 // Styles using CSS variables
 const styles = {
@@ -106,6 +150,7 @@ const styles = {
     fontWeight: 'var(--ds-form-label-font-weight)' as unknown as number,
     color: 'var(--ds-form-label-color)',
     marginBottom: 'var(--ds-form-item-gap)',
+    letterSpacing: '0.01em',
   },
   labelHorizontal: {
     width: 'var(--ds-form-label-width)',
@@ -115,6 +160,7 @@ const styles = {
   required: {
     color: 'var(--ds-form-required-color)',
     marginLeft: '2px',
+    animation: 'rottay-form-required-pulse 2s ease-in-out infinite',
   },
   inputWrapper: {
     flex: 1,
@@ -128,6 +174,7 @@ const styles = {
     fontSize: 'var(--ds-form-help-font-size)',
     marginTop: 'var(--ds-form-item-gap)',
     color: 'var(--ds-form-help-color)',
+    animation: 'rottay-form-help-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
   },
   helpError: {
     color: 'var(--ds-form-error-color)',
@@ -152,16 +199,19 @@ interface FormContextValue {
   values: Record<string, unknown>;
   errors: Record<string, string[]>;
   touched: Record<string, boolean>;
+  validating: Record<string, boolean>;
   setValue: (name: string, value: unknown) => void;
   setError: (name: string, errors: string[]) => void;
   setTouched: (name: string, touched: boolean) => void;
-  registerField: (name: string, initialValue?: unknown) => void;
+  registerField: (name: string, initialValue?: unknown, rules?: FormRule[]) => void;
   layout?: 'horizontal' | 'vertical' | 'inline';
   size?: 'small' | 'default' | 'large';
   disabled?: boolean;
   colon?: boolean;
   requiredMark?: boolean | 'optional';
+  hasFeedback?: boolean;
   validateField: (name: string, rules?: FormRule[]) => Promise<string[]>;
+  getFieldRules: (name: string) => FormRule[] | undefined;
   t: (key: string, params?: Record<string, string | number>) => string;
 }
 
@@ -247,6 +297,8 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     size = 'default',
     disabled = false,
     requiredMark = true,
+    scrollToFirstError = false,
+    hasFeedback: formHasFeedback = false,
     name,
     onValuesChange,
     onFinish,
@@ -256,17 +308,89 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     style,
     autoComplete = 'on',
   } = props;
+  const [internalForm] = useForm();
+  const resolvedForm = form ?? internalForm;
+  const formElementRef = useRef<HTMLFormElement | null>(null);
 
   const [values, setValues] = useState<Record<string, unknown>>(initialValues as Record<string, unknown>);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [validating, setValidating] = useState<Record<string, boolean>>({});
+  const fieldRulesRef = useRef<Record<string, FormRule[] | undefined>>({});
+  const valuesRef = useRef<Record<string, unknown>>(initialValues as Record<string, unknown>);
+
+  const getFieldRules = useCallback((fieldName: string) => {
+    return fieldRulesRef.current[fieldName];
+  }, []);
+
+  React.useEffect(() => {
+    if (resolvedForm) {
+      const originalSetFieldsValue = resolvedForm.setFieldsValue;
+      const originalSetFieldValue = resolvedForm.setFieldValue;
+      const originalResetFields = resolvedForm.resetFields;
+      const originalSubmit = resolvedForm.submit;
+
+      resolvedForm.setFieldsValue = (newValues: Record<string, unknown>) => {
+        originalSetFieldsValue.call(resolvedForm, newValues);
+        const nextValues = { ...valuesRef.current, ...newValues };
+        valuesRef.current = nextValues;
+        setValues(nextValues);
+      };
+
+      resolvedForm.setFieldValue = (
+        fieldName: string | number | (string | number)[],
+        value: unknown
+      ) => {
+        originalSetFieldValue.call(resolvedForm, fieldName, value);
+        const key = Array.isArray(fieldName) ? fieldName.join('.') : String(fieldName);
+        const nextValues = { ...valuesRef.current, [key]: value };
+        valuesRef.current = nextValues;
+        setValues(nextValues);
+      };
+
+      resolvedForm.resetFields = (fields?: (string | number | (string | number)[])[]) => {
+        originalResetFields.call(resolvedForm, fields);
+        if (fields) {
+          setValues((prev) => {
+            const nextValues = { ...prev };
+            fields.forEach((field) => {
+              const key = Array.isArray(field) ? field.join('.') : String(field);
+              delete nextValues[key];
+            });
+            valuesRef.current = nextValues;
+            return nextValues;
+          });
+        } else {
+          valuesRef.current = initialValues as Record<string, unknown>;
+          setValues(initialValues as Record<string, unknown>);
+        }
+      };
+
+      resolvedForm.submit = () => {
+        if (formElementRef.current?.requestSubmit) {
+          formElementRef.current.requestSubmit();
+          return;
+        }
+
+        formElementRef.current?.dispatchEvent(
+          new Event('submit', { bubbles: true, cancelable: true })
+        );
+      };
+
+      return () => {
+        resolvedForm.setFieldsValue = originalSetFieldsValue;
+        resolvedForm.setFieldValue = originalSetFieldValue;
+        resolvedForm.resetFields = originalResetFields;
+        resolvedForm.submit = originalSubmit;
+      };
+    }
+  }, [resolvedForm, initialValues]);
 
   const setValue = useCallback((fieldName: string, value: unknown) => {
-    setValues((prev) => {
-      const newValues = { ...prev, [fieldName]: value };
-      onValuesChange?.({ [fieldName]: value } as Partial<unknown>, newValues as unknown);
-      return newValues;
-    });
+    const nextValues = { ...valuesRef.current, [fieldName]: value };
+    valuesRef.current = nextValues;
+    setValues(nextValues);
+    onValuesChange?.({ [fieldName]: value } as Partial<unknown>, nextValues as unknown);
   }, [onValuesChange]);
 
   const setError = useCallback((fieldName: string, fieldErrors: string[]) => {
@@ -277,16 +401,21 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     setTouched((prev) => ({ ...prev, [fieldName]: isTouched }));
   }, []);
 
-  const registerField = useCallback((fieldName: string, initialValue?: unknown) => {
+  const registerField = useCallback((fieldName: string, initialValue?: unknown, rules?: FormRule[]) => {
+    fieldRulesRef.current[fieldName] = rules;
     if (initialValue !== undefined && values[fieldName] === undefined) {
-      setValues((prev) => ({ ...prev, [fieldName]: initialValue }));
+      const nextValues = { ...valuesRef.current, [fieldName]: initialValue };
+      valuesRef.current = nextValues;
+      setValues(nextValues);
     }
   }, [values]);
 
   const validateField = useCallback(async (fieldName: string, rules?: FormRule[]): Promise<string[]> => {
     if (!rules || rules.length === 0) return [];
 
-    const value = values[fieldName];
+    setValidating((prev) => ({ ...prev, [fieldName]: true }));
+
+    const value = valuesRef.current[fieldName];
     const fieldErrors: string[] = [];
 
     for (const rule of rules) {
@@ -311,6 +440,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
       }
     }
 
+    setValidating((prev) => ({ ...prev, [fieldName]: false }));
     setError(fieldName, fieldErrors);
     return fieldErrors;
   }, [values, setError, t]);
@@ -318,17 +448,40 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const allErrors: FieldData[] = [];
-    for (const [fieldName, fieldErrors] of Object.entries(errors)) {
-      if (fieldErrors.length > 0) {
-        allErrors.push({ name: fieldName, errors: fieldErrors });
-      }
-    }
+    const validationEntries = await Promise.all(
+      Object.entries(fieldRulesRef.current).map(async ([fieldName, fieldRules]) => {
+        const fieldErrors = await validateField(fieldName, fieldRules);
+        return [fieldName, fieldErrors] as const;
+      })
+    );
+
+    const allErrors: FieldData[] = validationEntries
+      .filter(([, fieldErrors]) => fieldErrors.length > 0)
+      .map(([fieldName, fieldErrors]) => ({
+        name: fieldName,
+        errors: fieldErrors,
+      }));
 
     if (allErrors.length > 0) {
-      onFinishFailed?.({ values: values as unknown, errorFields: allErrors, outOfDate: false });
+      onFinishFailed?.({ values: valuesRef.current as unknown, errorFields: allErrors, outOfDate: false });
+
+      // Scroll to first error field
+      if (scrollToFirstError && formElementRef.current) {
+        const firstErrorName = allErrors[0]?.name;
+        if (firstErrorName) {
+          const fieldKey = Array.isArray(firstErrorName) ? firstErrorName.join('.') : String(firstErrorName);
+          const errorEl = formElementRef.current.querySelector(`[id="form-${fieldKey}"]`) ||
+            formElementRef.current.querySelector(`[name="${fieldKey}"]`);
+          if (errorEl) {
+            const scrollOpts: ScrollIntoViewOptions = typeof scrollToFirstError === 'object'
+              ? scrollToFirstError
+              : { behavior: 'smooth', block: 'center' };
+            errorEl.scrollIntoView(scrollOpts);
+          }
+        }
+      }
     } else {
-      onFinish?.(values as unknown);
+      onFinish?.(valuesRef.current as unknown);
     }
   };
 
@@ -336,6 +489,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     values,
     errors,
     touched,
+    validating,
     setValue,
     setError,
     setTouched: setFieldTouched,
@@ -345,11 +499,13 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     disabled,
     colon,
     requiredMark,
+    hasFeedback: formHasFeedback,
     validateField,
+    getFieldRules,
     t,
-  }), [values, errors, touched, setValue, setError, setFieldTouched, registerField, layout, size, disabled, colon, requiredMark, validateField, t]);
+  }), [values, errors, touched, validating, setValue, setError, setFieldTouched, registerField, layout, size, disabled, colon, requiredMark, formHasFeedback, validateField, getFieldRules, t]);
 
-  useImperativeHandle(ref, () => form as FormInstance, [form]);
+  useImperativeHandle(ref, () => resolvedForm as FormInstance, [resolvedForm]);
 
   const formStyle = {
     ...(layout === 'horizontal' ? styles.formHorizontal : layout === 'inline' ? styles.formInline : styles.formVertical),
@@ -359,6 +515,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   return (
     <FormContext.Provider value={contextValue}>
       <form
+        ref={formElementRef}
         name={name}
         className={className}
         style={formStyle}
@@ -367,6 +524,24 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
         role="form"
       >
         {children}
+        <style>{`
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes rottay-form-help-slide-in {
+            from { opacity: 0; transform: translateY(-4px); max-height: 0; }
+            to { opacity: 1; transform: translateY(0); max-height: 100px; }
+          }
+          @keyframes rottay-form-feedback-in {
+            from { opacity: 0; transform: scale(0); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          @keyframes rottay-form-required-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+          }
+        `}</style>
       </form>
     </FormContext.Provider>
   );
@@ -384,10 +559,13 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     extra,
     help,
     validateStatus,
+    hasFeedback: itemHasFeedback,
     initialValue,
     hidden,
     tooltip,
+    valuePropName = 'value',
     colon: itemColon,
+    dependencies,
     children,
     className = '',
     style,
@@ -399,28 +577,73 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   }
 
   const fieldName = Array.isArray(name) ? name.join('.') : String(name || '');
-  const { values, errors, setValue, registerField, layout, colon, disabled, requiredMark, validateField } = context;
+  const {
+    values,
+    errors,
+    touched,
+    validating: validatingMap,
+    setValue,
+    registerField,
+    layout,
+    colon,
+    disabled,
+    requiredMark,
+    hasFeedback: formHasFeedback,
+    validateField,
+    getFieldRules,
+  } = context;
 
   React.useEffect(() => {
     if (fieldName) {
-      registerField(fieldName, initialValue);
+      registerField(fieldName, initialValue, rules);
     }
-  }, [fieldName, initialValue, registerField]);
+  }, [fieldName, initialValue, registerField, rules]);
+
+  // Field dependencies: when a dependency changes, re-validate this field
+  const depsKey = dependencies?.map((d) => {
+    const k = Array.isArray(d) ? d.join('.') : String(d);
+    return `${k}:${JSON.stringify(values[k])}`;
+  }).join('|');
+
+  useEffect(() => {
+    if (!dependencies || !fieldName || !rules) return;
+    if (touched[fieldName]) {
+      validateField(fieldName, rules);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [depsKey]);
 
   const fieldValue = fieldName ? values[fieldName] : undefined;
   const fieldErrors = fieldName ? (errors[fieldName] || []) : [];
+  const isFieldValidating = fieldName ? !!validatingMap[fieldName] : false;
   const hasError = validateStatus === 'error' || fieldErrors.length > 0;
+  const isSuccess = validateStatus === 'success' || (touched[fieldName] && fieldErrors.length === 0 && !isFieldValidating && fieldValue !== undefined && fieldValue !== '');
+  const isWarning = validateStatus === 'warning';
   const isRequired = required || rules?.some((r) => r.required);
   const showColon = itemColon ?? colon;
+  const generatedControlId = fieldName ? `form-${fieldName}` : undefined;
+  const showFeedback = itemHasFeedback ?? formHasFeedback;
+
+  const computedFeedbackStatus = (): 'success' | 'error' | 'warning' | 'validating' | null => {
+    if (validateStatus === 'validating' || isFieldValidating) return 'validating';
+    if (validateStatus === 'error' || hasError) return 'error';
+    if (validateStatus === 'warning' || isWarning) return 'warning';
+    if (validateStatus === 'success' || isSuccess) return 'success';
+    return null;
+  };
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement> | unknown) => {
     if (!fieldName) return;
-    const value = (e as React.ChangeEvent<HTMLInputElement>)?.target?.value ?? e;
+    const target = (e as React.ChangeEvent<HTMLInputElement>)?.target;
+    const value =
+      valuePropName === 'checked'
+        ? target?.checked ?? Boolean(e)
+        : target?.value ?? e;
     setValue(fieldName, value);
     if (rules) {
       validateField(fieldName, rules);
     }
-  }, [fieldName, setValue, rules, validateField]);
+  }, [fieldName, setValue, rules, validateField, valuePropName]);
 
   if (hidden) return null;
 
@@ -441,9 +664,15 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   };
 
   const childrenWithProps = React.Children.map(children, (child) => {
-    if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean }>(child)) {
+    if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean; checked?: boolean; id?: string }>(child)) {
+      const usesCheckedValue = valuePropName === 'checked' || (child.props as { type?: string }).type === 'checkbox';
+      const childId = (child.props as { id?: string }).id ?? generatedControlId;
+
       return React.cloneElement(child, {
-        value: fieldValue,
+        id: childId,
+        [usesCheckedValue ? 'checked' : valuePropName]: usesCheckedValue
+          ? Boolean(fieldValue)
+          : (fieldValue ?? ''),
         onChange: handleChange,
         disabled: disabled || (child as React.ReactElement<any>).props.disabled,
       });
@@ -451,18 +680,25 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     return child;
   });
 
+  const feedbackStatus = computedFeedbackStatus();
+
   return (
     <div className={className} style={itemStyle}>
       {label && (
-        <label style={labelStyle}>
+        <label style={labelStyle} htmlFor={generatedControlId}>
           {label}
           {showColon && ':'}
           {isRequired && requiredMark && <span style={styles.required}>*</span>}
-          {tooltip && <span title={String(tooltip)} style={{ marginLeft: '4px', cursor: 'help' }}>ℹ️</span>}
+          {tooltip && <span title={String(tooltip)} style={{ marginLeft: '4px', cursor: 'help' }}>?</span>}
         </label>
       )}
       <div style={styles.inputWrapper}>
-        {childrenWithProps}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ flex: 1 }}>{childrenWithProps}</div>
+          {showFeedback && feedbackStatus && (
+            <RusticFeedbackIcon status={feedbackStatus} />
+          )}
+        </div>
         {(help || fieldErrors.length > 0) && (
           <div style={helpStyle}>{help || fieldErrors[0]}</div>
         )}

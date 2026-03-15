@@ -149,6 +149,8 @@ export interface FormProps<T = unknown> {
   preserve?: boolean;
   /** Whether to scroll to first error field when validate fails */
   scrollToFirstError?: boolean | ScrollIntoViewOptions;
+  /** Whether to show feedback icons on all form items (can be overridden per-item) */
+  hasFeedback?: boolean;
   /** Form name */
   name?: string;
   /** Callback when form values change */

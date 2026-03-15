@@ -24,10 +24,10 @@
  *
  * **CSS Custom Properties:**
  * All styling is controlled via CSS variables, making it easy to theme:
- * - `--button-{variant}-bg` - Background colors
- * - `--button-{variant}-color` - Text colors
- * - `--button-{size}-height` - Heights per size
- * - `--button-transition` - Transition timing
+ * - `--ds-button-{variant}-bg` - Background colors
+ * - `--ds-button-{variant}-color` - Text colors
+ * - `--ds-button-{size}-height` - Heights per size
+ * - `--ds-button-transition` - Transition timing
  *
  * **Accessibility:**
  * - Proper ARIA attributes (aria-disabled, aria-busy)
@@ -173,15 +173,15 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Build CSS variables for the button
     const buttonVars: React.CSSProperties = {
-      '--button-height': sizeConfig.height,
-      '--button-padding': sizeConfig.padding,
-      '--button-font-size': sizeConfig.fontSize,
-      '--button-bg': variantConfig.bg,
-      '--button-color': variantConfig.color,
-      '--button-border-color': variantConfig.borderColor,
-      '--button-hover-bg': variantConfig.hoverBg,
-      '--button-radius': shapeRadius,
-      '--button-transition': 'all 0.2s ease',
+      '--ds-button-height': sizeConfig.height,
+      '--ds-button-padding': sizeConfig.padding,
+      '--ds-button-font-size': sizeConfig.fontSize,
+      '--ds-button-bg': variantConfig.bg,
+      '--ds-button-color': variantConfig.color,
+      '--ds-button-border-color': variantConfig.borderColor,
+      '--ds-button-hover-bg': variantConfig.hoverBg,
+      '--ds-button-radius': shapeRadius,
+      '--ds-button-transition': 'color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.2s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
     } as React.CSSProperties;
 
     // Compute effective background with hover state
@@ -210,7 +210,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       whiteSpace: 'nowrap',
       verticalAlign: 'middle',
       background: gradient
-        ? 'linear-gradient(135deg, var(--button-bg) 0%, var(--button-hover-bg) 100%)'
+        ? 'linear-gradient(135deg, var(--ds-button-bg) 0%, var(--ds-button-hover-bg) 100%)'
         : effectiveBg,
       color: variantConfig.color,
       border: effectiveVariant === 'dashed'
@@ -221,17 +221,22 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       borderRadius: shapeRadius,
       cursor: disabled || loading ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
-      transition: 'all 0.2s ease',
+      transition: 'var(--ds-button-transition, color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.2s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1))',
       outline: 'none',
       boxSizing: 'border-box',
       userSelect: 'none',
       touchAction: 'manipulation',
-      boxShadow: shadow
-        ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-        : isFocused
-          ? `0 0 0 2px rgba(0, 102, 204, 0.25)`
+      boxShadow: isFocused
+        ? 'var(--ds-button-focus-ring, 0 0 0 3px var(--ds-color-primary-200)), 0 0 12px rgba(0, 102, 204, 0.15)'
+        : shadow || (isHovered && !disabled && !loading)
+          ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
           : 'none',
-      transform: isActive && !disabled && !loading ? 'scale(0.98)' : 'scale(1)',
+      transform:
+        isActive && !disabled && !loading
+          ? 'var(--ds-button-active-transform, scale(0.97))'
+          : isHovered && !disabled && !loading
+            ? 'var(--ds-button-hover-transform, translateY(-1px) scale(1.01))'
+            : 'translateY(0) scale(1)',
       animation: pulse ? 'rottay-button-pulse 2s infinite' : 'none',
       ...style,
     };

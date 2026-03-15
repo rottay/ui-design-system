@@ -51,8 +51,8 @@
 'use client';
 
 import React, { useState, useId } from 'react';
-import type { RadioProps, RadioGroupProps } from '../../types';
-import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS } from '../../types';
+import type { RadioProps } from '../../types';
+import { RADIO_DEFAULTS } from '../../types';
 
 export default function ModernRadio(props: RadioProps): React.ReactElement {
   const {
@@ -136,115 +136,4 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   );
 }
 
-// Radio Group component
-export function ModernRadioGroup(props: RadioGroupProps): React.ReactElement {
-  const {
-    size = RADIO_GROUP_DEFAULTS.size,
-    color = RADIO_GROUP_DEFAULTS.color,
-    options = [],
-    value: controlledValue,
-    defaultValue,
-    disabled = RADIO_GROUP_DEFAULTS.disabled,
-    direction = RADIO_GROUP_DEFAULTS.direction,
-    spacing = RADIO_GROUP_DEFAULTS.spacing,
-    onChange,
-    children,
-    className = '',
-    style,
-    name: providedName,
-  } = props;
-
-  const generatedId = useId();
-  const name = providedName || `radio-group-${generatedId}`;
-
-  // Internal state for uncontrolled mode
-  const [internalValue, setInternalValue] = useState<string | number | undefined>(defaultValue);
-  const isControlled = controlledValue !== undefined;
-  const currentValue = isControlled ? controlledValue : internalValue;
-
-  const handleChange = (newValue: string | number) => {
-    if (!isControlled) {
-      setInternalValue(newValue);
-    }
-    onChange?.(newValue);
-  };
-
-  // Spacing values
-  const spacingMap: Record<string, string> = {
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
-  };
-
-  const groupStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: direction === 'horizontal' ? 'row' : 'column',
-    gap: spacingMap[spacing] || spacingMap.md,
-    flexWrap: direction === 'horizontal' ? 'wrap' : 'nowrap',
-    ...style,
-  };
-
-  // DaisyUI size classes
-  const sizeClass = {
-    xs: 'radio-xs',
-    sm: 'radio-sm',
-    md: '',
-    lg: 'radio-lg',
-    xl: 'radio-lg',
-  }[size] || '';
-
-  // DaisyUI color classes
-  const colorClass = {
-    default: '',
-    primary: 'radio-primary',
-    secondary: 'radio-secondary',
-    success: 'radio-success',
-    warning: 'radio-warning',
-    error: 'radio-error',
-  }[color] || 'radio-primary';
-
-  const renderOptions = () => {
-    if (options.length === 0) return children;
-
-    return options.map((option) => {
-      const isChecked = currentValue === option.value;
-      const isDisabled = disabled || option.disabled;
-
-      return (
-        <label
-          key={String(option.value)}
-          className="label cursor-pointer gap-2 justify-start"
-        >
-          <input
-            type="radio"
-            name={name}
-            value={option.value}
-            checked={isChecked}
-            disabled={isDisabled}
-            onChange={() => handleChange(option.value)}
-            className={`radio ${sizeClass} ${colorClass}`}
-          />
-          <div className="flex flex-col">
-            <span className="label-text">{option.label}</span>
-            {option.description && (
-              <span className="label-text-alt text-gray-500">{option.description}</span>
-            )}
-          </div>
-        </label>
-      );
-    });
-  };
-
-  return (
-    <div
-      className={`rottay-radio-group-modern ${className}`}
-      style={groupStyle}
-      role="radiogroup"
-    >
-      {renderOptions()}
-    </div>
-  );
-}
-
 ModernRadio.displayName = 'ModernRadio';
-ModernRadio.Group = ModernRadioGroup;

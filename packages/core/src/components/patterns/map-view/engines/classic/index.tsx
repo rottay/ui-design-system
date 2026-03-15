@@ -42,7 +42,7 @@ export default function ClassicMapView<T>(props: MapViewProps<T>) {
           {/* Placeholder map area */}
           <Card
             style={{ height, marginBottom: 16 }}
-            styles={{ body: { height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#e8f4fd' } }}
+            styles={{ body: { height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--ds-color-info-bg)' } }}
           >
             <div style={{ textAlign: 'center' }}>
               <Text type="secondary" style={{ fontSize: 14 }}>
@@ -77,7 +77,7 @@ export default function ClassicMapView<T>(props: MapViewProps<T>) {
                     onClick={() => onMarkerClick?.(marker)}
                     style={{
                       cursor: 'pointer',
-                      background: isSelected ? '#e6f4ff' : undefined,
+                      background: isSelected ? 'var(--ds-color-info-bg)' : undefined,
                     }}
                   >
                     {renderMarker ? (

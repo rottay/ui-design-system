@@ -155,16 +155,16 @@ export function CardImage({
     overflow: 'hidden',
     borderRadius: RADIUS_MAP[radius] || radius,
     ...(position === 'top' && {
-      borderTopLeftRadius: 'var(--card-border-radius, 8px)',
-      borderTopRightRadius: 'var(--card-border-radius, 8px)',
+      borderTopLeftRadius: 'var(--ds-card-radius, 8px)',
+      borderTopRightRadius: 'var(--ds-card-radius, 8px)',
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
     }),
     ...(position === 'bottom' && {
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
-      borderBottomLeftRadius: 'var(--card-border-radius, 8px)',
-      borderBottomRightRadius: 'var(--card-border-radius, 8px)',
+      borderBottomLeftRadius: 'var(--ds-card-radius, 8px)',
+      borderBottomRightRadius: 'var(--ds-card-radius, 8px)',
     }),
     ...(position === 'cover' && {
       position: 'absolute',
@@ -194,11 +194,11 @@ export function CardImage({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'var(--card-image-placeholder-bg, #f0f0f0)',
+    backgroundColor: 'var(--ds-card-image-placeholder-bg, var(--ds-color-neutral-100, #f0f0f0))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'var(--card-image-placeholder-color, #999)',
+    color: 'var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary, #a3a3a3))',
   };
 
   const overlayStyle: CSSProperties = {
@@ -219,7 +219,8 @@ export function CardImage({
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.7) 100%)',
+    background:
+      'var(--ds-card-cover-overlay-bg, linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.7) 100%))',
     zIndex: 1,
   } : {};
 
@@ -251,8 +252,8 @@ export function CardImage({
               style={{
                 width: '40px',
                 height: '40px',
-                border: '3px solid var(--card-loading-color, #e0e0e0)',
-                borderTopColor: 'var(--card-loading-active-color, #1890ff)',
+                border: '3px solid var(--ds-card-image-loading-track, var(--ds-color-neutral-200, #e5e5e5))',
+                borderTopColor: 'var(--ds-card-image-loading-active, var(--ds-color-primary-500, #171717))',
                 borderRadius: '50%',
                 animation: 'rottay-card-image-spin 1s linear infinite',
               }}

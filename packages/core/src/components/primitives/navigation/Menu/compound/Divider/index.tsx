@@ -93,11 +93,11 @@ export function MenuDivider({
    */
   const dividerStyle: CSSProperties = {
     height: '1px',
-    margin: 'var(--menu-divider-margin, 8px 0)',
-    backgroundColor: 'var(--menu-divider-color, rgba(0, 0, 0, 0.06))',
+    margin: 'var(--ds-menu-divider-margin, 8px 0)',
+    backgroundColor: 'var(--ds-menu-divider-color, var(--ds-color-border))',
     borderStyle: dashed ? 'dashed' : 'solid',
     borderWidth: dashed ? '1px 0 0 0' : 0,
-    borderColor: dashed ? 'var(--menu-divider-color, rgba(0, 0, 0, 0.06))' : 'transparent',
+    borderColor: dashed ? 'var(--ds-menu-divider-color, var(--ds-color-border))' : 'transparent',
     ...style,
   };
 

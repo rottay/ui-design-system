@@ -8,63 +8,63 @@
 // Tag Sizes
 export const tagSize = {
   xs: {
-    padding: 'var(--tag-xs-padding)',
-    fontSize: 'var(--tag-xs-font-size)',
-    height: 'var(--tag-xs-height)',
+    padding: 'var(--ds-tag-xs-padding)',
+    fontSize: 'var(--ds-tag-xs-font-size)',
+    height: 'var(--ds-tag-xs-height)',
   },
   sm: {
-    padding: 'var(--tag-sm-padding)',
-    fontSize: 'var(--tag-sm-font-size)',
-    height: 'var(--tag-sm-height)',
+    padding: 'var(--ds-tag-sm-padding)',
+    fontSize: 'var(--ds-tag-sm-font-size)',
+    height: 'var(--ds-tag-sm-height)',
   },
   md: {
-    padding: 'var(--tag-md-padding)',
-    fontSize: 'var(--tag-md-font-size)',
-    height: 'var(--tag-md-height)',
+    padding: 'var(--ds-tag-md-padding)',
+    fontSize: 'var(--ds-tag-md-font-size)',
+    height: 'var(--ds-tag-md-height)',
   },
   lg: {
-    padding: 'var(--tag-lg-padding)',
-    fontSize: 'var(--tag-lg-font-size)',
-    height: 'var(--tag-lg-height)',
+    padding: 'var(--ds-tag-lg-padding)',
+    fontSize: 'var(--ds-tag-lg-font-size)',
+    height: 'var(--ds-tag-lg-height)',
   },
   xl: {
-    padding: 'var(--tag-xl-padding)',
-    fontSize: 'var(--tag-xl-font-size)',
-    height: 'var(--tag-xl-height)',
+    padding: 'var(--ds-tag-xl-padding)',
+    fontSize: 'var(--ds-tag-xl-font-size)',
+    height: 'var(--ds-tag-xl-height)',
   },
 } as const;
 
 // Tag Radius
 export const tagRadius = {
-  none: 'var(--tag-radius-none)',
-  sm: 'var(--tag-radius-sm)',
-  md: 'var(--tag-radius-md)',
-  lg: 'var(--tag-radius-lg)',
-  full: 'var(--tag-radius-full)',
+  none: 'var(--ds-tag-radius-none)',
+  sm: 'var(--ds-tag-radius-sm)',
+  md: 'var(--ds-tag-radius-md)',
+  lg: 'var(--ds-tag-radius-lg)',
+  full: 'var(--ds-tag-radius-full)',
 } as const;
 
 // Tag Spacing
 export const tagSpacing = {
-  iconGap: 'var(--tag-icon-gap)',
-  closeGap: 'var(--tag-close-gap)',
+  iconGap: 'var(--ds-tag-icon-gap)',
+  closeGap: 'var(--ds-tag-close-gap)',
 } as const;
 
 // Tag Border
 export const tagBorder = {
-  width: 'var(--tag-border-width)',
+  width: 'var(--ds-tag-border-width)',
 } as const;
 
 // Tag Transition
 export const tagTransition = {
-  duration: 'var(--tag-transition-duration)',
-  timing: 'var(--tag-transition-timing)',
-  all: 'var(--tag-transition)',
+  duration: 'var(--ds-tag-transition-duration)',
+  timing: 'var(--ds-tag-transition-timing)',
+  all: 'var(--ds-tag-transition)',
 } as const;
 
 // Tag Typography
 export const tagTypography = {
-  fontWeight: 'var(--tag-font-weight)',
-  lineHeight: 'var(--tag-line-height)',
+  fontWeight: 'var(--ds-tag-font-weight)',
+  lineHeight: 'var(--ds-tag-line-height)',
 } as const;
 
 // Combined tag tokens

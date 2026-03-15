@@ -45,6 +45,20 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
+  /**
+   * Ant Design deprecated the `(record, index)` rowKey signature. We precompute
+   * stable keys once per data array so the table can consume a single-argument
+   * lookup and still preserve index-based fallback behavior when callers do not
+   * provide an explicit row key.
+   */
+  const rowKeyLookup = useMemo(() => {
+    const lookup = new Map<T, string>();
+    data.forEach((record, index) => {
+      lookup.set(record, resolveRowKey(record, rowKey, index));
+    });
+    return lookup;
+  }, [data, rowKey]);
+
   const antColumns: ColumnsType<T> = useMemo(() => {
     const cols: ColumnsType<T> = columns
       .filter((col) => col.visible !== false)
@@ -93,8 +107,8 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     }
   };
 
-  const getRowKey = (record: T, index?: number): string => {
-    return resolveRowKey(record, rowKey, index ?? 0);
+  const getRowKey = (record: T): string => {
+    return rowKeyLookup.get(record) ?? '';
   };
 
   const paginationConfig = pagination === false
@@ -128,7 +142,7 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
                   type={action.variant === 'primary' ? 'primary' : 'default'}
                   disabled={action.disabled}
                   onClick={() => {
-                    const selectedRows = data.filter((row, i) => selectedKeys.includes(getRowKey(row, i)));
+                    const selectedRows = data.filter((row) => selectedKeys.includes(getRowKey(row)));
                     action.onExecute(selectedRows);
                   }}
                   icon={action.icon}
@@ -144,7 +158,7 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
       <Table<T>
         columns={antColumns}
         dataSource={data}
-        rowKey={(record, index) => getRowKey(record, index)}
+        rowKey={getRowKey}
         loading={loading}
         bordered={bordered}
         size={compact ? 'small' : 'middle'}

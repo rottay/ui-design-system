@@ -71,7 +71,7 @@ export interface SpinnerProps extends EngineAwareProps {
   /**
    * Custom color for the spinner.
    * Accepts any valid CSS color value.
-   * @example '#1890ff', 'var(--color-primary)', 'rgb(139, 92, 246)'
+   * @example '#1890ff', 'var(--ds-color-primary)', 'rgb(139, 92, 246)'
    */
   color?: string;
 
@@ -136,16 +136,16 @@ export const SPINNER_DEFAULTS: Partial<SpinnerProps> = {
  *
  * @example
  * ```tsx
- * const spinnerSize = SIZE_MAP[size]; // 'var(--spinner-md-size)'
+ * const spinnerSize = SIZE_MAP[size]; // 'var(--ds-spinner-md-size)'
  * ```
  */
 export const SIZE_MAP = {
   /** Small: 16-20px for inline/button loading */
-  sm: 'var(--spinner-sm-size)',
+  sm: 'var(--ds-spinner-sm-size)',
   /** Medium: 24-32px for general loading states */
-  md: 'var(--spinner-md-size)',
+  md: 'var(--ds-spinner-md-size)',
   /** Large: 40-48px for section loading */
-  lg: 'var(--spinner-lg-size)',
+  lg: 'var(--ds-spinner-lg-size)',
   /** Extra Large: 56-64px for full-page overlays */
-  xl: 'var(--spinner-xl-size)',
+  xl: 'var(--ds-spinner-xl-size)',
 };

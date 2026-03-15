@@ -6,13 +6,14 @@ import type { SpotlightProps } from '../../types';
 
 export const Spotlight: React.FC<SpotlightProps> = ({
   size = 300,
-  color = 'rgba(255, 255, 255, 0.05)',
+  color = 'var(--ds-spotlight-color, var(--ds-color-alpha-white-5))',
   children,
   className,
   style,
 }) => {
   const shouldReduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<number | null>(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -21,12 +22,25 @@ export const Spotlight: React.FC<SpotlightProps> = ({
     if (!el) return;
 
     const handleMove = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      if (frameRef.current != null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+
+      frameRef.current = requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect();
+        setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+        frameRef.current = null;
+      });
     };
 
     el.addEventListener('mousemove', handleMove);
-    return () => el.removeEventListener('mousemove', handleMove);
+
+    return () => {
+      el.removeEventListener('mousemove', handleMove);
+      if (frameRef.current != null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, [shouldReduceMotion]);
 
   return (

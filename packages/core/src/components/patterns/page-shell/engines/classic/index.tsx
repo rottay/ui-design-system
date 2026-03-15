@@ -78,7 +78,16 @@ export default function ClassicPageShell(props: PageShellProps) {
               {badge}
             </div>
             {subtitle && (
-              <div style={{ color: 'rgba(0,0,0,0.45)', fontSize: 14, marginTop: 4 }}>{subtitle}</div>
+              <div
+                style={{
+                  color:
+                    'var(--ds-page-shell-subtitle-color, var(--ds-color-text-secondary, var(--ds-color-neutral-600, rgba(0,0,0,0.45))))',
+                  fontSize: 14,
+                  marginTop: 4,
+                }}
+              >
+                {subtitle}
+              </div>
             )}
           </div>
         </div>

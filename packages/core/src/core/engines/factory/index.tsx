@@ -30,7 +30,17 @@
  * @package @rottay/design-system
  */
 
-import { lazy, Suspense, ComponentType, LazyExoticComponent, ErrorInfo } from 'react';
+import {
+  lazy,
+  Suspense,
+  ComponentType,
+  LazyExoticComponent,
+  ErrorInfo,
+  forwardRef,
+  type ForwardRefExoticComponent,
+  type PropsWithoutRef,
+  type RefAttributes,
+} from 'react';
 import { useEngineContext } from '../../providers/engine';
 import { createAthenaWrapper } from '../athena';
 import { EngineErrorBoundary } from '../boundary';
@@ -41,13 +51,13 @@ import type { EngineName } from '../../types';
  */
 export interface EngineLoaders<P> {
   /** Loader for Classic engine (Ant Design) */
-  classic: () => Promise<{ default: ComponentType<P> }>;
+  classic: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
   /** Loader for Modern engine (DaisyUI/Tailwind) */
-  modern: () => Promise<{ default: ComponentType<P> }>;
+  modern: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
   /** Loader for Rustic engine (Vanilla HTML/CSS) */
-  rustic: () => Promise<{ default: ComponentType<P> }>;
+  rustic: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
   /** Optional loader for Athena engine (custom implementations) */
-  athena?: () => Promise<{ default: ComponentType<P> }>;
+  athena?: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
 }
 
 /**
@@ -72,7 +82,7 @@ export function createEngineComponent<P extends object>(
   displayName: string,
   loaders: EngineLoaders<P>,
   options: CreateEngineComponentOptions = {}
-): ComponentType<P> {
+): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> {
   const { fallback = null, athenaEnabled = true, fallbackEngine, onError } = options;
 
   // Create Athena wrapper that checks for registered components
@@ -81,15 +91,15 @@ export function createEngineComponent<P extends object>(
     : (loaders.athena || loaders.rustic);
 
   // Create lazy components for each engine
-  const components: Record<EngineName, LazyExoticComponent<ComponentType<P>>> = {
-    classic: lazy(loaders.classic),
-    modern: lazy(loaders.modern),
-    rustic: lazy(loaders.rustic),
-    athena: lazy(athenaLoader),
+  const components: Record<EngineName, LazyExoticComponent<ComponentType<any>>> = {
+    classic: lazy(loaders.classic as () => Promise<{ default: ComponentType<any> }>),
+    modern: lazy(loaders.modern as () => Promise<{ default: ComponentType<any> }>),
+    rustic: lazy(loaders.rustic as () => Promise<{ default: ComponentType<any> }>),
+    athena: lazy(athenaLoader as () => Promise<{ default: ComponentType<any> }>),
   };
 
   // Create the router component
-  const EngineRouter = (props: P & { engine?: EngineName }) => {
+  const EngineRouter = forwardRef<any, P & { engine?: EngineName }>((props, ref) => {
     const context = useEngineContext();
     // Allow engine prop to override context engine
     const activeEngine = props.engine || context.engine;
@@ -104,11 +114,11 @@ export function createEngineComponent<P extends object>(
         onError={onError}
       >
         <Suspense fallback={fallback}>
-          <Component {...(componentProps as any)} />
+          <Component {...(componentProps as any)} ref={ref} />
         </Suspense>
       </EngineErrorBoundary>
     );
-  };
+  });
 
   EngineRouter.displayName = displayName;
 

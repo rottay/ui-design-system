@@ -11,6 +11,3 @@ export * from './effects';
 
 // Hooks
 export * from './hooks';
-
-// Animation presets
-export * from './presets';

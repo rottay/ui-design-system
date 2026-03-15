@@ -1,11 +1,26 @@
 'use client';
 
 import React from 'react';
-import { useReducedMotion } from 'framer-motion';
 import type { ShimmerTextProps } from '../../types';
+import { useMotionPersonality } from '../../hooks';
 
 export const ShimmerText: React.FC<ShimmerTextProps> = ({ text, className, style }) => {
-  const shouldReduceMotion = useReducedMotion();
+  const motionPersonality = useMotionPersonality();
+  const shouldReduceMotion = motionPersonality.shouldReduceMotion;
+  const speedMultiplier = {
+    none: 0,
+    slow: 1.35,
+    normal: 1,
+    fast: 0.8,
+  } as const;
+  const animationDuration = `${Math.max(
+    motionPersonality.durationSeconds * 6 * (speedMultiplier[motionPersonality.pulseSpeed] || 1),
+    1.4
+  )}s`;
+  const shimmerGradient =
+    motionPersonality.skeletonStyle === 'pulse'
+      ? 'linear-gradient(90deg, var(--ds-color-text-secondary) 0%, var(--ds-color-text-primary) 50%, var(--ds-color-text-secondary) 100%)'
+      : 'linear-gradient(90deg, var(--ds-color-text-secondary) 0%, var(--ds-color-text-primary) 40%, var(--ds-color-text-on-primary) 50%, var(--ds-color-text-primary) 60%, var(--ds-color-text-secondary) 100%)';
 
   return (
     <>
@@ -14,13 +29,13 @@ export const ShimmerText: React.FC<ShimmerTextProps> = ({ text, className, style
         className={className}
         style={{
           background: shouldReduceMotion
-            ? 'var(--ds-text-primary, #000)'
-            : 'linear-gradient(90deg, var(--ds-text-secondary, #666) 0%, var(--ds-text-primary, #000) 40%, #fff 50%, var(--ds-text-primary, #000) 60%, var(--ds-text-secondary, #666) 100%)',
+            ? 'var(--ds-color-text-primary)'
+            : shimmerGradient,
           backgroundSize: shouldReduceMotion ? '100% 100%' : '200% 100%',
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          animation: shouldReduceMotion ? 'none' : 'ds-shimmer 3s linear infinite',
+          animation: shouldReduceMotion ? 'none' : `ds-shimmer ${animationDuration} linear infinite`,
           display: 'inline-block',
           ...style,
         }}

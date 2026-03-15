@@ -103,8 +103,8 @@ export const IMAGE_DEFAULTS = {
  */
 export const RADIUS_MAP: Record<ImageRadius, string> = {
   none: '0',
-  sm: 'var(--radius-sm, 0.25rem)',
-  md: 'var(--radius-md, 0.5rem)',
-  lg: 'var(--radius-lg, 1rem)',
-  full: 'var(--radius-full, 9999px)',
+  sm: 'var(--ds-radius-sm, 0.25rem)',
+  md: 'var(--ds-radius-md, 0.5rem)',
+  lg: 'var(--ds-radius-lg, 1rem)',
+  full: 'var(--ds-radius-full, 9999px)',
 };

@@ -57,7 +57,8 @@
     "sort_desc": "Ordenar descendente",
     "filter": "Filtrar",
     "clear_filters": "Limpar filtros",
-    "rows_selected": "{count} linhas selecionadas"
+    "rows_selected": "{count} linhas selecionadas",
+    "edit_cell": "Editar celula"
   },
   "upload": {
     "drag_drop": "Arraste arquivos aqui ou clique para selecionar",
@@ -116,5 +117,94 @@
   },
   "empty": {
     "description": "Sem dados"
+  },
+  "chart": {
+    "loading": "Carregando grafico..."
+  },
+  "surfaces": {
+    "states": {
+      "loading_title": "Carregando surface",
+      "loading_description": "Preparando dados e layout para esta visualizacao.",
+      "empty_title": "Nada para mostrar ainda",
+      "empty_description": "Esta surface nao tem dados para renderizar agora.",
+      "error_title": "A surface falhou ao renderizar",
+      "retry": "Tentar novamente"
+    },
+    "list": {
+      "empty_title": "Nenhum resultado disponivel",
+      "empty_description": "Ajuste os filtros ou crie um novo registro para preencher esta lista.",
+      "view_table": "Tabela",
+      "view_cards": "Cards",
+      "filters_title": "Filtros"
+    },
+    "detail": {
+      "empty_title": "Nenhum dado de detalhe disponivel",
+      "empty_description": "Esta surface nao recebeu uma entidade para renderizar.",
+      "loading": "Carregando"
+    },
+    "detail_form": {
+      "form_title": "Formulario",
+      "summary_title": "Resumo"
+    },
+    "search": {
+      "placeholder": "Buscar",
+      "empty_query_title": "Comece a digitar para buscar",
+      "empty_query_description_one": "Digite pelo menos {count} caractere para executar a busca.",
+      "empty_query_description_other": "Digite pelo menos {count} caracteres para executar a busca.",
+      "empty_results_title": "Nenhum resultado encontrado",
+      "empty_results_description": "Tente ajustar a consulta ou os filtros.",
+      "preview_title": "Previa"
+    },
+    "media": {
+      "empty_title": "Nenhum item de midia",
+      "empty_description": "Adicione um ou mais itens para renderizar a galeria.",
+      "preview_title": "Previa",
+      "details_title": "Detalhes"
+    },
+    "sidebar": {
+      "expand": "Expandir",
+      "collapse": "Recolher"
+    },
+    "compare": {
+      "empty_title": "Nenhum dado de comparacao",
+      "empty_description": "Adicione sujeitos e linhas para renderizar esta surface.",
+      "criteria": "Criterio"
+    },
+    "scheduler": {
+      "empty_title": "Nenhum evento agendado",
+      "empty_description": "Preencha o agendador com eventos para renderizar o calendario."
+    },
+    "operational": {
+      "empty_title": "Nenhum modulo operacional configurado",
+      "empty_description": "Adicione fila, feed ou paineis para renderizar esta surface.",
+      "primary_panel": "Painel principal",
+      "secondary_panel": "Painel secundario",
+      "queue": "Fila",
+      "live_feed": "Feed ao vivo"
+    },
+    "wizard": {
+      "empty_step_title": "Etapa vazia",
+      "empty_step_description": "Esta etapa nao exibe conteudo visivel.",
+      "empty_title": "Nenhuma etapa disponivel",
+      "empty_description": "Este fluxo ainda nao possui etapas configuradas.",
+      "step_error_fallback": "Revise esta etapa.",
+      "complete": "Concluir"
+    },
+    "chat": {
+      "conversation_title": "Conversa",
+      "empty_title": "Ainda nao ha mensagens",
+      "empty_description": "Envie a primeira mensagem para iniciar a conversa.",
+      "composer_title": "Composer",
+      "placeholder": "Escreva uma mensagem",
+      "send": "Enviar",
+      "typing": "O assistente esta digitando"
+    },
+    "editor": {
+      "title": "Editor"
+    },
+    "visualization": {
+      "empty_title": "Nenhuma visualizacao configurada",
+      "empty_description": "Adicione uma ou mais views para renderizar esta surface."
+    }
   }
 }

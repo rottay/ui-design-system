@@ -33,6 +33,12 @@ export interface StepWizardProps extends PatternBaseProps {
   onStepChange?: (step: number) => void;
   /** Callback when wizard is completed */
   onComplete?: () => void;
+  /** Disable navigation actions while async work is in flight */
+  actionsDisabled?: boolean;
+  /** Disable the final completion action without disabling navigation */
+  completeDisabled?: boolean;
+  /** Hide the final completion action entirely */
+  showCompleteAction?: boolean;
   /** Allow skipping optional steps */
   allowSkip?: boolean;
   /** Show progress indicator */

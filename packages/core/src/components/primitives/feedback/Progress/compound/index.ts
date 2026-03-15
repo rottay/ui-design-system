@@ -34,7 +34,7 @@
  *   percent={85}
  *   size={150}
  *   strokeWidth={10}
- *   strokeColor="var(--color-success-500)"
+ *   strokeColor="var(--ds-color-success-500)"
  *   format={(p) => `${p}% Done`}
  * />
  * ```

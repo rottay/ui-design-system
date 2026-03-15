@@ -1,5 +1,5 @@
 import type { SVGProps, ForwardRefExoticComponent, RefAttributes } from 'react';
-import { iconSize, type IconSize } from '@/theme/tokens/ts/components/icon';
+import { ICON_SIZE_TOKENS, type IconSizeToken } from '../tokens';
 
 /**
  * Props base para todos los iconos del sistema Rottay.
@@ -10,7 +10,7 @@ export interface SvgIconProps extends SVGProps<SVGSVGElement> {
    * Tamaño del icono. Puede ser un valor predefinido o un número en pixels.
    * @default 'md'
    */
-  size?: IconSize | number;
+  size?: IconSizeToken | number;
 
   /**
    * Color del icono. Usa 'currentColor' para heredar del padre.
@@ -43,10 +43,10 @@ export type IconComponent = ForwardRefExoticComponent<
  * Los valores reales están definidos en tokens/css/components/icon.css
  */
 export const ICON_SIZE_MAP: Record<string, string> = {
-  xs: iconSize.xs,
-  sm: iconSize.sm,
-  md: iconSize.md,
-  lg: iconSize.lg,
-  xl: iconSize.xl,
-  '2xl': iconSize['2xl'],
+  xs: ICON_SIZE_TOKENS.xs,
+  sm: ICON_SIZE_TOKENS.sm,
+  md: ICON_SIZE_TOKENS.md,
+  lg: ICON_SIZE_TOKENS.lg,
+  xl: ICON_SIZE_TOKENS.xl,
+  '2xl': ICON_SIZE_TOKENS['2xl'],
 };

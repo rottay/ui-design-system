@@ -300,20 +300,35 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 
   /** Type-specific background and border colors */
   const typeStyles: Record<MessageType, React.CSSProperties> = {
-    success: { backgroundColor: '#f6ffed', borderColor: '#b7eb8f' },
-    error: { backgroundColor: '#fff2f0', borderColor: '#ffccc7' },
-    info: { backgroundColor: '#e6f4ff', borderColor: '#91caff' },
-    warning: { backgroundColor: '#fffbe6', borderColor: '#ffe58f' },
-    loading: { backgroundColor: '#e6f4ff', borderColor: '#91caff' },
+    success: {
+      backgroundColor: 'var(--ds-color-success-bg)',
+      borderColor: 'var(--ds-color-success-border)',
+    },
+    error: {
+      backgroundColor: 'var(--ds-color-error-bg)',
+      borderColor: 'var(--ds-color-error-border)',
+    },
+    info: {
+      backgroundColor: 'var(--ds-color-info-bg)',
+      borderColor: 'var(--ds-color-info-border)',
+    },
+    warning: {
+      backgroundColor: 'var(--ds-color-warning-bg)',
+      borderColor: 'var(--ds-color-warning-border)',
+    },
+    loading: {
+      backgroundColor: 'var(--ds-color-info-bg)',
+      borderColor: 'var(--ds-color-info-border)',
+    },
   };
 
   /** Type-specific icon colors */
   const iconColors: Record<MessageType, string> = {
-    success: '#52c41a',
-    error: '#ff4d4f',
-    info: '#1677ff',
-    warning: '#faad14',
-    loading: '#1677ff',
+    success: 'var(--ds-color-success)',
+    error: 'var(--ds-color-error)',
+    info: 'var(--ds-color-info)',
+    warning: 'var(--ds-color-warning)',
+    loading: 'var(--ds-color-info)',
   };
 
   return (

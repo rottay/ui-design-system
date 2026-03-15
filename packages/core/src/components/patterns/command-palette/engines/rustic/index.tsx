@@ -83,6 +83,9 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
 
   if (!open) return null;
 
+  const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+
   const overlay: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
@@ -96,86 +99,123 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
   const backdrop: React.CSSProperties = {
     position: 'absolute',
     inset: 0,
-    background: 'rgba(0,0,0,0.5)',
+    background: 'var(--ds-command-palette-backdrop, var(--ds-overlay-bg))',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    animation: `ds-cmd-backdrop-in ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   };
 
   const dialog: React.CSSProperties = {
     position: 'relative',
-    background: 'var(--ds-color-bg, #fff)',
+    background: 'var(--ds-command-palette-bg, var(--ds-color-bg-elevated))',
     borderRadius: 'var(--ds-radius-lg, 12px)',
-    boxShadow: 'var(--ds-shadow-xl, 0 25px 50px -12px rgba(0,0,0,0.25))',
+    boxShadow: 'var(--ds-command-palette-shadow, var(--ds-shadow-dialog, var(--ds-shadow-xl)))',
     width: '100%',
-    maxWidth: 520,
+    maxWidth: 560,
     overflow: 'hidden',
+    animation: `ds-cmd-panel-in ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
     ...style,
   };
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    padding: '14px 16px',
+    padding: '16px 20px',
     border: 'none',
     outline: 'none',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: 400,
     background: 'transparent',
-    color: 'var(--ds-color-text, #1a1a1a)',
+    color: 'var(--ds-color-text, var(--ds-color-text-primary))',
+    letterSpacing: '-0.01em',
   };
 
   const groupLabel: React.CSSProperties = {
-    fontSize: 11,
+    fontSize: 10,
+    fontWeight: 600,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    color: 'var(--ds-color-text-muted, #888)',
-    padding: '8px 16px 4px',
+    letterSpacing: 'var(--ds-typography-heading-letter-spacing, 0.08em)',
+    color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))',
+    padding: '12px 20px 6px',
   };
 
-  const renderItem = (item: CommandItem, idx: number) => (
-    <div
-      key={item.id}
-      onClick={() => handleSelect(item)}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '8px 16px',
-        cursor: item.disabled ? 'not-allowed' : 'pointer',
-        opacity: item.disabled ? 0.5 : 1,
-        background: activeIndex === idx ? 'var(--ds-color-bg-hover, #f5f5f5)' : 'transparent',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        {item.icon}
-        <div>
-          <div style={{ fontWeight: 500, fontSize: 14 }}>{item.label}</div>
-          {item.description && (
-            <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted, #888)' }}>
-              {item.description}
-            </div>
-          )}
+  const renderItem = (item: CommandItem, idx: number) => {
+    const isSelected = activeIndex === idx;
+    return (
+      <div
+        key={item.id}
+        onClick={() => handleSelect(item)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '10px 20px',
+          cursor: item.disabled ? 'not-allowed' : 'pointer',
+          opacity: item.disabled ? 0.5 : 1,
+          background: isSelected
+            ? 'var(--ds-command-palette-item-active-bg, var(--ds-color-primary-50))'
+            : 'transparent',
+          borderLeft: isSelected
+            ? '3px solid var(--ds-command-palette-item-active-border, var(--ds-color-primary-500))'
+            : '3px solid transparent',
+          transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
+          marginLeft: -1,
+        }}
+        onMouseEnter={(e) => {
+          if (!isSelected) {
+            const el = e.currentTarget as HTMLElement;
+            el.style.borderLeftColor = 'var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300))';
+            el.style.background = 'var(--ds-command-palette-item-hover-bg, var(--ds-color-bg-hover))';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isSelected) {
+            const el = e.currentTarget as HTMLElement;
+            el.style.borderLeftColor = 'transparent';
+            el.style.background = 'transparent';
+          }
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {item.icon}
+          <div>
+            <div style={{ fontWeight: 500, fontSize: 14 }}>{item.label}</div>
+            {item.description && (
+              <div style={{ fontSize: 12, color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))' }}>
+                {item.description}
+              </div>
+            )}
+          </div>
         </div>
+        {item.shortcut && (
+          <span
+            style={{
+              padding: '3px 8px',
+              borderRadius: 'var(--ds-radius-sm, 4px)',
+              border: '1px solid var(--ds-command-palette-shortcut-border, var(--ds-color-border))',
+              background: 'var(--ds-command-palette-shortcut-bg, var(--ds-color-surface-muted, var(--ds-color-neutral-50)))',
+              fontSize: 11,
+              fontWeight: 500,
+              fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
+              color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))',
+              boxShadow: 'var(--ds-command-palette-shortcut-shadow, var(--ds-shadow-sm))',
+              letterSpacing: '0.02em',
+            }}
+          >
+            {item.shortcut}
+          </span>
+        )}
       </div>
-      {item.shortcut && (
-        <span
-          style={{
-            padding: '2px 6px',
-            borderRadius: 'var(--ds-radius-sm, 4px)',
-            border: '1px solid var(--ds-color-border, #d9d9d9)',
-            fontSize: 11,
-            color: 'var(--ds-color-text-muted, #888)',
-          }}
-        >
-          {item.shortcut}
-        </span>
-      )}
-    </div>
-  );
+    );
+  };
 
   let itemIndex = -1;
 
   return (
     <div style={overlay}>
+      <style>{`@keyframes ds-cmd-backdrop-in { from { opacity: 0; } to { opacity: 1; } } @keyframes ds-cmd-panel-in { from { opacity: 0; transform: scale(0.96) translateY(-10px); } to { opacity: 1; transform: scale(1) translateY(0); } }`}</style>
       <div style={backdrop} onClick={() => onOpenChange(false)} />
       <div className={className} style={dialog}>
-        <div style={{ borderBottom: '1px solid var(--ds-color-border, #e5e5e5)' }}>
+        <div style={{ borderBottom: '1px solid var(--ds-command-palette-border, var(--ds-color-border))' }}>
           <input
             ref={inputRef}
             type="text"
@@ -184,6 +224,13 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
             value={query}
             onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}
             onKeyDown={handleKeyDown}
+            onFocus={(e) => {
+              (e.currentTarget.parentElement as HTMLElement).style.boxShadow =
+                'inset 0 -1px 0 0 var(--ds-command-palette-focus-line, var(--ds-color-primary-200))';
+            }}
+            onBlur={(e) => {
+              (e.currentTarget.parentElement as HTMLElement).style.boxShadow = 'none';
+            }}
           />
         </div>
         <div style={{ maxHeight, overflowY: 'auto', padding: '4px 0' }}>
@@ -206,13 +253,27 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
             </div>
           ))}
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--ds-color-text-muted, #888)', fontSize: 14 }}>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '24px 0',
+                color: 'var(--ds-command-palette-empty-color, var(--ds-color-text-muted))',
+                fontSize: 14,
+              }}
+            >
               {emptyMessage}
             </div>
           )}
         </div>
         {footer && (
-          <div style={{ borderTop: '1px solid var(--ds-color-border, #e5e5e5)', padding: '8px 16px', fontSize: 12, color: 'var(--ds-color-text-muted, #888)' }}>
+          <div
+            style={{
+              borderTop: '1px solid var(--ds-command-palette-border, var(--ds-color-border))',
+              padding: '8px 16px',
+              fontSize: 12,
+              color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))',
+            }}
+          >
             {footer}
           </div>
         )}

@@ -54,6 +54,7 @@
 'use client';
 
 import { forwardRef, useState, useEffect, useCallback } from 'react';
+import { CountUp } from '../../../../../../animations';
 import type { StatisticProps, CountdownProps } from '../../types';
 import { STATISTIC_DEFAULTS } from '../../types';
 
@@ -129,6 +130,8 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       decimalSeparator = STATISTIC_DEFAULTS.decimalSeparator,
       loading,
       formatter,
+      animateValue = false,
+      countFrom = 0,
       valueType = STATISTIC_DEFAULTS.valueType,
       className = '',
       style,
@@ -140,6 +143,8 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       : value !== undefined
         ? formatNumber(value, precision, groupSeparator, decimalSeparator)
         : '--';
+    const shouldAnimateValue =
+      animateValue && typeof value === 'number' && !formatter && !loading;
 
     // Get Tailwind class for value color
     const valueColorClass = VALUE_TYPE_CLASS_MAP[valueType] || VALUE_TYPE_CLASS_MAP.default;
@@ -166,7 +171,17 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           style={valueStyle}
         >
           {prefix && <span className="mr-1">{prefix}</span>}
-          <span>{displayValue}</span>
+          {shouldAnimateValue ? (
+            <CountUp
+              from={countFrom}
+              to={value}
+              formatter={(nextValue) =>
+                formatNumber(nextValue, precision, groupSeparator, decimalSeparator)
+              }
+            />
+          ) : (
+            <span>{displayValue}</span>
+          )}
           {suffix && <span className="ml-1">{suffix}</span>}
         </div>
       </div>

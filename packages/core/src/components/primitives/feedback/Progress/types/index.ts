@@ -170,7 +170,7 @@ export interface ProgressProps extends BaseComponentProps, EngineAwareProps {
    * Color of the progress bar/circle stroke.
    * Supports CSS colors, variables, and gradients.
    * @example '#52c41a'
-   * @example 'var(--color-success-500)'
+   * @example 'var(--ds-color-success-500)'
    * @example 'linear-gradient(to right, #108ee9, #87d068)'
    */
   strokeColor?: string;

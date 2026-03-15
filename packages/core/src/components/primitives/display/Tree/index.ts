@@ -90,7 +90,7 @@ import type { TreeProps } from './types';
 import { TreeNode } from './compound';
 
 // Export types
-export type { TreeProps, TreeNodeProps, TreeDataNode, TreeSize } from './types';
+export type { TreeProps, TreeNodeProps, TreeDataNode, TreeSize, TreeDropInfo, TreeDragStartInfo } from './types';
 export { TREE_DEFAULTS } from './types';
 
 // Export compound components

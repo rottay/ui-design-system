@@ -1,225 +1,155 @@
-/**
- * Form Tests
- * Colocated with component following approved architecture
- */
+import React, { createRef } from 'react';
+import { describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Form } from '../';
+import { Form } from '..';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../../testing/helpers/engine-test-utils';
 
-// Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../core/engines/factory', () => ({
-  createEngineComponent: () => {
-    const MockForm = ({
-      layout,
-      size,
-      disabled,
-      colon,
-      requiredMark,
-      onFinish,
-      onFinishFailed,
-      children,
-      className,
-      ...props
-    }: any) => (
-      <form
-        data-testid="form"
-        data-layout={layout}
-        data-size={size}
-        data-disabled={disabled}
-        data-colon={colon}
-        data-required-mark={requiredMark}
-        className={className}
-        onSubmit={(e) => {
-          e.preventDefault();
-          onFinish?.({});
-        }}
-        {...props}
-      >
-        {children}
-      </form>
+describe('Form integration', () => {
+  it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {
+    renderWithEngine(<Form name="profile-form">Form content</Form>, engine);
+
+    const content = await screen.findByText('Form content');
+    const form = content.closest('form');
+
+    expect(form).toBeTruthy();
+    expect(form).toBeInTheDocument();
+    if (engine === 'classic') {
+      expect(form).toHaveAttribute('id', 'profile-form');
+    } else {
+      expect(form).toHaveAttribute('name', 'profile-form');
+    }
+  });
+
+  it.each(STABLE_ENGINES)(
+    'forwards refs through the engine factory with the %s engine',
+    async (engine) => {
+      const ref = createRef<any>();
+
+      renderWithEngine(
+        <Form ref={ref} name="ref-form">
+          Ref content
+        </Form>,
+        engine
+      );
+
+      await screen.findByText('Ref content');
+      expect(ref.current).toBeTruthy();
+    }
+  );
+
+  it.each(STABLE_ENGINES)('applies layout and size attributes for the %s engine', async (engine) => {
+    renderWithEngine(
+      <Form layout="vertical" size="large" className="integration-form">
+        Form content
+      </Form>,
+      engine
     );
 
-    MockForm.displayName = 'Form';
+    const content = await screen.findByText('Form content');
+    const form = content.closest('form');
 
-    MockForm.Item = ({
-      name,
-      label,
-      required,
-      rules,
-      validateStatus,
-      help,
-      extra,
-      children,
-      className,
-      ...props
-    }: any) => (
-      <div
-        data-testid={`form-item-${name || 'unnamed'}`}
-        data-name={name}
-        data-required={required || rules?.some((r: any) => r.required)}
-        data-validate-status={validateStatus}
-        className={className}
-        {...props}
-      >
-        {label && <label data-testid={`form-label-${name}`}>{label}</label>}
-        {children}
-        {help && <span data-testid={`form-help-${name}`}>{help}</span>}
-        {extra && <span data-testid={`form-extra-${name}`}>{extra}</span>}
-      </div>
-    );
+    expect(form).toBeTruthy();
+    expect(form).toHaveClass('integration-form');
 
-    MockForm.List = ({ name, children }: any) => (
-      <div data-testid={`form-list-${name}`}>
-        {children?.(
-          [{ name: 0, key: 0, isListField: true }],
-          { add: vi.fn(), remove: vi.fn(), move: vi.fn() },
-          { errors: [], warnings: [] }
-        )}
-      </div>
-    );
-
-    MockForm.ErrorList = ({ fieldName, className }: any) => (
-      <div data-testid={`form-error-list-${fieldName}`} className={className}>
-        Errors
-      </div>
-    );
-
-    return MockForm;
-  },
-}));
-
-describe('Form', () => {
-  it('renders correctly', () => {
-    render(<Form>Content</Form>);
-    expect(screen.getByTestId('form')).toBeInTheDocument();
+    if (engine === 'classic') {
+      expect(form.className).toContain('ant-form-vertical');
+      expect(form.className).toContain('ant-form-large');
+    }
   });
 
-  it.each(['horizontal', 'vertical', 'inline'] as const)('renders layout %s', (layout) => {
-    render(<Form layout={layout}>Content</Form>);
-    expect(screen.getByTestId('form')).toHaveAttribute('data-layout', layout);
-  });
-
-  it.each(['small', 'default', 'large'] as const)('renders size %s', (size) => {
-    render(<Form size={size}>Content</Form>);
-    expect(screen.getByTestId('form')).toHaveAttribute('data-size', size);
-  });
-
-  it('renders disabled state', () => {
-    render(<Form disabled>Content</Form>);
-    expect(screen.getByTestId('form')).toHaveAttribute('data-disabled', 'true');
-  });
-
-  it('renders colon setting', () => {
-    render(<Form colon>Content</Form>);
-    expect(screen.getByTestId('form')).toHaveAttribute('data-colon', 'true');
-  });
-
-  it('renders required mark setting', () => {
-    render(<Form requiredMark>Content</Form>);
-    expect(screen.getByTestId('form')).toHaveAttribute('data-required-mark', 'true');
-  });
-
-  it('calls onFinish when form is submitted', () => {
+  it.each(STABLE_ENGINES)('submits values with the %s engine', async (engine) => {
     const handleFinish = vi.fn();
-    render(
-      <Form onFinish={handleFinish}>
-        <button type="submit">Submit</button>
-      </Form>
-    );
-    fireEvent.submit(screen.getByTestId('form'));
-    expect(handleFinish).toHaveBeenCalled();
-  });
+    const ref = createRef<any>();
 
-  it('applies custom className', () => {
-    render(<Form className="custom-class">Content</Form>);
-    expect(screen.getByTestId('form')).toHaveClass('custom-class');
+    renderWithEngine(
+      <Form ref={ref} onFinish={handleFinish}>
+        <button type="submit">Submit profile</button>
+      </Form>,
+      engine
+    );
+
+    await screen.findByRole('button', { name: /submit profile/i });
+    ref.current?.submit?.();
+
+    await waitFor(() => {
+      expect(handleFinish).toHaveBeenCalled();
+    });
   });
 });
 
-describe('Form.Item', () => {
-  it('renders correctly', () => {
-    render(
+describe('Form compound components', () => {
+  it('renders labels through the live Ant Design Form.Item integration', async () => {
+    renderWithEngine(
       <Form>
-        <Form.Item name="test">
+        <Form.Item name="email" label="Email address">
+          <input />
+        </Form.Item>
+      </Form>,
+      'classic'
+    );
+
+    expect(await screen.findByText('Email address')).toBeInTheDocument();
+    expect(screen.getByLabelText('Email address')).toBeInTheDocument();
+  });
+
+  it('marks required fields when the prop or rules demand it', async () => {
+    const { rerender } = renderWithEngine(
+      <Form>
+        <Form.Item name="required-prop" label="Required prop" required>
+          <input />
+        </Form.Item>
+      </Form>,
+      'classic'
+    );
+
+    expect(await screen.findByLabelText('Required prop')).toHaveAttribute('aria-required', 'true');
+
+    rerender(
+      <Form>
+        <Form.Item name="required-rule" label="Required rule" rules={[{ required: true }]}>
           <input />
         </Form.Item>
       </Form>
     );
-    expect(screen.getByTestId('form-item-test')).toBeInTheDocument();
+
+    expect(await screen.findByLabelText('Required rule')).toHaveAttribute('aria-required', 'true');
   });
 
-  it('renders with label', () => {
-    render(
+  it('renders help and extra text with the live compound components', async () => {
+    renderWithEngine(
       <Form>
-        <Form.Item name="test" label="Test Label">
+        <Form.Item name="details" label="Details" help="Helpful guidance" extra="Additional context">
           <input />
         </Form.Item>
-      </Form>
+      </Form>,
+      'classic'
     );
-    expect(screen.getByTestId('form-label-test')).toHaveTextContent('Test Label');
+
+    expect(await screen.findByText('Helpful guidance')).toBeInTheDocument();
+    expect(screen.getByText('Additional context')).toBeInTheDocument();
   });
 
-  it('renders required field', () => {
-    render(
+  it('applies validation status styling through the live item wrapper', async () => {
+    renderWithEngine(
       <Form>
-        <Form.Item name="test" required>
+        <Form.Item name="status" label="Status" validateStatus="error">
           <input />
         </Form.Item>
-      </Form>
+      </Form>,
+      'classic'
     );
-    expect(screen.getByTestId('form-item-test')).toHaveAttribute('data-required', 'true');
+
+    const field = await screen.findByLabelText('Status');
+    const formItem = field.closest('.ant-form-item');
+
+    expect(formItem).toBeTruthy();
+    expect(formItem?.className).toContain('ant-form-item-has-error');
   });
 
-  it('renders required from rules', () => {
-    render(
-      <Form>
-        <Form.Item name="test" rules={[{ required: true }]}>
-          <input />
-        </Form.Item>
-      </Form>
-    );
-    expect(screen.getByTestId('form-item-test')).toHaveAttribute('data-required', 'true');
-  });
-
-  it('renders with help text', () => {
-    render(
-      <Form>
-        <Form.Item name="test" help="Help text">
-          <input />
-        </Form.Item>
-      </Form>
-    );
-    expect(screen.getByTestId('form-help-test')).toHaveTextContent('Help text');
-  });
-
-  it('renders with extra text', () => {
-    render(
-      <Form>
-        <Form.Item name="test" extra="Extra info">
-          <input />
-        </Form.Item>
-      </Form>
-    );
-    expect(screen.getByTestId('form-extra-test')).toHaveTextContent('Extra info');
-  });
-
-  it('renders with validate status', () => {
-    render(
-      <Form>
-        <Form.Item name="test" validateStatus="error">
-          <input />
-        </Form.Item>
-      </Form>
-    );
-    expect(screen.getByTestId('form-item-test')).toHaveAttribute('data-validate-status', 'error');
-  });
-});
-
-describe('Form.List', () => {
-  it('renders correctly', () => {
-    render(
-      <Form>
+  it('renders list content through Ant Design Form.List', async () => {
+    renderWithEngine(
+      <Form initialValues={{ users: [{ name: 'Ada' }] }}>
         <Form.List name="users">
           {(fields) => (
             <div>
@@ -229,35 +159,282 @@ describe('Form.List', () => {
             </div>
           )}
         </Form.List>
-      </Form>
+      </Form>,
+      'classic'
     );
-    expect(screen.getByTestId('form-list-users')).toBeInTheDocument();
-  });
-});
 
-describe('Form.ErrorList', () => {
-  it('renders correctly', () => {
-    render(
+    expect(await screen.findByText('Field 0')).toBeInTheDocument();
+  });
+
+  it('renders the error list component without crashing', async () => {
+    renderWithEngine(
       <Form>
-        <Form.ErrorList fieldName="test" />
-      </Form>
+        <Form.ErrorList className="custom-error-list" />
+      </Form>,
+      'classic'
     );
-    expect(screen.getByTestId('form-error-list-test')).toBeInTheDocument();
-  });
-});
 
-describe('Form engines', () => {
-  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
-    render(<Form engine={engine}>Content</Form>);
-    expect(screen.getByTestId('form')).toBeInTheDocument();
+    const form = document.querySelector('form');
+    expect(form).toBeInTheDocument();
+    expect(form.querySelector('.custom-error-list')).toBeTruthy();
   });
-});
 
-describe('Form tenants', () => {
-  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
-    document.documentElement.setAttribute('data-tenant', tenant);
-    render(<Form>Test</Form>);
-    expect(screen.getByTestId('form')).toBeInTheDocument();
-    document.documentElement.removeAttribute('data-tenant');
-  });
+  it.each(['modern', 'rustic'] as const)(
+    'keeps the public FormInstance and the live %s engine in sync',
+    async (engine) => {
+      const ref = createRef<any>();
+
+      renderWithEngine(
+        <Form ref={ref} engine={engine}>
+          <Form.Item name="email" label="Email">
+            <input aria-label="Email" />
+          </Form.Item>
+        </Form>,
+        engine
+      );
+
+      const input = await screen.findByLabelText('Email');
+
+      await act(async () => {
+        ref.current.setFieldValue('email', 'ada@rottay.dev');
+      });
+      await waitFor(() => {
+        expect(input).toHaveValue('ada@rottay.dev');
+      });
+
+      await act(async () => {
+        ref.current.setFieldsValue({ email: 'grace@rottay.dev' });
+      });
+      await waitFor(() => {
+        expect(input).toHaveValue('grace@rottay.dev');
+      });
+
+      await act(async () => {
+        ref.current.resetFields();
+      });
+      await waitFor(() => {
+        expect(input).toHaveValue('');
+      });
+    }
+  );
+
+  it.each(['modern', 'rustic'] as const)(
+    'validates, fails submit, and succeeds submit in the live %s engine',
+    async (engine) => {
+      const onFinish = vi.fn();
+      const onFinishFailed = vi.fn();
+      const onValuesChange = vi.fn();
+
+      renderWithEngine(
+        <Form
+          engine={engine}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          onValuesChange={onValuesChange}
+        >
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: 'Email required' },
+              { pattern: /@/, message: 'Invalid email format' },
+            ]}
+          >
+            <input aria-label="Email" />
+          </Form.Item>
+          <button type="submit">Submit email</button>
+        </Form>,
+        engine
+      );
+
+      const input = await screen.findByLabelText('Email');
+      fireEvent.change(input, { target: { value: 'invalid' } });
+
+      expect(await screen.findByText('Invalid email format')).toBeInTheDocument();
+      expect(onValuesChange).toHaveBeenCalled();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Submit email' }));
+
+      await waitFor(() => {
+        expect(onFinishFailed).toHaveBeenCalled();
+      });
+
+      fireEvent.change(input, { target: { value: 'valid@rottay.dev' } });
+
+      await waitFor(() => {
+        expect(screen.queryByText('Invalid email format')).not.toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: 'Submit email' }));
+
+      await waitFor(() => {
+        expect(onFinish).toHaveBeenCalledWith(
+          expect.objectContaining({ email: 'valid@rottay.dev' })
+        );
+      });
+    }
+  );
+
+  it.each(['modern', 'rustic'] as const)(
+    'supports Form.List operations in the live %s engine',
+    async (engine) => {
+      renderWithEngine(
+        <Form engine={engine}>
+          <Form.List name="users" initialValue={[{ name: 'Ada' }]}>
+            {(fields, { add, remove, move }) => (
+              <div>
+                <button type="button" onClick={() => add()}>
+                  Add row
+                </button>
+                <button type="button" onClick={() => remove(0)}>
+                  Remove first
+                </button>
+                <button type="button" onClick={() => move(0, 1)}>
+                  Move row
+                </button>
+                {fields.map((field) => (
+                  <div key={field.key}>{`Field ${field.name}`}</div>
+                ))}
+              </div>
+            )}
+          </Form.List>
+        </Form>,
+        engine
+      );
+
+      expect(await screen.findByText('Field 0')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Add row' }));
+      expect(await screen.findByText('Field 1')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Move row' }));
+      expect(screen.getAllByText(/Field/)).toHaveLength(2);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Remove first' }));
+      await waitFor(() => {
+        expect(screen.queryAllByText(/Field/).length).toBe(1);
+      });
+    }
+  );
+
+  it.each(['modern', 'rustic'] as const)(
+    'supports checkbox value semantics, hidden items, and partial field resets in the live %s engine',
+    async (engine) => {
+      const ref = createRef<any>();
+
+      renderWithEngine(
+        <Form ref={ref} engine={engine} layout="horizontal" requiredMark={false}>
+          <Form.Item name="hidden" label="Hidden field" hidden>
+            <input />
+          </Form.Item>
+          <Form.Item
+            name="terms"
+            label="Terms"
+            valuePropName="checked"
+            tooltip="Accept the terms"
+            extra="Must be accepted"
+          >
+            <input type="checkbox" aria-label="Terms" />
+          </Form.Item>
+          <Form.Item name="email" label="Email">
+            <input aria-label="Email" />
+          </Form.Item>
+        </Form>,
+        engine
+      );
+
+      expect(screen.queryByText('Hidden field')).not.toBeInTheDocument();
+
+      const checkbox = await screen.findByLabelText('Terms');
+      const email = screen.getByLabelText('Email');
+
+      expect(screen.getByText('Must be accepted')).toBeInTheDocument();
+
+      fireEvent.click(checkbox);
+      await waitFor(() => {
+        expect(checkbox).toBeChecked();
+      });
+
+      await act(async () => {
+        ref.current.setFieldsValue({ email: 'ada@rottay.dev' });
+      });
+      await waitFor(() => {
+        expect(email).toHaveValue('ada@rottay.dev');
+      });
+
+      await act(async () => {
+        ref.current.resetFields(['email']);
+      });
+      await waitFor(() => {
+        expect(email).toHaveValue('');
+        expect(checkbox).toBeChecked();
+      });
+    }
+  );
+
+  it.each(['modern', 'rustic'] as const)(
+    'covers required, min, max, pattern, and async validator branches in the live %s engine',
+    async (engine) => {
+      const onFinish = vi.fn();
+      const onFinishFailed = vi.fn();
+
+      renderWithEngine(
+        <Form engine={engine} onFinish={onFinish} onFinishFailed={onFinishFailed}>
+          <Form.Item
+            name="username"
+            label="Username"
+            rules={[
+              { required: true, message: 'Username required' },
+              { min: 3, message: 'Too short' },
+              { max: 5, message: 'Too long' },
+              { pattern: /^[a-z]+$/, message: 'Letters only' },
+              {
+                validator: async (_rule, value) => {
+                  if (value === 'taken') {
+                    throw new Error('Already taken');
+                  }
+                },
+              },
+            ]}
+            hasFeedback
+          >
+            <input aria-label="Username" />
+          </Form.Item>
+          <Form.ErrorList />
+          <button type="submit">Submit username</button>
+        </Form>,
+        engine
+      );
+
+      const input = await screen.findByLabelText('Username');
+
+      fireEvent.change(input, { target: { value: '1' } });
+      expect(input).toHaveValue('1');
+
+      fireEvent.change(input, { target: { value: 'abcdef' } });
+      expect(input).toHaveValue('abcdef');
+
+      fireEvent.change(input, { target: { value: 'taken' } });
+      expect(input).toHaveValue('taken');
+
+      fireEvent.click(screen.getByRole('button', { name: 'Submit username' }));
+      await waitFor(() => {
+        expect(onFinishFailed).toHaveBeenCalled();
+      });
+
+      fireEvent.change(input, { target: { value: 'ada' } });
+      await waitFor(() => {
+        expect(screen.queryByText(/Already taken/)).not.toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: 'Submit username' }));
+      await waitFor(() => {
+        expect(onFinish).toHaveBeenCalledWith(
+          expect.objectContaining({
+            username: 'ada',
+          })
+        );
+      });
+    }
+  );
 });

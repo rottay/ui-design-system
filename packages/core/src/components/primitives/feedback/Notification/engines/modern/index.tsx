@@ -64,6 +64,7 @@ import type {
   NotificationPlacement,
 } from '../../types';
 import { NOTIFICATION_DEFAULTS } from '../../types';
+import { warnOnceInDev } from '../../../../../../core/utils/runtime-logger';
 
 // ============================================================================
 // Internal Types
@@ -188,7 +189,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         icon: config.icon,
         className: config.className,
         style: config.style,
-        btn: config.btn,
+        actions: config.actions,
         closeIcon: config.closeIcon,
         closable: config.closable ?? NOTIFICATION_DEFAULTS.closable,
         placement: config.placement || placement,
@@ -303,13 +304,17 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
           className={placementClasses[p as NotificationPlacement]}
           style={placementStyles[p as NotificationPlacement]}
         >
-          {items.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              {...notification}
-              onRemove={removeNotification}
-            />
-          ))}
+          {items.map((notification) => {
+            const { key: _notificationKey, ...notificationProps } = notification;
+
+            return (
+              <NotificationItem
+                key={notification.id}
+                {...notificationProps}
+                onRemove={removeNotification}
+              />
+            );
+          })}
         </div>
       ))}
     </NotificationContext.Provider>
@@ -414,7 +419,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   icon,
   className = '',
   style,
-  btn,
+  actions,
   closeIcon,
   closable = NOTIFICATION_DEFAULTS.closable,
   onRemove,
@@ -521,7 +526,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           {description && <div className="text-sm opacity-80">{description}</div>}
 
           {/* Action Button */}
-          {btn && <div className="mt-2">{btn}</div>}
+          {actions && <div className="mt-2">{actions}</div>}
         </div>
 
         {/* Close Button */}
@@ -573,12 +578,12 @@ NotificationItem.displayName = 'NotificationItem.Modern';
  * ```
  */
 export const notification: NotificationInstance = {
-  success: () => console.warn('Modern notification: Please use NotificationProvider and useNotification hook'),
-  error: () => console.warn('Modern notification: Please use NotificationProvider and useNotification hook'),
-  info: () => console.warn('Modern notification: Please use NotificationProvider and useNotification hook'),
-  warning: () => console.warn('Modern notification: Please use NotificationProvider and useNotification hook'),
-  open: () => console.warn('Modern notification: Please use NotificationProvider and useNotification hook'),
-  destroy: () => console.warn('Modern notification: Please use NotificationProvider and useNotification hook'),
+  success: () => warnOnceInDev('notification-modern:provider-required', 'Modern notification: Please use NotificationProvider and useNotification hook'),
+  error: () => warnOnceInDev('notification-modern:provider-required', 'Modern notification: Please use NotificationProvider and useNotification hook'),
+  info: () => warnOnceInDev('notification-modern:provider-required', 'Modern notification: Please use NotificationProvider and useNotification hook'),
+  warning: () => warnOnceInDev('notification-modern:provider-required', 'Modern notification: Please use NotificationProvider and useNotification hook'),
+  open: () => warnOnceInDev('notification-modern:provider-required', 'Modern notification: Please use NotificationProvider and useNotification hook'),
+  destroy: () => warnOnceInDev('notification-modern:provider-required', 'Modern notification: Please use NotificationProvider and useNotification hook'),
 };
 
 // ============================================================================

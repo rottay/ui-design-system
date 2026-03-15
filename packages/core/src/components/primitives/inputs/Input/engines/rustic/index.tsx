@@ -161,10 +161,10 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Determine box shadow based on state
   const getBoxShadow = () => {
     if (variant === 'unstyled') return 'none';
-    if (hasError && isFocused) return 'var(--ds-input-error-shadow-focus)';
-    if (hasWarning && isFocused) return 'var(--ds-input-warning-shadow-focus)';
-    if (hasSuccess && isFocused) return 'var(--ds-input-success-shadow-focus)';
-    if (isFocused) return 'var(--ds-input-shadow-focus)';
+    if (hasError && isFocused) return 'var(--ds-input-error-shadow-focus, 0 0 0 3px rgba(239, 68, 68, 0.15)), 0 0 8px rgba(239, 68, 68, 0.1)';
+    if (hasWarning && isFocused) return 'var(--ds-input-warning-shadow-focus, 0 0 0 3px rgba(245, 158, 11, 0.15)), 0 0 8px rgba(245, 158, 11, 0.1)';
+    if (hasSuccess && isFocused) return 'var(--ds-input-success-shadow-focus, 0 0 0 3px rgba(34, 197, 94, 0.15)), 0 0 8px rgba(34, 197, 94, 0.1)';
+    if (isFocused) return 'var(--ds-input-shadow-focus, 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.15))), 0 0 8px rgba(59, 130, 246, 0.08)';
     return 'none';
   };
 
@@ -179,6 +179,9 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   };
 
   // Container styles using CSS variables
+  const isBorderless = variant === 'flushed' || variant === 'unstyled';
+  const outlineBorder = `1px solid ${getBorderColor()}`;
+  const sideBorder = isBorderless ? 'none' : outlineBorder;
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-flex',
@@ -187,15 +190,13 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     height: sizeValues.height,
     backgroundColor: getBackground(),
     borderRadius: variant === 'flushed' ? 0 : 'var(--ds-input-radius)',
-    border: variant === 'flushed'
-      ? 'none'
-      : variant === 'unstyled'
-        ? 'none'
-        : `1px solid ${getBorderColor()}`,
+    borderTop: sideBorder,
+    borderRight: sideBorder,
+    borderLeft: sideBorder,
     borderBottom: variant === 'flushed'
       ? `${isFocused ? 2 : 1}px solid ${getBorderColor()}`
-      : undefined,
-    transition: 'var(--ds-input-transition)',
+      : sideBorder,
+    transition: 'border-color 0.15s, box-shadow 0.2s, background-color 0.1s',
     opacity: disabled ? 0.6 : 1,
     cursor: disabled ? 'not-allowed' : 'text',
     boxShadow: getBoxShadow(),
@@ -237,7 +238,7 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     padding: '0 0.5rem',
     color: 'var(--ds-input-clear-color)',
     cursor: 'pointer',
-    transition: 'var(--ds-input-transition)',
+    transition: 'color 0.15s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
     background: 'none',
     border: 'none',
   };
@@ -314,6 +315,14 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
             onClick={handleClear}
             aria-label="Clear input"
             tabIndex={-1}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.1)';
+              e.currentTarget.style.color = 'var(--ds-input-color, currentColor)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.color = 'var(--ds-input-clear-color)';
+            }}
           >
             <svg
               width="14"

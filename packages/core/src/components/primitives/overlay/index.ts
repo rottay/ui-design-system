@@ -82,3 +82,38 @@ export type {
   WatermarkFont,
 } from './Watermark';
 export { WATERMARK_DEFAULTS } from './Watermark';
+
+// ContextMenu
+export { ContextMenu } from './ContextMenu';
+export type {
+  ContextMenuProps,
+  ContextMenuItem,
+} from './ContextMenu';
+export { CONTEXTMENU_DEFAULTS } from './ContextMenu';
+
+// HoverCard
+export { HoverCard } from './HoverCard';
+export type {
+  HoverCardProps,
+  HoverCardSide,
+  HoverCardAlign,
+} from './HoverCard';
+export { HOVERCARD_DEFAULTS } from './HoverCard';
+
+// Sheet
+export { Sheet } from './Sheet';
+export type {
+  SheetProps,
+  SheetSide,
+} from './Sheet';
+export { SHEET_DEFAULTS } from './Sheet';
+
+// ConfirmDialog
+export { ConfirmDialog } from './ConfirmDialog';
+export type { ConfirmDialogProps, ConfirmDialogVariant } from './ConfirmDialog';
+export { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS as CONFIRM_DIALOG_VARIANT_COLORS } from './ConfirmDialog';
+
+// AlertDialog
+export { AlertDialog } from './AlertDialog';
+export type { AlertDialogProps } from './AlertDialog';
+export { ALERT_DIALOG_DEFAULTS } from './AlertDialog';

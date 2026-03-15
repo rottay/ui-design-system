@@ -7,15 +7,15 @@
 
 // Space Sizes
 export const spaceSize = {
-  small: 'var(--space-small-size)',
-  middle: 'var(--space-middle-size)',
-  large: 'var(--space-large-size)',
+  small: 'var(--ds-space-small-size)',
+  middle: 'var(--ds-space-middle-size)',
+  large: 'var(--ds-space-large-size)',
 } as const;
 
 // Combined space tokens
 export const spaceTokens = {
   size: spaceSize,
-  defaultSize: 'var(--space-default-size)',
+  defaultSize: 'var(--ds-space-default-size)',
 } as const;
 
 // Type exports

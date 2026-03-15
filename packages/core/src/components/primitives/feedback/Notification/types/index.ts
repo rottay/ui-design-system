@@ -112,8 +112,8 @@ export interface NotificationConfig {
   /** Screen position where the notification appears */
   placement?: NotificationPlacement;
 
-  /** Custom action button(s) displayed in the notification */
-  btn?: ReactNode;
+  /** Custom action content displayed in the notification */
+  actions?: ReactNode;
 
   /** Custom close icon to replace the default */
   closeIcon?: ReactNode;
@@ -337,8 +337,8 @@ export interface NotificationItemProps {
   /** Inline styles */
   style?: CSSProperties;
 
-  /** Action button(s) */
-  btn?: ReactNode;
+  /** Action content */
+  actions?: ReactNode;
 
   /** Custom close icon */
   closeIcon?: ReactNode;

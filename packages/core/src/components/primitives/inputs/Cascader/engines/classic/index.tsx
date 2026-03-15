@@ -34,6 +34,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       popupClassName,
     } = props;
 
+    const popupClassNames = popupClassName
+      ? ({ popup: { root: popupClassName } } as const)
+      : undefined;
+
     return (
       <div ref={ref} className={className} style={style}>
         <AntCascader
@@ -53,10 +57,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           loading={loading}
           status={status}
           open={open}
-          onDropdownVisibleChange={onDropdownVisibleChange}
+          onOpenChange={onDropdownVisibleChange}
           maxTagCount={maxTagCount}
           fieldNames={fieldNames}
-          popupClassName={popupClassName}
+          classNames={popupClassNames as any}
           style={{ width: '100%' }}
         />
       </div>

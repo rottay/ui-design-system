@@ -74,7 +74,14 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef } from 'react';
+
 import { createEngineComponent } from '../../../../core/engines/factory';
+import { useOptionalTokens } from '../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveStatisticPersonalityStyle,
+} from '../../../../core/personality/primitives';
 import type { StatisticProps, CountdownProps } from './types';
 import { Countdown } from './compound';
 
@@ -161,11 +168,38 @@ const StatisticBase = createEngineComponent<StatisticProps>('Statistic', {
  * Engine-aware Countdown component.
  * Routes to the appropriate engine implementation.
  */
-const CountdownEngine = createEngineComponent<CountdownProps>('Statistic.Countdown', {
+const CountdownBase = createEngineComponent<CountdownProps>('Statistic.Countdown', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Countdown })),
   modern: () => import('./engines/modern').then(m => ({ default: m.Countdown })),
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Countdown })),
 });
+
+const StatisticComponent = forwardRef<any, StatisticProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const { style, animateValue, ...rest } = props;
+
+  return createElement(StatisticBase, {
+    ref,
+    ...rest,
+    animateValue: animateValue ?? tokens?.personality.animation.countUpEnabled,
+    style: tokens ? mergePersonalityStyle(style, resolveStatisticPersonalityStyle(tokens)) : style,
+  });
+});
+
+StatisticComponent.displayName = 'Statistic';
+
+const CountdownEngine = forwardRef<any, CountdownProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const { style, ...rest } = props;
+
+  return createElement(CountdownBase, {
+    ref,
+    ...rest,
+    style: tokens ? mergePersonalityStyle(style, resolveStatisticPersonalityStyle(tokens)) : style,
+  });
+});
+
+CountdownEngine.displayName = 'Statistic.Countdown';
 
 /**
  * Statistic component with compound components attached.
@@ -184,7 +218,7 @@ const CountdownEngine = createEngineComponent<CountdownProps>('Statistic.Countdo
  * />
  * ```
  */
-export const Statistic = Object.assign(StatisticBase, {
+export const Statistic = Object.assign(StatisticComponent, {
   Countdown: CountdownEngine,
 });
 

@@ -23,12 +23,12 @@
  * - Icon support with closable option
  *
  * **CSS Custom Properties:**
- * - `--badge-{size}-height` - Badge height per size
- * - `--badge-{size}-min-width` - Minimum badge width
- * - `--badge-{size}-font-size` - Text size
- * - `--badge-{variant}-bg` - Background color per variant
- * - `--badge-{variant}-color` - Text color per variant
- * - `--badge-dot-{size}-size` - Dot indicator diameter
+ * - `--ds-badge-{size}-height` - Badge height per size
+ * - `--ds-badge-{size}-min-width` - Minimum badge width
+ * - `--ds-badge-{size}-font-size` - Text size
+ * - `--ds-badge-{variant}-bg` - Background color per variant
+ * - `--ds-badge-{variant}-color` - Text color per variant
+ * - `--ds-badge-dot-{size}-size` - Dot indicator diameter
  *
  * @example Basic Usage with Count
  * ```tsx
@@ -66,7 +66,11 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef } from 'react';
+
 import { createEngineComponent } from '../../../../core/engines/factory';
+import { useOptionalTokens } from '../../../../core/hooks';
+import { resolveBadgePersonalityDefaults } from '../../../../core/personality/primitives';
 import type { BadgeProps } from './types';
 
 // Export types
@@ -101,8 +105,25 @@ export {
  * @component
  * @see {@link BadgeProps} for available props
  */
-export const Badge = createEngineComponent<BadgeProps>('Badge', {
+const BadgeBase = createEngineComponent<BadgeProps>('Badge', {
   classic: () => import('./engines/classic'),
   modern: () => import('./engines/modern'),
   rustic: () => import('./engines/rustic'),
 });
+
+export const Badge = forwardRef<any, BadgeProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const defaults = tokens ? resolveBadgePersonalityDefaults(tokens) : null;
+  const {
+    radius,
+    ...rest
+  } = props;
+
+  return createElement(BadgeBase, {
+    ref,
+    ...rest,
+    radius: radius ?? defaults?.radius,
+  });
+});
+
+Badge.displayName = 'Badge';

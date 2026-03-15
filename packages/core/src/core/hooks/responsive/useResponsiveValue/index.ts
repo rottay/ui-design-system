@@ -27,6 +27,7 @@
  * @package @rottay/design-system
  */
 import { useMediaQuery } from '../useMediaQuery';
+import { buildMinWidthQuery } from '../breakpoints';
 
 /**
  * Responsive value configuration object
@@ -93,11 +94,11 @@ export interface ResponsiveValueConfig<T> {
 export function useResponsiveValue<T>(values: ResponsiveValueConfig<T>): T {
   // Check breakpoints from largest to smallest (cascade)
   // This ensures we get the most specific match
-  const is2xl = useMediaQuery('(min-width: 1536px)');
-  const isXl = useMediaQuery('(min-width: 1280px)');
-  const isLg = useMediaQuery('(min-width: 1024px)');
-  const isMd = useMediaQuery('(min-width: 768px)');
-  const isSm = useMediaQuery('(min-width: 640px)');
+  const is2xl = useMediaQuery(buildMinWidthQuery('2xl'));
+  const isXl = useMediaQuery(buildMinWidthQuery('xl'));
+  const isLg = useMediaQuery(buildMinWidthQuery('lg'));
+  const isMd = useMediaQuery(buildMinWidthQuery('md'));
+  const isSm = useMediaQuery(buildMinWidthQuery('sm'));
 
   // Return the most specific value that matches
   // Fall back to base if no breakpoint matches

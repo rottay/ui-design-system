@@ -71,3 +71,10 @@ export function useTenant() {
   }
   return context;
 }
+
+// Tenant creation utilities
+export { resolvePersonalityPreset } from './personality-presets';
+export type { PersonalityPreset } from './personality-presets';
+export { createTenantConfig } from './create-tenant';
+export type { TenantCreationConfig } from './create-tenant';
+export { useCreateTenant } from './useCreateTenant';

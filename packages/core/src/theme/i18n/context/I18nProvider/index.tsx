@@ -14,7 +14,8 @@ import type {
   LocaleConfig,
 } from '../../types';
 import { LOCALE_CONFIGS } from '../../types';
-import { es, en, pt, fr } from '../../locales';
+import { es, en, pt, fr, ar } from '../../locales';
+import { warnOnceInDev } from '../../../../core/utils/runtime-logger';
 
 // Mapa de traducciones
 const TRANSLATIONS = {
@@ -22,6 +23,7 @@ const TRANSLATIONS = {
   en,
   pt,
   fr,
+  ar,
 };
 
 /**
@@ -72,6 +74,16 @@ export function I18nProvider({
 }: I18nProviderProps) {
   const [locale, setLocaleState] = useState<SupportedLocale>(initialLocale);
 
+  /**
+   * The provider can now sit under DesignSystemProvider, so locale may change
+   * when a tenant or explicit provider prop changes at runtime. We mirror the
+   * controlled prop into local state to keep `setLocale()` working while still
+   * honoring upstream updates.
+   */
+  useEffect(() => {
+    setLocaleState(initialLocale);
+  }, [initialLocale]);
+
   // Función de traducción memoizada
   const t: TranslateFunction = useCallback(
     (key: string, params?: Record<string, string | number>) => {
@@ -100,7 +112,12 @@ export function I18nProvider({
       }
 
       // 4. Si no se encuentra, devolver la key
-      console.warn(`Translation not found for key: ${key}`);
+      if (process.env.NODE_ENV !== 'test') {
+        warnOnceInDev(
+          `i18n:missing:${locale}:${key}`,
+          `Translation not found for key: ${key}`
+        );
+      }
       return key;
     },
     [locale, fallbackLocale, customTranslations]

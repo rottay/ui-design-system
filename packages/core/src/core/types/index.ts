@@ -23,6 +23,9 @@ export * from './themes';
 // Tenant types
 export * from './tenants';
 
+// Product profile types
+export * from './product-profiles';
+
 // Token types
 export * from './tokens';
 

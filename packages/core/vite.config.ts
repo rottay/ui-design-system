@@ -12,7 +12,19 @@ export default defineConfig({
       insertTypesEntry: true,
       copyDtsFiles: false,
     }),
-    preserveDirectives(),
+    /**
+     * We only want directive preservation on library source modules.
+     *
+     * Storybook's Vite preview also runs through this config, and its HTML
+     * entry (`iframe.html`) makes `rollup-plugin-preserve-directives` try to
+     * parse non-JS input. Restricting the plugin to actual source modules keeps
+     * library output correct without breaking Storybook builds.
+     */
+    preserveDirectives({
+      suppressPreserveModulesWarning: true,
+      include: ['src/**/*.{ts,tsx,js,jsx}'],
+      exclude: ['**/*.html'],
+    }),
   ],
   resolve: {
     alias: {
@@ -27,6 +39,8 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         icons: resolve(__dirname, 'src/icons.ts'),
+        i18n: resolve(__dirname, 'src/i18n.ts'),
+        tokens: resolve(__dirname, 'src/tokens.ts'),
       },
       name: 'DesignSystem',
     },

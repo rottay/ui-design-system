@@ -2,33 +2,33 @@ navigation/
 ├── tabs/
 │   ├── core/
 │   │   └── index.ts                    # TabsProps, TabItem, defaults
-│   ├── titan/
+│   ├── classic/
 │   │   └── index.tsx                   # Ant Design implementation
-│   ├── hermes/
+│   ├── modern/
 │   │   └── index.tsx                   # DaisyUI implementation
-│   ├── apollo/
+│   ├── rustic/
 │   │   └── index.tsx                   # Pure CSS implementation
 │   └── index.ts                        # Router + exports
 │
 ├── breadcrumb/
 │   ├── core/
 │   │   └── index.ts                    # BreadcrumbProps, BreadcrumbItem, defaults
-│   ├── titan/
+│   ├── classic/
 │   │   └── index.tsx                   # Ant Design implementation
-│   ├── hermes/
+│   ├── modern/
 │   │   └── index.tsx                   # DaisyUI implementation
-│   ├── apollo/
+│   ├── rustic/
 │   │   └── index.tsx                   # Pure CSS implementation
 │   └── index.ts                        # Router + exports
 │
 ├── pagination/
 │   ├── core/
 │   │   └── index.ts                    # PaginationProps, defaults
-│   ├── titan/
+│   ├── classic/
 │   │   └── index.tsx                   # Ant Design implementation
-│   ├── hermes/
+│   ├── modern/
 │   │   └── index.tsx                   # DaisyUI implementation
-│   ├── apollo/
+│   ├── rustic/
 │   │   └── index.tsx                   # Pure CSS implementation
 │   └── index.ts                        # Router + exports
 │

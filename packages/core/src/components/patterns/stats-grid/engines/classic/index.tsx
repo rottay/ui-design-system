@@ -7,8 +7,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Statistic } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { useBreakpoints } from '../../../../../core/hooks/responsive/useBreakpoints';
+import { useTokens } from '../../../../../core/hooks/tokens';
 import type { StatsGridProps } from '../../types';
 import type { StatDef } from '../../../types';
+import { resolveStatsGridMotion } from '../../personality';
 
 function normalizeSparkline(data: number[], width = 80, height = 30): string {
   const min = Math.min(...data);
@@ -30,7 +33,7 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
       <polyline
         points={normalizeSparkline(data)}
         fill="none"
-        stroke={color || 'var(--ds-color-primary, #1677ff)'}
+        stroke={color || 'var(--ds-color-primary)'}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -39,7 +42,11 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
   );
 }
 
-function useAnimatedValue(target: number | string, animate?: boolean): number | string {
+function useAnimatedValue(
+  target: number | string,
+  animate?: boolean,
+  duration = 600
+): number | string {
   const [value, setValue] = useState<number | string>(animate && typeof target === 'number' ? 0 : target);
 
   useEffect(() => {
@@ -47,7 +54,6 @@ function useAnimatedValue(target: number | string, animate?: boolean): number | 
       setValue(target);
       return;
     }
-    const duration = 600;
     const start = performance.now();
     const from = 0;
     const tick = (now: number) => {
@@ -67,30 +73,36 @@ function StatCard({
   sparkline,
   variant,
   animate,
+  animationDuration,
   onClick,
 }: {
   stat: StatDef;
   sparkline?: boolean;
   variant: StatsGridProps['variant'];
   animate?: boolean;
+  animationDuration?: number;
   onClick?: () => void;
 }) {
-  const displayValue = useAnimatedValue(stat.value, animate);
+  const displayValue = useAnimatedValue(stat.value, animate, animationDuration);
 
   const changeColor =
-    stat.changeType === 'increase' ? '#52c41a' : stat.changeType === 'decrease' ? '#ff4d4f' : undefined;
+    stat.changeType === 'increase'
+      ? 'var(--ds-color-success)'
+      : stat.changeType === 'decrease'
+        ? 'var(--ds-color-error)'
+        : undefined;
 
   const cardStyle: React.CSSProperties = {
     cursor: onClick ? 'pointer' : undefined,
     ...(variant === 'outlined'
-      ? { border: '1px solid var(--ds-color-border, #d9d9d9)' }
+      ? { border: '1px solid var(--ds-stats-grid-card-border, var(--ds-color-border))' }
       : variant === 'filled'
-        ? { background: 'var(--ds-color-bg-elevated, #fafafa)' }
+        ? { background: 'var(--ds-stats-grid-card-filled-bg, var(--ds-color-bg-secondary))' }
         : variant === 'glass'
           ? {
-              background: 'rgba(255,255,255,0.6)',
+              background: 'var(--ds-stats-grid-card-glass-bg, var(--ds-color-alpha-white-50))',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.3)',
+              border: '1px solid var(--ds-stats-grid-card-glass-border, var(--ds-color-alpha-white-20))',
             }
           : {}),
   };
@@ -120,7 +132,7 @@ function StatCard({
         </div>
       )}
       {stat.description && (
-        <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted, #8c8c8c)', marginTop: 2 }}>
+        <div style={{ fontSize: 12, color: 'var(--ds-stats-grid-description-color, var(--ds-color-text-muted))', marginTop: 2 }}>
           {stat.description}
         </div>
       )}
@@ -140,6 +152,8 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
 }
 
 export default function ClassicStatsGrid(props: StatsGridProps) {
+  const tokens = useTokens();
+  const { prefersReducedMotion } = useBreakpoints();
   const {
     stats,
     renderStat,
@@ -153,6 +167,7 @@ export default function ClassicStatsGrid(props: StatsGridProps) {
     className,
     style,
   } = props;
+  const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
 
   if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
 
@@ -173,7 +188,8 @@ export default function ClassicStatsGrid(props: StatsGridProps) {
             stat={stat}
             sparkline={sparkline}
             variant={variant}
-            animate={animate}
+            animate={motion.animate}
+            animationDuration={motion.duration}
             onClick={onStatClick ? () => onStatClick(stat) : undefined}
           />
         );

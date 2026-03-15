@@ -21,9 +21,9 @@
  * - When you want full control over markup and styles
  *
  * **CSS Variables Used:**
- * - `--color-primary`: Link text color
- * - `--color-neutral-600`: Non-link text color
- * - `--color-neutral-400`: Separator color
+ * - `--ds-color-primary`: Link text color
+ * - `--ds-color-neutral-600`: Non-link text color
+ * - `--ds-color-neutral-400`: Separator color
  *
  * **Multi-Tenant Theming:**
  * Rustic breadcrumbs use CSS variables which can be easily customized

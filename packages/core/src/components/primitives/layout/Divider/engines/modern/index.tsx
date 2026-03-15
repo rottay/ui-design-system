@@ -136,7 +136,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       whiteSpace: 'nowrap',
       fontSize: plain ? 'inherit' : '0.875rem',
       fontWeight: plain ? 'inherit' : 600,
-      color: plain ? 'inherit' : 'oklch(var(--bc) / 0.7)',
+      color: plain ? 'inherit' : 'var(--ds-color-text-secondary, rgba(0, 0, 0, 0.65))',
       textTransform: plain ? 'none' : 'uppercase',
       letterSpacing: plain ? 'normal' : '0.05em',
     };

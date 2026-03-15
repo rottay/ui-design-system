@@ -155,7 +155,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             disabled={disabled}
             autoFocus={autoFocus}
           />
-          {allowClear && value && (
+          {allowClear && value && !disabled && (
             <button
               type="button"
               className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-ghost btn-xs btn-circle"

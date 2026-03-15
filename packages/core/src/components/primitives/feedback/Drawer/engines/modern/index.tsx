@@ -261,7 +261,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     // Base styles shared across all placements
     const baseStyle: React.CSSProperties = {
       position: 'fixed',
-      backgroundColor: 'var(--fallback-b1, oklch(var(--b1)/1))',
+      backgroundColor: 'var(--ds-drawer-bg, var(--ds-color-bg-elevated, #ffffff))',
       boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
       transition: 'transform 0.3s ease-in-out',
       overflowY: 'auto',

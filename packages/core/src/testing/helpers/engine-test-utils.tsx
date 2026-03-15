@@ -5,14 +5,31 @@
 
 import React, { ReactElement, Suspense } from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import { EngineProvider } from '../../core/providers/engine';
-import type { EngineName } from '../../core/types';
+import { DesignSystemProvider } from '../../core/providers';
+import type { EngineName, TenantConfig } from '../../core/types';
 
 /**
  * Stable engines for testing (excludes experimental 'athena')
  */
 export const STABLE_ENGINES: readonly EngineName[] = ['classic', 'modern', 'rustic'] as const;
 export type StableEngineName = (typeof STABLE_ENGINES)[number];
+
+const TEST_TENANT_CONFIG: TenantConfig = {
+  slug: 'test-tenant',
+  name: 'Test Tenant',
+  engine: 'classic',
+  theme: 'base',
+  locale: 'en',
+  fallbackLocale: 'en',
+  plan: 'enterprise',
+  features: ['testing'],
+  branding: {
+    companyName: 'Test Tenant',
+    primaryColor: '#2563eb',
+    secondaryColor: '#0f766e',
+    accentColor: '#7c3aed',
+  },
+};
 
 /**
  * Options for renderWithEngine
@@ -34,9 +51,13 @@ function createEngineWrapper(
 ): React.FC<{ children: React.ReactNode }> {
   return function EngineWrapper({ children }) {
     return (
-      <EngineProvider defaultEngine={engine}>
+      <DesignSystemProvider
+        tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+        forceEngine={engine}
+        skipCssLoading
+      >
         <Suspense fallback={suspenseFallback}>{children}</Suspense>
-      </EngineProvider>
+      </DesignSystemProvider>
     );
   };
 }

@@ -15,7 +15,7 @@
  *
  * **Styling:**
  * Uses CSS variables for theming:
- * - `--color-primary-500`: Link text color
+ * - `--ds-color-primary-500`: Link text color
  * - Gap and alignment handled via inline flexbox styles
  *
  * **Accessibility:**
@@ -154,7 +154,7 @@ export interface BreadcrumbItemProps {
  *
  * **Styling:**
  * - Uses inline flexbox for icon/text alignment
- * - Link color uses CSS variable `--color-primary-500`
+ * - Link color uses CSS variable `--ds-color-primary-500`
  * - Cursor changes based on interactivity
  *
  * @param props - {@link BreadcrumbItemProps}
@@ -190,7 +190,7 @@ export const BreadcrumbItem = forwardRef<HTMLSpanElement, BreadcrumbItemProps>(
 
     /** Link/text styles based on interactivity */
     const linkStyle: React.CSSProperties = {
-      color: href ? 'var(--color-primary-500, #1890ff)' : 'inherit',
+      color: href ? 'var(--ds-color-primary-500, #1890ff)' : 'inherit',
       textDecoration: 'none',
       cursor: href || onClick ? 'pointer' : 'default',
     };

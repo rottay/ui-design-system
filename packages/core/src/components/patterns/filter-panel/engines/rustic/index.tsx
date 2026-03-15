@@ -148,6 +148,9 @@ function renderFilterControl(
   }
 }
 
+const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+
 export default function RusticFilterPanel(props: FilterPanelProps) {
   const {
     filters,
@@ -184,14 +187,17 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
     border: '1px solid var(--ds-color-border, #d9d9d9)',
     background: 'var(--ds-color-bg, #fff)',
     color: 'var(--ds-color-text, #1a1a1a)',
+    transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   };
 
   const btnPrimary: React.CSSProperties = {
     ...btnBase,
     background: 'var(--ds-color-primary, #1677ff)',
-    color: '#fff',
+    color: 'var(--ds-color-text-on-primary)',
     border: 'none',
   };
+
+  const activeChipValues = Object.entries(values).filter(([, v]) => v != null && v !== '' && !(Array.isArray(v) && v.length === 0));
 
   return (
     <div
@@ -201,18 +207,24 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
         ...style,
       }}
     >
+      <style>{`@keyframes ds-filter-slide-down { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       {(title || collapsible) && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
           {collapsible && (
             <button
-              style={{ ...btnBase, padding: '2px 8px', fontSize: 12 }}
+              style={{ ...btnBase, padding: '2px 8px', fontSize: 12, transition: `transform ${RUSTIC_DURATION} ${RUSTIC_EASING}` }}
               onClick={() => setCollapsed(!collapsed)}
             >
               {collapsed ? '+' : '-'}
             </button>
           )}
           {title && (
-            <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ds-color-text, #1a1a1a)' }}>
+            <span style={{
+              fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
+              fontSize: 14,
+              letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
+              color: 'var(--ds-color-text, #1a1a1a)',
+            }}>
               {title}
             </span>
           )}
@@ -220,8 +232,8 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
             <span
               style={{
                 background: 'var(--ds-color-primary, #1677ff)',
-                color: '#fff',
-                borderRadius: 10,
+                color: 'var(--ds-color-text-on-primary)',
+                borderRadius: 'var(--ds-badge-radius, 10px)',
                 padding: '1px 8px',
                 fontSize: 11,
                 fontWeight: 600,
@@ -230,6 +242,45 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
               {activeCount}
             </span>
           )}
+        </div>
+      )}
+
+      {/* Active filter chips */}
+      {activeChipValues.length > 0 && isInline && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+          {activeChipValues.map(([key]) => {
+            const filter = filters.find((f) => f.key === key);
+            if (!filter) return null;
+            return (
+              <span
+                key={key}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  padding: '3px 10px',
+                  borderRadius: 'var(--ds-radius-full, 9999px)',
+                  fontSize: 12,
+                  fontWeight: 500,
+                  background: 'var(--ds-color-primary-50, rgba(99,102,241,0.08))',
+                  color: 'var(--ds-color-primary-700, #4338ca)',
+                  border: '1px solid var(--ds-color-primary-200, rgba(99,102,241,0.2))',
+                  cursor: 'pointer',
+                  transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
+                }}
+                onClick={() => handleChange(key, undefined)}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
+                }}
+              >
+                {filter.label}
+                <span style={{ fontSize: 14, lineHeight: 1, marginLeft: 2 }}>x</span>
+              </span>
+            );
+          })}
         </div>
       )}
 
@@ -243,11 +294,12 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
         <>
           <div
             style={{
-              display: isInline ? 'flex' : 'flex',
+              display: 'flex',
               flexDirection: isInline ? 'row' : 'column',
               flexWrap: isInline ? 'wrap' : undefined,
               gap: isInline ? 16 : 12,
               alignItems: isInline ? 'flex-end' : undefined,
+              animation: collapsible ? `ds-filter-slide-down ${RUSTIC_DURATION} ${RUSTIC_EASING}` : undefined,
             }}
           >
             {filters.map((filter) => (
@@ -257,6 +309,8 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
                     marginBottom: 4,
                     fontWeight: 500,
                     fontSize: 13,
+                    letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
+                    textTransform: 'var(--ds-typography-label-transform, none)' as React.CSSProperties['textTransform'],
                     color: 'var(--ds-color-text, #1a1a1a)',
                   }}
                 >
@@ -274,8 +328,21 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
                 </button>
               )}
               {showReset && (
-                <button style={btnBase} onClick={onReset}>
-                  Reset
+                <button
+                  style={{ ...btnBase, border: '1px solid transparent', background: 'transparent' }}
+                  onClick={onReset}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = 'var(--ds-color-primary, #1677ff)';
+                    el.style.background = 'var(--ds-color-primary-50, rgba(99,102,241,0.04))';
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = 'var(--ds-color-text, #1a1a1a)';
+                    el.style.background = 'transparent';
+                  }}
+                >
+                  Clear all
                 </button>
               )}
             </div>

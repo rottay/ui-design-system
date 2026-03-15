@@ -21,7 +21,7 @@
  * - Good: "Delete item", Bad: "Trash icon"
  *
  * **CSS Custom Properties:**
- * - `--button-spinner-size-{size}` - Loading spinner size per button size
+ * - `--ds-button-spinner-size-{size}` - Loading spinner size per button size
  *
  * @example Basic Icon Button
  * ```tsx
@@ -99,11 +99,11 @@ export interface ButtonIconProps {
  * Spinner size mapping to CSS variables
  */
 const SPINNER_SIZE_MAP = {
-  xs: 'var(--button-spinner-size-xs)',
-  sm: 'var(--button-spinner-size-sm)',
-  md: 'var(--button-spinner-size-md)',
-  lg: 'var(--button-spinner-size-lg)',
-  xl: 'var(--button-spinner-size-xl)',
+  xs: 'var(--ds-button-spinner-size-xs)',
+  sm: 'var(--ds-button-spinner-size-sm)',
+  md: 'var(--ds-button-spinner-size-md)',
+  lg: 'var(--ds-button-spinner-size-lg)',
+  xl: 'var(--ds-button-spinner-size-xl)',
 };
 
 /**

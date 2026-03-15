@@ -63,6 +63,7 @@ vi.mock('../../../../../core/engines/factory', () => ({
             step={step ?? 1}
             value={Array.isArray(currentValue) ? currentValue[1] : currentValue}
             disabled={disabled}
+            readOnly={value !== undefined && !onChange}
             onChange={handleChange}
             onMouseUp={handleMouseUp}
             aria-valuemin={min}
@@ -83,18 +84,19 @@ vi.mock('../../../../../core/engines/factory', () => ({
             </div>
           )}
           {range && (
-            <input
-              type="range"
-              role="slider"
-              min={min}
-              max={max}
-              step={step ?? 1}
-              value={Array.isArray(currentValue) ? currentValue[0] : 0}
-              disabled={disabled}
-              aria-valuemin={min}
-              aria-valuemax={max}
-              data-testid="slider-input-range"
-            />
+          <input
+            type="range"
+            role="slider"
+            min={min}
+            max={max}
+            step={step ?? 1}
+            value={Array.isArray(currentValue) ? currentValue[0] : 0}
+            disabled={disabled}
+            readOnly
+            aria-valuemin={min}
+            aria-valuemax={max}
+            data-testid="slider-input-range"
+          />
           )}
         </div>
       );

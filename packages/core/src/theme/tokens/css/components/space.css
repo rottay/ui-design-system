@@ -12,14 +12,14 @@
      ======================================================================== */
 
   /* Small (8px) */
-  --space-small-size: 0.5rem;        /* 8px */
+  --ds-space-small-size: 0.5rem;        /* 8px */
 
   /* Middle (16px - Default) */
-  --space-middle-size: 1rem;         /* 16px */
+  --ds-space-middle-size: 1rem;         /* 16px */
 
   /* Large (24px) */
-  --space-large-size: 1.5rem;        /* 24px */
+  --ds-space-large-size: 1.5rem;        /* 24px */
 
   /* Default size */
-  --space-default-size: var(--space-small-size);
+  --ds-space-default-size: var(--ds-space-small-size);
 }

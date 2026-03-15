@@ -35,7 +35,7 @@
  * ```tsx
  * import { Anchor } from '@rottay/design-system';
  *
- * <Anchor engine="apollo">
+ * <Anchor engine="rustic">
  *   <Anchor.Link href="#section1" title="Section 1" />
  *   <Anchor.Link href="#section2" title="Section 2" />
  * </Anchor>
@@ -44,7 +44,7 @@
  * @example Custom Styling
  * ```tsx
  * <Anchor
- *   engine="apollo"
+ *   engine="rustic"
  *   style={{ '--anchor-active-color': '#ff6b6b' }}
  * >
  *   <Anchor.Link href="#section" title="Section" />
@@ -55,7 +55,7 @@
  * ```tsx
  * import { EngineProvider, Anchor } from '@rottay/design-system';
  *
- * <EngineProvider engine="apollo">
+ * <EngineProvider engine="rustic">
  *   <Anchor>
  *     <Anchor.Link href="#intro" title="Introduction" />
  *     <Anchor.Link href="#features" title="Features" />
@@ -300,7 +300,7 @@ Link.displayName = 'Anchor.Link.Apollo';
  * @example
  * ```tsx
  * <Anchor
- *   engine="apollo"
+ *   engine="rustic"
  *   offsetTop={80}
  *   affix={true}
  *   direction="vertical"

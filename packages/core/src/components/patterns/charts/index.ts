@@ -8,7 +8,8 @@ export type {
 export { DEFAULT_COLORS, DEFAULT_MARGIN } from './types';
 
 // Hooks
-export { useChartDimensions } from './hooks';
+export { useChartDimensions, useChartPersonality } from './hooks';
+export type { ChartPersonalityOptions, ResolvedChartPersonality } from './hooks';
 
 // Charts
 export { BarChart } from './bar-chart';

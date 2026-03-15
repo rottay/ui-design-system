@@ -9,7 +9,44 @@ import { DatePicker } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
 vi.mock('../../../../../core/engines/factory', () => ({
-  createEngineComponent: () => {
+  createEngineComponent: (name: string) => {
+    if (name === 'DateRangePicker') {
+      const MockRangePicker = ({
+        disabled,
+        size,
+        status,
+        placeholder,
+        separator = '~',
+        className,
+        ...props
+      }: any) => (
+        <div
+          data-testid="range-picker"
+          data-size={size}
+          data-status={status}
+          data-disabled={disabled}
+          className={className}
+          {...props}
+        >
+          <input
+            type="text"
+            placeholder={placeholder?.[0]}
+            disabled={disabled}
+            data-testid="range-picker-start"
+          />
+          <span data-testid="range-separator">{separator}</span>
+          <input
+            type="text"
+            placeholder={placeholder?.[1]}
+            disabled={disabled}
+            data-testid="range-picker-end"
+          />
+        </div>
+      );
+      MockRangePicker.displayName = 'DatePicker.RangePicker';
+      return MockRangePicker;
+    }
+
     const MockDatePicker = ({
       value,
       defaultValue,
@@ -61,42 +98,6 @@ vi.mock('../../../../../core/engines/factory', () => ({
     );
 
     MockDatePicker.displayName = 'DatePicker';
-
-    MockDatePicker.RangePicker = ({
-      value,
-      defaultValue,
-      disabled,
-      size,
-      status,
-      placeholder,
-      separator = '~',
-      onChange,
-      className,
-      ...props
-    }: any) => (
-      <div
-        data-testid="range-picker"
-        data-size={size}
-        data-status={status}
-        data-disabled={disabled}
-        className={className}
-        {...props}
-      >
-        <input
-          type="text"
-          placeholder={placeholder?.[0]}
-          disabled={disabled}
-          data-testid="range-picker-start"
-        />
-        <span data-testid="range-separator">{separator}</span>
-        <input
-          type="text"
-          placeholder={placeholder?.[1]}
-          disabled={disabled}
-          data-testid="range-picker-end"
-        />
-      </div>
-    );
 
     return MockDatePicker;
   },

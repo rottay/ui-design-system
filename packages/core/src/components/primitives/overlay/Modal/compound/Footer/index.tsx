@@ -33,7 +33,7 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
       justifyContent: alignMap[align] || 'flex-end',
       gap: '12px',
       padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-      borderTop: divider ? '1px solid var(--modal-footer-border, rgba(0, 0, 0, 0.1))' : 'none',
+      borderTop: divider ? '1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1))' : 'none',
       flexShrink: 0,
       ...style,
     };

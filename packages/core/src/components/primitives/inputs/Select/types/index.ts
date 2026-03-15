@@ -53,7 +53,7 @@
  * console.log(SELECT_DEFAULTS.multiple); // false
  *
  * // Access CSS variable mappings
- * console.log(SIZE_MAP.lg.height); // 'var(--select-lg-height)'
+ * console.log(SIZE_MAP.lg.height); // 'var(--ds-select-lg-height)'
  * ```
  *
  * @see {@link Select} for the main component
@@ -177,6 +177,31 @@ export interface SelectProps<T = string | number> extends EngineAwareProps {
   allowClear?: boolean;
   /** Show search input (alias for searchable) */
   showSearch?: boolean;
+  /**
+   * Option groups. When provided, options are rendered under group headers
+   * with visual separators. Takes precedence over flat `options` when both
+   * are supplied.
+   */
+  optionGroups?: SelectOptionGroup[];
+  /**
+   * Enable virtual scrolling for large option lists. Only visible options
+   * plus a small buffer are rendered. The dropdown uses a fixed-height
+   * container and translates items based on scroll position.
+   *
+   * - `true`: enable with default item height (32px) and 300px container
+   * - `{ itemHeight, containerHeight }`: custom dimensions
+   */
+  virtual?:
+    | boolean
+    | { itemHeight?: number; containerHeight?: number };
+  /**
+   * Token separators for tags mode. When the user types one of these
+   * characters, the current search text is converted into a tag
+   * (if it matches an existing option or if in tags/multiple mode).
+   *
+   * @example `[',', ' ', ';']`
+   */
+  tokenSeparators?: string[];
 }
 
 /**

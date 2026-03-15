@@ -100,9 +100,9 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
         </div>
       )}
       <Spin spinning={loading}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', border: '1px solid #f0f0f0' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', border: '1px solid var(--ds-color-border-subtle)' }}>
           {DAY_NAMES.map((d) => (
-            <div key={d} style={{ padding: '8px 4px', textAlign: 'center', fontWeight: 600, fontSize: 12, borderBottom: '1px solid #f0f0f0', background: '#fafafa' }}>
+            <div key={d} style={{ padding: '8px 4px', textAlign: 'center', fontWeight: 600, fontSize: 12, borderBottom: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-color-bg-secondary)' }}>
               {d}
             </div>
           ))}
@@ -117,9 +117,9 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
                 style={{
                   minHeight: 80,
                   padding: 4,
-                  borderRight: (i + 1) % 7 !== 0 ? '1px solid #f0f0f0' : undefined,
-                  borderBottom: '1px solid #f0f0f0',
-                  background: cell ? '#fff' : '#fafafa',
+                  borderRight: (i + 1) % 7 !== 0 ? '1px solid var(--ds-color-border-subtle)' : undefined,
+                  borderBottom: '1px solid var(--ds-color-border-subtle)',
+                  background: cell ? 'var(--ds-color-bg-primary)' : 'var(--ds-color-bg-secondary)',
                   cursor: cell ? 'pointer' : 'default',
                 }}
               >
@@ -128,7 +128,7 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
                     <div style={{
                       fontSize: 12,
                       fontWeight: isToday ? 700 : 400,
-                      color: isToday ? '#1677ff' : undefined,
+                      color: isToday ? 'var(--ds-color-primary)' : undefined,
                       textAlign: 'right',
                       padding: '2px 4px',
                     }}>
@@ -143,8 +143,8 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
                           padding: '1px 4px',
                           marginTop: 2,
                           borderRadius: 3,
-                          background: ev.color ?? '#1677ff',
-                          color: '#fff',
+                          background: ev.color ?? 'var(--ds-color-primary)',
+                          color: 'var(--ds-color-text-on-primary)',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',

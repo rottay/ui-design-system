@@ -59,7 +59,7 @@
  * <Spinner color="#8b5cf6" size="lg" />
  *
  * // Using CSS variable
- * <Spinner color="var(--color-primary)" />
+ * <Spinner color="var(--ds-color-primary)" />
  * ```
  *
  * @example Multi-Tenant Theming

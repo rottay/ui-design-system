@@ -96,9 +96,25 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef } from 'react';
+
 import { createEngineComponent } from '../../../../core/engines/factory';
+import { useOptionalTokens } from '../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveSkeletonPersonalityDefaults,
+} from '../../../../core/personality/primitives';
 import type { SkeletonProps } from './types';
-import { SkeletonAvatar, SkeletonText, SkeletonButton } from './compound';
+import {
+  SkeletonAvatar,
+  SkeletonText,
+  SkeletonButton,
+  SkeletonCard,
+  SkeletonListItem,
+  SkeletonTable,
+  SkeletonForm,
+  SkeletonParagraph,
+} from './compound';
 
 // ============================================================================
 // Type Exports
@@ -120,8 +136,9 @@ export {
 // Compound Component Exports
 // ============================================================================
 
-export { SkeletonAvatar, SkeletonText, SkeletonButton };
+export { SkeletonAvatar, SkeletonText, SkeletonButton, SkeletonCard, SkeletonListItem, SkeletonTable, SkeletonForm, SkeletonParagraph };
 export type { SkeletonAvatarProps, SkeletonTextProps, SkeletonButtonProps } from './compound';
+export type { SkeletonCardProps, SkeletonListItemProps, SkeletonTableProps, SkeletonFormProps, SkeletonParagraphProps } from './compound';
 
 // ============================================================================
 // Main Component
@@ -159,15 +176,36 @@ export type { SkeletonAvatarProps, SkeletonTextProps, SkeletonButtonProps } from
  * <Skeleton.Button shape="round" />
  * ```
  */
-export const Skeleton = Object.assign(
-  createEngineComponent<SkeletonProps>('Skeleton', {
+const SkeletonBase = createEngineComponent<SkeletonProps>('Skeleton', {
     /** Ant Design implementation - full-featured with animations */
     classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
     modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - zero dependencies */
     rustic: () => import('./engines/rustic'),
-  }),
+  });
+
+const SkeletonComponent = forwardRef<any, SkeletonProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const defaults = tokens ? resolveSkeletonPersonalityDefaults(tokens) : null;
+  const {
+    animation,
+    style,
+    ...rest
+  } = props;
+
+  return createElement(SkeletonBase, {
+    ref,
+    ...rest,
+    animation: animation ?? defaults?.animation,
+    style: defaults ? mergePersonalityStyle(style, defaults.style) : style,
+  });
+});
+
+SkeletonComponent.displayName = 'Skeleton';
+
+export const Skeleton = Object.assign(
+  SkeletonComponent,
   {
     /**
      * Avatar skeleton placeholder.
@@ -189,5 +227,40 @@ export const Skeleton = Object.assign(
      * @see {@link SkeletonButton}
      */
     Button: SkeletonButton,
+
+    /**
+     * Card skeleton placeholder.
+     * Displays a card-shaped loading indicator with optional image and text lines.
+     * @see {@link SkeletonCard}
+     */
+    Card: SkeletonCard,
+
+    /**
+     * ListItem skeleton placeholder.
+     * Displays a list item loading indicator with optional avatar and text lines.
+     * @see {@link SkeletonListItem}
+     */
+    ListItem: SkeletonListItem,
+
+    /**
+     * Table skeleton placeholder.
+     * Displays a table-shaped loading indicator with configurable rows and columns.
+     * @see {@link SkeletonTable}
+     */
+    Table: SkeletonTable,
+
+    /**
+     * Form skeleton placeholder.
+     * Displays a form-shaped loading indicator with label + input pairs.
+     * @see {@link SkeletonForm}
+     */
+    Form: SkeletonForm,
+
+    /**
+     * Paragraph skeleton placeholder.
+     * Displays multiple text lines with configurable last-line width.
+     * @see {@link SkeletonParagraph}
+     */
+    Paragraph: SkeletonParagraph,
   }
 );

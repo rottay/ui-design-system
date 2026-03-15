@@ -1,10 +1,10 @@
 /**
- * @fileoverview Stack Hermes Engine - Rottay Design System
- * @description Hermes (DaisyUI/Tailwind) implementation of the Stack component.
+ * @fileoverview Stack Modern Engine - Rottay Design System
+ * @description Modern (DaisyUI/Tailwind) implementation of the Stack component.
  * Provides utility-first Stack using Tailwind CSS flexbox classes.
  *
  * @remarks
- * The Hermes engine leverages Tailwind CSS utility classes for flexbox layouts,
+ * The Modern engine leverages Tailwind CSS utility classes for flexbox layouts,
  * making it ideal for projects using the utility-first paradigm.
  *
  * Tailwind Class Mappings:
@@ -14,17 +14,17 @@
  * - Justification: `justify-start`, `justify-between`, `justify-evenly`, etc.
  * - Sizing: `w-full`, `h-full` for fullWidth/fullHeight
  *
- * @example Using Hermes Engine
+ * @example Using Modern Engine
  * ```tsx
  * import { Stack } from '@rottay/design-system';
  *
- * // Use Hermes engine for Tailwind classes
- * <Stack engine="hermes" direction="horizontal" spacing="md" align="center">
+ * // Use Modern engine for Tailwind classes
+ * <Stack engine="modern" direction="horizontal" spacing="md" align="center">
  *   Outputs: class="flex flex-row gap-4 items-center"
  * </Stack>
  *
  * // Combine with global EngineProvider
- * <EngineProvider engine="hermes">
+ * <EngineProvider engine="modern">
  *   <Stack spacing="lg" justify="space-between">
  *     Tailwind flexbox classes applied
  *   </Stack>
@@ -34,7 +34,7 @@
  * @see {@link Stack} - The main engine-aware component
  * @see {@link TitanStack} - Ant Design implementation
  * @see {@link ApolloStack} - Pure HTML/CSS implementation
- * @module Stack/Engines/Hermes
+ * @module Stack/Engines/Modern
  * @category Layout
  * @package @rottay/design-system
  */
@@ -207,7 +207,7 @@ function buildTailwindClasses(props: StackProps): string[] {
 }
 
 /**
- * Hermes Stack component.
+ * Modern Stack component.
  * Uses DaisyUI/Tailwind styling conventions while maintaining
  * compatibility with the Stack API.
  */
@@ -231,10 +231,10 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const tailwindClasses = buildTailwindClasses(props);
   const renderedChildren = renderStackChildren(children, divider, direction);
 
-  // Build class names with Hermes-specific prefixes and Tailwind classes
+  // Build class names with Modern-specific prefixes and Tailwind classes
   const classNames = [
     'rottay-stack',
-    'rottay-stack--hermes',
+    'rottay-stack--modern',
     ...(needsInlineGap ? [] : tailwindClasses),
     className,
   ].filter(Boolean).join(' ');
@@ -252,6 +252,6 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   );
 });
 
-HermesStack.displayName = 'HermesStack';
+HermesStack.displayName = 'ModernStack';
 
 export default HermesStack;

@@ -161,15 +161,22 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     flexDirection: 'column',
     borderRadius: borderRadiusValue,
     overflow: 'hidden',
-    transition: 'all 0.2s ease-in-out',
+    transition: 'var(--ds-card-transition, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s)',
     cursor: clickable || onClick ? 'pointer' : undefined,
     opacity: loading ? 0.7 : 1,
     pointerEvents: loading ? 'none' : 'auto',
+    transform: isHovered && hoverable
+      ? 'var(--ds-card-hover-transform, translateY(-2px) scale(1.005))'
+      : 'translateY(0) scale(1)',
     ...variantStyles[variant],
     // Apply color variant styles
     ...(hasColorVariant && {
       borderLeft: `4px solid ${colorStyles.borderColor}`,
       backgroundColor: colorStyles.background,
+    }),
+    ...(isHovered && hoverable && !hasColorVariant && {
+      backgroundColor: 'var(--ds-card-bg-hover, inherit)',
+      borderColor: 'var(--ds-card-border-hover, var(--ds-card-border, transparent))',
     }),
     ...style,
   };
@@ -210,6 +217,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backdropFilter: 'blur(2px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -225,7 +233,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
           border: '3px solid var(--ds-color-neutral-200, #e0e0e0)',
           borderTopColor: 'var(--ds-color-primary-500, #1890ff)',
           borderRadius: '50%',
-          animation: 'rottay-rustic-card-spin 1s linear infinite',
+          animation: 'rottay-rustic-card-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
         }}
       />
     </div>

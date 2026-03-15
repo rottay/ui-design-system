@@ -7,6 +7,9 @@
 import React, { useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../../types';
 
+const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
@@ -14,7 +17,8 @@ const s = {
     background: 'var(--ds-color-neutral-0, #fff)',
     border: '1px solid var(--ds-color-neutral-200)',
     borderRadius: 'var(--ds-radius-lg)',
-    padding: '1.5rem',
+    padding: 'var(--ds-card-body-padding, 1.5rem)',
+    boxShadow: 'var(--ds-card-shadow, none)',
   } as React.CSSProperties,
   breadcrumbs: {
     display: 'flex',
@@ -60,6 +64,7 @@ const s = {
     fontSize: '1.25rem',
     lineHeight: 1,
     borderRadius: 'var(--ds-radius-sm)',
+    transition: `color ${RUSTIC_DURATION} ${RUSTIC_EASING}, background ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   titleRow: {
     display: 'flex',
@@ -69,7 +74,8 @@ const s = {
   } as React.CSSProperties,
   title: {
     fontSize: 'var(--ds-font-size-xl)',
-    fontWeight: 600,
+    fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
+    letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
     margin: 0,
     lineHeight: 1.3,
   } as React.CSSProperties,
@@ -85,7 +91,7 @@ const s = {
     fontSize: 'var(--ds-font-size-xs)',
     fontWeight: 500,
     background: color ?? 'var(--ds-color-neutral-200)',
-    color: color ? '#fff' : 'var(--ds-color-neutral-700)',
+    color: color ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-neutral-700)',
   } as React.CSSProperties),
   actions: {
     display: 'flex',
@@ -106,15 +112,15 @@ const s = {
       border: '1px solid var(--ds-color-neutral-300)',
       background: 'var(--ds-color-neutral-0, #fff)',
       color: 'var(--ds-color-neutral-700)',
-      transition: 'background 150ms, border-color 150ms',
+      transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
     };
     if (variant === 'primary') {
       base.background = 'var(--ds-color-primary-600)';
-      base.color = '#fff';
+      base.color = 'var(--ds-color-text-on-primary)';
       base.borderColor = 'var(--ds-color-primary-600)';
     } else if (variant === 'danger') {
       base.background = 'var(--ds-color-error-600, #dc2626)';
-      base.color = '#fff';
+      base.color = 'var(--ds-color-text-on-primary)';
       base.borderColor = 'var(--ds-color-error-600, #dc2626)';
     } else if (variant === 'ghost') {
       base.border = '1px solid transparent';
@@ -148,7 +154,8 @@ const s = {
   tab: (active: boolean, disabled?: boolean) => ({
     padding: '0.5rem 1rem',
     fontSize: 'var(--ds-font-size-sm)',
-    fontWeight: active ? 600 : 400,
+    fontWeight: active ? 'var(--ds-typography-heading-font-weight, 600)' : 400,
+    letterSpacing: active ? 'var(--ds-typography-heading-letter-spacing, normal)' : 'normal',
     color: disabled
       ? 'var(--ds-color-neutral-400)'
       : active
@@ -162,7 +169,7 @@ const s = {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '0.375rem',
-    transition: 'color 150ms, border-color 150ms',
+    transition: `color ${RUSTIC_DURATION} ${RUSTIC_EASING}, border-color ${RUSTIC_DURATION} ${RUSTIC_EASING}, font-weight ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties),
   tabBadge: {
     display: 'inline-block',
@@ -174,9 +181,9 @@ const s = {
     lineHeight: '1.4',
   } as React.CSSProperties,
   footer: {
-    marginTop: '1rem',
-    paddingTop: '1rem',
-    borderTop: '1px solid var(--ds-color-neutral-200)',
+    marginTop: 'var(--ds-card-body-padding, 1rem)',
+    paddingTop: 'var(--ds-card-body-padding, 1rem)',
+    borderTop: '1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200))',
   } as React.CSSProperties,
   skeleton: (w: string, h: string) => ({
     width: w,
@@ -312,6 +319,26 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
                 }}
                 disabled={a.disabled || a.loading}
                 onClick={a.onClick}
+                onMouseEnter={(e) => {
+                  if (!a.disabled && (a.variant === 'ghost' || !a.variant)) {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = 'var(--ds-color-primary-600)';
+                    el.style.background = 'var(--ds-color-primary-50, rgba(99,102,241,0.06))';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!a.disabled && (a.variant === 'ghost' || !a.variant)) {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = a.variant === 'ghost' ? 'var(--ds-color-neutral-700)' : '';
+                    el.style.background = a.variant === 'ghost' ? 'transparent' : '';
+                  }
+                }}
+                onFocus={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8)';
+                }}
+                onBlur={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                }}
               >
                 {a.icon}
                 {a.loading ? 'Loading...' : a.label}

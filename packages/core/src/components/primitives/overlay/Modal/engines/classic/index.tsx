@@ -73,7 +73,7 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
       keyboard={closeOnEscape}
       mask={showBackdrop}
       zIndex={zIndex}
-      destroyOnClose
+      destroyOnHidden
       className={`rottay-modal rottay-modal--classic ${className}`}
       style={modalStyle}
       styles={{

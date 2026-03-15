@@ -39,7 +39,7 @@ const s = {
     fontWeight: 600,
     flexShrink: 0,
     background: completed ? 'var(--ds-color-primary-600)' : active ? 'var(--ds-color-primary-100)' : 'var(--ds-color-neutral-100)',
-    color: completed ? '#fff' : active ? 'var(--ds-color-primary-700)' : 'var(--ds-color-neutral-500)',
+    color: completed ? 'var(--ds-color-text-on-primary)' : active ? 'var(--ds-color-primary-700)' : 'var(--ds-color-neutral-500)',
     border: active ? '2px solid var(--ds-color-primary-600)' : '2px solid transparent',
   } as React.CSSProperties),
   stepLabel: (active: boolean) => ({
@@ -80,6 +80,15 @@ const s = {
     alignItems: 'center',
     marginTop: '1.5rem',
   } as React.CSSProperties,
+  error: {
+    marginTop: '1rem',
+    padding: '0.75rem 1rem',
+    borderRadius: 'var(--ds-radius-md)',
+    border: '1px solid var(--ds-color-error-300, #fca5a5)',
+    background: 'var(--ds-color-error-50, #fef2f2)',
+    color: 'var(--ds-color-error-700, #b91c1c)',
+    fontSize: 'var(--ds-font-size-sm)',
+  } as React.CSSProperties,
   btn: (variant: 'primary' | 'ghost') => ({
     display: 'inline-flex',
     alignItems: 'center',
@@ -91,7 +100,7 @@ const s = {
     cursor: 'pointer',
     border: variant === 'primary' ? '1px solid var(--ds-color-primary-600)' : '1px solid transparent',
     background: variant === 'primary' ? 'var(--ds-color-primary-600)' : 'transparent',
-    color: variant === 'primary' ? '#fff' : 'var(--ds-color-neutral-600)',
+    color: variant === 'primary' ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-neutral-600)',
     transition: 'background 150ms',
   } as React.CSSProperties),
   skeleton: (w: string, h: string) => ({
@@ -109,6 +118,9 @@ export default function RusticStepWizard(props: StepWizardProps) {
     currentStep: controlledStep,
     onStepChange,
     onComplete,
+    actionsDisabled = false,
+    completeDisabled = false,
+    showCompleteAction = true,
     allowSkip = false,
     showProgress = true,
     orientation = 'horizontal',
@@ -123,16 +135,67 @@ export default function RusticStepWizard(props: StepWizardProps) {
   } = props;
 
   const [internalStep, setInternalStep] = useState(0);
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
+  const [isValidating, setIsValidating] = useState(false);
   const current = controlledStep ?? internalStep;
 
   const setCurrent = (step: number) => {
     if (controlledStep == null) setInternalStep(step);
     onStepChange?.(step);
+    setValidationMessage(null);
   };
 
   const isLast = current === steps.length - 1;
   const currentDef = steps[current];
   const progress = Math.round(((current + 1) / steps.length) * 100);
+
+  const validateCurrentStep = async (): Promise<boolean> => {
+    if (!currentDef?.validate) {
+      setValidationMessage(null);
+      return true;
+    }
+
+    setIsValidating(true);
+
+    try {
+      const result = await currentDef.validate();
+
+      if (result === true || result === undefined) {
+        setValidationMessage(null);
+        return true;
+      }
+
+      setValidationMessage(
+        typeof result === 'string'
+          ? result
+          : 'Please complete this step before continuing.'
+      );
+
+      return false;
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleAdvance = async () => {
+    const isValid = await validateCurrentStep();
+
+    if (!isValid) {
+      return;
+    }
+
+    setCurrent(current + 1);
+  };
+
+  const handleComplete = async () => {
+    const isValid = await validateCurrentStep();
+
+    if (!isValid) {
+      return;
+    }
+
+    await onComplete?.();
+  };
 
   if (loading) {
     return (
@@ -194,21 +257,33 @@ export default function RusticStepWizard(props: StepWizardProps) {
         <div style={s.content}>{currentDef?.content}</div>
       )}
 
+      {validationMessage && (
+        <div style={s.error}>{validationMessage}</div>
+      )}
+
       <div style={s.nav}>
         <div>
           {current > 0 && (
-            <button style={s.btn('ghost')} onClick={() => setCurrent(current - 1)}>{prevLabel}</button>
+            <button disabled={isValidating || actionsDisabled} style={s.btn('ghost')} onClick={() => setCurrent(current - 1)}>{prevLabel}</button>
           )}
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           {footer}
           {allowSkip && currentDef?.optional && !isLast && (
-            <button style={s.btn('ghost')} onClick={() => setCurrent(current + 1)}>{skipLabel}</button>
+            <button disabled={isValidating || actionsDisabled} style={s.btn('ghost')} onClick={() => setCurrent(current + 1)}>{skipLabel}</button>
           )}
           {isLast ? (
-            <button style={s.btn('primary')} onClick={onComplete}>{completeLabel}</button>
+            showCompleteAction ? (
+              <button
+                disabled={isValidating || actionsDisabled || completeDisabled}
+                style={s.btn('primary')}
+                onClick={handleComplete}
+              >
+                {completeLabel}
+              </button>
+            ) : null
           ) : (
-            <button style={s.btn('primary')} onClick={() => setCurrent(current + 1)}>{nextLabel}</button>
+            <button disabled={isValidating || actionsDisabled} style={s.btn('primary')} onClick={handleAdvance}>{nextLabel}</button>
           )}
         </div>
       </div>

@@ -119,16 +119,16 @@ export function MenuItem({
   const itemStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    gap: 'var(--menu-item-gap, 8px)',
-    padding: 'var(--menu-item-padding, 8px 16px)',
-    minHeight: 'var(--menu-item-height, 40px)',
+    gap: 'var(--ds-menu-item-gap, 8px)',
+    padding: 'var(--ds-menu-item-padding, 8px 16px)',
+    minHeight: 'var(--ds-menu-item-height, 40px)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     color: danger
-      ? 'var(--menu-item-danger-color, #ff4d4f)'
-      : 'var(--menu-item-color, inherit)',
+      ? 'var(--ds-menu-item-danger-color, var(--ds-color-error))'
+      : 'var(--ds-menu-item-color, inherit)',
     backgroundColor: 'transparent',
-    borderRadius: 'var(--menu-border-radius, 6px)',
+    borderRadius: 'var(--ds-menu-border-radius, 6px)',
     transition: 'all 0.2s ease',
     userSelect: 'none',
     ...style,

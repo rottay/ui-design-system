@@ -27,7 +27,7 @@
  *
  * **Multi-Tenant Theming:**
  * Rustic uses CSS custom properties for theming:
- * - `--radius-md`: Border radius
+ * - `--ds-radius-md`: Border radius
  * - Type-specific colors are inlined for reliability
  *
  * **Type to Style Mapping:**
@@ -48,7 +48,7 @@
  * @example With Custom CSS Variables
  * ```tsx
  * <div style={{
- *   '--radius-md': '8px',
+ *   '--ds-radius-md': '8px',
  * }}>
  *   <Alert engine="rustic" type="info" message="Custom styled alert" />
  * </div>
@@ -96,27 +96,27 @@ import { ALERT_DEFAULTS } from '../../types';
 const TYPE_STYLES: Record<AlertType, React.CSSProperties> = {
   /** Blue theme for informational messages */
   info: {
-    backgroundColor: 'var(--ds-alert-info-bg, #EFF6FF)',
-    borderColor: 'var(--ds-alert-info-border, #3B82F6)',
-    color: 'var(--ds-alert-info-color, #1E40AF)',
+    backgroundColor: 'var(--ds-alert-info-bg, var(--ds-color-info-bg))',
+    borderColor: 'var(--ds-alert-info-border, var(--ds-color-info-border))',
+    color: 'var(--ds-alert-info-color, var(--ds-color-info-700))',
   },
   /** Green theme for success confirmations */
   success: {
-    backgroundColor: 'var(--ds-alert-success-bg, #F0FDF4)',
-    borderColor: 'var(--ds-alert-success-border, #22C55E)',
-    color: 'var(--ds-alert-success-color, #166534)',
+    backgroundColor: 'var(--ds-alert-success-bg, var(--ds-color-success-bg))',
+    borderColor: 'var(--ds-alert-success-border, var(--ds-color-success-border))',
+    color: 'var(--ds-alert-success-color, var(--ds-color-success-700))',
   },
   /** Yellow/orange theme for warnings */
   warning: {
-    backgroundColor: 'var(--ds-alert-warning-bg, #FFFBEB)',
-    borderColor: 'var(--ds-alert-warning-border, #F59E0B)',
-    color: 'var(--ds-alert-warning-color, #92400E)',
+    backgroundColor: 'var(--ds-alert-warning-bg, var(--ds-color-warning-bg))',
+    borderColor: 'var(--ds-alert-warning-border, var(--ds-color-warning-border))',
+    color: 'var(--ds-alert-warning-color, var(--ds-color-warning-700))',
   },
   /** Red theme for errors and failures */
   error: {
-    backgroundColor: 'var(--ds-alert-error-bg, #FEF2F2)',
-    borderColor: 'var(--ds-alert-error-border, #EF4444)',
-    color: 'var(--ds-alert-error-color, #991B1B)',
+    backgroundColor: 'var(--ds-alert-error-bg, var(--ds-color-error-bg))',
+    borderColor: 'var(--ds-alert-error-border, var(--ds-color-error-border))',
+    color: 'var(--ds-alert-error-color, var(--ds-color-error-700))',
   },
 };
 
@@ -166,7 +166,7 @@ const TYPE_ICONS: Record<AlertType, string> = {
  * **CSS Custom Properties:**
  * | Property | Default | Description |
  * |----------|---------|-------------|
- * | `--radius-md` | 0.375rem | Border radius |
+ * | `--ds-radius-md` | 0.375rem | Border radius |
  *
  * @param props - {@link AlertProps}
  * @returns The rendered vanilla Alert or null when dismissed
@@ -243,7 +243,7 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
     alignItems: 'flex-start',
     gap: '0.75rem',
     padding: '1rem',
-    borderRadius: 'var(--radius-md, 0.375rem)',
+    borderRadius: 'var(--ds-radius-md, 0.375rem)',
     borderLeft: '4px solid',
     ...TYPE_STYLES[alertType],
     ...style,

@@ -79,6 +79,31 @@ export interface TreeDataNode {
   checkable?: boolean;
   /** Custom icon for the node */
   icon?: ReactNode;
+  /** Whether this node is draggable (overrides parent draggable) */
+  draggable?: boolean;
+}
+
+/**
+ * Info object provided to the onDrop callback.
+ */
+export interface TreeDropInfo {
+  /** The node being dragged */
+  dragNode: TreeDataNode;
+  /** The drop target node */
+  dropNode: TreeDataNode;
+  /**
+   * Position relative to the drop node:
+   * -1 = before, 0 = as child, 1 = after
+   */
+  dropPosition: number;
+}
+
+/**
+ * Info object provided to the onDragStart callback.
+ */
+export interface TreeDragStartInfo {
+  /** The node being dragged */
+  node: TreeDataNode;
 }
 
 /**
@@ -207,6 +232,40 @@ export interface TreeProps {
   switcherIcon?: ReactNode | ((props: { expanded: boolean }) => ReactNode);
 
   /**
+   * Async data loading function.
+   * Called when a non-leaf node is expanded for the first time.
+   * Should return children to append to the node.
+   */
+  loadData?: (node: TreeDataNode) => Promise<TreeDataNode[]>;
+
+  /**
+   * Filter function for tree search.
+   * Return true to show the node, false to hide it.
+   * Parent nodes of matching nodes are automatically expanded.
+   */
+  filterTreeNode?: (searchValue: string, node: TreeDataNode) => boolean;
+
+  /**
+   * Current search value for tree filtering.
+   * Used with filterTreeNode to highlight and filter nodes.
+   */
+  searchValue?: string;
+
+  /**
+   * Check nodes independently (no parent-child cascade).
+   * When true, checking a parent does NOT check its children and vice versa.
+   * @default false
+   */
+  treeCheckStrictly?: boolean;
+
+  /**
+   * Show connecting tree lines between nodes (CSS borders).
+   * Alias for showLine kept for backward compat.
+   * @default false
+   */
+  treeLine?: boolean;
+
+  /**
    * Callback when a node is expanded/collapsed
    * @param expandedKeys - Array of currently expanded node keys
    * @param info - Object containing the node and expanded state
@@ -234,13 +293,13 @@ export interface TreeProps {
    * Callback when drag operation starts
    * @param info - Object containing the dragged node
    */
-  onDragStart?: (info: { node: TreeDataNode }) => void;
+  onDragStart?: (info: TreeDragStartInfo) => void;
 
   /**
    * Callback when a node is dropped
    * @param info - Object containing drag node, drop target, and position
    */
-  onDrop?: (info: { dragNode: TreeDataNode; node: TreeDataNode; dropPosition: number }) => void;
+  onDrop?: (info: TreeDropInfo) => void;
 
   /**
    * Children elements (for Tree.TreeNode usage pattern)
@@ -323,6 +382,8 @@ export const TREE_DEFAULTS = {
   draggable: false,
   /** Default block node state */
   blockNode: false,
+  /** Default treeCheckStrictly state */
+  treeCheckStrictly: false,
 } as const;
 
 /**

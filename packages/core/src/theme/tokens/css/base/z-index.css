@@ -12,37 +12,37 @@
      ======================================================================== */
 
   /* Base layer - Normal document flow */
-  --z-index-base: 0;
+  --ds-z-index-base: 0;
 
   /* Dropdown layer - Select menus, autocomplete, etc */
-  --z-index-dropdown: 1000;
+  --ds-z-index-dropdown: 1000;
 
   /* Sticky elements - Sticky headers, footers */
-  --z-index-sticky: 1100;
+  --ds-z-index-sticky: 1100;
 
   /* Fixed elements - Fixed navigation, banners */
-  --z-index-fixed: 1200;
+  --ds-z-index-fixed: 1200;
 
   /* Overlay backdrop - Modal/drawer backdrops */
-  --z-index-overlay: 1300;
+  --ds-z-index-overlay: 1300;
 
   /* Drawer - Side panels */
-  --z-index-drawer: 1400;
+  --ds-z-index-drawer: 1400;
 
   /* Modal/Dialog - Modal windows */
-  --z-index-modal: 1500;
+  --ds-z-index-modal: 1500;
 
   /* Popover - Context menus, popovers */
-  --z-index-popover: 1600;
+  --ds-z-index-popover: 1600;
 
   /* Tooltip - Tooltips and hints */
-  --z-index-tooltip: 1700;
+  --ds-z-index-tooltip: 1700;
 
   /* Notification/Toast - Toast messages, notifications */
-  --z-index-notification: 1800;
+  --ds-z-index-notification: 1800;
 
   /* Maximum - Highest priority elements */
-  --z-index-max: 9999;
+  --ds-z-index-max: 9999;
 
   /* ========================================================================
      COMPONENT-SPECIFIC Z-INDEX
@@ -50,41 +50,41 @@
      ======================================================================== */
 
   /* Navigation */
-  --z-index-navbar: var(--z-index-fixed);
-  --z-index-sidebar: var(--z-index-drawer);
-  --z-index-navbar-dropdown: calc(var(--z-index-navbar) + 10);
+  --ds-z-index-navbar: var(--ds-z-index-fixed);
+  --ds-z-index-sidebar: var(--ds-z-index-drawer);
+  --ds-z-index-navbar-dropdown: calc(var(--ds-z-index-navbar) + 10);
 
   /* Menus */
-  --z-index-menu: var(--z-index-dropdown);
-  --z-index-submenu: calc(var(--z-index-menu) + 10);
-  --z-index-context-menu: var(--z-index-popover);
+  --ds-z-index-menu: var(--ds-z-index-dropdown);
+  --ds-z-index-submenu: calc(var(--ds-z-index-menu) + 10);
+  --ds-z-index-context-menu: var(--ds-z-index-popover);
 
   /* Overlays */
-  --z-index-modal-backdrop: var(--z-index-overlay);
-  --z-index-modal-content: var(--z-index-modal);
-  --z-index-drawer-backdrop: var(--z-index-overlay);
-  --z-index-drawer-content: var(--z-index-drawer);
+  --ds-z-index-modal-backdrop: var(--ds-z-index-overlay);
+  --ds-z-index-modal-content: var(--ds-z-index-modal);
+  --ds-z-index-drawer-backdrop: var(--ds-z-index-overlay);
+  --ds-z-index-drawer-content: var(--ds-z-index-drawer);
 
   /* Feedback */
-  --z-index-toast: var(--z-index-notification);
-  --z-index-alert: calc(var(--z-index-base) + 1);
-  --z-index-banner: var(--z-index-sticky);
+  --ds-z-index-toast: var(--ds-z-index-notification);
+  --ds-z-index-alert: calc(var(--ds-z-index-base) + 1);
+  --ds-z-index-banner: var(--ds-z-index-sticky);
 
   /* Forms */
-  --z-index-select-dropdown: var(--z-index-dropdown);
-  --z-index-datepicker: var(--z-index-dropdown);
-  --z-index-autocomplete: var(--z-index-dropdown);
+  --ds-z-index-select-dropdown: var(--ds-z-index-dropdown);
+  --ds-z-index-datepicker: var(--ds-z-index-dropdown);
+  --ds-z-index-autocomplete: var(--ds-z-index-dropdown);
 
   /* Utility */
-  --z-index-loading-overlay: calc(var(--z-index-modal) + 100);
-  --z-index-skip-link: var(--z-index-max);
+  --ds-z-index-loading-overlay: calc(var(--ds-z-index-modal) + 100);
+  --ds-z-index-skip-link: var(--ds-z-index-max);
 
   /* ========================================================================
      RELATIVE Z-INDEX
      For elements that need layering within their stacking context
      ======================================================================== */
-  --z-index-relative-below: -1;
-  --z-index-relative-base: 0;
-  --z-index-relative-above: 1;
-  --z-index-relative-top: 10;
+  --ds-z-index-relative-below: -1;
+  --ds-z-index-relative-base: 0;
+  --ds-z-index-relative-above: 1;
+  --ds-z-index-relative-top: 10;
 }

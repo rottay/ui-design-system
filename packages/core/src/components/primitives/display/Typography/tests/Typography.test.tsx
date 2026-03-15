@@ -11,12 +11,40 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Typography, Heading, Text, Paragraph } from '../';
 
+function stripTypographyProps(props: Record<string, unknown>) {
+  const {
+    engine: _engine,
+    tenant: _tenant,
+    size: _size,
+    weight: _weight,
+    color: _color,
+    underline: _underline,
+    strikethrough: _strikethrough,
+    italic: _italic,
+    monospace: _monospace,
+    truncate: _truncate,
+    lineClamp: _lineClamp,
+    align: _align,
+    copyable: _copyable,
+    ellipsis: _ellipsis,
+    mark: _mark,
+    code: _code,
+    keyboard: _keyboard,
+    delete: _delete,
+    strong: _strong,
+    type: _type,
+    ...domProps
+  } = props;
+
+  return domProps;
+}
+
 // Mock the engine implementations to avoid async loading issues in tests
 vi.mock('../engines/classic', () => ({
   ClassicHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="classic" {...props}>
+      <Component data-testid="heading" data-engine="classic" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
@@ -24,20 +52,25 @@ vi.mock('../engines/classic', () => ({
   ClassicText: vi.fn(({ children, as = 'span', ...props }: any) => {
     const Component = as;
     return (
-      <Component data-testid="text" data-engine="classic" {...props}>
+      <Component data-testid="text" data-engine="classic" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
   }),
   ClassicParagraph: vi.fn(({ children, ...props }: any) => (
-    <p data-testid="paragraph" data-engine="classic" {...props}>
+    <p data-testid="paragraph" data-engine="classic" {...stripTypographyProps(props)}>
       {children}
     </p>
+  )),
+  ClassicLink: vi.fn(({ children, href = '#', ...props }: any) => (
+    <a data-testid="link" data-engine="classic" href={href} {...stripTypographyProps(props)}>
+      {children}
+    </a>
   )),
   default: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="classic" {...props}>
+      <Component data-testid="heading" data-engine="classic" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
@@ -48,7 +81,7 @@ vi.mock('../engines/modern', () => ({
   ModernHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="modern" {...props}>
+      <Component data-testid="heading" data-engine="modern" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
@@ -56,20 +89,25 @@ vi.mock('../engines/modern', () => ({
   ModernText: vi.fn(({ children, as = 'span', ...props }: any) => {
     const Component = as;
     return (
-      <Component data-testid="text" data-engine="modern" {...props}>
+      <Component data-testid="text" data-engine="modern" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
   }),
   ModernParagraph: vi.fn(({ children, ...props }: any) => (
-    <p data-testid="paragraph" data-engine="modern" {...props}>
+    <p data-testid="paragraph" data-engine="modern" {...stripTypographyProps(props)}>
       {children}
     </p>
+  )),
+  ModernLink: vi.fn(({ children, href = '#', ...props }: any) => (
+    <a data-testid="link" data-engine="modern" href={href} {...stripTypographyProps(props)}>
+      {children}
+    </a>
   )),
   default: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="modern" {...props}>
+      <Component data-testid="heading" data-engine="modern" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
@@ -80,7 +118,7 @@ vi.mock('../engines/rustic', () => ({
   RusticHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="rustic" {...props}>
+      <Component data-testid="heading" data-engine="rustic" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
@@ -88,20 +126,25 @@ vi.mock('../engines/rustic', () => ({
   RusticText: vi.fn(({ children, as = 'span', ...props }: any) => {
     const Component = as;
     return (
-      <Component data-testid="text" data-engine="rustic" {...props}>
+      <Component data-testid="text" data-engine="rustic" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );
   }),
   RusticParagraph: vi.fn(({ children, ...props }: any) => (
-    <p data-testid="paragraph" data-engine="rustic" {...props}>
+    <p data-testid="paragraph" data-engine="rustic" {...stripTypographyProps(props)}>
       {children}
     </p>
+  )),
+  RusticLink: vi.fn(({ children, href = '#', ...props }: any) => (
+    <a data-testid="link" data-engine="rustic" href={href} {...stripTypographyProps(props)}>
+      {children}
+    </a>
   )),
   default: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="rustic" {...props}>
+      <Component data-testid="heading" data-engine="rustic" {...stripTypographyProps(props)}>
         {children}
       </Component>
     );

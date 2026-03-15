@@ -5,6 +5,13 @@
  * @description Pure vanilla HTML/CSS implementation of the Transfer component
  * using CSS variables for multi-tenant theming.
  *
+ * Features:
+ * - showSearch: search input at top of each panel, filters items
+ * - pagination: page size + navigation controls at bottom of each panel
+ * - titles: custom header text for left/right panels
+ * - render: custom item render function
+ * - notFoundContent: empty state (via locale.notFoundContent)
+ *
  * @module RusticTransfer
  * @category Inputs
  * @package @rottay/design-system
@@ -13,6 +20,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TransferProps, TransferItem } from '../../types';
 import { TRANSFER_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 interface TransferListProps {
   title: React.ReactNode;
@@ -28,7 +36,10 @@ interface TransferListProps {
   showSelectAll?: boolean;
   locale?: TransferProps['locale'];
   listStyle?: React.CSSProperties;
+  pagination?: boolean | { pageSize?: number };
 }
+
+const DEFAULT_PAGE_SIZE = 10;
 
 const TransferListComponent: React.FC<TransferListProps> = ({
   title,
@@ -44,11 +55,33 @@ const TransferListComponent: React.FC<TransferListProps> = ({
   showSelectAll,
   locale,
   listStyle,
+  pagination,
 }) => {
+  const { t } = useTranslation('components');
+  const [currentPage, setCurrentPage] = useState(1);
+
   const filteredItems = useMemo(() => {
     if (!searchValue || !filterOption) return items;
     return items.filter((item) => filterOption(searchValue, item));
   }, [items, searchValue, filterOption]);
+
+  // Reset page on filter change
+  const prevFilteredLength = React.useRef(filteredItems.length);
+  React.useEffect(() => {
+    if (filteredItems.length !== prevFilteredLength.current) {
+      setCurrentPage(1);
+      prevFilteredLength.current = filteredItems.length;
+    }
+  }, [filteredItems.length]);
+
+  // Pagination logic
+  const pageSize = pagination
+    ? (typeof pagination === 'object' && pagination.pageSize ? pagination.pageSize : DEFAULT_PAGE_SIZE)
+    : 0;
+  const totalPages = pageSize > 0 ? Math.max(1, Math.ceil(filteredItems.length / pageSize)) : 1;
+  const paginatedItems = pageSize > 0
+    ? filteredItems.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    : filteredItems;
 
   const selectableItems = filteredItems.filter((item) => !item.disabled);
   const allSelected = selectableItems.length > 0 && selectableItems.every((item) => selectedKeys.has(item.key));
@@ -87,7 +120,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 'var(--ds-transfer-header-padding)',
-    borderBottom: `1px solid var(--ds-transfer-header-border)`,
+    borderBottom: `2px solid var(--ds-transfer-header-border)`,
     backgroundColor: 'var(--ds-transfer-header-bg)',
   };
 
@@ -113,6 +146,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     borderRadius: 'var(--ds-transfer-search-input-radius)',
     fontSize: 'var(--ds-font-size-sm)',
     outline: 'none',
+    transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
   };
 
   const itemsContainerStyle: React.CSSProperties = {
@@ -129,7 +163,8 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     padding: 'var(--ds-transfer-item-padding)',
     borderRadius: 'var(--ds-transfer-item-radius)',
     fontSize: 'var(--ds-font-size-sm)',
-    transition: 'background-color 0.15s',
+    transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
+    borderLeft: '3px solid transparent',
   });
 
   const emptyStyle: React.CSSProperties = {
@@ -137,6 +172,32 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     textAlign: 'center',
     color: 'var(--ds-transfer-empty-color)',
     fontSize: 'var(--ds-font-size-sm)',
+  };
+
+  const paginationContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    padding: '8px',
+    borderTop: '1px solid var(--ds-transfer-header-border)',
+  };
+
+  const paginationButtonStyle = (isDisabled: boolean): React.CSSProperties => ({
+    background: 'none',
+    border: '1px solid var(--ds-transfer-border)',
+    borderRadius: '4px',
+    padding: '2px 8px',
+    cursor: isDisabled ? 'not-allowed' : 'pointer',
+    opacity: isDisabled ? 0.4 : 1,
+    fontSize: 'var(--ds-font-size-sm)',
+    color: 'inherit',
+    transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.15s',
+  });
+
+  const paginationTextStyle: React.CSSProperties = {
+    fontSize: 'var(--ds-transfer-count-font-size)',
+    color: 'var(--ds-transfer-count-color)',
   };
 
   return (
@@ -164,19 +225,27 @@ const TransferListComponent: React.FC<TransferListProps> = ({
         <div className="rottay-transfer__search" style={searchContainerStyle}>
           <input
             type="text"
-            placeholder={locale?.searchPlaceholder}
+            placeholder={locale?.searchPlaceholder || t('transfer.search_placeholder')}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
             disabled={disabled}
             style={searchInputStyle}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--ds-color-primary, #1677ff)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = '';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
           />
         </div>
       )}
 
       {/* Items */}
       <div className="rottay-transfer__items" style={itemsContainerStyle}>
-        {filteredItems.length > 0 ? (
-          filteredItems.map((item) => (
+        {paginatedItems.length > 0 ? (
+          paginatedItems.map((item) => (
             <label
               key={item.key}
               className="rottay-transfer__item"
@@ -188,10 +257,12 @@ const TransferListComponent: React.FC<TransferListProps> = ({
               onMouseEnter={(e) => {
                 if (!item.disabled && !disabled) {
                   e.currentTarget.style.backgroundColor = 'var(--ds-transfer-item-bg-hover)';
+                  e.currentTarget.style.borderLeft = '3px solid var(--ds-color-primary, #1677ff)';
                 }
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.borderLeft = '3px solid transparent';
               }}
             >
               <input
@@ -207,10 +278,35 @@ const TransferListComponent: React.FC<TransferListProps> = ({
           ))
         ) : (
           <div className="rottay-transfer__empty" style={emptyStyle}>
-            {locale?.notFoundContent}
+            {locale?.notFoundContent || t('transfer.not_found')}
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {pagination && totalPages > 1 && (
+        <div className="rottay-transfer__pagination" style={paginationContainerStyle}>
+          <button
+            type="button"
+            style={paginationButtonStyle(currentPage <= 1)}
+            disabled={currentPage <= 1}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          >
+            ‹
+          </button>
+          <span style={paginationTextStyle}>
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            type="button"
+            style={paginationButtonStyle(currentPage >= totalPages)}
+            disabled={currentPage >= totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          >
+            ›
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -234,6 +330,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       locale = TRANSFER_DEFAULTS.locale,
       showSelectAll = TRANSFER_DEFAULTS.showSelectAll,
       oneWay,
+      pagination,
       className = '',
       style,
     } = props;
@@ -251,6 +348,13 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
 
     const sourceItems = dataSource.filter((item) => !targetKeysSet.has(item.key));
     const targetItems = dataSource.filter((item) => targetKeysSet.has(item.key));
+
+    // Default filter function when showSearch is enabled but no filterOption provided
+    const effectiveFilterOption = filterOption ?? (showSearch
+      ? (input: string, item: TransferItem) =>
+          item.title.toLowerCase().includes(input.toLowerCase())
+      : undefined
+    );
 
     const handleMove = useCallback((direction: 'left' | 'right') => {
       const keysToMove = direction === 'right'
@@ -321,7 +425,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       cursor: 'pointer',
       fontWeight: 'var(--ds-font-weight-medium)' as React.CSSProperties['fontWeight'],
       fontSize: 'var(--ds-font-size-sm)',
-      transition: 'var(--ds-transition-fast)',
+      transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s',
     };
 
     const disabledButtonStyle: React.CSSProperties = {
@@ -351,11 +455,12 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           showSearch={showSearch}
           searchValue={sourceSearch}
           onSearch={handleSourceSearch}
-          filterOption={filterOption}
+          filterOption={effectiveFilterOption}
           render={render}
           showSelectAll={showSelectAll}
           locale={locale}
           listStyle={listStyle}
+          pagination={pagination}
         />
 
         <div className="rottay-transfer__operations" style={operationsContainerStyle}>
@@ -365,6 +470,24 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
             style={disabled || sourceSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
+            onMouseEnter={(e) => {
+              if (!disabled && sourceSelectedKeys.size > 0) {
+                e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+            onMouseDown={(e) => {
+              if (!disabled && sourceSelectedKeys.size > 0) {
+                e.currentTarget.style.transform = 'scale(0.97)';
+              }
+            }}
+            onMouseUp={(e) => {
+              e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+            }}
           >
             {operations![0]}
           </button>
@@ -375,6 +498,24 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
               style={disabled || targetSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}
+              onMouseEnter={(e) => {
+                if (!disabled && targetSelectedKeys.size > 0) {
+                  e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.1)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+              onMouseDown={(e) => {
+                if (!disabled && targetSelectedKeys.size > 0) {
+                  e.currentTarget.style.transform = 'scale(0.97)';
+                }
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+              }}
             >
               {operations![1]}
             </button>
@@ -390,11 +531,12 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           showSearch={showSearch}
           searchValue={targetSearch}
           onSearch={handleTargetSearch}
-          filterOption={filterOption}
+          filterOption={effectiveFilterOption}
           render={render}
           showSelectAll={showSelectAll}
           locale={locale}
           listStyle={listStyle}
+          pagination={pagination}
         />
       </div>
     );

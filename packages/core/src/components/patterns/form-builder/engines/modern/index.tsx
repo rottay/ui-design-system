@@ -246,7 +246,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           );
         case 'color':
           return (
-            <input type="color" value={(val as string) ?? '#000000'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} className="w-12 h-10 rounded-xl border border-base-300 cursor-pointer" />
+            // Native color inputs only accept concrete color strings, not CSS vars.
+            <input type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} className="w-12 h-10 rounded-xl border border-base-300 cursor-pointer" />
           );
         case 'slider':
           return (

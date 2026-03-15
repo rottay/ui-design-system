@@ -4,6 +4,7 @@
  */
 
 import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../../core/types';
+import type { SupportedLocale } from '../../i18n/types';
 
 /**
  * Validate tenant branding
@@ -29,6 +30,13 @@ export function isValidEngineName(engine: unknown): engine is EngineName {
 }
 
 /**
+ * Validate supported locale
+ */
+export function isValidLocale(locale: unknown): locale is SupportedLocale {
+  return locale === 'es' || locale === 'en' || locale === 'pt' || locale === 'fr' || locale === 'ar';
+}
+
+/**
  * Validate complete tenant config
  */
 export function isValidTenantConfig(config: unknown): config is TenantConfig {
@@ -37,13 +45,15 @@ export function isValidTenantConfig(config: unknown): config is TenantConfig {
   const c = config as TenantConfig;
 
   return (
-    typeof c.slug === 'string' &&
-    typeof c.name === 'string' &&
-    isValidEngineName(c.engine) &&
-    typeof c.theme === 'string' &&
-    isValidPlan(c.plan) &&
-    Array.isArray(c.features) &&
-    isValidBranding(c.branding)
+      typeof c.slug === 'string' &&
+      typeof c.name === 'string' &&
+      isValidEngineName(c.engine) &&
+      typeof c.theme === 'string' &&
+      (c.locale === undefined || isValidLocale(c.locale)) &&
+      (c.fallbackLocale === undefined || isValidLocale(c.fallbackLocale)) &&
+      isValidPlan(c.plan) &&
+      Array.isArray(c.features) &&
+      isValidBranding(c.branding)
   );
 }
 
@@ -57,6 +67,8 @@ export function createTenantConfig(partial: Partial<TenantConfig> & { slug: stri
     domain: partial.domain,
     engine: partial.engine ?? 'classic',
     theme: partial.theme ?? 'base',
+    locale: partial.locale,
+    fallbackLocale: partial.fallbackLocale,
     plan: partial.plan ?? 'starter',
     features: partial.features ?? [],
     branding: {
@@ -68,5 +80,6 @@ export function createTenantConfig(partial: Partial<TenantConfig> & { slug: stri
       secondaryColor: partial.branding?.secondaryColor,
       accentColor: partial.branding?.accentColor,
     },
+    customTranslations: partial.customTranslations,
   };
 }

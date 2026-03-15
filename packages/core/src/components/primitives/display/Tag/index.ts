@@ -27,9 +27,9 @@
  * - `Tag.Group` - Container for multiple tags with gap options
  *
  * **CSS Custom Properties:**
- * - `--tag-{size}-height` - Tag height per size
- * - `--tag-{size}-padding` - Tag padding per size
- * - `--tag-{size}-font-size` - Font size per size
+ * - `--ds-tag-{size}-height` - Tag height per size
+ * - `--ds-tag-{size}-padding` - Tag padding per size
+ * - `--ds-tag-{size}-font-size` - Font size per size
  *
  * @example Basic Tag
  * ```tsx
@@ -69,7 +69,11 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef } from 'react';
+
 import { createEngineComponent } from '../../../../core/engines/factory';
+import { useOptionalTokens } from '../../../../core/hooks';
+import { resolveBadgePersonalityDefaults } from '../../../../core/personality/primitives';
 import type { TagProps } from './types';
 import { TagGroup } from './compound';
 
@@ -101,12 +105,27 @@ export type { TagGroupProps } from './compound';
  * <Tag engine="modern" variant="success">Modern Tag</Tag>
  * ```
  */
-export const Tag = Object.assign(
-  createEngineComponent<TagProps>('Tag', {
+const TagBase = createEngineComponent<TagProps>('Tag', {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
     rustic: () => import('./engines/rustic'),
-  }),
+  });
+
+const TagComponent = forwardRef<any, TagProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const defaults = tokens ? resolveBadgePersonalityDefaults(tokens) : null;
+
+  return createElement(TagBase, {
+    ref,
+    ...props,
+    radius: props.radius ?? defaults?.radius,
+  });
+});
+
+TagComponent.displayName = 'Tag';
+
+export const Tag = Object.assign(
+  TagComponent,
   {
     /**
      * Tag.Group - Compound component for grouping tags with consistent spacing.

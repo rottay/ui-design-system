@@ -37,91 +37,30 @@
  * @package @rottay/design-system
  */
 
+import type { CSSProperties } from 'react';
+
 import type { ToastPosition } from '../types';
 import { TOAST_ANIMATION } from '../types';
 
-// ============================================================================
-// Direction Helpers
-// ============================================================================
+function readRootCssVariable(name: string): string | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
-/**
- * Gets slide direction transforms based on toast position.
- *
- * @description
- * Calculates the appropriate CSS transform values for enter/exit
- * animations based on the toast's screen position.
- *
- * @param position - Toast position (e.g., 'top-right', 'bottom-center')
- * @returns Object with enter and exit transform strings
- *
- * @example
- * ```tsx
- * const direction = getSlideDirection('top-right');
- * // { enter: 'translateX(100%)', exit: 'translateX(100%)' }
- *
- * const centerDirection = getSlideDirection('top-center');
- * // { enter: 'translateY(-100%)', exit: 'translateY(-100%)' }
- * ```
- */
-export function getSlideDirection(position: ToastPosition): {
-  enter: string;
-  exit: string;
-} {
-  const positionParts = position.split('-');
-  const horizontal = positionParts[1] || 'right';
-
-  if (horizontal === 'left') {
-    return { enter: 'translateX(-100%)', exit: 'translateX(-100%)' };
-  }
-  if (horizontal === 'right') {
-    return { enter: 'translateX(100%)', exit: 'translateX(100%)' };
-  }
-  // center - use vertical direction
-  const vertical = positionParts[0] || 'top';
-  if (vertical === 'top') {
-    return { enter: 'translateY(-100%)', exit: 'translateY(-100%)' };
-  }
-  return { enter: 'translateY(100%)', exit: 'translateY(100%)' };
+  const value = window.getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return value.length > 0 ? value : null;
 }
 
-// ============================================================================
-// Animation Style Generators
-// ============================================================================
-
-/**
- * Generates enter animation style object.
- *
- * @description
- * Creates a React CSSProperties object with the animation property
- * set for enter transitions.
- *
- * @param _position - Toast position (unused, animation is generic)
- * @returns CSSProperties with animation property
- *
- * @internal
- */
-export function getEnterAnimation(_position: ToastPosition): React.CSSProperties {
-  return {
-    animation: `toast-slide-in ${TOAST_ANIMATION.enterDuration}ms ease-out forwards`,
-  };
+function getToastAnimationDuration(phase: 'in' | 'out'): string {
+  const variableName = phase === 'in' ? '--ds-toast-enter-duration' : '--ds-toast-exit-duration';
+  const fallback = `${phase === 'in' ? TOAST_ANIMATION.enterDuration : TOAST_ANIMATION.exitDuration}ms`;
+  return readRootCssVariable(variableName) ?? fallback;
 }
 
-/**
- * Generates exit animation style object.
- *
- * @description
- * Creates a React CSSProperties object with the animation property
- * set for exit transitions.
- *
- * @param _position - Toast position (unused, animation is generic)
- * @returns CSSProperties with animation property
- *
- * @internal
- */
-export function getExitAnimation(_position: ToastPosition): React.CSSProperties {
-  return {
-    animation: `toast-slide-out ${TOAST_ANIMATION.exitDuration}ms ease-in forwards`,
-  };
+function getToastAnimationEasing(phase: 'in' | 'out'): string {
+  const variableName = phase === 'in' ? '--ds-toast-enter-easing' : '--ds-toast-exit-easing';
+  const fallback = phase === 'in' ? 'ease-out' : 'ease-in';
+  return readRootCssVariable(variableName) ?? fallback;
 }
 
 // ============================================================================
@@ -312,6 +251,23 @@ export function getAnimationName(
 
   // Left/right positions use horizontal direction
   return `toast-slide-${direction}-${horizontal}`;
+}
+
+export function getToastAnimationStyle(
+  position: ToastPosition,
+  direction: 'in' | 'out',
+  mode: 'slide' | 'fade' = 'slide'
+): CSSProperties {
+  const animationName =
+    mode === 'fade'
+      ? direction === 'in'
+        ? 'toast-fade-in'
+        : 'toast-fade-out'
+      : getAnimationName(position, direction);
+
+  return {
+    animation: `${animationName} ${getToastAnimationDuration(direction)} ${getToastAnimationEasing(direction)} forwards`,
+  };
 }
 
 // ============================================================================

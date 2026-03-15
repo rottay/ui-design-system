@@ -202,9 +202,10 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
       width: shape === 'circle' ? dimensions.height : dimensions.width,
       height: dimensions.height,
       borderRadius,
-      background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+      background:
+        'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
       backgroundSize: '200% 100%',
-      animation: 'skeleton-loading 1.5s infinite',
+      animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
       ...style,
     };
 

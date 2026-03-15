@@ -148,8 +148,8 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../core/engines/factory';
 import type { ToastProps } from './types';
+import { BaseToast } from './base';
 import { ToastContainer } from './compound';
 
 // ============================================================================
@@ -218,14 +218,7 @@ export type { ToastProviderProps, UseToastReturn } from './utils';
  *
  * @private
  */
-const ToastComponent = createEngineComponent<ToastProps>('Toast', {
-  /** Ant Design implementation - uses message and notification APIs */
-  classic: () => import('./engines/classic'),
-  /** DaisyUI/Tailwind implementation - utility-first styling */
-  modern: () => import('./engines/modern'),
-  /** Vanilla HTML/CSS implementation - zero dependencies */
-  rustic: () => import('./engines/rustic'),
-});
+const ToastComponent = BaseToast;
 
 // ============================================================================
 // Extended Toast with Compound Components

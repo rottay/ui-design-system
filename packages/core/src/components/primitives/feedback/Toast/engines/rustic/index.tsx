@@ -52,6 +52,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../../types';
 import { TOAST_DEFAULTS, TOAST_ANIMATION, VARIANT_COLORS } from '../../types';
+import { getToastAnimationStyle } from '../../utils/animations';
 
 // ============================================================================
 // Helper Functions
@@ -283,10 +284,8 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     overflow: 'hidden',
     opacity: isExiting ? 0 : 1,
     transform: isExiting ? 'scale(0.95) translateY(-10px)' : 'scale(1) translateY(0)',
-    transition: `opacity ${TOAST_ANIMATION.exitDuration}ms ease, transform ${TOAST_ANIMATION.exitDuration}ms ease`,
-    animation: !isExiting
-      ? `toast-slide-in ${TOAST_ANIMATION.enterDuration}ms ease-out`
-      : undefined,
+    transition: `opacity var(--ds-toast-exit-duration, ${TOAST_ANIMATION.exitDuration}ms) var(--ds-toast-exit-easing, ease), transform var(--ds-toast-exit-duration, ${TOAST_ANIMATION.exitDuration}ms) var(--ds-toast-exit-easing, ease)`,
+    ...getToastAnimationStyle('top-right', isExiting ? 'out' : 'in', 'fade'),
     ...style,
   };
 

@@ -10,7 +10,7 @@ export type ButtonSize = Size;
 /**
  * Button variants.
  */
-export type ButtonVariant = Variant | 'text' | 'link' | 'ghost' | 'dashed';
+export type ButtonVariant = Variant | 'text' | 'link' | 'ghost' | 'dashed' | 'danger';
 
 /**
  * Button shapes.

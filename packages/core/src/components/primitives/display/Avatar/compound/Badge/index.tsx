@@ -19,10 +19,10 @@ export interface AvatarBadgeProps {
 }
 
 const STATUS_COLORS: Record<BadgeStatus, string> = {
-  online: '#52c41a',
-  offline: '#d9d9d9',
-  busy: '#ff4d4f',
-  away: '#faad14',
+  online: 'var(--ds-color-success)',
+  offline: 'var(--ds-color-border-secondary)',
+  busy: 'var(--ds-color-error)',
+  away: 'var(--ds-color-warning)',
 };
 
 export function AvatarBadge({
@@ -46,7 +46,7 @@ export function AvatarBadge({
     height: dot ? '10px' : '14px',
     borderRadius: '50%',
     backgroundColor: STATUS_COLORS[status],
-    border: '2px solid var(--avatar-badge-border, #fff)',
+    border: '2px solid var(--ds-avatar-badge-border, var(--ds-color-bg-primary))',
   };
 
   return (

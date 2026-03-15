@@ -8,7 +8,7 @@ import type { ReactNode } from 'react';
 /**
  * Locales soportados por el Design System Rottay.
  */
-export type SupportedLocale = 'es' | 'en' | 'pt' | 'fr';
+export type SupportedLocale = 'es' | 'en' | 'pt' | 'fr' | 'ar';
 
 /**
  * Dirección del texto.
@@ -53,7 +53,7 @@ export interface I18nProviderProps {
   /** Locale de fallback si falta una traducción */
   fallbackLocale?: SupportedLocale;
   /** Traducciones personalizadas del tenant */
-  customTranslations?: Record<string, Record<string, string>>;
+  customTranslations?: Partial<LocaleTranslations>;
   /** Callback cuando cambia el locale */
   onLocaleChange?: (locale: SupportedLocale) => void;
   children: ReactNode;
@@ -104,6 +104,13 @@ export const LOCALE_CONFIGS: Record<SupportedLocale, LocaleConfig> = {
     direction: 'ltr',
     dateLocale: 'fr-FR',
     numberLocale: 'fr-FR',
+  },
+  ar: {
+    code: 'ar',
+    name: 'العربية',
+    direction: 'rtl',
+    dateLocale: 'ar-SA',
+    numberLocale: 'ar-SA',
   },
 };
 

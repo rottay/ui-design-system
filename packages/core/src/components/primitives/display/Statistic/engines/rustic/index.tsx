@@ -63,6 +63,7 @@
 'use client';
 
 import React, { forwardRef, useState, useEffect, useCallback } from 'react';
+import { CountUp } from '../../../../../../animations';
 import type { StatisticProps, CountdownProps } from '../../types';
 import { STATISTIC_DEFAULTS } from '../../types';
 
@@ -106,14 +107,14 @@ const STYLES = {
   container: {},
   title: {
     fontSize: 'var(--ds-statistic-title-font-size, 14px)',
-    color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary, #00000073))',
+    color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary))',
     marginBottom: '4px',
     lineHeight: 1.5,
   } as React.CSSProperties,
   value: {
     fontSize: 'var(--ds-statistic-value-font-size, 24px)',
     fontWeight: 600,
-    color: 'var(--ds-statistic-value-color, var(--ds-color-text-primary, #000000e0))',
+    color: 'var(--ds-statistic-value-color, var(--ds-color-text-primary))',
     lineHeight: 1.3,
   } as React.CSSProperties,
   prefix: {
@@ -123,7 +124,7 @@ const STYLES = {
     marginLeft: '4px',
   } as React.CSSProperties,
   skeleton: {
-    background: 'var(--ds-statistic-skeleton-bg, #f5f5f5)',
+    background: 'var(--ds-statistic-skeleton-bg, var(--ds-color-bg-secondary))',
     borderRadius: '4px',
   } as React.CSSProperties,
 };
@@ -133,10 +134,10 @@ const STYLES = {
  * Uses WCAG 2.1 AA compliant colors for accessibility.
  */
 const VALUE_TYPE_COLOR_MAP: Record<string, string> = {
-  default: 'var(--ds-statistic-value-color, var(--ds-color-text-primary, #000000e0))',
-  positive: 'var(--ds-statistic-positive-color, var(--ds-color-success-500, #52c41a))',
-  negative: 'var(--ds-statistic-negative-color, var(--ds-color-error-500, #ff4d4f))',
-  warning: 'var(--ds-statistic-warning-color, var(--ds-color-warning-500, #faad14))',
+  default: 'var(--ds-statistic-value-color, var(--ds-color-text-primary))',
+  positive: 'var(--ds-statistic-positive-color, var(--ds-color-success))',
+  negative: 'var(--ds-statistic-negative-color, var(--ds-color-error))',
+  warning: 'var(--ds-statistic-warning-color, var(--ds-color-warning))',
 };
 
 /**
@@ -171,6 +172,8 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       decimalSeparator = STATISTIC_DEFAULTS.decimalSeparator,
       loading,
       formatter,
+      animateValue = false,
+      countFrom = 0,
       valueType = STATISTIC_DEFAULTS.valueType,
       className,
       style,
@@ -182,6 +185,8 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       : value !== undefined
         ? formatNumber(value, precision, groupSeparator, decimalSeparator)
         : '--';
+    const shouldAnimateValue =
+      animateValue && typeof value === 'number' && !formatter && !loading;
 
     // Get color for value type
     const valueColor = VALUE_TYPE_COLOR_MAP[valueType] || VALUE_TYPE_COLOR_MAP.default;
@@ -212,7 +217,17 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           }}
         >
           {prefix && <span style={STYLES.prefix}>{prefix}</span>}
-          <span>{displayValue}</span>
+          {shouldAnimateValue ? (
+            <CountUp
+              from={countFrom}
+              to={value}
+              formatter={(nextValue) =>
+                formatNumber(nextValue, precision, groupSeparator, decimalSeparator)
+              }
+            />
+          ) : (
+            <span>{displayValue}</span>
+          )}
           {suffix && <span style={STYLES.suffix}>{suffix}</span>}
         </div>
       </div>

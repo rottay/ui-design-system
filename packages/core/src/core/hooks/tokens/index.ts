@@ -13,8 +13,9 @@
  * - **Surface**: Engine-differentiated container appearance
  * - **Motion**: Engine-differentiated animation behavior
  *
- * All color values use CSS custom properties (var(--color-*)) for
- * white-labeling support. Tenants override the CSS variables.
+ * All color values use CSS custom properties (var(--ds-color-*)) for
+ * white-labeling support. Tenants override the CSS variables the runtime
+ * system actually consumes.
  *
  * @see {@link DesignTokens} - Token structure
  * @module System/Hooks/Tokens
@@ -24,6 +25,7 @@
 
 import { useMemo } from 'react';
 import { useTenant } from '../tenant';
+import { useProductProfile } from '../product-profile';
 import { useEngineContext } from '../../providers/engine';
 import { getEngineTokens } from './engine-tokens';
 import { DEFAULT_PERSONALITY } from './personality-defaults';
@@ -39,16 +41,16 @@ export { DEFAULT_PERSONALITY } from './personality-defaults';
  */
 function createColorScale(prefix: string): ColorScale {
   return {
-    50: `var(--color-${prefix}-50)`,
-    100: `var(--color-${prefix}-100)`,
-    200: `var(--color-${prefix}-200)`,
-    300: `var(--color-${prefix}-300)`,
-    400: `var(--color-${prefix}-400)`,
-    500: `var(--color-${prefix}-500)`,
-    600: `var(--color-${prefix}-600)`,
-    700: `var(--color-${prefix}-700)`,
-    800: `var(--color-${prefix}-800)`,
-    900: `var(--color-${prefix}-900)`,
+    50: `var(--ds-color-${prefix}-50)`,
+    100: `var(--ds-color-${prefix}-100)`,
+    200: `var(--ds-color-${prefix}-200)`,
+    300: `var(--ds-color-${prefix}-300)`,
+    400: `var(--ds-color-${prefix}-400)`,
+    500: `var(--ds-color-${prefix}-500)`,
+    600: `var(--ds-color-${prefix}-600)`,
+    700: `var(--ds-color-${prefix}-700)`,
+    800: `var(--ds-color-${prefix}-800)`,
+    900: `var(--ds-color-${prefix}-900)`,
   };
 }
 
@@ -132,47 +134,88 @@ const OVERLAY_TOKENS: OverlayTokens = {
  */
 export function useTokens(): DesignTokens {
   const { config } = useTenant();
+  const { profile } = useProductProfile();
   const { engine } = useEngineContext();
 
   return useMemo(() => {
     // 1. Engine base tokens
     const engineOverrides = getEngineTokens(engine);
 
-    // 2. Tenant token overrides on top of engine
-    const to = config.tokenOverrides;
-    const borderRadius = to?.borderRadius
-      ? { ...engineOverrides.borderRadius, ...to.borderRadius }
+    // 2. Product profile token overrides on top of engine
+    const productProfileTokenOverrides = profile.tokenOverrides;
+    const productProfileBorderRadius = productProfileTokenOverrides?.borderRadius
+      ? { ...engineOverrides.borderRadius, ...productProfileTokenOverrides.borderRadius }
       : engineOverrides.borderRadius;
-    const shadows = to?.shadows
-      ? { ...engineOverrides.shadows, ...to.shadows }
+    const productProfileShadows = productProfileTokenOverrides?.shadows
+      ? { ...engineOverrides.shadows, ...productProfileTokenOverrides.shadows }
       : engineOverrides.shadows;
-    const surface = to?.surface
-      ? { ...engineOverrides.surface, ...to.surface }
+    const productProfileSurface = productProfileTokenOverrides?.surface
+      ? { ...engineOverrides.surface, ...productProfileTokenOverrides.surface }
       : engineOverrides.surface;
-    const motion = to?.motion
-      ? { ...engineOverrides.motion, ...to.motion }
+    const productProfileMotion = productProfileTokenOverrides?.motion
+      ? { ...engineOverrides.motion, ...productProfileTokenOverrides.motion }
       : engineOverrides.motion;
-    const densityScale = to?.densityScale ?? engineOverrides.densityScale;
+    const productProfileDensityScale = productProfileTokenOverrides?.densityScale ?? engineOverrides.densityScale;
 
-    // 3. Personality: defaults + tenant overrides (deep merge)
-    const p = config.personality;
+    // 3. Tenant token overrides on top of the product profile.
+    const tenantTokenOverrides = config.tokenOverrides;
+    const borderRadius = tenantTokenOverrides?.borderRadius
+      ? { ...productProfileBorderRadius, ...tenantTokenOverrides.borderRadius }
+      : productProfileBorderRadius;
+    const shadows = tenantTokenOverrides?.shadows
+      ? { ...productProfileShadows, ...tenantTokenOverrides.shadows }
+      : productProfileShadows;
+    const surface = tenantTokenOverrides?.surface
+      ? { ...productProfileSurface, ...tenantTokenOverrides.surface }
+      : productProfileSurface;
+    const motion = tenantTokenOverrides?.motion
+      ? { ...productProfileMotion, ...tenantTokenOverrides.motion }
+      : productProfileMotion;
+    const densityScale = tenantTokenOverrides?.densityScale ?? productProfileDensityScale;
+
+    // 4. Personality: defaults + product profile + tenant overrides.
+    const productPersonality = profile.personality;
+    const tenantPersonality = config.personality;
     const personality: PersonalityTokens = {
-      animation: { ...DEFAULT_PERSONALITY.animation, ...p?.animation },
-      chart: { ...DEFAULT_PERSONALITY.chart, ...p?.chart },
-      typography: { ...DEFAULT_PERSONALITY.typography, ...p?.typography },
-      accent: { ...DEFAULT_PERSONALITY.accent, ...p?.accent },
-      card: { ...DEFAULT_PERSONALITY.card, ...p?.card },
+      animation: {
+        ...DEFAULT_PERSONALITY.animation,
+        ...productPersonality?.animation,
+        ...tenantPersonality?.animation,
+      },
+      chart: {
+        ...DEFAULT_PERSONALITY.chart,
+        ...productPersonality?.chart,
+        ...tenantPersonality?.chart,
+      },
+      typography: {
+        ...DEFAULT_PERSONALITY.typography,
+        ...productPersonality?.typography,
+        ...tenantPersonality?.typography,
+      },
+      accent: {
+        ...DEFAULT_PERSONALITY.accent,
+        ...productPersonality?.accent,
+        ...tenantPersonality?.accent,
+      },
+      card: {
+        ...DEFAULT_PERSONALITY.card,
+        ...productPersonality?.card,
+        ...tenantPersonality?.card,
+      },
     };
 
     return {
       colors: {
         // Single values (backwards compatible, from tenant branding)
-        primary: config.branding.primaryColor || 'var(--color-primary-500)',
-        secondary: config.branding.accentColor || 'var(--color-secondary-500)',
-        success: 'var(--color-success-500)',
-        warning: 'var(--color-warning-500)',
-        error: 'var(--color-error-500)',
-        info: 'var(--color-info-500)',
+        primary: config.branding.primaryColor || 'var(--ds-color-primary)',
+        secondary:
+          config.branding.secondaryColor ||
+          config.branding.accentColor ||
+          'var(--ds-color-secondary)',
+        success: 'var(--ds-color-success)',
+        warning: 'var(--ds-color-warning)',
+        error: 'var(--ds-color-error)',
+        info: 'var(--ds-color-info)',
 
         // Full color scales (CSS custom properties for white-labeling)
         primaryScale: PRIMARY_SCALE,
@@ -185,8 +228,8 @@ export function useTokens(): DesignTokens {
 
         // Common colors
         common: {
-          white: 'var(--color-white)',
-          black: 'var(--color-black)',
+          white: 'var(--ds-color-white)',
+          black: 'var(--ds-color-black)',
         },
       },
       spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96].map(
@@ -228,5 +271,22 @@ export function useTokens(): DesignTokens {
       // Personality tokens
       personality,
     };
-  }, [engine, config.slug, config.tokenOverrides, config.personality, config.branding.primaryColor, config.branding.accentColor]);
+  }, [
+    engine,
+    config.slug,
+    config.tokenOverrides,
+    config.personality,
+    config.branding.primaryColor,
+    config.branding.secondaryColor,
+    config.branding.accentColor,
+    profile,
+  ]);
+}
+
+export function useOptionalTokens(): DesignTokens | null {
+  try {
+    return useTokens();
+  } catch {
+    return null;
+  }
 }

@@ -54,6 +54,11 @@
 
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { useOptionalTokens } from '../../../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveTypographyTextStyle,
+} from '../../../../../../core/personality/primitives';
 import type { TextProps } from '../../types';
 import { ClassicText } from '../../engines/classic';
 import { ModernText } from '../../engines/modern';
@@ -101,8 +106,19 @@ const engineMap: Record<
  */
 export const TypographyText = forwardRef<HTMLElement, TextProps>(
   ({ engine = 'classic', ...props }, ref) => {
+    const tokens = useOptionalTokens();
     const Component = engineMap[engine] || ClassicText;
-    return <Component ref={ref} {...props} />;
+
+    return (
+      <Component
+        ref={ref}
+        {...props}
+        style={mergePersonalityStyle(
+          props.style,
+          tokens ? resolveTypographyTextStyle(tokens, props.as === 'label') : undefined
+        )}
+      />
+    );
   }
 );
 

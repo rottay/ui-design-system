@@ -124,7 +124,7 @@ export default function ClassicToggle(props: ToggleProps): React.ReactElement {
   // Custom styles based on color
   const switchStyle: React.CSSProperties = {
     backgroundColor: isChecked ? colors.bgChecked : undefined,
-    borderColor: error ? 'var(--color-error, #ff4d4f)' : undefined,
+    borderColor: error ? 'var(--ds-color-error, #ff4d4f)' : undefined,
   };
 
   const switchElement = (
@@ -157,7 +157,7 @@ export default function ClassicToggle(props: ToggleProps): React.ReactElement {
             <span
               style={{
                 fontSize: sizeValues.height * 0.6,
-                color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
+                color: error ? 'var(--ds-color-error, #ff4d4f)' : 'inherit',
                 userSelect: 'none',
                 lineHeight: 1.4,
               }}
@@ -169,7 +169,7 @@ export default function ClassicToggle(props: ToggleProps): React.ReactElement {
             <span
               style={{
                 fontSize: sizeValues.height * 0.5,
-                color: 'var(--color-text-secondary, #666)',
+                color: 'var(--ds-color-text-secondary, #666)',
                 userSelect: 'none',
                 lineHeight: 1.4,
               }}

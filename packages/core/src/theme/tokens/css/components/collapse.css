@@ -21,19 +21,19 @@
      ======================================================================== */
 
   /* Root - Default Variant - Idle State */
-  --ds-collapse-root-default-idle-bg: var(--color-white);
-  --ds-collapse-root-default-idle-border-color: var(--color-neutral-200);
+  --ds-collapse-root-default-idle-bg: var(--ds-color-white);
+  --ds-collapse-root-default-idle-border-color: var(--ds-color-neutral-200);
   --ds-collapse-root-default-idle-border-width: 1px;
   --ds-collapse-root-default-idle-border-style: solid;
-  --ds-collapse-root-default-idle-border-radius: var(--radius-lg);
-  --ds-collapse-root-default-idle-shadow: var(--shadow-sm);
+  --ds-collapse-root-default-idle-border-radius: var(--ds-radius-lg);
+  --ds-collapse-root-default-idle-shadow: var(--ds-shadow-sm);
 
   /* Root - Bordered Variant - Idle State */
   --ds-collapse-root-bordered-idle-bg: transparent;
-  --ds-collapse-root-bordered-idle-border-color: var(--color-neutral-300);
+  --ds-collapse-root-bordered-idle-border-color: var(--ds-color-neutral-300);
   --ds-collapse-root-bordered-idle-border-width: 1px;
   --ds-collapse-root-bordered-idle-border-style: solid;
-  --ds-collapse-root-bordered-idle-border-radius: var(--radius-lg);
+  --ds-collapse-root-bordered-idle-border-radius: var(--ds-radius-lg);
   --ds-collapse-root-bordered-idle-shadow: none;
 
   /* Root - Ghost Variant - Idle State */
@@ -49,72 +49,72 @@
      ======================================================================== */
 
   /* Header - Default Variant - Idle State */
-  --ds-collapse-header-default-idle-bg: var(--color-neutral-50);
-  --ds-collapse-header-default-idle-color: var(--color-neutral-900);
-  --ds-collapse-header-default-idle-border-color: var(--color-neutral-200);
+  --ds-collapse-header-default-idle-bg: var(--ds-color-neutral-50);
+  --ds-collapse-header-default-idle-color: var(--ds-color-neutral-900);
+  --ds-collapse-header-default-idle-border-color: var(--ds-color-neutral-200);
   --ds-collapse-header-default-idle-border-width: 0 0 1px 0;
-  --ds-collapse-header-default-idle-padding-x: var(--spacing-4);
-  --ds-collapse-header-default-idle-padding-y: var(--spacing-3);
-  --ds-collapse-header-default-idle-font-size: var(--font-size-base);
-  --ds-collapse-header-default-idle-font-weight: var(--font-weight-medium);
-  --ds-collapse-header-default-idle-line-height: var(--line-height-normal);
+  --ds-collapse-header-default-idle-padding-x: var(--ds-spacing-4);
+  --ds-collapse-header-default-idle-padding-y: var(--ds-spacing-3);
+  --ds-collapse-header-default-idle-font-size: var(--ds-font-size-base);
+  --ds-collapse-header-default-idle-font-weight: var(--ds-font-weight-medium);
+  --ds-collapse-header-default-idle-line-height: var(--ds-line-height-normal);
   --ds-collapse-header-default-idle-cursor: pointer;
 
   /* Header - Default Variant - Hover State */
-  --ds-collapse-header-default-hover-bg: var(--color-neutral-100);
-  --ds-collapse-header-default-hover-color: var(--color-neutral-900);
+  --ds-collapse-header-default-hover-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-default-hover-color: var(--ds-color-neutral-900);
 
   /* Header - Default Variant - Focus State */
-  --ds-collapse-header-default-focus-outline: 2px solid var(--color-primary-500);
+  --ds-collapse-header-default-focus-outline: 2px solid var(--ds-color-primary-500);
   --ds-collapse-header-default-focus-outline-offset: -2px;
 
   /* Header - Default Variant - Active State (pressing) */
-  --ds-collapse-header-default-active-bg: var(--color-neutral-200);
+  --ds-collapse-header-default-active-bg: var(--ds-color-neutral-200);
 
   /* Header - Default Variant - Disabled State */
-  --ds-collapse-header-default-disabled-bg: var(--color-neutral-100);
-  --ds-collapse-header-default-disabled-color: var(--color-neutral-400);
+  --ds-collapse-header-default-disabled-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-default-disabled-color: var(--ds-color-neutral-400);
   --ds-collapse-header-default-disabled-cursor: not-allowed;
   --ds-collapse-header-default-disabled-opacity: 0.6;
 
   /* Header - Default Variant - Expanded State */
-  --ds-collapse-header-default-expanded-bg: var(--color-neutral-50);
-  --ds-collapse-header-default-expanded-color: var(--color-primary-600);
-  --ds-collapse-header-default-expanded-border-color: var(--color-neutral-200);
+  --ds-collapse-header-default-expanded-bg: var(--ds-color-neutral-50);
+  --ds-collapse-header-default-expanded-color: var(--ds-color-primary-600);
+  --ds-collapse-header-default-expanded-border-color: var(--ds-color-neutral-200);
 
   /* Header - Ghost Variant - Idle State */
   --ds-collapse-header-ghost-idle-bg: transparent;
-  --ds-collapse-header-ghost-idle-color: var(--color-neutral-800);
+  --ds-collapse-header-ghost-idle-color: var(--ds-color-neutral-800);
   --ds-collapse-header-ghost-idle-border-color: transparent;
   --ds-collapse-header-ghost-idle-border-width: 0;
-  --ds-collapse-header-ghost-idle-padding-x: var(--spacing-3);
-  --ds-collapse-header-ghost-idle-padding-y: var(--spacing-2);
+  --ds-collapse-header-ghost-idle-padding-x: var(--ds-spacing-3);
+  --ds-collapse-header-ghost-idle-padding-y: var(--ds-spacing-2);
 
   /* Header - Ghost Variant - Hover State */
-  --ds-collapse-header-ghost-hover-bg: var(--color-neutral-100);
-  --ds-collapse-header-ghost-hover-color: var(--color-neutral-900);
+  --ds-collapse-header-ghost-hover-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-ghost-hover-color: var(--ds-color-neutral-900);
 
   /* ========================================================================
      CONTENT SLOT - Panel Content
      ======================================================================== */
 
   /* Content - Default Variant - Idle State */
-  --ds-collapse-content-default-idle-bg: var(--color-white);
-  --ds-collapse-content-default-idle-color: var(--color-neutral-700);
-  --ds-collapse-content-default-idle-border-color: var(--color-neutral-200);
+  --ds-collapse-content-default-idle-bg: var(--ds-color-white);
+  --ds-collapse-content-default-idle-color: var(--ds-color-neutral-700);
+  --ds-collapse-content-default-idle-border-color: var(--ds-color-neutral-200);
   --ds-collapse-content-default-idle-border-width: 0 0 1px 0;
-  --ds-collapse-content-default-idle-padding-x: var(--spacing-4);
-  --ds-collapse-content-default-idle-padding-y: var(--spacing-4);
-  --ds-collapse-content-default-idle-font-size: var(--font-size-base);
-  --ds-collapse-content-default-idle-line-height: var(--line-height-relaxed);
+  --ds-collapse-content-default-idle-padding-x: var(--ds-spacing-4);
+  --ds-collapse-content-default-idle-padding-y: var(--ds-spacing-4);
+  --ds-collapse-content-default-idle-font-size: var(--ds-font-size-base);
+  --ds-collapse-content-default-idle-line-height: var(--ds-line-height-relaxed);
 
   /* Content - Ghost Variant - Idle State */
   --ds-collapse-content-ghost-idle-bg: transparent;
-  --ds-collapse-content-ghost-idle-color: var(--color-neutral-700);
+  --ds-collapse-content-ghost-idle-color: var(--ds-color-neutral-700);
   --ds-collapse-content-ghost-idle-border-color: transparent;
   --ds-collapse-content-ghost-idle-border-width: 0;
-  --ds-collapse-content-ghost-idle-padding-x: var(--spacing-3);
-  --ds-collapse-content-ghost-idle-padding-y: var(--spacing-2);
+  --ds-collapse-content-ghost-idle-padding-x: var(--ds-spacing-3);
+  --ds-collapse-content-ghost-idle-padding-y: var(--ds-spacing-2);
 
   /* ========================================================================
      ICON SLOT - Expand/Collapse Icon
@@ -122,20 +122,20 @@
 
   /* Icon - Default Variant - Idle State */
   --ds-collapse-icon-default-idle-size: 1rem;
-  --ds-collapse-icon-default-idle-color: var(--color-neutral-500);
-  --ds-collapse-icon-default-idle-margin-right: var(--spacing-3);
+  --ds-collapse-icon-default-idle-color: var(--ds-color-neutral-500);
+  --ds-collapse-icon-default-idle-margin-right: var(--ds-spacing-3);
   --ds-collapse-icon-default-idle-transform: rotate(0deg);
   --ds-collapse-icon-default-idle-transition: transform 0.2s ease-in-out;
 
   /* Icon - Default Variant - Hover State */
-  --ds-collapse-icon-default-hover-color: var(--color-neutral-700);
+  --ds-collapse-icon-default-hover-color: var(--ds-color-neutral-700);
 
   /* Icon - Default Variant - Disabled State */
-  --ds-collapse-icon-default-disabled-color: var(--color-neutral-300);
+  --ds-collapse-icon-default-disabled-color: var(--ds-color-neutral-300);
 
   /* Icon - Default Variant - Expanded State */
   --ds-collapse-icon-default-expanded-transform: rotate(90deg);
-  --ds-collapse-icon-default-expanded-color: var(--color-primary-600);
+  --ds-collapse-icon-default-expanded-color: var(--ds-color-primary-600);
 
   /* Icon Position */
   --ds-collapse-icon-position-start-order: -1;
@@ -148,27 +148,27 @@
      ======================================================================== */
 
   /* Small Size */
-  --ds-collapse-size-small-header-padding-x: var(--spacing-3);
-  --ds-collapse-size-small-header-padding-y: var(--spacing-2);
-  --ds-collapse-size-small-header-font-size: var(--font-size-sm);
-  --ds-collapse-size-small-content-padding-x: var(--spacing-3);
-  --ds-collapse-size-small-content-padding-y: var(--spacing-3);
+  --ds-collapse-size-small-header-padding-x: var(--ds-spacing-3);
+  --ds-collapse-size-small-header-padding-y: var(--ds-spacing-2);
+  --ds-collapse-size-small-header-font-size: var(--ds-font-size-sm);
+  --ds-collapse-size-small-content-padding-x: var(--ds-spacing-3);
+  --ds-collapse-size-small-content-padding-y: var(--ds-spacing-3);
   --ds-collapse-size-small-icon-size: 0.875rem;
 
   /* Middle Size (Default) */
-  --ds-collapse-size-middle-header-padding-x: var(--spacing-4);
-  --ds-collapse-size-middle-header-padding-y: var(--spacing-3);
-  --ds-collapse-size-middle-header-font-size: var(--font-size-base);
-  --ds-collapse-size-middle-content-padding-x: var(--spacing-4);
-  --ds-collapse-size-middle-content-padding-y: var(--spacing-4);
+  --ds-collapse-size-middle-header-padding-x: var(--ds-spacing-4);
+  --ds-collapse-size-middle-header-padding-y: var(--ds-spacing-3);
+  --ds-collapse-size-middle-header-font-size: var(--ds-font-size-base);
+  --ds-collapse-size-middle-content-padding-x: var(--ds-spacing-4);
+  --ds-collapse-size-middle-content-padding-y: var(--ds-spacing-4);
   --ds-collapse-size-middle-icon-size: 1rem;
 
   /* Large Size */
-  --ds-collapse-size-large-header-padding-x: var(--spacing-5);
-  --ds-collapse-size-large-header-padding-y: var(--spacing-4);
-  --ds-collapse-size-large-header-font-size: var(--font-size-lg);
-  --ds-collapse-size-large-content-padding-x: var(--spacing-5);
-  --ds-collapse-size-large-content-padding-y: var(--spacing-5);
+  --ds-collapse-size-large-header-padding-x: var(--ds-spacing-5);
+  --ds-collapse-size-large-header-padding-y: var(--ds-spacing-4);
+  --ds-collapse-size-large-header-font-size: var(--ds-font-size-lg);
+  --ds-collapse-size-large-content-padding-x: var(--ds-spacing-5);
+  --ds-collapse-size-large-content-padding-y: var(--ds-spacing-5);
   --ds-collapse-size-large-icon-size: 1.25rem;
 
   /* ========================================================================

@@ -12,78 +12,78 @@
      ======================================================================== */
 
   /* XS - Extra Small */
-  --tag-xs-padding: 0 0.375rem;           /* 0 6px */
-  --tag-xs-font-size: 0.625rem;           /* 10px */
-  --tag-xs-height: 1.25rem;               /* 20px */
+  --ds-tag-xs-padding: 0 0.375rem;           /* 0 6px */
+  --ds-tag-xs-font-size: 0.625rem;           /* 10px */
+  --ds-tag-xs-height: 1.25rem;               /* 20px */
 
   /* SM - Small */
-  --tag-sm-padding: 0 0.5rem;             /* 0 8px */
-  --tag-sm-font-size: 0.75rem;            /* 12px */
-  --tag-sm-height: 1.5rem;                /* 24px */
+  --ds-tag-sm-padding: 0 0.5rem;             /* 0 8px */
+  --ds-tag-sm-font-size: 0.75rem;            /* 12px */
+  --ds-tag-sm-height: 1.5rem;                /* 24px */
 
   /* MD - Medium (Default) */
-  --tag-md-padding: 0 0.625rem;           /* 0 10px */
-  --tag-md-font-size: 0.8125rem;          /* 13px */
-  --tag-md-height: 1.75rem;               /* 28px */
+  --ds-tag-md-padding: 0 0.625rem;           /* 0 10px */
+  --ds-tag-md-font-size: 0.8125rem;          /* 13px */
+  --ds-tag-md-height: 1.75rem;               /* 28px */
 
   /* LG - Large */
-  --tag-lg-padding: 0 0.75rem;            /* 0 12px */
-  --tag-lg-font-size: 0.875rem;           /* 14px */
-  --tag-lg-height: 2rem;                  /* 32px */
+  --ds-tag-lg-padding: 0 0.75rem;            /* 0 12px */
+  --ds-tag-lg-font-size: 0.875rem;           /* 14px */
+  --ds-tag-lg-height: 2rem;                  /* 32px */
 
   /* XL - Extra Large */
-  --tag-xl-padding: 0 1rem;               /* 0 16px */
-  --tag-xl-font-size: 1rem;               /* 16px */
-  --tag-xl-height: 2.25rem;               /* 36px */
+  --ds-tag-xl-padding: 0 1rem;               /* 0 16px */
+  --ds-tag-xl-font-size: 1rem;               /* 16px */
+  --ds-tag-xl-height: 2.25rem;               /* 36px */
 
   /* Default size (can be overridden) */
-  --tag-default-padding: var(--tag-md-padding);
-  --tag-default-font-size: var(--tag-md-font-size);
-  --tag-default-height: var(--tag-md-height);
+  --ds-tag-default-padding: var(--ds-tag-md-padding);
+  --ds-tag-default-font-size: var(--ds-tag-md-font-size);
+  --ds-tag-default-height: var(--ds-tag-md-height);
 
   /* ========================================================================
      BORDER RADIUS
      Border radius options for tags
      ======================================================================== */
 
-  --tag-radius-none: 0;
-  --tag-radius-sm: 0.125rem;              /* 2px */
-  --tag-radius-md: 0.25rem;               /* 4px */
-  --tag-radius-lg: 0.5rem;                /* 8px */
-  --tag-radius-full: 9999px;
+  --ds-tag-radius-none: 0;
+  --ds-tag-radius-sm: 0.125rem;              /* 2px */
+  --ds-tag-radius-md: 0.25rem;               /* 4px */
+  --ds-tag-radius-lg: 0.5rem;                /* 8px */
+  --ds-tag-radius-full: 9999px;
 
   /* Default border radius */
-  --tag-default-radius: var(--tag-radius-md);
+  --ds-tag-default-radius: var(--ds-tag-radius-md);
 
   /* ========================================================================
      SPACING
      Icon and close button spacing
      ======================================================================== */
 
-  --tag-icon-gap: 0.25rem;                /* 4px */
-  --tag-close-gap: 0.25rem;               /* 4px */
+  --ds-tag-icon-gap: 0.25rem;                /* 4px */
+  --ds-tag-close-gap: 0.25rem;               /* 4px */
 
   /* ========================================================================
      BORDER
      Border settings for bordered tags
      ======================================================================== */
 
-  --tag-border-width: 1px;
+  --ds-tag-border-width: 1px;
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
 
-  --tag-transition-duration: 0.2s;
-  --tag-transition-timing: ease-in-out;
-  --tag-transition: all var(--tag-transition-duration) var(--tag-transition-timing);
+  --ds-tag-transition-duration: 0.2s;
+  --ds-tag-transition-timing: ease-in-out;
+  --ds-tag-transition: all var(--ds-tag-transition-duration) var(--ds-tag-transition-timing);
 
   /* ========================================================================
      TYPOGRAPHY
      Font settings for tag content
      ======================================================================== */
 
-  --tag-font-weight: 500;
-  --tag-line-height: 1;
+  --ds-tag-font-weight: 500;
+  --ds-tag-line-height: 1;
 }

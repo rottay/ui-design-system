@@ -44,6 +44,11 @@
 
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { useOptionalTokens } from '../../../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveTypographyHeadingStyle,
+} from '../../../../../../core/personality/primitives';
 import type { HeadingProps } from '../../types';
 import { ClassicHeading } from '../../engines/classic';
 import { ModernHeading } from '../../engines/modern';
@@ -86,8 +91,20 @@ const engineMap: Record<
  */
 export const TypographyHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ engine = 'classic', ...props }, ref) => {
+    const tokens = useOptionalTokens();
     const Component = engineMap[engine] || ClassicHeading;
-    return <Component ref={ref} {...props} />;
+
+    return (
+      <Component
+        ref={ref}
+        {...props}
+        style={
+          tokens
+            ? mergePersonalityStyle(props.style, resolveTypographyHeadingStyle(tokens))
+            : props.style
+        }
+      />
+    );
   }
 );
 

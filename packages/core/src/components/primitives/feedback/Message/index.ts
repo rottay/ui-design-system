@@ -151,6 +151,15 @@
  * @package @rottay/design-system
  */
 
+'use client';
+
+import React from 'react';
+import { useEngineContext } from '../../../../core/providers/engine';
+import type { EngineName } from '../../../../core/types';
+import * as classicEngine from './engines/classic';
+import * as modernEngine from './engines/modern';
+import * as rusticEngine from './engines/rustic';
+
 // ============================================================================
 // Type Exports
 // ============================================================================
@@ -173,20 +182,40 @@ export {
 // Component Exports (Default: Classic Engine)
 // ============================================================================
 
-/**
- * Re-exports from the Classic engine (Ant Design implementation).
- *
- * @remarks
- * The Classic engine is the default and provides the richest feature set,
- * including static message methods that work without a provider context.
- * For Modern and Rustic engines, use the MessageProvider and useMessage hook.
- */
-export {
-  MessageProvider,
-  MessageItem,
-  useMessage,
-  message,
-} from './engines/classic';
+const messageEngines = {
+  classic: classicEngine,
+  modern: modernEngine,
+  rustic: rusticEngine,
+} as const satisfies Record<Exclude<EngineName, 'athena'>, typeof classicEngine>;
+
+function resolveMessageEngine(engine: EngineName) {
+  if (engine === 'athena') {
+    return classicEngine;
+  }
+
+  return messageEngines[engine];
+}
+
+export const MessageProvider: React.FC<React.ComponentProps<typeof classicEngine.MessageProvider>> = (
+  props
+) => {
+  const { engine } = useEngineContext();
+  const Provider = resolveMessageEngine(engine).MessageProvider;
+  return React.createElement(Provider, props);
+};
+
+export const MessageItem: React.FC<React.ComponentProps<typeof classicEngine.MessageItem>> = (
+  props
+) => {
+  const { engine } = useEngineContext();
+  const Item = resolveMessageEngine(engine).MessageItem;
+  return React.createElement(Item, props);
+};
+
+export function useMessage() {
+  const { engine } = useEngineContext();
+  return resolveMessageEngine(engine).useMessage();
+}
 
 // ============================================================================
 // Default Export
@@ -196,5 +225,11 @@ export {
  * Default export containing all Classic engine exports.
  * Includes MessageProvider, MessageItem, useMessage hook, and static message API.
  */
-import * as classicEngine from './engines/classic';
-export default classicEngine;
+export const message = classicEngine.message;
+
+export default {
+  MessageProvider,
+  MessageItem,
+  useMessage,
+  message,
+};

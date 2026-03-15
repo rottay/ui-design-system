@@ -45,6 +45,7 @@
 import React from 'react';
 import type { PaginationProps, PaginationSize } from '../../types';
 import { PAGINATION_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 // ============================================================================
 // Size Classes
@@ -95,6 +96,8 @@ const SIZE_CLASSES: Record<PaginationSize, string> = {
  * ```
  */
 export default function ModernPagination(props: PaginationProps): React.ReactElement {
+  const { t } = useTranslation('components');
+
   const {
     current,
     total,
@@ -187,7 +190,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
     <div className={className} style={style}>
       {/* Total items display */}
       {showTotal && (
-        <div className="text-sm mb-2">Total {total} items</div>
+        <div className="text-sm mb-2">{t('pagination.total_items', { total })}</div>
       )}
 
       {/* Pagination controls */}

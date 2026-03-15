@@ -126,8 +126,8 @@ export default function ClassicImage(props: ImageProps): React.ReactElement {
   // Compute container styles
   const containerStyle: React.CSSProperties = {
     borderRadius: radiusValue,
-    border: bordered ? '1px solid var(--color-border, rgba(0, 0, 0, 0.1))' : 'none',
-    boxShadow: shadow ? 'var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1))' : 'none',
+    border: bordered ? '1px solid var(--ds-color-border, rgba(0, 0, 0, 0.1))' : 'none',
+    boxShadow: shadow ? 'var(--ds-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1))' : 'none',
     overflow: 'hidden',
     display: 'inline-block',
   };
@@ -147,13 +147,13 @@ export default function ClassicImage(props: ImageProps): React.ReactElement {
       style={{
         width: typeof width === 'number' ? width : '100%',
         height: typeof height === 'number' ? height : '100%',
-        backgroundColor: 'var(--color-neutral-200, #e5e5e5)',
+        backgroundColor: 'var(--ds-color-neutral-200, #e5e5e5)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <span style={{ color: 'var(--color-neutral-400, #a3a3a3)' }}>Loading...</span>
+      <span style={{ color: 'var(--ds-color-neutral-400, #a3a3a3)' }}>Loading...</span>
     </div>
   );
 

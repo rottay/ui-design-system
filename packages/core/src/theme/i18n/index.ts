@@ -49,7 +49,7 @@ export type {
 export { LOCALE_CONFIGS } from './types';
 
 // Locales
-export { es, en, pt, fr } from './locales';
+export { es, en, pt, fr, ar } from './locales';
 
 // Utils
 export {

@@ -13,7 +13,7 @@
 export * from './core';
 
 // ============================================
-// THEME (Tenants, Presets, Tokens)
+// THEME (Tenants, Product Profiles, i18n)
 // ============================================
 export * from './theme';
 
@@ -32,16 +32,4 @@ export * from './animations';
 // ============================================
 export * from './components/primitives';
 export * from './components/patterns';
-export * from './components/custom';
-
-// ============================================
-// ANTD COMPATIBILITY (Temporary exports for migration)
-// These are re-exports from antd for backward compatibility.
-// Applications should migrate to DS primitives over time.
-// ============================================
-export { Row, Col } from 'antd';
-export type { ColumnsType, TableProps } from 'antd/es/table';
-export type { DataNode, TreeProps as AntTreeProps } from 'antd/es/tree';
-
-// Alias for backward compatibility
-export { Spinner as Spin } from './components/primitives/feedback/Spinner';
+export * from './components/surfaces';

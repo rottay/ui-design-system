@@ -14,7 +14,7 @@ interface Particle {
 
 export const Particles: React.FC<ParticlesProps> = ({
   count = 50,
-  color = '#ffffff',
+  color = 'var(--ds-color-text-on-primary)',
   speed = 0.5,
   children,
   className,

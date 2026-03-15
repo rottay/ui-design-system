@@ -3,4 +3,5 @@
  */
 
 export * from './primitives';
-export * from './custom';
+export * from './patterns';
+export * from './surfaces';

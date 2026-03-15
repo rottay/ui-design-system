@@ -31,11 +31,11 @@
  * - `Avatar.Fallback` - Custom fallback content
  *
  * **CSS Custom Properties:**
- * - `--avatar-{size}-size` - Avatar dimensions
- * - `--avatar-{size}-font-size` - Initials font size
- * - `--avatar-{variant}-bg` - Background color
- * - `--avatar-{variant}-color` - Text color
- * - `--avatar-status-{status}-color` - Status indicator color
+ * - `--ds-avatar-{size}-size` - Avatar dimensions
+ * - `--ds-avatar-{size}-font-size` - Initials font size
+ * - `--ds-avatar-{variant}-bg` - Background color
+ * - `--ds-avatar-{variant}-color` - Text color
+ * - `--ds-avatar-status-{status}-color` - Status indicator color
  *
  * @example Basic Avatar
  * ```tsx

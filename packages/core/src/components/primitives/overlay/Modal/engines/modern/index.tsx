@@ -1,10 +1,16 @@
 /**
  * Modal - Modern Engine (DaisyUI)
+ *
+ * Enhancements:
+ * - Scale + opacity entrance animation (0.95 -> 1, 0 -> 1, 0.3s)
+ * - Backdrop-filter: blur(4px) on overlay
+ * - Scrollbar compensation (padding to body when scroll is hidden)
+ * - Close button with hover background color transition
  */
 
 'use client';
 
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import type { ModalProps } from '../../../../../../types/primitives/feedback/Modal';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../../types';
 import { Portal } from '../../utils/Portal';
@@ -23,6 +29,14 @@ const SIZE_CLASS_MAP: Record<string, string> = {
   '5xl': 'max-w-5xl',
   full: 'max-w-full',
 };
+
+/**
+ * Calculate scrollbar width for body padding compensation.
+ */
+function getScrollbarWidth(): number {
+  if (typeof window === 'undefined') return 0;
+  return window.innerWidth - document.documentElement.clientWidth;
+}
 
 export default function ModernModal(props: ModalProps): React.ReactElement | null {
   const { t } = useTranslation('components');
@@ -55,6 +69,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   } = props;
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [isCloseHovered, setIsCloseHovered] = useState(false);
 
   // Handle ESC key
   const handleEscKey = useCallback(
@@ -93,15 +108,23 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     }
   }, [open, closeOnEscape, handleEscKey]);
 
-  // Prevent scroll
+  // Prevent scroll + scrollbar compensation
   useEffect(() => {
     if (!preventScroll) return;
 
     if (open) {
+      const scrollbarWidth = getScrollbarWidth();
       const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
+
       document.body.style.overflow = 'hidden';
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+
       return () => {
         document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
       };
     }
   }, [open, preventScroll]);
@@ -130,7 +153,11 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     maxWidth: fullScreen ? '100vw' : '90vw',
     maxHeight: fullScreen ? '100vh' : '85vh',
     borderRadius: fullScreen ? '0' : RADIUS_MAP[radius] || RADIUS_MAP.lg,
-    boxShadow: shadow ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)' : 'none',
+    boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-shadow-2xl))' : 'none',
+    backgroundColor: 'var(--ds-modal-bg)',
+    color: 'var(--ds-modal-color)',
+    // Entrance animation
+    animation: 'rottay-modal-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
     ...style,
   };
 
@@ -146,13 +173,15 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         onClick={handleBackdropClick}
         onClose={handleDialogClose}
       >
-        {/* Backdrop */}
+        {/* Backdrop with blur */}
         {showBackdrop && (
           <div
-            className={`modal-backdrop ${blurBackdrop ? 'backdrop-blur-sm' : ''}`}
+            className="modal-backdrop"
             style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              backdropFilter: blurBackdrop ? 'blur(4px)' : undefined,
+              backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
+              animation: 'rottay-modal-backdrop-enter 0.3s ease-out',
             }}
           />
         )}
@@ -170,7 +199,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
               style={{
                 padding: PADDING_MAP[padding] || PADDING_MAP.lg,
                 paddingBottom: divider ? PADDING_MAP[padding] || PADDING_MAP.lg : '0',
-                borderBottom: divider ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+                borderBottom: divider ? '1px solid var(--ds-modal-header-border, var(--ds-color-border-primary))' : 'none',
               }}
             >
               <div className="flex-1">
@@ -185,7 +214,16 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                   type="button"
                   className="btn btn-sm btn-circle btn-ghost"
                   onClick={onClose}
+                  onMouseEnter={() => setIsCloseHovered(true)}
+                  onMouseLeave={() => setIsCloseHovered(false)}
                   aria-label={t('modal.close')}
+                  style={{
+                    transition: 'background-color 0.2s ease, transform 0.15s ease',
+                    backgroundColor: isCloseHovered
+                      ? 'var(--ds-modal-close-hover-bg, rgba(0, 0, 0, 0.08))'
+                      : 'transparent',
+                    transform: isCloseHovered ? 'scale(1.05)' : 'scale(1)',
+                  }}
                 >
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -204,7 +242,12 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             }}
           >
             {description && (
-              <p className="py-2 text-base-content/70">{description}</p>
+              <p
+                className="py-2"
+                style={{ color: 'var(--ds-modal-body-color, var(--ds-color-text-secondary))' }}
+              >
+                {description}
+              </p>
             )}
             {children}
           </div>
@@ -216,7 +259,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
               style={{
                 padding: PADDING_MAP[padding] || PADDING_MAP.lg,
                 paddingTop: divider ? PADDING_MAP[padding] || PADDING_MAP.lg : '0',
-                borderTop: divider ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+                borderTop: divider ? '1px solid var(--ds-modal-footer-border, var(--ds-color-border-primary))' : 'none',
               }}
             >
               {footer}
@@ -224,6 +267,28 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           )}
         </div>
       </dialog>
+
+      {/* Keyframe animations for entrance */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes rottay-modal-enter {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        @keyframes rottay-modal-backdrop-enter {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}} />
     </Portal>
   );
 }

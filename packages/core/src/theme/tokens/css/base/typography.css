@@ -10,107 +10,107 @@
      FONT FAMILIES
      Define the typeface stacks for different text purposes
      ======================================================================== */
-  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
                       'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
                       'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
                       'Noto Color Emoji';
-  --font-family-heading: var(--font-family-base);
-  --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
+  --ds-font-family-heading: var(--ds-font-family-base);
+  --ds-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
                       Consolas, 'Liberation Mono', 'Courier New', monospace;
-  --font-family-display: var(--font-family-base);
+  --ds-font-family-display: var(--ds-font-family-base);
 
   /* ========================================================================
      FONT SIZES
      Type scale from small to 4xl for consistent text sizing
      ======================================================================== */
-  --font-size-xs: 0.75rem;      /* 12px */
-  --font-size-sm: 0.875rem;     /* 14px */
-  --font-size-base: 1rem;       /* 16px - Base font size */
-  --font-size-md: 1rem;         /* 16px - Alias for base */
-  --font-size-lg: 1.125rem;     /* 18px */
-  --font-size-xl: 1.25rem;      /* 20px */
-  --font-size-2xl: 1.5rem;      /* 24px */
-  --font-size-3xl: 1.875rem;    /* 30px */
-  --font-size-4xl: 2.25rem;     /* 36px */
-  --font-size-5xl: 3rem;        /* 48px */
-  --font-size-6xl: 3.75rem;     /* 60px */
-  --font-size-7xl: 4.5rem;      /* 72px */
-  --font-size-8xl: 6rem;        /* 96px */
-  --font-size-9xl: 8rem;        /* 128px */
+  --ds-font-size-xs: 0.75rem;      /* 12px */
+  --ds-font-size-sm: 0.875rem;     /* 14px */
+  --ds-font-size-base: 1rem;       /* 16px - Base font size */
+  --ds-font-size-md: 1rem;         /* 16px - Alias for base */
+  --ds-font-size-lg: 1.125rem;     /* 18px */
+  --ds-font-size-xl: 1.25rem;      /* 20px */
+  --ds-font-size-2xl: 1.5rem;      /* 24px */
+  --ds-font-size-3xl: 1.875rem;    /* 30px */
+  --ds-font-size-4xl: 2.25rem;     /* 36px */
+  --ds-font-size-5xl: 3rem;        /* 48px */
+  --ds-font-size-6xl: 3.75rem;     /* 60px */
+  --ds-font-size-7xl: 4.5rem;      /* 72px */
+  --ds-font-size-8xl: 6rem;        /* 96px */
+  --ds-font-size-9xl: 8rem;        /* 128px */
 
   /* ========================================================================
      HEADING SIZES
      Predefined sizes for heading elements
      ======================================================================== */
-  --font-size-h1: var(--font-size-4xl);   /* 36px */
-  --font-size-h2: var(--font-size-3xl);   /* 30px */
-  --font-size-h3: var(--font-size-2xl);   /* 24px */
-  --font-size-h4: var(--font-size-xl);    /* 20px */
-  --font-size-h5: var(--font-size-lg);    /* 18px */
-  --font-size-h6: var(--font-size-base);  /* 16px */
+  --ds-font-size-h1: var(--ds-font-size-4xl);   /* 36px */
+  --ds-font-size-h2: var(--ds-font-size-3xl);   /* 30px */
+  --ds-font-size-h3: var(--ds-font-size-2xl);   /* 24px */
+  --ds-font-size-h4: var(--ds-font-size-xl);    /* 20px */
+  --ds-font-size-h5: var(--ds-font-size-lg);    /* 18px */
+  --ds-font-size-h6: var(--ds-font-size-base);  /* 16px */
 
   /* ========================================================================
      FONT WEIGHTS
      Weight scale for text emphasis
      ======================================================================== */
-  --font-weight-thin: 100;
-  --font-weight-extralight: 200;
-  --font-weight-light: 300;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  --font-weight-extrabold: 800;
-  --font-weight-black: 900;
+  --ds-font-weight-thin: 100;
+  --ds-font-weight-extralight: 200;
+  --ds-font-weight-light: 300;
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-extrabold: 800;
+  --ds-font-weight-black: 900;
 
   /* Semantic aliases */
-  --font-weight-body: var(--font-weight-normal);
-  --font-weight-heading: var(--font-weight-semibold);
-  --font-weight-display: var(--font-weight-bold);
+  --ds-font-weight-body: var(--ds-font-weight-normal);
+  --ds-font-weight-heading: var(--ds-font-weight-semibold);
+  --ds-font-weight-display: var(--ds-font-weight-bold);
 
   /* ========================================================================
      LINE HEIGHTS
      Vertical spacing for text readability
      ======================================================================== */
-  --line-height-none: 1;
-  --line-height-tight: 1.25;
-  --line-height-snug: 1.375;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.625;
-  --line-height-loose: 2;
+  --ds-line-height-none: 1;
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-snug: 1.375;
+  --ds-line-height-normal: 1.5;
+  --ds-line-height-relaxed: 1.625;
+  --ds-line-height-loose: 2;
 
   /* Contextual line heights */
-  --line-height-body: var(--line-height-normal);      /* 1.5 */
-  --line-height-heading: var(--line-height-tight);    /* 1.25 */
-  --line-height-display: var(--line-height-none);     /* 1 */
+  --ds-line-height-body: var(--ds-line-height-normal);      /* 1.5 */
+  --ds-line-height-heading: var(--ds-line-height-tight);    /* 1.25 */
+  --ds-line-height-display: var(--ds-line-height-none);     /* 1 */
 
   /* ========================================================================
      LETTER SPACING
      Horizontal spacing between characters
      ======================================================================== */
-  --letter-spacing-tighter: -0.05em;
-  --letter-spacing-tight: -0.025em;
-  --letter-spacing-normal: 0;
-  --letter-spacing-wide: 0.025em;
-  --letter-spacing-wider: 0.05em;
-  --letter-spacing-widest: 0.1em;
+  --ds-letter-spacing-tighter: -0.05em;
+  --ds-letter-spacing-tight: -0.025em;
+  --ds-letter-spacing-normal: 0;
+  --ds-letter-spacing-wide: 0.025em;
+  --ds-letter-spacing-wider: 0.05em;
+  --ds-letter-spacing-widest: 0.1em;
 
   /* ========================================================================
      TEXT TRANSFORM
      Common text transformations
      ======================================================================== */
-  --text-transform-none: none;
-  --text-transform-uppercase: uppercase;
-  --text-transform-lowercase: lowercase;
-  --text-transform-capitalize: capitalize;
+  --ds-text-transform-none: none;
+  --ds-text-transform-uppercase: uppercase;
+  --ds-text-transform-lowercase: lowercase;
+  --ds-text-transform-capitalize: capitalize;
 
   /* ========================================================================
      TEXT DECORATION
      Common text decorations
      ======================================================================== */
-  --text-decoration-none: none;
-  --text-decoration-underline: underline;
-  --text-decoration-line-through: line-through;
+  --ds-text-decoration-none: none;
+  --ds-text-decoration-underline: underline;
+  --ds-text-decoration-line-through: line-through;
 
   /* ========================================================================
      COMPOSITE TEXT STYLES
@@ -118,73 +118,73 @@
      ======================================================================== */
 
   /* Display styles */
-  --text-display-1-size: var(--font-size-6xl);
-  --text-display-1-weight: var(--font-weight-bold);
-  --text-display-1-line-height: var(--line-height-none);
-  --text-display-1-letter-spacing: var(--letter-spacing-tight);
+  --ds-text-display-1-size: var(--ds-font-size-6xl);
+  --ds-text-display-1-weight: var(--ds-font-weight-bold);
+  --ds-text-display-1-line-height: var(--ds-line-height-none);
+  --ds-text-display-1-letter-spacing: var(--ds-letter-spacing-tight);
 
-  --text-display-2-size: var(--font-size-5xl);
-  --text-display-2-weight: var(--font-weight-bold);
-  --text-display-2-line-height: var(--line-height-none);
-  --text-display-2-letter-spacing: var(--letter-spacing-tight);
+  --ds-text-display-2-size: var(--ds-font-size-5xl);
+  --ds-text-display-2-weight: var(--ds-font-weight-bold);
+  --ds-text-display-2-line-height: var(--ds-line-height-none);
+  --ds-text-display-2-letter-spacing: var(--ds-letter-spacing-tight);
 
   /* Heading styles */
-  --text-heading-1-size: var(--font-size-h1);
-  --text-heading-1-weight: var(--font-weight-heading);
-  --text-heading-1-line-height: var(--line-height-heading);
+  --ds-text-heading-1-size: var(--ds-font-size-h1);
+  --ds-text-heading-1-weight: var(--ds-font-weight-heading);
+  --ds-text-heading-1-line-height: var(--ds-line-height-heading);
 
-  --text-heading-2-size: var(--font-size-h2);
-  --text-heading-2-weight: var(--font-weight-heading);
-  --text-heading-2-line-height: var(--line-height-heading);
+  --ds-text-heading-2-size: var(--ds-font-size-h2);
+  --ds-text-heading-2-weight: var(--ds-font-weight-heading);
+  --ds-text-heading-2-line-height: var(--ds-line-height-heading);
 
-  --text-heading-3-size: var(--font-size-h3);
-  --text-heading-3-weight: var(--font-weight-heading);
-  --text-heading-3-line-height: var(--line-height-heading);
+  --ds-text-heading-3-size: var(--ds-font-size-h3);
+  --ds-text-heading-3-weight: var(--ds-font-weight-heading);
+  --ds-text-heading-3-line-height: var(--ds-line-height-heading);
 
-  --text-heading-4-size: var(--font-size-h4);
-  --text-heading-4-weight: var(--font-weight-heading);
-  --text-heading-4-line-height: var(--line-height-heading);
+  --ds-text-heading-4-size: var(--ds-font-size-h4);
+  --ds-text-heading-4-weight: var(--ds-font-weight-heading);
+  --ds-text-heading-4-line-height: var(--ds-line-height-heading);
 
-  --text-heading-5-size: var(--font-size-h5);
-  --text-heading-5-weight: var(--font-weight-heading);
-  --text-heading-5-line-height: var(--line-height-heading);
+  --ds-text-heading-5-size: var(--ds-font-size-h5);
+  --ds-text-heading-5-weight: var(--ds-font-weight-heading);
+  --ds-text-heading-5-line-height: var(--ds-line-height-heading);
 
-  --text-heading-6-size: var(--font-size-h6);
-  --text-heading-6-weight: var(--font-weight-heading);
-  --text-heading-6-line-height: var(--line-height-heading);
+  --ds-text-heading-6-size: var(--ds-font-size-h6);
+  --ds-text-heading-6-weight: var(--ds-font-weight-heading);
+  --ds-text-heading-6-line-height: var(--ds-line-height-heading);
 
   /* Body styles */
-  --text-body-lg-size: var(--font-size-lg);
-  --text-body-lg-weight: var(--font-weight-normal);
-  --text-body-lg-line-height: var(--line-height-normal);
+  --ds-text-body-lg-size: var(--ds-font-size-lg);
+  --ds-text-body-lg-weight: var(--ds-font-weight-normal);
+  --ds-text-body-lg-line-height: var(--ds-line-height-normal);
 
-  --text-body-md-size: var(--font-size-base);
-  --text-body-md-weight: var(--font-weight-normal);
-  --text-body-md-line-height: var(--line-height-normal);
+  --ds-text-body-md-size: var(--ds-font-size-base);
+  --ds-text-body-md-weight: var(--ds-font-weight-normal);
+  --ds-text-body-md-line-height: var(--ds-line-height-normal);
 
-  --text-body-sm-size: var(--font-size-sm);
-  --text-body-sm-weight: var(--font-weight-normal);
-  --text-body-sm-line-height: var(--line-height-normal);
+  --ds-text-body-sm-size: var(--ds-font-size-sm);
+  --ds-text-body-sm-weight: var(--ds-font-weight-normal);
+  --ds-text-body-sm-line-height: var(--ds-line-height-normal);
 
-  --text-body-xs-size: var(--font-size-xs);
-  --text-body-xs-weight: var(--font-weight-normal);
-  --text-body-xs-line-height: var(--line-height-normal);
+  --ds-text-body-xs-size: var(--ds-font-size-xs);
+  --ds-text-body-xs-weight: var(--ds-font-weight-normal);
+  --ds-text-body-xs-line-height: var(--ds-line-height-normal);
 
   /* Caption styles */
-  --text-caption-size: var(--font-size-sm);
-  --text-caption-weight: var(--font-weight-normal);
-  --text-caption-line-height: var(--line-height-snug);
-  --text-caption-color: var(--color-neutral-600);
+  --ds-text-caption-size: var(--ds-font-size-sm);
+  --ds-text-caption-weight: var(--ds-font-weight-normal);
+  --ds-text-caption-line-height: var(--ds-line-height-snug);
+  --ds-text-caption-color: var(--ds-color-neutral-600);
 
   /* Label styles */
-  --text-label-size: var(--font-size-sm);
-  --text-label-weight: var(--font-weight-medium);
-  --text-label-line-height: var(--line-height-normal);
-  --text-label-letter-spacing: var(--letter-spacing-wide);
+  --ds-text-label-size: var(--ds-font-size-sm);
+  --ds-text-label-weight: var(--ds-font-weight-medium);
+  --ds-text-label-line-height: var(--ds-line-height-normal);
+  --ds-text-label-letter-spacing: var(--ds-letter-spacing-wide);
 
   /* Code/Mono styles */
-  --text-code-size: var(--font-size-sm);
-  --text-code-weight: var(--font-weight-normal);
-  --text-code-line-height: var(--line-height-normal);
-  --text-code-family: var(--font-family-mono);
+  --ds-text-code-size: var(--ds-font-size-sm);
+  --ds-text-code-weight: var(--ds-font-weight-normal);
+  --ds-text-code-line-height: var(--ds-line-height-normal);
+  --ds-text-code-family: var(--ds-font-family-mono);
 }

@@ -40,7 +40,7 @@
  */
 
 import React from 'react';
-import { InputNumber as AntInputNumber } from 'antd';
+import { InputNumber as AntInputNumber, Space } from 'antd';
 import type { InputNumberProps } from '../../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,7 +80,7 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
       variant,
     } = props;
 
-    return (
+    const input = (
       <AntInputNumber
         ref={ref}
         value={value}
@@ -95,8 +95,6 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
         status={status}
         prefix={prefix}
         suffix={suffix}
-        addonBefore={addonBefore}
-        addonAfter={addonAfter}
         placeholder={placeholder}
         controls={controls}
         keyboard={keyboard}
@@ -114,6 +112,18 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
         name={name}
         variant={variant}
       />
+    );
+
+    if (!addonBefore && !addonAfter) {
+      return input;
+    }
+
+    return (
+      <Space.Compact className={className} style={style}>
+        {addonBefore ? <span>{addonBefore}</span> : null}
+        {input}
+        {addonAfter ? <span>{addonAfter}</span> : null}
+      </Space.Compact>
     );
   }
 );

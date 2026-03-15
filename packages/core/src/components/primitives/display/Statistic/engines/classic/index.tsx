@@ -13,7 +13,7 @@
  *
  * **Implementation Details:**
  * - Uses `antd/Statistic` for core rendering
- * - Uses `antd/Statistic.Countdown` for timer
+ * - Uses `antd/Statistic.Timer` for countdown timers
  * - Maps valueType to inline colors
  * - Consistent with Ant Design theming
  *
@@ -57,6 +57,7 @@
 
 import React, { forwardRef } from 'react';
 import { Statistic as AntStatistic } from 'antd';
+import { CountUp } from '../../../../../../animations';
 import type { StatisticProps, CountdownProps } from '../../types';
 import { STATISTIC_DEFAULTS } from '../../types';
 
@@ -66,9 +67,9 @@ import { STATISTIC_DEFAULTS } from '../../types';
  */
 const VALUE_TYPE_COLOR_MAP: Record<string, string> = {
   default: 'inherit',
-  positive: '#52c41a',
-  negative: '#ff4d4f',
-  warning: '#faad14',
+  positive: 'var(--ds-color-success)',
+  negative: 'var(--ds-color-error)',
+  warning: 'var(--ds-color-warning)',
 };
 
 /**
@@ -102,6 +103,8 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       decimalSeparator = STATISTIC_DEFAULTS.decimalSeparator,
       loading,
       formatter,
+      animateValue = false,
+      countFrom = 0,
       valueType = STATISTIC_DEFAULTS.valueType,
       className,
       style,
@@ -112,6 +115,23 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       ...valueStyle,
       ...(valueType !== 'default' && { color: VALUE_TYPE_COLOR_MAP[valueType] }),
     };
+    const resolvedFormatter =
+      !formatter && animateValue && typeof value === 'number'
+        ? () => (
+            <CountUp
+              from={countFrom}
+              to={value}
+              formatter={(nextValue) =>
+                typeof nextValue === 'number'
+                  ? nextValue.toLocaleString(undefined, {
+                      minimumFractionDigits: precision,
+                      maximumFractionDigits: precision,
+                    })
+                  : String(nextValue)
+              }
+            />
+          )
+        : formatter;
 
     return (
       <div ref={ref} className={className} style={style}>
@@ -125,7 +145,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           groupSeparator={groupSeparator}
           decimalSeparator={decimalSeparator}
           loading={loading}
-          formatter={formatter}
+          formatter={resolvedFormatter}
         />
       </div>
     );
@@ -137,7 +157,7 @@ Statistic.displayName = 'Statistic.Classic';
 /**
  * Classic Engine implementation of the Countdown component.
  *
- * Wraps Ant Design's Statistic.Countdown component, providing
+ * Wraps Ant Design's Statistic.Timer component in countdown mode, providing
  * countdown functionality with the Rottay Design System API.
  *
  * @example
@@ -175,7 +195,8 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
 
     return (
       <div ref={ref} className={className} style={style}>
-        <AntStatistic.Countdown
+        <AntStatistic.Timer
+          type="countdown"
           title={title}
           value={value}
           format={format}

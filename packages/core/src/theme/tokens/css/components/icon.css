@@ -12,43 +12,43 @@
      ======================================================================== */
 
   /* XS - Extra Small (12px) */
-  --icon-xs-size: 0.75rem;           /* 12px */
+  --ds-icon-xs-size: 0.75rem;           /* 12px */
 
   /* SM - Small (16px) */
-  --icon-sm-size: 1rem;              /* 16px */
+  --ds-icon-sm-size: 1rem;              /* 16px */
 
   /* MD - Medium (20px - Default) */
-  --icon-md-size: 1.25rem;           /* 20px */
+  --ds-icon-md-size: 1.25rem;           /* 20px */
 
   /* LG - Large (24px) */
-  --icon-lg-size: 1.5rem;            /* 24px */
+  --ds-icon-lg-size: 1.5rem;            /* 24px */
 
   /* XL - Extra Large (32px) */
-  --icon-xl-size: 2rem;              /* 32px */
+  --ds-icon-xl-size: 2rem;              /* 32px */
 
   /* 2XL - 2x Extra Large (48px) */
-  --icon-2xl-size: 3rem;             /* 48px */
+  --ds-icon-2xl-size: 3rem;             /* 48px */
 
   /* Default size */
-  --icon-default-size: var(--icon-md-size);
+  --ds-icon-default-size: var(--ds-icon-md-size);
 
   /* ========================================================================
      STROKE - Icon Stroke Settings
      ======================================================================== */
-  --icon-stroke-width: 2;
-  --icon-stroke-linecap: round;
-  --icon-stroke-linejoin: round;
+  --ds-icon-stroke-width: 2;
+  --ds-icon-stroke-linecap: round;
+  --ds-icon-stroke-linejoin: round;
 
   /* ========================================================================
      COLOR - Default Icon Color
      ======================================================================== */
-  --icon-default-color: currentColor;
+  --ds-icon-default-color: currentColor;
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --icon-transition-duration: 0.2s;
-  --icon-transition-timing: ease-in-out;
-  --icon-transition: all var(--icon-transition-duration) var(--icon-transition-timing);
+  --ds-icon-transition-duration: 0.2s;
+  --ds-icon-transition-timing: ease-in-out;
+  --ds-icon-transition: all var(--ds-icon-transition-duration) var(--ds-icon-transition-timing);
 }

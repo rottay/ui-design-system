@@ -46,7 +46,7 @@
  * console.log(RATE_DEFAULTS.allowHalf); // false
  *
  * // Access size mappings
- * console.log(RATE_SIZE_MAP.lg);        // 'var(--rate-lg-size)'
+ * console.log(RATE_SIZE_MAP.lg);        // 'var(--ds-rate-lg-size)'
  * ```
  *
  * @see {@link RateProps} - Main component props
@@ -71,11 +71,11 @@ import type { ReactNode, CSSProperties, HTMLAttributes } from 'react';
  *
  * | Value | CSS Variable | Typical Size |
  * |-------|-------------|--------------|
- * | `xs` | --rate-xs-size | 16px |
- * | `sm` | --rate-sm-size | 20px |
- * | `md` | --rate-md-size | 24px (default) |
- * | `lg` | --rate-lg-size | 32px |
- * | `xl` | --rate-xl-size | 40px |
+ * | `xs` | --ds-rate-xs-size | 16px |
+ * | `sm` | --ds-rate-sm-size | 20px |
+ * | `md` | --ds-rate-md-size | 24px (default) |
+ * | `lg` | --ds-rate-lg-size | 32px |
+ * | `xl` | --ds-rate-xl-size | 40px |
  */
 export type RateSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -288,7 +288,7 @@ export interface RateProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
    * Color of the inactive (empty) stars.
    * Overrides the default theme color.
    * @example '#d1d5db'
-   * @example 'var(--color-gray-300)'
+   * @example 'var(--ds-color-neutral-300)'
    */
   inactiveColor?: string;
 
@@ -403,11 +403,11 @@ export const RATE_DEFAULTS: Required<Pick<RateProps,
  * These CSS variables should be defined in your theme tokens:
  * ```css
  * :root {
- *   --rate-xs-size: 16px;
- *   --rate-sm-size: 20px;
- *   --rate-md-size: 24px;
- *   --rate-lg-size: 32px;
- *   --rate-xl-size: 40px;
+ *   --ds-rate-xs-size: 16px;
+ *   --ds-rate-sm-size: 20px;
+ *   --ds-rate-md-size: 24px;
+ *   --ds-rate-lg-size: 32px;
+ *   --ds-rate-xl-size: 40px;
  * }
  * ```
  *
@@ -423,13 +423,13 @@ export const RATE_DEFAULTS: Required<Pick<RateProps,
  */
 export const RATE_SIZE_MAP: Record<RateSize, string> = {
   /** Extra small - 16px */
-  xs: 'var(--rate-xs-size)',
+  xs: 'var(--ds-rate-xs-size)',
   /** Small - 20px */
-  sm: 'var(--rate-sm-size)',
+  sm: 'var(--ds-rate-sm-size)',
   /** Medium (default) - 24px */
-  md: 'var(--rate-md-size)',
+  md: 'var(--ds-rate-md-size)',
   /** Large - 32px */
-  lg: 'var(--rate-lg-size)',
+  lg: 'var(--ds-rate-lg-size)',
   /** Extra large - 40px */
-  xl: 'var(--rate-xl-size)',
+  xl: 'var(--ds-rate-xl-size)',
 };

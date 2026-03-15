@@ -39,7 +39,10 @@ export function InputGroup({
     // Handle border radius for compact mode
     if (compact) {
       if (!isFirst && !isLast) {
-        childStyle.borderRadius = 0;
+        childStyle.borderTopLeftRadius = 0;
+        childStyle.borderTopRightRadius = 0;
+        childStyle.borderBottomRightRadius = 0;
+        childStyle.borderBottomLeftRadius = 0;
       } else if (isFirst && !isLast) {
         childStyle.borderTopRightRadius = 0;
         childStyle.borderBottomRightRadius = 0;

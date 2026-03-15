@@ -106,7 +106,7 @@
  *       description: 'Do you want to proceed with this action?',
  *       key,
  *       duration: 0, // Won't auto-close
- *       btn: (
+ *       actions: (
  *         <Button size="sm" onClick={() => api.destroy(key)}>
  *           Confirm
  *         </Button>
@@ -174,6 +174,15 @@
  * @package @rottay/design-system
  */
 
+'use client';
+
+import React from 'react';
+import { useEngineContext } from '../../../../core/providers/engine';
+import type { EngineName } from '../../../../core/types';
+import * as classicEngine from './engines/classic';
+import * as modernEngine from './engines/modern';
+import * as rusticEngine from './engines/rustic';
+
 // ============================================================================
 // Type Exports
 // ============================================================================
@@ -195,19 +204,40 @@ export {
 // Component Exports (Classic Engine - Default)
 // ============================================================================
 
-/**
- * Exports from the default Classic engine.
- *
- * @remarks
- * The Classic engine uses Ant Design's notification API under the hood,
- * providing a full-featured implementation with animations and static methods.
- */
-export {
-  NotificationProvider,
-  NotificationItem,
-  useNotification,
-  notification,
-} from './engines/classic';
+const notificationEngines = {
+  classic: classicEngine,
+  modern: modernEngine,
+  rustic: rusticEngine,
+} as const satisfies Record<Exclude<EngineName, 'athena'>, typeof classicEngine>;
+
+function resolveNotificationEngine(engine: EngineName) {
+  if (engine === 'athena') {
+    return classicEngine;
+  }
+
+  return notificationEngines[engine];
+}
+
+export const NotificationProvider: React.FC<
+  React.ComponentProps<typeof classicEngine.NotificationProvider>
+> = (props) => {
+  const { engine } = useEngineContext();
+  const Provider = resolveNotificationEngine(engine).NotificationProvider;
+  return React.createElement(Provider, props);
+};
+
+export const NotificationItem: React.FC<React.ComponentProps<typeof classicEngine.NotificationItem>> = (
+  props
+) => {
+  const { engine } = useEngineContext();
+  const Item = resolveNotificationEngine(engine).NotificationItem;
+  return React.createElement(Item, props);
+};
+
+export function useNotification() {
+  const { engine } = useEngineContext();
+  return resolveNotificationEngine(engine).useNotification();
+}
 
 // ============================================================================
 // Default Export
@@ -223,5 +253,11 @@ export {
  * const { NotificationProvider, useNotification, notification } = Notification;
  * ```
  */
-import * as classicEngine from './engines/classic';
-export default classicEngine;
+export const notification = classicEngine.notification;
+
+export default {
+  NotificationProvider,
+  NotificationItem,
+  useNotification,
+  notification,
+};

@@ -12,44 +12,44 @@
      ======================================================================== */
 
   /* XS - Extra Small */
-  --toggle-xs-width: 1.75rem;            /* 28px */
-  --toggle-xs-height: 1rem;              /* 16px */
-  --toggle-xs-dot: 0.75rem;              /* 12px */
-  --toggle-xs-dot-offset: 0.125rem;      /* 2px */
-  --toggle-xs-label-font-size: 0.75rem;  /* 12px */
+  --ds-toggle-xs-width: 1.75rem;            /* 28px */
+  --ds-toggle-xs-height: 1rem;              /* 16px */
+  --ds-toggle-xs-dot: 0.75rem;              /* 12px */
+  --ds-toggle-xs-dot-offset: 0.125rem;      /* 2px */
+  --ds-toggle-xs-label-font-size: 0.75rem;  /* 12px */
 
   /* SM - Small */
-  --toggle-sm-width: 2.25rem;            /* 36px */
-  --toggle-sm-height: 1.25rem;           /* 20px */
-  --toggle-sm-dot: 1rem;                 /* 16px */
-  --toggle-sm-dot-offset: 0.125rem;      /* 2px */
-  --toggle-sm-label-font-size: 0.8125rem; /* 13px */
+  --ds-toggle-sm-width: 2.25rem;            /* 36px */
+  --ds-toggle-sm-height: 1.25rem;           /* 20px */
+  --ds-toggle-sm-dot: 1rem;                 /* 16px */
+  --ds-toggle-sm-dot-offset: 0.125rem;      /* 2px */
+  --ds-toggle-sm-label-font-size: 0.8125rem; /* 13px */
 
   /* MD - Medium (Default) */
-  --toggle-md-width: 2.75rem;            /* 44px */
-  --toggle-md-height: 1.5rem;            /* 24px */
-  --toggle-md-dot: 1.25rem;              /* 20px */
-  --toggle-md-dot-offset: 0.125rem;      /* 2px */
-  --toggle-md-label-font-size: 0.875rem; /* 14px */
+  --ds-toggle-md-width: 2.75rem;            /* 44px */
+  --ds-toggle-md-height: 1.5rem;            /* 24px */
+  --ds-toggle-md-dot: 1.25rem;              /* 20px */
+  --ds-toggle-md-dot-offset: 0.125rem;      /* 2px */
+  --ds-toggle-md-label-font-size: 0.875rem; /* 14px */
 
   /* LG - Large */
-  --toggle-lg-width: 3.25rem;            /* 52px */
-  --toggle-lg-height: 1.75rem;           /* 28px */
-  --toggle-lg-dot: 1.5rem;               /* 24px */
-  --toggle-lg-dot-offset: 0.125rem;      /* 2px */
-  --toggle-lg-label-font-size: 1rem;     /* 16px */
+  --ds-toggle-lg-width: 3.25rem;            /* 52px */
+  --ds-toggle-lg-height: 1.75rem;           /* 28px */
+  --ds-toggle-lg-dot: 1.5rem;               /* 24px */
+  --ds-toggle-lg-dot-offset: 0.125rem;      /* 2px */
+  --ds-toggle-lg-label-font-size: 1rem;     /* 16px */
 
   /* XL - Extra Large */
-  --toggle-xl-width: 3.75rem;            /* 60px */
-  --toggle-xl-height: 2rem;              /* 32px */
-  --toggle-xl-dot: 1.75rem;              /* 28px */
-  --toggle-xl-dot-offset: 0.125rem;      /* 2px */
-  --toggle-xl-label-font-size: 1.125rem; /* 18px */
+  --ds-toggle-xl-width: 3.75rem;            /* 60px */
+  --ds-toggle-xl-height: 2rem;              /* 32px */
+  --ds-toggle-xl-dot: 1.75rem;              /* 28px */
+  --ds-toggle-xl-dot-offset: 0.125rem;      /* 2px */
+  --ds-toggle-xl-label-font-size: 1.125rem; /* 18px */
 
   /* Default size */
-  --toggle-default-width: var(--toggle-md-width);
-  --toggle-default-height: var(--toggle-md-height);
-  --toggle-default-dot: var(--toggle-md-dot);
+  --ds-toggle-default-width: var(--ds-toggle-md-width);
+  --ds-toggle-default-height: var(--ds-toggle-md-height);
+  --ds-toggle-default-dot: var(--ds-toggle-md-dot);
 
   /* ========================================================================
      COLOR VARIANTS - Semantic Colors
@@ -57,121 +57,121 @@
      ======================================================================== */
 
   /* Default variant */
-  --toggle-default-bg: #d9d9d9;
-  --toggle-default-bg-checked: #1890ff;
-  --toggle-default-border: #d9d9d9;
+  --ds-toggle-default-bg: #d9d9d9;
+  --ds-toggle-default-bg-checked: #1890ff;
+  --ds-toggle-default-border: #d9d9d9;
 
   /* Primary variant */
-  --toggle-primary-bg: #d9d9d9;
-  --toggle-primary-bg-checked: var(--color-primary-500, #1890ff);
-  --toggle-primary-border: var(--color-primary-500, #1890ff);
+  --ds-toggle-primary-bg: #d9d9d9;
+  --ds-toggle-primary-bg-checked: var(--ds-color-primary-500, #1890ff);
+  --ds-toggle-primary-border: var(--ds-color-primary-500, #1890ff);
 
   /* Secondary variant */
-  --toggle-secondary-bg: #d9d9d9;
-  --toggle-secondary-bg-checked: var(--color-neutral-600, #6c757d);
-  --toggle-secondary-border: var(--color-neutral-600, #6c757d);
+  --ds-toggle-secondary-bg: #d9d9d9;
+  --ds-toggle-secondary-bg-checked: var(--ds-color-neutral-600, #6c757d);
+  --ds-toggle-secondary-border: var(--ds-color-neutral-600, #6c757d);
 
   /* Success variant */
-  --toggle-success-bg: #d9d9d9;
-  --toggle-success-bg-checked: var(--color-success-500, #52c41a);
-  --toggle-success-border: var(--color-success-500, #52c41a);
+  --ds-toggle-success-bg: #d9d9d9;
+  --ds-toggle-success-bg-checked: var(--ds-color-success-500, #52c41a);
+  --ds-toggle-success-border: var(--ds-color-success-500, #52c41a);
 
   /* Warning variant */
-  --toggle-warning-bg: #d9d9d9;
-  --toggle-warning-bg-checked: var(--color-warning-500, #faad14);
-  --toggle-warning-border: var(--color-warning-500, #faad14);
+  --ds-toggle-warning-bg: #d9d9d9;
+  --ds-toggle-warning-bg-checked: var(--ds-color-warning-500, #faad14);
+  --ds-toggle-warning-border: var(--ds-color-warning-500, #faad14);
 
   /* Error variant */
-  --toggle-error-bg: #d9d9d9;
-  --toggle-error-bg-checked: var(--color-error-500, #ff4d4f);
-  --toggle-error-border: var(--color-error-500, #ff4d4f);
+  --ds-toggle-error-bg: #d9d9d9;
+  --ds-toggle-error-bg-checked: var(--ds-color-error-500, #ff4d4f);
+  --ds-toggle-error-border: var(--ds-color-error-500, #ff4d4f);
 
   /* ========================================================================
      DOT/HANDLE - Toggle Handle Styling
      Settings for the toggle handle/dot
      ======================================================================== */
-  --toggle-dot-bg: var(--color-white, #ffffff);
-  --toggle-dot-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  --toggle-dot-border-radius: var(--radius-full);
+  --ds-toggle-dot-bg: var(--ds-color-white, #ffffff);
+  --ds-toggle-dot-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --ds-toggle-dot-border-radius: var(--ds-radius-full);
 
   /* ========================================================================
      TRACK - Toggle Track Styling
      Settings for the toggle track/background
      ======================================================================== */
-  --toggle-track-border-radius: var(--radius-full);
-  --toggle-track-border-width: 1px;
-  --toggle-track-border-style: solid;
+  --ds-toggle-track-border-radius: var(--ds-radius-full);
+  --ds-toggle-track-border-width: 1px;
+  --ds-toggle-track-border-style: solid;
 
   /* ========================================================================
      LABEL - Label Styling
      Settings for toggle labels
      ======================================================================== */
-  --toggle-label-color: var(--color-neutral-700);
-  --toggle-label-color-disabled: var(--color-neutral-400);
-  --toggle-label-font-weight: var(--font-weight-normal);
-  --toggle-label-gap: 0.5rem;            /* 8px */
+  --ds-toggle-label-color: var(--ds-color-neutral-700);
+  --ds-toggle-label-color-disabled: var(--ds-color-neutral-400);
+  --ds-toggle-label-font-weight: var(--ds-font-weight-normal);
+  --ds-toggle-label-gap: 0.5rem;            /* 8px */
 
   /* Description text */
-  --toggle-description-color: var(--color-neutral-500);
-  --toggle-description-font-size: 0.75rem;
-  --toggle-description-margin-top: 0.25rem;
+  --ds-toggle-description-color: var(--ds-color-neutral-500);
+  --ds-toggle-description-font-size: 0.75rem;
+  --ds-toggle-description-margin-top: 0.25rem;
 
   /* ========================================================================
      INNER LABELS - On/Off Text Inside Toggle
      Settings for text inside the toggle track
      ======================================================================== */
-  --toggle-inner-font-size: 0.625rem;    /* 10px */
-  --toggle-inner-color: var(--color-white);
-  --toggle-inner-padding: 0 0.375rem;
+  --ds-toggle-inner-font-size: 0.625rem;    /* 10px */
+  --ds-toggle-inner-color: var(--ds-color-white);
+  --ds-toggle-inner-padding: 0 0.375rem;
 
   /* ========================================================================
      HELPER TEXT
      Settings for helper/description text
      ======================================================================== */
-  --toggle-helper-color: var(--color-neutral-600);
-  --toggle-helper-font-size: 0.75rem;
-  --toggle-helper-margin-top: 0.25rem;
+  --ds-toggle-helper-color: var(--ds-color-neutral-600);
+  --ds-toggle-helper-font-size: 0.75rem;
+  --ds-toggle-helper-margin-top: 0.25rem;
 
   /* ========================================================================
      ERROR STATE
      Settings for error message and styling
      ======================================================================== */
-  --toggle-error-border-color: var(--color-error-500);
-  --toggle-error-message-color: var(--color-error-600);
-  --toggle-error-message-font-size: 0.75rem;
-  --toggle-error-message-margin-top: 0.25rem;
+  --ds-toggle-error-border-color: var(--ds-color-error-500);
+  --ds-toggle-error-message-color: var(--ds-color-error-600);
+  --ds-toggle-error-message-font-size: 0.75rem;
+  --ds-toggle-error-message-margin-top: 0.25rem;
 
   /* ========================================================================
      FOCUS STATE
      Settings for focus ring/outline
      ======================================================================== */
-  --toggle-focus-ring-color: var(--color-primary-200);
-  --toggle-focus-ring-width: 3px;
-  --toggle-focus-ring-offset: 2px;
-  --toggle-focus-shadow: 0 0 0 var(--toggle-focus-ring-width) var(--toggle-focus-ring-color);
+  --ds-toggle-focus-ring-color: var(--ds-color-primary-200);
+  --ds-toggle-focus-ring-width: 3px;
+  --ds-toggle-focus-ring-offset: 2px;
+  --ds-toggle-focus-shadow: 0 0 0 var(--ds-toggle-focus-ring-width) var(--ds-toggle-focus-ring-color);
 
   /* ========================================================================
      LOADING STATE
      Settings for loading spinner inside toggle
      ======================================================================== */
-  --toggle-loading-color: var(--color-white);
-  --toggle-loading-size: 0.75rem;
+  --ds-toggle-loading-color: var(--ds-color-white);
+  --ds-toggle-loading-size: 0.75rem;
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --toggle-transition-duration: 0.2s;
-  --toggle-transition-timing: ease-in-out;
-  --toggle-transition: all var(--toggle-transition-duration) var(--toggle-transition-timing);
-  --toggle-dot-transition: transform var(--toggle-transition-duration) var(--toggle-transition-timing);
+  --ds-toggle-transition-duration: 0.2s;
+  --ds-toggle-transition-timing: ease-in-out;
+  --ds-toggle-transition: all var(--ds-toggle-transition-duration) var(--ds-toggle-transition-timing);
+  --ds-toggle-dot-transition: transform var(--ds-toggle-transition-duration) var(--ds-toggle-transition-timing);
 
   /* ========================================================================
      DISABLED STATE
      Appearance when disabled
      ======================================================================== */
-  --toggle-disabled-opacity: 0.5;
-  --toggle-disabled-cursor: not-allowed;
-  --toggle-disabled-bg: var(--color-neutral-200);
-  --toggle-disabled-dot-bg: var(--color-neutral-100);
+  --ds-toggle-disabled-opacity: 0.5;
+  --ds-toggle-disabled-cursor: not-allowed;
+  --ds-toggle-disabled-bg: var(--ds-color-neutral-200);
+  --ds-toggle-disabled-dot-bg: var(--ds-color-neutral-100);
 }

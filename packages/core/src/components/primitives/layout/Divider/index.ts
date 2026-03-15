@@ -105,7 +105,14 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef } from 'react';
+
 import { createEngineComponent } from '../../../../core/engines/factory';
+import { useOptionalTokens } from '../../../../core/hooks';
+import {
+  mergePersonalityStyle,
+  resolveDividerPersonalityDefaults,
+} from '../../../../core/personality/primitives';
 import type { DividerProps } from './types';
 
 // ============================================================================
@@ -162,8 +169,27 @@ export {
  * <Divider engine="modern" orientation="vertical" />
  * ```
  */
-export const Divider = createEngineComponent<DividerProps>('Divider', {
+const DividerBase = createEngineComponent<DividerProps>('Divider', {
   classic: () => import('./engines/classic'),
   modern: () => import('./engines/modern'),
   rustic: () => import('./engines/rustic'),
 });
+
+export const Divider = forwardRef<any, DividerProps>((props, ref) => {
+  const tokens = useOptionalTokens();
+  const defaults = tokens ? resolveDividerPersonalityDefaults(tokens) : null;
+  const {
+    variant,
+    style,
+    ...rest
+  } = props;
+
+  return createElement(DividerBase, {
+    ref,
+    ...rest,
+    variant: variant ?? defaults?.variant,
+    style: defaults ? mergePersonalityStyle(style, defaults.style) : style,
+  });
+});
+
+Divider.displayName = 'Divider';

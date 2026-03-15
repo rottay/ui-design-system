@@ -23,6 +23,7 @@
  * | Virtual Scroll | ✅ | ❌ | ❌ |
  * | Fixed Columns | ✅ | ❌ | ❌ |
  * | Column Groups | ✅ | ❌ | ❌ |
+ * | Inline Edit   | ❌ | ✅ | ✅ |
  *
  * @example Engine Override
  * ```tsx

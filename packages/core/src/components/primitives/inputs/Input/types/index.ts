@@ -21,7 +21,7 @@
  *
  * **CSS Custom Properties:**
  * The type definitions include mappings to CSS variables for consistent theming:
- * - Size: `--input-{size}-height`, `--input-{size}-padding-x`, `--input-{size}-font-size`
+ * - Size: `--ds-input-{size}-height`, `--ds-input-{size}-padding-x`, `--ds-input-{size}-font-size`
  *
  * @example Using Types
  * ```tsx
@@ -45,7 +45,7 @@
  * console.log(INPUT_DEFAULTS.variant); // 'outline'
  *
  * // Access CSS variable mappings
- * console.log(SIZE_MAP.lg.height); // 'var(--input-lg-height)'
+ * console.log(SIZE_MAP.lg.height); // 'var(--ds-input-lg-height)'
  * ```
  *
  * @see {@link Input} for the main component

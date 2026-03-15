@@ -21,7 +21,7 @@
  * - Focus visible states
  *
  * **Styling via CSS Custom Properties:**
- * - `--modal-close-color`: Button color (default: rgba(0, 0, 0, 0.45))
+ * - `--ds-modal-close-color`: Button color (default: rgba(0, 0, 0, 0.45))
  *
  * @example Basic Usage
  * ```tsx
@@ -161,7 +161,7 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       background: 'transparent',
 
       // Color - uses CSS custom property for tenant theming
-      color: 'var(--modal-close-color, rgba(0, 0, 0, 0.45))',
+      color: 'var(--ds-modal-close-color, rgba(0, 0, 0, 0.45))',
 
       // Interaction
       cursor: 'pointer',

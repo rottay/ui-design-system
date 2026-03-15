@@ -27,12 +27,12 @@
  * - ARIA switch role with proper attributes
  *
  * **CSS Custom Properties:**
- * - `--toggle-{size}-width` - Toggle track width
- * - `--toggle-{size}-height` - Toggle track height
- * - `--toggle-{size}-dot` - Toggle dot size
- * - `--toggle-bg` - Track background color
- * - `--toggle-bg-checked` - Checked track background
- * - `--toggle-border-color` - Track border color
+ * - `--ds-toggle-{size}-width` - Toggle track width
+ * - `--ds-toggle-{size}-height` - Toggle track height
+ * - `--ds-toggle-{size}-dot` - Toggle dot size
+ * - `--ds-toggle-bg` - Track background color
+ * - `--ds-toggle-bg-checked` - Checked track background
+ * - `--ds-toggle-border-color` - Track border color
  *
  * @example Basic Toggle
  * ```tsx

@@ -181,7 +181,7 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
 
       // Visual
       borderBottom: divider
-        ? '1px solid var(--drawer-header-border, var(--color-border, rgba(0, 0, 0, 0.1)))'
+        ? '1px solid var(--ds-drawer-header-border, var(--ds-color-border, rgba(0, 0, 0, 0.1)))'
         : 'none',
 
       // Prevent shrinking when content overflows
@@ -201,8 +201,8 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       margin: 0,
 
       // Typography - uses CSS custom properties for tenant theming
-      fontSize: 'var(--drawer-title-font-size, 16px)',
-      fontWeight: 'var(--drawer-title-font-weight, 600)' as React.CSSProperties['fontWeight'],
+      fontSize: 'var(--ds-drawer-title-font-size, 16px)',
+      fontWeight: 'var(--ds-drawer-title-font-weight, 600)' as React.CSSProperties['fontWeight'],
       lineHeight: 1.4,
 
       // Inherit color from parent for theme compatibility
@@ -227,7 +227,7 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       lineHeight: 1,
 
       // Color - uses CSS custom property for tenant theming
-      color: 'var(--drawer-close-color, var(--color-text-secondary, rgba(0, 0, 0, 0.45)))',
+      color: 'var(--ds-drawer-close-color, var(--ds-color-text-secondary, rgba(0, 0, 0, 0.45)))',
 
       // Hover state handled via CSS in production
       transition: 'color 0.2s ease',

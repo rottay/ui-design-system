@@ -16,7 +16,7 @@ The `EngineErrorBoundary` component provides robust error handling for engine co
 │  │    Suspense (Loading)         │  │
 │  │  ┌─────────────────────────┐  │  │
 │  │  │  Engine Component       │  │  │
-│  │  │  (titan/hermes/apollo)  │  │  │
+│  │  │  (classic/modern/rustic)│  │  │
 │  │  └─────────────────────────┘  │  │
 │  └───────────────────────────────┘  │
 └─────────────────────────────────────┘
@@ -80,8 +80,8 @@ function App() {
 ### With Fallback Engine
 
 ```tsx
-<EngineErrorBoundary fallbackEngine="apollo">
-  <Button engine="titan">Click me</Button>
+<EngineErrorBoundary fallbackEngine="rustic">
+  <Button engine="classic">Click me</Button>
 </EngineErrorBoundary>
 ```
 
@@ -121,7 +121,7 @@ If Titan fails to load, it will automatically fall back to Apollo engine.
 
 ```tsx
 <EngineErrorBoundary
-  fallbackEngine="apollo"
+  fallbackEngine="rustic"
   onError={(error) => {
     logToSentry(error);
   }}
@@ -149,7 +149,7 @@ interface EngineErrorBoundaryProps {
   children: ReactNode;
 
   /** Fallback engine to try if primary fails */
-  fallbackEngine?: EngineName; // 'titan' | 'hermes' | 'apollo' | 'athena'
+  fallbackEngine?: EngineName; // 'classic' | 'modern' | 'rustic' | 'athena'
 
   /** Custom fallback UI render function */
   fallbackRender?: (error: Error, reset: () => void) => ReactNode;
@@ -177,7 +177,7 @@ When no custom `fallbackRender` is provided, the default UI shows:
 ┌─────────────────────────────────────┐
 │ ⚠ Engine Error: Failed to load     │
 │   component.                        │
-│   Attempting fallback to apollo...  │
+│   Attempting fallback to rustic...  │
 │                                     │
 │   Error message here                │
 └─────────────────────────────────────┐
@@ -200,7 +200,7 @@ Engine bundle fails to download due to network issues.
 ### 2. Module Not Found
 Engine implementation doesn't exist for the component.
 
-**Solution:** Fall back to a different engine (apollo as universal fallback)
+**Solution:** Fall back to a different engine (rustic as universal fallback)
 
 ### 3. Runtime Error in Engine Component
 Bug in the engine implementation itself.
@@ -210,7 +210,7 @@ Bug in the engine implementation itself.
 ### 4. Dependency Missing
 Required dependency for engine not installed.
 
-**Solution:** Fall back to minimal engine (apollo)
+**Solution:** Fall back to minimal engine (rustic)
 
 ## Integration with createEngineComponent
 
@@ -243,11 +243,11 @@ When creating engine components, you can configure error handling:
 
 ```tsx
 export const Button = createEngineComponent<ButtonProps>('Button', {
-  titan: () => import('./titan'),
-  hermes: () => import('./hermes'),
-  apollo: () => import('./apollo'),
+  classic: () => import('./classic'),
+  modern: () => import('./modern'),
+  rustic: () => import('./rustic'),
 }, {
-  fallbackEngine: 'apollo', // Universal fallback
+  fallbackEngine: 'rustic', // Universal fallback
   onError: (error) => {
     console.error('[Button] Engine load failed:', error);
   },
@@ -261,7 +261,7 @@ export const Button = createEngineComponent<ButtonProps>('Button', {
 1. **Simulate Network Error:**
    ```tsx
    // Temporarily break import path
-   titan: () => import('./titan-nonexistent'),
+   classic: () => import('./classic-nonexistent'),
    ```
 
 2. **Simulate Runtime Error:**
@@ -274,7 +274,7 @@ export const Button = createEngineComponent<ButtonProps>('Button', {
 
 3. **Test Fallback Engine:**
    ```tsx
-   <EngineErrorBoundary fallbackEngine="apollo">
+   <EngineErrorBoundary fallbackEngine="rustic">
      <Component engine="nonexistent" />
    </EngineErrorBoundary>
    ```

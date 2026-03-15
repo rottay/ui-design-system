@@ -57,7 +57,8 @@
     "sort_desc": "Trier par ordre décroissant",
     "filter": "Filtrer",
     "clear_filters": "Effacer les filtres",
-    "rows_selected": "{count} lignes sélectionnées"
+    "rows_selected": "{count} lignes sélectionnées",
+    "edit_cell": "Modifier la cellule"
   },
   "upload": {
     "drag_drop": "Glissez les fichiers ici ou cliquez pour sélectionner",
@@ -116,5 +117,94 @@
   },
   "empty": {
     "description": "Aucune donnée"
+  },
+  "chart": {
+    "loading": "Chargement du graphique..."
+  },
+  "surfaces": {
+    "states": {
+      "loading_title": "Chargement de la surface",
+      "loading_description": "Preparation des donnees et de la mise en page pour cette vue.",
+      "empty_title": "Rien a afficher pour le moment",
+      "empty_description": "Cette surface ne dispose d'aucune donnee a afficher pour le moment.",
+      "error_title": "La surface n'a pas pu etre rendue",
+      "retry": "Reessayer"
+    },
+    "list": {
+      "empty_title": "Aucun resultat disponible",
+      "empty_description": "Ajustez les filtres ou creez un nouvel enregistrement pour alimenter cette liste.",
+      "view_table": "Tableau",
+      "view_cards": "Cards",
+      "filters_title": "Filtres"
+    },
+    "detail": {
+      "empty_title": "Aucune donnee de detail disponible",
+      "empty_description": "Cette surface n'a recu aucune entite a afficher.",
+      "loading": "Chargement"
+    },
+    "detail_form": {
+      "form_title": "Formulaire",
+      "summary_title": "Resume"
+    },
+    "search": {
+      "placeholder": "Rechercher",
+      "empty_query_title": "Commencez a taper pour rechercher",
+      "empty_query_description_one": "Saisissez au moins {count} caractere pour lancer la recherche.",
+      "empty_query_description_other": "Saisissez au moins {count} caracteres pour lancer la recherche.",
+      "empty_results_title": "Aucun resultat trouve",
+      "empty_results_description": "Essayez d'ajuster la requete ou les filtres.",
+      "preview_title": "Apercu"
+    },
+    "media": {
+      "empty_title": "Aucun element media",
+      "empty_description": "Ajoutez un ou plusieurs elements pour afficher la galerie.",
+      "preview_title": "Apercu",
+      "details_title": "Details"
+    },
+    "sidebar": {
+      "expand": "Developper",
+      "collapse": "Reduire"
+    },
+    "compare": {
+      "empty_title": "Aucune donnee de comparaison",
+      "empty_description": "Ajoutez des sujets et des lignes pour afficher cette surface.",
+      "criteria": "Critere"
+    },
+    "scheduler": {
+      "empty_title": "Aucun evenement planifie",
+      "empty_description": "Ajoutez des evenements pour afficher le calendrier."
+    },
+    "operational": {
+      "empty_title": "Aucun module operationnel configure",
+      "empty_description": "Ajoutez une file, un feed ou des panneaux pour afficher cette surface.",
+      "primary_panel": "Panneau principal",
+      "secondary_panel": "Panneau secondaire",
+      "queue": "File",
+      "live_feed": "Flux en direct"
+    },
+    "wizard": {
+      "empty_step_title": "Etape vide",
+      "empty_step_description": "Cette etape n'expose aucun contenu visible.",
+      "empty_title": "Aucune etape disponible",
+      "empty_description": "Ce flux ne contient encore aucune etape configuree.",
+      "step_error_fallback": "Veuillez verifier cette etape.",
+      "complete": "Terminer"
+    },
+    "chat": {
+      "conversation_title": "Conversation",
+      "empty_title": "Aucun message pour le moment",
+      "empty_description": "Envoyez le premier message pour commencer la conversation.",
+      "composer_title": "Composer",
+      "placeholder": "Ecrivez un message",
+      "send": "Envoyer",
+      "typing": "L'assistant ecrit"
+    },
+    "editor": {
+      "title": "Editeur"
+    },
+    "visualization": {
+      "empty_title": "Aucune visualisation configuree",
+      "empty_description": "Ajoutez une ou plusieurs vues pour afficher cette surface."
+    }
   }
 }

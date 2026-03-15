@@ -227,9 +227,9 @@ export const QRCODE_DEFAULTS = {
   /** Default icon size in pixels */
   iconSize: 40,
   /** Default foreground color */
-  color: '#000000',
+  color: 'var(--ds-color-text-primary)',
   /** Default background color */
-  bgColor: '#ffffff',
+  bgColor: 'var(--ds-color-bg-primary)',
   /** Default error correction level */
   errorLevel: 'M' as const,
   /** Default status */
@@ -242,10 +242,10 @@ export const QRCODE_DEFAULTS = {
  * Size mapping for preset QR code sizes using CSS variables.
  */
 export const SIZE_MAP: Record<string, string> = {
-  xs: 'var(--qrcode-xs-size)',
-  sm: 'var(--qrcode-sm-size)',
-  md: 'var(--qrcode-md-size)',
-  lg: 'var(--qrcode-lg-size)',
-  xl: 'var(--qrcode-xl-size)',
-  '2xl': 'var(--qrcode-2xl-size)',
+  xs: 'var(--ds-qrcode-xs-size)',
+  sm: 'var(--ds-qrcode-sm-size)',
+  md: 'var(--ds-qrcode-md-size)',
+  lg: 'var(--ds-qrcode-lg-size)',
+  xl: 'var(--ds-qrcode-xl-size)',
+  '2xl': 'var(--ds-qrcode-2xl-size)',
 };

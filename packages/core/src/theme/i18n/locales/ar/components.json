@@ -1,0 +1,210 @@
+{
+  "avatar": {
+    "loading": "جارٍ تحميل الصورة الرمزية...",
+    "error": "حدث خطأ أثناء تحميل الصورة",
+    "fallback": "لا توجد صورة",
+    "group": {
+      "surplus": "+{count} إضافية",
+      "empty": "لا يوجد مستخدمون"
+    },
+    "status": {
+      "online": "متصل",
+      "offline": "غير متصل",
+      "away": "بعيد",
+      "busy": "مشغول"
+    }
+  },
+  "button": {
+    "loading": "جارٍ التحميل...",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "save": "حفظ"
+  },
+  "input": {
+    "placeholder": "اكتب هنا...",
+    "required": "هذا الحقل مطلوب",
+    "optional": "(اختياري)",
+    "clear": "مسح",
+    "show_password": "إظهار كلمة المرور",
+    "hide_password": "إخفاء كلمة المرور"
+  },
+  "select": {
+    "placeholder": "اختر خيارًا",
+    "no_options": "لا توجد خيارات متاحة",
+    "loading": "جارٍ تحميل الخيارات...",
+    "search": "بحث...",
+    "clear": "مسح التحديد"
+  },
+  "modal": {
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء"
+  },
+  "pagination": {
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "الصفحة {current} من {total}",
+    "go_to": "الانتقال إلى الصفحة",
+    "items_per_page": "{count} لكل صفحة"
+  },
+  "table": {
+    "empty": "لا توجد بيانات",
+    "loading": "جارٍ تحميل البيانات...",
+    "sort_asc": "ترتيب تصاعدي",
+    "sort_desc": "ترتيب تنازلي",
+    "filter": "تصفية",
+    "clear_filters": "مسح عوامل التصفية",
+    "rows_selected": "تم تحديد {count} صفوف",
+    "edit_cell": "تعديل الخلية"
+  },
+  "upload": {
+    "drag_drop": "اسحب الملفات هنا أو انقر للاختيار",
+    "uploading": "جارٍ الرفع...",
+    "success": "تم رفع الملف بنجاح",
+    "error": "حدث خطأ أثناء رفع الملف",
+    "remove": "إزالة الملف",
+    "max_size": "الحد الأقصى للحجم: {size}",
+    "accepted_formats": "الصيغ المقبولة: {formats}"
+  },
+  "datepicker": {
+    "placeholder": "اختر تاريخًا",
+    "today": "اليوم",
+    "clear": "مسح",
+    "ok": "حسنًا",
+    "month": "الشهر",
+    "year": "السنة"
+  },
+  "timepicker": {
+    "placeholder": "اختر وقتًا",
+    "now": "الآن",
+    "clear": "مسح",
+    "ok": "حسنًا"
+  },
+  "search": {
+    "placeholder": "بحث...",
+    "no_results": "لا توجد نتائج",
+    "searching": "جارٍ البحث..."
+  },
+  "form": {
+    "required_field": "هذا الحقل مطلوب",
+    "required_with_name": "{name} مطلوب",
+    "invalid_field": "حقل غير صالح",
+    "min_length": "الحد الأدنى {min} أحرف",
+    "max_length": "الحد الأقصى {max} أحرف",
+    "invalid_format": "تنسيق غير صالح",
+    "submit": "إرسال",
+    "reset": "إعادة تعيين"
+  },
+  "drawer": {
+    "close": "إغلاق"
+  },
+  "dropdown": {
+    "no_options": "لا توجد خيارات"
+  },
+  "tooltip": {
+    "close": "إغلاق"
+  },
+  "notification": {
+    "close": "إغلاق",
+    "mark_as_read": "تعيين كمقروء",
+    "clear_all": "مسح الكل"
+  },
+  "alert": {
+    "close": "إغلاق"
+  },
+  "empty": {
+    "description": "لا توجد بيانات"
+  },
+  "chart": {
+    "loading": "جارٍ تحميل الرسم البياني"
+  },
+  "surfaces": {
+    "states": {
+      "loading_title": "جارٍ تحميل الواجهة",
+      "loading_description": "يتم تجهيز البيانات والتخطيط لهذا العرض.",
+      "empty_title": "لا يوجد ما يمكن عرضه بعد",
+      "empty_description": "لا تحتوي هذه الواجهة على بيانات لعرضها الآن.",
+      "error_title": "تعذر عرض هذه الواجهة",
+      "retry": "حاول مرة أخرى"
+    },
+    "list": {
+      "empty_title": "لا توجد نتائج متاحة",
+      "empty_description": "عدّل عوامل التصفية أو أنشئ سجلًا جديدًا لملء هذه القائمة.",
+      "view_table": "جدول",
+      "view_cards": "بطاقات",
+      "filters_title": "عوامل التصفية"
+    },
+    "detail": {
+      "empty_title": "لا توجد بيانات تفصيلية متاحة",
+      "empty_description": "لم تستقبل هذه الواجهة كيانًا لعرضه.",
+      "loading": "جارٍ التحميل"
+    },
+    "detail_form": {
+      "form_title": "النموذج",
+      "summary_title": "الملخص"
+    },
+    "search": {
+      "placeholder": "بحث",
+      "empty_query_title": "ابدأ الكتابة للبحث",
+      "empty_query_description_one": "أدخل {count} حرفًا على الأقل لبدء البحث.",
+      "empty_query_description_other": "أدخل {count} أحرف على الأقل لبدء البحث.",
+      "empty_results_title": "لم يتم العثور على نتائج",
+      "empty_results_description": "جرّب تعديل عبارة البحث أو عوامل التصفية.",
+      "preview_title": "المعاينة"
+    },
+    "media": {
+      "empty_title": "لا توجد عناصر وسائط",
+      "empty_description": "أضف عنصر وسائط واحدًا أو أكثر لعرض المعرض.",
+      "preview_title": "المعاينة",
+      "details_title": "التفاصيل"
+    },
+    "sidebar": {
+      "expand": "توسيع",
+      "collapse": "طي"
+    },
+    "compare": {
+      "empty_title": "لا توجد بيانات للمقارنة",
+      "empty_description": "أضف عناصر وصفوفًا لعرض واجهة المقارنة.",
+      "criteria": "المعايير"
+    },
+    "scheduler": {
+      "empty_title": "لا توجد أحداث مجدولة",
+      "empty_description": "املأ الجدولة بالأحداث لعرض التقويم."
+    },
+    "operational": {
+      "empty_title": "لا توجد وحدات تشغيلية مُعدّة",
+      "empty_description": "أضف محتوى للطابور أو التدفق أو اللوحة لعرض هذه الواجهة.",
+      "primary_panel": "اللوحة الرئيسية",
+      "secondary_panel": "اللوحة الثانوية",
+      "queue": "الطابور",
+      "live_feed": "التدفق المباشر"
+    },
+    "wizard": {
+      "empty_step_title": "خطوة فارغة في المعالج",
+      "empty_step_description": "هذه الخطوة لا تعرض أي محتوى مرئي.",
+      "empty_title": "لا توجد خطوات متاحة في المعالج",
+      "empty_description": "لا يحتوي هذا التدفق على أي خطوات مُعدّة بعد.",
+      "step_error_fallback": "يرجى مراجعة هذه الخطوة.",
+      "complete": "إكمال"
+    },
+    "chat": {
+      "conversation_title": "المحادثة",
+      "empty_title": "لا توجد رسائل بعد",
+      "empty_description": "أرسل أول رسالة لبدء المحادثة.",
+      "composer_title": "محرر الرسالة",
+      "placeholder": "اكتب رسالة",
+      "send": "إرسال",
+      "typing": "المساعد يكتب الآن"
+    },
+    "editor": {
+      "title": "المحرر"
+    },
+    "visualization": {
+      "empty_title": "لا توجد تصورات مُعدّة",
+      "empty_description": "أضف عرضًا واحدًا أو أكثر لعرض هذه الواجهة."
+    }
+  }
+}

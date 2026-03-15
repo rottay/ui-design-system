@@ -171,7 +171,8 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     borderBottom: '1px solid var(--ds-input-border)',
   } : {};
 
-  // Common props
+  // Props shared by Ant Input variants. InputNumber receives a narrower set to
+  // avoid leaking unsupported props like `allowClear` and `showCount` to the DOM.
   const commonProps = {
     id,
     name,
@@ -202,17 +203,43 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-required': required,
   };
 
+  const numberProps = {
+    id,
+    name,
+    placeholder,
+    disabled,
+    readOnly,
+    autoComplete,
+    autoFocus,
+    size: ANT_SIZE_MAP[size],
+    status: STATUS_MAP[computedStatus],
+    prefix,
+    maxLength,
+    variant: VARIANT_MAP[variant],
+    onFocus,
+    onBlur,
+    onKeyDown: handleKeyDown,
+    className: `rottay-input rottay-input--classic ${className}`,
+    style: {
+      ...flushedStyles,
+      ...style,
+    },
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
+    'aria-required': required,
+  };
+
   // Handle number type with InputNumber
   if (type === 'number') {
     return (
       <div style={{ width: '100%' }}>
         <InputNumber
-          {...commonProps}
+          {...numberProps}
           ref={ref as any}
           value={currentValue ? parseFloat(currentValue) : undefined}
           defaultValue={defaultValue ? parseFloat(defaultValue) : undefined}
           onChange={handleNumberChange}
-          style={{ width: '100%', ...commonProps.style }}
+          style={{ width: '100%', ...numberProps.style }}
           controls={false}
         />
         {hasError && errorMessage && (

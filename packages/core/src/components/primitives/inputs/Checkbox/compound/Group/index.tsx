@@ -184,7 +184,7 @@ export function CheckboxGroup({
               width: sizeValue,
               height: sizeValue,
               borderRadius: '2px',
-              border: `2px solid ${isChecked ? colors.border : '#d9d9d9'}`,
+              border: `2px solid ${isChecked ? colors.border : 'var(--ds-color-border-secondary)'}`,
               backgroundColor: isChecked ? colors.bg : 'transparent',
               transition: 'all 0.2s ease-in-out',
             }}

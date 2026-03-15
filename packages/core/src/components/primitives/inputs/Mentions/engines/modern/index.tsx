@@ -3,9 +3,12 @@
 /**
  * Mentions - Modern Engine (DaisyUI/Tailwind)
  */
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
 import type { MentionsProps, MentionsOption } from '../../types';
 import { MENTIONS_DEFAULTS } from '../../types';
+
+// Safe useLayoutEffect that falls back to useEffect on SSR
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
@@ -46,6 +49,31 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const prefixes = (Array.isArray(prefix) ? prefix : [prefix]).filter((p): p is string => !!p);
+
+    // Auto-size: dynamically adjust textarea height based on content
+    const adjustTextareaHeight = useCallback(() => {
+      const textarea = textareaRef.current;
+      if (!textarea || !autoSize) return;
+
+      // Reset height to auto first to get the correct scrollHeight
+      textarea.style.height = 'auto';
+      const scrollHeight = textarea.scrollHeight;
+
+      if (typeof autoSize === 'object') {
+        const lineHeight = parseInt(getComputedStyle(textarea).lineHeight) || 20;
+        const minH = autoSize.minRows ? autoSize.minRows * lineHeight : 0;
+        const maxH = autoSize.maxRows ? autoSize.maxRows * lineHeight : Infinity;
+        textarea.style.height = `${Math.min(Math.max(scrollHeight, minH), maxH)}px`;
+        textarea.style.overflowY = scrollHeight > maxH ? 'auto' : 'hidden';
+      } else {
+        textarea.style.height = `${scrollHeight}px`;
+        textarea.style.overflowY = 'hidden';
+      }
+    }, [autoSize]);
+
+    useIsomorphicLayoutEffect(() => {
+      adjustTextareaHeight();
+    }, [value, adjustTextareaHeight]);
 
     const filteredOptions = useMemo(() => {
       if (!filterOption) return options;
@@ -188,33 +216,40 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}
-          rows={typeof autoSize === 'object' ? autoSize.minRows : rows}
+          rows={typeof autoSize === 'object' ? autoSize.minRows || 1 : autoSize === true ? 1 : rows}
+          style={autoSize ? { resize: 'none' } : undefined}
+          role="textbox"
+          aria-multiline="true"
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
         />
 
-        {isOpen && filteredOptions.length > 0 && (
+        {isOpen && (
           <ul
             className={`absolute z-50 w-full menu bg-base-100 rounded-box shadow-lg max-h-48 overflow-auto ${placement === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'} ${popupClassName || ''}`}
+            role="listbox"
+            aria-label="Mention suggestions"
           >
-            {filteredOptions.map((option, index) => (
-              <li key={option.value}>
-                <button
-                  type="button"
-                  className={`${option.disabled ? 'disabled' : ''} ${focusedIndex === index ? 'active' : ''}`}
-                  disabled={option.disabled}
-                  onClick={() => handleSelect(option)}
-                  onMouseEnter={() => setFocusedIndex(index)}
-                >
-                  {option.label ?? option.value}
-                </button>
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option, index) => (
+                <li key={option.value} role="option" aria-selected={focusedIndex === index}>
+                  <button
+                    type="button"
+                    className={`${option.disabled ? 'disabled' : ''} ${focusedIndex === index ? 'active' : ''}`}
+                    disabled={option.disabled}
+                    onClick={() => handleSelect(option)}
+                    onMouseEnter={() => setFocusedIndex(index)}
+                  >
+                    {option.label ?? option.value}
+                  </button>
+                </li>
+              ))
+            ) : (
+              <li className="p-3 text-center text-base-content/50" role="option" aria-disabled="true">
+                {notFoundContent}
               </li>
-            ))}
+            )}
           </ul>
-        )}
-
-        {isOpen && filteredOptions.length === 0 && (
-          <div className={`absolute z-50 w-full p-3 bg-base-100 rounded-box shadow-lg text-center text-base-content/50 ${placement === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'}`}>
-            {notFoundContent}
-          </div>
         )}
       </div>
     );

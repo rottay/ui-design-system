@@ -2,7 +2,7 @@
  * Athena Pluggable Engine Tests
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   registerAthenaComponent,
   registerAthenaComponents,
@@ -14,6 +14,8 @@ import {
   getRegisteredComponentCount,
   configureAthena,
   getAthenaConfig,
+  createAthenaWrapper,
+  useAthenaStatus,
 } from '../../core/engines/athena';
 
 describe('Athena Engine', () => {
@@ -148,6 +150,19 @@ describe('Athena Engine', () => {
       const config = getAthenaConfig();
       expect(config.fallbackEngine).toBe('classic'); // default
     });
+
+    it('should invoke the logger during register / unregister / clear flows', () => {
+      const logger = vi.fn();
+      configureAthena({ logger });
+
+      registerAthenaComponent('Button', () => null);
+      unregisterAthenaComponent('Button');
+      clearAthenaRegistry();
+
+      expect(logger).toHaveBeenCalledWith('Registered Athena component: Button', 'info');
+      expect(logger).toHaveBeenCalledWith('Unregistered Athena component: Button', 'info');
+      expect(logger).toHaveBeenCalledWith('Cleared all Athena components', 'info');
+    });
   });
 
   describe('getAthenaConfig', () => {
@@ -162,6 +177,71 @@ describe('Athena Engine', () => {
       const config2 = getAthenaConfig();
       expect(config1).not.toBe(config2);
       expect(config1).toEqual(config2);
+    });
+  });
+
+  describe('createAthenaWrapper', () => {
+    it('should resolve registered athena components before falling back', async () => {
+      const MockButton = () => null;
+      const fallbackLoader = vi.fn(async () => ({ default: (() => null) as any }));
+
+      registerAthenaComponent('Button', MockButton);
+      const loader = createAthenaWrapper('Button', fallbackLoader);
+      const resolved = await loader();
+
+      expect(resolved.default).toBe(MockButton);
+      expect(fallbackLoader).not.toHaveBeenCalled();
+    });
+
+    it('should resolve fallback loaders and emit a warning when configured', async () => {
+      const logger = vi.fn();
+      const Fallback = () => null;
+      const fallbackLoader = vi.fn(async () => ({ default: Fallback }));
+
+      configureAthena({
+        fallbackEngine: 'rustic',
+        warnOnFallback: true,
+        logger,
+      });
+
+      const loader = createAthenaWrapper('Input', fallbackLoader);
+      const resolved = await loader();
+
+      expect(resolved.default).toBe(Fallback);
+      expect(fallbackLoader).toHaveBeenCalledTimes(1);
+      expect(logger).toHaveBeenCalledWith(
+        'No Athena implementation for "Input", using rustic fallback',
+        'warn'
+      );
+    });
+
+    it('should skip fallback warnings when warnOnFallback is disabled', async () => {
+      const logger = vi.fn();
+      configureAthena({
+        fallbackEngine: 'modern',
+        warnOnFallback: false,
+        logger,
+      });
+
+      const loader = createAthenaWrapper('Card', async () => ({ default: (() => null) as any }));
+      await loader();
+
+      expect(logger).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('useAthenaStatus', () => {
+    it('should expose the current registry and config snapshot', () => {
+      registerAthenaComponent('Alert', () => null);
+      configureAthena({ fallbackEngine: 'modern', warnOnFallback: false });
+
+      const status = useAthenaStatus();
+
+      expect(status.registeredComponents).toContain('Alert');
+      expect(status.componentCount).toBe(1);
+      expect(status.config.fallbackEngine).toBe('modern');
+      expect(status.hasComponent('Alert')).toBe(true);
+      expect(status.hasComponent('Missing')).toBe(false);
     });
   });
 });

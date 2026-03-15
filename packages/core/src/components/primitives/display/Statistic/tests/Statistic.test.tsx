@@ -24,6 +24,9 @@ vi.mock('../../../../../core/engines/factory', () => ({
       groupSeparator = ',',
       decimalSeparator = '.',
       formatter,
+      onFinish: _onFinish,
+      onChange: _onChange,
+      format: _format,
       ...props
     }: any) => {
       if (loading) {

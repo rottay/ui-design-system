@@ -29,6 +29,7 @@ export const DEFAULT_PERSONALITY: PersonalityTokens = {
     showDots: true,
     useGradientFill: false,
     tooltipStyle: 'minimal',
+    colorScheme: 'default',
   },
   typography: {
     headingWeightBias: 'normal',

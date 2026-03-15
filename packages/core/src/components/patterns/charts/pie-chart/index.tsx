@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { memo, useEffect, useRef } from 'react';
+import { arc, interpolate, pie, select, sum, type PieArcDatum } from 'd3';
 
 import type { ChartBaseProps, DataPoint } from '../types';
 import { DEFAULT_COLORS } from '../types';
-import { useChartDimensions } from '../hooks';
+import { useChartDimensions, useChartPersonality } from '../hooks';
+import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 export interface PieChartProps extends ChartBaseProps {
   data: DataPoint[];
@@ -15,7 +16,7 @@ export interface PieChartProps extends ChartBaseProps {
   showPercentage?: boolean;
 }
 
-export function PieChart({
+export const PieChart = memo(function PieChart({
   data,
   donut = false,
   innerRadius = 0.6,
@@ -29,20 +30,37 @@ export function PieChart({
   title,
   subtitle,
   legend = true,
-  animate = true,
+  animate,
   responsive = true,
   colors = DEFAULT_COLORS,
-  tooltip = true,
+  tooltip,
 }: PieChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = height;
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const summary = {
+    caption: title ? `${title} data summary` : 'Pie chart data summary',
+    headers: ['Label', 'Value', 'Percentage'],
+    rows: data.map((item) => [item.label, item.value, total === 0 ? '0%' : `${((item.value / total) * 100).toFixed(1)}%`]),
+  };
+  const legendNode = legend ? (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      {data.map((d, i) => (
+        <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+        </div>
+      ))}
+    </div>
+  ) : null;
 
   useEffect(() => {
     if (!svgRef.current || !data || data.length === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
     const radius = Math.min(chartWidth, chartHeight) / 2 - 20;
@@ -54,26 +72,23 @@ export function PieChart({
       .append('g')
       .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
-    const pie = d3
-      .pie<DataPoint>()
+    const pieGenerator = pie<DataPoint>()
       .value((d) => d.value)
       .sort(null);
 
-    const arc = d3
-      .arc<d3.PieArcDatum<DataPoint>>()
+    const arcGenerator = arc<PieArcDatum<DataPoint>>()
       .innerRadius(inner)
       .outerRadius(radius);
 
-    const labelArc = d3
-      .arc<d3.PieArcDatum<DataPoint>>()
+    const labelArc = arc<PieArcDatum<DataPoint>>()
       .innerRadius(radius * 0.7)
       .outerRadius(radius * 0.7);
 
-    const total = d3.sum(data, (d) => d.value);
+    const total = sum(data, (d) => d.value);
 
     const slices = g
       .selectAll('.slice')
-      .data(pie(data))
+      .data(pieGenerator(data))
       .enter()
       .append('g')
       .attr('class', 'slice');
@@ -84,23 +99,23 @@ export function PieChart({
       .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 2);
 
-    if (tooltip) {
+    if (chartPersonality.tooltip) {
       paths.append('title').text((d) => {
         const pct = ((d.data.value / total) * 100).toFixed(1);
         return `${d.data.label}: ${d.data.value} (${pct}%)`;
       });
     }
 
-    if (animate) {
+    if (chartPersonality.animate) {
       paths
         .transition()
-        .duration(800)
+        .duration(chartPersonality.animationDuration)
         .attrTween('d', (d) => {
-          const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
-          return (t) => arc(interpolate(t) as d3.PieArcDatum<DataPoint>) ?? '';
+          const interpolateArc = interpolate({ startAngle: 0, endAngle: 0 }, d);
+          return (t) => arcGenerator(interpolateArc(t) as PieArcDatum<DataPoint>) ?? '';
         });
     } else {
-      paths.attr('d', arc);
+      paths.attr('d', arcGenerator);
     }
 
     // Labels
@@ -120,37 +135,24 @@ export function PieChart({
           return d.data.label;
         });
     }
-  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, animate, colors, tooltip]);
-
-  if (loading) {
-    return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>
-          Loading...
-        </div>
-      </div>
-    );
-  }
+  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, colors]);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
-      {title && (
-        <div style={{ marginBottom: 4, textAlign: 'center' }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
-          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
-        </div>
-      )}
-      <svg ref={svgRef} />
-      {legend && (
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-          {data.map((d, i) => (
-            <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-              <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
-              <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <ChartScaffold
+      containerRef={containerRef}
+      svgRef={svgRef}
+      width={width}
+      height={height}
+      className={className}
+      style={style}
+      loading={loading}
+      loadingLabel={chartPersonality.loadingLabel}
+      title={title}
+      subtitle={subtitle}
+      ariaLabel={title ?? 'Pie chart'}
+      ariaDescription={describeChart('Pie chart', data.length, subtitle, donut ? 'Rendered as a donut chart.' : undefined)}
+      summary={summary}
+      legend={legendNode}
+    />
   );
-}
+});

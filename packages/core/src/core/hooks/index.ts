@@ -28,6 +28,17 @@
  * - `useBreakpoints` - Check current breakpoint (mobile, tablet, desktop)
  * - `useResponsiveValue` - Get responsive values based on breakpoint
  *
+ * **Accessibility Hooks:**
+ * - `useKeyboardNavigation` - Arrow key navigation for lists, menus, grids
+ * - `useAriaAnnounce` - Screen reader announcements via aria-live regions
+ *
+ * **Shortcut Hooks:**
+ * - `useGlobalShortcut` - Register a single global keyboard shortcut
+ * - `useGlobalShortcuts` - Register multiple global keyboard shortcuts
+ * - `useRegisteredShortcuts` - Get all registered shortcuts (for overlay display)
+ * - `ShortcutProvider` - Context provider for the shortcut registry
+ * - `formatShortcutKey` - Format shortcut key strings for display
+ *
  * @example Engine selection
  * ```tsx
  * const { engine, setEngine } = useEngine();
@@ -71,8 +82,22 @@ export { useTenant } from './tenant';
 // Re-export useTenantContext from provider (single source of truth)
 export { useTenantContext } from '../providers/tenant';
 
+// Tenant creation utilities
+export {
+  resolvePersonalityPreset,
+  createTenantConfig,
+  useCreateTenant,
+} from './tenant';
+export type {
+  PersonalityPreset,
+  TenantCreationConfig,
+} from './tenant';
+
+// Product profile hooks
+export { useProductProfile } from './product-profile';
+
 // Token hooks
-export { useTokens } from './tokens';
+export { useTokens, useOptionalTokens } from './tokens';
 
 // Feature hooks
 export { useFeatures, useHasFeature, useFeatureContext } from './features';
@@ -94,3 +119,43 @@ export type {
   UseCollapseTokensOptions,
   UseCollapseTokensResult,
 } from './components';
+
+// Accessibility hooks
+export { useKeyboardNavigation, useAriaAnnounce } from './a11y';
+export type {
+  UseKeyboardNavigationOptions,
+  UseKeyboardNavigationResult,
+  UseAriaAnnounceResult,
+} from './a11y';
+
+// Shortcut hooks
+export {
+  useGlobalShortcut,
+  useGlobalShortcuts,
+  useRegisteredShortcuts,
+  ShortcutProvider,
+  formatShortcutKey,
+} from './shortcuts';
+export type {
+  ShortcutDefinition,
+  ShortcutProviderProps,
+} from './shortcuts';
+
+// Data hooks
+export { useSurfaceQuery } from './data';
+export type {
+  SurfaceQueryParams,
+  SurfaceQueryResult,
+  UseSurfaceQueryOptions,
+  UseSurfaceQueryReturn,
+} from './data';
+
+// AI hooks
+export { useStreamingText, useChat } from './ai';
+export type {
+  UseStreamingTextOptions,
+  UseStreamingTextReturn,
+  ChatMessage,
+  UseChatOptions,
+  UseChatReturn,
+} from './ai';

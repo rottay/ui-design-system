@@ -5,8 +5,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useBreakpoints } from '../../../../../core/hooks/responsive/useBreakpoints';
+import { useTokens } from '../../../../../core/hooks/tokens';
 import type { StatsGridProps } from '../../types';
 import type { StatDef } from '../../../types';
+import { resolveStatsGridMotion } from '../../personality';
 
 function normalizeSparkline(data: number[], width = 80, height = 30): string {
   const min = Math.min(...data);
@@ -28,7 +31,7 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
       <polyline
         points={normalizeSparkline(data)}
         fill="none"
-        stroke={color || 'var(--ds-color-primary, #6366f1)'}
+        stroke={color || 'var(--ds-color-primary)'}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -37,7 +40,11 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
   );
 }
 
-function useAnimatedValue(target: number | string, animate?: boolean): number | string {
+function useAnimatedValue(
+  target: number | string,
+  animate?: boolean,
+  duration = 600
+): number | string {
   const [value, setValue] = useState<number | string>(animate && typeof target === 'number' ? 0 : target);
 
   useEffect(() => {
@@ -45,7 +52,6 @@ function useAnimatedValue(target: number | string, animate?: boolean): number | 
       setValue(target);
       return;
     }
-    const duration = 600;
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
@@ -61,50 +67,55 @@ function useAnimatedValue(target: number | string, animate?: boolean): number | 
 
 const variantStyles: Record<NonNullable<StatsGridProps['variant']>, React.CSSProperties> = {
   default: {
-    background: 'var(--ds-color-bg-primary, #fff)',
-    border: '1px solid var(--ds-color-border, #e5e7eb)',
+    background: 'var(--ds-stats-grid-card-bg, var(--ds-color-bg-elevated))',
+    border: '1px solid var(--ds-stats-grid-card-border, var(--ds-color-border))',
     borderRadius: 'var(--ds-radius-md, 8px)',
   },
   outlined: {
     background: 'transparent',
-    border: '2px solid var(--ds-color-border, #e5e7eb)',
+    border: '2px solid var(--ds-stats-grid-card-border, var(--ds-color-border))',
     borderRadius: 'var(--ds-radius-md, 8px)',
   },
   filled: {
-    background: 'var(--ds-color-bg-secondary, #f3f4f6)',
+    background: 'var(--ds-stats-grid-card-filled-bg, var(--ds-color-bg-secondary))',
     border: 'none',
     borderRadius: 'var(--ds-radius-md, 8px)',
   },
   glass: {
-    background: 'rgba(255,255,255,0.5)',
+    background: 'var(--ds-stats-grid-card-glass-bg, var(--ds-color-alpha-white-50))',
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
-    border: '1px solid rgba(255,255,255,0.25)',
+    border: '1px solid var(--ds-stats-grid-card-glass-border, var(--ds-color-alpha-white-20))',
     borderRadius: 'var(--ds-radius-md, 8px)',
   },
 };
+
+const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
 
 function StatCard({
   stat,
   sparkline,
   variant,
   animate,
+  animationDuration,
   onClick,
 }: {
   stat: StatDef;
   sparkline?: boolean;
   variant: StatsGridProps['variant'];
   animate?: boolean;
+  animationDuration?: number;
   onClick?: () => void;
 }) {
-  const displayValue = useAnimatedValue(stat.value, animate);
+  const displayValue = useAnimatedValue(stat.value, animate, animationDuration);
 
   const changeColor =
     stat.changeType === 'increase'
-      ? 'var(--ds-color-success, #16a34a)'
+      ? 'var(--ds-stats-grid-trend-positive, var(--ds-color-success))'
       : stat.changeType === 'decrease'
-        ? 'var(--ds-color-error, #dc2626)'
-        : 'var(--ds-color-text-muted, #9ca3af)';
+        ? 'var(--ds-stats-grid-trend-negative, var(--ds-color-error))'
+        : 'var(--ds-stats-grid-trend-neutral, var(--ds-color-text-muted))';
 
   const arrow =
     stat.changeType === 'increase' ? '\u2191' : stat.changeType === 'decrease' ? '\u2193' : '';
@@ -113,19 +124,30 @@ function StatCard({
     <div
       style={{
         ...variantStyles[variant || 'default'],
-        padding: 16,
+        padding: 'var(--ds-card-body-padding, 16px)',
         cursor: onClick ? 'pointer' : undefined,
-        transition: 'box-shadow 0.15s ease',
+        boxShadow: 'var(--ds-card-shadow, none)',
+        transition: `box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}, transform ${RUSTIC_DURATION} ${RUSTIC_EASING}, background-color ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
       }}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
+      onFocus={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8)';
+      }}
+      onBlur={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow = 'var(--ds-card-shadow, none)';
+      }}
       onMouseEnter={(e) => {
-        if (onClick) (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        const el = e.currentTarget as HTMLElement;
+        el.style.boxShadow = 'var(--ds-card-shadow-hover, var(--ds-shadow-lg))';
+        el.style.transform = 'var(--ds-card-hover-transform, translateY(-2px) scale(1))';
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+        const el = e.currentTarget as HTMLElement;
+        el.style.boxShadow = 'var(--ds-card-shadow, none)';
+        el.style.transform = 'translateY(0) scale(1)';
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -134,7 +156,9 @@ function StatCard({
           style={{
             fontSize: 13,
             fontWeight: 500,
-            color: 'var(--ds-color-text-muted, #6b7280)',
+            color: 'var(--ds-stats-grid-label-color, var(--ds-color-text-secondary))',
+            textTransform: 'var(--ds-typography-label-transform, none)' as React.CSSProperties['textTransform'],
+            letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
           }}
         >
           {stat.label}
@@ -142,10 +166,11 @@ function StatCard({
       </div>
       <div
         style={{
-          fontSize: 24,
-          fontWeight: 700,
-          color: stat.color || 'var(--ds-color-text-primary, #111827)',
+          fontSize: 28,
+          fontWeight: 'var(--ds-typography-heading-font-weight, 700)' as unknown as number,
+          color: stat.color || 'var(--ds-stats-grid-value-color, var(--ds-color-text-primary))',
           lineHeight: 1.2,
+          letterSpacing: '-0.02em',
         }}
       >
         {stat.prefix}
@@ -155,15 +180,34 @@ function StatCard({
         )}
       </div>
       {stat.change != null && (
-        <div style={{ fontSize: 12, fontWeight: 500, color: changeColor, marginTop: 4 }}>
-          {arrow} {Math.abs(stat.change)}%
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 3,
+            fontSize: 12,
+            fontWeight: 600,
+            color: changeColor,
+            marginTop: 6,
+            padding: '2px 6px',
+            borderRadius: 'var(--ds-radius-sm, 4px)',
+            background: stat.changeType === 'increase'
+              ? 'var(--ds-color-success-50, rgba(16,185,129,0.08))'
+              : stat.changeType === 'decrease'
+                ? 'var(--ds-color-error-50, rgba(239,68,68,0.08))'
+                : 'transparent',
+            transition: `transform ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
+          }}
+        >
+          {arrow && <span style={{ fontSize: 13, lineHeight: 1 }}>{arrow}</span>}
+          {Math.abs(stat.change)}%
         </div>
       )}
       {stat.description && (
         <div
           style={{
             fontSize: 12,
-            color: 'var(--ds-color-text-muted, #9ca3af)',
+            color: 'var(--ds-stats-grid-description-color, var(--ds-color-text-muted))',
             marginTop: 2,
           }}
         >
@@ -175,15 +219,31 @@ function StatCard({
   );
 }
 
-function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | number }) {
+function LoadingSkeleton({
+  columns,
+  gap,
+  animation,
+}: {
+  columns: number;
+  gap: string | number;
+  animation: 'pulse' | 'wave';
+}) {
   const pulseStyle: React.CSSProperties = {
-    background: 'var(--ds-color-bg-secondary, #e5e7eb)',
+    background: 'var(--ds-stats-grid-skeleton-bg, var(--ds-color-bg-tertiary))',
     borderRadius: 4,
-    animation: 'pulse 1.5s ease-in-out infinite',
+    animation:
+      animation === 'wave'
+        ? 'wave 1.4s ease-in-out infinite'
+        : 'pulse 1.5s ease-in-out infinite',
+    backgroundImage:
+      animation === 'wave'
+        ? 'var(--ds-stats-grid-skeleton-wave-gradient)'
+        : undefined,
+    backgroundSize: animation === 'wave' ? '200% 100%' : undefined,
   };
   return (
     <>
-      <style>{`@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.4 } }`}</style>
+      <style>{`@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.4 } } @keyframes wave { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }`}</style>
       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap }}>
         {Array.from({ length: columns }).map((_, i) => (
           <div
@@ -204,12 +264,14 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
 }
 
 export default function RusticStatsGrid(props: StatsGridProps) {
+  const tokens = useTokens();
+  const { prefersReducedMotion } = useBreakpoints();
   const {
     stats,
     renderStat,
     columns = 4,
     sparkline,
-    gap = 16,
+    gap = 'var(--ds-card-body-padding, 16px)' as unknown as number,
     variant = 'default',
     animate,
     onStatClick,
@@ -217,8 +279,9 @@ export default function RusticStatsGrid(props: StatsGridProps) {
     className,
     style,
   } = props;
+  const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
 
-  if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
+  if (loading) return <LoadingSkeleton columns={columns} gap={gap} animation={motion.skeletonAnimation} />;
 
   return (
     <div
@@ -237,7 +300,8 @@ export default function RusticStatsGrid(props: StatsGridProps) {
             stat={stat}
             sparkline={sparkline}
             variant={variant}
-            animate={animate}
+            animate={motion.animate}
+            animationDuration={motion.duration}
             onClick={onStatClick ? () => onStatClick(stat) : undefined}
           />
         );

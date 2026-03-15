@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { memo, useEffect, useRef } from 'react';
+import { axisBottom, axisLeft, max, min, scaleBand, scaleTime, select, timeFormat } from 'd3';
 
 import type { ChartBaseProps } from '../types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../types';
-import { useChartDimensions } from '../hooks';
+import { useChartDimensions, useChartPersonality } from '../hooks';
+import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 export interface GanttTask {
   id: string;
@@ -23,7 +24,7 @@ export interface GanttChartProps extends ChartBaseProps {
   showToday?: boolean;
 }
 
-export function GanttChart({
+export const GanttChart = memo(function GanttChart({
   tasks,
   showProgress = true,
   showToday = true,
@@ -43,13 +44,24 @@ export function GanttChart({
 }: GanttChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 800;
   const dynamicHeight = Math.max(height, tasks.length * 36 + margin.top + margin.bottom);
+  const summary = {
+    caption: title ? `${title} data summary` : 'Gantt chart data summary',
+    headers: ['Task', 'Start', 'End', 'Progress'],
+    rows: tasks.map((task) => [
+      task.name,
+      new Date(task.start).toISOString().slice(0, 10),
+      new Date(task.end).toISOString().slice(0, 10),
+      task.progress ?? 'N/A',
+    ]),
+  };
 
   useEffect(() => {
     if (!svgRef.current || !tasks || tasks.length === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
     const innerWidth = chartWidth - margin.left - margin.right;
@@ -67,14 +79,12 @@ export function GanttChart({
       end: new Date(t.end),
     }));
 
-    const x = d3
-      .scaleTime()
-      .domain([d3.min(parsedTasks, (d) => d.start)!, d3.max(parsedTasks, (d) => d.end)!])
+    const x = scaleTime()
+      .domain([min(parsedTasks, (d) => d.start)!, max(parsedTasks, (d) => d.end)!])
       .range([0, innerWidth])
       .nice();
 
-    const y = d3
-      .scaleBand()
+    const y = scaleBand()
       .domain(parsedTasks.map((d) => d.id))
       .range([0, innerHeight])
       .padding(0.3);
@@ -82,21 +92,21 @@ export function GanttChart({
     // X axis
     g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(x).ticks(6))
+      .call(axisBottom(x).ticks(6))
       .selectAll('text')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px');
 
     // Task names
     g.append('g')
-      .call(d3.axisLeft(y).tickFormat((id) => parsedTasks.find((t) => t.id === id)?.name ?? id))
+      .call(axisLeft(y).tickFormat((id) => parsedTasks.find((t) => t.id === id)?.name ?? id))
       .selectAll('text')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Grid
     g.append('g')
-      .call(d3.axisBottom(x).ticks(6).tickSize(innerHeight).tickFormat(() => ''))
+      .call(axisBottom(x).ticks(6).tickSize(innerHeight).tickFormat(() => ''))
       .attr('opacity', 0.15)
       .selectAll('line')
       .style('stroke', 'var(--ds-color-border-secondary)');
@@ -120,11 +130,11 @@ export function GanttChart({
       .attr('fill', (d, i) => d.color ?? colors[i % colors.length])
       .attr('opacity', 0.25);
 
-    if (animate) {
+    if (chartPersonality.animate) {
       rects
         .attr('width', 0)
         .transition()
-        .duration(600)
+        .duration(chartPersonality.animationDuration)
         .delay((_, i) => i * 50)
         .attr('width', (d) => Math.max(0, x(d.end) - x(d.start)));
     } else {
@@ -142,11 +152,11 @@ export function GanttChart({
         .attr('rx', 4)
         .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
 
-      if (animate) {
+      if (chartPersonality.animate) {
         progressBars
           .attr('width', 0)
           .transition()
-          .duration(600)
+          .duration(chartPersonality.animationDuration)
           .delay((_, i) => i * 50)
           .attr('width', (d) => Math.max(0, (x(d.end) - x(d.start)) * ((d.progress ?? 0) / 100)));
       } else {
@@ -154,9 +164,9 @@ export function GanttChart({
       }
     }
 
-    if (tooltip) {
+    if (chartPersonality.tooltip) {
       bars.append('title').text((d) => {
-        const fmt = d3.timeFormat('%b %d, %Y');
+        const fmt = timeFormat('%b %d, %Y');
         const progress = d.progress != null ? ` (${d.progress}%)` : '';
         return `${d.name}: ${fmt(d.start)} - ${fmt(d.end)}${progress}`;
       });
@@ -186,25 +196,34 @@ export function GanttChart({
     }
 
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [tasks, chartWidth, dynamicHeight, showProgress, showToday, animate, colors, margin, tooltip]);
-
-  if (loading) {
-    return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>Loading...</div>
-      </div>
-    );
-  }
+  }, [
+    tasks,
+    chartWidth,
+    dynamicHeight,
+    showProgress,
+    showToday,
+    chartPersonality.animate,
+    chartPersonality.animationDuration,
+    colors,
+    margin,
+    chartPersonality.tooltip,
+  ]);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
-      {title && (
-        <div style={{ marginBottom: 4 }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
-          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
-        </div>
-      )}
-      <svg ref={svgRef} />
-    </div>
+    <ChartScaffold
+      containerRef={containerRef}
+      svgRef={svgRef}
+      width={width}
+      height={dynamicHeight}
+      className={className}
+      style={style}
+      loading={loading}
+      loadingLabel={chartPersonality.loadingLabel}
+      title={title}
+      subtitle={subtitle}
+      ariaLabel={title ?? 'Gantt chart'}
+      ariaDescription={describeChart('Gantt chart', tasks.length, subtitle, showToday ? 'Includes a marker for today when it falls inside the visible date range.' : undefined)}
+      summary={summary}
+    />
   );
-}
+});

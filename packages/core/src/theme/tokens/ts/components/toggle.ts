@@ -8,153 +8,153 @@
 // Toggle Sizes
 export const toggleSize = {
   xs: {
-    width: 'var(--toggle-xs-width)',
-    height: 'var(--toggle-xs-height)',
-    dot: 'var(--toggle-xs-dot)',
-    dotOffset: 'var(--toggle-xs-dot-offset)',
-    labelFontSize: 'var(--toggle-xs-label-font-size)',
+    width: 'var(--ds-toggle-xs-width)',
+    height: 'var(--ds-toggle-xs-height)',
+    dot: 'var(--ds-toggle-xs-dot)',
+    dotOffset: 'var(--ds-toggle-xs-dot-offset)',
+    labelFontSize: 'var(--ds-toggle-xs-label-font-size)',
   },
   sm: {
-    width: 'var(--toggle-sm-width)',
-    height: 'var(--toggle-sm-height)',
-    dot: 'var(--toggle-sm-dot)',
-    dotOffset: 'var(--toggle-sm-dot-offset)',
-    labelFontSize: 'var(--toggle-sm-label-font-size)',
+    width: 'var(--ds-toggle-sm-width)',
+    height: 'var(--ds-toggle-sm-height)',
+    dot: 'var(--ds-toggle-sm-dot)',
+    dotOffset: 'var(--ds-toggle-sm-dot-offset)',
+    labelFontSize: 'var(--ds-toggle-sm-label-font-size)',
   },
   md: {
-    width: 'var(--toggle-md-width)',
-    height: 'var(--toggle-md-height)',
-    dot: 'var(--toggle-md-dot)',
-    dotOffset: 'var(--toggle-md-dot-offset)',
-    labelFontSize: 'var(--toggle-md-label-font-size)',
+    width: 'var(--ds-toggle-md-width)',
+    height: 'var(--ds-toggle-md-height)',
+    dot: 'var(--ds-toggle-md-dot)',
+    dotOffset: 'var(--ds-toggle-md-dot-offset)',
+    labelFontSize: 'var(--ds-toggle-md-label-font-size)',
   },
   lg: {
-    width: 'var(--toggle-lg-width)',
-    height: 'var(--toggle-lg-height)',
-    dot: 'var(--toggle-lg-dot)',
-    dotOffset: 'var(--toggle-lg-dot-offset)',
-    labelFontSize: 'var(--toggle-lg-label-font-size)',
+    width: 'var(--ds-toggle-lg-width)',
+    height: 'var(--ds-toggle-lg-height)',
+    dot: 'var(--ds-toggle-lg-dot)',
+    dotOffset: 'var(--ds-toggle-lg-dot-offset)',
+    labelFontSize: 'var(--ds-toggle-lg-label-font-size)',
   },
   xl: {
-    width: 'var(--toggle-xl-width)',
-    height: 'var(--toggle-xl-height)',
-    dot: 'var(--toggle-xl-dot)',
-    dotOffset: 'var(--toggle-xl-dot-offset)',
-    labelFontSize: 'var(--toggle-xl-label-font-size)',
+    width: 'var(--ds-toggle-xl-width)',
+    height: 'var(--ds-toggle-xl-height)',
+    dot: 'var(--ds-toggle-xl-dot)',
+    dotOffset: 'var(--ds-toggle-xl-dot-offset)',
+    labelFontSize: 'var(--ds-toggle-xl-label-font-size)',
   },
 } as const;
 
 // Toggle Color Variants
 export const toggleColor = {
   default: {
-    bg: 'var(--toggle-default-bg)',
-    bgChecked: 'var(--toggle-default-bg-checked)',
-    border: 'var(--toggle-default-border)',
+    bg: 'var(--ds-toggle-default-bg)',
+    bgChecked: 'var(--ds-toggle-default-bg-checked)',
+    border: 'var(--ds-toggle-default-border)',
   },
   primary: {
-    bg: 'var(--toggle-primary-bg)',
-    bgChecked: 'var(--toggle-primary-bg-checked)',
-    border: 'var(--toggle-primary-border)',
+    bg: 'var(--ds-toggle-primary-bg)',
+    bgChecked: 'var(--ds-toggle-primary-bg-checked)',
+    border: 'var(--ds-toggle-primary-border)',
   },
   secondary: {
-    bg: 'var(--toggle-secondary-bg)',
-    bgChecked: 'var(--toggle-secondary-bg-checked)',
-    border: 'var(--toggle-secondary-border)',
+    bg: 'var(--ds-toggle-secondary-bg)',
+    bgChecked: 'var(--ds-toggle-secondary-bg-checked)',
+    border: 'var(--ds-toggle-secondary-border)',
   },
   success: {
-    bg: 'var(--toggle-success-bg)',
-    bgChecked: 'var(--toggle-success-bg-checked)',
-    border: 'var(--toggle-success-border)',
+    bg: 'var(--ds-toggle-success-bg)',
+    bgChecked: 'var(--ds-toggle-success-bg-checked)',
+    border: 'var(--ds-toggle-success-border)',
   },
   warning: {
-    bg: 'var(--toggle-warning-bg)',
-    bgChecked: 'var(--toggle-warning-bg-checked)',
-    border: 'var(--toggle-warning-border)',
+    bg: 'var(--ds-toggle-warning-bg)',
+    bgChecked: 'var(--ds-toggle-warning-bg-checked)',
+    border: 'var(--ds-toggle-warning-border)',
   },
   error: {
-    bg: 'var(--toggle-error-bg)',
-    bgChecked: 'var(--toggle-error-bg-checked)',
-    border: 'var(--toggle-error-border)',
+    bg: 'var(--ds-toggle-error-bg)',
+    bgChecked: 'var(--ds-toggle-error-bg-checked)',
+    border: 'var(--ds-toggle-error-border)',
   },
 } as const;
 
 // Toggle Dot/Handle
 export const toggleDot = {
-  bg: 'var(--toggle-dot-bg)',
-  shadow: 'var(--toggle-dot-shadow)',
-  borderRadius: 'var(--toggle-dot-border-radius)',
+  bg: 'var(--ds-toggle-dot-bg)',
+  shadow: 'var(--ds-toggle-dot-shadow)',
+  borderRadius: 'var(--ds-toggle-dot-border-radius)',
 } as const;
 
 // Toggle Track
 export const toggleTrack = {
-  borderRadius: 'var(--toggle-track-border-radius)',
-  borderWidth: 'var(--toggle-track-border-width)',
-  borderStyle: 'var(--toggle-track-border-style)',
+  borderRadius: 'var(--ds-toggle-track-border-radius)',
+  borderWidth: 'var(--ds-toggle-track-border-width)',
+  borderStyle: 'var(--ds-toggle-track-border-style)',
 } as const;
 
 // Toggle Label
 export const toggleLabel = {
-  color: 'var(--toggle-label-color)',
-  colorDisabled: 'var(--toggle-label-color-disabled)',
-  fontWeight: 'var(--toggle-label-font-weight)',
-  gap: 'var(--toggle-label-gap)',
+  color: 'var(--ds-toggle-label-color)',
+  colorDisabled: 'var(--ds-toggle-label-color-disabled)',
+  fontWeight: 'var(--ds-toggle-label-font-weight)',
+  gap: 'var(--ds-toggle-label-gap)',
   description: {
-    color: 'var(--toggle-description-color)',
-    fontSize: 'var(--toggle-description-font-size)',
-    marginTop: 'var(--toggle-description-margin-top)',
+    color: 'var(--ds-toggle-description-color)',
+    fontSize: 'var(--ds-toggle-description-font-size)',
+    marginTop: 'var(--ds-toggle-description-margin-top)',
   },
 } as const;
 
 // Toggle Inner Labels
 export const toggleInner = {
-  fontSize: 'var(--toggle-inner-font-size)',
-  color: 'var(--toggle-inner-color)',
-  padding: 'var(--toggle-inner-padding)',
+  fontSize: 'var(--ds-toggle-inner-font-size)',
+  color: 'var(--ds-toggle-inner-color)',
+  padding: 'var(--ds-toggle-inner-padding)',
 } as const;
 
 // Toggle Helper Text
 export const toggleHelper = {
-  color: 'var(--toggle-helper-color)',
-  fontSize: 'var(--toggle-helper-font-size)',
-  marginTop: 'var(--toggle-helper-margin-top)',
+  color: 'var(--ds-toggle-helper-color)',
+  fontSize: 'var(--ds-toggle-helper-font-size)',
+  marginTop: 'var(--ds-toggle-helper-margin-top)',
 } as const;
 
 // Toggle Error State
 export const toggleError = {
-  borderColor: 'var(--toggle-error-border-color)',
-  messageColor: 'var(--toggle-error-message-color)',
-  messageFontSize: 'var(--toggle-error-message-font-size)',
-  messageMarginTop: 'var(--toggle-error-message-margin-top)',
+  borderColor: 'var(--ds-toggle-error-border-color)',
+  messageColor: 'var(--ds-toggle-error-message-color)',
+  messageFontSize: 'var(--ds-toggle-error-message-font-size)',
+  messageMarginTop: 'var(--ds-toggle-error-message-margin-top)',
 } as const;
 
 // Toggle Focus State
 export const toggleFocus = {
-  ringColor: 'var(--toggle-focus-ring-color)',
-  ringWidth: 'var(--toggle-focus-ring-width)',
-  ringOffset: 'var(--toggle-focus-ring-offset)',
-  shadow: 'var(--toggle-focus-shadow)',
+  ringColor: 'var(--ds-toggle-focus-ring-color)',
+  ringWidth: 'var(--ds-toggle-focus-ring-width)',
+  ringOffset: 'var(--ds-toggle-focus-ring-offset)',
+  shadow: 'var(--ds-toggle-focus-shadow)',
 } as const;
 
 // Toggle Loading State
 export const toggleLoading = {
-  color: 'var(--toggle-loading-color)',
-  size: 'var(--toggle-loading-size)',
+  color: 'var(--ds-toggle-loading-color)',
+  size: 'var(--ds-toggle-loading-size)',
 } as const;
 
 // Toggle Transition
 export const toggleTransition = {
-  duration: 'var(--toggle-transition-duration)',
-  timing: 'var(--toggle-transition-timing)',
-  all: 'var(--toggle-transition)',
-  dot: 'var(--toggle-dot-transition)',
+  duration: 'var(--ds-toggle-transition-duration)',
+  timing: 'var(--ds-toggle-transition-timing)',
+  all: 'var(--ds-toggle-transition)',
+  dot: 'var(--ds-toggle-dot-transition)',
 } as const;
 
 // Toggle Disabled
 export const toggleDisabled = {
-  opacity: 'var(--toggle-disabled-opacity)',
-  cursor: 'var(--toggle-disabled-cursor)',
-  bg: 'var(--toggle-disabled-bg)',
-  dotBg: 'var(--toggle-disabled-dot-bg)',
+  opacity: 'var(--ds-toggle-disabled-opacity)',
+  cursor: 'var(--ds-toggle-disabled-cursor)',
+  bg: 'var(--ds-toggle-disabled-bg)',
+  dotBg: 'var(--ds-toggle-disabled-dot-bg)',
 } as const;
 
 // Combined toggle tokens

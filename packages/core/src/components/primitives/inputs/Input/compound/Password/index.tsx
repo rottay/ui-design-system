@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { InputPasswordProps } from '../../types';
-import { Input } from '../../';
+import { BaseInput } from '../../base';
 
 const EyeIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -52,7 +52,7 @@ export const InputPassword = (props: InputPasswordProps) => {
   ) : null;
 
   return (
-    <Input
+    <BaseInput
       {...inputProps}
       type={visible ? 'text' : 'password'}
       suffix={toggleButton}

@@ -35,13 +35,13 @@ export function AvatarGroup({
 
   const childStyle: CSSProperties = {
     marginLeft: '-8px',
-    border: '2px solid var(--avatar-group-border, #fff)',
+    border: '2px solid var(--ds-avatar-group-border, #fff)',
   };
 
   const surplusStyle: CSSProperties = {
     ...childStyle,
-    backgroundColor: 'var(--avatar-surplus-bg, #f0f0f0)',
-    color: 'var(--avatar-surplus-color, #666)',
+    backgroundColor: 'var(--ds-avatar-surplus-bg, #f0f0f0)',
+    color: 'var(--ds-avatar-surplus-color, #666)',
     ...maxStyle,
   };
 

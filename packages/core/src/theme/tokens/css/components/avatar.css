@@ -12,63 +12,63 @@
      ======================================================================== */
 
   /* XS - Extra Small (24px) */
-  --avatar-xs-size: 1.5rem;           /* 24px */
-  --avatar-xs-font-size: 0.625rem;    /* 10px */
-  --avatar-xs-status-size: 0.375rem;  /* 6px */
-  --avatar-xs-border-width: 1px;
+  --ds-avatar-xs-size: 1.5rem;           /* 24px */
+  --ds-avatar-xs-font-size: 0.625rem;    /* 10px */
+  --ds-avatar-xs-status-size: 0.375rem;  /* 6px */
+  --ds-avatar-xs-border-width: 1px;
 
   /* SM - Small (32px) */
-  --avatar-sm-size: 2rem;             /* 32px */
-  --avatar-sm-font-size: 0.75rem;     /* 12px */
-  --avatar-sm-status-size: 0.5rem;    /* 8px */
-  --avatar-sm-border-width: 1.5px;
+  --ds-avatar-sm-size: 2rem;             /* 32px */
+  --ds-avatar-sm-font-size: 0.75rem;     /* 12px */
+  --ds-avatar-sm-status-size: 0.5rem;    /* 8px */
+  --ds-avatar-sm-border-width: 1.5px;
 
   /* MD - Medium (40px - Default) */
-  --avatar-md-size: 2.5rem;           /* 40px */
-  --avatar-md-font-size: 0.875rem;    /* 14px */
-  --avatar-md-status-size: 0.625rem;  /* 10px */
-  --avatar-md-border-width: 2px;
+  --ds-avatar-md-size: 2.5rem;           /* 40px */
+  --ds-avatar-md-font-size: 0.875rem;    /* 14px */
+  --ds-avatar-md-status-size: 0.625rem;  /* 10px */
+  --ds-avatar-md-border-width: 2px;
 
   /* LG - Large (48px) */
-  --avatar-lg-size: 3rem;             /* 48px */
-  --avatar-lg-font-size: 1rem;        /* 16px */
-  --avatar-lg-status-size: 0.75rem;   /* 12px */
-  --avatar-lg-border-width: 2px;
+  --ds-avatar-lg-size: 3rem;             /* 48px */
+  --ds-avatar-lg-font-size: 1rem;        /* 16px */
+  --ds-avatar-lg-status-size: 0.75rem;   /* 12px */
+  --ds-avatar-lg-border-width: 2px;
 
   /* XL - Extra Large (56px) */
-  --avatar-xl-size: 3.5rem;           /* 56px */
-  --avatar-xl-font-size: 1.125rem;    /* 18px */
-  --avatar-xl-status-size: 0.875rem;  /* 14px */
-  --avatar-xl-border-width: 2.5px;
+  --ds-avatar-xl-size: 3.5rem;           /* 56px */
+  --ds-avatar-xl-font-size: 1.125rem;    /* 18px */
+  --ds-avatar-xl-status-size: 0.875rem;  /* 14px */
+  --ds-avatar-xl-border-width: 2.5px;
 
   /* 2XL - 2x Extra Large (64px) */
-  --avatar-2xl-size: 4rem;            /* 64px */
-  --avatar-2xl-font-size: 1.25rem;    /* 20px */
-  --avatar-2xl-status-size: 1rem;     /* 16px */
-  --avatar-2xl-border-width: 3px;
+  --ds-avatar-2xl-size: 4rem;            /* 64px */
+  --ds-avatar-2xl-font-size: 1.25rem;    /* 20px */
+  --ds-avatar-2xl-status-size: 1rem;     /* 16px */
+  --ds-avatar-2xl-border-width: 3px;
 
   /* 3XL - 3x Extra Large (96px) */
-  --avatar-3xl-size: 6rem;            /* 96px */
-  --avatar-3xl-font-size: 1.75rem;    /* 28px */
-  --avatar-3xl-status-size: 1.25rem;  /* 20px */
-  --avatar-3xl-border-width: 4px;
+  --ds-avatar-3xl-size: 6rem;            /* 96px */
+  --ds-avatar-3xl-font-size: 1.75rem;    /* 28px */
+  --ds-avatar-3xl-status-size: 1.25rem;  /* 20px */
+  --ds-avatar-3xl-border-width: 4px;
 
   /* Default size (can be overridden) */
-  --avatar-default-size: var(--avatar-md-size);
-  --avatar-default-font-size: var(--avatar-md-font-size);
-  --avatar-default-status-size: var(--avatar-md-status-size);
-  --avatar-default-border-width: var(--avatar-md-border-width);
+  --ds-avatar-default-size: var(--ds-avatar-md-size);
+  --ds-avatar-default-font-size: var(--ds-avatar-md-font-size);
+  --ds-avatar-default-status-size: var(--ds-avatar-md-status-size);
+  --ds-avatar-default-border-width: var(--ds-avatar-md-border-width);
 
   /* ========================================================================
      SHAPES - Avatar Border Radius
      Three shape variants: circle, square, rounded
      ======================================================================== */
-  --avatar-circle-radius: 50%;                          /* Fully rounded */
-  --avatar-square-radius: 0;                            /* No rounding */
-  --avatar-rounded-radius: var(--radius-md, 0.5rem);    /* 8px rounded corners */
+  --ds-avatar-circle-radius: 50%;                          /* Fully rounded */
+  --ds-avatar-square-radius: 0;                            /* No rounding */
+  --ds-avatar-rounded-radius: var(--ds-radius-md, 0.5rem);    /* 8px rounded corners */
 
   /* Default shape */
-  --avatar-default-shape: var(--avatar-circle-radius);
+  --ds-avatar-default-shape: var(--ds-avatar-circle-radius);
 
   /* ========================================================================
      VARIANTS - Avatar Color Variants
@@ -76,137 +76,137 @@
      ======================================================================== */
 
   /* Default variant (neutral) */
-  --avatar-default-bg: var(--color-neutral-100);
-  --avatar-default-color: var(--color-neutral-600);
-  --avatar-default-border-color: var(--color-neutral-200);
-  --avatar-default-shadow: none;
+  --ds-avatar-default-bg: var(--ds-color-neutral-100);
+  --ds-avatar-default-color: var(--ds-color-neutral-600);
+  --ds-avatar-default-border-color: var(--ds-color-neutral-200);
+  --ds-avatar-default-shadow: none;
 
   /* Primary variant */
-  --avatar-primary-bg: var(--color-primary-100);
-  --avatar-primary-color: var(--color-primary-700);
-  --avatar-primary-border-color: var(--color-primary-200);
-  --avatar-primary-shadow: 0 2px 8px rgba(0, 102, 204, 0.15);
+  --ds-avatar-primary-bg: var(--ds-color-primary-100);
+  --ds-avatar-primary-color: var(--ds-color-primary-700);
+  --ds-avatar-primary-border-color: var(--ds-color-primary-200);
+  --ds-avatar-primary-shadow: 0 2px 8px rgba(0, 102, 204, 0.15);
 
   /* Secondary variant */
-  --avatar-secondary-bg: var(--color-secondary-100);
-  --avatar-secondary-color: var(--color-secondary-700);
-  --avatar-secondary-border-color: var(--color-secondary-200);
-  --avatar-secondary-shadow: 0 2px 8px rgba(107, 107, 212, 0.15);
+  --ds-avatar-secondary-bg: var(--ds-color-secondary-100);
+  --ds-avatar-secondary-color: var(--ds-color-secondary-700);
+  --ds-avatar-secondary-border-color: var(--ds-color-secondary-200);
+  --ds-avatar-secondary-shadow: 0 2px 8px rgba(107, 107, 212, 0.15);
 
   /* Success variant */
-  --avatar-success-bg: var(--color-success-100);
-  --avatar-success-color: var(--color-success-700);
-  --avatar-success-border-color: var(--color-success-200);
-  --avatar-success-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
+  --ds-avatar-success-bg: var(--ds-color-success-100);
+  --ds-avatar-success-color: var(--ds-color-success-700);
+  --ds-avatar-success-border-color: var(--ds-color-success-200);
+  --ds-avatar-success-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
 
   /* Warning variant */
-  --avatar-warning-bg: var(--color-warning-100);
-  --avatar-warning-color: var(--color-warning-700);
-  --avatar-warning-border-color: var(--color-warning-200);
-  --avatar-warning-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+  --ds-avatar-warning-bg: var(--ds-color-warning-100);
+  --ds-avatar-warning-color: var(--ds-color-warning-700);
+  --ds-avatar-warning-border-color: var(--ds-color-warning-200);
+  --ds-avatar-warning-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
 
   /* Error variant */
-  --avatar-error-bg: var(--color-error-100);
-  --avatar-error-color: var(--color-error-700);
-  --avatar-error-border-color: var(--color-error-200);
-  --avatar-error-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+  --ds-avatar-error-bg: var(--ds-color-error-100);
+  --ds-avatar-error-color: var(--ds-color-error-700);
+  --ds-avatar-error-border-color: var(--ds-color-error-200);
+  --ds-avatar-error-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
 
   /* Gradient variant */
-  --avatar-gradient-bg: linear-gradient(135deg, var(--color-primary-400) 0%, var(--color-secondary-500) 100%);
-  --avatar-gradient-color: var(--color-white);
-  --avatar-gradient-border-color: transparent;
-  --avatar-gradient-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+  --ds-avatar-gradient-bg: linear-gradient(135deg, var(--ds-color-primary-400) 0%, var(--ds-color-secondary-500) 100%);
+  --ds-avatar-gradient-color: var(--ds-color-white);
+  --ds-avatar-gradient-border-color: transparent;
+  --ds-avatar-gradient-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
 
   /* ========================================================================
      STATUS INDICATORS
      Color indicators for online/offline/away/busy states
      ======================================================================== */
-  --avatar-status-online-color: var(--color-success-500);
-  --avatar-status-offline-color: var(--color-neutral-400);
-  --avatar-status-away-color: var(--color-warning-500);
-  --avatar-status-busy-color: var(--color-error-500);
+  --ds-avatar-status-online-color: var(--ds-color-success-500);
+  --ds-avatar-status-offline-color: var(--ds-color-neutral-400);
+  --ds-avatar-status-away-color: var(--ds-color-warning-500);
+  --ds-avatar-status-busy-color: var(--ds-color-error-500);
 
   /* Status indicator position and sizing */
-  --avatar-status-offset: 0;          /* Distance from edge */
-  --avatar-status-border-width: 2px;  /* White border around status */
-  --avatar-status-border-color: var(--color-white);
+  --ds-avatar-status-offset: 0;          /* Distance from edge */
+  --ds-avatar-status-border-width: 2px;  /* White border around status */
+  --ds-avatar-status-border-color: var(--ds-color-white);
 
   /* ========================================================================
      AVATAR GROUP
      Settings for overlapping avatar groups
      ======================================================================== */
-  --avatar-group-compact-spacing: -0.5rem;   /* -8px overlap */
-  --avatar-group-normal-spacing: -0.25rem;   /* -4px overlap */
-  --avatar-group-loose-spacing: 0.25rem;     /* 4px gap */
+  --ds-avatar-group-compact-spacing: -0.5rem;   /* -8px overlap */
+  --ds-avatar-group-normal-spacing: -0.25rem;   /* -4px overlap */
+  --ds-avatar-group-loose-spacing: 0.25rem;     /* 4px gap */
 
   /* Default group spacing */
-  --avatar-group-default-spacing: var(--avatar-group-normal-spacing);
+  --ds-avatar-group-default-spacing: var(--ds-avatar-group-normal-spacing);
 
   /* Group max count settings */
-  --avatar-group-max-count: 5;                /* Max avatars before showing +N */
-  --avatar-group-overflow-bg: var(--color-neutral-200);
-  --avatar-group-overflow-color: var(--color-neutral-700);
-  --avatar-group-overflow-font-weight: var(--font-weight-medium);
+  --ds-avatar-group-max-count: 5;                /* Max avatars before showing +N */
+  --ds-avatar-group-overflow-bg: var(--ds-color-neutral-200);
+  --ds-avatar-group-overflow-color: var(--ds-color-neutral-700);
+  --ds-avatar-group-overflow-font-weight: var(--ds-font-weight-medium);
 
   /* ========================================================================
      INTERACTIONS
      Hover, focus, and active states
      ======================================================================== */
-  --avatar-hover-scale: 1.05;
-  --avatar-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --avatar-hover-border-color: var(--color-primary-300);
+  --ds-avatar-hover-scale: 1.05;
+  --ds-avatar-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --ds-avatar-hover-border-color: var(--ds-color-primary-300);
 
-  --avatar-focus-ring-width: 2px;
-  --avatar-focus-ring-color: var(--color-primary-500);
-  --avatar-focus-ring-offset: 2px;
+  --ds-avatar-focus-ring-width: 2px;
+  --ds-avatar-focus-ring-color: var(--ds-color-primary-500);
+  --ds-avatar-focus-ring-offset: 2px;
 
-  --avatar-active-scale: 0.98;
+  --ds-avatar-active-scale: 0.98;
 
   /* ========================================================================
      BADGE/NOTIFICATION
      For notification badges on avatars
      ======================================================================== */
-  --avatar-badge-size: 1rem;                  /* 16px */
-  --avatar-badge-font-size: 0.625rem;         /* 10px */
-  --avatar-badge-bg: var(--color-error-500);
-  --avatar-badge-color: var(--color-white);
-  --avatar-badge-border-width: 2px;
-  --avatar-badge-border-color: var(--color-white);
-  --avatar-badge-offset-top: 0;
-  --avatar-badge-offset-right: 0;
+  --ds-avatar-badge-size: 1rem;                  /* 16px */
+  --ds-avatar-badge-font-size: 0.625rem;         /* 10px */
+  --ds-avatar-badge-bg: var(--ds-color-error-500);
+  --ds-avatar-badge-color: var(--ds-color-white);
+  --ds-avatar-badge-border-width: 2px;
+  --ds-avatar-badge-border-color: var(--ds-color-white);
+  --ds-avatar-badge-offset-top: 0;
+  --ds-avatar-badge-offset-right: 0;
 
   /* ========================================================================
      LOADING STATE
      Skeleton/loading appearance
      ======================================================================== */
-  --avatar-loading-bg: var(--color-neutral-100);
-  --avatar-loading-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --ds-avatar-loading-bg: var(--ds-color-neutral-100);
+  --ds-avatar-loading-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   /* ========================================================================
      TOUCH TARGETS
      Minimum touch target size for accessibility
      ======================================================================== */
-  --avatar-touch-target-min: 2.75rem;  /* 44px - WCAG AAA minimum */
+  --ds-avatar-touch-target-min: 2.75rem;  /* 44px - WCAG AAA minimum */
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --avatar-transition-duration: 0.2s;
-  --avatar-transition-timing: ease-in-out;
-  --avatar-transition: all var(--avatar-transition-duration) var(--avatar-transition-timing);
+  --ds-avatar-transition-duration: 0.2s;
+  --ds-avatar-transition-timing: ease-in-out;
+  --ds-avatar-transition: all var(--ds-avatar-transition-duration) var(--ds-avatar-transition-timing);
 
   /* ========================================================================
      IMAGE SETTINGS
      Settings for image rendering within avatars
      ======================================================================== */
-  --avatar-image-object-fit: cover;
-  --avatar-image-object-position: center;
+  --ds-avatar-image-object-fit: cover;
+  --ds-avatar-image-object-position: center;
 
   /* ========================================================================
      FALLBACK ICON
      Settings for icon fallback when no image is provided
      ======================================================================== */
-  --avatar-fallback-icon-size: 60%;  /* Icon size relative to avatar */
-  --avatar-fallback-icon-color: currentColor;
+  --ds-avatar-fallback-icon-size: 60%;  /* Icon size relative to avatar */
+  --ds-avatar-fallback-icon-color: currentColor;
 }

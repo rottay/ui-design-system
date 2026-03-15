@@ -126,7 +126,7 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
                     ? `3px solid ${column.color}`
                     : undefined,
                 }}
-                bodyStyle={{ padding: '8px 12px' }}
+                styles={{ body: { padding: '8px 12px' } }}
               >
                 {renderColumnHeader ? (
                   renderColumnHeader(column, column.items.length)
@@ -150,8 +150,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       <Badge
                         count={column.items.length}
                         style={{
-                          backgroundColor: isOverLimit ? '#ff4d4f' : '#d9d9d9',
-                          color: isOverLimit ? '#fff' : '#595959',
+                          backgroundColor: isOverLimit ? 'var(--ds-color-error)' : 'var(--ds-color-border-secondary)',
+                          color: isOverLimit ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-text-secondary)',
                         }}
                         overflowCount={999}
                       />
@@ -170,7 +170,7 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 <div
                   style={{
                     flex: 1,
-                    background: '#fafafa',
+                    background: 'var(--ds-color-bg-secondary)',
                     borderRadius: 6,
                     padding: 8,
                     minHeight: 100,

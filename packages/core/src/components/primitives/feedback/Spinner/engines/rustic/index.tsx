@@ -12,8 +12,8 @@
  * - Works in any environment without framework requirements
  *
  * The spinner uses a circular border animation with configurable:
- * - Size via CSS variables (--spinner-{size}-size)
- * - Stroke width via --spinner-stroke-width
+ * - Size via CSS variables (--ds-spinner-{size}-size)
+ * - Stroke width via --ds-spinner-stroke-width
  * - Color via the color prop or CSS variables
  * - Animation speed (0.8s default rotation)
  *

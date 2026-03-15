@@ -8,10 +8,14 @@ import React, { useState, useCallback, useMemo, type ReactNode, type CSSProperti
 import type { FormBuilderProps } from '../../types';
 import type { FieldDef } from '../../../types';
 
+const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+
 const s = {
   title: {
     fontSize: 'var(--ds-font-size-xl)',
-    fontWeight: 600,
+    fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
+    letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
     color: 'var(--ds-color-neutral-900)',
     margin: '0 0 4px 0',
   } as CSSProperties,
@@ -20,10 +24,17 @@ const s = {
     color: 'var(--ds-color-neutral-500)',
     margin: '0 0 24px 0',
   } as CSSProperties,
+  sectionDivider: {
+    border: 'none',
+    borderTop: '1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200))',
+    margin: 'var(--ds-card-body-padding, 1.5rem) 0',
+  } as CSSProperties,
   label: {
     display: 'block',
     fontSize: 'var(--ds-font-size-sm)',
-    fontWeight: 500,
+    fontWeight: 'var(--ds-typography-heading-font-weight, 500)' as unknown as number,
+    letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
+    textTransform: 'var(--ds-typography-label-transform, none)' as CSSProperties['textTransform'],
     color: 'var(--ds-color-neutral-700)',
     marginBottom: 6,
   } as CSSProperties,
@@ -42,7 +53,7 @@ const s = {
     color: 'var(--ds-color-neutral-900)',
     outline: 'none',
     boxSizing: 'border-box' as const,
-    transition: 'border-color 0.15s',
+    transition: `border-color ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
   textarea: {
     display: 'block',
@@ -57,6 +68,7 @@ const s = {
     boxSizing: 'border-box' as const,
     resize: 'vertical' as const,
     minHeight: 80,
+    transition: `border-color ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
   select: {
     display: 'block',
@@ -69,11 +81,15 @@ const s = {
     color: 'var(--ds-color-neutral-900)',
     outline: 'none',
     boxSizing: 'border-box' as const,
+    transition: `border-color ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
   error: {
     fontSize: 'var(--ds-font-size-xs)',
     color: 'var(--ds-color-danger, #ef4444)',
     marginTop: 4,
+    animation: `ds-form-error-in ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
+    borderLeft: '2px solid var(--ds-color-danger, #ef4444)',
+    paddingLeft: 8,
   } as CSSProperties,
   hint: {
     fontSize: 'var(--ds-font-size-xs)',
@@ -99,11 +115,11 @@ const s = {
       textAlign: 'center',
       padding: '8px 0',
       fontSize: 'var(--ds-font-size-sm)',
-      fontWeight: active ? 600 : 400,
+      fontWeight: active ? 'var(--ds-typography-heading-font-weight, 600)' : 400,
       color: active ? 'var(--ds-color-primary, #3b82f6)' : 'var(--ds-color-neutral-400)',
       borderBottom: `2px solid ${active ? 'var(--ds-color-primary, #3b82f6)' : 'var(--ds-color-neutral-200)'}`,
       cursor: 'pointer',
-      transition: 'all 0.15s',
+      transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
     }) as CSSProperties,
   navRow: {
     display: 'flex',
@@ -119,6 +135,7 @@ const s = {
     background: 'var(--ds-color-neutral-0, #fff)',
     color: 'var(--ds-color-neutral-700)',
     cursor: 'pointer',
+    transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
   btnPrimary: {
     padding: '8px 20px',
@@ -127,11 +144,24 @@ const s = {
     border: 'none',
     borderRadius: 'var(--ds-radius-md)',
     background: 'var(--ds-color-primary, #3b82f6)',
-    color: '#fff',
+    color: 'var(--ds-color-text-on-primary)',
     cursor: 'pointer',
+    transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
   inputError: {
     borderColor: 'var(--ds-color-danger, #ef4444)',
+    boxShadow: '0 0 0 1px var(--ds-color-danger, #ef4444)',
+  } as CSSProperties,
+  submitArea: {
+    position: 'sticky' as const,
+    bottom: 0,
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    background: 'rgba(255, 255, 255, 0.85)',
+    padding: '12px 0',
+    marginTop: 16,
+    borderTop: '1px solid var(--ds-color-neutral-100)',
+    zIndex: 5,
   } as CSSProperties,
 };
 
@@ -367,7 +397,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'file':
           return <input type="file" disabled={fieldDisabled} style={inputStyle(field.name)} onChange={(e) => updateValue(field.name, e.target.files)} />;
         case 'color':
-          return <input type="color" value={(val as string) ?? '#000000'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, border: '1px solid var(--ds-color-neutral-300)', borderRadius: 'var(--ds-radius-md)', cursor: 'pointer' }} />;
+          // Native color inputs only accept concrete color strings, not CSS vars.
+          return <input type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, border: '1px solid var(--ds-color-neutral-300)', borderRadius: 'var(--ds-radius-md)', cursor: 'pointer' }} />;
         case 'slider':
           return <input type="range" value={(val as number) ?? 0} onChange={(e) => updateValue(field.name, Number(e.target.value))} min={field.validation?.min ?? 0} max={field.validation?.max ?? 100} disabled={fieldDisabled} style={{ width: '100%' }} />;
         case 'rating':
@@ -462,6 +493,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
       className={className}
       style={{ fontFamily: 'var(--ds-font-family-base)', ...style }}
     >
+      <style>{`@keyframes ds-form-error-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       {title && <h3 style={s.title}>{title}</h3>}
       {description && <p style={s.description}>{description}</p>}
 
@@ -494,7 +526,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         </div>
       )}
 
-      {actions && <div style={{ marginTop: 16 }}>{actions}</div>}
+      {actions && <div style={s.submitArea}>{actions}</div>}
     </form>
   );
 }

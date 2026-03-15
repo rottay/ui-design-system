@@ -2,7 +2,7 @@
  * Tenant System Tests
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   isValidTenantConfig,
   createTenantConfig,
@@ -11,6 +11,16 @@ import { getDefaultTenantConfig } from '../../theme/tenants/defaults';
 import { resolveFromSubdomain } from '../../theme/tenants/resolver/subdomain';
 import { resolveFromDomain, configureDomainLookup } from '../../theme/tenants/resolver/domain';
 import { resolveFromHeader, setServerHeaders, clearServerHeaders } from '../../theme/tenants/resolver/header';
+
+let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
+beforeEach(() => {
+  consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  consoleWarnSpy.mockRestore();
+});
 
 describe('Tenant Schema', () => {
   describe('isValidTenantConfig', () => {

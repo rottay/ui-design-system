@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { memo, useEffect, useRef } from 'react';
+import { axisBottom, axisLeft, extent, interpolateRgb, scaleBand, scaleSequential, select } from 'd3';
 
 import type { ChartBaseProps } from '../types';
 import { DEFAULT_MARGIN } from '../types';
-import { useChartDimensions } from '../hooks';
+import { useChartDimensions, useChartPersonality } from '../hooks';
+import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 export interface HeatMapProps extends ChartBaseProps {
   data: { x: string; y: string; value: number }[];
@@ -15,11 +16,11 @@ export interface HeatMapProps extends ChartBaseProps {
   cellRadius?: number;
 }
 
-export function HeatMap({
+export const HeatMap = memo(function HeatMap({
   data,
   xLabels: xLabelsProp,
   yLabels: yLabelsProp,
-  colorRange = ['#e0f2fe', 'var(--ds-color-primary-500)'],
+  colorRange = ['var(--ds-color-info-bg)', 'var(--ds-color-primary-500)'],
   cellRadius = 2,
   width,
   height = 400,
@@ -36,13 +37,19 @@ export function HeatMap({
 }: HeatMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
+  const summary = {
+    caption: title ? `${title} data summary` : 'Heatmap data summary',
+    headers: ['X', 'Y', 'Value'],
+    rows: data.map((item) => [item.x, item.y, item.value]),
+  };
 
   useEffect(() => {
     if (!svgRef.current || !data || data.length === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
     const innerWidth = chartWidth - margin.left - margin.right;
@@ -51,11 +58,11 @@ export function HeatMap({
     const xLabels = xLabelsProp ?? [...new Set(data.map((d) => d.x))];
     const yLabels = yLabelsProp ?? [...new Set(data.map((d) => d.y))];
 
-    const x = d3.scaleBand().domain(xLabels).range([0, innerWidth]).padding(0.05);
-    const y = d3.scaleBand().domain(yLabels).range([0, innerHeight]).padding(0.05);
+    const x = scaleBand().domain(xLabels).range([0, innerWidth]).padding(0.05);
+    const y = scaleBand().domain(yLabels).range([0, innerHeight]).padding(0.05);
 
-    const [minVal, maxVal] = d3.extent(data, (d) => d.value) as [number, number];
-    const colorScale = d3.scaleSequential().domain([minVal, maxVal]).interpolator(d3.interpolateRgb(colorRange[0], colorRange[1]));
+    const [minVal, maxVal] = extent(data, (d) => d.value) as [number, number];
+    const colorScale = scaleSequential().domain([minVal, maxVal]).interpolator(interpolateRgb(colorRange[0], colorRange[1]));
 
     const g = svg
       .attr('width', chartWidth)
@@ -66,7 +73,7 @@ export function HeatMap({
     // X axis
     g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(x))
+      .call(axisBottom(x))
       .selectAll('text')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px')
@@ -75,7 +82,7 @@ export function HeatMap({
 
     // Y axis
     g.append('g')
-      .call(d3.axisLeft(y))
+      .call(axisLeft(y))
       .selectAll('text')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px');
@@ -93,35 +100,50 @@ export function HeatMap({
       .attr('rx', cellRadius)
       .attr('fill', (d) => colorScale(d.value));
 
-    if (animate) {
-      cells.attr('opacity', 0).transition().duration(500).delay((_, i) => i * 10).attr('opacity', 1);
+    if (chartPersonality.animate) {
+      cells
+        .attr('opacity', 0)
+        .transition()
+        .duration(chartPersonality.animationDuration)
+        .delay((_, i) => i * 10)
+        .attr('opacity', 1);
     }
 
-    if (tooltip) {
+    if (chartPersonality.tooltip) {
       cells.append('title').text((d) => `${d.x}, ${d.y}: ${d.value}`);
     }
 
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [data, chartWidth, chartHeight, xLabelsProp, yLabelsProp, colorRange, cellRadius, animate, tooltip, margin]);
-
-  if (loading) {
-    return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>Loading...</div>
-      </div>
-    );
-  }
+  }, [
+    data,
+    chartWidth,
+    chartHeight,
+    xLabelsProp,
+    yLabelsProp,
+    colorRange,
+    cellRadius,
+    chartPersonality.animate,
+    chartPersonality.animationDuration,
+    chartPersonality.tooltip,
+    margin,
+  ]);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
-      {title && (
-        <div style={{ marginBottom: 4 }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
-          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
-        </div>
-      )}
-      <svg ref={svgRef} />
-    </div>
+    <ChartScaffold
+      containerRef={containerRef}
+      svgRef={svgRef}
+      width={width}
+      height={height}
+      className={className}
+      style={style}
+      loading={loading}
+      loadingLabel={chartPersonality.loadingLabel}
+      title={title}
+      subtitle={subtitle}
+      ariaLabel={title ?? 'Heatmap'}
+      ariaDescription={describeChart('Heatmap', data.length, subtitle)}
+      summary={summary}
+    />
   );
-}
+});

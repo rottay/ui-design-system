@@ -11,7 +11,7 @@ import { Select } from '../';
 vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockSelect = ({
-      children,
+      children: _children,
       options = [],
       size,
       variant,
@@ -59,7 +59,6 @@ vi.mock('../../../../../core/engines/factory', () => ({
               {opt.label}
             </option>
           ))}
-          {children}
         </select>
         {clearable && value && (
           <button data-testid="clear-button" onClick={onClear}>×</button>

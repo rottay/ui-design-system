@@ -1,0 +1,54 @@
+import React, { Suspense, type ReactElement } from 'react';
+import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
+import { DesignSystemProvider } from '../../../core/providers/root';
+import type { ProductProfileKey, TenantConfig } from '../../../core/types';
+
+const SURFACE_TEST_TENANT: TenantConfig = {
+  slug: 'surface-test',
+  name: 'Surface Test Tenant',
+  engine: 'rustic',
+  theme: 'light',
+  plan: 'enterprise',
+  features: ['all'],
+  branding: {
+    companyName: 'Surface Test Tenant',
+    primaryColor: '#0a66c2',
+    accentColor: '#14b8a6',
+  },
+};
+
+export interface RenderSurfaceOptions extends Omit<RenderOptions, 'wrapper'> {
+  tenantConfig?: TenantConfig;
+  tenantOverrides?: Partial<TenantConfig>;
+  productProfile?: ProductProfileKey;
+}
+
+/**
+ * Surface tests should run through the real provider stack so they exercise the
+ * same token, engine, and tenant resolution path that apps will use in
+ * production. We pin tests to the rustic engine to keep DOM behavior stable.
+ */
+export function renderSurface(
+  ui: ReactElement,
+  options: RenderSurfaceOptions = {}
+): RenderResult {
+  const {
+    tenantConfig = SURFACE_TEST_TENANT,
+    tenantOverrides,
+    productProfile = 'generic.default',
+    ...renderOptions
+  } = options;
+
+  return render(
+    <DesignSystemProvider
+      tenantConfig={tenantConfig}
+      tenantOverrides={tenantOverrides}
+      productProfile={productProfile}
+      forceEngine="rustic"
+      skipCssLoading
+    >
+      <Suspense fallback={<div data-testid="surface-loading">Loading...</div>}>{ui}</Suspense>
+    </DesignSystemProvider>,
+    renderOptions
+  );
+}

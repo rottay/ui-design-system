@@ -25,7 +25,7 @@ export default meta;
 export const DesignSystemProviderExample: StoryObj = {
   render: () => (
     <DesignSystemProvider
-      tenant={{
+      tenantConfig={{
         slug: 'demo',
         name: 'Demo Tenant',
         engine: 'classic',
@@ -62,21 +62,51 @@ export const DesignSystemProviderExample: StoryObj = {
 export const EngineSelection: StoryObj = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <DesignSystemProvider tenant={{ engine: 'classic' } as any}>
+      <DesignSystemProvider
+        tenantConfig={{
+          slug: 'classic-demo',
+          name: 'Classic Demo',
+          engine: 'classic',
+          theme: 'base',
+          plan: 'starter',
+          features: ['dashboard'],
+          branding: { companyName: 'Classic Demo' },
+        }}
+      >
         <div style={{ padding: 16, border: '1px solid #e5e7eb', borderRadius: 8 }}>
           <h4 style={{ margin: '0 0 8px' }}>Classic Engine (Ant Design)</h4>
           <Button variant="primary">Classic Button</Button>
         </div>
       </DesignSystemProvider>
 
-      <DesignSystemProvider tenant={{ engine: 'modern' } as any}>
+      <DesignSystemProvider
+        tenantConfig={{
+          slug: 'modern-demo',
+          name: 'Modern Demo',
+          engine: 'modern',
+          theme: 'base',
+          plan: 'starter',
+          features: ['dashboard'],
+          branding: { companyName: 'Modern Demo' },
+        }}
+      >
         <div style={{ padding: 16, border: '1px solid #e5e7eb', borderRadius: 8 }}>
           <h4 style={{ margin: '0 0 8px' }}>Modern Engine (DaisyUI)</h4>
           <Button variant="primary">Modern Button</Button>
         </div>
       </DesignSystemProvider>
 
-      <DesignSystemProvider tenant={{ engine: 'rustic' } as any}>
+      <DesignSystemProvider
+        tenantConfig={{
+          slug: 'rustic-demo',
+          name: 'Rustic Demo',
+          engine: 'rustic',
+          theme: 'base',
+          plan: 'starter',
+          features: ['dashboard'],
+          branding: { companyName: 'Rustic Demo' },
+        }}
+      >
         <div style={{ padding: 16, border: '1px solid #e5e7eb', borderRadius: 8 }}>
           <h4 style={{ margin: '0 0 8px' }}>Rustic Engine (HTML)</h4>
           <Button variant="primary">Rustic Button</Button>
@@ -96,7 +126,7 @@ export const EngineSelection: StoryObj = {
 export const FeatureGateExample: StoryObj = {
   render: () => (
     <DesignSystemProvider
-      tenant={{
+      tenantConfig={{
         slug: 'demo',
         name: 'Demo',
         engine: 'classic',

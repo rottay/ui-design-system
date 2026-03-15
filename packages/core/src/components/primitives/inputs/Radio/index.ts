@@ -17,7 +17,7 @@
  *
  * **Multi-Tenant Support:**
  * Radio appearance adapts to tenant themes via CSS custom properties
- * (--radio-*), ensuring consistent branding across tenants.
+ * (--ds-radio-*), ensuring consistent branding across tenants.
  *
  * **Compound Components:**
  * - `Radio.Group` - Manages exclusive selection across radio buttons

@@ -66,6 +66,7 @@ import type {
 } from '../types';
 import { TOAST_DEFAULTS, TOAST_CONTAINER_DEFAULTS } from '../types';
 import { injectToastStyles } from './animations';
+import { clearToastMethods, setToastMethods } from './useToast';
 
 // ============================================================================
 // ID Generation
@@ -452,6 +453,14 @@ export function ToastProvider({
     }),
     [show, success, error, warning, info, dismiss, dismissAll, update]
   );
+
+  useEffect(() => {
+    setToastMethods(methods);
+
+    return () => {
+      clearToastMethods();
+    };
+  }, [methods]);
 
   // ========================================================================
   // Context Value Memoization

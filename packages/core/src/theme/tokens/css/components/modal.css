@@ -10,133 +10,133 @@
      SIZES - Modal Width Variants
      Ten size variants for different content amounts
      ======================================================================== */
-  --modal-xs-width: 320px;              /* Extra small */
-  --modal-sm-width: 400px;              /* Small */
-  --modal-md-width: 500px;              /* Medium - Default */
-  --modal-lg-width: 640px;              /* Large */
-  --modal-xl-width: 800px;              /* Extra large */
-  --modal-2xl-width: 960px;             /* 2X large */
-  --modal-3xl-width: 1120px;            /* 3X large */
-  --modal-4xl-width: 1280px;            /* 4X large */
-  --modal-5xl-width: 1440px;            /* 5X large */
-  --modal-full-width: 100%;             /* Full width */
+  --ds-modal-xs-width: 320px;              /* Extra small */
+  --ds-modal-sm-width: 400px;              /* Small */
+  --ds-modal-md-width: 500px;              /* Medium - Default */
+  --ds-modal-lg-width: 640px;              /* Large */
+  --ds-modal-xl-width: 800px;              /* Extra large */
+  --ds-modal-2xl-width: 960px;             /* 2X large */
+  --ds-modal-3xl-width: 1120px;            /* 3X large */
+  --ds-modal-4xl-width: 1280px;            /* 4X large */
+  --ds-modal-5xl-width: 1440px;            /* 5X large */
+  --ds-modal-full-width: 100%;             /* Full width */
 
   /* Height variants per size */
-  --modal-xs-max-height: 90vh;
-  --modal-sm-max-height: 90vh;
-  --modal-md-max-height: 85vh;
-  --modal-lg-max-height: 85vh;
-  --modal-xl-max-height: 80vh;
-  --modal-2xl-max-height: 80vh;
-  --modal-3xl-max-height: 80vh;
-  --modal-4xl-max-height: 80vh;
-  --modal-5xl-max-height: 80vh;
-  --modal-full-max-height: 100vh;
+  --ds-modal-xs-max-height: 90vh;
+  --ds-modal-sm-max-height: 90vh;
+  --ds-modal-md-max-height: 85vh;
+  --ds-modal-lg-max-height: 85vh;
+  --ds-modal-xl-max-height: 80vh;
+  --ds-modal-2xl-max-height: 80vh;
+  --ds-modal-3xl-max-height: 80vh;
+  --ds-modal-4xl-max-height: 80vh;
+  --ds-modal-5xl-max-height: 80vh;
+  --ds-modal-full-max-height: 100vh;
 
   /* Legacy height variants */
-  --modal-max-height: calc(100vh - 4rem); /* Max height with margins */
-  --modal-full-height: calc(100vh - 2rem);
+  --ds-modal-max-height: calc(100vh - 4rem); /* Max height with margins */
+  --ds-modal-full-height: calc(100vh - 2rem);
 
   /* Default size */
-  --modal-default-width: var(--modal-md-width);
+  --ds-modal-default-width: var(--ds-modal-md-width);
 
   /* ========================================================================
      OVERLAY/BACKDROP
      Background overlay behind the modal
      ======================================================================== */
-  --modal-overlay-bg: var(--color-alpha-black-50);
-  --modal-overlay-backdrop-filter: blur(4px);
-  --modal-overlay-z-index: var(--z-index-modal-backdrop);
+  --ds-modal-overlay-bg: var(--ds-color-alpha-black-50);
+  --ds-modal-overlay-backdrop-filter: blur(4px);
+  --ds-modal-overlay-z-index: var(--ds-z-index-modal-backdrop);
 
   /* ========================================================================
      CONTAINER
      Modal container positioning and appearance
      ======================================================================== */
-  --modal-z-index: var(--z-index-modal-content);
-  --modal-margin: 2rem;                 /* Margin from viewport edges */
-  --modal-margin-mobile: 1rem;
+  --ds-modal-z-index: var(--ds-z-index-modal-content);
+  --ds-modal-margin: 2rem;                 /* Margin from viewport edges */
+  --ds-modal-margin-mobile: 1rem;
 
   /* ========================================================================
      CONTENT
      Main modal content area
      ======================================================================== */
-  --modal-bg: var(--color-white);
-  --modal-color: var(--color-neutral-900);
-  --modal-border-radius: var(--radius-xl);
-  --modal-border-width: 0;
-  --modal-border-color: transparent;
-  --modal-shadow: var(--shadow-modal);
+  --ds-modal-bg: var(--ds-color-white);
+  --ds-modal-color: var(--ds-color-neutral-900);
+  --ds-modal-border-radius: var(--ds-radius-xl);
+  --ds-modal-border-width: 0;
+  --ds-modal-border-color: transparent;
+  --ds-modal-shadow: var(--ds-shadow-modal);
 
   /* Padding variants */
-  --modal-padding: 1.5rem;              /* 24px - Default */
-  --modal-padding-none: 0;              /* No padding */
-  --modal-padding-sm: 12px;             /* Small: 12px */
-  --modal-padding-md: 16px;             /* Medium: 16px */
-  --modal-padding-lg: 24px;             /* Large: 24px */
+  --ds-modal-padding: 1.5rem;              /* 24px - Default */
+  --ds-modal-padding-none: 0;              /* No padding */
+  --ds-modal-padding-sm: 12px;             /* Small: 12px */
+  --ds-modal-padding-md: 16px;             /* Medium: 16px */
+  --ds-modal-padding-lg: 24px;             /* Large: 24px */
 
   /* Border radius variants */
-  --modal-radius-none: 0;               /* No border radius */
-  --modal-radius-sm: 4px;               /* Small: 4px */
-  --modal-radius-md: 8px;               /* Medium: 8px */
-  --modal-radius-lg: 12px;              /* Large: 12px */
-  --modal-radius-xl: 16px;              /* Extra large: 16px */
+  --ds-modal-radius-none: 0;               /* No border radius */
+  --ds-modal-radius-sm: 4px;               /* Small: 4px */
+  --ds-modal-radius-md: 8px;               /* Medium: 8px */
+  --ds-modal-radius-lg: 12px;              /* Large: 12px */
+  --ds-modal-radius-xl: 16px;              /* Extra large: 16px */
 
   /* ========================================================================
      HEADER
      Modal header section
      ======================================================================== */
-  --modal-header-padding: var(--modal-padding);
-  --modal-header-padding-bottom: 1rem;
-  --modal-header-border-width: 1px;
-  --modal-header-border-color: var(--color-neutral-200);
-  --modal-header-bg: transparent;
+  --ds-modal-header-padding: var(--ds-modal-padding);
+  --ds-modal-header-padding-bottom: 1rem;
+  --ds-modal-header-border-width: 1px;
+  --ds-modal-header-border-color: var(--ds-color-neutral-200);
+  --ds-modal-header-bg: transparent;
 
   /* Title */
-  --modal-title-font-size: var(--font-size-xl);
-  --modal-title-font-weight: var(--font-weight-semibold);
-  --modal-title-line-height: var(--line-height-tight);
-  --modal-title-color: var(--color-neutral-900);
+  --ds-modal-title-font-size: var(--ds-font-size-xl);
+  --ds-modal-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-modal-title-line-height: var(--ds-line-height-tight);
+  --ds-modal-title-color: var(--ds-color-neutral-900);
 
   /* Subtitle */
-  --modal-subtitle-font-size: var(--font-size-sm);
-  --modal-subtitle-color: var(--color-neutral-600);
-  --modal-subtitle-margin-top: 0.25rem;
+  --ds-modal-subtitle-font-size: var(--ds-font-size-sm);
+  --ds-modal-subtitle-color: var(--ds-color-neutral-600);
+  --ds-modal-subtitle-margin-top: 0.25rem;
 
   /* ========================================================================
      BODY
      Modal content area
      ======================================================================== */
-  --modal-body-padding: var(--modal-padding);
-  --modal-body-padding-y: 1.5rem;
-  --modal-body-color: var(--color-neutral-700);
-  --modal-body-font-size: var(--font-size-base);
-  --modal-body-line-height: var(--line-height-normal);
-  --modal-body-max-height: calc(100vh - 12rem); /* Scrollable body */
+  --ds-modal-body-padding: var(--ds-modal-padding);
+  --ds-modal-body-padding-y: 1.5rem;
+  --ds-modal-body-color: var(--ds-color-neutral-700);
+  --ds-modal-body-font-size: var(--ds-font-size-base);
+  --ds-modal-body-line-height: var(--ds-line-height-normal);
+  --ds-modal-body-max-height: calc(100vh - 12rem); /* Scrollable body */
 
   /* ========================================================================
      FOOTER
      Modal footer with actions
      ======================================================================== */
-  --modal-footer-padding: var(--modal-padding);
-  --modal-footer-padding-top: 1rem;
-  --modal-footer-border-width: 1px;
-  --modal-footer-border-color: var(--color-neutral-200);
-  --modal-footer-bg: var(--color-neutral-50);
-  --modal-footer-justify: flex-end;
-  --modal-footer-gap: 0.75rem;
+  --ds-modal-footer-padding: var(--ds-modal-padding);
+  --ds-modal-footer-padding-top: 1rem;
+  --ds-modal-footer-border-width: 1px;
+  --ds-modal-footer-border-color: var(--ds-color-neutral-200);
+  --ds-modal-footer-bg: var(--ds-color-neutral-50);
+  --ds-modal-footer-justify: flex-end;
+  --ds-modal-footer-gap: 0.75rem;
 
   /* ========================================================================
      CLOSE BUTTON
      X button to close modal
      ======================================================================== */
-  --modal-close-size: 2rem;             /* 32px */
-  --modal-close-icon-size: 1.25rem;     /* 20px */
-  --modal-close-color: var(--color-neutral-500);
-  --modal-close-color-hover: var(--color-neutral-700);
-  --modal-close-bg-hover: var(--color-neutral-100);
-  --modal-close-border-radius: var(--radius-md);
-  --modal-close-position-top: 1rem;
-  --modal-close-position-right: 1rem;
+  --ds-modal-close-size: 2rem;             /* 32px */
+  --ds-modal-close-icon-size: 1.25rem;     /* 20px */
+  --ds-modal-close-color: var(--ds-color-neutral-500);
+  --ds-modal-close-color-hover: var(--ds-color-neutral-700);
+  --ds-modal-close-bg-hover: var(--ds-color-neutral-100);
+  --ds-modal-close-border-radius: var(--ds-radius-md);
+  --ds-modal-close-position-top: 1rem;
+  --ds-modal-close-position-right: 1rem;
 
   /* ========================================================================
      ANIMATIONS - Entry/Exit
@@ -144,27 +144,27 @@
      ======================================================================== */
 
   /* Fade animation */
-  --modal-fade-duration: 0.3s;
-  --modal-fade-timing: ease-out;
+  --ds-modal-fade-duration: 0.3s;
+  --ds-modal-fade-timing: ease-out;
 
   /* Scale animation */
-  --modal-scale-from: 0.95;
-  --modal-scale-to: 1;
-  --modal-scale-duration: 0.3s;
-  --modal-scale-timing: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-modal-scale-from: 0.95;
+  --ds-modal-scale-to: 1;
+  --ds-modal-scale-duration: 0.3s;
+  --ds-modal-scale-timing: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Slide from top */
-  --modal-slide-top-from: -2rem;
-  --modal-slide-top-to: 0;
-  --modal-slide-duration: 0.3s;
-  --modal-slide-timing: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-modal-slide-top-from: -2rem;
+  --ds-modal-slide-top-to: 0;
+  --ds-modal-slide-duration: 0.3s;
+  --ds-modal-slide-timing: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Slide from bottom (mobile) */
-  --modal-slide-bottom-from: 100%;
-  --modal-slide-bottom-to: 0;
+  --ds-modal-slide-bottom-from: 100%;
+  --ds-modal-slide-bottom-to: 0;
 
   /* Combined transition */
-  --modal-transition: all var(--modal-fade-duration) var(--modal-fade-timing);
+  --ds-modal-transition: all var(--ds-modal-fade-duration) var(--ds-modal-fade-timing);
 
   /* ========================================================================
      VARIANTS - Modal Types
@@ -172,25 +172,25 @@
      ======================================================================== */
 
   /* Centered modal (default) */
-  --modal-centered-align: center;
-  --modal-centered-justify: center;
+  --ds-modal-centered-align: center;
+  --ds-modal-centered-justify: center;
 
   /* Top modal */
-  --modal-top-align: flex-start;
-  --modal-top-justify: center;
-  --modal-top-margin-top: 4rem;
+  --ds-modal-top-align: flex-start;
+  --ds-modal-top-justify: center;
+  --ds-modal-top-margin-top: 4rem;
 
   /* Drawer/Side modal */
-  --modal-drawer-width: 24rem;          /* 384px */
-  --modal-drawer-max-width: 90vw;
-  --modal-drawer-height: 100vh;
-  --modal-drawer-border-radius: 0;
+  --ds-modal-drawer-width: 24rem;          /* 384px */
+  --ds-modal-drawer-max-width: 90vw;
+  --ds-modal-drawer-height: 100vh;
+  --ds-modal-drawer-border-radius: 0;
 
   /* Bottom sheet (mobile) */
-  --modal-bottom-sheet-width: 100%;
-  --modal-bottom-sheet-max-height: 90vh;
-  --modal-bottom-sheet-border-radius-top: var(--radius-2xl);
-  --modal-bottom-sheet-border-radius-bottom: 0;
+  --ds-modal-bottom-sheet-width: 100%;
+  --ds-modal-bottom-sheet-max-height: 90vh;
+  --ds-modal-bottom-sheet-border-radius-top: var(--ds-radius-2xl);
+  --ds-modal-bottom-sheet-border-radius-bottom: 0;
 
   /* ========================================================================
      SEMANTIC VARIANTS
@@ -198,87 +198,87 @@
      ======================================================================== */
 
   /* Confirmation modal */
-  --modal-confirm-icon-color: var(--color-primary-500);
-  --modal-confirm-icon-bg: var(--color-primary-100);
+  --ds-modal-confirm-icon-color: var(--ds-color-primary-500);
+  --ds-modal-confirm-icon-bg: var(--ds-color-primary-100);
 
   /* Success modal */
-  --modal-success-icon-color: var(--color-success-500);
-  --modal-success-icon-bg: var(--color-success-100);
+  --ds-modal-success-icon-color: var(--ds-color-success-500);
+  --ds-modal-success-icon-bg: var(--ds-color-success-100);
 
   /* Warning modal */
-  --modal-warning-icon-color: var(--color-warning-500);
-  --modal-warning-icon-bg: var(--color-warning-100);
+  --ds-modal-warning-icon-color: var(--ds-color-warning-500);
+  --ds-modal-warning-icon-bg: var(--ds-color-warning-100);
 
   /* Error/Destructive modal */
-  --modal-error-icon-color: var(--color-error-500);
-  --modal-error-icon-bg: var(--color-error-100);
+  --ds-modal-error-icon-color: var(--ds-color-error-500);
+  --ds-modal-error-icon-bg: var(--ds-color-error-100);
 
   /* Info modal */
-  --modal-info-icon-color: var(--color-info-500);
-  --modal-info-icon-bg: var(--color-info-100);
+  --ds-modal-info-icon-color: var(--ds-color-info-500);
+  --ds-modal-info-icon-bg: var(--ds-color-info-100);
 
   /* ========================================================================
      ICON
      Icon in header or content
      ======================================================================== */
-  --modal-icon-size: 3rem;              /* 48px */
-  --modal-icon-size-sm: 2rem;           /* 32px */
-  --modal-icon-size-lg: 4rem;           /* 64px */
-  --modal-icon-margin-bottom: 1rem;
+  --ds-modal-icon-size: 3rem;              /* 48px */
+  --ds-modal-icon-size-sm: 2rem;           /* 32px */
+  --ds-modal-icon-size-lg: 4rem;           /* 64px */
+  --ds-modal-icon-margin-bottom: 1rem;
 
   /* ========================================================================
      SCROLLABLE CONTENT
      Settings for scrolling modal body
      ======================================================================== */
-  --modal-scroll-padding: 0.5rem;
-  --modal-scroll-shadow-top: inset 0 8px 8px -8px rgba(0, 0, 0, 0.1);
-  --modal-scroll-shadow-bottom: inset 0 -8px 8px -8px rgba(0, 0, 0, 0.1);
+  --ds-modal-scroll-padding: 0.5rem;
+  --ds-modal-scroll-shadow-top: inset 0 8px 8px -8px rgba(0, 0, 0, 0.1);
+  --ds-modal-scroll-shadow-bottom: inset 0 -8px 8px -8px rgba(0, 0, 0, 0.1);
 
   /* ========================================================================
      LOADING STATE
      Modal loading indicator
      ======================================================================== */
-  --modal-loading-overlay-bg: var(--color-alpha-white-80);
-  --modal-loading-spinner-color: var(--color-primary-500);
-  --modal-loading-spinner-size: 2rem;
+  --ds-modal-loading-overlay-bg: var(--ds-color-alpha-white-80);
+  --ds-modal-loading-spinner-color: var(--ds-color-primary-500);
+  --ds-modal-loading-spinner-size: 2rem;
 
   /* ========================================================================
      NESTED MODALS
      Stacking multiple modals
      ======================================================================== */
-  --modal-nested-z-index-offset: 10;
-  --modal-nested-overlay-bg: var(--color-alpha-black-30);
+  --ds-modal-nested-z-index-offset: 10;
+  --ds-modal-nested-overlay-bg: var(--ds-color-alpha-black-30);
 
   /* ========================================================================
      ACCESSIBILITY
      Focus trap and keyboard navigation
      ======================================================================== */
-  --modal-focus-ring: var(--shadow-focus-ring);
-  --modal-focus-ring-offset: 2px;
-  --modal-focus-outline: none;
+  --ds-modal-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-modal-focus-ring-offset: 2px;
+  --ds-modal-focus-outline: none;
 
   /* ========================================================================
      RESPONSIVE
      Mobile-specific adjustments
      ======================================================================== */
-  --modal-mobile-width: calc(100vw - 2rem);
-  --modal-mobile-max-height: calc(100vh - 2rem);
-  --modal-mobile-padding: 1rem;
-  --modal-mobile-border-radius: var(--radius-lg);
+  --ds-modal-mobile-width: calc(100vw - 2rem);
+  --ds-modal-mobile-max-height: calc(100vh - 2rem);
+  --ds-modal-mobile-padding: 1rem;
+  --ds-modal-mobile-border-radius: var(--ds-radius-lg);
 
   /* ========================================================================
      DIVIDER
      Internal modal dividers
      ======================================================================== */
-  --modal-divider-width: 1px;
-  --modal-divider-color: var(--color-neutral-200);
-  --modal-divider-margin-y: 1rem;
+  --ds-modal-divider-width: 1px;
+  --ds-modal-divider-color: var(--ds-color-neutral-200);
+  --ds-modal-divider-margin-y: 1rem;
 
   /* ========================================================================
      BACKDROP BLUR
      Glassmorphism effect
      ======================================================================== */
-  --modal-glass-bg: rgba(255, 255, 255, 0.9);
-  --modal-glass-backdrop-filter: blur(12px) saturate(180%);
-  --modal-glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  --ds-modal-glass-bg: rgba(255, 255, 255, 0.9);
+  --ds-modal-glass-backdrop-filter: blur(12px) saturate(180%);
+  --ds-modal-glass-border: 1px solid rgba(255, 255, 255, 0.3);
 }

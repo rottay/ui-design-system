@@ -2,12 +2,30 @@
  * Test setup for Vitest
  */
 
+import { mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { expect, afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import * as matchers from '@testing-library/jest-dom/matchers';
 
 // Extend Vitest's expect with testing-library matchers
 expect.extend(matchers);
+
+/**
+ * The DS test suite exercises a large amount of lazy-loaded engine code. The
+ * default Testing Library timeout is too small for full coverage runs, which
+ * can otherwise produce false negatives while imports are still resolving.
+ */
+configure({
+  asyncUtilTimeout: 30000,
+});
+
+// Vitest's v8 coverage writer expects the reports directory to exist before it
+// flushes per-file artifacts. Creating the common report directories here keeps
+// coverage runs reproducible without relying on manual shell setup.
+for (const reportsDirectory of ['coverage', 'coverage-final']) {
+  mkdirSync(resolve(process.cwd(), reportsDirectory, '.tmp'), { recursive: true });
+}
 
 // Polyfill for ResizeObserver
 class ResizeObserverMock {
@@ -16,6 +34,61 @@ class ResizeObserverMock {
   disconnect = vi.fn();
 }
 global.ResizeObserver = ResizeObserverMock;
+
+// Polyfill for IntersectionObserver
+class IntersectionObserverMock {
+  constructor(private readonly callback: IntersectionObserverCallback) {}
+
+  observe = vi.fn((element: Element) => {
+    this.callback(
+      [
+        {
+          isIntersecting: true,
+          intersectionRatio: 1,
+          target: element,
+        } as IntersectionObserverEntry,
+      ],
+      this as unknown as IntersectionObserver
+    );
+  });
+
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+  takeRecords = vi.fn(() => []);
+}
+global.IntersectionObserver = IntersectionObserverMock;
+
+Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+  writable: true,
+  value: vi.fn().mockImplementation(() => ({
+    clearRect: vi.fn(),
+    fillRect: vi.fn(),
+    drawImage: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
+    beginPath: vi.fn(),
+    moveTo: vi.fn(),
+    lineTo: vi.fn(),
+    closePath: vi.fn(),
+    stroke: vi.fn(),
+    fill: vi.fn(),
+    arc: vi.fn(),
+    measureText: vi.fn().mockReturnValue({ width: 0 }),
+    fillText: vi.fn(),
+    strokeText: vi.fn(),
+    scale: vi.fn(),
+    translate: vi.fn(),
+    rotate: vi.fn(),
+    createLinearGradient: vi.fn().mockReturnValue({
+      addColorStop: vi.fn(),
+    }),
+  })),
+});
+
+Object.defineProperty(HTMLCanvasElement.prototype, 'toDataURL', {
+  writable: true,
+  value: vi.fn().mockReturnValue('data:image/png;base64,'),
+});
 
 // Polyfill for matchMedia
 Object.defineProperty(window, 'matchMedia', {

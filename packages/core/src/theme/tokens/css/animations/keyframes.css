@@ -556,6 +556,79 @@
 }
 
 /* ========================================================================
+   COMPONENT-SPECIFIC ANIMATIONS
+   Keyframes used by individual DS components
+   ======================================================================== */
+
+/* Button spinner - used by Rustic and Modern engines */
+@keyframes rottay-button-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button pulse - used by Rustic engine */
+@keyframes rottay-button-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+}
+
+/* Modal entrance - used by Modern engine */
+@keyframes rottay-modal-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal backdrop entrance - used by Modern engine */
+@keyframes rottay-modal-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Select dropdown slide-in - used by Modern engine */
+@keyframes rottay-select-slide-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
+    transform-origin: top;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+/* Tabs panel fade-in - used by Modern engine */
+@keyframes rottay-tabs-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================================
    REDUCED MOTION
    Respect user's motion preferences by disabling animations
    ======================================================================== */

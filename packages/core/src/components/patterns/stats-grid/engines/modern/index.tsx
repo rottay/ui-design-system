@@ -5,8 +5,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useBreakpoints } from '../../../../../core/hooks/responsive/useBreakpoints';
+import { useTokens } from '../../../../../core/hooks/tokens';
 import type { StatsGridProps } from '../../types';
 import type { StatDef } from '../../../types';
+import { resolveStatsGridMotion } from '../../personality';
 
 function normalizeSparkline(data: number[], width = 80, height = 30): string {
   const min = Math.min(...data);
@@ -28,7 +31,7 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
       <polyline
         points={normalizeSparkline(data)}
         fill="none"
-        stroke={color || 'oklch(var(--p))'}
+        stroke={color || 'var(--ds-color-primary-500)'}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -37,7 +40,11 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
   );
 }
 
-function useAnimatedValue(target: number | string, animate?: boolean): number | string {
+function useAnimatedValue(
+  target: number | string,
+  animate?: boolean,
+  duration = 600
+): number | string {
   const [value, setValue] = useState<number | string>(animate && typeof target === 'number' ? 0 : target);
 
   useEffect(() => {
@@ -45,7 +52,6 @@ function useAnimatedValue(target: number | string, animate?: boolean): number | 
       setValue(target);
       return;
     }
-    const duration = 600;
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
@@ -71,15 +77,17 @@ function StatCard({
   sparkline,
   variant,
   animate,
+  animationDuration,
   onClick,
 }: {
   stat: StatDef;
   sparkline?: boolean;
   variant: StatsGridProps['variant'];
   animate?: boolean;
+  animationDuration?: number;
   onClick?: () => void;
 }) {
-  const displayValue = useAnimatedValue(stat.value, animate);
+  const displayValue = useAnimatedValue(stat.value, animate, animationDuration);
 
   const changeColor =
     stat.changeType === 'increase'
@@ -137,6 +145,8 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
 }
 
 export default function ModernStatsGrid(props: StatsGridProps) {
+  const tokens = useTokens();
+  const { prefersReducedMotion } = useBreakpoints();
   const {
     stats,
     renderStat,
@@ -150,6 +160,7 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     className,
     style,
   } = props;
+  const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
 
   if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
 
@@ -169,7 +180,8 @@ export default function ModernStatsGrid(props: StatsGridProps) {
             stat={stat}
             sparkline={sparkline}
             variant={variant}
-            animate={animate}
+            animate={motion.animate}
+            animationDuration={motion.duration}
             onClick={onStatClick ? () => onStatClick(stat) : undefined}
           />
         );

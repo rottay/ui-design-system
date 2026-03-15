@@ -48,33 +48,67 @@
     "next": "Siguiente",
     "page": "Página {current} de {total}",
     "go_to": "Ir a página",
-    "items_per_page": "{count} por página"
+    "items_per_page": "{count} por página",
+    "total_items": "Total {total} elementos"
   },
   "table": {
     "empty": "Sin datos",
-    "loading": "Cargando datos...",
+    "loading": "Cargando...",
     "sort_asc": "Ordenar ascendente",
     "sort_desc": "Ordenar descendente",
     "filter": "Filtrar",
+    "filter_column": "Filtrar {column}...",
     "clear_filters": "Limpiar filtros",
-    "rows_selected": "{count} filas seleccionadas"
+    "rows_selected": "{count} filas seleccionadas",
+    "select_all": "Seleccionar todas las filas",
+    "select_row": "Seleccionar fila {index}",
+    "expand_row": "Expandir fila",
+    "collapse_row": "Contraer fila",
+    "page": "Página {current}",
+    "previous_page": "Página anterior",
+    "next_page": "Página siguiente",
+    "resize_column": "Redimensionar columna {column}",
+    "edit_cell": "Editar celda"
   },
   "upload": {
-    "drag_drop": "Arrastra archivos aquí o haz clic para seleccionar",
+    "button": "Subir",
+    "drag_drop": "Haz clic o arrastra archivos para subir",
     "uploading": "Subiendo...",
     "success": "Archivo subido correctamente",
     "error": "Error al subir archivo",
     "remove": "Eliminar archivo",
+    "remove_named": "Eliminar {name}",
+    "preview": "Vista previa de {name}",
+    "close_preview": "Cerrar vista previa",
+    "add_file": "Agregar archivo",
+    "upload_file": "Subir archivo",
+    "drop_hint": "Arrastra archivos aquí o haz clic para subir",
     "max_size": "Tamaño máximo: {size}",
-    "accepted_formats": "Formatos aceptados: {formats}"
+    "accepted_formats": "Formatos aceptados: {formats}",
+    "progress": "Progreso de subida: {percent}%"
   },
   "datepicker": {
-    "placeholder": "Selecciona una fecha",
+    "placeholder": "Seleccionar fecha",
     "today": "Hoy",
+    "now": "Ahora",
     "clear": "Limpiar",
+    "clear_date": "Limpiar fecha",
+    "clear_dates": "Limpiar fechas",
     "ok": "OK",
     "month": "Mes",
-    "year": "Año"
+    "year": "Año",
+    "start_date": "Fecha inicio",
+    "end_date": "Fecha fin",
+    "previous_month": "Mes anterior",
+    "next_month": "Mes siguiente",
+    "previous_year": "Año anterior",
+    "next_year": "Año siguiente",
+    "previous_decade": "Década anterior",
+    "next_decade": "Década siguiente",
+    "date_picker": "Selector de fecha",
+    "calendar_dates": "Fechas del calendario",
+    "hour": "Hora",
+    "minute": "Minuto"
   },
   "timepicker": {
     "placeholder": "Selecciona una hora",
@@ -114,7 +148,115 @@
   "alert": {
     "close": "Cerrar"
   },
+  "transfer": {
+    "source_title": "Origen",
+    "target_title": "Destino",
+    "search_placeholder": "Buscar",
+    "not_found": "Sin datos",
+    "item_unit": "elemento",
+    "items_unit": "elementos",
+    "select_all": "Seleccionar todo",
+    "move_right": ">",
+    "move_left": "<"
+  },
+  "treeselect": {
+    "placeholder": "Seleccionar",
+    "search_placeholder": "Buscar...",
+    "not_found": "Sin datos",
+    "clear": "Limpiar",
+    "expand": "Expandir",
+    "collapse": "Contraer"
+  },
   "empty": {
     "description": "Sin datos"
+  },
+  "chart": {
+    "loading": "Cargando grafico..."
+  },
+  "surfaces": {
+    "states": {
+      "loading_title": "Cargando superficie",
+      "loading_description": "Preparando datos y layout para esta vista.",
+      "empty_title": "Todavia no hay nada para mostrar",
+      "empty_description": "Esta surface no tiene datos para renderizar ahora.",
+      "error_title": "La surface no pudo renderizar",
+      "retry": "Reintentar"
+    },
+    "list": {
+      "empty_title": "No hay resultados disponibles",
+      "empty_description": "Ajusta los filtros o crea un nuevo registro para poblar esta lista.",
+      "view_table": "Tabla",
+      "view_cards": "Cards",
+      "filters_title": "Filtros"
+    },
+    "detail": {
+      "empty_title": "No hay datos de detalle disponibles",
+      "empty_description": "Esta surface no recibio una entidad para renderizar.",
+      "loading": "Cargando"
+    },
+    "detail_form": {
+      "form_title": "Formulario",
+      "summary_title": "Resumen"
+    },
+    "search": {
+      "placeholder": "Buscar",
+      "empty_query_title": "Empieza a escribir para buscar",
+      "empty_query_description_one": "Ingresa al menos {count} caracter para ejecutar la busqueda.",
+      "empty_query_description_other": "Ingresa al menos {count} caracteres para ejecutar la busqueda.",
+      "empty_results_title": "No se encontraron resultados",
+      "empty_results_description": "Prueba ajustando la consulta o los filtros.",
+      "preview_title": "Vista previa"
+    },
+    "media": {
+      "empty_title": "No hay elementos multimedia",
+      "empty_description": "Agrega uno o mas elementos para renderizar la galeria.",
+      "preview_title": "Vista previa",
+      "details_title": "Detalles"
+    },
+    "sidebar": {
+      "expand": "Expandir",
+      "collapse": "Colapsar"
+    },
+    "compare": {
+      "empty_title": "No hay datos de comparacion",
+      "empty_description": "Agrega sujetos y filas para renderizar esta surface.",
+      "criteria": "Criterio"
+    },
+    "scheduler": {
+      "empty_title": "No hay eventos programados",
+      "empty_description": "Carga eventos para renderizar el calendario."
+    },
+    "operational": {
+      "empty_title": "No hay modulos operativos configurados",
+      "empty_description": "Agrega cola, feed o paneles para renderizar esta surface.",
+      "primary_panel": "Panel principal",
+      "secondary_panel": "Panel secundario",
+      "queue": "Cola",
+      "live_feed": "Feed en vivo"
+    },
+    "wizard": {
+      "empty_step_title": "Paso vacio",
+      "empty_step_description": "Este paso no expone contenido visible.",
+      "empty_title": "No hay pasos configurados",
+      "empty_description": "Este flujo todavia no tiene pasos configurados.",
+      "step_error_fallback": "Revisa este paso.",
+      "complete": "Completar"
+    },
+    "chat": {
+      "conversation_title": "Conversacion",
+      "empty_title": "Todavia no hay mensajes",
+      "empty_description": "Envia el primer mensaje para comenzar la conversacion.",
+      "composer_title": "Composer",
+      "placeholder": "Escribe un mensaje",
+      "send": "Enviar",
+      "typing": "El asistente esta escribiendo"
+    },
+    "editor": {
+      "title": "Editor"
+    },
+    "visualization": {
+      "empty_title": "No hay visualizaciones configuradas",
+      "empty_description": "Agrega una o mas vistas para renderizar esta surface."
+    }
   }
 }

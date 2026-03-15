@@ -16,16 +16,19 @@
  * - Block mode (btn-block, w-full)
  *
  * **Prop Mapping:**
- * - `variant="primary"` → `btn-primary`
- * - `variant="secondary"` → `btn-secondary`
- * - `variant="danger"` → `btn-error`
- * - `variant="ghost"` → `btn-ghost`
- * - `variant="link"` → `btn-link`
- * - `size="xs"` → `btn-xs`
- * - `shape="round"` → `rounded-full`
+ * - `variant="primary"` -> `btn-primary`
+ * - `variant="secondary"` -> `btn-secondary`
+ * - `variant="danger"` -> `btn-error`
+ * - `variant="ghost"` -> `btn-ghost`
+ * - `variant="link"` -> `btn-link`
+ * - `size="xs"` -> `btn-xs`
+ * - `shape="round"` -> `rounded-full`
  *
- * **Loading State:**
- * Uses DaisyUI's loading spinner with size-appropriate classes.
+ * **Enhancements:**
+ * - Hover/active/focus state tracking with interactive transforms
+ * - Custom SVG spinner (matching Rustic engine quality)
+ * - Explicit focus ring style using CSS variables
+ * - Smooth transitions with cubic-bezier easing
  *
  * @example Using Modern Engine
  * ```tsx
@@ -57,7 +60,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { forwardRef, useState } from 'react';
 import type { ButtonProps } from '../../types';
 import { BUTTON_DEFAULTS } from '../../types';
 
@@ -90,7 +93,49 @@ const SHAPE_CLASSES: Record<string, string> = {
   circle: 'btn-circle',
 };
 
-export default function ModernButton(props: ButtonProps): React.ReactElement {
+/**
+ * Custom SVG loading spinner for Modern engine.
+ * Matches Rustic engine quality with size-aware rendering.
+ */
+const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
+  const spinnerSize = size === 'xs' || size === 'sm' ? 12 : size === 'lg' || size === 'xl' ? 18 : 14;
+
+  return (
+    <svg
+      width={spinnerSize}
+      height={spinnerSize}
+      viewBox="0 0 24 24"
+      fill="none"
+      style={{
+        animation: 'rottay-button-spin 1s linear infinite',
+      }}
+    >
+      <circle
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeDasharray="31.416"
+        strokeDashoffset="10"
+        opacity="0.25"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeDasharray="31.416"
+        strokeDashoffset="25"
+      />
+    </svg>
+  );
+};
+
+const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     children,
     variant = BUTTON_DEFAULTS.variant,
@@ -111,6 +156,10 @@ export default function ModernButton(props: ButtonProps): React.ReactElement {
     className = '',
     style,
   } = props;
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   // fullWidth is an alias for block
   const isFullWidth = fullWidth ?? block;
@@ -133,13 +182,21 @@ export default function ModernButton(props: ButtonProps): React.ReactElement {
     className,
   ].filter(Boolean).join(' ');
 
-  // Spinner sizes
-  const spinnerSize: Record<string, string> = {
-    xs: 'loading-xs',
-    sm: 'loading-sm',
-    md: 'loading-sm',
-    lg: 'loading-md',
-    xl: 'loading-lg',
+  // Compute interactive styles
+  const interactiveStyle: React.CSSProperties = {
+    transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.15s ease',
+    transform:
+      isActive && !disabled && !loading
+        ? 'scale(0.98)'
+        : isHovered && !disabled && !loading
+          ? 'var(--ds-button-hover-transform, translateY(-1px))'
+          : 'translateY(0)',
+    boxShadow:
+      isFocused && !disabled && !loading
+        ? '0 0 0 3px var(--ds-color-primary-200, rgba(59, 130, 246, 0.3))'
+        : undefined,
+    outline: isFocused ? 'none' : undefined,
+    ...style,
   };
 
   // Determine start and end content
@@ -148,22 +205,29 @@ export default function ModernButton(props: ButtonProps): React.ReactElement {
 
   return (
     <button
+      ref={ref}
       type={htmlType}
       className={classes}
       disabled={disabled || loading}
       onClick={onClick}
-      style={style}
+      style={interactiveStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
+      onMouseDown={() => setIsActive(true)}
+      onMouseUp={() => setIsActive(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
       aria-disabled={disabled || loading}
       aria-busy={loading}
     >
-      {loading && (
-        <span className={`loading loading-spinner ${spinnerSize[size || 'md']}`} />
-      )}
+      {loading && <LoadingSpinner size={size} />}
       {!loading && (startContent || prefix)}
       {children && <span>{children}</span>}
       {!loading && (endContent || suffix)}
     </button>
   );
-}
+});
 
 ModernButton.displayName = 'ModernButton';
+
+export default ModernButton;

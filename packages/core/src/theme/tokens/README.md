@@ -64,7 +64,7 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 │   │
 │   └── index.css              # CSS entry point
 │
-├── ts/                        # TypeScript mirrors
+├── ts/                        # Public TypeScript mirrors of the CSS variable system
 │   ├── base/                  # Base token exports
 │   │   ├── colors.ts
 │   │   ├── spacing.ts
@@ -118,6 +118,12 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 
 ### Import TypeScript Tokens
 
+The TypeScript layer is the public JS/TS mirror of the CSS token system. It is
+part of the package API, but core runtime components should not import it back
+into their implementation. Runtime code should use canonical local helpers and
+the CSS variables themselves; the TS mirror exists for consumers, tooling and
+type-safe references.
+
 ```typescript
 // Import all tokens
 import { tokens } from '@rottay/design-system/tokens';
@@ -140,27 +146,27 @@ const style = {
 ```css
 .my-component {
   /* Colors */
-  color: var(--color-primary-600);
-  background-color: var(--color-neutral-50);
+  color: var(--ds-color-primary-600);
+  background-color: var(--ds-color-neutral-50);
 
   /* Spacing */
-  padding: var(--spacing-4);
-  margin-bottom: var(--spacing-6);
+  padding: var(--ds-spacing-4);
+  margin-bottom: var(--ds-spacing-6);
 
   /* Typography */
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-normal);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-normal);
 
   /* Borders */
-  border-radius: var(--radius-md);
-  border: var(--border-default);
+  border-radius: var(--ds-radius-md);
+  border: var(--ds-border-default);
 
   /* Shadows */
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--ds-shadow-sm);
 
   /* Transitions */
-  transition: var(--transition-all);
+  transition: var(--ds-transition-normal);
 }
 ```
 
@@ -178,14 +184,14 @@ const MyComponent = () => (
 
 // MyComponent.module.css
 .container {
-  padding: var(--spacing-8);
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
+  padding: var(--ds-spacing-8);
+  background: var(--ds-color-white);
+  border-radius: var(--ds-radius-lg);
 }
 
 .title {
-  font-size: var(--font-size-2xl);
-  color: var(--color-primary-700);
+  font-size: var(--ds-font-size-2xl);
+  color: var(--ds-color-primary-700);
 }
 ```
 
@@ -193,59 +199,59 @@ const MyComponent = () => (
 
 ### Base Tokens
 
-#### Colors (`base/colors.css`)
-- **Primary**: Rottay brand blue (9 shades)
-- **Secondary**: Rottay accent purple (9 shades)
+#### Colors (`themes/default.css` + `tenants/*.css`)
+- **Primary**: Canonical primary palette (9 shades)
+- **Secondary**: Canonical secondary palette (9 shades)
 - **Neutral**: Gray scale (9 shades)
 - **Semantic**: Success, warning, error, info (9 shades each)
-- **Alpha**: Transparency overlays
+- **Alpha**: Transparency overlays and semantic alpha helpers
 
 ```css
-var(--color-primary-500)    /* #0066CC */
-var(--color-success-600)    /* #16A34A */
-var(--color-neutral-700)    /* #404040 */
-var(--color-alpha-black-50) /* rgba(0, 0, 0, 0.5) */
+var(--ds-color-primary-500)    /* primary scale */
+var(--ds-color-success-600)    /* success scale */
+var(--ds-color-neutral-700)    /* neutral scale */
+var(--ds-color-alpha-black-50) /* rgba(0, 0, 0, 0.5) */
 ```
 
 #### Spacing (`base/spacing.css`)
 4px grid system with semantic names:
 ```css
-var(--spacing-4)      /* 16px */
-var(--spacing-md)     /* 24px - alias for spacing-6 */
-var(--spacing-gutter) /* 16px - layout spacing */
+var(--ds-spacing-4)      /* 16px */
+var(--ds-spacing-md)     /* 24px - alias for spacing-6 */
+var(--ds-spacing-gutter) /* 16px - layout spacing */
 ```
 
 #### Typography (`base/typography.css`)
 Font families, sizes, weights, and line heights:
 ```css
-var(--font-family-base)
-var(--font-size-lg)        /* 18px */
-var(--font-weight-medium)  /* 500 */
-var(--line-height-normal)  /* 1.5 */
+var(--ds-font-family-base)
+var(--ds-font-size-lg)        /* 18px */
+var(--ds-font-weight-medium)  /* 500 */
+var(--ds-line-height-normal)  /* 1.5 */
 ```
 
 #### Shadows (`base/shadows.css`)
 Elevation scale from xs to 3xl:
 ```css
-var(--shadow-sm)
-var(--shadow-primary-md)
-var(--shadow-focus-ring)
+var(--ds-shadow-sm)
+var(--ds-shadow-primary-md)
+var(--ds-shadow-focus-ring)
 ```
 
 #### Borders (`base/borders.css`)
 Border widths, radii, and styles:
 ```css
-var(--radius-md)           /* 8px */
-var(--border-default)      /* 1px solid neutral-200 */
-var(--border-color-focus)
+var(--ds-radius-md)           /* 8px */
+var(--ds-border-default)      /* 1px solid neutral-200 */
+var(--ds-border-color-focus)
 ```
 
 #### Z-Index (`base/z-index.css`)
 Layering system for stacking:
 ```css
-var(--z-index-modal)       /* 1500 */
-var(--z-index-tooltip)     /* 1700 */
-var(--z-index-dropdown)    /* 1000 */
+var(--ds-z-index-modal)       /* 1500 */
+var(--ds-z-index-tooltip)     /* 1700 */
+var(--ds-z-index-dropdown)    /* 1000 */
 ```
 
 ### Component Tokens
@@ -325,35 +331,35 @@ Default tenant with Rottay-specific customizations:
 
 ### General Pattern
 ```
---{category}-{element}-{property}-{variant}-{state}
+--ds-{category}-{element}-{property}-{variant}-{state}
 ```
 
 ### Examples
 ```css
 /* Color tokens */
---color-primary-500
---color-success-100
---color-alpha-black-50
+--ds-color-primary-500
+--ds-color-success-100
+--ds-color-alpha-black-50
 
 /* Spacing tokens */
---spacing-4
---spacing-md
---spacing-gutter-lg
+--ds-spacing-4
+--ds-spacing-md
+--ds-spacing-gutter-lg
 
 /* Typography tokens */
---font-size-lg
---font-weight-semibold
---line-height-normal
+--ds-font-size-lg
+--ds-font-weight-semibold
+--ds-line-height-normal
 
 /* Component tokens */
---button-md-height
---avatar-primary-bg
---card-shadow-hover
+--ds-button-md-height
+--ds-avatar-primary-bg
+--ds-card-shadow-hover
 
 /* Animation tokens */
---duration-normal
---easing-standard
---transition-fade
+--ds-transition-fast
+--ds-transition-normal
+--ds-transition-spring
 ```
 
 ## 📱 Responsive Tokens
@@ -364,12 +370,12 @@ Tokens automatically adjust based on:
 ```css
 /* Mobile */
 @media (max-width: 639px) {
-  --button-default-height: var(--button-lg-height);
+  --ds-button-default-height: var(--ds-button-lg-height);
 }
 
 /* Desktop */
 @media (min-width: 1024px) {
-  --avatar-hover-enabled: 1;
+  --ds-avatar-hover-enabled: 1;
 }
 ```
 
@@ -377,7 +383,7 @@ Tokens automatically adjust based on:
 ```css
 /* Touch devices */
 @media (hover: none) and (pointer: coarse) {
-  --button-touch-target-min: 2.75rem; /* 44px */
+  --ds-button-touch-target-min: 2.75rem; /* 44px */
 }
 ```
 
@@ -390,7 +396,7 @@ Tokens automatically adjust based on:
 
 /* High contrast */
 @media (prefers-contrast: high) {
-  --button-border-width: 2px;
+  --ds-button-border-width: 2px;
 }
 ```
 
@@ -400,22 +406,22 @@ Tokens automatically adjust based on:
 
 1. Create tenant directory:
 ```bash
-mkdir -p src/tokens/src/tenants/my-tenant
+mkdir -p src/theme/tokens/css/tenants/my-tenant
 ```
 
 2. Create color overrides (`my-tenant/colors.css`):
 ```css
-:root {
-  --color-primary-500: #YOUR_BRAND_COLOR;
-  --color-secondary-500: #YOUR_ACCENT_COLOR;
+html[data-tenant='my-tenant'] {
+  --ds-color-primary-500: #YOUR_BRAND_COLOR;
+  --ds-color-secondary-500: #YOUR_ACCENT_COLOR;
 }
 ```
 
 3. Create component overrides (`my-tenant/components.css`):
 ```css
-:root {
-  --button-primary-bg: var(--color-primary-500);
-  --card-border-radius: var(--radius-2xl);
+html[data-tenant='my-tenant'] {
+  --ds-button-primary-bg: var(--ds-color-primary-500);
+  --ds-card-radius: var(--ds-radius-2xl);
 }
 ```
 
@@ -457,12 +463,12 @@ When adding new tokens:
   --new-component-lg-size: 4rem;
 
   /* COLORS */
-  --new-component-bg: var(--color-neutral-50);
-  --new-component-color: var(--color-neutral-900);
+  --new-component-bg: var(--ds-color-neutral-50);
+  --new-component-color: var(--ds-color-neutral-900);
 
   /* VARIANTS */
-  --new-component-primary-bg: var(--color-primary-100);
-  --new-component-primary-color: var(--color-primary-700);
+  --new-component-primary-bg: var(--ds-color-primary-100);
+  --new-component-primary-color: var(--ds-color-primary-700);
 }
 ```
 

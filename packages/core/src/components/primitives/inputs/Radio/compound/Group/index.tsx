@@ -176,7 +176,7 @@ export function RadioGroup({
               padding: paddingMap[size] || paddingMap.md,
               cursor: isDisabled ? 'not-allowed' : 'pointer',
               opacity: isDisabled ? 0.5 : 1,
-              border: `1px solid ${isChecked ? colors.border : '#d9d9d9'}`,
+              border: `1px solid ${isChecked ? colors.border : 'var(--ds-color-border-secondary)'}`,
               borderRadius: '4px',
               backgroundColor: buttonStyle === 'solid' && isChecked ? colors.bg : 'transparent',
               color: buttonStyle === 'solid' && isChecked ? colors.dot : 'inherit',
@@ -231,7 +231,7 @@ export function RadioGroup({
               width: sizeValue,
               height: sizeValue,
               borderRadius: '50%',
-              border: `2px solid ${isChecked ? colors.border : '#d9d9d9'}`,
+              border: `2px solid ${isChecked ? colors.border : 'var(--ds-color-border-secondary)'}`,
               backgroundColor: 'transparent',
               transition: 'all 0.2s ease-in-out',
               flexShrink: 0,
@@ -271,7 +271,7 @@ export function RadioGroup({
               {option.label}
             </span>
             {option.description && (
-              <span style={{ fontSize: sizeNumeric * 0.75, color: '#666', userSelect: 'none', lineHeight: 1.4 }}>
+              <span style={{ fontSize: sizeNumeric * 0.75, color: 'var(--ds-color-text-secondary)', userSelect: 'none', lineHeight: 1.4 }}>
                 {option.description}
               </span>
             )}

@@ -132,11 +132,11 @@ function renderRusticMenuItems(
         <li
           key={item.key}
           role="separator"
-          style={{
-            height: '1px',
-            margin: '8px 0',
-            backgroundColor: 'var(--ds-menu-divider-color, rgba(0, 0, 0, 0.06))',
-          }}
+            style={{
+              height: '1px',
+              margin: '8px 0',
+              backgroundColor: 'var(--ds-menu-divider-color, var(--ds-color-border))',
+            }}
         />
       );
     }
@@ -150,7 +150,7 @@ function renderRusticMenuItems(
               padding: '8px 16px 4px',
               fontSize: '12px',
               fontWeight: 600,
-              color: 'var(--ds-menu-group-title-color, rgba(0, 0, 0, 0.45))',
+              color: 'var(--ds-menu-group-title-color, var(--ds-color-text-muted))',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
               paddingLeft: paddingLeft ? `${paddingLeft}px` : undefined,
@@ -206,10 +206,10 @@ function renderRusticMenuItems(
               cursor: item.disabled ? 'not-allowed' : 'pointer',
               opacity: item.disabled ? 0.5 : 1,
               color: 'var(--ds-menu-item-color, inherit)',
-              backgroundColor: isFocused ? 'var(--ds-menu-item-hover-bg, rgba(0, 0, 0, 0.04))' : 'transparent',
+              backgroundColor: isFocused ? 'var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover))' : 'transparent',
               borderRadius: 'var(--ds-menu-border-radius, 6px)',
               transition: 'all 0.2s ease',
-              outline: isFocused ? '2px solid var(--ds-menu-focus-ring, var(--ds-color-primary-500, #1677ff))' : 'none',
+              outline: isFocused ? '2px solid var(--ds-menu-focus-ring-color, var(--ds-color-primary))' : 'none',
               outlineOffset: '-2px',
             }}
           >
@@ -289,18 +289,18 @@ function renderRusticMenuItems(
             cursor: item.disabled ? 'not-allowed' : 'pointer',
             opacity: item.disabled ? 0.5 : 1,
             color: item.danger
-              ? 'var(--ds-menu-item-danger-color, var(--ds-color-error-500, #ff4d4f))'
+              ? 'var(--ds-menu-item-danger-color, var(--ds-color-error))'
               : isSelected
-                ? 'var(--ds-menu-item-selected-color, var(--ds-color-primary-500, #1677ff))'
+                ? 'var(--ds-menu-item-selected-color, var(--ds-color-primary))'
                 : 'var(--ds-menu-item-color, inherit)',
             backgroundColor: isSelected
-              ? 'var(--ds-menu-item-selected-bg, rgba(22, 119, 255, 0.08))'
+              ? 'var(--ds-menu-item-selected-bg, var(--ds-color-alpha-primary-10))'
               : isFocused
-                ? 'var(--ds-menu-item-hover-bg, rgba(0, 0, 0, 0.04))'
+                ? 'var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover))'
                 : 'transparent',
             borderRadius: 'var(--ds-menu-border-radius, 6px)',
             transition: 'all 0.2s ease',
-            outline: isFocused ? '2px solid var(--ds-menu-focus-ring, var(--ds-color-primary-500, #1677ff))' : 'none',
+            outline: isFocused ? '2px solid var(--ds-menu-focus-ring-color, var(--ds-color-primary))' : 'none',
             outlineOffset: '-2px',
           }}
         >
@@ -541,8 +541,8 @@ export default function RusticMenu(props: MenuProps): React.ReactElement {
     listStyle: 'none',
     padding: '4px',
     margin: 0,
-    backgroundColor: theme === 'dark' ? 'var(--ds-menu-dark-bg, #001529)' : 'var(--ds-menu-bg, #fff)',
-    color: theme === 'dark' ? 'var(--ds-menu-dark-item-color, rgba(255, 255, 255, 0.65))' : 'var(--ds-menu-item-color, rgba(0, 0, 0, 0.88))',
+    backgroundColor: theme === 'dark' ? 'var(--ds-menu-dark-bg, var(--ds-color-neutral-900))' : 'var(--ds-menu-bg, var(--ds-color-bg-elevated))',
+    color: theme === 'dark' ? 'var(--ds-menu-dark-item-color, var(--ds-color-alpha-white-70))' : 'var(--ds-menu-item-color, var(--ds-color-text-primary))',
     borderRadius: 'var(--ds-menu-border-radius, 8px)',
     display: mode === 'horizontal' ? 'flex' : 'block',
     flexDirection: mode === 'horizontal' ? 'row' : undefined,

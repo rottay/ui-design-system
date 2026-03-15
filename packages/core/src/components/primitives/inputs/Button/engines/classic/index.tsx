@@ -54,7 +54,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Button as AntButton } from 'antd';
 import type { ButtonProps } from '../../types';
 import { BUTTON_DEFAULTS } from '../../types';
@@ -88,7 +88,7 @@ const SHAPE_MAP: Record<string, 'default' | 'circle' | 'round'> = {
   circle: 'circle',
 };
 
-export default function ClassicButton(props: ButtonProps): React.ReactElement {
+const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   const {
     children,
     variant = BUTTON_DEFAULTS.variant,
@@ -135,6 +135,7 @@ export default function ClassicButton(props: ButtonProps): React.ReactElement {
 
   return (
     <AntButton
+      ref={ref}
       {...variantProps}
       size={SIZE_MAP[size || 'md']}
       shape={SHAPE_MAP[shape || 'default']}
@@ -161,6 +162,8 @@ export default function ClassicButton(props: ButtonProps): React.ReactElement {
       )}
     </AntButton>
   );
-}
+});
 
 ClassicButton.displayName = 'ClassicButton';
+
+export default ClassicButton;

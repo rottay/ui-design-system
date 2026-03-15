@@ -1,10 +1,10 @@
 /**
- * @fileoverview Stack Apollo Engine - Rottay Design System
- * @description Apollo (Pure HTML/CSS) implementation of the Stack component.
+ * @fileoverview Stack Rustic Engine - Rottay Design System
+ * @description Rustic (Pure HTML/CSS) implementation of the Stack component.
  * Provides a dependency-free Stack using inline flexbox styles.
  *
  * @remarks
- * The Apollo engine uses pure inline CSS styles without any external CSS framework
+ * The Rustic engine uses pure inline CSS styles without any external CSS framework
  * dependencies. All flexbox properties are computed and applied inline:
  * - `display: flex`
  * - `flexDirection`: column/row (with -reverse variants)
@@ -17,17 +17,17 @@
  * - Maximum browser compatibility
  * - Accessibility-focused implementations
  *
- * @example Using Apollo Engine
+ * @example Using Rustic Engine
  * ```tsx
  * import { Stack } from '@rottay/design-system';
  *
- * // Use Apollo for dependency-free styling
- * <Stack engine="apollo" direction="vertical" spacing="md">
+ * // Use Rustic for dependency-free styling
+ * <Stack engine="rustic" direction="vertical" spacing="md">
  *   Pure inline CSS flexbox, no framework dependencies
  * </Stack>
  *
  * // Ideal for embedded widgets
- * <EngineProvider engine="apollo">
+ * <EngineProvider engine="rustic">
  *   <Stack spacing="lg" align="center">
  *     Self-contained flexbox styling
  *   </Stack>
@@ -37,7 +37,7 @@
  * @see {@link Stack} - The main engine-aware component
  * @see {@link TitanStack} - Ant Design implementation
  * @see {@link HermesStack} - Tailwind implementation
- * @module Stack/Engines/Apollo
+ * @module Stack/Engines/Rustic
  * @category Layout
  * @package @rottay/design-system
  */
@@ -122,7 +122,7 @@ function renderStackChildren(
 }
 
 /**
- * Apollo Stack component.
+ * Rustic Stack component.
  * Uses pure HTML and inline CSS styles for maximum compatibility
  * and accessibility without external dependencies.
  */
@@ -138,10 +138,10 @@ const ApolloStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const computedStyle = buildStackStyles(props);
   const renderedChildren = renderStackChildren(children, divider, direction);
 
-  // Build class names with Apollo-specific prefixes
+  // Build class names with Rustic-specific prefixes
   const classNames = [
     'rottay-stack',
-    'rottay-stack--apollo',
+    'rottay-stack--rustic',
     className,
   ].filter(Boolean).join(' ');
 
@@ -158,6 +158,6 @@ const ApolloStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   );
 });
 
-ApolloStack.displayName = 'ApolloStack';
+ApolloStack.displayName = 'RusticStack';
 
 export default ApolloStack;

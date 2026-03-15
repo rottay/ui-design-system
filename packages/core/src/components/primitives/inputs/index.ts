@@ -177,3 +177,39 @@ export type {
   UploadRequestOption,
 } from './Upload';
 export { UPLOAD_DEFAULTS } from './Upload';
+
+// PasswordInput
+export { PasswordInput } from './PasswordInput';
+export type {
+  PasswordInputProps,
+  PasswordInputSize,
+  PasswordInputVariant,
+  PasswordStrengthLevel,
+} from './PasswordInput';
+export { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from './PasswordInput';
+
+// TagInput
+export { TagInput } from './TagInput';
+export type {
+  TagInputProps,
+  TagInputSize,
+} from './TagInput';
+export { TAGINPUT_DEFAULTS } from './TagInput';
+
+// OTPInput
+export { OTPInput } from './OTPInput';
+export type {
+  OTPInputProps,
+  OTPInputType,
+  OTPInputSize,
+} from './OTPInput';
+export { OTPINPUT_DEFAULTS } from './OTPInput';
+
+// FormField
+export { FormField } from './FormField';
+export type {
+  FormFieldProps,
+  FormFieldLayout,
+  FormFieldSize,
+} from './FormField';
+export { FORMFIELD_DEFAULTS } from './FormField';

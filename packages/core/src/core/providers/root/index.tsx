@@ -80,9 +80,13 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import { EngineProvider } from '../engine';
 import { ThemeProvider } from '../theme';
 import { TenantProvider } from '../tenant';
+import { ProductProfileProvider } from '../product-profile';
 import { FeatureProvider } from '../features';
-import type { TenantConfig, EngineName } from '../../types';
+import { I18nProvider } from '../../../theme/i18n';
+import type { TenantConfig, EngineName, ProductProfile, ProductProfileKey } from '../../types';
+import type { LocaleTranslations, SupportedLocale } from '../../../theme/i18n/types';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../../../theme/tenants/storage';
+import { SystemCssVariablesBridge } from './system-css-variables-bridge';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -97,10 +101,33 @@ export interface DesignSystemProviderProps {
    * Takes precedence over tenantSlug if both are provided.
    */
   tenantConfig?: TenantConfig;
+  /**
+   * Runtime tenant overrides applied on top of the resolved tenant.
+   *
+   * This is the app-owned white-label entry point. Product teams can tune
+   * branding, token overrides, personality, and features without forking the
+   * DS or creating a new tenant package.
+   */
+  tenantOverrides?: Partial<TenantConfig>;
+  /**
+   * Product profile that sits between engine defaults and tenant overrides.
+   *
+   * The provider accepts either a registered key or an inline object so teams
+   * can move fast locally without turning the DS into a bottleneck.
+   */
+  productProfile?: ProductProfileKey | ProductProfile;
   /** Force a specific engine */
   forceEngine?: EngineName;
   /** Force a specific theme */
   forceTheme?: string;
+  /** Force a specific locale on top of tenant defaults */
+  locale?: SupportedLocale;
+  /** Locale used when a key is missing in the active locale */
+  fallbackLocale?: SupportedLocale;
+  /** App-level translation overrides merged with tenant translations */
+  customTranslations?: Partial<LocaleTranslations>;
+  /** Callback when locale changes */
+  onLocaleChange?: (locale: SupportedLocale) => void;
   /** Callback when tenant is resolved */
   onTenantResolved?: (tenant: TenantConfig) => void;
   /** Callback on error */
@@ -120,12 +147,133 @@ export interface DesignSystemProviderProps {
  */
 const LoadingScreen: React.FC = () => null;
 
+/**
+ * Merges a resolved tenant with app-level overrides.
+ *
+ * The rules here are intentional:
+ * - scalar values: last write wins
+ * - branding/token/personality objects: shallow-merge by section
+ * - features: set union so apps can enable additional capabilities without
+ *   accidentally dropping defaults shipped by the tenant registry
+ */
+function mergeTenantConfig(
+  baseTenantConfig: TenantConfig,
+  tenantOverrides?: Partial<TenantConfig>
+): TenantConfig {
+  if (!tenantOverrides) {
+    return baseTenantConfig;
+  }
+
+  return {
+    ...baseTenantConfig,
+    ...tenantOverrides,
+    branding: {
+      ...baseTenantConfig.branding,
+      ...tenantOverrides.branding,
+    },
+    tokenOverrides: {
+      ...baseTenantConfig.tokenOverrides,
+      ...tenantOverrides.tokenOverrides,
+      surface: {
+        ...baseTenantConfig.tokenOverrides?.surface,
+        ...tenantOverrides.tokenOverrides?.surface,
+      },
+      motion: {
+        ...baseTenantConfig.tokenOverrides?.motion,
+        ...tenantOverrides.tokenOverrides?.motion,
+      },
+      borderRadius: {
+        ...baseTenantConfig.tokenOverrides?.borderRadius,
+        ...tenantOverrides.tokenOverrides?.borderRadius,
+      },
+      shadows: {
+        ...baseTenantConfig.tokenOverrides?.shadows,
+        ...tenantOverrides.tokenOverrides?.shadows,
+      },
+    },
+    /**
+     * We intentionally do not deep-merge personality sections here.
+     *
+     * Reason:
+     * - `TenantConfig.personality` is stored as a partial shape
+     * - `useTokens()` is the place where personality becomes fully resolved
+     * - trying to deeply re-materialize the nested structure here creates noisy
+     *   type friction without adding real behavioral value
+     *
+     * In practice this keeps provider logic simple:
+     * - registry tenant provides the base partial
+     * - app override can replace that partial
+     * - token resolution later merges defaults + product profile + tenant
+     */
+    personality: tenantOverrides.personality ?? baseTenantConfig.personality,
+    /**
+     * Translation dictionaries are nested objects, so a plain spread would make
+     * app-level overrides replace an entire namespace. We keep a tiny recursive
+     * merge here so teams can override just one surface string without forking
+     * the full locale tree.
+     */
+    customTranslations: mergeLocaleTranslations(
+      baseTenantConfig.customTranslations,
+      tenantOverrides.customTranslations
+    ),
+    features: Array.from(
+      new Set([...(baseTenantConfig.features ?? []), ...(tenantOverrides.features ?? [])])
+    ),
+  };
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function mergeLocaleTranslations(
+  baseTranslations?: Partial<LocaleTranslations>,
+  overrideTranslations?: Partial<LocaleTranslations>
+): Partial<LocaleTranslations> | undefined {
+  if (!baseTranslations && !overrideTranslations) {
+    return undefined;
+  }
+
+  if (!baseTranslations) {
+    return overrideTranslations;
+  }
+
+  if (!overrideTranslations) {
+    return baseTranslations;
+  }
+
+  const result: Record<string, unknown> = {
+    ...baseTranslations,
+  };
+
+  for (const [key, value] of Object.entries(overrideTranslations)) {
+    const currentValue = result[key];
+
+    if (isPlainObject(currentValue) && isPlainObject(value)) {
+      result[key] = mergeLocaleTranslations(
+        currentValue as Partial<LocaleTranslations>,
+        value as Partial<LocaleTranslations>
+      );
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result as Partial<LocaleTranslations>;
+}
+
 export function DesignSystemProvider({
   children,
   tenantSlug: propTenantSlug,
   tenantConfig: propTenantConfig,
+  tenantOverrides,
+  productProfile,
   forceEngine,
   forceTheme,
+  locale: forcedLocale,
+  fallbackLocale: forcedFallbackLocale,
+  customTranslations: appCustomTranslations,
+  onLocaleChange,
   onTenantResolved,
   onError,
   skipCssLoading = true,
@@ -139,9 +287,10 @@ export function DesignSystemProvider({
   useEffect(() => {
     // If tenant config provided via props, use it (takes precedence)
     if (propTenantConfig) {
-      setTenantConfig(propTenantConfig);
+      const mergedTenantConfig = mergeTenantConfig(propTenantConfig, tenantOverrides);
+      setTenantConfig(mergedTenantConfig);
       setLoading(false);
-      onTenantResolved?.(propTenantConfig);
+      onTenantResolved?.(mergedTenantConfig);
       return;
     }
 
@@ -149,21 +298,22 @@ export function DesignSystemProvider({
     const loadTenant = async () => {
       try {
         const slug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
-        const config = await resolveTenantConfig(slug);
-        setTenantConfig(config);
-        onTenantResolved?.(config);
+        const resolvedTenantConfig = await resolveTenantConfig(slug);
+        const mergedTenantConfig = mergeTenantConfig(resolvedTenantConfig, tenantOverrides);
+        setTenantConfig(mergedTenantConfig);
+        onTenantResolved?.(mergedTenantConfig);
       } catch (error) {
         onError?.(error as Error);
         // Fallback to default tenant on error
-        const defaultConfig = await resolveTenantConfig(DEFAULT_TENANT_SLUG);
-        setTenantConfig(defaultConfig);
+        const defaultTenantConfig = await resolveTenantConfig(DEFAULT_TENANT_SLUG);
+        setTenantConfig(mergeTenantConfig(defaultTenantConfig, tenantOverrides));
       } finally {
         setLoading(false);
       }
     };
 
     loadTenant();
-  }, [propTenantSlug, propTenantConfig, onTenantResolved, onError]);
+  }, [propTenantSlug, propTenantConfig, tenantOverrides, onTenantResolved, onError]);
 
   if (loading || !tenantConfig) {
     return <LoadingScreen />;
@@ -171,22 +321,38 @@ export function DesignSystemProvider({
 
   const engine = forceEngine ?? tenantConfig.engine ?? 'classic';
   const theme = forceTheme ?? tenantConfig.theme ?? 'base';
+  const locale = forcedLocale ?? tenantConfig.locale ?? 'en';
+  const fallbackLocale = forcedFallbackLocale ?? tenantConfig.fallbackLocale ?? locale;
+  const customTranslations = mergeLocaleTranslations(
+    tenantConfig.customTranslations,
+    appCustomTranslations
+  );
 
   return (
     <TenantProvider config={tenantConfig}>
-      <EngineProvider defaultEngine={engine}>
-        <ThemeProvider
-          theme={theme}
-          tenant={tenantConfig.slug}
-          branding={tenantConfig.branding}
-          skipCssLoading={skipCssLoading}
-          cssBaseUrl={cssBaseUrl}
+      <ProductProfileProvider profile={productProfile}>
+        <I18nProvider
+          locale={locale}
+          fallbackLocale={fallbackLocale}
+          customTranslations={customTranslations}
+          onLocaleChange={onLocaleChange}
         >
-          <FeatureProvider features={tenantConfig.features ?? []}>
-            {children}
-          </FeatureProvider>
-        </ThemeProvider>
-      </EngineProvider>
+          <EngineProvider defaultEngine={engine}>
+            <ThemeProvider
+              theme={theme}
+              tenant={tenantConfig.slug}
+              branding={tenantConfig.branding}
+              skipCssLoading={skipCssLoading}
+              cssBaseUrl={cssBaseUrl}
+            >
+              <FeatureProvider features={tenantConfig.features ?? []}>
+                <SystemCssVariablesBridge />
+                {children}
+              </FeatureProvider>
+            </ThemeProvider>
+          </EngineProvider>
+        </I18nProvider>
+      </ProductProfileProvider>
     </TenantProvider>
   );
 }

@@ -59,6 +59,9 @@ export type { ThemeProviderProps } from './theme';
 export { TenantProvider, TenantContext } from './tenant';
 export type { TenantProviderProps } from './tenant';
 
+export { ProductProfileProvider, ProductProfileContext } from './product-profile';
+export type { ProductProfileProviderProps } from './product-profile';
+
 export { FeatureProvider, FeatureContext } from './features';
 export type { FeatureProviderProps } from './features';
 

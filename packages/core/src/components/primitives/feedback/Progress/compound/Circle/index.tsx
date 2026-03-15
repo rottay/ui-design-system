@@ -18,8 +18,8 @@
  * **Multi-Tenant Support:**
  * Uses CSS custom properties for colors, allowing automatic
  * adaptation to tenant themes:
- * - `--color-primary-500`: Default stroke color
- * - `--color-gray-200`: Default trail color
+ * - `--ds-color-primary-500`: Default stroke color
+ * - `--ds-color-neutral-200`: Default trail color
  *
  * @example Basic Usage
  * ```tsx
@@ -124,13 +124,13 @@ export interface ProgressCircleProps {
   /**
    * Color of the progress stroke.
    * Supports CSS colors, variables, and gradients.
-   * @default 'var(--color-primary-500, #1890ff)'
+   * @default 'var(--ds-color-primary-500, #1890ff)'
    */
   strokeColor?: string;
 
   /**
    * Color of the background trail.
-   * @default 'var(--color-gray-200, #f0f0f0)'
+   * @default 'var(--ds-color-neutral-200, #f0f0f0)'
    */
   trailColor?: string;
 
@@ -213,8 +213,8 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
       percent = 0,
       size = 120,
       strokeWidth = 8,
-      strokeColor = 'var(--color-primary-500, #1890ff)',
-      trailColor = 'var(--color-gray-200, #f0f0f0)',
+      strokeColor = 'var(--ds-color-primary-500, #1890ff)',
+      trailColor = 'var(--ds-color-neutral-200, #f0f0f0)',
       showInfo = true,
       format,
       className = '',

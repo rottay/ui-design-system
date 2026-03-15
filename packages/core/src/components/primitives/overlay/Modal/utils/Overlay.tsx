@@ -44,7 +44,7 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       clickable = true,
       blur = false,
       blurAmount = 4,
-      backgroundColor = 'rgba(0, 0, 0, 0.5)',
+      backgroundColor = 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
       zIndex = 999,
       className = '',
       style = {},
@@ -80,7 +80,7 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       visibility: visible ? 'visible' : 'hidden',
       transition: disableAnimation
         ? 'none'
-        : 'opacity 0.2s ease-in-out, visibility 0.2s ease-in-out',
+        : 'opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s, backdrop-filter 0.3s',
       ...style,
     };
 

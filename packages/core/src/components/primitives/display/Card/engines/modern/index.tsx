@@ -10,14 +10,20 @@
  * **Implementation Details:**
  * - Uses DaisyUI `card` class for container
  * - Uses `card-body`, `card-title`, `card-actions` for structure
- * - Uses Tailwind `animate-pulse` for skeleton loading
+ * - Custom spinner overlay with backdrop-filter blur for loading state
  * - Uses `figure` element for cover images
  *
+ * **Enhancements:**
+ * - Hover state tracking with transform + shadow elevation
+ * - Smooth transitions using cubic-bezier easing
+ * - Custom spinner overlay replaces simple animate-pulse
+ * - Personality-variable-driven hover effects
+ *
  * **Class Mappings:**
- * - `elevated` → `bg-base-100 shadow-md`
- * - `outlined` → `card-bordered bg-base-100`
- * - `filled` → `bg-base-200`
- * - `ghost` → `bg-transparent`
+ * - `elevated` -> `bg-base-100 shadow-md`
+ * - `outlined` -> `card-bordered bg-base-100`
+ * - `filled` -> `bg-base-200`
+ * - `ghost` -> `bg-transparent`
  *
  * @example Basic Usage
  * ```tsx
@@ -51,17 +57,52 @@ import type { CardProps } from '../../types';
 import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../../types';
 
 /**
+ * Custom loading spinner for Card overlay.
+ */
+const CardSpinner: React.FC = () => (
+  <svg
+    width={28}
+    height={28}
+    viewBox="0 0 24 24"
+    fill="none"
+    style={{ animation: 'rottay-button-spin 1s linear infinite' }}
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeDasharray="31.416"
+      strokeDashoffset="10"
+      opacity="0.25"
+    />
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeDasharray="31.416"
+      strokeDashoffset="25"
+    />
+  </svg>
+);
+
+/**
  * Modern engine Card component using DaisyUI/Tailwind CSS.
  * Provides a utility-first card implementation with responsive design patterns.
  *
  * Features:
  * - DaisyUI card component classes
  * - Tailwind CSS utility-first styling
- * - Skeleton loading animation
+ * - Custom spinner overlay with backdrop blur for loading
  * - Cover image support (top/bottom position)
  * - Header with title, description, and extra content
  * - Action slot with flexible alignment
- * - Smooth hover transitions
+ * - Smooth hover transitions with transform + shadow elevation
  *
  * @component
  * @example
@@ -110,7 +151,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     style,
   } = props;
 
-  const [_isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Map variants to DaisyUI classes
   const variantClasses: Record<string, string> = {
@@ -121,12 +162,12 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   };
 
   // Build class list
+  const isInteractive = hoverable || clickable;
   const cardClasses = [
     'card',
     variantClasses[variant] || variantClasses.elevated,
-    hoverable || clickable ? 'hover:shadow-lg transition-shadow cursor-pointer' : '',
+    isInteractive ? 'cursor-pointer' : '',
     bordered && variant !== 'outlined' ? 'card-bordered' : '',
-    loading ? 'opacity-70 pointer-events-none' : '',
     className,
   ].filter(Boolean).join(' ');
 
@@ -136,10 +177,18 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
 
-  // Card style
+  // Card style with interactive transitions
   const cardStyle: React.CSSProperties = {
     borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
     cursor: clickable || onClick ? 'pointer' : undefined,
+    transition: 'box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+    transform: isHovered && isInteractive
+      ? 'var(--ds-card-hover-transform, translateY(-2px))'
+      : 'translateY(0)',
+    boxShadow: isHovered && isInteractive
+      ? 'var(--ds-card-hover-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08))'
+      : undefined,
+    position: 'relative',
     // Apply color variant styles
     ...(hasColorVariant && {
       borderLeft: `4px solid ${colorStyles.borderColor}`,
@@ -148,17 +197,18 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     ...style,
   };
 
-  // Render loading skeleton
+  // Render loading state with custom spinner overlay + backdrop blur
   if (loading) {
     return (
       <div className={cardClasses} style={cardStyle}>
         {cover && (
-          <figure className="animate-pulse">
-            <div className="bg-base-300 h-48 w-full" />
+          <figure>
+            <div className="bg-base-300 h-48 w-full" style={{ opacity: 0.5 }} />
           </figure>
         )}
-        <div className="card-body" style={{ padding: paddingValue }}>
-          <div className="animate-pulse space-y-4">
+        <div className="card-body" style={{ padding: paddingValue, position: 'relative', minHeight: '120px' }}>
+          {/* Skeleton content underneath */}
+          <div className="space-y-4" style={{ opacity: 0.3 }}>
             <div className="h-4 bg-base-300 rounded w-3/4" />
             <div className="h-4 bg-base-300 rounded w-1/2" />
             <div className="space-y-2">
@@ -166,6 +216,23 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               <div className="h-3 bg-base-300 rounded" />
               <div className="h-3 bg-base-300 rounded w-5/6" />
             </div>
+          </div>
+          {/* Spinner overlay with backdrop blur */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(2px)',
+              WebkitBackdropFilter: 'blur(2px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: 'inherit',
+              zIndex: 1,
+            }}
+          >
+            <CardSpinner />
           </div>
         </div>
       </div>

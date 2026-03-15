@@ -34,7 +34,7 @@
  * ```tsx
  * import { Anchor } from '@rottay/design-system';
  *
- * <Anchor engine="hermes">
+ * <Anchor engine="modern">
  *   <Anchor.Link href="#section1" title="Section 1" />
  *   <Anchor.Link href="#section2" title="Section 2" />
  * </Anchor>
@@ -44,7 +44,7 @@
  * ```tsx
  * import { EngineProvider, Anchor } from '@rottay/design-system';
  *
- * <EngineProvider engine="hermes">
+ * <EngineProvider engine="modern">
  *   <Anchor>
  *     <Anchor.Link href="#intro" title="Introduction" />
  *     <Anchor.Link href="#features" title="Features" />
@@ -54,7 +54,7 @@
  *
  * @example Horizontal Layout
  * ```tsx
- * <Anchor engine="hermes" direction="horizontal">
+ * <Anchor engine="modern" direction="horizontal">
  *   <Anchor.Link href="#tab1" title="Tab 1" />
  *   <Anchor.Link href="#tab2" title="Tab 2" />
  *   <Anchor.Link href="#tab3" title="Tab 3" />
@@ -227,7 +227,7 @@ Link.displayName = 'Anchor.Link.Hermes';
  * @example
  * ```tsx
  * <Anchor
- *   engine="hermes"
+ *   engine="modern"
  *   offsetTop={80}
  *   affix={true}
  *   direction="vertical"

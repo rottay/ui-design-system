@@ -14,35 +14,35 @@
   --ds-glass-blur-sm: 8px;
   --ds-glass-blur-lg: 20px;
   --ds-glass-blur-xl: 32px;
-  --ds-glass-bg: rgba(255, 255, 255, 0.06);
-  --ds-glass-bg-light: rgba(255, 255, 255, 0.12);
-  --ds-glass-bg-heavy: rgba(255, 255, 255, 0.18);
-  --ds-glass-border: rgba(255, 255, 255, 0.12);
-  --ds-glass-border-light: rgba(255, 255, 255, 0.08);
-  --ds-glass-border-heavy: rgba(255, 255, 255, 0.2);
+  --ds-glass-bg: var(--ds-color-alpha-white-5);
+  --ds-glass-bg-light: var(--ds-color-alpha-white-10);
+  --ds-glass-bg-heavy: var(--ds-color-alpha-white-20);
+  --ds-glass-border: var(--ds-color-alpha-white-10);
+  --ds-glass-border-light: var(--ds-color-alpha-white-5);
+  --ds-glass-border-heavy: var(--ds-color-alpha-white-20);
 
   /* ========================================================================
      GLOW EFFECTS
      Glow shadows for emphasis and premium feel
      ======================================================================== */
-  --ds-shadow-glow-primary: 0 0 40px rgba(var(--ds-color-primary-rgb, 0, 102, 204), 0.06);
-  --ds-shadow-glow-primary-md: 0 0 60px rgba(var(--ds-color-primary-rgb, 0, 102, 204), 0.1);
-  --ds-shadow-glow-primary-lg: 0 0 80px rgba(var(--ds-color-primary-rgb, 0, 102, 204), 0.15);
-  --ds-shadow-glow-secondary: 0 0 40px rgba(var(--ds-color-secondary-rgb, 107, 107, 212), 0.06);
-  --ds-shadow-glow-success: 0 0 40px rgba(34, 197, 94, 0.06);
-  --ds-shadow-glow-error: 0 0 40px rgba(239, 68, 68, 0.06);
+  --ds-shadow-glow-primary: 0 0 40px rgba(var(--ds-color-primary-rgb), 0.06);
+  --ds-shadow-glow-primary-md: 0 0 60px rgba(var(--ds-color-primary-rgb), 0.1);
+  --ds-shadow-glow-primary-lg: 0 0 80px rgba(var(--ds-color-primary-rgb), 0.15);
+  --ds-shadow-glow-secondary: 0 0 40px rgba(var(--ds-color-secondary-rgb), 0.06);
+  --ds-shadow-glow-success: 0 0 40px var(--ds-color-alpha-success-10);
+  --ds-shadow-glow-error: 0 0 40px var(--ds-color-alpha-error-10);
 
   /* ========================================================================
      GRADIENTS
      Premium gradient presets
      ======================================================================== */
-  --ds-gradient-primary: linear-gradient(135deg, var(--ds-color-primary-500, #0066cc), var(--ds-color-secondary-500, #6b6bd4));
-  --ds-gradient-primary-soft: linear-gradient(135deg, var(--ds-color-primary-50, #e6f0ff), var(--ds-color-secondary-50, #ededf8));
-  --ds-gradient-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
-  --ds-gradient-dark: linear-gradient(135deg, #0a0a0a, #1a1a2e);
-  --ds-gradient-mesh: radial-gradient(at 40% 20%, var(--ds-color-primary-100, #cce0ff) 0px, transparent 50%),
-                      radial-gradient(at 80% 0%, var(--ds-color-secondary-100, #d5d5f0) 0px, transparent 50%),
-                      radial-gradient(at 0% 50%, var(--ds-color-primary-50, #e6f0ff) 0px, transparent 50%);
+  --ds-gradient-primary: linear-gradient(135deg, var(--ds-color-primary-500), var(--ds-color-secondary-500));
+  --ds-gradient-primary-soft: linear-gradient(135deg, var(--ds-color-primary-50), var(--ds-color-secondary-50));
+  --ds-gradient-surface: linear-gradient(135deg, var(--ds-color-alpha-white-90), var(--ds-color-alpha-white-60));
+  --ds-gradient-dark: linear-gradient(135deg, var(--ds-color-neutral-900), var(--ds-color-neutral-800));
+  --ds-gradient-mesh: radial-gradient(at 40% 20%, var(--ds-color-primary-100) 0px, transparent 50%),
+                      radial-gradient(at 80% 0%, var(--ds-color-secondary-100) 0px, transparent 50%),
+                      radial-gradient(at 0% 50%, var(--ds-color-primary-50) 0px, transparent 50%);
 
   /* ========================================================================
      PREMIUM EASING

@@ -55,8 +55,8 @@
 import React from 'react';
 import { Radio as AntRadio } from 'antd';
 import type { RadioChangeEvent } from 'antd';
-import type { RadioProps, RadioGroupProps } from '../../types';
-import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
+import type { RadioProps } from '../../types';
+import { RADIO_DEFAULTS, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
 
 export default function ClassicRadio(props: RadioProps): React.ReactElement {
   const {
@@ -109,59 +109,4 @@ export default function ClassicRadio(props: RadioProps): React.ReactElement {
   );
 }
 
-// Radio Group component
-export function ClassicRadioGroup(props: RadioGroupProps): React.ReactElement {
-  const {
-    options = [],
-    value,
-    defaultValue,
-    disabled = RADIO_GROUP_DEFAULTS.disabled,
-    direction = RADIO_GROUP_DEFAULTS.direction,
-    buttonStyle,
-    onChange,
-    className = '',
-    style,
-  } = props;
-
-  const handleChange = (e: RadioChangeEvent) => {
-    onChange?.(e.target.value);
-  };
-
-  const groupStyle: React.CSSProperties = {
-    display: buttonStyle ? 'inline-flex' : 'flex',
-    flexDirection: direction === 'horizontal' ? 'row' : 'column',
-    gap: direction === 'horizontal' ? '16px' : '8px',
-    ...style,
-  };
-
-  if (buttonStyle) {
-    return (
-      <AntRadio.Group
-        options={options as any}
-        value={value}
-        defaultValue={defaultValue}
-        disabled={disabled}
-        onChange={handleChange}
-        optionType="button"
-        buttonStyle={buttonStyle}
-        className={`rottay-radio-group-classic ${className}`}
-        style={groupStyle}
-      />
-    );
-  }
-
-  return (
-    <AntRadio.Group
-      options={options as any}
-      value={value}
-      defaultValue={defaultValue}
-      disabled={disabled}
-      onChange={handleChange}
-      className={`rottay-radio-group-classic ${className}`}
-      style={groupStyle}
-    />
-  );
-}
-
 ClassicRadio.displayName = 'ClassicRadio';
-ClassicRadio.Group = ClassicRadioGroup;

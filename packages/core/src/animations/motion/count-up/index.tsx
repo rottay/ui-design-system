@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { useMotionValue, useSpring, useInView, useReducedMotion } from 'framer-motion';
+import { useMotionValue, useSpring, useInView } from 'framer-motion';
 import type { CountUpProps } from '../../types';
+import { useMotionPersonality } from '../../hooks';
 
 export const CountUp: React.FC<CountUpProps> = ({
   from = 0,
@@ -15,12 +16,14 @@ export const CountUp: React.FC<CountUpProps> = ({
   className,
   style,
 }) => {
-  const shouldReduceMotion = useReducedMotion();
+  const motionPersonality = useMotionPersonality();
+  const shouldReduceMotion =
+    motionPersonality.shouldReduceMotion || !motionPersonality.countUpEnabled;
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(from);
   const springValue = useSpring(motionValue, {
-    damping: 60,
-    stiffness: 100,
+    damping: motionPersonality.springFriction,
+    stiffness: motionPersonality.springTension,
     duration: shouldReduceMotion ? 0 : duration * 1000,
   });
   const isInView = useInView(ref, { once: true, amount: 0.5 });

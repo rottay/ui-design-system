@@ -37,7 +37,7 @@ export const TreeNode = forwardRef<HTMLDivElement, TreeNodeProps>(
 
     // Base CSS variables
     const nodeVars: React.CSSProperties = {
-      '--tree-node-opacity': disabled ? '0.5' : '1',
+      '--ds-tree-node-opacity': disabled ? '0.5' : '1',
     } as React.CSSProperties;
 
     const nodeStyle: React.CSSProperties = {
@@ -45,7 +45,7 @@ export const TreeNode = forwardRef<HTMLDivElement, TreeNodeProps>(
       display: 'flex',
       alignItems: 'center',
       padding: '4px 8px',
-      opacity: 'var(--tree-node-opacity)',
+      opacity: 'var(--ds-tree-node-opacity)',
       cursor: disabled ? 'not-allowed' : 'pointer',
       ...style,
     };

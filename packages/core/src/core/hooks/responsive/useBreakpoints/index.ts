@@ -25,6 +25,7 @@
  * @package @rottay/design-system
  */
 import { useMediaQuery } from '../useMediaQuery';
+import { buildMinWidthQuery, buildRangeQuery } from '../breakpoints';
 
 /**
  * Breakpoint detection results
@@ -83,9 +84,9 @@ export interface UseBreakpointsResult {
  */
 export function useBreakpoints(): UseBreakpointsResult {
   // Core breakpoints (mobile-first)
-  const isMobile = useMediaQuery('(max-width: 639px)');
-  const isTablet = useMediaQuery('(min-width: 640px) and (max-width: 1023px)');
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const isMobile = useMediaQuery(buildRangeQuery('xs', 'sm'));
+  const isTablet = useMediaQuery(buildRangeQuery('sm', 'lg'));
+  const isDesktop = useMediaQuery(buildMinWidthQuery('lg'));
 
   // Device capabilities
   const isTouchDevice = useMediaQuery('(hover: none) and (pointer: coarse)');

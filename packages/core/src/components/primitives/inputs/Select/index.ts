@@ -17,7 +17,7 @@
  *
  * **Multi-Tenant Support:**
  * Select appearance adapts to tenant themes via CSS custom properties
- * (--select-*), ensuring consistent branding across tenants.
+ * (--ds-select-*), ensuring consistent branding across tenants.
  *
  * **Compound Components:**
  * - `Select.Option` - Individual selectable option

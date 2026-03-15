@@ -5,15 +5,80 @@
  * @description Pure vanilla HTML/CSS implementation of the Cascader component
  * using CSS variables for multi-tenant theming.
  *
+ * Features:
+ * - expandTrigger: 'click' | 'hover'
+ * - showSearch: search input filtering across all levels
+ * - fieldNames: custom property mapping (label, value, children)
+ * - loadData: async loading with spinner when expanding nodes
+ *
  * @module RusticCascader
  * @category Inputs
  * @package @rottay/design-system
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import type { CascaderProps, CascaderOption, CascaderValue } from '../../types';
+import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../../types';
 import { CASCADER_DEFAULTS } from '../../types';
+
+// ---------------------------------------------------------------------------
+// Helpers for fieldNames mapping
+// ---------------------------------------------------------------------------
+
+function getLabel(option: CascaderOption, fn?: CascaderFieldNames): React.ReactNode {
+  const key = fn?.label ?? 'label';
+  return (option as Record<string, unknown>)[key] as React.ReactNode;
+}
+
+function getValue(option: CascaderOption, fn?: CascaderFieldNames): string | number {
+  const key = fn?.value ?? 'value';
+  return (option as Record<string, unknown>)[key] as string | number;
+}
+
+function getChildren(option: CascaderOption, fn?: CascaderFieldNames): CascaderOption[] | undefined {
+  const key = fn?.children ?? 'children';
+  return (option as Record<string, unknown>)[key] as CascaderOption[] | undefined;
+}
+
+function optionIsLeaf(option: CascaderOption, fn?: CascaderFieldNames): boolean {
+  if (option.isLeaf !== undefined) return option.isLeaf;
+  const children = getChildren(option, fn);
+  return !children || children.length === 0;
+}
+
+// ---------------------------------------------------------------------------
+// Flatten options for search
+// ---------------------------------------------------------------------------
+
+interface FlatOption {
+  path: CascaderOption[];
+  labels: string[];
+  values: (string | number)[];
+}
+
+function flattenOptions(
+  options: CascaderOption[],
+  fn?: CascaderFieldNames,
+  parentPath: CascaderOption[] = [],
+  parentLabels: string[] = [],
+  parentValues: (string | number)[] = [],
+): FlatOption[] {
+  const result: FlatOption[] = [];
+  for (const opt of options) {
+    const label = String(getLabel(opt, fn));
+    const val = getValue(opt, fn);
+    const path = [...parentPath, opt];
+    const labels = [...parentLabels, label];
+    const values = [...parentValues, val];
+    const children = getChildren(opt, fn);
+    if (children && children.length > 0) {
+      result.push(...flattenOptions(children, fn, path, labels, values));
+    } else {
+      result.push({ path, labels, values });
+    }
+  }
+  return result;
+}
 
 // Size configuration using CSS variables
 const SIZE_CONFIG: Record<string, { height: string }> = {
@@ -30,15 +95,18 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       defaultValue,
       onChange,
       displayRender,
-      expandTrigger: _expandTrigger = CASCADER_DEFAULTS.expandTrigger,
+      expandTrigger = CASCADER_DEFAULTS.expandTrigger,
       placeholder = CASCADER_DEFAULTS.placeholder,
       disabled,
+      showSearch,
       allowClear = CASCADER_DEFAULTS.allowClear,
       size = CASCADER_DEFAULTS.size,
       status,
       notFoundContent = 'No data',
       open: controlledOpen,
       onDropdownVisibleChange,
+      fieldNames,
+      loadData,
       className = '',
       style,
     } = props;
@@ -49,6 +117,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const [selectedPath, setSelectedPath] = useState<CascaderOption[]>([]);
     const [position, setPosition] = useState({ top: 0, left: 0 });
     const [isFocused, setIsFocused] = useState(false);
+    const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
+    const [searchValue, setSearchValue] = useState('');
 
     const isControlled = controlledValue !== undefined;
     const value = (isControlled ? controlledValue : internalValue) as CascaderValue;
@@ -56,6 +126,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
     const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (controlledOpen === undefined) {
@@ -63,7 +134,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       }
       onDropdownVisibleChange?.(newOpen);
       setIsFocused(newOpen);
-    }, [controlledOpen, onDropdownVisibleChange]);
+      if (newOpen && showSearch) {
+        setTimeout(() => searchInputRef.current?.focus(), 0);
+      }
+      if (!newOpen) {
+        setSearchValue('');
+      }
+    }, [controlledOpen, onDropdownVisibleChange, showSearch]);
 
     // Update position
     useEffect(() => {
@@ -76,6 +153,15 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       }
     }, [isOpen]);
 
+    // Sync first column when options change
+    useEffect(() => {
+      setActiveColumns((prev) => {
+        const next = [...prev];
+        next[0] = options;
+        return next;
+      });
+    }, [options]);
+
     // Build selected path from value
     useEffect(() => {
       if (value.length > 0) {
@@ -83,30 +169,86 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         let currentOptions = options;
 
         for (const val of value) {
-          const found = currentOptions.find((opt) => opt.value === val);
+          const found = currentOptions.find((opt) => getValue(opt, fieldNames) === val);
           if (found) {
             path.push(found);
-            if (found.children) {
-              currentOptions = found.children;
+            const children = getChildren(found, fieldNames);
+            if (children) {
+              currentOptions = children;
             }
           }
         }
         setSelectedPath(path);
       }
-    }, [value, options]);
+    }, [value, options, fieldNames]);
+
+    // ------ Async load helpers ------
+
+    const triggerLoadData = useCallback(async (option: CascaderOption, path: CascaderOption[]) => {
+      if (!loadData) return;
+      const key = getValue(option, fieldNames);
+      setLoadingKeys((prev) => new Set(prev).add(key));
+      try {
+        await loadData([...path, option]);
+      } finally {
+        setLoadingKeys((prev) => {
+          const next = new Set(prev);
+          next.delete(key);
+          return next;
+        });
+      }
+    }, [loadData, fieldNames]);
+
+    // ------ Expand / Select ------
+
+    const handleOptionHover = (option: CascaderOption, columnIndex: number) => {
+      if (expandTrigger !== 'hover' || option.disabled) return;
+      expandOption(option, columnIndex);
+    };
 
     const handleOptionClick = (option: CascaderOption, columnIndex: number) => {
       if (option.disabled) return;
 
+      if (expandTrigger === 'click') {
+        expandOption(option, columnIndex);
+      }
+
+      // If leaf node, select it
+      if (optionIsLeaf(option, fieldNames) && !loadData) {
+        const newPath = [...selectedPath.slice(0, columnIndex), option];
+        const newValue = newPath.map((opt) => getValue(opt, fieldNames)) as CascaderValue;
+        if (!isControlled) {
+          setInternalValue(newValue);
+        }
+        setSelectedPath(newPath);
+        onChange?.(newValue, newPath);
+        handleOpenChange(false);
+        setActiveColumns([options]);
+      }
+    };
+
+    const expandOption = async (option: CascaderOption, columnIndex: number) => {
       const newPath = [...selectedPath.slice(0, columnIndex), option];
       setSelectedPath(newPath);
 
-      if (option.children && option.children.length > 0) {
-        const newColumns = [...activeColumns.slice(0, columnIndex + 1), option.children];
+      const children = getChildren(option, fieldNames);
+
+      // Async load if no children and loadData provided
+      if (!children && !optionIsLeaf(option, fieldNames) && loadData) {
+        await triggerLoadData(option, selectedPath.slice(0, columnIndex));
+        const loadedChildren = getChildren(option, fieldNames);
+        if (loadedChildren && loadedChildren.length > 0) {
+          setActiveColumns([...activeColumns.slice(0, columnIndex + 1), loadedChildren]);
+        }
+        return;
+      }
+
+      if (children && children.length > 0) {
+        const newColumns = [...activeColumns.slice(0, columnIndex + 1), children];
         setActiveColumns(newColumns);
-      } else {
+      } else if (!loadData) {
         // Leaf node - complete selection
-        const newValue = newPath.map((opt) => opt.value) as CascaderValue;
+        const newValue = newPath.map((opt) => getValue(opt, fieldNames)) as CascaderValue;
         if (!isControlled) {
           setInternalValue(newValue);
         }
@@ -124,6 +266,30 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       setSelectedPath([]);
       setActiveColumns([options]);
       onChange?.([], []);
+    };
+
+    // ------ Search ------
+
+    const flatOptions = useMemo(
+      () => (showSearch ? flattenOptions(options, fieldNames) : []),
+      [options, fieldNames, showSearch],
+    );
+
+    const filteredFlatOptions = useMemo(() => {
+      if (!searchValue) return flatOptions;
+      const lower = searchValue.toLowerCase();
+      return flatOptions.filter((fo) =>
+        fo.labels.some((l) => l.toLowerCase().includes(lower)),
+      );
+    }, [flatOptions, searchValue]);
+
+    const handleSearchSelect = (fo: FlatOption) => {
+      if (!isControlled) {
+        setInternalValue(fo.values as CascaderValue);
+      }
+      setSelectedPath(fo.path);
+      onChange?.(fo.values as CascaderValue, fo.path);
+      handleOpenChange(false);
     };
 
     // Click outside
@@ -147,7 +313,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
     const getDisplayValue = () => {
       if (selectedPath.length === 0) return '';
-      const labels = selectedPath.map((opt) => String(opt.label));
+      const labels = selectedPath.map((opt) => String(getLabel(opt, fieldNames)));
       if (displayRender) {
         return displayRender(labels, selectedPath);
       }
@@ -220,10 +386,29 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       top: position.top,
       left: position.left,
       display: 'flex',
+      flexDirection: 'column',
       backgroundColor: 'var(--ds-cascader-dropdown-bg)',
       borderRadius: 'var(--ds-cascader-dropdown-radius)',
-      boxShadow: 'var(--ds-cascader-dropdown-shadow)',
+      boxShadow: 'var(--ds-card-shadow, var(--ds-cascader-dropdown-shadow))',
       zIndex: 1050,
+      animation: 'rottay-cascader-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
+      transformOrigin: 'top left',
+    };
+
+    const searchContainerStyle: React.CSSProperties = {
+      padding: '8px',
+      borderBottom: '1px solid var(--ds-cascader-menu-border)',
+    };
+
+    const searchInputStyle: React.CSSProperties = {
+      width: '100%',
+      padding: '6px 10px',
+      border: '1px solid var(--ds-cascader-border)',
+      borderRadius: 'var(--ds-cascader-radius)',
+      fontSize: 'var(--ds-font-size-sm)',
+      outline: 'none',
+      backgroundColor: 'var(--ds-cascader-bg)',
+      transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
     };
 
     const menuStyle = (colIndex: number, totalCols: number): React.CSSProperties => ({
@@ -245,7 +430,9 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       justifyContent: 'space-between',
       alignItems: 'center',
       fontSize: 'var(--ds-font-size-sm)',
-      transition: 'background-color 0.15s',
+      transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
+      borderLeft: isSelected ? '3px solid var(--ds-color-primary, #1677ff)' : '3px solid transparent',
+      fontWeight: isSelected ? 600 : 'normal',
     });
 
     const emptyStyle: React.CSSProperties = {
@@ -255,6 +442,18 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       fontSize: 'var(--ds-font-size-sm)',
     };
 
+    const spinnerStyle: React.CSSProperties = {
+      display: 'inline-block',
+      width: '12px',
+      height: '12px',
+      border: '2px solid var(--ds-cascader-arrow-color)',
+      borderTopColor: 'transparent',
+      borderRadius: '50%',
+      animation: 'rottay-cascader-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+    };
+
+    const isSearchMode = showSearch && searchValue.length > 0;
+
     const dropdownContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div
@@ -262,44 +461,133 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           className="rottay-cascader__dropdown"
           style={dropdownStyle}
         >
-          {activeColumns.map((column, colIndex) => (
+          {/* Search input */}
+          {showSearch && (
+            <div style={searchContainerStyle}>
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                style={searchInputStyle}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--ds-color-primary, #1677ff)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--ds-cascader-border)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              />
+            </div>
+          )}
+
+          {isSearchMode ? (
+            /* Flat search results */
             <ul
-              key={colIndex}
               className="rottay-cascader__menu"
-              style={menuStyle(colIndex, activeColumns.length)}
+              style={{
+                listStyle: 'none',
+                margin: 0,
+                padding: '4px 0',
+                minWidth: '240px',
+                maxHeight: 'var(--ds-cascader-menu-height)',
+                overflowY: 'auto',
+              }}
             >
-              {column.length > 0 ? (
-                column.map((option) => {
-                  const isSelected = selectedPath[colIndex]?.value === option.value;
-                  return (
-                    <li
-                      key={String(option.value)}
-                      className="rottay-cascader__item"
-                      onClick={() => handleOptionClick(option, colIndex)}
-                      style={getItemStyle(isSelected, option.disabled)}
-                      onMouseEnter={(e) => {
-                        if (!option.disabled && !isSelected) {
-                          e.currentTarget.style.backgroundColor = 'var(--ds-cascader-item-bg-hover)';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isSelected) {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }
-                      }}
-                    >
-                      <span>{option.label}</span>
-                      {option.children && option.children.length > 0 && (
-                        <span style={{ color: 'var(--ds-cascader-arrow-color)' }}>›</span>
-                      )}
-                    </li>
-                  );
-                })
+              {filteredFlatOptions.length > 0 ? (
+                filteredFlatOptions.map((fo, idx) => (
+                  <li
+                    key={idx}
+                    className="rottay-cascader__item"
+                    onClick={() => handleSearchSelect(fo)}
+                    style={getItemStyle(false)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--ds-cascader-item-bg-hover)';
+                      e.currentTarget.style.borderLeft = '3px solid var(--ds-color-primary, #1677ff)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.borderLeft = '3px solid transparent';
+                    }}
+                  >
+                    <span>{fo.labels.join(' / ')}</span>
+                  </li>
+                ))
               ) : (
                 <li style={emptyStyle}>{notFoundContent}</li>
               )}
             </ul>
-          ))}
+          ) : (
+            /* Normal cascading columns */
+            <div style={{ display: 'flex' }}>
+              {activeColumns.map((column, colIndex) => (
+                <ul
+                  key={colIndex}
+                  className="rottay-cascader__menu"
+                  style={menuStyle(colIndex, activeColumns.length)}
+                >
+                  {column.length > 0 ? (
+                    column.map((option) => {
+                      const optValue = getValue(option, fieldNames);
+                      const optLabel = getLabel(option, fieldNames);
+                      const optChildren = getChildren(option, fieldNames);
+                      const isSelected = selectedPath[colIndex] && getValue(selectedPath[colIndex], fieldNames) === optValue;
+                      const isLoading = loadingKeys.has(optValue);
+                      const hasExpandIndicator = (optChildren && optChildren.length > 0) || (!optionIsLeaf(option, fieldNames) && loadData);
+
+                      return (
+                        <li
+                          key={String(optValue)}
+                          className="rottay-cascader__item"
+                          onClick={() => handleOptionClick(option, colIndex)}
+                          onMouseEnter={(e) => {
+                            handleOptionHover(option, colIndex);
+                            if (!option.disabled && !isSelected) {
+                              e.currentTarget.style.backgroundColor = 'var(--ds-cascader-item-bg-hover)';
+                              e.currentTarget.style.borderLeft = '3px solid var(--ds-color-primary, #1677ff)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isSelected) {
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                              e.currentTarget.style.borderLeft = '3px solid transparent';
+                            }
+                          }}
+                          style={getItemStyle(!!isSelected, option.disabled)}
+                        >
+                          <span>{optLabel}</span>
+                          {isLoading ? (
+                            <span style={spinnerStyle} />
+                          ) : (
+                            hasExpandIndicator && (
+                              <span style={{ color: 'var(--ds-cascader-arrow-color)' }}>›</span>
+                            )
+                          )}
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <li style={emptyStyle}>{notFoundContent}</li>
+                  )}
+                </ul>
+              ))}
+            </div>
+          )}
+
+          {/* Spinner + dropdown keyframes */}
+          <style>{`
+            @keyframes rottay-cascader-spin {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+            @keyframes rottay-cascader-dropdown-in {
+              from { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
+              to { opacity: 1; transform: scaleY(1) translateY(0); }
+            }
+          `}</style>
         </div>,
         document.body
       )

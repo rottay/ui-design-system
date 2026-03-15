@@ -26,10 +26,10 @@
  * - Addon before/after slots
  *
  * **CSS Custom Properties:**
- * - `--input-number-height` - Input height
- * - `--input-number-font-size` - Text size
- * - `--input-number-border-color` - Border color
- * - `--input-number-bg` - Background color
+ * - `--ds-input-number-height` - Input height
+ * - `--ds-input-number-font-size` - Text size
+ * - `--ds-input-number-border-color` - Border color
+ * - `--ds-input-number-bg` - Background color
  *
  * @example Basic InputNumber
  * ```tsx

@@ -196,17 +196,17 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
 
     // CSS variables for theming
     const countdownVars: React.CSSProperties = {
-      '--statistic-title-color': 'var(--color-text-secondary, #00000073)',
-      '--statistic-title-font-size': 'var(--font-size-sm, 14px)',
-      '--statistic-value-color': valueType === 'positive'
-        ? 'var(--color-success, #52c41a)'
+      '--ds-statistic-title-color': 'var(--ds-color-text-secondary)',
+      '--ds-statistic-title-font-size': 'var(--ds-font-size-sm, 14px)',
+      '--ds-statistic-value-color': valueType === 'positive'
+        ? 'var(--ds-color-success)'
         : valueType === 'negative'
-          ? 'var(--color-error, #ff4d4f)'
+          ? 'var(--ds-color-error)'
           : valueType === 'warning'
-            ? 'var(--color-warning, #faad14)'
-            : 'var(--color-text-primary, #000000e0)',
-      '--statistic-value-font-size': 'var(--font-size-2xl, 24px)',
-      '--statistic-value-font-weight': 'var(--font-weight-semibold, 600)',
+            ? 'var(--ds-color-warning)'
+            : 'var(--ds-color-text-primary)',
+      '--ds-statistic-value-font-size': 'var(--ds-font-size-2xl, 24px)',
+      '--ds-statistic-value-font-weight': 'var(--ds-font-weight-semibold, 600)',
     } as React.CSSProperties;
 
     const containerStyle: React.CSSProperties = {
@@ -215,16 +215,16 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     };
 
     const titleStyle: React.CSSProperties = {
-      fontSize: 'var(--statistic-title-font-size)',
-      color: 'var(--statistic-title-color)',
+      fontSize: 'var(--ds-statistic-title-font-size)',
+      color: 'var(--ds-statistic-title-color)',
       marginBottom: '4px',
     };
 
     const valueContainerStyle: React.CSSProperties = {
-      fontSize: 'var(--statistic-value-font-size)',
-      fontWeight: 'var(--statistic-value-font-weight)' as any,
-      color: 'var(--statistic-value-color)',
-      fontFamily: 'var(--font-family-mono, monospace)',
+      fontSize: 'var(--ds-statistic-value-font-size)',
+      fontWeight: 'var(--ds-statistic-value-font-weight)' as any,
+      color: 'var(--ds-statistic-value-color)',
+      fontFamily: 'var(--ds-font-family-mono, monospace)',
       ...valueStyle,
     };
 
@@ -232,8 +232,8 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     if (loading) {
       return (
         <div ref={ref} className={`rottay-statistic rottay-statistic--countdown rottay-statistic--loading ${className}`} style={containerStyle}>
-          <div style={{ height: '16px', width: '64px', marginBottom: '8px', background: '#f5f5f5', borderRadius: '4px' }} />
-          <div style={{ height: '32px', width: '120px', background: '#f5f5f5', borderRadius: '4px' }} />
+          <div style={{ height: '16px', width: '64px', marginBottom: '8px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
+          <div style={{ height: '32px', width: '120px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
         </div>
       );
     }

@@ -149,7 +149,8 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       whiteSpace: 'nowrap',
       opacity: visible ? 1 : 0,
       visibility: visible ? 'visible' : 'hidden',
-      transition: 'var(--ds-tooltip-transition, opacity 0.15s ease-in-out, visibility 0.15s ease-in-out)',
+      transform: visible ? 'scale(1)' : 'scale(0.95)',
+      transition: 'opacity 0.15s ease-out, visibility 0.15s ease-out, transform 0.15s ease-out',
       pointerEvents: visible ? 'auto' : 'none',
       ...style,
     };
