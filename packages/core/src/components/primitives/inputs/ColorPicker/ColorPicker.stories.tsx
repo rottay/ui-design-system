@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ColorPicker } from './';
 import type { Color, ColorFormat } from './ColorPicker.types';
-import { DesignSystemProvider } from '../../../../core/providers/root';
+import { DesignSystemProvider } from '../../../../design-system';
 import { EngineComparison, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof ColorPicker> = {

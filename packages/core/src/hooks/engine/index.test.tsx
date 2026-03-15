@@ -2,7 +2,7 @@ import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { EngineContext } from '../../core/providers/engine';
+import { EngineContext } from '../../engines';
 import { useEngine, useEngineContext } from '.';
 
 describe('useEngine hook', () => {

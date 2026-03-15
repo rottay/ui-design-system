@@ -26,7 +26,7 @@
 import { useMemo } from 'react';
 import { useTenant } from '../tenant';
 import { useProductProfile } from '../product-profile';
-import { useEngineContext } from '../../core/providers/engine';
+import { useEngineContext } from '../../engines';
 import { getEngineTokens } from './engine-tokens';
 import { DEFAULT_PERSONALITY } from './personality-defaults';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../contracts';

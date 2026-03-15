@@ -7,9 +7,9 @@
 
 import React, { ComponentType, useMemo } from 'react';
 import type { EngineName, TenantConfig, DesignTokens, ComponentExtensions, ExtensionHelpers } from '../../../types';
-import { useTenant } from '../../../core/hooks/tenant';
-import { useTokens } from '../../../core/hooks/tokens';
-import { useEngineContext } from '../../../core/providers/engine';
+import { useTenant } from '../../../hooks/tenant';
+import { useTokens } from '../../../hooks/tokens';
+import { useEngineContext } from '../../../engines';
 import { createExtensionHelpers } from './extensions';
 
 // Re-export primitives for use in presets

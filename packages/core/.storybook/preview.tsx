@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react-vite'
-import { ThemeProvider, EngineProvider } from '../src/core/providers';
+import { ThemeProvider } from '../src/theming';
+import { EngineProvider } from '../src/engines';
 import type { EngineName } from '../src/core/types/engine';
 import React from 'react';
 

@@ -75,7 +75,7 @@ import React, {
   ReactNode,
 } from 'react';
 import type { ThemeContextValue, ThemeConfig, TenantBranding } from '../contracts';
-import { errorInDev, warnInDev } from '../core/utils/runtime-logger';
+import { errorInDev, warnInDev } from '../utils/runtime-logger';
 
 // ─────────────────────────────────────────────────────────────────
 // COLOR HELPERS

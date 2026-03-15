@@ -8,7 +8,7 @@ import { useMotionPersonality } from '../use-motion-personality';
 import { useReducedMotion } from '../use-reduced-motion';
 import { useScrollProgress } from '../use-scroll-progress';
 import { useSmoothCounter } from '../use-smooth-counter';
-import { DesignSystemProvider } from '../../../core/providers/root';
+import { DesignSystemProvider } from '../../../design-system';
 
 class IntersectionObserverMock {
   callback: IntersectionObserverCallback;

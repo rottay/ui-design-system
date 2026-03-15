@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react';
 import type { Decorator } from '@storybook/react-vite';
 
-import { DesignSystemProvider } from '../../../core/providers/root';
+import { DesignSystemProvider } from '../../../design-system';
 import type { ProductProfileKey, TenantConfig } from '../../../contracts';
 import type { LocaleTranslations, SupportedLocale } from '../../../i18n/types';
 

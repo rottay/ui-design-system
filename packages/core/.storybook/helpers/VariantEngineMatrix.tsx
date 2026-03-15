@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { EngineProvider } from '../../src/core/providers';
+import { EngineProvider } from '../../src/engines';
 import type { EngineName } from '../types/engine';
 import { EngineLabel } from './EngineLabel';
 

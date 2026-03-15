@@ -5,4 +5,4 @@
  * provider implementation details.
  */
 
-export { useProductProfileContext as useProductProfile } from '../../core/providers/product-profile';
+export { useProductProfileContext as useProductProfile } from '../../product-profiles';

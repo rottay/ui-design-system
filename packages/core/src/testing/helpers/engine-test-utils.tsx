@@ -5,7 +5,7 @@
 
 import React, { ReactElement, Suspense } from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import { DesignSystemProvider } from '../../core/providers';
+import { DesignSystemProvider } from '../../design-system';
 import type { EngineName, TenantConfig } from '../../contracts';
 
 /**

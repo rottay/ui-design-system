@@ -11,7 +11,10 @@
 // CORE (Engines, Providers, Types, Errors)
 // ============================================
 export * from './engines';
-export * from './core/providers';
+export { ThemeProvider, ThemeContext } from './theming';
+export type { ThemeProviderProps, ThemeConfig, ThemeContextValue } from './theming';
+export * from './features';
+export * from './design-system';
 export * from './contracts';
 export * from './errors';
 

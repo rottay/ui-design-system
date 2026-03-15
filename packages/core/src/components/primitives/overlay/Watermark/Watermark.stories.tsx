@@ -9,7 +9,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Watermark } from './';
-import { DesignSystemProvider } from '../../../../core/providers/root';
+import { DesignSystemProvider } from '../../../../design-system';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 /**

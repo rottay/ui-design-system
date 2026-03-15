@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, waitFor, within } from '@testing-librar
 import { notification as antNotification } from 'antd';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../../../core/utils/runtime-logger', () => ({
+vi.mock('../../../../utils/runtime-logger', () => ({
   warnOnceInDev: vi.fn(),
 }));
 

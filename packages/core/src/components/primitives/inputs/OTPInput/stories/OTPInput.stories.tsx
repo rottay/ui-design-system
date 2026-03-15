@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { OTPInput } from '../';
-import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { DesignSystemProvider } from '../../../../../design-system';
 
 const meta: Meta<typeof OTPInput> = {
   title: 'Primitives/Inputs/OTPInput',

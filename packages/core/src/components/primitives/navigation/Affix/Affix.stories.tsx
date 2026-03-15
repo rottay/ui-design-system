@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState, useRef } from 'react';
 import { Affix } from './';
-import { DesignSystemProvider } from '../../../../core/providers/root';
+import { DesignSystemProvider } from '../../../../design-system';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Affix> = {

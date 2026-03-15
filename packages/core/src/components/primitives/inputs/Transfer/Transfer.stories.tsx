@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Transfer } from './';
 import type { TransferItem } from './types';
-import { DesignSystemProvider } from '../../../../core/providers/root';
+import { DesignSystemProvider } from '../../../../design-system';
 import { EngineComparison } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Transfer> = {
