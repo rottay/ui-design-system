@@ -201,9 +201,9 @@
 /* Disabled Button */
 .ds-btn:disabled,
 .ds-btn--disabled {
-  background-color: var(--ds-button-disabled-bg) !important;
-  border-color: var(--ds-button-disabled-border) !important;
-  color: var(--ds-button-disabled-color) !important;
+  background-color: var(--ds-button-disabled-bg);
+  border-color: var(--ds-button-disabled-border);
+  color: var(--ds-button-disabled-color);
   opacity: var(--ds-button-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;

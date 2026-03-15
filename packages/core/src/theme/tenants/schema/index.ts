@@ -4,7 +4,7 @@
  */
 
 import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../../core/types';
-import type { SupportedLocale } from '../../i18n/types';
+import type { SupportedLocale } from '../../../i18n/types';
 
 /**
  * Validate tenant branding

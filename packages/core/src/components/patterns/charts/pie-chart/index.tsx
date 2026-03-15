@@ -3,8 +3,8 @@
 import { memo, useEffect, useRef } from 'react';
 import { arc, interpolate, pie, select, sum, type PieArcDatum } from 'd3';
 
-import type { ChartBaseProps, DataPoint } from '../types';
-import { DEFAULT_COLORS } from '../types';
+import type { ChartBaseProps, DataPoint } from '../Charts.types';
+import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
-import type { TreeViewProps } from '../types';
+import type { TreeViewProps } from '../TreeView.types';
 import ClassicTreeView from '../engines/classic';
 import ModernTreeView from '../engines/modern';
 import RusticTreeView from '../engines/rustic';

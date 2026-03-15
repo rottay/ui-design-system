@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { UserProfileCardProps } from './types';
+import type { UserProfileCardProps } from './UserProfileCard.types';
 
-export type { UserProfileCardProps, UserProfile, ProfileAction } from './types';
+export type { UserProfileCardProps, UserProfile, ProfileAction } from './UserProfileCard.types';
 
 export const PatternUserProfileCard = createEngineComponent<UserProfileCardProps>(
   'PatternUserProfileCard',

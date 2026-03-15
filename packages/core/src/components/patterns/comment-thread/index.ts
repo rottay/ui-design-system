@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { CommentThreadProps } from './types';
+import type { CommentThreadProps } from './CommentThread.types';
 
-export type { CommentThreadProps, Comment, CommentReaction } from './types';
+export type { CommentThreadProps, Comment, CommentReaction } from './CommentThread.types';
 
 export const PatternCommentThread = createEngineComponent<CommentThreadProps>(
   'PatternCommentThread',

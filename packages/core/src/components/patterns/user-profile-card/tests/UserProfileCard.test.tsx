@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { UserProfileCardProps } from '../types';
+import type { UserProfileCardProps } from '../UserProfileCard.types';
 import ClassicUserProfileCard from '../engines/classic';
 import ModernUserProfileCard from '../engines/modern';
 import RusticUserProfileCard from '../engines/rustic';

@@ -15,7 +15,7 @@ import {
   TypingIndicator,
   type AssistantMessagePart,
 } from '../../patterns';
-import { FadeIn, StaggerChildren } from '../../../animations';
+import { FadeIn, StaggerChildren } from '../../../motion';
 import { useSurfaceTranslations } from '../i18n';
 import { useSurfaceProfileDefaults } from '../profile-defaults';
 import { useSurfaceResponsiveLayout } from '../responsive';

@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { EnvironmentToggleProps } from './types';
+import type { EnvironmentToggleProps } from './EnvironmentToggle.types';
 
-export type { EnvironmentToggleProps, EnvironmentDef } from './types';
+export type { EnvironmentToggleProps, EnvironmentDef } from './EnvironmentToggle.types';
 
 export const PatternEnvironmentToggle = createEngineComponent<EnvironmentToggleProps>(
   'PatternEnvironmentToggle',

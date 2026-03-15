@@ -25,9 +25,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { TenantPreviewProps } from './types';
+import type { TenantPreviewProps } from './TenantPreview.types';
 
-export type { TenantPreviewProps, PreviewComponent } from './types';
+export type { TenantPreviewProps, PreviewComponent } from './TenantPreview.types';
 
 export const PatternTenantPreview = createEngineComponent<TenantPreviewProps>(
   'PatternTenantPreview',

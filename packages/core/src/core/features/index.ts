@@ -1,3 +1,2 @@
-// packages/core/src/system/features/index.ts
-export * from './gate';
-export * from './flags';
+/** @deprecated Import from 'features/' instead */
+export * from '../../features/FeatureGate';

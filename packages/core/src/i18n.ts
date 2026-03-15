@@ -5,4 +5,4 @@
  * path for locale helpers without having to reach into theme internals.
  */
 
-export * from './theme/i18n';
+export * from './i18n/index';

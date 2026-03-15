@@ -4,7 +4,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { ShortcutsOverlayProps } from '../types';
+import type { ShortcutsOverlayProps } from '../ShortcutsOverlay.types';
 import ClassicShortcutsOverlay from '../engines/classic';
 import ModernShortcutsOverlay from '../engines/modern';
 import RusticShortcutsOverlay from '../engines/rustic';

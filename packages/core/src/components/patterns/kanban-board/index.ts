@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { KanbanBoardProps } from './types';
+import type { KanbanBoardProps } from './KanbanBoard.types';
 
-export type { KanbanBoardProps } from './types';
+export type { KanbanBoardProps } from './KanbanBoard.types';
 export type { KanbanColumnDef } from '../types';
 
 export const PatternKanbanBoard = createEngineComponent<KanbanBoardProps<any>>(

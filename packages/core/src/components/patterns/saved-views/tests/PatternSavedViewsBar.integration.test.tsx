@@ -1,10 +1,10 @@
 import React from 'react';
-import { fireEvent, screen, within } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { SavedViewsBarProps, SavedView } from '../types';
+import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 import ClassicSavedViewsBar from '../engines/classic';
 import ModernSavedViewsBar from '../engines/modern';
 import RusticSavedViewsBar from '../engines/rustic';
@@ -56,7 +56,7 @@ describe('PatternSavedViewsBar integration', () => {
   describe('view selection', () => {
     it.each(STABLE_ENGINES)(
       'highlights the active view and switches on click through the %s engine',
-      (engine) => {
+      async (engine) => {
         const Component = COMPONENTS[engine];
         const onViewSelect = vi.fn();
 
@@ -140,7 +140,7 @@ describe('PatternSavedViewsBar integration', () => {
   describe('rename view', () => {
     it.each(STABLE_ENGINES)(
       'shows rename option in context menu through the %s engine',
-      (engine) => {
+      async (engine) => {
         const Component = COMPONENTS[engine];
         const onViewRename = vi.fn();
 
@@ -157,7 +157,9 @@ describe('PatternSavedViewsBar integration', () => {
         );
 
         const optionsBtn = screen.getByLabelText('Active Only options');
-        fireEvent.click(optionsBtn);
+        await act(async () => {
+          fireEvent.click(optionsBtn);
+        });
 
         expect(screen.getByText('Rename')).toBeInTheDocument();
       }
@@ -167,7 +169,7 @@ describe('PatternSavedViewsBar integration', () => {
   describe('delete view', () => {
     it.each(STABLE_ENGINES)(
       'shows delete option for non-default views through the %s engine',
-      (engine) => {
+      async (engine) => {
         const Component = COMPONENTS[engine];
         const onViewDelete = vi.fn();
 
@@ -183,7 +185,9 @@ describe('PatternSavedViewsBar integration', () => {
         );
 
         const optionsBtn = screen.getByLabelText('Active Only options');
-        fireEvent.click(optionsBtn);
+        await act(async () => {
+          fireEvent.click(optionsBtn);
+        });
 
         expect(screen.getByText('Delete')).toBeInTheDocument();
       }
@@ -191,7 +195,7 @@ describe('PatternSavedViewsBar integration', () => {
 
     it.each(STABLE_ENGINES)(
       'does not show delete for default view through the %s engine',
-      (engine) => {
+      async (engine) => {
         const Component = COMPONENTS[engine];
 
         renderWithEngine(
@@ -205,7 +209,9 @@ describe('PatternSavedViewsBar integration', () => {
         );
 
         const optionsBtn = screen.getByLabelText('All Items options');
-        fireEvent.click(optionsBtn);
+        await act(async () => {
+          fireEvent.click(optionsBtn);
+        });
 
         const allItemsTab = screen.getByTestId('view-tab-view-1');
         const deleteInDefault = within(allItemsTab).queryByText('Delete');

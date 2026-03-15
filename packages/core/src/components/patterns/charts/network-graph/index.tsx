@@ -12,8 +12,8 @@ import {
   type SimulationNodeDatum,
 } from 'd3';
 
-import type { ChartBaseProps } from '../types';
-import { DEFAULT_COLORS } from '../types';
+import type { ChartBaseProps } from '../Charts.types';
+import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 

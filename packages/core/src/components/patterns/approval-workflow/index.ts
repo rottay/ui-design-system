@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { ApprovalWorkflowProps } from './types';
+import type { ApprovalWorkflowProps } from './ApprovalWorkflow.types';
 
-export type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from './types';
+export type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from './ApprovalWorkflow.types';
 
 export const PatternApprovalWorkflow = createEngineComponent<ApprovalWorkflowProps>(
   'PatternApprovalWorkflow',

@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import ClassicMapView from '../engines/classic';
 import ModernMapView from '../engines/modern';
 import RusticMapView from '../engines/rustic';
-import type { MapMarker, MapViewProps } from '../types';
+import type { MapMarker, MapViewProps } from '../MapView.types';
 
 type Venue = {
   city: string;

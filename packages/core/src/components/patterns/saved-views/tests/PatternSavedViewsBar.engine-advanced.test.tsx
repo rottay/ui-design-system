@@ -1,10 +1,10 @@
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { SavedViewsBarProps, SavedView } from '../types';
+import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 import ClassicSavedViewsBar from '../engines/classic';
 import ModernSavedViewsBar from '../engines/modern';
 import RusticSavedViewsBar from '../engines/rustic';
@@ -55,7 +55,7 @@ function createBarProps(
 describe('PatternSavedViewsBar advanced engine coverage', () => {
   it.each(STABLE_ENGINES)(
     'covers loading state through the %s engine',
-    (engine) => {
+    async (engine) => {
       const Component = COMPONENTS[engine];
       renderWithEngine(<Component {...createBarProps()} loading />, engine);
 
@@ -122,7 +122,7 @@ describe('PatternSavedViewsBar advanced engine coverage', () => {
 
   it.each(STABLE_ENGINES)(
     'shows context menu with options through the %s engine',
-    (engine) => {
+    async (engine) => {
       const Component = COMPONENTS[engine];
       const onViewDelete = vi.fn();
 
@@ -140,7 +140,9 @@ describe('PatternSavedViewsBar advanced engine coverage', () => {
 
       // Find the options button for "Active Only" (view-2, not default)
       const optionsBtn = screen.getByLabelText('Active Only options');
-      fireEvent.click(optionsBtn);
+      await act(async () => {
+        fireEvent.click(optionsBtn);
+      });
 
       // Should show Rename, Duplicate, Delete options
       expect(screen.getByText('Rename')).toBeInTheDocument();
@@ -151,7 +153,7 @@ describe('PatternSavedViewsBar advanced engine coverage', () => {
 
   it.each(STABLE_ENGINES)(
     'respects allowCreate=false through the %s engine',
-    (engine) => {
+    async (engine) => {
       const Component = COMPONENTS[engine];
 
       renderWithEngine(
@@ -196,7 +198,7 @@ describe('PatternSavedViewsBar advanced engine coverage', () => {
 
   it.each(STABLE_ENGINES)(
     'does not show delete for default view through the %s engine',
-    (engine) => {
+    async (engine) => {
       const Component = COMPONENTS[engine];
 
       renderWithEngine(
@@ -211,7 +213,9 @@ describe('PatternSavedViewsBar advanced engine coverage', () => {
 
       // Open menu for the default view ("All Items")
       const optionsBtn = screen.getByLabelText('All Items options');
-      fireEvent.click(optionsBtn);
+      await act(async () => {
+        fireEvent.click(optionsBtn);
+      });
 
       // Rename and Duplicate should appear, but Delete should not
       expect(screen.getByText('Rename')).toBeInTheDocument();

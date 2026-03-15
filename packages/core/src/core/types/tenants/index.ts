@@ -6,7 +6,7 @@
 import type { EngineName } from '../engine';
 import type { PersonalityTokens } from '../tokens/personality';
 import type { SurfaceTokens, MotionTokens } from '../tokens';
-import type { LocaleTranslations, SupportedLocale } from '../../../theme/i18n/types';
+import type { LocaleTranslations, SupportedLocale } from '../../../i18n/types';
 
 export type TenantPlan = 'starter' | 'pro' | 'enterprise';
 

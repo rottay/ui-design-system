@@ -50,17 +50,14 @@
  * @package @rottay/design-system
  */
 
-export { EngineProvider, EngineContext } from './engine';
-export type { EngineProviderProps } from './engine';
+export { EngineProvider, EngineContext } from '../../engines/EngineProvider';
+export type { EngineProviderProps } from '../../engines/EngineProvider';
 
 export { ThemeProvider, ThemeContext } from './theme';
 export type { ThemeProviderProps } from './theme';
 
-export { TenantProvider, TenantContext } from './tenant';
-export type { TenantProviderProps } from './tenant';
-
-export { ProductProfileProvider, ProductProfileContext } from './product-profile';
-export type { ProductProfileProviderProps } from './product-profile';
+// TenantProvider -- exported from src/tenancy/, not re-exported here
+// ProductProfileProvider -- exported from src/product-profiles/, not re-exported here
 
 export { FeatureProvider, FeatureContext } from './features';
 export type { FeatureProviderProps } from './features';

@@ -18,7 +18,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../primitives';
 import { PatternDataTable, PatternFilterPanel } from '../../patterns';
-import { FadeIn, StaggerChildren } from '../../../animations';
+import { FadeIn, StaggerChildren } from '../../../motion';
 import {
   countActiveFilters,
   resolveSurfaceAction,

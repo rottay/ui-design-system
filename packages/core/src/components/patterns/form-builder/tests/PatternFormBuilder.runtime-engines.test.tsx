@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import type { FormBuilderProps } from '../types';
+import type { FormBuilderProps } from '../FormBuilder.types';
 import ClassicFormBuilder from '../engines/classic';
 import ModernFormBuilder from '../engines/modern';
 import RusticFormBuilder from '../engines/rustic';

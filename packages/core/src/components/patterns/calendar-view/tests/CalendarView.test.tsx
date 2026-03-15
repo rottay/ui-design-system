@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { CalendarViewProps, CalendarEvent } from '../types';
+import type { CalendarViewProps, CalendarEvent } from '../CalendarView.types';
 import ClassicCalendarView from '../engines/classic';
 import ModernCalendarView from '../engines/modern';
 import RusticCalendarView from '../engines/rustic';

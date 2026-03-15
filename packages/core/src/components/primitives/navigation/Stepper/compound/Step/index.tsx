@@ -206,28 +206,28 @@ export function StepperStep({
     switch (s) {
       case 'finish':
         return {
-          bg: 'var(--ds-stepper-icon-finish-bg, #1677ff)',
-          color: 'var(--ds-stepper-icon-finish-color, #fff)',
-          border: 'var(--ds-stepper-icon-finish-border, #1677ff)',
+          bg: 'var(--ds-stepper-icon-finish-bg, var(--ds-color-primary))',
+          color: 'var(--ds-stepper-icon-finish-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)))',
+          border: 'var(--ds-stepper-icon-finish-border, var(--ds-color-primary))',
         };
       case 'process':
         return {
-          bg: 'var(--ds-stepper-icon-process-bg, #1677ff)',
-          color: 'var(--ds-stepper-icon-process-color, #fff)',
-          border: 'var(--ds-stepper-icon-process-border, #1677ff)',
+          bg: 'var(--ds-stepper-icon-process-bg, var(--ds-color-primary))',
+          color: 'var(--ds-stepper-icon-process-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)))',
+          border: 'var(--ds-stepper-icon-process-border, var(--ds-color-primary))',
         };
       case 'error':
         return {
-          bg: 'var(--ds-stepper-icon-error-bg, #fff)',
-          color: 'var(--ds-stepper-icon-error-color, #ff4d4f)',
-          border: 'var(--ds-stepper-icon-error-border, #ff4d4f)',
+          bg: 'var(--ds-stepper-icon-error-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
+          color: 'var(--ds-stepper-icon-error-color, var(--ds-color-error))',
+          border: 'var(--ds-stepper-icon-error-border, var(--ds-color-error))',
         };
       case 'wait':
       default:
         return {
-          bg: 'var(--ds-stepper-icon-wait-bg, #fff)',
-          color: 'var(--ds-stepper-icon-wait-color, rgba(0, 0, 0, 0.45))',
-          border: 'var(--ds-stepper-icon-wait-border, rgba(0, 0, 0, 0.25))',
+          bg: 'var(--ds-stepper-icon-wait-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
+          color: 'var(--ds-stepper-icon-wait-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))',
+          border: 'var(--ds-stepper-icon-wait-border, var(--ds-color-border-secondary, var(--ds-color-border-primary)))',
         };
     }
   };
@@ -300,10 +300,10 @@ export function StepperStep({
     fontSize: fontSize.title,
     fontWeight: 500,
     color: status === 'error'
-      ? 'var(--ds-stepper-title-error-color, #ff4d4f)'
+      ? 'var(--ds-stepper-title-error-color, var(--ds-color-error))'
       : status === 'process'
-        ? 'var(--ds-stepper-title-process-color, rgba(0, 0, 0, 0.88))'
-        : 'var(--ds-stepper-title-color, rgba(0, 0, 0, 0.88))',
+        ? 'var(--ds-stepper-title-process-color, var(--ds-color-text-primary, var(--ds-color-text)))'
+        : 'var(--ds-stepper-title-color, var(--ds-color-text-primary, var(--ds-color-text)))',
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
@@ -312,13 +312,13 @@ export function StepperStep({
 
   const subTitleStyle: CSSProperties = {
     fontSize: fontSize.description,
-    color: 'var(--ds-stepper-subtitle-color, rgba(0, 0, 0, 0.45))',
+    color: 'var(--ds-stepper-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))',
     marginLeft: '8px',
   };
 
   const descriptionStyle: CSSProperties = {
     fontSize: fontSize.description,
-    color: 'var(--ds-stepper-description-color, rgba(0, 0, 0, 0.45))',
+    color: 'var(--ds-stepper-description-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))',
   };
 
   // Connector line style (horizontal or vertical)
@@ -327,8 +327,8 @@ export function StepperStep({
     minWidth: '32px',
     height: '1px',
     backgroundColor: status === 'finish'
-      ? 'var(--ds-stepper-connector-finish-color, #1677ff)'
-      : 'var(--ds-stepper-connector-color, rgba(0, 0, 0, 0.06))',
+      ? 'var(--ds-stepper-connector-finish-color, var(--ds-color-primary))'
+      : 'var(--ds-stepper-connector-color, var(--ds-color-border-secondary, var(--ds-color-border-primary)))',
     margin: '0 8px',
     alignSelf: 'center',
     transition: 'background-color 0.3s ease',
@@ -336,8 +336,8 @@ export function StepperStep({
     width: '1px',
     minHeight: '32px',
     backgroundColor: status === 'finish'
-      ? 'var(--ds-stepper-connector-finish-color, #1677ff)'
-      : 'var(--ds-stepper-connector-color, rgba(0, 0, 0, 0.06))',
+      ? 'var(--ds-stepper-connector-finish-color, var(--ds-color-primary))'
+      : 'var(--ds-stepper-connector-color, var(--ds-color-border-secondary, var(--ds-color-border-primary)))',
     marginLeft: `${iconSize / 2}px`,
     marginTop: '4px',
     marginBottom: '4px',

@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import ClassicStepWizard from '../engines/classic';
 import ModernStepWizard from '../engines/modern';
 import RusticStepWizard from '../engines/rustic';
-import type { StepWizardProps } from '../types';
+import type { StepWizardProps } from '../StepWizard.types';
 
 const ENGINE_COMPONENTS = [
   ['classic', ClassicStepWizard],

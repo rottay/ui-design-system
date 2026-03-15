@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { ActivityLogProps } from './types';
+import type { ActivityLogProps } from './ActivityLog.types';
 
-export type { ActivityLogProps, Activity, ActivityFilter } from './types';
+export type { ActivityLogProps, Activity, ActivityFilter } from './ActivityLog.types';
 
 export const PatternActivityLog = createEngineComponent<ActivityLogProps>(
   'PatternActivityLog',

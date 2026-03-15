@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { StepWizardProps } from './types';
+import type { StepWizardProps } from './StepWizard.types';
 
-export type { StepWizardProps, WizardStep } from './types';
+export type { StepWizardProps, WizardStep } from './StepWizard.types';
 
 export const PatternStepWizard = createEngineComponent<StepWizardProps>(
   'PatternStepWizard',

@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { TimelinePatternProps } from './types';
+import type { TimelinePatternProps } from './Timeline.types';
 
-export type { TimelinePatternProps, TimelineItem } from './types';
+export type { TimelinePatternProps, TimelineItem } from './Timeline.types';
 
 export const PatternTimeline = createEngineComponent<TimelinePatternProps<any>>(
   'PatternTimeline',

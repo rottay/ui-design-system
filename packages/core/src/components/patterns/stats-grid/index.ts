@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { StatsGridProps } from './types';
+import type { StatsGridProps } from './StatsGrid.types';
 
-export type { StatsGridProps } from './types';
+export type { StatsGridProps } from './StatsGrid.types';
 
 export const PatternStatsGrid = createEngineComponent<StatsGridProps>(
   'PatternStatsGrid',

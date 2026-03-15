@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { WorkspaceSwitcherProps } from '../types';
+import type { WorkspaceSwitcherProps } from '../WorkspaceSwitcher.types';
 import ClassicWorkspaceSwitcher from '../engines/classic';
 import ModernWorkspaceSwitcher from '../engines/modern';
 import RusticWorkspaceSwitcher from '../engines/rustic';

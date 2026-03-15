@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { FilterBuilderProps, FilterGroup, FilterFieldDefinition } from '../types';
+import type { FilterBuilderProps, FilterGroup, FilterFieldDefinition } from '../FilterBuilder.types';
 import ClassicFilterBuilder from '../engines/classic';
 import ModernFilterBuilder from '../engines/modern';
 import RusticFilterBuilder from '../engines/rustic';

@@ -101,7 +101,7 @@
 
 import React from 'react';
 import { createEngineComponent } from '../../../../core/engines/factory';
-import { useEngineContext } from '../../../../core/providers/engine';
+import { useEngineContext } from '../../../../engines/EngineProvider';
 import type { EngineName } from '../../../../core/types';
 import type {
   FormProps,

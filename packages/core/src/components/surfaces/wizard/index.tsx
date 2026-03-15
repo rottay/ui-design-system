@@ -16,7 +16,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Card, Flex, Grid, Stack, Text } from '../../primitives';
 import { PatternFormBuilder, PatternStepWizard } from '../../patterns';
-import { FadeIn, SlideIn } from '../../../animations';
+import { FadeIn, SlideIn } from '../../../motion';
 import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../helpers';
 import { useSurfaceTranslations } from '../i18n';
 import { useSurfaceProfileDefaults } from '../profile-defaults';

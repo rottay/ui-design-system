@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { FilterPanelProps } from './types';
+import type { FilterPanelProps } from './FilterPanel.types';
 
-export type { FilterPanelProps } from './types';
+export type { FilterPanelProps } from './FilterPanel.types';
 export type { FilterDef } from '../types';
 
 export const PatternFilterPanel = createEngineComponent<FilterPanelProps>(

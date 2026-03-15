@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { EnvironmentToggleProps } from '../types';
+import type { EnvironmentToggleProps } from '../EnvironmentToggle.types';
 import ClassicEnvironmentToggle from '../engines/classic';
 import ModernEnvironmentToggle from '../engines/modern';
 import RusticEnvironmentToggle from '../engines/rustic';

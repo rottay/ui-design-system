@@ -210,8 +210,8 @@ export type {
   DataPoint,
   SeriesDataPoint,
   Series,
-} from './charts/types';
-export { DEFAULT_COLORS, DEFAULT_MARGIN } from './charts/types';
+} from './charts/Charts.types';
+export { DEFAULT_COLORS, DEFAULT_MARGIN } from './charts/Charts.types';
 
 // === Hooks & Utilities ===
 export {

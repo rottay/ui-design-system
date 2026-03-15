@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { PageShellProps } from './types';
+import type { PageShellProps } from './PageShell.types';
 
-export type { PageShellProps } from './types';
+export type { PageShellProps } from './PageShell.types';
 
 export const PatternPageShell = createEngineComponent<PageShellProps>(
   'PatternPageShell',

@@ -1,32 +1,8 @@
 /**
- * @file Descriptions - Engine Implementations
- * @description Exports all engine implementations for the Descriptions component.
- * Each engine provides a different rendering strategy while maintaining
- * consistent API and functionality.
+ * @deprecated This barrel file is no longer needed.
+ * Engines are imported directly from flat files (classic.tsx, modern.tsx, rustic.tsx).
+ * This file will be removed in a future cleanup pass.
  */
-
 export { default as classic } from './classic';
 export { default as modern } from './modern';
 export { default as rustic } from './rustic';
-
-// Named exports for direct engine access
-export {
-  ClassicDescriptions,
-  ClassicItem,
-  Descriptions as ClassicDescriptionsAlias,
-  Item as ClassicItemAlias,
-} from './classic';
-
-export {
-  ModernDescriptions,
-  ModernItem,
-  Descriptions as ModernDescriptionsAlias,
-  Item as ModernItemAlias,
-} from './modern';
-
-export {
-  RusticDescriptions,
-  RusticItem,
-  Descriptions as RusticDescriptionsAlias,
-  Item as RusticItemAlias,
-} from './rustic';

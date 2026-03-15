@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import ClassicPageShell from '../engines/classic';
 import ModernPageShell from '../engines/modern';
 import RusticPageShell from '../engines/rustic';
-import type { PageShellProps } from '../types';
+import type { PageShellProps } from '../PageShell.types';
 
 const ENGINE_COMPONENTS = [
   ['classic', ClassicPageShell],

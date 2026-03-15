@@ -8,7 +8,7 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { FilterBuilderProps } from './types';
+import type { FilterBuilderProps } from './FilterBuilder.types';
 
 export type {
   FilterBuilderProps,
@@ -18,7 +18,7 @@ export type {
   FilterFieldType,
   FilterOperator,
   OperatorDefinition,
-} from './types';
+} from './FilterBuilder.types';
 
 export {
   isFilterGroup,
@@ -27,7 +27,7 @@ export {
   getOperatorsForField,
   OPERATOR_DEFINITIONS,
   DEFAULT_OPERATORS_BY_TYPE,
-} from './types';
+} from './FilterBuilder.types';
 
 export const PatternFilterBuilder = createEngineComponent<FilterBuilderProps>(
   'PatternFilterBuilder',

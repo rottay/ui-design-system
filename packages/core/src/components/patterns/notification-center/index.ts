@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { NotificationCenterProps } from './types';
+import type { NotificationCenterProps } from './NotificationCenter.types';
 
-export type { NotificationCenterProps, Notification } from './types';
+export type { NotificationCenterProps, Notification } from './NotificationCenter.types';
 
 export const PatternNotificationCenter = createEngineComponent<NotificationCenterProps>(
   'PatternNotificationCenter',

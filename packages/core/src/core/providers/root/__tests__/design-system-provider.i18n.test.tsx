@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { DesignSystemProvider } from '..';
-import { useTranslation } from '../../../../theme/i18n';
+import { useTranslation } from '../../../../i18n';
 import type { TenantConfig } from '../../../types';
 
 const I18N_TEST_TENANT: TenantConfig = {

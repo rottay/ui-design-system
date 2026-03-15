@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { CommentThreadProps } from '../types';
+import type { CommentThreadProps } from '../CommentThread.types';
 import ClassicCommentThread from '../engines/classic';
 import ModernCommentThread from '../engines/modern';
 import RusticCommentThread from '../engines/rustic';

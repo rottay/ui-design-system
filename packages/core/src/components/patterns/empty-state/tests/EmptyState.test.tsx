@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { EmptyStateProps } from '../types';
+import type { EmptyStateProps } from '../EmptyState.types';
 import ClassicEmptyState from '../engines/classic';
 import ModernEmptyState from '../engines/modern';
 import RusticEmptyState from '../engines/rustic';

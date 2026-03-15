@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { CommandPaletteProps } from './types';
+import type { CommandPaletteProps } from './CommandPalette.types';
 
-export type { CommandPaletteProps, CommandItem } from './types';
+export type { CommandPaletteProps, CommandItem } from './CommandPalette.types';
 
 export const PatternCommandPalette = createEngineComponent<CommandPaletteProps>(
   'PatternCommandPalette',

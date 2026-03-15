@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { NotificationCenterProps } from '../types';
+import type { NotificationCenterProps } from '../NotificationCenter.types';
 import ClassicNotificationCenter from '../engines/classic';
 import ModernNotificationCenter from '../engines/modern';
 import RusticNotificationCenter from '../engines/rustic';

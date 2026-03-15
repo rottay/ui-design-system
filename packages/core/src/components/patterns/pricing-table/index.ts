@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { PricingTableProps } from './types';
+import type { PricingTableProps } from './PricingTable.types';
 
-export type { PricingTableProps, PricingPlan, PricingFeature } from './types';
+export type { PricingTableProps, PricingPlan, PricingFeature } from './PricingTable.types';
 
 export const PatternPricingTable = createEngineComponent<PricingTableProps>(
   'PatternPricingTable',

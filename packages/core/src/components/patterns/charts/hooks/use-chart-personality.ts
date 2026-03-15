@@ -1,10 +1,10 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useTokens } from '../../../../core/hooks/tokens';
-import { useBreakpoints } from '../../../../core/hooks/responsive/useBreakpoints';
-import { useTranslation } from '../../../../theme/i18n';
-import { DEFAULT_COLORS, COLOR_SCHEME_MAP } from '../types';
+import { useTokens } from '../../../../hooks/tokens';
+import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
+import { useTranslation } from '../../../../i18n';
+import { DEFAULT_COLORS, COLOR_SCHEME_MAP } from '../Charts.types';
 
 export interface ChartPersonalityOptions {
   animate?: boolean;

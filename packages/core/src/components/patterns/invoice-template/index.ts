@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { InvoiceTemplateProps } from './types';
+import type { InvoiceTemplateProps } from './InvoiceTemplate.types';
 
-export type { InvoiceTemplateProps, InvoiceData, InvoiceCompany, InvoiceClient, InvoiceLineItem } from './types';
+export type { InvoiceTemplateProps, InvoiceData, InvoiceCompany, InvoiceClient, InvoiceLineItem } from './InvoiceTemplate.types';
 
 export const PatternInvoiceTemplate = createEngineComponent<InvoiceTemplateProps>(
   'PatternInvoiceTemplate',

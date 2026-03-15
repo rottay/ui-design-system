@@ -11,7 +11,7 @@
 
 import { Box } from '../../primitives';
 import { PatternDetailPanel } from '../../patterns';
-import { FadeIn } from '../../../animations';
+import { FadeIn } from '../../../motion';
 import {
   filterDetailSurfaceTabs,
   filterSurfaceActions,

@@ -14,7 +14,7 @@ import React, { useEffect, useCallback, useRef, useState } from 'react';
 import type { ModalProps } from '../../../../../../types/primitives/feedback/Modal';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../../types';
 import { Portal } from '../../utils/Portal';
-import { useTranslation } from '../../../../../../theme/i18n';
+import { useTranslation } from '../../../../../../i18n';
 
 // DaisyUI size class mapping
 const SIZE_CLASS_MAP: Record<string, string> = {

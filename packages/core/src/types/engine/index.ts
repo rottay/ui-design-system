@@ -1,4 +1,2 @@
-/**
- * Re-export engine types from core/types/engine
- */
+/** Backward-compatibility proxy -> core/types/engine */
 export * from '../../core/types/engine';

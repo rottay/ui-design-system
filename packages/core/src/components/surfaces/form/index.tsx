@@ -10,7 +10,7 @@
 
 import { Button, Card, Grid, Stack, Text, Flex } from '../../primitives';
 import { PatternFormBuilder } from '../../patterns';
-import { FadeIn } from '../../../animations';
+import { FadeIn } from '../../../motion';
 import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../helpers';
 import type { FormSurfaceConfig } from '../types';
 import { PageShellSurface } from '../page-shell';

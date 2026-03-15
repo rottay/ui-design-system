@@ -9,10 +9,10 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { DataTablePatternProps } from './types';
+import type { DataTablePatternProps } from './DataTable.types';
 
-export type { DataTablePatternProps } from './types';
-export { resolveAccessor, resolveRowKey } from './types';
+export type { DataTablePatternProps } from './DataTable.types';
+export { resolveAccessor, resolveRowKey } from './DataTable.types';
 export type {
   ColumnDef,
   SortConfig,

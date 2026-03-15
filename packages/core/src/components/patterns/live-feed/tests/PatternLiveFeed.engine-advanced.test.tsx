@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import ClassicLiveFeed from '../engines/classic';
 import ModernLiveFeed from '../engines/modern';
 import RusticLiveFeed from '../engines/rustic';
-import type { FeedItem, LiveFeedProps } from '../types';
+import type { FeedItem, LiveFeedProps } from '../LiveFeed.types';
 
 type ActivityItem = FeedItem & {
   title: string;

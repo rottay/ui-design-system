@@ -6,11 +6,11 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   isValidTenantConfig,
   createTenantConfig,
-} from '../../theme/tenants/schema';
-import { getDefaultTenantConfig } from '../../theme/tenants/defaults';
-import { resolveFromSubdomain } from '../../theme/tenants/resolver/subdomain';
-import { resolveFromDomain, configureDomainLookup } from '../../theme/tenants/resolver/domain';
-import { resolveFromHeader, setServerHeaders, clearServerHeaders } from '../../theme/tenants/resolver/header';
+} from '../../tenancy/schema';
+import { getDefaultTenantConfig } from '../../tenancy/defaults';
+import { resolveFromSubdomain } from '../../tenancy/resolver/subdomain';
+import { resolveFromDomain, configureDomainLookup } from '../../tenancy/resolver/domain';
+import { resolveFromHeader, setServerHeaders, clearServerHeaders } from '../../tenancy/resolver/header';
 
 let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
 

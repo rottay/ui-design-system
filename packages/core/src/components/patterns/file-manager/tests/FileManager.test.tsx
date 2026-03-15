@@ -4,7 +4,7 @@ import { fireEvent, screen, within } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { FileManagerProps } from '../types';
+import type { FileManagerProps } from '../FileManager.types';
 import ClassicFileManager from '../engines/classic';
 import ModernFileManager from '../engines/modern';
 import RusticFileManager from '../engines/rustic';

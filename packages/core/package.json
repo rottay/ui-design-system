@@ -31,6 +31,18 @@
       "types": "./dist/icons.d.ts",
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
+    },
+    "./engines/classic": {
+      "types": "./dist/engines/classic.d.ts",
+      "import": "./dist/engines/classic.js"
+    },
+    "./engines/modern": {
+      "types": "./dist/engines/modern.d.ts",
+      "import": "./dist/engines/modern.js"
+    },
+    "./engines/rustic": {
+      "types": "./dist/engines/rustic.d.ts",
+      "import": "./dist/engines/rustic.js"
     }
   },
   "files": [

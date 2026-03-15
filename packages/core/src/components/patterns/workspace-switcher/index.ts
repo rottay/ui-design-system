@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { WorkspaceSwitcherProps } from './types';
+import type { WorkspaceSwitcherProps } from './WorkspaceSwitcher.types';
 
-export type { WorkspaceSwitcherProps, Workspace } from './types';
+export type { WorkspaceSwitcherProps, Workspace } from './WorkspaceSwitcher.types';
 
 export const PatternWorkspaceSwitcher = createEngineComponent<WorkspaceSwitcherProps>(
   'PatternWorkspaceSwitcher',

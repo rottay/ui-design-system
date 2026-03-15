@@ -8,7 +8,7 @@
  * stacking decision centralized here instead of scattering breakpoint logic.
  */
 
-import { useBreakpoints } from '../../core/hooks/responsive/useBreakpoints';
+import { useBreakpoints } from '../../hooks/responsive/useBreakpoints';
 
 export interface SurfaceResponsiveVisualConfig {
   stackOnMobile?: boolean;

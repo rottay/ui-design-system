@@ -1,4 +1,2 @@
-/**
- * Re-export common types from core/types/common
- */
+/** Backward-compatibility proxy -> core/types/common */
 export * from '../../core/types/common';

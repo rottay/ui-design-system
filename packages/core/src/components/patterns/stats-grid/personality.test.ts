@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { resolveStatsGridMotion } from './personality';
-import { DEFAULT_PERSONALITY } from '../../../core/hooks/tokens';
+import { DEFAULT_PERSONALITY } from '../../../hooks/tokens';
 
 describe('resolveStatsGridMotion', () => {
   it('uses personality defaults when animation is not forced', () => {

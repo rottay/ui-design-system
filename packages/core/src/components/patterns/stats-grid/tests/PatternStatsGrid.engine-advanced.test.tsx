@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { StatsGridProps } from '../types';
+import type { StatsGridProps } from '../StatsGrid.types';
 import ClassicStatsGrid from '../engines/classic';
 import ModernStatsGrid from '../engines/modern';
 import RusticStatsGrid from '../engines/rustic';

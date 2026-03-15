@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { EmptyStateProps } from './types';
+import type { EmptyStateProps } from './EmptyState.types';
 
-export type { EmptyStateProps } from './types';
+export type { EmptyStateProps } from './EmptyState.types';
 
 export const PatternEmptyState = createEngineComponent<EmptyStateProps>(
   'PatternEmptyState',

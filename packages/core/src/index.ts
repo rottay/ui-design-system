@@ -8,24 +8,47 @@
  */
 
 // ============================================
-// CORE (Types, Providers, Hooks, Engines, Errors)
+// CORE (Engines, Providers, Types, Errors)
 // ============================================
-export * from './core';
+export * from './engines';
+export * from './core/providers';
+export * from './core/types';
+export * from './errors';
 
 // ============================================
-// THEME (Tenants, Product Profiles, i18n)
+// HOOKS (promoted from core/hooks/)
 // ============================================
-export * from './theme';
+export * from './hooks';
 
 // ============================================
-// SHARED (Utils, Icons)
+// UTILS (merged from core/utils + shared/utils)
 // ============================================
-export * from './shared';
+export * from './utils';
 
 // ============================================
-// ANIMATIONS
+// ICONS (promoted from shared/icons/)
 // ============================================
-export * from './animations';
+export * from './icons';
+
+// ============================================
+// TENANCY (schema, registry, resolver, storage, CSS generation)
+// ============================================
+export * from './tenancy';
+
+// ============================================
+// PRODUCT PROFILES (registry, provider, hooks)
+// ============================================
+export * from './product-profiles';
+
+// ============================================
+// I18N (locales, provider, hooks)
+// ============================================
+export * from './i18n';
+
+// ============================================
+// MOTION (animations, effects, hooks)
+// ============================================
+export * from './motion';
 
 // ============================================
 // COMPONENTS

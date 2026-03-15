@@ -12,7 +12,7 @@
 
 import { Button, Card, Grid, Stack, Text, Flex } from '../../primitives';
 import { PatternStatsGrid } from '../../patterns';
-import { FadeIn, StaggerChildren } from '../../../animations';
+import { FadeIn, StaggerChildren } from '../../../motion';
 import { filterSurfaceActions, resolveSurfaceButtonVariant } from '../helpers';
 import type { DashboardSurfaceConfig } from '../types';
 import { PageShellSurface } from '../page-shell';

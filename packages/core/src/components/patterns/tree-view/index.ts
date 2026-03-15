@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { TreeViewProps } from './types';
+import type { TreeViewProps } from './TreeView.types';
 
-export type { TreeViewProps, TreeNode } from './types';
+export type { TreeViewProps, TreeNode } from './TreeView.types';
 
 export const PatternTreeView = createEngineComponent<TreeViewProps>(
   'PatternTreeView',

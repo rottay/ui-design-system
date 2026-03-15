@@ -20,8 +20,8 @@ import {
   type ScaleTime,
 } from 'd3';
 
-import type { ChartBaseProps, Series } from '../types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../types';
+import type { ChartBaseProps, Series } from '../Charts.types';
+import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 

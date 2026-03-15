@@ -12,7 +12,7 @@ import {
   RESPONSIVE_BREAKPOINTS,
   RESPONSIVE_BREAKPOINT_ORDER,
   type ResponsiveBreakpointKey,
-} from '../../../../../core/hooks/responsive/breakpoints';
+} from '../../../../../hooks/responsive/breakpoints';
 import type { ResponsiveValue } from '../types';
 
 export { RESPONSIVE_BREAKPOINTS as GRID_BREAKPOINTS };

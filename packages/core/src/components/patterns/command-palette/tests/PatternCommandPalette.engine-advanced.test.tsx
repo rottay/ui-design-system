@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { CommandPaletteProps } from '../types';
+import type { CommandPaletteProps } from '../CommandPalette.types';
 import ClassicCommandPalette from '../engines/classic';
 import ModernCommandPalette from '../engines/modern';
 import RusticCommandPalette from '../engines/rustic';

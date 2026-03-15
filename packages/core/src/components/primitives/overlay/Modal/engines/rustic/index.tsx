@@ -10,7 +10,7 @@ import { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } fro
 import { Portal } from '../../utils/Portal';
 import { Overlay } from '../../utils/Overlay';
 import { FocusTrap } from '../../utils/FocusTrap';
-import { useTranslation } from '../../../../../../theme/i18n';
+import { useTranslation } from '../../../../../../i18n';
 
 export default function RusticModal(props: ModalProps): React.ReactElement | null {
   const { t } = useTranslation('components');
@@ -121,7 +121,10 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     justifyContent: 'center',
     width: '100%',
     height: '100%',
-    padding: '20px',
+    paddingTop: '20px',
+    paddingRight: '20px',
+    paddingBottom: '20px',
+    paddingLeft: '20px',
     boxSizing: 'border-box',
     ...getPlacementStyles(),
   };

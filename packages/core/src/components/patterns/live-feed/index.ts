@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { LiveFeedProps } from './types';
+import type { LiveFeedProps } from './LiveFeed.types';
 
-export type { LiveFeedProps, FeedItem } from './types';
+export type { LiveFeedProps, FeedItem } from './LiveFeed.types';
 
 export const PatternLiveFeed = createEngineComponent<LiveFeedProps>(
   'PatternLiveFeed',

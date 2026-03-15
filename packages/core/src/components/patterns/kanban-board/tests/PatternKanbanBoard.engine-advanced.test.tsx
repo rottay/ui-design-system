@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { KanbanBoardProps } from '../types';
+import type { KanbanBoardProps } from '../KanbanBoard.types';
 import ClassicKanbanBoard from '../engines/classic';
 import ModernKanbanBoard from '../engines/modern';
 import RusticKanbanBoard from '../engines/rustic';

@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
-import type { DataTablePatternProps } from '../types';
+import type { DataTablePatternProps } from '../DataTable.types';
 import ClassicDataTable from '../engines/classic';
 import ModernDataTable from '../engines/modern';
 import RusticDataTable from '../engines/rustic';

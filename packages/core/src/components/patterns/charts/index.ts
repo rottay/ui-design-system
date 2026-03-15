@@ -4,8 +4,8 @@ export type {
   DataPoint,
   SeriesDataPoint,
   Series,
-} from './types';
-export { DEFAULT_COLORS, DEFAULT_MARGIN } from './types';
+} from './Charts.types';
+export { DEFAULT_COLORS, DEFAULT_MARGIN } from './Charts.types';
 
 // Hooks
 export { useChartDimensions, useChartPersonality } from './hooks';

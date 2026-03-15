@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { MapViewProps } from './types';
+import type { MapViewProps } from './MapView.types';
 
-export type { MapViewProps, MapMarker } from './types';
+export type { MapViewProps, MapMarker } from './MapView.types';
 
 export const PatternMapView = createEngineComponent<MapViewProps<any>>(
   'PatternMapView',

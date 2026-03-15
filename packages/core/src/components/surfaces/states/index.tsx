@@ -15,8 +15,8 @@
 import type { ReactNode } from 'react';
 import { Alert, Button, Card, Skeleton, Stack, Text } from '../../primitives';
 import { PatternEmptyState } from '../../patterns';
-import { useBreakpoints } from '../../../core/hooks/responsive/useBreakpoints';
-import { useTokens } from '../../../core/hooks/tokens';
+import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
+import { useTokens } from '../../../hooks/tokens';
 import { normalizeSurfaceError, resolveSurfaceButtonVariant } from '../helpers';
 import type { SurfaceAction } from '../types';
 import { useSurfaceTranslations } from '../i18n';

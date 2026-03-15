@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { ActivityLogProps } from '../types';
+import type { ActivityLogProps } from '../ActivityLog.types';
 import ClassicActivityLog from '../engines/classic';
 import ModernActivityLog from '../engines/modern';
 import RusticActivityLog from '../engines/rustic';

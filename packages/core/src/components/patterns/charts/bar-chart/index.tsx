@@ -3,8 +3,8 @@
 import { memo, useEffect, useRef } from 'react';
 import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select } from 'd3';
 
-import type { ChartBaseProps, DataPoint, Series } from '../types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../types';
+import type { ChartBaseProps, DataPoint, Series } from '../Charts.types';
+import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 

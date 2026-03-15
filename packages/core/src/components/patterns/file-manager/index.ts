@@ -7,9 +7,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { FileManagerProps } from './types';
+import type { FileManagerProps } from './FileManager.types';
 
-export type { FileManagerProps, FileItem, FolderItem, FileSystemItem } from './types';
+export type { FileManagerProps, FileItem, FolderItem, FileSystemItem } from './FileManager.types';
 
 export const PatternFileManager = createEngineComponent<FileManagerProps>(
   'PatternFileManager',

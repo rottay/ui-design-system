@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../testing/helpers/engine-test-utils';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
-import type { PricingTableProps } from '../types';
+import type { PricingTableProps } from '../PricingTable.types';
 import ClassicPricingTable from '../engines/classic';
 import ModernPricingTable from '../engines/modern';
 import RusticPricingTable from '../engines/rustic';

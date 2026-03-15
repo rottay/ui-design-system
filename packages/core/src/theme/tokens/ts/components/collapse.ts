@@ -21,7 +21,7 @@ import {
   type CollapseSlot,
   type CollapseTokenOptions,
   type CollapseVariant,
-} from '../../../../core/hooks/components/collapse-token-utils';
+} from '../../../../hooks/components/collapse-token-utils';
 
 // =============================================================================
 // TYPE DEFINITIONS

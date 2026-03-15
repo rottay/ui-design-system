@@ -7,7 +7,7 @@
  * wrapper keeps call sites short and makes the translation keys predictable.
  */
 
-import { useTranslation } from '../../theme/i18n';
+import { useTranslation } from '../../i18n';
 
 export function useSurfaceTranslations(): {
   tSurface: (key: string, params?: Record<string, string | number>) => string;

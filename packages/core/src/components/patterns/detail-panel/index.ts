@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { DetailPanelProps } from './types';
+import type { DetailPanelProps } from './DetailPanel.types';
 
-export type { DetailPanelProps, DetailTab, DetailAction } from './types';
+export type { DetailPanelProps, DetailTab, DetailAction } from './DetailPanel.types';
 
 export const PatternDetailPanel = createEngineComponent<DetailPanelProps<any>>(
   'PatternDetailPanel',

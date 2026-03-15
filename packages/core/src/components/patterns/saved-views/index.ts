@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { SavedViewsBarProps } from './types';
+import type { SavedViewsBarProps } from './SavedViews.types';
 
-export type { SavedViewsBarProps, SavedView, SavedViewConfig, ViewMenuAction } from './types';
+export type { SavedViewsBarProps, SavedView, SavedViewConfig, ViewMenuAction } from './SavedViews.types';
 
 export const PatternSavedViewsBar = createEngineComponent<SavedViewsBarProps>(
   'PatternSavedViewsBar',

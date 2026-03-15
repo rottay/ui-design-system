@@ -9,9 +9,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { FormBuilderProps } from './types';
+import type { FormBuilderProps } from './FormBuilder.types';
 
-export type { FormBuilderProps } from './types';
+export type { FormBuilderProps } from './FormBuilder.types';
 export type { FieldDef } from '../types';
 
 export const PatternFormBuilder = createEngineComponent<FormBuilderProps>(

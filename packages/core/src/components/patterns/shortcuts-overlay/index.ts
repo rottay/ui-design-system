@@ -9,9 +9,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { ShortcutsOverlayProps } from './types';
+import type { ShortcutsOverlayProps } from './ShortcutsOverlay.types';
 
-export type { ShortcutsOverlayProps, ShortcutDisplayItem } from './types';
+export type { ShortcutsOverlayProps, ShortcutDisplayItem } from './ShortcutsOverlay.types';
 
 export const PatternShortcutsOverlay = createEngineComponent<ShortcutsOverlayProps>(
   'PatternShortcutsOverlay',

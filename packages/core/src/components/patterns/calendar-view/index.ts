@@ -8,9 +8,9 @@
  */
 
 import { createEngineComponent } from '../../../core/engines/factory';
-import type { CalendarViewProps } from './types';
+import type { CalendarViewProps } from './CalendarView.types';
 
-export type { CalendarViewProps, CalendarEvent } from './types';
+export type { CalendarViewProps, CalendarEvent } from './CalendarView.types';
 
 export const PatternCalendarView = createEngineComponent<CalendarViewProps<any>>(
   'PatternCalendarView',
