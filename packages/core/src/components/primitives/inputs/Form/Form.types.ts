@@ -75,7 +75,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { SizeType } from '../../../../types/common';
+import type { SizeType } from '../../../../contracts/common';
 
 export type FormLayout = 'horizontal' | 'vertical' | 'inline';
 export type FormSize = SizeType;

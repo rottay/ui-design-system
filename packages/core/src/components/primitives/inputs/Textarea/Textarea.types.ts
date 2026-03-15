@@ -36,7 +36,7 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 import type { ChangeEvent, FocusEvent } from 'react';
 
 export type TextareaSize = 'sm' | 'md' | 'lg';

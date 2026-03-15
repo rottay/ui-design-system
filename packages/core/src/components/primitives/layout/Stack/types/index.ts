@@ -36,7 +36,7 @@
  */
 
 import type { CSSProperties, ElementType, HTMLAttributes, ReactNode } from 'react';
-import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../types';
+import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../contracts';
 
 /**
  * Direction of the stack layout

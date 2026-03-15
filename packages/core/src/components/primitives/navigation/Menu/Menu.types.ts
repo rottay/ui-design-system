@@ -13,8 +13,8 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, WithChildren } from '../../../../types/common';
-import type { EngineAwareProps } from '../../../../types/engine';
+import type { BaseComponentProps, WithChildren } from '../../../../contracts/common';
+import type { EngineAwareProps } from '../../../../contracts/engine';
 
 // ============================================================================
 // Menu Mode Types

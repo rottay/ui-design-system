@@ -6,7 +6,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ModalFooterProps } from '../../../../../../types/primitives/feedback/Modal';
+import type { ModalFooterProps } from '../../../../../../contracts/primitives/feedback/Modal';
 import { PADDING_MAP } from '../../types';
 
 export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(

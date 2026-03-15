@@ -14,7 +14,7 @@
 
 import type React from 'react';
 import type { ReactNode } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 
 // ============================================================================
 // Tab Item Interface

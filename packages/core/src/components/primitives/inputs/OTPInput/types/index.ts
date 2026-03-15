@@ -9,7 +9,7 @@
  */
 
 import type { CSSProperties } from 'react';
-import type { EngineAwareProps } from '../../../../../types';
+import type { EngineAwareProps } from '../../../../../contracts';
 
 /** Input type for OTP digits */
 export type OTPInputType = 'numeric' | 'alphanumeric';

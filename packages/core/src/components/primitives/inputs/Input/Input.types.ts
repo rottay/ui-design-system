@@ -57,7 +57,7 @@
 
 'use client';
 
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent } from 'react';
 
 export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';

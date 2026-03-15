@@ -49,7 +49,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties, Key } from 'react';
-import type { SizeType } from '../../../../types/common';
+import type { SizeType } from '../../../../contracts/common';
 
 export type TableSize = SizeType;
 export type TableLayout = 'auto' | 'fixed';

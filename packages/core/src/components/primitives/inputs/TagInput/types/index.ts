@@ -9,7 +9,7 @@
  */
 
 import type { CSSProperties } from 'react';
-import type { EngineAwareProps } from '../../../../../types';
+import type { EngineAwareProps } from '../../../../../contracts';
 
 /** Size variants for TagInput */
 export type TagInputSize = 'sm' | 'md' | 'lg';

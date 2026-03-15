@@ -28,7 +28,7 @@
  */
 
 import type { CSSProperties, ReactNode } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 
 // ============================================================================
 // Size Types

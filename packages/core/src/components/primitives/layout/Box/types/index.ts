@@ -34,7 +34,7 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../types';
+import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../contracts';
 import type { CSSProperties, ElementType, HTMLAttributes } from 'react';
 
 /**

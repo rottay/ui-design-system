@@ -56,7 +56,7 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 import type { ReactNode, ChangeEvent, CSSProperties } from 'react';
 
 export type RadioSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';

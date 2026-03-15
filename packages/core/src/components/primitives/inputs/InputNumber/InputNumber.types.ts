@@ -39,7 +39,7 @@
  */
 
 import type { ReactNode, CSSProperties, KeyboardEvent } from 'react';
-import type { SizeType, StatusType } from '../../../../types/common';
+import type { SizeType, StatusType } from '../../../../contracts/common';
 
 export type InputNumberSize = SizeType;
 export type InputNumberStatus = StatusType;

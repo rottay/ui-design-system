@@ -16,7 +16,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineAwareProps } from '../../../../../types';
+import type { EngineAwareProps } from '../../../../../contracts';
 
 /**
  * Layout options for the FormField component.

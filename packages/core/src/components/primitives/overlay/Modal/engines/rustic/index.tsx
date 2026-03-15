@@ -5,7 +5,7 @@
 'use client';
 
 import React, { useEffect, useCallback } from 'react';
-import type { ModalProps } from '../../../../../../types/primitives/feedback/Modal';
+import type { ModalProps } from '../../../../../../contracts/primitives/feedback/Modal';
 import { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } from '../../types';
 import { Portal } from '../../utils/Portal';
 import { Overlay } from '../../utils/Overlay';

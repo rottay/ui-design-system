@@ -65,7 +65,7 @@
  */
 
 import type { ReactNode, CSSProperties, FocusEvent } from 'react';
-import type { EngineAwareProps } from '../../../../types/engine';
+import type { EngineAwareProps } from '../../../../contracts/engine';
 
 // Size types - extended to include xs and xl
 export type SelectSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';

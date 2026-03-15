@@ -9,7 +9,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 
 /** Side where the hover card appears relative to the trigger */
 export type HoverCardSide = 'top' | 'bottom' | 'left' | 'right';

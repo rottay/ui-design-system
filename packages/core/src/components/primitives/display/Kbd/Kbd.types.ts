@@ -9,7 +9,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 
 /** Size variants for Kbd */
 export type KbdSize = 'sm' | 'md' | 'lg';

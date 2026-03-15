@@ -49,7 +49,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineAwareProps, BaseComponentProps } from '../../../../types';
+import type { EngineAwareProps, BaseComponentProps } from '../../../../contracts';
 
 // ============================================================================
 // Type Definitions

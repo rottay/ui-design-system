@@ -34,7 +34,7 @@
  */
 
 import type React from 'react';
-import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../types';
+import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../contracts';
 
 /**
  * Responsive breakpoint object for grid properties

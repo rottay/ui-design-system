@@ -17,7 +17,7 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 import type { ReactNode, CSSProperties } from 'react';
 
 export interface AlertDialogProps extends EngineAwareProps {

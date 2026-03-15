@@ -50,8 +50,8 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps } from '../../../../types/common';
-import type { EngineAwareProps } from '../../../../types/engine';
+import type { BaseComponentProps } from '../../../../contracts/common';
+import type { EngineAwareProps } from '../../../../contracts/engine';
 
 // ============================================================================
 // Re-exports from Central Types
@@ -71,7 +71,7 @@ export type {
 } from '../../../../contracts/primitives/feedback/Modal';
 
 // Use Size from central types
-import type { Size } from '../../../../types/common';
+import type { Size } from '../../../../contracts/common';
 
 // ============================================================================
 // Type Definitions

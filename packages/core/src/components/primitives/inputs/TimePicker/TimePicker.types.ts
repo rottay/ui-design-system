@@ -36,7 +36,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
-import type { SizeType, StatusType } from '../../../../types/common';
+import type { SizeType, StatusType } from '../../../../contracts/common';
 
 /**
  * Size variants for the TimePicker input.

@@ -45,8 +45,8 @@
  * @package @rottay/design-system
  */
 
-import type { BaseComponentProps } from '../../../../types/common';
-import type { EngineAwareProps } from '../../../../types/engine';
+import type { BaseComponentProps } from '../../../../contracts/common';
+import type { EngineAwareProps } from '../../../../contracts/engine';
 
 /**
  * Semantic heading levels corresponding to HTML heading elements.

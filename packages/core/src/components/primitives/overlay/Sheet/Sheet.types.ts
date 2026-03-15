@@ -9,7 +9,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 
 /** Side from which the sheet slides in */
 export type SheetSide = 'bottom' | 'left' | 'right';

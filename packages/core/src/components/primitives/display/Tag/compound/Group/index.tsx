@@ -38,7 +38,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { BaseComponentProps, WithChildren } from '../../../../../../types/common';
+import type { BaseComponentProps, WithChildren } from '../../../../../../contracts/common';
 
 /**
  * Props for the TagGroup component.

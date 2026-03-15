@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Modal as AntModal } from 'antd';
-import type { ModalProps } from '../../../../../../types/primitives/feedback/Modal';
+import type { ModalProps } from '../../../../../../contracts/primitives/feedback/Modal';
 import { MODAL_DEFAULTS, SIZE_MAP } from '../../types';
 
 export default function ClassicModal(props: ModalProps): React.ReactElement | null {

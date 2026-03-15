@@ -44,7 +44,7 @@ export type {
   TooltipState,
 } from '../../../../contracts/primitives/display/Tooltip';
 
-import type { BaseComponentProps } from '../../../../types/common';
+import type { BaseComponentProps } from '../../../../contracts/common';
 
 /**
  * Props for the Tooltip.Trigger compound component.

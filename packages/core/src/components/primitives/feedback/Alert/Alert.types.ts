@@ -52,7 +52,7 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps, BaseComponentProps } from '../../../../types';
+import type { EngineAwareProps, BaseComponentProps } from '../../../../contracts';
 import type { ReactNode } from 'react';
 
 // ============================================================================

@@ -29,7 +29,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineName } from '../../../../types';
+import type { EngineName } from '../../../../contracts';
 
 // ============================================================================
 // Component Props Interface

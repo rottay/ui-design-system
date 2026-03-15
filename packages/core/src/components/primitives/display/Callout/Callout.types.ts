@@ -9,7 +9,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps } from '../../../../contracts';
 
 /** Variant types for Callout */
 export type CalloutVariant = 'info' | 'warning' | 'error' | 'success';

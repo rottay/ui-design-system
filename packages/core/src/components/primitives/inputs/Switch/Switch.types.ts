@@ -38,7 +38,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { SizeType } from '../../../../types/common';
+import type { SizeType } from '../../../../contracts/common';
 
 export type SwitchSize = SizeType;
 
