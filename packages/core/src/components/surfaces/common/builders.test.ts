@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Tests for surface config builder identity functions.
+ */
+
 import { describe, expect, it } from 'vitest';
 
 import {

@@ -1,10 +1,12 @@
 /**
- * QRCode - Rustic Engine (Pure HTML/CSS/Canvas)
+ * @fileoverview Rustic (pure HTML/CSS/Canvas) engine for the QRCode display primitive.
+ * Zero-dependency implementation with inline styles, DS CSS variables, full ARIA
+ * roles/labels, and an inline `@keyframes spin` for the loading spinner.
  *
- * Minimal QR code implementation using vanilla HTML, CSS, and Canvas.
- * Provides maximum accessibility and zero dependencies.
- * Note: Uses a simplified pattern generator. For production use,
- * consider integrating a proper QR code library.
+ * @example
+ * ```tsx
+ * <QRCode engine="rustic" value="https://example.com" bordered />
+ * ```
  */
 
 'use client';
@@ -14,10 +16,12 @@ import type { QRCodeProps } from '../QRCode.types';
 import { QRCODE_DEFAULTS } from '../QRCode.types';
 
 /**
- * Generates a visual pattern that resembles a QR code.
- * This is a placeholder - real QR encoding requires a proper library.
+ * Creates a deterministic boolean grid from a string hash, then stamps three
+ * finder patterns in the corners to visually resemble a real QR code.
+ * This is a visual placeholder -- real QR encoding requires a dedicated library.
  */
 function generatePattern(value: string, gridSize: number): boolean[][] {
+  // Build a simple hash from the input string (djb2-like)
   const pattern: boolean[][] = [];
   let hash = 0;
   for (let i = 0; i < value.length; i++) {
@@ -25,6 +29,7 @@ function generatePattern(value: string, gridSize: number): boolean[][] {
     hash = hash & hash;
   }
 
+  // Fill the grid using the Knuth multiplicative hash for pseudo-random distribution
   for (let i = 0; i < gridSize; i++) {
     pattern[i] = [];
     for (let j = 0; j < gridSize; j++) {
@@ -33,7 +38,7 @@ function generatePattern(value: string, gridSize: number): boolean[][] {
     }
   }
 
-  // Add finder patterns (the three squares in corners)
+  // Stamp the three 7x7 finder patterns that make QR codes recognizable
   const addFinderPattern = (startX: number, startY: number) => {
     for (let i = 0; i < 7; i++) {
       for (let j = 0; j < 7; j++) {
@@ -54,12 +59,12 @@ function generatePattern(value: string, gridSize: number): boolean[][] {
 }
 
 /**
- * Rustic QRCode component using pure HTML/CSS/Canvas.
+ * Rustic QRCode engine. Draws the pattern on a `<canvas>` with full ARIA
+ * labelling, centers an optional icon, and overlays inline-styled status
+ * indicators with role="status" / role="alert" for accessibility.
  *
- * @example
- * ```tsx
- * <RusticQRCode value="https://example.com" />
- * ```
+ * @param props - DS QRCodeProps (value, size, colors, status, icon, etc.).
+ * @returns An inline-styled container with canvas, icon, status overlay, and keyframes.
  */
 export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
   const {
@@ -77,10 +82,11 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
   } = props;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // 25x25 matches QR version 2 dimensions for a realistic appearance
   const gridSize = 25;
   const pattern = useMemo(() => generatePattern(value || '', gridSize), [value]);
 
-  // Draw QR code pattern on canvas
+  // Re-paint the canvas whenever value, size, or colors change
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -105,7 +111,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     }
   }, [value, size, color, bgColor, pattern]);
 
-  // Container styles
+  // All decoration via DS CSS variables; bordered adds padding, border, and bg
   const containerStyle: React.CSSProperties = {
     display: 'inline-block',
     position: 'relative',
@@ -118,7 +124,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     ...style,
   };
 
-  // Overlay styles
+  // Shared overlay base for loading/expired/scanned states
   const overlayStyle: React.CSSProperties = {
     position: 'absolute',
     top: 0,
@@ -133,7 +139,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     backgroundColor: 'var(--ds-qrcode-overlay-bg, rgba(255, 255, 255, 0.9))',
   };
 
-  // Icon wrapper styles
+  // Absolutely centered over the canvas with a white background so the icon is readable
   const iconWrapperStyle: React.CSSProperties = {
     position: 'absolute',
     top: '50%',
@@ -158,7 +164,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     fontFamily: 'inherit',
   };
 
-  // Spinner styles with animation
+  // CSS-only spinner driven by the inline @keyframes spin defined below
   const spinnerStyle: React.CSSProperties = {
     width: 24,
     height: 24,
@@ -168,9 +174,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     animation: 'spin 1s linear infinite',
   };
 
-  /**
-   * Renders the status overlay based on current status.
-   */
+  // Each status gets proper ARIA roles: 'status' for loading/scanned, 'alert' for expired
   const renderOverlay = () => {
     switch (status) {
       case 'loading':

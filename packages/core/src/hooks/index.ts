@@ -104,18 +104,29 @@
  * @package @rottay/design-system
  */
 
-// Engine hooks -- exported from src/engines/, not re-exported here
+// ============================================================================
+// Engine hooks
+// ============================================================================
+// Exported from src/engines/, not re-exported here to avoid circular imports.
+// Consumers use: import { useEngine } from '@rottay/design-system';
 
-// Theme hooks
+// ============================================================================
+// Theme hooks -- light/dark mode toggling and theme context access
+// ============================================================================
 export { useTheme, useThemeContext } from '../theming/useTheme';
 
-// Tenant hooks -- exported from src/tenancy/, not re-exported here
-// Product profile hooks -- exported from src/product-profiles/, not re-exported here
+// Tenant hooks -- exported from src/tenancy/, not re-exported here (avoids circular deps)
+// Product profile hooks -- exported from src/product-profiles/, same reason
 
-// Token hooks
+// ============================================================================
+// Token hooks -- access resolved design tokens from the nearest TokenProvider
+// ============================================================================
+// useTokens: full token object. useOptionalTokens: returns undefined outside provider.
 export { useTokens, useOptionalTokens } from './tokens';
 
-// Granular token sub-hooks (subscribe to specific slices only)
+// Granular token sub-hooks subscribe to specific slices only, avoiding
+// unnecessary re-renders when unrelated tokens change. Prefer these over
+// useTokens when a component only needs one token category.
 export {
   useColorTokens,
   useSpacingTokens,
@@ -133,10 +144,14 @@ export type {
   AccentTokens,
 } from './tokens';
 
-// Feature hooks
+// ============================================================================
+// Feature hooks -- tenant-scoped feature flag gating
+// ============================================================================
 export { useFeatures, useHasFeature, useFeatureContext } from '../features';
 
-// Responsive hooks
+// ============================================================================
+// Responsive hooks -- viewport detection and breakpoint-based values
+// ============================================================================
 export {
   useMediaQuery,
   useBreakpoints,
@@ -147,14 +162,18 @@ export type {
   ResponsiveValueConfig,
 } from './responsive';
 
-// Component token hooks
+// ============================================================================
+// Component token hooks -- component-specific token resolution
+// ============================================================================
 export { useCollapseTokens } from './components';
 export type {
   UseCollapseTokensOptions,
   UseCollapseTokensResult,
 } from './components';
 
-// Accessibility hooks
+// ============================================================================
+// Accessibility hooks -- keyboard navigation and screen reader support
+// ============================================================================
 export { useKeyboardNavigation, useAriaAnnounce } from './a11y';
 export type {
   UseKeyboardNavigationOptions,
@@ -162,7 +181,9 @@ export type {
   UseAriaAnnounceResult,
 } from './a11y';
 
-// Shortcut hooks
+// ============================================================================
+// Shortcut hooks -- global keyboard shortcut registration and display
+// ============================================================================
 export {
   useGlobalShortcut,
   useGlobalShortcuts,
@@ -175,7 +196,9 @@ export type {
   ShortcutProviderProps,
 } from './shortcuts';
 
-// Data hooks
+// ============================================================================
+// Data hooks -- fetching, exporting, optimistic updates, PDF generation
+// ============================================================================
 export { useSurfaceQuery, useTableExport, useOptimisticUpdate, usePdfExport } from './data';
 export type {
   SurfaceQueryParams,
@@ -194,7 +217,9 @@ export type {
   UsePdfExportReturn,
 } from './data';
 
-// Form hooks
+// ============================================================================
+// Form hooks -- auto-save, draft persistence, change tracking
+// ============================================================================
 export { useAutoSave, useDraftSave, useFormDiff } from './form';
 export type {
   AutoSaveStatus,
@@ -207,7 +232,9 @@ export type {
   UseFormDiffReturn,
 } from './form';
 
-// Command registry hooks
+// ============================================================================
+// Command registry hooks -- command palette / action registry
+// ============================================================================
 export {
   CommandRegistryProvider,
   useRegisterCommands,
@@ -220,14 +247,18 @@ export type {
   CommandRegistryProviderProps,
 } from './commands';
 
-// Routing hooks
+// ============================================================================
+// Routing hooks -- URL query param synchronization
+// ============================================================================
 export { useRouterState } from './routing';
 export type {
   UseRouterStateOptions,
   UseRouterStateReturn,
 } from './routing';
 
-// AI hooks
+// ============================================================================
+// AI hooks -- streaming text and chat interfaces
+// ============================================================================
 export { useStreamingText, useChat } from './ai';
 export type {
   UseStreamingTextOptions,
@@ -237,7 +268,9 @@ export type {
   UseChatReturn,
 } from './ai';
 
-// Notification hooks
+// ============================================================================
+// Notification hooks -- preference matrix management (categories x channels)
+// ============================================================================
 export { useNotificationPreferences } from './notifications';
 export type {
   NotificationChannel,
@@ -246,7 +279,9 @@ export type {
   UseNotificationPreferencesReturn,
 } from './notifications';
 
-// State hooks
+// ============================================================================
+// State hooks -- undo/redo history and persisted layout preferences
+// ============================================================================
 export { useUndoRedo, useLayoutPreference } from './state';
 export type {
   UseUndoRedoOptions,
@@ -257,7 +292,9 @@ export type {
   UseLayoutPreferenceReturn,
 } from './state';
 
-// Drag and Drop hooks
+// ============================================================================
+// Drag and Drop hooks -- HTML5 DnD sortable lists (zero dependencies)
+// ============================================================================
 export { useSortableList } from './dnd';
 export type {
   UseSortableListOptions,
@@ -266,7 +303,9 @@ export type {
   UseSortableListReturn,
 } from './dnd';
 
-// Search hooks
+// ============================================================================
+// Search hooks -- multi-source search with debounce, grouping, highlights
+// ============================================================================
 export { useGlobalSearch } from './search';
 export type {
   SearchResult,

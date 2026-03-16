@@ -1,14 +1,41 @@
 'use client';
 
 /**
- * DetailPanel - Rustic Engine (Vanilla HTML/CSS with --ds-* vars)
+ * @fileoverview Rustic (Vanilla / CSS variables) engine for the DetailPanel pattern.
+ * Renders an entity detail view using only inline styles with `--ds-*` design tokens,
+ * making it framework-agnostic. Includes a header with avatar/title/status/actions,
+ * tabbed content with an animated underline indicator, an optional sidebar, breadcrumbs,
+ * and a footer. Hover/focus effects are applied via inline event handlers since there
+ * is no CSS class system.
+ *
+ * @example
+ * <RusticDetailPanel
+ *   data={employee}
+ *   title="Alex Rivera"
+ *   subtitle="Product Manager"
+ *   status={{ label: 'On Leave', color: '#f59e0b' }}
+ *   tabs={[
+ *     { key: 'profile', label: 'Profile', content: <ProfileCard /> },
+ *     { key: 'reviews', label: 'Reviews', content: <ReviewList />, badge: 3 },
+ *   ]}
+ *   sidebar={<QuickInfo />}
+ *   sidebarWidth={280}
+ * />
  */
 
 import React, { useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../DetailPanel.types';
 
+// Animation constants shared across all interactive elements in this engine.
+// Uses a "back-out" easing for a slightly bouncy, organic feel.
 const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+
+// ---------------------------------------------------------------------------
+// Static style objects.
+// All visual tokens reference --ds-* CSS custom properties so the component
+// adapts to any design-system theme without class-based overrides.
+// ---------------------------------------------------------------------------
 
 const s = {
   container: {
@@ -84,6 +111,8 @@ const s = {
     color: 'var(--ds-color-neutral-500)',
     marginTop: '0.25rem',
   } as React.CSSProperties,
+  // Badge factory: when a color is provided, it is used as background with
+  // high-contrast on-primary text. Otherwise falls back to a neutral pill.
   badge: (color?: string) => ({
     display: 'inline-block',
     padding: '0.125rem 0.5rem',
@@ -99,6 +128,9 @@ const s = {
     gap: '0.5rem',
     flexShrink: 0,
   } as React.CSSProperties,
+  // Button style factory: builds a base style then overrides color/background
+  // per variant. The "all" transition covers color, background, border, and
+  // box-shadow changes from hover/focus handlers on the rendered button.
   btn: (variant: DetailAction['variant']) => {
     const base: React.CSSProperties = {
       display: 'inline-flex',
@@ -151,6 +183,9 @@ const s = {
     marginBottom: '1rem',
     gap: 0,
   } as React.CSSProperties,
+  // Tab button style factory. The active tab gets a colored bottom border and
+  // heavier font weight. marginBottom:-2px offsets the border so it overlaps
+  // the nav's bottom border, creating the "selected tab" underline effect.
   tab: (active: boolean, disabled?: boolean) => ({
     padding: '0.5rem 1rem',
     fontSize: 'var(--ds-font-size-sm)',
@@ -185,6 +220,7 @@ const s = {
     paddingTop: 'var(--ds-card-body-padding, 1rem)',
     borderTop: '1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200))',
   } as React.CSSProperties,
+  // Skeleton factory: pulsing placeholder at given dimensions, used in loading state.
   skeleton: (w: string, h: string) => ({
     width: w,
     height: h,
@@ -194,6 +230,17 @@ const s = {
   } as React.CSSProperties),
 };
 
+/**
+ * Rustic (Vanilla) DetailPanel engine.
+ *
+ * Uses inline styles exclusively, referencing `--ds-*` CSS custom properties for
+ * theming. Hover and focus effects are applied via inline event handlers since
+ * there is no class-based CSS. Tab state can be controlled or uncontrolled.
+ *
+ * @typeParam T - Shape of the entity data object being displayed.
+ * @param props - {@link DetailPanelProps} -- data, header info, tabs, sidebar, and actions.
+ * @returns The detail view as a styled container div.
+ */
 export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
   const {
     data,
@@ -217,14 +264,18 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
     style,
   } = props;
 
+  // Uncontrolled tab state: defaults to first tab. Ignored when consumer provides activeTab.
   const [internalActiveTab, setInternalActiveTab] = useState<string>(tabs?.[0]?.key ?? '');
   const activeTab = controlledActiveTab ?? internalActiveTab;
 
+  // Update internal state only in uncontrolled mode; always notify parent via onTabChange.
   const handleTabChange = (key: string) => {
     if (!controlledActiveTab) setInternalActiveTab(key);
     onTabChange?.(key);
   };
 
+  // Skeleton loading state: injects @keyframes pulse inline since rustic engine
+  // has no external CSS file.
   if (loading) {
     return (
       <div className={className} style={{ ...s.container, ...style }}>
@@ -242,8 +293,10 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
     );
   }
 
+  // Resolve active tab object for rendering its content below the tab nav.
   const activeTabObj = tabs?.find((t) => t.key === activeTab);
 
+  // Sidebar wrapped in a bordered panel. Width can be a number (px) or CSS string.
   const sidebarNode = sidebar ? (
     <div style={s.sidebar(sidebarWidth)}>{sidebar}</div>
   ) : null;
@@ -309,6 +362,9 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
         {(actions || headerExtra) && (
           <div style={s.actions}>
             {headerExtra}
+            {/* Action buttons with inline hover/focus handlers because the rustic engine
+                has no CSS hover pseudo-class available. Only default/ghost variants get
+                hover effects -- primary and danger already have strong backgrounds. */}
             {actions?.map((a) => (
               <button
                 key={a.key}
@@ -320,6 +376,7 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
                 disabled={a.disabled || a.loading}
                 onClick={a.onClick}
                 onMouseEnter={(e) => {
+                  // Hover effect only for ghost/default: tint background with primary-50.
                   if (!a.disabled && (a.variant === 'ghost' || !a.variant)) {
                     const el = e.currentTarget as HTMLElement;
                     el.style.color = 'var(--ds-color-primary-600)';
@@ -334,6 +391,7 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
                   }
                 }}
                 onFocus={(e) => {
+                  // Double-ring focus indicator: inner ring (bg color) + outer ring (primary).
                   (e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8)';
                 }}
                 onBlur={(e) => {
@@ -348,7 +406,8 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
         )}
       </div>
 
-      {/* Body */}
+      {/* Body -- flex-direction reversal places the sidebar visually on the left
+          while keeping the DOM order (main first) for screen readers. */}
       <div style={{
         ...s.body,
         flexDirection: sidebarPosition === 'left' ? 'row-reverse' : 'row',

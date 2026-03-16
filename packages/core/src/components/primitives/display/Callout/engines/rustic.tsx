@@ -1,11 +1,19 @@
 'use client';
 
 /**
- * @fileoverview Callout Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Callout component.
- * Uses semantic aside element.
+ * @fileoverview Rustic engine for the Callout component, using pure HTML/CSS.
+ * Renders a semantic `<aside>` alert with a coloured left border accent,
+ * icon, title, body, optional action, and dismissible close button --
+ * all without external CSS framework dependencies.
  *
- * @module Callout/Engines/Rustic
+ * @example
+ * ```tsx
+ * <Callout engine="rustic" variant="error" title="Error" closable>
+ *   Something went wrong. Please try again.
+ * </Callout>
+ * ```
+ *
+ * @module Callout/engines/rustic
  * @category Display
  * @package @rottay/design-system
  */
@@ -14,6 +22,16 @@ import React, { useState } from 'react';
 import type { CalloutProps } from '../Callout.types';
 import { CALLOUT_DEFAULTS, CALLOUT_COLORS, CALLOUT_ICONS } from '../Callout.types';
 
+/**
+ * Rustic (Pure HTML/CSS) implementation of the Callout component.
+ *
+ * Uses a semantic `<aside>` element with inline styles and CSS-variable
+ * colour tokens. Differentiated from the classic engine by its left-border
+ * accent style (instead of a full border) for a more editorial look.
+ *
+ * @param props - {@link CalloutProps} controlling variant, content, and behaviour.
+ * @returns A semantic aside alert element, or null when dismissed.
+ */
 export default function RusticCallout(props: CalloutProps): React.ReactElement | null {
   const {
     variant = CALLOUT_DEFAULTS.variant,
@@ -27,6 +45,7 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
     style,
   } = props;
 
+  // Uncontrolled dismiss: once closed, the aside is removed from the DOM
   const [visible, setVisible] = useState(true);
   const colors = CALLOUT_COLORS[variant];
 
@@ -38,6 +57,9 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
   };
 
   return (
+    // <aside> is semantically appropriate for tangential content like alerts.
+    // The left-border accent (borderLeft) visually differentiates the rustic
+    // engine from the classic engine's full-border approach.
     <aside
       className={`rottay-callout-rustic rottay-callout--${variant} ${className}`}
       role="alert"
@@ -56,6 +78,7 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
         ...style,
       }}
     >
+      {/* Icon column: fixed-size prevents text from pushing the icon around */}
       <span
         style={{
           flexShrink: 0,
@@ -72,6 +95,8 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
       >
         {icon || CALLOUT_ICONS[variant]}
       </span>
+
+      {/* Content column: minWidth:0 prevents flex overflow on long unbreakable text */}
       <div style={{ flex: 1, minWidth: 0 }}>
         {title && (
           <div style={{ fontWeight: 600, marginBottom: children ? 4 : 0, fontSize: 14 }}>
@@ -79,10 +104,13 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
           </div>
         )}
         <div>{children}</div>
+        {/* Action slot for CTA buttons placed below the body */}
         {action && (
           <div style={{ marginTop: 8 }}>{action}</div>
         )}
       </div>
+
+      {/* Close button: reduced opacity keeps it visually subordinate to content */}
       {closable && (
         <button
           type="button"

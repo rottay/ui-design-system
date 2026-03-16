@@ -1,5 +1,16 @@
 'use client';
 
+/**
+ * @fileoverview Assistant UI pattern -- composable chat primitives for AI
+ * assistant interfaces. Exports StreamingText, TypingIndicator, ToolCallCard,
+ * MessageBubble, and AssistantStatusBadge.
+ *
+ * Unlike engine-based patterns, these components use DS primitives directly
+ * (Box, Card, Stack, Text, Tag) and are engine-agnostic. They handle
+ * rendering concerns (streaming caret, typing dots, tool call cards) while
+ * leaving message state management to the consumer.
+ */
+
 import React from 'react';
 
 import { Box, Card, Stack, Text, Tag } from '../../primitives';
@@ -26,6 +37,11 @@ export type {
   MessageBubbleProps,
 } from './types';
 
+// -- Internal mapping helpers --
+
+// Maps assistant-specific tone names to the DS Tag's variant prop. "danger"
+// maps to "error" because the Tag component uses semantic color names while
+// the assistant domain uses UX-oriented tone labels.
 function toneToVariant(
   tone: AssistantStatusBadgeProps['tone']
 ): 'default' | 'primary' | 'success' | 'warning' | 'error' {
@@ -43,6 +59,7 @@ function toneToVariant(
   }
 }
 
+/** Converts a delivery lifecycle status into a visual tone for badge display. */
 function deliveryStatusToTone(
   deliveryStatus: AssistantDeliveryStatus | undefined
 ): AssistantStatusBadgeProps['tone'] {
@@ -59,6 +76,7 @@ function deliveryStatusToTone(
   }
 }
 
+/** Returns a human-readable label for the message role, or null for unknown roles. */
 function roleLabel(role: AssistantMessageRole | undefined): string | null {
   switch (role) {
     case 'assistant':
@@ -74,6 +92,12 @@ function roleLabel(role: AssistantMessageRole | undefined): string | null {
   }
 }
 
+/**
+ * Renders a tonal badge for delivery or tool status.
+ *
+ * @param props - Badge label and optional tone (neutral, success, warning, danger, info).
+ * @returns A small outlined Tag with the appropriate semantic color.
+ */
 export function AssistantStatusBadge({
   label,
   tone = 'neutral',
@@ -85,6 +109,16 @@ export function AssistantStatusBadge({
   );
 }
 
+/**
+ * Displays text with an optional blinking caret while streaming is active.
+ *
+ * The `as` prop switches between plain text and monospace (markdown) rendering.
+ * The caret is `aria-hidden` because the streaming state is conveyed by the
+ * parent's delivery status badge, not by the visual caret.
+ *
+ * @param props - Text content, streaming flag, and display mode.
+ * @returns A text block with an optional animated caret.
+ */
 export function StreamingText({
   text,
   streaming = false,
@@ -100,6 +134,8 @@ export function StreamingText({
       >
         {text}
       </Text>
+      {/* Blinking caret is aria-hidden because it is purely decorative;
+          the streaming state is conveyed by the parent's delivery status badge. */}
       {streaming ? (
         <Text
           aria-hidden="true"
@@ -117,6 +153,16 @@ export function StreamingText({
   );
 }
 
+/**
+ * Animated three-dot indicator with an accessible "typing" status label.
+ *
+ * Uses `role="status"` and `aria-live="polite"` so screen readers
+ * announce when the assistant starts typing. The dots are `aria-hidden`
+ * since they are purely decorative.
+ *
+ * @param props - Optional custom label (defaults to "Assistant is typing").
+ * @returns An inline indicator with bouncing dots and a muted text label.
+ */
 export function TypingIndicator({
   label = 'Assistant is typing',
 }: TypingIndicatorProps): React.ReactElement {
@@ -146,6 +192,17 @@ export function TypingIndicator({
   );
 }
 
+/**
+ * Card displaying a tool invocation with its name, status badge, and
+ * optional input/output sections.
+ *
+ * Designed for AI assistant UIs where the model calls external tools
+ * (e.g. search, code execution). The status badge color is automatically
+ * derived from the status string.
+ *
+ * @param props - Tool name, execution status, and optional I/O content.
+ * @returns An outlined Card with structured tool call information.
+ */
 export function ToolCallCard({
   name,
   status,
@@ -197,6 +254,11 @@ export function ToolCallCard({
   );
 }
 
+/**
+ * Default renderer for a single message part. Handles text, markdown,
+ * tool-status, artifact, and attachment part types. Consumers can override
+ * this via `MessageBubble.renderPart` for custom rendering.
+ */
 function renderDefaultPart(part: AssistantMessagePart, index: number): React.ReactNode {
   switch (part.type) {
     case 'text':
@@ -241,6 +303,21 @@ function renderDefaultPart(part: AssistantMessagePart, index: number): React.Rea
   }
 }
 
+/**
+ * Chat message bubble rendering multi-part content with author, avatar,
+ * timestamp, and delivery status.
+ *
+ * Layout adapts based on `align`: "end" uses a filled Card and right-aligns
+ * (for user messages), "start" uses an outlined Card and left-aligns
+ * (for assistant/system messages).
+ *
+ * Each message part is rendered by `renderPart` (custom) or the built-in
+ * `renderDefaultPart` which supports text, markdown, tool-status, artifact,
+ * and attachment part types.
+ *
+ * @param props - Message content, metadata, and optional custom part renderer.
+ * @returns A positioned Card with author header, message parts, and footer metadata.
+ */
 export function MessageBubble({
   author,
   parts,
@@ -253,6 +330,8 @@ export function MessageBubble({
   deliveryStatus,
   renderPart,
 }: MessageBubbleProps): React.ReactElement {
+  // User messages align right, assistant/system messages align left.
+  // The filled vs outlined variant gives an additional visual cue.
   const alignEnd = align === 'end';
   const roleText = roleLabel(role);
 

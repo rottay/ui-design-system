@@ -63,7 +63,8 @@ export default function RusticSpinner(props: SpinnerProps): React.ReactElement {
     style,
   } = props;
 
-  // Use provided color or fallback to CSS variable
+  // Three-level color fallback: explicit prop -> tenant CSS variable -> hardcoded default.
+  // This ensures the spinner always has a visible color regardless of theme setup.
   const spinnerColor = color || 'var(--ds-spinner-color, var(--ds-color-primary-500, #1890ff))';
 
   // ============================================================================
@@ -73,7 +74,9 @@ export default function RusticSpinner(props: SpinnerProps): React.ReactElement {
   /** Resolve size from CSS variable map */
   const spinnerSize = SIZE_MAP[size!];
 
-  /** Spinner circle styles with animation */
+  // The spinner is a circle with a full border in a muted track color
+  // and only the top border colored. The CSS rotation creates the
+  // spinning effect as the colored segment sweeps around the circle.
   const spinnerStyle: React.CSSProperties = {
     width: spinnerSize,
     height: spinnerSize,

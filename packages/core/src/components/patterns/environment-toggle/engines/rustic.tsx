@@ -1,12 +1,25 @@
 'use client';
 
 /**
- * EnvironmentToggle - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview EnvironmentToggle -- Rustic engine (Vanilla / CSS variables).
+ * Provides an environment switching UI using only inline styles with
+ * --ds-* design tokens. No CSS framework dependency. Supports three
+ * display variants: radio-style toggle (default), pill buttons, and
+ * a custom dropdown. Includes a colored banner for non-production
+ * environments and a production-safety confirmation modal.
+ *
+ * @example
+ * <RusticEnvironmentToggle
+ *   environments={[{ id: 'dev', name: 'Development', color: '#3b82f6' }]}
+ *   activeEnvironment="dev"
+ *   onChange={(envId) => setEnv(envId)}
+ * />
  */
 
 import React, { useState, useRef, useEffect, useCallback, type CSSProperties } from 'react';
 import type { EnvironmentToggleProps, EnvironmentDef } from '../EnvironmentToggle.types';
 
+/** Base banner style -- centered flex row for the environment warning strip */
 const bannerBaseStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
@@ -17,6 +30,7 @@ const bannerBaseStyle: CSSProperties = {
   fontWeight: 500,
 };
 
+/** Colored indicator dot -- optionally animated with a CSS pulse keyframe */
 const dotStyle = (color: string, animate?: boolean): CSSProperties => ({
   width: 8,
   height: 8,
@@ -27,6 +41,7 @@ const dotStyle = (color: string, animate?: boolean): CSSProperties => ({
   animation: animate ? 'ds-pulse 2s infinite' : undefined,
 });
 
+/** Container for the default (radio-group style) toggle variant */
 const toggleContainerStyle: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
@@ -41,6 +56,7 @@ const pillContainerStyle: CSSProperties = {
   alignItems: 'center',
 };
 
+/** Absolute-positioned dropdown menu -- appears below the trigger button */
 const dropdownStyle: CSSProperties = {
   position: 'absolute',
   top: '100%',
@@ -55,6 +71,7 @@ const dropdownStyle: CSSProperties = {
   padding: '4px 0',
 };
 
+/** Full-screen overlay backdrop for the production confirmation modal */
 const modalOverlayStyle: CSSProperties = {
   position: 'fixed',
   inset: 0,
@@ -65,6 +82,7 @@ const modalOverlayStyle: CSSProperties = {
   background: 'var(--ds-color-alpha-black-40)',
 };
 
+/** Modal dialog box -- centered with elevated background and shadow */
 const modalBoxStyle: CSSProperties = {
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   borderRadius: 'var(--ds-radius-lg, 12px)',
@@ -74,6 +92,7 @@ const modalBoxStyle: CSSProperties = {
   boxShadow: 'var(--ds-shadow-2xl)',
 };
 
+/** Toggle button style -- active state uses the environment color as background */
 const btnStyle = (active: boolean, color: string): CSSProperties => ({
   padding: '4px 12px',
   fontSize: 'var(--ds-font-size-sm, 13px)',
@@ -88,6 +107,7 @@ const btnStyle = (active: boolean, color: string): CSSProperties => ({
   transition: 'all 0.15s',
 });
 
+/** Pill button style -- similar to toggle but with individual border radius per button */
 const pillBtnStyle = (active: boolean, color: string): CSSProperties => ({
   padding: '4px 12px',
   fontSize: 'var(--ds-font-size-sm, 13px)',
@@ -103,6 +123,14 @@ const pillBtnStyle = (active: boolean, color: string): CSSProperties => ({
   transition: 'all 0.15s',
 });
 
+/**
+ * Rustic (Vanilla CSS) implementation of the EnvironmentToggle pattern.
+ * All styling uses inline CSSProperties with --ds-* token fallbacks.
+ * Manages its own dropdown open/close and click-outside detection.
+ *
+ * @param props - See {@link EnvironmentToggleProps} for the full prop contract.
+ * @returns The rendered environment toggle with optional banner and modal.
+ */
 export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
   const {
     environments,
@@ -118,13 +146,17 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
     style,
   } = props;
 
+  /* Dropdown open/close state for the dropdown variant */
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  /* Tracks pending production confirmation (null = no pending switch) */
   const [confirmEnv, setConfirmEnv] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const activeEnv = environments.find(e => e.id === activeEnvironment);
+  /* Controls whether the non-production warning banner is visible */
   const isProduction = activeEnvironment === productionId;
 
+  /** Closes the dropdown when user clicks outside the container element */
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -134,11 +166,16 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
     [],
   );
 
+  /* Register/unregister click-outside listener only while dropdown is open */
   useEffect(() => {
     if (dropdownOpen) document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dropdownOpen, handleClickOutside]);
 
+  /**
+   * Handles environment switching with production safety gate.
+   * If the target is production and confirmation is configured, opens a modal.
+   */
   const handleSwitch = useCallback(
     (envId: string) => {
       if (envId === activeEnvironment) return;
@@ -152,6 +189,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
     [activeEnvironment, productionId, confirmProductionSwitch, onChange],
   );
 
+  /** Renders a small uppercase badge label for environments that have one */
   const renderBadge = (env: EnvironmentDef) => {
     if (!env.badge) return null;
     return (
@@ -170,7 +208,9 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
     );
   };
 
+  /** Renders the appropriate toggle control based on the variant prop */
   const renderToggle = () => {
+    /* Dropdown variant: positioned absolutely below the trigger button */
     if (variant === 'dropdown') {
       return (
         <div ref={containerRef} style={{ position: 'relative', display: 'inline-block' }}>
@@ -254,6 +294,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
       );
     }
 
+    /* Pills variant: individually rounded buttons with active color highlight */
     if (variant === 'pills') {
       return (
         <div style={pillContainerStyle} data-testid="env-toggle-trigger">
@@ -273,7 +314,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
       );
     }
 
-    // Default: toggle
+    /* Default: radio-style toggle -- buttons share the container's border radius via overflow:hidden */
     return (
       <div style={toggleContainerStyle} data-testid="env-toggle-trigger">
         {environments.map(env => (
@@ -315,9 +356,10 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
         {renderToggle()}
       </div>
 
-      {/* Production confirmation modal */}
+      {/* Production confirmation modal -- overlay click dismisses, inner box stops propagation */}
       {confirmEnv && (
         <div style={modalOverlayStyle} onClick={() => setConfirmEnv(null)}>
+          {/* stopPropagation prevents the overlay's dismiss handler from catching inner clicks */}
           <div style={modalBoxStyle} onClick={(e) => e.stopPropagation()}>
             <div style={{ fontSize: 'var(--ds-font-size-lg, 18px)', fontWeight: 700, marginBottom: 12 }}>
               Switch to Production
@@ -357,6 +399,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
                   fontWeight: 500,
                 }}
                 onClick={() => {
+                  /* Commit the environment switch and clean up all UI state */
                   onChange(confirmEnv);
                   setConfirmEnv(null);
                   setDropdownOpen(false);

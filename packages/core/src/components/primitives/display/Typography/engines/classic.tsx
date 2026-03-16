@@ -50,7 +50,10 @@ import { TYPOGRAPHY_DEFAULTS } from '../Typography.types';
 const { Title, Text: AntText, Paragraph: AntParagraph, Link: AntLink } = AntTypography;
 
 /**
- * Maps design system heading levels to Ant Design Title levels.
+ * Maps DS heading levels (h1-h6) to Ant Design Title levels (1-5).
+ * AntD only supports 5 levels, so h6 is collapsed into level 5.
+ * This is an intentional tradeoff: semantic HTML still renders h6 via
+ * AntD internals, but the visual size matches h5.
  */
 const LEVEL_MAP: Record<string, 1 | 2 | 3 | 4 | 5> = {
   h1: 1,
@@ -58,16 +61,19 @@ const LEVEL_MAP: Record<string, 1 | 2 | 3 | 4 | 5> = {
   h3: 3,
   h4: 4,
   h5: 5,
-  h6: 5, // Ant Design only supports levels 1-5
+  h6: 5,
 };
 
 /**
- * Maps design system color variants to Ant Design text types.
+ * Maps DS color names to AntD text types. "primary" maps to undefined
+ * because AntD has no built-in "primary" text type -- the primary color
+ * must be applied via custom CSS or theme tokens instead. "muted" maps
+ * to "secondary" which provides the reduced-contrast treatment.
  */
 const TYPE_MAP: Record<string, 'secondary' | 'success' | 'warning' | 'danger' | undefined> = {
   default: undefined,
   muted: 'secondary',
-  primary: undefined, // Primary uses custom styling
+  primary: undefined,
   success: 'success',
   warning: 'warning',
   error: 'danger',
@@ -103,7 +109,9 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     },
     ref
   ) => {
-    // Build ellipsis config for truncation
+    // AntD Title uses `ellipsis.rows` to control multi-line truncation.
+    // When only `truncate` is set (no lineClamp), default to 1 row so
+    // the heading clips to a single line with an ellipsis.
     const ellipsisConfig = truncate || lineClamp
       ? { rows: lineClamp || 1 }
       : undefined;
@@ -116,6 +124,8 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         ellipsis={ellipsisConfig}
         style={{
           textAlign: align,
+          // Reset AntD's default Title margin to let the DS layout
+          // components (Stack, Flex) control spacing instead.
           margin: 0,
           ...style,
         }}
@@ -164,7 +174,9 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
     },
     ref
   ) => {
-    // Build ellipsis config for truncation
+    // AntD Text uses a boolean (not an object) for ellipsis because inline
+    // text elements cannot have multi-row truncation -- they are always
+    // single-line. The `lineClamp` prop is accepted but effectively ignored.
     const ellipsisConfig = truncate || lineClamp ? true : undefined;
 
     return (
@@ -172,8 +184,10 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
         ref={ref as React.Ref<HTMLElement>}
         type={TYPE_MAP[color]}
         underline={underline}
+        // AntD uses `delete` (not `strikethrough`) for line-through styling
         delete={strikethrough}
         italic={italic}
+        // `code` renders a <code> tag with monospace font
         code={monospace}
         ellipsis={ellipsisConfig}
         style={{
@@ -220,7 +234,8 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
     },
     ref
   ) => {
-    // Build ellipsis config for truncation
+    // Paragraphs support multi-row truncation via AntD's expandable
+    // ellipsis. Default to 1 row when only `truncate` is set.
     const ellipsisConfig = truncate || lineClamp
       ? { rows: lineClamp || 1 }
       : undefined;
@@ -278,7 +293,8 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
     },
     ref
   ) => {
-    // Auto-set rel for external links
+    // Security best-practice: external links (_blank) get noopener noreferrer
+    // automatically so the opened page cannot access window.opener.
     const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
 
     return (
@@ -288,6 +304,9 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
         target={target}
         rel={computedRel}
         type={TYPE_MAP[color]}
+        // When underlineOnHover is false we want the underline always
+        // visible, so we pass true. AntD lacks a "hover-only" mode,
+        // making this the closest approximation.
         underline={underline || !underlineOnHover}
         disabled={disabled}
         strong={strong}

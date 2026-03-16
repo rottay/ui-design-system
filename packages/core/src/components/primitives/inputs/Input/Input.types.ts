@@ -60,11 +60,62 @@
 import type { EngineAwareProps } from '../../../../contracts';
 import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent } from 'react';
 
+/**
+ * Size variants for the Input component.
+ * Maps to CSS custom properties `--ds-input-{size}-height`, `--ds-input-{size}-padding-x`,
+ * and `--ds-input-{size}-font-size` via {@link SIZE_MAP}.
+ */
 export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * Visual style variants for the Input component.
+ * - `outline` - Standard bordered input (default)
+ * - `filled` - Solid background fill with no visible border
+ * - `flushed` - Only a bottom border, no background
+ * - `unstyled` - No visual decoration; useful for custom styling
+ */
 export type InputVariant = 'outline' | 'filled' | 'flushed' | 'unstyled';
+
+/**
+ * Validation status indicators for the Input component.
+ * Controls border color and optional feedback icon to communicate field state.
+ */
 export type InputStatus = 'default' | 'error' | 'warning' | 'success';
+
+/**
+ * Supported HTML input types.
+ * Determines browser behavior for input fields (keyboard, validation, masking).
+ */
 export type InputType = 'text' | 'password' | 'email' | 'number' | 'tel' | 'url' | 'search';
 
+/**
+ * Props for the Input component.
+ *
+ * Supports controlled and uncontrolled modes, multiple visual variants,
+ * validation states, prefix/suffix slots, clearable behavior, and character counting.
+ *
+ * @example Basic controlled input
+ * ```tsx
+ * <Input
+ *   value={email}
+ *   onChange={(val) => setEmail(val)}
+ *   placeholder="Enter email"
+ *   type="email"
+ *   status={hasError ? 'error' : 'default'}
+ * />
+ * ```
+ *
+ * @example With prefix, suffix, and clear
+ * ```tsx
+ * <Input
+ *   prefix={<SearchIcon />}
+ *   suffix={<InfoIcon />}
+ *   clearable
+ *   maxLength={100}
+ *   showCount
+ * />
+ * ```
+ */
 export interface InputProps extends EngineAwareProps {
   /** Input size */
   size?: InputSize;
@@ -134,6 +185,18 @@ export interface InputProps extends EngineAwareProps {
   'data-testid'?: string;
 }
 
+/**
+ * Props for the Input.Group compound component.
+ * Groups multiple inputs and addons into a visually connected row.
+ *
+ * @example
+ * ```tsx
+ * <Input.Group compact>
+ *   <Input.Addon position="before">https://</Input.Addon>
+ *   <Input placeholder="domain.com" />
+ * </Input.Group>
+ * ```
+ */
 export interface InputGroupProps {
   /** Group children (Input + addons) */
   children: ReactNode;
@@ -147,6 +210,16 @@ export interface InputGroupProps {
   style?: React.CSSProperties;
 }
 
+/**
+ * Props for the Input.Addon compound component.
+ * Renders a decorative or informational element attached to one side of an Input.
+ *
+ * @example
+ * ```tsx
+ * <Input.Addon position="before">$</Input.Addon>
+ * <Input.Addon position="after" variant="transparent">.00</Input.Addon>
+ * ```
+ */
 export interface InputAddonProps {
   /** Addon content */
   children: ReactNode;
@@ -162,6 +235,22 @@ export interface InputAddonProps {
   style?: React.CSSProperties;
 }
 
+/**
+ * Default values for Input component props.
+ * Applied when no explicit value is provided by the consumer.
+ *
+ * @constant
+ * @property {string} size - Default size variant ('md')
+ * @property {string} variant - Default visual style ('outline')
+ * @property {string} status - Default validation status ('default')
+ * @property {string} type - Default HTML input type ('text')
+ * @property {boolean} disabled - Default disabled state (false)
+ * @property {boolean} readOnly - Default read-only state (false)
+ * @property {boolean} required - Default required state (false)
+ * @property {boolean} error - Default error state (false)
+ * @property {boolean} clearable - Default clearable behavior (false)
+ * @property {boolean} showCount - Default character count display (false)
+ */
 export const INPUT_DEFAULTS = {
   size: 'md' as const,
   variant: 'outline' as const,
@@ -175,7 +264,20 @@ export const INPUT_DEFAULTS = {
   showCount: false,
 };
 
-// Size mapping to CSS variables (references tokens from tokens/css/themes/default.css)
+/**
+ * Size configuration mapping to CSS custom properties.
+ * Each size variant maps to height, horizontal padding, and font-size CSS variables
+ * defined in the tenant's theme (see `tokens/css/themes/default.css`).
+ *
+ * @constant
+ * @example
+ * ```ts
+ * const { height, paddingX, fontSize } = SIZE_MAP['lg'];
+ * // height   = 'var(--ds-input-lg-height)'
+ * // paddingX = 'var(--ds-input-lg-padding-x)'
+ * // fontSize = 'var(--ds-input-lg-font-size)'
+ * ```
+ */
 export const SIZE_MAP = {
   xs: { height: 'var(--ds-input-xs-height)', paddingX: 'var(--ds-input-xs-padding-x)', fontSize: 'var(--ds-input-xs-font-size)' },
   sm: { height: 'var(--ds-input-sm-height)', paddingX: 'var(--ds-input-sm-padding-x)', fontSize: 'var(--ds-input-sm-font-size)' },
@@ -184,7 +286,14 @@ export const SIZE_MAP = {
   xl: { height: 'var(--ds-input-xl-height)', paddingX: 'var(--ds-input-xl-padding-x)', fontSize: 'var(--ds-input-xl-font-size)' },
 };
 
-// Ant Design size mapping
+/**
+ * Ant Design (Titan engine) size mapping.
+ * Translates design system size tokens to Ant Design's size prop values.
+ * Note: `xs` and `xl` are collapsed to `small` and `large` respectively,
+ * since Ant Design only supports three size values.
+ *
+ * @constant
+ */
 export const ANT_SIZE_MAP = {
   xs: 'small' as const,
   sm: 'small' as const,
@@ -193,7 +302,13 @@ export const ANT_SIZE_MAP = {
   xl: 'large' as const,
 };
 
-// DaisyUI size mapping
+/**
+ * DaisyUI (Hermes engine) size mapping.
+ * Translates design system size tokens to DaisyUI CSS class names.
+ * Note: `xl` falls back to `input-lg` since DaisyUI has no xl size class.
+ *
+ * @constant
+ */
 export const DAISY_SIZE_MAP = {
   xs: 'input-xs',
   sm: 'input-sm',

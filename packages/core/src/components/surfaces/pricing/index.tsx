@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * PricingSurface
- *
- * Full-page pricing/plans comparison surface wrapping PatternPricingTable
- * inside PageShellSurface. The surface owns page chrome, intro copy, billing
- * cycle toggle context, and footer while delegating the comparison grid to
- * the underlying pattern.
+ * @fileoverview PricingSurface -- full-page pricing/plans comparison.
+ * @description Wraps PatternPricingTable inside PageShellSurface. Owns page chrome,
+ * intro copy, billing cycle toggle, and footer while delegating the comparison
+ * grid to the underlying pattern.
  */
 
 import React from 'react';
@@ -27,6 +25,9 @@ export function PricingSurface({
 }: PricingSurfaceProps): React.ReactElement {
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
 
+  // Plans and features are re-mapped to strip surface-level metadata before
+  // reaching the pricing pattern. This keeps the pattern API stable even if
+  // the surface config adds fields (e.g. analytics tags, permission gates).
   const plans = config.behavior.plans.map((p) => ({
     id: p.id,
     name: p.name,

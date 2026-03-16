@@ -1,5 +1,7 @@
 /**
- * Pattern Hooks & Utilities
+ * @fileoverview Pattern hooks and utilities barrel. Exports composition hooks
+ * (useDataTable, useKanban, useFormBuilder, useFilterPanel), type-safe column
+ * builders, and the createRecipeVariant factory for customizing patterns.
  */
 
 // Composition Hooks

@@ -113,6 +113,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       style,
     } = props;
 
+    // AntD Carousel exposes its own ref type (AntCarouselRef) which we wrap
+    // with our DS-agnostic CarouselRef so consumers never depend on AntD directly.
     const carouselRef = useRef<AntCarouselRef>(null);
 
     /**
@@ -150,6 +152,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         dots={dots}
         dotPosition={dotPosition}
         arrows={arrows}
+        // The DS `fade` boolean takes precedence over the `effect` string
+        // so consumers can toggle fade mode without changing effect.
         effect={fade ? 'fade' : effect}
         slidesToShow={slidesToShow}
         slidesToScroll={slidesToScroll}
@@ -162,6 +166,9 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         pauseOnDotsHover={pauseOnDotsHover}
         swipe={swipe}
         vertical={vertical}
+        // AntD requires ReactElement for arrows but our DS types allow
+        // ReactNode for flexibility; the cast is safe because AntD only
+        // reads the element's props for positioning.
         prevArrow={prevArrow as React.ReactElement}
         nextArrow={nextArrow as React.ReactElement}
         className={className}

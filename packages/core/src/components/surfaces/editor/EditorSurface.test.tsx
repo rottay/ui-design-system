@@ -1,3 +1,5 @@
+/** @fileoverview EditorSurface tests -- content canvas, toolbar, save/publish actions. */
+
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';

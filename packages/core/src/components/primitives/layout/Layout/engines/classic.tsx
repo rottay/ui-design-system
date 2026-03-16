@@ -42,6 +42,15 @@ import type {
   LayoutFooterProps,
 } from '../Layout.types';
 
+/**
+ * Classic Layout shell -- a thin passthrough to Ant Design's Layout.
+ *
+ * Delegates entirely to AntLayout so consumers get full Ant Design theming,
+ * collapsible sidebar behavior, and responsive breakpoint support out of the box.
+ *
+ * @param props - Layout container props (hasSider, className, style).
+ * @returns A ref-forwarding Ant Design Layout wrapper.
+ */
 export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
   (props, ref) => {
     const { hasSider, children, className, style } = props;
@@ -54,9 +63,17 @@ export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
 );
 Layout.displayName = 'Layout.Classic';
 
+/**
+ * Classic Header backed by AntLayout.Header.
+ * Accepts an optional `height` override merged into the inline style.
+ *
+ * @param props - Header props (height, className, style).
+ * @returns A ref-forwarding Ant Design Header wrapper.
+ */
 export const Header = React.forwardRef<HTMLDivElement, LayoutHeaderProps>(
   (props, ref) => {
     const { height, children, className, style } = props;
+    // Merge height into style so it overrides the Ant Design default (64px)
     const headerStyle = height ? { ...style, height } : style;
     return (
       <AntLayout.Header ref={ref} className={className} style={headerStyle}>
@@ -67,6 +84,15 @@ export const Header = React.forwardRef<HTMLDivElement, LayoutHeaderProps>(
 );
 Header.displayName = 'Layout.Header.Classic';
 
+/**
+ * Classic Sider backed by AntLayout.Sider.
+ *
+ * Passes through all Ant Design sidebar props (collapsible, breakpoint, theme)
+ * for native collapsible behavior and responsive auto-collapse at breakpoints.
+ *
+ * @param props - Sider props (width, collapsible, collapsed, breakpoint, theme, etc.)
+ * @returns A ref-forwarding Ant Design Sider wrapper.
+ */
 export const Sider = React.forwardRef<HTMLDivElement, LayoutSiderProps>(
   (props, ref) => {
     const {
@@ -105,6 +131,12 @@ export const Sider = React.forwardRef<HTMLDivElement, LayoutSiderProps>(
 );
 Sider.displayName = 'Layout.Sider.Classic';
 
+/**
+ * Classic Content area backed by AntLayout.Content.
+ *
+ * @param props - Content props (className, style).
+ * @returns A ref-forwarding Ant Design Content wrapper.
+ */
 export const Content = React.forwardRef<HTMLDivElement, LayoutContentProps>(
   (props, ref) => {
     const { children, className, style } = props;
@@ -117,6 +149,12 @@ export const Content = React.forwardRef<HTMLDivElement, LayoutContentProps>(
 );
 Content.displayName = 'Layout.Content.Classic';
 
+/**
+ * Classic Footer backed by AntLayout.Footer.
+ *
+ * @param props - Footer props (className, style).
+ * @returns A ref-forwarding Ant Design Footer wrapper.
+ */
 export const Footer = React.forwardRef<HTMLDivElement, LayoutFooterProps>(
   (props, ref) => {
     const { children, className, style } = props;

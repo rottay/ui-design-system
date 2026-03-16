@@ -1,8 +1,9 @@
 /**
- * Math Utilities
+ * @fileoverview Framework-agnostic math utilities for layout, animation, and responsive values.
  *
- * Provides common numerical operations for layout calculations,
- * animations, and responsive value transformations.
+ * Provides `clamp`, `lerp`, `normalize`, `remap`, `roundTo`, and `range`.
+ * All functions are pure and stateless, usable in token generation, motion
+ * code, and component logic alike.
  */
 
 /**

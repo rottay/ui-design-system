@@ -255,6 +255,8 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
   // ---------------------------------------------------------------------------
 
   const drawerSize = size as DrawerSize;
+  // Horizontal drawers (left/right) use width for sizing; vertical drawers
+  // (top/bottom) use height. The opposite dimension always fills the viewport.
   const isHorizontal = placement === 'left' || placement === 'right';
   const drawerWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : '100vw');
   const drawerHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100vh');
@@ -287,6 +289,8 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
       position: 'fixed',
       backgroundColor: 'var(--ds-drawer-bg, var(--ds-color-bg-elevated))',
       boxShadow: 'var(--ds-drawer-shadow, 0 8px 30px rgba(0, 0, 0, 0.12))',
+      // CSS transition on transform allows the slide-in/out animation.
+      // The drawer's zIndex is mask+1 so it renders above the overlay.
       transition: 'var(--ds-drawer-transition, transform 0.3s ease-in-out)',
       overflowY: 'auto',
       zIndex: zIndex! + 1,

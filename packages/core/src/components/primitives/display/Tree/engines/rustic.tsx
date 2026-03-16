@@ -1,12 +1,26 @@
 /**
- * Tree - Rustic Engine (Vanilla HTML/CSS)
+ * @fileoverview Rustic Tree engine -- pure HTML/CSS (zero UI-library dependencies).
  *
- * Full-featured headless tree implementation using vanilla HTML and CSS variables.
- * Supports drag-and-drop, async loading, search/filter, checkable with
- * half-checked cascading, tree lines, keyboard navigation, and full ARIA.
- * Maximum accessibility and customization with no external dependencies.
+ * Full-featured hierarchical tree using only inline styles with CSS custom properties
+ * (`var(--ds-*)`) and semantic HTML. Implements expand/collapse, checkable nodes
+ * with cascading half-checked state, drag-and-drop reordering, async child loading,
+ * search/filter with auto-expand, tree-line connectors, and WAI-ARIA TreeView
+ * keyboard navigation -- all without DaisyUI, Tailwind, or Ant Design.
+ *
+ * Hover states are managed via imperative `style` mutations on mouse events
+ * because inline styles cannot express `:hover` pseudo-selectors. Keyframe
+ * animations are injected into `<head>` once via `injectKeyframes()`.
+ *
+ * Engine: **Vanilla HTML + CSS custom properties**
+ *
+ * @example
+ * ```tsx
+ * <Tree engine="rustic" treeData={departments} checkable showLine blockNode />
+ * ```
  *
  * @module Tree/Rustic
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -30,6 +44,9 @@ import {
 // Highlight helper
 // ---------------------------------------------------------------------------
 
+// Highlights the first occurrence of the search term within a tree node's title.
+// Only works on string titles -- React elements pass through unchanged since
+// we cannot safely split arbitrary JSX.
 function highlightText(
   text: React.ReactNode,
   searchValue: string,
@@ -60,6 +77,8 @@ function highlightText(
 
 // ---------------------------------------------------------------------------
 // CSS-in-JS styles (all using CSS variables)
+// Rustic engine uses pure inline styles with CSS custom property fallbacks
+// so tenant themes override colors without any class-based system.
 // ---------------------------------------------------------------------------
 
 const styles = {
@@ -93,6 +112,8 @@ const styles = {
 // Keyframes injection (once)
 // ---------------------------------------------------------------------------
 
+// Module-level flag ensures we only inject the keyframe stylesheet once
+// across all Tree instances on the page (avoids duplicate <style> tags).
 let stylesInjected = false;
 function injectKeyframes() {
   if (stylesInjected || typeof document === 'undefined') return;
@@ -198,7 +219,11 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
 }) => {
   const normalizedNodeKey = normalizeTreeKey(nodeKey);
   const hasChildren = children && children.length > 0;
+  // Show the expand arrow when: has children OR is a non-leaf that might
+  // load children asynchronously (loadData pattern). True leaves never expand.
   const showExpander = (hasChildren || (!isLeaf && !hasChildren)) && !isLeaf;
+  // 24px per level creates the indentation hierarchy. 8px base offset
+  // keeps root nodes from touching the container edge.
   const paddingLeft = level * 24 + 8;
 
   const isDraggable = propDraggable && !disabled;
@@ -207,7 +232,8 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
 
   const displayTitle = searchValue ? highlightText(title, searchValue) : title;
 
-  // Node row style
+  // Node row style -- blockNode fills the full width (directory-tree style),
+  // inline-flex only takes the width of its content (tag-picker style).
   const nodeStyle: React.CSSProperties = {
     display: blockNode ? 'flex' : 'inline-flex',
     width: blockNode ? '100%' : undefined,
@@ -238,6 +264,9 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
       : '3px solid transparent',
   };
 
+  // The expand/collapse arrow rotates 90deg to point downward when expanded.
+  // cubic-bezier(0.16, 1, 0.3, 1) is an "ease-out-expo" feel -- fast start,
+  // gentle deceleration -- used consistently across the rustic engine.
   const switcherStyle: React.CSSProperties = {
     width: '20px',
     height: '20px',
@@ -271,10 +300,13 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     flexShrink: 0,
   };
 
-  // Tree line styles
+  // Tree line connectors create the visual hierarchy lines seen in directory
+  // tree UIs. Three types of lines are drawn per node:
+  // 1. Vertical lines from non-last ancestors (continuous down the left edge)
+  // 2. Horizontal connector from parent to this node
+  // 3. Vertical segment from parent -- full height if not last child, half if last
   const treeLineConnectors: React.ReactNode[] = [];
   if (showLine && level > 0) {
-    // Vertical lines from ancestors
     for (let i = 0; i < parentIsLast.length; i++) {
       if (!parentIsLast[i]) {
         treeLineConnectors.push(
@@ -361,6 +393,9 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     }
   };
 
+  // Imperative hover handlers -- required because inline styles cannot
+  // express :hover. The border-left accent appears on hover and persists
+  // on selected nodes, giving progressive visual feedback.
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isSelected && !disabled && !(isDropTarget && dropPosition === 'inside')) {
       e.currentTarget.style.backgroundColor =
@@ -474,7 +509,8 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
           <span style={{ width: '24px', flexShrink: 0 }} />
         )}
 
-        {/* Checkbox */}
+        {/* Checkbox -- uses a ref callback to set the native indeterminate property
+            which cannot be set via a React attribute (HTML has no indeterminate attr). */}
         {checkable && (
           <input
             type="checkbox"
@@ -562,6 +598,16 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
 // RusticTree (main export)
 // ---------------------------------------------------------------------------
 
+/**
+ * Rustic Tree engine -- dependency-free, inline-styled hierarchical tree.
+ *
+ * Manages expand, select, check, drag-and-drop, async loading, search/filter,
+ * and keyboard navigation state. Renders tree nodes recursively via
+ * `TreeNodeRender`. Supports both controlled and uncontrolled modes.
+ *
+ * @param props - Unified DS TreeProps (see Tree.types.ts)
+ * @returns A vanilla HTML tree with role="tree" ARIA semantics
+ */
 export default function RusticTree(props: TreeProps): React.ReactElement {
   const {
     treeData = [],
@@ -638,7 +684,9 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
     position: 'before' | 'inside' | 'after';
   } | null>(null);
 
-  // Resolve controlled vs uncontrolled
+  // Resolve controlled vs uncontrolled -- when the consumer provides controlled
+  // keys we normalize them on every render. When uncontrolled, internal state
+  // is the source of truth.
   const actualExpandedKeys = controlledExpandedKeys
     ? controlledExpandedKeys.map(normalizeTreeKey)
     : expandedKeys;
@@ -649,7 +697,9 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
     ? controlledCheckedKeys.map(normalizeTreeKey)
     : (controlledCheckedKeys?.checked.map(normalizeTreeKey) ?? checkedKeys);
 
-  // Half-checked computation
+  // Half-checked (indeterminate) keys: a parent is half-checked when some but
+  // not all of its descendants are checked. Skipped in strict mode where
+  // parent/child checking is independent.
   const halfCheckedKeys = useMemo(() => {
     if (!checkable || treeCheckStrictly) return [];
     return computeHalfCheckedKeys(treeData, actualCheckedKeys);
@@ -663,7 +713,9 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
 
   const filteredKeys = filterResult?.filteredKeys ?? null;
 
-  // Auto-expand parents of search matches
+  // Auto-expand ancestor nodes of search matches so the user sees matching
+  // nodes without manually opening each parent. Merges with existing expanded
+  // keys to avoid collapsing nodes the user already opened.
   useEffect(() => {
     if (filterResult && filterResult.expandKeys.length > 0) {
       setExpandedKeys((prev) => {
@@ -673,7 +725,9 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
     }
   }, [filterResult]);
 
-  // Visible flat keys for keyboard navigation
+  // Flatten the tree into a linear list of keys representing the currently
+  // visible nodes (respecting which branches are expanded). This powers
+  // ArrowUp/ArrowDown keyboard navigation with O(1) index lookups.
   const visibleKeys = useMemo(
     () => flattenVisibleKeys(treeData, actualExpandedKeys),
     [treeData, actualExpandedKeys],
@@ -696,7 +750,9 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
         onExpand?.(newKeys, { node, expanded: isExpanding });
       }
 
-      // Async loading
+      // Async (lazy) loading: when a non-leaf node is expanded for the first
+      // time and has no children, call loadData to fetch them from the server.
+      // loadedKeysRef prevents duplicate fetches on subsequent expand/collapse cycles.
       if (isExpanding && loadData && node && !node.isLeaf && !loadedKeysRef.current.has(key)) {
         const hasExistingChildren = node.children && node.children.length > 0;
         if (!hasExistingChildren) {
@@ -747,7 +803,9 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
           newChecked = actualCheckedKeys.filter((k) => !toRemove.has(k));
         }
 
-        // Bubble up: check parents if all children are checked
+        // Cascade upward: iteratively check/uncheck parent nodes based on
+        // whether all their children are now checked. Runs in a loop because
+        // checking a parent may satisfy another grandparent's "all checked" condition.
         let changed = true;
         while (changed) {
           changed = false;
@@ -794,6 +852,9 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
     [findNode, onDragStart],
   );
 
+  // Drop position is determined by where the cursor sits within the target node:
+  // top 25% = before, middle 50% = inside (reparent), bottom 25% = after.
+  // This 3-zone approach matches Finder/Explorer tree drag semantics.
   const handleDragOver = useCallback(
     (key: TreeEngineKey, e: React.DragEvent, _level: number) => {
       if (dragKey === null || dragKey === key) {
@@ -841,11 +902,15 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
   }, []);
 
   // -----------------------------------------------------------------------
-  // Keyboard navigation
+  // Keyboard navigation -- follows WAI-ARIA TreeView pattern:
+  // ArrowUp/Down = move focus, ArrowRight = expand, ArrowLeft = collapse/parent,
+  // Space = toggle checkbox, Enter = select node.
   // -----------------------------------------------------------------------
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      // Auto-focus the first visible node when the tree receives keyboard input
+      // but no node is focused yet (e.g., first Tab into the tree).
       if (!focusedKey) {
         if (visibleKeys.length > 0) setFocusedKey(visibleKeys[0]);
         return;

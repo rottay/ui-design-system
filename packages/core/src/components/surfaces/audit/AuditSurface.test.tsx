@@ -1,3 +1,5 @@
+/** @fileoverview AuditSurface tests -- log rendering, filters, and export actions. */
+
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

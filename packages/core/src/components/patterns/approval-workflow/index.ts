@@ -1,10 +1,11 @@
 'use client';
 
 /**
- * ApprovalWorkflow - Pattern Component
+ * @fileoverview ApprovalWorkflow pattern -- multi-step approval chain with
+ * status tracking, comments, and action buttons. Renders a vertical approval
+ * pipeline where each step can be approved, rejected, or escalated.
  *
- * Multi-step approval chain with status tracking, comments, and action buttons.
- * Used by: Offer approvals (bh), PurchaseOrders (bar), ShiftSwaps (staff), Refunds (pm)
+ * Used by: Offer approvals (bh), PurchaseOrders (bar), ShiftSwaps (staff), Refunds (pm).
  */
 
 import { createEngineComponent } from '../../../engines/factory';

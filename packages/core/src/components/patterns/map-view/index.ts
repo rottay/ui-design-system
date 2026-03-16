@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * MapView<T> - Pattern Component
- *
- * Placeholder map container with marker list display.
- * Designed to be extended with Leaflet/Mapbox by consumers.
+ * @fileoverview MapView pattern -- engine-aware placeholder map container
+ * with marker list display. Designed for Leaflet/Mapbox extension by consumers.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -1,7 +1,21 @@
 'use client';
 
 /**
- * SavedViewsBar - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the SavedViews bar pattern.
+ * Renders a horizontal tab strip where each tab represents a saved view
+ * (filter/sort preset). Supports inline rename via Ant Input, drag-and-drop
+ * reorder via native HTML5 DnD, per-view context menus via Ant Dropdown,
+ * and a "Create view" button with an inline name input.
+ *
+ * @example
+ * <ClassicSavedViewsBar
+ *   views={[{ id: '1', name: 'All Tasks', isDefault: true, config: {} }]}
+ *   activeViewId="1"
+ *   onViewSelect={(id) => loadView(id)}
+ *   onViewCreate={(v) => createView(v)}
+ *   onViewDelete={(id) => deleteView(id)}
+ *   onViewRename={(id, name) => renameView(id, name)}
+ * />
  */
 
 import React, { useCallback, useRef, useState } from 'react';
@@ -19,6 +33,15 @@ import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 
 const { Text } = Typography;
 
+/**
+ * Classic engine saved views bar built on Ant Design Dropdown/Input/Button.
+ * Renders a horizontally scrollable tab strip with drag-and-drop reorder,
+ * inline rename, context menu (rename/duplicate/delete), and a "Create view"
+ * inline input. Default views (isDefault) are protected from deletion.
+ *
+ * @param props - {@link SavedViewsBarProps}
+ * @returns A horizontal flex container acting as a tab bar for saved views.
+ */
 export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
   const {
     views,
@@ -42,14 +65,18 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
     style,
   } = props;
 
+  // --- Local UI state ---
   const [isCreating, setIsCreating] = useState(false);
   const [newViewName, setNewViewName] = useState('');
   const [editingViewId, setEditingViewId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
+  // Drag-and-drop state: tracks the view being dragged and the current drop target
+  // to provide visual feedback (left-border accent on the target tab).
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
   const inputRef = useRef<any>(null);
 
+  /** Commits the new view name and resets the creation input. */
   const handleCreate = useCallback(() => {
     if (!newViewName.trim()) return;
     onViewCreate({
@@ -97,6 +124,8 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
     [dragViewId]
   );
 
+  // Reorders by splicing the dragged view out of its old position and inserting
+  // it at the drop target's position, then passing the new ID order to the consumer.
   const handleDrop = useCallback(
     (e: React.DragEvent, targetViewId: string) => {
       e.preventDefault();
@@ -122,6 +151,8 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
     setDropTargetId(null);
   }, []);
 
+  // Builds the Ant Dropdown menu items for a view tab, combining built-in actions
+  // (rename, duplicate, delete) with any consumer-provided custom actions.
   const buildMenuItems = useCallback(
     (view: SavedView) => {
       const customActions = getMenuActions?.(view) ?? [];
@@ -161,6 +192,8 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
         });
       }
 
+      // Default views cannot be deleted to prevent users from accidentally
+      // removing the system-provided baseline configuration.
       if (allowDelete && !view.isDefault) {
         if (items.length > 0) {
           items.push({ type: 'divider' as const });
@@ -196,6 +229,8 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
     );
   }
 
+  // Disable creation when maxViews is reached to enforce plan-based limits
+  // (e.g. free tier = 3 saved views).
   const canCreate = allowCreate && (!maxViews || views.length < maxViews);
 
   return (

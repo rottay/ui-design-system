@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * KanbanBoard<T> - Pattern Component
- *
- * Generic, engine-aware kanban board with drag-and-drop,
- * configurable columns, card rendering, and item management.
+ * @fileoverview KanbanBoard pattern -- generic, engine-aware kanban board
+ * with drag-and-drop, configurable columns, card rendering, and item management.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -1,15 +1,31 @@
 'use client';
 
 /**
- * MapView - Rustic Engine (Pure inline styles with --ds-* CSS vars)
+ * @fileoverview MapView -- Rustic engine (Vanilla / CSS variables).
+ * Renders a placeholder map area with a marker list using only inline
+ * styles referencing --ds-* design tokens. No external CSS framework
+ * dependency -- all visual properties flow from the tenant's CSS custom
+ * properties, making this engine fully theme-portable.
  *
- * Placeholder map container with marker list.
- * Designed to be extended with Leaflet/Mapbox by consumers.
+ * @example
+ * <RusticMapView
+ *   markers={[{ id: '1', lat: 40.7128, lng: -74.006, label: 'NYC' }]}
+ *   height={400}
+ *   onMarkerClick={(m) => console.log(m.id)}
+ * />
  */
 
 import React from 'react';
 import type { MapViewProps, MapMarker } from '../MapView.types';
 
+/**
+ * Rustic (Vanilla CSS) implementation of the MapView pattern.
+ * All styling is done via inline styles with --ds-* CSS variable fallbacks,
+ * ensuring full tenant-theme compatibility without framework lock-in.
+ *
+ * @param props - See {@link MapViewProps} for the full prop contract.
+ * @returns The rendered map view with marker list.
+ */
 export default function RusticMapView<T>(props: MapViewProps<T>) {
   const {
     markers,
@@ -29,12 +45,14 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
   } = props;
 
   return (
+    /* Flex row: optional fixed-width sidebar + fluid main content area */
     <div className={className} style={{ display: 'flex', gap: 16, ...style }}>
       {sidebar && (
         <div style={{ width: sidebarWidth, flexShrink: 0 }}>{sidebar}</div>
       )}
       <div style={{ flex: 1 }}>
         {toolbar}
+        {/* Plain text loading indicator -- no framework spinner dependency */}
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
             Loading...
@@ -42,6 +60,8 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
         ) : (
           <>
             {/* Placeholder map area */}
+            {/* Placeholder map region -- uses bg-info token for a subtle
+                 informational tint that visually distinguishes it from the marker list */}
             <div
               style={{
                 height,
@@ -76,6 +96,7 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                 No markers
               </div>
             ) : (
+              /* Marker list container with token-based border and radius */
               <div
                 style={{
                   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
@@ -84,6 +105,7 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                 }}
               >
                 {markers.map((marker, i) => {
+                  /* Selected row uses primary-50 tint; non-selected use elevated surface */
                   const isSelected = marker.id === selectedMarkerId;
                   return (
                     <div
@@ -95,17 +117,20 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                         background: isSelected
                           ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))'
                           : 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
+                        /* Only render bottom border between items, not after the last one */
                         borderBottom:
                           i < markers.length - 1
                             ? '1px solid var(--ds-color-border-primary, var(--ds-color-border))'
                             : undefined,
                       }}
                     >
+                      {/* Custom renderMarker replaces the entire row content when provided */}
                       {renderMarker ? (
                         renderMarker(marker)
                       ) : (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           {marker.icon}
+                          {/* Color dot -- a small filled circle representing the marker's color */}
                           {marker.color && (
                             <span
                               style={{
@@ -118,9 +143,11 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                             />
                           )}
                           <div>
+                            {/* Selected markers get bold weight for visual emphasis */}
                             <div style={{ fontSize: 14, fontWeight: isSelected ? 600 : 400, color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>
                               {marker.label ?? marker.id}
                             </div>
+                            {/* Coordinates at 4-decimal precision (~11m accuracy) */}
                             <div style={{ fontSize: 11, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                               {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
                             </div>

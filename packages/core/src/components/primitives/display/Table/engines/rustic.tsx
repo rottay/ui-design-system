@@ -1,35 +1,25 @@
 'use client';
 
 /**
- * @fileoverview Table Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS table with full feature parity with Classic.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Rustic Table engine -- pure HTML/CSS (zero UI-library dependencies).
  *
- * @remarks
- * This engine provides a lightweight, dependency-free table using only
- * inline styles via CSS custom properties (var(--ds-*)) and semantic HTML.
+ * Full-featured data table using only inline styles with CSS custom properties
+ * (`var(--ds-*)`) and semantic HTML. Achieves feature parity with the Modern
+ * engine (sorting, filtering, pagination, selection, expand, virtual scroll,
+ * sticky columns, column resize, nested headers, inline editing, summary rows)
+ * but without any DaisyUI or Tailwind dependency, making it ideal for
+ * environments where a utility-class framework is unavailable.
  *
- * **Supported Features:**
- * - Column sorting (single column, toggle ascend/descend/none)
- * - Column filtering (text input per column)
- * - Client-side pagination
- * - Row selection (checkbox/radio)
- * - Expandable rows with custom render
- * - Virtual scrolling for large datasets
- * - Fixed/sticky columns and headers
- * - Column resize via drag handles
- * - Nested column groups (multi-row headers)
- * - Summary rows (tfoot)
- * - Title and footer render functions
+ * All visual properties are driven by CSS custom properties with sensible
+ * fallbacks, so tenant themes can re-skin the table without touching JS.
  *
- * **ARIA Compliance:**
- * - role="grid" on table element
- * - aria-sort on sortable header cells
- * - aria-expanded on expandable rows
- * - aria-label on interactive controls
- * - Keyboard-accessible controls
+ * Engine: **Vanilla HTML + CSS custom properties**
  *
- * @see {@link Table} for the main component
+ * @example
+ * ```tsx
+ * <Table engine="rustic" dataSource={products} columns={cols} bordered size="small" />
+ * ```
+ *
  * @module Table/engines/rustic
  * @category Display
  * @package @rottay/design-system
@@ -47,6 +37,9 @@ import { useTranslation } from '../../../../../i18n';
 // ---------------------------------------------------------------------------
 // Style definitions using CSS custom properties
 // ---------------------------------------------------------------------------
+// All styles use CSS custom properties with sensible fallbacks so tenant themes
+// can override any visual aspect (colors, spacing, borders) without JS changes.
+// The `as const` casts prevent TypeScript from widening string literal types.
 const baseStyles = {
   wrapper: {
     position: 'relative' as const,
@@ -77,11 +70,14 @@ const baseStyles = {
     color: 'var(--ds-table-header-color)',
     position: 'relative' as const,
   },
+  // userSelect: none prevents text selection during rapid sort toggling
   thSortable: {
     cursor: 'pointer',
     userSelect: 'none' as const,
     transition: 'background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
   },
+  // Sticky headers need an explicit background to prevent body rows from
+  // bleeding through when scrolling. zIndex 20 sits above fixed columns (10).
   thSticky: {
     position: 'sticky' as const,
     zIndex: 20,
@@ -97,6 +93,8 @@ const baseStyles = {
   tdLarge: {
     padding: '16px 20px',
   },
+  // box-shadow transition is included alongside background-color so the
+  // left-border accent (applied via inset box-shadow on hover) also animates.
   rowHover: {
     transition: 'background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
   },
@@ -110,6 +108,8 @@ const baseStyles = {
     fontStyle: 'italic',
     letterSpacing: '0.01em',
   },
+  // Loading overlay sits above everything in the table (zIndex 30 > sticky 20).
+  // Semi-transparent background lets users see the data is stale but updating.
   loading: {
     position: 'absolute' as const,
     inset: 0,
@@ -161,6 +161,8 @@ const baseStyles = {
     display: 'inline-block',
     transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s',
   },
+  // Resize handle is a thin 4px strip on the right edge of each header cell.
+  // It is invisible by default and only shows a colored indicator when active.
   resizeHandle: {
     position: 'absolute' as const,
     right: 0,
@@ -205,6 +207,9 @@ const baseStyles = {
     backgroundColor: 'var(--ds-table-row-bg-expanded, var(--ds-color-bg-secondary, var(--ds-color-bg-muted)))',
     animation: 'var(--ds-personality-animation-entrance-duration, 0.2s) cubic-bezier(0.16, 1, 0.3, 1) rottay-table-expand-in',
   },
+  // Fixed (sticky) columns need an opaque background to obscure scrolling
+  // content underneath. Falls through three CSS variable levels for maximum
+  // compatibility with different theme configurations.
   fixedLeft: {
     position: 'sticky' as const,
     left: 0,
@@ -231,6 +236,9 @@ const baseStyles = {
     fontWeight: 600,
     backgroundColor: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
   },
+  // Dashed outline on hover signals that the cell is editable (click to edit).
+  // outlineOffset: -1px keeps the outline inside the cell boundary so it does
+  // not cause a layout shift on neighboring cells.
   editableCellHover: {
     outline: '1px dashed var(--ds-color-primary-200, var(--ds-color-primary))',
     outlineOffset: '-1px',
@@ -265,6 +273,16 @@ const baseStyles = {
   },
 };
 
+/**
+ * Rustic Table engine -- dependency-free, inline-styled data grid.
+ *
+ * Uses only CSS custom properties and semantic HTML. Hover states are managed
+ * via React state (hoveredRow, hoveredEditableCell, etc.) because inline
+ * styles cannot express `:hover` pseudo-selectors.
+ *
+ * @param props - Unified DS TableProps (see Table.types.ts)
+ * @returns A vanilla HTML table element with pagination controls
+ */
 export const Table = <T extends object = object>(props: TableProps<T>) => {
   const { t } = useTranslation('components');
 
@@ -333,6 +351,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   } = features;
 
   const { onCellEdit } = props;
+  // Rustic engine tracks hover states in React because inline styles cannot
+  // use CSS :hover pseudo-selectors. Each hover state variable maps to a
+  // specific visual feedback (row highlight, editable cell outline, sort
+  // header underline, pagination button lift).
   const [hoveredRow, setHoveredRow] = useState<string | number | null>(null);
   const [hoveredEditableCell, setHoveredEditableCell] = useState<string | null>(null);
   const [hoveredSortCol, setHoveredSortCol] = useState<string | null>(null);
@@ -344,6 +366,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const hasFilters = leafColumns.some((c) => c.filterSearch || c.filters);
 
   // ---- Style helpers ----
+  // These functions compose the base style objects with size/bordered/layout
+  // overrides. Composition happens at render time because the size prop can
+  // change dynamically (e.g., responsive layouts).
   const getTableStyle = (): CSSProperties => {
     const base: CSSProperties = { ...baseStyles.table };
     if (size === 'small') Object.assign(base, baseStyles.tableSmall);
@@ -378,6 +403,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Inline editable cell component (Rustic - pure inline styles) ----
+  // Defined as a nested component so it closes over handleCellSave/handleCellKeyNav
+  // without prop drilling. The component renders the appropriate input type
+  // (text, number, date, select, checkbox) based on column.fieldType.
   const EditableCellInput = ({
     value: initialValue,
     record,
@@ -406,6 +434,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       [record, index, column, cellValue]
     );
 
+    // Enter/Tab saves and moves focus to the next cell (via handleCellKeyNav).
+    // Escape discards the edit. This matches spreadsheet keyboard conventions.
     const onKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Escape') {
         if (e.key !== 'Escape') {
@@ -578,6 +608,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Filter row ----
+  // Per-column text inputs for client-side filtering. The focus/blur handlers
+  // mutate e.currentTarget.style directly (imperative DOM) because inline
+  // styles cannot express :focus pseudo-selectors.
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     const cellStyle = getCellStyle();
@@ -641,6 +674,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       const canExpand = isRowExpandable(record);
       const rowClass = typeof rowClassName === 'function' ? rowClassName(record, actualIndex) : rowClassName;
 
+      // Row style priority: hover > selected > default. The inset box-shadow
+      // creates a left-side accent bar on hover without affecting cell padding
+      // (a real border-left would shift content by 3px).
       const rowStyle: CSSProperties = {
         ...(isSelected
           ? baseStyles.rowSelected
@@ -787,6 +823,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Scroll dimensions ----
+  // scroll.y sets maxHeight on the scroll container, enabling vertical overflow.
+  // Accepts both pixel numbers and CSS strings (e.g., 'calc(100vh - 200px)').
   const scrollYValue = typeof scroll?.y === 'number' ? scroll.y : typeof scroll?.y === 'string' ? scroll.y : undefined;
 
   const tableElement = (
@@ -847,7 +885,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         </thead>
       )}
 
-      {/* Body */}
+      {/* Body -- when virtual scrolling is enabled, invisible spacer rows before
+          and after the visible window maintain the scroll container's total height
+          so the scrollbar thumb size/position stays correct. 48px is the estimated
+          row height used for offset calculations. */}
       <tbody>
         {virtualEnabled && virtualSlice.offsetTop > 0 && (
           <tr style={{ height: virtualSlice.offsetTop }} aria-hidden="true">

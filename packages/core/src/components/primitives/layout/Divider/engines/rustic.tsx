@@ -1,32 +1,15 @@
 /**
- * @fileoverview Divider Rustic Engine - Rottay Design System
- * @description Rustic (Pure HTML/CSS) implementation of the Divider component.
- * Uses vanilla HTML with inline CSS for maximum compatibility and accessibility.
+ * @fileoverview Divider Rustic Engine - Rottay Design System.
+ * Pure inline CSS divider with full ARIA accessibility (`role="separator"`,
+ * `aria-orientation`, `aria-hidden` on decorative lines). Uses BEM-style
+ * class names and CSS custom properties for tenant theming. Zero external
+ * dependencies -- ideal for embedded widgets and SSR.
  *
- * @remarks
- * The Rustic engine provides:
- * - Pure inline CSS styling without external dependencies
- * - Full ARIA accessibility (`role="separator"`, `aria-orientation`, `aria-hidden`)
- * - BEM-style class names (`divider`, `divider--horizontal`, `divider__text`)
- * - Complete box-sizing control for consistent rendering
- *
- * This implementation is ideal for:
- * - Embedded widgets in third-party applications
- * - Server-side rendering without CSS extraction
- * - Accessibility-focused implementations
- * - Maximum browser compatibility
- *
- * @example Using Rustic Engine
+ * @example
  * ```tsx
- * import { Divider } from '@rottay/design-system';
- *
- * // Pure HTML/CSS divider with accessibility
- * <Divider engine="rustic" variant="dashed">
- *   Section Break
- * </Divider>
+ * <RusticDivider variant="dashed">Section Break</RusticDivider>
  * ```
  *
- * @see {@link Divider} - The main engine-aware component
  * @module Divider/Engines/Rustic
  * @category Layout
  * @package @rottay/design-system
@@ -44,8 +27,15 @@ import {
 } from '../Divider.types';
 
 /**
- * Rustic Divider component.
- * Pure HTML/CSS implementation with accessibility focus.
+ * Rustic (vanilla CSS) Divider with full ARIA accessibility.
+ *
+ * Uses BEM-style class names (`divider`, `divider--horizontal`, `divider__text`)
+ * and CSS custom properties (`--ds-divider-text-*`, `--ds-color-neutral-*`) for
+ * tenant theming. Decorative line spans include `aria-hidden="true"` so screen
+ * readers only announce the text content.
+ *
+ * @param props - {@link DividerProps} with orientation, variant, text, and styling options.
+ * @returns A fully accessible separator element with inline styles.
  */
 const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
   (props, ref) => {
@@ -68,21 +58,21 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...rest
     } = props;
 
-    // Resolve prop aliases
+    // Resolve prop aliases for backward compatibility
     const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
     const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
     const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
     const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
     const isHorizontal = orientation === 'horizontal';
+    // Text is only supported in horizontal orientation
     const hasChildren = !!children && isHorizontal;
 
-    // Calculate values
     const lineThickness = getThicknessValue(thickness);
     const lineColor = color || DEFAULT_COLORS.rustic;
     const spacingValue = SPACING_MAP[spacing];
 
-    // Build class names
+    // BEM class names allow external CSS overrides without specificity wars
     const classNames = [
       'divider',
       `divider--${orientation}`,
@@ -93,7 +83,8 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       className,
     ].filter(Boolean).join(' ');
 
-    // Container style
+    // Explicit box-sizing ensures padding/border is included in dimensions.
+    // Vertical dividers use inline-flex so they flow alongside content.
     const containerStyle: React.CSSProperties = {
       display: isHorizontal ? 'flex' : 'inline-flex',
       alignItems: 'center',
@@ -109,7 +100,8 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...style,
     };
 
-    // Line style
+    // Base line style: only the relevant border direction is set, and
+    // borderRight/Bottom are explicitly none to prevent style bleeding
     const lineStyle: React.CSSProperties = {
       flex: 1,
       boxSizing: 'border-box',
@@ -121,7 +113,7 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       borderBottom: 'none',
     };
 
-    // Line before text
+    // Asymmetric flex values create the left/center/right text positioning
     const lineBeforeStyle: React.CSSProperties = {
       ...lineStyle,
       flex: textPosition === 'left' ? '0 0 5%' :
@@ -129,7 +121,6 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: '5%',
     };
 
-    // Line after text
     const lineAfterStyle: React.CSSProperties = {
       ...lineStyle,
       flex: textPosition === 'left' ? 1 :
@@ -137,7 +128,7 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: '5%',
     };
 
-    // Text style
+    // Text uses CSS custom property fallbacks for tenant-level overrides
     const textStyle: React.CSSProperties = {
       display: 'inline-block',
       padding: 'var(--ds-divider-text-padding, 0 1rem)',
@@ -148,7 +139,7 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       lineHeight: 1.5,
     };
 
-    // Render with text
+    // With-text render path: line spans are aria-hidden for accessibility
     if (hasChildren) {
       return (
         <div
@@ -177,7 +168,7 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       );
     }
 
-    // Simple divider without text
+    // Simple divider: merge container and line styles into a single element
     return (
       <div
         ref={ref}

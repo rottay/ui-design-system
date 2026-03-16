@@ -1,47 +1,13 @@
 /**
- * @fileoverview Toggle Classic Engine - Rottay Design System
- * @description Ant Design implementation of the Toggle component.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Classic engine for Toggle, wrapping Ant Design's `Switch` component.
+ * Supports loading states, inner checked/unchecked labels, and color variants through
+ * inline style overrides on top of AntSwitch's built-in behaviour.
  *
- * @remarks
- * The Classic engine wraps Ant Design's Switch component, providing
- * enterprise-grade toggle functionality with built-in loading states
- * and accessibility features.
- *
- * **Ant Design Features Utilized:**
- * - AntSwitch component with checked/loading props
- * - Size mapping (small, default)
- * - checkedChildren/unCheckedChildren for inner labels
- * - Built-in focus and keyboard handling
- *
- * **Prop Mapping:**
- * - `size`: 'xs'|'sm' → 'small', 'md'|'lg'|'xl' → 'default'
- * - `color`: Applied via inline styles
- * - `loading`: Direct pass-through to AntSwitch
- * - `checkedLabel`/`uncheckedLabel`: Maps to children slots
- *
- * **Added Features:**
- * - Label and description wrapper
- * - Error state styling
- * - Color variant support
- * - Synthetic onChange event
- *
- * @example Using Classic Engine
+ * @example
  * ```tsx
- * import { Toggle } from '@rottay/design-system';
- *
- * <Toggle
- *   engine="classic"
- *   loading={isProcessing}
- *   label="Auto-save"
- *   description="Save changes automatically"
- *   color="success"
- * />
+ * <Toggle engine="classic" loading={isSaving} label="Auto-save" color="success" />
  * ```
  *
- * @see {@link Toggle} for the main component
- * @see {@link ModernToggle} for DaisyUI implementation
- * @see {@link RusticToggle} for vanilla implementation
  * @module ClassicToggle
  * @category Inputs
  * @package @rottay/design-system
@@ -54,7 +20,10 @@ import { Switch as AntSwitch } from 'antd';
 import type { ToggleProps } from '../Toggle.types';
 import { TOGGLE_DEFAULTS, SIZE_VALUES as TOGGLE_SIZE_VALUES, COLOR_MAP } from '../Toggle.types';
 
-// Ant Design size mapping
+/**
+ * Ant Design only supports 'small' and 'default' switch sizes,
+ * so xs/sm both map to 'small' and md/lg/xl all map to 'default'.
+ */
 const ANT_SIZE_MAP = {
   xs: 'small' as const,
   sm: 'small' as const,
@@ -63,6 +32,16 @@ const ANT_SIZE_MAP = {
   xl: 'default' as const,
 };
 
+/**
+ * Classic (Ant Design) implementation of Toggle.
+ *
+ * Manages controlled/uncontrolled state internally and wraps `AntSwitch` with
+ * an optional label+description layout. A synthetic `ChangeEvent` is fabricated
+ * on toggle so consumers get a consistent `(checked, event)` signature across engines.
+ *
+ * @param props - Standard ToggleProps shared across all engines.
+ * @returns An AntSwitch element, optionally wrapped in a label with description text.
+ */
 export default function ClassicToggle(props: ToggleProps): React.ReactElement {
   const {
     size = TOGGLE_DEFAULTS.size,
@@ -89,7 +68,8 @@ export default function ClassicToggle(props: ToggleProps): React.ReactElement {
   const generatedId = useId();
   const inputId = providedId || `toggle-classic-${generatedId}`;
 
-  // Internal state for uncontrolled mode
+  // Dual-mode state: when controlledChecked is provided the component is controlled,
+  // otherwise internalChecked serves as the source of truth.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
@@ -98,7 +78,8 @@ export default function ClassicToggle(props: ToggleProps): React.ReactElement {
     if (!isControlled) {
       setInternalChecked(checked);
     }
-    // Create synthetic change event
+    // AntSwitch only provides a boolean; fabricate a synthetic event so the
+    // DS onChange signature (checked, event) stays consistent across engines.
     const syntheticEvent = {
       target: { checked, value },
       currentTarget: { checked, value },
@@ -121,7 +102,7 @@ export default function ClassicToggle(props: ToggleProps): React.ReactElement {
     ...style,
   };
 
-  // Custom styles based on color
+  // Override AntSwitch's default blue with the selected color variant
   const switchStyle: React.CSSProperties = {
     backgroundColor: isChecked ? colors.bgChecked : undefined,
     borderColor: error ? 'var(--ds-color-error, #ff4d4f)' : undefined,
@@ -144,6 +125,7 @@ export default function ClassicToggle(props: ToggleProps): React.ReactElement {
     />
   );
 
+  // When label or description is present, wrap switch + text in a <label> for click-to-toggle
   if (displayLabel || description) {
     return (
       <label

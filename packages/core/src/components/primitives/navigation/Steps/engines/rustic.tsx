@@ -167,6 +167,9 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
      * Compute effective status for each step.
      * Memoized to prevent unnecessary recalculations.
      */
+    // Pre-compute the effective status for each step so the render phase
+    // only deals with resolved values. Memoized to avoid recalculating
+    // on unrelated re-renders (e.g., parent state changes).
     const computedSteps = useMemo(() => {
       return items.map((item, index) => ({
         ...item,
@@ -278,7 +281,9 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
               );
             }
 
-            // Default: numbered step with status indicator
+            // Default icon: use text symbols for finished (check) and error (cross)
+            // to provide a universally renderable indicator without SVG overhead.
+            // Pending steps show their 1-based position number.
             const displayNumber = step.effectiveStatus === 'finish'
               ? '✓'
               : step.effectiveStatus === 'error'
@@ -357,7 +362,10 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                 )}
               </div>
 
-              {/* Connecting line to next step */}
+              {/* Connecting line to next step.
+                  Positioned absolutely so it does not affect the flex layout.
+                  Completed connectors (index < current) use the primary color
+                  to visually indicate progress between finished steps. */}
               {!isLast && (
                 <span
                   style={{

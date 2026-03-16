@@ -1,8 +1,9 @@
 /**
- * Color Tokens - TypeScript Mirror
+ * @fileoverview Color token mirrors -- type-safe references to `--ds-color-*` CSS variables.
  *
- * TypeScript representation of color CSS custom properties.
- * Use these for type-safe color references in JavaScript/TypeScript.
+ * Defines 10-step scales (50-900) for semantic palettes (primary, secondary,
+ * success, warning, error, info), a neutral gray scale, common colors
+ * (black/white), and alpha transparency overlays.
  */
 
 // Primary - Rottay Brand Blue
@@ -135,7 +136,7 @@ export const colorAlphaWhite = {
   90: 'var(--ds-color-alpha-white-90)',
 } as const;
 
-// Combined colors export
+/** Aggregated color token namespace for discovery and runtime introspection. */
 export const colors = {
   primary: colorPrimary,
   secondary: colorSecondary,

@@ -59,10 +59,41 @@
 import type { EngineAwareProps } from '../../../../contracts';
 import type { ReactNode, ChangeEvent, CSSProperties } from 'react';
 
+/**
+ * Size variants for the Radio component.
+ * Maps to CSS custom properties `--ds-radio-{size}-size` via {@link SIZE_MAP}
+ * and pixel values via {@link SIZE_MAP_NUMERIC}.
+ */
 export type RadioSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * Color variants applied when the radio button is selected.
+ * Each variant maps to background, border, and inner dot colors
+ * via {@link COLOR_MAP} and the tenant's CSS custom properties.
+ */
 export type RadioVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+
+/**
+ * Position of the label text relative to the radio indicator.
+ * - `start` - Label appears before (left in LTR) the radio
+ * - `end` - Label appears after (right in LTR) the radio
+ */
 export type RadioLabelPlacement = 'start' | 'end';
 
+/**
+ * Option structure for Radio.Group when using the `options` prop.
+ * Includes an optional `description` field for richer option displays
+ * (e.g., pricing plans, feature descriptions).
+ *
+ * @example
+ * ```tsx
+ * const plans: RadioOption[] = [
+ *   { value: 'free', label: 'Free', description: 'Limited features' },
+ *   { value: 'pro', label: 'Pro', description: 'All features included' },
+ * ];
+ * <Radio.Group options={plans} />
+ * ```
+ */
 export interface RadioOption {
   /** Option value */
   value: string | number;
@@ -74,6 +105,32 @@ export interface RadioOption {
   description?: ReactNode;
 }
 
+/**
+ * Props for the Radio component.
+ *
+ * Supports controlled and uncontrolled modes, multiple color variants,
+ * label placement, and optional description text. Unlike Checkbox,
+ * Radio does not support an indeterminate state.
+ *
+ * @example Basic controlled radio
+ * ```tsx
+ * <Radio
+ *   checked={selectedPlan === 'pro'}
+ *   onChange={() => setSelectedPlan('pro')}
+ *   label="Pro Plan"
+ *   description="All features included"
+ *   color="primary"
+ * />
+ * ```
+ *
+ * @example Within a group (preferred)
+ * ```tsx
+ * <Radio.Group value={plan} onChange={setPlan} name="plan">
+ *   <Radio value="free" label="Free" />
+ *   <Radio value="pro" label="Pro" />
+ * </Radio.Group>
+ * ```
+ */
 export interface RadioProps extends EngineAwareProps {
   /** Radio size */
   size?: RadioSize;
@@ -113,6 +170,33 @@ export interface RadioProps extends EngineAwareProps {
   autoFocus?: boolean;
 }
 
+/**
+ * Props for the Radio.Group compound component.
+ * Manages a set of radio buttons as a single form control, tracking a single selected value.
+ * Unlike Checkbox.Group, only one value can be selected at a time.
+ *
+ * @example Using options prop
+ * ```tsx
+ * <Radio.Group
+ *   options={[
+ *     { value: 'sm', label: 'Small' },
+ *     { value: 'lg', label: 'Large' },
+ *   ]}
+ *   value={size}
+ *   onChange={(val) => setSize(val)}
+ *   direction="horizontal"
+ *   buttonStyle="solid"
+ * />
+ * ```
+ *
+ * @example Using children
+ * ```tsx
+ * <Radio.Group value={size} onChange={setSize} name="size">
+ *   <Radio value="sm" label="Small" />
+ *   <Radio value="lg" label="Large" />
+ * </Radio.Group>
+ * ```
+ */
 export interface RadioGroupProps extends EngineAwareProps {
   /** Group size */
   size?: RadioSize;
@@ -144,6 +228,19 @@ export interface RadioGroupProps extends EngineAwareProps {
   buttonStyle?: 'outline' | 'solid';
 }
 
+/**
+ * Default values for Radio component props.
+ * Applied when no explicit value is provided by the consumer.
+ *
+ * @constant
+ * @property {string} size - Default size variant ('md')
+ * @property {string} color - Default color variant ('primary')
+ * @property {string} labelPlacement - Default label position ('end')
+ * @property {boolean} defaultChecked - Default checked state (false)
+ * @property {boolean} disabled - Default disabled state (false)
+ * @property {boolean} required - Default required state (false)
+ * @property {boolean} error - Default error state (false)
+ */
 export const RADIO_DEFAULTS = {
   size: 'md' as RadioSize,
   color: 'primary' as RadioVariant,
@@ -154,6 +251,16 @@ export const RADIO_DEFAULTS = {
   error: false,
 };
 
+/**
+ * Default values for Radio.Group component props.
+ *
+ * @constant
+ * @property {string} size - Default size for all child radios ('md')
+ * @property {string} color - Default color for all child radios ('primary')
+ * @property {string} direction - Default layout direction ('vertical')
+ * @property {string} spacing - Default gap between items ('md')
+ * @property {boolean} disabled - Default disabled state (false)
+ */
 export const RADIO_GROUP_DEFAULTS = {
   size: 'md' as RadioSize,
   color: 'primary' as RadioVariant,
@@ -162,7 +269,13 @@ export const RADIO_GROUP_DEFAULTS = {
   disabled: false,
 };
 
-// Size mapping to CSS variables
+/**
+ * Size mapping to CSS custom properties.
+ * Each size variant references a `--ds-radio-{size}-size` CSS variable
+ * that controls both width and height of the radio indicator.
+ *
+ * @constant
+ */
 export const SIZE_MAP: Record<RadioSize, string> = {
   xs: 'var(--ds-radio-xs-size)',
   sm: 'var(--ds-radio-sm-size)',
@@ -171,7 +284,12 @@ export const SIZE_MAP: Record<RadioSize, string> = {
   xl: 'var(--ds-radio-xl-size)',
 };
 
-// Numeric size values for calculations (e.g., dot sizing)
+/**
+ * Numeric size values in pixels for calculations that cannot use CSS variables
+ * (e.g., SVG inner dot sizing, canvas rendering).
+ *
+ * @constant
+ */
 export const SIZE_MAP_NUMERIC: Record<RadioSize, number> = {
   xs: 14,
   sm: 16,
@@ -180,7 +298,15 @@ export const SIZE_MAP_NUMERIC: Record<RadioSize, number> = {
   xl: 24,
 };
 
-// Color mapping
+/**
+ * Color configuration mapping for each radio variant.
+ * References CSS custom properties with hardcoded fallback values.
+ *
+ * @constant
+ * @property {string} bg - Background color when selected
+ * @property {string} border - Border color when selected
+ * @property {string} dot - Inner dot color (always white)
+ */
 export const COLOR_MAP: Record<RadioVariant, { bg: string; border: string; dot: string }> = {
   default: {
     bg: 'var(--ds-color-neutral-600, #4b5563)',

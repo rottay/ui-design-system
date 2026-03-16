@@ -1,12 +1,34 @@
 'use client';
 
 /**
- * DetailPanel - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (DaisyUI / Tailwind) engine for the DetailPanel pattern.
+ * Renders an entity detail view inside a DaisyUI card with a header (avatar, title,
+ * status badge, action buttons), tab navigation (DaisyUI bordered tabs), an optional
+ * sidebar, breadcrumbs, and a footer. Supports controlled and uncontrolled tab state.
+ *
+ * @example
+ * <ModernDetailPanel
+ *   data={project}
+ *   title="Project Alpha"
+ *   subtitle="Q1 2026 Roadmap"
+ *   status={{ label: 'In Progress', color: '#3b82f6' }}
+ *   tabs={[
+ *     { key: 'tasks', label: 'Tasks', content: <TaskList />, badge: 5 },
+ *     { key: 'files', label: 'Files', content: <FileList /> },
+ *   ]}
+ *   sidebar={<ProjectMeta />}
+ *   sidebarPosition="right"
+ *   onBack={() => router.back()}
+ * />
  */
 
 import React, { useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../DetailPanel.types';
 
+/**
+ * Maps a DetailAction variant to the corresponding DaisyUI btn class.
+ * Isolated as a small component to keep the main render body readable.
+ */
 function ActionButton({ action }: { action: DetailAction }) {
   const variantClasses: Record<string, string> = {
     default: 'btn-outline',
@@ -26,6 +48,18 @@ function ActionButton({ action }: { action: DetailAction }) {
   );
 }
 
+/**
+ * Modern (DaisyUI) DetailPanel engine.
+ *
+ * Tab state can be controlled (activeTab + onTabChange) or uncontrolled (defaults
+ * to the first tab). The sidebar is positioned via flex-direction reversal to
+ * avoid duplicating DOM. Responsive grid columns on the sidebar keep the layout
+ * readable on smaller screens.
+ *
+ * @typeParam T - Shape of the entity data object being displayed.
+ * @param props - {@link DetailPanelProps} -- data, header info, tabs, sidebar, and actions.
+ * @returns The detail view wrapped in a DaisyUI card.
+ */
 export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   const {
     data,
@@ -49,14 +83,19 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     style,
   } = props;
 
+  // Uncontrolled tab state: falls back to the first tab key when the consumer
+  // does not provide controlledActiveTab.
   const [internalActiveTab, setInternalActiveTab] = useState<string>(tabs?.[0]?.key ?? '');
   const activeTab = controlledActiveTab ?? internalActiveTab;
 
+  // Only update internal state when uncontrolled. Always fire onTabChange
+  // so controlled consumers can sync their own state.
   const handleTabChange = (key: string) => {
     if (!controlledActiveTab) setInternalActiveTab(key);
     onTabChange?.(key);
   };
 
+  // Skeleton loading: mimics the header + tab layout with animated pulse blocks.
   if (loading) {
     return (
       <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
@@ -77,6 +116,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     );
   }
 
+  // Resolve the active tab object so we can render its content below the tab bar.
   const activeTabObj = tabs?.find((t) => t.key === activeTab);
 
   return (
@@ -132,9 +172,11 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           )}
         </div>
 
-        {/* Body with optional sidebar */}
+        {/* Body with optional sidebar. flex-direction is reversed when sidebarPosition
+            is 'left' so the sidebar DOM stays after main content (better for a11y reading
+            order) while visually appearing on the left. */}
         <div className="mt-4 flex gap-4" style={{ flexDirection: sidebarPosition === 'left' ? 'row-reverse' : 'row' }}>
-          {/* Main content */}
+          {/* Main content -- minWidth:0 prevents long tab content from overflowing. */}
           <div className="flex-1 min-w-0" style={sidebarPosition === 'left' ? undefined : undefined}>
             {tabs && tabs.length > 0 && (
               <>
@@ -158,7 +200,8 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
             )}
           </div>
 
-          {/* Sidebar */}
+          {/* Sidebar -- uses order:1 when position is 'left' as a fallback in case
+              flex-direction reversal is overridden by a parent container. */}
           {sidebar && (
             <div className="flex-shrink-0" style={{ width: sidebarWidth, order: sidebarPosition === 'left' ? 1 : undefined }}>
               <div className="card bg-base-200/50 p-4 rounded-lg">{sidebar}</div>

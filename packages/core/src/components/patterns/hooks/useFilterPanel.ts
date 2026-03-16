@@ -1,9 +1,22 @@
 'use client';
 
 /**
- * useFilterPanel - Composition Hook
+ * @fileoverview useFilterPanel composition hook -- manages filter values,
+ * reset, and active count tracking. Returns `filterProps` ready to spread
+ * onto PatternFilterPanel.
  *
- * Manages filter state for FilterPanel pattern.
+ * Use this hook when you need to coordinate filter state with other UI
+ * (e.g. a DataTable or URL query params). The `activeCount` and
+ * `hasActiveFilters` flags are handy for "N filters applied" badges.
+ *
+ * @example
+ * ```tsx
+ * const { filterProps, hasActiveFilters } = useFilterPanel({
+ *   filters: [{ key: 'status', type: 'select', options: statusOptions }],
+ *   onChange: (values) => refetch(values),
+ * });
+ * return <PatternFilterPanel {...filterProps} />;
+ * ```
  */
 
 import { useState, useCallback, useMemo } from 'react';
@@ -31,9 +44,28 @@ export interface UseFilterPanelReturn {
   };
 }
 
+/**
+ * Manages filter state for a set of filter definitions, with reset and
+ * active-count tracking.
+ *
+ * Every `setValue` / `setValues` call immediately notifies the parent via
+ * `onChange`, making it straightforward to trigger server-side refetches.
+ *
+ * @param options - Filter definitions, initial values, and change callback.
+ * @returns Filter state plus a `filterProps` object ready to spread onto
+ *          PatternFilterPanel.
+ *
+ * @example
+ * ```tsx
+ * const { filterProps, activeCount } = useFilterPanel({ filters, onChange: refetch });
+ * ```
+ */
 export function useFilterPanel(options: UseFilterPanelOptions): UseFilterPanelReturn {
   const { filters, initialValues, onChange } = options;
 
+  // Build the default values map once per filter set. These serve both as
+  // the initial state and as the baseline for determining which filters
+  // are "active" (i.e. differ from their default).
   const defaults = useMemo(() => {
     const d: Record<string, unknown> = {};
     for (const f of filters) {
@@ -65,6 +97,10 @@ export function useFilterPanel(options: UseFilterPanelOptions): UseFilterPanelRe
     onChange?.(defaults);
   }, [defaults, onChange]);
 
+  // Count filters whose value meaningfully differs from the default.
+  // Empty strings, nulls, undefined, and empty arrays are treated as
+  // "not active" even if the default was something else, since they
+  // represent a cleared filter from the user's perspective.
   const activeCount = useMemo(() => {
     return Object.entries(values).filter(([key, val]) => {
       if (val === undefined || val === null || val === '') return false;

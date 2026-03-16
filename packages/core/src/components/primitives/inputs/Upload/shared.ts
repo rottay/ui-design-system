@@ -1,12 +1,11 @@
+/**
+ * @fileoverview Upload shared utilities.
+ * Normalizes internal file descriptor creation across all engines.
+ */
+
 'use client';
 
 import type { UploadFile, UploadProps } from './Upload.types';
-
-/**
- * Normaliza la creación del descriptor interno de archivo para que todos los
- * engines presenten la misma forma de datos y podamos probar el flujo una sola
- * vez sin esconder diferencias sutiles.
- */
 export function createUploadFile(
   file: File,
   originalFile: File = file

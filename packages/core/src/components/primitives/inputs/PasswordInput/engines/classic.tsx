@@ -1,6 +1,12 @@
 /**
- * @fileoverview PasswordInput Classic Engine - Rottay Design System
- * @description Ant Design implementation of the PasswordInput component.
+ * @fileoverview PasswordInput Classic Engine - Rottay Design System.
+ * Wraps Ant Design's Input.Password, mapping design-system size/variant tokens
+ * to Ant equivalents and appending an optional strength indicator bar.
+ *
+ * @example
+ * ```tsx
+ * <PasswordInput engine="classic" strengthIndicator strengthLevel="strong" />
+ * ```
  *
  * @module ClassicPasswordInput
  * @category Inputs
@@ -14,6 +20,10 @@ import { Input as AntInput } from 'antd';
 import type { PasswordInputProps } from '../PasswordInput.types';
 import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../PasswordInput.types';
 
+/**
+ * Maps DS 5-tier size tokens to Ant Design's 3-tier size system.
+ * xs/sm both collapse to 'small', lg/xl both map to 'large'.
+ */
 const ANT_SIZE_MAP = {
   xs: 'small' as const,
   sm: 'small' as const,
@@ -22,6 +32,14 @@ const ANT_SIZE_MAP = {
   xl: 'large' as const,
 };
 
+/**
+ * Classic engine PasswordInput backed by Ant Design's Input.Password.
+ * Delegates visibility toggle, variant styling, and input behavior to Ant Design,
+ * adding a strength indicator bar and error message below the input when configured.
+ *
+ * @param props - Unified PasswordInputProps from the design system contract.
+ * @returns An Ant Design password input with optional strength bar and error text.
+ */
 export default function ClassicPasswordInput(props: PasswordInputProps): React.ReactElement {
   const {
     size = PASSWORD_INPUT_DEFAULTS.size,
@@ -73,6 +91,7 @@ export default function ClassicPasswordInput(props: PasswordInputProps): React.R
       style={{ display: 'inline-flex', flexDirection: 'column', width: '100%', ...style }}
       data-testid={dataTestId}
     >
+      {/* Map DS variant tokens to Ant Design variant equivalents; 'unstyled' becomes 'borderless' */}
       <AntInput.Password
         id={inputId}
         size={ANT_SIZE_MAP[size]}
@@ -95,6 +114,7 @@ export default function ClassicPasswordInput(props: PasswordInputProps): React.R
         status={error ? 'error' : undefined}
         variant={variant === 'filled' ? 'filled' : variant === 'unstyled' ? 'borderless' : undefined}
       />
+      {/* Strength indicator bar: width and color driven by STRENGTH_WIDTHS/STRENGTH_COLORS constants */}
       {strengthIndicator && strengthLevel && (
         <div
           className="rottay-password-strength"

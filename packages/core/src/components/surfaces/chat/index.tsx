@@ -1,11 +1,14 @@
 'use client';
 
 /**
- * ChatSurface
+ * @fileoverview ChatSurface - Rottay Design System
+ * @description Reusable conversation surface for assistants, support inboxes,
+ * and operator messaging workflows.
  *
- * Messaging flows need transcript rendering, composer state, and optional
- * supporting context. This surface keeps that conversation skeleton reusable
- * across AI copilots, support inboxes, and operator chat pages.
+ * @remarks
+ * The surface owns layout, transcript scaffolding, composer behavior, and
+ * personality-aware motion. It deliberately delegates rich message rendering
+ * to assistant patterns so the shell stays vendor-agnostic.
  */
 
 import React, { useEffect, useState } from 'react';
@@ -28,6 +31,7 @@ import { PageShellSurface } from '../page-shell';
 import { SurfaceActionBar, SurfaceSectionCard } from '../shared';
 import { SurfaceEmptyState } from '../states';
 
+/** Default transcript renderer used when consumers do not provide a custom message slot. */
 function DefaultMessage({
   message,
   renderPart,
@@ -53,9 +57,18 @@ function DefaultMessage({
   );
 }
 
+/**
+ * Normalize legacy `body` fields into the richer assistant message part model.
+ *
+ * This keeps older surface configs working while newer configs can provide
+ * explicit rich parts such as tool blocks or attachments.
+ */
 function normalizeMessageParts(message: ChatSurfaceMessage): AssistantMessagePart[] {
+  // Start from explicit parts if the caller provided them.
   const parts = [...(message.parts ?? [])];
 
+  // Legacy compat: older configs pass a `body` string instead of typed parts.
+  // We auto-promote it so callers do not have to migrate all at once.
   if (parts.length === 0 && message.body !== undefined && message.body !== null) {
     if (typeof message.body === 'string' || typeof message.body === 'number') {
       parts.push({
@@ -64,6 +77,8 @@ function normalizeMessageParts(message: ChatSurfaceMessage): AssistantMessagePar
         streaming: message.streaming,
       });
     } else {
+      // Non-primitive bodies (React nodes, objects) are treated as artifacts
+      // so the pattern can render them in a distinct visual container.
       parts.push({
         type: 'artifact',
         content: message.body,
@@ -71,6 +86,9 @@ function normalizeMessageParts(message: ChatSurfaceMessage): AssistantMessagePar
     }
   }
 
+  // Attachments are appended only when not already represented in the parts
+  // array. This prevents duplication when a config supplies both `parts` and
+  // the legacy `attachments` field.
   if (
     message.attachments &&
     !parts.some((part) => part.type === 'attachments')
@@ -89,6 +107,7 @@ export interface ChatSurfaceProps {
   loading?: boolean;
 }
 
+/** Full chat surface composed from transcript, composer, optional sidebar, and shell chrome. */
 export function ChatSurface({
   config,
   loading = false,
@@ -97,15 +116,20 @@ export function ChatSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
+  // The composer supports both controlled (app owns draft state) and
+  // uncontrolled (surface owns draft state) modes. When `config.behavior.draft`
+  // is defined, the surface defers to the app's value.
   const [internalDraft, setInternalDraft] = useState(config.behavior.draft ?? '');
   const draft = config.behavior.draft ?? internalDraft;
 
+  // Keep local draft state in sync when the surface is controlled from outside.
   useEffect(() => {
     if (config.behavior.draft !== undefined) {
       setInternalDraft(config.behavior.draft);
     }
   }, [config.behavior.draft]);
 
+  /** Update the draft while supporting both controlled and uncontrolled usage. */
   const setDraft = (nextValue: string): void => {
     if (config.behavior.draft === undefined) {
       setInternalDraft(nextValue);
@@ -114,6 +138,7 @@ export function ChatSurface({
     config.behavior.onDraftChange?.(nextValue);
   };
 
+  /** Submit the current draft through the configured send handler and reset local state when allowed. */
   const handleSend = async (): Promise<void> => {
     if (!draft.trim() || !config.behavior.onSend) {
       return;
@@ -136,6 +161,9 @@ export function ChatSurface({
       ? '1.8s'
       : '1.2s';
 
+  // The chat layout uses a 12-column grid with 8/4 split when a sidebar is
+  // present and viewport is wide enough. On mobile or when no sidebar
+  // content is provided, it collapses to a single column.
   const chatContent = (
     <Grid columns={config.presentation.sidebar && !shouldStack ? 12 : 1} gap={sectionSpacing}>
       <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
@@ -161,6 +189,7 @@ export function ChatSurface({
                 aria-live="polite"
                 aria-relevant="additions text"
               >
+                {/* When entrance motion is enabled, transcript messages reveal as a coordinated group. */}
                 {profileDefaults.animateEntrance ? (
                   <StaggerChildren
                     staggerDelay={profileDefaults.staggerDelay}
@@ -202,6 +231,9 @@ export function ChatSurface({
 
           <SurfaceSectionCard title={tSurface('chat.composer_title')}>
             <Stack spacing="md">
+              {/* When a personality accent bar is active, the composer gets a
+                  matching primary border to visually tie it to the accent
+                  theme. Without an accent, the default border is used. */}
               <Textarea
                 value={draft}
                 onChange={(nextValue) => setDraft(nextValue)}

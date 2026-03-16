@@ -1,8 +1,9 @@
 /**
- * Pattern Components - Tier 2
- *
- * Generic, composable components with engine support and slots.
- * Used as building blocks for Domain Recipes (Tier 3).
+ * @fileoverview Pattern Components barrel -- Tier 2 of the design system.
+ * Generic, composable components with engine support and composable slots.
+ * Patterns sit above primitives and below surfaces: they package recurring
+ * UI structures (tables, forms, charts, kanban, etc.) without taking
+ * ownership of full page chrome. Used as building blocks for Tier 3 recipes.
  */
 
 // === Shared Types ===

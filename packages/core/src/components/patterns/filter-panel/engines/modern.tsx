@@ -1,13 +1,34 @@
 'use client';
 
 /**
- * FilterPanel - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview Modern (DaisyUI / Tailwind) engine for the FilterPanel pattern.
+ * Renders a flat list of filter controls using DaisyUI-styled native HTML form
+ * elements. Supports inline (toolbar), stacked, and sidebar layouts, an
+ * optional collapsible header, and Apply/Reset action buttons.
+ *
+ * @example
+ * <FilterPanel
+ *   engine="modern"
+ *   filters={[
+ *     { key: 'search', label: 'Search', type: 'text' },
+ *     { key: 'active', label: 'Active only', type: 'boolean' },
+ *   ]}
+ *   values={filterValues}
+ *   onChange={setFilterValues}
+ *   layout="inline"
+ *   showApply
+ * />
  */
 
 import React, { useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../types';
 
+/**
+ * Renders the appropriate DaisyUI-styled native HTML form control for a given
+ * filter definition. Uses input, select, and checkbox elements with DaisyUI
+ * utility classes to keep the bundle free of heavy UI-library dependencies.
+ */
 function renderFilterControl(
   filter: FilterDef,
   value: unknown,
@@ -37,6 +58,9 @@ function renderFilterControl(
           ))}
         </select>
       );
+    // Multi-select renders individual checkboxes because DaisyUI has no
+    // built-in multi-select widget. This also gives better UX on mobile
+    // where native multi-select elements are difficult to use.
     case 'multi-select':
       return (
         <div className="flex flex-wrap gap-2">
@@ -49,6 +73,7 @@ function renderFilterControl(
                   className="checkbox checkbox-sm"
                   checked={checked}
                   onChange={() => {
+                    // Toggle: add if unchecked, remove if checked.
                     const arr = ((value as string[]) ?? []);
                     const next = checked
                       ? arr.filter((v) => v !== o.value)
@@ -100,6 +125,8 @@ function renderFilterControl(
         </div>
       );
     }
+    // Number range: coerce empty strings to undefined so the consumer's
+    // query builder can distinguish "no bound" from zero.
     case 'number-range': {
       const range = (value as [number | '', number | '']) ?? ['', ''];
       return (
@@ -137,6 +164,13 @@ function renderFilterControl(
   }
 }
 
+/**
+ * Modern FilterPanel using DaisyUI-styled native HTML form controls.
+ * Supports inline, stacked, and sidebar layouts with optional collapse.
+ *
+ * @param props - See {@link FilterPanelProps} for full prop documentation.
+ * @returns A DaisyUI-styled filter panel with configurable layout.
+ */
 export default function ModernFilterPanel(props: FilterPanelProps) {
   const {
     filters,
@@ -158,14 +192,20 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
 
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
+  // Spread existing values and overwrite the changed key so the consumer
+  // always receives the full values snapshot, not just the delta.
   const handleChange = (key: string, val: unknown) => {
     onChange({ ...values, [key]: val });
   };
 
+  // Layout modes: inline = horizontal toolbar, stacked = vertical list,
+  // sidebar = vertical with a right border separator.
   const isInline = layout === 'inline';
   const isSidebar = layout === 'sidebar';
 
   const filterContent = (
+    // Inline layout uses items-end alignment so labels and inputs of
+    // different heights share a consistent bottom baseline.
     <div className={isInline ? 'flex flex-wrap gap-4 items-end' : 'flex flex-col gap-4'}>
       {filters.map((filter) => (
         <div key={filter.key} className={isInline ? 'min-w-[180px]' : ''}>
@@ -210,6 +250,9 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
         </div>
       )}
 
+      {/* Hide filter content when collapsed or loading. The guard
+          `!(collapsible && collapsed)` ensures non-collapsible panels
+          always show their content regardless of the collapsed state. */}
       {!loading && !(collapsible && collapsed) && (
         <>
           {filterContent}

@@ -98,6 +98,9 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
      * Adapts the Rottay progressDot function signature to Ant Design's format.
      * Ant Design passes different parameters than our unified interface.
      */
+    // Antd's progressDot callback receives (iconDot, stepInfo) where iconDot
+    // is the default dot node. Our unified interface omits the iconDot argument,
+    // so we adapt the signature here by discarding it with the underscore param.
     const antProgressDot = typeof progressDot === 'function'
       ? (_iconDot: React.ReactNode, { index, status: stepStatus, title, description }: {
           index: number;
@@ -130,6 +133,9 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
           status={status}
           type={type}
           onChange={onChange}
+          // Map Rottay StepItem props to antd's item shape. We explicitly
+          // pick known properties to avoid passing engine-specific or unknown
+          // props into antd which would trigger console warnings.
           items={items.map((item) => ({
             title: item.title,
             subTitle: item.subTitle,

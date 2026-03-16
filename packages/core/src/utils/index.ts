@@ -1,8 +1,9 @@
 /**
- * Utility Functions
+ * @fileoverview Public barrel for shared utility helpers.
  *
- * Provides common utilities for the design system.
- * Merged from core/utils and shared/utils.
+ * Exports compound component helpers, runtime logging, performance comparators,
+ * math functions, and WCAG accessibility utilities. All helpers are pure and
+ * reusable -- React-context-dependent logic belongs elsewhere.
  */
 
 // Compound component helpers

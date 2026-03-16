@@ -1,93 +1,27 @@
 'use client';
 
 /**
- * @fileoverview ColorPicker Component - Rottay Design System
- * @description A color selection interface with support for multiple formats,
- * preset palettes, and alpha channel control for design and theming applications.
+ * @fileoverview ColorPicker -- color selection input with format options (HEX/RGB/HSB),
+ * preset palettes, alpha channel control, and controlled/uncontrolled modes.
  *
- * @remarks
- * The ColorPicker component provides comprehensive color selection for:
- * - **Theme customization**: Brand colors, accent colors
- * - **Design tools**: Color palettes, gradients, shadows
- * - **Form inputs**: Color preferences, highlighting
- * - **Data visualization**: Chart colors, heatmaps
- *
- * Key features:
- * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
- * - **Format options**: HEX, RGB, HSB color formats
- * - **Preset palettes**: Predefined color groups for quick selection
- * - **Alpha channel**: Transparency control with optional disable
- * - **Text display**: Show color value as text
- * - **Controlled/uncontrolled**: Full state management flexibility
- * - **Clear support**: Allow clearing selected color
- *
- * @example Basic color picker
+ * @example
  * ```tsx
  * import { ColorPicker } from '@rottay/design-system';
  *
- * <ColorPicker defaultValue="#1677ff" />
- * ```
+ * // Basic with text display
+ * <ColorPicker defaultValue="#1677ff" showText format="hex" />
  *
- * @example With text display
- * ```tsx
- * <ColorPicker defaultValue="#1677ff" showText />
- * ```
- *
- * @example Different color formats
- * ```tsx
- * // HEX format (default)
- * <ColorPicker format="hex" showText />
- *
- * // RGB format
- * <ColorPicker format="rgb" showText />
- *
- * // HSB format
- * <ColorPicker format="hsb" showText />
- * ```
- *
- * @example With preset palettes
- * ```tsx
- * <ColorPicker
- *   presets={[
- *     { label: 'Primary', colors: ['#1677ff', '#52c41a', '#faad14'] },
- *     { label: 'Neutral', colors: ['#000000', '#666666', '#ffffff'] },
- *   ]}
- * />
- * ```
- *
- * @example Controlled component
- * ```tsx
+ * // Controlled with preset palettes
  * const [color, setColor] = useState('#1677ff');
- *
  * <ColorPicker
  *   value={color}
  *   onChange={(_, hex) => setColor(hex)}
+ *   presets={[{ label: 'Brand', colors: ['#1677ff', '#52c41a'] }]}
  * />
  * ```
  *
- * @example Without alpha channel
- * ```tsx
- * <ColorPicker defaultValue="#1677ff" disabledAlpha />
- * ```
- *
- * @example Multi-engine usage
- * ```tsx
- * // Classic engine (Ant Design - default)
- * <ColorPicker engine="classic" defaultValue="#1677ff" showText />
- *
- * // Modern engine (DaisyUI/Tailwind)
- * <ColorPicker engine="modern" defaultValue="#1677ff" />
- *
- * // Rustic engine (Pure HTML/CSS)
- * <ColorPicker engine="rustic" defaultValue="#1677ff" />
- * ```
- *
- * @see {@link ColorPickerProps} for component props
- * @see {@link Color} for color value interface
- * @see {@link ColorPreset} for preset palette structure
  * @module ColorPicker
  * @category Inputs
- * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
 import type { ColorPickerProps } from './ColorPicker.types';
@@ -102,9 +36,13 @@ export {
   COLORPICKER_DEFAULTS,
 } from './ColorPicker.types';
 
+/** Color selection primitive resolved through the active engine. */
 export const ColorPicker = createEngineComponent<ColorPickerProps>('ColorPicker', {
+  /** Ant Design ColorPicker with full panel, presets, and format switching */
   classic: () => import('./engines/classic'),
+  /** DaisyUI/Tailwind color input with custom swatch UI */
   modern: () => import('./engines/modern'),
+  /** Native HTML color input with inline styling */
   rustic: () => import('./engines/rustic'),
 });
 

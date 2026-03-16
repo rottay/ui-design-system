@@ -1,8 +1,9 @@
 /**
- * Spacing Tokens - TypeScript Mirror
+ * @fileoverview Spacing token mirrors based on a 4px grid system.
  *
- * TypeScript representation of spacing CSS custom properties.
- * Use these for type-safe spacing references in JavaScript/TypeScript.
+ * Three tiers: numeric scale (0-96 in 4px increments), semantic named sizes
+ * (xxxs-5xl), and contextual spacing for layouts (gutter, section, container)
+ * and components (gap, padding, margin).
  */
 
 // Spacing Scale - 4px Grid System

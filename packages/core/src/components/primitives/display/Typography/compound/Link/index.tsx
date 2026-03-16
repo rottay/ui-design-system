@@ -86,10 +86,16 @@ const engineMap: Record<
  *   About
  * </TypographyLink>
  * ```
+ *
+ * @param props - LinkProps including engine, href, target, color, underline, and disabled
+ * @param ref - Forwarded ref to the underlying anchor element
+ * @returns The engine-specific anchor element with consistent link styling
  */
 export const TypographyLink = forwardRef<HTMLAnchorElement, LinkProps>(
   ({ engine = 'classic', ...props }, ref) => {
+    // Fall back to ClassicLink if an unrecognized engine name is provided
     const Component = engineMap[engine] || ClassicLink;
+    // Link does not apply personality tokens; styling is fully engine-driven
     return <Component ref={ref} {...props} />;
   }
 );

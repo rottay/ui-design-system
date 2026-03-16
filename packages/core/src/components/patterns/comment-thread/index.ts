@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * CommentThread - Pattern Component
- *
- * Engine-aware nested comment thread with replies, editing, and reactions.
+ * @fileoverview CommentThread pattern -- engine-aware nested comment thread
+ * with replies, editing, reactions, and configurable nesting depth. Renders
+ * a recursive comment tree with avatar, timestamp, and inline editing.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

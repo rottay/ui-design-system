@@ -1,18 +1,48 @@
 'use client';
 
 /**
- * PricingTable - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the PricingTable pattern.
+ *
+ * Builds the same plan-comparison grid as the Classic engine but uses DaisyUI
+ * utility classes and Tailwind CSS instead of Ant Design components. This
+ * avoids pulling in Ant Design's JavaScript runtime for projects that rely on
+ * the Tailwind pipeline, keeping the bundle lightweight.
+ *
+ * @example
+ * <ModernPricingTable
+ *   plans={[{ id: 'team', name: 'Team', price: 49, cta: 'Start Trial', features: { api: true } }]}
+ *   features={[{ key: 'api', label: 'API Access' }]}
+ *   billingCycle="monthly"
+ *   onBillingCycleChange={(cycle) => setCycle(cycle)}
+ * />
  */
 
 import React from 'react';
 import type { PricingTableProps, PricingPlan, PricingFeature } from '../PricingTable.types';
 
+/**
+ * Renders a tri-state feature indicator using Unicode characters.
+ * - `true` -> green checkmark
+ * - `false`/`undefined` -> muted cross
+ * - `string` -> custom label (e.g. "10 GB")
+ */
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
   if (value === true) return <span className="text-success text-lg">{'\u2713'}</span>;
   if (value === false || value === undefined) return <span className="text-base-300 text-lg">{'\u2717'}</span>;
   return <span className="text-sm">{value}</span>;
 }
 
+/**
+ * Modern (DaisyUI/Tailwind) engine for the PricingTable pattern component.
+ *
+ * Uses DaisyUI's `table`, `toggle`, `badge`, `card`, and `btn` classes to
+ * compose the pricing layout. Loading state leverages DaisyUI's built-in
+ * `loading-spinner`. Tooltips use the `tooltip` data attribute instead of a
+ * JS-driven Ant Design Tooltip.
+ *
+ * @param props - {@link PricingTableProps} controlling plans, features, billing cycle, and callbacks.
+ * @returns A feature-comparison pricing table styled with DaisyUI/Tailwind.
+ */
 export default function ModernPricingTable(props: PricingTableProps) {
   const {
     plans,
@@ -28,6 +58,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
     style,
   } = props;
 
+  /* Short-circuit: DaisyUI spinner while pricing data loads */
   if (loading) {
     return (
       <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
@@ -38,7 +69,9 @@ export default function ModernPricingTable(props: PricingTableProps) {
 
   return (
     <div className={`ds-pattern-pricing-table ds-engine-modern ${className ?? ''}`} style={style}>
-      {/* Billing toggle */}
+      {/* Billing toggle -- Uses DaisyUI's toggle component. Only rendered
+          when the consumer provides a billing-cycle change handler, keeping
+          the toggle opt-in for static pricing pages. */}
       {onBillingCycleChange && (
         <div className="flex justify-center items-center gap-3 mb-8">
           <span className={`text-sm ${billingCycle === 'monthly' ? 'font-bold' : 'opacity-50'}`}>Monthly</span>
@@ -62,16 +95,19 @@ export default function ModernPricingTable(props: PricingTableProps) {
           <thead>
             <tr>
               <th className="w-48 text-sm font-semibold opacity-50 align-bottom">Features</th>
+              {/* Each plan becomes a column. Highlighted plans get primary border + tinted bg. */}
               {plans.map(plan => {
                 const isHighlighted = plan.id === highlightedPlan || plan.popular;
                 return (
                   <th key={plan.id} className="text-center align-top">
+                    {/* renderPlanHeader lets consumers fully replace the card content */}
                     {renderPlanHeader ? renderPlanHeader(plan) : (
                       <div className={`card ${isHighlighted ? 'bg-primary/5 border-2 border-primary' : 'bg-base-100 border border-base-300'} p-4`}>
                         {plan.popular && (
                           <span className="badge badge-primary badge-sm mb-2">Most Popular</span>
                         )}
                         <div className="font-bold text-lg">{plan.name}</div>
+                        {/* Price displayed as currency+number or raw string for "Custom" tiers */}
                         <div className="text-3xl font-extrabold mt-1">
                           {typeof plan.price === 'number' ? `${currency}${plan.price}` : plan.price}
                         </div>
@@ -95,7 +131,9 @@ export default function ModernPricingTable(props: PricingTableProps) {
             </tr>
           </thead>
 
-          {/* Feature rows */}
+          {/* Feature rows -- Category headers are emitted when a feature's
+              category differs from the previous one, allowing a flat features
+              array to still produce visually grouped sections. */}
           <tbody>
             {features.map((feature, index) => {
               const isCategory = feature.category && (index === 0 || features[index - 1].category !== feature.category);
@@ -111,8 +149,10 @@ export default function ModernPricingTable(props: PricingTableProps) {
                       </td>
                     </tr>
                   )}
+                  {/* Feature row -- DaisyUI "hover" class adds a subtle highlight on mouseover */}
                   <tr className="hover">
                     <td className="text-sm">
+                      {/* DaisyUI tooltip via data-tip attribute -- no JS overhead */}
                       {feature.description ? (
                         <span className="tooltip tooltip-right" data-tip={feature.description}>
                           {feature.label}
@@ -121,6 +161,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
                         feature.label
                       )}
                     </td>
+                    {/* Each cell shows the tri-state feature indicator for this plan */}
                     {plans.map(plan => (
                       <td key={plan.id} className="text-center">
                         {renderFeatureValue(plan.features[feature.key])}

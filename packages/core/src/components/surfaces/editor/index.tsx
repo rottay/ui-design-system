@@ -1,11 +1,13 @@
 'use client';
 
 /**
- * EditorSurface
+ * @fileoverview EditorSurface - Rottay Design System
+ * @description Reusable editing surface with content canvas, toolbar area,
+ * save/publish actions, and optional preview panel.
  *
- * Editing flows often need a content canvas, a toolbar, save/publish actions,
- * and sometimes a live preview. This surface standardizes that page skeleton
- * while allowing the app to plug in a simple textarea or a richer editor.
+ * @remarks
+ * This surface gives apps a consistent authoring shell while allowing them to
+ * plug in either a simple textarea or a richer custom editor.
  */
 
 import React, { useEffect, useState } from 'react';
@@ -22,21 +24,28 @@ export interface EditorSurfaceProps {
   loading?: boolean;
 }
 
+/** Editing surface with controlled/uncontrolled value handling and optional preview rail. */
 export function EditorSurface({
   config,
   loading = false,
 }: EditorSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  // Controlled/uncontrolled dual mode: when `value` is provided the app owns
+  // the state; otherwise the surface manages it internally. This mirrors
+  // React's standard input pattern.
   const [internalValue, setInternalValue] = useState(config.behavior.initialValue ?? '');
   const value = config.behavior.value ?? internalValue;
 
+  // Re-sync internal state when initialValue changes (e.g. loading a
+  // different document) but only when the surface is in uncontrolled mode.
   useEffect(() => {
     if (config.behavior.value === undefined) {
       setInternalValue(config.behavior.initialValue ?? '');
     }
   }, [config.behavior.initialValue, config.behavior.value]);
 
+  /** Update the editor value while supporting both controlled and uncontrolled usage. */
   const setValue = (nextValue: string): void => {
     if (config.behavior.value === undefined) {
       setInternalValue(nextValue);
@@ -51,6 +60,8 @@ export function EditorSurface({
     actions.push(config.behavior.cancelAction);
   }
 
+  // Save and publish are adapted into generic surface actions so the shared
+  // action bar can render them without knowing editor-specific semantics.
   if (config.behavior.saveAction) {
     actions.push({
       id: config.behavior.saveAction.id,
@@ -84,6 +95,9 @@ export function EditorSurface({
       actions={<SurfaceActionBar actions={actions} permissions={config.permissions} />}
       loading={loading}
     >
+      {/* Split layout with preview rail only activates when all three conditions
+          are met: split mode requested, preview content exists, and viewport is
+          wide enough. Otherwise the editor uses the full width. */}
       <Grid columns={config.visual.layout === 'split' && config.presentation.preview && !shouldStack ? 12 : 1} gap="lg">
         <Grid.Item span={config.visual.layout === 'split' && config.presentation.preview && !shouldStack ? 8 : undefined}>
           <SurfaceSectionCard
@@ -98,6 +112,10 @@ export function EditorSurface({
                 </Text>
               )}
 
+              {/* Apps can replace the default textarea with a rich editor (Monaco,
+                  TipTap, etc.) via renderEditor. The surface passes value + setter
+                  so the custom editor integrates with the same controlled/uncontrolled
+                  mechanism. */}
               {config.presentation.renderEditor?.(value, setValue) ?? (
                 <Textarea
                   value={value}

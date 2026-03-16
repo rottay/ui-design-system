@@ -1,45 +1,13 @@
 /**
- * @fileoverview Textarea Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Textarea component.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Modern engine for Textarea, built with DaisyUI's `textarea` utility classes.
+ * Produces a native `<textarea>` element styled through class composition, keeping the
+ * bundle lightweight compared to Classic (no Ant Design runtime).
  *
- * @remarks
- * The Modern engine implements textareas using DaisyUI's textarea classes
- * with Tailwind CSS utilities. It provides a lightweight alternative
- * with utility-first styling.
- *
- * **DaisyUI Classes Used:**
- * - `textarea` - Base textarea styling
- * - `textarea-{size}` - Size variants (sm, md, lg)
- * - `textarea-bordered` - Outlined variant
- * - `textarea-{status}` - Status colors (error, warning, success)
- *
- * **Tailwind Integration:**
- * - Native textarea element
- * - DaisyUI classes for consistent styling
- * - Supports all native textarea attributes
- *
- * **Limitations:**
- * - No built-in autoSize (use custom solution if needed)
- * - No built-in showCount (implement separately)
- * - No allowClear button
- *
- * @example Using Modern Engine
+ * @example
  * ```tsx
- * import { Textarea } from '@rottay/design-system';
- *
- * <Textarea
- *   engine="modern"
- *   placeholder="Enter description..."
- *   rows={4}
- *   variant="outlined"
- *   className="w-full"
- * />
+ * <Textarea engine="modern" placeholder="Enter description..." rows={4} variant="outlined" />
  * ```
  *
- * @see {@link Textarea} for the main component
- * @see {@link ClassicTextarea} for Ant Design implementation
- * @see {@link RusticTextarea} for vanilla implementation
  * @module ModernTextarea
  * @category Inputs
  * @package @rottay/design-system
@@ -49,12 +17,14 @@ import React from 'react';
 import type { TextareaProps } from '../Textarea.types';
 import { TEXTAREA_DEFAULTS } from '../Textarea.types';
 
+/** DaisyUI size modifier classes for textarea. */
 const SIZE_MAP = {
   sm: 'textarea-sm',
   md: 'textarea-md',
   lg: 'textarea-lg',
 };
 
+/** DaisyUI status color classes. Maps DS status names to DaisyUI equivalents. */
 const STATUS_MAP = {
   default: '',
   error: 'textarea-error',
@@ -62,12 +32,26 @@ const STATUS_MAP = {
   success: 'textarea-success',
 };
 
+/**
+ * DaisyUI variant classes. Only 'outlined' has a specific class (`textarea-bordered`);
+ * 'filled' and 'borderless' rely on default / custom styling.
+ */
 const VARIANT_MAP = {
   outlined: 'textarea-bordered',
   filled: '',
   borderless: '',
 };
 
+/**
+ * Modern (DaisyUI) implementation of Textarea.
+ *
+ * Composes DaisyUI classes for size, variant, and status onto a native `<textarea>`.
+ * Does not support autoSize, showCount, or allowClear -- use Classic engine for those.
+ * The onChange signature is normalized to `(value, event)` for DS consistency.
+ *
+ * @param props - Standard TextareaProps shared across all engines.
+ * @returns A native textarea element with DaisyUI class composition.
+ */
 export default function ModernTextarea(props: TextareaProps): React.ReactElement {
   const {
     size = TEXTAREA_DEFAULTS.size,
@@ -93,12 +77,14 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
     ...rest
   } = props;
 
+  // Normalize onChange to DS convention: (value, event) instead of just (event)
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (onChange) {
       onChange(e.target.value, e);
     }
   };
 
+  // Assemble DaisyUI classes -- filter(Boolean) drops empty strings from maps
   const classes = [
     'textarea',
     SIZE_MAP[size!],

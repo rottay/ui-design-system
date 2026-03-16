@@ -137,12 +137,16 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       style,
     } = props;
 
-    // Format the display value
+    // Resolve display value: custom formatter takes priority, then formatNumber,
+    // and '--' as a fallback when value is undefined (empty-state indicator).
     const displayValue = formatter
       ? formatter(value ?? '')
       : value !== undefined
         ? formatNumber(value, precision, groupSeparator, decimalSeparator)
         : '--';
+
+    // Only animate when explicitly requested, value is numeric, and no custom
+    // formatter or loading state would conflict with the CountUp animation.
     const shouldAnimateValue =
       animateValue && typeof value === 'number' && !formatter && !loading;
 
@@ -250,14 +254,16 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     } = props;
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
+    // Tracks whether onFinish has already fired to prevent duplicate calls
     const [isFinished, setIsFinished] = useState(false);
 
-    // Calculate target time
+    // Normalise the target: accept either an ISO date string or epoch ms number.
     const getTargetTime = useCallback(() => {
       return typeof value === 'string' ? new Date(value).getTime() : value;
     }, [value]);
 
-    // Update countdown with interval
+    // 1-second interval drives the countdown. We clamp to 0 so the display
+    // never shows negative time, and fire onFinish exactly once when diff hits 0.
     useEffect(() => {
       const targetTime = getTargetTime();
 
@@ -273,16 +279,15 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
         }
       };
 
-      // Initial update
+      // Run immediately so the user never sees the initial 0 state
       updateTime();
 
-      // Set up interval for updates
       const interval = setInterval(updateTime, 1000);
 
       return () => clearInterval(interval);
     }, [value, onFinish, onChange, getTargetTime, isFinished]);
 
-    // Reset finished state when value changes
+    // When the target value changes (e.g. new deadline), allow onFinish to fire again
     useEffect(() => {
       setIsFinished(false);
     }, [value]);
@@ -297,6 +302,8 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
             {title}
           </div>
         )}
+        {/* font-mono ensures digits occupy equal widths so the layout
+            does not shift as numbers change during the countdown. */}
         <div
           className={`text-2xl font-semibold font-mono ${valueColorClass}`}
           style={valueStyle}

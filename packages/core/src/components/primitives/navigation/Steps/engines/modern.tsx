@@ -147,6 +147,9 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
      * Compute effective status and styling for each step.
      * Memoized to prevent unnecessary recalculations.
      */
+    // Pre-compute status and DaisyUI class for each step. Memoized because
+    // this runs on every render and the items array may be large. Only
+    // recomputes when items, current position, or overall status change.
     const computedSteps = useMemo(() => {
       return items.map((item, index) => {
         const effectiveStatus = getEffectiveStatus(index, current, item.status, overallStatus);
@@ -183,6 +186,8 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
               key={index}
               className={`step ${step.stepClass} ${step.disabled ? 'opacity-50' : ''} ${isClickable ? 'cursor-pointer' : ''}`}
               onClick={() => handleStepClick(index, step.disabled)}
+              // In progressDot mode, replace the default number/icon with a
+              // simple filled circle via DaisyUI's data-content attribute
               data-content={progressDot ? '●' : undefined}
             >
               <div className="flex flex-col items-start">

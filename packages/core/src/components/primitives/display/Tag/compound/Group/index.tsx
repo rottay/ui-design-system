@@ -84,8 +84,9 @@ const GAP_MAP: Record<string, string> = {
  *
  * Provides consistent spacing and layout options for tag collections.
  *
- * @param props - TagGroup component properties
+ * @param props - TagGroup component properties (gap, wrap, direction, align, children)
  * @param ref - Forwarded ref to the root div element
+ * @returns A flexbox group container div with role="group" and configured layout styles
  *
  * @example
  * ```tsx

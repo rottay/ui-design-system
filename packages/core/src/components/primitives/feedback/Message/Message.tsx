@@ -1,154 +1,20 @@
 /**
- * @fileoverview Message Component - Rottay Design System
- * @description An imperative API for displaying global messages and toasts.
- * Part of the Rottay Design System's feedback primitives collection.
+ * @fileoverview Message - imperative API for global feedback toasts.
+ * Unlike declarative components, Message is invoked via `useMessage()` hook
+ * or the static `message.success()` / `message.error()` methods.
+ * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
  *
- * @remarks
- * The Message component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
- * (Vanilla) engines. This ensures consistent behavior while adapting to your
- * project's styling framework.
- *
- * Multi-tenant theming is fully supported - message styling automatically adapts
- * to your tenant's brand colors, spacing, and typography tokens.
- *
- * Unlike most components, Message uses an imperative API pattern where you call
- * methods like `messageApi.success()` to display messages programmatically.
- *
- * @example Basic Usage with Provider and Hook
+ * @example
  * ```tsx
- * import { MessageProvider, useMessage } from '@rottay/design-system';
- *
- * function App() {
- *   return (
- *     <MessageProvider>
- *       <MyComponent />
- *     </MessageProvider>
- *   );
- * }
- *
- * function MyComponent() {
- *   const [messageApi, contextHolder] = useMessage();
- *
- *   return (
- *     <>
- *       {contextHolder}
- *       <button onClick={() => messageApi.success('Operation completed!')}>
- *         Show Success
- *       </button>
- *     </>
- *   );
- * }
+ * const [messageApi, contextHolder] = useMessage();
+ * // ...
+ * <>{contextHolder}</>
+ * messageApi.success('Saved!');
+ * messageApi.loading('Processing...');
  * ```
- *
- * @example Different Message Types
- * ```tsx
- * import { useMessage } from '@rottay/design-system';
- *
- * function NotificationDemo() {
- *   const [messageApi, contextHolder] = useMessage();
- *
- *   const showMessages = () => {
- *     messageApi.success('This is a success message');
- *     messageApi.error('This is an error message');
- *     messageApi.info('This is an info message');
- *     messageApi.warning('This is a warning message');
- *     messageApi.loading('Loading in progress...');
- *   };
- *
- *   return (
- *     <>
- *       {contextHolder}
- *       <button onClick={showMessages}>Show All Types</button>
- *     </>
- *   );
- * }
- * ```
- *
- * @example Custom Duration and Callbacks
- * ```tsx
- * import { useMessage } from '@rottay/design-system';
- *
- * function CustomMessage() {
- *   const [messageApi, contextHolder] = useMessage();
- *
- *   const showMessage = () => {
- *     messageApi.success({
- *       content: 'Custom message with options',
- *       duration: 5,
- *       onClose: () => console.log('Message closed'),
- *       closable: true,
- *     });
- *   };
- *
- *   return (
- *     <>
- *       {contextHolder}
- *       <button onClick={showMessage}>Show Custom</button>
- *     </>
- *   );
- * }
- * ```
- *
- * @example Static Methods (Classic Engine Only)
- * ```tsx
- * import { message } from '@rottay/design-system';
- *
- * // These work globally without context (Classic engine only)
- * message.success('Success!');
- * message.error('Error!');
- * message.info('Info!');
- * message.warning('Warning!');
- * message.loading('Loading...');
- * ```
- *
- * @example Promise-like Chaining
- * ```tsx
- * import { useMessage } from '@rottay/design-system';
- *
- * function AsyncMessage() {
- *   const [messageApi, contextHolder] = useMessage();
- *
- *   const handleSave = async () => {
- *     const hide = messageApi.loading('Saving...');
- *     try {
- *       await saveData();
- *       hide(); // Destroy loading message
- *       messageApi.success('Saved successfully!');
- *     } catch (error) {
- *       hide();
- *       messageApi.error('Save failed!');
- *     }
- *   };
- *
- *   return (
- *     <>
- *       {contextHolder}
- *       <button onClick={handleSave}>Save</button>
- *     </>
- *   );
- * }
- * ```
- *
- * @example Multi-Tenant Theming
- * ```tsx
- * // Message automatically inherits tenant theme
- * <ThemeProvider tenant="acme-corp">
- *   <MessageProvider>
- *     {/* Messages use ACME Corp's brand colors and styling *\/}
- *     <App />
- *   </MessageProvider>
- * </ThemeProvider>
- * ```
- *
- * @see {@link MessageConfig} for message configuration options
- * @see {@link MessageInstance} for the message API interface
- * @see {@link MessageProviderProps} for provider configuration
- * @see {@link useMessage} for the React hook API
  *
  * @module Message
  * @category Feedback
- * @package @rottay/design-system
  */
 
 'use client';
@@ -159,10 +25,6 @@ import type { EngineName } from '../../../../contracts';
 import * as classicEngine from './engines/classic';
 import * as modernEngine from './engines/modern';
 import * as rusticEngine from './engines/rustic';
-
-// ============================================================================
-// Type Exports
-// ============================================================================
 
 export {
   type MessageType,
@@ -178,16 +40,19 @@ export {
   MESSAGE_ICONS,
 } from './Message.types';
 
-// ============================================================================
-// Component Exports (Default: Classic Engine)
-// ============================================================================
-
+// Engine lookup map -- keyed by built-in engine name, typed to the classic shape
+// so all three modules expose the same public surface.
 const messageEngines = {
   classic: classicEngine,
   modern: modernEngine,
   rustic: rusticEngine,
 } as const satisfies Record<Exclude<EngineName, 'custom'>, typeof classicEngine>;
 
+/**
+ * Resolve the imperative message runtime for the active engine.
+ * Custom engine packs don't register a message provider contract yet,
+ * so classic is used as a stable fallback.
+ */
 function resolveMessageEngine(engine: EngineName) {
   if (engine === 'custom') {
     return classicEngine;
@@ -196,6 +61,13 @@ function resolveMessageEngine(engine: EngineName) {
   return messageEngines[engine];
 }
 
+// ---------------------------------------------------------------------------
+// Engine-aware wrapper components
+// These thin wrappers read the active engine from context and delegate to the
+// matching runtime, keeping the public API engine-agnostic.
+// ---------------------------------------------------------------------------
+
+/** Provider that creates the message portal for the active engine. */
 export const MessageProvider: React.FC<React.ComponentProps<typeof classicEngine.MessageProvider>> = (
   props
 ) => {
@@ -204,6 +76,7 @@ export const MessageProvider: React.FC<React.ComponentProps<typeof classicEngine
   return React.createElement(Provider, props);
 };
 
+/** Renders a single message item through the active engine runtime. */
 export const MessageItem: React.FC<React.ComponentProps<typeof classicEngine.MessageItem>> = (
   props
 ) => {
@@ -212,19 +85,17 @@ export const MessageItem: React.FC<React.ComponentProps<typeof classicEngine.Mes
   return React.createElement(Item, props);
 };
 
+/** Hook facade -- returns `[messageApi, contextHolder]` for the active engine. */
 export function useMessage() {
   const { engine } = useEngineContext();
   return resolveMessageEngine(engine).useMessage();
 }
 
-// ============================================================================
-// Default Export
-// ============================================================================
+// ---------------------------------------------------------------------------
+// Static API & default export
+// ---------------------------------------------------------------------------
 
-/**
- * Default export containing all Classic engine exports.
- * Includes MessageProvider, MessageItem, useMessage hook, and static message API.
- */
+/** Classic-engine static methods (`message.success(...)`) for use without a provider. */
 export const message = classicEngine.message;
 
 export default {

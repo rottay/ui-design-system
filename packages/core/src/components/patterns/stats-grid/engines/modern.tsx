@@ -1,7 +1,20 @@
 'use client';
 
 /**
- * StatsGrid - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the StatsGrid pattern.
+ *
+ * Implements the same stat-card grid as the Classic engine but using DaisyUI
+ * utility classes and Tailwind CSS. Cards are composed from `card`, `card-body`,
+ * and `glass` DaisyUI classes. The loading skeleton uses Tailwind's
+ * `animate-pulse` for a CSS-only shimmer effect without additional JS.
+ *
+ * @example
+ * <ModernStatsGrid
+ *   stats={[{ key: 'users', label: 'Active Users', value: 1234, change: 5.2, changeType: 'increase' }]}
+ *   columns={4}
+ *   variant="glass"
+ *   animate
+ * />
  */
 
 import React, { useState, useEffect } from 'react';
@@ -11,6 +24,10 @@ import type { StatsGridProps } from '../StatsGrid.types';
 import type { StatDef } from '../../types';
 import { resolveStatsGridMotion } from '../personality';
 
+/**
+ * Converts raw numeric data into SVG polyline coordinates for a mini sparkline.
+ * Division-by-zero is guarded by `|| 1` when min equals max.
+ */
 function normalizeSparkline(data: number[], width = 80, height = 30): string {
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -24,6 +41,7 @@ function normalizeSparkline(data: number[], width = 80, height = 30): string {
     .join(' ');
 }
 
+/** Tiny SVG sparkline chart rendered below a stat value to visualize trends. */
 function Sparkline({ data, color }: { data: number[]; color?: string }) {
   if (!data || data.length < 2) return null;
   return (
@@ -40,11 +58,17 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
   );
 }
 
+/**
+ * Animates a numeric value from 0 to target using cubic ease-out.
+ * String values pass through unchanged since formatted strings cannot be interpolated.
+ */
 function useAnimatedValue(
   target: number | string,
   animate?: boolean,
   duration = 600
 ): number | string {
+  // Start at 0 when animating numbers; strings pass through immediately
+  // since they cannot be numerically interpolated.
   const [value, setValue] = useState<number | string>(animate && typeof target === 'number' ? 0 : target);
 
   useEffect(() => {
@@ -54,6 +78,8 @@ function useAnimatedValue(
     }
     const start = performance.now();
     const tick = (now: number) => {
+      // Normalize progress to [0,1] then apply cubic ease-out
+      // for a fast-start, smooth-deceleration feel.
       const t = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - t, 3);
       setValue(Math.round((target as number) * eased));
@@ -65,6 +91,7 @@ function useAnimatedValue(
   return value;
 }
 
+/** Maps variant names to DaisyUI/Tailwind class combinations for card styling. */
 const variantClasses: Record<NonNullable<StatsGridProps['variant']>, string> = {
   default: 'card bg-base-100 shadow-sm',
   outlined: 'card border border-base-300',
@@ -72,6 +99,12 @@ const variantClasses: Record<NonNullable<StatsGridProps['variant']>, string> = {
   glass: 'card glass',
 };
 
+/**
+ * Individual statistic card using DaisyUI card classes.
+ *
+ * Includes keyboard accessibility (Enter to activate) and ARIA role="button"
+ * when clickable, making it screen-reader friendly.
+ */
 function StatCard({
   stat,
   sparkline,
@@ -89,6 +122,8 @@ function StatCard({
 }) {
   const displayValue = useAnimatedValue(stat.value, animate, animationDuration);
 
+  // Map trend direction to semantic DaisyUI color classes.
+  // Neutral changes use reduced opacity for visual de-emphasis.
   const changeColor =
     stat.changeType === 'increase'
       ? 'text-success'
@@ -96,6 +131,7 @@ function StatCard({
         ? 'text-error'
         : 'text-base-content/60';
 
+  // Unicode arrows provide a lightweight trend indicator without icon imports.
   const arrow =
     stat.changeType === 'increase' ? '\u2191' : stat.changeType === 'decrease' ? '\u2193' : '';
 
@@ -127,6 +163,7 @@ function StatCard({
   );
 }
 
+/** CSS-only loading skeleton using Tailwind's animate-pulse utility. */
 function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | number }) {
   return (
     <div
@@ -144,6 +181,17 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
   );
 }
 
+/**
+ * Modern (DaisyUI/Tailwind) engine for the StatsGrid pattern component.
+ *
+ * Renders a CSS grid of stat cards styled with DaisyUI utility classes.
+ * Supports the same props as the Classic engine -- columns, sparklines,
+ * variant, animation, and custom renderStat slot -- but without any Ant
+ * Design dependency.
+ *
+ * @param props - {@link StatsGridProps} controlling stats data, layout, animation, and callbacks.
+ * @returns A grid of statistic cards styled with DaisyUI/Tailwind.
+ */
 export default function ModernStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
   const { prefersReducedMotion } = useBreakpoints();
@@ -160,8 +208,12 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     className,
     style,
   } = props;
+
+  // Resolve animation settings from the personality token system.
+  // Respects user's prefers-reduced-motion OS preference.
   const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
 
+  // Show placeholder skeleton during data fetching to prevent layout shift.
   if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
 
   return (
@@ -174,6 +226,8 @@ export default function ModernStatsGrid(props: StatsGridProps) {
       }}
     >
       {stats.map((stat) => {
+        // Build the default card first, then allow consumers to override
+        // via renderStat while still receiving the default as a fallback.
         const defaultRender = (
           <StatCard
             key={stat.key}

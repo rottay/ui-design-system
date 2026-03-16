@@ -1,6 +1,6 @@
 /**
- * Select.Option - Compound Component
- * Represents a single selectable option within a Select
+ * @fileoverview Select.Option compound component.
+ * Represents a single selectable option within a Select.
  */
 
 'use client';

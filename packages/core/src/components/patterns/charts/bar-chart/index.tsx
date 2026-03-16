@@ -1,5 +1,21 @@
 'use client';
 
+/**
+ * @fileoverview BarChart -- D3-backed categorical bar chart supporting vertical and horizontal
+ * orientations. Uses `scaleBand` for the category axis and `scaleLinear` for the value axis.
+ * Bars animate with a staggered grow-from-baseline effect driven by the chart personality system.
+ * Grouped and stacked modes are accepted as props but currently render as simple single-series bars.
+ *
+ * @example
+ * <BarChart
+ *   data={[{ label: 'Q1', value: 120 }, { label: 'Q2', value: 340 }]}
+ *   orientation="vertical"
+ *   showValues
+ *   height={300}
+ *   title="Quarterly Revenue"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select } from 'd3';
 
@@ -8,6 +24,7 @@ import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** Props for the {@link BarChart} component. */
 export interface BarChartProps extends ChartBaseProps {
   data: DataPoint[];
   orientation?: 'vertical' | 'horizontal';
@@ -21,6 +38,12 @@ export interface BarChartProps extends ChartBaseProps {
   yAxisLabel?: string;
 }
 
+/**
+ * Renders a categorical bar chart powered by D3's `scaleBand` + `scaleLinear`.
+ *
+ * @param props - See {@link BarChartProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const BarChart = memo(function BarChart({
   data,
   orientation = 'vertical',
@@ -71,6 +94,8 @@ export const BarChart = memo(function BarChart({
     if (!svgRef.current || !data || data.length === 0) return;
 
     const svg = select(svgRef.current);
+    // Full clear on each render: D3's enter/update/exit pattern is overkill here
+    // because the entire dataset is typically replaced, not incrementally updated.
     svg.selectAll('*').remove();
 
     const innerWidth = chartWidth - margin.left - margin.right;
@@ -83,11 +108,15 @@ export const BarChart = memo(function BarChart({
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (orientation === 'vertical') {
+      // scaleBand evenly distributes categories across the x-axis with uniform
+      // padding between them; barGap controls the padding-to-step ratio.
       const x = scaleBand()
         .domain(data.map((d) => d.label))
         .range([0, innerWidth])
         .padding(barGap);
 
+      // .nice() rounds the domain to friendly tick boundaries (e.g. 97 -> 100)
+      // so the top gridline never clips the tallest bar.
       const y = scaleLinear()
         .domain([0, max(data, (d) => d.value) ?? 0])
         .nice()
@@ -135,6 +164,8 @@ export const BarChart = memo(function BarChart({
         bars.append('title').text((d) => `${d.label}: ${d.value}`);
       }
 
+      // Bars grow upward from the x-axis with staggered delay so the viewer
+      // perceives a left-to-right reveal instead of a simultaneous pop-in.
       if (chartPersonality.animate) {
         bars
           .attr('y', innerHeight)
@@ -163,7 +194,8 @@ export const BarChart = memo(function BarChart({
           .text((d) => d.value);
       }
     } else {
-      // Horizontal orientation
+      // Horizontal orientation: swap the role of the axes -- scaleBand maps
+      // categories along the y-axis, scaleLinear maps values along the x-axis.
       const y = scaleBand()
         .domain(data.map((d) => d.label))
         .range([0, innerHeight])
@@ -203,6 +235,8 @@ export const BarChart = memo(function BarChart({
         bars.append('title').text((d) => `${d.label}: ${d.value}`);
       }
 
+      // Horizontal bars grow rightward from the y-axis, mirroring the vertical
+      // grow-upward pattern for visual consistency across orientations.
       if (chartPersonality.animate) {
         bars
           .attr('x', 0)
@@ -230,7 +264,8 @@ export const BarChart = memo(function BarChart({
       }
     }
 
-    // Axis labels
+    // Axis labels are appended to the root SVG (not the inner <g>) so they
+    // sit outside the margin-based plotting area and stay positioned correctly.
     if (xAxisLabel) {
       svg
         .append('text')

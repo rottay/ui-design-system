@@ -47,6 +47,11 @@ import { STACK_DEFAULTS, SPACING_MAP, ALIGN_MAP, JUSTIFY_MAP } from '../Stack.ty
 
 /**
  * Converts a spacing value to its CSS equivalent.
+ * Used as a fallback when numeric spacing forces inline styles instead of
+ * Tailwind gap classes.
+ *
+ * @param value - A preset name, pixel number, or undefined
+ * @returns A CSS-compatible string value
  */
 function resolveSpacing(value: StackSpacing | undefined): string {
   if (value === undefined || value === 'none') return '0';
@@ -55,7 +60,13 @@ function resolveSpacing(value: StackSpacing | undefined): string {
 }
 
 /**
- * Build flexbox styles from Stack props
+ * Assembles a complete inline flexbox CSSProperties object from Stack props.
+ * Only used when the spacing value is numeric, since Tailwind gap-* classes
+ * cannot represent arbitrary pixel values. For preset spacing, Tailwind
+ * classes are preferred (see buildTailwindClasses).
+ *
+ * @param props - The full StackProps to derive styles from
+ * @returns A CSSProperties object with all flexbox layout properties
  */
 function buildStackStyles(props: StackProps): CSSProperties {
   const {
@@ -91,7 +102,14 @@ function buildStackStyles(props: StackProps): CSSProperties {
 }
 
 /**
- * Renders children with optional dividers between them
+ * Interleaves divider elements between children when a divider is provided.
+ * Clones React elements with stable keys; wraps primitives in a span with
+ * aria-hidden to keep dividers out of the accessibility tree.
+ *
+ * @param children - The child nodes to separate
+ * @param divider - The separator element to insert between children
+ * @param direction - Stack direction (reserved for orientation-aware dividers)
+ * @returns Children with dividers interleaved, or unmodified children if no divider
  */
 function renderStackChildren(
   children: ReactNode,
@@ -119,7 +137,8 @@ function renderStackChildren(
 }
 
 /**
- * Maps spacing values to Tailwind gap classes
+ * Maps spacing presets to Tailwind gap utility classes.
+ * Only preset string values are mapped; numeric values fall back to inline styles.
  */
 const GAP_CLASS_MAP: Record<StackSpacingPreset, string> = {
   none: 'gap-0',
@@ -133,9 +152,7 @@ const GAP_CLASS_MAP: Record<StackSpacingPreset, string> = {
   '4xl': 'gap-16', // 4rem
 };
 
-/**
- * Maps alignment values to Tailwind classes
- */
+/** Maps StackAlign values to their Tailwind items-* class equivalents. */
 const ALIGN_CLASS_MAP: Record<StackAlign, string> = {
   start: 'items-start',
   center: 'items-center',
@@ -144,9 +161,7 @@ const ALIGN_CLASS_MAP: Record<StackAlign, string> = {
   baseline: 'items-baseline',
 };
 
-/**
- * Maps justify values to Tailwind classes
- */
+/** Maps StackJustify values to their Tailwind justify-* class equivalents. */
 const JUSTIFY_CLASS_MAP: Record<StackJustify, string> = {
   start: 'justify-start',
   center: 'justify-center',
@@ -157,7 +172,13 @@ const JUSTIFY_CLASS_MAP: Record<StackJustify, string> = {
 };
 
 /**
- * Build Tailwind classes from Stack props
+ * Builds an array of Tailwind utility classes representing the Stack layout.
+ * Numeric spacing values are excluded because Tailwind's gap-* utilities only
+ * accept predefined scale values -- numeric gaps are handled via inline styles
+ * in `buildStackStyles` instead.
+ *
+ * @param props - The full StackProps to derive Tailwind classes from
+ * @returns An array of Tailwind class name strings
  */
 function buildTailwindClasses(props: StackProps): string[] {
   const classes: string[] = ['flex'];
@@ -173,29 +194,24 @@ function buildTailwindClasses(props: StackProps): string[] {
     fullHeight = STACK_DEFAULTS.fullHeight,
   } = props;
 
-  // Direction classes
+  // Direction with optional reverse suffix
   if (direction === 'vertical') {
     classes.push(reverse ? 'flex-col-reverse' : 'flex-col');
   } else {
     classes.push(reverse ? 'flex-row-reverse' : 'flex-row');
   }
 
-  // Gap classes (only for preset values, not numeric)
+  // Only map preset spacing to Tailwind classes; numeric values are skipped
+  // and will be handled via inline styles in the component render
   const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
   if (typeof spacingValue === 'string' && spacingValue in GAP_CLASS_MAP) {
     classes.push(GAP_CLASS_MAP[spacingValue as StackSpacingPreset]);
   }
 
-  // Alignment classes
   classes.push(ALIGN_CLASS_MAP[align]);
-
-  // Justify classes
   classes.push(JUSTIFY_CLASS_MAP[justify]);
-
-  // Wrap classes
   classes.push(wrap ? 'flex-wrap' : 'flex-nowrap');
 
-  // Size classes
   if (fullWidth) {
     classes.push('w-full');
   }
@@ -207,9 +223,18 @@ function buildTailwindClasses(props: StackProps): string[] {
 }
 
 /**
- * Modern Stack component.
- * Uses DaisyUI/Tailwind styling conventions while maintaining
- * compatibility with the Stack API.
+ * Modern (Hermes) engine implementation of the Stack component.
+ * Uses Tailwind utility classes for preset spacing values and falls back to
+ * inline flexbox styles for numeric pixel values. This dual strategy avoids
+ * generating arbitrary Tailwind classes at runtime while still supporting
+ * custom gap sizes.
+ *
+ * When `needsInlineGap` is true (numeric spacing), all layout properties are
+ * expressed via inline styles and Tailwind classes are omitted to prevent
+ * conflicts between class-based and inline gap declarations.
+ *
+ * @param props - Stack configuration (direction, spacing, align, justify, divider, etc.)
+ * @returns A polymorphic element with Tailwind classes or inline flexbox styles
  */
 const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const {
@@ -222,16 +247,19 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
     children,
   } = props;
 
-  // For numeric spacing values, use inline styles
+  // Determine whether inline styles or Tailwind classes should drive the gap.
+  // Numeric values require inline styles; presets use Tailwind gap-* classes.
   const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
   const needsInlineGap = typeof spacingValue === 'number';
 
-  // Use base styles for numeric gap, otherwise let Tailwind handle it
+  // When numeric gap is needed, buildStackStyles provides ALL layout properties
+  // inline, making the Tailwind classes redundant (and potentially conflicting).
   const computedStyle = needsInlineGap ? buildStackStyles(props) : props.style;
   const tailwindClasses = buildTailwindClasses(props);
   const renderedChildren = renderStackChildren(children, divider, direction);
 
-  // Build class names with Modern-specific prefixes and Tailwind classes
+  // Exclude Tailwind layout classes when inline styles are in control to avoid
+  // specificity conflicts between Tailwind's gap-* and the inline gap property.
   const classNames = [
     'rottay-stack',
     'rottay-stack--modern',

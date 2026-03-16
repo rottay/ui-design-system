@@ -37,14 +37,149 @@
  * @package @rottay/design-system
  */
 
-export type {
-  TooltipProps,
-  TooltipPlacement,
-  TooltipTrigger,
-  TooltipState,
-} from '../../../../contracts/primitives/display/Tooltip';
+import type { ReactNode } from 'react';
+import type { BaseComponentProps, WithChildren } from '../../../../contracts/common';
+import type { EngineAwareProps } from '../../../../contracts/engine';
 
-import type { BaseComponentProps } from '../../../../contracts/common';
+// ============================================================================
+// Type Definitions
+// ============================================================================
+
+/** Tooltip placement options combining edge and alignment. */
+export type TooltipPlacement =
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end';
+
+/**
+ * Tooltip trigger.
+ */
+export type TooltipTrigger = 'hover' | 'click' | 'focus' | 'manual';
+
+/**
+ * Tooltip component props.
+ */
+export interface TooltipProps extends BaseComponentProps, EngineAwareProps, WithChildren {
+  /**
+   * Tooltip content.
+   */
+  content: ReactNode;
+
+  /**
+   * Tooltip placement.
+   * @default 'top'
+   */
+  placement?: TooltipPlacement;
+
+  /**
+   * Trigger that opens the tooltip.
+   * @default 'hover'
+   */
+  trigger?: TooltipTrigger | TooltipTrigger[];
+
+  /**
+   * Whether the tooltip is visible (controlled mode).
+   */
+  visible?: boolean;
+
+  /**
+   * Whether the tooltip is visible by default (uncontrolled mode).
+   */
+  defaultVisible?: boolean;
+
+  /**
+   * Visibility change callback.
+   */
+  onVisibleChange?: (visible: boolean) => void;
+
+  /**
+   * Delay in ms before showing the tooltip.
+   * @default 0
+   */
+  showDelay?: number;
+
+  /**
+   * Delay in ms before hiding the tooltip.
+   * @default 0
+   */
+  hideDelay?: number;
+
+  /**
+   * Tooltip color.
+   * @default 'default'
+   */
+  color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+
+  /**
+   * Whether to show the tooltip arrow.
+   * @default true
+   */
+  arrow?: boolean;
+
+  /**
+   * Tooltip border radius.
+   * @default 'md'
+   */
+  radius?: 'none' | 'sm' | 'md' | 'lg';
+
+  /**
+   * Offset from the trigger element.
+   * @default 8
+   */
+  offset?: number;
+
+  /**
+   * Whether the tooltip is disabled.
+   */
+  disabled?: boolean;
+
+  /**
+   * Tooltip z-index.
+   */
+  zIndex?: number;
+
+  /**
+   * Maximum width of the tooltip.
+   * @default 200
+   */
+  maxWidth?: number | string;
+
+  /**
+   * Tooltip trigger element.
+   */
+  children: ReactNode;
+
+  /**
+   * Whether to allow interaction with tooltip content.
+   * @default false
+   */
+  interactive?: boolean;
+}
+
+/**
+ * Tooltip state.
+ */
+export interface TooltipState {
+  /** Whether visible */
+  visible: boolean;
+  /** Calculated position */
+  position?: { x: number; y: number };
+  /** Whether hovering */
+  hovering: boolean;
+}
+
+// ============================================================================
+// Compound Component Props
+// ============================================================================
 
 /**
  * Props for the Tooltip.Trigger compound component.
@@ -120,7 +255,18 @@ export const TOOLTIP_DEFAULTS = {
 
 /**
  * Placement to CSS position mapping.
- * Maps tooltip placements to their CSS positioning values.
+ *
+ * Maps each of the 12 tooltip placement options to the inline CSS
+ * positioning properties needed to render the tooltip relative to
+ * its trigger element. Used by engine implementations to calculate
+ * the absolute position of the tooltip container.
+ *
+ * Placement naming convention:
+ * - `{side}` - centered along the given side.
+ * - `{side}-start` - aligned to the start edge (left or top).
+ * - `{side}-end` - aligned to the end edge (right or bottom).
+ *
+ * @constant
  */
 export const PLACEMENT_MAP: Record<string, React.CSSProperties> = {
   top: { bottom: '100%', left: '50%', transform: 'translateX(-50%)' },

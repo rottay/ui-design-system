@@ -1,8 +1,14 @@
 'use client';
 
 /**
- * I18n Provider
- * Design System Rottay - Wave 0 - Agente D
+ * @fileoverview I18n React context provider and consumer hook.
+ *
+ * Manages the active locale, translation function, and document directionality.
+ * Translation resolution follows a three-tier fallback chain:
+ *   1. Tenant custom translations (passed via `customTranslations` prop)
+ *   2. Current locale dictionary
+ *   3. Fallback locale dictionary (defaults to 'es')
+ * If no match is found, the raw key is returned and a dev-only warning is logged.
  */
 
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
@@ -17,7 +23,7 @@ import { LOCALE_CONFIGS } from '../../types';
 import { es, en, pt, fr, ar } from '../../locales';
 import { warnOnceInDev } from '../../../utils/runtime-logger';
 
-// Mapa de traducciones
+/** Lookup table mapping each supported locale to its translation dictionary. */
 const TRANSLATIONS = {
   es,
   en,
@@ -26,14 +32,15 @@ const TRANSLATIONS = {
   ar,
 };
 
-/**
- * Contexto de i18n
- */
+/** React context carrying the current locale, config, and translate function. */
 const I18nContext = createContext<I18nContextValue | undefined>(undefined);
 
 /**
- * Obtiene un valor anidado de un objeto usando dot notation
- * Ejemplo: getValue(obj, 'components.avatar.loading')
+ * Resolves a nested value from an object using dot-notation path.
+ *
+ * @param obj  - Translation dictionary (or nested sub-object)
+ * @param path - Dot-separated key, e.g. 'components.avatar.loading'
+ * @returns The resolved string, or undefined if the path is invalid
  */
 function getValue(obj: any, path: string): string | undefined {
   const keys = path.split('.');
@@ -51,8 +58,11 @@ function getValue(obj: any, path: string): string | undefined {
 }
 
 /**
- * Interpola parámetros en un string
- * Ejemplo: interpolate('Hello {name}!', { name: 'World' }) => 'Hello World!'
+ * Replaces `{placeholder}` tokens in a template with provided parameter values.
+ *
+ * @param template - String containing `{key}` placeholders
+ * @param params   - Key/value pairs to substitute
+ * @returns The interpolated string
  */
 function interpolate(template: string, params?: Record<string, string | number>): string {
   if (!params) return template;
@@ -63,7 +73,12 @@ function interpolate(template: string, params?: Record<string, string | number>)
 }
 
 /**
- * Provider de internacionalización
+ * Wraps the React tree with i18n context providing locale state, a translation
+ * function, and automatic `<html lang>` / `<html dir>` synchronization.
+ *
+ * The provider supports controlled locale changes from a parent (e.g.
+ * DesignSystemProvider) while still exposing an imperative `setLocale()` for
+ * in-app language switchers.
  */
 export function I18nProvider({
   locale: initialLocale = 'es',
@@ -84,10 +99,13 @@ export function I18nProvider({
     setLocaleState(initialLocale);
   }, [initialLocale]);
 
-  // Función de traducción memoizada
+  // The translate function follows a three-tier resolution chain. Tenant
+  // custom translations are checked first so whitelabel apps can override
+  // any DS string without forking the locale dictionaries.
   const t: TranslateFunction = useCallback(
     (key: string, params?: Record<string, string | number>) => {
-      // 1. Buscar en traducciones custom del tenant
+      // 1. Tenant custom translations (highest priority). These are provided by
+      // the platform layer and can override any built-in DS string.
       if (customTranslations) {
         const customValue = getValue(customTranslations, key);
         if (customValue) {
@@ -95,14 +113,15 @@ export function I18nProvider({
         }
       }
 
-      // 2. Buscar en el locale actual
+      // 2. Current locale dictionary
       const currentTranslations = TRANSLATIONS[locale];
       const value = getValue(currentTranslations, key);
       if (value) {
         return interpolate(value, params);
       }
 
-      // 3. Fallback al locale de fallback
+      // 3. Fallback locale. This prevents blank UI when a translation has not
+      // yet been added to a newly supported language.
       if (locale !== fallbackLocale) {
         const fallbackTranslations = TRANSLATIONS[fallbackLocale];
         const fallbackValue = getValue(fallbackTranslations, key);
@@ -111,7 +130,8 @@ export function I18nProvider({
         }
       }
 
-      // 4. Si no se encuentra, devolver la key
+      // 4. Return the raw key as a last resort. The dev-only warning helps
+      // translators find missing keys without breaking the UI.
       if (process.env.NODE_ENV !== 'test') {
         warnOnceInDev(
           `i18n:missing:${locale}:${key}`,
@@ -135,7 +155,9 @@ export function I18nProvider({
   // Obtener configuración del locale actual
   const config: LocaleConfig = useMemo(() => LOCALE_CONFIGS[locale], [locale]);
 
-  // Actualizar atributos del documento
+  // Synchronize the HTML element's lang and dir attributes with the active locale.
+  // This is necessary for CSS selectors like [dir="rtl"] (used by Arabic layout)
+  // and for screen readers that use `lang` to pick the correct pronunciation engine.
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.documentElement.lang = config.code;
@@ -162,7 +184,10 @@ export function I18nProvider({
 }
 
 /**
- * Hook para usar el contexto de i18n
+ * Reads the i18n context. Throws if called outside an `I18nProvider`.
+ *
+ * Prefer the narrower `useTranslation` / `useLocale` hooks for component code;
+ * this hook is the low-level escape hatch when you need the full context value.
  */
 export function useI18nContext(): I18nContextValue {
   const context = useContext(I18nContext);

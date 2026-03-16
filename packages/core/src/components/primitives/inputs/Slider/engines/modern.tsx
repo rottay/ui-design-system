@@ -49,6 +49,17 @@ import React, { useState, useCallback } from 'react';
 import type { SliderProps } from '../Slider.types';
 import { SLIDER_DEFAULTS } from '../Slider.types';
 
+/**
+ * Modern engine Slider -- built with DaisyUI range classes and custom overlays.
+ *
+ * Supports both single and dual-handle range modes. Range mode stacks two
+ * invisible native `<input type="range">` elements on top of a custom track
+ * overlay so that each handle can be dragged independently while preserving
+ * accessibility and keyboard control via the native inputs.
+ *
+ * @param props - {@link SliderProps} unified slider props shared across engines.
+ * @returns A ref-forwarding slider with DaisyUI/Tailwind styling.
+ */
 export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
   (props, ref) => {
     const {
@@ -67,6 +78,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       style,
     } = props;
 
+    // Lazy initialiser -- defaults to full range when in range mode
     const getInitialValue = (): number | [number, number] => {
       if (defaultValue !== undefined) return defaultValue;
       if (range) return [min!, max!];
@@ -75,6 +87,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
     const [internalValue, setInternalValue] = useState<number | [number, number]>(getInitialValue);
 
+    // Support both controlled and uncontrolled usage patterns
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : internalValue;
 
@@ -85,11 +98,17 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       onChange?.(newValue);
     }, [isControlled, onChange]);
 
+    /** Handler for the single-value slider (non-range mode). */
     const handleSingleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = Number(e.target.value);
       handleChange(newValue);
     };
 
+    /**
+     * Returns a change handler scoped to a specific handle index.
+     * Index 0 = start handle, index 1 = end handle. The opposite
+     * handle value is preserved from the current tuple.
+     */
     const handleRangeChange = (index: 0 | 1) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const newPartValue = Number(e.target.value);
       const current = currentValue as [number, number];
@@ -99,10 +118,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       handleChange(newValue);
     };
 
+    // Fires onChangeComplete on pointer release (mouse or touch)
     const handleMouseUp = () => {
       onChangeComplete?.(currentValue);
     };
 
+    /** Converts an absolute value to a percentage offset along the track. */
     const getPercentage = (val: number) => {
       return ((val - min!) / (max! - min!)) * 100;
     };
@@ -141,6 +162,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             }}
           />
 
+          {/*
+           * Two invisible native range inputs are stacked over the custom track.
+           * They remain fully accessible (keyboard, screen readers) while the
+           * visual handles rendered below provide the styled appearance.
+           */}
           {/* Start input */}
           <input
             type="range"
@@ -181,10 +207,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             style={vertical ? { left: '50%', bottom: `${endPercent}%` } : { top: '50%', left: `${endPercent}%` }}
           />
 
-          {/* Marks */}
+          {/* Marks -- positioned absolutely; supports both string and {label,style} shapes */}
           {marks && Object.entries(marks).map(([key, mark]) => {
             const markValue = Number(key);
             const percent = getPercentage(markValue);
+            // Marks can be plain strings or objects with a label property
             const label = typeof mark === 'object' ? mark.label : mark;
 
             return (
@@ -211,7 +238,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       );
     }
 
-    // Single slider
+    // --- Single slider (non-range mode) ---
     const singleValue = currentValue as number;
 
     return (

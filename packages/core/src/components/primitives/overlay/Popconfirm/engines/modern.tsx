@@ -1,48 +1,33 @@
 'use client';
 
 /**
- * @fileoverview Popconfirm Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Popconfirm component.
- * Uses DaisyUI card and button components with Tailwind utility classes.
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the Popconfirm overlay component.
+ * Uses a DaisyUI card for the confirmation panel with async-aware confirm handling
+ * (auto-loading state), click-outside dismissal, and Tailwind placement classes.
  *
- * @remarks
- * The Modern engine provides:
- * - DaisyUI card component for the confirmation panel
- * - DaisyUI button styling (btn-primary, btn-error, btn-ghost)
- * - Loading spinner via DaisyUI loading component
- * - Click-outside dismissal via event listeners
- * - Async onConfirm support with automatic loading state
- *
- * Implementation details:
- * - Uses controlled/uncontrolled pattern for open state
- * - Placement mapped to Tailwind positioning classes
- * - Internal loading state tracks async onConfirm execution
- * - Button types mapped to DaisyUI button variants
- *
- * @example Using Modern Engine
+ * @example
  * ```tsx
- * import { Popconfirm, Button } from '@rottay/design-system';
- *
- * <Popconfirm
- *   engine="modern"
- *   title="Remove item?"
- *   okText="Remove"
- *   okType="danger"
- *   onConfirm={async () => await removeItem()}
- * >
+ * <Popconfirm engine="modern" title="Remove item?" okType="danger"
+ *   onConfirm={async () => await removeItem()}>
  *   <Button>Remove</Button>
  * </Popconfirm>
  * ```
- *
- * @see {@link Popconfirm} - The main engine-aware component
- * @module Popconfirm/Engines/Modern
- * @category Overlay
- * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { PopconfirmProps } from '../Popconfirm.types';
 import { POPCONFIRM_DEFAULTS } from '../Popconfirm.types';
 
+/**
+ * Popconfirm implementation using DaisyUI card and button classes.
+ *
+ * The component tracks an internal loading state that activates automatically
+ * when `onConfirm` returns a Promise, disabling both buttons until the promise
+ * settles. Supports controlled/uncontrolled open state and maps the unified
+ * `okType` prop to DaisyUI button variants (btn-primary, btn-error, btn-ghost).
+ *
+ * @param props - {@link PopconfirmProps} shared across all engines.
+ * @returns A ref-forwarded relatively-positioned container with an absolutely-placed card.
+ */
 export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
   (props, ref) => {
     const {
@@ -79,7 +64,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Click outside handler
+    // Dismiss the popconfirm when clicking anywhere outside the container
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -101,6 +86,8 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(true);
     };
 
+    // Async-aware: wraps onConfirm in try/finally to track loading state
+    // automatically when the callback returns a Promise
     const handleConfirm = async () => {
       if (onConfirm) {
         setLoading(true);
@@ -118,6 +105,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(false);
     };
 
+    // Translate the engine-agnostic placement prop into Tailwind positioning classes
     const getPlacementClasses = () => {
       if (placement?.includes('top')) return 'bottom-full mb-2';
       if (placement?.includes('bottom')) return 'top-full mt-2';
@@ -126,6 +114,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       return 'bottom-full mb-2';
     };
 
+    // Map unified okType to the corresponding DaisyUI button variant class
     const getButtonClass = () => {
       switch (okType) {
         case 'danger':

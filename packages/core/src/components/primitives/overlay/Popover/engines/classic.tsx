@@ -42,6 +42,16 @@ import React from 'react';
 import { Popover as AntPopover } from 'antd';
 import type { PopoverProps } from '../Popover.types';
 
+/**
+ * Classic engine implementation of Popover using Ant Design.
+ *
+ * Wraps children in an inline-block container for ref forwarding and delegates
+ * all popover behavior (positioning, animation, trigger) to AntPopover.
+ *
+ * @param props - Popover configuration props
+ * @param ref - Forwarded ref attached to the wrapper div
+ * @returns Ant Design Popover wrapping the trigger element
+ */
 export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
   (props, ref) => {
     const {
@@ -74,6 +84,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           defaultOpen={defaultOpen}
           onOpenChange={onOpenChange}
           arrow={arrow}
+          /* DS uses milliseconds; Ant Design expects seconds, so divide by 1000 */
           mouseEnterDelay={mouseEnterDelay ? mouseEnterDelay / 1000 : undefined}
           mouseLeaveDelay={mouseLeaveDelay ? mouseLeaveDelay / 1000 : undefined}
           destroyOnHidden={destroyTooltipOnHide}

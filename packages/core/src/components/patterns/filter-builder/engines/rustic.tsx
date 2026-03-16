@@ -1,7 +1,23 @@
 'use client';
 
 /**
- * FilterBuilder - Rustic Engine (Inline styles with CSS variables)
+ * @fileoverview Rustic (Vanilla / CSS variables) engine for the FilterBuilder pattern.
+ * Uses zero third-party UI libraries -- all styling is expressed through inline
+ * styles referencing `--ds-*` design-token CSS variables. Input and select
+ * elements use native HTML controls styled with consistent token-based borders,
+ * colors, and radii so the filter builder respects the active tenant theme.
+ *
+ * @example
+ * <FilterBuilder
+ *   engine="rustic"
+ *   fields={[
+ *     { key: 'amount', label: 'Amount', type: 'number' },
+ *     { key: 'category', label: 'Category', type: 'select', options: catOpts },
+ *   ]}
+ *   value={filterGroup}
+ *   onChange={setFilterGroup}
+ *   compact
+ * />
  */
 
 import React, { useCallback } from 'react';
@@ -19,6 +35,13 @@ import {
   OPERATOR_DEFINITIONS,
 } from '../FilterBuilder.types';
 
+/**
+ * Rustic FilterBuilder using only inline styles and `--ds-*` CSS variables.
+ * Manages a recursive filter tree (FilterGroup) via immutable updates.
+ *
+ * @param props - See {@link FilterBuilderProps} for full prop documentation.
+ * @returns A themeable, framework-free filter composer with AND/OR grouping.
+ */
 export default function RusticFilterBuilder(props: FilterBuilderProps) {
   const {
     fields,
@@ -37,6 +60,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     style,
   } = props;
 
+  // Recursive immutable update: returns a new tree with only the target
+  // group mutated, preserving referential identity of all other nodes.
   const updateGroup = useCallback(
     (
       root: FilterGroup,
@@ -151,6 +176,9 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateGroup]
   );
 
+  // Changing the field type invalidates the current operator and value
+  // because different types support different operator sets (e.g. "contains"
+  // is only valid for text). Reset both to safe defaults.
   const handleFieldChange = useCallback(
     (ruleId: string, fieldKey: string) => {
       const fieldDef = fields.find((f) => f.key === fieldKey);
@@ -168,6 +196,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     [fields, value, onChange, updateRule]
   );
 
+  // Clear value when switching to a unary operator (isEmpty/isNotEmpty)
+  // so stale values don't leak into the consumer's query.
   const handleOperatorChange = useCallback(
     (ruleId: string, operator: FilterOperator) => {
       const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === operator);
@@ -194,6 +224,9 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateRule]
   );
 
+  // Shared base styles for native inputs. All colors and radii come from
+  // --ds-* tokens with fallbacks so the component works even if the tenant
+  // theme is partially defined.
   const inputStyle: React.CSSProperties = {
     padding: compact ? '3px 6px' : '5px 8px',
     fontSize: compact ? 12 : 13,
@@ -204,12 +237,16 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     color: 'var(--ds-color-text-primary, var(--ds-color-text))',
   };
 
+  // Selects inherit the input style but add a pointer cursor and restore
+  // native appearance so the browser renders its dropdown chevron.
   const selectStyle: React.CSSProperties = {
     ...inputStyle,
     cursor: 'pointer',
     appearance: 'auto' as any,
   };
 
+  // Action buttons (add rule / add group) use a dashed border to stay
+  // visually subordinate to the filter rows themselves.
   const smallBtnStyle: React.CSSProperties = {
     padding: '4px 10px',
     border: '1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary))',
@@ -223,10 +260,14 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     gap: 4,
   };
 
+  // Renders the value input matching the field type. Native HTML form elements
+  // are used (no UI library) so the rustic engine has zero external dependencies.
   const renderValueInput = (rule: FilterRule, fieldDef: FilterFieldDefinition) => {
     const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === rule.operator);
+    // Unary operators (isEmpty/isNotEmpty) need no value input.
     if (!opDef?.requiresValue) return null;
 
+    // "between" operator renders paired from/to inputs.
     if (opDef.requiresRange) {
       const rangeVal = Array.isArray(rule.value) ? rule.value : [undefined, undefined];
       return (
@@ -338,6 +379,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     }
   };
 
+  // Single rule row: logic label ("Where" for first rule, "AND"/"OR" for
+  // subsequent), field select, operator select, value input, and delete button.
   const renderRule = (rule: FilterRule, isFirst: boolean, parentLogic: 'and' | 'or') => {
     const fieldDef = fields.find((f) => f.key === rule.field);
     const operators = fieldDef ? getOperatorsForField(fieldDef) : [];
@@ -418,8 +461,11 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     );
   };
 
+  // Groups render recursively. Root has no chrome; nested groups get a
+  // primary-tinted left border and muted background to show hierarchy depth.
   const renderGroup = (group: FilterGroup, depth: number = 0) => {
     const isRoot = depth === 0;
+    // maxDepth - 1 because "Add group" creates a child at depth + 1.
     const canNest = allowGrouping && depth < maxDepth - 1;
 
     return (
@@ -449,6 +495,10 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
               marginBottom: 4,
             }}
           >
+            {/* AND uses a filled primary button to emphasize the stricter
+                conjunction; OR uses an outlined style to suggest the looser
+                disjunction. This visual weight difference helps users quickly
+                scan nested group logic. */}
             <button
               onClick={() => handleToggleLogic(group.id)}
               data-testid={`logic-toggle-${group.id}`}

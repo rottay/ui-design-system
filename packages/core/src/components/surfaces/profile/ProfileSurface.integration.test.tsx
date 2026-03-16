@@ -1,3 +1,5 @@
+/** @fileoverview ProfileSurface integration tests -- save flow and layout variants. */
+
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

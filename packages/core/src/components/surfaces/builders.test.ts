@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests verifying surface config builder functions preserve type
+ * inference while returning their input unchanged.
+ */
+
 import { describe, expect, it } from 'vitest';
 
 import {

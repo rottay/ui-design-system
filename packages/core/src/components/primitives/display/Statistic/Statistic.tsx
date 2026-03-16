@@ -1,77 +1,27 @@
 'use client';
 
 /**
- * @fileoverview Statistic Component - Rottay Design System
- * @description Numerical data display with formatting, countdown, and value types.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Statistic - Numerical data display with formatting and countdown.
+ * Renders a title + formatted value pair with optional prefix/suffix and
+ * semantic coloring (positive/negative/warning). `Statistic.Countdown`
+ * provides a live countdown timer compound sub-component.
  *
- * @remarks
- * The Statistic component displays numerical data with optional formatting,
- * supporting titles, prefixes, suffixes, value types, and countdown timers.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design Statistic with full feature support
- * - **Modern**: DaisyUI-styled statistic with Tailwind utilities
- * - **Rustic**: Pure HTML/CSS with WCAG-compliant colors
- *
- * **Key Features:**
- * - Number formatting with separators and precision
- * - Semantic value types (positive, negative, warning)
- * - Prefix and suffix support
- * - Loading skeleton states
- * - Countdown timer compound component
- * - Custom formatter function support
- *
- * **Compound Components:**
- * - `Statistic.Countdown` - Countdown timer with format tokens
- *
- * **CSS Custom Properties:**
- * - `--statistic-title-color` - Title text color
- * - `--statistic-title-font-size` - Title font size
- * - `--statistic-value-color` - Value text color
- * - `--statistic-value-font-size` - Value font size
- * - `--statistic-positive-color` - Positive value color
- * - `--statistic-negative-color` - Negative value color
- * - `--statistic-warning-color` - Warning value color
- *
- * @example Basic Usage
+ * @example
  * ```tsx
  * import { Statistic } from '@rottay/design-system';
  *
- * <Statistic title="Active Users" value={1128} />
- * ```
- *
- * @example With Formatting
- * ```tsx
- * <Statistic
- *   title="Revenue"
- *   value={1250000.5}
- *   prefix="$"
- *   precision={2}
- * />
- * ```
- *
- * @example Value Types
- * ```tsx
+ * <Statistic title="Revenue" value={1250000} prefix="$" precision={2} />
  * <Statistic title="Growth" value={15.5} suffix="%" valueType="positive" />
- * <Statistic title="Loss" value={-8.2} suffix="%" valueType="negative" />
- * ```
  *
- * @example Countdown Timer
- * ```tsx
  * <Statistic.Countdown
- *   title="Time Remaining"
+ *   title="Sale Ends"
  *   value={Date.now() + 3600000}
  *   format="HH:mm:ss"
- *   onFinish={() => console.log('Done!')}
  * />
  * ```
  *
- * @see {@link StatisticProps} for component props
- * @see {@link CountdownProps} for countdown props
  * @module Statistic
  * @category Display
- * @package @rottay/design-system
  */
 
 import { createElement, forwardRef } from 'react';
@@ -85,7 +35,6 @@ import {
 import type { StatisticProps, CountdownProps } from './Statistic.types';
 import { Countdown } from './compound';
 
-// Re-export types
 export type {
   StatisticProps,
   CountdownProps,
@@ -95,7 +44,6 @@ export type {
 
 export { STATISTIC_DEFAULTS, CSS_VARS } from './Statistic.types';
 
-// Re-export compound components
 export { Countdown };
 
 /**
@@ -136,44 +84,26 @@ export function formatNumber(
     : formattedInt;
 }
 
-// Re-export base component for custom implementations
-
-/**
- * Statistic component for displaying numerical data.
- *
- * Supports multiple rendering engines:
- * - **Classic**: Ant Design implementation (default)
- * - **Modern**: DaisyUI/Tailwind implementation
- * - **Rustic**: Vanilla HTML/CSS implementation
- *
- * @example
- * ```tsx
- * // Default engine (Classic)
- * <Statistic title="Users" value={1024} />
- *
- * // Specific engine
- * <Statistic engine="modern" title="Users" value={1024} />
- *
- * // With value type for semantic coloring
- * <Statistic title="Growth" value={15.5} suffix="%" valueType="positive" />
- * ```
- */
+/** Engine-routed base for the static value display. */
 const StatisticBase = createEngineComponent<StatisticProps>('Statistic', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Statistic })),
   modern: () => import('./engines/modern').then(m => ({ default: m.Statistic })),
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Statistic })),
 });
 
-/**
- * Engine-aware Countdown component.
- * Routes to the appropriate engine implementation.
- */
+/** Engine-routed base for the live countdown timer. */
 const CountdownBase = createEngineComponent<CountdownProps>('Statistic.Countdown', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Countdown })),
   modern: () => import('./engines/modern').then(m => ({ default: m.Countdown })),
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Countdown })),
 });
 
+/**
+ * Personality wrapper for Statistic.
+ *
+ * Merges count-up animation and typography styles from the tenant's personality
+ * tokens so dashboard metrics adopt the correct visual energy level.
+ */
 const StatisticComponent = forwardRef<any, StatisticProps>((props, ref) => {
   const tokens = useOptionalTokens();
   const { style, animateValue, ...rest } = props;
@@ -181,6 +111,8 @@ const StatisticComponent = forwardRef<any, StatisticProps>((props, ref) => {
   return createElement(StatisticBase, {
     ref,
     ...rest,
+    // Count-up animation defaults come from personality so dashboards can feel
+    // energetic or restrained without rewriting each stat call site.
     animateValue: animateValue ?? tokens?.personality.animation.countUpEnabled,
     style: tokens ? mergePersonalityStyle(style, resolveStatisticPersonalityStyle(tokens)) : style,
   });
@@ -188,6 +120,11 @@ const StatisticComponent = forwardRef<any, StatisticProps>((props, ref) => {
 
 StatisticComponent.displayName = 'Statistic';
 
+/**
+ * Personality wrapper for Countdown.
+ * Shares the same typography/value styling contract as Statistic so they
+ * look visually consistent when placed side by side on dashboards.
+ */
 const CountdownEngine = forwardRef<any, CountdownProps>((props, ref) => {
   const tokens = useOptionalTokens();
   const { style, ...rest } = props;
@@ -201,24 +138,9 @@ const CountdownEngine = forwardRef<any, CountdownProps>((props, ref) => {
 
 CountdownEngine.displayName = 'Statistic.Countdown';
 
-/**
- * Statistic component with compound components attached.
- *
- * Available compound components:
- * - `Statistic.Countdown` - Countdown timer component
- *
- * @example
- * ```tsx
- * // Countdown usage
- * <Statistic.Countdown
- *   title="Sale Ends In"
- *   value={Date.now() + 86400000}
- *   format="DD:HH:mm:ss"
- *   onFinish={() => console.log('Sale ended!')}
- * />
- * ```
- */
+/** Compound assembly: attaches Countdown so consumers write `Statistic.Countdown`. */
 export const Statistic = Object.assign(StatisticComponent, {
+  /** Live countdown timer that ticks down to a target timestamp. */
   Countdown: CountdownEngine,
 });
 

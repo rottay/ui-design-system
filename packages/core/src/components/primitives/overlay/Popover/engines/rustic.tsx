@@ -49,10 +49,20 @@ import { createPortal } from 'react-dom';
 import type { PopoverProps, PopoverPlacement } from '../Popover.types';
 import { POPOVER_DEFAULTS } from '../Popover.types';
 
+/**
+ * Computes fixed-position CSS for the popover content relative to the trigger
+ * element's bounding rect. Accounts for scroll offsets so the popover tracks
+ * correctly in scrollable containers.
+ *
+ * @param placement - One of 12 placement positions
+ * @param triggerRect - DOMRect of the trigger element
+ * @returns Inline styles for absolute positioning of the popover
+ */
 const getPositionStyles = (
   placement: PopoverPlacement,
   triggerRect: DOMRect
 ): React.CSSProperties => {
+  // 8px gap between trigger edge and popover content prevents visual collision
   const gap = 8;
   const scrollX = window.scrollX;
   const scrollY = window.scrollY;
@@ -115,6 +125,17 @@ const getPositionStyles = (
   return positions[placement] || positions.top;
 };
 
+/**
+ * Rustic (Apollo) engine implementation of Popover using pure inline CSS.
+ *
+ * Renders the popover content via createPortal into document.body for proper
+ * z-index stacking that escapes overflow:hidden ancestors. Position is
+ * recalculated from the trigger's bounding rect each time the popover opens.
+ *
+ * @param props - Popover configuration props
+ * @param ref - Forwarded ref merged with the internal trigger ref
+ * @returns Trigger element plus a portaled popover overlay
+ */
 export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
   (props, ref) => {
     const {
@@ -136,6 +157,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       zIndex = POPOVER_DEFAULTS.zIndex,
     } = props;
 
+    // Controlled/uncontrolled pattern: external `open` prop takes precedence
     const [internalOpen, setInternalOpen] = useState(defaultOpen);
     const [position, setPosition] = useState<React.CSSProperties>({});
     const isControlled = controlledOpen !== undefined;
@@ -153,7 +175,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Update position
+    // Recalculate popover position from trigger rect whenever visibility or placement changes
     useEffect(() => {
       if (isOpen && triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
@@ -169,7 +191,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       };
     }, []);
 
-    // Click outside handler
+    // Dismiss on click outside both the trigger AND the popover content, since the
+    // content is portaled to document.body and not a DOM child of the trigger.
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
@@ -230,6 +253,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }
     };
 
+    // Portal the popover to document.body so it escapes overflow:hidden ancestors
+    // and participates in the global z-index stacking context.
     const popoverContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div
@@ -250,6 +275,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
             ...position,
             ...overlayStyle,
           }}
+          /* Re-bind hover handlers on the popover itself so moving the cursor
+             from trigger to content does not trigger a premature close. */
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >

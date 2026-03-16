@@ -1,5 +1,6 @@
 /**
- * Tests for tenant creation utilities
+ * @fileoverview Tests for createTenantConfig -- verifies personality merging,
+ * density projection, and structural token generation from minimal input.
  */
 
 import { describe, it, expect } from 'vitest';

@@ -1,7 +1,22 @@
 'use client';
 
 /**
- * StatsGrid - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the StatsGrid pattern.
+ *
+ * Displays a responsive CSS-grid of statistic cards using Ant Design's Card
+ * and Statistic primitives. Each card can optionally render an animated
+ * numeric counter, a percentage-change indicator with directional arrows,
+ * a mini SVG sparkline, and a description line. The animation behavior
+ * is resolved through the personality/motion system so it can be suppressed
+ * for users who prefer reduced motion.
+ *
+ * @example
+ * <ClassicStatsGrid
+ *   stats={[{ key: 'revenue', label: 'Revenue', value: 42500, prefix: '$', change: 12, changeType: 'increase' }]}
+ *   columns={3}
+ *   sparkline
+ *   animate
+ * />
  */
 
 import React, { useState, useEffect } from 'react';
@@ -13,6 +28,12 @@ import type { StatsGridProps } from '../StatsGrid.types';
 import type { StatDef } from '../../types';
 import { resolveStatsGridMotion } from '../personality';
 
+/**
+ * Maps raw data values to SVG polyline coordinate pairs.
+ *
+ * The range guard (`|| 1`) prevents division by zero when all values are
+ * identical, producing a flat horizontal line instead of NaN coordinates.
+ */
 function normalizeSparkline(data: number[], width = 80, height = 30): string {
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -26,6 +47,7 @@ function normalizeSparkline(data: number[], width = 80, height = 30): string {
     .join(' ');
 }
 
+/** Tiny SVG line chart rendered below a stat value to show trend direction. */
 function Sparkline({ data, color }: { data: number[]; color?: string }) {
   if (!data || data.length < 2) return null;
   return (
@@ -42,6 +64,13 @@ function Sparkline({ data, color }: { data: number[]; color?: string }) {
   );
 }
 
+/**
+ * Animates a numeric value from 0 to the target using a cubic ease-out curve.
+ *
+ * String values (e.g. "$1,234") are passed through unchanged because
+ * interpolating formatted strings would require parsing the format. The
+ * animation runs via requestAnimationFrame for frame-perfect rendering.
+ */
 function useAnimatedValue(
   target: number | string,
   animate?: boolean,
@@ -56,6 +85,7 @@ function useAnimatedValue(
     }
     const start = performance.now();
     const from = 0;
+    // requestAnimationFrame loop with cubic ease-out for smooth deceleration.
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - t, 3);
@@ -68,6 +98,13 @@ function useAnimatedValue(
   return value;
 }
 
+/**
+ * Individual statistic card using Ant Design's Card + Statistic primitives.
+ *
+ * Variant styles (outlined, filled, glass) are applied via inline CSS so they
+ * can reference DS tokens. The glass variant uses backdrop-filter blur for a
+ * frosted-glass effect.
+ */
 function StatCard({
   stat,
   sparkline,
@@ -141,6 +178,7 @@ function StatCard({
   );
 }
 
+/** Skeleton placeholder grid rendered while stat data is being fetched. */
 function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | number }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap }}>
@@ -151,6 +189,16 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
   );
 }
 
+/**
+ * Classic (Ant Design) engine for the StatsGrid pattern component.
+ *
+ * Lays out StatCard instances in a CSS grid whose column count is controlled
+ * by the `columns` prop. Animation is gated by the personality token system
+ * and the user's `prefers-reduced-motion` media query via `resolveStatsGridMotion`.
+ *
+ * @param props - {@link StatsGridProps} controlling stats data, layout, animation, and callbacks.
+ * @returns A grid of statistic cards rendered with Ant Design primitives.
+ */
 export default function ClassicStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
   const { prefersReducedMotion } = useBreakpoints();
@@ -167,6 +215,8 @@ export default function ClassicStatsGrid(props: StatsGridProps) {
     className,
     style,
   } = props;
+  // Resolve animation settings from the personality system. This merges the
+  // explicit `animate` prop with the personality defaults and reduced-motion pref.
   const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
 
   if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;

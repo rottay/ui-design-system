@@ -113,6 +113,10 @@ export interface UseAutoSaveReturn {
  * Simple deep equality check using JSON serialization.
  * Sufficient for plain data objects, arrays, and primitives.
  */
+// JSON.stringify comparison is intentionally simple here. The auto-save hook
+// only needs to detect "has the form data changed?" -- not produce a diff.
+// For complex objects with circular references or class instances, consumers
+// should pre-serialize before passing data to the hook.
 function deepEqual<T>(a: T, b: T): boolean {
   if (a === b) return true;
   try {
@@ -174,7 +178,9 @@ export function useAutoSave<T>(options: UseAutoSaveOptions<T>): UseAutoSaveRetur
   // Prevent saves after unmount
   const mountedRef = useRef(true);
 
-  // Track if a save is already in progress to avoid concurrent saves
+  // Guard against concurrent saves. Two debounced saves could overlap if the
+  // onSave callback takes longer than the debounce interval. Without this lock,
+  // the second save could snapshot stale data or cause race conditions.
   const savingRef = useRef(false);
 
   useEffect(() => {
@@ -193,7 +199,9 @@ export function useAutoSave<T>(options: UseAutoSaveOptions<T>): UseAutoSaveRetur
 
     const dataToSave = currentDataRef.current;
 
-    // Skip if data hasn't actually changed
+    // Skip if data hasn't changed since the last successful save. The
+    // lastSavedAt null check allows the very first save to proceed even
+    // when the data matches the initial value.
     if (deepEqual(dataToSave, lastSavedDataRef.current) && lastSavedAt !== null) {
       setIsDirty(false);
       return;

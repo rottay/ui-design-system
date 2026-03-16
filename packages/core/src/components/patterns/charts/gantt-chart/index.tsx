@@ -1,5 +1,24 @@
 'use client';
 
+/**
+ * @fileoverview GanttChart -- D3-backed Gantt timeline using `scaleTime` for the horizontal date
+ * axis and `scaleBand` for vertical task rows. Each task has a translucent background bar
+ * showing the full planned duration and an opaque progress overlay proportional to completion.
+ * Height auto-grows to fit the task count so rows remain readable. A dashed "Today" line is
+ * drawn when the current date falls within the visible domain.
+ *
+ * @example
+ * <GanttChart
+ *   tasks={[
+ *     { id: '1', name: 'Design', start: '2026-01-01', end: '2026-02-15', progress: 80 },
+ *     { id: '2', name: 'Build',  start: '2026-02-01', end: '2026-04-01', progress: 30 },
+ *   ]}
+ *   showProgress
+ *   showToday
+ *   title="Project Timeline"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import { axisBottom, axisLeft, max, min, scaleBand, scaleTime, select, timeFormat } from 'd3';
 
@@ -8,6 +27,7 @@ import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** A single task in the Gantt timeline. Dates accept ISO strings or `Date` objects. */
 export interface GanttTask {
   id: string;
   name: string;
@@ -18,12 +38,19 @@ export interface GanttTask {
   group?: string;
 }
 
+/** Props for the {@link GanttChart} component. */
 export interface GanttChartProps extends ChartBaseProps {
   tasks: GanttTask[];
   showProgress?: boolean;
   showToday?: boolean;
 }
 
+/**
+ * Renders a Gantt timeline using `scaleTime` (x) and `scaleBand` (y) with task progress overlays.
+ *
+ * @param props - See {@link GanttChartProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table.
+ */
 export const GanttChart = memo(function GanttChart({
   tasks,
   showProgress = true,
@@ -46,6 +73,8 @@ export const GanttChart = memo(function GanttChart({
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 800;
+  // Dynamically grow the chart height so every task gets a readable row;
+  // the minimum stays at the consumer-supplied `height` to avoid collapse.
   const dynamicHeight = Math.max(height, tasks.length * 36 + margin.top + margin.bottom);
   const summary = {
     caption: title ? `${title} data summary` : 'Gantt chart data summary',
@@ -79,11 +108,15 @@ export const GanttChart = memo(function GanttChart({
       end: new Date(t.end),
     }));
 
+    // scaleTime maps the full date span (earliest start -> latest end) to pixel
+    // width; .nice() rounds the domain to tidy date boundaries (e.g. month start).
     const x = scaleTime()
       .domain([min(parsedTasks, (d) => d.start)!, max(parsedTasks, (d) => d.end)!])
       .range([0, innerWidth])
       .nice();
 
+    // scaleBand assigns each task id an equal-height row with 30% padding between
+    // rows for visual separation and hover affordance.
     const y = scaleBand()
       .domain(parsedTasks.map((d) => d.id))
       .range([0, innerHeight])
@@ -112,7 +145,8 @@ export const GanttChart = memo(function GanttChart({
       .style('stroke', 'var(--ds-color-border-secondary)');
     g.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
 
-    // Bars
+    // Task bars are rendered as two overlapping rects per task: a translucent
+    // background bar (full duration) and an opaque progress bar (partial width).
     const bars = g
       .selectAll('.task')
       .data(parsedTasks)
@@ -120,7 +154,8 @@ export const GanttChart = memo(function GanttChart({
       .append('g')
       .attr('class', 'task');
 
-    // Background bar
+    // Background bar at 25% opacity shows the full planned duration. The
+    // progress overlay (below) fills a proportional width at full opacity.
     const rects = bars
       .append('rect')
       .attr('x', (d) => x(d.start))
@@ -172,7 +207,8 @@ export const GanttChart = memo(function GanttChart({
       });
     }
 
-    // Today line
+    // "Today" marker is only drawn if the current date falls within the
+    // chart's visible domain; otherwise it would render off-canvas.
     if (showToday) {
       const now = new Date();
       if (now >= x.domain()[0] && now <= x.domain()[1]) {

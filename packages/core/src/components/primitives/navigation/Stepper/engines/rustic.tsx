@@ -183,6 +183,8 @@ function renderStep(
 ): React.ReactNode {
   const status = computeStatus(index, current, item.status, globalStatus);
   const colors = getStatusColors(status);
+  // Resolve pixel dimensions and font sizes from the shared size maps.
+  // These are used for both the circular icon container and the text labels.
   const iconSize = SIZE_MAP[size];
   const fontSize = FONT_SIZE_MAP[size];
   const isLast = index === totalSteps - 1;
@@ -243,7 +245,9 @@ function renderStep(
     color: 'var(--ds-stepper-description-color, var(--ds-color-text-secondary))',
   };
 
-  // Connector line styles (horizontal only)
+  // Connector lines link adjacent steps visually. In horizontal mode, they
+  // stretch between step icons. Finished connectors use the primary color
+  // to indicate progress; pending connectors use the border color.
   const connectorStyle: CSSProperties = direction === 'horizontal' ? {
     flex: 1,
     minWidth: '32px',
@@ -425,7 +429,8 @@ export default function RusticStepper(props: StepperProps): React.ReactElement {
         case 'ArrowDown':
           e.preventDefault();
           nextFocus = currentFocus < stepItems.length - 1 ? currentFocus + 1 : 0;
-          // Skip disabled steps
+          // Skip disabled steps -- wraps around to avoid infinite loop only
+          // when we've cycled back to the starting position
           while (stepItems[nextFocus]?.disabled && nextFocus !== currentFocus) {
             nextFocus = nextFocus < stepItems.length - 1 ? nextFocus + 1 : 0;
           }
@@ -434,7 +439,7 @@ export default function RusticStepper(props: StepperProps): React.ReactElement {
         case 'ArrowUp':
           e.preventDefault();
           nextFocus = currentFocus > 0 ? currentFocus - 1 : stepItems.length - 1;
-          // Skip disabled steps
+          // Same wrap-around logic in reverse direction
           while (stepItems[nextFocus]?.disabled && nextFocus !== currentFocus) {
             nextFocus = nextFocus > 0 ? nextFocus - 1 : stepItems.length - 1;
           }

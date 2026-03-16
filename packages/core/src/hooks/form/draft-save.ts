@@ -248,7 +248,9 @@ export function useDraftSave<T>(options: UseDraftSaveOptions<T>): UseDraftSaveRe
     }
   }, [key, ttl]);
 
-  // ---- Set data (persists to localStorage) ----
+  // Persists to localStorage on every setData call. This is intentional: draft
+  // saves should be as frequent as possible so the user never loses more than
+  // a few keystrokes on an unexpected tab close or navigation.
   const setData = useCallback(
     (dataOrUpdater: T | ((prev: T) => T)) => {
       setDataState((prev) => {
@@ -257,6 +259,8 @@ export function useDraftSave<T>(options: UseDraftSaveOptions<T>): UseDraftSaveRe
             ? (dataOrUpdater as (prev: T) => T)(prev)
             : dataOrUpdater;
 
+        // Write happens inside the updater function so the persisted data
+        // always matches what React committed to state.
         const savedAt = writeDraft(key, next);
         setLastDraftAt(new Date(savedAt));
         setHasDraft(true);

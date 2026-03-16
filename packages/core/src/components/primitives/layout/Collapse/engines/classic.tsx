@@ -1,33 +1,13 @@
 'use client';
 
 /**
- * @fileoverview Collapse Classic Engine - Rottay Design System
- * @description Classic (Ant Design) implementation of the Collapse compound component
- * with engine-agnostic token architecture for multi-tenant theming.
+ * @fileoverview Collapse Classic Engine - Rottay Design System.
+ * Ant Design implementation of the Collapse compound component. Wraps
+ * AntCollapse in a `.ds-collapse` token container that receives CSS custom
+ * properties for multi-tenant theming via `useCollapseTokens`.
  *
- * @remarks
- * The Classic engine provides:
- * - **Token wrapper**: `.ds-collapse` wrapper for tenant customization
- * - **CSS Variables**: Dynamic styling via design tokens
- * - **Ant Design integration**: Full feature parity with underlying library
- * - **Theme inheritance**: Respects tenant color palette and spacing
- *
- * Architecture:
- * ```
- * <div class="ds-collapse" style="--ds-collapse-*">
- *   <AntCollapse>
- *     <AntCollapse.Panel />
- *   </AntCollapse>
- * </div>
- * ```
- *
- * The outer wrapper receives CSS custom properties, while inner Ant Design
- * components are styled via CSS that targets `.ds-collapse .ant-collapse-*`.
- *
- * @example Using Classic Engine with tokens
+ * @example
  * ```tsx
- * import { Collapse } from '@rottay/design-system';
- *
  * <Collapse engine="classic" accordion bordered>
  *   <Collapse.Panel engine="classic" header="Panel 1" panelKey="1">
  *     Ant Design styled content with tenant theming
@@ -35,7 +15,6 @@
  * </Collapse>
  * ```
  *
- * @see {@link Collapse} - The main engine-aware component
  * @see {@link useCollapseTokens} - Token generation hook
  * @module Collapse/Engines/Classic
  * @category Layout
@@ -46,12 +25,23 @@ import { Collapse as AntCollapse } from 'antd';
 import type { CollapseProps, CollapsePanelProps } from '../Collapse.types';
 import { useCollapseTokens } from '../../../../../hooks/components';
 
+/**
+ * Converts JSX `<Collapse.Panel>` children into the `items` array format
+ * expected by Ant Design's Collapse component (v5+ items API).
+ *
+ * Filters out non-element children and elements whose displayName does not
+ * start with "Collapse.Panel", ensuring only valid panel children are rendered.
+ * The `disabled` prop is translated to Ant's `collapsible: 'disabled'` API.
+ */
 function convertCollapseChildren(children: React.ReactNode): NonNullable<React.ComponentProps<typeof AntCollapse>['items']> {
   return React.Children.toArray(children).flatMap((child) => {
+    // Skip text nodes, null, and other non-element children
     if (!React.isValidElement(child)) {
       return [];
     }
 
+    // Identify panel components by displayName rather than direct reference
+    // so that any engine's Panel component can be recognized
     const displayName =
       typeof child.type === 'string'
         ? child.type
@@ -84,11 +74,14 @@ function convertCollapseChildren(children: React.ReactNode): NonNullable<React.C
 }
 
 /**
- * Classic (Ant Design) implementation of Collapse with token architecture.
+ * Classic (Ant Design) Collapse with token-based theming.
  *
  * Wraps Ant Design's Collapse in a `.ds-collapse` container that receives
  * CSS custom properties for theming. This enables tenant-specific styling
  * without modifying the underlying Ant Design components.
+ *
+ * @param props - {@link CollapseProps} including accordion, bordered, ghost, size, and children.
+ * @returns A token-wrapped Ant Design Collapse component.
  */
 export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
   (props, ref) => {
@@ -107,7 +100,8 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       style,
     } = props;
 
-    // Generate tokens using the hook
+    // Derive variant from boolean flags for token resolution:
+    // ghost takes priority, then bordered, then default
     const { rootStyle, classNames } = useCollapseTokens({
       variant: ghost ? 'ghost' : bordered ? 'bordered' : 'default',
       size,
@@ -117,6 +111,8 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       style,
     });
 
+    // Convert JSX Panel children to Ant's items API; memoized to avoid
+    // re-converting on every render when only activeKey changes
     const items = useMemo(() => convertCollapseChildren(children), [children]);
 
     return (
@@ -140,10 +136,15 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
 Collapse.displayName = 'Collapse.Classic';
 
 /**
- * Classic (Ant Design) implementation of Collapse.Panel with token architecture.
+ * Classic (Ant Design) Collapse Panel.
  *
- * Panel components work within the token context established by the parent
- * Collapse wrapper, inheriting CSS custom property values.
+ * Renders an individual Ant Design Collapse.Panel with DS class names.
+ * Note: In practice, the parent Collapse converts Panel children into the
+ * items API via `convertCollapseChildren`, so this component mainly serves
+ * as a declarative authoring surface and fallback for direct rendering.
+ *
+ * @param props - {@link CollapsePanelProps} with panelKey, header, disabled, and content.
+ * @returns An Ant Design Collapse.Panel wrapped with DS class names.
  */
 export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps>(
   (props, _ref) => {
@@ -159,7 +160,8 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps>(
       style,
     } = props;
 
-    // Generate panel-specific class names
+    // Build BEM-style class names; disabled state adds a modifier class
+    // for CSS targeting within the .ds-collapse token wrapper
     const panelClassNames = useMemo(
       () =>
         [

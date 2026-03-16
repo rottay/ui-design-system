@@ -1,7 +1,20 @@
 'use client';
 
 /**
- * ActivityLog - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the ActivityLog pattern.
+ * Renders a chronological timeline of user activities inside an Ant Design Card,
+ * using the Timeline component with color-coded dots and action Tags. Provides
+ * optional multi-select filters for action type and user, plus diff rendering
+ * that shows old/new values with strikethrough formatting.
+ *
+ * @example
+ * <ClassicActivityLog
+ *   activities={[
+ *     { id: '1', action: 'created', user: { name: 'Ana' }, timestamp: new Date().toISOString() },
+ *   ]}
+ *   actionTypes={['created', 'updated', 'deleted']}
+ *   onFilterChange={(f) => setFilters(f)}
+ * />
  */
 
 import React from 'react';
@@ -16,6 +29,7 @@ import {
 } from '@ant-design/icons';
 import type { ActivityLogProps, Activity } from '../ActivityLog.types';
 
+// CSS-variable-based colors for timeline dot icons, mapped by action verb.
 const ACTIVITY_ICON_COLORS = {
   created: 'var(--ds-color-success)',
   updated: 'var(--ds-color-primary)',
@@ -25,6 +39,7 @@ const ACTIVITY_ICON_COLORS = {
   fallback: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))',
 } as const;
 
+// Ant Design icon per action type, displayed as the Timeline dot.
 const actionIcons: Record<string, React.ReactNode> = {
   created: <PlusOutlined style={{ color: ACTIVITY_ICON_COLORS.created }} />,
   updated: <EditOutlined style={{ color: ACTIVITY_ICON_COLORS.updated }} />,
@@ -33,6 +48,7 @@ const actionIcons: Record<string, React.ReactNode> = {
   synced: <SyncOutlined style={{ color: ACTIVITY_ICON_COLORS.synced }} />,
 };
 
+// Ant Design Tag color name per action type (not CSS variables -- Ant resolves these internally).
 const actionColors: Record<string, string> = {
   created: 'green',
   updated: 'blue',
@@ -41,6 +57,10 @@ const actionColors: Record<string, string> = {
   synced: 'orange',
 };
 
+/**
+ * Resolves a timeline dot icon by substring-matching the action name against
+ * known verbs (created, updated, deleted, viewed, synced). Falls back to EditOutlined.
+ */
 function getActionIcon(action: string): React.ReactNode {
   const lower = action.toLowerCase();
   for (const [key, icon] of Object.entries(actionIcons)) {
@@ -49,6 +69,7 @@ function getActionIcon(action: string): React.ReactNode {
   return <EditOutlined style={{ color: ACTIVITY_ICON_COLORS.fallback }} />;
 }
 
+/** Resolves an Ant Design Tag color name from an action string via substring match. */
 function getActionColor(action: string): string {
   const lower = action.toLowerCase();
   for (const [key, color] of Object.entries(actionColors)) {
@@ -57,6 +78,11 @@ function getActionColor(action: string): string {
   return 'default';
 }
 
+/**
+ * Converts an ISO timestamp to a human-friendly relative string.
+ * Uses minute/hour/day thresholds, falling back to a locale-formatted date
+ * for anything older than 7 days.
+ */
 function formatTimestamp(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
@@ -71,6 +97,7 @@ function formatTimestamp(ts: string): string {
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+/** Renders a field-level diff showing old values with strikethrough and new values in bold. */
 function renderDiff(diff: Record<string, { from: unknown; to: unknown }>): React.ReactNode {
   return (
     <div
@@ -89,6 +116,15 @@ function renderDiff(diff: Record<string, { from: unknown; to: unknown }>): React
   );
 }
 
+/**
+ * Classic engine activity log built on Ant Design's Timeline + Card.
+ * Displays a chronological list of activities with icon dots, user avatars,
+ * action tags, entity references, and optional field-level diffs. Includes
+ * multi-select filters for action type and user.
+ *
+ * @param props - {@link ActivityLogProps}
+ * @returns An Ant Design Card wrapping a filterable Timeline.
+ */
 export default function ClassicActivityLog(props: ActivityLogProps) {
   const {
     activities,

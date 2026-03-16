@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * ProfileSurface
- *
- * User account management surface with support for sectioned profile editing,
- * avatar management, password changes, and account deletion. Supports both
- * sidebar and stacked layouts. The app owns actual save/update logic while this
- * surface provides consistent structure for profile pages.
+ * @fileoverview ProfileSurface -- user account management page.
+ * @description Sectioned profile editing with avatar management, password changes,
+ * and account deletion. Supports sidebar and stacked layouts. The app owns
+ * save/update logic; this surface provides consistent page structure.
  */
 
 import React, { useCallback, useState } from 'react';
@@ -21,6 +19,9 @@ export interface ProfileSurfaceProps {
   loading?: boolean;
 }
 
+// Each profile section manages its own edit/view toggle and local form state.
+// This isolates section saves so editing one section does not force the entire
+// profile into edit mode.
 function ProfileSectionCard({
   section,
   onSave,
@@ -29,6 +30,8 @@ function ProfileSectionCard({
   onSave?: (sectionKey: string, data: Record<string, unknown>) => void;
 }): React.ReactElement {
   const [editing, setEditing] = useState(false);
+  // Initialize field values from the section config. Empty string fallback
+  // prevents uncontrolled-to-controlled React warnings on inputs.
   const [values, setValues] = useState<Record<string, unknown>>(() => {
     const initial: Record<string, unknown> = {};
     for (const field of section.fields) {
@@ -76,7 +79,11 @@ function ProfileSectionCard({
                   field.type === 'textarea' ? (
                     <Textarea
                       value={String(values[field.key] ?? '')}
-                      onChange={(e: any) =>
+                      // The `any` type on the event handles both DS primitives
+                  // (which pass the value directly as a string) and native
+                  // HTML inputs (which pass a SyntheticEvent). This dual
+                  // handling avoids coupling to a specific engine's API.
+                  onChange={(e: any) =>
                         setValues((prev) => ({ ...prev, [field.key]: typeof e === 'string' ? e : e?.target?.value ?? '' }))
                       }
                       placeholder={field.placeholder}
@@ -108,6 +115,8 @@ export function ProfileSurface({
   loading = false,
 }: ProfileSurfaceProps): React.ReactElement {
   const isSidebarLayout = config.visual.layout === 'sidebar';
+  // Sidebar layout stacks on tablet in addition to mobile because the
+  // avatar + nav sidebar becomes too narrow on tablet viewports.
   const { shouldStack } = useSurfaceResponsiveLayout({
     stackOnMobile: true,
     stackOnTablet: isSidebarLayout,
@@ -115,6 +124,9 @@ export function ProfileSurface({
 
   const actionsNode = (
     <Flex gap={8} wrap="wrap" justify="end">
+      {/* Password change is triggered with empty strings because the actual
+          old/new password values come from a modal or separate form that the
+          app manages. The surface just opens the flow. */}
       {config.behavior.onPasswordChange && (
         <Button variant="secondary" size="sm" onClick={() => config.behavior.onPasswordChange?.('', '')}>
           <Text>Change Password</Text>

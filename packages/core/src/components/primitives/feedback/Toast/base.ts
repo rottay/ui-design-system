@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Internal engine-aware Toast export.
+ * @fileoverview Internal engine-aware Toast export.
  *
  * `Toast.Container` renders individual toasts from inside the same primitive
  * package. Splitting the base engine component from the public `Toast` wrapper

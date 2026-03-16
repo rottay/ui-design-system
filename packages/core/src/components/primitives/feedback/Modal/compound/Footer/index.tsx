@@ -62,7 +62,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ModalFooterProps } from '../../../../../../contracts/primitives/feedback/Modal';
+import type { ModalFooterProps } from '../../Modal.types';
 import { PADDING_MAP } from '../../Modal.types';
 
 // ============================================================================

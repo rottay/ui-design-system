@@ -1,8 +1,10 @@
 /**
- * Modal Component Tokens - TypeScript Mirror
+ * @fileoverview Modal component token mirrors.
  *
- * TypeScript representation of Modal CSS custom properties.
- * Use these for type-safe Modal token references.
+ * Covers 10 width sizes, overlay/backdrop, header/body/footer sub-slots,
+ * close button, fade/scale/slide animations, centered/top positioning,
+ * drawer and bottom-sheet variants, semantic status icons, scroll shadows,
+ * loading overlay, nested modal z-index, accessibility, responsive, and glass effect.
  */
 
 // Modal Sizes

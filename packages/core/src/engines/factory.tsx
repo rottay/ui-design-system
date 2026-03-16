@@ -131,14 +131,17 @@ export function createEngineComponent<P extends object>(
   const EngineRouter = forwardRef<any, P & { engine?: EngineName }>((props, ref) => {
     const context = useEngineContext();
 
-    // Read tenant context if available (returns null when no TenantProvider in tree)
+    // Read tenant context if available. Components can still render without a
+    // TenantProvider, but in that case custom pack resolution falls back to the
+    // default custom registry.
     const tenantCtx = useContext(TenantContext);
     const componentPack = tenantCtx?.config?.componentPack;
 
     // Allow engine prop to override context engine
     const activeEngine = props.engine || context.engine;
 
-    // For custom engine with a tenant-specific pack, use pack-scoped resolution
+    // Custom engine is the only path that needs tenant-aware component lookup.
+    // Standard engines are fully determined by the active engine name.
     const Component = useMemo(() => {
       if (activeEngine === 'custom' && customEnabled && componentPack) {
         return getPackLazyComponent(componentPack);

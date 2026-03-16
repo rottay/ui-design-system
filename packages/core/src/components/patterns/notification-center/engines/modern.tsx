@@ -1,12 +1,24 @@
 'use client';
 
 /**
- * NotificationCenter - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern engine for the NotificationCenter pattern, powered by DaisyUI / Tailwind.
+ * Builds a custom dropdown (no Ant Popover) with manual click-outside detection,
+ * supporting both controlled and uncontrolled open state. Notifications are
+ * rendered in a scrollable menu list with per-type color coding and Unicode
+ * fallback icons when no custom icon is provided.
+ *
+ * @example
+ * <ModernNotificationCenter
+ *   notifications={[{ id: '1', title: 'Build passed', message: 'CI green on main', type: 'success', read: false, timestamp: new Date().toISOString() }]}
+ *   onRead={(id) => markRead(id)}
+ *   maxVisible={5}
+ * />
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { NotificationCenterProps, Notification } from '../NotificationCenter.types';
 
+// DaisyUI semantic text color classes per notification type.
 const typeColors: Record<string, string> = {
   info: 'text-info',
   success: 'text-success',
@@ -14,6 +26,8 @@ const typeColors: Record<string, string> = {
   error: 'text-error',
 };
 
+// Tinted background classes at 10% opacity for icon containers, giving each
+// notification type a subtle color band without overpowering the row.
 const typeBg: Record<string, string> = {
   info: 'bg-info/10',
   success: 'bg-success/10',
@@ -21,6 +35,10 @@ const typeBg: Record<string, string> = {
   error: 'bg-error/10',
 };
 
+/**
+ * Progressive degradation from relative ("3m ago") to calendar ("Mar 5").
+ * Keeps recent notifications scannable while older ones stay unambiguous.
+ */
 function formatTimestamp(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
@@ -35,6 +53,16 @@ function formatTimestamp(ts: string): string {
   return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
+/**
+ * Modern (DaisyUI / Tailwind) engine for the NotificationCenter pattern.
+ *
+ * Uses a DaisyUI dropdown shell with manual click-outside detection to support
+ * both controlled and uncontrolled open states. The default trigger is an
+ * inline SVG bell icon with a DaisyUI indicator badge for the unread count.
+ *
+ * @param props - {@link NotificationCenterProps}
+ * @returns A dropdown notification center with DaisyUI styling.
+ */
 export default function ModernNotificationCenter(props: NotificationCenterProps) {
   const {
     notifications,
@@ -53,6 +81,8 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     style,
   } = props;
 
+  // Controlled/uncontrolled open state pattern -- see Classic engine for the
+  // same approach. When `controlledOpen` is undefined, internal state drives.
   const [internalOpen, setInternalOpen] = useState(false);
   const isOpen = controlledOpen ?? internalOpen;
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -62,6 +92,9 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     onOpenChange?.(newOpen);
   }, [controlledOpen, onOpenChange]);
 
+  // Manual click-outside detection because DaisyUI's native dropdown toggle
+  // does not support controlled open state. Only attached while open to avoid
+  // unnecessary document-level listeners.
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -72,7 +105,9 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleOpenChange]);
 
+  // Prefer server-authoritative count; fall back to client-side filter.
   const displayCount = unreadCount ?? notifications.filter(n => !n.read).length;
+  // Cap the rendered list to `maxVisible` items for performance.
   const visibleNotifications = notifications.slice(0, maxVisible);
 
   return (
@@ -81,7 +116,8 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       className={`dropdown dropdown-end ds-pattern-notification-center ds-engine-modern ${className ?? ''}`}
       style={style}
     >
-      {/* Trigger */}
+      {/* Trigger: inline SVG bell icon with DaisyUI indicator badge.
+          A custom trigger replaces the entire button contents when provided. */}
       <div
         tabIndex={0}
         role="button"
@@ -123,7 +159,9 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
               </div>
             </div>
 
-            {/* List */}
+            {/* Scrollable notification list. Unread items get a subtle primary
+                tint (bg-primary/5). Unicode fallback icons are used when no custom
+                icon is provided -- keeps the bundle lightweight. */}
             <div className="max-h-[360px] overflow-y-auto">
               {visibleNotifications.length === 0 ? (
                 <div className="flex justify-center items-center py-12 opacity-50">
@@ -137,6 +175,8 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                         className={`flex gap-3 items-start p-3 rounded-none border-b border-base-200 ${!item.read ? 'bg-primary/5' : ''}`}
                         onClick={() => onRead?.(item.id)}
                       >
+                        {/* Type icon: custom icon takes priority, otherwise a
+                            Unicode glyph matching the notification type */}
                         <div className={`mt-0.5 text-lg ${typeColors[item.type]}`}>
                           {item.icon || (
                             item.type === 'success' ? '\u2713' :
@@ -148,11 +188,14 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span className={`text-sm ${!item.read ? 'font-semibold' : ''}`}>{item.title}</span>
+                            {/* Small primary dot next to unread titles for visual emphasis */}
                             {!item.read && <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />}
                           </div>
                           <p className="text-xs opacity-60 mt-0.5 line-clamp-2">{item.message}</p>
                           <div className="flex justify-between items-center mt-1">
                             <span className="text-xs opacity-40">{formatTimestamp(item.timestamp)}</span>
+                            {/* stopPropagation prevents the action click from also
+                                firing the row-level onRead handler */}
                             {item.action && (
                               <button
                                 className="btn btn-ghost btn-xs"
@@ -163,6 +206,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                             )}
                           </div>
                         </div>
+                        {/* Dismiss button: low opacity by default, full on hover */}
                         {onClear && (
                           <button
                             className="btn btn-ghost btn-xs btn-circle opacity-30 hover:opacity-100"

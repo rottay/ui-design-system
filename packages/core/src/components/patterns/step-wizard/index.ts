@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * StepWizard - Pattern Component
- *
- * Multi-step form wizard with progress tracking and per-step validation.
- * Used by: Onboarding flows (bh/ev/pl), EventCreation (ev), JobPosting (bh), TenantSetup (pl)
+ * @fileoverview StepWizard pattern -- engine-aware multi-step form wizard
+ * with progress tracking, per-step async validation, and skip support.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

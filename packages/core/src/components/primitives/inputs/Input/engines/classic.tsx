@@ -67,6 +67,8 @@ import { Input as AntInput, InputNumber } from 'antd';
 import type { InputProps } from '../Input.types';
 import { INPUT_DEFAULTS, ANT_SIZE_MAP } from '../Input.types';
 
+// Antd Input only supports error/warning status natively. Success is rendered
+// through the DS Form.Item layer instead, so we pass undefined.
 const STATUS_MAP = {
   default: undefined,
   error: 'error' as const,
@@ -74,6 +76,9 @@ const STATUS_MAP = {
   success: undefined,
 };
 
+// DS "flushed" (bottom-border-only) maps to antd "borderless" with a custom
+// bottom border applied via style override. "outline" is antd's default so
+// we pass undefined to avoid setting an explicit variant.
 const VARIANT_MAP = {
   outline: undefined,
   filled: 'filled' as const,
@@ -81,6 +86,18 @@ const VARIANT_MAP = {
   unstyled: 'borderless' as const,
 };
 
+/**
+ * Classic (Ant Design) engine for the Input component.
+ *
+ * Delegates rendering to the appropriate Ant Design sub-component based on the
+ * `type` prop (InputNumber, Input.Password, Input.Search, or plain Input).
+ * Supports controlled and uncontrolled modes with full prop-mapping from the
+ * DS-neutral InputProps to Ant Design's API.
+ *
+ * @param props - Standardized InputProps from the design system contract.
+ * @param ref   - Forwarded ref attached to the underlying Ant Design element.
+ * @returns The rendered Ant Design input wrapped in a full-width container.
+ */
 const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     size = INPUT_DEFAULTS.size,
@@ -229,7 +246,9 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-required': required,
   };
 
-  // Handle number type with InputNumber
+  // Ant Design's InputNumber is a separate component with a different API,
+  // so numeric inputs branch here to avoid prop mismatches (e.g., allowClear
+  // is not supported on InputNumber).
   if (type === 'number') {
     return (
       <div style={{ width: '100%' }}>
@@ -258,7 +277,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     );
   }
 
-  // Handle password type
+  // Password uses Ant Design's built-in visibility toggle (eye icon).
   if (type === 'password') {
     return (
       <div style={{ width: '100%' }}>
@@ -285,7 +304,8 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     );
   }
 
-  // Handle search type
+  // Search wraps Ant Design's Input.Search which adds a search icon button.
+  // The onSearch callback is bridged to the DS onChange signature.
   if (type === 'search') {
     return (
       <div style={{ width: '100%' }}>

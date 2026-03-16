@@ -75,6 +75,8 @@ import type { EngineContextValue } from '../../contracts';
 export function useEngine(): EngineContextValue {
   const context = useContext(EngineContext);
   if (!context) {
+    // Engine context is required because component factories rely on it to pick
+    // the correct implementation and lazy entrypoint.
     throw new Error('useEngine must be used within EngineProvider');
   }
   return context;

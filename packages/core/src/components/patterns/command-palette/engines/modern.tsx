@@ -1,12 +1,29 @@
 'use client';
 
 /**
- * CommandPalette - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the CommandPalette pattern.
+ * Renders a searchable command list in a custom fixed-position overlay (not a
+ * framework modal) with backdrop click-to-close, keyboard navigation, and
+ * DaisyUI `kbd` badges for shortcut display. The overlay is conditionally
+ * unmounted rather than hidden to avoid stacking invisible listeners.
+ *
+ * @example
+ * <ModernCommandPalette
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ *   items={[{ id: '1', label: 'Deploy', group: 'Actions', onSelect: deploy }]}
+ *   recentItems={recentCommands}
+ * />
  */
 
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import type { CommandPaletteProps, CommandItem } from '../CommandPalette.types';
 
+/**
+ * Modern (DaisyUI/Tailwind) command palette with full keyboard navigation.
+ * @param props - CommandPaletteProps controlling open state, items, search, and footer.
+ * @returns A fixed overlay with backdrop and a rounded dialog card, or null when closed.
+ */
 export default function ModernCommandPalette(props: CommandPaletteProps) {
   const {
     open,
@@ -27,6 +44,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Case-insensitive substring match on both label and description so
+  // users can search by intent ("delete") not just the exact command name.
   const filtered = useMemo(() => {
     if (!query) return items;
     const q = query.toLowerCase();
@@ -37,6 +56,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     );
   }, [items, query]);
 
+  // Group by the optional `group` field. Items without a group land under
+  // the empty-string key and render without a section header.
   const grouped = useMemo(() => {
     const groups: Record<string, CommandItem[]> = {};
     for (const item of filtered) {
@@ -47,8 +68,13 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     return groups;
   }, [filtered]);
 
+  // Reset the keyboard cursor to the first item whenever the query changes.
   useEffect(() => { setActiveIndex(0); }, [query]);
 
+  // Reset search and auto-focus the input when the palette opens.
+  // The 50ms delay is needed because the DOM element must be mounted
+  // before focus() can succeed (no framework modal transition here,
+  // but React render cycle still requires a microtask).
   useEffect(() => {
     if (open) {
       setQuery('');
@@ -56,6 +82,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     }
   }, [open]);
 
+  // Execute the item's onSelect callback and close the palette.
+  // Disabled items are silently ignored to prevent accidental invocation.
   const handleSelect = useCallback(
     (item: CommandItem) => {
       if (item.disabled) return;
@@ -65,6 +93,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     [onOpenChange]
   );
 
+  // Keyboard navigation: ArrowDown/ArrowUp move the cursor, Enter selects,
+  // Escape closes. preventDefault on arrows stops the input caret from jumping.
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -81,8 +111,12 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     }
   };
 
+  // Early return avoids rendering the backdrop/portal when closed, which
+  // is cheaper than CSS visibility toggling for a rarely-open overlay.
   if (!open) return null;
 
+  // Mutable counter spans all sections (recent + grouped) so the
+  // keyboard activeIndex always maps to the correct visual row.
   let itemIndex = -1;
 
   return (
@@ -108,6 +142,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
         </div>
         {/* Results */}
         <div className="overflow-y-auto py-2" style={{ maxHeight }}>
+          {/* Show the "Recent" section only when there is no active query,
+              giving users quick access to previously used commands. */}
           {!query && recentItems && recentItems.length > 0 && (
             <div className="px-3 pb-2">
               <div className="text-xs uppercase tracking-wider text-base-content/50 mb-1 px-2">Recent</div>
@@ -137,6 +173,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
               })}
             </div>
           )}
+          {/* Render grouped results. Groups with an empty-string key (items
+              that had no `group` field) render without a section header. */}
           {Object.entries(grouped).map(([group, groupItems]) => (
             <div key={group}>
               {group && (

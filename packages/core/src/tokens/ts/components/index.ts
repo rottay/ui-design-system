@@ -1,8 +1,10 @@
 /**
- * Component Tokens Index - TypeScript
+ * @fileoverview Barrel for all component-specific design tokens.
  *
- * Central export file for all component-specific design tokens.
- * Import from this file to access all component tokens.
+ * Each component token module (e.g. `button.ts`, `card.ts`) exports individual
+ * sub-objects (sizes, variants, states) plus a combined `{component}Tokens`
+ * aggregate. This barrel re-exports everything and provides a single
+ * `componentTokens` object for runtime introspection.
  */
 
 // Individual component token exports

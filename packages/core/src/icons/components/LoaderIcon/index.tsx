@@ -1,12 +1,12 @@
 'use client';
 
+/** @fileoverview Animated loader/spinner icon for loading states. */
+
 import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
 import type { SvgIconProps as IconProps } from '../../types';
 
-/**
- * Icono de loading/spinner - usado en estados de carga.
- */
+/** Eight-spoke loader icon. Animate with CSS `animation: spin` for rotation effect. */
 export const LoaderIcon = forwardRef<SVGSVGElement, IconProps>((props, ref) => (
   <BaseIcon ref={ref} {...props}>
     <line x1="12" y1="2" x2="12" y2="6" />

@@ -70,6 +70,9 @@ export type AccentTokens = PersonalityTokens['accent'];
  */
 export function useColorTokens(): ColorTokens {
   const tokens = useTokens();
+  // useMemo with a specific slice dependency means this hook only triggers
+  // downstream re-renders when the color tokens object identity changes --
+  // not when spacing, motion, or personality tokens are updated.
   return useMemo(() => tokens.colors, [tokens.colors]);
 }
 
@@ -107,6 +110,10 @@ export function useSpacingTokens(): SpacingTokens {
  */
 export function useMotionTokens(): MotionTokenSlice {
   const tokens = useTokens();
+  // Combines two separate branches of the token tree (engine-level motion and
+  // personality-level animation) into a single slice. Animated components need
+  // both because the engine controls transition timing while personality controls
+  // hover lift, spring physics, and entrance style.
   return useMemo(
     () => ({
       motion: tokens.motion,

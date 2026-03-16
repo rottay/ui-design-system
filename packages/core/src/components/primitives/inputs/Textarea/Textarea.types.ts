@@ -39,74 +39,136 @@
 import type { EngineAwareProps } from '../../../../contracts';
 import type { ChangeEvent, FocusEvent } from 'react';
 
+/**
+ * Size variants for the Textarea component.
+ * - `'sm'`: Compact size for dense layouts
+ * - `'md'`: Default size for most use cases
+ * - `'lg'`: Larger size for prominent text areas
+ */
 export type TextareaSize = 'sm' | 'md' | 'lg';
+
+/**
+ * Visual variant for the Textarea component.
+ * - `'outlined'`: Standard bordered textarea (default)
+ * - `'filled'`: Filled background with subtle border
+ * - `'borderless'`: No visible border, minimal style
+ */
 export type TextareaVariant = 'outlined' | 'filled' | 'borderless';
+
+/**
+ * Validation status for the Textarea component.
+ * - `'default'`: Normal state with no validation feedback
+ * - `'error'`: Error state with red border and optional message
+ * - `'warning'`: Warning state with yellow/orange border
+ * - `'success'`: Success state with green border
+ */
 export type TextareaStatus = 'default' | 'error' | 'warning' | 'success';
 
+/**
+ * Props for the Textarea component.
+ *
+ * A multi-line text input with support for auto-sizing, character count,
+ * validation status, and clear functionality. Extends EngineAwareProps
+ * for multi-engine rendering.
+ *
+ * @example Basic usage
+ * ```tsx
+ * <Textarea
+ *   placeholder="Enter your message..."
+ *   rows={4}
+ *   onChange={(value) => setMessage(value)}
+ * />
+ * ```
+ *
+ * @example With auto-size and character count
+ * ```tsx
+ * <Textarea
+ *   value={comment}
+ *   maxLength={500}
+ *   showCount
+ *   autoSize={{ minRows: 2, maxRows: 8 }}
+ *   onChange={(value) => setComment(value)}
+ * />
+ * ```
+ */
 export interface TextareaProps extends EngineAwareProps {
-  /** Textarea size */
+  /** Size variant controlling height and font size of the textarea */
   size?: TextareaSize;
-  /** Visual variant */
+  /** Visual variant controlling the border and background style */
   variant?: TextareaVariant;
-  /** Validation status */
+  /** Validation status indicator (affects border color and styling) */
   status?: TextareaStatus;
-  /** Placeholder text */
+  /** Placeholder text shown when the textarea is empty */
   placeholder?: string;
-  /** Current value (controlled) */
+  /** Current text value (controlled mode) */
   value?: string;
-  /** Default value (uncontrolled) */
+  /** Default text value (uncontrolled mode) */
   defaultValue?: string;
-  /** Disabled state */
+  /** Whether the textarea is disabled and non-interactive */
   disabled?: boolean;
-  /** Read-only state */
+  /** Whether the textarea is read-only (visible but not editable) */
   readOnly?: boolean;
-  /** Required field */
+  /** Whether the field is required for form validation */
   required?: boolean;
-  /** Maximum length */
+  /** Maximum number of characters allowed. When combined with showCount, displays a counter. */
   maxLength?: number;
-  /** Show character count */
+  /** Whether to show the character count indicator (e.g., "42/500") */
   showCount?: boolean;
-  /** Number of rows */
+  /** Number of visible text rows (sets the initial height) */
   rows?: number;
-  /** Auto resize */
+  /** Auto-resize behavior. Pass true for unlimited resize, or an object with min/max row constraints. */
   autoSize?: boolean | { minRows?: number; maxRows?: number };
-  /** Allow clear button */
+  /** Whether to show a clear button when the textarea has content */
   allowClear?: boolean;
-  /** Change handler */
+  /** Callback fired when the text value changes, receives the value and native event */
   onChange?: (value: string, event: ChangeEvent<HTMLTextAreaElement>) => void;
-  /** Focus handler */
+  /** Callback fired when the textarea receives focus */
   onFocus?: (event: FocusEvent<HTMLTextAreaElement>) => void;
-  /** Blur handler */
+  /** Callback fired when the textarea loses focus */
   onBlur?: (event: FocusEvent<HTMLTextAreaElement>) => void;
-  /** Clear handler */
+  /** Callback fired when the clear button is clicked */
   onClear?: () => void;
-  /** Press Enter handler */
+  /** Callback fired when the Enter key is pressed */
   onPressEnter?: () => void;
-  /** Resize handler */
+  /** Callback fired when the textarea is resized (via autoSize or user drag), receives new dimensions */
   onResize?: (size: { width: number; height: number }) => void;
-  /** Additional CSS class */
+  /** Additional CSS class name for the root element */
   className?: string;
-  /** Inline styles */
+  /** Additional inline styles for the root element */
   style?: React.CSSProperties;
-  /** Name attribute for forms */
+  /** HTML name attribute for form submission */
   name?: string;
-  /** ID attribute */
+  /** HTML id attribute for the textarea element */
   id?: string;
-  /** Autocomplete attribute */
+  /** HTML autocomplete attribute */
   autoComplete?: string;
-  /** Autofocus attribute */
+  /** Whether to auto-focus the textarea on mount */
   autoFocus?: boolean;
 }
 
+/**
+ * Default values for Textarea props.
+ * Used across all engine implementations for consistency.
+ */
 export const TEXTAREA_DEFAULTS: Partial<TextareaProps> = {
+  /** Medium size by default */
   size: 'md',
+  /** Outlined variant by default */
   variant: 'outlined',
+  /** No validation status by default */
   status: 'default',
+  /** Not disabled by default */
   disabled: false,
+  /** Editable by default */
   readOnly: false,
+  /** Not required by default */
   required: false,
+  /** Clear button hidden by default */
   allowClear: false,
+  /** Character count hidden by default */
   showCount: false,
+  /** Auto-sizing disabled by default */
   autoSize: false,
+  /** Four visible rows by default */
   rows: 4,
 };

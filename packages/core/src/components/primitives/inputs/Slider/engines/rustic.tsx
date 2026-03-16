@@ -1,9 +1,15 @@
 'use client';
 
 /**
- * @fileoverview Slider Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Slider component using CSS variables.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Slider Rustic Engine -- pure HTML/CSS with CSS variable theming.
+ * Renders a fully custom slider track, rail, handles, and marks using only
+ * inline styles driven by `--ds-slider-*` design tokens, making it safe for
+ * multi-tenant theme isolation.
+ *
+ * @example
+ * ```tsx
+ * <Slider engine="rustic" min={0} max={100} marks={{ 0: 'Low', 100: 'High' }} />
+ * ```
  *
  * @module RusticSlider
  * @category Inputs
@@ -14,6 +20,17 @@ import React, { useState, useCallback } from 'react';
 import type { SliderProps } from '../Slider.types';
 import { SLIDER_DEFAULTS } from '../Slider.types';
 
+/**
+ * Rustic engine Slider -- framework-free, CSS-variable-driven range input.
+ *
+ * Renders an invisible native `<input type="range">` for accessibility and
+ * overlays custom rail, track, and handle elements styled entirely through
+ * `--ds-slider-*` CSS variables. Supports single-value and dual-handle range
+ * modes with vertical orientation and custom marks.
+ *
+ * @param props - {@link SliderProps} unified slider props shared across engines.
+ * @returns A ref-forwarding slider with pure CSS variable styling.
+ */
 export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
   (props, ref) => {
     const {
@@ -35,6 +52,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       style,
     } = props;
 
+    // Lazy initialiser -- uses full range span as default for dual-handle mode
     const getInitialValue = (): number | [number, number] => {
       if (defaultValue !== undefined) return defaultValue;
       if (range) return [min!, max!];
@@ -42,8 +60,10 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     };
 
     const [internalValue, setInternalValue] = useState<number | [number, number]>(getInitialValue);
+    // Focus state drives the focus-ring outline on handles via inline styles
     const [isFocused, setIsFocused] = useState(false);
 
+    // Controlled vs uncontrolled pattern: external value wins when provided
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : internalValue;
 
@@ -54,15 +74,17 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       onChange?.(newValue);
     }, [isControlled, onChange]);
 
+    // Fires the "commit" callback on pointer release (analogous to AntD's onChangeComplete)
     const handleMouseUp = () => {
       onChangeComplete?.(currentValue);
     };
 
+    /** Maps an absolute value to a 0-100% position on the track. */
     const getPercentage = (val: number) => {
       return ((val - min!) / (max! - min!)) * 100;
     };
 
-    // Build class names
+    // BEM class names assembled conditionally for external CSS overrides
     const containerClasses = [
       'rottay-slider',
       'rottay-slider--rustic',
@@ -81,6 +103,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       ...style,
     };
 
+    // Rail = the full-length background bar behind the active track
     const railBaseStyle: React.CSSProperties = {
       position: 'absolute',
       backgroundColor: 'var(--ds-slider-rail-color)',
@@ -99,6 +122,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       ...railStyle,
     };
 
+    /** Generates absolute-positioned handle styles at a given percentage offset. */
     const getHandleBaseStyle = (position: number, extraStyle?: React.CSSProperties): React.CSSProperties => ({
       position: 'absolute',
       width: 'var(--ds-slider-handle-size)',
@@ -125,6 +149,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       ...extraStyle,
     });
 
+    // Native input is invisible but receives all pointer/keyboard events
     const inputStyle: React.CSSProperties = {
       position: 'absolute',
       inset: 0,
@@ -134,6 +159,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       cursor: disabled ? 'not-allowed' : 'pointer',
     };
 
+    /** Positions a mark label at the given percentage, adapting for vertical orientation. */
     const markStyle = (percent: number, customStyle?: React.CSSProperties): React.CSSProperties => ({
       position: 'absolute',
       fontSize: 'var(--ds-slider-mark-font-size)',
@@ -259,10 +285,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       );
     }
 
-    // Single slider
+    // --- Single slider (non-range mode) ---
     const singleValue = currentValue as number;
     const percent = getPercentage(singleValue);
 
+    // Active track fills from the start (0%) up to the current value
     const trackActiveStyle: React.CSSProperties = {
       position: 'absolute',
       backgroundColor: disabled

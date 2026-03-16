@@ -1,10 +1,11 @@
 /**
- * Error Types for Design System
+ * @fileoverview Error type definitions - Rottay Design System
+ * @description Standardized error categories, severity levels, and structured
+ * error interfaces for consistent error handling across the design system.
  *
- * Provides standardized error categories, severity levels, and error structure
- * for consistent error handling across the design system.
- *
- * @packageDocumentation
+ * @module System/Errors/Types
+ * @category System
+ * @package @rottay/design-system
  */
 
 /**
@@ -47,7 +48,7 @@ export enum ErrorSeverity {
 
 /**
  * Standard error interface for the design system.
- * All errors should conform to this structure.
+ * All DS-reported runtime errors should conform to this structure.
  */
 export interface DSError {
   /** Unique error code identifier (e.g., 'AVATAR_IMAGE_LOAD_FAILED') */

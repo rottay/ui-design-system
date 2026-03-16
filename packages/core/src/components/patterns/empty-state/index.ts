@@ -1,9 +1,8 @@
 'use client';
 
 /**
- * EmptyState - Pattern Component
- *
- * Engine-aware empty state component for displaying placeholder content.
+ * @fileoverview EmptyState pattern -- engine-aware placeholder component
+ * for empty lists, pages, or search results with icon, actions, and sizing.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -73,20 +73,21 @@ function getFocusableKeys(items: MenuItemInterface[]): string[] {
   const keys: string[] = [];
 
   items.forEach((item) => {
-    // Skip dividers
+    // Dividers are visual-only, so they should never receive focus
     if (item.type === 'divider') return;
-    // Skip disabled items
+    // Disabled items are excluded from the tab order per WCAG guidance
     if (item.disabled) return;
 
     if (item.children && item.children.length > 0) {
-      // Include submenu key and its children
+      // Submenu toggles are themselves focusable (they act as buttons),
+      // and their children are also traversable via arrow keys
       keys.push(item.key);
       keys.push(...getFocusableKeys(item.children));
     } else if (item.type !== 'group') {
-      // Regular item
+      // Regular interactive item
       keys.push(item.key);
     } else if (item.children) {
-      // Group with children
+      // Groups are non-interactive headings, but their children are focusable
       keys.push(...getFocusableKeys(item.children));
     }
   });
@@ -124,9 +125,12 @@ function renderRusticMenuItems(
   level: number = 0
 ): React.ReactNode {
   return items.map((item) => {
+    // Indentation scales with nesting depth to visually convey hierarchy.
+    // Level 0 items have no extra padding; each deeper level adds inlineIndent px.
     const paddingLeft = level > 0 ? level * inlineIndent : undefined;
 
-    // Handle divider type
+    // Dividers use role="separator" for screen reader semantics and
+    // CSS variables for consistent theming across tenants
     if (item.type === 'divider') {
       return (
         <li
@@ -263,7 +267,9 @@ function renderRusticMenuItems(
       );
     }
 
-    // Handle regular menu item
+    // Regular leaf item. The color cascade is: danger > selected > default,
+    // ensuring destructive actions are always visually prominent regardless
+    // of selection state
     const isSelected = selectedKeys.includes(item.key);
     const isFocused = focusedKey === item.key;
 
@@ -564,13 +570,15 @@ export default function RusticMenu(props: MenuProps): React.ReactElement {
       tabIndex={0}
       onKeyDown={handleKeyDown}
       onFocus={() => {
-        // Focus first item when menu receives focus
+        // Auto-focus the first focusable item when the menu container gains focus.
+        // This follows WAI-ARIA menu pattern: focus moves into the menu on Tab.
         if (!focusedKey && focusableKeys.length > 0) {
           setFocusedKey(focusableKeys[0]);
         }
       }}
       onBlur={(e) => {
-        // Clear focus when leaving the menu
+        // Only clear focus when focus actually leaves the menu entirely.
+        // `relatedTarget` check prevents clearing when focus moves between items.
         if (!menuRef.current?.contains(e.relatedTarget as Node)) {
           setFocusedKey(null);
         }

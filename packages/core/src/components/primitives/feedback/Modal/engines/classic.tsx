@@ -206,10 +206,10 @@ export default function ClassicModal(props: ModalProps): React.ReactElement {
   // Event Handlers
   // ---------------------------------------------------------------------------
 
-  /**
-   * Handle cancel/close action.
-   * Called when X button clicked, overlay clicked, or Escape pressed.
-   */
+  // Unified close handler fires all three callbacks to support different
+  // consumer patterns: onClose (simple toggle), onCancel (confirmation
+  // dialogs), and onOpenChange (controlled open state). Ordering matters:
+  // onClose first for immediate UI update, then onCancel for side effects.
   const handleCancel = () => {
     onClose?.();
     onCancel?.();
@@ -244,11 +244,16 @@ export default function ClassicModal(props: ModalProps): React.ReactElement {
       centered={centered}
       zIndex={zIndex}
 
-      // Content
+      // Ant Design renders default OK/Cancel buttons when footer is undefined.
+      // Passing null explicitly hides the footer entirely, which is what
+      // hideFooter=true should achieve.
       title={title}
       footer={hideFooter ? null : footer}
 
-      // Behavior - map Rottay props to Ant Design props
+      // Behavior - bridge Rottay's naming conventions to Ant Design's API.
+      // "closeOnOverlayClick" is more descriptive than Ant's "maskClosable",
+      // and "closeOnEscape" is clearer than "keyboard". This abstraction
+      // lets consumers switch engines without learning each library's API.
       onCancel={handleCancel}
       onOk={handleOk}
       closable={closable}

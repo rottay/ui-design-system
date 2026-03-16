@@ -57,6 +57,9 @@ export type {
  * Creates a CSS variable-based color scale for a semantic color category.
  * These reference CSS custom properties that tenants can override.
  */
+// Color scales are built once as CSS variable references rather than resolved
+// values. Actual color values live in the tenant CSS file so they can be swapped
+// at runtime without re-rendering the React tree.
 function createColorScale(prefix: string): ColorScale {
   return {
     50: `var(--ds-color-${prefix}-50)`,
@@ -72,7 +75,8 @@ function createColorScale(prefix: string): ColorScale {
   };
 }
 
-// Pre-computed color scales (static, shared across all instances)
+// Pre-computed once at module load. These are CSS variable strings (not actual
+// colors), so they are safe to share across all tenants and engine combinations.
 const PRIMARY_SCALE = createColorScale('primary');
 const SECONDARY_SCALE = createColorScale('secondary');
 const NEUTRAL_SCALE = createColorScale('neutral');
@@ -156,10 +160,21 @@ export function useTokens(): DesignTokens {
   const { engine } = useEngineContext();
 
   return useMemo(() => {
-    // 1. Engine base tokens
+    // -- Token Resolution Pipeline --
+    // Structural tokens (borderRadius, shadows, surface, motion) resolve via a
+    // three-layer spread: engine -> product profile -> tenant. Each layer can
+    // provide partial overrides that spread on top of the layer below.
+    //
+    // Vertical currently influences the personality layer only, not the lower-level
+    // token buckets like border radius or shadows. That keeps verticals focused
+    // on product mood while preserving the existing token override contract.
+
+    // 1. Engine base tokens -- the visual foundation for classic/modern/rustic
     const engineOverrides = getEngineTokens(engine);
 
-    // 2. Product profile token overrides on top of engine
+    // 2. Product profile overrides spread on top of engine. The conditional spread
+    // avoids allocating a new object when the profile has no overrides, which is
+    // the common case for generic.default.
     const productProfileTokenOverrides = profile.tokenOverrides;
     const productProfileBorderRadius = productProfileTokenOverrides?.borderRadius
       ? { ...engineOverrides.borderRadius, ...productProfileTokenOverrides.borderRadius }
@@ -175,7 +190,8 @@ export function useTokens(): DesignTokens {
       : engineOverrides.motion;
     const productProfileDensityScale = productProfileTokenOverrides?.densityScale ?? engineOverrides.densityScale;
 
-    // 3. Tenant token overrides on top of the product profile.
+    // 3. Tenant overrides are the highest-priority structural layer. A customer
+    // tenant can sharpen radii or add heavier shadows without forking a profile.
     const tenantTokenOverrides = config.tokenOverrides;
     const borderRadius = tenantTokenOverrides?.borderRadius
       ? { ...productProfileBorderRadius, ...tenantTokenOverrides.borderRadius }
@@ -191,7 +207,10 @@ export function useTokens(): DesignTokens {
       : productProfileMotion;
     const densityScale = tenantTokenOverrides?.densityScale ?? productProfileDensityScale;
 
-    // 4. Personality: defaults + vertical + product profile + tenant overrides.
+    // 4. Personality tokens use a four-layer merge, one layer deeper than structural
+    // tokens because verticals also participate. Each sub-object (animation, chart, etc.)
+    // is spread independently so a tenant that only customizes `animation` does not
+    // accidentally wipe out the vertical's `chart` personality.
     //
     // Merge chain (lowest to highest priority):
     //   DEFAULT_PERSONALITY -> vertical.personality -> productProfile.personality -> tenant.personality
@@ -233,8 +252,12 @@ export function useTokens(): DesignTokens {
 
     return {
       colors: {
-        // Single values (backwards compatible, from tenant branding)
+        // Single-value color tokens remain for backward compatibility with older
+        // consumers that read `tokens.colors.primary` directly. The canonical
+        // source of truth is now the CSS variable-backed scale objects below.
         primary: config.branding.primaryColor || 'var(--ds-color-primary)',
+        // Secondary falls back to accent then CSS var so tenants that only set
+        // an accent color still get a secondary-slot value in component code.
         secondary:
           config.branding.secondaryColor ||
           config.branding.accentColor ||
@@ -244,7 +267,8 @@ export function useTokens(): DesignTokens {
         error: 'var(--ds-color-error)',
         info: 'var(--ds-color-info)',
 
-        // Full color scales (CSS custom properties for white-labeling)
+        // Full color scales are what enable tenant theming without rewriting
+        // component code. They are consumed indirectly through CSS variables.
         primaryScale: PRIMARY_SCALE,
         secondaryScale: SECONDARY_SCALE,
         neutral: NEUTRAL_SCALE,
@@ -259,6 +283,9 @@ export function useTokens(): DesignTokens {
           black: 'var(--ds-color-black)',
         },
       },
+      // Spacing values are density-scaled at resolution time rather than via
+      // CSS calc() because components consume them as numeric pixel values
+      // for style objects and layout calculations.
       spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96].map(
         v => Math.round(v * densityScale)
       ),
@@ -298,6 +325,10 @@ export function useTokens(): DesignTokens {
       // Personality tokens
       personality,
     };
+  // Memo deps use config.slug as a proxy for "the whole tenant changed" plus
+  // the specific sub-objects that participate in the resolution pipeline. This
+  // avoids re-resolving on every render while still reacting to tenant switches,
+  // engine changes, and profile swaps.
   }, [
     engine,
     config.slug,
@@ -311,7 +342,17 @@ export function useTokens(): DesignTokens {
   ]);
 }
 
+/**
+ * Non-throwing variant of `useTokens`. Returns `null` instead of throwing
+ * when called outside the required provider tree. Useful in shared
+ * components that may render in both DS-wrapped and standalone contexts.
+ *
+ * @returns The resolved design tokens, or `null` if the provider is missing
+ */
 export function useOptionalTokens(): DesignTokens | null {
+  // The try/catch approach is intentional here. React hooks cannot be called
+  // conditionally, so we cannot check for the provider before calling useTokens.
+  // The catch path handles the thrown "must be used within Provider" error.
   try {
     return useTokens();
   } catch {

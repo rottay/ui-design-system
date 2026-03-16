@@ -1,24 +1,34 @@
 'use client';
 
 /**
- * @fileoverview Kbd Classic Engine - Rottay Design System
- * @description Ant Design styled implementation of the Kbd component.
+ * @fileoverview Classic (Ant Design-styled) engine for the Kbd display primitive.
+ * Renders a keyboard-key indicator using inline styles that mirror Ant Design's
+ * visual language -- 3D border-bottom, neutral background, monospace font.
  *
- * @module Kbd/Engines/Classic
- * @category Display
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <Kbd engine="classic" size="md">Ctrl</Kbd>
+ * ```
  */
 
 import React from 'react';
 import type { KbdProps } from '../Kbd.types';
 import { KBD_DEFAULTS } from '../Kbd.types';
 
+/** Size presets controlling font size, padding, and minimum tap-target width. */
 const SIZE_STYLES: Record<string, { fontSize: number; padding: string; minWidth: number }> = {
   sm: { fontSize: 11, padding: '1px 5px', minWidth: 20 },
   md: { fontSize: 13, padding: '2px 7px', minWidth: 24 },
   lg: { fontSize: 15, padding: '3px 9px', minWidth: 28 },
 };
 
+/**
+ * Classic Kbd engine. Renders a `<kbd>` element styled to resemble a physical
+ * keyboard key using Ant Design's neutral palette and a subtle 3D border effect.
+ *
+ * @param props - KbdProps with children content and optional size/className/style.
+ * @returns A styled `<kbd>` element.
+ */
 export default function ClassicKbd(props: KbdProps): React.ReactElement {
   const {
     children,
@@ -27,8 +37,11 @@ export default function ClassicKbd(props: KbdProps): React.ReactElement {
     style,
   } = props;
 
+  // Fall back to 'md' when an unknown size is provided
   const sizeConfig = SIZE_STYLES[size] || SIZE_STYLES.md;
 
+  // All styling is inline to keep this engine free of Tailwind/antd runtime deps.
+  // The thicker border-bottom creates the 3D "raised key" illusion.
   return (
     <kbd
       className={`rottay-kbd-classic ${className}`}

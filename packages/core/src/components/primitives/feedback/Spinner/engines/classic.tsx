@@ -70,9 +70,13 @@ export default function ClassicSpinner(props: SpinnerProps): React.ReactElement 
   // Render
   // ============================================================================
 
+  // Ant Design only supports three Spin sizes (small/default/large), so
+  // we collapse our extended size scale accordingly. 'xl' maps to 'large'
+  // because Ant Design has no equivalent larger option.
   return (
     <div className={className} style={{ textAlign: 'center', ...style }}>
       <Spin size={size === 'xl' ? 'large' : size === 'sm' ? 'small' : 'default'} />
+      {/* Label sits below the spinner for a vertically stacked layout */}
       {label && <div style={{ marginTop: '0.5rem' }}>{label}</div>}
     </div>
   );

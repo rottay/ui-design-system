@@ -1,48 +1,88 @@
 /**
- * SavedViewsBar - Pattern Component Types
- *
- * The Airtable/Linear pattern: save and switch between custom data views.
+ * @fileoverview Type definitions for the SavedViewsBar pattern. Defines
+ * SavedView (config with filters/sort/columns/layout), SavedViewConfig,
+ * ViewMenuAction, and the full props for view CRUD, reordering, and duplication.
  */
 
 import type { ReactNode } from 'react';
 import type { PatternBaseProps } from '../types';
 
 /**
- * Configuration for a saved view including filters, sort, columns, etc.
+ * Configuration snapshot stored within a saved view.
+ * Captures the complete UI state (filters, sorting, visible columns,
+ * grouping, and layout mode) so it can be restored when the view is selected.
  */
 export interface SavedViewConfig {
+  /** Active filter values keyed by filter field name */
   filters?: Record<string, any>;
+  /** Ordered list of sort criteria applied to the data */
   sort?: { field: string; direction: 'asc' | 'desc' }[];
+  /** Ordered list of visible column identifiers */
   columns?: string[];
+  /** Field name used to group rows/items */
   groupBy?: string;
+  /** Layout mode the view renders in */
   layout?: 'table' | 'board' | 'gallery' | 'calendar';
 }
 
 /**
  * A single saved view definition.
+ * Represents a named, persisted configuration that users can select
+ * from the view bar to instantly apply a set of filters, sorting,
+ * column visibility, and layout preferences.
  */
 export interface SavedView {
+  /** Unique identifier for this view */
   id: string;
+  /** User-facing display name shown on the view tab */
   name: string;
+  /** Optional icon rendered alongside the view name */
   icon?: ReactNode;
+  /** Whether this view is the default selection when no view is active */
   isDefault?: boolean;
+  /** The captured configuration state for this view */
   config: SavedViewConfig;
 }
 
 /**
- * Menu action for a view's context menu.
+ * Describes a single item in a view's right-click or overflow context menu.
+ * Used by `getMenuActions` to provide custom per-view actions beyond
+ * the built-in rename, duplicate, and delete operations.
  */
 export interface ViewMenuAction {
+  /** Unique key for list rendering and identification */
   key: string;
+  /** Menu item label text */
   label: string;
+  /** Optional icon rendered before the label */
   icon?: ReactNode;
+  /** Whether to style this item as a destructive/danger action */
   danger?: boolean;
+  /** Whether the menu item is disabled */
   disabled?: boolean;
+  /** Handler invoked when the menu item is clicked */
   onClick: () => void;
 }
 
 /**
  * Props for the SavedViewsBar pattern component.
+ * Renders a horizontal tab bar of saved views with support for
+ * selecting, creating, renaming, deleting, duplicating, and reordering views.
+ *
+ * @example
+ * ```tsx
+ * <SavedViewsBar
+ *   views={views}
+ *   activeViewId={currentViewId}
+ *   onViewSelect={(id) => setCurrentViewId(id)}
+ *   onViewSave={(view) => updateView(view)}
+ *   onViewDelete={(id) => deleteView(id)}
+ *   onViewRename={(id, name) => renameView(id, name)}
+ *   onViewCreate={(view) => createView(view)}
+ *   allowCreate
+ *   maxViews={10}
+ * />
+ * ```
  */
 export interface SavedViewsBarProps extends PatternBaseProps {
   /** List of saved views */

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for the static tenant config loader -- validates fetch
+ * behavior, path construction, and schema validation on loaded payloads.
+ */
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { loadStaticTenantConfig } from '..';

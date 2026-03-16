@@ -45,10 +45,14 @@
  * @package @rottay/design-system
  */
 
-// Media query hook
+// -- Media query hook --
+// Low-level primitive: subscribes to any CSS media query string.
+// Other responsive hooks are built on top of this.
 export { useMediaQuery } from './useMediaQuery';
 
-// Breakpoint constants and helpers
+// -- Breakpoint constants and helpers --
+// Shared scale and query builders consumed by useBreakpoints and useResponsiveValue.
+// Also available to consumers who need custom range or min-width queries.
 export {
   RESPONSIVE_BREAKPOINTS,
   RESPONSIVE_BREAKPOINT_ORDER,
@@ -57,10 +61,12 @@ export {
 } from './breakpoints';
 export type { ResponsiveBreakpointKey } from './breakpoints';
 
-// Breakpoint detection hook
+// -- Breakpoint detection hook --
+// High-level hook returning named boolean flags (isMobile, isTablet, isDesktop, etc.)
 export { useBreakpoints } from './useBreakpoints';
 export type { UseBreakpointsResult } from './useBreakpoints';
 
-// Responsive value hook
+// -- Responsive value hook --
+// Returns a breakpoint-specific value from a config map, following Tailwind cascade.
 export { useResponsiveValue } from './useResponsiveValue';
 export type { ResponsiveValueConfig } from './useResponsiveValue';

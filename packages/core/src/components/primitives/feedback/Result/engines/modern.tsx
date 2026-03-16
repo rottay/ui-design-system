@@ -202,7 +202,8 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
         className={`flex flex-col items-center justify-center text-center py-12 px-6 ${className}`}
         style={style}
       >
-        {/* Icon Section */}
+        {/* Custom icon takes precedence over the built-in status icon,
+            allowing consumers to completely replace the visual indicator */}
         <div className="mb-6">
           {icon || statusIcons[status!]}
         </div>
@@ -214,7 +215,8 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
           </h2>
         )}
 
-        {/* Subtitle Section */}
+        {/* Subtitle uses 70% opacity of base-content for visual hierarchy
+            without introducing a separate color token */}
         {subTitle && (
           <p className="text-base-content/70 mb-6 max-w-md">
             {subTitle}

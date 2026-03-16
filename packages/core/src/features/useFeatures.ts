@@ -34,8 +34,16 @@
 import { useContext } from 'react';
 import { FeatureContext } from './FeatureProvider';
 
+/**
+ * Duplicated locally to avoid a circular import with `FeatureProvider`.
+ * The canonical definition lives in `FeatureProvider.tsx`, but both files
+ * need the type and importing it would create a cycle. The shape is trivial
+ * enough that keeping it in sync manually is acceptable.
+ */
 interface FeatureContextValue {
+  /** Array of enabled feature flag names. May include `'*'` for wildcard access. */
   features: string[];
+  /** Returns `true` if the feature is explicitly listed or if wildcard is present. */
   hasFeature: (feature: string) => boolean;
 }
 
@@ -72,6 +80,8 @@ interface FeatureContextValue {
 export function useFeatures(): FeatureContextValue {
   const context = useContext(FeatureContext);
   if (!context) {
+    // Feature flags are app behavior, not a cosmetic enhancement, so missing
+    // provider state is treated as a developer error.
     throw new Error('useFeatures must be used within FeatureProvider');
   }
   return context;
@@ -106,5 +116,7 @@ export function useHasFeature(feature: string): boolean {
   return hasFeature(feature);
 }
 
-// Re-export for backwards compatibility
+// Re-export for backwards compatibility. Some early adopters imported
+// `useFeatureContext` from this file; the canonical version now lives in
+// `FeatureProvider.tsx`, but we keep this alias to avoid breaking changes.
 export { useFeatures as useFeatureContext };

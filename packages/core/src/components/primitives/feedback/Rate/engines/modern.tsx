@@ -176,13 +176,16 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     // State Management
     // -------------------------------------------------------------------------
 
+    // Controlled vs uncontrolled pattern: when `value` is provided the
+    // parent owns the state; otherwise we track it internally.
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
     const [focusIndex, setFocusIndex] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Derived values
+    // displayValue prioritises hover feedback so the user sees a live
+    // preview before committing their selection via click
     const currentValue = isControlled ? value : internalValue;
     const displayValue = hoverValue !== null ? hoverValue : currentValue;
     const isInteractive = !disabled && !readOnly;
@@ -341,7 +344,9 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           aria-checked={isFilled}
           aria-label={tooltips?.[index] || `${starIndex} star${starIndex > 1 ? 's' : ''}`}
         >
-          {/* Hidden radio input for form compatibility */}
+          {/* Hidden radio input ensures the rating works inside native forms.
+              Random name avoids radio-group collisions when multiple Rate
+              instances coexist on the same page. */}
           <input
             type="radio"
             name={`rating-${Math.random().toString(36).substr(2, 9)}`}
@@ -351,7 +356,9 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
             onClick={() => handleClick(starIndex)}
             onChange={() => {}}
           />
-          {/* Half star click area */}
+          {/* Invisible overlay covering the left half of the star.
+              stopPropagation prevents the full-star handler from firing
+              when the user interacts with the half-star zone. */}
           {allowHalf && (
             <span
               className="absolute left-0 top-0 w-1/2 h-full z-10"
@@ -407,6 +414,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
 
     return (
       <div
+        // Merge the forwarded ref with our internal containerRef so both
+        // the consumer and the autoFocus effect can access the DOM node
         ref={(node) => {
           if (typeof ref === 'function') {
             ref(node);

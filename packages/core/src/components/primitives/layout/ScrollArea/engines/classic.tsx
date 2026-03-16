@@ -1,6 +1,15 @@
 /**
  * @fileoverview ScrollArea Classic Engine - Rottay Design System
- * @description Ant Design compatible scrollable container with styled scrollbar.
+ * Ant Design-compatible scrollable container with custom scrollbar styling.
+ * Injects a scoped `<style>` block for ::-webkit-scrollbar rules and uses
+ * the standard `scrollbar-width` / `scrollbar-color` for Firefox.
+ *
+ * @example
+ * ```tsx
+ * <ScrollArea engine="classic" maxHeight={400} scrollbarSize="thin">
+ *   <LongContent />
+ * </ScrollArea>
+ * ```
  *
  * @module ClassicScrollArea
  * @category Layout
@@ -13,6 +22,16 @@ import React, { useId } from 'react';
 import type { ScrollAreaProps } from '../ScrollArea.types';
 import { SCROLL_AREA_DEFAULTS, SCROLLBAR_SIZES } from '../ScrollArea.types';
 
+/**
+ * Classic ScrollArea component with Ant Design-compatible scrollbar styling.
+ *
+ * Generates a unique CSS class per instance to scope ::-webkit-scrollbar rules.
+ * When `hideScrollbar` is true, the thumb is transparent at rest and fades in
+ * on hover for a cleaner visual appearance.
+ *
+ * @param props - ScrollArea props (maxHeight, maxWidth, orientation, scrollbarSize, hideScrollbar, etc.)
+ * @returns A React element containing a scoped `<style>` block and a scrollable div.
+ */
 export default function ClassicScrollArea(props: ScrollAreaProps): React.ReactElement {
   const {
     children,
@@ -26,10 +45,12 @@ export default function ClassicScrollArea(props: ScrollAreaProps): React.ReactEl
     'data-testid': dataTestId,
   } = props;
 
+  // SSR-safe unique ID for scoping scrollbar CSS to this specific instance
   const generatedId = useId();
   const scrollId = `scroll-classic-${generatedId.replace(/:/g, '')}`;
   const barWidth = SCROLLBAR_SIZES[scrollbarSize];
 
+  // Determine overflow axes based on the scroll orientation
   const getOverflow = (): React.CSSProperties => {
     switch (orientation) {
       case 'horizontal': return { overflowX: 'auto', overflowY: 'hidden' };
@@ -46,6 +67,8 @@ export default function ClassicScrollArea(props: ScrollAreaProps): React.ReactEl
     ...style,
   };
 
+  // Scoped CSS: WebKit scrollbar rules use the instance-unique class selector.
+  // Firefox support is provided via standard scrollbar-width/scrollbar-color.
   const scrollbarCSS = `
     .${scrollId}::-webkit-scrollbar {
       width: ${barWidth}px;

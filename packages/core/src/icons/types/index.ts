@@ -1,9 +1,20 @@
+/**
+ * @fileoverview Shared type definitions for the icon subsystem.
+ *
+ * Defines `SvgIconProps` (the base props interface for all icons), the
+ * `IconComponent` type alias, and the `ICON_SIZE_MAP` lookup table that
+ * maps named size tokens to their CSS variable references.
+ */
+
 import type { SVGProps, ForwardRefExoticComponent, RefAttributes } from 'react';
 import { ICON_SIZE_TOKENS, type IconSizeToken } from '../tokens';
 
 /**
- * Props base para todos los iconos del sistema Rottay.
- * Renamed to SvgIconProps to avoid conflict with IconProps from common types.
+ * Base props for every icon in the DS. Extends native SVG element props with
+ * DS-specific `size`, `color`, `title`, and `decorative` options.
+ *
+ * Named `SvgIconProps` to avoid collision with the broader `IconProps` in
+ * component prop types.
  */
 export interface SvgIconProps extends SVGProps<SVGSVGElement> {
   /**
@@ -39,8 +50,8 @@ export type IconComponent = ForwardRefExoticComponent<
 
 
 /**
- * Mapeo de tamaños a CSS variables.
- * Los valores reales están definidos en tokens/css/components/icon.css
+ * Maps named size tokens to their CSS variable strings.
+ * Actual pixel values are defined in `tokens/css/components/icon.css`.
  */
 export const ICON_SIZE_MAP: Record<string, string> = {
   xs: ICON_SIZE_TOKENS.xs,

@@ -1,3 +1,7 @@
+/**
+ * Tests for the ErrorHandler singleton: reporting, subscriptions,
+ * log trimming, immutable snapshots, and dev-mode console routing.
+ */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ErrorHandler } from '..';

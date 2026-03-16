@@ -1,8 +1,10 @@
 /**
- * Sistema de Internacionalización (i18n)
- * Design System Rottay - Wave 0 - Agente D
+ * @fileoverview Public barrel for the i18n subsystem.
  *
  * @module i18n
+ *
+ * This barrel exposes the public i18n runtime used by the DS itself and by
+ * consuming apps that want locale-aware strings, formatting, and directionality.
  *
  * @example
  * // Setup básico en app

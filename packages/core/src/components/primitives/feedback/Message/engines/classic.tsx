@@ -102,7 +102,9 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
   placement: _placement = MESSAGE_DEFAULTS.placement,
   top = MESSAGE_DEFAULTS.top,
 }) => {
-  // Configure message globally on mount/update
+  // Bridge Rottay provider props to Ant Design's global config API.
+  // Ant Design manages message positioning via a singleton config rather than
+  // per-instance props, so we sync on mount and whenever settings change.
   useEffect(() => {
     antMessage.config({
       top,
@@ -110,6 +112,9 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     });
   }, [top, maxCount]);
 
+  // Ant Design's App wrapper is required in Next.js (SSR) environments to
+  // provide the correct context for message rendering. Without it, messages
+  // rendered via the hook may not appear or lose their animation context.
   return (
     <App>
       {children}
@@ -168,6 +173,9 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
     duration?: number,
     onClose?: () => void
   ): MessageConfig => {
+    // Supports two call signatures: simple content string or full config object.
+    // Duck-typing via 'content' property check avoids needing separate overloads
+    // and keeps the API compatible with Ant Design's dual-signature pattern.
     if (typeof content === 'object' && content !== null && 'content' in content) {
       return content as MessageConfig;
     }
@@ -199,7 +207,10 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
         onClose: config.onClose,
       });
 
-      // Return promise-like object for chaining
+      // Return a callable + thenable object so consumers can either call
+      // result() to destroy immediately or result.then() to chain after auto-close.
+      // This mimics Ant Design's MessageType return while keeping the Rottay API
+      // engine-agnostic (Modern/Rustic return the same shape).
       const result = () => destroy?.();
       result.then = (fn: () => void) => {
         setTimeout(fn, (config.duration ?? MESSAGE_DEFAULTS.duration) * 1000);
@@ -219,6 +230,9 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
       const type = config.type || 'info';
       return createMessageMethod(type)(config);
     },
+    // Key-based destroy uses the hook API for targeted removal;
+    // keyless destroy falls back to the global antMessage singleton
+    // because the hook API's destroy() requires a key argument.
     destroy: (key?: string | number) => {
       if (key !== undefined) {
         api.destroy(key);
@@ -298,7 +312,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     onClose?.();
   };
 
-  /** Type-specific background and border colors */
+  // CSS variables enable multi-tenant theming: each tenant can override
+  // --ds-color-success-bg etc. without changing component code.
+  // Loading reuses info colors intentionally since both represent neutral states.
   const typeStyles: Record<MessageType, React.CSSProperties> = {
     success: {
       backgroundColor: 'var(--ds-color-success-bg)',
@@ -345,10 +361,14 @@ export const MessageItem: React.FC<MessageItemProps> = ({
         ...style,
       }}
     >
+      {/* Fallback text icons chosen for cross-platform unicode support
+          (no emoji rendering inconsistencies across OS/browser). */}
       <span style={{ color: iconColors[type] }}>
         {icon || (type === 'loading' ? '⏳' : type === 'success' ? '✓' : type === 'error' ? '✕' : type === 'warning' ? '⚠' : 'ℹ')}
       </span>
       <span style={{ flex: 1 }}>{content}</span>
+      {/* Close button uses tertiary text color by default to stay unobtrusive,
+          relying on the DS token so tenant themes can adjust contrast. */}
       {closable && (
         <button
           onClick={handleClose}

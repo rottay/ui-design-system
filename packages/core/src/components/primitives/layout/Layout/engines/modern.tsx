@@ -44,6 +44,16 @@ import type {
 } from '../Layout.types';
 import { LAYOUT_DEFAULTS } from '../Layout.types';
 
+/**
+ * Modern Layout shell using Tailwind flexbox utilities.
+ *
+ * Renders a full-height flex column by default. When `hasSider` is true,
+ * switches to a row direction at the `md` breakpoint so the sidebar sits
+ * alongside the content area on wider screens.
+ *
+ * @param props - Layout container props (hasSider, className, style).
+ * @returns A ref-forwarding div styled with Tailwind flex utilities.
+ */
 export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
   (props, ref) => {
     const { hasSider, children, className = '', style } = props;
@@ -60,6 +70,13 @@ export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
 );
 Layout.displayName = 'Layout.Modern';
 
+/**
+ * Modern Header using DaisyUI's base-200 background and flex alignment.
+ * Height is set via inline style to support both pixel and string values.
+ *
+ * @param props - Header props (height, className, style).
+ * @returns A ref-forwarding semantic `<header>` element.
+ */
 export const Header = React.forwardRef<HTMLElement, LayoutHeaderProps>(
   (props, ref) => {
     const { height = LAYOUT_DEFAULTS.headerHeight, children, className = '', style } = props;
@@ -76,6 +93,17 @@ export const Header = React.forwardRef<HTMLElement, LayoutHeaderProps>(
 );
 Header.displayName = 'Layout.Header.Modern';
 
+/**
+ * Modern Sider with controlled/uncontrolled collapse support.
+ *
+ * Uses a DaisyUI theme class (`bg-base-300` for dark, `bg-base-100` for light`)
+ * and a CSS width transition for smooth collapse animation. Supports both
+ * controlled (`collapsed` prop) and uncontrolled (`defaultCollapsed`) modes
+ * following React's standard controlled-component pattern.
+ *
+ * @param props - Sider props (width, collapsible, collapsed, theme, etc.)
+ * @returns A ref-forwarding semantic `<aside>` element.
+ */
 export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
   (props, ref) => {
     const {
@@ -92,11 +120,14 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
       style,
     } = props;
 
+    // Internal state for uncontrolled mode; ignored when `collapsed` is provided
     const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
+    // Controlled prop takes priority over internal state
     const isCollapsed = controlledCollapsed ?? internalCollapsed;
 
     const handleToggle = () => {
       const newCollapsed = !isCollapsed;
+      // Only update internal state in uncontrolled mode
       if (controlledCollapsed === undefined) {
         setInternalCollapsed(newCollapsed);
       }
@@ -104,6 +135,7 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     };
 
     const currentWidth = isCollapsed ? collapsedWidth : width;
+    // DaisyUI theme tokens: base-300 for dark sidebar, base-100 for light
     const themeClass = theme === 'dark' ? 'bg-base-300 text-base-content' : 'bg-base-100';
 
     return (
@@ -128,6 +160,12 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
 );
 Sider.displayName = 'Layout.Sider.Modern';
 
+/**
+ * Modern Content area -- a flex-growing `<main>` with default padding and scroll.
+ *
+ * @param props - Content props (className, style).
+ * @returns A ref-forwarding semantic `<main>` element.
+ */
 export const Content = React.forwardRef<HTMLElement, LayoutContentProps>(
   (props, ref) => {
     const { children, className = '', style } = props;
@@ -140,6 +178,13 @@ export const Content = React.forwardRef<HTMLElement, LayoutContentProps>(
 );
 Content.displayName = 'Layout.Content.Modern';
 
+/**
+ * Modern Footer using DaisyUI base-200 background.
+ * Shrink-proof so it stays at its natural height even in flex overflow.
+ *
+ * @param props - Footer props (className, style).
+ * @returns A ref-forwarding semantic `<footer>` element.
+ */
 export const Footer = React.forwardRef<HTMLElement, LayoutFooterProps>(
   (props, ref) => {
     const { children, className = '', style } = props;

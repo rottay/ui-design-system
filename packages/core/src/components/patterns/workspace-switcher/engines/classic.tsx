@@ -1,7 +1,18 @@
 'use client';
 
 /**
- * WorkspaceSwitcher - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the WorkspaceSwitcher pattern.
+ * Renders a popover-based workspace picker with avatar, name, role/plan metadata,
+ * unread badges, and an optional "Create workspace" action. Uses Ant Design's
+ * Popover, Avatar, Badge, Button, Divider, and Tooltip primitives.
+ *
+ * @example
+ * <ClassicWorkspaceSwitcher
+ *   workspaces={[{ id: '1', name: 'Acme Corp' }]}
+ *   activeWorkspaceId="1"
+ *   onSwitch={(id) => console.log(id)}
+ *   position="sidebar"
+ * />
  */
 
 import React, { useState, useCallback } from 'react';
@@ -15,6 +26,10 @@ import {
 } from '@ant-design/icons';
 import type { WorkspaceSwitcherProps, Workspace } from '../WorkspaceSwitcher.types';
 
+/**
+ * Extracts up to two uppercase initials from a workspace or user name.
+ * Used as a fallback when no logo/avatar image is available.
+ */
 function getInitials(name: string): string {
   return name
     .split(' ')
@@ -24,6 +39,14 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
+/**
+ * Classic engine workspace switcher built on Ant Design's Popover.
+ * Supports keyboard navigation (ArrowUp/Down, Enter, Escape), per-workspace
+ * settings buttons, unread count badges, and an optional "Create workspace" CTA.
+ *
+ * @param props - {@link WorkspaceSwitcherProps}
+ * @returns A popover trigger element that opens a workspace list dropdown.
+ */
 export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   const {
     workspaces,
@@ -41,10 +64,13 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
   } = props;
 
   const [open, setOpen] = useState(false);
+  // -1 means no keyboard focus; updated on ArrowUp/Down or mouse hover.
   const [focusIndex, setFocusIndex] = useState(-1);
 
   const activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId);
 
+  // Full keyboard navigation (arrow keys + Enter + Escape) so the switcher
+  // is operable without a mouse, which is critical for accessibility.
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (!open) return;
@@ -97,6 +123,8 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
               role="option"
               aria-selected={isActive}
               data-testid={`workspace-item-${ws.id}`}
+              // Active workspace gets a left border accent. Focused (keyboard)
+              // overrides active background to show the user where Enter will land.
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -265,6 +293,8 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
     </div>
   );
 
+  // Trigger element adapts its layout based on position: sidebar shows the
+  // full workspace name, while topbar/header renders a compact avatar-only trigger.
   const triggerElement = (
     <div
       style={{
@@ -318,6 +348,8 @@ export default function ClassicWorkspaceSwitcher(props: WorkspaceSwitcherProps) 
 
   return (
     <div className={`ds-pattern-workspace-switcher ds-engine-classic ${className ?? ''}`} style={style}>
+      {/* Popover placement is contextual: sidebar opens to the right to avoid
+          overlapping the navigation rail; topbar opens below the trigger. */}
       <Popover
         content={content}
         trigger={trigger === 'hover' ? 'hover' : 'click'}

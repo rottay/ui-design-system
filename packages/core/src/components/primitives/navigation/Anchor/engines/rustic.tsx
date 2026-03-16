@@ -209,6 +209,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
     // State
     // ---------------------------------------------------------------------------
 
+    // Hover state is managed in JS because inline styles cannot use :hover
+    // pseudo-selectors; this is the trade-off for zero-dependency styling
     const [isHovered, setIsHovered] = useState(false);
 
     // ---------------------------------------------------------------------------
@@ -336,6 +338,8 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     // State
     // ---------------------------------------------------------------------------
 
+    // Dual state pattern: supports both controlled (parent owns state) and
+    // uncontrolled (component owns state) usage via nullish coalescing
     const [internalActiveKey, setInternalActiveKey] = useState('');
     const activeKey = controlledActiveKey ?? internalActiveKey;
 
@@ -380,11 +384,14 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
           ? window.scrollY
           : (container as HTMLElement).scrollTop;
 
+        // Walk anchors in document order; the last one whose top edge has
+        // scrolled past the threshold wins, giving us the deepest visible section
         let currentAnchor = '';
         for (const anchor of anchors) {
           const element = document.querySelector(anchor);
           if (element) {
             const rect = element.getBoundingClientRect();
+            // Convert viewport-relative position to absolute document position
             const top = container === window
               ? rect.top + scrollTop
               : rect.top + (container as HTMLElement).scrollTop;
@@ -413,6 +420,8 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     // Render
     // ---------------------------------------------------------------------------
 
+    // Inline style merging order matters: container base, then optional
+    // affix/direction overrides, then consumer style prop wins last
     return (
       <AnchorContext.Provider value={{ activeKey, onClick, direction }}>
         <div

@@ -1,12 +1,30 @@
 'use client';
 
 /**
- * ApprovalWorkflow - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern engine for the ApprovalWorkflow pattern, powered by DaisyUI / Tailwind.
+ * Builds a custom vertical timeline with dot + connector-line indicators. Each step
+ * renders an approver name, status badge, optional comments, and -- on the active
+ * pending step -- action buttons for approve, reject, and escalate.
+ *
+ * Uses DaisyUI badge and button classes for consistent theming across the Hermes engine.
+ *
+ * @example
+ * <ModernApprovalWorkflow
+ *   title="Expense Report"
+ *   entity="EXP-9981"
+ *   steps={[{ key: 'fin', approver: 'Finance Team', status: 'pending' }]}
+ *   currentStep={0}
+ *   onApprove={(key) => approve(key)}
+ *   onReject={(key) => reject(key)}
+ * />
  */
 
 import React from 'react';
 import type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from '../ApprovalWorkflow.types';
 
+// DaisyUI badge variant classes mapped from domain statuses.
+// "skipped" uses ghost with reduced opacity to visually de-emphasize it,
+// distinguishing it from "pending" which is ghost at full opacity.
 const statusBadge: Record<ApprovalStatus, string> = {
   pending: 'badge-ghost',
   approved: 'badge-success',
@@ -23,6 +41,8 @@ const statusLabel: Record<ApprovalStatus, string> = {
   skipped: 'Skipped',
 };
 
+// Timeline connector line colors mirror the step's resolved status so the
+// visual trail shows at a glance which portions of the chain succeeded/failed.
 const statusLineColor: Record<ApprovalStatus, string> = {
   pending: 'bg-base-300',
   approved: 'bg-success',
@@ -31,6 +51,17 @@ const statusLineColor: Record<ApprovalStatus, string> = {
   skipped: 'bg-base-300',
 };
 
+/**
+ * A single node in the approval timeline. Renders the dot indicator, connector
+ * line, approver identity, status badge, and optional supplementary content.
+ *
+ * The dot color is derived from the step's status, with one exception: the
+ * current pending step uses `bg-primary animate-pulse` to draw the reviewer's
+ * attention to the step that awaits their decision.
+ *
+ * Escalate uses `btn-outline` instead of a filled variant to visually signal
+ * that it is a secondary action compared to approve/reject.
+ */
 function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, actionsDisabled }: {
   step: ApprovalStep;
   isCurrent: boolean;
@@ -42,7 +73,9 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
 }) {
   return (
     <div className="flex gap-3">
-      {/* Timeline line + dot */}
+      {/* Timeline column: dot + vertical connector line.
+          The dot animates (pulse) only when this is the current pending step
+          to indicate it requires user action. */}
       <div className="flex flex-col items-center">
         <div className={`w-3 h-3 rounded-full flex-shrink-0 mt-1.5 ${
           step.status === 'approved' ? 'bg-success' :
@@ -50,10 +83,11 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
           step.status === 'escalated' ? 'bg-warning' :
           isCurrent ? 'bg-primary animate-pulse' : 'bg-base-300'
         }`} />
+        {/* Hide the connector on the last step to avoid a dangling line */}
         {!isLast && <div className={`w-0.5 flex-1 min-h-[2rem] ${statusLineColor[step.status]}`} />}
       </div>
 
-      {/* Content */}
+      {/* Content column: identity row, contextual details, and actions */}
       <div className={`pb-6 flex-1 ${isCurrent ? '' : ''}`}>
         <div className="flex items-center gap-2 flex-wrap">
           {step.avatar && <span className="flex-shrink-0">{step.avatar}</span>}
@@ -71,6 +105,7 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
           <div className="mt-2 p-2 bg-base-200/50 rounded-lg text-sm">{step.comments}</div>
         )}
 
+        {/* Arbitrary metadata entries rendered as key-value pairs */}
         {step.metadata && (
           <div className="mt-1 text-xs text-base-content/60">
             {Object.entries(step.metadata).map(([k, v]) => (
@@ -79,6 +114,8 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
           </div>
         )}
 
+        {/* Action buttons only appear on the current step when it is still pending.
+            Callbacks are optional -- omitting onEscalate hides the Escalate button. */}
         {isCurrent && step.status === 'pending' && (
           <div className="flex gap-2 mt-3">
             {onApprove && (
@@ -103,9 +140,22 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
   );
 }
 
+/**
+ * Modern (DaisyUI / Tailwind) engine for the ApprovalWorkflow pattern.
+ *
+ * Renders a DaisyUI card containing a hand-rolled vertical timeline of
+ * `StepNode` components. Unlike the Classic engine (which delegates layout to
+ * Ant Steps), this engine builds its own dot-and-line timeline for full
+ * control over styling via Tailwind utilities.
+ *
+ * @param props - {@link ApprovalWorkflowProps}
+ * @returns A DaisyUI card with a custom vertical approval timeline.
+ */
 export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
   const { title, entity, steps, currentStep = 0, onApprove, onReject, onEscalate, actionsDisabled, footer, loading, className, style } = props;
 
+  // Skeleton loading state mimics the timeline structure (3 placeholder rows)
+  // so the card maintains its approximate height while data loads.
   if (loading) {
     return (
       <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
@@ -130,11 +180,13 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
   return (
     <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
       <div className="card-body">
+        {/* Header with workflow title and optional entity identifier badge */}
         <div className="flex items-center gap-2 mb-4">
           <h3 className="text-lg font-semibold">{title}</h3>
           {entity && <div className="badge badge-outline badge-sm">{entity}</div>}
         </div>
 
+        {/* Timeline: one StepNode per approval step, ordered sequentially */}
         <div>
           {steps.map((step, i) => (
             <StepNode

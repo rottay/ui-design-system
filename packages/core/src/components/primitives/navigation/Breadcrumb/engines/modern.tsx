@@ -128,7 +128,9 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
   const {
     items,
-    // DaisyUI breadcrumbs uses CSS li separators, so we ignore the separator prop
+    // DaisyUI renders separators via CSS ::before on <li> elements, making
+    // the JS separator prop unnecessary; we destructure it out to avoid
+    // passing an unknown prop to the DOM
     separator: _separator,
     maxItems,
     className = '',
@@ -155,6 +157,9 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // Render
   // ---------------------------------------------------------------------------
 
+  // DaisyUI breadcrumbs require a div > ul > li structure; items with href
+  // render as <a> for navigation, items without render as <span> to indicate
+  // the current (non-clickable) page in the trail
   return (
     <div className={`breadcrumbs text-sm ${className}`} style={style}>
       <ul>

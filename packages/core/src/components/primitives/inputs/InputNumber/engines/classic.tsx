@@ -43,6 +43,15 @@ import React from 'react';
 import { InputNumber as AntInputNumber, Space } from 'antd';
 import type { InputNumberProps } from '../InputNumber.types';
 
+/**
+ * Classic engine InputNumber backed by Ant Design's InputNumber.
+ * Delegates all numeric formatting, precision, and step logic to Ant Design,
+ * wrapping addons in Space.Compact when present.
+ *
+ * @param props - Unified InputNumberProps from the design system contract.
+ * @param ref - Forwarded ref attached to the underlying Ant InputNumber.
+ * @returns The rendered Ant Design InputNumber, optionally wrapped in Space.Compact for addons.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const InputNumber = React.forwardRef<any, InputNumberProps>(
   (props, ref) => {
@@ -80,6 +89,7 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
       variant,
     } = props;
 
+    // Map DS "default" size to Ant Design's equivalent "middle" token
     const input = (
       <AntInputNumber
         ref={ref}
@@ -114,10 +124,12 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
       />
     );
 
+    // When no addons are needed, render the bare input to avoid extra DOM nesting
     if (!addonBefore && !addonAfter) {
       return input;
     }
 
+    // Wrap in Space.Compact so addons share contiguous border radii with the input
     return (
       <Space.Compact className={className} style={style}>
         {addonBefore ? <span>{addonBefore}</span> : null}

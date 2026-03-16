@@ -1,17 +1,43 @@
 /**
- * Modal - Rustic Engine (Pure HTML/CSS with Portal, Overlay, FocusTrap)
+ * @fileoverview Modal Rustic (Apollo) Engine - Rottay Design System.
+ * Pure inline-CSS implementation that composes Portal, Overlay, and FocusTrap
+ * utilities for accessible modal behavior with zero external CSS dependencies.
+ * All visual theming is driven by CSS custom properties (--ds-*).
+ *
+ * @example
+ * ```tsx
+ * <Modal engine="rustic" open={open} onClose={close} title="Settings" size="lg">
+ *   <SettingsPanel />
+ * </Modal>
+ * ```
+ *
+ * @module Modal/Engines/Rustic
+ * @category Overlay
+ * @package @rottay/design-system
  */
 
 'use client';
 
 import React, { useEffect, useCallback } from 'react';
-import type { ModalProps } from '../../../../../contracts/primitives/feedback/Modal';
+import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } from '../Modal.types';
 import { Portal } from '../utils/Portal';
 import { Overlay } from '../utils/Overlay';
 import { FocusTrap } from '../utils/FocusTrap';
 import { useTranslation } from '../../../../../i18n';
 
+/**
+ * Rustic engine implementation of Modal using vanilla HTML/CSS.
+ *
+ * Composes three internal utilities -- Portal (DOM insertion), Overlay
+ * (backdrop + blur), and FocusTrap (keyboard loop) -- to achieve accessible
+ * modal behavior without any UI library. Supports scrollbar compensation,
+ * scale/opacity entrance animation via inline transition, and lifecycle
+ * callbacks (onOpen, onOpenChange).
+ *
+ * @param props - Modal configuration props
+ * @returns Portaled modal dialog with focus trap and overlay, or null when closed
+ */
 export default function RusticModal(props: ModalProps): React.ReactElement | null {
   const { t } = useTranslation('components');
 
@@ -54,7 +80,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     [closeOnEscape, open, onClose]
   );
 
-  // Handle body scroll lock
+  // Lock body scroll and compensate for disappearing scrollbar to prevent layout shift
   useEffect(() => {
     if (!preventScroll) return;
 
@@ -85,7 +111,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     }
   }, [open, closeOnEscape, handleEscKey]);
 
-  // Trigger open callbacks
+  // Notify consumers of open/close transitions for side-effect coordination
   useEffect(() => {
     if (open) {
       onOpen?.();
@@ -102,7 +128,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     }
   }, [closeOnBackdropClick, onClose]);
 
-  // Compute placement styles
+  // Placement affects vertical alignment within the full-screen flex container
   const getPlacementStyles = (): React.CSSProperties => {
     switch (placement) {
       case 'top':
@@ -129,7 +155,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     ...getPlacementStyles(),
   };
 
-  // Modal content styles
+  // Entrance animation: scale(0.95)->scale(1) + opacity(0)->opacity(1) driven by CSS transition
   const modalStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',

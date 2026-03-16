@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for the tenant CSS generator -- validates color scale
+ * generation, dark mode selectors, personality variables, and token overrides.
+ */
+
 import { describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '../../../../contracts';

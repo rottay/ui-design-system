@@ -1,5 +1,12 @@
 'use client';
 
+/**
+ * @fileoverview useChartPersonality hook -- resolves product personality tokens
+ * into concrete chart rendering decisions (animation, line mode, dots, gradient
+ * fills, tooltip style, color scheme). Respects prefers-reduced-motion and
+ * allows per-chart overrides via ChartPersonalityOptions.
+ */
+
 import { useMemo } from 'react';
 import { useTokens } from '../../../../hooks/tokens';
 import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
@@ -30,9 +37,24 @@ export interface ResolvedChartPersonality {
 }
 
 /**
+ * Resolves product personality tokens into concrete chart rendering decisions.
+ *
  * Chart components should not guess whether a product wants sharp lines,
  * playful mount animations, or dots on every data point. Those defaults belong
- * to the resolved product personality and only get overridden by explicit props.
+ * to the resolved product personality and only get overridden by explicit
+ * `ChartPersonalityOptions` props.
+ *
+ * Respects `prefers-reduced-motion` at the OS level: when enabled, animation
+ * duration is forced to 0 regardless of personality or option overrides.
+ *
+ * @param options - Optional per-chart overrides that take precedence over personality tokens.
+ * @returns A fully resolved personality object ready for chart rendering logic.
+ *
+ * @example
+ * ```tsx
+ * const personality = useChartPersonality({ colorScheme: 'accessible' });
+ * // personality.animate, personality.colors, personality.lineMode, etc.
+ * ```
  */
 export function useChartPersonality(
   options: ChartPersonalityOptions = {}
@@ -41,8 +63,14 @@ export function useChartPersonality(
   const { prefersReducedMotion } = useBreakpoints();
   const { t } = useTranslation('components');
 
+  // Memoized because every chart in the tree calls this hook, and the
+  // personality tokens rarely change. The dep array is kept granular
+  // (individual option fields rather than the `options` object) to avoid
+  // unnecessary recomputation when the consumer creates a new options
+  // object reference on each render.
   return useMemo(() => {
     const chartPersonality = tokens.personality.chart;
+    // Color scheme cascade: explicit option -> personality token -> 'default'.
     const scheme = options.colorScheme ?? chartPersonality.colorScheme ?? 'default';
     const colors = COLOR_SCHEME_MAP[scheme] ?? DEFAULT_COLORS;
 

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for the tenant storage facade -- validates the full
+ * resolution chain: memory -> localStorage -> registry -> static -> remote -> default.
+ */
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getKnownTenantConfig } from '../../registry';

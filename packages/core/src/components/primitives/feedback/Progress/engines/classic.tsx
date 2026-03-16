@@ -125,6 +125,10 @@ export default function ClassicProgress(props: ProgressProps): React.ReactElemen
   // Render
   // ---------------------------------------------------------------------------
 
+  // Status mapping bridges Rottay's "error" to Ant Design's "exception"
+  // terminology. Passing undefined for normal/active lets Ant Design use
+  // its default styling. strokeWidth maps to Ant's "size" prop because
+  // Ant Design v5 unified the progress bar thickness under the size API.
   return (
     <AntProgress
       percent={percent}

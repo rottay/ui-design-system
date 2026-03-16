@@ -1,5 +1,5 @@
 /**
- * Barrel re-export for Rate component.
+ * @fileoverview Barrel re-export for Rate component.
  * Entry point: ./Rate.tsx
  */
 export * from './Rate';

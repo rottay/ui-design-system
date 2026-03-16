@@ -155,7 +155,8 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // Shape Variant Rendering
   // ---------------------------------------------------------------------------
 
-  // Handle circular, rectangular, and rounded variants
+  // Shape variants render a single div with the DaisyUI skeleton class
+  // and a dynamic border-radius to achieve the desired geometry
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
       <div
@@ -189,10 +190,11 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
 
       {/* Content section with title and paragraph lines */}
       <div className="flex-1 space-y-2">
-        {/* Title line - wider than paragraph */}
+        {/* Title line is 60% width to visually distinguish it from body text */}
         {title && <div className="skeleton" style={{ height: '1.25rem', width: '60%' }} />}
 
-        {/* Paragraph lines with varying widths */}
+        {/* Last paragraph line is 80% width to simulate a natural text ending,
+            preventing the skeleton from looking like a uniform block */}
         {paragraph &&
           Array.from({
             length: typeof paragraph === 'object' ? paragraph.rows || rows! : rows!,

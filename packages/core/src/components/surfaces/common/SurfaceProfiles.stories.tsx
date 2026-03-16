@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Product profile stories -- shows how surfaces adapt visual
+ * density, animation, and accent treatment per product profile.
+ */
+
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 

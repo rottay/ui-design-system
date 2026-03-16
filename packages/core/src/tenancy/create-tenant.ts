@@ -1,11 +1,9 @@
 /**
- * Tenant Creation Utilities
- *
- * Generates a complete TenantConfig from minimal input (slug, name, primaryColor)
- * and provides runtime CSS injection for dynamic tenant creation.
- *
- * This removes the need for manual CSS file creation and registry updates
- * when onboarding new tenants.
+ * @fileoverview Tenant creation utilities.
+ * @description Generates a complete TenantConfig from minimal input (slug, name,
+ * primaryColor). Personality presets, density overrides, and structural token
+ * adjustments are all derived automatically so onboarding flows never need to
+ * hand-craft a full config object.
  */
 
 import type { TenantConfig, EngineName, TenantPlan } from '../contracts';
@@ -36,6 +34,10 @@ export interface TenantCreationConfig {
   features?: string[];
   /** Custom domain */
   domain?: string;
+  /** Optional vertical preset key used by the app/platform layer */
+  vertical?: string;
+  /** Optional custom component pack for the custom engine */
+  componentPack?: string;
 }
 
 /**
@@ -87,12 +89,15 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
     plan = 'starter',
     features = [],
     domain,
+    vertical,
+    componentPack,
   } = config;
 
   const personalityTokens = resolvePersonalityPreset(personalityPreset) as PersonalityTokens;
   const { densityScale, paddingDensity } = resolveDensity(density);
 
-  // Merge density into personality card tokens
+  // Density is the one high-level input that affects both structural tokens and
+  // perceived personality, so we project it into both layers here.
   const mergedPersonality: Partial<PersonalityTokens> = {
     ...personalityTokens,
     card: {
@@ -101,10 +106,14 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
     },
   };
 
+  // Token overrides are only created when density differs from the 1.0 baseline.
+  // This keeps the generated config minimal -- the engine's own density scale
+  // applies when no override is present.
   const tokenOverrides: TenantTokenOverrides | undefined =
     densityScale !== 1.0 ? { densityScale } : undefined;
 
-  // Apply spacious border radius for spacious density
+  // Spacious layouts read better when radius scales with density. We encode
+  // that as a generated override instead of making callers wire it manually.
   if (density === 'spacious' && tokenOverrides) {
     tokenOverrides.borderRadius = {
       sm: '10px',
@@ -130,6 +139,7 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
     },
     personality: mergedPersonality,
     tokenOverrides,
+    vertical,
+    componentPack,
   };
 }
-

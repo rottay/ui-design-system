@@ -1,6 +1,14 @@
 /**
- * Portal - Utility Component
- * Renders children into a DOM node that exists outside the DOM hierarchy of the parent component
+ * @fileoverview Portal - renders children outside the parent DOM hierarchy via createPortal.
+ * Creates a shared `#rottay-portal-root` div on first use (SSR-safe).
+ * Also exports a `usePortalContainer` hook for imperative container management.
+ *
+ * @example
+ * ```tsx
+ * <Portal>
+ *   <OverlayContent />  {/* Rendered into #rottay-portal-root *\/}
+ * </Portal>
+ * ```
  */
 
 'use client';
@@ -18,17 +26,17 @@ export interface PortalProps {
 }
 
 /**
- * Portal component that renders children into a DOM node outside the parent hierarchy.
- * Uses React's createPortal for proper event bubbling and context propagation.
+ * SSR-safe portal: waits for mount, creates/finds the portal root, then
+ * renders children via createPortal (preserving event bubbling and context).
  */
 export function Portal({ children, container, key }: PortalProps): React.ReactPortal | null {
   const [mounted, setMounted] = useState(false);
   const [portalContainer, setPortalContainer] = useState<Element | null>(null);
 
+  // On mount: resolve the target container (provided, or shared #rottay-portal-root)
   useEffect(() => {
     setMounted(true);
 
-    // Use provided container or create/find default container
     if (container) {
       setPortalContainer(container);
     } else if (typeof document !== 'undefined') {
@@ -48,7 +56,7 @@ export function Portal({ children, container, key }: PortalProps): React.ReactPo
     };
   }, [container]);
 
-  // Don't render on server side
+  // SSR guard -- createPortal requires a real DOM node
   if (!mounted || !portalContainer) {
     return null;
   }
@@ -58,9 +66,7 @@ export function Portal({ children, container, key }: PortalProps): React.ReactPo
 
 Portal.displayName = 'Portal';
 
-/**
- * Hook to get or create a portal container
- */
+/** Hook that lazily creates (or finds) a portal container by ID. SSR-safe. */
 export function usePortalContainer(containerId?: string): Element | null {
   const [container, setContainer] = useState<Element | null>(null);
 

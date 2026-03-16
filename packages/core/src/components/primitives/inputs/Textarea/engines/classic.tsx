@@ -1,47 +1,13 @@
 /**
- * @fileoverview Textarea Classic Engine - Rottay Design System
- * @description Ant Design implementation of the Textarea component.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Classic engine for Textarea, wrapping Ant Design's `Input.TextArea`.
+ * Provides enterprise features (autoSize, showCount, allowClear) out of the box
+ * by mapping DS prop conventions to Ant Design's API surface.
  *
- * @remarks
- * The Classic engine wraps Ant Design's TextArea component, providing
- * enterprise-grade multi-line input with advanced features like
- * auto-sizing and character counting.
- *
- * **Ant Design Features Utilized:**
- * - Input.TextArea component
- * - Auto-resize with minRows/maxRows
- * - Built-in character count (showCount)
- * - Clear button (allowClear)
- * - Resize callback (onResize)
- *
- * **Prop Mapping:**
- * - `size`: 'sm' → 'small', 'md' → 'middle', 'lg' → 'large'
- * - `variant`: 'outlined' → undefined, 'filled' → 'filled', 'borderless' → 'borderless'
- * - `status`: 'default' → undefined, 'error' → 'error', 'warning' → 'warning'
- *
- * **Event Handlers:**
- * - `onChange`: Wraps native event to provide value directly
- * - `onPressEnter`: Triggered on Enter key press
- * - `onResize`: Reports new dimensions
- *
- * @example Using Classic Engine
+ * @example
  * ```tsx
- * import { Textarea } from '@rottay/design-system';
- *
- * <Textarea
- *   engine="classic"
- *   placeholder="Type here..."
- *   autoSize={{ minRows: 3, maxRows: 8 }}
- *   showCount
- *   maxLength={500}
- *   allowClear
- * />
+ * <Textarea engine="classic" autoSize={{ minRows: 3, maxRows: 8 }} showCount maxLength={500} />
  * ```
  *
- * @see {@link Textarea} for the main component
- * @see {@link ModernTextarea} for DaisyUI implementation
- * @see {@link RusticTextarea} for vanilla implementation
  * @module ClassicTextarea
  * @category Inputs
  * @package @rottay/design-system
@@ -54,12 +20,17 @@ import { TEXTAREA_DEFAULTS } from '../Textarea.types';
 
 const { TextArea: AntTextArea } = Input;
 
+/** Maps DS size tokens to Ant Design's expected size literals. */
 const SIZE_MAP = {
   sm: 'small' as const,
   md: 'middle' as const,
   lg: 'large' as const,
 };
 
+/**
+ * Maps DS status values to Ant Design status prop.
+ * 'success' has no Ant counterpart, so it maps to undefined (default appearance).
+ */
 const STATUS_MAP = {
   default: undefined,
   error: 'error' as const,
@@ -67,12 +38,26 @@ const STATUS_MAP = {
   success: undefined,
 };
 
+/**
+ * Maps DS variant names to Ant Design variant prop.
+ * 'outlined' is Ant's default, so it maps to undefined.
+ */
 const VARIANT_MAP = {
   outlined: undefined,
   filled: 'filled' as const,
   borderless: 'borderless' as const,
 };
 
+/**
+ * Classic (Ant Design) implementation of Textarea.
+ *
+ * Thin wrapper around `Input.TextArea` that translates DS-standard prop names
+ * (size, variant, status) into Ant Design equivalents and normalizes the
+ * onChange signature to `(value, event)` instead of Ant's raw event.
+ *
+ * @param props - Standard TextareaProps shared across all engines.
+ * @returns An Ant Design TextArea element with mapped props.
+ */
 export default function ClassicTextarea(props: TextareaProps): React.ReactElement {
   const {
     size = TEXTAREA_DEFAULTS.size,
@@ -103,12 +88,14 @@ export default function ClassicTextarea(props: TextareaProps): React.ReactElemen
     ...rest
   } = props;
 
+  // Normalize onChange to DS convention: (value, event) instead of just (event)
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (onChange) {
       onChange(e.target.value, e);
     }
   };
 
+  // Strip the keyboard event from the public API -- consumers only need to know Enter was pressed
   const handlePressEnter = (_e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (onPressEnter) {
       onPressEnter();

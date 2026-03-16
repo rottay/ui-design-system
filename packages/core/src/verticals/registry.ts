@@ -1,7 +1,7 @@
 /**
- * Vertical Preset Registry
+ * @fileoverview Built-in vertical preset registry.
  *
- * Built-in vertical presets derived from existing product profiles and
+ * Contains preset definitions derived from existing product profiles and
  * tenant configurations. Each vertical captures the full personality,
  * engine preference, and surface defaults for a Rottay product domain.
  *
@@ -21,6 +21,9 @@ import type { VerticalKey, VerticalPreset } from './types';
  * Values are intentionally derived from the existing product profiles and
  * tenant configurations that have been battle-tested across the three
  * Rottay applications.
+ *
+ * Verticals are the DS-owned fallback layer for domains. Real tenants should
+ * reference these presets, not duplicate them one by one.
  */
 export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
   /**
@@ -255,5 +258,7 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
  * a default). Verticals are optional -- the system works fine without one.
  */
 export function getVerticalPreset(key: VerticalKey): VerticalPreset | undefined {
+  // Unlike product profiles, verticals are optional. Callers can choose to
+  // continue without one instead of forcing a DS-owned fallback.
   return VERTICAL_REGISTRY[key];
 }

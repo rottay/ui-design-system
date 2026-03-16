@@ -1,12 +1,23 @@
 'use client';
 
 /**
- * UserProfileCard - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla/CSS-variable) engine for the UserProfileCard pattern.
+ * Zero external UI library dependency -- renders with plain HTML elements and inline
+ * styles that reference `--ds-*` CSS custom properties. Supports "full" (centered card)
+ * and "compact" (horizontal row) variants, with configurable size tiers (sm/md/lg).
+ *
+ * @example
+ * <RusticUserProfileCard
+ *   user={{ name: 'Jane Doe', role: 'Engineer', department: 'Platform', status: 'active' }}
+ *   size="lg"
+ *   actions={[{ key: 'edit', label: 'Edit', variant: 'primary', onClick: () => {} }]}
+ * />
  */
 
 import React, { type CSSProperties } from 'react';
 import type { UserProfileCardProps } from '../UserProfileCard.types';
 
+// Maps user status to the corresponding --ds-* color token for the status dot.
 const statusColors: Record<string, string> = {
   active: 'var(--ds-color-success)',
   away: 'var(--ds-color-warning)',
@@ -14,12 +25,15 @@ const statusColors: Record<string, string> = {
   offline: 'var(--ds-color-text-tertiary, var(--ds-color-neutral-400))',
 };
 
+// Pixel dimensions per size tier. Avatar, typography, padding, and button
+// padding scale together so each tier feels proportional.
 const sizeMap = {
   sm: { avatar: 36, titleSize: 13, descSize: 11, padding: 12, btnPad: '4px 10px' },
   md: { avatar: 56, titleSize: 16, descSize: 13, padding: 20, btnPad: '6px 16px' },
   lg: { avatar: 80, titleSize: 20, descSize: 14, padding: 28, btnPad: '8px 20px' },
 };
 
+// Base card container style -- all colors from --ds-* tokens.
 const cardStyle: CSSProperties = {
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
   borderRadius: 'var(--ds-radius-lg, 8px)',
@@ -27,6 +41,8 @@ const cardStyle: CSSProperties = {
   overflow: 'hidden',
 };
 
+// Dynamic avatar style: font-size scales at 35% of the avatar diameter
+// to keep the fallback initial letter visually centered.
 const avatarStyle = (size: number): CSSProperties => ({
   width: size,
   height: size,
@@ -43,6 +59,7 @@ const avatarStyle = (size: number): CSSProperties => ({
   position: 'relative' as const,
 });
 
+// Base button style shared by all action button variants.
 const btnBase: CSSProperties = {
   borderRadius: 'var(--ds-radius-md, 6px)',
   border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
@@ -53,6 +70,14 @@ const btnBase: CSSProperties = {
   fontSize: 'var(--ds-font-size-sm, 13px)',
 };
 
+/**
+ * Rustic engine user profile card using only inline styles and CSS variables.
+ * Mirrors Classic/Modern feature set (avatar, status dot, department/status tags,
+ * action buttons) without any third-party UI dependency.
+ *
+ * @param props - {@link UserProfileCardProps}
+ * @returns A styled div card (full) or flex row (compact).
+ */
 export default function RusticUserProfileCard(props: UserProfileCardProps) {
   const {
     user,
@@ -102,6 +127,8 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
     </div>
   );
 
+  // Returns variant-specific button styles by merging overrides onto btnBase.
+  // "primary" fills with the primary color; "danger" uses a bordered outline.
   const getBtnStyle = (v?: string): CSSProperties => {
     if (v === 'primary') return { ...btnBase, padding: s.btnPad, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))', borderColor: 'var(--ds-color-primary)' };
     if (v === 'danger') return { ...btnBase, padding: s.btnPad, color: 'var(--ds-color-error)', borderColor: 'var(--ds-color-error)' };

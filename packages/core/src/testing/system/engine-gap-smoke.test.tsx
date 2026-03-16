@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Engine gap smoke tests for components needing explicit engine imports.
+ * Covers Calendar, Tree, Link, Splitter, and Tour which require per-engine
+ * module pre-loading before they render correctly.
+ */
+
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';

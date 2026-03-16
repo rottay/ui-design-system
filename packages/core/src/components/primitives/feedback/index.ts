@@ -1,5 +1,6 @@
 /**
- * Feedback primitives
+ * @fileoverview Feedback primitives barrel export.
+ * Re-exports all feedback-category primitive components.
  */
 
 export { Alert } from './Alert';

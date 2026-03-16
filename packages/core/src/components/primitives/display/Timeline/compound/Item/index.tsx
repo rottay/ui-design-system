@@ -46,6 +46,10 @@ import type { TimelineItemProps } from '../../Timeline.types';
 /**
  * Timeline.Item component for individual timeline entries.
  *
+ * @param props - TimelineItemProps including color, dot, label, position, and children
+ * @param ref - Forwarded ref to the root div element
+ * @returns A pass-through div whose actual rendering is delegated to the parent Timeline engine
+ *
  * @example
  * ```tsx
  * <Timeline>

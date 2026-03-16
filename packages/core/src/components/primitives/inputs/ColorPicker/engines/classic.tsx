@@ -35,6 +35,17 @@ import React from 'react';
 import { ColorPicker as AntColorPicker } from 'antd';
 import type { ColorPickerProps } from '../ColorPicker.types';
 
+/**
+ * Classic engine ColorPicker -- wraps Ant Design's full-featured ColorPicker.
+ *
+ * Passes all DS props through to AntD with minimal transformation. Several
+ * props are cast to `any` because the DS types use a simplified `Color`
+ * interface while AntD's internal `Color` class carries additional methods.
+ * The outer `<div>` receives the forwarded ref for measurement/portal anchoring.
+ *
+ * @param props - {@link ColorPickerProps} unified color picker props shared across engines.
+ * @returns A ref-forwarding wrapper around `antd/ColorPicker`.
+ */
 export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
   (props, ref) => {
     const {
@@ -59,7 +70,13 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     } = props;
 
     return (
+      // Outer div anchors the forwarded ref; AntD renders a Popover internally
       <div ref={ref} className={className} style={style}>
+        {/*
+         * Several casts to `any` are needed because AntD's Color type has
+         * richer internals (metaColor, etc.) than the DS Color interface.
+         * At runtime the values are fully compatible.
+         */}
         <AntColorPicker
           value={value as any}
           defaultValue={defaultValue}

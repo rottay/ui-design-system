@@ -117,15 +117,24 @@ export { INPUT_DEFAULTS } from './Input.types';
 // Export compound components
 export { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea };
 
-// Export base component
-
+/**
+ * Public Input namespace.
+ *
+ * The root input implementation lives in `base.ts` to avoid circular chunking
+ * between the main `Input` object and compounds such as `Input.Password`.
+ */
 export const Input = Object.assign(
   BaseInput,
   {
+    /** Groups adjacent inputs and addons into a single control cluster. */
     Group: InputGroup,
+    /** Decorative or semantic content before or after the main input. */
     Addon: InputAddon,
+    /** Password-specialized input with visibility toggle behavior. */
     Password: InputPassword,
+    /** Search-oriented input variant with a stronger submit affordance. */
     Search: InputSearch,
+    /** Multi-line text entry while preserving the Input namespace. */
     TextArea: InputTextArea,
   }
 );

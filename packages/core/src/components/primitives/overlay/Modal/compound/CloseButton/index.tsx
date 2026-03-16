@@ -1,6 +1,47 @@
 /**
- * Modal.CloseButton - Compound Component
- * Close button for the modal header
+ * @fileoverview ModalCloseButton - Rottay Design System
+ * @description Compound component rendering a close button for the Modal header.
+ * Provides an accessible dismiss control with hover effects and size variants.
+ *
+ * @remarks
+ * ModalCloseButton renders an "X" icon button that triggers the `onClose`
+ * callback when clicked. It includes hover state management via inline style
+ * manipulation and uses CSS variables for consistent theming.
+ *
+ * **Key Features:**
+ * - Three size variants (sm, md, lg) for button and icon dimensions
+ * - Hover effects via CSS variable-driven background and color changes
+ * - Click event propagation stopped to prevent backdrop dismissal
+ * - Ref forwarding to the underlying `<button>` element
+ * - Built-in "X" SVG icon (no external icon dependency)
+ *
+ * **Accessibility:**
+ * - `aria-label` defaults to "Close modal" and is customizable
+ * - Rendered as a native `<button>` with `type="button"`
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Modal.CloseButton onClose={handleClose} />
+ * ```
+ *
+ * @example Custom Size
+ * ```tsx
+ * <Modal.CloseButton onClose={handleClose} size="lg" />
+ * ```
+ *
+ * @example Custom Aria Label
+ * ```tsx
+ * <Modal.CloseButton
+ *   onClose={handleClose}
+ *   aria-label="Dismiss dialog"
+ * />
+ * ```
+ *
+ * @see {@link ModalHeader} for typical usage context
+ * @see {@link Modal} for the parent component
+ * @module Modal/Compound/CloseButton
+ * @category Overlay
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -8,12 +49,30 @@
 import React, { forwardRef } from 'react';
 import type { ModalCloseButtonProps } from '../../Modal.types';
 
+/** Maps size variants to button and icon pixel dimensions. */
 const SIZE_MAP = {
   sm: { button: 24, icon: 14 },
   md: { button: 32, icon: 18 },
   lg: { button: 40, icon: 22 },
 };
 
+/**
+ * Close button for the Modal with hover effects and accessibility support.
+ *
+ * @description
+ * Renders a transparent button with an "X" SVG icon. On hover, the background
+ * and color are updated via inline style manipulation using CSS variables.
+ * Click events are stopped from propagating to prevent triggering backdrop dismiss.
+ *
+ * @param props - {@link ModalCloseButtonProps}
+ * @param ref - Forwarded ref to the `<button>` element
+ * @returns An accessible close button element
+ *
+ * @example
+ * ```tsx
+ * <ModalCloseButton onClose={() => setOpen(false)} size="md" />
+ * ```
+ */
 export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonProps>(
   (props, ref) => {
     const {
@@ -44,6 +103,7 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       ...style,
     };
 
+    // Stop propagation to prevent the modal backdrop's click handler from firing
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       onClose?.();

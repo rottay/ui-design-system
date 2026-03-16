@@ -143,6 +143,9 @@ export default function RusticLink(props: LinkProps): React.ReactElement {
    * Build complete inline styles for the link element.
    * Combines type-based colors, underline, disabled state, and custom styles.
    */
+  // Returns a CSS var() with a 3-level fallback chain: component-specific ->
+  // design token -> hardcoded hex. This ensures the link renders correctly
+  // even in environments where no CSS variables are defined.
   const getColorVar = () => {
     switch (type) {
       case 'primary':
@@ -160,6 +163,8 @@ export default function RusticLink(props: LinkProps): React.ReactElement {
     }
   };
 
+  // Disabled color uses rgba for semi-transparency, communicating the
+  // inactive state visually while keeping the text barely legible
   const linkStyle: React.CSSProperties = {
     color: disabled ? 'var(--ds-link-disabled-color, rgba(0, 0, 0, 0.25))' : getColorVar(),
     textDecoration: underline ? 'underline' : 'none',

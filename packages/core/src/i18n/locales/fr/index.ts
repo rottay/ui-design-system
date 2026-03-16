@@ -1,5 +1,7 @@
 /**
- * Traductions en Français
+ * @fileoverview French (fr-FR) translation dictionary.
+ *
+ * Aggregates namespace JSON files into a typed `LocaleTranslations` object.
  */
 
 import common from './common.json';

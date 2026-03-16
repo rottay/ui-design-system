@@ -1,16 +1,10 @@
 'use client';
 
 /**
- * WizardSurface
- *
- * This surface is the page-level wrapper for guided multi-step flows.
- *
- * Why it exists separately from FormSurface:
- * - FormSurface solves "one page, one form"
- * - WizardSurface solves "ordered progression across multiple steps"
- *
- * The surface stays generic by owning only the progression mechanics. The app
- * still owns the step content, fields, and domain-specific validation.
+ * @fileoverview WizardSurface -- multi-step guided flow page shell.
+ * @description Distinct from FormSurface (single-page form): WizardSurface handles
+ * ordered step progression, step validation gating, and back/next navigation.
+ * The app owns step content, fields, and domain-specific validation.
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -125,10 +119,16 @@ export function WizardSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
+  // The wizard supports both controlled (app owns values + step) and
+  // uncontrolled (surface manages them) modes. Controlled mode is common
+  // when the wizard integrates with external state management (e.g. Zustand).
   const [internalValues, setInternalValues] = useState<Record<string, unknown>>(
     config.behavior.initialValues ?? {}
   );
   const [internalStep, setInternalStep] = useState(config.behavior.currentStep ?? 0);
+  // Step errors are keyed by step.key so validation state persists when
+  // navigating between steps. This lets users fix errors on a previous step
+  // without losing validation feedback.
   const [stepErrors, setStepErrors] = useState<Record<string, Record<string, string>>>({});
 
   const isControlledValues = config.behavior.values !== undefined;
@@ -216,6 +216,9 @@ export function WizardSurface({
     goToStep,
   };
 
+  // Footer can be a static ReactNode or a function that receives the
+  // current wizard context (values, step index), enabling dynamic content
+  // like "Step 2 of 5" or conditional help text.
   const footerNode =
     typeof config.presentation.footer === 'function'
       ? config.presentation.footer(activeContext)
@@ -285,6 +288,9 @@ export function WizardSurface({
     );
   }
 
+  // Aside, like footer, supports both static and context-aware rendering.
+  // Context-aware asides are useful for showing step-specific help or
+  // progress summaries that update as the user advances.
   const asideNode =
     typeof config.presentation.aside === 'function'
       ? config.presentation.aside(activeContext)
@@ -317,7 +323,11 @@ export function WizardSurface({
                 icon: step.icon,
                 optional: step.optional,
                 content: step.renderedContent,
-                validate: async () => {
+                // Validation is two-phase: first check form-level field errors
+              // from the PatternFormBuilder, then run the step's custom validate
+              // function. The first field error message is surfaced to the
+              // StepWizard pattern which displays it inline.
+              validate: async () => {
                   if (validationErrors && Object.keys(validationErrors).length > 0) {
                     return (
                       Object.values(validationErrors)[0] ??

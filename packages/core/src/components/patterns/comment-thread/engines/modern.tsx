@@ -1,12 +1,29 @@
 'use client';
 
 /**
- * CommentThread - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the CommentThread pattern.
+ * Renders a recursive tree of comments using DaisyUI avatar/btn/textarea classes
+ * and Tailwind utility classes. Supports nested replies up to maxDepth, inline
+ * editing, deletion, and emoji reactions. Falls back to a first-initial avatar
+ * placeholder when no image URL is provided.
+ *
+ * @example
+ * <ModernCommentThread
+ *   comments={[{ id: '1', author: { name: 'Bob' }, content: 'Great work!', timestamp: new Date().toISOString() }]}
+ *   currentUser={{ name: 'Bob', avatar: '/avatars/bob.png' }}
+ *   onReply={(parentId, text) => reply(parentId, text)}
+ *   onReaction={(id, emoji) => toggleReaction(id, emoji)}
+ * />
  */
 
 import React, { useState, useCallback } from 'react';
 import type { CommentThreadProps, Comment } from '../CommentThread.types';
 
+/**
+ * Convert an ISO timestamp string into a human-readable relative time label.
+ * Uses progressively coarser units (minutes, hours, days) and falls back to
+ * an absolute date for timestamps older than 7 days.
+ */
 function formatTimestamp(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
@@ -21,6 +38,7 @@ function formatTimestamp(ts: string): string {
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+/** Props for the recursive CommentNode used internally by ModernCommentThread. */
 interface CommentNodeProps {
   comment: Comment;
   depth: number;
@@ -32,14 +50,24 @@ interface CommentNodeProps {
   onReaction?: (commentId: string, emoji: string) => void;
 }
 
+/**
+ * Recursive comment node using DaisyUI classes. Each instance renders its own
+ * content, reactions, action buttons, and optionally its children (replies),
+ * indented via Tailwind's ml-6 class per depth level.
+ */
 function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, onDelete, onReaction }: CommentNodeProps) {
   const [replyVisible, setReplyVisible] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(comment.content);
 
+  // Only the comment author can edit or delete their own comments.
+  // Identity is matched by name since the Comment type only exposes
+  // author.name at this level (no user ID available).
   const isOwner = currentUser?.name === comment.author.name;
 
+  // Submit the reply text to the parent handler and reset local state.
+  // Whitespace-only text is rejected to prevent empty replies.
   const handleReply = useCallback(() => {
     if (replyText.trim() && onReply) {
       onReply(comment.id, replyText.trim());
@@ -48,6 +76,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
     }
   }, [replyText, onReply, comment.id]);
 
+  // Submit the edited content and exit edit mode. The trim() guard
+  // prevents saving a comment that contains only whitespace.
   const handleEdit = useCallback(() => {
     if (editText.trim() && onEdit) {
       onEdit(comment.id, editText.trim());
@@ -108,7 +138,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
             </div>
           )}
 
-          {/* Actions */}
+          {/* Actions -- reply is depth-gated to prevent infinitely nested threads.
+              Edit and delete are restricted to the comment owner. */}
           <div className="flex gap-3 text-xs opacity-50">
             {depth < maxDepth && onReply && (
               <button className="btn btn-ghost btn-xs" onClick={() => setReplyVisible(!replyVisible)}>
@@ -148,7 +179,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
         </div>
       </div>
 
-      {/* Nested replies */}
+      {/* Nested replies -- rendered recursively with a left border line for
+          visual threading. Stops at maxDepth to cap DOM nesting depth. */}
       {comment.replies && comment.replies.length > 0 && depth < maxDepth && (
         <div className="border-l-2 border-base-300 pl-3">
           {comment.replies.map(reply => (
@@ -170,6 +202,12 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
   );
 }
 
+/**
+ * Modern (DaisyUI/Tailwind) comment thread with recursive nesting, reactions, and CRUD.
+ * @param props - CommentThreadProps controlling the comment list, user identity,
+ *   CRUD callbacks, nesting depth, and display options.
+ * @returns A comment list with a DaisyUI spinner for loading and an optional input area.
+ */
 export default function ModernCommentThread(props: CommentThreadProps) {
   const {
     comments,
@@ -206,7 +244,8 @@ export default function ModernCommentThread(props: CommentThreadProps) {
 
   return (
     <div className={`ds-pattern-comment-thread ds-engine-modern ${className ?? ''}`} style={style}>
-      {/* New comment input */}
+      {/* New comment input -- only rendered when both onAdd and currentUser
+          are provided. Without a user identity we cannot attribute the comment. */}
       {onAdd && currentUser && (
         <div className="flex gap-3 mb-6">
           <div className="avatar placeholder flex-shrink-0">

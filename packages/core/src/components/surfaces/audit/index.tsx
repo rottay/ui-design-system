@@ -22,6 +22,9 @@ export interface AuditSurfaceProps {
   loading?: boolean;
 }
 
+// Maps audit severity to design-system color tokens. Falls through to
+// text-muted for 'info' and undefined, keeping low-severity entries
+// visually subordinate so critical items stand out in dense logs.
 function severityColor(severity?: AuditEntry['severity']): string {
   switch (severity) {
     case 'critical':
@@ -39,8 +42,13 @@ export function AuditSurface({
   loading = false,
 }: AuditSurfaceProps): React.ReactElement {
   const isCompact = config.visual.density === 'compact';
+  // Active filter count drives the badge in the filter panel header,
+  // giving users a quick signal about how many constraints are applied.
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);
 
+  // Export buttons are rendered only when the app provides an export handler.
+  // All three formats are always offered -- the app decides which to support
+  // and can no-op unsupported formats in its callback.
   const exportActions = useMemo(() => {
     if (!config.behavior.onExport) return null;
 
@@ -68,6 +76,9 @@ export function AuditSurface({
     </Flex>
   );
 
+  // Translate surface column config into the Table primitive's column contract.
+  // The surface uses `label` while Table expects `title`; the mapping keeps
+  // the surface API domain-friendly without leaking Table internals.
   const tableColumns = config.behavior.columns.map((col) => ({
     key: col.key,
     title: col.label,
@@ -79,6 +90,9 @@ export function AuditSurface({
       : undefined,
   }));
 
+  // Fallback renderer for entries when the app does not provide a custom one.
+  // Intentionally compact: severity tag + action + actor, mirroring the
+  // structure compliance teams expect in audit interfaces.
   const defaultRenderEntry = (entry: AuditEntry) => (
     <Flex gap={12} align="center">
       <Tag
@@ -113,6 +127,10 @@ export function AuditSurface({
         {config.behavior.filters.length > 0 && (
           <Card variant="outlined">
             <Card.Body>
+              {/* The audit surface supports richer filter types (date-range,
+                  multi-select) than PatternFilterPanel natively handles, so we
+                  downcast to the closest supported primitive type here. The app
+                  still receives the raw filter values in onFilterChange. */}
               <PatternFilterPanel
                 filters={config.behavior.filters.map((f) => ({
                   key: f.key,
@@ -143,6 +161,10 @@ export function AuditSurface({
         ) : (
           <Card variant="outlined">
             <Card.Body>
+              {/* maxHeight enables scrollable audit logs for compliance dashboards
+                  where the full entry list may be thousands of rows. Overflow is
+                  only set when a maxHeight is specified to avoid unnecessary
+                  scroll containers. */}
               <Box style={{ maxHeight: config.visual.maxHeight, overflow: config.visual.maxHeight ? 'auto' : undefined }}>
                 <Stack spacing={isCompact ? 'xs' : 'md'}>
                   {config.behavior.entries.map((entry) => (

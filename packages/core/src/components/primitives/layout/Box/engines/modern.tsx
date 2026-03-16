@@ -43,9 +43,10 @@ import React, { forwardRef, type ElementType, type Ref, type CSSProperties } fro
 import type { BoxProps, BoxSpacing, BoxBorderRadius, BoxShadow } from '../Box.types';
 import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../Box.types';
 
-/**
- * Builds CSSProperties from BoxProps
- */
+// Inline style builder for properties that cannot be expressed as static
+// Tailwind classes (dimensions, colors, transforms, etc.). This runs in
+// parallel with buildTailwindClasses -- classes handle spacing/shadow/radius,
+// inline styles handle everything else.
 function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
 
@@ -222,9 +223,11 @@ const SHADOW_CLASS_MAP: Record<BoxShadow, string> = {
   '2xl': 'shadow-2xl',
 };
 
-/**
- * Build Tailwind classes from Box props
- */
+// Builds an array of Tailwind utility classes from Box layout props.
+// Modern engine prefers classes over inline styles so Tailwind's purge
+// can detect them and include only used utilities in the production build.
+// Values like dimensions, colors, and transforms fall through to inline
+// styles because they are dynamic and not in Tailwind's static class set.
 function buildTailwindClasses(props: BoxProps): string[] {
   const classes: string[] = [];
   const {

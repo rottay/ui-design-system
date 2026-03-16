@@ -1,18 +1,57 @@
-'use client';
-
 /**
  * @fileoverview Skeleton Paragraph Compound Component - Rottay Design System
  * @description Paragraph/text block placeholder component for the Skeleton primitive.
  * Displays multiple text lines with a configurable last-line width.
  *
  * @remarks
- * This is distinct from SkeletonText in that it exposes a `lastLineWidth` prop
- * for precise control over the trailing line appearance.
+ * The SkeletonParagraph is distinct from SkeletonText in that it exposes a
+ * `lastLineWidth` prop for precise control over the trailing line appearance.
+ * All lines are rendered at a uniform 16px height. Non-last lines fill the
+ * full container width while the final line uses the configurable width.
  *
+ * **Key Features:**
+ * - Configurable number of text lines
+ * - Customizable last-line width via `lastLineWidth` prop
+ * - Uniform 16px line height with 8px vertical gap
+ * - Themed via CSS custom properties (shimmer gradient, animation duration)
+ *
+ * **Versus SkeletonText:**
+ * - SkeletonText: overall `width` prop, last line fixed at 60%
+ * - SkeletonParagraph: full-width lines, explicit `lastLineWidth` control
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Skeleton } from '@rottay/design-system';
+ *
+ * <Skeleton.Paragraph />
+ * ```
+ *
+ * @example Custom Line Count and Last-Line Width
+ * ```tsx
+ * <Skeleton.Paragraph lines={5} lastLineWidth="40%" />
+ * ```
+ *
+ * @example In a Content Section
+ * ```tsx
+ * function ArticleLoading() {
+ *   return (
+ *     <div>
+ *       <Skeleton.Text lines={1} width="50%" />
+ *       <Skeleton.Paragraph lines={4} lastLineWidth="70%" style={{ marginTop: 12 }} />
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link SkeletonParagraphProps} - Component props interface
+ * @see {@link SkeletonText} - Simpler text skeleton (fixed 60% last line)
+ * @see {@link SkeletonCard} - Card skeleton that includes text lines
  * @module Skeleton/Compound/Paragraph
  * @category Feedback
  * @package @rottay/design-system
  */
+
+'use client';
 
 import React, { forwardRef } from 'react';
 
@@ -22,6 +61,17 @@ import React, { forwardRef } from 'react';
 
 /**
  * Props for the SkeletonParagraph component.
+ *
+ * @interface SkeletonParagraphProps
+ *
+ * @example
+ * ```tsx
+ * const props: SkeletonParagraphProps = {
+ *   lines: 5,
+ *   lastLineWidth: '40%',
+ *   className: 'my-paragraph-skeleton',
+ * };
+ * ```
  */
 export interface SkeletonParagraphProps {
   /**
@@ -51,6 +101,11 @@ export interface SkeletonParagraphProps {
 // Shared Styles
 // ============================================================================
 
+/**
+ * Shared shimmer animation styles reused by all skeleton elements.
+ * Uses a sweeping gradient that animates horizontally via `backgroundSize: 200%`.
+ * @internal
+ */
 const shimmerStyle: React.CSSProperties = {
   background:
     'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
@@ -65,19 +120,52 @@ const shimmerStyle: React.CSSProperties = {
 /**
  * Skeleton Paragraph compound component.
  *
+ * @description
  * Renders multiple animated text lines with configurable last-line width.
- * Useful for representing paragraph content in loading states.
+ * All lines are full-width except the final one, which uses the
+ * `lastLineWidth` prop for a natural trailing-off effect.
+ *
+ * @remarks
+ * - All lines are 16px tall with 8px vertical gap
+ * - Non-last lines span 100% width
+ * - Last line width is configurable (default 60%)
+ * - Forwards ref for DOM manipulation
+ * - Applies `rottay-skeleton-paragraph` class for styling hooks
+ *
+ * @param props - {@link SkeletonParagraphProps}
+ * @param ref - Forwarded ref to the container div
+ * @returns The rendered paragraph skeleton element
+ *
+ * @example
+ * ```tsx
+ * <SkeletonParagraph lines={4} lastLineWidth="45%" />
+ * ```
  */
 export const SkeletonParagraph = forwardRef<HTMLDivElement, SkeletonParagraphProps>(
   (props, ref) => {
+    // -------------------------------------------------------------------------
+    // Props Destructuring
+    // -------------------------------------------------------------------------
+
     const { lines = 3, lastLineWidth = '60%', className = '', style = {} } = props;
 
+    // -------------------------------------------------------------------------
+    // Style Generation
+    // -------------------------------------------------------------------------
+
+    /**
+     * Container styles for vertical line stacking.
+     */
     const containerStyle: React.CSSProperties = {
       display: 'flex',
       flexDirection: 'column',
       gap: '8px',
       ...style,
     };
+
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
 
     return (
       <div ref={ref} className={`rottay-skeleton-paragraph ${className}`} style={containerStyle}>
@@ -87,6 +175,7 @@ export const SkeletonParagraph = forwardRef<HTMLDivElement, SkeletonParagraphPro
             style={{
               ...shimmerStyle,
               height: '16px',
+              // Last line uses configurable width for natural trailing appearance
               width: index === lines - 1 ? lastLineWidth : '100%',
               borderRadius: '4px',
             }}
@@ -97,6 +186,7 @@ export const SkeletonParagraph = forwardRef<HTMLDivElement, SkeletonParagraphPro
   }
 );
 
+// Set display name for React DevTools debugging
 SkeletonParagraph.displayName = 'Skeleton.Paragraph';
 
 export default SkeletonParagraph;

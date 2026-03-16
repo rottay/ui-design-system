@@ -54,6 +54,17 @@ import React, { useState, useRef, useEffect, useId } from 'react';
 import type { CheckboxProps } from '../Checkbox.types';
 import { CHECKBOX_DEFAULTS } from '../Checkbox.types';
 
+/**
+ * Modern (DaisyUI/Tailwind) implementation of the DS Checkbox.
+ *
+ * Uses a native `<input type="checkbox">` with DaisyUI's `checkbox` class and
+ * modifier classes for size and color. Supports both controlled (`checked` prop)
+ * and uncontrolled (`defaultChecked`) modes. The indeterminate state is set
+ * imperatively on the DOM element because there is no HTML attribute for it.
+ *
+ * @param props - Standardized CheckboxProps from the DS type contract.
+ * @returns A DaisyUI-styled checkbox wrapped in a `form-control` label.
+ */
 export default function ModernCheckbox(props: CheckboxProps): React.ReactElement {
   const {
     size = CHECKBOX_DEFAULTS.size,
@@ -71,16 +82,20 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     style,
   } = props;
 
+  // Stable unique ID for the input-label association. The prefix prevents
+  // collision with IDs from other engines rendered on the same page.
   const generatedId = useId();
   const inputId = `checkbox-modern-${generatedId}`;
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Internal state for uncontrolled mode
+  // Controlled vs. uncontrolled: when `checked` is undefined, local state
+  // owns the checkbox value. This mirrors React's standard input pattern.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
-  // Handle indeterminate state
+  // `indeterminate` has no HTML attribute -- it can only be set via the
+  // DOM property, so we use an effect to keep it synchronized.
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.indeterminate = indeterminate;
@@ -97,7 +112,8 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     onChange?.(newChecked, e);
   };
 
-  // DaisyUI size classes
+  // DaisyUI size classes. `xl` maps to `checkbox-lg` because DaisyUI
+  // does not provide an xl modifier for checkboxes.
   const sizeClass = {
     xs: 'checkbox-xs',
     sm: 'checkbox-sm',
@@ -106,7 +122,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     xl: 'checkbox-lg',
   }[size] || '';
 
-  // DaisyUI color classes
+  // DaisyUI color classes map directly to DS color tokens.
   const colorClass = {
     default: '',
     primary: 'checkbox-primary',
@@ -120,6 +136,8 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
 
   return (
     <div className={`form-control ${className}`} style={style}>
+      {/* `justify-start` overrides DaisyUI's default `justify-between` so
+          the checkbox and label stay visually grouped on the left. */}
       <label className="label cursor-pointer gap-2 justify-start">
         <input
           ref={inputRef}
@@ -131,6 +149,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           disabled={disabled}
           onChange={handleChange}
           className={`checkbox ${sizeClass} ${colorClass}`}
+          // "mixed" signals the indeterminate state to assistive technology.
           aria-checked={indeterminate ? 'mixed' : isChecked}
         />
         {displayLabel && (

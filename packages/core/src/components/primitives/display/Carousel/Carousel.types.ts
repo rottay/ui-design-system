@@ -4,8 +4,8 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This module re-exports types from the centralized type system and provides
- * default configuration values for the Carousel component.
+ * This module provides type definitions and default configuration values
+ * for the Carousel component.
  *
  * **Exported Types:**
  * - `CarouselProps` - Main component properties
@@ -36,14 +36,48 @@
  * @package @rottay/design-system
  */
 
-export type {
-  CarouselProps,
-  CarouselEffect,
-  CarouselDotPosition,
-  CarouselSize,
-  CarouselItemProps,
-  CarouselRef,
-} from '../../../../contracts/primitives/display/Carousel';
+import type { ReactNode } from 'react';
+import type { BaseComponentProps, WithChildren } from '../../../../contracts/common';
+import type { EngineAwareProps } from '../../../../contracts/engine';
+
+/** Carousel transition effect type. */
+export type CarouselEffect = 'scrollx' | 'fade';
+export type CarouselDotPosition = 'top' | 'bottom' | 'left' | 'right';
+export type CarouselSize = 'sm' | 'md' | 'lg';
+
+export interface CarouselItemProps extends BaseComponentProps, WithChildren {
+  key?: string | number;
+}
+
+export interface CarouselProps extends BaseComponentProps, EngineAwareProps, WithChildren {
+  autoplay?: boolean;
+  autoplaySpeed?: number;
+  dots?: boolean;
+  dotPosition?: CarouselDotPosition;
+  arrows?: boolean;
+  effect?: CarouselEffect;
+  slidesToShow?: number;
+  slidesToScroll?: number;
+  infinite?: boolean;
+  speed?: number;
+  initialSlide?: number;
+  beforeChange?: (currentSlide: number, nextSlide: number) => void;
+  afterChange?: (currentSlide: number) => void;
+  pauseOnHover?: boolean;
+  pauseOnDotsHover?: boolean;
+  prevArrow?: ReactNode;
+  nextArrow?: ReactNode;
+  swipe?: boolean;
+  vertical?: boolean;
+  dotsClass?: string;
+  fade?: boolean;
+}
+
+export interface CarouselRef {
+  goTo: (slideNumber: number, dontAnimate?: boolean) => void;
+  next: () => void;
+  prev: () => void;
+}
 
 /**
  * Default configuration values for the Carousel component.

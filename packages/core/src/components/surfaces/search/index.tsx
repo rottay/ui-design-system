@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * SearchSurface
- *
- * Search pages are not just lists with an input on top. They need query state,
- * optional filters, selection, preview behavior, and a consistent "too early
- * to search" / "no results" language. This surface centralizes those mechanics.
+ * @fileoverview SearchSurface -- dedicated search page with query state and filters.
+ * @description Centralizes search page mechanics: query state, optional filter panel,
+ * selection, result preview, and consistent empty/initial-state language. Not just a
+ * list with an input -- includes debounce, minimum query length, and preview behavior.
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -76,10 +75,15 @@ export function SearchSurface({
 }: SearchSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  // Selection state follows the controlled/uncontrolled pattern. When
+  // selectedResultId is provided, the app owns it; otherwise the surface
+  // auto-selects the first result for preview.
   const [internalSelectedId, setInternalSelectedId] = useState<string | undefined>(
     config.behavior.selectedResultId ?? config.behavior.results[0]?.id
   );
 
+  // Re-sync on result changes so the preview panel does not go stale when
+  // results are re-fetched after a query change.
   useEffect(() => {
     if (config.behavior.selectedResultId !== undefined) {
       setInternalSelectedId(config.behavior.selectedResultId);
@@ -105,12 +109,17 @@ export function SearchSurface({
     config.behavior.onSelectResult?.(result);
   };
 
+  // Minimum query length prevents firing searches for single-character
+  // inputs that would return too many results. The empty query state message
+  // adapts its grammar based on the count (singular vs plural).
   const minQueryLength = config.visual.minQueryLength ?? 0;
   const hasEnoughQuery = config.behavior.query.trim().length >= minQueryLength;
   const emptyQueryDescription =
     minQueryLength === 1
       ? tSurface('search.empty_query_description_one', { count: minQueryLength })
       : tSurface('search.empty_query_description_other', { count: minQueryLength });
+  // Split layout with preview rail requires both a selected result AND a wide
+  // enough viewport. On mobile the preview collapses into the result list.
   const showPreview = config.visual.layout === 'split' && !!selectedResult;
   const splitLayout = showPreview && !shouldStack;
   const resultMinWidth = config.visual.resultMinWidth ?? 280;
@@ -147,6 +156,11 @@ export function SearchSurface({
           </Stack>
         </SurfaceSectionCard>
 
+        {/* Three-way state: not enough query -> empty query state,
+            enough query but no results -> no results state,
+            results available -> render the result grid/list.
+            Loading state is excluded from all three to avoid flashing
+            misleading empty states during fetches. */}
         {!hasEnoughQuery && !loading ? (
           config.presentation.emptyQueryState ?? (
             <SurfaceEmptyState

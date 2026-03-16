@@ -67,12 +67,16 @@ import { TenantContext } from './TenantProvider';
 export function useTenant() {
   const context = useContext(TenantContext);
   if (!context) {
+    // Without tenant context, token resolution, branding, and custom pack lookup
+    // can all drift, so we fail loudly.
     throw new Error('useTenant must be used within TenantProvider');
   }
   return context;
 }
 
-// Tenant creation utilities
+// ── Tenant creation utilities ──
+// Re-exported here for ergonomic imports (`import { useTenant, createTenantConfig }`)
+// without requiring consumers to know the internal file structure.
 export { resolvePersonalityPreset } from './personality-presets';
 export type { PersonalityPreset } from './personality-presets';
 export { createTenantConfig } from './create-tenant';

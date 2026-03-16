@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Pattern component smoke tests across all stable engines.
+ * Ensures every pattern (KanbanBoard, StepWizard, FilterPanel, etc.)
+ * renders its expected text content through each engine implementation.
+ */
+
 import React from 'react';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';

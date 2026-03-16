@@ -1,28 +1,43 @@
 /**
- * Personality Presets
+ * @fileoverview Personality presets mapping keywords to full PersonalityTokens.
+ * @description Four presets derived from existing product profiles:
+ * - `formal` - BitHire / recruiting: compact, subtle animations, structured borders
+ * - `neutral` - Platform admin: balanced defaults, sentence-case labels
+ * - `playful` - Evnto / events: bouncy animations, spacious layout, gradient accents
+ * - `expressive` - Rottay brand: spring animations, glassmorphism, medium lift
  *
- * Maps human-friendly personality labels to complete PersonalityTokens.
- * These presets are derived from existing product profiles and known tenant
- * configurations so new tenants get a coherent visual identity from a
- * single keyword.
+ * Unknown preset names degrade to `neutral` rather than throwing.
  */
 
 import type { PersonalityTokens } from '../contracts/tokens/personality';
 
+/**
+ * Named personality keywords that map to full PersonalityTokens objects.
+ *
+ * WHY presets exist: creating a complete PersonalityTokens from scratch
+ * requires filling ~30 fields across 5 dimensions. Presets let tenant
+ * admins pick a starting point by keyword and optionally override
+ * individual fields, greatly simplifying the tenant creation flow.
+ */
 export type PersonalityPreset = 'formal' | 'neutral' | 'playful' | 'expressive';
 
 /**
  * Formal: modeled after recruiting.operator / BitHire.
  * Compact, restrained animations, structured borders, uppercase labels.
+ *
+ * WHY this is distinct from the BitHire registry entry: the registry is the
+ * exact BitHire config (including branding colors). This preset captures
+ * only the personality "feel" so other tenants can adopt it without
+ * adopting BitHire's brand palette.
  */
 const FORMAL_PERSONALITY: PersonalityTokens = {
   animation: {
-    intensity: 0.35,
+    intensity: 0.35,       // Even lower than BitHire registry -- pure formal baseline
     staggerDelay: 20,
     staggerMax: 120,
     entrance: 'fade',
     entranceDuration: 160,
-    hoverLift: 0,
+    hoverLift: 0,          // No lift -- maximum groundedness
     hoverScale: 1.0,
     useSpring: false,
     springTension: 170,
@@ -49,13 +64,13 @@ const FORMAL_PERSONALITY: PersonalityTokens = {
     barPosition: 'left',
     barThickness: 3,
     barStyle: 'solid',
-    iconContainerShape: 'square',
+    iconContainerShape: 'square', // WHY square: more structured than rounded
     badgeShape: 'pill',
     dividerStyle: 'solid',
   },
   card: {
     defaultElevation: 'sm',
-    hoverElevation: 'none',
+    hoverElevation: 'none',     // No elevation change -- flat and stable
     showBorder: true,
     hoverTint: false,
     paddingDensity: 'compact',
@@ -65,15 +80,19 @@ const FORMAL_PERSONALITY: PersonalityTokens = {
 /**
  * Neutral: modeled after generic.default / platform.admin.
  * Balanced animations, standard borders, sentence-case labels.
+ *
+ * This is also the safe fallback when `resolvePersonalityPreset()` receives
+ * an unknown preset name. Values are deliberately middle-of-the-road so
+ * they work acceptably with any brand palette.
  */
 const NEUTRAL_PERSONALITY: PersonalityTokens = {
   animation: {
-    intensity: 0.45,
+    intensity: 0.45,       // Mild -- noticeable but not distracting
     staggerDelay: 40,
     staggerMax: 220,
     entrance: 'fade',
     entranceDuration: 220,
-    hoverLift: 1,
+    hoverLift: 1,          // Minimal lift for interactive feedback
     hoverScale: 1.0,
     useSpring: false,
     springTension: 170,
@@ -94,7 +113,7 @@ const NEUTRAL_PERSONALITY: PersonalityTokens = {
   typography: {
     headingWeightBias: 'normal',
     headingLetterSpacing: '-0.01em',
-    labelStyle: 'sentence',
+    labelStyle: 'sentence', // WHY sentence: most universally readable casing
   },
   accent: {
     barPosition: 'top',
@@ -116,10 +135,14 @@ const NEUTRAL_PERSONALITY: PersonalityTokens = {
 /**
  * Playful: modeled after events.organizer / Evnto.
  * Bouncy animations, spacious cards, gradient accents, pill badges.
+ *
+ * Slightly toned down from the Evnto registry entry (intensity 1.2 vs 1.5,
+ * staggerMax 480 vs 600) so it can apply broadly without overwhelming
+ * tenants that are not event-focused.
  */
 const PLAYFUL_PERSONALITY: PersonalityTokens = {
   animation: {
-    intensity: 1.2,
+    intensity: 1.2,        // High but not exaggerated
     staggerDelay: 65,
     staggerMax: 480,
     entrance: 'bounce',
@@ -140,7 +163,7 @@ const PLAYFUL_PERSONALITY: PersonalityTokens = {
     showDots: true,
     useGradientFill: true,
     tooltipStyle: 'detailed',
-    colorScheme: 'vibrant',
+    colorScheme: 'vibrant', // WHY vibrant: playful tenants benefit from saturated palettes
   },
   typography: {
     headingWeightBias: 'heavier',
@@ -153,7 +176,7 @@ const PLAYFUL_PERSONALITY: PersonalityTokens = {
     barStyle: 'animated',
     iconContainerShape: 'circle',
     badgeShape: 'pill',
-    dividerStyle: 'dashed',
+    dividerStyle: 'dashed', // WHY dashed: adds visual rhythm without heaviness
   },
   card: {
     defaultElevation: 'md',
@@ -165,8 +188,12 @@ const PLAYFUL_PERSONALITY: PersonalityTokens = {
 };
 
 /**
- * Expressive: modeled after Rottay tenant.
+ * Expressive: modeled after the Rottay flagship tenant.
  * Spring animations, gradient accents, glass tooltips, medium lift.
+ *
+ * Uses the same values as the Rottay registry entry's personality section.
+ * This preset captures the "AI-futuristic startup" feel so other tenants
+ * can adopt it independently of the Rottay brand colors.
  */
 const EXPRESSIVE_PERSONALITY: PersonalityTokens = {
   animation: {
@@ -215,6 +242,11 @@ const EXPRESSIVE_PERSONALITY: PersonalityTokens = {
   },
 };
 
+/**
+ * Maps each preset keyword to its complete PersonalityTokens definition.
+ * Kept as a plain Record so lookup is O(1) and the set of valid presets
+ * is statically typed via the `PersonalityPreset` union.
+ */
 const PRESET_MAP: Record<PersonalityPreset, PersonalityTokens> = {
   formal: FORMAL_PERSONALITY,
   neutral: NEUTRAL_PERSONALITY,
@@ -223,10 +255,18 @@ const PRESET_MAP: Record<PersonalityPreset, PersonalityTokens> = {
 };
 
 /**
- * Resolve a personality preset keyword to a full PersonalityTokens object.
+ * Resolves a personality preset keyword to a full PersonalityTokens object.
  *
- * @param preset - One of 'formal', 'neutral', 'playful', 'expressive'
- * @returns Partial<PersonalityTokens> that can be spread into a TenantConfig
+ * The return type is `Partial<PersonalityTokens>` so callers can spread the
+ * result into a TenantConfig without a type assertion, even though the runtime
+ * value is always a complete PersonalityTokens.
+ *
+ * Unknown preset names gracefully degrade to `neutral` rather than throwing.
+ * This is intentional -- the tenant creation UI may receive user-typed input
+ * and should not crash on typos.
+ *
+ * @param preset - One of `'formal'`, `'neutral'`, `'playful'`, `'expressive'`.
+ * @returns A complete PersonalityTokens object typed as Partial for spread ergonomics.
  */
 export function resolvePersonalityPreset(preset: string): Partial<PersonalityTokens> {
   const resolved = PRESET_MAP[preset as PersonalityPreset];
@@ -234,6 +274,7 @@ export function resolvePersonalityPreset(preset: string): Partial<PersonalityTok
     return resolved;
   }
 
-  // Fallback to neutral for unknown presets
+  // Unknown preset names degrade to a safe neutral baseline rather than
+  // forcing every caller to pre-validate or handle undefined.
   return PRESET_MAP.neutral;
 }

@@ -1,12 +1,36 @@
 'use client';
 
 /**
- * SavedViewsBar - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the SavedViews bar pattern.
+ * Renders a horizontal tab strip using DaisyUI utility classes with drag-and-drop
+ * reorder, inline rename, a custom dropdown context menu (rename/duplicate/delete),
+ * and a "Create view" button with inline text input. Manages its own menu
+ * open/close state via `openMenuId` rather than relying on DaisyUI's native
+ * dropdown behavior, allowing programmatic close-on-action.
+ *
+ * @example
+ * <ModernSavedViewsBar
+ *   views={[{ id: '1', name: 'My Tasks', config: {} }]}
+ *   activeViewId="1"
+ *   onViewSelect={(id) => applyView(id)}
+ *   onViewCreate={(v) => saveNewView(v)}
+ *   onViewDelete={(id) => removeView(id)}
+ *   onViewRename={(id, name) => renameView(id, name)}
+ * />
  */
 
 import React, { useCallback, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 
+/**
+ * Modern engine saved views bar built on DaisyUI/Tailwind.
+ * Renders a scrollable tab strip with drag-and-drop reorder, inline rename,
+ * a manually-controlled dropdown menu per tab, and an inline create input.
+ * Default views (isDefault) are protected from deletion.
+ *
+ * @param props - {@link SavedViewsBarProps}
+ * @returns A horizontal flex container acting as a tab bar for saved views.
+ */
 export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const {
     views,
@@ -30,11 +54,14 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     style,
   } = props;
 
+  // --- Local UI state ---
   const [isCreating, setIsCreating] = useState(false);
   const [newViewName, setNewViewName] = useState('');
   const [editingViewId, setEditingViewId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
+  // Tracks which view's context menu is open; only one can be open at a time.
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  // Drag-and-drop state for visual feedback during tab reorder.
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
@@ -86,6 +113,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     [dragViewId]
   );
 
+  // Reorders by splicing the dragged view out of its old position and inserting
+  // it at the drop target's position, then emitting the new ID order array.
   const handleDrop = useCallback(
     (e: React.DragEvent, targetViewId: string) => {
       e.preventDefault();
@@ -122,6 +151,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     );
   }
 
+  // Disable creation when maxViews cap is reached (e.g. plan-based limits).
   const canCreate = allowCreate && (!maxViews || views.length < maxViews);
 
   return (
@@ -266,6 +296,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                         </button>
                       </li>
                     ))}
+                    {/* Default views are protected from deletion to prevent
+                        accidental removal of the system-provided baseline. */}
                     {allowDelete && !view.isDefault && (
                       <>
                         <div className="divider my-0" />

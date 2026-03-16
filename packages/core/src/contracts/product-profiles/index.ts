@@ -1,9 +1,17 @@
 /**
- * Product profile types
+ * @fileoverview Product Profile contracts - Rottay Design System
+ * @description Defines the ProductProfile type layer that sits between generic DS
+ * defaults and tenant-specific overrides, enabling distinct UX presets (admin, events
+ * organizer, recruiting operator) without hardcoding differences into components.
  *
- * Product profiles sit between the generic DS defaults and tenant-specific
- * overrides. This lets the same tenant system power very different product
- * experiences without hardcoding those differences into individual components.
+ * @remarks
+ * Resolution order: DS defaults -> product profile -> tenant overrides.
+ * Product profiles are broad UX presets (personality, token overrides, surface
+ * defaults), not app-specific configuration blobs.
+ *
+ * @module Contracts/ProductProfiles
+ * @category Types
+ * @package @rottay/design-system
  */
 
 import type { PersonalityTokens } from '../tokens/personality';

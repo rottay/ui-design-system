@@ -1,32 +1,21 @@
 'use client';
 
 /**
- * @fileoverview HoverCard - Rottay Design System
- * @description Card that appears on hover over a trigger element.
- * Part of the Rottay Design System's overlay primitives collection.
+ * @fileoverview HoverCard - rich content preview that appears on mouse hover.
+ * Shows a card with arbitrary ReactNode content next to a trigger element.
+ * Multi-engine: Classic (Ant Design Popover), Modern (DaisyUI), Rustic (portal + delay).
  *
- * @remarks
- * The HoverCard component provides rich content previews on hover.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Wraps Ant Design Popover with hover trigger
- * - **Modern**: DaisyUI tooltip-like with card content
- * - **Rustic**: Portal card with mouse enter/leave + delay
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { HoverCard } from '@rottay/design-system';
- *
  * <HoverCard
- *   content={<div>Profile card content here</div>}
- *   trigger={<span style={{ textDecoration: 'underline' }}>Hover me</span>}
+ *   content={<UserProfileCard user={user} />}
+ *   trigger={<Text as="a">@username</Text>}
  *   side="bottom"
  * />
  * ```
  *
  * @module HoverCard
  * @category Overlay
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -39,10 +28,11 @@ export {
   HOVERCARD_DEFAULTS,
 } from './HoverCard.types';
 
+/** HoverCard component with multi-engine support. No compound sub-components. */
 export const HoverCard = createEngineComponent<HoverCardProps>('HoverCard', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+  classic: () => import('./engines/classic'),  // Ant Design Popover (hover trigger)
+  modern: () => import('./engines/modern'),     // DaisyUI tooltip variant
+  rustic: () => import('./engines/rustic'),      // Portal card + mouseenter/leave
 });
 
 HoverCard.displayName = 'HoverCard';

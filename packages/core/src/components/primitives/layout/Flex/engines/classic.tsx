@@ -33,6 +33,16 @@ import { Flex as AntFlex } from 'antd';
 import type { FlexProps } from '../Flex.types';
 import { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from '../Flex.types';
 
+/**
+ * Classic Flex component backed by Ant Design's Flex primitive.
+ *
+ * Translates the engine-agnostic FlexProps into Ant Design's prop contract,
+ * delegating layout rendering entirely to AntFlex for pixel-perfect
+ * consistency with the Ant ecosystem.
+ *
+ * @param props - Engine-agnostic flex layout props (direction, wrap, justify, align, gap, etc.)
+ * @returns A ref-forwarding Ant Design Flex wrapper element.
+ */
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {
     const {
@@ -49,14 +59,18 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...rest
     } = props;
 
+    // Ant Design accepts gap as-is (number or tuple); preserve the original value
     const computedGap = Array.isArray(gap) ? gap : gap;
 
+    // Merge the shorthand `flex` CSS property with any user-provided styles
     const flexStyle: React.CSSProperties = {
       ...(flex !== undefined && { flex }),
       ...style,
     };
 
     return (
+      // Ant Design uses `vertical` boolean instead of flexDirection string,
+      // so we map column/column-reverse to vertical=true
       <AntFlex
         ref={ref}
         vertical={direction === 'column' || direction === 'column-reverse'}

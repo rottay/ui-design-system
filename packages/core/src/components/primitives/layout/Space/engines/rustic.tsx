@@ -39,6 +39,15 @@ import React, { Children, Fragment } from 'react';
 import type { SpaceProps } from '../Space.types';
 import { SPACE_DEFAULTS, SPACE_SIZE_MAP, SPACE_ALIGN_MAP } from '../Space.types';
 
+/**
+ * Rustic engine implementation of the Space component.
+ * Builds the entire layout from inline CSS flexbox properties, avoiding
+ * any dependency on Ant Design or Tailwind. This makes it safe for
+ * server-side rendering and third-party widget embedding.
+ *
+ * @param props - Space configuration (size, direction, wrap, align, split)
+ * @returns A plain div with pure inline flexbox styles
+ */
 export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   (props, ref) => {
     const {
@@ -55,15 +64,21 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
 
     const isVertical = direction === 'vertical';
 
+    // Resolve gap identically to the Modern engine, supporting numbers, tuples,
+    // and preset CSS variable tokens from SPACE_SIZE_MAP.
     let gapValue: string;
     if (typeof size === 'number') {
       gapValue = `${size}px`;
     } else if (Array.isArray(size)) {
+      // CSS gap shorthand: row-gap column-gap
       gapValue = `${size[1]}px ${size[0]}px`;
     } else {
       gapValue = `${SPACE_SIZE_MAP[size || 'small'] || SPACE_SIZE_MAP.small}px`;
     }
 
+    // All layout properties are set inline so no external stylesheet is required.
+    // SPACE_ALIGN_MAP translates DS align values ('start', 'end', etc.) to their
+    // CSS equivalents ('flex-start', 'flex-end', etc.).
     const spaceStyle: React.CSSProperties = {
       display: 'inline-flex',
       flexDirection: isVertical ? 'column' : 'row',
@@ -73,6 +88,7 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       ...style,
     };
 
+    // Interleave split separators between children when provided
     const childArray = Children.toArray(children).filter(Boolean);
     const renderedChildren = split
       ? childArray.map((child, index) => (

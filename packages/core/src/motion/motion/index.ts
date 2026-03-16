@@ -1,5 +1,11 @@
 'use client';
 
+/**
+ * @fileoverview Motion primitives exports - Rottay Design System
+ * @description Barrel for reusable transition-style primitives such as fade,
+ * slide, stagger, and count-up.
+ */
+
 export { FadeIn } from './fade-in';
 export { SlideIn } from './slide-in';
 export { ScaleIn } from './scale-in';

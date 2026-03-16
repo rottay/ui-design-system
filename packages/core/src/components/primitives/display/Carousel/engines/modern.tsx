@@ -102,10 +102,14 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       style,
     } = props;
 
+    // Flatten children into an array so we can index into individual slides
+    // and derive the total count for boundary checks and dot rendering.
     const slides = React.Children.toArray(children);
     const [currentSlide, setCurrentSlide] = useState(initialSlide);
     const [isPaused, setIsPaused] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    // Autoplay timer ref is stored outside state to avoid triggering
+    // re-renders when the interval is created or cleared.
     const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
     /**
@@ -119,9 +123,12 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       (slideNumber: number, _dontAnimate?: boolean) => {
         let targetSlide = slideNumber;
         if (infinite) {
+          // Double-modulo trick handles negative indices correctly, so
+          // navigating "prev" from slide 0 wraps to the last slide.
           targetSlide =
             ((slideNumber % slides.length) + slides.length) % slides.length;
         } else {
+          // Clamp within bounds when infinite loop is disabled.
           targetSlide = Math.max(0, Math.min(slideNumber, slides.length - 1));
         }
 
@@ -182,9 +189,9 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       if (pauseOnHover) setIsPaused(false);
     };
 
-    /**
-     * Map dot positions to Tailwind CSS classes.
-     */
+    // Pre-compute the positional Tailwind classes for the dot container.
+    // Each position needs both placement (top/bottom/left/right) and
+    // centering (translate) plus a flex direction for the dot row/column.
     const dotsPositionClass = {
       top: 'top-2 left-1/2 -translate-x-1/2 flex-row',
       bottom: 'bottom-2 left-1/2 -translate-x-1/2 flex-row',
@@ -214,6 +221,9 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               key={index}
               className="carousel-item absolute w-full h-full"
               style={{
+                // Fade mode: toggle opacity only, no translation needed.
+                // Slide mode: offset each slide by its distance from current,
+                // using translateX for horizontal or translateY for vertical.
                 opacity: fade ? (index === currentSlide ? 1 : 0) : 1,
                 transform: fade
                   ? 'none'

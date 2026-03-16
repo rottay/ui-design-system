@@ -1,22 +1,40 @@
 'use client';
 
 /**
- * Timeline - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla CSS) engine for the Timeline pattern.
+ *
+ * Zero-dependency timeline implementation using inline styles and `--ds-*`
+ * CSS custom properties. The timeline line is rendered as an absolutely
+ * positioned `<div>` running vertically through the dot indicators. Each
+ * item is a card with a colored dot (solid circle or icon-bearing ring)
+ * positioned over the line. Hover effects on clickable cards are applied
+ * via imperative style mutations since inline styles cannot express
+ * pseudo-classes.
+ *
+ * @example
+ * <RusticTimeline
+ *   items={[{ key: '1', title: 'Incident Resolved', timestamp: new Date(), type: 'success' }]}
+ *   groupByDate
+ *   onItemClick={(item) => openDetail(item)}
+ * />
  */
 
 import React, { useMemo, type CSSProperties } from 'react';
 import type { TimelinePatternProps, TimelineItem } from '../Timeline.types';
 
+/** Formats a timestamp for display inside a timeline item. */
 function formatTimestamp(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
   return date.toLocaleString();
 }
 
+/** Extracts a locale-formatted date string used as a grouping key. */
 function formatDateKey(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
   return date.toLocaleDateString();
 }
 
+/** Maps semantic item types to DS color token CSS variables for dot coloring. */
 const typeColors: Record<string, string> = {
   default: 'var(--ds-color-primary)',
   success: 'var(--ds-color-success)',
@@ -25,6 +43,13 @@ const typeColors: Record<string, string> = {
   info: 'var(--ds-color-info)',
 };
 
+/**
+ * Pre-computed style objects for timeline elements.
+ * The vertical line is absolutely positioned at left:15 and spans the full
+ * container height. Dot and iconDot position themselves over this line
+ * using matching left offsets. Function-valued entries accept dynamic
+ * parameters (color, clickable) for state-dependent styling.
+ */
 const styles = {
   container: {
     position: 'relative' as const,
@@ -130,6 +155,17 @@ const styles = {
   },
 };
 
+/**
+ * Rustic (Vanilla CSS) engine for the Timeline pattern component.
+ *
+ * Renders a left-aligned vertical timeline with colored dot indicators
+ * and card-style item bodies. Date grouping clusters items under
+ * calendar-date headers. Clickable items receive a subtle box-shadow
+ * on hover via imperative style mutations.
+ *
+ * @param props - {@link TimelinePatternProps} controlling items, grouping, and callbacks.
+ * @returns A vertical timeline rendered with inline CSS and DS tokens.
+ */
 export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
   const {
     items,
@@ -145,6 +181,8 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
     style,
   } = props;
 
+  // Group items by calendar date when groupByDate is enabled.
+  // Returns null when grouping is off to avoid unnecessary object allocation.
   const grouped = useMemo(() => {
     if (!groupByDate) return null;
     const groups: Record<string, TimelineItem<T>[]> = {};
@@ -156,10 +194,15 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
     return groups;
   }, [items, groupByDate]);
 
+  /** Builds the default render for a single item, including the colored dot,
+   *  card body, user avatar row, and optional timestamp/description. */
   const buildDefaultRender = (item: TimelineItem<T>) => {
+    // Resolve dot color: explicit item.color takes precedence, then semantic
+    // type color, falling back to the primary brand color.
     const color = item.color ?? typeColors[item.type ?? 'default'];
     return (
       <div key={item.key} style={styles.item}>
+        {/* Icon items get a larger ring-style dot; plain items get a solid circle. */}
         {item.icon ? (
           <div style={styles.iconDot(color)}>{item.icon}</div>
         ) : (
@@ -168,6 +211,7 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
         <div
           style={styles.card(!!onItemClick)}
           onClick={onItemClick ? () => onItemClick(item) : undefined}
+          // Imperative hover shadow because inline styles cannot express :hover.
           onMouseEnter={(e) => { if (onItemClick) (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'; }}
           onMouseLeave={(e) => { if (onItemClick) (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
         >
@@ -189,6 +233,8 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
     );
   };
 
+  /** Renders a list of timeline items within a container that holds the
+   *  vertical connector line as an absolutely-positioned child. */
   const renderList = (list: TimelineItem<T>[]) => (
     <div style={styles.container}>
       <div style={styles.line} />
@@ -203,10 +249,12 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
     </div>
   );
 
+  // Early-return for loading and empty states before building the full timeline.
   if (loading) {
     return <div className={className} style={{ ...styles.loading, ...style }}>Loading...</div>;
   }
 
+  // Empty state preserves header/footer so surrounding layout stays intact.
   if (items.length === 0) {
     return (
       <div className={className} style={style}>
@@ -220,6 +268,8 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
   return (
     <div className={className} style={style}>
       {header}
+      {/* When groupByDate is active, render each date cluster with its
+          own heading; otherwise render all items as a single flat list. */}
       {grouped ? (
         Object.entries(grouped).map(([dateKey, group]) => (
           <div key={dateKey} style={{ marginBottom: 24 }}>

@@ -129,12 +129,14 @@ const UploadBase = createEngineComponent<UploadProps>('Upload', {
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Upload })),
 });
 
+/** Drag-and-drop upload variant kept on the namespace to mirror Ant Design ergonomics. */
 const Dragger = createEngineComponent<DraggerProps>('Upload.Dragger', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Dragger })),
   modern: () => import('./engines/modern').then(m => ({ default: m.Dragger })),
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Dragger })),
 });
 
+/** Public upload namespace that exposes the main control plus drag-drop variant. */
 export const Upload = Object.assign(UploadBase, {
   Dragger,
 });

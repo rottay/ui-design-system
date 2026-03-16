@@ -1,3 +1,14 @@
+/**
+ * @fileoverview Tenant CSS generator - Rottay Design System
+ * @description Generate runtime tenant CSS from `TenantConfig` without requiring
+ * prebuilt per-tenant stylesheets.
+ *
+ * @remarks
+ * This module is what makes tenant self-service viable: the app/platform layer
+ * can persist tenant branding and personality in data, and the DS can turn that
+ * into CSS variables on demand at runtime.
+ */
+
 import type { TenantConfig } from '../../../../contracts';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
@@ -7,10 +18,12 @@ export interface GenerateTenantCssOptions {
   includeSystemDarkSelector?: boolean;
 }
 
+/** Validate that a color is a short or full hex code before attempting scale generation. */
 function isHexColor(value: string): boolean {
   return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
 }
 
+/** Expand shorthand hex colors so downstream color math can assume six-digit input. */
 function normalizeHexColor(value: string): string {
   if (!isHexColor(value)) {
     return value;
@@ -23,6 +36,7 @@ function normalizeHexColor(value: string): string {
   return value;
 }
 
+/** Convert a hex color into RGB channels for runtime mixing operations. */
 function hexToRgb(value: string): { r: number; g: number; b: number } | null {
   const normalizedValue = normalizeHexColor(value);
 
@@ -38,12 +52,14 @@ function hexToRgb(value: string): { r: number; g: number; b: number } | null {
   };
 }
 
+/** Convert clamped RGB channels back into a hex color string. */
 function rgbToHex(rgb: { r: number; g: number; b: number }): string {
   return `#${[rgb.r, rgb.g, rgb.b]
     .map((channel) => Math.max(0, Math.min(255, Math.round(channel))).toString(16).padStart(2, '0'))
     .join('')}`;
 }
 
+/** Mix two colors to build runtime scales without needing a design-time token build step. */
 function mixColor(baseColor: string, mixWith: string, mixRatio: number): string {
   const baseRgb = hexToRgb(baseColor);
   const mixRgb = hexToRgb(mixWith);
@@ -59,6 +75,11 @@ function mixColor(baseColor: string, mixWith: string, mixRatio: number): string 
   });
 }
 
+/** Generate the light-theme runtime scale for a tenant branding color. */
+// Light scale generation: step 500 IS the base color; steps 50-400 mix toward
+// white (progressively lighter tints) while steps 600-900 mix toward black
+// (progressively darker shades). The asymmetric mix ratios were tuned to match
+// Tailwind's default color palette feel.
 function buildRuntimeScale(baseColor: string): Record<(typeof COLOR_STEPS)[number], string> {
   return {
     50: mixColor(baseColor, '#ffffff', 0.92),
@@ -74,6 +95,11 @@ function buildRuntimeScale(baseColor: string): Record<(typeof COLOR_STEPS)[numbe
   };
 }
 
+/** Generate the dark-theme runtime scale for a tenant branding color. */
+// Dark scale inverts the brightness direction: steps 50-300 mix toward a dark
+// slate (#020617) for background use, steps 400-500 mix toward white for
+// readable surface text, and step 600 becomes the "true" base color. This
+// ensures sufficient contrast on dark backgrounds without manual per-color tuning.
 function buildDarkRuntimeScale(baseColor: string): Record<(typeof COLOR_STEPS)[number], string> {
   return {
     50: mixColor(baseColor, '#020617', 0.88),
@@ -89,6 +115,7 @@ function buildDarkRuntimeScale(baseColor: string): Record<(typeof COLOR_STEPS)[n
   };
 }
 
+/** Pick a readable foreground color for tenant-generated brand backgrounds. */
 function getReadableForegroundColor(baseColor: string): string {
   const rgbColor = hexToRgb(baseColor);
 
@@ -96,10 +123,14 @@ function getReadableForegroundColor(baseColor: string): string {
     return '#ffffff';
   }
 
+  // W3C relative luminance formula (NTSC weighting). The 186 threshold is a
+  // well-known heuristic that approximates WCAG AA contrast requirements for
+  // foreground text on a solid background.
   const luminance = (0.299 * rgbColor.r) + (0.587 * rgbColor.g) + (0.114 * rgbColor.b);
   return luminance > 186 ? '#171717' : '#ffffff';
 }
 
+/** Convert label-style personality into a CSS `text-transform` value. */
 function labelTransform(style: 'uppercase' | 'sentence' | 'capitalize'): string {
   switch (style) {
     case 'uppercase':
@@ -111,6 +142,7 @@ function labelTransform(style: 'uppercase' | 'sentence' | 'capitalize'): string 
   }
 }
 
+/** Convert heading-weight personality into the concrete numeric weight used in CSS. */
 function headingWeight(weight: 'lighter' | 'normal' | 'heavier'): number {
   switch (weight) {
     case 'lighter':
@@ -122,10 +154,12 @@ function headingWeight(weight: 'lighter' | 'normal' | 'heavier'): number {
   }
 }
 
+/** Map card shadow tokens into the shared DS shadow variable set. */
 function cardShadow(level: 'sm' | 'md' | 'lg'): string {
   return `var(--ds-shadow-${level})`;
 }
 
+/** Resolve hover elevation into the actual shadow variable used by cards. */
 function hoverCardShadow(level: 'none' | 'lift-one' | 'lift-two'): string {
   switch (level) {
     case 'lift-one':
@@ -137,6 +171,7 @@ function hoverCardShadow(level: 'none' | 'lift-one' | 'lift-two'): string {
   }
 }
 
+/** Build the standard hover transform used across generated tenant styles. */
 function hoverTransform(hoverLift: number, hoverScale: number): string {
   if (hoverLift <= 0 && hoverScale <= 1) {
     return 'translateY(0) scale(1)';
@@ -145,11 +180,13 @@ function hoverTransform(hoverLift: number, hoverScale: number): string {
   return `translateY(${hoverLift > 0 ? `-${hoverLift}px` : '0'}) scale(${Math.max(hoverScale, 1)})`;
 }
 
+/** Build the active-state transform that follows the configured hover scale. */
 function activeTransform(hoverScale: number): string {
   const normalized = Math.max(hoverScale, 1);
   return `translateY(0) scale(${normalized > 1 ? Math.max(normalized - 0.02, 0.97) : 0.98})`;
 }
 
+/** Resolve badge shape into the shared DS radius variable set. */
 function badgeRadius(shape: 'rounded' | 'pill' | 'square'): string {
   switch (shape) {
     case 'pill':
@@ -161,6 +198,7 @@ function badgeRadius(shape: 'rounded' | 'pill' | 'square'): string {
   }
 }
 
+/** Convert pulse-speed personality into a CSS duration string. */
 function pulseDuration(speed: 'none' | 'slow' | 'normal' | 'fast'): string {
   switch (speed) {
     case 'slow':
@@ -174,6 +212,7 @@ function pulseDuration(speed: 'none' | 'slow' | 'normal' | 'fast'): string {
   }
 }
 
+/** Render a selector block from a flat declaration map. */
 function toCssBlock(selector: string, declarations: Record<string, string | number | undefined>): string {
   const lines = Object.entries(declarations)
     .filter(([, value]) => value !== undefined && value !== null)
@@ -182,6 +221,7 @@ function toCssBlock(selector: string, declarations: Record<string, string | numb
   return `${selector} {\n${lines.join('\n')}\n}`;
 }
 
+/** Indent nested CSS blocks for readable generated output. */
 function indentBlock(block: string, spaces = 2): string {
   const indent = ' '.repeat(spaces);
   return block
@@ -190,6 +230,7 @@ function indentBlock(block: string, spaces = 2): string {
     .join('\n');
 }
 
+/** Generate tenant branding variables for the default light theme. */
 function brandingVariables(config: TenantConfig): Record<string, string | number | undefined> {
   const declarations: Record<string, string | number | undefined> = {};
   const colorEntries = [
@@ -220,6 +261,7 @@ function brandingVariables(config: TenantConfig): Record<string, string | number
   return declarations;
 }
 
+/** Generate tenant branding variables for dark-theme selectors. */
 function darkBrandingVariables(config: TenantConfig): Record<string, string | number | undefined> {
   const declarations: Record<string, string | number | undefined> = {};
   const colorEntries = [
@@ -250,6 +292,7 @@ function darkBrandingVariables(config: TenantConfig): Record<string, string | nu
   return declarations;
 }
 
+/** Convert structural token overrides from config into CSS variable declarations. */
 function tokenOverrideVariables(config: TenantConfig): Record<string, string | number | undefined> {
   const overrides = config.tokenOverrides;
 
@@ -502,10 +545,26 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
   };
 }
 
+/**
+ * Build the CSS selector used to scope tenant variables: `html[data-tenant='<slug>']`.
+ * This matches the attribute set by TenantProvider on mount.
+ */
 export function buildTenantSelector(slug: string): string {
   return `html[data-tenant='${slug}']`;
 }
 
+/**
+ * Generate a complete CSS stylesheet for a tenant config.
+ *
+ * Produces up to three selector blocks:
+ * 1. Light theme -- branding + personality + token overrides
+ * 2. Dark theme -- explicit `[data-theme='dark']` / `.dark` selectors
+ * 3. System dark -- `@media (prefers-color-scheme: dark)` for unset themes
+ *
+ * @param config - Full tenant configuration with branding and personality
+ * @param options - Control dark mode selector generation
+ * @returns Raw CSS string ready for injection or file writing
+ */
 export function generateTenantCss(
   config: TenantConfig,
   options: GenerateTenantCssOptions = {}
@@ -518,9 +577,13 @@ export function generateTenantCss(
     ...tokenOverrideVariables(config),
     ...personalityVariables(config),
   };
+  // Block 1: light-theme tenant variables (always generated)
   const blocks = [toCssBlock(selector, declarations)];
 
   if (includeDarkSelector) {
+    // Dark declarations spread light declarations first so any shared variables
+    // get overridden by the dark-specific values. This avoids duplicating the
+    // personality variables that are theme-independent.
     const darkDeclarations = {
       ...declarations,
       ...darkBrandingVariables(config),
@@ -528,6 +591,8 @@ export function generateTenantCss(
       ...darkPersonalityOverrides(config),
     };
 
+    // Block 2: explicit dark mode -- matches `data-theme='dark'` attribute or `.dark` class.
+    // The `:is()` variant handles frameworks that set only the attribute without a class.
     blocks.push(
       toCssBlock(
         `${selector}[data-theme='dark'], ${selector}.dark, ${selector}:is([data-theme='dark'])`,
@@ -536,6 +601,8 @@ export function generateTenantCss(
     );
 
     if (includeSystemDarkSelector) {
+      // Block 3: system-preference dark mode for apps that do not explicitly set a theme.
+      // The `:not()` guards prevent double-application when an explicit theme is set.
       blocks.push(
         `@media (prefers-color-scheme: dark) {\n${indentBlock(
           toCssBlock(
@@ -554,6 +621,10 @@ export function generateTenantCss(
   ].join('\n');
 }
 
+/**
+ * Generate a tenant CSS file artifact suitable for build-time pipelines.
+ * Returns the conventional path (`<slug>/index.css`) and the CSS content.
+ */
 export function generateTenantCssFile(
   config: TenantConfig,
   options?: GenerateTenantCssOptions

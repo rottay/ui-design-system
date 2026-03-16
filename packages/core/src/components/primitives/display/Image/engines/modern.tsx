@@ -1,47 +1,12 @@
 /**
- * @fileoverview Image Modern Engine - Rottay Design System
- * @description Tailwind/DaisyUI-based image with utility-first styling.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the Image display primitive.
+ * Renders images with utility-first Tailwind classes, a smooth opacity-based
+ * load transition, optional hover overlays, and a zoom indicator icon.
  *
- * @remarks
- * This engine uses Tailwind CSS utilities and DaisyUI patterns for
- * lightweight, responsive image rendering with hover effects.
- *
- * **Implementation Details:**
- * - Uses Tailwind `object-*` classes for fit modes
- * - Uses `rounded-*` classes for border radius
- * - Uses `animate-pulse` for loading skeleton
- * - Smooth opacity transitions on load
- *
- * **Tailwind Classes:**
- * - `rounded-none/sm/md/lg/full` - Border radius
- * - `object-cover/contain/fill` - Object fit
- * - `shadow-md` - Drop shadow
- * - `border border-base-300` - Border styling
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Image } from '@rottay/design-system';
- *
- * <Image engine="modern" src="/photo.jpg" alt="Photo" radius="lg" />
+ * <Image engine="modern" src="/photo.jpg" alt="Photo" radius="lg" shadow />
  * ```
- *
- * @example With Hover Effect
- * ```tsx
- * <Image
- *   engine="modern"
- *   src="/photo.jpg"
- *   alt="Photo"
- *   shadow
- *   hoverOverlay={<span className="text-white">View</span>}
- * />
- * ```
- *
- * @see {@link Image} for the main component
- * @see {@link https://tailwindcss.com/docs/object-fit} Tailwind Object Fit
- * @module ModernImage
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -51,9 +16,7 @@ import type { ImageProps } from '../Image.types';
 import { IMAGE_DEFAULTS } from '../Image.types';
 import type { ImageRadius, ImageStatus } from '../Image.types';
 
-/**
- * Maps radius prop to Tailwind CSS classes.
- */
+/** Maps the DS radius token to the corresponding Tailwind `rounded-*` class. */
 const RADIUS_CLASS_MAP: Record<ImageRadius, string> = {
   none: 'rounded-none',
   sm: 'rounded-sm',
@@ -63,25 +26,11 @@ const RADIUS_CLASS_MAP: Record<ImageRadius, string> = {
 };
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the Image component.
+ * Modern (DaisyUI/Tailwind) Image engine. Composes Tailwind utility classes
+ * for responsive sizing, smooth load transitions, and optional hover overlays.
  *
- * Features:
- * - Tailwind CSS utility classes
- * - DaisyUI component patterns
- * - Smooth loading transitions
- * - Responsive design utilities
- *
- * @example
- * ```tsx
- * <ModernImage
- *   src="/photo.jpg"
- *   alt="Photo description"
- *   width={400}
- *   height={300}
- *   radius="lg"
- *   shadow
- * />
- * ```
+ * @param props - Standard ImageProps shared across all engines.
+ * @returns A Tailwind-styled container with `<img>`, overlay, and zoom indicator.
  */
 export default function ModernImage(props: ImageProps): React.ReactElement {
   const {
@@ -107,10 +56,11 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     style = {},
   } = props;
 
+  // Tracks loading/loaded/error lifecycle for opacity transition and fallback
   const [status, setStatus] = useState<ImageStatus>('loading');
   const [isHovered, setIsHovered] = useState(false);
 
-  // Reset status when src changes
+  // A new src means the image must be re-fetched; reset to loading
   useEffect(() => {
     setStatus('loading');
   }, [src]);
@@ -134,7 +84,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     [onError]
   );
 
-  // Build Tailwind class names
+  // Assemble Tailwind class strings from the DS-level prop values
   const radiusClass = RADIUS_CLASS_MAP[radius] || RADIUS_CLASS_MAP.none;
 
   const containerClasses = [
@@ -152,7 +102,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     .filter(Boolean)
     .join(' ');
 
-  // Object fit Tailwind classes
+  // Map the CSS object-fit value to Tailwind's utility class equivalent
   const objectFitClass = {
     cover: 'object-cover',
     contain: 'object-contain',
@@ -161,7 +111,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     'scale-down': 'object-scale-down',
   }[objectFit] || 'object-cover';
 
-  // Image classes
+  // Start invisible (opacity-0) and fade in on load for a smooth reveal
   const imageClasses = [
     'w-full',
     'h-full',
@@ -182,7 +132,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     ...style,
   };
 
-  // Default fallback icon component
+  // Inline SVG used when no consumer fallback is provided and the image fails
   const DefaultFallbackIcon = () => (
     <svg
       className="w-12 h-12 text-base-content/30"

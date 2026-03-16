@@ -1,8 +1,9 @@
 /**
- * Typography Tokens - TypeScript Mirror
+ * @fileoverview Typography token mirrors -- font families, sizes, weights, and composite text styles.
  *
- * TypeScript representation of typography CSS custom properties.
- * Use these for type-safe typography references in JavaScript/TypeScript.
+ * Includes both atomic primitives (fontSize, fontWeight, lineHeight, letterSpacing)
+ * and pre-composed text styles (display1, heading1-6, bodyLg-Xs, caption, label, code)
+ * that bundle size + weight + lineHeight into a single reference object.
  */
 
 // Font Families

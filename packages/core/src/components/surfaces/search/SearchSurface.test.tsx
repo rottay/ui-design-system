@@ -1,3 +1,5 @@
+/** @fileoverview SearchSurface tests -- query state, filters, results, and preview. */
+
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

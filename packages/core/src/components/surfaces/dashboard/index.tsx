@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * DashboardSurface
+ * @fileoverview DashboardSurface - Rottay Design System
+ * @description Reusable dashboard shell for KPI grids, section cards, charts,
+ * and header actions.
  *
- * This surface composes the recurring dashboard skeleton:
- * - page chrome
- * - KPI grid
- * - optional header actions
- * - section grid for cards/feeds/charts
+ * @remarks
+ * This surface packages the recurring "overview page" structure while leaving
+ * each widget's content and meaning in app-level config.
  */
 
 import { Button, Card, Grid, Stack, Text, Flex } from '../../primitives';
@@ -31,6 +31,7 @@ export interface DashboardSurfaceProps {
   onRetry?: () => void | Promise<void>;
 }
 
+/** Dashboard page shell with stats, header actions, section cards, and error handling. */
 export function DashboardSurface({
   config,
   loading = false,
@@ -38,7 +39,11 @@ export function DashboardSurface({
   onRetry,
 }: DashboardSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
+  // Permission filtering happens early so the action count drives both
+  // rendering and layout decisions (e.g. no empty action bar wrapper).
   const headerActions = filterSurfaceActions(config.behavior.headerActions, config.permissions);
+  // Spacing and heading weight resolve from personality tokens, allowing
+  // the same dashboard config to render differently across product profiles.
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
 
@@ -59,6 +64,8 @@ export function DashboardSurface({
     </Flex>
   );
 
+  // Error state renders full page chrome so the user can still use header
+  // actions (e.g. refresh) even when the data load failed.
   if (error) {
     return (
       <PageShellSurface
@@ -75,6 +82,7 @@ export function DashboardSurface({
     <Stack spacing={sectionSpacing}>
       {config.presentation.headerContent}
 
+      {/* Stats stay optional so the same surface can power sparse and dense dashboards. */}
       {config.behavior.stats && config.behavior.stats.length > 0 && (
         <PatternStatsGrid
           stats={config.behavior.stats}
@@ -87,6 +95,7 @@ export function DashboardSurface({
       {config.presentation.sections && config.presentation.sections.length > 0 && (
         <Grid columns={config.visual.sectionsColumns ?? 12} gap={sectionSpacing}>
           {config.presentation.sections.map((section) => {
+            // Sections can opt out of the card shell when the content already brings its own chrome.
             const sectionContent = section.chrome === 'plain' ? (
               section.content
             ) : (

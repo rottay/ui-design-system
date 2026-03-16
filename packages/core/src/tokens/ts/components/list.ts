@@ -1,8 +1,10 @@
 /**
- * List Component Tokens - TypeScript Mirror
+ * @fileoverview List component token mirrors.
  *
- * TypeScript representation of List CSS custom properties.
- * Use these for type-safe List token references.
+ * Covers 3 size tiers (small/default/large), border/split styling, color
+ * scheme, header/footer sections, item meta (avatar/title/description),
+ * action links, extra content, empty/loading states, grid layout gutter,
+ * and transition tokens.
  */
 
 // List sizes

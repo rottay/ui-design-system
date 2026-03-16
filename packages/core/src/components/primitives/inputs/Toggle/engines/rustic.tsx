@@ -1,54 +1,13 @@
 /**
- * @fileoverview Toggle Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Toggle component.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Rustic (zero-dependency) engine for Toggle, using pure HTML, inline CSS,
+ * and DS CSS variables. Implements a custom sliding-dot animation, SVG loading spinner,
+ * inner ON/OFF labels, and full keyboard accessibility without any CSS framework.
  *
- * @remarks
- * The Rustic engine provides a zero-dependency toggle implementation
- * using pure HTML and inline CSS. It offers maximum accessibility
- * and customization through CSS custom properties.
- *
- * **Pure CSS Features:**
- * - Custom sliding dot animation
- * - Focus ring with outline styling
- * - Loading spinner SVG
- * - Inner checked/unchecked labels
- * - Color theming via inline styles
- *
- * **Accessibility Features:**
- * - Native checkbox with role="switch"
- * - Full keyboard support (Space, Enter)
- * - Focus state with visible outline
- * - aria-checked, aria-invalid, aria-busy
- * - Screen reader label association
- *
- * **Keyboard Navigation:**
- * - Space/Enter: Toggle checked state
- * - Tab: Focus navigation
- *
- * **Customization Points:**
- * - All styling via inline CSSProperties
- * - Size tokens from SIZE_MAP
- * - Color tokens from COLOR_MAP
- * - CSS variables for tenant theming
- *
- * @example Using Rustic Engine
+ * @example
  * ```tsx
- * import { Toggle } from '@rottay/design-system';
- *
- * <Toggle
- *   engine="rustic"
- *   size="lg"
- *   color="success"
- *   label="Accessibility mode"
- *   checkedLabel="ON"
- *   uncheckedLabel="OFF"
- * />
+ * <Toggle engine="rustic" size="lg" color="success" checkedLabel="ON" uncheckedLabel="OFF" />
  * ```
  *
- * @see {@link Toggle} for the main component
- * @see {@link ClassicToggle} for Ant Design implementation
- * @see {@link ModernToggle} for DaisyUI implementation
  * @module RusticToggle
  * @category Inputs
  * @package @rottay/design-system
@@ -60,6 +19,18 @@ import React, { useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../Toggle.types';
 import { TOGGLE_DEFAULTS, SIZE_MAP, SIZE_VALUES, COLOR_MAP } from '../Toggle.types';
 
+/**
+ * Rustic (vanilla HTML/CSS) implementation of Toggle.
+ *
+ * Builds the entire toggle track, sliding dot, loading spinner, and label layout
+ * from inline CSSProperties driven by DS CSS custom properties. The hidden native
+ * checkbox provides keyboard and form support, while the visual track is rendered
+ * as a sibling `<span>`. Includes Space/Enter key handling on the outer label for
+ * screen-reader compatibility beyond the native checkbox behaviour.
+ *
+ * @param props - Standard ToggleProps shared across all engines.
+ * @returns A label element containing a visually-hidden checkbox, CSS track/dot, and optional text.
+ */
 export default function RusticToggle(props: ToggleProps): React.ReactElement {
   const {
     size = TOGGLE_DEFAULTS.size,
@@ -91,8 +62,9 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
   const generatedId = useId();
   const inputId = providedId || `toggle-rustic-${generatedId}`;
 
-  // Internal state for uncontrolled mode
+  // Dual-mode state: controlled when `checked` prop is provided, uncontrolled otherwise
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  // Focus state drives the outer ring / box-shadow on the track
   const [isFocused, setIsFocused] = useState(false);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
@@ -104,6 +76,8 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
     onChange?.(e.target.checked, e);
   }, [isControlled, onChange]);
 
+  // Explicit keyboard handler on the <label> ensures Space/Enter toggle even when
+  // assistive technology focuses the label rather than the hidden checkbox.
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
@@ -112,6 +86,7 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
         if (!isControlled) {
           setInternalChecked(newChecked);
         }
+        // Fabricate synthetic event for consistent (checked, event) onChange signature
         const syntheticEvent = {
           target: { checked: newChecked, value },
           currentTarget: { checked: newChecked, value },
@@ -124,7 +99,7 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
   const sizeTokens = SIZE_MAP[size] || SIZE_MAP.md;
   const sizeValues = SIZE_VALUES[size] || SIZE_VALUES.md;
 
-  // Size CSS variable mapping
+  // CSS variable mapping per size -- these reference theme tokens set at the tenant level
   const SIZE_VAR_MAP: Record<string, { width: string; height: string; dot: string }> = {
     sm: {
       width: 'var(--ds-toggle-sm-width)',
@@ -145,7 +120,7 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
 
   const sizeVars = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
 
-  // Get track background color based on state and color
+  /** Resolves track background: unchecked uses neutral, checked picks the color variant. */
   const getTrackBg = () => {
     if (!isChecked) return 'var(--ds-toggle-track-bg)';
     if (color === 'success') return 'var(--ds-toggle-success-bg)';
@@ -182,6 +157,8 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
       : 'none',
   };
 
+  // Dot slides left/right via `left` transition with a spring-like cubic-bezier
+  // that gives the toggle a satisfying "snap" feel.
   const dotStyle: React.CSSProperties = {
     position: 'absolute',
     top: '50%',
@@ -200,6 +177,7 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
     justifyContent: 'center',
   };
 
+  // The checkbox is visually hidden but covers the track so clicks register natively
   const inputStyle: React.CSSProperties = {
     position: 'absolute',
     opacity: 0,

@@ -1,14 +1,14 @@
 /**
- * @fileoverview Select Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Select component.
+ * @fileoverview Select Modern Engine (DaisyUI/Tailwind) - Rottay Design System.
+ * Renders a fully custom dropdown select using DaisyUI utility classes, with
+ * a native `<select>` fallback for simple non-searchable, non-grouped usage.
+ * Relies on zero third-party JS -- all interaction (keyboard nav, virtual
+ * scroll, token separators) is implemented in-component.
  *
- * Features:
- * - Option groups: group options under headers with visual separator
- * - Virtual scrolling: only render visible options + buffer, fixed height container
- * - tokenSeparators: auto-create tags in multiple mode when separator typed
- * - Keyboard navigation: ArrowUp/ArrowDown/Home/End/Enter/Escape
- * - Focused option highlight with visual indication
- * - Dropdown slide-in animation
+ * @example
+ * ```tsx
+ * <Select engine="modern" options={opts} searchable multiple maxTagCount={3} />
+ * ```
  *
  * @module ModernSelect
  * @category Inputs
@@ -39,16 +39,18 @@ import {
   type RenderableItem,
 } from '../utils';
 
-// DaisyUI size classes
+// DaisyUI size classes -- xl falls back to lg since DaisyUI has no xl variant.
+// This is an intentional approximation; if xl precision is needed, use rustic.
 const DAISY_SIZE_MAP = {
   xs: 'select-xs',
   sm: 'select-sm',
   md: 'select-md',
   lg: 'select-lg',
-  xl: 'select-lg', // DaisyUI doesn't have xl, use lg
+  xl: 'select-lg',
 };
 
-// Status to DaisyUI color classes
+// DaisyUI maps validation states to border-color utility classes.
+// "default" maps to empty string so no extra class is added.
 const DAISY_STATUS_MAP = {
   default: '',
   error: 'select-error',
@@ -56,6 +58,28 @@ const DAISY_STATUS_MAP = {
   success: 'select-success',
 };
 
+/**
+ * Modern (DaisyUI/Tailwind) Select engine.
+ *
+ * For simple selects (non-searchable, single, no groups/virtual), renders a
+ * native `<select>` element styled with DaisyUI classes for maximum
+ * accessibility and mobile compatibility. For advanced cases (searchable,
+ * multiple, groups, virtual scroll), renders a custom dropdown with full
+ * keyboard navigation, token separators, and slide-in animation.
+ *
+ * @param props - Rottay SelectProps (engine-agnostic interface).
+ * @param ref   - Forwarded to the native select or container element.
+ * @returns The rendered DaisyUI-styled Select component.
+ *
+ * @example
+ * ```tsx
+ * <ModernSelect
+ *   options={countries}
+ *   optionGroups={[{ label: 'Americas', options: americaOpts }]}
+ *   virtual={{ itemHeight: 36, containerHeight: 300 }}
+ * />
+ * ```
+ */
 const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const { t } = useTranslation('components');
 
@@ -106,7 +130,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   // Determine effective status
   const effectiveStatus = error ? 'error' : status;
 
-  // Merge flat options with group options
+  // When optionGroups is provided, flatten all group-nested options into a
+  // single list for filtering/selection logic. The group structure is only
+  // used during rendering (via buildRenderableList) to inject headers.
   const allOptions = useMemo(() => {
     if (optionGroups && optionGroups.length > 0) {
       return flatOptionsFromGroups(optionGroups);
@@ -164,7 +190,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return buildRenderableList(filteredOptions, optionGroups);
   }, [filteredOptions, optionGroups, isSearchable, searchValue]);
 
-  // Build a list of only selectable option indices (for keyboard nav)
+  // Pre-compute selectable indices so keyboard navigation can skip group
+  // headers and disabled options without scanning on every keypress.
   const selectableIndices = useMemo(() => {
     const indices: number[] = [];
     renderableItems.forEach((item, idx) => {
@@ -175,7 +202,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return indices;
   }, [renderableItems]);
 
-  // Virtual scroll config
+  // Virtual scroll config -- when enabled, only a window of items + buffer
+  // is rendered into the DOM, keeping paint time constant for large lists.
   const virtualEnabled = !!virtual;
   const itemHeight = virtual && typeof virtual === 'object' && virtual.itemHeight
     ? virtual.itemHeight
@@ -413,7 +441,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     animation: 'rottay-select-slide-in 0.15s ease-out',
   };
 
-  // For simple native select (non-searchable, non-multiple, no groups, no virtual)
+  // For simple cases (no search, single value, no groups, no virtual), fall
+  // back to a native <select> for better accessibility and mobile UX. The
+  // custom dropdown is only used when advanced features are needed.
   if (!isSearchable && !multiple && !optionGroups && !virtual) {
     const handleNativeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedValue = e.target.value;
@@ -512,7 +542,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     setScrollTop(e.currentTarget.scrollTop);
   };
 
-  // Render a single option item with focus highlight
+  // Renders a single dropdown item (option or group header). Focus highlight
+  // uses an inline background-color backed by a CSS variable so tenant themes
+  // can override the hover color without touching this component.
   const renderOptionItem = (item: RenderableItem, idx: number, isFocused: boolean) => {
     if (item.type === 'group-header') {
       return (

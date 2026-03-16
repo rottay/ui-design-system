@@ -1,5 +1,6 @@
 /**
- * Display primitives
+ * @fileoverview Display primitives barrel export.
+ * Re-exports all display-category primitive components.
  */
 
 export { Avatar, AvatarGroup, AvatarBadge, AvatarFallback } from './Avatar';

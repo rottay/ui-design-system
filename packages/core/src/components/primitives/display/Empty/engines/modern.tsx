@@ -1,15 +1,14 @@
 /**
- * @fileoverview Empty Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based empty state with theme-aware colors.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Modern engine for the Empty component, backed by DaisyUI/Tailwind.
+ * Ships its own inline SVG illustrations (default + simple) styled with
+ * DaisyUI's base-content colour tokens, avoiding the antd dependency.
  *
- * @remarks
- * This engine uses DaisyUI classes with Tailwind utilities
- * for a lightweight, theme-integrated empty state.
- *
- * @module Empty/engines/modern
- * @category Display
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <Empty engine="modern" description="Nothing here yet">
+ *   <Button>Create New</Button>
+ * </Empty>
+ * ```
  */
 
 'use client';
@@ -19,6 +18,7 @@ import type { EmptyProps } from '../Empty.types';
 import { EMPTY_DEFAULTS } from '../Empty.types';
 import { useTranslation } from '../../../../../i18n';
 
+/** Detailed empty-box SVG illustration using DaisyUI's base-content colour at 20% opacity. */
 const DefaultImage: React.FC = () => (
   <svg
     className="w-24 h-24 text-base-content/20"
@@ -41,6 +41,7 @@ const DefaultImage: React.FC = () => (
   </svg>
 );
 
+/** Minimal outline-only SVG illustration at 15% opacity for subtle empty states. */
 const SimpleImage: React.FC = () => (
   <svg
     className="w-16 h-10 text-base-content/15"
@@ -60,6 +61,17 @@ const SimpleImage: React.FC = () => (
   </svg>
 );
 
+/**
+ * Modern (DaisyUI) implementation of the Empty component.
+ *
+ * Renders a vertically-centred flex column with optional image, localised
+ * description, and action footer. Uses role="status" and aria-label for
+ * screen reader accessibility.
+ *
+ * @param props - Unified EmptyProps from the design system type contract
+ * @param ref - Forwarded ref attached to the outer container div
+ * @returns A Tailwind-styled empty state element
+ */
 const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -73,8 +85,10 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       style,
     } = props;
 
+    // i18n translation provides the default "No data" text; explicit prop overrides it
     const displayDescription = description ?? t('empty.description');
 
+    // Resolve string shorthand to the matching inline SVG component, or pass through ReactNode
     const renderImage = () => {
       if (image === 'default') {
         return <DefaultImage />;

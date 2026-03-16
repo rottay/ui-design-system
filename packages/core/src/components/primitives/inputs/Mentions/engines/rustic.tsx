@@ -1,9 +1,15 @@
 'use client';
 
 /**
- * @fileoverview Mentions Rustic Engine - Rottay Design System
- * @description Pure vanilla HTML/CSS implementation of the Mentions component
- * using CSS variables for multi-tenant theming.
+ * @fileoverview Mentions Rustic Engine - Rottay Design System.
+ * Pure vanilla HTML/CSS implementation using CSS custom properties
+ * (--ds-mentions-*) so theming is driven entirely by tenant-level token
+ * overrides, with zero dependency on Ant Design or Tailwind at runtime.
+ *
+ * @example
+ * ```tsx
+ * <Mentions engine="rustic" options={users} prefix="@" autoSize={{ minRows: 2 }} />
+ * ```
  *
  * @module RusticMentions
  * @category Inputs
@@ -14,9 +20,21 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffe
 import type { MentionsProps, MentionsOption } from '../Mentions.types';
 import { MENTIONS_DEFAULTS } from '../Mentions.types';
 
-// Safe useLayoutEffect that falls back to useEffect on SSR
+/**
+ * SSR-safe layout effect: uses useLayoutEffect on the client for flicker-free
+ * DOM measurements, falls back to useEffect on the server to avoid warnings.
+ */
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
+/**
+ * Rustic engine Mentions built with pure HTML/CSS and design-system CSS variables.
+ * Implements cursor-aware prefix detection, filtered dropdown, keyboard navigation,
+ * auto-size textarea, and click-outside dismissal -- all framework-agnostic.
+ *
+ * @param props - Unified MentionsProps from the design system contract.
+ * @param ref - Forwarded ref attached to the underlying `<textarea>` element.
+ * @returns A theme-aware mentions textarea rendered without any UI framework dependency.
+ */
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
     const {
@@ -49,12 +67,14 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const [mentionStart, setMentionStart] = useState(-1);
     const [focusedIndex, setFocusedIndex] = useState(0);
 
+    // Controlled vs uncontrolled: parent-supplied `value` takes precedence
     const isControlled = controlledValue !== undefined;
     const value = isControlled ? controlledValue : internalValue;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    // Normalize prefix to array so multi-prefix detection logic stays uniform
     const prefixes = (Array.isArray(prefix) ? prefix : [prefix]).filter((p): p is string => !!p);
 
     // Auto-size: dynamically adjust textarea height based on content
@@ -81,6 +101,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       adjustTextareaHeight();
     }, [value, adjustTextareaHeight]);
 
+    /** Filter suggestions: true = built-in case-insensitive match; function = custom predicate. */
     const filteredOptions = useMemo(() => {
       if (!filterOption) return options;
       if (filterOption === true) {
@@ -100,6 +121,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
       onChange?.(newValue);
 
+      // Scan text before cursor for the nearest unterminated prefix trigger
       const textBeforeCursor = newValue.slice(0, cursorPos);
       let foundPrefix = '';
       let mentionStartPos = -1;
@@ -108,6 +130,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         const lastPrefixIndex = textBeforeCursor.lastIndexOf(p);
         if (lastPrefixIndex >= 0) {
           const textAfterPrefix = textBeforeCursor.slice(lastPrefixIndex + p.length);
+          // No split delimiter after prefix means user is still typing a mention
           if (!textAfterPrefix.includes(split || '')) {
             if (mentionStartPos < lastPrefixIndex) {
               mentionStartPos = lastPrefixIndex;
@@ -130,6 +153,10 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
     };
 
+    /**
+     * Insert the selected mention, replacing the in-progress search text,
+     * then reposition the cursor after the inserted mention + split delimiter.
+     */
     const handleSelect = useCallback((option: MentionsOption) => {
       if (textareaRef.current) {
         const cursorPos = textareaRef.current.selectionStart;
@@ -144,6 +171,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         onSelect?.(option, currentPrefix);
         setIsOpen(false);
 
+        // Defer cursor repositioning until React has flushed the new value
         setTimeout(() => {
           const newPos = beforeMention.length + currentPrefix.length + option.value.length + (split || '').length;
           textareaRef.current?.setSelectionRange(newPos, newPos);
@@ -181,6 +209,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
     };
 
+    // Dismiss dropdown when clicking outside the component boundary
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -193,6 +222,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
+    /** Resolve border color from CSS variables based on status/focus priority. */
     const getBorderColor = () => {
       if (status === 'error') return 'var(--ds-mentions-border-error)';
       if (status === 'warning') return 'var(--ds-mentions-border-warning)';
@@ -200,7 +230,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       return 'var(--ds-mentions-border)';
     };
 
-    // Build class names
+    // Build BEM class names; falsy entries are filtered out before joining
     const containerClasses = [
       'rottay-mentions',
       'rottay-mentions--rustic',
@@ -248,6 +278,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       margin: 0,
     };
 
+    /** Per-option inline styles: highlights the focused index and dims disabled items. */
     const getOptionStyle = (index: number, isDisabled?: boolean): React.CSSProperties => ({
       padding: 'var(--ds-mentions-option-padding)',
       cursor: isDisabled ? 'not-allowed' : 'pointer',

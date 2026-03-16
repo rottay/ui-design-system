@@ -1,19 +1,25 @@
 'use client';
 
 /**
- * @fileoverview HoverCard Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the HoverCard component.
- * Uses a tooltip-like pattern with card content.
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the HoverCard overlay component.
+ * Positions a DaisyUI card absolutely relative to the trigger using Tailwind
+ * transform/translate utilities, with configurable open/close delays.
  *
- * @module HoverCard/Engines/Modern
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <ModernHoverCard
+ *   content={<UserProfileCard />}
+ *   trigger={<span>@username</span>}
+ *   side="bottom"
+ * />
+ * ```
  */
 
 import React, { useState, useRef, useCallback } from 'react';
 import type { HoverCardProps } from '../HoverCard.types';
 import { HOVERCARD_DEFAULTS } from '../HoverCard.types';
 
+/** Maps each side to Tailwind position + translate classes for card placement. */
 const SIDE_CLASSES: Record<string, string> = {
   top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
   bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
@@ -21,6 +27,17 @@ const SIDE_CLASSES: Record<string, string> = {
   right: 'left-full top-1/2 -translate-y-1/2 ml-2',
 };
 
+/**
+ * HoverCard implementation using DaisyUI card classes and Tailwind utilities.
+ *
+ * Uses a debounced open/close pattern: entering the trigger starts an open timer,
+ * leaving starts a close timer, and entering the card itself cancels the close timer
+ * so the user can interact with the card content. Disabled state short-circuits
+ * visibility regardless of controlled open value.
+ *
+ * @param props - {@link HoverCardProps} shared across all engines.
+ * @returns A relatively-positioned inline-block container with an absolutely-placed card.
+ */
 export default function ModernHoverCard(props: HoverCardProps): React.ReactElement {
   const {
     content,
@@ -38,8 +55,11 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
 
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;
+  // Disabled always wins: forces card hidden even if controlled open is true
   const isOpen = disabled ? false : (isControlled ? controlledOpen : internalOpen);
 
+  // Timer refs allow cancellation of pending open/close when the cursor
+  // moves between the trigger and the card within the delay window
   const openTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -48,12 +68,14 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     onOpenChange?.(value);
   }, [isControlled, onOpenChange]);
 
+  // Cancel any pending close before scheduling open -- prevents flicker
   const handleMouseEnter = useCallback(() => {
     if (disabled) return;
     clearTimeout(closeTimerRef.current);
     openTimerRef.current = setTimeout(() => handleOpen(true), openDelay);
   }, [disabled, openDelay, handleOpen]);
 
+  // Cancel any pending open before scheduling close -- prevents premature show
   const handleMouseLeave = useCallback(() => {
     clearTimeout(openTimerRef.current);
     closeTimerRef.current = setTimeout(() => handleOpen(false), closeDelay);

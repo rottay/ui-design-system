@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Input primitive smoke tests across all stable engines.
+ * Validates Form+Input, Select, Checkbox, Radio, DatePicker, TimePicker,
+ * Upload, TreeSelect, Slider, Cascader, Mentions, and AutoComplete.
+ */
+
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';

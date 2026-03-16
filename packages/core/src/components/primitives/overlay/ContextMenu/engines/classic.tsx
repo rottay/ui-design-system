@@ -1,19 +1,29 @@
 'use client';
 
 /**
- * @fileoverview ContextMenu Classic Engine - Rottay Design System
- * @description Ant Design implementation of the ContextMenu component.
- * Uses Ant Design Dropdown with trigger='contextMenu'.
+ * @fileoverview Classic (Ant Design) engine for the ContextMenu overlay component.
+ * Wraps Ant Design's Dropdown with `trigger={['contextMenu']}` to intercept
+ * right-click events and display a themed menu with items, groups, and dividers.
  *
- * @module ContextMenu/Engines/Classic
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <ClassicContextMenu
+ *   items={[{ key: 'copy', label: 'Copy', shortcut: 'Ctrl+C' }]}
+ *   trigger={<span>Right-click me</span>}
+ *   onSelect={(key) => console.log(key)}
+ * />
+ * ```
  */
 
 import React from 'react';
 import { Dropdown as AntDropdown } from 'antd';
 import type { ContextMenuProps, ContextMenuItem } from '../ContextMenu.types';
 
+/**
+ * Recursively converts the engine-agnostic ContextMenuItem tree into Ant Design's
+ * menu item format. Handles dividers, groups (with nested children), shortcuts
+ * rendered as a flex row, and danger/disabled states.
+ */
 function mapItemsToAnt(items: ContextMenuItem[]): any[] {
   return items.map((item) => {
     if (item.type === 'divider') {
@@ -44,6 +54,16 @@ function mapItemsToAnt(items: ContextMenuItem[]): any[] {
   });
 }
 
+/**
+ * ContextMenu implementation backed by Ant Design's Dropdown primitive.
+ *
+ * Relies entirely on AntDropdown for positioning, animation, and keyboard
+ * navigation. The menu is portalled to document.body to avoid clipping inside
+ * overflow containers such as tables and scrollable panels.
+ *
+ * @param props - {@link ContextMenuProps} shared across all engines.
+ * @returns A wrapper div containing the right-click trigger area.
+ */
 export default function ClassicContextMenu(props: ContextMenuProps): React.ReactElement {
   const {
     items,
@@ -55,6 +75,7 @@ export default function ClassicContextMenu(props: ContextMenuProps): React.React
     overlayStyle,
   } = props;
 
+  // Build Ant-compatible menu descriptor with a global click handler
   const antMenu = {
     items: mapItemsToAnt(items),
     onClick: (info: { key: string }) => {
@@ -64,6 +85,7 @@ export default function ClassicContextMenu(props: ContextMenuProps): React.React
 
   return (
     <div className={className}>
+      {/* Portal target set to document.body to escape overflow:hidden ancestors */}
       <AntDropdown
         menu={antMenu}
         trigger={['contextMenu']}

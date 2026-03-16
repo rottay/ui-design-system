@@ -1,5 +1,8 @@
 /**
- * Arabic Translations
+ * @fileoverview Arabic (ar-SA) translation dictionary.
+ *
+ * This is the only RTL locale. The I18nProvider automatically sets
+ * `document.dir = 'rtl'` when this locale is active.
  */
 
 import common from './common.json';

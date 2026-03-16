@@ -1,8 +1,8 @@
 /**
- * Spinner Component Tokens - TypeScript Mirror
+ * @fileoverview Spinner (loading indicator) component token mirrors.
  *
- * TypeScript representation of Spinner CSS custom properties.
- * Use these for type-safe Spinner token references.
+ * Covers 4 size tiers, default/track colors, and animation properties
+ * (duration, timing function, stroke width).
  */
 
 // Spinner Sizes

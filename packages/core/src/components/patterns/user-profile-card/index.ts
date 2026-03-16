@@ -1,9 +1,8 @@
 'use client';
 
 /**
- * UserProfileCard - Pattern Component
- *
- * Engine-aware user profile card with avatar, actions, and status.
+ * @fileoverview UserProfileCard pattern -- engine-aware user profile card
+ * with avatar, role, online status, and configurable action buttons.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -1,5 +1,11 @@
 'use client';
 
+/**
+ * @fileoverview Motion effects exports - Rottay Design System
+ * @description Barrel for decorative motion/effect components such as glow,
+ * aurora, gradients, and texture overlays.
+ */
+
 export { GlassCard } from './glass-card';
 export { GradientBackground } from './gradient-background';
 export { GlowEffect } from './glow-effect';

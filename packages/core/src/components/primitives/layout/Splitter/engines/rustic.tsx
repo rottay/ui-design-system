@@ -49,6 +49,13 @@ import React, { useState, useRef, useCallback, Children, cloneElement, isValidEl
 import type { SplitterProps, SplitterPanelProps } from '../Splitter.types';
 import { SPLITTER_DEFAULTS } from '../Splitter.types';
 
+/**
+ * Precomputed inline style objects for the Rustic engine.
+ * Uses CSS custom properties (--ds-splitter-*) with hardcoded fallbacks so
+ * the component works even when the DS theme tokens are not loaded.
+ * Gutter hover is managed via React state since :hover pseudo-classes
+ * cannot be expressed in inline styles.
+ */
 const styles = {
   container: {
     display: 'flex',
@@ -78,10 +85,19 @@ const styles = {
   } as React.CSSProperties,
 };
 
+/**
+ * Rustic engine implementation of the Splitter.Panel sub-component.
+ * Uses percentage-based `flex: 0 0 {size}%` sizing with inline styles only.
+ * The `size` prop is injected by the parent Splitter via cloneElement.
+ *
+ * @param props - Panel configuration plus injected `size` percentage
+ * @returns A dependency-free div acting as a resizable panel
+ */
 export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { size?: number }>(
   (props, ref) => {
     const { size, min, max, children, className, style } = props;
 
+    // Clamp size within min/max bounds, defaulting to the full 0-100 range
     const minSize = typeof min === 'number' ? min : 0;
     const maxSize = typeof max === 'number' ? max : 100;
     const clampedSize = Math.min(Math.max(size ?? 50, minSize), maxSize);
@@ -103,6 +119,16 @@ export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { siz
 );
 Panel.displayName = 'Splitter.Panel.Rustic';
 
+/**
+ * Rustic engine implementation of the Splitter container.
+ * Implements drag-to-resize with document-level mouse events and pure inline
+ * CSS. Unlike the Modern engine which uses Tailwind for gutter styling, this
+ * engine simulates hover effects via React state (hoveredGutter) because
+ * inline styles cannot use CSS pseudo-classes.
+ *
+ * @param props - Splitter configuration (layout direction, resize callbacks)
+ * @returns A pure inline-CSS flex container with interleaved drag handles
+ */
 export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
   (props, ref) => {
     const {
@@ -116,16 +142,24 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
     } = props;
 
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // Equal-share initialization: each panel starts at 100/N percent
     const [sizes, setSizes] = useState<number[]>(() => {
       const childCount = Children.count(children);
       return Array(childCount).fill(100 / childCount);
     });
+
+    // Track which gutter is hovered to apply the highlight background,
+    // since inline styles cannot express :hover pseudo-classes.
     const [hoveredGutter, setHoveredGutter] = useState<number>(-1);
     const isDragging = useRef(false);
     const activeGutter = useRef<number>(-1);
 
     const isVertical = layout === 'vertical';
 
+    // Creates a curried mousedown handler for a specific gutter index.
+    // Attaches document-level move/up listeners to track the drag across
+    // the entire viewport, not just the gutter element.
     const handleMouseDown = useCallback((index: number) => (e: React.MouseEvent) => {
       e.preventDefault();
       isDragging.current = true;
@@ -135,6 +169,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       const handleMouseMove = (moveEvent: MouseEvent) => {
         if (!isDragging.current || !containerRef.current) return;
 
+        // Convert absolute mouse position to a percentage of the container
         const rect = containerRef.current.getBoundingClientRect();
         const totalSize = isVertical ? rect.height : rect.width;
         const offset = isVertical
@@ -144,9 +179,13 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 
         setSizes((prevSizes) => {
           const newSizes = [...prevSizes];
+          // Determine how far the mouse has moved past the cumulative edge
+          // of all panels before (and including) the active gutter's left panel
           const beforeSum = prevSizes.slice(0, activeGutter.current + 1).reduce((a, b) => a + b, 0);
           const diff = percentage - beforeSum;
 
+          // Transfer the size delta between the two adjacent panels,
+          // clamping at 0% to prevent negative (inverted) panels
           if (activeGutter.current < newSizes.length - 1) {
             newSizes[activeGutter.current] = Math.max(0, prevSizes[activeGutter.current] + diff);
             newSizes[activeGutter.current + 1] = Math.max(0, prevSizes[activeGutter.current + 1] - diff);
@@ -174,6 +213,8 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 
     return (
       <div
+        // Merge internal containerRef with forwarded ref for both resize
+        // measurement and consumer access to the DOM node.
         ref={(node) => {
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
           if (typeof ref === 'function') ref(node);
@@ -188,9 +229,11 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       >
         {childArray.map((child, index) => (
           <React.Fragment key={index}>
+            {/* Inject calculated size into each Panel child */}
             {isValidElement(child)
               ? cloneElement(child as React.ReactElement<SplitterPanelProps & { size?: number }>, { size: sizes[index] })
               : child}
+            {/* Render gutter drag handles between panels with state-driven hover */}
             {index < childArray.length - 1 && (
               <div
                 style={{

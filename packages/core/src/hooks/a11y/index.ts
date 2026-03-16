@@ -125,15 +125,21 @@ export function useKeyboardNavigation(
 ): UseKeyboardNavigationResult {
   const { items, onSelect, onEscape, orientation = 'vertical', loop = false } = options;
 
+  // Start at -1 (no focus) so the component can render without any item
+  // visually focused until the user begins keyboard interaction.
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
   const reset = useCallback(() => {
     setFocusedIndex(-1);
   }, []);
 
+  // Movement callbacks are memoized individually so the main handleKeyDown
+  // callback only re-creates when its direct dependencies change, not on
+  // every items/loop change that only affects movement logic.
   const movePrevious = useCallback(() => {
     setFocusedIndex((current) => {
       if (current <= 0) {
+        // When at the start, wrap to end if loop is enabled; otherwise clamp.
         return loop ? items - 1 : 0;
       }
       return current - 1;
@@ -145,7 +151,9 @@ export function useKeyboardNavigation(
       if (current >= items - 1) {
         return loop ? 0 : items - 1;
       }
-      // If nothing focused yet, start at 0
+      // If nothing focused yet (-1), start at the first item rather than
+      // incrementing -1 to 0 via math, which would also work but is less
+      // readable and intentional.
       if (current < 0) return 0;
       return current + 1;
     });
@@ -159,10 +167,16 @@ export function useKeyboardNavigation(
     setFocusedIndex(items - 1);
   }, [items]);
 
+  // handleKeyDown is the single event handler consumers attach to their
+  // container element. It dispatches to the appropriate movement helper
+  // based on the configured orientation, keeping the switch statement
+  // focused on key mapping rather than movement math.
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (items <= 0) return;
 
+      // Pre-compute orientation flags to avoid repeated string comparisons
+      // inside the switch cases.
       const isVertical = orientation === 'vertical' || orientation === 'both';
       const isHorizontal = orientation === 'horizontal' || orientation === 'both';
 
@@ -201,6 +215,8 @@ export function useKeyboardNavigation(
           moveToLast();
           break;
         }
+        // Space and Enter both trigger selection per WAI-ARIA Authoring
+        // Practices for composite widgets (menus, listboxes, toolbars).
         case 'Enter':
         case ' ': {
           if (focusedIndex >= 0 && focusedIndex < items) {
@@ -209,6 +225,8 @@ export function useKeyboardNavigation(
           }
           break;
         }
+        // Escape dismisses the widget AND resets focus to -1 so reopening
+        // the widget starts with no item pre-focused.
         case 'Escape': {
           e.preventDefault();
           onEscape?.();
@@ -297,21 +315,33 @@ export interface UseAriaAnnounceResult {
  * ```
  */
 export function useAriaAnnounce(): UseAriaAnnounceResult {
+  // Separate state for polite vs assertive because screen readers treat them
+  // differently: polite waits for idle, assertive interrupts immediately.
+  // Keeping them independent ensures one priority lane never clobbers the other.
   const [politeMessage, setPoliteMessage] = useState('');
   const [assertiveMessage, setAssertiveMessage] = useState('');
   const politeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const assertiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // announce is dependency-free (stable identity) because it only writes
+  // to state and refs. This lets consumers safely include it in their own
+  // useEffect/useCallback deps without triggering re-runs.
   const announce = useCallback(
     (message: string, priority: 'polite' | 'assertive' = 'polite') => {
       if (priority === 'assertive') {
-        // Clear first then set - ensures re-announcement of identical messages
+        // Clear-then-set pattern: screen readers only announce when the
+        // aria-live region content CHANGES. Setting to '' first guarantees
+        // a change even when the same message is announced twice in a row.
         setAssertiveMessage('');
         if (assertiveTimerRef.current) clearTimeout(assertiveTimerRef.current);
 
-        // Use requestAnimationFrame to ensure the clear has been committed
+        // requestAnimationFrame ensures the browser paints the empty state
+        // before we set the new message, so the screen reader detects two
+        // distinct content updates rather than a no-op.
         requestAnimationFrame(() => {
           setAssertiveMessage(message);
+          // Auto-clear after 7s to prevent stale announcements from
+          // lingering in the DOM if the user revisits the region.
           assertiveTimerRef.current = setTimeout(() => {
             setAssertiveMessage('');
           }, 7000);
@@ -331,7 +361,12 @@ export function useAriaAnnounce(): UseAriaAnnounceResult {
     []
   );
 
+  // AnnouncerRegion is wrapped in useCallback so it keeps a stable component
+  // identity across renders where messages haven't changed, preventing
+  // unnecessary unmount/remount of the aria-live DOM nodes.
   const AnnouncerRegion: FC = useCallback(() => {
+    // sr-only styles: visually hidden but still accessible to screen readers.
+    // Using clip + 1px dimensions is the most reliable cross-browser technique.
     const srOnlyStyle = {
       position: 'absolute' as const,
       width: '1px',
@@ -344,6 +379,9 @@ export function useAriaAnnounce(): UseAriaAnnounceResult {
       borderWidth: 0,
     };
 
+    // Two separate aria-live regions: role="status" for polite announcements
+    // and role="alert" for assertive ones. aria-atomic ensures the entire
+    // content is announced each time, not just the delta.
     return createElement(
       'div',
       { 'data-testid': 'ds-aria-announcer' },

@@ -1,5 +1,5 @@
 /**
- * Canonical icon token references used by runtime icon helpers.
+ * @fileoverview Canonical icon token references used by runtime icon helpers.
  *
  * The public `@rottay/design-system/tokens` entry exposes a much broader token
  * catalog for consumers. Runtime code inside the core package should depend on

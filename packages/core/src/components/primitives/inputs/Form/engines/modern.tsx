@@ -64,7 +64,11 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle, useEffect } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../Form.types';
 
-// Feedback Icons
+/**
+ * Renders an inline SVG icon corresponding to the current validation status.
+ * Uses DaisyUI semantic color classes (text-success, text-error, etc.) and a
+ * shared entrance animation so the icon pops in when validation completes.
+ */
 const FeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'validating' }> = ({ status }) => {
   switch (status) {
     case 'success':
@@ -94,7 +98,10 @@ const FeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'valida
   }
 };
 
-// Form Context
+// ---------------------------------------------------------------------------
+// Form Context - carries form-wide state and callbacks to nested Form.Items
+// without requiring prop-drilling through intermediate components.
+// ---------------------------------------------------------------------------
 interface FormContextValue {
   values: Record<string, unknown>;
   errors: Record<string, string[]>;
@@ -116,14 +123,27 @@ interface FormContextValue {
 
 const FormContext = createContext<FormContextValue | null>(null);
 
-// useForm hook
+/**
+ * Custom useForm hook providing a stable FormInstance for the Modern engine.
+ *
+ * All mutable state lives in refs so the instance identity stays the same
+ * across re-renders. External subscribers (the Form component) are notified
+ * via a simple listener set to trigger React state updates when values change.
+ *
+ * @template T - Shape of the form values object
+ * @returns A single-element tuple containing the FormInstance, matching Ant Design's API
+ */
 export function useForm<T = unknown>(): [FormInstance<T>] {
   const valuesRef = useRef<Record<string, unknown>>({});
   const errorsRef = useRef<Record<string, string[]>>({});
   const touchedRef = useRef<Record<string, boolean>>({});
   const listenersRef = useRef<Set<() => void>>(new Set());
 
+  // useMemo with [] deps ensures the instance object is created once and never
+  // replaced, so consumers can safely hold a reference without stale closures.
   const instance = useMemo<FormInstance<T> & { __subscribe?: (fn: () => void) => () => void; __getValues?: () => Record<string, unknown> }>(() => ({
+    // Field names can be strings or path arrays (e.g., ['address', 'city']).
+    // We normalise to dot-delimited keys for flat storage in the refs.
     getFieldValue: (name) => {
       const key = Array.isArray(name) ? name.join('.') : String(name);
       return valuesRef.current[key];
@@ -184,7 +204,9 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
     },
     isFieldValidating: () => false,
     scrollToField: () => {},
-    // Internal methods for Form component to subscribe to changes
+    // Internal methods used by the Form component to stay in sync.
+    // __subscribe lets the Form re-render when programmatic changes
+    // (e.g. setFieldsValue) happen outside React's normal flow.
     __subscribe: (fn: () => void) => {
       listenersRef.current.add(fn);
       return () => listenersRef.current.delete(fn);
@@ -195,7 +217,17 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
   return [instance];
 }
 
-// Form component
+/**
+ * Modern Form base component (DaisyUI/Tailwind CSS).
+ *
+ * Manages form state via React context, validates fields on change and submit,
+ * and supports scrollToFirstError for long forms. The component wraps the
+ * external FormInstance methods so that programmatic mutations (e.g. form.setFieldsValue)
+ * also update the internal React state and trigger re-renders.
+ *
+ * @param props - {@link FormProps}
+ * @returns A `<form>` element wrapped in a FormContext provider
+ */
 const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   const {
     form,
@@ -329,6 +361,10 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     }
   }, [values]);
 
+  // Runs every configured rule sequentially for a single field.
+  // Sequential execution matters because later rules may depend on earlier
+  // ones (e.g., a custom validator that only makes sense after required passes).
+  // Async validators are awaited individually so the validating spinner renders.
   const validateField = useCallback(async (fieldName: string, rules?: FormRule[]): Promise<string[]> => {
     if (!rules || rules.length === 0) return [];
 
@@ -338,6 +374,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     const fieldErrors: string[] = [];
 
     for (const rule of rules) {
+      // Check required first - empty values fail immediately
       if (rule.required && (value === undefined || value === null || value === '')) {
         fieldErrors.push(rule.message || `${fieldName} is required`);
       }
@@ -350,6 +387,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
       if (rule.pattern && typeof value === 'string' && !rule.pattern.test(value)) {
         fieldErrors.push(rule.message || `${fieldName} format is invalid`);
       }
+      // Custom validator: rejection or thrown error means validation failed
       if (rule.validator) {
         try {
           await rule.validator(rule, value);
@@ -364,6 +402,8 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     return fieldErrors;
   }, [values, setError]);
 
+  // Submit handler: validates ALL registered fields in parallel, then either
+  // calls onFinish (success) or onFinishFailed (errors) with scroll-to-error UX.
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -453,7 +493,14 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 
 FormBase.displayName = 'Form.Modern';
 
-// Form.Item component
+/**
+ * Modern Form.Item - wraps a single form field with label, validation, and
+ * feedback display. Automatically registers itself with the parent Form
+ * context and triggers validation on change and on dependency updates.
+ *
+ * @param props - {@link FormItemProps}
+ * @returns A labelled form control wrapper with error/help/extra messaging
+ */
 const FormItem: React.FC<FormItemProps> = (props) => {
   const {
     name,
@@ -560,6 +607,9 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     large: 'text-lg',
   };
 
+  // Clone children to inject controlled value, onChange, disabled, and id props.
+  // This is how the Form.Item takes ownership of its child input element without
+  // the consumer needing to wire up onChange/value manually.
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean; checked?: boolean; id?: string }>(child)) {
       const usesCheckedValue = valuePropName === 'checked' || (child.props as { type?: string }).type === 'checkbox';
@@ -626,7 +676,16 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
 FormItem.displayName = 'Form.Item.Modern';
 
-// Form.List component (simplified)
+/**
+ * Modern Form.List - manages a dynamic array of fields via render-prop pattern.
+ *
+ * Exposes add/remove/move operations to the children render function, mirroring
+ * Ant Design's Form.List API. Keys are monotonically increasing to ensure
+ * React reconciliation works correctly when items are reordered or removed.
+ *
+ * @param props - {@link FormListProps}
+ * @returns Rendered children with fields array and operation helpers
+ */
 const FormList: React.FC<FormListProps> = (props) => {
   const { name: _name, initialValue = [], children } = props;
   const [fields, setFields] = useState<Array<{ key: number; name: number }>>(() =>
@@ -669,7 +728,16 @@ const FormList: React.FC<FormListProps> = (props) => {
 
 FormList.displayName = 'Form.List.Modern';
 
-// Form.ErrorList component
+/**
+ * Modern Form.ErrorList - displays validation errors as a bulleted list.
+ *
+ * When `fieldName` is provided, shows errors for that specific field.
+ * When omitted, aggregates all form errors into a single list - useful
+ * for showing a summary at the top or bottom of the form.
+ *
+ * @param props - {@link FormErrorListProps}
+ * @returns An error list or null if no errors exist
+ */
 const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   const { fieldName, className = '', style } = props;
   const context = useContext(FormContext);
@@ -693,7 +761,15 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
 
 FormErrorList.displayName = 'Form.ErrorList.Modern';
 
-// Compound component
+/**
+ * Modern Form compound component.
+ *
+ * Uses Object.assign to attach sub-components so consumers can write
+ * `<Form.Item>` and `<Form.List>` without extra imports.
+ *
+ * @param props - {@link FormProps}
+ * @returns A DaisyUI/Tailwind-styled form with context-based state management
+ */
 export const Form = Object.assign(FormBase, {
   Item: FormItem,
   List: FormList,

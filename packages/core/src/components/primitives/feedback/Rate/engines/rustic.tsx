@@ -266,13 +266,16 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     // State Management
     // -------------------------------------------------------------------------
 
+    // Controlled vs uncontrolled pattern: the parent decides ownership
+    // by passing (or omitting) the `value` prop
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
     const [focusIndex, setFocusIndex] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Derived values
+    // displayValue prefers hoverValue so the visual feedback updates
+    // immediately on mouseover before the user commits a selection
     const currentValue = isControlled ? value : internalValue;
     const displayValue = hoverValue !== null ? hoverValue : currentValue;
     const isInteractive = !disabled && !readOnly;
@@ -414,7 +417,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       const isHovered = hoverValue === starIndex || (allowHalf && hoverValue === starIndex - 0.5);
       const isFocused = focusIndex === starIndex;
 
-      // Compute star style by merging base and state-specific styles
+      // Style merging follows a specificity cascade: base -> color -> state.
+      // Later spreads override earlier ones, so hover/focus take priority.
       const starStyle: React.CSSProperties = {
         ...styles.star.base,
         ...(isFilled || isHalfFilled ? styles.star.active : styles.star.inactive),
@@ -435,6 +439,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           role="radio"
           aria-checked={isFilled}
           aria-label={tooltips?.[index] || `${starIndex} star${starIndex > 1 ? 's' : ''}`}
+          // posinset/setsize inform screen readers of the star's position
+          // within the group, enabling "star 3 of 5" announcements
           aria-posinset={starIndex}
           aria-setsize={count}
           data-index={index}
@@ -480,6 +486,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
 
     return (
       <div
+        // Merge forwarded ref with internal ref so autoFocus and keyboard
+        // navigation logic can access the container DOM node
         ref={(node) => {
           if (typeof ref === 'function') {
             ref(node);

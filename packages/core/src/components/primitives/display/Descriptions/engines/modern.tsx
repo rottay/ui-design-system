@@ -1,7 +1,14 @@
 /**
- * @file Descriptions - Modern Engine (DaisyUI/Tailwind)
- * @description DaisyUI/Tailwind CSS implementation of the Descriptions component.
- * Provides a lightweight, utility-first approach with DaisyUI theming support.
+ * @fileoverview Modern engine for the Descriptions component, backed by DaisyUI/Tailwind.
+ * Renders label-value pairs in either a horizontal CSS grid or vertical stacked
+ * layout using Tailwind utility classes and DaisyUI's base-content colour tokens.
+ *
+ * @example
+ * ```tsx
+ * <Descriptions engine="modern" title="Profile" bordered>
+ *   <Descriptions.Item label="Name">John</Descriptions.Item>
+ * </Descriptions>
+ * ```
  */
 
 'use client';
@@ -22,20 +29,15 @@ function resolveColumnCount(column: DescriptionsProps['column']): number {
 }
 
 /**
- * Modern engine Descriptions component.
- * Uses DaisyUI utility classes for styling with Tailwind CSS.
+ * Modern (DaisyUI) implementation of the Descriptions component.
  *
- * @remarks
- * This implementation is optimized for lightweight bundle size while
- * maintaining full functionality. Uses DaisyUI's color system for
- * consistent theming across the design system.
+ * Iterates over children with React.Children.map and extracts their props
+ * to build either a CSS grid (horizontal) or a divide-y stack (vertical).
+ * This is why the companion ModernItem component renders nothing itself.
  *
- * @example
- * ```tsx
- * <ModernDescriptions title="Profile" bordered>
- *   <ModernDescriptions.Item label="Name">John</ModernDescriptions.Item>
- * </ModernDescriptions>
- * ```
+ * @param props - Unified DescriptionsProps from the design system type contract
+ * @param ref - Forwarded ref attached to the outer container div
+ * @returns A Tailwind-styled description list
  */
 export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
   (props, ref) => {
@@ -53,15 +55,16 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       style,
     } = props;
 
-    // Size variant classes
+    // Map DS size tokens to Tailwind text-size classes for body content
     const sizeClass = {
       default: 'text-base',
       small: 'text-sm',
       middle: 'text-base',
     }[size];
 
-    // Border classes
+    // Bordered mode adds a visible container outline using DaisyUI's base-300 token
     const borderClass = bordered ? 'border border-base-300 rounded-lg' : '';
+    // Resolve responsive column config to a concrete number for CSS grid
     const columnCount = resolveColumnCount(column);
 
     return (
@@ -86,7 +89,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         {/* Content section */}
         <div className={`${borderClass} ${sizeClass}`}>
           {layout === 'horizontal' ? (
-            // Horizontal layout: grid-based with columns
+            // Horizontal: CSS grid with configurable columns; items can span multiple cells
             <div
               className="grid gap-4 p-4"
               style={{ gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}
@@ -123,7 +126,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               })}
             </div>
           ) : (
-            // Vertical layout: stacked rows
+            // Vertical: label on the left (1/3 width), value on the right, separated by dividers
             <div className="divide-y divide-base-300">
               {React.Children.map(children, (child) => {
                 if (!React.isValidElement(child)) return null;
@@ -158,33 +161,29 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 ModernDescriptions.displayName = 'Descriptions.Modern';
 
 /**
- * Modern engine Descriptions.Item component.
- * Wrapper component for individual description items.
+ * Modern engine Descriptions.Item -- a "phantom" component.
  *
- * @remarks
- * In the Modern implementation, this component serves as a props container.
- * The parent Descriptions component handles the actual rendering by
- * iterating over children and extracting their props.
+ * Never renders its own DOM. The parent ModernDescriptions iterates children
+ * via React.Children.map and reads each Item's props (label, span, styles)
+ * to build the actual layout. This pattern avoids an extra wrapper div per
+ * item while keeping the JSX API consistent across engines.
  *
- * @example
- * ```tsx
- * <ModernItem label="Email" span={2}>
- *   user@example.com
- * </ModernItem>
- * ```
+ * @param props - Item-level props including label, span, and styles overrides
+ * @param _ref - Unused; included for API parity with the Classic engine
+ * @returns A React fragment containing only the children (rendered by parent)
  */
 export const ModernItem = forwardRef<HTMLDivElement, DescriptionsItemProps>(
   (props, _ref) => {
     const { children } = props;
-    // Parent component handles rendering; this is a wrapper for props collection
+    // This component is a props container only; the parent reads our props directly
     return <>{children}</>;
   }
 );
 
 ModernItem.displayName = 'Descriptions.Item.Modern';
 
-// Named exports for engine routing
+// Named exports consumed by the engine router to wire up <Descriptions> and <Descriptions.Item>
 export { ModernDescriptions as Descriptions, ModernItem as Item };
 
-// Default export for dynamic imports
+// Default export enables dynamic import via React.lazy or the DS engine loader
 export default ModernDescriptions;

@@ -1,9 +1,15 @@
 'use client';
 
 /**
- * @fileoverview TimePicker Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the TimePicker component using CSS variables.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview TimePicker Rustic Engine -- pure HTML/CSS with CSS variable theming.
+ * Renders a native `<input type="time">` styled entirely through `--ds-timepicker-*`
+ * design tokens, including status-aware border colors, focus ring, and a clear
+ * button. Includes the compound `TimePicker.RangePicker` sub-component.
+ *
+ * @example
+ * ```tsx
+ * <TimePicker engine="rustic" format="HH:mm" status="error" allowClear />
+ * ```
  *
  * @module RusticTimePicker
  * @category Inputs
@@ -13,7 +19,7 @@
 import React, { useState } from 'react';
 import type { TimePickerProps, TimeRangePickerProps } from '../TimePicker.types';
 
-// Size configuration using CSS variables
+/** Size dimensions driven by CSS variables for each size variant. */
 const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; minWidth: string }> = {
   small: {
     padding: 'var(--ds-timepicker-sm-padding)',
@@ -32,6 +38,11 @@ const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; minWidth:
   },
 };
 
+/**
+ * Parses a shorthand padding string (e.g., "8px 12px") into individual
+ * paddingTop/Right/Bottom/Left properties, overriding paddingRight with
+ * `endPadding` to make room for the clear button and clock icon.
+ */
 function resolveInputPadding(padding: string, endPadding: string): React.CSSProperties {
   const [top, right = top, bottom = top, left = right] = padding.split(' ');
   return {
@@ -42,6 +53,16 @@ function resolveInputPadding(padding: string, endPadding: string): React.CSSProp
   };
 }
 
+/**
+ * Rustic engine TimePicker -- framework-free, CSS-variable-driven time input.
+ *
+ * Uses a native `<input type="time">` for the actual time selection while
+ * applying custom border, background, and focus styles via `--ds-timepicker-*`
+ * tokens. Includes a conditional clear button and a decorative clock icon.
+ *
+ * @param props - {@link TimePickerProps} unified time picker props.
+ * @returns A ref-forwarding time input with pure CSS variable styling.
+ */
 const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((props, ref) => {
   const {
     value,
@@ -60,6 +81,10 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     name,
   } = props;
 
+  /**
+   * Normalises a Date or string into an "HH:mm:ss" time string.
+   * Accepts bare time strings, ISO date strings, and Date objects.
+   */
   const parseTime = (val: Date | string | null | undefined): string => {
     if (!val) return '';
     if (typeof val === 'string') {
@@ -73,12 +98,15 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     return val.toTimeString().slice(0, 8);
   };
 
+  // Controlled vs uncontrolled: external `value` takes precedence
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<string>(() => parseTime(defaultValue));
+  // Focus state drives border color and box-shadow via inline styles
   const [isFocused, setIsFocused] = useState(false);
 
   const displayValue = isControlled ? parseTime(value) : internalValue;
 
+  // Build a full Date anchored to today so the caller receives a usable Date object
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const timeStr = e.target.value;
     const today = new Date();
@@ -91,6 +119,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     onChange?.(today, timeStr);
   };
 
+  /** Clears the time value and notifies parent with null. */
   const handleClear = () => {
     if (!isControlled) {
       setInternalValue('');
@@ -99,9 +128,10 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   };
 
   const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+  // step=1 shows second spinners in the native picker; step=60 hides them
   const showSeconds = format.includes('ss') || format.includes('s');
 
-  // Build class names
+  // BEM class names for external CSS targeting and state-driven modifiers
   const containerClasses = [
     'rottay-timepicker',
     'rottay-timepicker--rustic',
@@ -112,6 +142,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     className,
   ].filter(Boolean).join(' ');
 
+  /** Resolves border color based on validation status and focus state priority. */
   const getBorderColor = () => {
     if (status === 'error') return 'var(--ds-timepicker-error-border)';
     if (status === 'warning') return 'var(--ds-timepicker-warning-border)';
@@ -197,7 +228,14 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
 
 TimePickerBase.displayName = 'TimePicker.Rustic';
 
-// TimeRangePicker component
+/**
+ * Range variant with two paired native time inputs and a separator.
+ * Each input independently updates its half of the `[start, end]` tuple
+ * and tracks its own focus state for individual border highlighting.
+ *
+ * @param props - {@link TimeRangePickerProps} unified range picker props.
+ * @returns A ref-forwarding time range input pair with pure CSS variable styling.
+ */
 const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((props, ref) => {
   const {
     value,
@@ -240,6 +278,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     ? [parseTime(value?.[0]), parseTime(value?.[1])] as [string, string]
     : internalValue;
 
+  /** Converts a time string to a Date anchored to today, or null if empty. */
   const createDate = (timeStr: string): Date | null => {
     if (!timeStr) return null;
     const today = new Date();
@@ -248,6 +287,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     return today;
   };
 
+  // Start input change preserves the current end value
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const timeStr = e.target.value;
     const newValue: [string, string] = [timeStr, displayValue[1]];
@@ -261,6 +301,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     );
   };
 
+  // End input change preserves the current start value
   const handleEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const timeStr = e.target.value;
     const newValue: [string, string] = [displayValue[0], timeStr];
@@ -277,7 +318,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
   const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
   const showSeconds = format.includes('ss') || format.includes('s');
 
-  // Build class names
+  // BEM class names for external CSS targeting and state-driven modifiers
   const containerClasses = [
     'rottay-timepicker-range',
     'rottay-timepicker-range--rustic',
@@ -295,6 +336,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     ...style,
   };
 
+  /** Resolves border color based on validation status and per-input focus state. */
   const getBorderColor = (isFocused: boolean) => {
     if (status === 'error') return 'var(--ds-timepicker-error-border)';
     if (status === 'warning') return 'var(--ds-timepicker-warning-border)';
@@ -354,7 +396,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
 
 TimeRangePicker.displayName = 'TimePicker.RangePicker.Rustic';
 
-// Compound component
+// Compound component: TimePicker.RangePicker follows the AntD compound pattern
 export const TimePicker = Object.assign(TimePickerBase, {
   RangePicker: TimeRangePicker,
 });

@@ -1,7 +1,21 @@
 'use client';
 
 /**
- * EnvironmentToggle - Classic Engine (Ant Design)
+ * @fileoverview EnvironmentToggle -- Classic engine (Ant Design).
+ * Provides a UI control for switching between deployment environments
+ * (e.g. development, staging, production). Supports three display
+ * variants: radio-group toggle (default), pill buttons, and dropdown.
+ * A warning banner appears when a non-production environment is active.
+ * Production switches can require explicit confirmation via Ant Modal.
+ *
+ * @example
+ * <ClassicEnvironmentToggle
+ *   environments={[{ id: 'dev', name: 'Development', color: '#3b82f6' }, { id: 'prod', name: 'Production', color: '#ef4444' }]}
+ *   activeEnvironment="dev"
+ *   onChange={(envId) => setEnv(envId)}
+ *   productionId="prod"
+ *   confirmProductionSwitch="Are you sure? This will affect live users."
+ * />
  */
 
 import React, { useState, useCallback } from 'react';
@@ -13,6 +27,15 @@ import {
 } from '@ant-design/icons';
 import type { EnvironmentToggleProps, EnvironmentDef } from '../EnvironmentToggle.types';
 
+/**
+ * Classic (Ant Design) implementation of the EnvironmentToggle pattern.
+ * Uses Ant's Radio.Group for the default toggle, Dropdown for the
+ * dropdown variant, and Button groups for the pills variant.
+ * Production safety is handled via Ant's Modal.confirm.
+ *
+ * @param props - See {@link EnvironmentToggleProps} for the full prop contract.
+ * @returns The rendered environment toggle with optional banner.
+ */
 export default function ClassicEnvironmentToggle(props: EnvironmentToggleProps) {
   const {
     environments,
@@ -28,12 +51,21 @@ export default function ClassicEnvironmentToggle(props: EnvironmentToggleProps) 
     style,
   } = props;
 
+  /* Derive the full definition for the currently active environment */
   const activeEnv = environments.find(e => e.id === activeEnvironment);
+  /* Determines whether the warning banner should be suppressed */
   const isProduction = activeEnvironment === productionId;
 
+  /**
+   * Handles environment switching with production safety gate.
+   * If the target is the production environment and a confirmation
+   * message is configured, it opens an Ant Modal.confirm dialog first.
+   */
   const handleSwitch = useCallback(
     (envId: string) => {
+      /* No-op when clicking the already-active environment */
       if (envId === activeEnvironment) return;
+      /* Gate production switches behind a confirmation modal */
       if (envId === productionId && confirmProductionSwitch) {
         Modal.confirm({
           title: 'Switch to Production',
@@ -51,7 +83,9 @@ export default function ClassicEnvironmentToggle(props: EnvironmentToggleProps) 
     [activeEnvironment, productionId, confirmProductionSwitch, onChange],
   );
 
+  /** Renders the appropriate toggle control based on the variant prop */
   const renderToggle = () => {
+    /* Dropdown variant: Ant Dropdown with colored dot and check mark for active item */
     if (variant === 'dropdown') {
       const items = environments.map(env => ({
         key: env.id,
@@ -92,6 +126,7 @@ export default function ClassicEnvironmentToggle(props: EnvironmentToggleProps) 
       );
     }
 
+    /* Pills variant: individual buttons with active color applied via inline style */
     if (variant === 'pills') {
       return (
         <Space size={4} data-testid="env-toggle-trigger">
@@ -115,7 +150,7 @@ export default function ClassicEnvironmentToggle(props: EnvironmentToggleProps) 
       );
     }
 
-    // Default: toggle (radio group style)
+    /* Default: radio-group toggle -- uses Ant's solid button style for clear active state */
     return (
       <Radio.Group
         value={activeEnvironment}
@@ -130,11 +165,13 @@ export default function ClassicEnvironmentToggle(props: EnvironmentToggleProps) 
             key={env.id}
             value={env.id}
             data-testid={`env-option-${env.id}`}
+            /* Override Ant's default button color with the environment's brand color when active */
             style={env.id === activeEnvironment ? { background: env.color, borderColor: env.color } : {}}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               {env.icon}
               {env.name}
+              {/* Compact inline badge for environment metadata (e.g. "v2", "beta") */}
               {env.badge && <Tag style={{ fontSize: 9, lineHeight: '14px', padding: '0 4px', marginRight: 0, marginLeft: 4 }}>{env.badge}</Tag>}
             </span>
           </Radio.Button>
@@ -145,7 +182,8 @@ export default function ClassicEnvironmentToggle(props: EnvironmentToggleProps) 
 
   return (
     <div className={`ds-pattern-environment-toggle ds-engine-classic ${className ?? ''}`} style={style}>
-      {/* Banner */}
+      {/* Banner -- only shown for non-production environments to warn the user */}
+      {/* Background uses the environment's color at 15% opacity (hex suffix) */}
       {showBanner && !isProduction && activeEnv && (
         <Alert
           type="warning"

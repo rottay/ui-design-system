@@ -1,8 +1,8 @@
 /**
- * Radio Component Tokens - TypeScript Mirror
+ * @fileoverview Radio component token mirrors.
  *
- * TypeScript representation of Radio CSS custom properties.
- * Use these for type-safe Radio token references.
+ * Covers 5 size tiers, 6 color variants, checked/unchecked/disabled states,
+ * inner dot scaling, focus ring, and transition tokens.
  */
 
 // Radio Sizes

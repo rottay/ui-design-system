@@ -1,3 +1,5 @@
+/** @fileoverview CompareSurface tests -- column rendering, highlight, and responsive. */
+
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { mockMatchMedia } from '../../../testing/helpers/match-media';

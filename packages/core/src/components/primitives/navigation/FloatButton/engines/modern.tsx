@@ -82,12 +82,15 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       children,
     } = props;
 
-    // Compose Tailwind/DaisyUI classes
+    // Compose DaisyUI button classes; btn-ghost + bg-base-100 provides an
+    // elevated default look that contrasts against most page backgrounds
     const baseClasses = `btn ${
       shape === 'circle' ? 'btn-circle' : 'rounded-lg'
     } ${type === 'primary' ? 'btn-primary' : 'btn-ghost bg-base-100'} shadow-lg`;
 
-    // Button content with icon, description, and badges
+    // Badge rendering: dot takes priority over count to avoid conflicting
+    // indicators. Count is capped at 99+ to prevent badge overflow on
+    // the small circular button surface.
     const content = (
       <>
         {icon}
@@ -104,7 +107,8 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       </>
     );
 
-    // Render as anchor or button based on href
+    // When href is provided, render as <a> for native link semantics and
+    // accessibility; otherwise render as <button> for click-only actions
     const buttonElement = href ? (
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
@@ -205,6 +209,8 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
       }
     };
 
+    // flex-col-reverse places the trigger button at the visual bottom
+    // so child items expand upward, matching FAB menu conventions
     return (
       <div
         ref={ref}

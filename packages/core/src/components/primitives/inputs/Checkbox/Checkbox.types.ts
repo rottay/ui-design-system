@@ -56,11 +56,50 @@
 import type { EngineAwareProps } from '../../../../contracts';
 import type { ReactNode, ChangeEvent, CSSProperties } from 'react';
 
+/**
+ * Size variants for the Checkbox component.
+ * Maps to CSS custom properties `--ds-checkbox-{size}-size` via {@link SIZE_MAP}
+ * and pixel values via {@link SIZE_MAP_NUMERIC}.
+ */
 export type CheckboxSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * Color variants applied when the checkbox is checked.
+ * Each variant maps to background, border, and checkmark colors
+ * via {@link COLOR_MAP} and the tenant's CSS custom properties.
+ */
 export type CheckboxVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+
+/**
+ * Border radius options for the checkbox indicator.
+ * - `none` - Sharp corners (square)
+ * - `sm` - Slightly rounded (default)
+ * - `md` - Medium rounding
+ * - `lg` - Large rounding
+ * - `full` - Fully rounded (circle)
+ */
 export type CheckboxRadius = 'none' | 'sm' | 'md' | 'lg' | 'full';
+
+/**
+ * Position of the label text relative to the checkbox indicator.
+ * - `start` - Label appears before (left in LTR) the checkbox
+ * - `end` - Label appears after (right in LTR) the checkbox
+ */
 export type CheckboxLabelPlacement = 'start' | 'end';
 
+/**
+ * Option structure for Checkbox.Group when using the `options` prop
+ * instead of declarative `<Checkbox>` children.
+ *
+ * @example
+ * ```tsx
+ * const options: CheckboxOption[] = [
+ *   { value: 'read', label: 'Read' },
+ *   { value: 'write', label: 'Write', disabled: true },
+ * ];
+ * <Checkbox.Group options={options} />
+ * ```
+ */
 export interface CheckboxOption {
   /** Option value */
   value: string | number;
@@ -70,6 +109,33 @@ export interface CheckboxOption {
   disabled?: boolean;
 }
 
+/**
+ * Props for the Checkbox component.
+ *
+ * Supports controlled and uncontrolled modes, indeterminate state for
+ * "select all" patterns, multiple color variants, configurable border radius,
+ * and label placement.
+ *
+ * @example Basic controlled checkbox
+ * ```tsx
+ * <Checkbox
+ *   checked={agreed}
+ *   onChange={(checked) => setAgreed(checked)}
+ *   label="I agree to the terms"
+ *   color="primary"
+ * />
+ * ```
+ *
+ * @example Indeterminate "select all" pattern
+ * ```tsx
+ * <Checkbox
+ *   indeterminate={someChecked && !allChecked}
+ *   checked={allChecked}
+ *   onChange={(checked) => toggleAll(checked)}
+ *   label="Select all"
+ * />
+ * ```
+ */
 export interface CheckboxProps extends EngineAwareProps {
   /** Checkbox size */
   size?: CheckboxSize;
@@ -113,6 +179,31 @@ export interface CheckboxProps extends EngineAwareProps {
   autoFocus?: boolean;
 }
 
+/**
+ * Props for the Checkbox.Group compound component.
+ * Manages a set of checkboxes as a single form control, tracking an array of selected values.
+ *
+ * @example Using options prop
+ * ```tsx
+ * <Checkbox.Group
+ *   options={[
+ *     { value: 'a', label: 'Option A' },
+ *     { value: 'b', label: 'Option B' },
+ *   ]}
+ *   value={selected}
+ *   onChange={(vals) => setSelected(vals)}
+ *   direction="horizontal"
+ * />
+ * ```
+ *
+ * @example Using children
+ * ```tsx
+ * <Checkbox.Group value={selected} onChange={setSelected}>
+ *   <Checkbox value="a" label="Option A" />
+ *   <Checkbox value="b" label="Option B" />
+ * </Checkbox.Group>
+ * ```
+ */
 export interface CheckboxGroupProps extends EngineAwareProps {
   /** Group size */
   size?: CheckboxSize;
@@ -142,6 +233,21 @@ export interface CheckboxGroupProps extends EngineAwareProps {
   name?: string;
 }
 
+/**
+ * Default values for Checkbox component props.
+ * Applied when no explicit value is provided by the consumer.
+ *
+ * @constant
+ * @property {string} size - Default size variant ('md')
+ * @property {string} color - Default color variant ('primary')
+ * @property {string} radius - Default border radius ('sm')
+ * @property {string} labelPlacement - Default label position ('end')
+ * @property {boolean} defaultChecked - Default checked state (false)
+ * @property {boolean} indeterminate - Default indeterminate state (false)
+ * @property {boolean} disabled - Default disabled state (false)
+ * @property {boolean} required - Default required state (false)
+ * @property {boolean} error - Default error state (false)
+ */
 export const CHECKBOX_DEFAULTS = {
   size: 'md' as CheckboxSize,
   color: 'primary' as CheckboxVariant,
@@ -154,6 +260,16 @@ export const CHECKBOX_DEFAULTS = {
   error: false,
 };
 
+/**
+ * Default values for Checkbox.Group component props.
+ *
+ * @constant
+ * @property {string} size - Default size for all child checkboxes ('md')
+ * @property {string} color - Default color for all child checkboxes ('primary')
+ * @property {string} direction - Default layout direction ('vertical')
+ * @property {string} spacing - Default gap between items ('md')
+ * @property {boolean} disabled - Default disabled state (false)
+ */
 export const CHECKBOX_GROUP_DEFAULTS = {
   size: 'md' as CheckboxSize,
   color: 'primary' as CheckboxVariant,
@@ -162,7 +278,13 @@ export const CHECKBOX_GROUP_DEFAULTS = {
   disabled: false,
 };
 
-// Size mapping to CSS variables
+/**
+ * Size mapping to CSS custom properties.
+ * Each size variant references a `--ds-checkbox-{size}-size` CSS variable
+ * that controls both width and height of the checkbox indicator.
+ *
+ * @constant
+ */
 export const SIZE_MAP: Record<CheckboxSize, string> = {
   xs: 'var(--ds-checkbox-xs-size)',
   sm: 'var(--ds-checkbox-sm-size)',
@@ -171,7 +293,12 @@ export const SIZE_MAP: Record<CheckboxSize, string> = {
   xl: 'var(--ds-checkbox-xl-size)',
 };
 
-// Numeric size values for calculations (e.g., checkmark sizing)
+/**
+ * Numeric size values in pixels for calculations that cannot use CSS variables
+ * (e.g., SVG checkmark path sizing, canvas rendering).
+ *
+ * @constant
+ */
 export const SIZE_MAP_NUMERIC: Record<CheckboxSize, number> = {
   xs: 14,
   sm: 16,
@@ -180,7 +307,15 @@ export const SIZE_MAP_NUMERIC: Record<CheckboxSize, number> = {
   xl: 24,
 };
 
-// Color mapping
+/**
+ * Color configuration mapping for each checkbox variant.
+ * References CSS custom properties with hardcoded fallback values.
+ *
+ * @constant
+ * @property {string} bg - Background color when checked
+ * @property {string} border - Border color when checked
+ * @property {string} check - Checkmark stroke color (always white)
+ */
 export const COLOR_MAP: Record<CheckboxVariant, { bg: string; border: string; check: string }> = {
   default: {
     bg: 'var(--ds-color-neutral-600, #4b5563)',
@@ -214,7 +349,12 @@ export const COLOR_MAP: Record<CheckboxVariant, { bg: string; border: string; ch
   },
 };
 
-// Radius mapping to CSS variables
+/**
+ * Border radius mapping to CSS custom properties.
+ * Controls the corner rounding of the checkbox indicator.
+ *
+ * @constant
+ */
 export const RADIUS_MAP: Record<CheckboxRadius, string> = {
   none: 'var(--ds-checkbox-radius-none)',
   sm: 'var(--ds-checkbox-radius-sm)',

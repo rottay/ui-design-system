@@ -1,8 +1,6 @@
 /**
- * Ejemplos de uso del sistema de tipos del Design System Rottay
- *
- * Este archivo demuestra cómo usar los tipos definidos para crear componentes.
- * NO es código de producción, solo ejemplos para referencia.
+ * Usage examples demonstrating how to consume the DS contract types when
+ * building engine-aware components. NOT production code -- reference only.
  */
 
 import React from 'react';
@@ -317,7 +315,7 @@ const ExampleModal: React.FC<ModalProps> = ({
    EJEMPLO 6: Toast Hook
    =========================== */
 
-import type { ToastMethods, ToastOptions } from './primitives/feedback/toast';
+import type { ToastMethods, ToastOptions } from '../components/primitives/feedback/Toast/Toast.types';
 
 // Ejemplo de implementación del hook useToast
 const useToastExample = (): ToastMethods => {

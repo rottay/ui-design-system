@@ -1,22 +1,38 @@
 'use client';
 
 /**
- * Timeline - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the Timeline pattern.
+ *
+ * Uses DaisyUI's `timeline`, `timeline-vertical`, `timeline-start`,
+ * `timeline-end`, and `timeline-box` classes to compose a vertical timeline.
+ * Supports left, right, and alternate layout modes by conditionally swapping
+ * `timeline-start` and `timeline-end` classes per item. Type-based semantic
+ * badges use DaisyUI's badge color variants.
+ *
+ * @example
+ * <ModernTimeline
+ *   items={[{ key: '1', title: 'PR Merged', timestamp: '2026-03-15', type: 'success' }]}
+ *   mode="alternate"
+ *   onItemClick={(item) => openDetail(item)}
+ * />
  */
 
 import React, { useMemo } from 'react';
 import type { TimelinePatternProps, TimelineItem } from '../Timeline.types';
 
+/** Formats a timestamp for display inside a timeline item. */
 function formatTimestamp(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
   return date.toLocaleString();
 }
 
+/** Extracts a locale-formatted date string used as a grouping key. */
 function formatDateKey(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
   return date.toLocaleDateString();
 }
 
+/** Maps semantic item types to DaisyUI badge color classes. */
 const typeBadgeClass: Record<string, string> = {
   default: 'badge-info',
   success: 'badge-success',
@@ -25,6 +41,17 @@ const typeBadgeClass: Record<string, string> = {
   info: 'badge-info',
 };
 
+/**
+ * Modern (DaisyUI/Tailwind) engine for the Timeline pattern component.
+ *
+ * Renders a `<ul class="timeline timeline-vertical">` with `<li>` entries
+ * that use DaisyUI's timeline utility classes for connector lines and dot
+ * indicators. In alternate mode, even-indexed items swap start/end placement
+ * for a zigzag layout.
+ *
+ * @param props - {@link TimelinePatternProps} controlling items, layout mode, grouping, and callbacks.
+ * @returns A vertical timeline rendered with DaisyUI/Tailwind classes.
+ */
 export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   const {
     items,
@@ -41,6 +68,8 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     style,
   } = props;
 
+  // Group items by calendar date when groupByDate is enabled.
+  // Returns null when grouping is off to avoid unnecessary object allocation.
   const grouped = useMemo(() => {
     if (!groupByDate) return null;
     const groups: Record<string, TimelineItem<T>[]> = {};
@@ -52,6 +81,8 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     return groups;
   }, [items, groupByDate]);
 
+  /** Builds the default render for a single timeline item. In alternate mode,
+   *  odd-indexed items are placed on the right side by swapping start/end classes. */
   const buildDefaultRender = (item: TimelineItem<T>, index: number, total: number) => {
     const isAlternate = mode === 'alternate';
     const isRight = mode === 'right' || (isAlternate && index % 2 === 1);
@@ -69,6 +100,8 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           </div>
         )}
         <div className="timeline-middle">
+          {/* Render custom icon if provided; otherwise fall back to a
+              checkmark circle SVG colored by the item's semantic type. */}
           {item.icon ? (
             <span className="flex items-center justify-center w-5 h-5">{item.icon}</span>
           ) : (
@@ -107,6 +140,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     );
   };
 
+  /** Renders a list of timeline items as a DaisyUI vertical timeline. */
   const renderList = (list: TimelineItem<T>[]) => (
     <ul className="timeline timeline-vertical">
       {list.map((item, index) => {
@@ -120,6 +154,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     </ul>
   );
 
+  // Early-return loading state using DaisyUI's built-in spinner component.
   if (loading) {
     return (
       <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
@@ -128,6 +163,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     );
   }
 
+  // Empty state preserves header/footer so surrounding layout stays intact.
   if (items.length === 0) {
     return (
       <div className={className} style={style}>
@@ -143,6 +179,8 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   return (
     <div className={`ds-pattern-timeline ds-engine-modern ${className ?? ''}`} style={style}>
       {header}
+      {/* When groupByDate is active, render each date cluster with its
+          own heading; otherwise render all items as a single flat list. */}
       {grouped ? (
         Object.entries(grouped).map(([dateKey, group]) => (
           <div key={dateKey} className="mb-6">

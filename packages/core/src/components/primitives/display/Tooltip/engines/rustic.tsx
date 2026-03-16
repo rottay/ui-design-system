@@ -78,6 +78,8 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const tooltipId = useRef(`tooltip-${Math.random().toString(36).substr(2, 9)}`);
 
+    // Controlled mode: external prop overrides internal state.
+    // Uncontrolled mode: internal state drives visibility.
     const visible = controlledVisible !== undefined ? controlledVisible : isVisible;
     const triggers = Array.isArray(trigger) ? trigger : [trigger];
 
@@ -121,16 +123,19 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       eventHandlers.onClick = () => (visible ? hide() : show());
     }
 
-    // Container styles
+    // inline-flex keeps the wrapper tight around the trigger element
+    // so the tooltip positions relative to the actual child bounds.
     const containerStyle: React.CSSProperties = {
       position: 'relative',
       display: 'inline-flex',
     };
 
-    // Get placement positioning
+    // PLACEMENT_MAP provides the absolute positioning offsets (top/left/transform)
+    // for each placement value, defined in the shared Tooltip.types module.
     const placementStyle = PLACEMENT_MAP[placement] || PLACEMENT_MAP.top;
 
-    // Tooltip content styles using CSS variables
+    // All visual properties reference CSS custom properties (--ds-tooltip-*)
+    // so theming is fully configurable without touching component code.
     const tooltipStyle: React.CSSProperties = {
       position: 'absolute',
       ...placementStyle,
@@ -155,7 +160,8 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       ...style,
     };
 
-    // Arrow styles
+    // Arrow is a rotated square positioned at the edge of the tooltip bubble.
+    // Each placement direction offsets the arrow to the appropriate side.
     const arrowStyle: React.CSSProperties = arrow ? {
       position: 'absolute',
       width: 'var(--ds-tooltip-arrow-size, 6px)',

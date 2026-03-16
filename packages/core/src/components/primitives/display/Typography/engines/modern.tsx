@@ -49,7 +49,9 @@ import type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../Typo
 import { TYPOGRAPHY_DEFAULTS } from '../Typography.types';
 
 /**
- * Tailwind CSS size classes for headings.
+ * Heading sizes are intentionally one step larger than text sizes (e.g.
+ * "xs" maps to text-base, not text-xs) so headings always appear visually
+ * distinct from body text at the same nominal size value.
  */
 const HEADING_SIZE_CLASSES: Record<string, string> = {
   xs: 'text-base',
@@ -62,7 +64,8 @@ const HEADING_SIZE_CLASSES: Record<string, string> = {
 };
 
 /**
- * Tailwind CSS size classes for text.
+ * Text sizes map 1:1 to Tailwind's type scale so consumers get
+ * predictable results without needing to know the underlying utility names.
  */
 const TEXT_SIZE_CLASSES: Record<string, string> = {
   xs: 'text-xs',
@@ -95,7 +98,9 @@ const ALIGN_CLASSES: Record<string, string> = {
 };
 
 /**
- * DaisyUI color classes.
+ * Colors use DaisyUI semantic tokens so they automatically adapt when
+ * the theme changes (e.g. light to dark mode). "muted" uses a 70%
+ * opacity modifier instead of a separate color to maintain contrast ratio.
  */
 const COLOR_CLASSES: Record<string, string> = {
   default: 'text-base-content',
@@ -136,9 +141,12 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     },
     ref
   ) => {
+    // Use the heading level directly as the JSX element tag (h1-h6)
+    // so the output is semantically correct without extra mapping.
     const Component = level;
 
-    // Build class list
+    // Class list is assembled as an array and filtered to avoid
+    // stray spaces from falsy entries (e.g. when size is undefined).
     const classes = [
       size ? HEADING_SIZE_CLASSES[size] : '',
       WEIGHT_CLASSES[weight],
@@ -200,9 +208,12 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
     },
     ref
   ) => {
+    // The `as` prop controls the rendered HTML tag (span, em, strong, etc.)
+    // giving consumers semantic flexibility without additional wrappers.
     const Component = as;
 
-    // Build class list
+    // Text decorations and style modifiers are each a single Tailwind class,
+    // keeping the compiled output minimal compared to inline style equivalents.
     const classes = [
       TEXT_SIZE_CLASSES[size],
       WEIGHT_CLASSES[weight],
@@ -263,7 +274,9 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     },
     ref
   ) => {
-    // Build class list
+    // Paragraphs include "leading-relaxed" and "mb-4" by default because
+    // body text needs generous line-height and vertical rhythm to remain
+    // readable at longer lengths. These can be overridden via className.
     const classes = [
       TEXT_SIZE_CLASSES[size],
       WEIGHT_CLASSES[weight],
@@ -321,16 +334,20 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
     },
     ref
   ) => {
-    // Auto-set rel for external links
+    // Security: external links automatically receive noopener noreferrer
+    // to prevent reverse tabnabbing attacks.
     const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
 
-    // Build class list
+    // Disabled links use pointer-events-none + reduced opacity so they
+    // cannot be clicked or focused, matching native disabled behavior.
+    // The "transition-colors" class is always present for smooth color shifts.
     const classes = [
       TEXT_SIZE_CLASSES[size],
       weight ? WEIGHT_CLASSES[weight] : '',
       COLOR_CLASSES[color],
       strong ? 'font-semibold' : '',
       underline ? 'underline' : '',
+      // hover:underline only applies when the link is not already underlined.
       underlineOnHover && !underline ? 'hover:underline' : '',
       disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
       'transition-colors',
@@ -340,6 +357,8 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       .join(' ');
 
     return (
+      /* Disabled links have href removed entirely so they are not
+          navigable via keyboard or assistive technology. */
       <a
         ref={ref}
         href={disabled ? undefined : href}

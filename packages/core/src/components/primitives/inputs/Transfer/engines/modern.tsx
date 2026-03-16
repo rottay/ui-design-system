@@ -1,14 +1,19 @@
 'use client';
 
 /**
- * Transfer - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Transfer Modern Engine -- DaisyUI/Tailwind implementation for
+ * the Rottay Design System. Builds a fully custom dual-panel transfer list
+ * using Tailwind utility classes, with built-in search, pagination, and
+ * select-all support.
  *
- * Features:
- * - showSearch: search input at top of each panel, filters items
- * - pagination: page size + navigation controls at bottom of each panel
- * - titles: custom header text for left/right panels
- * - render: custom item render function
- * - notFoundContent: empty state (via locale.notFoundContent)
+ * @example
+ * ```tsx
+ * <Transfer engine="modern" dataSource={items} showSearch pagination={{ pageSize: 5 }} />
+ * ```
+ *
+ * @module ModernTransfer
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TransferProps, TransferItem } from '../Transfer.types';
@@ -32,8 +37,15 @@ interface TransferListProps {
   pagination?: boolean | { pageSize?: number };
 }
 
+/** Default number of items shown per page when pagination is enabled without
+ *  an explicit pageSize. Matches the Ant Design Transfer default. */
 const DEFAULT_PAGE_SIZE = 10;
 
+/**
+ * Internal panel component that renders one side (source or target) of the
+ * Transfer. Includes optional search, select-all checkbox, paginated item
+ * list, and an empty-state placeholder.
+ */
 const TransferList: React.FC<TransferListProps> = ({
   title,
   items,
@@ -58,7 +70,8 @@ const TransferList: React.FC<TransferListProps> = ({
     return items.filter((item) => filterOption(searchValue, item));
   }, [items, searchValue, filterOption]);
 
-  // Reset page on filter change
+  // Reset to page 1 whenever the filtered item count changes (e.g., after
+  // a search query narrows results) to prevent showing an empty page.
   const prevFilteredLength = React.useRef(filteredItems.length);
   React.useEffect(() => {
     if (filteredItems.length !== prevFilteredLength.current) {
@@ -192,6 +205,17 @@ const TransferList: React.FC<TransferListProps> = ({
   );
 };
 
+/**
+ * Modern (DaisyUI/Tailwind) engine for the Transfer component.
+ *
+ * Renders two `TransferList` panels (source and target) with directional
+ * move buttons between them. Supports controlled and uncontrolled target
+ * keys, search filtering with a configurable filter function, and pagination.
+ *
+ * @param props - Standardized TransferProps from the design system contract.
+ * @param ref   - Forwarded ref attached to the outer flex container.
+ * @returns A dual-panel transfer list with move controls.
+ */
 export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
   (props, ref) => {
     const {
@@ -230,13 +254,17 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
     const sourceItems = dataSource.filter((item) => !targetKeysSet.has(item.key));
     const targetItems = dataSource.filter((item) => targetKeysSet.has(item.key));
 
-    // Default filter function when showSearch is enabled but no filterOption provided
+    // When showSearch is on but the consumer did not provide a custom filter,
+    // fall back to a case-insensitive title match for convenience.
     const effectiveFilterOption = filterOption ?? (showSearch
       ? (input: string, item: TransferItem) =>
           item.title.toLowerCase().includes(input.toLowerCase())
       : undefined
     );
 
+    // Move selected items between panels. "right" adds source selections to
+    // the target; "left" removes target selections back to source. Selections
+    // are cleared on the moved side to prevent stale ghost selections.
     const handleMove = useCallback((direction: 'left' | 'right') => {
       const keysToMove = direction === 'right'
         ? Array.from(sourceSelectedKeys)
@@ -254,7 +282,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       }
       onChange?.(newTargetKeys, direction, keysToMove);
 
-      // Clear selections after move
+      // Clear selections after move so the user starts fresh
       if (direction === 'right') {
         setSourceSelectedKeys(new Set());
       } else {

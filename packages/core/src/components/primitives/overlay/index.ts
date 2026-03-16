@@ -1,5 +1,6 @@
 /**
- * Overlay primitives
+ * @fileoverview Overlay primitives barrel export.
+ * Re-exports all overlay-category primitive components.
  *
  * Note: Modal compound components (Header, Body, Footer) are exported from
  * './feedback/Modal'. Use OverlayModal for advanced features like Portal.

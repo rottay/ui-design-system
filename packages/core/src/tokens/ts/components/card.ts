@@ -1,8 +1,9 @@
 /**
- * Card Component Tokens - TypeScript Mirror
+ * @fileoverview Card component token mirrors.
  *
- * TypeScript representation of Card CSS custom properties.
- * Use these for type-safe Card token references.
+ * Covers size tiers, appearance defaults, border/shadow/variant options,
+ * header/body/footer/media sub-slots, semantic status variants, interactive
+ * states, responsive grid layout tokens, and accessibility focus rings.
  */
 
 // Card Sizes

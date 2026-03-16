@@ -128,17 +128,19 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     } = props;
 
     const triggers = normalizeTriggers(trigger);
+    // Detect controlled mode: when the consumer supplies `visible`, we defer
+    // to their state and only notify via onVisibleChange instead of self-managing.
     const isControlled = visible !== undefined;
 
-    // Internal visibility state (uncontrolled mode)
+    // Internal state only used in uncontrolled mode
     const [internalVisible, setInternalVisible] = useState(false);
     const showTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Effective visibility
+    // Single source of truth: controlled prop wins over internal state
     const isVisible = isControlled ? visible : internalVisible;
 
-    // Cleanup timeouts on unmount
+    // Prevent stale timeouts from firing after the component unmounts
     useEffect(() => {
       return () => {
         if (showTimeoutRef.current) clearTimeout(showTimeoutRef.current);
@@ -187,7 +189,8 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }
     }, [isVisible, show, hide]);
 
-    // Event handlers based on trigger types
+    // Wire up DOM event handlers based on the requested trigger modes.
+    // Multiple triggers can be active simultaneously (e.g. ['hover', 'focus']).
     const eventHandlers: Record<string, any> = {};
 
     if (triggers.includes('hover')) {
@@ -204,7 +207,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       eventHandlers.onClick = toggle;
     }
 
-    // Build Tailwind/DaisyUI class names
+    // Assemble DaisyUI classes; tooltip-open forces visibility via CSS
     const tooltipClasses = [
       'tooltip',
       isVisible ? 'tooltip-open' : '',
@@ -223,8 +226,8 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
         data-tip={disabled ? undefined : content}
         style={{
           ...style,
-          // The ::before and ::after pseudo-elements handle the actual tooltip display
-          // via DaisyUI. We apply the animation class via tooltip-open.
+          // DaisyUI renders the tooltip content via ::before (text) and ::after
+          // (arrow) pseudo-elements. --tooltip-tail controls the arrow size.
           '--tooltip-tail': '6px',
         } as React.CSSProperties}
         {...eventHandlers}

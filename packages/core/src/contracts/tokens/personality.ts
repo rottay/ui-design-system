@@ -1,13 +1,32 @@
 /**
- * Personality Tokens
+ * @fileoverview Personality Token contracts - Rottay Design System
+ * @description Tenant-agnostic personality dimensions that drive visual
+ * differentiation without branching on engine or tenant names.
  *
- * Tenant-agnostic personality dimensions that drive visual differentiation.
- * Components read these tokens (NEVER the engine name) to produce distinct
- * visual experiences per tenant.
+ * @remarks
+ * Personality tokens are the high-level language of visual identity. The same
+ * component code renders formal (BitHire), futuristic (Rottay), or playful
+ * (Evnto) simply by changing these tokens in TenantConfig.
  *
- * The same component code renders formal (BitHire), futuristic (Rottay),
- * or playful (Evnto) simply by changing these tokens in TenantConfig.
+ * Five personality dimensions:
+ * - **animation** - Entrance, stagger, hover, spring, skeleton style
+ * - **chart** - Line style, dots, gradient fills, tooltip style
+ * - **typography** - Heading weight, letter spacing, label casing
+ * - **accent** - Bar position/style, icon shape, badge shape, divider style
+ * - **card** - Elevation, hover behavior, border, padding density
+ *
+ * Components should read these semantics (e.g., `tokens.personality.animation.hoverLift`)
+ * rather than branching on tenant or engine names.
+ *
+ * @module Contracts/Tokens/Personality
+ * @category Types
+ * @package @rottay/design-system
  */
+
+// Animation tokens are the most complex personality dimension because they
+// influence both CSS transitions (via CSS variables) and JS animation libraries
+// (framer-motion, react-spring). The dual representation is why we have both
+// CSS-friendly strings (entrance, pulseSpeed) and numeric values (springTension).
 
 /** Animation personality tokens */
 export interface AnimationPersonalityTokens {
@@ -97,6 +116,9 @@ export interface CardPersonalityTokens {
   paddingDensity: 'compact' | 'normal' | 'spacious';
 }
 
+// Each sub-object is independently spreadable in the merge chain
+// (DEFAULT -> vertical -> profile -> tenant). This means a tenant that only
+// customizes `card` does not need to provide `animation`, `chart`, etc.
 /** Complete set of personality tokens */
 export interface PersonalityTokens {
   animation: AnimationPersonalityTokens;

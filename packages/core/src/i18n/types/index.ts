@@ -1,6 +1,9 @@
 /**
- * Sistema de Internacionalización (i18n)
- * Design System Rottay - Wave 0 - Agente D
+ * @fileoverview Type definitions for the i18n subsystem.
+ *
+ * Defines the supported locales, locale configuration shape, translation
+ * namespaces, and the provider/context interfaces consumed by hooks and
+ * components throughout the design system.
  */
 
 import type { ReactNode } from 'react';

@@ -1,11 +1,18 @@
 'use client';
 
 /**
- * @fileoverview Callout Classic Engine - Rottay Design System
- * @description Ant Design styled implementation of the Callout component.
- * A richer alternative to Ant Alert.
+ * @fileoverview Classic engine for the Callout component, styled after Ant Design.
+ * Renders an inline alert banner with icon, title, body, optional action slot,
+ * and a dismissible close button -- all using inline styles and CSS variables.
  *
- * @module Callout/Engines/Classic
+ * @example
+ * ```tsx
+ * <Callout engine="classic" variant="warning" title="Heads up" closable>
+ *   Your subscription is about to expire.
+ * </Callout>
+ * ```
+ *
+ * @module Callout/engines/classic
  * @category Display
  * @package @rottay/design-system
  */
@@ -14,6 +21,15 @@ import React, { useState } from 'react';
 import type { CalloutProps } from '../Callout.types';
 import { CALLOUT_DEFAULTS, CALLOUT_COLORS, CALLOUT_ICONS } from '../Callout.types';
 
+/**
+ * Classic (Ant Design-styled) implementation of the Callout component.
+ *
+ * Uses inline styles with CSS-variable colour tokens for each variant.
+ * The component self-manages its dismissed state internally via useState.
+ *
+ * @param props - {@link CalloutProps} controlling variant, content, and behaviour.
+ * @returns A dismissible alert banner, or null when dismissed.
+ */
 export default function ClassicCallout(props: CalloutProps): React.ReactElement | null {
   const {
     variant = CALLOUT_DEFAULTS.variant,
@@ -27,11 +43,16 @@ export default function ClassicCallout(props: CalloutProps): React.ReactElement 
     style,
   } = props;
 
+  // Internal dismiss state: once closed, the component returns null.
+  // This is uncontrolled -- consumers who need controlled visibility
+  // should conditionally render the Callout themselves.
   const [visible, setVisible] = useState(true);
   const colors = CALLOUT_COLORS[variant];
 
   if (!visible) return null;
 
+  // Notify the consumer first, then hide. The order ensures the callback
+  // fires before the DOM node is removed.
   const handleClose = () => {
     setVisible(false);
     onClose?.();
@@ -56,6 +77,8 @@ export default function ClassicCallout(props: CalloutProps): React.ReactElement 
         ...style,
       }}
     >
+      {/* Icon column: fixed-width to keep text alignment consistent across
+          different icon sizes. Custom icon prop overrides the variant default. */}
       <span
         style={{
           flexShrink: 0,
@@ -72,6 +95,9 @@ export default function ClassicCallout(props: CalloutProps): React.ReactElement 
       >
         {icon || CALLOUT_ICONS[variant]}
       </span>
+
+      {/* Content column: flex-1 fills remaining space; minWidth:0 prevents
+          long text from overflowing the flex container. */}
       <div style={{ flex: 1, minWidth: 0 }}>
         {title && (
           <div style={{ fontWeight: 600, marginBottom: children ? 4 : 0, fontSize: 14 }}>
@@ -79,10 +105,13 @@ export default function ClassicCallout(props: CalloutProps): React.ReactElement 
           </div>
         )}
         <div>{children}</div>
+        {/* Action slot for buttons/links placed below the body text */}
         {action && (
           <div style={{ marginTop: 8 }}>{action}</div>
         )}
       </div>
+
+      {/* Close button with reduced opacity to avoid competing with content */}
       {closable && (
         <button
           type="button"

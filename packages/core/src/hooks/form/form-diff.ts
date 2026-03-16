@@ -293,8 +293,9 @@ export function useFormDiff<T extends Record<string, any>>(
 ): UseFormDiffReturn {
   const { original, current, fieldLabels = {}, ignore = [] } = options;
 
-  // Serialize original and current for memoization dependency.
-  // This ensures recalculation only when the data actually changes.
+  // Serialize to JSON for memo deps because React uses Object.is for dependency
+  // comparison. Without serialization, every render would produce a new object
+  // reference and recompute the diff even when the underlying data is identical.
   const originalSerialized = useMemo(() => {
     try {
       return JSON.stringify(original);
@@ -335,6 +336,8 @@ export function useFormDiff<T extends Record<string, any>>(
     return `${changedCount} fields changed`;
   }, [changedCount]);
 
+  // Pre-build a Map for O(1) field lookups. This avoids linear scanning when
+  // components check individual fields (e.g., highlighting changed form inputs).
   const getFieldDiff = useMemo(() => {
     const map = new Map<string, FormDiffEntry>();
     for (const entry of diff) {

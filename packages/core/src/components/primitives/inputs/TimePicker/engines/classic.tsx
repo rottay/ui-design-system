@@ -1,7 +1,19 @@
 'use client';
 
 /**
- * TimePicker - Classic Engine (Ant Design)
+ * @fileoverview TimePicker Classic Engine -- Ant Design wrapper with dayjs bridging.
+ * Converts the DS's `Date | string` value types to/from dayjs instances required
+ * by AntD's TimePicker, providing format support, step intervals, and the
+ * compound `TimePicker.RangePicker` sub-component.
+ *
+ * @example
+ * ```tsx
+ * <TimePicker engine="classic" format="HH:mm" minuteStep={15} />
+ * ```
+ *
+ * @module TimePicker/Engines/Classic
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { TimePicker as AntTimePicker } from 'antd';
@@ -11,11 +23,14 @@ import dayjs from 'dayjs';
 
 const { RangePicker: AntTimeRangePicker } = AntTimePicker;
 
-// Convert Date/string to dayjs
+/**
+ * Converts a DS-level `Date | string` value to a dayjs instance.
+ * Bare time strings like "14:30:00" are anchored to an arbitrary date
+ * (2000-01-01) because dayjs requires a full datetime for parsing.
+ */
 const toDayjs = (value: Date | string | null | undefined): Dayjs | undefined => {
   if (!value) return undefined;
   if (typeof value === 'string') {
-    // If it's a time string like "14:30:00", parse it
     if (/^\d{2}:\d{2}(:\d{2})?$/.test(value)) {
       return dayjs(`2000-01-01 ${value}`);
     }
@@ -23,12 +38,22 @@ const toDayjs = (value: Date | string | null | undefined): Dayjs | undefined => 
   return dayjs(value);
 };
 
-// Convert dayjs to Date
+/** Converts a dayjs instance back to a native Date for the DS callback. */
 const toDate = (value: Dayjs | null | undefined): Date | null => {
   if (!value) return null;
   return value.toDate();
 };
 
+/**
+ * Base TimePicker wrapping AntD's TimePicker with Date/string bridging.
+ *
+ * Converts incoming DS values to dayjs on the way in and back to Date on the
+ * way out. The DS `size` value "default" is remapped to AntD's "middle" since
+ * AntD uses a three-value enum (small | middle | large).
+ *
+ * @param props - {@link TimePickerProps} unified time picker props.
+ * @returns An AntD TimePicker with DS-compatible value types.
+ */
 const TimePickerBase = React.forwardRef<unknown, TimePickerProps>((props, ref) => {
   const {
     value,
@@ -68,6 +93,7 @@ const TimePickerBase = React.forwardRef<unknown, TimePickerProps>((props, ref) =
     cellRender,
   } = props;
 
+  // AntD v5 uses nested classNames/styles objects for popup theming
   const popupClassNames = popupClassName
     ? ({ popup: { root: popupClassName } } as const)
     : undefined;
@@ -75,6 +101,7 @@ const TimePickerBase = React.forwardRef<unknown, TimePickerProps>((props, ref) =
     ? ({ popup: { root: popupStyle } } as const)
     : undefined;
 
+  // Bridge AntD's dayjs-based onChange to the DS's Date-based onChange
   const handleChange = (time: Dayjs | null, timeString: string | string[]) => {
     onChange?.(toDate(time), Array.isArray(timeString) ? timeString[0] : timeString);
   };
@@ -120,7 +147,13 @@ const TimePickerBase = React.forwardRef<unknown, TimePickerProps>((props, ref) =
 
 TimePickerBase.displayName = 'TimePicker.Classic';
 
-// TimeRangePicker component
+/**
+ * Range variant wrapping AntD's `TimePicker.RangePicker`.
+ * Converts DS `[Date|null, Date|null]` tuples to/from dayjs pairs.
+ *
+ * @param props - {@link TimeRangePickerProps} unified range picker props.
+ * @returns An AntD TimeRangePicker with DS-compatible value types.
+ */
 const TimeRangePicker = React.forwardRef<unknown, TimeRangePickerProps>((props, ref) => {
   const {
     value,
@@ -162,6 +195,7 @@ const TimeRangePicker = React.forwardRef<unknown, TimeRangePickerProps>((props, 
     ? ({ popup: { root: popupStyle } } as const)
     : undefined;
 
+  // Convert the dayjs pair back to native Dates for the DS onChange callback
   const handleChange = (times: [Dayjs | null, Dayjs | null] | null, timeStrings: [string, string]) => {
     if (!times) {
       onChange?.(null, timeStrings);
@@ -206,7 +240,7 @@ const TimeRangePicker = React.forwardRef<unknown, TimeRangePickerProps>((props, 
 
 TimeRangePicker.displayName = 'TimePicker.RangePicker.Classic';
 
-// Compound component
+// Compound component: TimePicker.RangePicker follows the AntD compound pattern
 export const TimePicker = Object.assign(TimePickerBase, {
   RangePicker: TimeRangePicker,
 });

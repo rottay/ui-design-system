@@ -53,6 +53,10 @@ import type { TooltipContentProps } from '../../Tooltip.types';
  * Renders the content displayed inside the tooltip popup.
  * Includes optional arrow indicator for visual connection to trigger.
  *
+ * @param props - TooltipContentProps including arrow visibility, side placement, and children
+ * @param ref - Forwarded ref to the content container div
+ * @returns A styled tooltip content div with optional rotated-square arrow indicator
+ *
  * @example
  * ```tsx
  * <Tooltip.Content arrow>
@@ -86,7 +90,8 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
       ...style,
     };
 
-    // Arrow positioning based on side
+    // Arrow positioning offsets keyed by tooltip side; each positions the arrow
+    // on the opposite edge of the content box so it visually points toward the trigger
     const arrowPositions: Record<string, React.CSSProperties> = {
       top: { bottom: '-4px', left: '50%', marginLeft: '-4px' },
       bottom: { top: '-4px', left: '50%', marginLeft: '-4px' },
@@ -94,7 +99,7 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
       right: { left: '-4px', top: '50%', marginTop: '-4px' },
     };
 
-    // Arrow styles
+    // Arrow rendered as a rotated square (45deg) to create a triangle-like pointer
     const arrowStyles: React.CSSProperties = {
       position: 'absolute',
       width: 'var(--ds-tooltip-arrow-size, 8px)',

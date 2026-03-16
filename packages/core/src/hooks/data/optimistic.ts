@@ -142,7 +142,10 @@ export function useOptimisticUpdate<T>(
   // Track the previous value for rollback
   const previousDataRef = useRef<T | null>(null);
 
-  // Stable refs for callbacks to avoid stale closures
+  // Callback refs prevent the mutate() closure from going stale when the
+  // consumer re-renders between mutate() call and async resolution. Without
+  // these, a re-render could capture old onError/onSuccess closures that
+  // reference outdated component state.
   const onMutateRef = useRef(onMutate);
   onMutateRef.current = onMutate;
 
@@ -152,7 +155,9 @@ export function useOptimisticUpdate<T>(
   const onSuccessRef = useRef(onSuccess);
   onSuccessRef.current = onSuccess;
 
-  // Track the latest mutation to ignore stale responses
+  // Monotonically increasing ID so concurrent mutations resolve correctly.
+  // If the user triggers mutate() twice quickly, only the latest mutation's
+  // result is applied -- earlier ones are silently discarded.
   const mutationIdRef = useRef(0);
 
   // Ref to the rollback delay timer for cleanup
@@ -208,7 +213,9 @@ export function useOptimisticUpdate<T>(
             setData(rolledBackData);
           }
 
-          // Fire onError callback (optionally delayed)
+          // A rollback delay lets the UI briefly show the reverted state before
+          // displaying an error toast, which feels more natural than an instant
+          // flash-back + error appearing simultaneously.
           if (rollbackDelay > 0) {
             rollbackTimerRef.current = setTimeout(() => {
               rollbackTimerRef.current = null;

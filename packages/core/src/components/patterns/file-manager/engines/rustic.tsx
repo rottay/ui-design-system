@@ -1,12 +1,26 @@
 'use client';
 
 /**
- * FileManager - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla / CSS variables) engine for the FileManager pattern.
+ * Renders a file/folder browser using only inline styles with `--ds-*` design tokens,
+ * making it framework-agnostic (no Ant Design or Tailwind dependency). Supports list
+ * and grid views, breadcrumb navigation, drag-and-drop upload, multi-select, rename,
+ * and bulk delete.
+ *
+ * @example
+ * <RusticFileManager
+ *   files={[{ id: '1', name: 'data.csv', type: 'file', mimeType: 'text/csv', size: 8192 }]}
+ *   folders={[{ id: 'f1', name: 'Exports', type: 'folder' }]}
+ *   viewMode="list"
+ *   onUpload={(files) => handleUpload(files)}
+ *   onDelete={(ids) => handleDelete(ids)}
+ * />
  */
 
 import React, { useCallback, useRef, type CSSProperties } from 'react';
 import type { FileManagerProps, FileItem, FileSystemItem } from '../FileManager.types';
 
+/** Converts raw byte count to a human-friendly size string (B/KB/MB/GB). */
 function formatSize(bytes?: number): string {
   if (bytes == null) return '--';
   if (bytes < 1024) return `${bytes} B`;
@@ -15,10 +29,17 @@ function formatSize(bytes?: number): string {
   return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
 }
 
+/** Formats an ISO date string to a short locale-aware date (e.g. "Mar 15, 2026"). */
 function formatDate(date?: string): string {
   if (!date) return '--';
   return new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
+
+// ---------------------------------------------------------------------------
+// Static style objects.
+// All colors and radii reference --ds-* CSS custom properties so the component
+// automatically adapts to any design-system theme without class-based overrides.
+// ---------------------------------------------------------------------------
 
 const containerStyle: CSSProperties = {
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
@@ -46,6 +67,8 @@ const btnStyle: CSSProperties = {
   fontWeight: 500,
 };
 
+// Primary and danger button variants extend the base button style,
+// overriding only color/background to keep sizing and radius consistent.
 const primaryBtnStyle: CSSProperties = {
   ...btnStyle,
   background: 'var(--ds-color-primary)',
@@ -59,6 +82,17 @@ const dangerBtnStyle: CSSProperties = {
   borderColor: 'var(--ds-color-error)',
 };
 
+/**
+ * Rustic (Vanilla) FileManager engine.
+ *
+ * Uses inline styles exclusively, referencing `--ds-*` CSS custom properties for
+ * theming. No external CSS framework is required. Grid and list views are built
+ * with plain flexbox, and breadcrumb segments use styled `<button>` elements
+ * to remain semantically accessible.
+ *
+ * @param props - {@link FileManagerProps} -- files, folders, callbacks, and display options.
+ * @returns The FileManager UI as a bordered container div.
+ */
 export default function RusticFileManager(props: FileManagerProps) {
   const {
     files,
@@ -79,13 +113,16 @@ export default function RusticFileManager(props: FileManagerProps) {
     style,
   } = props;
 
+  // Hidden file input triggered programmatically for native file picker access.
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Folders are placed first so they visually precede files (standard OS convention).
   const items: FileSystemItem[] = [
     ...folders.map(f => ({ ...f, type: 'folder' as const })),
     ...files.map(f => ({ ...f, type: 'file' as const })),
   ];
 
+  // Toggle selection on/off for a single item. The parent owns the selected state.
   const handleSelect = useCallback((id: string) => {
     if (!onSelectionChange) return;
     const isSelected = selectedItems.includes(id);
@@ -96,6 +133,8 @@ export default function RusticFileManager(props: FileManagerProps) {
     }
   }, [selectedItems, onSelectionChange]);
 
+  // File input value must be reset to empty string after selection so the browser's
+  // change event fires even when re-selecting the same file.
   const handleUploadChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && onUpload) {
       onUpload(Array.from(e.target.files));
@@ -103,6 +142,7 @@ export default function RusticFileManager(props: FileManagerProps) {
     }
   }, [onUpload]);
 
+  // Drag-and-drop handler. preventDefault on dragOver is required for drop to work.
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     if (e.dataTransfer.files.length > 0 && onUpload) {
@@ -118,6 +158,8 @@ export default function RusticFileManager(props: FileManagerProps) {
     );
   }
 
+  // Breadcrumb and link styles are defined inside the component because
+  // they reference the same --ds-* variables but are only used in the toolbar.
   const breadcrumbStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -126,6 +168,8 @@ export default function RusticFileManager(props: FileManagerProps) {
     color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
   };
 
+  // linkStyle resets all native button/anchor styles so links look clickable but
+  // inherit the container font, avoiding browser default serif or underline.
   const linkStyle: CSSProperties = {
     color: 'var(--ds-color-primary)',
     cursor: 'pointer',
@@ -136,6 +180,8 @@ export default function RusticFileManager(props: FileManagerProps) {
     font: 'inherit',
   };
 
+  // Row and grid card style factories. The `selected` boolean controls
+  // the highlighted background and border to indicate active selection.
   const rowStyle = (selected: boolean): CSSProperties => ({
     display: 'flex',
     alignItems: 'center',
@@ -216,7 +262,8 @@ export default function RusticFileManager(props: FileManagerProps) {
           </div>
         ) : viewMode === 'list' ? (
           <div>
-            {/* Header */}
+            {/* Column headers styled as an uppercase label row. cursor:default overrides
+                the pointer cursor from rowStyle since headers are not interactive. */}
             <div style={{ ...rowStyle(false), fontWeight: 600, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', textTransform: 'uppercase' as const, cursor: 'default' }}>
               <div style={{ width: 24 }}></div>
               <div style={{ flex: 1 }}>Name</div>

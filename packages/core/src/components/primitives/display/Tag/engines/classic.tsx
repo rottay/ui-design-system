@@ -110,10 +110,12 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
     }
   }, [clickable, onClick]);
 
-  // Map variant to Ant Design color
+  // Explicit color prop takes precedence over variant-based mapping,
+  // allowing consumers to use custom Ant Design color presets or hex values.
   const antColor = color || VARIANT_TO_ANT_COLOR[variant];
 
-  // Build additional styles
+  // Radius uses CSS variables so the design token layer can override defaults.
+  // 'full' maps to 9999px for pill-shaped tags.
   const tagStyle: React.CSSProperties = {
     cursor: clickable ? 'pointer' : undefined,
     borderRadius: radius === 'full' ? 'var(--ds-tag-radius-full, 9999px)' :
@@ -122,7 +124,8 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
     ...style,
   };
 
-  // Build class names
+  // BEM-style class names enable external CSS overrides while keeping
+  // the component's own styling self-contained via Ant Design.
   const classNames = [
     'rottay-tag',
     `rottay-tag--${size}`,
@@ -132,6 +135,8 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
     .filter(Boolean)
     .join(' ');
 
+  // bordered and outlined are merged into Ant's single bordered prop --
+  // both DS props produce the same visual effect in the classic engine.
   return (
     <AntTag
       color={antColor}

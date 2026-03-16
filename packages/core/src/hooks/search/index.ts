@@ -262,14 +262,20 @@ export function useGlobalSearch<T = any>(
   const [results, setResults] = useState<SearchResult<T>[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  // Lazy initializer reads from localStorage once on mount. SSR returns []
+  // because loadRecentSearches guards against missing `window`.
   const [recentSearches, setRecentSearches] = useState<string[]>(() =>
     loadRecentSearches(storageKey)
   );
 
-  // Stable refs to avoid stale closures
+  // Sources ref avoids adding the sources array to effect/callback deps,
+  // which would retrigger searches on every render (sources is usually a
+  // new array literal each time).
   const sourcesRef = useRef(sources);
   sourcesRef.current = sources;
 
+  // Monotonic search ID for stale-response protection (same pattern as
+  // useSurfaceQuery's fetchIdRef).
   const searchIdRef = useRef(0);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -297,11 +303,15 @@ export function useGlobalSearch<T = any>(
       setError(null);
 
       try {
-        // Query all sources in parallel
+        // Query all sources in parallel using Promise.allSettled so that
+        // one failing source doesn't prevent results from other sources
+        // from appearing. This is critical for UX -- users still see
+        // partial results even if one backend is down.
         const sourceResults = await Promise.allSettled(
           sourcesRef.current.map(async (source) => {
             const rawResults = await source.search(searchQuery);
-            // Tag each result with the source category if not already set
+            // Tag each result with its source's category and priority so
+            // the merge/sort step can rank across sources.
             return rawResults.map((r) => ({
               ...r,
               category: r.category ?? source.label,
@@ -310,10 +320,12 @@ export function useGlobalSearch<T = any>(
           })
         );
 
-        // Abort if a newer search has started
+        // Guard: discard results if a newer search was triggered while
+        // these sources were being queried.
         if (currentSearchId !== searchIdRef.current) return;
 
-        // Collect fulfilled results, log rejected ones
+        // Merge fulfilled results; track the last error for partial-failure
+        // reporting.
         const allResults: (SearchResult<T> & { _sourcePriority: number })[] = [];
         let lastError: Error | null = null;
 
@@ -328,28 +340,30 @@ export function useGlobalSearch<T = any>(
           }
         }
 
-        // Sort by score descending, then source priority descending
+        // Primary sort by relevance score (higher = better match),
+        // secondary sort by source priority (higher = more important source).
         allResults.sort((a, b) => {
           if (b.score !== a.score) return b.score - a.score;
           return b._sourcePriority - a._sourcePriority;
         });
 
-        // Trim to maxResults and strip internal field
+        // Strip the internal _sourcePriority field before exposing results.
         const trimmed: SearchResult<T>[] = allResults
           .slice(0, maxResults)
           .map(({ _sourcePriority, ...rest }) => rest as SearchResult<T>);
 
         setResults(trimmed);
 
-        // If some sources failed but we still have results, surface the error
-        // alongside partial results
+        // Only surface errors when ALL sources failed. Partial results with
+        // one failing source is a degraded-but-acceptable state.
         if (lastError && allResults.length === 0) {
           setError(lastError);
         } else {
           setError(null);
         }
 
-        // Persist to recent searches
+        // Persist to recent searches: deduplicate first, then prepend the
+        // new query, and cap at maxRecentSearches.
         setRecentSearches((prev) => {
           const filtered = prev.filter((s) => s !== searchQuery);
           const next = [searchQuery, ...filtered].slice(0, maxRecentSearches);
@@ -372,11 +386,16 @@ export function useGlobalSearch<T = any>(
   );
 
   // ---- Debounced effect ----
+  // This effect bridges the controlled `query` state with the async
+  // performSearch function. setIsSearching(true) is called immediately
+  // (before the debounce) so the UI can show a loading indicator as soon
+  // as the user types, rather than waiting for the debounce to expire.
   useEffect(() => {
     if (debounceTimerRef.current !== null) {
       clearTimeout(debounceTimerRef.current);
     }
 
+    // Short queries are cleared immediately without debounce.
     if (query.length < minQueryLength) {
       setResults([]);
       setIsSearching(false);
@@ -400,7 +419,12 @@ export function useGlobalSearch<T = any>(
   }, [query, debounceMs, minQueryLength, performSearch]);
 
   // ---- Grouped results ----
+  // Memoized because grouping creates new arrays, and downstream
+  // components (e.g. command palette sections) use referential equality
+  // checks for render optimization.
   const groupedResults = useMemo<SearchResultGroup<T>[]>(() => {
+    // Map preserves insertion order, so groups appear in the same order
+    // as the first result from each category in the sorted results list.
     const groupMap = new Map<string, SearchResult<T>[]>();
 
     for (const result of results) {
@@ -426,12 +450,17 @@ export function useGlobalSearch<T = any>(
   }, [storageKey]);
 
   // ---- Highlight helper ----
+  // Splits text into segments for rendering with highlighted matches.
+  // Uses a capturing group in the regex so that `String.split` preserves
+  // the matched portions alongside the non-matched portions.
   const highlightMatch = useCallback(
     (text: string): HighlightSegment[] => {
       if (!query || query.length < minQueryLength) {
         return [{ text, highlighted: false }];
       }
 
+      // Escape special regex chars in the query to prevent ReDoS or
+      // unexpected behavior when the query contains characters like ., *, etc.
       const escaped = escapeRegex(query);
       const regex = new RegExp(`(${escaped})`, 'gi');
       const parts = text.split(regex);

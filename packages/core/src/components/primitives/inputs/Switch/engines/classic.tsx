@@ -48,6 +48,16 @@ import React from 'react';
 import { Switch as AntSwitch } from 'antd';
 import type { SwitchProps } from '../Switch.types';
 
+/**
+ * Classic engine Switch -- wraps Ant Design's Switch component.
+ *
+ * Maps the DS `size` prop (small | default | large) to AntD's two-value
+ * size enum (small | default), since AntD does not support a "large" toggle.
+ * All other props are forwarded directly.
+ *
+ * @param props - {@link SwitchProps} unified switch props shared across engines.
+ * @returns A ref-forwarding wrapper around `antd/Switch`.
+ */
 export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
   (props, ref) => {
     const {
@@ -68,9 +78,11 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
       name: _name,
     } = props;
 
-    // Map size to Ant Design size
+    // AntD only has 'default' and 'small'; collapse 'large' into 'default'
     const antSize = size === 'large' ? 'default' : size === 'default' ? 'default' : 'small';
 
+    // Assemble props for AntD -- `name` is intentionally excluded (_name)
+    // because AntD Switch does not accept a `name` attribute
     const switchProps = {
       ref,
       checked,
@@ -89,6 +101,7 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
       id,
     };
 
+    // Cast to `any` to bridge DS-level generics with AntD's internal typings
     return <AntSwitch {...switchProps as any} />;
   }
 );

@@ -1,15 +1,40 @@
 'use client';
 
 /**
- * Mentions - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Mentions Modern Engine - Rottay Design System.
+ * Custom DaisyUI/Tailwind CSS implementation with full mention detection,
+ * dropdown suggestions, keyboard navigation, and auto-size support --
+ * no Ant Design dependency at runtime.
+ *
+ * @example
+ * ```tsx
+ * <Mentions engine="modern" options={users} prefix="@" placement="bottom" />
+ * ```
+ *
+ * @module ModernMentions
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
 import type { MentionsProps, MentionsOption } from '../Mentions.types';
 import { MENTIONS_DEFAULTS } from '../Mentions.types';
 
-// Safe useLayoutEffect that falls back to useEffect on SSR
+/**
+ * SSR-safe layout effect: uses useLayoutEffect on the client for flicker-free
+ * DOM measurements, falls back to useEffect on the server to avoid warnings.
+ */
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
+/**
+ * Modern engine Mentions built with DaisyUI / Tailwind CSS.
+ * Implements cursor-aware prefix detection, filtered suggestion dropdown,
+ * keyboard list navigation, auto-size textarea, and click-outside dismissal.
+ *
+ * @param props - Unified MentionsProps from the design system contract.
+ * @param ref - Forwarded ref attached to the underlying `<textarea>` element.
+ * @returns A DaisyUI-styled textarea with a suggestion dropdown overlay.
+ */
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
     const {
@@ -42,12 +67,14 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const [mentionStart, setMentionStart] = useState(-1);
     const [focusedIndex, setFocusedIndex] = useState(0);
 
+    // Controlled vs uncontrolled: parent-supplied `value` takes precedence
     const isControlled = controlledValue !== undefined;
     const value = isControlled ? controlledValue : internalValue;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    // Normalize prefix to array so multi-prefix detection logic stays uniform
     const prefixes = (Array.isArray(prefix) ? prefix : [prefix]).filter((p): p is string => !!p);
 
     // Auto-size: dynamically adjust textarea height based on content
@@ -75,6 +102,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       adjustTextareaHeight();
     }, [value, adjustTextareaHeight]);
 
+    /** Filter suggestions: true = built-in case-insensitive match; function = custom predicate. */
     const filteredOptions = useMemo(() => {
       if (!filterOption) return options;
       if (filterOption === true) {
@@ -94,7 +122,9 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
       onChange?.(newValue);
 
-      // Check for mention trigger
+      // Detect whether the cursor sits inside an active mention by scanning for
+      // the most recent prefix character that has not yet been terminated by the
+      // configured `split` delimiter (typically a space).
       const textBeforeCursor = newValue.slice(0, cursorPos);
       let foundPrefix = '';
       let mentionStartPos = -1;
@@ -103,7 +133,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         const lastPrefixIndex = textBeforeCursor.lastIndexOf(p);
         if (lastPrefixIndex >= 0) {
           const textAfterPrefix = textBeforeCursor.slice(lastPrefixIndex + p.length);
-          // Check if there's no space after prefix (still typing mention)
+          // No split delimiter after prefix means user is still typing a mention
           if (!textAfterPrefix.includes(split || '')) {
             if (mentionStartPos < lastPrefixIndex) {
               mentionStartPos = lastPrefixIndex;
@@ -126,6 +156,10 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
     };
 
+    /**
+     * Insert the selected mention into the textarea value, replacing the
+     * in-progress search text, then reposition the cursor after the mention.
+     */
     const handleSelect = useCallback((option: MentionsOption) => {
       if (textareaRef.current) {
         const cursorPos = textareaRef.current.selectionStart;
@@ -140,7 +174,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         onSelect?.(option, currentPrefix);
         setIsOpen(false);
 
-        // Set cursor position after mention
+        // Defer cursor repositioning until React has flushed the new value
         setTimeout(() => {
           const newPos = beforeMention.length + currentPrefix.length + option.value.length + (split || '').length;
           textareaRef.current?.setSelectionRange(newPos, newPos);
@@ -178,7 +212,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
     };
 
-    // Click outside
+    // Dismiss dropdown when clicking outside the component boundary
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(e.target as Node)) {

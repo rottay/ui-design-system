@@ -1,13 +1,23 @@
 /**
- * Typography Scale
+ * @fileoverview Hardcoded Geist-based typography scale for direct style application.
  *
- * Geist-based typography scale for the design system.
- * Personality tokens (headingWeightBias, labelStyle, letterSpacing)
- * are applied at component level via getPersonalityTypography().
+ * Unlike the CSS-variable-backed token mirrors in `ts/base/typography.ts`, this
+ * scale uses concrete rem/px values suitable for inline `style` props and
+ * canvas/SVG rendering where CSS variables are unavailable.
+ *
+ * Personality-level adjustments (headingWeightBias, labelStyle, letterSpacing)
+ * are layered on top of these values at the component level via
+ * `getPersonalityTypography()`.
  */
 
 import type { CSSProperties } from 'react';
 
+/**
+ * Named text style presets mapping style keys to CSSProperties objects.
+ *
+ * Keys: pageTitle, sectionTitle, subsection, cardTitle, body, bodySmall,
+ * caption, code, kpiValue, kpiLabel.
+ */
 export const typographyScale: Record<string, CSSProperties> = {
   pageTitle: {
     fontSize: '2.25rem',

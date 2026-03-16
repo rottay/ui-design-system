@@ -1,6 +1,7 @@
 /**
- * Tenant Storage
- * Facade with caching for tenant config retrieval
+ * @fileoverview Tenant Storage Facade
+ * @description Central entry point for tenant resolution across built-in,
+ * static, remote, and cached sources.
  *
  * Resolution priority:
  * 1. Memory cache
@@ -9,6 +10,10 @@
  * 4. Static files
  * 5. Remote API
  * 6. Default config (rottay)
+ *
+ * This file is intentionally the only place that knows the full fallback chain.
+ * Providers and apps should call `getTenantConfig()` rather than reimplementing
+ * their own lookup strategy.
  */
 
 import type { TenantConfig } from '../../contracts';
@@ -23,14 +28,20 @@ export type { GenerateTenantCssOptions } from './static';
 export { fetchRemoteTenantConfig, configureTenantApi } from './remote';
 export { getKnownTenantConfig, isKnownTenant, getKnownTenantSlugs, DEFAULT_TENANT_SLUG } from '../registry';
 
-// In-memory cache
+// In-memory cache -- survives React re-renders and hot reloads. This is the
+// fastest lookup (step 1 in the chain) and is populated by every successful
+// resolution from any downstream source.
 const cache = new Map<string, TenantConfig>();
 
-// LocalStorage key
+// WHY a prefixed key: multiple Rottay apps may coexist on the same origin
+// (e.g., Storybook and the platform app), so we namespace to avoid collisions.
 const STORAGE_KEY = 'rottay-ds-tenant-cache';
 
 /**
- * Get cached config from localStorage
+ * Reads a cached tenant config from localStorage.
+ *
+ * Local cache is treated as an optimization only. Any parse issue or expired
+ * record is ignored so runtime resolution can continue to the next source.
  */
 function getFromLocalStorage(slug: string): TenantConfig | null {
   if (typeof window === 'undefined') return null;
@@ -54,7 +65,10 @@ function getFromLocalStorage(slug: string): TenantConfig | null {
 }
 
 /**
- * Save config to localStorage
+ * Persists a tenant config to localStorage with a short-lived timestamp.
+ *
+ * The DS keeps this best-effort on purpose: tenant resolution should never fail
+ * just because the browser blocks storage writes.
  */
 function saveToLocalStorage(slug: string, config: TenantConfig): void {
   if (typeof window === 'undefined') return;
@@ -70,8 +84,22 @@ function saveToLocalStorage(slug: string, config: TenantConfig): void {
 }
 
 /**
- * Get tenant configuration
- * Priority: memory cache → localStorage → known registry → static files → remote API → default
+ * Resolves a tenant configuration using the runtime fallback chain.
+ *
+ * Priority:
+ * 1. Memory cache (instant, populated by prior calls)
+ * 2. localStorage cache (fast, survives page reloads, 1-hour TTL)
+ * 3. Known registry (bundled first-party tenants -- zero network)
+ * 4. Static files (`/.designsystem/tenants/<slug>/config.json`)
+ * 5. Remote API (platform-managed tenants in the database)
+ * 6. Default Rottay config (absolute safety net)
+ *
+ * WHY six levels: the DS must render predictably in every environment --
+ * local dev (no API), preview deploys (static files only), production
+ * (full API), and CI (bundled registry). Each level adds resilience.
+ *
+ * @param slug - Tenant identifier to resolve (case-insensitive).
+ * @returns A guaranteed-valid TenantConfig. Never throws.
  */
 export async function getTenantConfig(slug: string): Promise<TenantConfig> {
   const normalizedSlug = slug.toLowerCase();
@@ -88,14 +116,16 @@ export async function getTenantConfig(slug: string): Promise<TenantConfig> {
     return fromStorage;
   }
 
-  // 3. Check known tenants registry (built-in configs)
+  // 3. Built-in registry is the fast path for first-party/demo tenants that ship
+  // with the DS bundle.
   const knownConfig = getKnownTenantConfig(normalizedSlug);
   if (knownConfig) {
     cache.set(normalizedSlug, knownConfig);
     return knownConfig;
   }
 
-  // 4. Try static files
+  // 4. Static files are useful for deployments that publish tenant payloads as
+  // versioned assets instead of serving them from an API.
   try {
     const config = await loadStaticTenantConfig(normalizedSlug);
     cache.set(normalizedSlug, config);
@@ -105,7 +135,7 @@ export async function getTenantConfig(slug: string): Promise<TenantConfig> {
     // Static file not found, continue
   }
 
-  // 5. Try remote API
+  // 5. Remote API is the canonical path for platform-managed tenants.
   try {
     const config = await fetchRemoteTenantConfig(normalizedSlug);
     cache.set(normalizedSlug, config);
@@ -115,14 +145,23 @@ export async function getTenantConfig(slug: string): Promise<TenantConfig> {
     // API failed, continue
   }
 
-  // 6. Return default tenant (rottay)
+  // 6. Final safety net. We always return a valid tenant so the DS can render
+  // predictably even when tenant resolution fails upstream.
   const defaultConfig = getDefaultTenant();
   cache.set(normalizedSlug, defaultConfig);
   return defaultConfig;
 }
 
 /**
- * Clear tenant cache
+ * Clears cached tenant configs from the in-memory Map and optionally from
+ * localStorage. Pass a specific slug to evict one tenant, or call with no
+ * arguments to flush the entire memory cache.
+ *
+ * WHY localStorage is only cleared when a slug is provided: a blanket
+ * `localStorage.clear()` could wipe unrelated app data. Targeted removal
+ * is safer.
+ *
+ * @param slug - Optional tenant slug. If omitted, only the in-memory cache is cleared.
  */
 export function clearTenantCache(slug?: string): void {
   if (slug) {
@@ -136,7 +175,8 @@ export function clearTenantCache(slug?: string): void {
 }
 
 /**
- * Preload tenant config
+ * Preloads a tenant config into the cache without returning it to the caller.
+ * Useful for route transitions or dashboards that know the next tenant ahead of time.
  */
 export async function preloadTenantConfig(slug: string): Promise<void> {
   await getTenantConfig(slug);

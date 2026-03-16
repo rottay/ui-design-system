@@ -1,6 +1,6 @@
 /**
- * Select.OptGroup - Compound Component
- * Groups related options together with a label
+ * @fileoverview Select.OptGroup compound component.
+ * Groups related options together with a label.
  */
 
 'use client';

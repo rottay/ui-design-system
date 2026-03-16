@@ -1,13 +1,19 @@
 'use client';
 
 /**
- * @fileoverview HoverCard Classic Engine - Rottay Design System
- * @description Ant Design implementation of the HoverCard component.
- * Uses Ant Design Popover with hover trigger.
+ * @fileoverview Classic (Ant Design) engine for the HoverCard overlay component.
+ * Wraps Ant Design's Popover with `trigger="hover"` to display rich content
+ * panels on mouse-enter, with configurable open/close delays and placement.
  *
- * @module HoverCard/Engines/Classic
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <ClassicHoverCard
+ *   content={<UserProfileCard userId={id} />}
+ *   trigger={<span>@username</span>}
+ *   side="bottom"
+ *   openDelay={200}
+ * />
+ * ```
  */
 
 import React from 'react';
@@ -15,6 +21,7 @@ import { Popover as AntPopover } from 'antd';
 import type { HoverCardProps } from '../HoverCard.types';
 import { HOVERCARD_DEFAULTS } from '../HoverCard.types';
 
+/** Maps engine-agnostic `side` prop to Ant Design's placement base value. */
 const SIDE_TO_PLACEMENT: Record<string, string> = {
   top: 'top',
   bottom: 'bottom',
@@ -22,12 +29,24 @@ const SIDE_TO_PLACEMENT: Record<string, string> = {
   right: 'right',
 };
 
+/** Appends alignment suffix to produce Ant placement strings like "bottomLeft". */
 const ALIGN_SUFFIX: Record<string, string> = {
   start: 'Left',
   center: '',
   end: 'Right',
 };
 
+/**
+ * HoverCard implementation backed by Ant Design's Popover primitive.
+ *
+ * The side + align props are combined into an Ant placement string (e.g.
+ * side="bottom" + align="start" becomes "bottomLeft"). Delays are converted
+ * from milliseconds to seconds to match Ant Design's API. When `disabled` is
+ * true, the popover is forced closed and the onOpenChange callback is suppressed.
+ *
+ * @param props - {@link HoverCardProps} shared across all engines.
+ * @returns A wrapper div containing the hover-triggered popover.
+ */
 export default function ClassicHoverCard(props: HoverCardProps): React.ReactElement {
   const {
     content,
@@ -44,7 +63,8 @@ export default function ClassicHoverCard(props: HoverCardProps): React.ReactElem
     overlayStyle,
   } = props;
 
-  // Map side+align to Ant placement
+  // Combine side + align into a single Ant placement value.
+  // Align suffix only applies on top/bottom; left/right sides ignore it.
   const baseSide = SIDE_TO_PLACEMENT[side] || 'bottom';
   const alignSuffix = (side === 'top' || side === 'bottom')
     ? ALIGN_SUFFIX[align] || ''
@@ -59,6 +79,7 @@ export default function ClassicHoverCard(props: HoverCardProps): React.ReactElem
         placement={placement}
         open={disabled ? false : open}
         onOpenChange={disabled ? undefined : onOpenChange}
+        /* Ant expects seconds; engine props use milliseconds */
         mouseEnterDelay={openDelay / 1000}
         mouseLeaveDelay={closeDelay / 1000}
         overlayClassName={overlayClassName}

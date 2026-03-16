@@ -1,8 +1,14 @@
 /**
- * @file Descriptions - Rustic Engine (Vanilla HTML/CSS)
- * @description Pure HTML/CSS implementation of the Descriptions component.
- * Provides maximum accessibility and zero external dependencies beyond React.
- * Ideal for applications requiring minimal bundle size or custom styling.
+ * @fileoverview Rustic engine for the Descriptions component, using pure HTML/CSS.
+ * Zero external dependencies -- inline styles backed by CSS custom properties
+ * (--ds-descriptions-*), with ARIA roles for screen reader accessibility.
+ *
+ * @example
+ * ```tsx
+ * <Descriptions engine="rustic" title="Details" bordered layout="vertical">
+ *   <Descriptions.Item label="Status">Active</Descriptions.Item>
+ * </Descriptions>
+ * ```
  */
 
 'use client';
@@ -32,20 +38,15 @@ const SIZE_FONT_MAP: Record<string, string> = {
 };
 
 /**
- * Rustic engine Descriptions component.
- * Uses pure inline styles for maximum portability and zero dependencies.
+ * Rustic (pure HTML/CSS) implementation of the Descriptions component.
  *
- * @remarks
- * This implementation focuses on accessibility and semantic HTML structure.
- * All styles are applied inline to avoid CSS conflicts and ensure
- * consistent rendering across different environments.
+ * Uses ARIA roles (region, list, listitem) for screen reader navigation.
+ * All visual properties come from CSS custom properties with hardcoded
+ * fallbacks, so the component works even without a loaded theme stylesheet.
  *
- * @example
- * ```tsx
- * <RusticDescriptions title="Details" bordered layout="vertical">
- *   <RusticDescriptions.Item label="Status">Active</RusticDescriptions.Item>
- * </RusticDescriptions>
- * ```
+ * @param props - Unified DescriptionsProps from the design system type contract
+ * @param ref - Forwarded ref attached to the outer container div
+ * @returns A semantically structured description list using only inline styles
  */
 export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
   (props, ref) => {
@@ -66,7 +67,7 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
     const fontSize = SIZE_FONT_MAP[size] || SIZE_FONT_MAP.default;
     const columnCount = resolveColumnCount(column);
 
-    // Container styles
+    // Root container only sets font size; other styles live on inner elements
     const containerStyle: React.CSSProperties = {
       fontSize,
       ...style,
@@ -88,7 +89,7 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       color: 'var(--ds-descriptions-title-color, var(--ds-color-text-primary, #333))',
     };
 
-    // Content container styles
+    // Content area gets border/radius/bg only in bordered mode; transparent otherwise
     const contentContainerStyle: React.CSSProperties = {
       border: bordered ? '1px solid var(--ds-descriptions-border-color, #e8e8e8)' : 'none',
       borderRadius: bordered ? 'var(--ds-descriptions-radius, 8px)' : '0',
@@ -104,7 +105,8 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       padding: bordered ? '16px' : '0',
     };
 
-    // Base label styles
+    // Label uses a secondary colour and smaller font to visually differentiate from values.
+    // Component-level styles.label is merged first, then item-level overrides on top.
     const labelBaseStyle: React.CSSProperties = {
       color: 'var(--ds-descriptions-label-color, var(--ds-color-text-secondary, #666))',
       fontSize: 'var(--ds-descriptions-label-font-size, 13px)',
@@ -224,33 +226,29 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 RusticDescriptions.displayName = 'Descriptions.Rustic';
 
 /**
- * Rustic engine Descriptions.Item component.
- * Wrapper component for individual description items.
+ * Rustic engine Descriptions.Item -- a "phantom" component.
  *
- * @remarks
- * In the Rustic implementation, this component acts as a props container.
- * The parent Descriptions component reads the props from children and
- * handles the actual DOM rendering.
+ * Never renders its own DOM. The parent RusticDescriptions iterates children
+ * via React.Children.map and reads each Item's props (label, span, styles)
+ * to build the actual layout. This pattern avoids an extra wrapper div per
+ * item while keeping the JSX API consistent across engines.
  *
- * @example
- * ```tsx
- * <RusticItem label="Created" labelStyle={{ fontWeight: 'bold' }}>
- *   2024-01-15
- * </RusticItem>
- * ```
+ * @param props - Item-level props including label, span, and styles overrides
+ * @param _ref - Unused; included for API parity with the Classic engine
+ * @returns A React fragment containing only the children (rendered by parent)
  */
 export const RusticItem = forwardRef<HTMLDivElement, DescriptionsItemProps>(
   (props, _ref) => {
     const { children } = props;
-    // Parent component handles rendering; this is a wrapper for props collection
+    // This component is a props container only; the parent reads our props directly
     return <>{children}</>;
   }
 );
 
 RusticItem.displayName = 'Descriptions.Item.Rustic';
 
-// Named exports for engine routing
+// Named exports consumed by the engine router to wire up <Descriptions> and <Descriptions.Item>
 export { RusticDescriptions as Descriptions, RusticItem as Item };
 
-// Default export for dynamic imports
+// Default export enables dynamic import via React.lazy or the DS engine loader
 export default RusticDescriptions;

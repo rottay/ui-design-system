@@ -80,11 +80,15 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
 
     const [backgroundImage, setBackgroundImage] = useState<string>('');
 
+    // Generate a repeating watermark tile on an off-screen canvas each time
+    // visual parameters change. The tile is exported as a data URL and applied
+    // as a CSS background-image on the overlay div.
     useEffect(() => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
+      // Scale by devicePixelRatio so the watermark stays crisp on retina displays
       const ratio = window.devicePixelRatio || 1;
       const canvasWidth = (width + gap![0]) * ratio;
       const canvasHeight = (height + gap![1]) * ratio;
@@ -92,6 +96,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
 
+      // Center the origin then rotate so the watermark text/image is drawn at an angle
       ctx.translate(canvasWidth / 2, canvasHeight / 2);
       ctx.rotate((rotate! * Math.PI) / 180);
 
@@ -104,12 +109,14 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
         };
         img.src = image;
       } else if (content) {
+        // Merge user-provided font overrides with defaults for consistent fallback
         const mergedFont = { ...WATERMARK_DEFAULTS.font, ...font };
         ctx.font = `${mergedFont.fontStyle} ${mergedFont.fontWeight} ${mergedFont.fontSize! * ratio}px ${mergedFont.fontFamily}`;
         ctx.fillStyle = mergedFont.color!;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
+        // Support multi-line watermarks when content is an array of strings
         const lines = Array.isArray(content) ? content : [content];
         const lineHeight = mergedFont.fontSize! * 1.5 * ratio;
         const startY = -((lines.length - 1) * lineHeight) / 2;
@@ -129,6 +136,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
         style={style}
       >
         {children}
+        {/* Non-interactive overlay renders the repeating watermark pattern via CSS background */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{

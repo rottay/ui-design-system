@@ -1,8 +1,10 @@
 /**
- * Tenant Tokens Index - TypeScript
+ * @fileoverview Barrel for tenant-specific token overrides.
  *
- * Central export file for all tenant-specific design tokens.
- * Import from this file to access all tenant tokens.
+ * Tenant tokens provide brand-specific CSS variable references that sit on top
+ * of the base token layer. Currently only ships the Rottay (default) tenant.
+ * Additional tenants (BitHire, Evnto) apply their overrides via CSS class
+ * scoping at runtime rather than through this TS layer.
  */
 
 // Individual tenant token exports

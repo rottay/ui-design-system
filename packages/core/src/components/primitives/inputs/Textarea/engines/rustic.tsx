@@ -1,9 +1,14 @@
 'use client';
 
 /**
- * @fileoverview Textarea Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Textarea component using CSS variables.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Rustic (zero-dependency) engine for Textarea, using inline CSS and DS CSS variables.
+ * Implements showCount natively (unlike Modern) and manages focus/blur state internally
+ * to drive border color and shadow changes without any CSS framework.
+ *
+ * @example
+ * ```tsx
+ * <Textarea engine="rustic" showCount maxLength={200} status="error" />
+ * ```
  *
  * @module RusticTextarea
  * @category Inputs
@@ -14,7 +19,7 @@ import React, { useEffect, useState } from 'react';
 import type { TextareaProps } from '../Textarea.types';
 import { TEXTAREA_DEFAULTS } from '../Textarea.types';
 
-// Size configuration using CSS variables
+/** Size tokens referencing DS CSS variables for consistent sizing across tenants. */
 const SIZE_CONFIG: Record<string, { padding: string; fontSize: string }> = {
   sm: {
     padding: 'var(--ds-textarea-sm-padding)',
@@ -30,6 +35,16 @@ const SIZE_CONFIG: Record<string, { padding: string; fontSize: string }> = {
   },
 };
 
+/**
+ * Rustic (vanilla HTML/CSS) implementation of Textarea.
+ *
+ * Tracks character count via local state synced to the controlled/uncontrolled value,
+ * and renders a `current / max` counter when `showCount` is enabled. All visual
+ * properties are driven by DS CSS custom properties for tenant-level theming.
+ *
+ * @param props - Standard TextareaProps shared across all engines.
+ * @returns A wrapper div containing a styled native textarea and optional character counter.
+ */
 export default function RusticTextarea(props: TextareaProps): React.ReactElement {
   const {
     size = TEXTAREA_DEFAULTS.size,
@@ -56,9 +71,12 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
     ...rest
   } = props;
 
+  // Character count for the optional showCount feature -- kept in sync with value
   const [charCount, setCharCount] = useState(value?.length || defaultValue?.length || 0);
+  // Focus drives border color and box-shadow transitions
   const [isFocused, setIsFocused] = useState(false);
 
+  // Sync charCount whenever the controlled value or defaultValue changes externally
   useEffect(() => {
     if (value !== undefined) {
       setCharCount(value.length);
@@ -76,6 +94,7 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     setCharCount(newValue.length);
+    // Normalize onChange to DS convention: (value, event)
     if (onChange) {
       onChange(newValue, e);
     }
@@ -93,7 +112,7 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
 
   const sizeConfig = SIZE_CONFIG[size!] || SIZE_CONFIG.md;
 
-  // Build class names
+  // BEM-style class names for optional external CSS overrides
   const containerClasses = [
     'rottay-textarea',
     'rottay-textarea--rustic',
@@ -106,6 +125,7 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
     className,
   ].filter(Boolean).join(' ');
 
+  /** Resolves border color from status > focus > default priority chain. */
   const getBorderColor = () => {
     if (status === 'error') return 'var(--ds-textarea-error-border)';
     if (status === 'warning') return 'var(--ds-textarea-warning-border)';
@@ -114,6 +134,7 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
     return 'var(--ds-textarea-border)';
   };
 
+  /** Resolves background from disabled > variant > default priority chain. */
   const getBackground = () => {
     if (disabled) return 'var(--ds-textarea-bg-disabled)';
     if (variant === 'filled') return 'var(--ds-textarea-filled-bg)';

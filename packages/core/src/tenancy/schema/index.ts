@@ -1,13 +1,15 @@
 /**
- * Tenant Schema
- * Validation and type guards for tenant configuration
+ * @fileoverview Tenant schema guards and normalizers.
+ * @description Runtime validation helpers for tenant payloads coming from
+ * registries, static assets, APIs, or app-provided config.
  */
 
 import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../contracts';
 import type { SupportedLocale } from '../../i18n/types';
 
 /**
- * Validate tenant branding
+ * Branding is intentionally permissive: only `companyName` is required.
+ * The rest of the visual system can be filled by presets or token defaults.
  */
 export function isValidBranding(branding: unknown): branding is TenantBranding {
   if (!branding || typeof branding !== 'object') return false;
@@ -16,34 +18,44 @@ export function isValidBranding(branding: unknown): branding is TenantBranding {
 }
 
 /**
- * Validate tenant plan
+ * Plans are a closed union because feature gating depends on predictable values.
  */
 export function isValidPlan(plan: unknown): plan is TenantPlan {
   return plan === 'starter' || plan === 'pro' || plan === 'enterprise';
 }
 
 /**
- * Validate engine name
+ * Engine validation guards the runtime boundary between config data and lazy
+ * engine loading.
  */
 export function isValidEngineName(engine: unknown): engine is EngineName {
   return engine === 'classic' || engine === 'modern' || engine === 'rustic' || engine === 'custom';
 }
 
 /**
- * Validate supported locale
+ * Locale validation stays explicit to avoid accepting arbitrary values that the
+ * i18n dictionaries cannot actually serve.
  */
 export function isValidLocale(locale: unknown): locale is SupportedLocale {
   return locale === 'es' || locale === 'en' || locale === 'pt' || locale === 'fr' || locale === 'ar';
 }
 
 /**
- * Validate complete tenant config
+ * Validates the minimum contract required for the DS to render a tenant safely.
+ *
+ * This does not deep-validate every optional nested object. The goal is to
+ * reject clearly invalid payloads at the boundary while keeping the schema
+ * light enough for runtime use.
  */
 export function isValidTenantConfig(config: unknown): config is TenantConfig {
   if (!config || typeof config !== 'object') return false;
 
   const c = config as TenantConfig;
 
+  // Validation checks the structural contract (required fields, closed enums)
+  // but intentionally skips deep validation of optional nested objects like
+  // personality, tokenOverrides, and customTranslations. Partial personality
+  // objects are valid because the merge chain fills gaps from lower layers.
   return (
       typeof c.slug === 'string' &&
       typeof c.name === 'string' &&
@@ -60,7 +72,10 @@ export function isValidTenantConfig(config: unknown): config is TenantConfig {
 }
 
 /**
- * Create a minimal valid tenant config
+ * Materializes a minimal valid tenant config from a partial payload.
+ *
+ * Useful when platform code or tests want a normalized tenant object without
+ * manually filling every field in the contract.
  */
 export function createTenantConfig(partial: Partial<TenantConfig> & { slug: string; name: string }): TenantConfig {
   return {

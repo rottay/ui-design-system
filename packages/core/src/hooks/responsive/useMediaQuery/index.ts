@@ -63,35 +63,43 @@ import { useState, useEffect, useCallback } from 'react';
  * @returns {boolean} True if the media query matches, false otherwise (or on server)
  */
 export function useMediaQuery(query: string): boolean {
-  // SSR-safe: default to false on server
+  // Initialize to false for SSR safety. During server rendering, there is no
+  // viewport, so returning false avoids hydration mismatches. The real value
+  // is set once the effect runs client-side.
   const [matches, setMatches] = useState<boolean>(false);
 
-  // Memoize callback to avoid recreating on every render
+  // Memoize the callback with an empty dependency array so the listener
+  // reference stays stable across renders. Without this, the effect would
+  // re-subscribe on every render since the inline function identity changes.
   const updateMatches = useCallback((e: MediaQueryListEvent | MediaQueryList) => {
     setMatches(e.matches);
   }, []);
 
   useEffect(() => {
-    // Check if we're in a browser environment
+    // Guard against SSR and environments without matchMedia (e.g. jsdom).
     if (typeof window === 'undefined' || !window.matchMedia) {
       return;
     }
 
     const mediaQuery = window.matchMedia(query);
 
-    // Set initial value
+    // Synchronously set the initial value so the first paint reflects
+    // the actual viewport rather than the false default.
     setMatches(mediaQuery.matches);
 
-    // Create listener that works with both event and object
+    // Wrap the memoized updater to satisfy the MediaQueryListEvent signature.
     const listener = (e: MediaQueryListEvent) => updateMatches(e);
 
-    // Modern browsers support addEventListener
+    // Modern browsers (Chrome 39+, Firefox 55+, Safari 14+) support the
+    // standard EventTarget API on MediaQueryList.
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener('change', listener);
       return () => mediaQuery.removeEventListener('change', listener);
     }
 
-    // Legacy support (Safari < 14)
+    // Legacy fallback for Safari < 14 which only supports the deprecated
+    // addListener/removeListener API. The `as any` cast is intentional
+    // because the legacy API expects a slightly different callback shape.
     if ('addListener' in mediaQuery && typeof mediaQuery.addListener === 'function') {
       mediaQuery.addListener(listener as any);
       return () => {
@@ -101,9 +109,12 @@ export function useMediaQuery(query: string): boolean {
       };
     }
 
-    // No listener support - just set initial value
+    // Extremely old environments with no listener support at all.
+    // The initial value was already set above; no cleanup needed.
     return undefined;
   }, [query, updateMatches]);
+  // Re-subscribe whenever the query string changes or the callback reference
+  // updates (which is never, due to the empty deps on useCallback).
 
   return matches;
 }

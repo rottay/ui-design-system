@@ -53,13 +53,20 @@ import {
   type ResponsiveGridTemplateValue,
 } from '../shared/responsive';
 
-// Inline utility functions
+/**
+ * Converts a semantic gap token or raw pixel number into a CSS-compatible string.
+ * Used for inline style fallbacks when Tailwind gap classes are insufficient.
+ */
 const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   if (gap === undefined) return undefined;
   if (typeof gap === 'number') return `${gap}px`;
   return GAP_MAP[gap as GridGap] || String(gap);
 };
 
+/**
+ * Converts a column/row definition into a CSS grid-template value.
+ * Numeric values become `repeat(N, 1fr)` for equal-width tracks.
+ */
 const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): string | undefined => {
   if (columns === undefined) return undefined;
   if (columns === 'auto') return 'auto';
@@ -69,6 +76,17 @@ const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): strin
   return undefined;
 };
 
+/**
+ * Assembles inline CSSProperties for the grid container.
+ *
+ * The Modern engine uses a hybrid approach: Tailwind classes handle grid column
+ * counts and gap sizing (via getColumnsClass / getGapClass), while inline styles
+ * cover the full range of CSS Grid properties that have no Tailwind equivalent
+ * (templateAreas, autoFlow, alignment shorthands, dimension constraints, etc.).
+ *
+ * @param props - The full set of GridProps from the consumer.
+ * @returns A CSSProperties object to spread onto the container element.
+ */
 const buildGridStyles = (props: GridProps): CSSProperties => {
   const {
     columns, rows, gap, spacing, columnGap, rowGap, templateColumns, templateRows,
@@ -100,12 +118,21 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   return computedStyle;
 };
 
+/**
+ * Assembles inline CSSProperties for a grid item.
+ *
+ * Works alongside Tailwind span classes (col-span-*, row-span-*) that are
+ * generated in ModernGridItem. Inline styles cover advanced placement scenarios
+ * (colStart/colEnd, named areas) that Tailwind classes cannot express statically.
+ */
 const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
   const { span, colSpan, rowSpan, colStart, colEnd, rowStart, rowEnd, area, alignSelf, justifySelf, placeSelf, zIndex, style } = props;
   const computedStyle: CSSProperties = { ...style };
+  // Named area takes full precedence over col/row placement
   if (area) computedStyle.gridArea = area;
   else {
     const effectiveColSpan = colSpan ?? span;
+    // Build gridColumn: "start / span N" or "start / end" or "span N"
     if (colStart !== undefined || colEnd !== undefined || effectiveColSpan !== undefined) {
       let col = colStart !== undefined ? String(colStart) : '';
       if (effectiveColSpan !== undefined) col = col ? `${col} / span ${effectiveColSpan}` : `span ${effectiveColSpan}`;
@@ -126,7 +153,9 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
 };
 
 /**
- * Get Tailwind-style gap class
+ * Maps semantic gap tokens to Tailwind gap utility classes.
+ * Returns empty string for numeric gaps (handled via inline styles instead)
+ * because Tailwind's spacing scale may not match the exact pixel value.
  */
 function getGapClass(gap: GridProps['gap']): string {
   if (!gap || typeof gap === 'number') return '';
@@ -145,7 +174,8 @@ function getGapClass(gap: GridProps['gap']): string {
 }
 
 /**
- * Get Tailwind-style columns class
+ * Maps column count to a Tailwind grid-cols utility class.
+ * Responsive objects are skipped here (handled by injected media-query CSS).
  */
 function getColumnsClass(columns: GridProps['columns']): string {
   if (!columns || typeof columns === 'object') return '';
@@ -155,8 +185,15 @@ function getColumnsClass(columns: GridProps['columns']): string {
 }
 
 /**
- * Modern Grid component
- * Uses DaisyUI/Tailwind styling patterns with CSS Grid layout
+ * Modern Grid container using a hybrid Tailwind + inline-style strategy.
+ *
+ * Tailwind classes are generated for column counts and gap tokens that map
+ * cleanly to the utility scale. All remaining CSS Grid properties (template
+ * areas, auto-flow, alignment, dimension constraints) are expressed as inline
+ * styles. Responsive breakpoint objects trigger injected `<style>` media queries.
+ *
+ * @param props - Grid container props including columns, rows, gap, template overrides, etc.
+ * @returns A polymorphic, ref-forwarding grid container element.
  */
 const ModernGrid = forwardRef<HTMLElement, GridProps>(
   (props, ref) => {
@@ -177,6 +214,9 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
     const hasResponsiveColumns = isResponsiveGridValue(columns);
     const hasResponsiveRows = isResponsiveGridValue(rows);
     const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
+
+    // Clear inline template values when responsive CSS will provide them via
+    // media queries, preventing the inline styles from overriding the injected rules
     const computedStyle = buildGridStyles({
       ...props,
       style: needsResponsiveCSS
@@ -198,7 +238,8 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
         )
       : null;
 
-    // Build Tailwind classes
+    // Compose Tailwind classes only for props with clean utility mappings;
+    // skip column class when responsive or custom template is active
     const tailwindClasses = [
       'grid',
       !hasResponsiveColumns && !props.templateColumns ? getColumnsClass(columns) : '',
@@ -232,7 +273,14 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
 ModernGrid.displayName = 'ModernGrid';
 
 /**
- * Modern GridItem component
+ * Modern GridItem component with Tailwind span utilities.
+ *
+ * Generates `col-span-*` and `row-span-*` Tailwind classes for common
+ * spanning scenarios. Advanced placement (colStart, colEnd, named areas)
+ * is handled by inline styles from buildGridItemStyles.
+ *
+ * @param props - Grid item positioning props (span, colSpan, rowSpan, area, etc.)
+ * @returns A polymorphic, ref-forwarding grid item element.
  */
 const ModernGridItem = forwardRef<HTMLElement, GridItemProps>(
   (props, ref) => {
@@ -247,7 +295,8 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>(
 
     const computedStyle = buildGridItemStyles(props);
 
-    // Build Tailwind span classes
+    // Generate Tailwind span utilities for the most common use case;
+    // inline styles from buildGridItemStyles handle start/end positioning
     const effectiveColSpan = colSpan || span;
     const spanClasses = [
       effectiveColSpan ? `col-span-${effectiveColSpan}` : '',

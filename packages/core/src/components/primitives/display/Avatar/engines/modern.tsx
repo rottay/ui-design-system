@@ -1,55 +1,12 @@
 /**
- * @fileoverview Avatar Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based avatar with mask utilities.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Modern engine for the Avatar component, backed by DaisyUI/Tailwind.
+ * Uses DaisyUI mask classes for shape clipping and Tailwind semantic colour
+ * utilities for variant styling, keeping the bundle lightweight.
  *
- * @remarks
- * This engine uses DaisyUI's avatar component with mask classes for
- * shape styling and Tailwind utilities for colors.
- *
- * **Implementation Details:**
- * - Uses DaisyUI `avatar` class for container
- * - Uses DaisyUI `mask-*` classes for shape styling
- * - Uses Tailwind `bg-*` and `text-*-content` for variant colors
- * - Uses `ring` utilities for bordered style
- *
- * **Mask Classes:**
- * - `circle` → `mask-circle`
- * - `square` → `mask-squircle`
- * - `rounded` → `mask-squircle`
- *
- * **Variant Mapping:**
- * - Uses DaisyUI semantic colors (primary, secondary, success, etc.)
- * - Automatically applies `-content` text color for contrast
- * - Gradient variant uses `bg-gradient-to-br`
- *
- * **Ring Support:**
- * - Uses Tailwind `ring` utilities
- * - Includes `ring-offset-base-100` for proper spacing
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Avatar } from '@rottay/design-system';
- *
- * <Avatar engine="modern" src="/user.jpg" name="Jane Doe" />
+ * <Avatar engine="modern" src="/user.jpg" name="Jane Doe" variant="primary" bordered />
  * ```
- *
- * @example With DaisyUI Styling
- * ```tsx
- * <Avatar
- *   engine="modern"
- *   name="JD"
- *   variant="primary"
- *   bordered
- *   status="online"
- * />
- * ```
- *
- * @see {@link Avatar} for the main component
- * @see {@link https://daisyui.com/components/avatar/} DaisyUI Avatar
- * @module ModernAvatar
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -59,7 +16,12 @@ import type { AvatarProps } from '../Avatar.types';
 import { AVATAR_DEFAULTS } from '../Avatar.types';
 
 /**
- * Generates initials from name or alt text
+ * Derives up to two uppercase initials from a display name or alt text.
+ * Uses first and last word so "John Michael Doe" produces "JD", not "JM".
+ *
+ * @param name - Primary display name
+ * @param alt - Fallback alt text if name is absent
+ * @returns One or two uppercase characters, or empty string
  */
 function getInitials(name?: string, alt?: string): string {
   const text = name || alt || '';
@@ -68,9 +30,20 @@ function getInitials(name?: string, alt?: string): string {
   if (parts.length === 0) return '';
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
 
+  // Take first + last word to handle multi-word names gracefully
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
+/**
+ * Modern (DaisyUI) implementation of the Avatar component.
+ *
+ * Renders avatar content inside a DaisyUI mask container with Tailwind utility
+ * classes for variant colours. Status is shown via an absolutely-positioned dot
+ * rather than wrapping in a Badge component (unlike the Classic engine).
+ *
+ * @param props - Unified AvatarProps from the design system type contract
+ * @returns A React element using DaisyUI avatar markup
+ */
 export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   const {
     src,
@@ -90,8 +63,10 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     style,
   } = props;
 
+  // Track image load failures so we can fall back to initials/children
   const [imageError, setImageError] = useState(false);
 
+  // Reset error state whenever the src URL changes, giving the new image a chance to load
   useEffect(() => {
     setImageError(false);
   }, [src]);
@@ -107,18 +82,21 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
 
   const displayInitials = initials || getInitials(name, alt);
 
-  // DaisyUI mask classes
+  // DaisyUI mask classes clip the avatar into the desired shape.
+  // Both 'square' and 'rounded' map to squircle because DaisyUI's squircle
+  // provides the expected soft-rounded appearance for non-circular avatars.
   const maskClass = shape === 'circle' ? 'mask-circle' :
                     shape === 'square' ? 'mask-squircle' :
                     'mask-squircle';
 
-  // Use CSS variables for sizing
+  // Dimensions come from CSS custom properties so tenant themes can override sizes
   const sizeStyle = {
     width: `var(--ds-avatar-${size}-size)`,
     height: `var(--ds-avatar-${size}-size)`,
   };
 
-  // Variant to DaisyUI color classes
+  // Map DS variant names to DaisyUI semantic bg classes.
+  // The '-content' suffix classes provide automatic contrast text colours.
   const variantBgClass = {
     default: 'bg-neutral',
     primary: 'bg-primary',
@@ -139,7 +117,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     gradient: 'text-white',
   }[variant] || 'text-neutral-content';
 
-  // Status indicator color
+  // Status indicator maps to DaisyUI semantic feedback colours
   const statusColor = status ? {
     online: 'bg-success',
     offline: 'bg-neutral',
@@ -147,7 +125,9 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     busy: 'bg-error',
   }[status] : undefined;
 
+  // DaisyUI 'online' class on the avatar container enables its built-in status dot
   const containerClass = `avatar ${status ? 'online' : ''} ${className}`;
+  // Ring utility provides the bordered outline; ring-offset prevents it from touching the avatar
   const ringClass = bordered ? 'ring ring-primary ring-offset-base-100 ring-offset-2' : '';
 
   return (
@@ -180,6 +160,8 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
           </div>
         )}
       </div>
+      {/* Status dot positioned at the bottom-right corner with a white border
+          to visually separate it from the avatar background */}
       {status && (
         <span
           className={`absolute bottom-0 right-0 ${statusColor} border-2 border-white rounded-full`}

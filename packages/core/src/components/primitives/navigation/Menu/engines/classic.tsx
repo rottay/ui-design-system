@@ -64,9 +64,12 @@ import { MENU_DEFAULTS } from '../Menu.types';
  *
  * @internal
  */
+// Recursive conversion from DS MenuItem shape to antd's ItemType.
+// The DS uses a unified item interface where `type` distinguishes dividers,
+// groups, and submenus. Antd requires structurally different objects for each.
 function convertMenuItems(items: MenuItemInterface[]): ItemType[] {
   return items.map((item) => {
-    // Handle divider type
+    // Dividers are purely visual separators -- antd needs the `type` discriminant
     if (item.type === 'divider') {
       return {
         type: 'divider' as const,
@@ -74,7 +77,9 @@ function convertMenuItems(items: MenuItemInterface[]): ItemType[] {
       };
     }
 
-    // Handle group type
+    // Groups render a non-interactive title above their children.
+    // Prefer `item.title` over `item.label` because groups traditionally
+    // use title for the heading text, while label is for interactive items.
     if (item.type === 'group') {
       return {
         type: 'group' as const,
@@ -84,7 +89,8 @@ function convertMenuItems(items: MenuItemInterface[]): ItemType[] {
       };
     }
 
-    // Handle submenu (item with children)
+    // Items with children become submenus (collapsible/expandable).
+    // Antd infers submenu behavior from the presence of `children`.
     if (item.children && item.children.length > 0) {
       return {
         key: item.key,
@@ -96,7 +102,7 @@ function convertMenuItems(items: MenuItemInterface[]): ItemType[] {
       };
     }
 
-    // Handle regular item
+    // Leaf items -- no children, no special type
     return {
       key: item.key,
       label: item.label,
@@ -107,12 +113,25 @@ function convertMenuItems(items: MenuItemInterface[]): ItemType[] {
   });
 }
 
+/**
+ * Converts JSX children (compound component pattern) into antd ItemType[].
+ * This enables the declarative `<Menu.Item>` / `<Menu.SubMenu>` API alongside
+ * the data-driven `items` prop. We inspect each child's displayName to decide
+ * which antd item shape to produce.
+ *
+ * @param children - React children from the Menu component
+ * @returns Flat array of antd-compatible menu item objects
+ * @internal
+ */
 function convertMenuChildren(children: React.ReactNode): ItemType[] {
   return React.Children.toArray(children).reduce<ItemType[]>((items, child, index) => {
+    // Skip text nodes, nulls, and other non-element children
     if (!React.isValidElement(child)) {
       return items;
     }
 
+    // Resolve displayName to determine the DS compound component type.
+    // Native HTML elements have a string type; DS components use displayName.
     const displayName =
       typeof child.type === 'string'
         ? child.type
@@ -299,6 +318,8 @@ export default function ClassicMenu(props: MenuProps): React.ReactElement {
     defaultOpenKeys,
     multiple,
     selectable,
+    // inlineCollapsed only applies to inline mode -- passing it for other
+    // modes would trigger an antd warning about unsupported prop combinations
     ...(mode === 'inline' ? { inlineCollapsed } : {}),
     expandIcon,
     onSelect: handleSelect as AntMenuProps['onSelect'],

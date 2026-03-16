@@ -297,11 +297,12 @@ export function useLayoutPreference(
   // Track whether we've hydrated from storage
   const hydratedRef = useRef(false);
 
-  // Hydrate from storage on mount (client-side only)
+  // Hydrate from storage on mount (client-side only). Deep merge ensures that
+  // when the app adds new default columns or preference keys, they appear
+  // alongside the user's previously saved values rather than being lost.
   useEffect(() => {
     const stored = readFromStorage(storageType, key);
     if (stored) {
-      // Deep merge stored values over defaults to handle new default keys
       const merged = deepMerge(defaults, stored);
       setPreferenceState(merged);
     }
@@ -335,12 +336,12 @@ export function useLayoutPreference(
     [debounceMs]
   );
 
-  // Cleanup debounce timer and flush on unmount
+  // Flush any pending write on unmount so column resizes or sidebar toggles
+  // that happened just before navigation are not lost.
   useEffect(() => {
     return () => {
       if (debounceTimerRef.current !== null) {
         clearTimeout(debounceTimerRef.current);
-        // Flush pending write on unmount
         if (pendingWriteRef.current !== null) {
           writeToStorage(
             storageTypeRef.current,

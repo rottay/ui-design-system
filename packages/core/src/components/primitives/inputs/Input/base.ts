@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Internal engine-aware Input export.
+ * @fileoverview Internal engine-aware Input export.
  *
  * Compound helpers such as `Input.Password` need to render the root input
  * without importing the public `Input` object itself, otherwise library builds

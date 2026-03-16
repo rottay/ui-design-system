@@ -1,12 +1,13 @@
 'use client';
 
 /**
- * DetailSurface
+ * @fileoverview DetailSurface - Rottay Design System
+ * @description Reusable detail-page shell that combines adapter mapping,
+ * permission-aware actions, tabs, and sidebar content.
  *
- * Wraps the generic detail panel pattern with:
- * - adapter mapping
- * - field/action permission filtering
- * - function-based tab/sidebar/header rendering
+ * @remarks
+ * The detail surface keeps page-level chrome standardized while allowing apps
+ * to supply field rendering and item-specific tab content.
  */
 
 import { Box } from '../../primitives';
@@ -32,6 +33,7 @@ export interface DetailSurfaceProps<TRaw, TView> {
   onRetry?: () => void | Promise<void>;
 }
 
+/** Detail-page shell with adapter mapping, action normalization, and tab filtering. */
 export function DetailSurface<TRaw, TView>({
   data,
   adapter,
@@ -51,6 +53,8 @@ export function DetailSurface<TRaw, TView>({
     );
   }
 
+  // Empty state only shows when not loading -- showing "not found" while data
+  // is still in-flight would flash a misleading screen.
   if (!data && !loading) {
     return (
       <Box>
@@ -64,8 +68,12 @@ export function DetailSurface<TRaw, TView>({
     );
   }
 
+  // The adapter transforms raw API/DB data into the view model that the
+  // surface config expects. This keeps the surface decoupled from the
+  // backend shape and lets the same config work across different data sources.
   const item = data ? adapter.map(data) : undefined;
 
+  // Convert the surface action vocabulary into the narrower detail-panel contract.
   const actions = item
     ? filterSurfaceActions(config.behavior.actions, config.permissions, item).map((action) => ({
         key: action.id,
@@ -83,6 +91,7 @@ export function DetailSurface<TRaw, TView>({
       }))
     : [];
 
+  // Tabs are filtered after mapping the item so `visible` and `badge` callbacks can inspect real data.
   const visibleTabs = item
     ? filterDetailSurfaceTabs(config.presentation.tabs, config.permissions, item).map((tab) => ({
         key: tab.key,
@@ -93,10 +102,15 @@ export function DetailSurface<TRaw, TView>({
         disabled: tab.disabled,
       }))
     : [];
+  // Validate that the configured active tab actually exists in the visible
+  // set. If the active tab was hidden by permissions or visibility rules,
+  // fall back to the first visible tab to avoid a blank content area.
   const resolvedActiveTab =
     visibleTabs.some((tab) => tab.key === config.behavior.activeTab)
       ? config.behavior.activeTab
       : visibleTabs[0]?.key;
+  // When activeTab is undefined the Tabs component manages its own state
+  // (uncontrolled mode). We track this so we pass the right prop.
   const isControlledTabState = config.behavior.activeTab !== undefined;
 
   const detailContent = (
@@ -108,6 +122,7 @@ export function DetailSurface<TRaw, TView>({
         overflow: profileDefaults.accentPosition !== 'none' ? 'hidden' : undefined,
       }}
     >
+      {/* Accent bars are rendered at the surface layer so patterns remain presentation-agnostic. */}
       {profileDefaults.accentPosition !== 'none' && (
         <SurfaceAccentBar
           position={profileDefaults.accentPosition}

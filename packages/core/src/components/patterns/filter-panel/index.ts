@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * FilterPanel - Pattern Component
- *
- * Configurable filter panel with support for multiple filter types,
- * layouts (inline, stacked, sidebar), and collapsible sections.
+ * @fileoverview FilterPanel pattern -- engine-aware configurable filter UI
+ * with multiple filter types, layout modes, and collapsible sections.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

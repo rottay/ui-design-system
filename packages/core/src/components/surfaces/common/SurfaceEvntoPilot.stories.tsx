@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Evnto pilot stories -- demonstrates surface components configured
+ * with the Evnto tenant personality (playful, spacious, bouncy animations).
+ */
+
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

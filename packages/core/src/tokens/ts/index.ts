@@ -1,17 +1,17 @@
 /**
- * Design Tokens - TypeScript
+ * @fileoverview Aggregator for all TypeScript design tokens.
  *
- * Main entry point for all TypeScript design tokens.
- * Import from this file to get access to the complete token system.
+ * Tokens are organized into three tiers:
  *
- * Token Categories:
- * - Base: Foundational tokens (colors, spacing, typography, shadows, borders, z-index)
- * - Components: Component-specific tokens (avatar, button, input, card, modal)
- * - Tenants: Brand-specific customizations (rottay)
+ * - **Base** -- Foundational primitives: colors, spacing (4px grid), typography,
+ *   shadows, borders, and z-index layering.
+ * - **Components** -- Per-component token objects (e.g. `buttonTokens`, `cardTokens`)
+ *   covering sizes, variants, states, and transitions.
+ * - **Tenants** -- Brand-specific overrides. Currently ships `rottayTokens` only;
+ *   additional tenant token sets are loaded at runtime via CSS class scoping.
  *
- * Usage:
- * import { colors, spacing, buttonTokens } from '@rottay/design-system/tokens';
- * import { tokens } from '@rottay/design-system/tokens';
+ * The combined `tokens` default export nests all three tiers for exploratory use.
+ * Most consumers should prefer direct named imports for tree-shaking.
  */
 
 // Export all individual tokens
@@ -24,7 +24,7 @@ import { baseTokens } from './base';
 import { componentTokens } from './components';
 import { tenantTokens } from './tenants';
 
-// Combined tokens export
+/** Nested aggregate of all token tiers for discovery and runtime introspection. */
 export const tokens = {
   base: baseTokens,
   components: componentTokens,

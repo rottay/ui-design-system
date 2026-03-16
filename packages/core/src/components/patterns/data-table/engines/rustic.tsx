@@ -1,16 +1,42 @@
 'use client';
 
 /**
- * DataTable - Rustic Engine (Vanilla HTML/CSS)
+ * @fileoverview Rustic (Apollo) engine for the DataTable pattern, rendered
+ * entirely with inline styles that reference `--ds-*` CSS custom properties.
+ * This engine carries zero external CSS dependencies (no Tailwind, no Ant
+ * Design) so it can run in any host environment -- including iframes, email
+ * previews, and Remotion renders -- while still respecting the tenant's
+ * design-system theme tokens for colors, radii, and typography.
+ *
+ * @example
+ * <RusticDataTable
+ *   data={transactions}
+ *   columns={[{ key: 'amount', header: 'Amount', accessorKey: 'amount', sortable: true }]}
+ *   rowKey="txId"
+ *   bordered
+ *   compact
+ *   stickyHeader
+ *   pagination={{ current: 1, pageSize: 50, total: 500, onChange: setPage }}
+ * />
  */
 
 import React, { useMemo, useState, useCallback } from 'react';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 
+// ---------------------------------------------------------------------------
+// Animation constants
+// ---------------------------------------------------------------------------
+// Shared animation curve and duration for the Rustic (Apollo) engine.
+// These map to personality CSS vars so tenant themes can override them globally.
 const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
 
+// ---------------------------------------------------------------------------
+// Style dictionary
+// ---------------------------------------------------------------------------
+// All visual tokens reference `--ds-*` CSS custom properties with sensible
+// fallbacks so the table renders correctly even without a theme provider.
 const styles = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
@@ -147,6 +173,14 @@ const styles = {
   } as React.CSSProperties,
 };
 
+/**
+ * Vanilla inline-style data table that uses `--ds-*` CSS custom properties
+ * for all visual decisions. Ships zero external CSS -- ideal for isolated
+ * rendering contexts such as iframes, email templates, or Remotion compositions.
+ *
+ * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
+ * @returns A data table rendered entirely with inline styles and CSS variables.
+ */
 export default function RusticDataTable<T extends Record<string, unknown>>(
   props: DataTablePatternProps<T>
 ) {
@@ -178,13 +212,18 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
     style,
   } = props;
 
+  // Uncontrolled selection fallback -- allows standalone usage without the
+  // consumer needing to manage selection state externally.
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
+  // Expanded rows tracked as a Set for O(1) has/add/delete during toggle.
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
   const getRowKey = useCallback((row: T, index: number) => resolveRowKey(row, rowKey, index), [rowKey]);
   const visibleColumns = useMemo(() => columns.filter((c) => c.visible !== false), [columns]);
 
+  // Toggle individual row selection. Re-derives selected rows from keys at
+  // call-time so data mutations between renders do not cause stale references.
   const toggleSelection = (key: string) => {
     const next = selectedKeys.includes(key)
       ? selectedKeys.filter((k) => k !== key)
@@ -194,6 +233,8 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
     onSelectionChange?.(next, selectedRows);
   };
 
+  // Select/deselect all rows. When every row is already selected, clear;
+  // otherwise select everything -- matching native spreadsheet behaviour.
   const toggleAll = () => {
     if (selectedKeys.length === data.length) {
       if (!controlledSelectedKeys) setInternalSelectedKeys([]);
@@ -205,6 +246,7 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
     }
   };
 
+  // Cycle sort direction on re-click; default to ascending for a new column.
   const handleSort = (key: string) => {
     if (!onSortChange) return;
     onSortChange({
@@ -213,6 +255,8 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
     });
   };
 
+  // Pre-calculate total column count for expanded-row colSpan, avoiding
+  // inline arithmetic inside the render loop.
   const colCount = visibleColumns.length + (selectable ? 1 : 0) + (actions ? 1 : 0) + (expandedRow ? 1 : 0);
 
   return (
@@ -253,8 +297,14 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
         </div>
       )}
 
+      {/* Table wrapper merges maxHeight for scrollable body and conditionally
+          removes the border when the `bordered` prop is false. */}
       <div style={{ ...styles.tableWrap, ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}), ...(bordered ? {} : { border: 'none' }) }}>
+        {/* Inline keyframes: Rustic engine cannot depend on global CSS, so animation
+            definitions must be co-located here. */}
         <style>{`@keyframes ds-spin { to { transform: rotate(360deg); } } @keyframes ds-bulk-slide-down { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+        {/* Loading overlay renders on top of existing data to avoid layout jump;
+            when data is empty, a centered spinner replaces the table entirely. */}
         {loading && data.length > 0 && (
           <div style={styles.loadingOverlay} role="status" aria-label="Loading">
             <div style={styles.loadingSpinner} aria-hidden="true" />
@@ -307,9 +357,13 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
               {data.map((row, index) => {
                 const key = getRowKey(row, index);
                 const isExpanded = expandedKeys.has(key);
+                // Pick cell padding based on density; compact mode roughly halves padding.
                 const cellStyle = compact ? styles.tdCompact : styles.td;
                 return (
                   <React.Fragment key={key}>
+                    {/* Row background priority: selected > striped > default.
+                        Selection uses primary-50 for a subtle highlight, striping
+                        uses neutral-50 for alternating rows. */}
                     <tr
                       style={{
                         cursor: onRowClick ? 'pointer' : undefined,
@@ -376,6 +430,8 @@ export default function RusticDataTable<T extends Record<string, unknown>>(
         )}
       </div>
 
+      {/* Pagination strip: range label is clamped with Math.min so the last
+          page does not show an end index beyond the total record count. */}
       {pagination && (
         <div style={styles.pagination}>
           <span>

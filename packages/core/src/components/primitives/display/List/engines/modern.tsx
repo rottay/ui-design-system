@@ -1,60 +1,26 @@
 'use client';
 
 /**
- * @fileoverview List Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based list with responsive design.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the List display primitive.
+ * Provides List, Item, and Meta sub-components using Tailwind utility classes
+ * and DaisyUI color tokens, with built-in skeleton loading and CSS Grid support.
  *
- * @remarks
- * This engine uses DaisyUI classes with Tailwind utilities
- * for a lightweight, responsive list implementation.
- *
- * **Exported Components:**
- * - `List` - Main list container
- * - `Item` - List item wrapper
- * - `Meta` - Item metadata display
- *
- * **Implementation Details:**
- * - Custom flex-based layout
- * - DaisyUI color classes
- * - Skeleton loading states
- * - Grid layout support
- * - Split dividers
- *
- * **Class Mappings:**
- * - `border border-base-300` - Bordered variant
- * - `text-sm`, `text-base`, `text-lg` - Sizes
- * - `flex items-center` - Item layout
- * - `animate-pulse` - Loading skeleton
- *
- * **Advantages:**
- * - Lightweight CSS-only styling
- * - Responsive by default
- * - DaisyUI theme integration
- * - Custom skeleton loading
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { List } from '@rottay/design-system';
- *
  * <List engine="modern" bordered>
  *   <List.Item>Item content</List.Item>
  * </List>
  * ```
- *
- * @see {@link List} for the main component
- * @see {@link https://daisyui.com/} DaisyUI
- * @module List/engines/modern
- * @category Display
- * @package @rottay/design-system
  */
 import React from 'react';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../List.types';
 import { LIST_DEFAULTS } from '../List.types';
 
+/** Modern List Item Meta. Renders avatar + title + description with Tailwind flex layout. */
 export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
   (props, ref) => {
     const { avatar, title, description, className = '', style } = props;
+    // flex-start alignment so multi-line descriptions don't center the avatar
     return (
       <div ref={ref} className={`flex items-start gap-3 ${className}`} style={style}>
         {avatar && <div className="flex-shrink-0">{avatar}</div>}
@@ -68,9 +34,11 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
 );
 Meta.displayName = 'List.Item.Meta.Modern';
 
+/** Modern List Item. Uses `<li>` with flex layout for content, extra, and actions. */
 export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
   (props, ref) => {
     const { actions, extra, children, className = '', style } = props;
+    // Content takes remaining space; extra and actions are flex-shrink-0 on the right
     return (
       <li
         ref={ref}
@@ -92,6 +60,13 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
 );
 Item.displayName = 'List.Item.Modern';
 
+/**
+ * Modern List container. Builds a `<ul>` inside a bordered/sized div, with
+ * CSS Grid support, skeleton loading, and split dividers between items.
+ *
+ * @param props - DS ListProps with Tailwind-based styling options.
+ * @returns A div-wrapped `<ul>` with optional header, footer, and loading skeleton.
+ */
 export const List = React.forwardRef<HTMLDivElement, ListProps>(
   (props, ref) => {
     const {
@@ -116,10 +91,12 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       large: 'text-lg',
     };
 
+    // Prefer renderItem for data-driven lists; fall back to children for declarative usage
     const listContent = dataSource && renderItem
       ? dataSource.map((item, index) => renderItem(item, index))
       : children;
 
+    // Three-row skeleton with avatar circle + two text bars to match typical list layouts
     if (loading) {
       return (
         <div ref={ref} className={`animate-pulse ${className}`} style={style}>
@@ -149,6 +126,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             {header}
           </div>
         )}
+        {/* When grid is set, switch to CSS Grid; otherwise render as a standard vertical list */}
         <ul
           className={`${grid ? 'grid' : ''} ${itemLayout === 'vertical' ? '' : ''}`}
           style={grid ? {

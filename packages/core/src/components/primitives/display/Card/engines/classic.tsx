@@ -112,21 +112,28 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
     style,
   } = props;
 
-  // Determine Ant Design variant based on our variant prop
-  // AntD 5.x uses variant="borderless" instead of bordered={false}
+  // AntD 5.x replaced the `bordered` boolean with a `variant` prop.
+  // We pass `undefined` (the AntD default, which renders borders) when our DS
+  // variant is "outlined" or the consumer explicitly wants a border; otherwise
+  // we opt into "borderless" so elevated/filled/ghost cards stay clean.
   const antVariant = (variant === 'outlined' || bordered) ? undefined : 'borderless';
 
-  // Get color variant styles
+  // Color variants (e.g. "info", "success") add a tinted left border + bg.
+  // We resolve once here so the same object is reused in both the style
+  // spread and the hasColorVariant guard below.
   const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
 
-  // Build body style
+  // Body padding is consumer-configurable; the "filled" variant also needs a
+  // subtle neutral background since AntD does not provide one by default.
   const bodyStyle: React.CSSProperties = {
     padding: PADDING_MAP[padding] || PADDING_MAP.md,
     ...(variant === 'filled' && { backgroundColor: 'var(--ds-color-neutral-50, #fafafa)' }),
   };
 
-  // Build card title with description
+  // AntD Card accepts a single `title` ReactNode. When a description is also
+  // provided we compose both into a stacked layout so the subtitle sits
+  // directly beneath the title without needing AntD's Meta sub-component.
   const cardTitle = description ? (
     <div>
       <div>{title}</div>
@@ -138,14 +145,17 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
     title
   );
 
-  // Build shadow style based on variant
+  // Elevated cards need a visible drop-shadow to communicate depth;
+  // ghost cards explicitly suppress both shadow and background so they
+  // blend into any container. Other variants inherit AntD defaults.
   const shadowStyle = variant === 'elevated' || shadowed
     ? { boxShadow: SHADOW_MAP.md }
     : variant === 'ghost'
     ? { boxShadow: 'none', backgroundColor: 'transparent' }
     : {};
 
-  // Build cover element if cover URL is provided
+  // AntD expects a full ReactElement for its `cover` prop, not a URL string.
+  // We convert the URL here so consumers can pass a simple string instead.
   const coverElement = cover ? (
     <img
       alt={typeof title === 'string' ? title : 'Card cover'}
@@ -167,13 +177,16 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
       className={`rottay-card rottay-card--classic ${className}`}
       styles={{
         body: bodyStyle,
+        // By default we hide the header divider to match the DS spec;
+        // it only appears when the consumer explicitly sets `divider`.
         header: divider ? undefined : { borderBottom: 'none' },
       }}
       style={{
         borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
         cursor: clickable || onClick ? 'pointer' : undefined,
         ...shadowStyle,
-        // Apply color variant styles
+        // Color variant overrides both border-left and background, giving
+        // cards a semantic accent (e.g. green for success, red for error).
         ...(hasColorVariant && {
           borderLeft: `4px solid ${colorStyles.borderColor}`,
           backgroundColor: colorStyles.background,
@@ -181,6 +194,8 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
         ...style,
       }}
     >
+      {/* When loading we render AntD Skeleton instead of children so the card
+          maintains its approximate dimensions while content is being fetched. */}
       {loading ? (
         <Skeleton active paragraph={{ rows: 3 }} />
       ) : (

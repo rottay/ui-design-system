@@ -1,5 +1,11 @@
 /**
- * Test setup for Vitest
+ * @fileoverview Global test setup for Vitest + Testing Library.
+ * @description Configures the test environment before any suite runs:
+ * - Extends Vitest `expect` with Testing Library DOM matchers
+ * - Sets a generous async timeout (30s) for lazy-loaded engine code
+ * - Polyfills browser APIs absent in jsdom/happy-dom: ResizeObserver,
+ *   IntersectionObserver, matchMedia, Canvas getContext, getComputedStyle
+ * - Cleans up tenant/theme/engine data attributes between tests
  */
 
 import { mkdirSync } from 'node:fs';

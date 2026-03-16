@@ -1,11 +1,13 @@
 'use client';
 
 /**
- * MediaSurface
+ * @fileoverview MediaSurface - Rottay Design System
+ * @description Reusable media-browser surface with gallery, selection, preview,
+ * detail rail, and item-level actions.
  *
- * Media-heavy pages need more than a card grid: they need selection, preview,
- * details, and item-level actions. This surface centralizes those mechanics
- * while still allowing the app to provide custom thumbnails and previews.
+ * @remarks
+ * The surface centralizes media mechanics while still allowing apps to inject
+ * custom thumbnails, previews, and details renderers.
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -18,6 +20,7 @@ import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../res
 import { SurfaceActionBar, SurfaceSectionCard } from '../shared';
 import { SurfaceEmptyState } from '../states';
 
+/** Default gallery card used when callers do not provide a custom grid-item renderer. */
 function DefaultMediaCard({
   item,
   selected,
@@ -63,16 +66,23 @@ export interface MediaSurfaceProps {
   loading?: boolean;
 }
 
+/** Media-browser shell with selection state, responsive gallery layout, and details rail. */
 export function MediaSurface({
   config,
   loading = false,
 }: MediaSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
+  // Selection supports controlled (app owns selectedItemId) and uncontrolled
+  // (surface auto-selects first item) modes. Auto-selection on mount ensures
+  // the details rail has something to show immediately.
   const [internalSelectedId, setInternalSelectedId] = useState<string | undefined>(
     config.behavior.selectedItemId ?? config.behavior.items[0]?.id
   );
 
+  // Re-sync when items change (e.g. after filtering) or when the app takes
+  // over control of the selection. The fallback to items[0] prevents the
+  // details rail from going blank after a filter narrows results.
   useEffect(() => {
     if (config.behavior.selectedItemId !== undefined) {
       setInternalSelectedId(config.behavior.selectedItemId);
@@ -90,8 +100,14 @@ export function MediaSurface({
     return filterSurfaceActions(config.behavior.itemActions, config.permissions, selectedItem);
   }, [config.behavior.itemActions, config.permissions, selectedItem]);
   const shouldStack = responsiveLayout.shouldStack;
+  // Details rail shows when there is a selected item AND either a custom
+  // detail renderer exists or the layout explicitly requests it. Without
+  // either condition, the gallery takes full width.
   const showDetailsRail =
     !!selectedItem && (config.presentation.renderDetails || config.visual.layout === 'detail');
+  // Gallery column count scales down responsively: desktop uses the configured
+  // count, tablet caps at 2 to prevent cramped thumbnails, mobile always
+  // collapses to a single column.
   const galleryColumns = resolveResponsiveColumnCount(
     responsiveLayout,
     config.visual.columns ?? 3,
@@ -104,6 +120,8 @@ export function MediaSurface({
       setInternalSelectedId(item.id);
     }
 
+    // Selection is surfaced back to app code even in uncontrolled mode so it can
+    // drive related UI such as metadata panels or analytics.
     config.behavior.onSelectItem?.(item);
   };
 

@@ -219,7 +219,8 @@ const styles = {
  * @internal
  */
 const renderIcon = (status: ResultStatus): React.ReactNode => {
-  // HTTP status codes (404, 403, 500) display as large text
+  // HTTP status codes are rendered as bold text rather than icons
+  // because they are universally recognisable and carry more meaning
   if (['404', '403', '500'].includes(status)) {
     return <div style={styles.statusCode(status)}>{status}</div>;
   }
@@ -305,6 +306,8 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
     // -------------------------------------------------------------------------
 
     return (
+      /* role="status" + aria-live="polite" ensures screen readers announce
+          the result when it appears or changes, without interrupting the user */
       <div
         ref={ref}
         className={className}

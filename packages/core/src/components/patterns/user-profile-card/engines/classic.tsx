@@ -1,7 +1,18 @@
 'use client';
 
 /**
- * UserProfileCard - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the UserProfileCard pattern.
+ * Renders a centered card with avatar, online status dot, name/role/department,
+ * email, status tag, and configurable action buttons. Supports two variants:
+ * "full" (Card with centered layout) and "compact" (horizontal inline row).
+ * Built entirely on Ant Design primitives (Card, Avatar, Tag, Button, Space).
+ *
+ * @example
+ * <ClassicUserProfileCard
+ *   user={{ name: 'Jane Doe', role: 'Engineer', email: 'jane@acme.com', status: 'active' }}
+ *   size="md"
+ *   actions={[{ key: 'msg', label: 'Message', variant: 'primary', onClick: () => {} }]}
+ * />
  */
 
 import React from 'react';
@@ -9,6 +20,7 @@ import { Card, Avatar, Tag, Button, Space, Tooltip } from 'antd';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import type { UserProfileCardProps } from '../UserProfileCard.types';
 
+// Maps user status to the --ds-* color token used for the online indicator dot.
 const statusColors: Record<string, string> = {
   active: 'var(--ds-color-success)',
   away: 'var(--ds-color-warning)',
@@ -16,6 +28,7 @@ const statusColors: Record<string, string> = {
   offline: 'var(--ds-color-text-tertiary)',
 };
 
+// Ant Design Tag `color` prop value per status, driving the tag background tint.
 const statusTagColors: Record<string, string> = {
   active: 'success',
   away: 'warning',
@@ -30,12 +43,23 @@ const statusLabels: Record<string, string> = {
   offline: 'Offline',
 };
 
+// Pixel dimensions per size tier. Keeps avatar, typography, and padding
+// proportional so the card scales visually at sm/md/lg without ad-hoc overrides.
 const sizeMap = {
   sm: { avatar: 40, titleSize: 14, descSize: 12, padding: 12 },
   md: { avatar: 56, titleSize: 16, descSize: 13, padding: 16 },
   lg: { avatar: 80, titleSize: 20, descSize: 14, padding: 24 },
 };
 
+/**
+ * Classic engine user profile card built on Ant Design Card/Avatar/Tag.
+ * Two layout variants: "full" (centered card with all details) and "compact"
+ * (horizontal row suited for sidebars and lists). Includes an online status
+ * dot positioned absolutely over the avatar.
+ *
+ * @param props - {@link UserProfileCardProps}
+ * @returns An Ant Design Card (full) or a plain flex container (compact).
+ */
 export default function ClassicUserProfileCard(props: UserProfileCardProps) {
   const {
     user,
@@ -56,6 +80,8 @@ export default function ClassicUserProfileCard(props: UserProfileCardProps) {
     return <Card className={className} style={style} loading />;
   }
 
+  // Default to online when user.status is 'active' unless explicitly overridden
+  // by the `online` prop, allowing the consumer to decouple presence from status.
   const isOnline = online ?? (user.status === 'active');
 
   if (variant === 'compact') {
@@ -144,6 +170,9 @@ export default function ClassicUserProfileCard(props: UserProfileCardProps) {
 
       {headerExtra && <div style={{ marginBottom: 12 }}>{headerExtra}</div>}
 
+      {/* Action buttons rendered with Ant Design's Space for consistent gap.
+          "danger" variant maps to Ant's `danger` prop on a primary button,
+          while unrecognized variants fall back to the default button style. */}
       {actions.length > 0 && (
         <Space wrap style={{ justifyContent: 'center' }}>
           {actions.map(action => (

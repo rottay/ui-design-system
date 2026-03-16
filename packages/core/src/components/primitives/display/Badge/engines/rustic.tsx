@@ -1,55 +1,12 @@
 /**
- * @fileoverview Badge Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS badge implementation with zero dependencies.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Rustic engine for the Badge component, using pure HTML/CSS.
+ * Zero external dependencies -- all styling via inline styles and CSS custom
+ * properties, with injected keyframes for the pulse animation.
  *
- * @remarks
- * This engine provides a lightweight, dependency-free badge using only
- * inline styles and CSS custom properties for theming.
- *
- * **Implementation Details:**
- * - Uses inline styles for all visual properties
- * - Injects keyframe animation for pulse effect
- * - Computes dimensions from SIZE_MAP constants
- * - Supports all style variants (solid, outline, soft, ghost)
- *
- * **Advantages:**
- * - Zero external dependencies
- * - Smallest bundle size
- * - Maximum browser compatibility
- * - Full control over styles
- *
- * **Style Variants:**
- * - `solid` - Filled background with white text
- * - `outline` - Transparent with colored border
- * - `soft` - Light background (15% opacity)
- * - `ghost` - Transparent with colored text
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Badge } from '@rottay/design-system';
- *
- * <Badge engine="rustic" count={5} variant="primary">
- *   <Avatar />
- * </Badge>
+ * <Badge engine="rustic" count={5} variant="primary"><Avatar /></Badge>
  * ```
- *
- * @example Soft Style with Icon
- * ```tsx
- * <Badge
- *   engine="rustic"
- *   content="New"
- *   badgeStyle="soft"
- *   variant="success"
- *   icon={<StarIcon />}
- * />
- * ```
- *
- * @see {@link Badge} for the main component
- * @see {@link BaseBadge} for CSS variable implementation
- * @module RusticBadge
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -59,25 +16,14 @@ import type { BadgeProps } from '../Badge.types';
 import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP } from '../Badge.types';
 
 /**
- * Rustic (Pure HTML/CSS) implementation of the Badge component.
+ * Rustic (pure HTML/CSS) implementation of the Badge component.
  *
- * This engine provides a zero-dependency badge implementation using only
- * vanilla HTML, CSS, and CSS custom properties. It offers maximum control
- * over styling and is optimized for accessibility.
+ * Supports four style variants (solid, outline, soft, ghost) via computed
+ * inline styles. A `<style>` tag is injected only when pulse is active to
+ * provide the keyframe animation without requiring a global stylesheet.
  *
- * @component
- * @example
- * // Basic badge with count
- * <RusticBadge count={5} variant="primary">
- *   <Avatar />
- * </RusticBadge>
- *
- * @example
- * // Soft style badge with icon
- * <RusticBadge content="New" badgeStyle="soft" variant="success" icon={<StarIcon />} />
- *
- * @param props - Badge component props
- * @returns React element with pure CSS Badge
+ * @param props - Unified BadgeProps from the design system type contract
+ * @returns React element built entirely from native HTML elements and inline styles
  */
 export default function RusticBadge(props: BadgeProps): React.ReactElement {
   const {
@@ -104,7 +50,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     style,
   } = props;
 
-  // Determine display value (content takes precedence)
+  // `content` (string/ReactNode) takes precedence over numeric `count`
   const displayValue = content !== undefined ? content : count;
 
   /**
@@ -116,13 +62,14 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     return displayValue > max! ? `${max}+` : displayValue;
   })();
 
-  // Calculate badge visibility
+  // Badge is hidden when visible=false, or when there is no dot and the count
+  // is zero (unless showZero is set). This avoids rendering an empty indicator.
   const shouldShowBadge = visible && (
     dot ||
     (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero))
   );
 
-  // Retrieve size-specific values
+  // Pull size-specific dimensions from the shared constants (height, minWidth, fontSize)
   const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
   const color = VARIANT_COLOR_MAP[variant!] || VARIANT_COLOR_MAP.default;
@@ -202,7 +149,8 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     onClose?.();
   };
 
-  // Base indicator styles
+  // Core visual style shared by both standalone and positioned badges.
+  // When dot=true, dimensions collapse to the dot size with zero padding.
   const badgeIndicatorStyle: React.CSSProperties = {
     ...cssVars,
     display: 'inline-flex',
@@ -223,12 +171,12 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     ...getStyleVariation(),
   };
 
-  // Pulse animation styles
+  // Animation is applied inline; the matching @keyframes is injected via <style> below
   const pulseAnimation = pulse ? {
     animation: 'badge-pulse 1.5s ease-in-out infinite',
   } : {};
 
-  // Render standalone badge (no children)
+  // Standalone path: render as an inline tag without any wrapper container
   if (!children) {
     return (
       <>
@@ -261,7 +209,8 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     );
   }
 
-  // Container wrapper styles
+  // Positioned path: wrap children in a relative container so the badge can
+  // be placed absolutely at the requested corner (top-right, etc.)
   const containerStyle: React.CSSProperties = {
     ...cssVars,
     position: 'relative',
@@ -269,7 +218,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     ...style,
   };
 
-  // Positioned badge styles
+  // Merge indicator styles with absolute positioning and the chosen corner offset
   const positionedBadgeStyle: React.CSSProperties = {
     ...badgeIndicatorStyle,
     ...pulseAnimation,

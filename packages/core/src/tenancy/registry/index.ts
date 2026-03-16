@@ -1,20 +1,29 @@
 /**
- * Known Tenants Registry
+ * @fileoverview Known tenants registry -- first-party tenants bundled with the DS.
+ * @description Three built-in tenants ship with pre-computed CSS and personality:
+ * - `rottay` -- Default/flagship. Indigo + purple, spring animations, glassmorphism.
+ * - `bithire` -- Recruiting platform. Corporate blue, subtle animations, structured borders.
+ * - `evnto` -- Event management. Orange + cyan, bounce animations, spacious density.
  *
- * Built-in configurations for known tenants.
- * These are the "official" tenants that ship with the design system.
+ * Customer tenants should NOT be added here. They resolve from the remote API
+ * or static file storage instead.
  *
- * For new/custom tenants:
- * - Use the remote API (configureTenantApi)
- * - Or provide config via DesignSystemProvider props
- *
- * The CSS styles for these tenants are included in the design system bundle.
+ * WHY these live in the DS bundle:
+ * First-party tenants need zero-latency resolution (no API call, no static file fetch)
+ * because they are used in development, Storybook, and CI. The storage facade in
+ * `tenancy/storage/index.ts` checks this registry (step 3) before attempting
+ * slower network-based sources (static files, remote API).
  */
 
 import type { TenantConfig, EngineName } from '../../contracts';
 
 /**
- * Known tenant configurations
+ * First-party tenants that ship with the DS.
+ *
+ * Each entry is a complete `TenantConfig` including full `personality` tokens.
+ * The personality section drives all visual differentiation -- animation timing,
+ * chart rendering, typography casing, accent decorations, and card behavior --
+ * without any per-tenant branching in component code.
  */
 const KNOWN_TENANTS: Record<string, TenantConfig> = {
   /**
@@ -36,16 +45,20 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       accentColor: '#a855f7',
       logo: undefined,
     },
+    // Rottay personality: AI-futuristic startup aesthetic.
+    // Spring physics give a high-tech feel; gradient accent bars and glass tooltips
+    // reinforce the glassmorphism visual language. showBorder=false + hoverTint=true
+    // creates the "floating card" look characteristic of the Rottay brand.
     personality: {
       animation: {
-        intensity: 1.0,
+        intensity: 1.0,          // Full animation -- flagship should feel alive
         staggerDelay: 50,
         staggerMax: 400,
-        entrance: 'spring',
+        entrance: 'spring',      // WHY spring: bouncy entrances match the futuristic aesthetic
         entranceDuration: 300,
         hoverLift: 2,
         hoverScale: 1.01,
-        useSpring: true,
+        useSpring: true,         // Spring physics for react-spring/framer-motion integrations
         springTension: 170,
         springFriction: 26,
         pulseSpeed: 'normal',
@@ -55,10 +68,10 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       chart: {
         animateOnMount: true,
         mountDuration: 800,
-        lineStyle: 'smooth',
-        showDots: false,
+        lineStyle: 'smooth',     // WHY smooth: curved lines suit a modern dashboard
+        showDots: false,         // Dots clutter the clean Rottay aesthetic
         useGradientFill: true,
-        tooltipStyle: 'glass',
+        tooltipStyle: 'glass',   // Glassmorphism tooltip matches the overall brand
       },
       typography: {
         headingWeightBias: 'normal',
@@ -68,7 +81,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       accent: {
         barPosition: 'top',
         barThickness: 2,
-        barStyle: 'gradient',
+        barStyle: 'gradient',    // WHY gradient: ties back to the indigo-purple palette
         iconContainerShape: 'rounded',
         badgeShape: 'rounded',
         dividerStyle: 'solid',
@@ -76,7 +89,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       card: {
         defaultElevation: 'md',
         hoverElevation: 'lift-two',
-        showBorder: false,
+        showBorder: false,       // No borders -- floating card aesthetic
         hoverTint: true,
         paddingDensity: 'normal',
       },
@@ -102,16 +115,20 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       accentColor: '#7FC15E',
       logo: undefined,
     },
+    // BitHire personality: corporate/LinkedIn-style professionalism.
+    // Low animation intensity and fade-only entrances keep the UI quiet and
+    // data-focused. Compact padding and uppercase labels match the structured
+    // feel of ATS (Applicant Tracking System) workflows.
     personality: {
       animation: {
-        intensity: 0.4,
+        intensity: 0.4,          // Subtle -- recruiters value speed over spectacle
         staggerDelay: 30,
         staggerMax: 200,
-        entrance: 'fade',
+        entrance: 'fade',        // WHY fade: minimal distraction in data-heavy screens
         entranceDuration: 150,
-        hoverLift: 0,
+        hoverLift: 0,            // No lift -- structured/grounded feel
         hoverScale: 1.0,
-        useSpring: false,
+        useSpring: false,        // Standard easing is more business-appropriate
         springTension: 170,
         springFriction: 26,
         pulseSpeed: 'slow',
@@ -120,19 +137,19 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       },
       chart: {
         animateOnMount: true,
-        mountDuration: 400,
-        lineStyle: 'sharp',
-        showDots: true,
+        mountDuration: 400,      // Fast -- data should appear quickly
+        lineStyle: 'sharp',      // WHY sharp: precision matches recruiting analytics
+        showDots: true,          // Dots aid precision reading of data points
         useGradientFill: false,
         tooltipStyle: 'detailed',
       },
       typography: {
         headingWeightBias: 'heavier',
         headingLetterSpacing: '-0.01em',
-        labelStyle: 'uppercase',
+        labelStyle: 'uppercase', // WHY uppercase: formal label treatment
       },
       accent: {
-        barPosition: 'left',
+        barPosition: 'left',     // WHY left: vertical accent bars mimic sidebar navigation
         barThickness: 3,
         barStyle: 'solid',
         iconContainerShape: 'circle',
@@ -142,9 +159,9 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       card: {
         defaultElevation: 'sm',
         hoverElevation: 'lift-one',
-        showBorder: true,
+        showBorder: true,        // Borders provide clear structure in dense layouts
         hoverTint: false,
-        paddingDensity: 'compact',
+        paddingDensity: 'compact', // WHY compact: maximizes content density for tables/lists
       },
     },
   },
@@ -168,25 +185,29 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       accentColor: '#06b6d4',
       logo: undefined,
     },
+    // Evnto personality: vibrant, fun, event-centric.
+    // High animation intensity and bounce entrances create an energetic feel
+    // appropriate for event discovery and ticketing UIs. Spacious padding and
+    // large border radii (via tokenOverrides) give a friendly, rounded look.
     personality: {
       animation: {
-        intensity: 1.5,
+        intensity: 1.5,          // Exaggerated -- events are about excitement
         staggerDelay: 80,
         staggerMax: 600,
-        entrance: 'bounce',
+        entrance: 'bounce',      // WHY bounce: playful entrance for event cards
         entranceDuration: 500,
-        hoverLift: 4,
+        hoverLift: 4,            // Pronounced lift for interactive discovery
         hoverScale: 1.03,
         useSpring: true,
-        springTension: 200,
-        springFriction: 18,
+        springTension: 200,      // Snappier springs than Rottay for a bouncy feel
+        springFriction: 18,      // Lower friction = more oscillation
         pulseSpeed: 'fast',
         skeletonStyle: 'wave',
         countUpEnabled: true,
       },
       chart: {
         animateOnMount: true,
-        mountDuration: 1200,
+        mountDuration: 1200,     // Slow reveal for dramatic chart unveils
         lineStyle: 'smooth',
         showDots: true,
         useGradientFill: true,
@@ -195,12 +216,12 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       typography: {
         headingWeightBias: 'heavier',
         headingLetterSpacing: '-0.02em',
-        labelStyle: 'capitalize',
+        labelStyle: 'capitalize', // WHY capitalize: friendly title-case for event labels
       },
       accent: {
         barPosition: 'top',
-        barThickness: 4,
-        barStyle: 'animated',
+        barThickness: 4,         // Thicker bar for bold accent
+        barStyle: 'animated',    // WHY animated: CSS shimmer draws attention to featured content
         iconContainerShape: 'circle',
         badgeShape: 'pill',
         dividerStyle: 'dashed',
@@ -210,9 +231,12 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
         hoverElevation: 'lift-two',
         showBorder: false,
         hoverTint: true,
-        paddingDensity: 'spacious',
+        paddingDensity: 'spacious', // WHY spacious: event cards need room for imagery
       },
     },
+    // WHY tokenOverrides: Evnto is the only first-party tenant with custom density
+    // and border-radius tokens. The larger radii (10-24px vs default 4-16px) and
+    // 1.125x density scale create a distinctly rounded, airy layout.
     tokenOverrides: {
       densityScale: 1.125,
       borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px' },
@@ -221,34 +245,50 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
 };
 
 /**
- * Default tenant slug (used when no tenant is specified)
+ * Slug used when no tenant is specified. Rottay is the flagship product so it
+ * makes sense as the implicit default for development, Storybook, and CI.
  */
 export const DEFAULT_TENANT_SLUG = 'rottay';
 
 /**
- * Get known tenant configuration
- * Returns undefined if tenant is not in the registry
+ * Looks up a first-party tenant by slug.
+ *
+ * Slugs are case-insensitive -- the registry normalizes to lowercase internally.
+ * Returns `undefined` for customer tenants that are not in the built-in set;
+ * the storage facade will then fall through to static/remote sources.
+ *
+ * @param slug - Tenant identifier (e.g. 'rottay', 'bithire', 'evnto').
+ * @returns The full TenantConfig if found, otherwise `undefined`.
  */
 export function getKnownTenantConfig(slug: string): TenantConfig | undefined {
   return KNOWN_TENANTS[slug.toLowerCase()];
 }
 
 /**
- * Check if a tenant is known (has built-in config)
+ * Checks whether a tenant slug has a built-in configuration in this registry.
+ *
+ * @param slug - Tenant identifier to check.
+ * @returns `true` if the tenant ships with the DS bundle.
  */
 export function isKnownTenant(slug: string): boolean {
   return slug.toLowerCase() in KNOWN_TENANTS;
 }
 
 /**
- * Get all known tenant slugs
+ * Returns an array of all first-party tenant slugs registered in the DS.
+ * Useful for build-time asset generation and Storybook tenant selectors.
+ *
+ * @returns Array of slug strings (e.g. `['rottay', 'bithire', 'evnto']`).
  */
 export function getKnownTenantSlugs(): string[] {
   return Object.keys(KNOWN_TENANTS);
 }
 
 /**
- * Get default tenant config
+ * Returns the default (Rottay) tenant configuration.
+ * Convenience shortcut equivalent to `getKnownTenantConfig(DEFAULT_TENANT_SLUG)!`.
+ *
+ * @returns The Rottay TenantConfig -- guaranteed to exist.
  */
 export function getDefaultTenant(): TenantConfig {
   return KNOWN_TENANTS[DEFAULT_TENANT_SLUG];

@@ -169,7 +169,8 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
 
-  // Get variant colors from the color map
+  // Retrieve the colour palette for this variant. Falls back to the
+  // neutral "default" palette when an unrecognised variant is provided.
   const colors = VARIANT_COLORS[variant as keyof typeof VARIANT_COLORS] || VARIANT_COLORS.default;
 
   // ========================================================================
@@ -199,6 +200,8 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     if (!visible || duration === 0 || isPaused) return;
 
     const startTime = Date.now();
+    // Scale remaining time by current progress so pausing and resuming
+    // picks up where it left off rather than restarting the full duration
     const remainingTime = (progress / 100) * duration;
 
     const timer = setTimeout(() => {
@@ -268,7 +271,9 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     lg: 'var(--ds-toast-radius-lg, 12px)',
   };
 
-  /** Main container styles */
+  // Container uses CSS variables with hardcoded fallbacks so the toast
+  // works out-of-the-box but remains fully customisable via tenant themes.
+  // Exit animation scales down and moves up for a natural dismiss feel.
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',
@@ -360,7 +365,8 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     transition: 'width 0.1s linear',
   };
 
-  // Determine icon to display
+  // Explicit icon prop (even null) overrides the default SVG. This lets
+  // consumers suppress the icon entirely by passing `icon={null}`.
   const displayIcon = icon !== undefined ? icon : getDefaultIcon(variant as ToastVariant);
 
   // ========================================================================

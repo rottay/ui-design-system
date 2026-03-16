@@ -183,21 +183,25 @@ export const Rate = React.forwardRef<HTMLUListElement, RateProps>(
       ...restProps
     } = props;
 
-    // Suppress unused variable warnings
+    // Suppress unused variable warnings - restProps may contain HTML attrs
+    // that conflict with Ant Design's Rate API, so we discard them safely
     void restProps;
 
     // -------------------------------------------------------------------------
     // Styles
     // -------------------------------------------------------------------------
 
-    // Combine size styles with custom styles and colors
+    // Combine size styles with custom styles and colors.
+    // activeColor is injected as a CSS variable to override Ant Design's
+    // internal star color without needing ConfigProvider theme changes.
     const combinedStyle: React.CSSProperties = {
       ...getSizeStyle(size),
       ...(activeColor && { '--ant-rate-star-color': activeColor } as React.CSSProperties),
       ...style,
     };
 
-    // Custom root class for styling hooks
+    // Custom root class provides BEM-style hooks so consumers can target
+    // specific states (disabled/readonly) without inspecting Ant internals
     const rootClassName = `rottay-rate rottay-rate--${size} ${disabled ? 'rottay-rate--disabled' : ''} ${readOnly ? 'rottay-rate--readonly' : ''} ${className}`.trim();
 
     // -------------------------------------------------------------------------
@@ -212,6 +216,8 @@ export const Rate = React.forwardRef<HTMLUListElement, RateProps>(
         count={count}
         allowHalf={allowHalf}
         allowClear={allowClear}
+        // Ant Design has no readOnly prop, so we merge both into disabled.
+        // Visual distinction between disabled and readOnly is handled via CSS classes above.
         disabled={disabled || readOnly}
         onChange={onChange}
         onHoverChange={onHoverChange}

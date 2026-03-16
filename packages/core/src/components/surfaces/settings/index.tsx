@@ -1,11 +1,9 @@
 'use client';
 
 /**
- * SettingsSurface
- *
- * Settings routes are structurally repetitive: title, intro copy, action bar,
- * tab navigation, and optional supporting sidebar content. This surface keeps
- * that structure centralized while letting each app own the actual settings
+ * @fileoverview SettingsSurface -- tabbed settings page shell.
+ * @description Centralizes the repetitive settings route structure: title, intro copy,
+ * action bar, tab navigation, and optional sidebar. Each app owns the actual settings
  * panels and field renderers.
  */
 
@@ -30,7 +28,11 @@ export function SettingsSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
+  // Permission-filtered tabs prevent users from seeing settings categories
+  // they cannot access, avoiding "access denied" dead ends inside the page.
   const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs, config.permissions);
+  // Fall back to the first visible tab if the requested active tab was
+  // removed by permission filtering.
   const resolvedActiveTabKey =
     visibleTabs.some((tab) => tab.key === config.behavior.activeTab)
       ? config.behavior.activeTab
@@ -70,6 +72,8 @@ export function SettingsSurface({
       actions={actionsNode}
       loading={loading}
     >
+      {/* Optional sidebar (e.g. help links, plan summary) uses the 8/4 split.
+          Without sidebar content the settings card takes full width. */}
       <Grid columns={config.presentation.sidebar && !shouldStack ? 12 : 1} gap="lg">
         <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
           <Card variant="outlined">

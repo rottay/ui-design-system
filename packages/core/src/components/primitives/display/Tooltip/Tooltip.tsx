@@ -1,87 +1,27 @@
 'use client';
 
 /**
- * @fileoverview Tooltip - Rottay Design System
- * @description Contextual information overlay triggered by user interaction.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Tooltip - Contextual overlay triggered by hover, click, or focus.
+ * 12 placement positions, controlled/uncontrolled visibility, and color variants.
+ * Compound sub-components: Trigger and Content for advanced composition.
  *
- * @remarks
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design Tooltip with collision detection
- * - **Modern**: DaisyUI tooltip classes with Tailwind utilities
- * - **Rustic**: Pure CSS implementation with zero dependencies
- *
- * **Key Features:**
- * - 12 placement positions (top, bottom, left, right with start/end variants)
- * - Multiple trigger types (hover, click, focus, manual)
- * - Controlled and uncontrolled visibility modes
- * - Configurable show/hide delays
- * - Arrow indicator support
- * - Color variants (default, primary, secondary, success, warning, error)
- * - Interactive mode for hoverable content
- * - Full ARIA accessibility
- *
- * **Compound Components:**
- * - `Tooltip.Trigger` - Element that triggers tooltip display
- * - `Tooltip.Content` - Content displayed within the tooltip
- *
- * **CSS Custom Properties:**
- * - `--tooltip-bg` - Background color
- * - `--tooltip-color` - Text color
- * - `--tooltip-radius` - Border radius
- * - `--tooltip-padding` - Content padding
- * - `--tooltip-shadow` - Box shadow
- * - `--tooltip-arrow-size` - Arrow dimensions
- *
- * @example Basic Usage
+ * @example
  * ```tsx
  * import { Tooltip } from '@rottay/design-system';
  *
- * <Tooltip content="Helpful information">
+ * <Tooltip content="Helpful information" placement="bottom">
  *   <Button>Hover me</Button>
  * </Tooltip>
  * ```
  *
- * @example With Placement and Color
- * ```tsx
- * <Tooltip content="Success tip" placement="bottom" color="success">
- *   <IconButton>?</IconButton>
- * </Tooltip>
- * ```
- *
- * @example Controlled Visibility
- * ```tsx
- * const [isOpen, setIsOpen] = useState(false);
- *
- * <Tooltip
- *   content="Controlled tooltip"
- *   visible={isOpen}
- *   onVisibleChange={setIsOpen}
- *   trigger="click"
- * >
- *   <Button>Click me</Button>
- * </Tooltip>
- * ```
- *
- * @example Engine Override
- * ```tsx
- * <Tooltip engine="modern" content="DaisyUI styled tooltip">
- *   <span>Hover for info</span>
- * </Tooltip>
- * ```
- *
- * @see {@link TooltipProps} for available props
- * @see {@link BaseTooltip} for CSS variable implementation
  * @module Tooltip
  * @category Display
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
 import type { TooltipProps } from './Tooltip.types';
 import { TooltipTrigger, TooltipContent } from './compound';
 
-// Export types
 export type {
   TooltipProps,
   TooltipPlacement,
@@ -92,24 +32,12 @@ export type {
 } from './Tooltip.types';
 export { TOOLTIP_DEFAULTS, PLACEMENT_MAP } from './Tooltip.types';
 
-// Export compound components
 export { TooltipTrigger, TooltipContent };
 
-// Export base component
-
 /**
- * Tooltip component with engine-aware rendering.
- *
- * Automatically selects the appropriate engine implementation based on the
- * `engine` prop or the current EngineProvider context. Supports compound
- * component pattern with Tooltip.Trigger and Tooltip.Content.
- *
- * Available engines:
- * - **classic**: Full-featured Ant Design implementation
- * - **modern**: Lightweight DaisyUI/Tailwind implementation
- * - **rustic**: Vanilla HTML/CSS headless implementation
- *
- * @see {@link TooltipProps} for available props
+ * Tooltip with Trigger and Content compound sub-components.
+ * The simple API (`content` prop) covers most cases; the compound pattern
+ * is for advanced scenarios where trigger/content need separate wrappers.
  */
 export const Tooltip = Object.assign(
   createEngineComponent<TooltipProps>('Tooltip', {
@@ -118,9 +46,9 @@ export const Tooltip = Object.assign(
     rustic: () => import('./engines/rustic'),
   }),
   {
-    /** Compound component for wrapping trigger elements */
+    /** Wraps the element that activates the tooltip on hover/click/focus. */
     Trigger: TooltipTrigger,
-    /** Compound component for tooltip content */
+    /** Wraps rich content displayed inside the tooltip popup. */
     Content: TooltipContent,
   }
 );

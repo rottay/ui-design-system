@@ -129,14 +129,17 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     [onClose]
   );
 
-  // Get variant colors
+  // Resolve variant colors from the CSS-variable-based lookup table.
+  // Falls back to 'default' for unrecognised variant strings.
   const variantKey = (variant as keyof typeof VARIANT_COLORS) || 'default';
   const colors = VARIANT_COLORS[variantKey] || VARIANT_COLORS.default;
 
-  // Get size configuration
+  // Size tokens (height, padding, fontSize) come from the shared SIZE_MAP
+  // defined in Tag.types so all three engines share identical sizing.
   const sizeConfig = SIZE_MAP[size] || SIZE_MAP.md;
 
-  // Compute styles based on props
+  // All visual properties are inline to avoid any CSS framework dependency.
+  // The outlined variant swaps background to transparent while keeping the border.
   const containerStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -181,7 +184,8 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     transition: 'opacity 0.2s ease-in-out',
   };
 
-  // Build class names
+  // BEM-style class names are emitted alongside inline styles so consumers
+  // can hook into them for global overrides without touching inline styles.
   const classNames = [
     'rottay-tag',
     `rottay-tag--${size}`,

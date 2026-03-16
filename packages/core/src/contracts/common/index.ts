@@ -1,56 +1,60 @@
-import type { CSSProperties, ReactNode } from 'react';
-
 /**
- * Tamaños estándar del sistema Rottay.
+ * @fileoverview Common contracts - Rottay Design System
+ * @description Shared low-level type building blocks (Size, Variant, Shape,
+ * BaseComponentProps, and mixin interfaces) reused across all component contracts.
+ *
+ * @remarks
+ * These types are intentionally generic and library-agnostic. If a type only
+ * applies to one component family, it belongs next to that family instead.
+ *
+ * Mixin interfaces (LoadableProps, DisableableProps, ClickableProps, etc.) can
+ * be composed via intersection to build component prop types without repeating
+ * common fields like `loading`, `disabled`, or `onChange`.
+ *
+ * @module Contracts/Common
+ * @category Types
+ * @package @rottay/design-system
  */
+
+import type { CSSProperties, ReactNode } from 'react';
+/** Standard size scale used across all DS components. */
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
-/**
- * Alias for Size type (Ant Design compatible)
- */
+/** Ant Design-compatible size vocabulary used by a few engine bindings. */
 export type SizeType = 'small' | 'middle' | 'large' | 'default';
 
-/**
- * Status types for form controls
- */
+/** Status types for form control validation states. */
 export type StatusType = '' | 'error' | 'warning';
 
-/**
- * Variantes semánticas del sistema.
- */
+/** Semantic color variants available system-wide. */
 export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';
 
-/**
- * Formas disponibles para componentes.
- */
+/** Shape options for components that support geometric variants. */
 export type Shape = 'circle' | 'square' | 'rounded';
 
-/**
- * Estados de interacción.
- */
+/** Interaction states that drive visual feedback on interactive elements. */
 export type InteractionState = 'idle' | 'hover' | 'active' | 'focus' | 'disabled';
 
-/**
- * Direcciones para layouts.
- */
+/** Layout direction for flex/stack containers. */
 export type Direction = 'horizontal' | 'vertical';
 
-/**
- * Alineaciones.
- */
+/** Alignment options for content within containers. */
 export type Alignment = 'start' | 'center' | 'end';
 
 /**
- * Props base que todos los componentes del Design System heredan.
+ * Base props inherited by most DS components.
+ *
+ * Keeping these centralized avoids dozens of tiny `className/style/id`
+ * redefinitions across component-specific prop files.
  */
 export interface BaseComponentProps {
-  /** Clase CSS adicional */
+  /** Additional CSS class name */
   className?: string;
-  /** Estilos inline adicionales */
+  /** Additional inline styles */
   style?: CSSProperties;
-  /** ID del elemento */
+  /** Element ID */
   id?: string;
-  /** Data attributes para testing */
+  /** Data attribute for testing */
   'data-testid'?: string;
   /** Accessible label for non-textual or landmark-style containers */
   'aria-label'?: string;
@@ -58,122 +62,100 @@ export interface BaseComponentProps {
   'aria-describedby'?: string;
 }
 
-/**
- * Props para componentes que soportan estados de loading.
- */
+/** Mixin for components that support loading states. */
 export interface LoadableProps {
-  /** Si el componente está en estado de carga */
+  /** Whether the component is in a loading state */
   loading?: boolean;
-  /** Texto alternativo durante carga */
+  /** Alternative text displayed during loading */
   loadingText?: string;
 }
 
-/**
- * Props para componentes que soportan estados disabled.
- */
+/** Mixin for components that support disabled states. */
 export interface DisableableProps {
-  /** Si el componente está deshabilitado */
+  /** Whether the component is disabled */
   disabled?: boolean;
 }
 
-/**
- * Props para componentes con children.
- */
+/** Mixin for components that accept children. */
 export interface WithChildren {
   children?: ReactNode;
 }
 
-/**
- * Props para componentes clickeables.
- */
+/** Mixin for components that support click interaction. */
 export interface ClickableProps {
-  /** Si el componente es clickeable */
+  /** Whether the component is clickable */
   clickable?: boolean;
-  /** Callback cuando se hace click */
+  /** Click event callback */
   onClick?: () => void;
 }
 
-/**
- * Props para componentes con estados de error.
- */
+/** Mixin for components that display error states. */
 export interface ErrorableProps {
-  /** Si el componente tiene un error */
+  /** Whether the component has an error */
   error?: boolean;
-  /** Mensaje de error */
+  /** Error message to display */
   errorMessage?: string;
 }
 
-/**
- * Props para componentes con label.
- */
+/** Mixin for components with label and helper text. */
 export interface LabeledProps {
-  /** Etiqueta del componente */
+  /** Field label */
   label?: string;
-  /** Texto de ayuda */
+  /** Helper/description text below the field */
   helperText?: string;
-  /** Si el campo es requerido */
+  /** Whether the field is required */
   required?: boolean;
 }
 
-/**
- * Props para componentes con placeholder.
- */
+/** Mixin for components with placeholder text. */
 export interface PlaceholderProps {
-  /** Texto placeholder */
+  /** Placeholder text shown when empty */
   placeholder?: string;
 }
 
 /**
- * Props para componentes con valor controlado.
+ * Generic controlled/uncontrolled value contract.
+ *
+ * Components can specialize `T` when their value is not a string.
  */
 export interface ControlledProps<T = string> {
-  /** Valor actual */
+  /** Current value (controlled) */
   value?: T;
-  /** Valor por defecto (no controlado) */
+  /** Default value (uncontrolled) */
   defaultValue?: T;
-  /** Callback cuando cambia el valor */
+  /** Callback when the value changes */
   onChange?: (value: T) => void;
 }
 
-/**
- * Props para componentes que pueden ser borrados.
- */
+/** Mixin for components that support clearing their value. */
 export interface ClearableProps {
-  /** Si el componente puede ser borrado */
+  /** Whether the component shows a clear/reset control */
   clearable?: boolean;
-  /** Callback cuando se borra */
+  /** Callback when the value is cleared */
   onClear?: () => void;
 }
 
-/**
- * Props para componentes con icono.
- */
+/** Mixin for components that display an icon. */
 export interface IconProps {
-  /** Icono a mostrar */
+  /** Icon element to render */
   icon?: ReactNode;
-  /** Posición del icono */
+  /** Icon placement relative to content */
   iconPosition?: 'start' | 'end';
 }
 
-/**
- * Props para componentes con bordes.
- */
+/** Mixin for components that support a visible border. */
 export interface BorderedProps {
-  /** Si mostrar borde */
+  /** Whether to render a border */
   bordered?: boolean;
 }
 
-/**
- * Props para componentes con sombra.
- */
+/** Mixin for components that support a box shadow. */
 export interface ShadowedProps {
-  /** Si mostrar sombra */
+  /** Whether to render a shadow */
   shadowed?: boolean;
 }
 
-/**
- * Posiciones absolutas para elementos overlay.
- */
+/** Absolute positioning options for overlay elements (tooltips, badges, etc.). */
 export type Position =
   | 'top-left'
   | 'top-center'
@@ -185,14 +167,10 @@ export type Position =
   | 'right-center'
   | 'center';
 
-/**
- * Densidad de espaciado.
- */
+/** Spacing density presets that control padding and gaps globally. */
 export type Density = 'compact' | 'normal' | 'comfortable';
 
-/**
- * Color token del sistema.
- */
+/** Semantic color token names available for component theming. */
 export type ColorToken =
   | 'neutral'
   | 'primary'

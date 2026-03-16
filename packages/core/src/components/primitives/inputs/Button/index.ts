@@ -114,15 +114,24 @@ export { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from './Button.type
 export { ButtonGroup, ButtonIcon };
 export type { ButtonGroupProps, ButtonIconProps } from './compound';
 
-// Export base component
-
-// Create engine-aware Button component with compound components attached
+/**
+ * Internal engine-routed button primitive.
+ *
+ * Keeping the engine selection isolated here makes it easier to layer tenant
+ * personality on top without leaking that resolution into each engine file.
+ */
 const ButtonBase = createEngineComponent<ButtonProps>('Button', {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
     rustic: () => import('./engines/rustic'),
   });
 
+/**
+ * Public Button wrapper.
+ *
+ * This is the seam where global token context can tune hover behavior or
+ * motion without each engine needing direct access to the full token object.
+ */
 const ButtonComponent = forwardRef<any, ButtonProps>((props, ref) => {
   const tokens = useOptionalTokens();
   const { style, ...rest } = props;
@@ -130,6 +139,8 @@ const ButtonComponent = forwardRef<any, ButtonProps>((props, ref) => {
   return createElement(ButtonBase, {
     ref,
     ...rest,
+    // Personality-driven interaction styles are merged once here so every
+    // engine inherits the same behavioral contract.
     style: tokens ? mergePersonalityStyle(style, resolveButtonPersonalityStyle(tokens)) : style,
   });
 });
@@ -139,7 +150,9 @@ ButtonComponent.displayName = 'Button';
 export const Button = Object.assign(
   ButtonComponent,
   {
+    /** Layout helper for grouping related actions under the same visual rhythm. */
     Group: ButtonGroup,
+    /** Compact icon-only button that still participates in Button sizing rules. */
     Icon: ButtonIcon,
   }
 );

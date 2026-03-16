@@ -1,39 +1,32 @@
 'use client';
 
 /**
- * @fileoverview Dropdown Classic Engine - Rottay Design System
- * @description Classic (Ant Design) implementation of the Dropdown component.
- * Wraps Ant Design's Dropdown component with full feature parity.
+ * @fileoverview Classic (Ant Design) engine for the Dropdown overlay component.
+ * Thin wrapper around Ant Design's Dropdown providing direct passthrough for menu,
+ * trigger, placement, arrow, and popup-container options with no extra behaviour.
  *
- * @remarks
- * The Classic engine provides:
- * - Direct passthrough to Ant Design Dropdown
- * - Full Ant Design menu styling and theming
- * - Native trigger handling (click, hover, contextMenu)
- * - All Ant Design placement and arrow options
- *
- * @example Using Classic Engine
+ * @example
  * ```tsx
- * import { Dropdown, Button } from '@rottay/design-system';
- *
- * <Dropdown
- *   engine="classic"
- *   trigger={['click']}
- *   menu={{ items: [{ key: '1', label: 'Option' }] }}
- * >
- *   <Button>Ant Design Dropdown</Button>
+ * <Dropdown engine="classic" trigger={['click']}
+ *   menu={{ items: [{ key: '1', label: 'Option' }] }}>
+ *   <Button>Open Menu</Button>
  * </Dropdown>
  * ```
- *
- * @see {@link Dropdown} - The main engine-aware component
- * @module Dropdown/Engines/Classic
- * @category Overlay
- * @package @rottay/design-system
  */
 import React from 'react';
 import { Dropdown as AntDropdown } from 'antd';
 import type { DropdownProps } from '../Dropdown.types';
 
+/**
+ * Dropdown implementation backed by Ant Design's Dropdown primitive.
+ *
+ * The trigger array is normalised to always be an array (Ant expects `string[]`).
+ * The popup container defaults to `document.body` so the menu escapes any ancestor
+ * with `overflow: hidden` -- common in table cells and card layouts.
+ *
+ * @param props - {@link DropdownProps} shared across all engines.
+ * @returns A ref-forwarded wrapper div containing the AntDropdown.
+ */
 export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
   (props, ref) => {
     const {
@@ -53,7 +46,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     } = props;
 
 
-    // Default to document.body to avoid clipping inside overflow containers (tables, cards, etc.)
+    // Default to document.body so the popup escapes overflow:hidden ancestors
     const defaultGetPopupContainer = () => document.body;
 
     return (

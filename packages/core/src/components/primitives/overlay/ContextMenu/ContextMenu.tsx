@@ -1,36 +1,21 @@
 'use client';
 
 /**
- * @fileoverview ContextMenu - Rottay Design System
- * @description Right-click triggered context menu for contextual actions.
- * Part of the Rottay Design System's overlay primitives collection.
+ * @fileoverview ContextMenu - right-click triggered floating menu.
+ * Accepts an items array and a trigger element; opens on `contextmenu` event.
+ * Multi-engine: Classic (Ant Design Dropdown), Modern (DaisyUI), Rustic (Portal menu).
  *
- * @remarks
- * The ContextMenu component provides a right-click triggered floating menu.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Wraps Ant Design Dropdown with trigger='contextMenu'
- * - **Modern**: DaisyUI dropdown with right-click handler
- * - **Rustic**: Portal menu with contextmenu event listener
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { ContextMenu } from '@rottay/design-system';
- *
  * <ContextMenu
- *   items={[
- *     { key: 'copy', label: 'Copy' },
- *     { key: 'paste', label: 'Paste' },
- *     { key: 'delete', label: 'Delete', danger: true },
- *   ]}
- *   onSelect={(key) => console.log('Selected:', key)}
- *   trigger={<div style={{ padding: 40, background: 'var(--ds-color-neutral-100)' }}>Right-click me</div>}
+ *   items={[{ key: 'copy', label: 'Copy' }, { key: 'delete', label: 'Delete', danger: true }]}
+ *   onSelect={(key) => handleAction(key)}
+ *   trigger={<div>Right-click me</div>}
  * />
  * ```
  *
  * @module ContextMenu
  * @category Overlay
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -42,10 +27,11 @@ export {
   CONTEXTMENU_DEFAULTS,
 } from './ContextMenu.types';
 
+/** ContextMenu component with multi-engine support. No compound sub-components. */
 export const ContextMenu = createEngineComponent<ContextMenuProps>('ContextMenu', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+  classic: () => import('./engines/classic'),  // Ant Design Dropdown (contextMenu trigger)
+  modern: () => import('./engines/modern'),     // DaisyUI dropdown + right-click handler
+  rustic: () => import('./engines/rustic'),      // Portal menu + contextmenu listener
 });
 
 ContextMenu.displayName = 'ContextMenu';

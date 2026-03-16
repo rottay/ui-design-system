@@ -1,8 +1,9 @@
 /**
- * Shadow Tokens - TypeScript Mirror
+ * @fileoverview Shadow/elevation token mirrors -- box shadows, drop shadows, and focus rings.
  *
- * TypeScript representation of shadow CSS custom properties.
- * Use these for type-safe shadow references in JavaScript/TypeScript.
+ * Organized by category: general elevation scale (xs-3xl), semantic colored
+ * shadows, component-specific shadows (card, button, input, overlay, navigation),
+ * and accessibility focus ring shadows.
  */
 
 // Box Shadows - Elevation Scale

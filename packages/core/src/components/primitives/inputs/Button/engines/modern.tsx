@@ -64,7 +64,11 @@ import React, { forwardRef, useState } from 'react';
 import type { ButtonProps } from '../Button.types';
 import { BUTTON_DEFAULTS } from '../Button.types';
 
-// Map our variants to DaisyUI classes
+// Translate DS variant tokens to DaisyUI button classes.
+// "outline" combines `btn-outline` with `btn-primary` so the outline color
+// matches the primary theme, rather than defaulting to neutral gray.
+// "text" and "ghost" both map to `btn-ghost` since DaisyUI has no separate
+// text-only class.
 const VARIANT_CLASSES: Record<string, string> = {
   primary: 'btn-primary',
   secondary: 'btn-secondary',
@@ -77,16 +81,18 @@ const VARIANT_CLASSES: Record<string, string> = {
   link: 'btn-link',
 };
 
-// Map our sizes to DaisyUI classes
+// DaisyUI lacks an `xl` size modifier, so xl falls back to lg.
+// `md` is the default button size in DaisyUI and needs no extra class.
 const SIZE_CLASSES: Record<string, string> = {
   xs: 'btn-xs',
   sm: 'btn-sm',
-  md: '', // Default size, no class needed
+  md: '',
   lg: 'btn-lg',
-  xl: 'btn-lg', // DaisyUI doesn't have xl, use lg
+  xl: 'btn-lg',
 };
 
-// Map our shapes to DaisyUI classes
+// Shape modifiers. DaisyUI's `btn-circle` forces equal width/height;
+// `rounded-full` only rounds corners without constraining dimensions.
 const SHAPE_CLASSES: Record<string, string> = {
   default: '',
   round: 'rounded-full',
@@ -135,6 +141,18 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
   );
 };
 
+/**
+ * Modern (DaisyUI/Tailwind) implementation of the DS Button.
+ *
+ * Composes DaisyUI utility classes for variant, size, and shape, then layers
+ * on interactive transforms (hover lift, active press) and a custom focus ring
+ * via inline styles. The SVG loading spinner is rendered in place of icons
+ * during the loading state.
+ *
+ * @param props - Standardized ButtonProps from the DS type contract.
+ * @param ref   - Forwarded ref attached to the native `<button>` element.
+ * @returns A DaisyUI-styled button with interactive state animations.
+ */
 const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     children,
@@ -157,14 +175,17 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     style,
   } = props;
 
+  // Track hover/active/focus in React state because inline styles (used for
+  // transforms and focus rings) override CSS pseudo-classes. This gives us
+  // full control over the interaction animation chain.
   const [isHovered, setIsHovered] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  // fullWidth is an alias for block
   const isFullWidth = fullWidth ?? block;
 
-  // Get effective variant (danger overrides)
+  // Explicit `danger` prop takes priority over the `variant` prop so
+  // consumers can conditionally toggle destructive styling.
   const effectiveVariant = danger ? 'danger' : (variant || 'primary');
 
   // Build class names
@@ -182,7 +203,11 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     className,
   ].filter(Boolean).join(' ');
 
-  // Compute interactive styles
+  // Three-layer interaction cascade:
+  // 1. Active (mousedown) -> scale(0.98) for tactile press feedback
+  // 2. Hover -> translateY(-1px) for a subtle lift effect
+  // 3. Default -> identity transform so transitions animate smoothly
+  // Focus adds a 3px ring without removing the native outline.
   const interactiveStyle: React.CSSProperties = {
     transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.15s ease',
     transform:

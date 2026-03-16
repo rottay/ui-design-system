@@ -1,11 +1,21 @@
 /**
- * Tree - Classic Engine (Ant Design)
+ * @fileoverview Classic Tree engine -- thin Ant Design wrapper.
  *
- * Full-featured tree implementation using Ant Design's Tree component.
- * Provides comprehensive functionality including virtual scrolling,
- * drag-and-drop, and checkable nodes with cascading selection.
+ * Delegates all tree behavior (expand/collapse, drag-and-drop, checkbox cascading,
+ * virtual scroll, keyboard navigation) to antd's Tree component. The engine
+ * exists so the DS exposes a unified TreeProps surface while Ant Design handles
+ * rendering, accessibility, and performance internally.
+ *
+ * Engine: **Ant Design** (`antd/Tree`)
+ *
+ * @example
+ * ```tsx
+ * <Tree engine="classic" treeData={nodes} checkable onCheck={(keys) => setChecked(keys)} />
+ * ```
  *
  * @module Tree/Classic
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -16,17 +26,14 @@ import type { TreeProps } from '../Tree.types';
 import { TREE_DEFAULTS } from '../Tree.types';
 
 /**
- * Classic Tree component using Ant Design.
+ * Classic Tree backed by Ant Design's Tree component.
  *
- * @example
- * ```tsx
- * <ClassicTree
- *   treeData={data}
- *   checkable
- *   defaultExpandedKeys={['1']}
- *   onSelect={(keys) => console.log(keys)}
- * />
- * ```
+ * Nearly all props pass through to antd unchanged. The `as never` / `as React.Key[]`
+ * casts bridge the DS's string-only key types with antd's broader `React.Key`
+ * (string | number) -- safe because antd coerces keys to strings internally.
+ *
+ * @param props - Unified DS TreeProps (see Tree.types.ts)
+ * @returns An Ant Design Tree element wrapped with DS class names
  */
 export default function ClassicTree(props: TreeProps): React.ReactElement {
   const {
@@ -58,6 +65,9 @@ export default function ClassicTree(props: TreeProps): React.ReactElement {
     style,
   } = props;
 
+  // The `as never` and `as React.Key[]` casts bridge the DS's string-based key
+  // types with antd's broader React.Key (string | number). This is safe because
+  // antd coerces keys to strings internally anyway.
   return (
     <AntTree
       treeData={treeData as never}

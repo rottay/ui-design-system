@@ -1,7 +1,6 @@
 /**
- * Accessibility Testing Helpers for @rottay/design-system
- *
- * Provides two levels of a11y checking:
+ * @fileoverview Accessibility testing helpers for @rottay/design-system.
+ * @description Provides two levels of a11y checking:
  *
  * 1. **Built-in checks** (`checkAccessibility`) - Zero-dependency ARIA attribute
  *    validation that works out of the box with vitest + happy-dom/jsdom.
@@ -124,12 +123,14 @@ const INTERACTIVE_ELEMENTS = new Set([
   'TEXTAREA',
 ]);
 
+// Follows the WAI-ARIA accessible name computation algorithm (simplified).
+// Priority: aria-label > aria-labelledby > title > associated <label> > text content.
+// This ordering matches browser implementations and ensures test assertions
+// align with what screen readers actually announce.
 function getAccessibleName(el: Element): string {
-  // aria-label takes priority
   const ariaLabel = el.getAttribute('aria-label');
   if (ariaLabel?.trim()) return ariaLabel.trim();
 
-  // aria-labelledby
   const labelledBy = el.getAttribute('aria-labelledby');
   if (labelledBy) {
     const doc = el.ownerDocument;
@@ -398,6 +399,9 @@ export async function checkAccessibilityWithAxe(
   container: HTMLElement,
   config?: Partial<RottayAxeConfig>
 ): Promise<void> {
+  // Dynamic import so the DS itself does not depend on axe-core. Consumers
+  // that want full automated audits install vitest-axe (preferred) or jest-axe
+  // as a devDependency. The fallback chain tries both test frameworks.
   let axeModule: { axe: (container: HTMLElement, options?: unknown) => Promise<{ violations: Array<{ id: string; description: string; impact?: string; nodes: Array<{ html: string }> }> }> };
 
   try {

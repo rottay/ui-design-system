@@ -1,7 +1,21 @@
 'use client';
 
 /**
- * DataTable - Classic Engine (Ant Design)
+ * @fileoverview Classic (Titan) engine for the DataTable pattern, built on top
+ * of Ant Design's `<Table>` component. It maps the design-system-agnostic
+ * `DataTablePatternProps` into Ant Design's column/row/selection/pagination
+ * contracts, handling controlled-vs-uncontrolled selection, sort direction
+ * mapping, and bulk-action toolbars entirely within this adapter layer.
+ *
+ * @example
+ * <ClassicDataTable
+ *   data={users}
+ *   columns={[{ key: 'name', header: 'Name', accessorKey: 'name', sortable: true }]}
+ *   rowKey="id"
+ *   selectable
+ *   pagination={{ current: 1, pageSize: 10, total: 100, onChange: handlePage }}
+ *   onRowClick={(row) => router.push(`/users/${row.id}`)}
+ * />
  */
 
 import React, { useMemo, useState } from 'react';
@@ -10,6 +24,14 @@ import type { ColumnsType } from 'antd/es/table';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 
+/**
+ * Ant Design-backed data table that adapts `DataTablePatternProps` into
+ * `antd/Table` configuration. Supports selection, sorting, expandable rows,
+ * bulk actions, pagination, and sticky headers out of the box.
+ *
+ * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
+ * @returns A fully-featured data table rendered with Ant Design components.
+ */
 export default function ClassicDataTable<T extends Record<string, unknown>>(
   props: DataTablePatternProps<T>
 ) {
@@ -42,6 +64,8 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     style,
   } = props;
 
+  // Internal selection state acts as fallback when the consumer does not provide
+  // controlled selection -- this lets the table work standalone or inside a list surface.
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
@@ -59,6 +83,8 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     return lookup;
   }, [data, rowKey]);
 
+  // Transform DS-agnostic column definitions into Ant Design's ColumnsType.
+  // Filtering out hidden columns here avoids layout shifts when visibility toggles.
   const antColumns: ColumnsType<T> = useMemo(() => {
     const cols: ColumnsType<T> = columns
       .filter((col) => col.visible !== false)
@@ -78,6 +104,8 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
           : undefined,
       }));
 
+    // Actions column is pinned right and has no header label so it stays
+    // visually subordinate to data columns in the table header.
     if (actions) {
       cols.push({
         key: '__actions',
@@ -92,12 +120,16 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     return cols;
   }, [columns, actions, sorting]);
 
+  // Ant Design passes React.Key[] (string | number); we normalise to string[]
+  // so consumers always receive a consistent type regardless of rowKey format.
   const handleSelectionChange = (keys: React.Key[], rows: T[]) => {
     const strKeys = keys.map(String);
     if (!controlledSelectedKeys) setInternalSelectedKeys(strKeys);
     onSelectionChange?.(strKeys, rows);
   };
 
+  // Ant Table fires onChange for pagination, filters, AND sorting in one callback.
+  // We only care about sorting here; pagination is handled separately.
   const handleTableChange = (_pagination: unknown, _filters: unknown, sorter: any) => {
     if (sorter?.columnKey && onSortChange) {
       onSortChange({
@@ -111,6 +143,8 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     return rowKeyLookup.get(record) ?? '';
   };
 
+  // Three-way config: `false` disables pagination entirely, an object maps to
+  // Ant's pagination props, and `undefined` falls back to sensible defaults.
   const paginationConfig = pagination === false
     ? false
     : pagination
@@ -124,9 +158,13 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
         }
       : { pageSize: 20, showSizeChanger: true };
 
+  // --- Render ---
+
   return (
     <div className={`ds-pattern-data-table ds-engine-classic ${className ?? ''}`} style={style}>
       {header}
+      {/* Toolbar row only mounts when there is toolbar content or active bulk
+          actions -- avoids an empty spacer div when neither is needed. */}
       {(toolbar || (bulkActions && selectedKeys.length > 0)) && (
         <div className="ds-pattern-data-table__toolbar" style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>{toolbar}</div>
@@ -135,6 +173,9 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
               <span style={{ color: 'var(--ds-color-neutral-500)', fontSize: 'var(--ds-font-size-sm)' }}>
                 {selectedKeys.length} selected
               </span>
+              {/* Each bulk action button resolves the selected rows at click
+                  time (not at render time) so stale closures are avoided when
+                  the data array changes between renders. */}
               {bulkActions.map((action) => (
                 <Button
                   key={action.key}
@@ -155,6 +196,9 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
           )}
         </div>
       )}
+      {/* Ant Table is the single rendering primitive -- selection, expansion,
+          sorting, and pagination are all configured via props rather than
+          custom markup, keeping this engine thin. */}
       <Table<T>
         columns={antColumns}
         dataSource={data}
@@ -177,6 +221,9 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
         expandable={expandedRow ? {
           expandedRowRender: (record: T) => expandedRow(record),
         } : undefined}
+        // onRow applies per-row styles for click cursor and zebra striping.
+        // Ant Design passes `undefined` for index on virtual rows, so we
+        // default to 0 to prevent NaN-based CSS glitches.
         onRow={(record, index) => ({
           onClick: onRowClick ? () => onRowClick(record, index ?? 0) : undefined,
           style: {

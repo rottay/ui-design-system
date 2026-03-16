@@ -50,6 +50,10 @@ function createEngineWrapper(
   suspenseFallback: React.ReactNode
 ): React.FC<{ children: React.ReactNode }> {
   return function EngineWrapper({ children }) {
+    // skipCssLoading avoids fetching tenant CSS files during tests, which would
+    // fail in jsdom/happy-dom environments without a real network.
+    // forceEngine overrides the tenant config's engine field so the test
+    // controls which engine renders regardless of the fixture tenant.
     return (
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}

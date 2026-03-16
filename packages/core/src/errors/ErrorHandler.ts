@@ -1,5 +1,23 @@
 /**
- * ErrorHandler - Centralized error handling for the design system
+ * @fileoverview ErrorHandler - Rottay Design System
+ * @description Centralized singleton error bus that standardizes categorization,
+ * subscriptions, and dev-mode console logging for all DS runtime errors.
+ *
+ * @remarks
+ * The ErrorHandler is intentionally lightweight. It provides:
+ * - **Reporting**: Structured error creation with auto-timestamps
+ * - **Subscriptions**: Category-specific and catch-all error listeners
+ * - **Bounded log**: In-memory ring buffer (100 entries) for debugging
+ * - **Dev logging**: Severity-aware console output in development only
+ *
+ * Host applications control production logging through subscriptions.
+ * The singleton can be reset between tests via `ErrorHandler.resetInstance()`.
+ *
+ * @see {@link useErrorHandler} - React hook for component-level error handling
+ * @see {@link ErrorCategory} - Supported error categories
+ * @module System/Errors/ErrorHandler
+ * @category System
+ * @package @rottay/design-system
  */
 import {
   DSError,
@@ -25,7 +43,8 @@ class ErrorHandler {
     new Map();
 
   private constructor() {
-    // Initialize category subscriber sets
+    // Pre-create category sets so subscription and notification stay O(1)
+    // without defensive branching on every report.
     Object.values(ErrorCategory).forEach((category) => {
       this.categorySubscribers.set(category, new Set());
     });
@@ -58,18 +77,20 @@ class ErrorHandler {
       timestamp: new Date(),
     };
 
-    // Add to log
+    // The in-memory log is a debugging aid, not a permanent store.
     this.errorLog.push(error);
 
-    // Trim log if too large
+    // Ring buffer behavior: once the log exceeds the cap, trim from the front.
+    // This keeps memory bounded in long-lived sessions (Storybook, admin apps)
+    // while retaining the most recent errors for debugging.
     if (this.errorLog.length > MAX_ERROR_LOG_SIZE) {
       this.errorLog = this.errorLog.slice(-MAX_ERROR_LOG_SIZE);
     }
 
-    // Notify subscribers
+    // Subscribers are how hooks and debug tooling react to DS-level errors.
     this.notifySubscribers(error);
 
-    // Log to console in development
+    // Console logging stays dev-only so host applications control production logging.
     if (process.env.NODE_ENV === 'development') {
       this.logToConsole(error);
     }
@@ -126,17 +147,19 @@ class ErrorHandler {
   }
 
   private notifySubscribers(error: DSError): void {
-    // Notify category-specific subscribers
+    // Notify category-specific subscribers first so targeted handlers run before
+    // catch-all observers.
     const categorySubscriberIds = this.categorySubscribers.get(error.category);
     categorySubscriberIds?.forEach((id) => {
       const callback = this.subscribers.get(id);
       callback?.(error);
     });
 
-    // Notify "all" subscribers
+    // "all" subscribers receive every error regardless of category, but the
+    // dedup check below prevents double-notification when a subscriber is
+    // registered under both a specific category and the "all" bucket.
     const allSubscriberIds = this.categorySubscribers.get('all');
     allSubscriberIds?.forEach((id) => {
-      // Skip if already notified via category
       if (!categorySubscriberIds?.has(id)) {
         const callback = this.subscribers.get(id);
         callback?.(error);

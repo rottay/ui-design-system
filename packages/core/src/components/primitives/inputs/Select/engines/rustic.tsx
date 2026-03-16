@@ -1,11 +1,14 @@
 /**
- * @fileoverview Select Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Select component using CSS variables.
+ * @fileoverview Select Rustic Engine (Vanilla HTML/CSS) - Rottay Design System.
+ * Zero-dependency select component styled entirely via CSS custom properties
+ * (`--ds-select-*`), making it fully themeable by tenants without any
+ * framework-specific class overrides. Supports groups, virtual scroll,
+ * token separators, keyboard navigation, and ARIA combobox semantics.
  *
- * Features:
- * - Option groups: group options under headers with visual separator
- * - Virtual scrolling: only render visible options + buffer, fixed height container
- * - tokenSeparators: auto-create tags in multiple mode when separator typed
+ * @example
+ * ```tsx
+ * <Select engine="rustic" options={opts} searchable clearable size="md" />
+ * ```
  *
  * @module RusticSelect
  * @category Inputs
@@ -35,6 +38,28 @@ import {
   VIRTUAL_BUFFER,
 } from '../utils';
 
+/**
+ * Rustic (Vanilla CSS) Select engine.
+ *
+ * Builds the entire select UI from raw HTML elements and inline styles driven
+ * by CSS custom properties. Unlike the classic (antd) and modern (DaisyUI)
+ * engines, this engine has no runtime dependency on a UI framework, which
+ * makes it ideal for lightweight deployments and custom-branded tenants.
+ *
+ * @param props - Rottay SelectProps (engine-agnostic interface).
+ * @param ref   - Forwarded to the search input or container element.
+ * @returns The rendered vanilla-CSS Select with full DS feature support.
+ *
+ * @example
+ * ```tsx
+ * <RusticSelect
+ *   options={items}
+ *   multiple
+ *   tokenSeparators={[',']}
+ *   maxTagCount={5}
+ * />
+ * ```
+ */
 const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const { t } = useTranslation('components');
 
@@ -76,7 +101,8 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const displayPlaceholder = placeholder ?? t('select.placeholder');
   const noOptionsText = t('select.no_options');
 
-  // Resolve aliases
+  // The DS accepts both antd-style (allowClear, showSearch) and standard
+  // prop names (clearable, searchable) for API compatibility across engines.
   const isClearable = clearable || allowClear;
   const isSearchable = searchable || showSearch;
 
@@ -131,7 +157,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return allOptions.filter((opt) => filterFn(searchValue, opt));
   }, [allOptions, searchValue, isSearchable, filterOption, defaultFilter]);
 
-  // Build renderable list (with group headers if applicable)
+  // Build renderable list (with group headers if applicable).
+  // When searching, flatten to plain options -- group headers would just be noise.
+  // Without search, interleave group headers for visual organization.
   const renderableItems = useMemo(() => {
     if (isSearchable && searchValue) {
       return filteredOptions.map((opt) => ({ type: 'option' as const, option: opt }));
@@ -148,7 +176,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     ? virtual.containerHeight
     : DEFAULT_CONTAINER_HEIGHT;
 
-  // Virtual scroll: compute visible range
+  // Virtual scroll: only render items in the visible viewport plus a buffer
+  // zone above and below. This keeps DOM node count constant regardless of
+  // total option count (critical for selects with 10k+ options).
   const { visibleItems, totalHeight, offsetY } = useMemo(() => {
     if (!virtualEnabled) {
       return { visibleItems: renderableItems, totalHeight: 0, offsetY: 0 };
@@ -171,7 +201,8 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return allOptions.filter((opt) => internalValue.includes(opt.value));
   }, [allOptions, internalValue]);
 
-  // Handle selection
+  // Handle selection -- multiple mode toggles (add/remove), single mode
+  // replaces and closes the dropdown immediately.
   const handleSelect = useCallback((optionValue: string | number, option: SelectOption) => {
     if (option.disabled) return;
 
@@ -184,6 +215,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       }
     } else {
       newValue = [optionValue];
+      // Auto-close after single selection since there is nothing else to pick
       setIsOpen(false);
     }
 
@@ -208,7 +240,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     onClear?.();
   }, [multiple, onChange, onClear]);
 
-  // Handle token separators
+  // Token separators (e.g., comma, Enter) allow users to type a value and
+  // have it auto-matched to an existing option and added as a tag. This is
+  // the "tag input" UX pattern common in email recipient pickers.
   const handleSearchInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
 
@@ -239,7 +273,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     setFocusedIndex(0);
   }, [tokenSeparators, multiple, allOptions, internalValue, onChange, onSearch]);
 
-  // Handle keyboard navigation
+  // Keyboard navigation operates on option-only items (skipping group headers).
+  // ArrowUp/Down cycle with wrapping, Home/End jump to boundaries, Backspace
+  // in multi mode removes the last selected tag (email-style deletion).
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (disabled) return;
 
@@ -359,7 +395,8 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return 'var(--ds-select-border)';
   };
 
-  // Container styles using CSS variables
+  // All visual properties reference CSS custom properties with fallback values
+  // so the component renders correctly even without a loaded theme stylesheet.
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-block',
@@ -510,7 +547,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     setScrollTop(e.currentTarget.scrollTop);
   };
 
-  // Build a map from option value to its option-only index for keyboard focus
+  // Map option values to their option-only indices so keyboard navigation
+  // can map from a renderable item (which includes group headers) back to
+  // the position used by focusedIndex (which counts only options).
   const optionIndexMap = useMemo(() => {
     const map = new Map<string | number, number>();
     let idx = 0;
@@ -523,6 +562,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return map;
   }, [renderableItems]);
 
+  // Renders a single option row with multi-layered visual states: selected
+  // (primary bg + checkmark), focused (left accent border + subtle inset
+  // shadow), and disabled (reduced opacity + not-allowed cursor). All colors
+  // are CSS-variable-driven for tenant customization.
   const renderOptionItem = (option: SelectOption, optionIdx: number) => {
     const isSelected = internalValue.includes(option.value);
     const isFocused = focusedIndex === optionIdx;

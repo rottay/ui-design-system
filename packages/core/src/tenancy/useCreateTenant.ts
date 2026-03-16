@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * useCreateTenant Hook
- *
- * React hook for runtime tenant creation with CSS injection.
- * Allows creating, previewing, and activating tenant themes
- * without manual CSS file creation or registry updates.
+ * @fileoverview useCreateTenant hook for runtime tenant creation with CSS injection.
+ * @description Allows creating, previewing, and activating tenant themes without
+ * manual CSS file creation or registry updates. Designed for onboarding flows,
+ * admin consoles, and tenant preview tooling.
  *
  * @example
  * ```tsx
@@ -50,8 +49,14 @@ function getStyleTagId(slug: string): string {
  * - `createTenant` - Generates a complete TenantConfig from minimal input
  * - `injectTenantCss` - Injects the generated CSS into the document head
  * - `removeTenantCss` - Removes injected CSS for a given tenant slug
+ *
+ * This hook is intentionally app-facing. It is the bridge for onboarding flows,
+ * tenant preview tooling, and admin consoles that need to materialize a tenant
+ * before the platform persists it.
  */
 export function useCreateTenant() {
+  // Tracks which tenant slugs have been injected into the DOM so the hook
+  // can clean up on re-injection and consumers can introspect active previews.
   const injectedSlugs = useRef<Set<string>>(new Set());
 
   const createTenant = useCallback(
@@ -68,7 +73,7 @@ export function useCreateTenant() {
 
     const id = getStyleTagId(config.slug);
 
-    // Remove existing style tag for this tenant if present
+    // Replacing instead of appending keeps repeated previews deterministic.
     const existing = document.getElementById(id);
     if (existing) {
       existing.remove();
@@ -79,6 +84,8 @@ export function useCreateTenant() {
       includeSystemDarkSelector: true,
     });
 
+    // The data-tenant-css attribute allows DevTools inspection and automated
+    // tests to locate tenant-specific style blocks in the document head.
     const style = document.createElement('style');
     style.id = id;
     style.setAttribute('data-tenant-css', config.slug);

@@ -29,6 +29,18 @@ import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'rea
 import type { InputProps } from '../Input.types';
 import { INPUT_DEFAULTS, SIZE_MAP } from '../Input.types';
 
+/**
+ * Rustic (vanilla HTML/CSS) engine for the Input component.
+ *
+ * Uses only native HTML elements styled through CSS variables (`--ds-input-*`)
+ * for full multi-tenant theming without any UI library dependency. All visual
+ * states (focus ring, validation colors, disabled opacity) are computed inline
+ * from the CSS variable palette.
+ *
+ * @param props - Standardized InputProps from the design system contract.
+ * @param ref   - Forwarded ref merged with an internal ref for imperative focus.
+ * @returns The rendered vanilla input with optional prefix, suffix, and clear button.
+ */
 const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     size = INPUT_DEFAULTS.size,
@@ -85,7 +97,8 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     }
   }, [ref]);
 
-  // Handle auto focus
+  // Native autoFocus only fires on initial mount and can be unreliable in
+  // client-rendered React trees, so we trigger focus imperatively.
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
@@ -129,6 +142,9 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     [onKeyDown, onPressEnter]
   );
 
+  // Clear creates a synthetic ChangeEvent so consumers can treat it the same
+  // as a normal onChange. We re-focus the input after clearing so the user
+  // can immediately start typing without an extra click.
   const handleClear = useCallback(() => {
     if (!isControlled) {
       setInternalValue('');
@@ -149,7 +165,8 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Get size values from CSS variables
   const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
 
-  // Determine border color based on state using CSS variables
+  // Border color priority: error > warning > success > focused > default.
+  // Validation status always wins over focus state to ensure errors are visible.
   const getBorderColor = () => {
     if (hasError) return 'var(--ds-input-error-border)';
     if (hasWarning) return 'var(--ds-input-warning-border)';
@@ -158,7 +175,8 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     return 'var(--ds-input-border)';
   };
 
-  // Determine box shadow based on state
+  // Focus ring uses a status-colored glow (3px spread + 8px ambient) to reinforce
+  // the validation state. Unstyled variant disables the ring entirely.
   const getBoxShadow = () => {
     if (variant === 'unstyled') return 'none';
     if (hasError && isFocused) return 'var(--ds-input-error-shadow-focus, 0 0 0 3px rgba(239, 68, 68, 0.15)), 0 0 8px rgba(239, 68, 68, 0.1)';
@@ -168,7 +186,8 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     return 'none';
   };
 
-  // Determine background based on variant
+  // Background varies by variant and interaction state. The "filled" variant
+  // swaps to a lighter background on focus to give the user a visual cue.
   const getBackground = () => {
     if (disabled) return 'var(--ds-input-bg-disabled)';
     if (variant === 'filled') {
@@ -178,7 +197,8 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     return 'var(--ds-input-bg)';
   };
 
-  // Container styles using CSS variables
+  // Flushed variant shows only a bottom border (Material Design-style).
+  // Unstyled removes all borders. All other variants use a full border.
   const isBorderless = variant === 'flushed' || variant === 'unstyled';
   const outlineBorder = `1px solid ${getBorderColor()}`;
   const sideBorder = isBorderless ? 'none' : outlineBorder;
@@ -203,7 +223,9 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     ...style,
   };
 
-  // Input styles using CSS variables
+  // The inner <input> is borderless and transparent so the container div
+  // controls all visual chrome (border, radius, shadow). Padding is removed
+  // on the side where a prefix or suffix is present to avoid double-spacing.
   const inputStyle: React.CSSProperties = {
     flex: 1,
     width: '100%',

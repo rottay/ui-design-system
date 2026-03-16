@@ -1,5 +1,5 @@
 /**
- * Vertical Preset Types
+ * @fileoverview Type definitions for the vertical preset system.
  *
  * Verticals represent industry-specific configurations that bundle together
  * an engine preference, personality tokens, density, and surface defaults.
@@ -29,7 +29,7 @@ export type VerticalKey =
 /**
  * A vertical preset bundles all design system configuration for a product domain.
  *
- * It sits above tenant configuration and below explicit provider props in the
+ * It sits above product profiles and below explicit provider props in the
  * resolution chain:
  *
  *   DesignSystemProvider props (highest priority)

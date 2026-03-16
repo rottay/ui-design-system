@@ -1,17 +1,18 @@
 'use client';
 
 /**
- * @fileoverview Cascader Rustic Engine - Rottay Design System
- * @description Pure vanilla HTML/CSS implementation of the Cascader component
- * using CSS variables for multi-tenant theming.
+ * @fileoverview Cascader Rustic Engine - Rottay Design System.
+ * Pure vanilla HTML/CSS implementation of a hierarchical option selector.
+ * Uses CSS variables (--ds-cascader-*) for multi-tenant theming and renders
+ * the dropdown via React portal for correct stacking-context behaviour.
+ * Supports click/hover expansion, cross-level search, and async data loading.
  *
- * Features:
- * - expandTrigger: 'click' | 'hover'
- * - showSearch: search input filtering across all levels
- * - fieldNames: custom property mapping (label, value, children)
- * - loadData: async loading with spinner when expanding nodes
+ * @example
+ * ```tsx
+ * <Cascader engine="rustic" options={regions} loadData={fetchChildren} showSearch />
+ * ```
  *
- * @module RusticCascader
+ * @module Cascader/Engines/Rustic
  * @category Inputs
  * @package @rottay/design-system
  */
@@ -23,6 +24,9 @@ import { CASCADER_DEFAULTS } from '../Cascader.types';
 
 // ---------------------------------------------------------------------------
 // Helpers for fieldNames mapping
+// fieldNames allows consumers to use their own data shape (e.g., {name, id, items})
+// instead of the default {label, value, children}. These accessors abstract
+// the mapping so the rest of the component uses a uniform API.
 // ---------------------------------------------------------------------------
 
 function getLabel(option: CascaderOption, fn?: CascaderFieldNames): React.ReactNode {
@@ -48,6 +52,9 @@ function optionIsLeaf(option: CascaderOption, fn?: CascaderFieldNames): boolean 
 
 // ---------------------------------------------------------------------------
 // Flatten options for search
+// Cascader options are hierarchical, but search needs to match across all
+// levels. Flattening produces one entry per leaf path (e.g., "US > CA > SF")
+// so the search filter can match against the concatenated label string.
 // ---------------------------------------------------------------------------
 
 interface FlatOption {
@@ -80,13 +87,24 @@ function flattenOptions(
   return result;
 }
 
-// Size configuration using CSS variables
+// Trigger height varies by size prop. Values resolve at runtime from CSS
+// variables so each tenant can customise dimensions without code changes.
 const SIZE_CONFIG: Record<string, { height: string }> = {
   small: { height: 'var(--ds-cascader-sm-height)' },
   default: { height: 'var(--ds-cascader-md-height)' },
   large: { height: 'var(--ds-cascader-lg-height)' },
 };
 
+/**
+ * Rustic Cascader component (pure HTML/CSS with CSS variables).
+ *
+ * The trigger element is rendered inline; the dropdown is portalled to
+ * document.body to avoid overflow:hidden clipping from parent containers.
+ * Position is calculated from the trigger's bounding rect on open.
+ *
+ * @param props - {@link CascaderProps}
+ * @returns A cascader trigger with a portalled multi-column dropdown
+ */
 export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
   (props, ref) => {
     const {
@@ -120,6 +138,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
     const [searchValue, setSearchValue] = useState('');
 
+    // Support both controlled and uncontrolled value modes
     const isControlled = controlledValue !== undefined;
     const value = (isControlled ? controlledValue : internalValue) as CascaderValue;
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -142,7 +161,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       }
     }, [controlledOpen, onDropdownVisibleChange, showSearch]);
 
-    // Update position
+    // Recalculate portal dropdown position relative to the trigger element.
+    // Runs every time the dropdown opens to handle layout shifts.
     useEffect(() => {
       if (isOpen && triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
@@ -183,6 +203,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     }, [value, options, fieldNames]);
 
     // ------ Async load helpers ------
+    // Tracks loading state per-option key to show a spinner on the expanding node
 
     const triggerLoadData = useCallback(async (option: CascaderOption, path: CascaderOption[]) => {
       if (!loadData) return;
@@ -200,6 +221,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     }, [loadData, fieldNames]);
 
     // ------ Expand / Select ------
+    // Hover vs click expansion is determined by the expandTrigger prop.
+    // Leaf nodes trigger selection instead of expansion.
 
     const handleOptionHover = (option: CascaderOption, columnIndex: number) => {
       if (expandTrigger !== 'hover' || option.disabled) return;
@@ -227,6 +250,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       }
     };
 
+    // Expands a node and adds its children as a new column. Also handles
+    // the case where children are loaded asynchronously via loadData.
     const expandOption = async (option: CascaderOption, columnIndex: number) => {
       const newPath = [...selectedPath.slice(0, columnIndex), option];
       setSelectedPath(newPath);
@@ -269,6 +294,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     };
 
     // ------ Search ------
+    // Pre-flatten all leaf paths when search is enabled. Filtering happens
+    // client-side against the concatenated labels for instant results.
 
     const flatOptions = useMemo(
       () => (showSearch ? flattenOptions(options, fieldNames) : []),
@@ -292,7 +319,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       handleOpenChange(false);
     };
 
-    // Click outside
+    // Close dropdown when clicking outside both the trigger and the portal
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         const target = e.target as Node;
@@ -322,6 +349,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
     const sizeConfig = SIZE_CONFIG[size ?? 'default'] || SIZE_CONFIG.default;
 
+    // Border color changes based on validation status and focus state
     const getBorderColor = () => {
       if (status === 'error') return 'var(--ds-cascader-border-error)';
       if (status === 'warning') return 'var(--ds-cascader-border-warning)';
@@ -329,7 +357,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       return 'var(--ds-cascader-border)';
     };
 
-    // Build class names
+    // Build BEM-style class names for external CSS targeting if needed
     const containerClasses = [
       'rottay-cascader',
       'rottay-cascader--rustic',
@@ -421,6 +449,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       borderRight: colIndex < totalCols - 1 ? `1px solid var(--ds-cascader-menu-border)` : 'none',
     });
 
+    // Item style highlights the selected path with a left border accent
+    // and reduces opacity for disabled options
     const getItemStyle = (isSelected: boolean, isDisabled?: boolean): React.CSSProperties => ({
       padding: 'var(--ds-cascader-item-padding)',
       cursor: isDisabled ? 'not-allowed' : 'pointer',
@@ -454,6 +484,9 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
     const isSearchMode = showSearch && searchValue.length > 0;
 
+    // Portal the dropdown to document.body so it is not clipped by
+    // parent overflow:hidden containers. SSR guard (typeof document)
+    // prevents errors during server-side rendering.
     const dropdownContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div

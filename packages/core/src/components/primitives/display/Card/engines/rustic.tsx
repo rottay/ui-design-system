@@ -121,16 +121,22 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     style,
   } = props;
 
+  // Hover state is tracked via React state rather than CSS :hover because
+  // inline styles cannot respond to pseudo-classes. This lets us apply
+  // CSS-variable-driven transforms and shadows dynamically.
   const [isHovered, setIsHovered] = useState(false);
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
   const borderRadiusValue = RADIUS_MAP[radius] || RADIUS_MAP.md;
 
-  // Get color variant styles
+  // Resolve color variant once so the same values are shared between
+  // the left-border accent and the tinted background spread below.
   const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
 
-  // Variant-specific styles using design system tokens
+  // Each variant defines its own background, border, and shadow combination.
+  // All values reference DS CSS variables with hardcoded fallbacks so the
+  // card renders correctly even without a theme provider.
   const variantStyles: Record<string, React.CSSProperties> = {
     elevated: {
       backgroundColor: backgroundColor || 'var(--ds-card-bg, #fff)',
@@ -154,26 +160,35 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     },
   };
 
-  // Card container style
+  // The container style merges three layers in order of specificity:
+  // 1) Base layout (flex column, overflow hidden, border-radius)
+  // 2) Variant-specific visuals (background, border, shadow)
+  // 3) State overrides (hover transforms, color variant accents, loading dim)
+  // Consumer `style` is spread last so it can override everything.
   const cardStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     borderRadius: borderRadiusValue,
     overflow: 'hidden',
+    // The transition references a DS variable so tenants can customize easing.
     transition: 'var(--ds-card-transition, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s)',
     cursor: clickable || onClick ? 'pointer' : undefined,
+    // Dim the card and block interactions while content is loading.
     opacity: loading ? 0.7 : 1,
     pointerEvents: loading ? 'none' : 'auto',
+    // Slight upward lift + micro-scale on hover for tactile feedback.
     transform: isHovered && hoverable
       ? 'var(--ds-card-hover-transform, translateY(-2px) scale(1.005))'
       : 'translateY(0) scale(1)',
     ...variantStyles[variant],
-    // Apply color variant styles
+    // Color variant accent: left border + tinted background for semantic cues.
     ...(hasColorVariant && {
       borderLeft: `4px solid ${colorStyles.borderColor}`,
       backgroundColor: colorStyles.background,
     }),
+    // Hover background/border shift only for non-color-variant cards,
+    // because color variants already have their own background.
     ...(isHovered && hoverable && !hasColorVariant && {
       backgroundColor: 'var(--ds-card-bg-hover, inherit)',
       borderColor: 'var(--ds-card-border-hover, var(--ds-card-border, transparent))',
@@ -207,7 +222,10 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     borderTop: '1px solid var(--ds-card-footer-border, #e5e5e5)',
   };
 
-  // Loading overlay
+  // The loading overlay sits on top of the full card (position: absolute)
+  // with a frosted-glass backdrop-filter. Unlike the classic engine's
+  // Skeleton approach, this preserves the existing content underneath
+  // to signal a "refresh" rather than an initial load.
   const loadingOverlay = loading && (
     <div
       style={{
@@ -246,6 +264,8 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      // Clickable cards receive button role + tabIndex for keyboard access.
+      // This is the rustic engine's key a11y advantage over modern/classic.
       role={clickable || onClick ? 'button' : undefined}
       tabIndex={clickable || onClick ? 0 : undefined}
       aria-busy={loading}
@@ -318,7 +338,10 @@ export default function RusticCard(props: CardProps): React.ReactElement {
         />
       )}
 
-      {/* Keyframes for loading spinner */}
+      {/* Inline keyframes avoid requiring a global CSS file, keeping the
+          rustic engine fully self-contained with zero external dependencies.
+          The animation name is prefixed to prevent collisions with other
+          component keyframes in the same document. */}
       <style>{`
         @keyframes rottay-rustic-card-spin {
           to { transform: rotate(360deg); }

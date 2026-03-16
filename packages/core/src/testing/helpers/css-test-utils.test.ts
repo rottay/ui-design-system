@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for CSS test utilities: variable getters, injection,
+ * snapshot comparison, and tenant fixture generation.
+ */
+
 import { describe, expect, it } from 'vitest';
 
 import {

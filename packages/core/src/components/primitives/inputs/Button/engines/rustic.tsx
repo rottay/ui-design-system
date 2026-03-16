@@ -122,8 +122,18 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
 };
 
 /**
- * Rustic Button - Pure HTML/CSS implementation
- * Uses CSS variables for theming without any UI library dependencies
+ * Rustic (vanilla HTML/CSS) implementation of the DS Button.
+ *
+ * All styling is computed via inline styles referencing CSS custom properties,
+ * so no Tailwind or Ant Design classes are needed. Hover, focus, and active
+ * states are tracked in React state because inline styles override CSS
+ * pseudo-classes. When `href` is provided, renders an `<a>` tag for proper
+ * link semantics.
+ *
+ * @param props - Standardized ButtonProps from the DS type contract, plus
+ *                rustic-specific extras: `shadow`, `gradient`, `pulse`, `bordered`.
+ * @param ref   - Forwarded ref attached to the native `<button>` element.
+ * @returns A fully themed button rendered without any UI library dependency.
  */
 const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
@@ -154,24 +164,25 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       ...rest
     } = props;
 
-    // fullWidth is an alias for block
     const isFullWidth = fullWidth ?? block;
 
+    // Hover/focus/active are managed in React state because inline styles
+    // take precedence over CSS pseudo-classes. This enables smooth
+    // three-state transforms (idle -> hover -> active) without stylesheets.
     const [isHovered, setIsHovered] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
     const [isActive, setIsActive] = useState(false);
 
-    // Get size configuration
+    // Resolve configuration objects from the shared type maps. These maps
+    // live in Button.types.ts so all three engines share the same token
+    // definitions for sizes, variants, and shapes.
     const sizeConfig = SIZE_MAP[size as keyof typeof SIZE_MAP] || SIZE_MAP.md;
-
-    // Get variant colors (danger overrides)
     const effectiveVariant = danger ? 'danger' : (variant || 'primary');
     const variantConfig = VARIANT_MAP[effectiveVariant as keyof typeof VARIANT_MAP] || VARIANT_MAP.primary;
-
-    // Get shape border radius
     const shapeRadius = SHAPE_MAP[shape as keyof typeof SHAPE_MAP] || SHAPE_MAP.default;
 
-    // Build CSS variables for the button
+    // Set CSS custom properties on the element so descendant styles (e.g., the
+    // loading spinner) can reference them, and tenants can override per-button.
     const buttonVars: React.CSSProperties = {
       '--ds-button-height': sizeConfig.height,
       '--ds-button-padding': sizeConfig.padding,
@@ -189,7 +200,10 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       ? variantConfig.hoverBg
       : variantConfig.bg;
 
-    // Computed styles
+    // All button styles are computed inline because rustic engine cannot rely
+    // on Tailwind/antd classes. Hover, focus, and active states are managed
+    // through React state + inline style mutations (not CSS :hover/:focus)
+    // since inline styles have higher specificity than pseudo-classes.
     const buttonStyle: React.CSSProperties = {
       ...buttonVars,
       position: 'relative',
@@ -225,12 +239,17 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       outline: 'none',
       boxSizing: 'border-box',
       userSelect: 'none',
+      // touchAction: manipulation disables double-tap zoom on mobile,
+      // preventing the 300ms click delay on touch devices.
       touchAction: 'manipulation',
       boxShadow: isFocused
         ? 'var(--ds-button-focus-ring, 0 0 0 3px var(--ds-color-primary-200)), 0 0 12px rgba(0, 102, 204, 0.15)'
         : shadow || (isHovered && !disabled && !loading)
           ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
           : 'none',
+      // Three-state transform: active presses in (0.97), hover lifts up (-1px),
+      // default is identity. translateY(0) scale(1) is explicit so the
+      // transition property has a value to animate from.
       transform:
         isActive && !disabled && !loading
           ? 'var(--ds-button-active-transform, scale(0.97))'
@@ -256,6 +275,9 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
     ].filter(Boolean).join(' ');
 
+    // Guard click handler so disabled/loading buttons never fire onClick.
+    // The native `disabled` attribute already blocks clicks on <button>,
+    // but this guard is needed for the <a> branch and for extra safety.
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled || loading) {
         e.preventDefault();
@@ -264,12 +286,16 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       onClick?.(e);
     };
 
-    // Handle icon positioning
+    // Icons and prefix are hidden during loading so the spinner is the
+    // only visual indicator. Suffix remains visible because it often
+    // contains contextual information (e.g., a keyboard shortcut hint).
     const renderIcon = icon && !loading ? icon : null;
     const renderPrefix = prefix && !loading ? prefix : null;
     const renderSuffix = suffix ? suffix : null;
 
-    // If href is provided, render as anchor
+    // When href is set, render an <a> instead of <button> for correct
+    // semantics (screen readers announce it as a link, browser features like
+    // Cmd+Click to open in new tab work). Disabled links stay as <button>.
     if (href && !disabled && !loading) {
       return (
         <a

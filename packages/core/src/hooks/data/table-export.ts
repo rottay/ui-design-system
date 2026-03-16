@@ -232,7 +232,8 @@ export function useTableExport<T>(
 
   const [isExporting, setIsExporting] = useState(false);
 
-  // Use refs to always access the latest data/columns without re-creating callbacks
+  // Refs keep export callbacks stable across renders. Without this, every data
+  // change would recreate the callback references and re-render toolbar buttons.
   const dataRef = useRef(data);
   dataRef.current = data;
 
@@ -270,7 +271,9 @@ export function useTableExport<T>(
         row.map(escapeCsvValue).join(',')
       );
 
-      // BOM for Excel UTF-8 compatibility + content
+      // The UTF-8 BOM (byte order mark) is prepended so that Excel on Windows
+      // correctly detects the file encoding. Without it, non-ASCII characters
+      // (accented names, currency symbols) display as garbled text.
       const bom = '\uFEFF';
       const csvContent = bom + [headerLine, ...dataLines].join('\r\n');
 

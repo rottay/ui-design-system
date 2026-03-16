@@ -1,12 +1,34 @@
 'use client';
 
 /**
- * LiveFeed - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (DaisyUI / Tailwind) engine for the LiveFeed pattern.
+ * Renders a real-time feed inside a DaisyUI card with optional auto-refresh
+ * polling, a "new items" banner (DaisyUI btn-info), and load-more pagination.
+ * New items receive Tailwind's `animate-pulse` class to signal freshness.
+ *
+ * @example
+ * <ModernLiveFeed
+ *   items={[{ key: '1', text: 'Payment confirmed', isNew: true }]}
+ *   renderItem={(item) => <div className="p-2">{item.text}</div>}
+ *   autoRefresh={10000}
+ *   hasMore
+ *   onLoadMore={() => fetchPage(page + 1)}
+ * />
  */
 
 import React, { useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../LiveFeed.types';
 
+/**
+ * Modern (DaisyUI) LiveFeed engine.
+ *
+ * Uses DaisyUI card/btn classes and Tailwind utilities. Supports polling-based
+ * auto-refresh, a configurable item cap (maxItems), and scrollable feed area.
+ *
+ * @typeParam T - Feed item shape, must extend {@link FeedItem}.
+ * @param props - {@link LiveFeedProps} -- items, renderItem callback, refresh/load-more controls.
+ * @returns A scrollable feed wrapped in a DaisyUI card.
+ */
 export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<T>) {
   const {
     items,
@@ -26,8 +48,12 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
     style,
   } = props;
 
+  // Interval ref persists across renders so the useEffect cleanup can
+  // clear the correct timer when dependencies change or the component unmounts.
   const intervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
+  // Auto-refresh polls at the given interval (ms). Setting autoRefresh to 0
+  // or omitting it disables polling entirely.
   useEffect(() => {
     if (autoRefresh && autoRefresh > 0 && onRefresh) {
       intervalRef.current = setInterval(onRefresh, autoRefresh);
@@ -35,8 +61,11 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
     }
   }, [autoRefresh, onRefresh]);
 
+  // Cap visible items to prevent excessive DOM nodes in high-throughput feeds.
   const displayItems = maxItems ? items.slice(0, maxItems) : items;
 
+  // Skeleton loading state: only shown when there are zero items and loading is true.
+  // Subsequent refreshes keep existing items visible (no flicker).
   if (loading && items.length === 0) {
     return (
       <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
@@ -69,7 +98,8 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
           </div>
         )}
 
-        {/* New items indicator */}
+        {/* New items indicator -- full-width info button so it is impossible to miss.
+            Clicking merges buffered items into the visible list (handled by parent). */}
         {newItemsCount != null && newItemsCount > 0 && (
           <button
             className="btn btn-info btn-sm btn-block mb-3 gap-2"
@@ -80,12 +110,15 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
           </button>
         )}
 
-        {/* Feed */}
+        {/* Feed -- maxHeight enables vertical scrolling for bounded-height containers.
+            When omitted, the feed grows unbounded. */}
         <div style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
           {displayItems.length === 0 ? (
             emptyState ?? <div className="text-center py-8 text-base-content/50">No items</div>
           ) : (
             <div className="flex flex-col gap-2">
+              {/* Tailwind animate-pulse on new items provides a visual cue that the
+                  entry just arrived, helping users track real-time changes. */}
               {displayItems.map((item, i) => (
                 <div key={item.key} className={item.isNew ? 'animate-pulse' : ''}>
                   {renderItem(item, i)}

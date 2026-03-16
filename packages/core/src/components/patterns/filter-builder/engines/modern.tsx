@@ -1,7 +1,22 @@
 'use client';
 
 /**
- * FilterBuilder - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview Modern (DaisyUI / Tailwind) engine for the FilterBuilder pattern.
+ * Renders a recursive, composable filter tree using DaisyUI input/select/toggle
+ * classes with native HTML form elements. Nested groups get a left-border
+ * accent and tinted background to communicate hierarchy visually.
+ *
+ * @example
+ * <FilterBuilder
+ *   engine="modern"
+ *   fields={[
+ *     { key: 'status', label: 'Status', type: 'select', options: statusOpts },
+ *     { key: 'created', label: 'Created', type: 'date' },
+ *   ]}
+ *   value={filterGroup}
+ *   onChange={setFilterGroup}
+ *   allowGrouping
+ * />
  */
 
 import React, { useCallback } from 'react';
@@ -19,6 +34,13 @@ import {
   OPERATOR_DEFINITIONS,
 } from '../FilterBuilder.types';
 
+/**
+ * Modern FilterBuilder using DaisyUI form controls for each value type.
+ * Manages a recursive filter tree (FilterGroup) via immutable updates.
+ *
+ * @param props - See {@link FilterBuilderProps} for full prop documentation.
+ * @returns A DaisyUI-styled interactive filter composer with AND/OR grouping.
+ */
 export default function ModernFilterBuilder(props: FilterBuilderProps) {
   const {
     fields,
@@ -37,6 +59,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     style,
   } = props;
 
+  // Immutable recursive tree update: walks from root to find the target group,
+  // spreading at every level so React's reconciler detects the change.
   const updateGroup = useCallback(
     (
       root: FilterGroup,
@@ -94,6 +118,9 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     []
   );
 
+  // New rules default to the first field and its first valid operator so the
+  // row renders with sensible dropdowns pre-selected. Value starts undefined
+  // to show the placeholder text in the input.
   const handleAddRule = useCallback(
     (groupId: string) => {
       const defaultField = fields[0];
@@ -139,6 +166,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, removeNode]
   );
 
+  // Binary toggle between AND / OR. Nested groups allow users to build
+  // complex predicates (e.g. an OR group inside an AND group).
   const handleToggleLogic = useCallback(
     (groupId: string) => {
       onChange(
@@ -151,6 +180,9 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateGroup]
   );
 
+  // Reset operator and value when the field type changes because the valid
+  // operator set differs by type (e.g. "contains" is not valid for numbers)
+  // and the previous value may be the wrong shape for the new type.
   const handleFieldChange = useCallback(
     (ruleId: string, fieldKey: string) => {
       const fieldDef = fields.find((f) => f.key === fieldKey);
@@ -168,6 +200,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     [fields, value, onChange, updateRule]
   );
 
+  // Clear the value when switching to a unary operator (e.g. "is empty")
+  // so stale values are not accidentally sent to the consumer's query builder.
   const handleOperatorChange = useCallback(
     (ruleId: string, operator: FilterOperator) => {
       const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === operator);
@@ -194,12 +228,19 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateRule]
   );
 
+  // DaisyUI size classes are chosen based on the compact prop to keep the
+  // filter row visually tight in dense UIs like data-table toolbars.
   const sizeClass = compact ? 'input-xs select-xs' : 'input-sm select-sm';
 
+  // Renders the appropriate native input for the field type. Uses native HTML
+  // elements (input, select, checkbox) styled with DaisyUI classes rather
+  // than Ant Design components, keeping the bundle lightweight.
   const renderValueInput = (rule: FilterRule, fieldDef: FilterFieldDefinition) => {
     const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === rule.operator);
+    // Unary operators (isEmpty, isNotEmpty) render no value input.
     if (!opDef?.requiresValue) return null;
 
+    // Range operators ("between") require paired from/to inputs.
     if (opDef.requiresRange) {
       const rangeVal = Array.isArray(rule.value) ? rule.value : [undefined, undefined];
       return (
@@ -293,6 +334,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     }
   };
 
+  // A single rule row: logic keyword, field dropdown, operator dropdown,
+  // type-appropriate value input, and a delete button.
   const renderRule = (rule: FilterRule, isFirst: boolean, parentLogic: 'and' | 'or') => {
     const fieldDef = fields.find((f) => f.key === rule.field);
     const operators = fieldDef ? getOperatorsForField(fieldDef) : [];
@@ -359,8 +402,12 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     );
   };
 
+  // Groups render recursively. The root group has no visual container so it
+  // integrates cleanly into any parent layout; nested groups get a colored
+  // left border and tinted background to show nesting hierarchy.
   const renderGroup = (group: FilterGroup, depth: number = 0) => {
     const isRoot = depth === 0;
+    // maxDepth - 1 because "Add group" creates a child at depth + 1.
     const canNest = allowGrouping && depth < maxDepth - 1;
 
     return (

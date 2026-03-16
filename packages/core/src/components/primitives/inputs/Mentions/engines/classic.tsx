@@ -1,12 +1,33 @@
 'use client';
 
 /**
- * Mentions - Classic Engine (Ant Design)
+ * @fileoverview Mentions Classic Engine - Rottay Design System.
+ * Thin wrapper around Ant Design's Mentions component, forwarding every
+ * prop from the unified MentionsProps contract without custom logic.
+ *
+ * @example
+ * ```tsx
+ * <Mentions engine="classic" options={users} prefix="@" onSelect={handleSelect} />
+ * ```
+ *
+ * @module ClassicMentions
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import { Mentions as AntMentions } from 'antd';
 import type { MentionsProps } from '../Mentions.types';
 
+/**
+ * Classic engine Mentions backed by Ant Design's Mentions component.
+ * All mention detection, dropdown positioning, and keyboard navigation
+ * are delegated to the underlying Ant Design implementation.
+ *
+ * @param props - Unified MentionsProps from the design system contract.
+ * @param ref - Forwarded ref attached to the Ant Design textarea element.
+ * @returns The rendered Ant Design Mentions component.
+ */
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
     const {
@@ -32,6 +53,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       style,
     } = props;
 
+    // Direct delegation to Ant Design; width defaults to 100% for layout consistency
     return (
       <AntMentions
         ref={ref as any}

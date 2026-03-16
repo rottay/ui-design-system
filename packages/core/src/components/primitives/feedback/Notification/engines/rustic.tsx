@@ -142,6 +142,11 @@ const styles = {
       width: '100%',
     };
 
+    // Center placements (top/bottom) use translateX(-50%) for perfect
+    // horizontal centering regardless of container width. Corner placements
+    // use fixed pixel offsets (24px) for consistent gutter spacing.
+    // maxWidth on the base style prevents notifications from stretching
+    // across the entire viewport on wide screens.
     const placements: Record<NotificationPlacement, React.CSSProperties> = {
       top: { top, left: '50%', transform: 'translateX(-50%)', alignItems: 'center' },
       topLeft: { top, left: 24 },
@@ -266,6 +271,11 @@ const injectStyles = () => {
 
   const styleSheet = document.createElement('style');
   styleSheet.id = styleId;
+  // Notifications slide in horizontally (translateX) rather than vertically
+  // like messages, following the UX convention that corner-positioned elements
+  // slide in from the nearest edge. The offset distance is 2x the base
+  // animation distance for a more pronounced entrance matching the larger
+  // notification size. CSS variable allows per-tenant animation tuning.
   styleSheet.textContent = `
     @keyframes notificationSlideIn {
       from {
@@ -464,7 +474,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   return (
     <NotificationContext.Provider value={notificationApi}>
       {children}
-      {/* Render notification containers for each placement with notifications */}
+      {/* Render notification containers for each placement with notifications.
+          role="log" + aria-live="polite" for non-interruptive announcements.
+          "log" is semantically correct for a stream of notification events
+          that accumulate over time, unlike "alert" which implies urgency. */}
       {Object.entries(groupedNotifications).map(([p, items]) => (
         <div
           key={p}
@@ -618,9 +631,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // Event Handlers
   // ========================================================================
 
-  /**
-   * Handles manual close with exit animation.
-   */
+  // Two-phase close: trigger exit animation via isExiting state, then
+  // remove from DOM after 240ms (matching the CSS exit animation duration).
+  // This prevents abrupt disappearance and gives users visual confirmation.
   const handleClose = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -698,7 +711,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         {actions && <div style={styles.btnContainer}>{actions}</div>}
       </div>
 
-      {/* Close Button */}
+      {/* JS-driven hover state because Rustic uses only inline styles
+          (no stylesheet for :hover pseudo-class). stopPropagation prevents
+          the notification's onClick from firing on close button clicks.
+          aria-label is essential for the icon-only close button. */}
       {closable && (
         <button
           onClick={(e) => {

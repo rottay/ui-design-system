@@ -54,6 +54,17 @@ import React, { useState, useId } from 'react';
 import type { RadioProps } from '../Radio.types';
 import { RADIO_DEFAULTS } from '../Radio.types';
 
+/**
+ * Modern (DaisyUI/Tailwind) implementation of the DS Radio.
+ *
+ * Uses a native `<input type="radio">` with DaisyUI's `radio` class and modifier
+ * classes for size and color. Supports both controlled (`checked` prop) and
+ * uncontrolled (`defaultChecked`) modes. An optional `description` is rendered
+ * below the label using DaisyUI's `label-text-alt` style.
+ *
+ * @param props - Standardized RadioProps from the DS type contract.
+ * @returns A DaisyUI-styled radio button wrapped in a `form-control` label.
+ */
 export default function ModernRadio(props: RadioProps): React.ReactElement {
   const {
     size = RADIO_DEFAULTS.size,
@@ -71,10 +82,13 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     style,
   } = props;
 
+  // Stable unique ID for input-label association. The engine prefix
+  // prevents collisions if multiple engines are rendered on the same page.
   const generatedId = useId();
   const inputId = `radio-modern-${generatedId}`;
 
-  // Internal state for uncontrolled mode
+  // Controlled vs. uncontrolled: when `checked` is undefined, local state
+  // owns the radio value. This mirrors React's standard input pattern.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
@@ -86,7 +100,8 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     onChange?.(e);
   };
 
-  // DaisyUI size classes
+  // DaisyUI size classes. `xl` maps to `radio-lg` because DaisyUI
+  // does not provide an xl modifier for radios.
   const sizeClass = {
     xs: 'radio-xs',
     sm: 'radio-sm',
@@ -95,7 +110,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     xl: 'radio-lg',
   }[size] || '';
 
-  // DaisyUI color classes
+  // DaisyUI color classes map directly to DS color tokens.
   const colorClass = {
     default: '',
     primary: 'radio-primary',
@@ -109,6 +124,8 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
 
   return (
     <div className={`form-control ${className}`} style={style}>
+      {/* `justify-start` overrides DaisyUI's default space-between so the
+          radio and label stay grouped on the left side. */}
       <label className="label cursor-pointer gap-2 justify-start">
         <input
           id={inputId}
@@ -121,6 +138,8 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
           className={`radio ${sizeClass} ${colorClass}`}
           aria-checked={isChecked}
         />
+        {/* Label and optional description are stacked vertically.
+            `label-text-alt` provides smaller, muted secondary text. */}
         {(displayLabel || description) && (
           <div className="flex flex-col">
             {displayLabel && (

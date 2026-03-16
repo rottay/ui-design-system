@@ -1,11 +1,14 @@
 /**
- * @fileoverview Empty Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS empty state with maximum accessibility.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Rustic engine for the Empty component, using pure HTML/CSS.
+ * Ships inline SVG illustrations coloured via CSS custom properties
+ * (--ds-color-*), ensuring the component works without any CSS framework.
  *
- * @module Empty/engines/rustic
- * @category Display
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <Empty engine="rustic" description="Nothing to show">
+ *   <Button>Add Item</Button>
+ * </Empty>
+ * ```
  */
 
 'use client';
@@ -15,6 +18,7 @@ import type { EmptyProps } from '../Empty.types';
 import { EMPTY_DEFAULTS } from '../Empty.types';
 import { useTranslation } from '../../../../../i18n';
 
+/** Detailed empty-box SVG illustration using CSS custom property colours for tenant theming. */
 const DefaultImage: React.FC = () => (
   <svg
     width="64"
@@ -40,6 +44,7 @@ const DefaultImage: React.FC = () => (
   </svg>
 );
 
+/** Minimal outline-only SVG illustration using tertiary background token for subtlety. */
 const SimpleImage: React.FC = () => (
   <svg
     width="64"
@@ -59,6 +64,17 @@ const SimpleImage: React.FC = () => (
   </svg>
 );
 
+/**
+ * Rustic (pure HTML/CSS) implementation of the Empty component.
+ *
+ * All styling is inline with CSS custom property fallbacks, ensuring it
+ * renders correctly even without a loaded theme stylesheet. Uses
+ * role="status" and aria-label for screen reader accessibility.
+ *
+ * @param props - Unified EmptyProps from the design system type contract
+ * @param ref - Forwarded ref attached to the outer container div
+ * @returns A dependency-free empty state element using only inline styles
+ */
 const RusticEmpty = forwardRef<HTMLDivElement, EmptyProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -72,8 +88,10 @@ const RusticEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       style,
     } = props;
 
+    // i18n translation provides the default "No data" text; explicit prop overrides it
     const displayDescription = description ?? t('empty.description');
 
+    // Resolve string shorthand to the matching inline SVG component, or pass through ReactNode
     const renderImage = () => {
       if (image === 'default') {
         return <DefaultImage />;
@@ -84,6 +102,8 @@ const RusticEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       return image;
     };
 
+    // Vertically centred flex column; padding token has a generous default
+    // so the empty state doesn't feel cramped inside cards or panels
     const containerStyle: React.CSSProperties = {
       display: 'flex',
       flexDirection: 'column',
@@ -100,6 +120,7 @@ const RusticEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       ...imageStyle,
     };
 
+    // Bottom margin only present when action children follow the description
     const descriptionStyle: React.CSSProperties = {
       margin: 0,
       marginBottom: children ? '16px' : 0,

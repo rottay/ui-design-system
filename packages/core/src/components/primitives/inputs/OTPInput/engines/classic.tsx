@@ -1,9 +1,15 @@
 'use client';
 
 /**
- * @fileoverview OTPInput Classic Engine - Rottay Design System
- * @description Ant Design styled implementation of the OTPInput component.
- * Row of individual input boxes with auto-advance.
+ * @fileoverview OTPInput Classic Engine - Rottay Design System.
+ * Renders a row of individual digit inputs styled to match Ant Design's
+ * visual language. Handles auto-advance, backspace navigation, paste
+ * distribution, and completion callbacks.
+ *
+ * @example
+ * ```tsx
+ * <OTPInput engine="classic" length={6} type="numeric" onComplete={handleVerify} />
+ * ```
  *
  * @module OTPInput/Engines/Classic
  * @category Inputs
@@ -14,12 +20,21 @@ import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
 import type { OTPInputProps } from '../OTPInput.types';
 import { OTPINPUT_DEFAULTS } from '../OTPInput.types';
 
+/** Pixel dimensions and font size for each size tier, matching Ant Design spacing. */
 const SIZE_STYLES: Record<string, { width: number; height: number; fontSize: number }> = {
   sm: { width: 36, height: 36, fontSize: 16 },
   md: { width: 44, height: 44, fontSize: 20 },
   lg: { width: 52, height: 52, fontSize: 24 },
 };
 
+/**
+ * Classic engine OTPInput styled like Ant Design.
+ * Each digit occupies its own `<input maxLength={1}>` box. Focus auto-advances
+ * on character entry and retreats on backspace for fluid typing.
+ *
+ * @param props - Unified OTPInputProps from the design system contract.
+ * @returns A flex row of single-character inputs with optional error display.
+ */
 export default function ClassicOTPInput(props: OTPInputProps): React.ReactElement {
   const {
     length = OTPINPUT_DEFAULTS.length,
@@ -43,21 +58,28 @@ export default function ClassicOTPInput(props: OTPInputProps): React.ReactElemen
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const sizeConfig = SIZE_STYLES[size] || SIZE_STYLES.md;
 
+  // Initialize per-slot values by splitting the controlled value and padding with empty strings
   const [internalValues, setInternalValues] = useState<string[]>(
     () => (controlledValue || '').split('').concat(Array(length).fill('')).slice(0, length)
   );
 
+  // Sync internal state when parent changes the controlled value
   useEffect(() => {
     if (controlledValue !== undefined) {
       setInternalValues(controlledValue.split('').concat(Array(length).fill('')).slice(0, length));
     }
   }, [controlledValue, length]);
 
+  /** Validate a single character against the configured input type (numeric or alphanumeric). */
   const isValidChar = useCallback((char: string) => {
     if (type === 'numeric') return /^[0-9]$/.test(char);
     return /^[a-zA-Z0-9]$/.test(char);
   }, [type]);
 
+  /**
+   * Persist slot values and fire onChange/onComplete callbacks.
+   * onComplete fires only when every slot is filled, enabling auto-submit flows.
+   */
   const updateValue = useCallback((newValues: string[]) => {
     setInternalValues(newValues);
     const joined = newValues.join('');
@@ -67,6 +89,7 @@ export default function ClassicOTPInput(props: OTPInputProps): React.ReactElemen
     }
   }, [length, onChange, onComplete]);
 
+  /** Write a valid character to the current slot and auto-advance focus to the next. */
   const handleChange = useCallback((index: number, char: string) => {
     if (!isValidChar(char)) return;
     const newValues = [...internalValues];
@@ -77,6 +100,10 @@ export default function ClassicOTPInput(props: OTPInputProps): React.ReactElemen
     }
   }, [internalValues, isValidChar, length, updateValue]);
 
+  /**
+   * Keyboard navigation: Backspace clears the current slot (or retreats to
+   * the previous one if already empty); ArrowLeft/Right moves focus laterally.
+   */
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
       e.preventDefault();
@@ -96,6 +123,10 @@ export default function ClassicOTPInput(props: OTPInputProps): React.ReactElemen
     }
   }, [internalValues, length, updateValue]);
 
+  /**
+   * Paste handler: distributes clipboard text across slots (filtered by type),
+   * then focuses the slot after the last pasted character.
+   */
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData('text').trim();

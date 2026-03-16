@@ -1,7 +1,21 @@
 'use client';
 
 /**
- * Timeline - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the Timeline pattern.
+ *
+ * Wraps Ant Design's Timeline component with support for user avatars,
+ * type-based dot coloring, optional date grouping, and a `renderItem` slot
+ * for full customization. Items are transformed into Ant's `items` prop
+ * format using `buildItems`, which maps the pattern's color/type/icon fields
+ * to Ant Design's `color`, `dot`, and `children` properties.
+ *
+ * @example
+ * <ClassicTimeline
+ *   items={[{ key: '1', title: 'Deployed v2.0', timestamp: new Date(), type: 'success' }]}
+ *   mode="alternate"
+ *   groupByDate
+ *   showTimestamp
+ * />
  */
 
 import React, { useMemo } from 'react';
@@ -10,16 +24,19 @@ import type { TimelinePatternProps, TimelineItem } from '../Timeline.types';
 
 const { Text, Paragraph } = Typography;
 
+/** Formats a timestamp for display inside a timeline item. */
 function formatTimestamp(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
   return date.toLocaleString();
 }
 
+/** Extracts a locale-formatted date string used as a grouping key. */
 function formatDateKey(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
   return date.toLocaleDateString();
 }
 
+/** Maps semantic item types to Ant Design's Timeline dot color names. */
 const typeColorMap: Record<string, string> = {
   default: 'blue',
   success: 'green',
@@ -28,6 +45,17 @@ const typeColorMap: Record<string, string> = {
   info: 'cyan',
 };
 
+/**
+ * Classic (Ant Design) engine for the Timeline pattern component.
+ *
+ * Supports left, right, and alternate layout modes via Ant Design's Timeline
+ * `mode` prop. Date grouping clusters items under calendar-date headers.
+ * The `renderItem` slot receives both the raw item and a pre-built default
+ * render so consumers can wrap or replace individual entries.
+ *
+ * @param props - {@link TimelinePatternProps} controlling items, layout mode, grouping, and callbacks.
+ * @returns A vertical timeline rendered with Ant Design primitives.
+ */
 export default function ClassicTimeline<T>(props: TimelinePatternProps<T>) {
   const {
     items,
@@ -44,8 +72,12 @@ export default function ClassicTimeline<T>(props: TimelinePatternProps<T>) {
     style,
   } = props;
 
+  // Map the pattern's mode to Ant Design's accepted values. The pattern
+  // defines modes as union strings; Ant Design uses the same names.
   const antMode = mode === 'alternate' ? 'alternate' : mode === 'right' ? 'right' : 'left';
 
+  // Group items by calendar date when groupByDate is enabled, rendering
+  // a date header above each cluster for visual separation.
   const grouped = useMemo(() => {
     if (!groupByDate) return null;
     const groups: Record<string, TimelineItem<T>[]> = {};
@@ -76,6 +108,7 @@ export default function ClassicTimeline<T>(props: TimelinePatternProps<T>) {
     </div>
   );
 
+  /** Transforms pattern TimelineItems into Ant Design's `items` prop format. */
   const buildItems = (list: TimelineItem<T>[]) =>
     list.map((item) => {
       const defaultRender = buildDefaultRender(item);

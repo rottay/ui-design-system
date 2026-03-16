@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for tenant test utilities: renderWithTenant,
+ * renderWithAllTenants, describeEachTenant, and cross-engine x tenant matrix.
+ */
+
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

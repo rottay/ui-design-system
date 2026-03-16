@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Navigation and feedback primitive smoke tests across all engines.
+ * Covers Stepper compounds, Menu compounds, Modal compounds, and
+ * Statistic.Countdown.
+ */
+
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';

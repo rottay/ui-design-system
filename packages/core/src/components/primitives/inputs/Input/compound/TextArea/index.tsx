@@ -1,3 +1,63 @@
+/**
+ * @fileoverview InputTextArea - Rottay Design System
+ * @description Compound component providing a multi-line text input with
+ * character counting, error display, and multiple visual variants.
+ *
+ * @remarks
+ * InputTextArea is a fully-featured textarea component with controlled and
+ * uncontrolled modes. It supports multiple visual variants (outline, filled,
+ * flushed, unstyled) and provides built-in character counting and error display.
+ *
+ * **Key Features:**
+ * - Controlled and uncontrolled value management
+ * - Multiple visual variants: outline, filled, flushed, unstyled
+ * - Character count display when `showCount` and `maxLength` are set
+ * - Inline error message rendering
+ * - Focus ring and error ring via CSS box-shadow
+ * - Configurable resize behavior
+ * - Enter key handling with `onPressEnter` (Shift+Enter for newline)
+ *
+ * **Accessibility:**
+ * - Supports `aria-label`, `aria-describedby`, `aria-invalid`
+ * - Error state communicated via `aria-invalid`
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Input } from '@rottay/design-system';
+ *
+ * <Input.TextArea
+ *   placeholder="Enter your message..."
+ *   rows={4}
+ * />
+ * ```
+ *
+ * @example With Character Count
+ * ```tsx
+ * <Input.TextArea
+ *   placeholder="Bio"
+ *   maxLength={200}
+ *   showCount
+ *   rows={3}
+ * />
+ * ```
+ *
+ * @example Error State
+ * ```tsx
+ * <Input.TextArea
+ *   value={description}
+ *   error={!isValid}
+ *   errorMessage="Description is required"
+ *   onChange={setDescription}
+ * />
+ * ```
+ *
+ * @see {@link Input} for the main input component
+ * @see {@link InputTextAreaProps} for prop definitions
+ * @module InputTextArea
+ * @category Inputs
+ * @package @rottay/design-system
+ */
+
 'use client';
 
 import React, {
@@ -12,6 +72,29 @@ import React, {
 import type { InputTextAreaProps } from '../../Input.types';
 import { SIZE_MAP } from '../../Input.types';
 
+/**
+ * Multi-line text input component with character counting and error display.
+ *
+ * @description
+ * Renders a `<textarea>` element with configurable visual variants, focus
+ * and error states, optional character count overlay, and inline error
+ * message rendering. Supports both controlled and uncontrolled modes.
+ *
+ * @param props - {@link InputTextAreaProps}
+ * @param ref - Forwarded ref to the underlying `<textarea>` element
+ * @returns A textarea element wrapped in a styled container
+ *
+ * @example
+ * ```tsx
+ * <InputTextArea
+ *   variant="filled"
+ *   rows={6}
+ *   maxLength={500}
+ *   showCount
+ *   placeholder="Write your story..."
+ * />
+ * ```
+ */
 export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>(
   (props, ref) => {
     const {
@@ -47,15 +130,21 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       'aria-describedby': ariaDescribedBy,
     } = props;
 
+    // Dual-mode value management: when controlledValue is defined the parent
+    // owns state; otherwise internal state tracks the value for uncontrolled usage.
     const [internalValue, setInternalValue] = useState(defaultValue ?? '');
     const [isFocused, setIsFocused] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : internalValue;
+    // Consolidate error detection from both the explicit `error` prop
+    // and the status-based API so downstream styling checks are simpler.
     const hasError = error || status === 'error';
     const sizeValues = SIZE_MAP[size as keyof typeof SIZE_MAP] || SIZE_MAP.md;
 
+    // Synchronize the forwarded ref with our internal textareaRef so the
+    // parent can access the DOM node regardless of ref type (callback or object).
     useEffect(() => {
       if (!ref) {
         return;
@@ -99,6 +188,8 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       [onBlur]
     );
 
+    // Intercept bare Enter (no Shift) for form submission or chat-send patterns.
+    // Shift+Enter still inserts a newline as expected in multi-line inputs.
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -110,6 +201,8 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       [onKeyDown, onPressEnter]
     );
 
+    // Container is relative-positioned so the character counter can be
+    // absolutely positioned at the bottom-right corner.
     const containerStyle: CSSProperties = {
       position: 'relative',
       display: 'block',
@@ -117,11 +210,15 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       ...style,
     };
 
+    // Pre-compute border/ring token values so the style object below stays readable.
+    // Each variant (outline, filled, flushed, unstyled) composes these differently.
     const neutralBorder = 'var(--ds-color-border-secondary)';
     const focusBorder = 'var(--ds-color-primary)';
     const errorBorder = 'var(--ds-color-error)';
     const focusRing = '0 0 0 2px var(--ds-color-alpha-primary-20)';
     const errorRing = '0 0 0 2px var(--ds-color-alpha-error-20)';
+    // "unstyled" and "flushed" variants suppress side borders entirely;
+    // flushed only shows a bottom border that thickens on focus.
     const isBorderless = variant === 'unstyled' || variant === 'flushed';
     const outlineBorder = `1px solid ${hasError ? errorBorder : isFocused ? focusBorder : neutralBorder}`;
     const sideBorder = isBorderless ? 'none' : outlineBorder;
@@ -156,6 +253,8 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
             : 'none',
     };
 
+    // Build BEM-style class list. Boolean entries (e.g. `isFocused && '...'`)
+    // produce `false` when inactive, which filter(Boolean) strips out.
     const containerClasses = [
       'rottay-textarea',
       `rottay-textarea--${size}`,

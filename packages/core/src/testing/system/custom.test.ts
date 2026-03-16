@@ -1,5 +1,7 @@
 /**
- * Custom Pluggable Engine Tests
+ * @fileoverview Custom (pluggable) engine tests. Validates the full lifecycle:
+ * register/unregister/clear components, pack-scoped isolation, fallback
+ * resolution via createCustomWrapper, config management, and useCustomStatus.
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';

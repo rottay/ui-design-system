@@ -1,8 +1,8 @@
 /**
- * Icon Component Tokens - TypeScript Mirror
+ * @fileoverview Icon component token mirrors.
  *
- * TypeScript representation of Icon CSS custom properties.
- * Use these for type-safe Icon token references.
+ * Covers 6 size tiers (xs-2xl), stroke configuration (width, linecap, linejoin),
+ * transition tokens, and default color/size values.
  */
 
 // Icon Sizes

@@ -176,7 +176,8 @@ export default function RusticBreadcrumb(props: BreadcrumbProps): React.ReactEle
     ...style,
   };
 
-  /** Link styles using CSS variables for theming */
+  // CSS variables with fallback chains (ds-breadcrumb -> ds-color -> hardcoded)
+  // ensure the component works even when no theme variables are defined
   const linkStyle: React.CSSProperties = {
     color: 'var(--ds-breadcrumb-link-color, var(--ds-color-primary-500, #0066CC))',
     textDecoration: 'none',
@@ -203,6 +204,8 @@ export default function RusticBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // Render
   // ---------------------------------------------------------------------------
 
+  // Semantic <nav> with aria-label enables screen readers to identify
+  // this as a breadcrumb navigation landmark
   return (
     <nav className={className} style={containerStyle} aria-label="breadcrumb">
       {displayItems.map((item, index) => (

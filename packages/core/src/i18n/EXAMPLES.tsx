@@ -1,6 +1,9 @@
 /**
- * Ejemplos de uso del sistema i18n
- * Design System Rottay - Wave 0 - Agente D
+ * @fileoverview Runnable usage examples for the i18n subsystem.
+ *
+ * This file is NOT part of the production bundle. It serves as living
+ * documentation showing common patterns: basic setup, namespace scoping,
+ * parameter interpolation, locale switching, and Intl-based formatting.
  */
 
 import { I18nProvider, useTranslation, useLocale, formatDate, formatCurrency } from './index';

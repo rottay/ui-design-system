@@ -1,10 +1,18 @@
 /**
- * @fileoverview AlertDialog Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the AlertDialog component.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the AlertDialog overlay component.
+ * Renders a fully self-contained modal using only inline styles and design-system
+ * CSS custom properties -- no Ant Design or Tailwind dependency required.
  *
- * @module RusticAlertDialog
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <RusticAlertDialog
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ *   title="Permanently delete?"
+ *   description="This cannot be undone."
+ *   action={<button onClick={onDelete}>Delete</button>}
+ * />
+ * ```
  */
 
 'use client';
@@ -13,6 +21,17 @@ import React, { useCallback, useEffect } from 'react';
 import type { AlertDialogProps } from '../AlertDialog.types';
 import { ALERT_DIALOG_DEFAULTS } from '../AlertDialog.types';
 
+/**
+ * AlertDialog implementation using pure inline CSS and DS token variables.
+ *
+ * This engine is designed for environments where neither Ant Design nor Tailwind
+ * are available (e.g. embedded widgets, SSR without CSS extraction). It provides
+ * full ARIA attributes (`role="alertdialog"`, `aria-labelledby`, `aria-describedby`)
+ * and manages scroll lock plus Escape-key dismissal manually.
+ *
+ * @param props - {@link AlertDialogProps} shared across all engines.
+ * @returns A portal-free modal element, or an empty fragment when `open` is false.
+ */
 export default function RusticAlertDialog(props: AlertDialogProps): React.ReactElement {
   const {
     open,
@@ -31,12 +50,14 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
     onOpenChange?.(false);
   }, [onOpenChange]);
 
+  // Only dismiss on backdrop click when explicitly allowed
   const handleBackdropClick = useCallback(() => {
     if (closeOnBackdropClick) {
       onOpenChange?.(false);
     }
   }, [closeOnBackdropClick, onOpenChange]);
 
+  // Keyboard dismissal and scroll lock -- cleaned up on close or unmount
   useEffect(() => {
     if (!open) return;
 
@@ -57,6 +78,9 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
 
   if (!open) return <></>;
 
+  // --- Style objects defined inside render so they read latest props/state ---
+
+  // Fixed full-screen overlay that centres the dialog box
   const backdropStyle: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
@@ -69,6 +93,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
     padding: 'var(--ds-space-4, 1rem)',
   };
 
+  // Card-like dialog container -- consumer `style` prop merges at the end
   const dialogStyle: React.CSSProperties = {
     backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff))',
     borderRadius: 'var(--ds-modal-radius, var(--ds-radius-xl, 16px))',
@@ -80,6 +105,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
     ...style,
   };
 
+  // Circular error badge housing the warning triangle SVG
   const iconContainerStyle: React.CSSProperties = {
     flexShrink: 0,
     width: '40px',
@@ -92,6 +118,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
     color: 'var(--ds-color-error-500, #ff4d4f)',
   };
 
+  // Outlined cancel button styled via DS tokens for border and transitions
   const cancelButtonStyle: React.CSSProperties = {
     padding: '8px 16px',
     borderRadius: 'var(--ds-radius-md, 6px)',
@@ -111,6 +138,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
       onClick={handleBackdropClick}
       data-testid={dataTestId}
     >
+      {/* stopPropagation prevents clicks inside the card from dismissing the dialog */}
       <div
         role="alertdialog"
         aria-modal="true"
@@ -155,6 +183,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
             )}
           </div>
         </div>
+        {/* Action footer -- cancel sits left of the consumer-provided action */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '24px' }}>
           <button
             type="button"

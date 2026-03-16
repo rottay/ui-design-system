@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Tests for tenant CSS fixture exports and injection helpers.
+ */
+
 import { describe, expect, it } from 'vitest';
 
 import {

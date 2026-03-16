@@ -50,12 +50,23 @@
 import React, { useState } from 'react';
 import type { SwitchProps } from '../Switch.types';
 
+/** Maps DS size values to DaisyUI toggle size modifier classes. */
 const sizeClasses = {
   small: 'toggle-sm',
   default: 'toggle-md',
   large: 'toggle-lg',
 };
 
+/**
+ * Modern engine Switch -- built with DaisyUI toggle classes.
+ *
+ * Uses a native checkbox `<input>` styled with DaisyUI's `toggle` class.
+ * Supports controlled and uncontrolled modes, loading state with an adjacent
+ * spinner, and checked/unchecked children labels that swap based on state.
+ *
+ * @param props - {@link SwitchProps} unified switch props shared across engines.
+ * @returns A ref-forwarding toggle switch with DaisyUI/Tailwind styling.
+ */
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   (props, ref) => {
     const {
@@ -76,10 +87,12 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       name,
     } = props;
 
+    // Controlled vs uncontrolled: external `checked` prop takes precedence
     const isControlled = checked !== undefined;
     const [internalChecked, setInternalChecked] = useState(defaultChecked);
     const isChecked = isControlled ? checked : internalChecked;
 
+    /** Syncs internal state (uncontrolled) and notifies parent via onChange. */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newChecked = e.target.checked;
       if (!isControlled) {
@@ -88,6 +101,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       onChange?.(newChecked);
     };
 
+    // onClick receives current checked state plus the event, matching AntD's API
     const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
       onClick?.(isChecked, e as unknown as React.MouseEvent);
     };
@@ -95,7 +109,9 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
 
     return (
+      // Label wrapper provides click-to-toggle behaviour on the entire row
       <label className="inline-flex items-center gap-2 cursor-pointer" style={style}>
+        {/* Show unchecked label only when the switch is OFF */}
         {!isChecked && unCheckedChildren && (
           <span className="text-sm">{unCheckedChildren}</span>
         )}

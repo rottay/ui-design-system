@@ -70,10 +70,14 @@ import type { ThemeContextValue } from '../contracts';
 export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
   if (!context) {
+    // We fail loudly here because theme state affects both runtime CSS loading
+    // and the `data-theme` contract consumed by the token layers.
     throw new Error('useTheme must be used within ThemeProvider');
   }
   return context;
 }
 
-// Re-export for backwards compatibility
+// Re-export for backwards compatibility. Early DS consumers imported
+// `useThemeContext` from this file; the canonical hook now lives in
+// `ThemeProvider.tsx`, but we keep this alias to avoid breaking changes.
 export { useTheme as useThemeContext };

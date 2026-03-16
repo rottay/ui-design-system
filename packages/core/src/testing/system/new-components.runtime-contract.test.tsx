@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Runtime contract tests for recently added components.
+ * Ensures Callout, Kbd, PasswordInput, TagInput, OTPInput, AspectRatio,
+ * ScrollArea, ContextMenu, HoverCard, Sheet, ConfirmDialog, and AlertDialog
+ * render their expected content across all stable engines.
+ */
+
 import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { describe, expect } from 'vitest';

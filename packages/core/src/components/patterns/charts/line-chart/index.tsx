@@ -1,5 +1,22 @@
 'use client';
 
+/**
+ * @fileoverview LineChart -- D3-backed multi-series line chart supporting category, time, and
+ * linear x-axis types. Uses `scalePoint` (category), `scaleTime`, or `scaleLinear` for x depending
+ * on `xType`. Line paths are drawn with D3 `line()` generator and optionally filled with `area()`.
+ * Animation uses the stroke-dashoffset "drawing" trick for a progressive reveal effect.
+ *
+ * @example
+ * <LineChart
+ *   series={[{ name: 'Revenue', data: [{ x: 'Jan', y: 100 }, { x: 'Feb', y: 240 }] }]}
+ *   curved
+ *   showDots
+ *   showArea
+ *   height={350}
+ *   title="Monthly Revenue"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import {
   area,
@@ -25,6 +42,7 @@ import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** Props for the {@link LineChart} component. */
 export interface LineChartProps extends ChartBaseProps {
   series: Series[];
   curved?: boolean;
@@ -35,6 +53,12 @@ export interface LineChartProps extends ChartBaseProps {
   xType?: 'category' | 'time' | 'linear';
 }
 
+/**
+ * Renders a multi-series line chart with optional area fill and interactive dots.
+ *
+ * @param props - See {@link LineChartProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const LineChart = memo(function LineChart({
   series,
   curved,
@@ -98,7 +122,8 @@ export const LineChart = memo(function LineChart({
 
     const allPoints = series.flatMap((s) => s.data);
 
-    // X scale
+    // X scale -- the type union is necessary because D3's scale factories return
+    // incompatible types; the helper `getX` below unifies access with type guards.
     let x: ScalePoint<string> | ScaleTime<number, number> | ScaleLinear<number, number>;
 
     if (xType === 'time') {
@@ -142,12 +167,16 @@ export const LineChart = memo(function LineChart({
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
+    // Polymorphic accessor that narrows the scale type so each data point is
+    // projected through the correct scale without casting at every call site.
     const getX = (d: (typeof allPoints)[0]): number => {
       if (xType === 'time') return (x as ScaleTime<number, number>)(new Date(d.x as string | number | Date));
       if (xType === 'linear') return (x as ScaleLinear<number, number>)(d.x as number);
       return (x as ScalePoint<string>)(String(d.x)) ?? 0;
     };
 
+    // Curve selection is personality-driven: "step" for discrete status charts,
+    // monotoneX for smooth data with guaranteed no overshoot, linear as default.
     const curveType =
       chartPersonality.lineMode === 'step'
         ? curveStepAfter
@@ -155,11 +184,14 @@ export const LineChart = memo(function LineChart({
           ? curveMonotoneX
           : curveLinear;
 
+    // Each series is rendered as its own path (not a single multi-path) so that
+    // individual stroke colors, area fills, and tooltip dot sets stay independent.
     series.forEach((s, i) => {
       const color = s.color ?? colors[i % colors.length];
       const gradientId = `line-chart-area-${i}`;
 
-      // Area
+      // Area fill: when gradient mode is active, a top-to-bottom linearGradient
+      // fades from 32% opacity to 4%, giving depth without obscuring grid lines.
       if (showArea) {
         if (chartPersonality.useGradientFill) {
           const gradient = svg
@@ -211,6 +243,10 @@ export const LineChart = memo(function LineChart({
         .attr('stroke-width', 2)
         .attr('d', linePath);
 
+      // "Drawing" animation using the stroke-dashoffset trick: start with the
+      // entire path hidden behind a dash gap, then animate the offset to zero.
+      // getTotalLength guard handles JSDOM/test environments where SVG methods
+      // may not exist.
       if (chartPersonality.animate) {
         const pathNode = path.node() as SVGPathElement | null;
         const totalLength =

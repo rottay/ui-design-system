@@ -1,3 +1,5 @@
+/** @fileoverview ListSurface integration tests -- filters, table/card views, and row actions. */
+
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

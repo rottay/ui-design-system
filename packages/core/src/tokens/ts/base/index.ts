@@ -1,8 +1,10 @@
 /**
- * Base Tokens Index - TypeScript
+ * @fileoverview Barrel for foundational design tokens.
  *
- * Central export file for all base design tokens.
- * Import from this file to access all foundational design tokens.
+ * Base tokens are the lowest layer in the token hierarchy. They define
+ * global primitives (color scales, spacing grid, font stacks, shadow
+ * elevations, border styles, and z-index layers) that component tokens
+ * and tenant overrides build upon.
  */
 
 // Individual token exports
@@ -21,7 +23,7 @@ import { shadows } from './shadows';
 import { borders } from './borders';
 import { zIndices } from './zIndex';
 
-// Combined base tokens export
+/** Grouped aggregate of all base token categories. */
 export const baseTokens = {
   colors,
   spacing,

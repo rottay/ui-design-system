@@ -1,9 +1,15 @@
 'use client';
 
 /**
- * @fileoverview InputNumber Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the InputNumber component using CSS variables.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview InputNumber Rustic Engine - Rottay Design System.
+ * Pure HTML/CSS implementation using CSS custom properties (--ds-inputnumber-*)
+ * so theming is driven entirely by tenant-level token overrides, with zero
+ * dependency on Ant Design or Tailwind at runtime.
+ *
+ * @example
+ * ```tsx
+ * <InputNumber engine="rustic" min={0} max={100} step={5} precision={2} />
+ * ```
  *
  * @module RusticInputNumber
  * @category Inputs
@@ -13,7 +19,10 @@
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../InputNumber.types';
 
-// Size configuration using CSS variables
+/**
+ * Size configuration referencing CSS variables for each size tier.
+ * Tenants override the underlying --ds-inputnumber-* tokens to control sizing.
+ */
 const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; width: string }> = {
   small: {
     padding: 'var(--ds-inputnumber-sm-padding)',
@@ -32,6 +41,15 @@ const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; width: st
   },
 };
 
+/**
+ * Rustic engine InputNumber built with pure HTML/CSS and design-system CSS variables.
+ * Implements controlled/uncontrolled state, step buttons, keyboard navigation,
+ * precision formatting, and addon slots -- all framework-agnostic.
+ *
+ * @param props - Unified InputNumberProps from the design system contract.
+ * @param ref - Forwarded ref attached to the underlying native `<input>` element.
+ * @returns A theme-aware numeric input rendered without any UI framework dependency.
+ */
 export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
   (props, ref) => {
     const {
@@ -61,17 +79,20 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       name,
     } = props;
 
+    // Controlled vs uncontrolled: parent-supplied `value` takes precedence
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState<number | string | null>(defaultValue ?? null);
     const [isFocused, setIsFocused] = useState(false);
     const currentValue = isControlled ? value : internalValue;
 
+    /** Parse raw string input, returning null for empty/NaN to represent "no value". */
     const parseNumber = (val: string): number | null => {
       if (val === '' || val === '-') return null;
       const parsed = parseFloat(val);
       return isNaN(parsed) ? null : parsed;
     };
 
+    /** Convert numeric value to display string, honoring precision if set. */
     const formatValue = (val: number | string | null | undefined): string => {
       if (val === null || val === undefined) return '';
       const num = typeof val === 'string' ? parseFloat(val) : val;
@@ -90,6 +111,10 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       onChange?.(newValue);
     };
 
+    /**
+     * Step the value up or down, clamping within min/max and reapplying
+     * precision to prevent floating-point arithmetic drift.
+     */
     const handleStep = useCallback((direction: 'up' | 'down') => {
       const current = typeof currentValue === 'string' ? parseFloat(currentValue) : (currentValue ?? 0);
       const stepNum = typeof step === 'string' ? parseFloat(step) : step;
@@ -125,7 +150,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
 
     const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
 
-    // Build class names
+    // Build BEM class names; falsy entries are filtered out before joining
     const containerClasses = [
       'rottay-inputnumber',
       'rottay-inputnumber--rustic',
@@ -136,6 +161,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       className,
     ].filter(Boolean).join(' ');
 
+    /** Resolve border color from CSS variables based on status/focus priority. */
     const getBorderColor = () => {
       if (status === 'error') return 'var(--ds-inputnumber-error-border)';
       if (status === 'warning') return 'var(--ds-inputnumber-warning-border)';
@@ -157,6 +183,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       alignItems: 'center',
     };
 
+    // Adjust border-radius depending on addon presence so edges merge seamlessly
     const inputStyle: React.CSSProperties = {
       padding: sizeConfig.padding,
       paddingLeft: prefix ? '28px' : undefined,

@@ -116,6 +116,8 @@ export default function ClassicPagination(props: PaginationProps): React.ReactEl
       pageSize={pageSize}
       size={SIZE_MAP[size ?? 'md']}
       showSizeChanger={showSizeChanger}
+      // Antd's showTotal expects a render function. We provide a simple
+      // template when showTotal is true; otherwise undefined hides it entirely.
       showTotal={showTotal ? (total) => `Total ${total} items` : undefined}
       disabled={disabled}
       onChange={onChange}

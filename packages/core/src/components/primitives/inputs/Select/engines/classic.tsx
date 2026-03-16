@@ -80,7 +80,8 @@ function getLabelText(label: React.ReactNode): string {
   return '';
 }
 
-// Map our sizes to Ant Design sizes
+// Antd only supports small/middle/large, so xs collapses to small and xl to large.
+// For pixel-precise sizing at xs/xl, use the rustic engine instead.
 const ANT_SIZE_MAP = {
   xs: 'small' as const,
   sm: 'small' as const,
@@ -89,7 +90,8 @@ const ANT_SIZE_MAP = {
   xl: 'large' as const,
 };
 
-// Map our variants to Ant Design variants
+// DS "flushed" variant maps to antd "borderless" -- same visual (no border,
+// only a bottom line on focus) but different naming conventions.
 const ANT_VARIANT_MAP: Record<string, 'outlined' | 'filled' | 'borderless'> = {
   outline: 'outlined',
   filled: 'filled',
@@ -97,14 +99,38 @@ const ANT_VARIANT_MAP: Record<string, 'outlined' | 'filled' | 'borderless'> = {
   default: 'outlined',
 };
 
-// Map our status to Ant Design status
+// Antd Select only supports error/warning status. Success is handled by the
+// DS layer (e.g., Form.Item) rather than the input itself, so we pass undefined.
 const ANT_STATUS_MAP = {
   default: undefined,
   error: 'error' as const,
   warning: 'warning' as const,
-  success: undefined, // Ant doesn't have success status
+  success: undefined,
 };
 
+/**
+ * Classic (Ant Design) Select engine.
+ *
+ * Wraps `antd/Select` behind the Rottay DS prop interface, translating
+ * standardized props (size, variant, status, clearable, searchable) into
+ * their Ant Design equivalents. Supports single and multi-select modes
+ * with built-in search, async loading, and icon-enriched options.
+ *
+ * @param props - Rottay SelectProps (engine-agnostic interface).
+ * @param ref   - Forwarded to the underlying antd Select element.
+ * @returns The rendered Ant Design Select with DS styling classes.
+ *
+ * @example
+ * ```tsx
+ * <ClassicSelect
+ *   options={[{ value: 'a', label: 'Alpha' }]}
+ *   searchable
+ *   clearable
+ *   size="md"
+ *   onChange={(val, opt) => console.log(val, opt)}
+ * />
+ * ```
+ */
 const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
   const { t } = useTranslation('components');
 
@@ -151,10 +177,10 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
   // Determine effective status
   const effectiveStatus = error ? 'error' : status;
 
-  // Handle change with proper typing
+  // Antd's onChange gives back its own option shape (with extra internal props).
+  // We normalize it to the DS SelectOption interface before calling the consumer.
   const handleChange = (val: any, option: any) => {
     if (onChange) {
-      // Convert Ant Design option to our format
       if (Array.isArray(option)) {
         const opts: SelectOption[] = option.map((o: any) => ({
           value: o.value,
@@ -175,7 +201,9 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
     }
   };
 
-  // Convert options to Ant Design format
+  // When an option has an icon, we wrap label + icon into a flex container so
+  // they render inline within antd's dropdown. Antd only supports ReactNode
+  // labels, so this composition happens at the boundary.
   const antOptions = options.map((opt) => ({
     value: opt.value,
     label: opt.icon ? (

@@ -1,9 +1,8 @@
 'use client';
 
 /**
- * PageShell - Pattern Component
- *
- * Engine-aware page shell with breadcrumbs, tabs, and actions.
+ * @fileoverview PageShell pattern -- engine-aware standard page layout
+ * wrapper with title, breadcrumbs, tabs, and action buttons.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

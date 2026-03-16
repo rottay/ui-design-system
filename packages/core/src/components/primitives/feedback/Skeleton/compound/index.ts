@@ -10,9 +10,14 @@
  * **Component Hierarchy:**
  * ```
  * <Skeleton>
- *   <Skeleton.Avatar />  ← Circular/square avatar placeholder
- *   <Skeleton.Text />    ← Multi-line text placeholder
- *   <Skeleton.Button />  ← Button shape placeholder
+ *   <Skeleton.Avatar />    ← Circular/square avatar placeholder
+ *   <Skeleton.Text />      ← Multi-line text placeholder
+ *   <Skeleton.Button />    ← Button shape placeholder
+ *   <Skeleton.Card />      ← Card with optional image and text lines
+ *   <Skeleton.ListItem />  ← List row with optional avatar
+ *   <Skeleton.Table />     ← Table with header and body rows
+ *   <Skeleton.Form />      ← Form with label + input pairs
+ *   <Skeleton.Paragraph /> ← Text block with configurable last-line width
  * </Skeleton>
  * ```
  *
@@ -61,17 +66,37 @@ export type { SkeletonTextProps } from './Text';
 export { SkeletonButton } from './Button';
 export type { SkeletonButtonProps } from './Button';
 
+/**
+ * Card skeleton with optional image area and text lines.
+ * @see {@link SkeletonCardProps}
+ */
 export { SkeletonCard } from './Card';
 export type { SkeletonCardProps } from './Card';
 
+/**
+ * List item skeleton with optional avatar and varied-width text lines.
+ * @see {@link SkeletonListItemProps}
+ */
 export { SkeletonListItem } from './ListItem';
 export type { SkeletonListItemProps } from './ListItem';
 
+/**
+ * Table skeleton with header row and configurable body rows/columns.
+ * @see {@link SkeletonTableProps}
+ */
 export { SkeletonTable } from './Table';
 export type { SkeletonTableProps } from './Table';
 
+/**
+ * Form skeleton with label + input pairs and submit button.
+ * @see {@link SkeletonFormProps}
+ */
 export { SkeletonForm } from './FormSkeleton';
 export type { SkeletonFormProps } from './FormSkeleton';
 
+/**
+ * Paragraph skeleton with configurable last-line width.
+ * @see {@link SkeletonParagraphProps}
+ */
 export { SkeletonParagraph } from './Paragraph';
 export type { SkeletonParagraphProps } from './Paragraph';

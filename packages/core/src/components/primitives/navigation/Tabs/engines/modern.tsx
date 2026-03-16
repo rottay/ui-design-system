@@ -47,6 +47,10 @@ import { TABS_DEFAULTS } from '../Tabs.types';
 /**
  * Maps Rottay tab types to DaisyUI classes.
  */
+// DaisyUI provides `tabs-bordered` (underline) and `tabs-boxed` (filled background).
+// Both "card" and "pills" map to `tabs-boxed` since DaisyUI has no distinct pill
+// variant. The visual difference between card/pills is achieved via the inline
+// type-specific styles returned by `getTabTypeStyle()` below.
 const TYPE_CLASSES: Record<string, string> = {
   line: 'tabs-bordered',
   card: 'tabs-boxed',
@@ -175,8 +179,12 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     className = '',
     style,
   } = props;
+  // useId() generates IDs containing colons which break CSS selectors and
+  // aria-* attribute references, so we strip them for safe DOM id usage
   const tabsId = useId().replace(/:/g, '');
+  // Ref map for imperative focus management during keyboard navigation
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  // Tracked hover state enables type-specific hover styles (e.g., underline preview)
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
   // ============================================================================
@@ -198,6 +206,8 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     onChange?.(key);
   };
 
+  // Filter out disabled items so keyboard navigation only cycles through
+  // actionable tabs, following the WAI-ARIA tabs roving tabindex pattern
   const enabledItems = items.filter((item) => !item.disabled);
 
   const focusAndActivate = useCallback(
@@ -253,8 +263,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   /** Currently active item for content rendering */
   const activeItem = items.find((item: TabItem) => item.key === currentKey);
 
-  // Determine DaisyUI container class based on type
-  // For pills, we use custom styling instead of DaisyUI's boxed which looks like card
+  // For pills, we omit tabs-boxed from the container class because DaisyUI's
+  // boxed style adds a background that conflicts with the pill button appearance.
+  // The pill styling is applied per-button via getTabTypeStyle() instead.
   const tabListClass = type === 'pills'
     ? `tabs ${SIZE_CLASSES[size as TabsSize]} ${centered ? 'justify-center' : ''}`
     : `tabs ${TYPE_CLASSES[type as TabsType]} ${SIZE_CLASSES[size as TabsSize]} ${centered ? 'justify-center' : ''}`;
@@ -322,7 +333,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         </div>
       )}
 
-      {/* Keyframe for panel fade-in */}
+      {/* Injected keyframe for the panel fade-in animation. Using
+          dangerouslySetInnerHTML because React does not support @keyframes
+          in inline style objects. The animation is scoped by its unique name. */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes rottay-tabs-fade-in {
           from { opacity: 0; transform: translateY(2px); }

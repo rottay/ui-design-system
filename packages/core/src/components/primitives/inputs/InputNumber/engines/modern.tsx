@@ -45,12 +45,22 @@
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../InputNumber.types';
 
+/** Maps DS size tokens to DaisyUI input size utility classes. */
 const sizeClasses = {
   small: 'input-sm',
   default: 'input-md',
   large: 'input-lg',
 };
 
+/**
+ * Modern engine InputNumber built with DaisyUI / Tailwind CSS.
+ * Implements controlled/uncontrolled modes, step buttons, keyboard navigation,
+ * and precision formatting without relying on a third-party input-number library.
+ *
+ * @param props - Unified InputNumberProps from the design system contract.
+ * @param ref - Forwarded ref attached to the underlying native `<input>` element.
+ * @returns A DaisyUI-styled numeric input with optional step controls and addons.
+ */
 export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
   (props, ref) => {
     const {
@@ -80,16 +90,19 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       name,
     } = props;
 
+    // Controlled vs uncontrolled: if `value` is provided, the parent owns state
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState<number | string | null>(defaultValue ?? null);
     const currentValue = isControlled ? value : internalValue;
 
+    /** Parse raw input string into a number, returning null for empty/invalid values. */
     const parseNumber = (val: string): number | null => {
       if (val === '' || val === '-') return null;
       const parsed = parseFloat(val);
       return isNaN(parsed) ? null : parsed;
     };
 
+    /** Format a numeric value to string, applying precision if configured. */
     const formatValue = (val: number | string | null | undefined): string => {
       if (val === null || val === undefined) return '';
       const num = typeof val === 'string' ? parseFloat(val) : val;
@@ -108,14 +121,21 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       onChange?.(newValue);
     };
 
+    /**
+     * Increment or decrement the current value by the configured step amount.
+     * Clamps result to min/max bounds and re-applies precision to avoid
+     * floating-point drift (e.g., 0.1 + 0.2 !== 0.3).
+     */
     const handleStep = useCallback((direction: 'up' | 'down') => {
       const current = typeof currentValue === 'string' ? parseFloat(currentValue) : (currentValue ?? 0);
       const stepNum = typeof step === 'string' ? parseFloat(step) : step;
       const offset = direction === 'up' ? stepNum : -stepNum;
       let newValue = current + offset;
 
+      // Clamp to configured bounds
       if (min !== undefined && newValue < min) newValue = min;
       if (max !== undefined && newValue > max) newValue = max;
+      // Re-apply precision to counteract floating-point arithmetic drift
       if (precision !== undefined) {
         newValue = parseFloat(newValue.toFixed(precision));
       }
@@ -127,6 +147,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       onStep?.(newValue, { offset: stepNum, type: direction });
     }, [currentValue, step, min, max, precision, isControlled, onChange, onStep]);
 
+    /** Arrow keys trigger step; Enter fires onPressEnter. preventDefault avoids native scroll. */
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
         onPressEnter?.(e);
@@ -141,6 +162,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       }
     };
 
+    // Normalize DS size tokens ("large"/"small") to DaisyUI class equivalents
     const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
     const statusClass = status === 'error' ? 'input-error' : status === 'warning' ? 'input-warning' : '';
 

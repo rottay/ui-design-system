@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * CompareSurface
- *
- * Product comparison pages and plan matrices show up everywhere: sales,
- * pricing, vendor evaluation, even internal rollout decisions. The surface
- * owns the repeated comparison chrome so those pages stop living as custom
- * one-offs.
+ * @fileoverview CompareSurface -- side-by-side comparison table.
+ * @description Standardizes product comparison pages, plan matrices, and vendor
+ * evaluation screens. Owns the comparison chrome (header row, feature rows,
+ * highlight column) so these pages stop being custom one-offs.
  */
 
 import React from 'react';
@@ -31,16 +29,26 @@ export function CompareSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { tSurface } = useSurfaceTranslations();
   const responsive = useSurfaceResponsiveLayout({ stackOnMobile: true });
+  // Empty state requires both subjects AND at least one populated section.
+  // Having subjects but zero rows (e.g. no features loaded yet) should still
+  // trigger empty state rather than rendering an empty table.
   const hasData =
     config.behavior.subjects.length > 0 && config.behavior.sections.some((section) => section.rows.length > 0);
   const compact = config.visual.compact ?? profileDefaults.compareCompact;
 
+  // The criteria column is synthesized here rather than coming from config
+  // because every comparison table needs it, and its rendering logic is
+  // always the same: label + optional description.
   const columns = [
     {
       key: '__criteria',
+      // Fixed 24% width on desktop keeps the criteria column narrow enough
+      // to leave room for multiple subjects; on mobile it auto-sizes.
       title: tSurface('compare.criteria'),
       width: responsive.shouldStack ? undefined : '24%',
       render: (_: unknown, record: unknown) => {
+        // The Table component erases generics, so we cast back to the
+        // surface's row type for type-safe access.
         const row = record as CompareSurfaceRow;
 
         return (
@@ -116,7 +124,10 @@ export function CompareSurface({
                 </Box>
               )}
 
-              {responsive.shouldStack ? (
+              {/* On mobile, the table layout is unreadable with multiple columns,
+                so we switch to stacked cards where each row becomes a card
+                that lists values per subject vertically. */}
+            {responsive.shouldStack ? (
                 <Stack spacing="md">
                   {section.rows.map((row) => (
                     <Card key={row.key} variant="outlined">
@@ -165,6 +176,9 @@ export function CompareSurface({
                     size={compact ? 'small' : 'default'}
                     rowHoverable={false}
                     locale={{ emptyText: tSurface('compare.empty_description') }}
+                    // Minimum scroll width scales with subject count so columns
+                    // do not compress below readability. 720px floor ensures
+                    // the table never shrinks below a reasonable 2-subject view.
                     scroll={{
                       x: Math.max(720, config.behavior.subjects.length * 220),
                     }}

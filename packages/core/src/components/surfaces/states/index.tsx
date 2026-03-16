@@ -1,15 +1,11 @@
 'use client';
 
 /**
- * Surface state components
- *
- * These wrappers give every surface the same language for:
- * - loading
- * - empty
- * - error
- *
- * Keeping these states centralized is important because page-level mechanics
- * are exactly what the surface layer is supposed to standardize.
+ * @fileoverview Shared surface state components: loading, empty, and error.
+ * @description Centralizes the three universal page states so every surface uses
+ * the same visual language: skeleton-based loading, PatternEmptyState for empty,
+ * and Alert-based error with optional retry. These are internal to the surface
+ * layer -- app code should use the surface component directly.
  */
 
 import type { ReactNode } from 'react';
@@ -35,6 +31,9 @@ export function SurfaceLoadingState({
   const { tSurface } = useSurfaceTranslations();
   const tokens = useTokens();
   const { prefersReducedMotion } = useBreakpoints();
+  // Respect the user's reduced-motion preference by falling back to the
+  // simpler pulse animation. The personality token can also force pulse for
+  // products that prefer a calmer visual style.
   const skeletonAnimation =
     prefersReducedMotion || tokens.personality.animation.skeletonStyle === 'pulse'
       ? 'pulse'
@@ -109,6 +108,8 @@ export function SurfaceErrorState({
   retryLabel,
 }: SurfaceErrorStateProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
+  // Normalize the error into a consistent shape regardless of whether the
+  // caller passed an Error instance, a string, or an unknown object.
   const normalized = normalizeSurfaceError(error);
 
   return (

@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * Personality helpers for surfaces
- *
- * Shared rendering utilities that translate personality profile defaults into
- * concrete visual elements. Each surface composes these to get personality-driven
- * differentiation without duplicating the logic.
+ * @fileoverview Personality rendering helpers for the surface layer.
+ * @description Translates personality profile defaults into concrete visual
+ * elements: accent bars (solid/gradient/animated), heading weights, label text
+ * transforms, and section spacing. Each surface composes these helpers rather
+ * than reimplementing personality-driven differentiation.
  */
 
 import React from 'react';
@@ -63,8 +63,13 @@ export function SurfaceAccentBar({
 
   const isTop = position === 'top';
 
+  // The bar is absolutely positioned inside its container so it does not
+  // affect content flow. The container must have position:relative and
+  // overflow:hidden (handled by SurfaceAccentBarWrapper).
   const baseStyle: React.CSSProperties = {
     position: 'absolute' as const,
+    // Gradient falls back to primary-only when --ds-color-secondary is not
+    // defined, keeping single-brand products visually clean.
     background:
       barStyle === 'gradient'
         ? 'linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)))'
@@ -75,6 +80,9 @@ export function SurfaceAccentBar({
       : { top: 0, left: 0, bottom: 0, width: thickness }),
   };
 
+  // Animated style uses a wider gradient (200%) that shifts via keyframes,
+  // creating a shimmer effect. The keyframe `ds-accent-bar-shimmer` must be
+  // defined in the global DS stylesheet.
   if (barStyle === 'animated') {
     baseStyle.backgroundSize = '200% 100%';
     baseStyle.background =

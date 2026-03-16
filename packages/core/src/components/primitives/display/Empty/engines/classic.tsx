@@ -1,46 +1,14 @@
 /**
- * @fileoverview Empty Classic Engine - Rottay Design System
- * @description Ant Design-based empty state with built-in image presets.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Classic engine for the Empty component, backed by Ant Design.
+ * Wraps antd's Empty to provide built-in image presets (default/simple),
+ * i18n-aware description text, and optional action children.
  *
- * @remarks
- * This engine wraps Ant Design's Empty component to provide
- * feature-rich empty states with ecosystem consistency.
- *
- * **Exported Components:**
- * - `ClassicEmpty` - Main empty state wrapper
- *
- * **Implementation Details:**
- * - Uses `antd/Empty` for core rendering
- * - Built-in PRESENTED_IMAGE_DEFAULT and PRESENTED_IMAGE_SIMPLE
- * - Consistent with Ant Design theming
- * - RTL (right-to-left) support
- *
- * **Ant Design Features:**
- * - Built-in image variants
- * - Theme token integration
- * - Accessible by default
- * - Locale support
- *
- * @example Basic Usage
- * ```tsx
- * import { Empty } from '@rottay/design-system';
- *
- * <Empty engine="classic" />
- * ```
- *
- * @example With Action
+ * @example
  * ```tsx
  * <Empty engine="classic" description="No items">
  *   <Button type="primary">Create Now</Button>
  * </Empty>
  * ```
- *
- * @see {@link Empty} for the main component
- * @see {@link https://ant.design/components/empty} Ant Design Empty
- * @module Empty/engines/classic
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -52,31 +20,15 @@ import { EMPTY_DEFAULTS } from '../Empty.types';
 import { useTranslation } from '../../../../../i18n';
 
 /**
- * Classic implementation of the Empty component.
+ * Classic (Ant Design) implementation of the Empty component.
  *
- * Uses Ant Design's Empty component which provides:
- * - Built-in default and simple image variants
- * - Consistent styling with Ant Design ecosystem
- * - RTL (right-to-left) support
- * - Accessible by default
+ * Maps the DS image prop ("default" | "simple" | ReactNode) to Ant Design's
+ * built-in PRESENTED_IMAGE constants. Falls through to the i18n translation
+ * system for the default description text so the empty state is localised.
  *
- * @example
- * ```tsx
- * // Basic usage
- * <ClassicEmpty />
- *
- * // With simple image variant
- * <ClassicEmpty image="simple" description="No results" />
- *
- * // With action button
- * <ClassicEmpty description="No items">
- *   <Button type="primary">Create Now</Button>
- * </ClassicEmpty>
- * ```
- *
- * @param props - Empty component props
- * @param ref - Forwarded ref to the container element
- * @returns Ant Design Empty component wrapped in a div
+ * @param props - Unified EmptyProps from the design system type contract
+ * @param ref - Forwarded ref attached to the outer wrapper div
+ * @returns Ant Design Empty wrapped in a ref-able container
  */
 const ClassicEmpty = forwardRef<HTMLDivElement, EmptyProps>(
   (props, ref) => {
@@ -91,13 +43,11 @@ const ClassicEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       style,
     } = props;
 
-    // Use translation as default, allow prop override
+    // i18n translation provides the default "No data" text; explicit prop overrides it
     const displayDescription = description ?? t('empty.description');
 
-    /**
-     * Maps the image prop to Ant Design's expected format.
-     * Ant Design has built-in PRESENTED_IMAGE_DEFAULT and PRESENTED_IMAGE_SIMPLE.
-     */
+    // Resolve string shorthand ("default"/"simple") to Ant Design's built-in
+    // SVG constants; pass ReactNode images through unchanged for custom illustrations
     const resolveImage = () => {
       if (image === 'default') {
         return AntEmpty.PRESENTED_IMAGE_DEFAULT;

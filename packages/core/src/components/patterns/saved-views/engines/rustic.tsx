@@ -1,12 +1,37 @@
 'use client';
 
 /**
- * SavedViewsBar - Rustic Engine (Inline styles with CSS variables)
+ * @fileoverview Rustic (Vanilla/CSS-variable) engine for the SavedViews bar pattern.
+ * Zero external UI library dependency -- renders a horizontal tab strip with
+ * inline styles referencing `--ds-*` CSS custom properties. Supports drag-and-drop
+ * reorder, inline rename, a hand-crafted context menu (rename/duplicate/delete +
+ * custom actions), and an inline "Create view" input. Mouse-hover background
+ * effects are applied via inline onMouseEnter/Leave handlers since no CSS
+ * framework is available.
+ *
+ * @example
+ * <RusticSavedViewsBar
+ *   views={[{ id: '1', name: 'Default', isDefault: true, config: {} }]}
+ *   activeViewId="1"
+ *   onViewSelect={(id) => applyView(id)}
+ *   onViewCreate={(v) => saveNewView(v)}
+ *   onViewDelete={(id) => removeView(id)}
+ *   onViewRename={(id, name) => renameView(id, name)}
+ * />
  */
 
 import React, { useCallback, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 
+/**
+ * Rustic engine saved views bar using only inline styles and CSS variables.
+ * Mirrors Classic/Modern feature set (tab strip, DnD reorder, rename, duplicate,
+ * delete, custom actions, create) without any third-party UI dependency.
+ * Hover effects use onMouseEnter/Leave since no CSS pseudo-classes are available.
+ *
+ * @param props - {@link SavedViewsBarProps}
+ * @returns A horizontal flex container acting as a tab bar for saved views.
+ */
 export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
   const {
     views,
@@ -30,11 +55,14 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
     style,
   } = props;
 
+  // --- Local UI state ---
   const [isCreating, setIsCreating] = useState(false);
   const [newViewName, setNewViewName] = useState('');
   const [editingViewId, setEditingViewId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
+  // Tracks which view's context menu is open; only one can be open at a time.
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  // Drag-and-drop state for visual feedback during tab reorder.
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -87,6 +115,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
     [dragViewId]
   );
 
+  // Reorders by splicing the dragged view out of its old position and inserting
+  // it at the drop target's position, then emitting the new ID order array.
   const handleDrop = useCallback(
     (e: React.DragEvent, targetViewId: string) => {
       e.preventDefault();
@@ -131,6 +161,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
     );
   }
 
+  // Disable creation when maxViews cap is reached (e.g. plan-based limits).
   const canCreate = allowCreate && (!maxViews || views.length < maxViews);
 
   return (
@@ -383,6 +414,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                         {action.label}
                       </button>
                     ))}
+                    {/* Default views are protected from deletion to prevent
+                        accidental removal of the system-provided baseline. */}
                     {allowDelete && !view.isDefault && (
                       <>
                         <div

@@ -1,5 +1,26 @@
 'use client';
 
+/**
+ * @fileoverview HeatMap -- D3-backed matrix heatmap using `scaleBand` for both axes and
+ * `scaleSequential` with `interpolateRgb` for the two-stop colour gradient. Each cell is a
+ * rounded `<rect>` positioned by the band scales. The sequential scale maps the data's min-max
+ * range to the provided `colorRange`, making it suitable for magnitude displays (not diverging
+ * data). Cells animate with a staggered fade-in on mount.
+ *
+ * @example
+ * <HeatMap
+ *   data={[
+ *     { x: 'Mon', y: '9am', value: 12 },
+ *     { x: 'Mon', y: '10am', value: 8 },
+ *     { x: 'Tue', y: '9am', value: 20 },
+ *   ]}
+ *   colorRange={['#eef', '#3366ff']}
+ *   cellRadius={4}
+ *   height={300}
+ *   title="Weekly Activity"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import { axisBottom, axisLeft, extent, interpolateRgb, scaleBand, scaleSequential, select } from 'd3';
 
@@ -8,6 +29,7 @@ import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** Props for the {@link HeatMap} component. */
 export interface HeatMapProps extends ChartBaseProps {
   data: { x: string; y: string; value: number }[];
   xLabels?: string[];
@@ -16,6 +38,12 @@ export interface HeatMapProps extends ChartBaseProps {
   cellRadius?: number;
 }
 
+/**
+ * Renders a matrix heatmap using D3's `scaleBand` for axes and `scaleSequential` for colour.
+ *
+ * @param props - See {@link HeatMapProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table.
+ */
 export const HeatMap = memo(function HeatMap({
   data,
   xLabels: xLabelsProp,
@@ -55,12 +83,19 @@ export const HeatMap = memo(function HeatMap({
     const innerWidth = chartWidth - margin.left - margin.right;
     const innerHeight = chartHeight - margin.top - margin.bottom;
 
+    // Derive axis labels from data when the consumer does not provide them
+    // explicitly; Set preserves insertion order for a stable axis layout.
     const xLabels = xLabelsProp ?? [...new Set(data.map((d) => d.x))];
     const yLabels = yLabelsProp ?? [...new Set(data.map((d) => d.y))];
 
+    // 5% padding between cells visually separates them while preserving the
+    // grid alignment; bandwidth() accounts for this padding automatically.
     const x = scaleBand().domain(xLabels).range([0, innerWidth]).padding(0.05);
     const y = scaleBand().domain(yLabels).range([0, innerHeight]).padding(0.05);
 
+    // Sequential color scale maps the data's value range to a two-stop gradient.
+    // This is preferred over a diverging scale because heatmaps here represent
+    // magnitude, not deviation from a midpoint.
     const [minVal, maxVal] = extent(data, (d) => d.value) as [number, number];
     const colorScale = scaleSequential().domain([minVal, maxVal]).interpolator(interpolateRgb(colorRange[0], colorRange[1]));
 
@@ -87,6 +122,8 @@ export const HeatMap = memo(function HeatMap({
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px');
 
+    // Each cell is one rect whose fill is computed via the sequential colour
+    // scale. The staggered 10ms delay creates a "wave" reveal across the matrix.
     const cells = g
       .selectAll('.cell')
       .data(data)

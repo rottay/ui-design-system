@@ -1,6 +1,13 @@
 /**
- * @fileoverview PasswordInput Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the PasswordInput component.
+ * @fileoverview PasswordInput Rustic Engine - Rottay Design System.
+ * Pure HTML/CSS implementation using CSS custom properties (--ds-color-*,
+ * --ds-radius-*, --ds-font-family-base) so theming is driven entirely by
+ * tenant-level token overrides, with zero dependency on Ant Design or Tailwind.
+ *
+ * @example
+ * ```tsx
+ * <PasswordInput engine="rustic" variant="flushed" showToggle strengthIndicator strengthLevel="weak" />
+ * ```
  *
  * @module RusticPasswordInput
  * @category Inputs
@@ -13,6 +20,7 @@ import React, { useState, useCallback, useId } from 'react';
 import type { PasswordInputProps } from '../PasswordInput.types';
 import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../PasswordInput.types';
 
+/** Fixed pixel dimensions for each size tier (xs through xl). */
 const SIZE_STYLES: Record<string, React.CSSProperties> = {
   xs: { height: '24px', fontSize: '12px', padding: '0 8px' },
   sm: { height: '28px', fontSize: '13px', padding: '0 10px' },
@@ -21,6 +29,15 @@ const SIZE_STYLES: Record<string, React.CSSProperties> = {
   xl: { height: '48px', fontSize: '18px', padding: '0 16px' },
 };
 
+/**
+ * Rustic engine PasswordInput built with pure HTML/CSS and design-system CSS variables.
+ * Supports four variant modes (outlined, filled, flushed, unstyled), a custom
+ * visibility toggle with inline SVG icons, a strength indicator bar, and focus
+ * ring via JS-managed state for cross-browser consistency.
+ *
+ * @param props - Unified PasswordInputProps from the design system contract.
+ * @returns A theme-aware password input rendered without any UI framework dependency.
+ */
 export default function RusticPasswordInput(props: PasswordInputProps): React.ReactElement {
   const {
     size = PASSWORD_INPUT_DEFAULTS.size,
@@ -54,7 +71,9 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
 
   const generatedId = useId();
   const inputId = providedId || `password-rustic-${generatedId}`;
+  // Local toggle state for password visibility (not exposed to parent)
   const [visible, setVisible] = useState(false);
+  // Track focus to apply ring shadow via inline styles (cross-browser safe)
   const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +99,7 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
 
   const sizeStyle = SIZE_STYLES[size] || SIZE_STYLES.md;
 
+  /** Resolve border color from CSS variables based on error/focus priority. */
   const getBorderColor = () => {
     if (error) return 'var(--ds-color-error-500, #ff4d4f)';
     if (isFocused) return 'var(--ds-color-primary-500, #1890ff)';
@@ -100,6 +120,8 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
     alignItems: 'center',
   };
 
+  // Variant-aware border and border-radius: flushed shows only a bottom border,
+  // unstyled removes all borders, filled adds a background tint
   const inputStyle: React.CSSProperties = {
     ...sizeStyle,
     width: '100%',

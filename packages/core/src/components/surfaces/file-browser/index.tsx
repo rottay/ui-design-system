@@ -1,11 +1,9 @@
 'use client';
 
 /**
- * FileBrowserSurface
- *
- * Full-page file management surface wrapping PatternFileManager inside
- * PageShellSurface. The surface owns the page chrome while delegating the
- * file browsing UI to the underlying pattern.
+ * @fileoverview FileBrowserSurface -- full-page file management shell.
+ * @description Wraps PatternFileManager inside PageShellSurface. The surface owns
+ * page chrome and toolbar actions; the pattern owns the file browsing UI.
  */
 
 import React from 'react';
@@ -25,6 +23,10 @@ export function FileBrowserSurface({
 }: FileBrowserSurfaceProps): React.ReactElement {
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
 
+  // Files and folders are mapped separately because the pattern requires
+  // discriminated union types (`type: 'file'` vs `type: 'folder'`). The
+  // surface config uses a looser string type, so we narrow here with a cast
+  // to satisfy the pattern's contract.
   const files = config.behavior.files.map((f) => ({
     id: f.id,
     name: f.name,

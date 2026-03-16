@@ -1,5 +1,7 @@
 /**
- * Traducciones en Español
+ * @fileoverview Spanish (es-ES) translation dictionary -- the default locale.
+ *
+ * Aggregates namespace JSON files into a typed `LocaleTranslations` object.
  */
 
 import common from './common.json';

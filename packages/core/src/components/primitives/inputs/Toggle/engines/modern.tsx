@@ -1,46 +1,13 @@
 /**
- * @fileoverview Toggle Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Toggle component.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Modern engine for Toggle, built with DaisyUI's `toggle` checkbox classes.
+ * Uses a native `<input type="checkbox" role="switch">` for full accessibility, with
+ * DaisyUI handling the visual track/dot via CSS-only transforms.
  *
- * @remarks
- * The Modern engine implements toggles using DaisyUI's toggle classes
- * with Tailwind CSS utilities. It provides a lightweight alternative
- * with utility-first styling.
- *
- * **DaisyUI Classes Used:**
- * - `toggle` - Base toggle styling
- * - `toggle-{size}` - Size variants (xs, sm, lg)
- * - `toggle-{color}` - Color variants (primary, secondary, success, warning, error)
- * - `form-control` - Form wrapper styling
- * - `label`, `label-text`, `label-text-alt` - Label styling
- *
- * **Tailwind Utilities:**
- * - `flex`, `flex-col`, `gap-*` - Layout utilities
- * - `opacity-50`, `cursor-not-allowed` - Disabled state
- * - `flex-row-reverse`, `justify-end` - Label placement
- *
- * **Accessibility:**
- * - Native checkbox with role="switch"
- * - aria-checked and aria-invalid attributes
- * - Proper label association
- *
- * @example Using Modern Engine
+ * @example
  * ```tsx
- * import { Toggle } from '@rottay/design-system';
- *
- * <Toggle
- *   engine="modern"
- *   color="primary"
- *   size="lg"
- *   label="Enable feature"
- *   className="my-4"
- * />
+ * <Toggle engine="modern" color="primary" size="lg" label="Enable feature" />
  * ```
  *
- * @see {@link Toggle} for the main component
- * @see {@link ClassicToggle} for Ant Design implementation
- * @see {@link RusticToggle} for vanilla implementation
  * @module ModernToggle
  * @category Inputs
  * @package @rottay/design-system
@@ -52,7 +19,7 @@ import React, { useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../Toggle.types';
 import { TOGGLE_DEFAULTS } from '../Toggle.types';
 
-// DaisyUI size classes
+/** DaisyUI size modifiers. 'md' is the default size so no class is needed; 'xl' reuses 'lg'. */
 const DAISY_SIZE_MAP = {
   xs: 'toggle-xs',
   sm: 'toggle-sm',
@@ -61,7 +28,7 @@ const DAISY_SIZE_MAP = {
   xl: 'toggle-lg',
 };
 
-// DaisyUI color classes
+/** DaisyUI color modifiers. 'default' uses DaisyUI's base toggle color (neutral). */
 const DAISY_COLOR_MAP = {
   default: '',
   primary: 'toggle-primary',
@@ -71,6 +38,17 @@ const DAISY_COLOR_MAP = {
   error: 'toggle-error',
 };
 
+/**
+ * Modern (DaisyUI) implementation of Toggle.
+ *
+ * Renders a native checkbox with `role="switch"` styled via DaisyUI utility classes.
+ * Supports controlled and uncontrolled modes, label placement (start/end), and an
+ * optional description line beneath the label. Error state forces `toggle-error`
+ * regardless of the color prop to ensure visual consistency.
+ *
+ * @param props - Standard ToggleProps shared across all engines.
+ * @returns A form-control wrapper containing a labeled checkbox toggle.
+ */
 export default function ModernToggle(props: ToggleProps): React.ReactElement {
   const {
     size = TOGGLE_DEFAULTS.size,
@@ -96,7 +74,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
   const generatedId = useId();
   const inputId = providedId || `toggle-modern-${generatedId}`;
 
-  // Internal state for uncontrolled mode
+  // Dual-mode state: controlled when `checked` prop is provided, uncontrolled otherwise
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
@@ -108,6 +86,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     onChange?.(e.target.checked, e);
   }, [isControlled, onChange]);
 
+  // Error state overrides the color class to ensure the toggle is visually marked
   const toggleClasses = [
     'toggle',
     DAISY_SIZE_MAP[size],

@@ -59,13 +59,21 @@ import {
   type ResponsiveGridTemplateValue,
 } from '../shared/responsive';
 
-// Inline utility functions
+/**
+ * Converts a semantic gap token or raw pixel number into a CSS-compatible string.
+ * Semantic tokens are resolved through GAP_MAP from Grid.types.
+ */
 const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   if (gap === undefined) return undefined;
   if (typeof gap === 'number') return `${gap}px`;
   return GAP_MAP[gap as GridGap] || String(gap);
 };
 
+/**
+ * Converts a column/row definition into a CSS grid-template value.
+ * Numeric values become `repeat(N, 1fr)` for equal-width tracks;
+ * strings pass through to support custom templates like '2fr 1fr'.
+ */
 const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): string | undefined => {
   if (columns === undefined) return undefined;
   if (columns === 'auto') return 'auto';
@@ -75,14 +83,27 @@ const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): strin
   return undefined;
 };
 
+/**
+ * Assembles the complete inline CSSProperties for the grid container.
+ *
+ * Since the rustic engine is dependency-free, every CSS Grid property is
+ * expressed as an inline style. The `skipResponsiveTemplate` flag prevents
+ * inline template columns/rows when responsive media-query CSS handles them.
+ *
+ * @param props - The full set of GridProps from the consumer.
+ * @param skipResponsiveTemplate - Omit gridTemplateColumns/Rows (handled by injected CSS).
+ * @returns A CSSProperties object to spread onto the container element.
+ */
 const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSProperties => {
   const {
     columns, rows, gap, spacing, columnGap, rowGap, templateColumns, templateRows,
     templateAreas, autoFlow, autoColumns, autoRows, alignItems, justifyItems,
     placeItems, alignContent, justifyContent, width, height, minHeight, maxWidth, inline, style,
   } = props;
+  // `spacing` is a legacy alias for `gap`; fall back to the configured default
   const effectiveGap = gap ?? spacing ?? GRID_DEFAULTS.gap;
   const computedStyle: CSSProperties = { display: inline ? 'inline-grid' : 'grid', ...style };
+  // Explicit templateColumns takes priority over the `columns` shorthand
   if (templateColumns) computedStyle.gridTemplateColumns = templateColumns;
   else if (!skipResponsiveTemplate && columns !== undefined && !isResponsiveGridValue(columns)) computedStyle.gridTemplateColumns = resolveColumns(columns as ResponsiveGridTemplateValue);
   if (templateRows) computedStyle.gridTemplateRows = templateRows;
@@ -95,6 +116,7 @@ const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSP
   if (autoFlow) computedStyle.gridAutoFlow = autoFlow;
   if (autoColumns) computedStyle.gridAutoColumns = autoColumns;
   if (autoRows) computedStyle.gridAutoRows = autoRows;
+  // placeItems is the shorthand; when present it overrides individual axes
   if (placeItems) computedStyle.placeItems = placeItems;
   else { if (alignItems) computedStyle.alignItems = alignItems; if (justifyItems) computedStyle.justifyItems = justifyItems; }
   if (alignContent) computedStyle.alignContent = alignContent;
@@ -106,18 +128,28 @@ const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSP
   return computedStyle;
 };
 
+/**
+ * Assembles inline CSSProperties for a grid item.
+ *
+ * Handles named areas, explicit column/row placement, and span shorthands
+ * entirely through inline styles (no external CSS classes needed).
+ */
 const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
   const { span, colSpan, rowSpan, colStart, colEnd, rowStart, rowEnd, area, alignSelf, justifySelf, placeSelf, zIndex, style } = props;
   const computedStyle: CSSProperties = { ...style };
+  // Named area sets gridArea and bypasses col/row placement entirely
   if (area) computedStyle.gridArea = area;
   else {
+    // `span` is a convenience alias for `colSpan`
     const effectiveColSpan = colSpan ?? span;
+    // Build gridColumn shorthand: "start / span N" or "start / end" or "span N"
     if (colStart !== undefined || colEnd !== undefined || effectiveColSpan !== undefined) {
       let col = colStart !== undefined ? String(colStart) : '';
       if (effectiveColSpan !== undefined) col = col ? `${col} / span ${effectiveColSpan}` : `span ${effectiveColSpan}`;
       else if (colEnd !== undefined) col = col ? `${col} / ${colEnd}` : `auto / ${colEnd}`;
       if (col) computedStyle.gridColumn = col;
     }
+    // Same logic for row placement
     if (rowStart !== undefined || rowEnd !== undefined || rowSpan !== undefined) {
       let row = rowStart !== undefined ? String(rowStart) : '';
       if (rowSpan !== undefined) row = row ? `${row} / span ${rowSpan}` : `span ${rowSpan}`;
@@ -132,8 +164,14 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
 };
 
 /**
- * Rustic Grid component
- * Pure HTML/CSS implementation with CSS Grid layout
+ * Rustic Grid container using pure inline CSS styles.
+ *
+ * All CSS Grid properties are expressed as inline styles for zero external
+ * dependencies. Responsive breakpoint objects trigger a scoped `<style>` block
+ * with media queries, which is the only non-inline CSS this engine produces.
+ *
+ * @param props - Grid container props including columns, rows, gap, template overrides, etc.
+ * @returns A polymorphic, ref-forwarding grid container element.
  */
 const RusticGrid = forwardRef<HTMLElement, GridProps>(
   (props, ref) => {
@@ -148,11 +186,13 @@ const RusticGrid = forwardRef<HTMLElement, GridProps>(
       'data-testid': dataTestId,
     } = props;
 
+    // SSR-safe unique ID for scoping responsive media-query CSS
     const reactId = useId();
     const gridId = `grid-${reactId.replace(/:/g, '')}`;
     const hasResponsiveColumns = isResponsiveGridValue(columns);
     const hasResponsiveRows = isResponsiveGridValue(rows);
     const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
+    // Skip inline template when responsive CSS will provide it via media queries
     const computedStyle = buildGridStyles(props, needsResponsiveCSS);
     const responsiveCSS = needsResponsiveCSS
       ? generateResponsiveGridCSS(
@@ -190,7 +230,14 @@ const RusticGrid = forwardRef<HTMLElement, GridProps>(
 RusticGrid.displayName = 'RusticGrid';
 
 /**
- * Rustic GridItem component
+ * Rustic GridItem component for positioning children within a RusticGrid.
+ *
+ * Renders a polymorphic element with pure inline CSS for grid placement.
+ * All positioning (span, start/end, named areas) is expressed without
+ * any external CSS framework dependency.
+ *
+ * @param props - Grid item positioning props (span, colSpan, rowSpan, area, etc.)
+ * @returns A polymorphic, ref-forwarding grid item element.
  */
 const RusticGridItem = forwardRef<HTMLElement, GridItemProps>(
   (props, ref) => {

@@ -4,8 +4,7 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This module re-exports types from the centralized types definition
- * and provides default values and configuration maps for the Tag component.
+ * This module provides default values and configuration maps for the Tag component.
  *
  * **Exported Types:**
  * - `TagProps` - Main component props interface
@@ -32,11 +31,82 @@
  * @package @rottay/design-system
  */
 
-export type {
-  TagProps,
-  TagSize,
-  TagVariant,
-} from '../../../../contracts/primitives/display/Tag';
+import type { ReactNode } from 'react';
+import type { BaseComponentProps, Size, Variant, WithChildren } from '../../../../contracts/common';
+import type { EngineAwareProps } from '../../../../contracts/engine';
+
+/** Tag size type alias derived from the global Size scale. */
+export type TagSize = Size;
+
+/**
+ * Tag variants.
+ */
+export type TagVariant = Variant;
+
+/**
+ * Tag component props.
+ */
+export interface TagProps extends BaseComponentProps, EngineAwareProps, WithChildren {
+  /**
+   * Tag size.
+   * @default 'md'
+   */
+  size?: TagSize;
+
+  /**
+   * Tag color variant.
+   * @default 'default'
+   */
+  variant?: TagVariant;
+
+  /**
+   * Tag icon.
+   */
+  icon?: ReactNode;
+
+  /**
+   * Whether the tag can be closed.
+   * @default false
+   */
+  closable?: boolean;
+
+  /**
+   * Tag close callback.
+   */
+  onClose?: () => void;
+
+  /**
+   * Whether the tag is clickable.
+   */
+  clickable?: boolean;
+
+  /**
+   * Tag click callback.
+   */
+  onClick?: () => void;
+
+  /**
+   * Whether the tag has a border.
+   * @default false
+   */
+  bordered?: boolean;
+
+  /**
+   * Tag border radius.
+   * @default 'md'
+   */
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+
+  /**
+   * Custom tag color.
+   */
+  color?: string;
+
+  /**
+   * Whether the tag has an "outlined" style.
+   */
+  outlined?: boolean;
+}
 
 /**
  * Tag radius options for border-radius customization.
@@ -89,35 +159,53 @@ export const RADIUS_MAP: Record<TagRadius, string> = {
 };
 
 /**
- * Color mapping for semantic variants.
- * Provides consistent color values for solid, outline, and subtle styles.
+ * Color mapping for semantic tag variants.
+ *
+ * Each variant provides three visual styles:
+ * - `solid` - Filled background with contrasting text.
+ * - `outline` - Transparent background with colored border and text.
+ * - `subtle` - Light-tinted background with colored text, no visible border.
+ *
+ * All values reference CSS custom properties for multi-tenant theming support.
+ *
+ * @constant
+ * @example
+ * ```ts
+ * const { bg, text, border } = VARIANT_COLORS.success.solid;
+ * ```
  */
 export const VARIANT_COLORS = {
+  /** Neutral / default colors for general-purpose tags. */
   default: {
     solid: { bg: 'var(--ds-color-neutral-200)', text: 'var(--ds-color-neutral-700)', border: 'var(--ds-color-neutral-300)' },
     outline: { bg: 'transparent', text: 'var(--ds-color-neutral-700)', border: 'var(--ds-color-neutral-400)' },
     subtle: { bg: 'var(--ds-color-neutral-100)', text: 'var(--ds-color-neutral-700)', border: 'transparent' },
   },
+  /** Primary brand color for emphasis and key actions. */
   primary: {
     solid: { bg: 'var(--ds-color-primary-500)', text: 'white', border: 'var(--ds-color-primary-500)' },
     outline: { bg: 'transparent', text: 'var(--ds-color-primary-500)', border: 'var(--ds-color-primary-500)' },
     subtle: { bg: 'var(--ds-color-primary-100)', text: 'var(--ds-color-primary-500)', border: 'transparent' },
   },
+  /** Secondary color for complementary or supporting tags. */
   secondary: {
     solid: { bg: 'var(--ds-color-secondary-500)', text: 'white', border: 'var(--ds-color-secondary-500)' },
     outline: { bg: 'transparent', text: 'var(--ds-color-secondary-500)', border: 'var(--ds-color-secondary-500)' },
     subtle: { bg: 'var(--ds-color-secondary-100)', text: 'var(--ds-color-secondary-500)', border: 'transparent' },
   },
+  /** Success color for positive states (e.g., "Active", "Approved"). */
   success: {
     solid: { bg: 'var(--ds-color-success-500)', text: 'white', border: 'var(--ds-color-success-500)' },
     outline: { bg: 'transparent', text: 'var(--ds-color-success-500)', border: 'var(--ds-color-success-500)' },
     subtle: { bg: 'var(--ds-color-success-100)', text: 'var(--ds-color-success-500)', border: 'transparent' },
   },
+  /** Warning color for cautionary states (e.g., "Pending", "Expiring"). */
   warning: {
     solid: { bg: 'var(--ds-color-warning-500)', text: 'white', border: 'var(--ds-color-warning-500)' },
     outline: { bg: 'transparent', text: 'var(--ds-color-warning-500)', border: 'var(--ds-color-warning-500)' },
     subtle: { bg: 'var(--ds-color-warning-100)', text: 'var(--ds-color-warning-500)', border: 'transparent' },
   },
+  /** Error color for negative states (e.g., "Failed", "Rejected"). */
   error: {
     solid: { bg: 'var(--ds-color-error-500)', text: 'white', border: 'var(--ds-color-error-500)' },
     outline: { bg: 'transparent', text: 'var(--ds-color-error-500)', border: 'var(--ds-color-error-500)' },

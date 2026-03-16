@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Integration tests verifying personality tokens propagate to
+ * runtime CSS variables and inline styles for Button, Card, Badge, Tag,
+ * Skeleton, Divider, Statistic, and Typography across all engines. Also
+ * validates that switching product profiles and tenants updates resolved tokens.
+ */
+
 import React, { Suspense } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';

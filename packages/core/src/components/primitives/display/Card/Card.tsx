@@ -1,72 +1,23 @@
 'use client';
 
 /**
- * @fileoverview Card - Rottay Design System
- * @description Container component for grouping related content and actions.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Card - Container for grouping related content and actions.
+ * Provides Header, Body, Footer, and Image compound sub-components for
+ * structured layouts with configurable variants, padding, and interactions.
  *
- * @remarks
- * The Card component provides a flexible container for displaying content
- * with optional header, body, footer, and cover image sections.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design Card with skeleton loading
- * - **Modern**: DaisyUI card classes with Tailwind utilities
- * - **Rustic**: Pure CSS implementation with zero dependencies
- *
- * **Key Features:**
- * - Multiple variants (elevated, outlined, filled, ghost)
- * - Configurable padding, radius, and shadow
- * - Cover image with top/bottom positioning
- * - Loading state with skeleton/spinner
- * - Hoverable and clickable interactions
- * - Action slots for buttons
- *
- * **Compound Components:**
- * - `Card.Header` - Title, subtitle, and extra content
- * - `Card.Body` - Main content area
- * - `Card.Footer` - Actions and alignment options
- * - `Card.Image` - Cover image with overlay support
- *
- * **CSS Custom Properties:**
- * - `--ds-card-{variant}-bg` - Background color per variant
- * - `--ds-card-{size}-padding` - Content padding
- * - `--ds-card-{size}-shadow` - Shadow elevation
- * - `--ds-card-border-default` - Border color
- *
- * @example Basic Card
+ * @example
  * ```tsx
  * import { Card } from '@rottay/design-system';
  *
  * <Card variant="elevated" padding="md">
  *   <Card.Header title="Card Title" subtitle="Subtitle" />
- *   <Card.Body>
- *     <p>Card content goes here</p>
- *   </Card.Body>
- *   <Card.Footer actions={[<Button>Action</Button>]} />
+ *   <Card.Body>Content here</Card.Body>
+ *   <Card.Footer actions={[<Button>Save</Button>]} />
  * </Card>
  * ```
  *
- * @example Clickable Card
- * ```tsx
- * <Card hoverable clickable onClick={handleClick}>
- *   <Card.Body>Click me!</Card.Body>
- * </Card>
- * ```
- *
- * @example Engine Override
- * ```tsx
- * <Card engine="modern" variant="outlined">
- *   <p>DaisyUI styled card</p>
- * </Card>
- * ```
- *
- * @see {@link CardProps} for available props
- * @see {@link CardHeader} for header configuration
- * @see {@link CardBody} for body configuration
  * @module Card
  * @category Display
- * @package @rottay/design-system
  */
 
 import { createElement, forwardRef } from 'react';
@@ -80,7 +31,6 @@ import {
 import type { CardProps } from './Card.types';
 import { CardHeader, CardBody, CardFooter, CardImage } from './compound';
 
-// Export types
 export type {
   CardProps,
   CardVariant,
@@ -94,36 +44,22 @@ export type {
 
 export { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from './Card.types';
 
-// Export compound components
 export { CardHeader, CardBody, CardFooter, CardImage };
 
-// Export base component
-
-/**
- * Card component with engine-aware routing.
- *
- * The Card component automatically selects the appropriate rendering engine
- * (Classic, Modern, or Rustic) based on the application's EngineProvider context
- * or an explicit `engine` prop.
- *
- * Available compound components:
- * - `Card.Header` - Header section with title, subtitle, avatar, and extra content
- * - `Card.Body` - Main content area with configurable padding
- * - `Card.Footer` - Footer section with actions and alignment options
- * - `Card.Image` - Image section with overlay and gradient support
- *
- * @component
- * @see {@link CardHeader} for header configuration
- * @see {@link CardBody} for body configuration
- * @see {@link CardFooter} for footer configuration
- * @see {@link CardImage} for image configuration
- */
+/** Engine-routed base -- consumers use the public `Card` export below. */
 const CardBase = createEngineComponent<CardProps>('Card', {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
     rustic: () => import('./engines/rustic'),
   });
 
+/**
+ * Personality wrapper for Card.
+ *
+ * Resolves structural defaults (border, hover, padding) from the tenant's
+ * personality tokens so every Card in the app shares a consistent feel
+ * without explicit overrides. Explicit props always win over defaults.
+ */
 const CardComponent = forwardRef<any, CardProps>((props, ref) => {
   const tokens = useOptionalTokens();
   const defaults = tokens ? resolveCardPersonalityDefaults(tokens) : null;
@@ -138,6 +74,7 @@ const CardComponent = forwardRef<any, CardProps>((props, ref) => {
   return createElement(CardBase, {
     ref,
     ...rest,
+    // Personality defaults stay opt-in: explicit props from consumers always win.
     padding: padding ?? defaults?.padding,
     bordered: bordered ?? defaults?.bordered,
     hoverable: hoverable ?? defaults?.hoverable,
@@ -147,16 +84,20 @@ const CardComponent = forwardRef<any, CardProps>((props, ref) => {
 
 CardComponent.displayName = 'Card';
 
+/**
+ * Public Card with compound sub-components attached.
+ * Each sub-component handles a discrete section of the card layout.
+ */
 export const Card = Object.assign(
   CardComponent,
   {
-    /** Header compound component for card title area */
+    /** Title area with optional subtitle, avatar, and extra content slot. */
     Header: CardHeader,
-    /** Body compound component for main content */
+    /** Primary content region with configurable internal padding. */
     Body: CardBody,
-    /** Footer compound component for actions */
+    /** Bottom section for actions, typically buttons with alignment options. */
     Footer: CardFooter,
-    /** Image compound component for media content */
+    /** Cover image with optional gradient overlay and positioning. */
     Image: CardImage,
   }
 );

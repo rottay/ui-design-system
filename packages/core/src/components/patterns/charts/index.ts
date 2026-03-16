@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Charts barrel -- re-exports all D3-backed chart components,
+ * shared types, color palettes, and the useChartPersonality hook. Charts are
+ * not engine-based; they render SVG directly using D3 and respect design-system
+ * tokens via the personality hook.
+ */
+
 // Types
 export type {
   ChartBaseProps,

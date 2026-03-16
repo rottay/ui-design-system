@@ -1,5 +1,26 @@
 'use client';
 
+/**
+ * @fileoverview FunnelChart -- D3-backed funnel visualization rendered as tapering polygons.
+ * Each stage is a four-point polygon whose top/bottom (or left/right) widths reflect the ratio
+ * of that stage's value to the maximum. No D3 scales are used -- widths are computed manually
+ * from value ratios, giving full control over the taper geometry. Supports vertical (top-down)
+ * and horizontal (left-to-right) orientations with conversion-rate annotations.
+ *
+ * @example
+ * <FunnelChart
+ *   data={[
+ *     { label: 'Visitors', value: 5000 },
+ *     { label: 'Leads', value: 2500 },
+ *     { label: 'Customers', value: 500 },
+ *   ]}
+ *   showPercentage
+ *   showConversion
+ *   height={400}
+ *   title="Sales Funnel"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import { max, select } from 'd3';
 
@@ -8,6 +29,7 @@ import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** Props for the {@link FunnelChart} component. */
 export interface FunnelChartProps extends ChartBaseProps {
   data: DataPoint[];
   showPercentage?: boolean;
@@ -15,6 +37,12 @@ export interface FunnelChartProps extends ChartBaseProps {
   orientation?: 'vertical' | 'horizontal';
 }
 
+/**
+ * Renders a funnel chart as tapering SVG polygons with optional conversion-rate labels.
+ *
+ * @param props - See {@link FunnelChartProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const FunnelChart = memo(function FunnelChart({
   data,
   showPercentage = true,
@@ -79,11 +107,16 @@ export const FunnelChart = memo(function FunnelChart({
     const n = data.length;
 
     if (orientation === 'vertical') {
+      // Each segment occupies an equal vertical slice; the 2px gap prevents
+      // anti-aliasing bleed between adjacent polygon edges.
       const segmentHeight = innerHeight / n;
       const gap = 2;
 
       data.forEach((d, i) => {
+        // widthRatio maps the segment's value to a proportion of innerWidth.
         const widthRatio = d.value / maxValue;
+        // The bottom edge of the last segment tapers to 80% of its own width
+        // to maintain the funnel visual, since there is no next segment to derive from.
         const nextRatio = i < n - 1 ? data[i + 1].value / maxValue : widthRatio * 0.8;
         const topWidth = innerWidth * widthRatio;
         const bottomWidth = innerWidth * nextRatio;
@@ -154,7 +187,8 @@ export const FunnelChart = memo(function FunnelChart({
         }
       });
     } else {
-      // Horizontal
+      // Horizontal: the taper logic mirrors the vertical case but operates on
+      // height rather than width, flowing left-to-right through stages.
       const segmentWidth = innerWidth / n;
       const gap = 2;
 

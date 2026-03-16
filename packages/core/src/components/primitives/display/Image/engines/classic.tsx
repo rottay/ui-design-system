@@ -1,47 +1,12 @@
 /**
- * @fileoverview Image Classic Engine - Rottay Design System
- * @description Ant Design-based image with built-in preview/lightbox.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Classic (Ant Design) engine for the Image display primitive.
+ * Delegates to `antd/Image` to provide built-in preview/lightbox, loading
+ * placeholders, and error fallback -- all themed via DS CSS variables.
  *
- * @remarks
- * This engine wraps Ant Design's Image component to provide full-featured
- * image display with built-in preview functionality.
- *
- * **Implementation Details:**
- * - Uses `antd/Image` for core rendering
- * - Built-in preview/lightbox on click
- * - Loading placeholder support
- * - Error fallback handling
- *
- * **Ant Design Features:**
- * - Native preview with zoom
- * - Image group gallery support
- * - Placeholder while loading
- * - Fallback on error
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Image } from '@rottay/design-system';
- *
  * <Image engine="classic" src="/photo.jpg" alt="Photo" zoomable />
  * ```
- *
- * @example With Preview
- * ```tsx
- * <Image
- *   engine="classic"
- *   src="/photo.jpg"
- *   alt="Photo"
- *   width={400}
- *   zoomable
- * />
- * ```
- *
- * @see {@link Image} for the main component
- * @see {@link https://ant.design/components/image} Ant Design Image
- * @module ClassicImage
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -53,24 +18,11 @@ import { IMAGE_DEFAULTS, RADIUS_MAP } from '../Image.types';
 import type { ImageRadius } from '../Image.types';
 
 /**
- * Classic (Ant Design) implementation of the Image component.
+ * Classic (Ant Design) Image engine. Wraps `antd/Image` with DS-level
+ * border, shadow, and radius tokens, plus error/placeholder state management.
  *
- * Features:
- * - Built-in preview/lightbox functionality
- * - Loading placeholder support
- * - Error fallback handling
- * - Responsive sizing
- *
- * @example
- * ```tsx
- * <ClassicImage
- *   src="/photo.jpg"
- *   alt="Photo description"
- *   width={400}
- *   height={300}
- *   zoomable
- * />
- * ```
+ * @param props - Standard ImageProps shared across all engines.
+ * @returns A themed `antd/Image` wrapped in a styled container div.
  */
 export default function ClassicImage(props: ImageProps): React.ReactElement {
   const {
@@ -94,17 +46,16 @@ export default function ClassicImage(props: ImageProps): React.ReactElement {
     style = {},
   } = props;
 
+  // Track error so we can clear the src and let antd show its fallback
   const [hasError, setHasError] = useState(false);
 
-  // Reset error state when src changes
+  // Clear error when the consumer provides a new image source
   useEffect(() => {
     setHasError(false);
   }, [src]);
 
-  /**
-   * Handles image load error.
-   * Returns false to prevent Ant Design's default error handling.
-   */
+  // Return false to suppress antd's built-in broken-image fallback;
+  // we manage fallback content ourselves via the `hasError` flag.
   const handleError = (event?: React.SyntheticEvent<HTMLImageElement, Event>) => {
     setHasError(true);
     if (onError && event) {
@@ -113,17 +64,15 @@ export default function ClassicImage(props: ImageProps): React.ReactElement {
     return false;
   };
 
-  /**
-   * Handles successful image load.
-   */
+  // Propagate the load event to the consumer callback
   const handleLoad = () => {
     onLoad?.();
   };
 
-  // Get radius CSS value
+  // Resolve the token-based radius to a concrete CSS value
   const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.none;
 
-  // Compute container styles
+  // Container wraps the antd Image to add DS-level border/shadow/radius
   const containerStyle: React.CSSProperties = {
     borderRadius: radiusValue,
     border: bordered ? '1px solid var(--ds-color-border, rgba(0, 0, 0, 0.1))' : 'none',
@@ -141,7 +90,7 @@ export default function ClassicImage(props: ImageProps): React.ReactElement {
     ...style,
   };
 
-  // Default placeholder content
+  // Use consumer-provided placeholder or fall back to a neutral loading box
   const placeholderContent = placeholder || (
     <div
       style={{
@@ -157,7 +106,7 @@ export default function ClassicImage(props: ImageProps): React.ReactElement {
     </div>
   );
 
-  // Default fallback content
+  // antd's fallback only accepts a string URL; ReactNode fallbacks are not supported here
   const fallbackContent = fallback ? (
     typeof fallback === 'string' ? fallback : undefined
   ) : undefined;

@@ -1,9 +1,8 @@
 'use client';
 
 /**
- * InvoiceTemplate - Pattern Component
- *
- * Engine-aware printable invoice document layout.
+ * @fileoverview InvoiceTemplate pattern -- engine-aware printable invoice
+ * document layout with company/client info, line items, and totals.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

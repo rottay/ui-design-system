@@ -1,6 +1,14 @@
 /**
- * Overlay - Utility Component
- * Backdrop overlay with optional blur effect and click handler
+ * @fileoverview Overlay - full-viewport backdrop for modals, drawers, and sheets.
+ * Supports optional blur, configurable background color, smooth opacity transitions,
+ * and click-to-dismiss. Used internally by Modal and Drawer rustic/modern engines.
+ *
+ * @example
+ * ```tsx
+ * <Overlay visible={isOpen} blur onClick={handleClose}>
+ *   <ModalContent />
+ * </Overlay>
+ * ```
  */
 
 'use client';
@@ -33,8 +41,8 @@ export interface OverlayProps {
 }
 
 /**
- * Overlay component for modal backdrops.
- * Supports blur effects, click handling, and smooth animations.
+ * Full-viewport overlay with opacity/visibility transitions.
+ * Click handler fires only on direct backdrop click (not child content).
  */
 export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
   (props, ref) => {
@@ -52,9 +60,10 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       children,
     } = props;
 
+    // Guard against clicks that bubble up from modal content.
+    // e.target === e.currentTarget ensures only direct backdrop clicks dismiss.
     const handleClick = useCallback(
       (e: React.MouseEvent<HTMLDivElement>) => {
-        // Only trigger if clicking directly on overlay (not children)
         if (e.target === e.currentTarget && clickable && onClick) {
           onClick();
         }
@@ -62,6 +71,10 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       [clickable, onClick]
     );
 
+    // Use opacity + visibility for the show/hide transition so the overlay
+    // remains in the DOM (preserving focus trap and portal mount) while
+    // smoothly fading. `visibility: hidden` removes it from the a11y tree
+    // and prevents pointer events when not visible.
     const overlayStyle: React.CSSProperties = {
       position: 'fixed',
       top: 0,
@@ -70,6 +83,7 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       bottom: 0,
       zIndex,
       backgroundColor,
+      // Both prefixed and unprefixed backdrop-filter for Safari compatibility.
       backdropFilter: blur ? `blur(${blurAmount}px)` : undefined,
       WebkitBackdropFilter: blur ? `blur(${blurAmount}px)` : undefined,
       display: 'flex',
@@ -78,6 +92,7 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       cursor: clickable ? 'pointer' : 'default',
       opacity: visible ? 1 : 0,
       visibility: visible ? 'visible' : 'hidden',
+      // Expo-out easing for a snappy, natural-feeling fade.
       transition: disableAnimation
         ? 'none'
         : 'opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s, backdrop-filter 0.3s',
@@ -90,6 +105,8 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
         className={`rottay-overlay ${className}`}
         style={overlayStyle}
         onClick={handleClick}
+        // aria-hidden keeps screen readers from reading backdrop content
+        // when the overlay is not visible.
         aria-hidden={!visible}
         data-visible={visible}
       >

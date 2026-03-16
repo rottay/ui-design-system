@@ -1,55 +1,36 @@
 'use client';
 
 /**
- * @fileoverview Popconfirm Rustic Engine - Rottay Design System
- * @description Rustic (Pure HTML/CSS) implementation of the Popconfirm component.
- * Uses inline CSS styles with portal rendering for proper z-index stacking.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the Popconfirm overlay component.
+ * Uses inline CSS with portal rendering (createPortal to document.body) for proper
+ * z-index stacking, getBoundingClientRect-based placement, async-aware confirm
+ * handling, and full ARIA dialog attributes.
  *
- * @remarks
- * The Rustic engine provides:
- * - Pure inline CSS with no external dependencies
- * - Portal rendering to document.body via createPortal
- * - Click-outside dismissal via event listeners
- * - Async onConfirm support with loading state tracking
- * - Accessible dialog with proper ARIA attributes
- *
- * Implementation details:
- * - Position calculated based on trigger getBoundingClientRect()
- * - Button colors resolve from semantic confirm/danger tokens
- * - Loading state disables confirm button and reduces opacity
- * - Uses scroll offsets for scroll-aware positioning
- *
- * This implementation is ideal for:
- * - Embedded applications without CSS framework dependencies
- * - Server-side rendering without CSS extraction
- * - Maximum browser compatibility scenarios
- *
- * @example Using Rustic Engine
+ * @example
  * ```tsx
- * import { Popconfirm, Button } from '@rottay/design-system';
- *
- * <Popconfirm
- *   engine="rustic"
- *   title="Confirm deletion?"
- *   description="This cannot be reversed."
- *   okText="Yes, delete"
- *   okType="danger"
- *   onConfirm={handleDelete}
- * >
+ * <Popconfirm engine="rustic" title="Confirm deletion?" okType="danger"
+ *   onConfirm={handleDelete}>
  *   <Button>Delete</Button>
  * </Popconfirm>
  * ```
- *
- * @see {@link Popconfirm} - The main engine-aware component
- * @module Popconfirm/Engines/Rustic
- * @category Overlay
- * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { PopconfirmProps } from '../Popconfirm.types';
 import { POPCONFIRM_DEFAULTS } from '../Popconfirm.types';
 
+/**
+ * Popconfirm implementation using pure inline CSS and React portals.
+ *
+ * The popover is portalled to `document.body` and positioned absolutely using
+ * the trigger's bounding rect plus scroll offsets. Placement is translated via
+ * CSS `transform` for centring. The confirm handler is async-aware: if it
+ * returns a Promise, the button enters a loading state automatically.
+ * Button colours are resolved from DS semantic tokens (--ds-popconfirm-*).
+ *
+ * @param props - {@link PopconfirmProps} shared across all engines.
+ * @returns A ref-forwarded inline-block trigger plus a portal-rendered popover.
+ */
 export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
   (props, ref) => {
     const {
@@ -89,7 +70,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Calculate position
+    // Recalculate popover position from the trigger's bounding rect
     useEffect(() => {
       if (isOpen && triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
@@ -114,7 +95,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       }
     }, [isOpen, placement]);
 
-    // Click outside handler
+    // Dismiss when clicking outside both the trigger and the popover portal
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
@@ -142,6 +123,8 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(true);
     };
 
+    // Async-aware: wraps onConfirm in try/finally so the button shows a
+    // loading state automatically when the callback returns a Promise
     const handleConfirm = async () => {
       if (onConfirm) {
         setLoading(true);
@@ -159,6 +142,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(false);
     };
 
+    // Resolve confirm-button colours from DS semantic tokens per okType variant
     const getOkButtonStyle = (): React.CSSProperties => {
       const baseStyle: React.CSSProperties = {
         padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',

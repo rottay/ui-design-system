@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * SchedulerSurface
- *
- * Scheduling pages repeat the same contract: date navigation, calendar view,
- * toolbar actions, and optional contextual sidebar content. This surface keeps
- * that structure reusable while delegating event rendering to the app when a
- * richer domain-specific presentation is needed.
+ * @fileoverview SchedulerSurface -- calendar/scheduling page shell.
+ * @description Wraps PatternCalendarView with date navigation, toolbar actions, and
+ * optional sidebar content. Event rendering is delegated to the app when a richer
+ * domain-specific presentation is needed.
  */
 
 import React from 'react';
@@ -32,6 +30,9 @@ export function SchedulerSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { tSurface } = useSurfaceTranslations();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  // toolbarStart/toolbarEnd slots let apps inject view toggles or date
+  // navigation controls around the standard action buttons without
+  // overriding the entire actions area.
   const actionsNode = (
     <Stack spacing="sm">
       {config.presentation.toolbarStart}
@@ -61,6 +62,10 @@ export function SchedulerSurface({
           <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
             <Card variant="outlined">
               <Card.Body>
+                {/* Calendar view cascades: explicit active view -> visual default ->
+                    product profile default. This lets the app control the view
+                    programmatically while still honoring the product-level
+                    preference (e.g. "week" for scheduling-heavy products). */}
                 <PatternCalendarView
                   events={config.behavior.events}
                   view={

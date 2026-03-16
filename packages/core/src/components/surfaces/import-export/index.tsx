@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * ImportExportSurface
- *
- * Data bulk operations surface supporting import uploads, export field
- * selection, and operation history. The surface owns the step-by-step flow
- * structure while the app owns the actual file processing, field mapping,
- * and data transformation logic.
+ * @fileoverview ImportExportSurface -- bulk data import/export page shell.
+ * @description Step-by-step flow for file upload (import), field selection (export),
+ * and operation history. The surface owns flow structure; the app owns file
+ * processing, field mapping, and data transformation.
  */
 
 import React, { useCallback, useState } from 'react';
@@ -38,6 +36,10 @@ function ImportPanel({
   const [uploading, setUploading] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
+  // File selection triggers the upload callback provided by the app. The app
+  // is responsible for parsing the file and returning validation results.
+  // The surface then transitions to the preview step where the user can
+  // review errors before confirming.
   const handleFileSelect = useCallback(async () => {
     if (!importConfig?.onUpload) return;
     setUploading(true);
@@ -128,7 +130,10 @@ function ImportPanel({
                       <Text style={{ fontWeight: 600, color: 'var(--ds-color-error-500)' }}>
                         Validation Errors
                       </Text>
-                      {importResult.errors.slice(0, 5).map((err, i) => (
+                      {/* Cap displayed errors at 5 to prevent the preview step from
+                  becoming unreadable with hundreds of validation failures. The
+                  overflow count is shown below. */}
+              {importResult.errors.slice(0, 5).map((err, i) => (
                         <Text key={i} style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
                           Row {err.row}, {err.field}: {err.message}
                         </Text>
@@ -180,6 +185,9 @@ function ExportPanel({
   config: ImportExportSurfaceConfig;
 }): React.ReactElement {
   const exportConfig = config.behavior.exportConfig;
+  // Pre-select all fields that are not explicitly opted out. This matches
+  // the typical export UX where users want everything by default and
+  // deselect what they do not need.
   const [selectedFields, setSelectedFields] = useState<string[]>(() => {
     if (!exportConfig?.fields) return [];
     return exportConfig.fields.filter((f) => f.selected !== false).map((f) => f.key);
@@ -328,6 +336,8 @@ export function ImportExportSurface({
   config,
   loading = false,
 }: ImportExportSurfaceProps): React.ReactElement {
+  // Mode controls which panels are visible. Apps that only need one direction
+  // can hide the other entirely, keeping the UI focused.
   const { mode } = config.behavior;
   const showImport = mode === 'import' || mode === 'both';
   const showExport = mode === 'export' || mode === 'both';

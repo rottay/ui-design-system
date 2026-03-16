@@ -1,15 +1,14 @@
 /**
- * Collapse Component Tokens - TypeScript Mirror
+ * @fileoverview Collapse/accordion component token mirrors.
  *
- * TypeScript representation of Collapse CSS custom properties.
- * Provides type-safe token access and hook-based token generation.
+ * Uses a slot-based architecture (root, header, content, icon) with variant
+ * support (default, bordered, ghost) and full state coverage (idle, hover,
+ * focus, active, disabled, expanded).
  *
- * Architecture:
- * - Slot-based structure (root, header, content, icon)
- * - Variant support (default, bordered, ghost)
- * - State-aware (idle, hover, focus, active, disabled, expanded)
+ * CSS variable naming: `--ds-collapse-{slot}-{variant}-{state}-{property}`
  *
- * Naming Convention: --ds-collapse-{slot}-{variant}-{state}-{property}
+ * Also re-exports `getCollapseTokens` and `getCollapseSlotTokens` helper
+ * functions for programmatic token resolution at runtime.
  */
 
 import type { CSSProperties } from 'react';

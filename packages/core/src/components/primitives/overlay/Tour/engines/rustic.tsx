@@ -105,6 +105,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       style,
     } = props;
 
+    // Controlled/uncontrolled step index -- external current takes precedence
     const [internalCurrent, setInternalCurrent] = useState(0);
     const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
@@ -116,6 +117,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       onChange?.(newCurrent);
     }, [onChange]);
 
+    // On the last step, "Next" becomes "Finish" and triggers both callbacks
     const handleNext = () => {
       if (currentStep < steps.length - 1) {
         handleChange(currentStep + 1);
@@ -154,10 +156,12 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       return () => document.removeEventListener('keydown', handleEscape);
     }, [open, onClose]);
 
+    // Return an empty placeholder when closed to preserve ref stability
     if (!open || typeof document === 'undefined') {
       return <div ref={ref} className={className} style={style} />;
     }
 
+    // Padding around the spotlight cutout so the target element has visual breathing room
     const padding = 8;
     const maskColor = typeof mask === 'object' ? mask.color : 'rgba(0, 0, 0, 0.5)';
     const isPrimary = type === 'primary';
@@ -176,7 +180,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           />
         )}
 
-        {/* Spotlight */}
+        {/* Spotlight: a huge box-shadow creates the "cutout" mask effect around the target.
+            The 9999px spread covers the entire viewport while the element itself stays transparent. */}
         {targetRect && (
           <div
             style={{
@@ -193,7 +198,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           />
         )}
 
-        {/* Popover */}
+        {/* Step dialog: positioned below the target when available, centered in viewport otherwise.
+            All visual tokens use --ds-tour-* CSS custom properties for theming. */}
         <div
           role="dialog"
           aria-modal="true"

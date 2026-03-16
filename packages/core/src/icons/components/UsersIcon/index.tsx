@@ -1,12 +1,12 @@
 'use client';
 
+/** @fileoverview Multi-user/group silhouette icon. */
+
 import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
 import type { SvgIconProps as IconProps } from '../../types';
 
-/**
- * Icono de grupo de usuarios - usado en Avatar.Group.
- */
+/** Group of users icon, used in Avatar.Group overflow indicators and team displays. */
 export const UsersIcon = forwardRef<SVGSVGElement, IconProps>((props, ref) => (
   <BaseIcon ref={ref} {...props}>
     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />

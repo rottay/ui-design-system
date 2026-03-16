@@ -1,14 +1,30 @@
 'use client';
 
 /**
- * CalendarView - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the CalendarView pattern.
+ * Renders a month grid using Tailwind utility classes and DaisyUI component
+ * classes (btn, select, loading spinner). Styling is fully class-based with no
+ * inline styles, except for per-event color which must be dynamic.
+ *
+ * @example
+ * <ModernCalendarView
+ *   events={[{ id: '1', title: 'Standup', start: new Date(), color: '#3b82f6' }]}
+ *   currentDate={new Date()}
+ *   onDateClick={(date) => console.log(date)}
+ * />
  */
 
 import React, { useMemo } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../CalendarView.types';
 
+/** Abbreviated day headers starting at Sunday to match JS Date.getDay() indices. */
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+/**
+ * Build a 7-column grid for the given month. Leading nulls pad the days
+ * before the 1st (Sunday-aligned); trailing nulls complete the last row
+ * to exactly 7 columns, preventing layout shift between months.
+ */
 function getMonthGrid(date: Date) {
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -24,15 +40,23 @@ function getMonthGrid(date: Date) {
   return cells;
 }
 
+/** Normalize a Date or ISO string into a YYYY-MM-DD key for event lookup. */
 function toDateKey(d: Date | string): string {
   const date = typeof d === 'string' ? new Date(d) : d;
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+/** Format a date as "March 2026" using the browser's default locale. */
 function formatMonth(date: Date) {
   return date.toLocaleString('default', { month: 'long', year: 'numeric' });
 }
 
+/**
+ * Modern (DaisyUI/Tailwind) calendar view rendering a month grid with event chips.
+ * @param props - CalendarViewProps including events array, navigation callbacks,
+ *   optional custom toolbar/header, and a generic `T` for event payload data.
+ * @returns A rounded month grid card; loading state uses DaisyUI's spinner.
+ */
 export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   const {
     events,
@@ -52,6 +76,8 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
 
   const cells = useMemo(() => getMonthGrid(currentDate), [currentDate]);
 
+  // Index events by date string for O(1) lookup per cell during render.
+  // Only keyed by start date -- multi-day events appear on their start day only.
   const eventsByDate = useMemo(() => {
     const map: Record<string, CalendarEvent<T>[]> = {};
     for (const ev of events) {
@@ -62,6 +88,8 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     return map;
   }, [events]);
 
+  // Navigate forward or backward by one month. Creates a new Date to
+  // avoid mutating the controlled currentDate prop.
   const navigateMonth = (delta: number) => {
     const next = new Date(currentDate);
     next.setMonth(next.getMonth() + delta);
@@ -73,6 +101,8 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   return (
     <div className={className} style={style}>
       {header}
+      {/* Render custom toolbar if provided; otherwise show the default
+          DaisyUI ghost-button nav with month title and view-mode selector. */}
       {toolbar ?? (
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -94,6 +124,9 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           </div>
         </div>
       )}
+      {/* Loading uses a conditional branch (not an overlay) so the grid
+          DOM is not rendered at all -- saves layout computation for large
+          event sets. */}
       {loading ? (
         <div className="flex justify-center py-12">
           <span className="loading loading-spinner loading-md" />
@@ -105,6 +138,8 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
               {d}
             </div>
           ))}
+          {/* Render each date cell. Null cells (padding before the 1st and
+              after the last day) use a faded background and no click handler. */}
           {cells.map((cell, i) => {
             const key = cell ? toDateKey(cell) : `empty-${i}`;
             const dayEvents = cell ? eventsByDate[toDateKey(cell)] ?? [] : [];
@@ -122,11 +157,15 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                     <div className={`text-xs text-right px-1 ${isToday ? 'font-bold text-primary' : ''}`}>
                       {cell.getDate()}
                     </div>
+                    {/* Show at most 3 event chips per cell to keep the grid compact;
+                        overflow is shown as "+N more" below. */}
                     {dayEvents.slice(0, 3).map((ev) => (
                       <div
                         key={ev.id}
                         onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
                         className="text-[11px] px-1 mt-0.5 rounded text-white truncate cursor-pointer"
+                        // Per-event color must be inline because it varies per item;
+                        // falls back to the DS primary token when no color is set.
                         style={{ background: ev.color ?? 'var(--ds-color-primary)' }}
                       >
                         {renderEvent ? renderEvent(ev) : ev.title}

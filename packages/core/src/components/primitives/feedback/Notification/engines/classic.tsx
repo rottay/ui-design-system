@@ -81,6 +81,10 @@ import { NOTIFICATION_DEFAULTS } from '../Notification.types';
  *
  * @internal
  */
+// 1:1 mapping today, but maintained as an explicit bridge layer so Rottay
+// can rename or add placements (e.g., "start"/"end" for RTL) without
+// requiring Ant Design to add matching values. This indirection costs
+// nothing at runtime but provides forward compatibility.
 const placementMap: Record<NotificationPlacement, NotificationPlacement> = {
   top: 'top',
   topLeft: 'topLeft',
@@ -130,7 +134,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   top = NOTIFICATION_DEFAULTS.top,
   bottom = NOTIFICATION_DEFAULTS.bottom,
 }) => {
-  // Configure Ant Design notification globally
+  // Sync Rottay provider props to Ant Design's global notification config.
+  // Unlike messages (which only support top), notifications need both top
+  // and bottom offsets because they can appear in any of 6 placements.
   useEffect(() => {
     antNotification.config({
       top,
@@ -140,6 +146,8 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     });
   }, [top, bottom, maxCount, placement]);
 
+  // Ant Design's App wrapper provides the context tree needed for theme
+  // token inheritance in SSR/Next.js environments.
   return <App>{children}</App>;
 };
 
@@ -334,9 +342,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // Style Definitions
   // ========================================================================
 
-  /**
-   * Type-specific border styles.
-   */
+  // Left border accent provides a quick visual type indicator that works
+  // even for color-blind users (different position than the icon color).
+  // "open" type has no border because it's a generic notification that
+  // the consumer styles via className/style props.
   const typeStyles: Record<NotificationType, React.CSSProperties> = {
     success: { borderLeft: '4px solid var(--ds-color-success)' },
     error: { borderLeft: '4px solid var(--ds-color-error)' },
@@ -406,7 +415,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           {actions && <div style={{ marginTop: '12px' }}>{actions}</div>}
         </div>
 
-        {/* Close Button */}
+        {/* stopPropagation prevents the notification's onClick handler from
+            firing when the user intends to close rather than interact with
+            the notification content. */}
         {closable && (
           <button
             onClick={(e) => {

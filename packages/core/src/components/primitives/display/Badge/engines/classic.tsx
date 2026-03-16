@@ -1,46 +1,12 @@
 /**
- * @fileoverview Badge Classic Engine - Rottay Design System
- * @description Ant Design-based badge with animation and status support.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Classic engine for the Badge component, backed by Ant Design.
+ * Wraps antd Badge to expose count/dot indicators with processing animation,
+ * position offsets, and standalone tag-like rendering for badge-only usage.
  *
- * @remarks
- * This engine wraps Ant Design's Badge component to provide full-featured
- * badge functionality with processing animations and ribbon support.
- *
- * **Implementation Details:**
- * - Uses `antd/Badge` for core rendering
- * - Maps pulse prop to Ant Design's processing status
- * - Maps size variants to Ant Design's small/default sizes
- * - Applies variant colors via inline styles
- *
- * **Size Mapping:**
- * - `xs`, `sm` → Ant Design `small`
- * - `md`, `lg`, `xl` → Ant Design `default`
- *
- * **Position Offsets:**
- * Position prop is mapped to [x, y] offset arrays for Ant Design.
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Badge } from '@rottay/design-system';
- *
- * <Badge engine="classic" count={5} variant="primary">
- *   <Avatar />
- * </Badge>
+ * <Badge engine="classic" count={5} variant="primary"><Avatar /></Badge>
  * ```
- *
- * @example Processing Animation
- * ```tsx
- * <Badge engine="classic" dot pulse variant="error">
- *   <NotificationIcon />
- * </Badge>
- * ```
- *
- * @see {@link Badge} for the main component
- * @see {@link https://ant.design/components/badge} Ant Design Badge
- * @module ClassicBadge
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -65,25 +31,12 @@ function formatCount(count: number | string | undefined, max: number): number | 
 /**
  * Classic (Ant Design) implementation of the Badge component.
  *
- * This engine provides the full feature set of Ant Design's Badge component,
- * including animation support, status indicators, and ribbon variants.
- * It maps the design system's unified prop interface to Ant Design's API.
+ * Maps the unified DS prop interface to antd's Badge API. Handles two distinct
+ * render paths: a standalone tag-like badge (no children, no count) using
+ * inline styles, and the standard antd Badge wrapper for all other cases.
  *
- * @component
- * @example
- * // Basic usage with count
- * <ClassicBadge count={5} variant="primary">
- *   <Avatar />
- * </ClassicBadge>
- *
- * @example
- * // Dot indicator with pulse animation
- * <ClassicBadge dot pulse variant="error">
- *   <NotificationIcon />
- * </ClassicBadge>
- *
- * @param props - Badge component props
- * @returns React element with Ant Design Badge
+ * @param props - Unified BadgeProps from the design system type contract
+ * @returns React element rendering either a standalone span or an antd Badge wrapper
  */
 export default function ClassicBadge(props: BadgeProps): React.ReactElement {
   const {
@@ -107,13 +60,13 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     style,
   } = props;
 
-  // Determine display value (content takes precedence)
+  // `content` (string/ReactNode) takes precedence over numeric `count`
   const displayValue = content !== undefined ? content : count;
 
-  // Map variant to Ant Design color
+  // Resolve variant to a concrete colour value via the shared colour map
   const color = VARIANT_COLOR_MAP[variant!] || VARIANT_COLOR_MAP.default;
 
-  // Map size to Ant Design size prop
+  // Ant Design only exposes two size tokens; collapse our 5-tier scale into them
   const antSize = size === 'sm' || size === 'xs' ? 'small' : 'default';
 
   /**
@@ -143,10 +96,11 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     ...style,
   };
 
-  // Map pulse to Ant Design processing status
+  // Ant Design's 'processing' status adds a ripple animation -- re-purpose it for our pulse prop
   const status = pulse ? 'processing' : undefined;
 
-  // Handle standalone badge (no children, no count)
+  // Standalone render path: when there are no children and no count/dot, render
+  // as a tag-like inline element instead of wrapping antd Badge around nothing
   if (!children && displayValue === undefined && !dot) {
     const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
 
@@ -190,7 +144,8 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     );
   }
 
-  // Render standard Ant Design Badge
+  // Standard path: delegate to antd Badge which handles count overflow,
+  // dot rendering, status animation, and positioning automatically
   return (
     <AntBadge
       count={typeof displayValue === 'string' ? displayValue : formatCount(displayValue as number, max!)}

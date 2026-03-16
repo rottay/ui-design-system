@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * BillingSurface
- *
- * Subscription management surface with plan overview, usage meters, invoices,
- * and payment methods. Supports both tabbed and sectioned layouts to fit
- * different product shapes. The app owns the actual billing logic and data
- * fetching; this surface standardizes how billing UIs are composed.
+ * @fileoverview BillingSurface -- subscription management page shell.
+ * @description Composes plan overview, usage meters, invoice history, and payment
+ * method management. Supports tabbed and sectioned layouts. The app owns billing
+ * logic and data fetching; this surface standardizes the composition.
  */
 
 import React from 'react';
@@ -22,6 +20,9 @@ export interface BillingSurfaceProps {
 }
 
 function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactElement {
+  // Full escape hatch: when the app provides a custom plan renderer, the
+  // surface yields entirely. This allows Stripe-specific or custom plan
+  // UI without forking the billing surface.
   if (config.presentation.renderPlan) {
     return <>{config.presentation.renderPlan()}</>;
   }
@@ -67,6 +68,8 @@ function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactE
   );
 }
 
+// UsageSection renders only when usage data exists. Returning null keeps the
+// page layout clean for plans that do not have metered features.
 function UsageSection({ config }: { config: BillingSurfaceConfig }): React.ReactElement | null {
   const { usage } = config.behavior;
 
@@ -78,6 +81,8 @@ function UsageSection({ config }: { config: BillingSurfaceConfig }): React.React
         <Stack spacing="md">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>Usage</Text>
           {usage.map((item, i) => {
+            // Guard against division by zero for unlimited usage items where
+            // the limit may be 0 or unset.
             const percentage = item.limit > 0 ? Math.round((item.current / item.limit) * 100) : 0;
             return (
               <Stack key={i} spacing="xs">
@@ -171,6 +176,9 @@ export function BillingSurface({
 }: BillingSurfaceProps): React.ReactElement {
   const useTabs = config.visual.layout === 'tabs';
 
+  // Tab layout groups plan+usage together (they are conceptually one unit),
+  // while invoices and payment methods become separate tabs. Empty sections
+  // are excluded from the tab bar entirely to avoid confusing empty tabs.
   const content = useTabs ? (
     <Tabs
       items={[

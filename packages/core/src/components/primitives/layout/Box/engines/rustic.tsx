@@ -45,9 +45,11 @@ import React, { forwardRef, type ElementType, type Ref, type CSSProperties } fro
 import type { BoxProps } from '../Box.types';
 import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../Box.types';
 
-/**
- * Builds CSSProperties from BoxProps
- */
+// Rustic engine converts ALL layout props to inline CSSProperties. Unlike
+// the modern engine (which splits between Tailwind classes and styles), rustic
+// uses pure inline styles so it works without any CSS framework dependency.
+// SPACING_MAP/RADIUS_MAP/SHADOW_MAP translate DS tokens (xs/sm/md/lg) to
+// actual CSS values (4px/8px/16px/24px).
 function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
 

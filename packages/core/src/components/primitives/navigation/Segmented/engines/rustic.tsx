@@ -269,6 +269,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       <div
         ref={ref}
         className={className}
+        // Merge container base, optional block-mode override, and consumer styles.
+        // Spread order ensures consumer `style` prop wins over internal defaults.
         style={{ ...styles.container, ...(block ? styles.containerBlock : {}), ...style }}
       >
         {normalizedOptions.map((opt) => {
@@ -279,6 +281,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
             <button
               key={String(opt.value)}
               type="button"
+              // Style cascade: base button -> size -> active overlay -> disabled overlay.
+              // Later spreads override earlier ones, so disabled always takes effect.
               style={{
                 ...styles.button,
                 ...sizeStyles,

@@ -109,7 +109,8 @@ export const ClassicAffix = forwardRef<HTMLDivElement, AffixProps>(
     // Styles
     // ========================================================================
 
-    // Build wrapper styles with CSS variables for theming
+    // Expose offset values as CSS variables so tenant themes can read them
+    // without needing JavaScript access (e.g. for coordinating layout shifts)
     const wrapperStyle: React.CSSProperties = {
       '--affix-z-index': zIndex,
       '--affix-offset-top': `${offsetTop}px`,
@@ -127,6 +128,11 @@ export const ClassicAffix = forwardRef<HTMLDivElement, AffixProps>(
         className={`rottay-affix rottay-affix--classic ${className}`}
         style={wrapperStyle}
       >
+        {/* AntAffix only accepts one offset direction at a time; passing both
+            causes conflicting positioning. We prioritize offsetBottom when set,
+            since bottom-affixed elements are less common and thus more intentional.
+            Ant Design may pass undefined to onChange; we coerce to boolean for a
+            stable consumer API. */}
         <AntAffix
           offsetTop={offsetBottom === undefined ? offsetTop : undefined}
           offsetBottom={offsetBottom}

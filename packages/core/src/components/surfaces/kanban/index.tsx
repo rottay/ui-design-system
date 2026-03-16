@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * KanbanSurface
- *
- * Full-page kanban board surface wrapping PatternKanbanBoard inside
- * PageShellSurface. The surface owns the page chrome, filter panel, and action
- * bar while delegating board rendering to the underlying pattern.
+ * @fileoverview KanbanSurface -- full-page kanban board with filters.
+ * @description Wraps PatternKanbanBoard inside PageShellSurface. The surface owns
+ * page chrome, filter panel, and action bar; the pattern owns column/card rendering
+ * and drag-and-drop mechanics.
  */
 
 import React from 'react';
@@ -26,9 +25,15 @@ export function KanbanSurface({
   config,
   loading = false,
 }: KanbanSurfaceProps): React.ReactElement {
+  // Actions render outside the board so they remain accessible even when
+  // the board is empty -- this matches the list surface's action placement.
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
+  // Active filter count drives the badge on the filter toggle, giving users
+  // a quick signal of how many constraints are applied.
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);
 
+  // Strip internal-only fields before passing to the pattern. The pattern's
+  // column type expects a leaner shape than what the surface config carries.
   const boardColumns = config.behavior.columns.map((col) => ({
     id: col.id,
     title: col.title,
@@ -37,6 +42,8 @@ export function KanbanSurface({
     color: col.color,
   }));
 
+  // Empty state checks both items AND loading: showing "no items" while data
+  // is still loading would flash a misleading empty screen.
   const hasItems = boardColumns.some((col) => col.items.length > 0);
 
   return (
@@ -73,8 +80,13 @@ export function KanbanSurface({
             </Card.Body>
           </Card>
         ) : (
+          // The `as any` cast bridges the surface column type to the pattern's
+          // generic column contract. The pattern does not know about surface-level
+          // config extras.
           <PatternKanbanBoard
             columns={boardColumns as any}
+            // Falls back to just the card title when no custom renderer is provided,
+            // keeping the board functional without presentation configuration.
             renderCard={(card: KanbanSurfaceCard, columnId: string) =>
               config.presentation.renderCard
                 ? config.presentation.renderCard(card, columnId)

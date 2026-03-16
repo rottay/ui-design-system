@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Surface catalog stories showing all surface components in a gallery.
+ */
+
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import {

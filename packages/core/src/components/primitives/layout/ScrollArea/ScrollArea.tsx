@@ -1,31 +1,17 @@
 'use client';
 
 /**
- * @fileoverview ScrollArea - Rottay Design System
- * @description Container with custom styled scrollbar for overflow content.
- * Part of the Rottay Design System's layout primitives collection.
+ * @fileoverview ScrollArea -- scrollable container with custom scrollbar styling,
+ * supporting vertical/horizontal orientation and hover-reveal behavior.
  *
- * @remarks
- * The ScrollArea component provides a scrollable container with customizable
- * scrollbar styling. It supports vertical, horizontal, or both scroll directions,
- * adjustable scrollbar thickness, and hover-reveal behavior.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design compatible wrapper with styled scrollbar
- * - **Modern**: Tailwind CSS implementation with utility scrollbar classes
- * - **Rustic**: Pure CSS with ::-webkit-scrollbar styling
- *
- * @example Basic ScrollArea
+ * @example
  * ```tsx
  * import { ScrollArea } from '@rottay/design-system';
  *
  * <ScrollArea maxHeight="300px">
  *   <p>Long scrollable content here...</p>
  * </ScrollArea>
- * ```
  *
- * @example Horizontal Scroll
- * ```tsx
  * <ScrollArea orientation="horizontal" maxWidth="400px">
  *   <div style={{ width: '800px' }}>Wide content</div>
  * </ScrollArea>
@@ -33,7 +19,6 @@
  *
  * @module ScrollArea
  * @category Layout
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -47,10 +32,13 @@ export {
   SCROLLBAR_SIZES,
 } from './ScrollArea.types';
 
-
+/** Scrollable container primitive resolved through the active engine. */
 export const ScrollArea = createEngineComponent<ScrollAreaProps>('ScrollArea', {
+  /** Ant Design compatible wrapper with styled scrollbar */
   classic: () => import('./engines/classic'),
+  /** Tailwind CSS with utility scrollbar classes */
   modern: () => import('./engines/modern'),
+  /** Pure CSS with ::-webkit-scrollbar customization */
   rustic: () => import('./engines/rustic'),
 });
 

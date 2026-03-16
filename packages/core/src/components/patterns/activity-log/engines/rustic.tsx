@@ -1,12 +1,28 @@
 'use client';
 
 /**
- * ActivityLog - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla/CSS-variable) engine for the ActivityLog pattern.
+ * Zero external UI library dependency -- renders a custom vertical timeline with
+ * colored dots, connecting lines, action tags, avatar circles, and diff rendering,
+ * all through inline styles referencing `--ds-*` CSS custom properties. Includes
+ * native `<select>` filters for action type and user.
+ *
+ * @example
+ * <RusticActivityLog
+ *   activities={[
+ *     { id: '1', action: 'deleted', user: { name: 'Ana' }, timestamp: new Date().toISOString() },
+ *   ]}
+ *   onActivityClick={(a) => openDetail(a.id)}
+ * />
  */
 
 import React, { type CSSProperties } from 'react';
 import type { ActivityLogProps, Activity } from '../ActivityLog.types';
 
+/**
+ * Resolves a --ds-* color token from an action string via substring match.
+ * Falls back to text-secondary for unrecognized action verbs.
+ */
 function getActionColor(action: string): string {
   const lower = action.toLowerCase();
   if (lower.includes('created') || lower.includes('added')) return 'var(--ds-color-success)';
@@ -16,6 +32,10 @@ function getActionColor(action: string): string {
   return 'var(--ds-color-text-secondary, var(--ds-color-text-muted))';
 }
 
+/**
+ * Converts an ISO timestamp to a human-friendly relative string.
+ * Uses minute/hour/day thresholds, falling back to locale date for 7+ days.
+ */
 function formatTimestamp(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
@@ -29,6 +49,9 @@ function formatTimestamp(ts: string): string {
   if (diffDay < 7) return `${diffDay}d ago`;
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
+
+// --- Shared style constants ---
+// Extracted as module-level objects to avoid re-creating on every render.
 
 const containerStyle: CSSProperties = {
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
@@ -46,6 +69,14 @@ const selectStyle: CSSProperties = {
   color: 'var(--ds-color-text)',
 };
 
+/**
+ * Rustic engine activity log using only inline styles and CSS variables.
+ * Renders a hand-crafted vertical timeline (dot + connecting line per entry)
+ * with action tags, avatars, timestamps, and optional field-level diffs.
+ *
+ * @param props - {@link ActivityLogProps}
+ * @returns A bordered container with optional filters and a custom timeline.
+ */
 export default function RusticActivityLog(props: ActivityLogProps) {
   const {
     activities,
@@ -69,6 +100,8 @@ export default function RusticActivityLog(props: ActivityLogProps) {
     );
   }
 
+  // Timeline dot -- colored circle that visually represents the action type.
+  // marginTop: 6 aligns the dot center with the first line of text.
   const dotStyle = (color: string): CSSProperties => ({
     width: 10,
     height: 10,
@@ -78,6 +111,8 @@ export default function RusticActivityLog(props: ActivityLogProps) {
     marginTop: 6,
   });
 
+  // Vertical connecting line between timeline dots. marginLeft: 4 centers
+  // the 2px line under the 10px dot.
   const lineStyle: CSSProperties = {
     width: 2,
     background: 'var(--ds-color-border-secondary, var(--ds-color-border))',
@@ -101,6 +136,7 @@ export default function RusticActivityLog(props: ActivityLogProps) {
     flexShrink: 0,
   });
 
+  // Inline action tag: filled background with on-primary text color.
   const tagStyle = (color: string): CSSProperties => ({
     display: 'inline-block',
     padding: '2px 8px',

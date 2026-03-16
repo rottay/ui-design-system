@@ -1,8 +1,8 @@
 /**
- * Checkbox Component Tokens - TypeScript Mirror
+ * @fileoverview Checkbox component token mirrors.
  *
- * TypeScript representation of Checkbox CSS custom properties.
- * Use these for type-safe Checkbox token references.
+ * Covers 5 size tiers, radius options, 6 color variants, checked/unchecked/disabled
+ * states, focus ring, and transition tokens.
  */
 
 // Checkbox Sizes

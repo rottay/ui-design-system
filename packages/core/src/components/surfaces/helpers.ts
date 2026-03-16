@@ -1,8 +1,9 @@
 /**
- * Surface helpers
- *
- * These helpers keep the actual surface components readable and enforce the
- * same permission and adapter rules everywhere.
+ * @fileoverview Surface helpers for permissions, adapters, and data normalization.
+ * @description Centralizes the permission resolution logic (field/action/tab visibility),
+ * column filtering, action variant mapping, and value display helpers used by every
+ * surface component. Adding new permission or filter logic should happen here, not
+ * inside individual surfaces.
  */
 
 import type { ColumnDef, FieldDef } from '../patterns/types';
@@ -25,6 +26,12 @@ export function mapSurfaceData<TRaw, TView>(
   return rawData.map((rawItem) => adapter.map(rawItem));
 }
 
+/**
+ * Resolve field, action, or tab visibility against the surface permission model.
+ *
+ * Surfaces intentionally keep permissions data-driven. This helper is the
+ * narrow place where explicit grants and custom `isAllowed` logic are combined.
+ */
 export function resolveSurfacePermission(
   permissions: SurfacePermissionsConfig | undefined,
   input: {
@@ -58,6 +65,7 @@ export function resolveSurfacePermission(
   return permissions.granted?.includes(permissionRule.permission) ?? false;
 }
 
+/** Filter visible columns before they reach table-like patterns. */
 export function filterSurfaceColumns<TView>(
   columns: SurfaceColumn<TView>[],
   permissions: SurfacePermissionsConfig | undefined
@@ -70,6 +78,7 @@ export function filterSurfaceColumns<TView>(
   });
 }
 
+/** Filter action bars against both declarative visibility and permission rules. */
 export function filterSurfaceActions<TView>(
   actions: SurfaceAction<TView>[] | undefined,
   permissions: SurfacePermissionsConfig | undefined,
@@ -123,6 +132,7 @@ export function filterSurfaceFields(
   });
 }
 
+/** Filter tabbed navigation so hidden or unauthorized views never reach the renderer. */
 export function filterSurfaceTabbedViews<TView extends SurfaceTabbedView>(
   views: TView[],
   permissions: SurfacePermissionsConfig | undefined
@@ -144,6 +154,7 @@ export function filterSurfaceTabbedViews<TView extends SurfaceTabbedView>(
   });
 }
 
+/** Apply tab visibility and permission rules to detail surfaces on a per-item basis. */
 export function filterDetailSurfaceTabs<TView>(
   tabs: DetailSurfaceTab<TView>[] | undefined,
   permissions: SurfacePermissionsConfig | undefined,
@@ -212,6 +223,7 @@ export function countActiveFilters(values: Record<string, unknown> | undefined):
     return 0;
   }
 
+  // Mirrors the product expectation of "active" filters while ignoring empty placeholders.
   return Object.values(values).filter((value) => {
     if (Array.isArray(value)) {
       return value.length > 0;
@@ -221,6 +233,7 @@ export function countActiveFilters(values: Record<string, unknown> | undefined):
   }).length;
 }
 
+/** Resolve a column value using the same accessor priority the pattern layer expects. */
 export function resolveColumnValue<TView>(
   column: Pick<ColumnDef<TView>, 'accessorFn' | 'accessorKey' | 'key'>,
   item: TView
@@ -236,6 +249,7 @@ export function resolveColumnValue<TView>(
   return (item as Record<string, unknown>)[column.key];
 }
 
+/** Convert heterogeneous field values into stable display strings for summaries and fallbacks. */
 export function stringifySurfaceValue(value: unknown): string {
   if (value === null || value === undefined || value === '') {
     return '-';
@@ -252,6 +266,7 @@ export function stringifySurfaceValue(value: unknown): string {
   return JSON.stringify(value);
 }
 
+/** Normalize arbitrary surface errors into user-facing message + description pairs. */
 export function normalizeSurfaceError(
   error: unknown,
   fallbackMessage = 'Something went wrong while rendering this surface.'

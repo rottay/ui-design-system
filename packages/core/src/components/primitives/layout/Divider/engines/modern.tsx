@@ -1,30 +1,14 @@
 /**
- * @fileoverview Divider Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Divider component.
- * Uses DaisyUI's divider classes with Tailwind utilities.
+ * @fileoverview Divider Modern Engine - Rottay Design System.
+ * DaisyUI/Tailwind implementation using `divider` / `divider-start` /
+ * `divider-end` class conventions. Text is styled with uppercase and
+ * letter-spacing for visual emphasis consistent with DaisyUI themes.
  *
- * @remarks
- * The Modern engine provides DaisyUI-compatible styling:
- * - Uses DaisyUI's `divider` class structure
- * - Text styling uses uppercase and letter-spacing for emphasis
- * - Colors use DaisyUI's `oklch` color variables
- *
- * CSS Classes Applied:
- * - `divider`: Base DaisyUI class
- * - `divider-horizontal` / `divider-vertical`: Orientation
- * - `divider-start` / `divider-end`: Text positioning
- *
- * @example Using Modern Engine
+ * @example
  * ```tsx
- * import { Divider } from '@rottay/design-system';
- *
- * // DaisyUI styled divider
- * <Divider engine="modern" textPosition="left">
- *   CHAPTER ONE
- * </Divider>
+ * <ModernDivider textPosition="left">CHAPTER ONE</ModernDivider>
  * ```
  *
- * @see {@link Divider} - The main engine-aware component
  * @module Divider/Engines/Modern
  * @category Layout
  * @package @rottay/design-system
@@ -42,8 +26,15 @@ import {
 } from '../Divider.types';
 
 /**
- * Modern Divider component.
- * Styled to match DaisyUI conventions.
+ * Modern (DaisyUI/Tailwind) Divider component.
+ *
+ * Maps text positioning to DaisyUI classes (`divider-start`, `divider-end`)
+ * and uses flexbox with a 1rem gap for consistent spacing between the line
+ * and inline text. Text is styled with uppercase and letter-spacing when
+ * `plain` is false, matching the DaisyUI visual language.
+ *
+ * @param props - {@link DividerProps} with orientation, variant, text, and styling options.
+ * @returns A separator element with `role="separator"` and DaisyUI classes.
  */
 const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
   (props, ref) => {
@@ -66,21 +57,22 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...rest
     } = props;
 
-    // Resolve prop aliases
+    // Resolve prop aliases for backward compatibility with Ant Design API
     const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
     const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
     const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
     const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
     const isHorizontal = orientation === 'horizontal';
+    // Inline text is only supported in horizontal orientation
     const hasChildren = !!children && isHorizontal;
 
-    // Calculate values
     const lineThickness = getThicknessValue(thickness);
     const lineColor = color || DEFAULT_COLORS.modern;
     const spacingValue = SPACING_MAP[spacing];
 
-    // Build class names (DaisyUI style)
+    // DaisyUI maps text position to divider-start/divider-end;
+    // center (default) does not need an additional class
     const classNames = [
       'divider',
       isHorizontal ? 'divider-horizontal' : 'divider-vertical',
@@ -89,7 +81,8 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       className,
     ].filter(Boolean).join(' ');
 
-    // Container style
+    // Flex container with alignSelf: stretch so vertical dividers fill
+    // the height of their parent flex container
     const containerStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
@@ -104,7 +97,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...style,
     };
 
-    // Line style for DaisyUI (uses pseudo-element approach)
+    // Line uses border (not a pseudo-element) for inline style portability
     const lineStyle: React.CSSProperties = {
       flex: 1,
       height: isHorizontal ? '0' : '100%',
@@ -113,7 +106,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       borderLeft: !isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
     };
 
-    // Line before text
+    // flexGrow/flexBasis control asymmetric line lengths around the text
     const lineBeforeStyle: React.CSSProperties = {
       ...lineStyle,
       flexGrow: textPosition === 'left' ? 0 : 1,
@@ -121,7 +114,6 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: '5%',
     };
 
-    // Line after text
     const lineAfterStyle: React.CSSProperties = {
       ...lineStyle,
       flexGrow: textPosition === 'right' ? 0 : 1,
@@ -129,7 +121,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: '5%',
     };
 
-    // Text style (DaisyUI style)
+    // DaisyUI text convention: uppercase + letter-spacing for visual emphasis
     const textStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
@@ -141,7 +133,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       letterSpacing: plain ? 'normal' : '0.05em',
     };
 
-    // Render with text
+    // Two render paths: with inline text or simple line
     if (hasChildren) {
       return (
         <div
@@ -162,7 +154,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       );
     }
 
-    // Simple divider without text
+    // Simple divider: merge container and line styles into one element
     return (
       <div
         ref={ref}

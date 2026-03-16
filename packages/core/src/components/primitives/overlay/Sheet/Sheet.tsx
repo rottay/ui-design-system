@@ -1,33 +1,20 @@
 'use client';
 
 /**
- * @fileoverview Sheet - Rottay Design System
- * @description Bottom/side sheet component for mobile-first layouts.
- * Part of the Rottay Design System's overlay primitives collection.
+ * @fileoverview Sheet - mobile-first sliding panel (bottom/side).
+ * Semantically different from Drawer: optimized for touch interactions
+ * with drag handle and snap points.
+ * Multi-engine: Classic (Ant Design Drawer variant), Modern (DaisyUI), Rustic (portal + slide).
  *
- * @remarks
- * The Sheet component provides a sliding panel, semantically different from Drawer.
- * Optimized for mobile-first interactions with drag handle and snap points.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Wraps Ant Design Drawer variant
- * - **Modern**: DaisyUI drawer with Tailwind transitions
- * - **Rustic**: Portal + slide animation + drag-to-close handle
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Sheet } from '@rottay/design-system';
- *
- * const [open, setOpen] = useState(false);
- *
  * <Sheet open={open} onOpenChange={setOpen} side="bottom" title="Details">
- *   <p>Sheet content here</p>
+ *   <p>Sheet content</p>
  * </Sheet>
  * ```
  *
  * @module Sheet
  * @category Overlay
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -39,10 +26,11 @@ export {
   SHEET_DEFAULTS,
 } from './Sheet.types';
 
+/** Sheet component with multi-engine support. No compound sub-components. */
 export const Sheet = createEngineComponent<SheetProps>('Sheet', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+  classic: () => import('./engines/classic'),  // Ant Design Drawer variant
+  modern: () => import('./engines/modern'),     // DaisyUI drawer + Tailwind transitions
+  rustic: () => import('./engines/rustic'),      // Portal + slide animation + drag handle
 });
 
 Sheet.displayName = 'Sheet';

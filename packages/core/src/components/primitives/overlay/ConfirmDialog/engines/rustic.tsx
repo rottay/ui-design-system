@@ -1,10 +1,18 @@
 /**
- * @fileoverview ConfirmDialog Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the ConfirmDialog component.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the ConfirmDialog overlay component.
+ * Renders a variant-aware confirmation modal using only inline styles and DS CSS
+ * custom properties, with full ARIA support and manual scroll/keyboard management.
  *
- * @module RusticConfirmDialog
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <RusticConfirmDialog
+ *   open={show}
+ *   title="Remove team member?"
+ *   variant="danger"
+ *   onConfirm={remove}
+ *   onCancel={close}
+ * />
+ * ```
  */
 
 'use client';
@@ -13,6 +21,7 @@ import React, { useCallback, useEffect } from 'react';
 import type { ConfirmDialogProps } from '../ConfirmDialog.types';
 import { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS } from '../ConfirmDialog.types';
 
+/** Maps each variant to an inline SVG so the component stays icon-library-free. */
 const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   info: (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -37,6 +46,17 @@ const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   ),
 };
 
+/**
+ * ConfirmDialog implementation using pure inline CSS and DS token variables.
+ *
+ * This engine handles its own Escape-key dismissal and scroll lock. The confirm
+ * button colour, icon tint, and icon background are all driven by the VARIANT_COLORS
+ * map so each variant (info, warning, danger) receives consistent visual treatment.
+ * A CSS `@keyframes spin` animation is assumed to exist for the loading spinner SVG.
+ *
+ * @param props - {@link ConfirmDialogProps} shared across all engines.
+ * @returns A self-contained modal element, or an empty fragment when closed.
+ */
 export default function RusticConfirmDialog(props: ConfirmDialogProps): React.ReactElement {
   const {
     open,
@@ -55,18 +75,21 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
   } = props;
 
   const colors = VARIANT_COLORS[variant];
+  // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
 
   const handleConfirm = useCallback(() => {
     onConfirm?.();
   }, [onConfirm]);
 
+  // Escape key triggers cancel -- memoised to keep effect deps stable
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       onCancel?.();
     }
   }, [onCancel]);
 
+  // Register keyboard listener and lock body scroll while the dialog is open
   useEffect(() => {
     if (open) {
       document.addEventListener('keydown', handleKeyDown);
@@ -80,6 +103,8 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
 
   if (!open) return <></>;
 
+  // --- Style objects use DS token cascade: component -> semantic -> primitive ---
+
   const backdropStyle: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
@@ -92,6 +117,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
     padding: 'var(--ds-space-4, 1rem)',
   };
 
+  // Card-like dialog container -- backdrop blur adds frosted-glass depth
   const dialogStyle: React.CSSProperties = {
     backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff))',
     color: 'var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a))',
@@ -105,6 +131,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
     ...style,
   };
 
+  // Shared base for both cancel and confirm buttons; cursor changes when loading
   const buttonBaseStyle: React.CSSProperties = {
     padding: '8px 16px',
     borderRadius: 'var(--ds-radius-md, 6px)',
@@ -122,6 +149,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
       onClick={onCancel}
       data-testid={dataTestId}
     >
+      {/* stopPropagation prevents clicks inside the card from dismissing via onCancel */}
       <div
         role="alertdialog"
         aria-modal="true"

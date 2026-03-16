@@ -127,7 +127,10 @@ export function useCollapseTokens(
     style,
   } = options;
 
-  // Memoize token generation
+  // Token generation is memoized because it produces a new object of CSS
+  // custom properties. Without memo, every render would create a fresh
+  // object reference even when inputs haven't changed, causing unnecessary
+  // style recalculations in the browser.
   const tokens = useMemo(
     () =>
       getCollapseTokens({
@@ -142,7 +145,9 @@ export function useCollapseTokens(
     [variant, size, ghost, bordered, disabled, expanded, iconPosition]
   );
 
-  // Memoize root style
+  // rootStyle merges computed tokens with any consumer-provided inline
+  // styles. Consumer styles are spread last so they can override tokens
+  // when needed (e.g. explicit width/height).
   const rootStyle = useMemo<CSSProperties>(
     () => ({
       ...tokens,
@@ -151,7 +156,10 @@ export function useCollapseTokens(
     [tokens, style]
   );
 
-  // Memoize slot style getter
+  // getSlotStyle is a factory function (not a direct style object) because
+  // each slot needs different token resolution and optional overrides.
+  // Memoized so engines that call it in render don't get a new function
+  // reference every time unrelated props change.
   const getSlotStyle = useMemo(
     () =>
       (slot: CollapseSlot, overrides?: CSSProperties): CSSProperties => {
@@ -169,8 +177,13 @@ export function useCollapseTokens(
     [variant, ghost, disabled, expanded]
   );
 
-  // Generate class names
+  // Resolve the effective variant: ghost/bordered flags take precedence
+  // over the explicit variant prop, following the Collapse component's
+  // convenience-prop pattern.
   const effectiveVariant = ghost ? 'ghost' : bordered ? 'bordered' : variant;
+
+  // BEM-style class names built via array + filter(Boolean) to safely
+  // handle conditional modifiers (disabled, expanded) without ternaries.
   const classNames = useMemo(
     () => ({
       root: [

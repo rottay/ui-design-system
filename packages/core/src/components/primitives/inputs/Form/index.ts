@@ -156,6 +156,11 @@ const FORM_ENGINES = {
 
 function resolveFormEngine(engine: EngineName) {
   if (engine === 'custom') {
+    /**
+     * Custom packs do not currently expose their own form runtime contract.
+     * Falling back to Classic keeps `Form` and `useForm` available instead of
+     * leaving callers without a stable imperative API.
+     */
     return classicEngine;
   }
 
@@ -173,12 +178,14 @@ const EngineAwareFormItem: React.FC<FormItemProps> = (props) => {
   return React.createElement(Item, props);
 };
 
+/** Mirror `Form.List` against the active engine to keep context ownership aligned. */
 const EngineAwareFormList: React.FC<FormListProps> = (props) => {
   const { engine } = useEngineContext();
   const List = resolveFormEngine(engine).Form.List;
   return React.createElement(List, props);
 };
 
+/** Engine-aware error list so validation chrome always matches the active form runtime. */
 const EngineAwareFormErrorList: React.FC<FormErrorListProps> = (props) => {
   const { engine } = useEngineContext();
   const ErrorList = resolveFormEngine(engine).Form.ErrorList;
@@ -199,8 +206,12 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
 // Compound components (Item, List, ErrorList) are attached from the Classic engine
 // They work with any engine since they render children normally
 export const Form = Object.assign(FormBase, {
+  /** Field wrapper with label, validation, and feedback slots. */
   Item: EngineAwareFormItem,
+  /** Dynamic repeated field list that follows the active engine runtime. */
   List: EngineAwareFormList,
+  /** Shared validation summary renderer. */
   ErrorList: EngineAwareFormErrorList,
+  /** Imperative form hook exposed on the namespace for ergonomic parity with Ant Design. */
   useForm,
 });

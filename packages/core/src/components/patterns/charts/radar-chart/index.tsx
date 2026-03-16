@@ -1,5 +1,27 @@
 'use client';
 
+/**
+ * @fileoverview RadarChart -- D3-backed multi-series radar (spider) chart. Axes are evenly
+ * distributed around a circle using trigonometric positioning (cos/sin), with a -PI/2 offset
+ * so the first axis points to 12-o'clock. Concentric grid polygons are drawn at equal
+ * `scaleLinear` intervals. Each data series becomes a filled polygon whose vertices are
+ * projected along the axis lines at distances proportional to their values.
+ *
+ * @example
+ * <RadarChart
+ *   data={[
+ *     { axis: 'Speed', value: 8 },
+ *     { axis: 'Power', value: 6 },
+ *     { axis: 'Range', value: 9 },
+ *     { axis: 'Armor', value: 4 },
+ *   ]}
+ *   levels={4}
+ *   maxValue={10}
+ *   height={400}
+ *   title="Vehicle Stats"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import { max, scaleLinear, select } from 'd3';
 
@@ -8,6 +30,7 @@ import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** Props for the {@link RadarChart} component. */
 export interface RadarChartProps extends ChartBaseProps {
   data: { axis: string; value: number }[];
   series?: { name: string; data: { axis: string; value: number }[]; color?: string }[];
@@ -16,6 +39,12 @@ export interface RadarChartProps extends ChartBaseProps {
   showLabels?: boolean;
 }
 
+/**
+ * Renders a multi-series radar/spider chart with concentric grid levels and axis labels.
+ *
+ * @param props - See {@link RadarChartProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const RadarChart = memo(function RadarChart({
   data,
   series,
@@ -74,6 +103,8 @@ export const RadarChart = memo(function RadarChart({
 
     const radius = Math.min(chartWidth, chartHeight) / 2 - 40;
     const maxValue = maxValueProp ?? max(allSeries.flatMap((s) => s.data.map((d) => d.value))) ?? 1;
+    // Each axis is equally spaced around the circle; the -PI/2 offset in the
+    // trigonometry below rotates the first axis to 12-o'clock instead of 3-o'clock.
     const angleSlice = (2 * Math.PI) / n;
 
     const g = svg
@@ -82,9 +113,12 @@ export const RadarChart = memo(function RadarChart({
       .append('g')
       .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
+    // rScale maps data values to radial pixel distance from the centre.
+    // domain [0, maxValue] ensures zero is always at the centre.
     const rScale = scaleLinear().domain([0, maxValue]).range([0, radius]);
 
-    // Grid levels
+    // Grid levels: concentric polygons (not circles) to visually align with
+    // the axis lines and reinforce the polygon aesthetic of radar charts.
     for (let level = 1; level <= levels; level++) {
       const r = (radius / levels) * level;
       const points = axes.map((_, i) => {
@@ -127,7 +161,8 @@ export const RadarChart = memo(function RadarChart({
       });
     }
 
-    // Data polygons
+    // Data polygons: each series is a single filled polygon. The 20% fill
+    // opacity lets overlapping series remain visible behind each other.
     allSeries.forEach((s, si) => {
       const color = s.color ?? colors[si % colors.length];
       const points = s.data.map((d, i) => {
@@ -153,7 +188,8 @@ export const RadarChart = memo(function RadarChart({
           .attr('opacity', 1);
       }
 
-      // Dots
+      // Vertex dots: small circles at each polygon vertex improve readability
+      // and serve as tooltip anchor points for individual axis values.
       s.data.forEach((d, i) => {
         const angle = angleSlice * i - Math.PI / 2;
         const r = rScale(d.value);

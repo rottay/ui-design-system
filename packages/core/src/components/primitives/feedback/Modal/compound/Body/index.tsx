@@ -61,7 +61,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ModalBodyProps } from '../../../../../../contracts/primitives/feedback/Modal';
+import type { ModalBodyProps } from '../../Modal.types';
 import { PADDING_MAP } from '../../Modal.types';
 
 // ============================================================================

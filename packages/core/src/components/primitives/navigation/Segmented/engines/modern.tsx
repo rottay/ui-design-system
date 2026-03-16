@@ -185,6 +185,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
      * Normalize options array to SegmentedOption objects.
      * Converts simple strings/numbers to full option objects.
      */
+    // Normalize primitive options (strings/numbers) into full option objects
+    // so rendering logic can uniformly access `.label`, `.value`, `.icon`, etc.
     const normalizedOptions: SegmentedOption[] = options.map((opt) =>
       typeof opt === 'object' ? opt : { label: opt, value: opt }
     );
@@ -228,6 +230,9 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
             <button
               key={String(opt.value)}
               type="button"
+              // btn-active + btn-primary together give the selected option a
+              // filled primary appearance. btn-disabled greys out and prevents
+              // pointer events at the DaisyUI level (complements the native disabled attr).
               className={`join-item btn ${sizeClass} ${isActive ? 'btn-active btn-primary' : ''} ${isDisabled ? 'btn-disabled' : ''} ${opt.className || ''}`}
               onClick={() => handleClick(opt.value)}
               disabled={isDisabled}

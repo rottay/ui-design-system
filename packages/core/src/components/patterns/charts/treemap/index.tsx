@@ -1,5 +1,26 @@
 'use client';
 
+/**
+ * @fileoverview TreeMap -- D3-backed hierarchical treemap using `d3.treemap()` with the default
+ * squarified tiling algorithm. Input is a flat array of nodes wrapped in a synthetic root via
+ * `d3.hierarchy()`. Leaf tiles are sorted descending by value so the largest appear top-left.
+ * Labels are conditionally rendered only when a tile exceeds minimum width/height thresholds
+ * to prevent illegible clipped text.
+ *
+ * @example
+ * <TreeMap
+ *   data={[
+ *     { name: 'Engineering', value: 45 },
+ *     { name: 'Design', value: 20 },
+ *     { name: 'Marketing', value: 15 },
+ *     { name: 'Sales', value: 20 },
+ *   ]}
+ *   showLabels
+ *   height={350}
+ *   title="Team Allocation"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import { hierarchy, select, treemap } from 'd3';
 
@@ -8,18 +29,26 @@ import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** A single node in the treemap hierarchy. Nested `children` create sub-groups. */
 export interface TreeMapNode {
   name: string;
   value: number;
   children?: TreeMapNode[];
 }
 
+/** Props for the {@link TreeMap} component. */
 export interface TreeMapProps extends ChartBaseProps {
   data: TreeMapNode[];
   showLabels?: boolean;
   padding?: number;
 }
 
+/**
+ * Renders a hierarchical treemap using D3's squarified tiling layout.
+ *
+ * @param props - See {@link TreeMapProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const TreeMap = memo(function TreeMap({
   data,
   showLabels = true,
@@ -66,6 +95,8 @@ export const TreeMap = memo(function TreeMap({
 
     svg.attr('width', chartWidth).attr('height', chartHeight);
 
+    // Wrap the flat data array in a synthetic root node so d3.hierarchy can
+    // process it. Sort descending so the largest tiles appear top-left.
     const root = hierarchy<TreeMapNode>({ name: 'root', value: 0, children: data })
       .sum((d) => d.value)
       .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
@@ -74,6 +105,8 @@ export const TreeMap = memo(function TreeMap({
 
     const leaves = root.leaves();
 
+    // Each leaf is rendered as a <g> translated to its top-left corner (x0, y0).
+    // This local coordinate system simplifies child positioning (rect + text).
     const nodes = svg
       .selectAll('.node')
       .data(leaves)
@@ -82,6 +115,8 @@ export const TreeMap = memo(function TreeMap({
       .attr('class', 'node')
       .attr('transform', (d: any) => `translate(${d.x0},${d.y0})`);
 
+    // Tile rects are stroked with the background colour to create a visual gap
+    // between adjacent tiles without relying on the treemap padding alone.
     const rects = nodes
       .append('rect')
       .attr('width', (d: any) => Math.max(0, d.x1 - d.x0))
@@ -105,6 +140,8 @@ export const TreeMap = memo(function TreeMap({
     }
 
     if (showLabels) {
+      // Labels are only rendered when the tile is large enough to be legible;
+      // small tiles would just show clipped text that hurts readability.
       nodes
         .append('text')
         .attr('x', 4)

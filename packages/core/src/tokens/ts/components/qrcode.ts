@@ -1,8 +1,9 @@
 /**
- * QRCode Component Tokens - TypeScript Mirror
+ * @fileoverview QR code component token mirrors.
  *
- * TypeScript representation of QRCode CSS custom properties.
- * Use these for type-safe QRCode token references.
+ * Covers 6 size tiers (xs-2xl), foreground/background/border colors,
+ * status states (active/loading/expired/scanned), refresh button,
+ * center icon styling, and transition tokens.
  */
 
 // QRCode sizes

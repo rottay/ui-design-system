@@ -251,27 +251,36 @@ export function useNotificationPreferences(
   const { channels, categories: initialCategories, onChange, onSave } = options;
 
   // ---- State ----
+  // Lazy initializer with cloneCategories ensures we never mutate the
+  // caller's original array, which would cause subtle bugs if the caller
+  // shares the array with other components.
   const [categories, setCategories] = useState<NotificationCategory[]>(
     () => cloneCategories(initialCategories)
   );
   const [isSaving, setIsSaving] = useState(false);
 
-  // Keep stable reference to initial categories for dirty checking
+  // initialCategoriesRef tracks the "clean" state for dirty detection.
+  // Updated on every render so that if the parent changes initialCategories
+  // (e.g. after a save), the dirty flag resets correctly.
   const initialCategoriesRef = useRef<NotificationCategory[]>(initialCategories);
   initialCategoriesRef.current = initialCategories;
 
-  // Stable ref for onChange callback
+  // Callback refs prevent toggle/toggleAll/toggleChannel from having
+  // onChange/onSave in their dep arrays, keeping them stable across renders.
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
 
-  // Stable ref for onSave callback
   const onSaveRef = useRef(onSave);
   onSaveRef.current = onSave;
 
   // ---- Dirty check ----
+  // Computed on every render (not memoized) because the deep comparison
+  // is O(categories * channels) which is typically < 100 items.
   const isDirty = !categoriesEqual(categories, initialCategoriesRef.current);
 
   // ---- Toggle a single channel for a category ----
+  // Dependency-free (stable identity) because it reads callbacks from refs
+  // and uses the functional updater to access current state.
   const toggle = useCallback((categoryId: string, channelId: string) => {
     setCategories((prev) =>
       prev.map((cat) => {
@@ -281,6 +290,8 @@ export function useNotificationPreferences(
           channels: cat.channels.map((ch) => {
             if (ch.channelId !== channelId) return ch;
             const newEnabled = !ch.enabled;
+            // Fire onChange synchronously so the consumer can react
+            // (e.g. show a toast) before the next render.
             onChangeRef.current?.(categoryId, channelId, newEnabled);
             return { ...ch, enabled: newEnabled };
           }),
@@ -342,6 +353,10 @@ export function useNotificationPreferences(
   }, []);
 
   // ---- NotificationSurface integration ----
+  // Flattens the category x channel matrix into a flat list of preference
+  // objects keyed by a composite "categoryId::channelId" ID. This shape
+  // matches what NotificationSurface expects, so consumers can spread
+  // these props directly without manual mapping.
   const notificationSurfaceProps = {
     preferences: categories.flatMap((cat) =>
       cat.channels.map((ch) => ({
@@ -352,6 +367,8 @@ export function useNotificationPreferences(
       }))
     ),
     onPreferenceChange: (id: string, enabled: boolean) => {
+      // Reverse the composite ID back into category + channel, then
+      // apply the same state update logic as the toggle() function.
       const { categoryId, channelId } = parsePreferenceId(id);
       setCategories((prev) =>
         prev.map((cat) => {

@@ -1,39 +1,20 @@
 'use client';
 
 /**
- * @fileoverview AspectRatio - Rottay Design System
- * @description Container that maintains a consistent aspect ratio for its content.
- * Part of the Rottay Design System's layout primitives collection.
+ * @fileoverview AspectRatio -- container that enforces a width-to-height ratio
+ * for responsive images, videos, maps, and embedded content.
  *
- * @remarks
- * The AspectRatio component provides a container that enforces a specific
- * width-to-height ratio, useful for responsive images, videos, maps, and
- * embedded content.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design compatible wrapper with padding-bottom trick
- * - **Modern**: Tailwind CSS with aspect-ratio CSS property
- * - **Rustic**: Pure CSS implementation with padding-bottom fallback
- *
- * @example Basic AspectRatio
+ * @example
  * ```tsx
  * import { AspectRatio } from '@rottay/design-system';
  *
- * <AspectRatio ratio={16/9}>
- *   <img src="/image.jpg" alt="Landscape" style={{ objectFit: 'cover' }} />
- * </AspectRatio>
- * ```
- *
- * @example Square Ratio
- * ```tsx
- * <AspectRatio ratio={1}>
- *   <div>Square content</div>
+ * <AspectRatio ratio={16 / 9}>
+ *   <img src="/hero.jpg" alt="Hero" style={{ objectFit: 'cover' }} />
  * </AspectRatio>
  * ```
  *
  * @module AspectRatio
  * @category Layout
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -46,10 +27,13 @@ export {
   RATIO_PRESETS,
 } from './AspectRatio.types';
 
-
+/** Aspect ratio container resolved through the active engine. */
 export const AspectRatio = createEngineComponent<AspectRatioProps>('AspectRatio', {
+  /** Ant Design compatible wrapper using padding-bottom trick */
   classic: () => import('./engines/classic'),
+  /** Tailwind CSS using native aspect-ratio property */
   modern: () => import('./engines/modern'),
+  /** Pure CSS with padding-bottom fallback for older browsers */
   rustic: () => import('./engines/rustic'),
 });
 

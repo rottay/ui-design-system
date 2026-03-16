@@ -277,10 +277,11 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
   // Style Definitions
   // ---------------------------------------------------------------------------
 
-  /**
-   * Overlay styles.
-   * Covers the entire viewport with semi-transparent background.
-   */
+  // Overlay uses fixed positioning to cover the entire viewport.
+  // overflowY: 'auto' allows scrolling tall modals when content exceeds
+  // viewport height. The centered prop switches between vertical centering
+  // (dialogs) and top-aligned (long form modals that need scroll room).
+  // overlayOpacity is configurable per instance for different visual weights.
   const overlayStyle: React.CSSProperties = {
     position: 'fixed',
     top: 0,
@@ -296,10 +297,9 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     overflowY: 'auto',
   };
 
-  /**
-   * Modal container styles.
-   * Uses CSS custom properties for tenant theming.
-   */
+  // Three-level CSS variable fallback chain: component-specific token ->
+  // global semantic token -> hardcoded default. This allows tenants to
+  // customize at any granularity (modal-specific, theme-wide, or neither).
   const modalStyle: React.CSSProperties = {
     backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
     borderRadius: 'var(--ds-modal-radius, var(--ds-radius-lg, 8px))',
@@ -368,7 +368,10 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
       style={overlayStyle}
       onClick={closeOnOverlayClick ? handleCancel : undefined}
     >
-      {/* Modal Container - stop propagation to prevent closing on content click */}
+      {/* stopPropagation prevents overlay click handler from firing when
+        user clicks inside the modal content. role="dialog" + aria-modal="true"
+        informs assistive technologies this is a modal context, enabling
+        proper focus trapping behavior in screen readers. */}
       <div
         className="rottay-modal"
         style={modalStyle}
@@ -414,6 +417,9 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
                     {cancelText}
                   </button>
                 )}
+                {/* Text-based loading indicator ("Loading...") instead of a
+                    spinner because Rustic avoids icon/animation dependencies.
+                    disabled prevents double-submission during async confirmation. */}
                 {onOk && (
                   <button
                     style={okButtonStyle}

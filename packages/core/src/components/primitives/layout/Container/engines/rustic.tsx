@@ -1,28 +1,16 @@
 'use client';
 
 /**
- * @fileoverview Container Rustic Engine - Rottay Design System
- * @description Rustic (Pure HTML/CSS) implementation of the Container component.
- * Uses inline CSS styles for maximum compatibility without external dependencies.
+ * @fileoverview Container Rustic Engine - Rottay Design System.
+ * Pure inline CSS container with zero external dependencies. Resolves named
+ * presets to pixel values identically to the Classic engine, but applies
+ * margin-left/right as explicit properties instead of the spread shorthand.
+ * Ideal for embedded widgets and SSR without CSS extraction.
  *
- * @remarks
- * The Rustic engine provides:
- * - Pure inline CSS styling without external dependencies
- * - Full max-width, padding, and centering support
- * - Box-sizing: border-box for consistent sizing
- *
- * This implementation is ideal for:
- * - Embedded widgets in third-party applications
- * - Server-side rendering without CSS extraction
- * - Maximum browser compatibility
- *
- * @example Using Rustic Engine
+ * @example
  * ```tsx
- * import { Container } from '@rottay/design-system';
- *
- * // Pure inline CSS container
- * <Container engine="rustic" maxWidth="lg" padding="md">
- *   Self-contained styling, no framework dependencies
+ * <Container engine="rustic" maxWidth={960} padding="lg" center>
+ *   <p>Self-contained styling, no framework required</p>
  * </Container>
  * ```
  *
@@ -40,6 +28,17 @@ import {
   CONTAINER_PADDINGS,
 } from '../Container.types';
 
+/**
+ * Rustic (vanilla CSS) Container component.
+ *
+ * Functionally equivalent to the Classic engine but uses explicit
+ * `marginLeft`/`marginRight` properties (not a spread object) for centering.
+ * This avoids issues in some SSR hydration scenarios where spread-based
+ * conditional styles can produce mismatched markup.
+ *
+ * @param props - {@link ContainerProps} with maxWidth, padding, center, fluid, and styling overrides.
+ * @returns A width-constrained container div with pure inline styles.
+ */
 export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   (props, ref) => {
     const {
@@ -53,17 +52,22 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
       ...rest
     } = props;
 
+    // Resolve maxWidth: fluid forces 100%, otherwise lookup the named preset
+    // or convert a raw number to a pixel string
     const computedMaxWidth = fluid
       ? '100%'
       : typeof maxWidth === 'number'
         ? `${maxWidth}px`
         : CONTAINER_MAX_WIDTHS[maxWidth as keyof typeof CONTAINER_MAX_WIDTHS] || CONTAINER_MAX_WIDTHS.lg;
 
+    // Resolve padding from the preset map or convert numeric to px
     const computedPadding =
       typeof padding === 'number'
         ? `${padding}px`
         : CONTAINER_PADDINGS[padding as keyof typeof CONTAINER_PADDINGS] || CONTAINER_PADDINGS.md;
 
+    // Explicit margin properties for centering (undefined when not centered
+    // so they do not override user-provided margin in the style spread)
     const containerStyle: React.CSSProperties = {
       maxWidth: computedMaxWidth,
       width: '100%',

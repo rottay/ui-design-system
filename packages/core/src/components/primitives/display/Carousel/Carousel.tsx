@@ -1,91 +1,30 @@
 'use client';
 
 /**
- * @fileoverview Carousel Component - Rottay Design System
- * @description Responsive slideshow with navigation, autoplay, and transitions.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Carousel - Responsive slideshow with navigation, autoplay, and transitions.
+ * Supports dots, arrows, fade/slide effects, vertical mode, and programmatic
+ * control via ref. `Carousel.Item` provides a styled slide wrapper.
  *
- * @remarks
- * The Carousel component displays rotating content with navigation controls,
- * autoplay, fade/slide transitions, and vertical mode support.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design Carousel with full feature support
- * - **Modern**: DaisyUI-styled carousel with Tailwind utilities
- * - **Rustic**: Pure HTML/CSS with maximum accessibility
- *
- * **Key Features:**
- * - Autoplay with configurable speed
- * - Navigation dots and arrows
- * - Fade and slide transitions
- * - Vertical carousel mode
- * - Touch/swipe support
- * - Infinite loop mode
- * - Programmatic control via ref
- * - ARIA-compliant accessibility
- *
- * **Compound Components:**
- * - `Carousel.Item` - Styled slide wrapper with background support
- *
- * **CSS Custom Properties:**
- * - `--carousel-speed` - Transition duration
- * - `--carousel-height` - Carousel height
- * - `--carousel-arrow-bg` - Arrow background
- * - `--carousel-arrow-size` - Arrow dimensions
- * - `--carousel-dot-bg` - Inactive dot color
- * - `--carousel-dot-active-bg` - Active dot color
- * - `--carousel-dots-gap` - Spacing between dots
- *
- * @example Basic Usage
+ * @example
  * ```tsx
  * import { Carousel } from '@rottay/design-system';
  *
- * <Carousel dots arrows>
- *   <div>Slide 1</div>
- *   <div>Slide 2</div>
- * </Carousel>
- * ```
- *
- * @example Autoplay
- * ```tsx
- * <Carousel autoplay autoplaySpeed={3000}>
- *   <img src="/image1.jpg" alt="Slide 1" />
- *   <img src="/image2.jpg" alt="Slide 2" />
- * </Carousel>
- * ```
- *
- * @example Compound Components
- * ```tsx
- * <Carousel>
- *   <Carousel.Item backgroundColor="var(--ds-color-neutral-100)">
+ * <Carousel autoplay dots arrows>
+ *   <Carousel.Item backgroundImage="/hero.jpg">
  *     <h2>Welcome</h2>
  *   </Carousel.Item>
- *   <Carousel.Item backgroundImage="/hero.jpg">
- *     <h2>Hero Section</h2>
- *   </Carousel.Item>
+ *   <Carousel.Item>Slide 2</Carousel.Item>
  * </Carousel>
  * ```
  *
- * @example Programmatic Control
- * ```tsx
- * const carouselRef = useRef<CarouselRef>(null);
- * <Carousel ref={carouselRef}>...</Carousel>
- * carouselRef.current?.next();
- * carouselRef.current?.goTo(2);
- * ```
- *
- * @see {@link CarouselProps} for component props
- * @see {@link CarouselRef} for ref methods
  * @module Carousel
  * @category Display
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
 import type { CarouselProps } from './Carousel.types';
 import { CarouselItem } from './compound';
 
-// Export types
 export type {
   CarouselProps,
   CarouselRef,
@@ -96,36 +35,13 @@ export type {
 } from './Carousel.types';
 export { CAROUSEL_DEFAULTS } from './Carousel.types';
 
-// Export compound components
 export { CarouselItem };
 export type { CarouselItemComponentProps } from './compound';
 
-// Export base component for direct usage
-
 /**
- * Carousel Component
- *
- * A flexible, engine-aware carousel component for displaying slideshows,
- * image galleries, or any rotating content. Supports autoplay, navigation
- * dots and arrows, fade/slide transitions, and vertical mode.
- *
- * The component automatically selects the appropriate engine implementation
- * based on the EngineProvider context or the `engine` prop.
- *
- * @example
- * ```tsx
- * // Default engine (from context or Classic)
- * <Carousel autoplay dots>
- *   <div>Slide 1</div>
- *   <div>Slide 2</div>
- * </Carousel>
- *
- * // Specific engine
- * <Carousel engine="modern" arrows>
- *   <div>Slide 1</div>
- *   <div>Slide 2</div>
- * </Carousel>
- * ```
+ * Carousel with compound Item sub-component.
+ * The Item wrapper adds background color/image and padding to individual slides,
+ * which is useful for hero sections and styled content panels.
  */
 export const Carousel = Object.assign(
   createEngineComponent<CarouselProps>('Carousel', {
@@ -134,7 +50,7 @@ export const Carousel = Object.assign(
     rustic: () => import('./engines/rustic'),
   }),
   {
-    /** Styled wrapper for carousel slides */
+    /** Styled slide wrapper with optional background color/image support. */
     Item: CarouselItem,
   }
 );

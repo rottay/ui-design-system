@@ -135,7 +135,8 @@ export default function ClassicStepper(props: StepperProps): React.ReactElement 
     style,
   } = props;
 
-  // Suppress unused - Ant Design doesn't have a variant prop
+  // Suppress unused -- antd Steps has no `variant` concept. The underscore
+  // prefix plus void expression prevent both TS "unused" and ESLint warnings.
   void _variant;
 
   // ============================================================================
@@ -188,8 +189,13 @@ export default function ClassicStepper(props: StepperProps): React.ReactElement 
     size: mapSize(size),
     status: mapStatus(status),
     labelPlacement,
+    // Only wire up onChange when clickable is true; passing undefined
+    // tells antd to render non-interactive step indicators
     onChange: clickable ? handleChange : undefined,
     percent,
+    // progressDot accepts boolean or a render function in antd.
+    // We only pass `true` for the boolean case; custom render functions
+    // are not yet mapped through the Classic engine.
     progressDot: progressDot === true ? true : undefined,
     responsive,
     className: `rottay-stepper rottay-stepper--classic ${className || ''}`,
@@ -204,12 +210,17 @@ export default function ClassicStepper(props: StepperProps): React.ReactElement 
    * If using children (compound pattern), convert them to items.
    * Ant Design v5 prefers the items prop but we support children for flexibility.
    */
+  // Support the compound component pattern `<Stepper.Step />` as an
+  // alternative to the data-driven `items` prop. The items prop takes
+  // precedence when both are provided to avoid ambiguity.
   if (children && !items) {
     const childItems: StepsProps['items'] = [];
 
     React.Children.forEach(children, (child) => {
       if (!React.isValidElement(child)) return;
 
+      // Match by displayName rather than direct reference to avoid circular
+      // imports between the engine and the compound sub-component
       const displayName = (child.type as any)?.displayName || '';
       if (displayName === 'Stepper.Step') {
         const stepProps = child.props as any;

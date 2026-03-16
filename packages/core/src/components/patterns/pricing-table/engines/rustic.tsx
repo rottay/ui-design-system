@@ -1,12 +1,32 @@
 'use client';
 
 /**
- * PricingTable - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla CSS) engine for the PricingTable pattern.
+ *
+ * Zero-dependency implementation that relies exclusively on inline styles
+ * referencing `--ds-*` CSS custom properties. This engine is intended for
+ * environments where neither Ant Design nor Tailwind is available, or where
+ * full theme-token control is required without external CSS frameworks. All
+ * interactive elements (toggle switch, buttons) are hand-built with native
+ * HTML to avoid any third-party runtime.
+ *
+ * @example
+ * <RusticPricingTable
+ *   plans={[{ id: 'basic', name: 'Basic', price: 0, cta: 'Free', features: { storage: '5 GB' } }]}
+ *   features={[{ key: 'storage', label: 'Storage' }]}
+ *   currency="$"
+ * />
  */
 
 import React, { type CSSProperties } from 'react';
 import type { PricingTableProps, PricingPlan, PricingFeature } from '../PricingTable.types';
 
+/**
+ * Renders a tri-state feature indicator using Unicode characters and DS tokens.
+ * Uses double-fallback CSS variables (e.g. `--ds-color-success-600` with a
+ * generic `--ds-color-success` fallback) so it works across both granular and
+ * simplified token sets.
+ */
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
   if (value === true) {
     return (
@@ -21,11 +41,14 @@ function renderFeatureValue(value: boolean | string | undefined): React.ReactNod
   return <span style={{ fontSize: 13 }}>{value}</span>;
 }
 
+/** Shared table cell padding and border. Extracted to avoid repetition across
+ *  the ~40+ cells in a typical pricing table. */
 const cellStyle: CSSProperties = {
   padding: '10px 16px',
   borderTop: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100))',
 };
 
+/** Default (ghost) button style for non-highlighted plan CTAs. */
 const btnBase: CSSProperties = {
   width: '100%',
   padding: '8px 16px',
@@ -39,6 +62,8 @@ const btnBase: CSSProperties = {
   marginTop: 12,
 };
 
+/** Primary button style for the highlighted/recommended plan CTA. Spreads
+ *  btnBase and overrides background and border to the primary color. */
 const primaryBtn: CSSProperties = {
   ...btnBase,
   background: 'var(--ds-button-primary-bg, var(--ds-color-primary))',
@@ -46,6 +71,17 @@ const primaryBtn: CSSProperties = {
   borderColor: 'var(--ds-button-primary-border, var(--ds-color-primary))',
 };
 
+/**
+ * Rustic (Vanilla CSS) engine for the PricingTable pattern component.
+ *
+ * Every visual element is built from native HTML and inline styles that
+ * reference `--ds-*` tokens, making this engine fully theme-aware without
+ * importing any CSS framework. The custom toggle switch is implemented via a
+ * hidden checkbox plus absolutely-positioned pseudo-knob spans.
+ *
+ * @param props - {@link PricingTableProps} controlling plans, features, billing cycle, and callbacks.
+ * @returns A feature-comparison pricing table styled with inline CSS and DS tokens.
+ */
 export default function RusticPricingTable(props: PricingTableProps) {
   const {
     plans,
@@ -61,6 +97,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
     style,
   } = props;
 
+  /* Short-circuit: plain text loading state with muted token color */
   if (loading) {
     return (
       <div className={className} style={{ textAlign: 'center', padding: 48, ...style }}>
@@ -71,7 +108,9 @@ export default function RusticPricingTable(props: PricingTableProps) {
 
   return (
     <div className={className} style={style}>
-      {/* Billing toggle */}
+      {/* Billing toggle -- Hand-built toggle switch using a hidden checkbox.
+          The visible track and knob are absolutely-positioned spans whose
+          position and color transition based on the billingCycle prop. */}
       {onBillingCycleChange && (
         <div style={{ textAlign: 'center', marginBottom: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
           <span style={{ fontWeight: billingCycle === 'monthly' ? 700 : 400, fontSize: 'var(--ds-font-size-sm, 14px)' }}>Monthly</span>
@@ -125,10 +164,12 @@ export default function RusticPricingTable(props: PricingTableProps) {
               <th style={{ ...cellStyle, textAlign: 'left', width: 200, verticalAlign: 'bottom', fontSize: 'var(--ds-font-size-sm, 13px)', fontWeight: 600, color: 'var(--ds-color-text-muted)', border: 'none' }}>
                 Features
               </th>
+              {/* Each plan column header: highlighted plans get thicker primary border + tinted bg */}
               {plans.map(plan => {
                 const isHighlighted = plan.id === highlightedPlan || plan.popular;
                 return (
                   <th key={plan.id} style={{ ...cellStyle, textAlign: 'center', verticalAlign: 'top', border: 'none' }}>
+                    {/* renderPlanHeader lets consumers fully replace the plan card */}
                     {renderPlanHeader ? renderPlanHeader(plan) : (
                       <div style={{
                         padding: 16,
@@ -151,6 +192,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                           </div>
                         )}
                         <div style={{ fontSize: 18, fontWeight: 700 }}>{plan.name}</div>
+                        {/* Price: number gets formatted with currency symbol; strings pass through for "Custom" etc. */}
                         <div style={{ fontSize: 28, fontWeight: 800, marginTop: 4 }}>
                           {typeof plan.price === 'number' ? `${currency}${plan.price}` : plan.price}
                         </div>
@@ -160,6 +202,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                         {plan.description && (
                           <div style={{ fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>{plan.description}</div>
                         )}
+                        {/* CTA button: highlighted plans get the primary button style */}
                         <button
                           style={isHighlighted ? primaryBtn : btnBase}
                           onClick={() => onSelectPlan?.(plan.id)}
@@ -173,8 +216,11 @@ export default function RusticPricingTable(props: PricingTableProps) {
               })}
             </tr>
           </thead>
+          {/* Feature rows -- category headers inserted when the category changes
+              between adjacent features in the flat array */}
           <tbody>
             {features.map((feature, index) => {
+              /* Detect category boundaries by comparing with the previous feature's category */
               const isCategory = feature.category && (index === 0 || features[index - 1].category !== feature.category);
               return (
                 <React.Fragment key={feature.key}>
@@ -195,6 +241,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                       </td>
                     </tr>
                   )}
+                  {/* Feature row: label cell + one value cell per plan */}
                   <tr>
                     <td style={{ ...cellStyle, fontSize: 'var(--ds-font-size-sm, 13px)' }}>
                       {feature.label}

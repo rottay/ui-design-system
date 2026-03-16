@@ -1,16 +1,39 @@
 'use client';
 
 /**
- * FormBuilder - Rustic Engine (Vanilla HTML/CSS)
+ * @fileoverview Rustic (Apollo) engine for the FormBuilder pattern, rendered
+ * entirely with inline styles that reference `--ds-*` CSS custom properties.
+ * This engine has zero external CSS dependencies (no Tailwind, no Ant Design)
+ * so it can run in any host environment -- including iframes, email previews,
+ * and Remotion renders -- while still respecting the tenant's design-system
+ * theme tokens for colors, radii, typography, and animation personality.
+ *
+ * @example
+ * <RusticFormBuilder
+ *   fields={[
+ *     { name: 'company', label: 'Company', type: 'text', required: true },
+ *     { name: 'industry', label: 'Industry', type: 'select', options: industries },
+ *   ]}
+ *   layout="horizontal"
+ *   onSubmit={(values) => onboardTenant(values)}
+ *   actions={<button type="submit" style={{ padding: '8px 20px' }}>Create</button>}
+ * />
  */
 
 import React, { useState, useCallback, useMemo, type ReactNode, type CSSProperties } from 'react';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../types';
 
+// Personality-driven easing and duration: these reference CSS custom properties
+// so tenant themes can tune animation feel without touching component code.
 const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
 
+// ---------------------------------------------------------------------------
+// Style dictionary
+// ---------------------------------------------------------------------------
+// All visual tokens reference `--ds-*` CSS custom properties with sensible
+// fallbacks so the form renders correctly even without a theme provider.
 const s = {
   title: {
     fontSize: 'var(--ds-font-size-xl)',
@@ -171,6 +194,15 @@ const s = {
   } as CSSProperties,
 };
 
+/**
+ * Vanilla inline-style form builder that uses `--ds-*` CSS custom properties
+ * for all visual decisions. Ships zero external CSS -- ideal for isolated
+ * rendering contexts such as iframes, email templates, or Remotion compositions.
+ * Includes a sticky submit area for long scrollable forms inside modals.
+ *
+ * @param props - Engine-agnostic form configuration; see {@link FormBuilderProps}.
+ * @returns A rendered `<form>` element styled entirely with inline styles and CSS variables.
+ */
 export default function RusticFormBuilder(props: FormBuilderProps) {
   const {
     fields,
@@ -198,6 +230,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     style,
   } = props;
 
+  // Lazy initializer: field-level defaults are merged first, then overridden
+  // by initialValues so server-loaded data always takes precedence.
   const [internalValues, setInternalValues] = useState<Record<string, unknown>>(() => {
     const defaults: Record<string, unknown> = {};
     fields.forEach((f) => {
@@ -209,9 +243,13 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [internalStep, setInternalStep] = useState(0);
 
+  // Controlled vs uncontrolled: the component works in both modes depending
+  // on whether the consumer passes `values` / `currentStep`.
   const currentValues = controlledValues ?? internalValues;
   const currentStep = controlledStep ?? internalStep;
 
+  // Shallow-copy-on-write: only update internal state when uncontrolled.
+  // Always fires onChange so both controlled and uncontrolled consumers stay in sync.
   const updateValue = useCallback(
     (name: string, value: unknown) => {
       const next = { ...currentValues, [name]: value };
@@ -221,6 +259,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     [currentValues, controlledValues, onChange]
   );
 
+  // `hidden` can be a static boolean or a function of current form values,
+  // enabling conditional visibility (e.g. "show city only if country is selected").
   const isHidden = useCallback(
     (field: FieldDef): boolean => {
       if (typeof field.hidden === 'function') return field.hidden(currentValues);
@@ -229,6 +269,10 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     [currentValues]
   );
 
+  // Validate all visible fields synchronously. Hidden fields are skipped
+  // because they should not block submission when their controlling condition
+  // is false. Empty string is treated as "not provided" for required checks
+  // because HTML inputs default to '' rather than undefined/null.
   const validate = useCallback((): Record<string, string> => {
     const errs: Record<string, string> = {};
     fields.forEach((field) => {
@@ -259,6 +303,9 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     return errs;
   }, [fields, currentValues, isHidden]);
 
+  // Intercepts native form submit to run validation first. Only calls
+  // onSubmit when all visible fields pass -- the consumer never receives
+  // invalid data. Notifies parent of validation state regardless of outcome.
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
@@ -272,12 +319,18 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     [validate, onSubmit, currentValues, onValidationChange]
   );
 
+  // Merge error border/shadow onto the base input style only when a validation
+  // error exists. This keeps per-field style computation to a single lookup.
   const inputStyle = (name: string): CSSProperties =>
     errors[name] ? { ...s.input, ...s.inputError } : s.input;
 
+  // Maps each FieldDef type to a native HTML input element styled with
+  // inline styles from the `s` dictionary. All visual tokens flow through
+  // CSS custom properties so tenant themes control the look without code changes.
   const renderFieldInput = useCallback(
     (field: FieldDef): ReactNode => {
       const val = currentValues[field.name];
+      // Per-field disabled merges with form-level disabled: either wins.
       const fieldDisabled = disabled || field.disabled;
 
       switch (field.type) {
@@ -435,6 +488,9 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     [fields, isHidden]
   );
 
+  // Distribute fields evenly across steps when explicit step assignments are
+  // not provided. This auto-grouping lets consumers add a wizard layout by
+  // just supplying stepLabels without restructuring their field array.
   const stepFields = useMemo(() => {
     if (layout !== 'steps' || !stepLabels) return [visibleFields];
     const perStep = Math.ceil(visibleFields.length / stepLabels.length);
@@ -445,17 +501,26 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     return groups;
   }, [layout, stepLabels, visibleFields]);
 
+  // Step navigation supports both controlled (parent manages step) and
+  // uncontrolled (internal state) modes -- same pattern as value management.
   const handleStepChange = (step: number) => {
     if (controlledStep === undefined) setInternalStep(step);
     onStepChange?.(step);
   };
 
+  // renderField is the consumer's escape hatch: it receives the default
+  // control, the field definition, and current value so it can wrap, replace,
+  // or augment the rendering without reimplementing the entire switch.
   const renderFormField = (field: FieldDef) => {
     const defaultRender = renderFieldInput(field);
     const content = renderField ? renderField(field, defaultRender, currentValues[field.name]) : defaultRender;
     const error = errors[field.name];
+    // Checkbox fields embed their label inline, so the outer label is hidden
+    // to avoid a redundant double-label.
     const showLabel = showLabels && field.type !== 'checkbox';
 
+    // Horizontal layout puts label and input side-by-side in a flex row;
+    // other layouts stack them vertically.
     const fieldStyle: CSSProperties =
       layout === 'horizontal'
         ? { display: 'flex', alignItems: 'flex-start', gap: 12 }
@@ -488,6 +553,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
   const fieldElements = fieldsToRender.map(renderFormField);
   const gapStr = typeof gap === 'number' ? `${gap}px` : gap;
 
+  // Grid mode uses CSS Grid; all other layouts use a vertical flex column.
+  // Gap is unified across both strategies so field spacing stays consistent.
   const containerStyle: CSSProperties =
     layout === 'grid'
       ? { display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap: gapStr }
@@ -499,10 +566,15 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
       className={className}
       style={{ fontFamily: 'var(--ds-font-family-base)', ...style }}
     >
+      {/* Inline keyframes: Rustic engine cannot depend on global CSS, so
+          the error-slide-in animation must be co-located here. */}
       <style>{`@keyframes ds-form-error-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       {title && <h3 style={s.title}>{title}</h3>}
       {description && <p style={s.description}>{description}</p>}
 
+      {/* Step bar renders a bottom-bordered indicator for each step.
+          Steps up to and including the current one are highlighted with
+          the primary colour via the `s.stepItem(active)` factory. */}
       {layout === 'steps' && stepLabels && (
         <div style={s.stepBar}>
           {stepLabels.map((label, i) => (
@@ -532,6 +604,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         </div>
       )}
 
+      {/* Submit area is position:sticky so it stays visible when the form
+          scrolls inside a modal or side panel. */}
       {actions && <div style={s.submitArea}>{actions}</div>}
     </form>
   );

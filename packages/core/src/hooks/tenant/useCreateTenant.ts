@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * useCreateTenant Hook
- *
- * React hook for runtime tenant creation with CSS injection.
- * Allows creating, previewing, and activating tenant themes
- * without manual CSS file creation or registry updates.
+ * @fileoverview useCreateTenant Hook - Rottay Design System
+ * @description React hook for runtime tenant creation with CSS injection.
+ * Allows creating, previewing, and activating tenant themes without
+ * manual CSS file creation or registry updates.
  *
  * @example
  * ```tsx
@@ -25,6 +24,10 @@
  *   return <button onClick={handleCreate}>Create Tenant</button>;
  * }
  * ```
+ *
+ * @module System/Hooks/Tenant/UseCreateTenant
+ * @category System
+ * @package @rottay/design-system
  */
 
 import { useCallback, useRef } from 'react';
@@ -46,12 +49,18 @@ function getStyleTagId(slug: string): string {
 /**
  * Hook for runtime tenant creation with CSS injection.
  *
- * Returns:
- * - `createTenant` - Generates a complete TenantConfig from minimal input
- * - `injectTenantCss` - Injects the generated CSS into the document head
- * - `removeTenantCss` - Removes injected CSS for a given tenant slug
+ * Provides three functions:
+ * - `createTenant` - Generates a complete `TenantConfig` from minimal input
+ * - `injectTenantCss` - Injects the generated CSS into the `<head>` as a `<style>` tag
+ * - `removeTenantCss` - Removes the injected `<style>` for a given tenant slug
+ *
+ * All DOM operations are SSR-safe (guarded by `typeof document` check).
+ *
+ * @returns Object with `createTenant`, `injectTenantCss`, and `removeTenantCss`
  */
 export function useCreateTenant() {
+  // Tracks which tenant slugs currently have injected style tags so we can
+  // avoid duplicate injection and properly clean up on removal.
   const injectedSlugs = useRef<Set<string>>(new Set());
 
   const createTenant = useCallback(

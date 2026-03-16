@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Public component smoke tests across all stable engines.
+ * Verifies that every exported primitive (Avatar, Badge, Card, Modal, etc.)
+ * renders without throwing through each engine's lazy-loaded implementation.
+ */
+
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { waitFor } from '@testing-library/react';

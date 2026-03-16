@@ -1,17 +1,40 @@
 'use client';
 
 /**
- * TimePicker - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview TimePicker Modern Engine -- DaisyUI/Tailwind with native time inputs.
+ * Uses the browser's built-in `<input type="time">` for time selection,
+ * styled with DaisyUI's `input` classes. Includes a compound
+ * `TimePicker.RangePicker` sub-component with two paired time inputs.
+ *
+ * @example
+ * ```tsx
+ * <TimePicker engine="modern" format="HH:mm" size="default" />
+ * ```
+ *
+ * @module TimePicker/Engines/Modern
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState } from 'react';
 import type { TimePickerProps, TimeRangePickerProps } from '../TimePicker.types';
 
+/** Maps DS size values to DaisyUI input size modifier classes. */
 const sizeClasses = {
   small: 'input-sm',
   default: 'input-md',
   large: 'input-lg',
 };
 
+/**
+ * Modern engine TimePicker -- native `<input type="time">` with DaisyUI styling.
+ *
+ * Parses incoming `Date | string` values into time strings for the native input
+ * and converts them back to Date objects on change. The `step` attribute is set
+ * to 1 (second precision) or 60 (minute precision) based on the format prop.
+ *
+ * @param props - {@link TimePickerProps} unified time picker props.
+ * @returns A ref-forwarding time input with DaisyUI styling.
+ */
 const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((props, ref) => {
   const {
     value,
@@ -30,12 +53,14 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     name,
   } = props;
 
+  /**
+   * Normalises a Date or string into an "HH:mm:ss" time string.
+   * Accepts bare time strings, ISO date strings, and Date objects.
+   */
   const parseTime = (val: Date | string | null | undefined): string => {
     if (!val) return '';
     if (typeof val === 'string') {
-      // If already a time string, return as is
       if (/^\d{2}:\d{2}(:\d{2})?$/.test(val)) return val;
-      // Try to parse as date
       const date = new Date(val);
       if (!isNaN(date.getTime())) {
         return date.toTimeString().slice(0, 8);
@@ -45,14 +70,15 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     return val.toTimeString().slice(0, 8);
   };
 
+  // Controlled vs uncontrolled: external `value` takes precedence
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<string>(() => parseTime(defaultValue));
 
   const displayValue = isControlled ? parseTime(value) : internalValue;
 
+  // Construct a full Date anchored to today so the caller receives a usable Date object
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const timeStr = e.target.value;
-    // Create a Date object with today's date and the selected time
     const today = new Date();
     const [hours, minutes, seconds = '00'] = timeStr.split(':');
     today.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
@@ -63,6 +89,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     onChange?.(today, timeStr);
   };
 
+  /** Clears the time value and notifies parent with null. */
   const handleClear = () => {
     if (!isControlled) {
       setInternalValue('');
@@ -73,7 +100,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
   const statusClass = status === 'error' ? 'input-error' : status === 'warning' ? 'input-warning' : '';
 
-  // Determine input step based on format
+  // step=1 shows second spinners in the native picker; step=60 hides them
   const showSeconds = format.includes('ss') || format.includes('s');
 
   return (
@@ -108,7 +135,13 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
 
 TimePickerBase.displayName = 'TimePicker.Modern';
 
-// TimeRangePicker component
+/**
+ * Range variant with two paired native time inputs and a separator.
+ * Each input independently updates its half of the `[start, end]` tuple.
+ *
+ * @param props - {@link TimeRangePickerProps} unified range picker props.
+ * @returns A ref-forwarding time range input pair with DaisyUI styling.
+ */
 const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((props, ref) => {
   const {
     value,
@@ -150,6 +183,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     ? [parseTime(value?.[0]), parseTime(value?.[1])] as [string, string]
     : internalValue;
 
+  /** Converts a time string to a Date anchored to today, or null if empty. */
   const createDate = (timeStr: string): Date | null => {
     if (!timeStr) return null;
     const today = new Date();
@@ -158,6 +192,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     return today;
   };
 
+  // Start input change preserves the current end value
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const timeStr = e.target.value;
     const newValue: [string, string] = [timeStr, displayValue[1]];
@@ -171,6 +206,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     );
   };
 
+  // End input change preserves the current start value
   const handleEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const timeStr = e.target.value;
     const newValue: [string, string] = [displayValue[0], timeStr];
@@ -215,7 +251,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
 
 TimeRangePicker.displayName = 'TimePicker.RangePicker.Modern';
 
-// Compound component
+// Compound component: TimePicker.RangePicker mirrors AntD's compound API
 export const TimePicker = Object.assign(TimePickerBase, {
   RangePicker: TimeRangePicker,
 });

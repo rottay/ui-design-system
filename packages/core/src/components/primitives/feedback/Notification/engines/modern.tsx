@@ -253,9 +253,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   // Grouping and Styling
   // ========================================================================
 
-  /**
-   * Group notifications by their placement position.
-   */
+  // Grouping by placement creates separate DOM containers for each position,
+  // allowing simultaneous notifications in different corners (e.g., success
+  // in topRight while an error shows in bottomRight). Each group renders
+  // its own DaisyUI toast container with appropriate positioning classes.
   const groupedNotifications = notifications.reduce<Record<NotificationPlacement, InternalNotification[]>>(
     (acc, notification) => {
       const p = notification.placement || placement;
@@ -278,9 +279,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     bottomRight: 'toast toast-bottom toast-end',
   };
 
-  /**
-   * Margin styles for offset configuration.
-   */
+  // Margin-based offsets rather than top/bottom CSS properties because
+  // DaisyUI toast already uses fixed positioning. Margins push the toast
+  // container away from its default edge position.
   const placementStyles: Record<NotificationPlacement, React.CSSProperties> = {
     top: { marginTop: top },
     topLeft: { marginTop: top },
@@ -475,9 +476,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     open: '',
   };
 
-  /**
-   * SVG icons for each notification type.
-   */
+  // Inline SVGs (h-6 w-6 = 24px) are slightly larger than Message icons
+  // (h-5 w-5 = 20px) because notifications have more content area and
+  // need proportional visual weight. "open" type has null icon since
+  // it's a generic notification where consumers provide their own icon.
   const icons: Record<NotificationType, ReactNode> = {
     success: (
       <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
@@ -506,6 +508,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // Render
   // ========================================================================
 
+  // min-w-80 (320px) ensures notifications are readable even with short
+  // messages. shadow-lg provides elevation to distinguish from page content.
+  // role="alert" triggers immediate screen reader announcement.
   return (
     <div
       className={`alert ${alertClasses[type]} shadow-lg min-w-80 ${className}`}

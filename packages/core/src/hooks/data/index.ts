@@ -194,6 +194,9 @@ export function useSurfaceQuery<T>(
   } = options;
 
   // ---- State ----
+  // All query parameters are individual state values rather than a single
+  // params object so that changing one param (e.g. page) doesn't create a
+  // new object reference for the others, minimizing downstream re-renders.
   const [data, setData] = useState<T[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -208,8 +211,14 @@ export function useSurfaceQuery<T>(
   );
   const [search, setSearchState] = useState(initialParams.search ?? '');
 
-  // Track latest fetch to avoid stale responses
+  // Monotonically increasing fetch ID prevents stale responses from
+  // overwriting newer data. Each fetchData call increments the counter
+  // and only applies results if its own ID is still the latest.
   const fetchIdRef = useRef(0);
+
+  // Refs for callbacks keep fetchData's dependency array stable so it
+  // only re-creates when query parameters change, not when the consumer
+  // passes a new function reference.
   const queryFnRef = useRef(queryFn);
   queryFnRef.current = queryFn;
 
@@ -217,6 +226,8 @@ export function useSurfaceQuery<T>(
   onErrorRef.current = onError;
 
   // ---- Fetch function ----
+  // fetchData is memoized against all query parameters so that the
+  // auto-fetch effect re-runs whenever any parameter changes.
   const fetchData = useCallback(async () => {
     if (!enabled) return;
 
@@ -225,6 +236,8 @@ export function useSurfaceQuery<T>(
     setError(null);
 
     try {
+      // Omit empty filters and blank search strings to keep the request
+      // payload clean and avoid unnecessary server-side processing.
       const params: SurfaceQueryParams = {
         page,
         pageSize,
@@ -235,7 +248,8 @@ export function useSurfaceQuery<T>(
 
       const result = await queryFnRef.current(params);
 
-      // Only apply if this is still the latest fetch
+      // Guard against stale responses: if another fetch was triggered
+      // while this one was in-flight, discard these results.
       if (fetchId === fetchIdRef.current) {
         setData(result.data);
         setTotal(result.total);
@@ -254,11 +268,16 @@ export function useSurfaceQuery<T>(
   }, [enabled, page, pageSize, sort, filters, search]);
 
   // ---- Auto-fetch on param changes ----
+  // Because fetchData's identity changes whenever any query parameter
+  // changes, this single effect handles all refetch triggers.
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   // ---- Refetch interval ----
+  // Polling is opt-in via refetchInterval. The interval is cleared and
+  // recreated whenever fetchData changes (query param updates), ensuring
+  // the poll always uses the latest parameters.
   useEffect(() => {
     if (!refetchInterval || refetchInterval <= 0 || !enabled) return;
 
@@ -271,9 +290,12 @@ export function useSurfaceQuery<T>(
     setPageState(newPage);
   }, []);
 
+  // setPageSize, setFilters, and setSearch all reset to page 1 because
+  // changing these parameters invalidates the current page offset --
+  // e.g. switching from 10-per-page to 50-per-page makes page 5 invalid.
   const setPageSize = useCallback((newSize: number) => {
     setPageSizeState(newSize);
-    setPageState(1); // Reset to first page on page size change
+    setPageState(1);
   }, []);
 
   const setSort = useCallback(
@@ -285,12 +307,12 @@ export function useSurfaceQuery<T>(
 
   const setFilters = useCallback((newFilters: Record<string, unknown>) => {
     setFiltersState(newFilters);
-    setPageState(1); // Reset to first page on filter change
+    setPageState(1);
   }, []);
 
   const setSearch = useCallback((newSearch: string) => {
     setSearchState(newSearch);
-    setPageState(1); // Reset to first page on search change
+    setPageState(1);
   }, []);
 
   const refetch = useCallback(() => {
@@ -298,6 +320,10 @@ export function useSurfaceQuery<T>(
   }, [fetchData]);
 
   // ---- Surface props ----
+  // handlePaginationChange bridges the Surface component's combined
+  // onChange(page, pageSize) signature with our separate setters. We
+  // check which value actually changed to apply the correct setter
+  // (setPageSize resets to page 1, setPage does not).
   const handlePaginationChange = useCallback(
     (newPage: number, newPageSize: number) => {
       if (newPageSize !== pageSize) {

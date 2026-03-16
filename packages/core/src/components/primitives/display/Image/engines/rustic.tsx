@@ -1,53 +1,12 @@
 /**
- * @fileoverview Image Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS image with custom zoom overlay.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the Image display primitive.
+ * Zero-dependency implementation styled entirely with inline styles and DS CSS
+ * variables, featuring a custom full-screen zoom overlay dialog.
  *
- * @remarks
- * This engine provides a lightweight, dependency-free image using only
- * inline styles with a custom zoom modal overlay.
- *
- * **Implementation Details:**
- * - Uses inline styles for all visual properties
- * - Custom zoom overlay with close button
- * - Native loading state management
- * - Full accessibility support
- *
- * **Advantages:**
- * - Zero external dependencies
- * - Smallest bundle size
- * - Maximum browser compatibility
- * - Custom zoom implementation
- *
- * **Accessibility:**
- * - `role="button"` for clickable images
- * - `aria-label` for zoom functionality
- * - `role="dialog"` for zoom overlay
- * - Keyboard close support
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Image } from '@rottay/design-system';
- *
- * <Image engine="rustic" src="/photo.jpg" alt="Photo" />
+ * <Image engine="rustic" src="/photo.jpg" alt="Photo" zoomable radius="md" />
  * ```
- *
- * @example With Custom Zoom
- * ```tsx
- * <Image
- *   engine="rustic"
- *   src="/photo.jpg"
- *   alt="Photo"
- *   zoomable
- *   radius="md"
- * />
- * ```
- *
- * @see {@link Image} for the main component
- * @see {@link BaseImage} for CSS variable implementation
- * @module RusticImage
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -58,24 +17,12 @@ import { IMAGE_DEFAULTS, RADIUS_MAP } from '../Image.types';
 import type { ImageRadius, ImageStatus } from '../Image.types';
 
 /**
- * Rustic (Pure HTML/CSS) implementation of the Image component.
+ * Rustic (pure inline-style) Image engine. Manages loading/error/zoom states
+ * internally, renders a full-screen dialog overlay for zoom, and uses only
+ * DS CSS variables for theming -- no Tailwind or antd required.
  *
- * Features:
- * - Zero external dependencies
- * - Maximum accessibility compliance
- * - Native browser image handling
- * - CSS variable-based theming
- *
- * @example
- * ```tsx
- * <RusticImage
- *   src="/photo.jpg"
- *   alt="Photo description"
- *   width={400}
- *   height={300}
- *   radius="md"
- * />
- * ```
+ * @param props - Standard ImageProps shared across all engines.
+ * @returns A Fragment containing the image container, zoom overlay, and inline keyframes.
  */
 export default function RusticImage(props: ImageProps): React.ReactElement {
   const {
@@ -101,11 +48,12 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     style = {},
   } = props;
 
+  // Three independent UI states: load lifecycle, hover for overlay, zoom for dialog
   const [status, setStatus] = useState<ImageStatus>('loading');
   const [isHovered, setIsHovered] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
 
-  // Reset status when src changes
+  // When the consumer swaps `src`, restart the loading lifecycle
   useEffect(() => {
     setStatus('loading');
   }, [src]);
@@ -129,9 +77,7 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     [onError]
   );
 
-  /**
-   * Handles click events, including zoom functionality.
-   */
+  // Open zoom overlay if enabled, then forward click to consumer
   const handleClick = useCallback(() => {
     if (zoomable) {
       setIsZoomed(true);
@@ -139,17 +85,15 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     onClick?.();
   }, [onClick, zoomable]);
 
-  /**
-   * Closes the zoom overlay.
-   */
+  // Dismiss the full-screen zoom dialog
   const handleCloseZoom = useCallback(() => {
     setIsZoomed(false);
   }, []);
 
-  // Get radius CSS value
+  // Resolve DS radius token to a CSS value shared by container and inner elements
   const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.none;
 
-  // Container styles
+  // All visual decoration (border, shadow, transition) via DS CSS variables
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-block',
@@ -165,7 +109,7 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     ...style,
   };
 
-  // Image element styles
+  // Hidden via display:none until loaded, avoiding a flash of broken content
   const imageStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -220,7 +164,7 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     transition: 'opacity 0.2s ease-in-out',
   };
 
-  // Zoom overlay styles
+  // Fixed full-viewport backdrop for the zoom dialog
   const zoomOverlayStyle: React.CSSProperties = {
     position: 'fixed',
     top: 0,
@@ -258,7 +202,7 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     </svg>
   );
 
-  // Default loading placeholder
+  // Inline pulse animation placeholder -- avoids importing an animation library
   const DefaultPlaceholder = () => (
     <div
       style={{

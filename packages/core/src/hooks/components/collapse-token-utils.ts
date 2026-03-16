@@ -1,19 +1,36 @@
-import type { CSSProperties } from 'react';
-
 /**
- * Internal collapse token helpers used by runtime hooks.
+ * @fileoverview Collapse Token Utilities - Rottay Design System
+ * @description Internal helpers that generate CSS custom properties and
+ * slot-level styles for the Collapse component. Runtime hooks
+ * (`useCollapseTokens`) delegate to these functions so the logic is
+ * testable outside of a React render cycle.
  *
+ * @remarks
  * The public tokens mirror still exports Collapse token references for
  * consumers, but runtime code should read from this internal helper so the
  * public mirror remains a public API surface instead of an implementation
  * dependency.
+ *
+ * @module System/Hooks/Components/CollapseTokenUtils
+ * @category System
+ * @package @rottay/design-system
  */
 
+import type { CSSProperties } from 'react';
+
+/** Named slots within the Collapse component that receive distinct styling. */
 export type CollapseSlot = 'root' | 'header' | 'content' | 'icon';
+
+/** Visual variant of the Collapse component. */
 export type CollapseVariant = 'default' | 'bordered' | 'ghost';
+
+/** Size preset controlling padding and font dimensions. */
 export type CollapseSize = 'small' | 'middle' | 'large';
+
+/** Position of the expand/collapse icon relative to the header text. */
 export type CollapseIconPosition = 'start' | 'end';
 
+/** Options driving the collapse token generator. */
 export interface CollapseTokenOptions {
   variant?: CollapseVariant;
   size?: CollapseSize;
@@ -41,8 +58,14 @@ export function getCollapseTokens(options: CollapseTokenOptions = {}): CSSProper
     iconPosition = 'start',
   } = options;
 
+  // Ghost and bordered are convenience boolean props that override the
+  // variant string, following the same precedence rules as the component API.
   const effectiveVariant: CollapseVariant = ghost ? 'ghost' : bordered ? 'bordered' : variant;
 
+  // Each CSS custom property references a deeper design-token variable
+  // scoped by variant and size (e.g. --ds-collapse-root-ghost-idle-bg).
+  // This indirection lets the CSS token layer handle theming/tenant
+  // overrides while this function only resolves which token to point at.
   return {
     '--ds-collapse-variant': effectiveVariant,
     '--ds-collapse-size': size,
@@ -76,6 +99,10 @@ export function getCollapseSlotTokens(
   const { variant = 'default', ghost = false, disabled = false, expanded = false } = options;
   const effectiveVariant = ghost ? 'ghost' : variant;
 
+  // Each slot returns CSS properties referencing the appropriate state
+  // token (idle, expanded, disabled). The cascading var() fallbacks
+  // ensure graceful degradation when a state-specific token isn't defined
+  // (e.g. falls back from expanded-bg to idle-bg).
   switch (slot) {
     case 'root':
       return {
@@ -87,6 +114,9 @@ export function getCollapseSlotTokens(
         boxShadow: `var(--ds-collapse-root-${effectiveVariant}-idle-shadow)`,
       };
 
+    // Header slot: state-aware background and color with CSS var() fallback
+    // chains. The expanded state takes priority over disabled because a
+    // panel can be expanded AND disabled simultaneously.
     case 'header':
       return {
         background: expanded
@@ -118,6 +148,9 @@ export function getCollapseSlotTokens(
         paddingBottom: 'var(--ds-collapse-content-padding-y)',
       };
 
+    // Icon slot: uses transform for the expand/collapse rotation animation.
+    // The transition property on the idle state enables smooth rotation
+    // when expanded changes.
     case 'icon':
       return {
         width: 'var(--ds-collapse-icon-size)',

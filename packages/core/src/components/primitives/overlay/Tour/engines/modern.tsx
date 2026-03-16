@@ -97,6 +97,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       className,
     } = props;
 
+    // Controlled/uncontrolled step index -- external current takes precedence
     const [internalCurrent, setInternalCurrent] = useState(0);
     const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
@@ -108,6 +109,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       onChange?.(newCurrent);
     }, [onChange]);
 
+    // On the last step, "Next" becomes "Finish" and triggers both callbacks
     const handleNext = () => {
       if (currentStep < steps.length - 1) {
         handleChange(currentStep + 1);
@@ -135,8 +137,10 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       }
     }, [open, step, currentStep]);
 
+    // Return an empty placeholder when closed to preserve ref stability
     if (!open || typeof document === 'undefined') return <div ref={ref} className={className} />;
 
+    // Padding around the spotlight cutout so the target element has visual breathing room
     const padding = 8;
     const maskStyle = typeof mask === 'object' ? mask.style : {};
     const maskColor = typeof mask === 'object' ? mask.color : 'rgba(0, 0, 0, 0.5)';
@@ -155,7 +159,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           />
         )}
 
-        {/* Spotlight */}
+        {/* Spotlight: a huge box-shadow creates the "cutout" mask effect around the target.
+            The 9999px spread covers the entire viewport while the element itself stays transparent. */}
         {targetRect && (
           <div
             className="fixed rounded-lg pointer-events-none"
@@ -170,7 +175,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           />
         )}
 
-        {/* Popover */}
+        {/* Step popover: positioned below the target when available, centered in viewport otherwise */}
         <div
           className={`fixed card bg-base-100 shadow-xl p-4 max-w-sm ${type === 'primary' ? 'border-2 border-primary' : ''}`}
           style={{

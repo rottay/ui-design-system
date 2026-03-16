@@ -1,13 +1,36 @@
 'use client';
 
 /**
- * DataTable - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (Hermes) engine for the DataTable pattern, built with
+ * native HTML `<table>` elements styled via DaisyUI and Tailwind CSS utility
+ * classes. Unlike the Classic engine this implementation manages row expansion,
+ * selection checkboxes, and pagination controls directly rather than delegating
+ * to a library -- giving full control over markup and animation classes.
+ *
+ * @example
+ * <ModernDataTable
+ *   data={orders}
+ *   columns={[{ key: 'total', header: 'Total', accessorKey: 'total', sortable: true }]}
+ *   rowKey="orderId"
+ *   selectable
+ *   striped
+ *   expandedRow={(row) => <OrderDetails order={row} />}
+ *   pagination={{ current: 1, pageSize: 25, total: 200, onChange: setPage }}
+ * />
  */
 
 import React, { useMemo, useState, useCallback } from 'react';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 
+/**
+ * DaisyUI/Tailwind-backed data table that renders native HTML table elements
+ * with utility classes. Manages selection, expand/collapse, sorting, and
+ * pagination internally -- no third-party table library required.
+ *
+ * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
+ * @returns A data table rendered with DaisyUI-styled native HTML elements.
+ */
 export default function ModernDataTable<T extends Record<string, unknown>>(
   props: DataTablePatternProps<T>
 ) {
@@ -40,14 +63,20 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
     style,
   } = props;
 
+  // Uncontrolled selection fallback -- lets the table work standalone without
+  // the consumer needing to lift selection state.
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
+  // Expanded rows tracked as a Set for O(1) has/add/delete during toggle.
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
   const getRowKey = useCallback((row: T, index: number) => resolveRowKey(row, rowKey, index), [rowKey]);
 
+  // Pre-filter once so the render loop and colSpan calculations always agree.
   const visibleColumns = useMemo(() => columns.filter((c) => c.visible !== false), [columns]);
 
+  // Toggle individual row selection. We re-derive the full selected rows array
+  // from keys rather than caching it, because data can change between renders.
   const toggleSelection = (key: string, row: T) => {
     const next = selectedKeys.includes(key)
       ? selectedKeys.filter((k) => k !== key)
@@ -68,6 +97,8 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
     }
   };
 
+  // Cycle sort direction when the same column is clicked again; reset to
+  // ascending when switching to a different column. This mirrors spreadsheet UX.
   const handleSort = (key: string) => {
     if (!onSortChange) return;
     if (sorting?.key === key) {
@@ -77,6 +108,8 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
     }
   };
 
+  // Build the DaisyUI table class list conditionally. `filter(Boolean)` strips
+  // falsy entries produced by disabled visual toggles so we get a clean string.
   const tableClasses = [
     'table',
     'w-full',
@@ -115,10 +148,14 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
         </div>
       )}
 
+      {/* Scroll container uses maxHeight when provided so the header can
+          stick while the body scrolls, without the outer page scrolling. */}
       <div
         className={`overflow-x-auto ${bordered ? 'rounded-xl border border-base-300' : 'rounded-xl'}`}
         style={maxHeight ? { maxHeight, overflowY: 'auto' } : undefined}
       >
+        {/* Three-way content: spinner while loading, empty state when no data,
+            or the full table. Keeping them mutually exclusive avoids flicker. */}
         {loading ? (
           <div className="flex items-center justify-center py-16">
             <span className="loading loading-spinner loading-lg" />
@@ -129,8 +166,13 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
           </div>
         ) : (
           <table className={tableClasses}>
+            {/* Sticky header uses z-10 to sit above scrolling rows and a
+                solid background so text doesn't bleed through. */}
             <thead className={stickyHeader ? 'sticky top-0 z-10 bg-base-100' : ''}>
               <tr>
+                {/* Select-all checkbox: checked state is derived from length
+                    comparison rather than a separate boolean to stay in sync
+                    when data changes externally (e.g. server-side filter). */}
                 {selectable && (
                   <th className="w-12">
                     <input
@@ -166,10 +208,13 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                 const isExpanded = expandedKeys.has(key);
                 return (
                   <React.Fragment key={key}>
+                    {/* Selected rows get a faint primary tint so the user can
+                        see their selection without losing row readability. */}
                     <tr
                       className={`${onRowClick ? 'cursor-pointer' : ''} ${selectedKeys.includes(key) ? 'bg-primary/5' : ''}`}
                       onClick={onRowClick ? () => onRowClick(row, index) : undefined}
                     >
+                      {/* stopPropagation prevents the checkbox click from also triggering onRowClick */}
                       {selectable && (
                         <td onClick={(e) => e.stopPropagation()}>
                           <input
@@ -210,6 +255,8 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                         </td>
                       )}
                     </tr>
+                    {/* colSpan must account for every possible column (selection, expand,
+                        data columns, actions) to span the full table width. */}
                     {expandedRow && isExpanded && (
                       <tr>
                         <td colSpan={visibleColumns.length + (selectable ? 1 : 0) + (actions ? 1 : 0) + 1}>
@@ -227,6 +274,9 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
         )}
       </div>
 
+      {/* Pagination strip renders only when a pagination config is provided.
+          The range label ("1-25 of 200") is clamped with Math.min so the
+          last page doesn't show an end index beyond the total count. */}
       {pagination && (
         <div className="flex items-center justify-between mt-4 px-1">
           <span className="text-sm text-base-content/60">

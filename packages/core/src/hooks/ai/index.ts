@@ -130,18 +130,25 @@ export function useStreamingText(
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  // Refs for stable callback access and typing animation
+  // Refs hold callbacks so that appendChunk/setText/startTyping have stable
+  // identities (no dependency on onComplete/onError) while still invoking
+  // the latest callback version. This prevents consumer useEffects from
+  // re-running when only the callback reference changes.
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
   const onErrorRef = useRef(onError);
   onErrorRef.current = onError;
 
+  // Typing animation state lives in refs (not state) because the animation
+  // loop runs via requestAnimationFrame and only the visible text slice
+  // needs to trigger a React re-render (via setTextState).
   const typingFrameRef = useRef<number | null>(null);
   const fullTextRef = useRef('');
   const cursorRef = useRef(0);
 
-  // Cleanup typing animation on unmount
+  // Cancel any in-flight animation frame on unmount to prevent state
+  // updates on an unmounted component.
   useEffect(() => {
     return () => {
       if (typingFrameRef.current !== null) {
@@ -163,12 +170,17 @@ export function useStreamingText(
     onCompleteRef.current?.(finalText);
   }, []);
 
+  // appendChunk cancels any running typing animation first because the two
+  // delivery modes are mutually exclusive -- real streaming data takes
+  // precedence over simulated typing.
   const appendChunk = useCallback(
     (chunk: string) => {
       try {
         cancelTyping();
         setIsStreaming(true);
         setError(null);
+        // Use functional updater to avoid a stale closure over `text`.
+        // Each chunk appends to whatever the current value is.
         setTextState((prev) => {
           const next = prev + chunk;
           return next;
@@ -192,6 +204,9 @@ export function useStreamingText(
     [cancelTyping, markComplete]
   );
 
+  // startTyping uses requestAnimationFrame for the typewriter effect rather
+  // than setInterval because rAF automatically pauses when the tab is
+  // backgrounded, saving CPU and producing smoother visual output when visible.
   const startTyping = useCallback(
     (fullText: string) => {
       cancelTyping();
@@ -204,6 +219,8 @@ export function useStreamingText(
 
       const tick = (): void => {
         try {
+          // Advance the cursor by typingSpeed characters per frame.
+          // Math.min clamps to avoid overshooting the string length.
           const nextCursor = Math.min(
             cursorRef.current + typingSpeed,
             fullTextRef.current.length
@@ -213,11 +230,13 @@ export function useStreamingText(
           setTextState(visibleText);
 
           if (nextCursor >= fullTextRef.current.length) {
+            // All characters revealed -- mark complete and notify consumer.
             typingFrameRef.current = null;
             setIsStreaming(false);
             setIsComplete(true);
             onCompleteRef.current?.(fullTextRef.current);
           } else {
+            // Schedule next frame to reveal more characters.
             typingFrameRef.current = requestAnimationFrame(tick);
           }
         } catch (err) {
@@ -350,8 +369,15 @@ export interface UseChatReturn {
   };
 }
 
+// Module-level counter combined with Date.now() produces IDs that are unique
+// within a single page session. This avoids pulling in a UUID library for
+// what is essentially a client-only, ephemeral identifier.
 let chatMessageIdCounter = 0;
 
+/**
+ * Generate a unique message ID for client-side chat messages.
+ * @returns A string ID combining timestamp and incrementing counter
+ */
 function generateMessageId(): string {
   chatMessageIdCounter += 1;
   return `msg_${Date.now()}_${chatMessageIdCounter}`;
@@ -359,6 +385,8 @@ function generateMessageId(): string {
 
 /**
  * Determines if a value is an AsyncIterable (duck-type check).
+ * Used to distinguish streaming responses (AsyncIterable<string>) from
+ * single-shot string responses returned by the onSend callback.
  */
 function isAsyncIterable(value: unknown): value is AsyncIterable<string> {
   return (
@@ -413,13 +441,18 @@ export function useChat(options?: UseChatOptions): UseChatReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  // Refs for callbacks prevent sendMessage from needing onSend/onError in
+  // its dependency array, which would cause the async function to be
+  // recreated on every prop change and potentially cancel in-flight work.
   const onSendRef = useRef(onSend);
   onSendRef.current = onSend;
 
   const onErrorRef = useRef(onError);
   onErrorRef.current = onError;
 
-  // Abort controller for cancelling in-flight streams on unmount
+  // AbortController lets us cancel in-flight streams when the component
+  // unmounts or when a new message is sent before the previous one finishes.
+  // This prevents stale responses from updating state after unmount.
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -444,13 +477,17 @@ export function useChat(options?: UseChatOptions): UseChatReturn {
     setInput('');
     setError(null);
 
-    // Add user message
+    // Snapshot messages before adding the user message so we can pass the
+    // full history (including the new user msg) to onSend. We don't use
+    // the functional updater here because we need the array reference for
+    // the onSend call below.
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
     if (!onSendRef.current) return;
 
-    // Create placeholder assistant message
+    // Insert an empty assistant message immediately so the UI can show a
+    // "typing" or "streaming" indicator while waiting for data.
     const assistantMessage: ChatMessage = {
       id: generateMessageId(),
       role: 'assistant',
@@ -473,13 +510,18 @@ export function useChat(options?: UseChatOptions): UseChatReturn {
       if (controller.signal.aborted) return;
 
       if (isAsyncIterable(response)) {
-        // Streaming response: consume token by token
+        // Streaming path: consume the async iterable token-by-token and
+        // accumulate into a local string. Each chunk triggers a state
+        // update so the UI can render progressively.
         let accumulated = '';
 
         for await (const chunk of response) {
           if (controller.signal.aborted) return;
           accumulated += chunk;
 
+          // Use functional updater to avoid stale closure over messages.
+          // We locate the assistant message by its stable ID rather than
+          // assuming it's always the last element (defensive).
           setMessages((prev) => {
             const copy = [...prev];
             const lastIdx = copy.length - 1;
@@ -561,7 +603,10 @@ export function useChat(options?: UseChatOptions): UseChatReturn {
     setError(null);
   }, []);
 
-  // Map ChatMessage[] to the shape ChatSurface expects
+  // Transform the internal ChatMessage model into the shape ChatSurface
+  // expects. This mapping is intentionally done on every render (not
+  // memoized) because messages change on every streaming tick and
+  // memoization overhead would exceed its benefit.
   const surfaceMessages = messages.map((msg) => ({
     id: msg.id,
     author: msg.role === 'user' ? 'You' : msg.role === 'assistant' ? 'Assistant' : msg.role,

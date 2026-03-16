@@ -1,8 +1,12 @@
 /**
- * Responsive Hooks - Usage Examples
+ * @fileoverview Responsive Hooks Usage Examples - Rottay Design System
+ * @description Practical reference examples demonstrating `useMediaQuery`,
+ * `useBreakpoints`, and `useResponsiveValue` in real-world scenarios
+ * including responsive layouts, adaptive components, and dark mode detection.
  *
- * These examples demonstrate how to use the responsive hooks
- * in real-world scenarios.
+ * @module System/Hooks/Responsive/Examples
+ * @category System
+ * @package @rottay/design-system
  */
 
 import React from 'react';

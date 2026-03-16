@@ -261,6 +261,8 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     // State
     // ---------------------------------------------------------------------------
 
+    // Dual state pattern: supports both controlled (parent owns state) and
+    // uncontrolled (component owns state) usage via nullish coalescing
     const [internalActiveKey, setInternalActiveKey] = useState('');
     const activeKey = controlledActiveKey ?? internalActiveKey;
 
@@ -305,11 +307,14 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
           ? window.scrollY
           : (container as HTMLElement).scrollTop;
 
+        // Walk anchors in document order; the last one whose top edge has
+        // scrolled past the threshold wins, giving us the deepest visible section
         let currentAnchor = '';
         for (const anchor of anchors) {
           const element = document.querySelector(anchor);
           if (element) {
             const rect = element.getBoundingClientRect();
+            // Convert viewport-relative position to absolute document position
             const top = container === window
               ? rect.top + scrollTop
               : rect.top + (container as HTMLElement).scrollTop;

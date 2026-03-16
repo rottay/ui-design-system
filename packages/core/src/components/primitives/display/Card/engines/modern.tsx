@@ -151,9 +151,13 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     style,
   } = props;
 
+  // Hover state is tracked in React (not pure CSS :hover) because we need
+  // to apply CSS variable-driven transforms and shadows via inline styles,
+  // which cannot be toggled with a pseudo-class selector alone.
   const [isHovered, setIsHovered] = useState(false);
 
-  // Map variants to DaisyUI classes
+  // Each DS variant maps to a combination of DaisyUI utility classes.
+  // "elevated" gets shadow, "outlined" gets DaisyUI's bordered modifier, etc.
   const variantClasses: Record<string, string> = {
     elevated: 'bg-base-100 shadow-md',
     outlined: 'card-bordered bg-base-100',
@@ -161,12 +165,14 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     ghost: 'bg-transparent',
   };
 
-  // Build class list
+  // Consolidate interactivity to a single flag so cursor and hover
+  // behaviors stay in sync across the style and class computations.
   const isInteractive = hoverable || clickable;
   const cardClasses = [
     'card',
     variantClasses[variant] || variantClasses.elevated,
     isInteractive ? 'cursor-pointer' : '',
+    // Avoid doubling the border when the variant already includes card-bordered.
     bordered && variant !== 'outlined' ? 'card-bordered' : '',
     className,
   ].filter(Boolean).join(' ');
@@ -177,7 +183,10 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
 
-  // Card style with interactive transitions
+  // Inline styles are used for the hover transform/shadow because they
+  // reference DS CSS custom properties (--ds-card-hover-*) that allow
+  // per-tenant personality overrides at runtime. The cubic-bezier easing
+  // produces a smooth "spring-like" lift that feels more tactile than linear.
   const cardStyle: React.CSSProperties = {
     borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
     cursor: clickable || onClick ? 'pointer' : undefined,
@@ -189,7 +198,8 @@ export default function ModernCard(props: CardProps): React.ReactElement {
       ? 'var(--ds-card-hover-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08))'
       : undefined,
     position: 'relative',
-    // Apply color variant styles
+    // Color variant accent: a tinted left border + matching background
+    // conveys semantic meaning (success, warning, etc.) at a glance.
     ...(hasColorVariant && {
       borderLeft: `4px solid ${colorStyles.borderColor}`,
       backgroundColor: colorStyles.background,
@@ -197,17 +207,21 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     ...style,
   };
 
-  // Render loading state with custom spinner overlay + backdrop blur
+  // Loading state renders a full early-return card with two layers:
+  // 1) Low-opacity skeleton bars that approximate the card's eventual layout,
+  // 2) A frosted-glass spinner overlay so the user understands content is
+  //    incoming while the card retains its correct dimensions.
   if (loading) {
     return (
       <div className={cardClasses} style={cardStyle}>
+        {/* Placeholder cover: a muted rectangle preserving aspect ratio */}
         {cover && (
           <figure>
             <div className="bg-base-300 h-48 w-full" style={{ opacity: 0.5 }} />
           </figure>
         )}
         <div className="card-body" style={{ padding: paddingValue, position: 'relative', minHeight: '120px' }}>
-          {/* Skeleton content underneath */}
+          {/* Skeleton bars mimic heading + body text shape at reduced opacity */}
           <div className="space-y-4" style={{ opacity: 0.3 }}>
             <div className="h-4 bg-base-300 rounded w-3/4" />
             <div className="h-4 bg-base-300 rounded w-1/2" />
@@ -217,7 +231,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               <div className="h-3 bg-base-300 rounded w-5/6" />
             </div>
           </div>
-          {/* Spinner overlay with backdrop blur */}
+          {/* Spinner overlay with backdrop blur for a frosted-glass effect */}
           <div
             style={{
               position: 'absolute',

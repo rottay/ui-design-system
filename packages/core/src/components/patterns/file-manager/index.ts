@@ -1,9 +1,8 @@
 'use client';
 
 /**
- * FileManager - Pattern Component
- *
- * Engine-aware file browser with folder tree, file list, and upload support.
+ * @fileoverview FileManager pattern -- engine-aware file browser with folder
+ * tree, file list, grid/list view modes, and upload support.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Surface Storybook helpers -- decorators, tenant configs, and
+ * locale fixtures used across all surface stories.
+ */
+
 import React, { type ReactNode } from 'react';
 import type { Decorator } from '@storybook/react-vite';
 

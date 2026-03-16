@@ -41,6 +41,11 @@ import { TenantContext } from '../../tenancy';
  * to have their own branding, themes, and feature configurations.
  * This hook provides access to the current tenant's configuration.
  *
+ * @remarks
+ * The hook throws if called outside a `<TenantProvider>` rather than
+ * returning `null`. This fail-fast behavior prevents silent rendering
+ * with missing branding data, which would be harder to debug.
+ *
  * @example
  * ```tsx
  * import { useTenant } from '@rottay/design-system';
@@ -65,16 +70,29 @@ import { TenantContext } from '../../tenancy';
  * @throws {Error} Throws an error if used outside of a TenantProvider
  */
 export function useTenant() {
+  // Read from the nearest TenantProvider ancestor via React Context.
   const context = useContext(TenantContext);
+
+  // Fail-fast: a missing provider is always a wiring bug. Throwing here
+  // surfaces the issue immediately rather than rendering with undefined
+  // branding/config values that would cause subtle downstream errors.
   if (!context) {
     throw new Error('useTenant must be used within TenantProvider');
   }
   return context;
 }
 
-// Tenant creation utilities
+// -- Tenant utilities --
+// Co-located here for backwards compatibility: consumers historically imported
+// personality presets and tenant creation helpers from `hooks/tenant`.
+
+/** Maps a personality keyword ('formal', 'neutral', etc.) to full PersonalityTokens. */
 export { resolvePersonalityPreset } from './personality-presets';
 export type { PersonalityPreset } from './personality-presets';
+
+/** Factory for building a complete TenantConfig from minimal input. */
 export { createTenantConfig } from './create-tenant';
 export type { TenantCreationConfig } from './create-tenant';
+
+/** Hook that wraps createTenantConfig with React state for dynamic tenant creation flows. */
 export { useCreateTenant } from './useCreateTenant';

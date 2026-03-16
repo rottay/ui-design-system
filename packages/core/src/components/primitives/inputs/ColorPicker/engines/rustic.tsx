@@ -1,9 +1,16 @@
 'use client';
 
 /**
- * @fileoverview ColorPicker Rustic Engine - Rottay Design System
- * @description Pure vanilla HTML/CSS implementation of the ColorPicker component
- * using CSS variables for multi-tenant theming.
+ * @fileoverview ColorPicker Rustic Engine -- pure HTML/CSS with CSS variable theming.
+ * Renders a color swatch trigger and a portal-mounted dropdown panel containing
+ * a native `<input type="color">`, hex text input, preset swatches, and clear
+ * button -- all styled through `--ds-colorpicker-*` design tokens for
+ * multi-tenant theme isolation.
+ *
+ * @example
+ * ```tsx
+ * <ColorPicker engine="rustic" defaultValue="#52c41a" showText presets={brandPresets} />
+ * ```
  *
  * @module RusticColorPicker
  * @category Inputs
@@ -15,13 +22,18 @@ import { createPortal } from 'react-dom';
 import type { ColorPickerProps, Color } from '../ColorPicker.types';
 import { COLORPICKER_DEFAULTS } from '../ColorPicker.types';
 
-// Size configuration using CSS variables
+/** Swatch size dimensions driven by CSS variables for each size variant. */
 const SIZE_CONFIG: Record<string, { width: string; height: string }> = {
   small: { width: 'var(--ds-colorpicker-swatch-size-sm)', height: 'var(--ds-colorpicker-swatch-size-sm)' },
   default: { width: 'var(--ds-colorpicker-swatch-size-md)', height: 'var(--ds-colorpicker-swatch-size-md)' },
   large: { width: 'var(--ds-colorpicker-swatch-size-lg)', height: 'var(--ds-colorpicker-swatch-size-lg)' },
 };
 
+/**
+ * Lightweight Color factory satisfying the DS `Color` interface.
+ * Includes a safety check for short/empty hex strings to prevent
+ * parseInt NaN in the rgb conversion path.
+ */
 const createColor = (hex: string): Color => ({
   toHexString: () => hex,
   toRgbString: () => {
@@ -34,6 +46,17 @@ const createColor = (hex: string): Color => ({
   toHsbString: () => hex,
 });
 
+/**
+ * Rustic engine ColorPicker -- framework-free, CSS-variable-driven color selector.
+ *
+ * The dropdown is rendered via `createPortal` into `document.body` so it
+ * escapes overflow-hidden ancestors. Position is recalculated from the
+ * trigger's bounding rect each time the dropdown opens. Click-outside
+ * detection checks both trigger and dropdown refs to avoid premature close.
+ *
+ * @param props - {@link ColorPickerProps} unified color picker props shared across engines.
+ * @returns A ref-forwarding color picker with pure CSS variable styling.
+ */
 export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
   (props, ref) => {
     const {
@@ -55,14 +78,17 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(false);
+    // Absolute position for the portal dropdown, computed from trigger rect
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
+    // Dual controlled/uncontrolled for both value and open state
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled
       ? (typeof controlledValue === 'string' ? controlledValue : controlledValue.toHexString())
       : internalValue;
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
 
+    // Two refs: one for the trigger (swatch), one for the portal dropdown
     const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -86,7 +112,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       handleOpenChange(false);
     };
 
-    // Update position
+    // Recalculate dropdown position relative to trigger on each open
     useEffect(() => {
       if (isOpen && triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
@@ -97,10 +123,11 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       }
     }, [isOpen]);
 
-    // Click outside
+    // Close when clicking outside both the trigger swatch and the portal dropdown
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         const target = e.target as Node;
+        // Both refs must be checked because the dropdown is portaled outside the trigger tree
         if (
           triggerRef.current &&
           !triggerRef.current.contains(target) &&
@@ -131,7 +158,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
     const displayText = getDisplayText();
 
-    // Build class names
+    // BEM class names for external CSS targeting and state modifiers
     const containerClasses = [
       'rottay-colorpicker',
       'rottay-colorpicker--rustic',
@@ -228,6 +255,8 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       fontSize: 'var(--ds-font-size-sm)',
     };
 
+    // Portal the dropdown into document.body to escape overflow clipping ancestors.
+    // SSR guard: only access `document` when available (client-side).
     const dropdownContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Internationalization stories -- demonstrates surfaces rendered
+ * with different locales and custom translation overrides.
+ */
+
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 

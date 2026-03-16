@@ -1,7 +1,19 @@
 'use client';
 
 /**
- * KanbanBoard - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the KanbanBoard pattern.
+ * Renders a horizontally-scrollable board of drag-and-drop columns using
+ * Ant Design's Card, Badge, and Button primitives. Supports WIP limits,
+ * collapsible columns, custom card renderers, and inline add-item actions.
+ *
+ * @example
+ * <KanbanBoard
+ *   engine="classic"
+ *   columns={[{ id: 'todo', title: 'To Do', items: tasks }]}
+ *   renderCard={(task) => <Text>{task.name}</Text>}
+ *   itemKey={(task) => task.id}
+ *   onItemMove={(id, from, to, pos) => moveTask(id, from, to, pos)}
+ * />
  */
 
 import React, { useCallback, useRef, useState } from 'react';
@@ -11,6 +23,13 @@ import type { KanbanBoardProps } from '../KanbanBoard.types';
 
 const { Text, Title } = Typography;
 
+/**
+ * Classic Kanban board built on Ant Design components.
+ * Generic over `T` so any item shape can be used as long as `itemKey` returns a string.
+ *
+ * @param props - See {@link KanbanBoardProps} for full prop documentation.
+ * @returns A horizontally-scrollable board with drag-and-drop columns.
+ */
 export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const {
     columns,
@@ -30,6 +49,9 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
     style,
   } = props;
 
+  // Drag data is stored in both dataTransfer (for the browser DnD API) and React
+  // state (for rendering drop indicators). The duplication is necessary because
+  // dataTransfer is only readable inside the drop handler, not during dragOver.
   const [dragData, setDragData] = useState<{
     itemId: string;
     fromColumn: string;
@@ -39,6 +61,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
     position: number;
   } | null>(null);
 
+  // Set dataTransfer as plain text for cross-browser compatibility, and
+  // mirror it in React state so dragOver handlers can read source info.
   const handleDragStart = useCallback(
     (e: React.DragEvent, item: T, columnId: string) => {
       const id = itemKey(item);
@@ -49,6 +73,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
     [itemKey]
   );
 
+  // preventDefault is required on dragOver; without it, the browser reverts to
+  // its default "no-drop" behavior and will never fire the drop event.
   const handleDragOver = useCallback(
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
@@ -58,6 +84,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
     []
   );
 
+  // On drop, delegate the actual reorder/move logic to the consumer via
+  // onItemMove so the board stays controlled (data lives in the parent).
   const handleDrop = useCallback(
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
@@ -70,6 +98,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
     [dragData, onItemMove]
   );
 
+  // Reset drag state on end regardless of whether a valid drop occurred,
+  // ensuring ghost opacity / indicators are always cleaned up.
   const handleDragEnd = useCallback(() => {
     setDragData(null);
     setDropTarget(null);
@@ -104,6 +134,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
         }}
       >
         {columns.map((column) => {
+          // WIP limits: when the column is at or over capacity, the badge
+          // turns red to signal that further additions should be reconsidered.
           const isOverLimit =
             column.limit !== undefined && column.items.length >= column.limit;
 
@@ -117,7 +149,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 flexDirection: 'column',
               }}
             >
-              {/* Column header */}
+              {/* Column header -- uses a colored top border as a quick visual
+                  lane identifier (e.g. red for "Blocked", green for "Done"). */}
               <Card
                 size="small"
                 style={{
@@ -185,6 +218,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       {emptyColumn}
                     </div>
                   ) : (
+                    // Each card acts as both a drag source and a drop target so
+                    // users can reorder within a column or move between columns.
                     column.items.map((item, index) => (
                       <div
                         key={itemKey(item)}
@@ -200,7 +235,11 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         onClick={() => onItemClick?.(item, column.id)}
                         style={{
                           marginBottom: 8,
+                          // Show pointer when clickable, grab cursor otherwise
+                          // to hint at drag capability.
                           cursor: onItemClick ? 'pointer' : 'grab',
+                          // Dim the source card during drag to make the
+                          // "picked up" state visually obvious.
                           opacity:
                             dragData?.itemId === itemKey(item) ? 0.4 : 1,
                           transition: 'opacity 0.2s',

@@ -64,13 +64,16 @@ import { STEPPER_DEFAULTS } from '../Stepper.types';
 function getStepClass(status: StepStatus): string {
   switch (status) {
     case 'finish':
-      return 'step-primary';
     case 'process':
+      // Both finished and active steps use `step-primary` because DaisyUI
+      // does not differentiate between "completed" and "in-progress" visually.
+      // The filled primary color signals that the step has been reached.
       return 'step-primary';
     case 'error':
       return 'step-error';
     case 'wait':
     default:
+      // No class yields DaisyUI's neutral (unfilled) step appearance
       return '';
   }
 }
@@ -108,6 +111,8 @@ function renderDaisySteps(
   globalStatus?: StepStatus
 ): React.ReactNode {
   return items.map((item, index) => {
+    // Priority: explicit item status > global status (only on current step) > positional computation.
+    // This lets consumers override specific steps while inheriting defaults elsewhere.
     const status = item.status || (globalStatus && index === current ? globalStatus : computeStatus(index, current));
     const stepClass = getStepClass(status);
 
@@ -124,6 +129,9 @@ function renderDaisySteps(
           cursor: clickable && !item.disabled ? 'pointer' : 'default',
           opacity: item.disabled ? 0.5 : 1,
         }}
+        // DaisyUI's `data-content` attribute renders text/numbers inside the
+        // step circle indicator. When a custom icon is provided, we skip it
+        // so the icon can be rendered inside the step-content div instead.
         data-content={item.icon ? undefined : (index + 1).toString()}
       >
         <div className="step-content">

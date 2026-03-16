@@ -1,12 +1,31 @@
 'use client';
 
 /**
- * TreeView - Rustic Engine (Vanilla HTML/CSS with --ds-* vars)
+ * @fileoverview Rustic (Vanilla CSS) engine for the TreeView pattern.
+ *
+ * Zero-dependency tree implementation using only inline styles and `--ds-*`
+ * CSS custom properties. All interactive affordances (expand/collapse toggle,
+ * selection highlight, checkbox, drag handle) are built from native HTML
+ * elements without any CSS framework. Style objects are pre-computed in the
+ * `s` namespace for readability and to avoid repeated object allocations
+ * during renders.
+ *
+ * @example
+ * <RusticTreeView
+ *   data={[{ key: 'src', label: 'src/', children: [{ key: 'index', label: 'index.ts' }] }]}
+ *   searchable
+ *   checkable
+ *   draggable
+ * />
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TreeViewProps, TreeNode } from '../TreeView.types';
 
+/**
+ * Recursively filters the tree, keeping any node whose label matches the query
+ * or whose descendants match, preserving the full ancestor chain.
+ */
 function filterTree(nodes: TreeNode[], query: string): TreeNode[] {
   const q = query.toLowerCase();
   return nodes
@@ -21,6 +40,12 @@ function filterTree(nodes: TreeNode[], query: string): TreeNode[] {
     .filter(Boolean) as TreeNode[];
 }
 
+/**
+ * Pre-computed style objects for tree UI elements.
+ * Using a namespace object avoids recreating style objects on every render
+ * and keeps the JSX clean. Function-valued entries (nodeRow, toggleBtn,
+ * skeleton) accept dynamic parameters for state-dependent styling.
+ */
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
@@ -94,6 +119,17 @@ const s = {
   } as React.CSSProperties),
 };
 
+/**
+ * Rustic (Vanilla CSS) engine for the TreeView pattern component.
+ *
+ * Implements expand/collapse, selection, check, and drag-drop from scratch
+ * using Sets for O(1) lookups, just like the Modern engine, but renders
+ * everything with inline styles instead of Tailwind classes. Supports both
+ * controlled and uncontrolled modes.
+ *
+ * @param props - {@link TreeViewProps} controlling tree data, selection, checking, and drag-drop.
+ * @returns A searchable, interactive tree rendered with inline CSS and DS tokens.
+ */
 export default function RusticTreeView(props: TreeViewProps) {
   const {
     data, renderNode, onSelect, onExpand, expandedKeys: controlledExpanded,
@@ -102,11 +138,15 @@ export default function RusticTreeView(props: TreeViewProps) {
     loading, className, style,
   } = props;
 
+  // Internal state for uncontrolled mode. Ignored when controlled key arrays
+  // are provided by the consumer.
   const [internalExpanded, setInternalExpanded] = useState<Set<string>>(new Set(defaultExpandedKeys ?? []));
   const [internalSelected, setInternalSelected] = useState<Set<string>>(new Set());
   const [internalChecked, setInternalChecked] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Resolve controlled vs. uncontrolled. Creating a new Set per render is
+  // acceptable for typical tree sizes and avoids stale-reference bugs.
   const expandedSet = controlledExpanded ? new Set(controlledExpanded) : internalExpanded;
   const selectedSet = controlledSelected ? new Set(controlledSelected) : internalSelected;
   const checkedSet = controlledChecked ? new Set(controlledChecked) : internalChecked;
@@ -142,6 +182,7 @@ export default function RusticTreeView(props: TreeViewProps) {
     onCheck?.([...next]);
   }, [checkedSet, controlledChecked, onCheck]);
 
+  /** Recursively renders tree nodes. Depth drives left-padding via `s.nodeRow`. */
   function renderNodes(nodes: TreeNode[], depth: number): React.ReactNode {
     return nodes.map((node) => {
       const hasChildren = node.children && node.children.length > 0;

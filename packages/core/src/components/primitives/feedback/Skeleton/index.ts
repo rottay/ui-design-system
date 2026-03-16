@@ -1,5 +1,5 @@
 /**
- * Barrel re-export for Skeleton component.
+ * @fileoverview Barrel re-export for Skeleton component.
  * Entry point: ./Skeleton.tsx
  */
 export * from './Skeleton';

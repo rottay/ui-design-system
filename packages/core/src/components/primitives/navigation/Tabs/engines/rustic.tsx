@@ -99,7 +99,10 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     className,
     style,
   } = props;
+  // Strip colons from generated IDs because colons are invalid in
+  // CSS selectors and break aria-controls / aria-labelledby references
   const tabsId = useId().replace(/:/g, '');
+  // Ref map for imperative focus management during keyboard navigation
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   // ============================================================================
@@ -121,6 +124,8 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     onChange?.(key);
   };
 
+  // Filter disabled items out of the keyboard navigation cycle.
+  // This follows the roving tabindex pattern from WAI-ARIA tabs spec.
   const enabledItems = items.filter((item) => !item.disabled);
 
   const focusAndActivate = useCallback(
@@ -199,6 +204,11 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
    * @param disabled - Whether this tab is disabled
    * @returns CSSProperties for the tab button
    */
+  // Generate button styles dynamically based on active/disabled/type state.
+  // CSS custom properties provide three fallback layers:
+  //   1. Component-level token (--ds-tabs-*)
+  //   2. Global design token (--ds-color-*)
+  //   3. Hardcoded fallback for standalone rendering
   const getTabStyle = (isActive: boolean, disabled?: boolean): React.CSSProperties => ({
     ...SIZE_STYLES[size as TabsSize],
     border: 'none',
@@ -206,8 +216,10 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     color: isActive ? 'var(--ds-tabs-active-color, white)' : 'inherit',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
+    // Card/pills types get rounded corners; line type stays flat with a bottom border
     borderRadius: type === 'card' || type === 'pills' ? 'var(--ds-tabs-radius, 0.375rem)' : '0',
     borderBottom: type === 'line' && isActive ? '2px solid var(--ds-tabs-active-border, var(--ds-color-primary-500, #0066CC))' : undefined,
+    // Negative margin pulls the active border over the container's bottom border
     marginBottom: type === 'line' ? '-1px' : undefined,
     display: 'flex',
     alignItems: 'center',

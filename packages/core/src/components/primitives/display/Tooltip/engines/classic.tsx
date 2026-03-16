@@ -108,19 +108,21 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       ...restProps
     } = props;
 
-    // Normalize trigger to array format and filter out 'manual' which Ant Design doesn't support
+    // Normalise trigger to an array and strip 'manual' -- Ant Design has no
+    // manual trigger mode; controlled visibility is achieved via the open prop.
     const rawTriggers = Array.isArray(trigger) ? trigger : [trigger];
     const triggers = rawTriggers.filter((t): t is 'hover' | 'click' | 'focus' => t !== 'manual');
 
-    // Map placement to Ant Design format
+    // Translate DS placement names (e.g. 'top-start') to Ant Design equivalents
     const antPlacement = PLACEMENT_MAP[placement] || 'top';
 
-    // Convert delays from milliseconds to seconds (Ant Design uses seconds)
+    // Ant Design expects delays in seconds; our API uses milliseconds for
+    // consistency with setTimeout and the modern/rustic engines.
     const mouseEnterDelay = showDelay ? showDelay / 1000 : 0.1;
     const mouseLeaveDelay = hideDelay ? hideDelay / 1000 : 0.1;
 
-    // Map color variants to CSS variable references
-    // Ant Design accepts CSS variables as color values
+    // Map semantic color variants to CSS variable references so the design
+    // token layer can override tooltip colours per-theme.
     const colorMap: Record<string, string | undefined> = {
       default: undefined, // Use Ant Design's default
       primary: 'var(--ds-tooltip-primary-bg, #1677ff)',
@@ -130,6 +132,8 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       error: 'var(--ds-tooltip-error-bg, #ff4d4f)',
     };
 
+    // When disabled, pass undefined as title to suppress the tooltip entirely
+    // rather than rendering an empty popup.
     return (
       <AntTooltip
         title={disabled ? undefined : content}

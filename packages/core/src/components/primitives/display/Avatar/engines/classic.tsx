@@ -1,51 +1,12 @@
 /**
- * @fileoverview Avatar Classic Engine - Rottay Design System
- * @description Ant Design-based avatar implementation with Badge for status.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Classic engine for the Avatar component, backed by Ant Design.
+ * Wraps antd Avatar + Badge to provide image/initials display with optional
+ * status indicators, delegating shape and sizing to Ant Design internals.
  *
- * @remarks
- * This engine wraps Ant Design's Avatar and Badge components to provide
- * a full-featured avatar with status indicators.
- *
- * **Implementation Details:**
- * - Uses `antd/Avatar` for the core avatar rendering
- * - Uses `antd/Badge` with dot mode for status indicators
- * - Maps custom shapes to Ant Design's 'circle' | 'square' shapes
- * - Applies variant colors via inline styles
- *
- * **Shape Mapping:**
- * - `circle` → Ant Design `circle`
- * - `square` → Ant Design `square`
- * - `rounded` → Ant Design `square` (with CSS border-radius)
- *
- * **Status Colors:**
- * - `online` → Green (#52c41a)
- * - `offline` → Gray (#d9d9d9)
- * - `away` → Orange (#faad14)
- * - `busy` → Red (#ff4d4f)
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Avatar } from '@rottay/design-system';
- *
- * <Avatar engine="classic" src="/user.jpg" name="John Doe" />
+ * <Avatar engine="classic" src="/user.jpg" name="John Doe" status="online" />
  * ```
- *
- * @example With Status Badge
- * ```tsx
- * <Avatar
- *   engine="classic"
- *   src="/profile.jpg"
- *   status="online"
- *   size="lg"
- * />
- * ```
- *
- * @see {@link Avatar} for the main component
- * @see {@link https://ant.design/components/avatar} Ant Design Avatar
- * @module ClassicAvatar
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -56,7 +17,12 @@ import type { AvatarProps } from '../Avatar.types';
 import { AVATAR_DEFAULTS, SIZE_MAP } from '../Avatar.types';
 
 /**
- * Generates initials from name or alt text
+ * Derives up to two uppercase initials from a display name or alt text.
+ * Uses first and last word so "John Michael Doe" produces "JD", not "JM".
+ *
+ * @param name - Primary display name
+ * @param alt - Fallback alt text if name is absent
+ * @returns One or two uppercase characters, or empty string
  */
 function getInitials(name?: string, alt?: string): string {
   const text = name || alt || '';
@@ -65,9 +31,21 @@ function getInitials(name?: string, alt?: string): string {
   if (parts.length === 0) return '';
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
 
+  // Take first + last word to handle multi-word names gracefully
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
+/**
+ * Classic (Ant Design) implementation of the Avatar component.
+ *
+ * Delegates rendering to antd's Avatar for image/initials and wraps with
+ * antd's Badge (dot mode) when a status indicator is requested. Variant
+ * colours are driven by CSS custom properties so tenant theming applies
+ * without runtime recalculation.
+ *
+ * @param props - Unified AvatarProps from the design system type contract
+ * @returns A React element containing the Ant Design avatar, optionally wrapped in a Badge
+ */
 export default function ClassicAvatar(props: AvatarProps): React.ReactElement {
   const {
     src,
@@ -88,29 +66,32 @@ export default function ClassicAvatar(props: AvatarProps): React.ReactElement {
     style,
   } = props;
 
+  // Track image load failures so we can fall back to initials/children
   const [imageError, setImageError] = useState(false);
 
+  // Reset error state whenever the src URL changes, giving the new image a chance to load
   useEffect(() => {
     setImageError(false);
   }, [src]);
 
+  // Return false to suppress Ant Design's built-in broken-image fallback;
+  // we handle the fallback ourselves via initials/children rendering below
   const handleError = () => {
     setImageError(true);
     onError?.(new Error('Failed to load image'));
-    return false; // Return false to prevent Ant Design's default error handling
+    return false;
   };
 
-  // Determine display content
+  // Explicit initials prop wins; otherwise derive from name/alt text
   const displayInitials = initials || getInitials(name, alt);
 
-  // Map shape to Ant Design's supported shapes ('circle' | 'square')
-  // 'rounded' maps to 'square' (Ant Design applies border-radius via CSS)
+  // Ant Design only supports 'circle' | 'square'; our 'rounded' shape maps to
+  // 'square' because Ant Design handles rounded corners via its own CSS class
   const antShape: 'circle' | 'square' = shape === 'circle' ? 'circle' : 'square';
 
-  // Only apply inline styles if explicitly provided by user
-  // Otherwise, let CSS custom properties handle theming via .ant-avatar classes
+  // CSS custom properties (--ds-avatar-*) enable tenant-level theming.
+  // Explicit backgroundColor/textColor props let consumers override per-instance.
   const avatarStyle: React.CSSProperties = {
-    // Use CSS variables for variant colors - only override if user provides explicit values
     backgroundColor: backgroundColor || `var(--ds-avatar-${variant}-bg)`,
     color: textColor || `var(--ds-avatar-${variant}-color)`,
     cursor: onClick ? 'pointer' : undefined,
@@ -133,8 +114,8 @@ export default function ClassicAvatar(props: AvatarProps): React.ReactElement {
     </AntAvatar>
   );
 
-  // Wrap with status badge if needed
-  // Use CSS variables for status colors
+  // Wrap avatar in an antd Badge (dot mode) when a status is set.
+  // Status colours come from CSS custom properties for tenant theming.
   if (status) {
     return (
       <Badge

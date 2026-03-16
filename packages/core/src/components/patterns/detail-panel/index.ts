@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * DetailPanel<T> - Pattern Component
- *
- * Master-detail panel with tabs, sidebar info, and action buttons.
- * Supports breadcrumbs, status badges, and configurable sidebar layout.
+ * @fileoverview DetailPanel pattern -- engine-aware master-detail panel with
+ * tabs, sidebar info, action buttons, breadcrumbs, and status badges.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -1,59 +1,26 @@
 'use client';
 
 /**
- * @fileoverview List Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS list implementation with maximum accessibility.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the List display primitive.
+ * Zero-dependency list using semantic `<ul>`/`<li>` markup, inline styles, and
+ * DS CSS variables for theming. Includes skeleton loading and CSS Grid layout.
  *
- * @remarks
- * This engine provides a lightweight, dependency-free list using only
- * inline styles and semantic HTML elements.
- *
- * **Exported Components:**
- * - `List` - Main list container (div + ul)
- * - `Item` - List item wrapper (li)
- * - `Meta` - Item metadata display (div)
- *
- * **Implementation Details:**
- * - Uses semantic `<ul>` and `<li>` elements
- * - Inline styles for all visual properties
- * - Flexbox-based layouts
- * - Grid support via CSS Grid
- * - Skeleton loading states
- *
- * **Accessibility Features:**
- * - Semantic list markup
- * - Proper list item structure
- * - Keyboard navigation support
- * - Screen reader friendly
- *
- * **Advantages:**
- * - Zero external dependencies
- * - Smallest bundle size
- * - Maximum browser compatibility
- * - Full accessibility compliance
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { List } from '@rottay/design-system';
- *
  * <List engine="rustic" bordered>
  *   <List.Item>Item content</List.Item>
  * </List>
  * ```
- *
- * @see {@link List} for the main component
- * @module List/engines/rustic
- * @category Display
- * @package @rottay/design-system
  */
 import React from 'react';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../List.types';
 import { LIST_DEFAULTS } from '../List.types';
 
+/** Rustic List Item Meta. Renders avatar/title/description with flexbox inline styles. */
 export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
   (props, ref) => {
     const { avatar, title, description, className, style } = props;
+    // flex-start keeps avatar top-aligned when description wraps to multiple lines
     return (
       <div
         ref={ref}
@@ -89,9 +56,11 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
 );
 Meta.displayName = 'List.Item.Meta.Rustic';
 
+/** Rustic List Item. Semantic `<li>` with inline flex layout for content/extra/actions. */
 export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
   (props, ref) => {
     const { actions, extra, children, className, style } = props;
+    // Content fills available space; extra and actions are pushed to the right
     return (
       <li
         ref={ref}
@@ -119,6 +88,13 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
 );
 Item.displayName = 'List.Item.Rustic';
 
+/**
+ * Rustic List container. Renders a semantic `<ul>` inside a styled div, with
+ * DS CSS variable borders, optional grid layout, and a skeleton loading state.
+ *
+ * @param props - DS ListProps with inline-style-based options.
+ * @returns A div-wrapped `<ul>` with optional header, footer, and loading skeleton.
+ */
 export const List = React.forwardRef<HTMLDivElement, ListProps>(
   (props, ref) => {
     const {
@@ -136,16 +112,19 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       style,
     } = props;
 
+    // Map DS size tokens to explicit pixel values for framework-free rendering
     const fontSizes = {
       small: '12px',
       default: '14px',
       large: '16px',
     };
 
+    // Prefer renderItem for data-driven lists; fall back to children for declarative usage
     const listContent = dataSource && renderItem
       ? dataSource.map((item, index) => renderItem(item, index))
       : children;
 
+    // Three-row skeleton with avatar circle + text bars matching typical list layouts
     if (loading) {
       return (
         <div ref={ref} className={className} style={{ ...style }}>
@@ -206,6 +185,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             {header}
           </div>
         )}
+        {/* Reset native list styling; horizontal padding only when bordered to inset content */}
         <ul
           style={{
             listStyle: 'none',

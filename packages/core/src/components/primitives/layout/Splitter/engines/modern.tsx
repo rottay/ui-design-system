@@ -43,10 +43,21 @@ import React, { useState, useRef, useCallback, Children, cloneElement, isValidEl
 import type { SplitterProps, SplitterPanelProps } from '../Splitter.types';
 import { SPLITTER_DEFAULTS } from '../Splitter.types';
 
+/**
+ * Modern engine implementation of the Splitter.Panel sub-component.
+ * Uses percentage-based `flex: 0 0 {size}%` to size each panel, with
+ * min/max constraints clamped in the 0-100 percentage range.
+ * The `size` prop is injected at runtime by the parent Splitter via cloneElement.
+ *
+ * @param props - Panel configuration plus injected `size` percentage
+ * @returns A Tailwind-styled div acting as a resizable panel
+ */
 export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { size?: number }>(
   (props, ref) => {
     const { size, min, max, children, className = '', style } = props;
 
+    // Normalize min/max to numeric percentages; default to the full 0-100 range
+    // so panels without constraints behave naturally.
     const minSize = typeof min === 'number' ? min : 0;
     const maxSize = typeof max === 'number' ? max : 100;
     const clampedSize = Math.min(Math.max(size ?? 50, minSize), maxSize);
@@ -57,6 +68,7 @@ export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { siz
         className={`overflow-auto ${className}`}
         style={{
           flex: `0 0 ${clampedSize}%`,
+          // Prevent content from forcing the panel wider than its flex-basis
           minWidth: 0,
           minHeight: 0,
           ...style,
@@ -69,6 +81,15 @@ export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { siz
 );
 Panel.displayName = 'Splitter.Panel.Modern';
 
+/**
+ * Modern engine implementation of the Splitter container.
+ * Manages panel sizes via React state and handles drag-to-resize through
+ * document-level mouse events. Gutter elements are styled with DaisyUI/Tailwind
+ * classes (bg-base-300, hover:bg-primary) for consistent theming.
+ *
+ * @param props - Splitter configuration (layout direction, resize callbacks)
+ * @returns A flex container with interleaved gutter drag handles
+ */
 export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
   (props, ref) => {
     const {
@@ -82,6 +103,8 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
     } = props;
 
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // Initialize each panel to an equal share of the container (100 / N percent)
     const [sizes, setSizes] = useState<number[]>(() => {
       const childCount = Children.count(children);
       return Array(childCount).fill(100 / childCount);
@@ -91,6 +114,9 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 
     const isVertical = layout === 'vertical';
 
+    // Returns a mousedown handler bound to a specific gutter index.
+    // On mousedown, document-level listeners are attached to track the drag
+    // and cleaned up on mouseup to avoid stale handlers.
     const handleMouseDown = useCallback((index: number) => (e: React.MouseEvent) => {
       e.preventDefault();
       isDragging.current = true;
@@ -100,6 +126,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       const handleMouseMove = (moveEvent: MouseEvent) => {
         if (!isDragging.current || !containerRef.current) return;
 
+        // Convert the mouse position to a percentage of the container's total dimension
         const rect = containerRef.current.getBoundingClientRect();
         const totalSize = isVertical ? rect.height : rect.width;
         const offset = isVertical
@@ -109,9 +136,13 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 
         setSizes((prevSizes) => {
           const newSizes = [...prevSizes];
+          // Calculate how far the gutter has moved relative to the cumulative
+          // size of all panels before (and including) the active one
           const beforeSum = prevSizes.slice(0, activeGutter.current + 1).reduce((a, b) => a + b, 0);
           const diff = percentage - beforeSum;
 
+          // Redistribute the delta between the two adjacent panels, ensuring
+          // neither panel goes below 0% (negative sizes cause layout collapse)
           if (activeGutter.current < newSizes.length - 1) {
             newSizes[activeGutter.current] = Math.max(0, prevSizes[activeGutter.current] + diff);
             newSizes[activeGutter.current + 1] = Math.max(0, prevSizes[activeGutter.current + 1] - diff);
@@ -139,6 +170,8 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 
     return (
       <div
+        // Merge the internal containerRef with the forwarded ref so both
+        // the resize logic and the consumer can access the DOM node.
         ref={(node) => {
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
           if (typeof ref === 'function') ref(node);
@@ -149,9 +182,11 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       >
         {childArray.map((child, index) => (
           <React.Fragment key={index}>
+            {/* Inject the calculated size percentage into each Panel child */}
             {isValidElement(child)
               ? cloneElement(child as React.ReactElement<SplitterPanelProps & { size?: number }>, { size: sizes[index] })
               : child}
+            {/* Render a gutter drag handle between each pair of panels */}
             {index < childArray.length - 1 && (
               <div
                 className={`flex-shrink-0 bg-base-300 hover:bg-primary transition-colors ${

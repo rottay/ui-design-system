@@ -173,7 +173,10 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
       };
 
       setMessages((prev) => {
-        // If key exists, update existing message
+        // Key-based deduplication: if a message with the same key exists,
+        // replace it in-place rather than adding a duplicate. This enables
+        // "loading -> success" transition patterns where the same key
+        // is reused to update a message's content and type.
         const existingIndex = prev.findIndex(
           (m) => config.key && m.key === config.key
         );
@@ -183,7 +186,8 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
           return updated;
         }
 
-        // Add new message, respecting maxCount
+        // Trim oldest messages when exceeding maxCount to prevent
+        // unbounded DOM growth in rapid-fire scenarios (e.g., form validation).
         const updated = [...prev, newMessage];
         if (updated.length > maxCount) {
           return updated.slice(-maxCount);
@@ -245,7 +249,10 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     },
   };
 
-  /** DaisyUI toast positioning classes */
+  // DaisyUI toast classes handle fixed positioning and stacking natively,
+  // avoiding manual z-index/position CSS. Only top/bottom are supported
+  // (unlike Notification which supports 6 placements) because messages
+  // are brief, centered alerts by convention.
   const placementClasses = {
     top: 'toast toast-top toast-center',
     bottom: 'toast toast-bottom toast-center',
@@ -306,7 +313,9 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
   const context = useContext(MessageContext);
 
   if (!context) {
-    // Fallback: return no-op methods if no provider
+    // Graceful degradation: return no-op methods when used outside a provider
+    // rather than throwing. This prevents runtime crashes during SSR or when
+    // components are rendered in isolation (e.g., Storybook without providers).
     const noop = () => {
       const result = () => {};
       result.then = () => {};
@@ -326,7 +335,10 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
     ];
   }
 
-  return [context, null]; // No context holder needed for Modern
+  // Second tuple element is null because Modern renders messages inside
+  // the provider's toast container -- no contextHolder injection needed
+  // (unlike Classic which requires Ant Design's contextHolder in the tree).
+  return [context, null];
 }
 
 // ============================================================================
@@ -394,7 +406,8 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     };
   }, [id, duration, onRemove, onClose]);
 
-  /** Handle manual close */
+  // Manual close must cancel the auto-close timer first to prevent
+  // a double-removal race condition (user clicks close, then timer fires).
   const handleClose = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -412,7 +425,10 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     loading: 'alert-info',
   };
 
-  /** SVG icons for each message type */
+  // Inline SVG icons instead of an icon library to keep the Modern engine's
+  // bundle lightweight. Each icon uses stroke-based paths for consistent
+  // rendering at small sizes (h-5 w-5 = 20px). The loading type uses
+  // DaisyUI's built-in spinner component for native animation support.
   const icons: Record<MessageType, ReactNode> = {
     success: (
       <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -439,6 +455,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     ),
   };
 
+  // role="alert" triggers screen reader announcement on appearance.
+  // DaisyUI alert classes provide semantic color coding that respects
+  // the active DaisyUI theme (light/dark/custom).
   return (
     <div
       className={`alert ${alertClasses[type]} shadow-lg ${className}`}
@@ -447,6 +466,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     >
       <span>{icon || icons[type]}</span>
       <span>{content}</span>
+      {/* aria-label required because the close button has no visible text
+          label -- only an SVG icon. btn-ghost keeps the button visually
+          minimal so it doesn't compete with the alert content. */}
       {closable && (
         <button
           className="btn btn-ghost btn-xs"

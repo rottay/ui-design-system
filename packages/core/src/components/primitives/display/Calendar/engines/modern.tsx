@@ -1,47 +1,21 @@
 'use client';
 
 /**
- * @fileoverview Calendar Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based calendar with responsive design.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Modern Calendar engine -- DaisyUI/Tailwind implementation.
  *
- * @remarks
- * This engine uses DaisyUI classes with Tailwind utilities
- * for a lightweight, responsive calendar implementation.
+ * Lightweight calendar built with a CSS Grid layout, DaisyUI button classes,
+ * and native `Date` objects (no dayjs dependency). Supports month view (7-column
+ * day grid) and year view (3-column month grid), controlled and uncontrolled
+ * value modes, date disabling via `disabledDate`/`validRange`, and custom
+ * cell renderers for both day and month cells.
  *
- * **Implementation Details:**
- * - Custom grid-based layout
- * - DaisyUI button and container classes
- * - Native Date object handling
- * - Controlled and uncontrolled modes
- * - Month and year view switching
+ * Engine: **DaisyUI / Tailwind CSS**
  *
- * **Class Mappings:**
- * - `btn btn-sm btn-ghost` - Navigation buttons
- * - `btn btn-primary` - Active mode button
- * - `grid grid-cols-7` - Days grid
- * - `grid grid-cols-3` - Months grid
- * - `bg-primary text-primary-content` - Selected state
- *
- * **Advantages:**
- * - Lightweight CSS-only styling
- * - Responsive by default
- * - DaisyUI theme integration
- * - No external date library
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Calendar } from '@rottay/design-system';
- *
- * <Calendar
- *   engine="modern"
- *   fullscreen={false}
- *   onChange={(date) => console.log(date)}
- * />
+ * <Calendar engine="modern" fullscreen={false} onChange={(d) => console.log(d)} />
  * ```
  *
- * @see {@link Calendar} for the main component
- * @see {@link https://daisyui.com/} DaisyUI
  * @module Calendar/engines/modern
  * @category Display
  * @package @rottay/design-system
@@ -49,14 +23,29 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import type { CalendarProps, CalendarMode } from '../Calendar.types';
 
+// English day/month labels. Localization is handled at a higher layer; the
+// modern engine uses these as display-only labels in the grid header.
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+// Normalizes the incoming value (Date, ISO string, or undefined) into a Date.
+// Falls back to "now" so the calendar always has a valid reference date.
 const parseDate = (value: Date | string | undefined): Date => {
   if (!value) return new Date();
   return typeof value === 'string' ? new Date(value) : value;
 };
 
+/**
+ * Modern Calendar backed by DaisyUI/Tailwind -- no external date library.
+ *
+ * Uses a 7-column CSS Grid for month view and a 3-column grid for year view.
+ * Supports controlled (`value`) and uncontrolled (`defaultValue`) modes,
+ * custom day/month cell renderers, and date disabling via `disabledDate` or
+ * `validRange`.
+ *
+ * @param props - Unified DS CalendarProps (see Calendar.types.ts)
+ * @returns A DaisyUI-styled calendar component
+ */
 export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, ref) => {
   const {
     value,
@@ -76,6 +65,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     id,
   } = props;
 
+  // Controlled vs uncontrolled: when `value` is provided, the consumer owns
+  // the selected date and we read from it on every render. Otherwise internal
+  // state tracks the selection.
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<Date>(() => parseDate(defaultValue));
   const [mode, setMode] = useState<CalendarMode>(modeProp || defaultMode);
@@ -83,13 +75,20 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   const currentDate = isControlled ? parseDate(value) : internalValue;
   const today = new Date();
 
+  // viewYear/viewMonth track which month page is displayed, independent of
+  // the selected date. This lets the user browse to future/past months without
+  // changing the selection.
   const [viewYear, setViewYear] = useState(currentDate.getFullYear());
   const [viewMonth, setViewMonth] = useState(currentDate.getMonth());
 
+  // Day 0 of the *next* month gives the last day of the current month.
+  // This is a standard JS Date trick to get the count of days.
   const daysInMonth = useMemo(() => {
     return new Date(viewYear, viewMonth + 1, 0).getDate();
   }, [viewYear, viewMonth]);
 
+  // getDay() returns 0=Sunday..6=Saturday. This tells us how many blank cells
+  // to render before the 1st of the month in the 7-column grid.
   const firstDayOfMonth = useMemo(() => {
     return new Date(viewYear, viewMonth, 1).getDay();
   }, [viewYear, viewMonth]);
@@ -114,6 +113,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     onSelect?.(date, { source: 'date' });
   }, [viewYear, viewMonth, isControlled, onChange, onSelect, isDateDisabled]);
 
+  // Selecting a month in year view both selects the date AND switches back to
+  // month view, so the user can drill down from year -> month -> day in sequence.
   const handleMonthClick = useCallback((month: number) => {
     const date = new Date(viewYear, month, 1);
     setViewMonth(month);
@@ -127,6 +128,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     onPanelChange?.(date, 'month');
   }, [viewYear, isControlled, onChange, onSelect, onPanelChange]);
 
+  // Month navigation wraps around the year boundary: going before January
+  // decrements the year and sets month to December, and vice versa.
   const handlePrevMonth = () => {
     if (viewMonth === 0) {
       setViewYear((y) => y - 1);
@@ -158,6 +161,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
 
+  // Fullscreen fills the parent container; compact mode constrains to w-80
+  // (320px) for use in popovers, sidebars, or date picker dropdowns.
   const containerClass = fullscreen ? 'w-full' : 'w-80';
 
   return (

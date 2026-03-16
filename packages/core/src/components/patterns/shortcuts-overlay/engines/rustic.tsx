@@ -1,13 +1,33 @@
 'use client';
 
 /**
- * ShortcutsOverlay - Rustic Engine (Pure inline styles with --ds-* CSS vars)
+ * @fileoverview ShortcutsOverlay -- Rustic engine (Vanilla / CSS variables).
+ * Full-screen modal dialog for keyboard shortcuts using only inline
+ * styles with --ds-* design tokens. No CSS framework dependency.
+ * Features search filtering, category grouping, and styled kbd elements.
+ * Supports custom tokens like --ds-shortcuts-overlay-backdrop and
+ * --ds-shortcuts-overlay-kbd-bg for fine-grained theming.
+ *
+ * @example
+ * <RusticShortcutsOverlay
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ *   shortcuts={[{ key: 'ctrl+s', description: 'Save', category: 'File' }]}
+ * />
  */
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { formatShortcutKey } from '../../../../hooks/shortcuts';
 import type { ShortcutsOverlayProps, ShortcutDisplayItem } from '../ShortcutsOverlay.types';
 
+/**
+ * Rustic (Vanilla CSS) implementation of the ShortcutsOverlay pattern.
+ * All styling uses inline CSSProperties with --ds-* token fallbacks.
+ * Builds its own dialog, backdrop, search input, and kbd key tags.
+ *
+ * @param props - See {@link ShortcutsOverlayProps} for the full prop contract.
+ * @returns The rendered shortcuts overlay, or null when closed.
+ */
 export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
   const {
     open,
@@ -24,6 +44,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /* Reset search and auto-focus input on open; 50ms delay for DOM readiness */
   useEffect(() => {
     if (open) {
       setQuery('');
@@ -31,6 +52,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     }
   }, [open]);
 
+  /* Case-insensitive filter across description, key combo, and category */
   const filtered = useMemo(() => {
     if (!query) return shortcuts;
     const q = query.toLowerCase();
@@ -42,6 +64,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     );
   }, [shortcuts, query]);
 
+  /* Group by category for sectioned display; "General" is the fallback */
   const grouped = useMemo(() => {
     const groups: Record<string, ShortcutDisplayItem[]> = {};
     for (const item of filtered) {
@@ -52,6 +75,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     return groups;
   }, [filtered]);
 
+  /** Closes the overlay and resets the search query */
   const handleClose = () => {
     onOpenChange(false);
     setQuery('');
@@ -59,6 +83,9 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
 
   if (!open) return null;
 
+  /* --- Style definitions using --ds-* tokens for full theme portability --- */
+
+  /** Fixed full-screen overlay container, offset from top for visual comfort */
   const overlay: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
@@ -75,6 +102,8 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     background: 'var(--ds-shortcuts-overlay-backdrop, var(--ds-color-bg-overlay))',
   };
 
+  /** Dialog container -- spread caller style last so it can override defaults.
+   *  Max-width prevents the panel from growing too wide on large screens. */
   const dialog: React.CSSProperties = {
     position: 'relative',
     background: 'var(--ds-shortcuts-overlay-bg, var(--ds-color-bg-elevated))',
@@ -86,6 +115,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     ...style,
   };
 
+  /** Header bar separates the title from the scrollable content area */
   const headerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -101,6 +131,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     margin: 0,
   };
 
+  /** Close button is transparent with muted text to stay visually recessive */
   const closeButtonStyle: React.CSSProperties = {
     background: 'transparent',
     border: 'none',
@@ -112,11 +143,13 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     lineHeight: 1,
   };
 
+  /** Search wrapper provides a border-bottom separator between search and content */
   const searchWrapperStyle: React.CSSProperties = {
     padding: '8px 20px',
     borderBottom: '1px solid var(--ds-color-border)',
   };
 
+  /** Input is visually borderless and transparent to blend into the dialog chrome */
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '8px 0',
@@ -127,6 +160,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     color: 'var(--ds-color-text)',
   };
 
+  /** Category labels use uppercase + letter-spacing for a subtle section divider feel */
   const categoryLabelStyle: React.CSSProperties = {
     fontSize: 11,
     textTransform: 'uppercase',
@@ -136,6 +170,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     padding: '8px 20px 4px',
   };
 
+  /** Each shortcut row: description left-aligned, keys right-aligned */
   const itemStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -148,6 +183,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     color: 'var(--ds-color-text-primary)',
   };
 
+  /** Keyboard key badge -- uses monospace font and bg token for kbd appearance */
   const kbdStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -163,6 +199,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     lineHeight: '18px',
   };
 
+  /** Horizontal layout for key segments with a small gap between each kbd badge */
   const keysContainerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',

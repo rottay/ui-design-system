@@ -1,5 +1,6 @@
 /**
- * Navigation primitives
+ * @fileoverview Navigation primitives barrel export.
+ * Re-exports all navigation-category primitive components.
  */
 
 export { Tabs } from './Tabs';

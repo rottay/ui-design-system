@@ -1,46 +1,12 @@
 /**
- * @fileoverview Badge Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based badge with indicator positioning.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Modern engine for the Badge component, backed by DaisyUI/Tailwind.
+ * Uses DaisyUI badge + indicator classes for utility-first badge rendering,
+ * with Tailwind animate-pulse for the pulse animation effect.
  *
- * @remarks
- * This engine uses DaisyUI's badge and indicator classes for lightweight,
- * utility-first badge rendering with Tailwind CSS.
- *
- * **Implementation Details:**
- * - Uses DaisyUI `badge` class for standalone badges
- * - Uses DaisyUI `indicator` for positioned badges over children
- * - Uses Tailwind `animate-pulse` for pulse animation
- * - Supports all DaisyUI semantic color classes
- *
- * **Class Mappings:**
- * - Variants: `badge-primary`, `badge-secondary`, etc.
- * - Sizes: `badge-xs`, `badge-sm`, `badge-md`, `badge-lg`
- * - Styles: `badge-outline`, `badge-ghost`
- *
- * **Indicator Positions:**
- * - Uses `indicator-top`, `indicator-bottom`
- * - Combined with `indicator-start`, `indicator-end`
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Badge } from '@rottay/design-system';
- *
- * <Badge engine="modern" count={5} variant="primary">
- *   <Avatar />
- * </Badge>
+ * <Badge engine="modern" count={5} variant="primary"><Avatar /></Badge>
  * ```
- *
- * @example Outline Style
- * ```tsx
- * <Badge engine="modern" content="New" badgeStyle="outline" variant="success" />
- * ```
- *
- * @see {@link Badge} for the main component
- * @see {@link https://daisyui.com/components/badge/} DaisyUI Badge
- * @module ModernBadge
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -52,23 +18,12 @@ import { BADGE_DEFAULTS, DOT_SIZE_MAP } from '../Badge.types';
 /**
  * Modern (DaisyUI) implementation of the Badge component.
  *
- * This engine uses DaisyUI's badge classes combined with Tailwind utilities
- * to render badges. It's optimized for bundle size and uses utility-first
- * CSS approach for styling.
+ * Three render paths: standalone badge (no children), hidden badge (visibility
+ * check fails), and indicator-wrapped badge (positioned over children via
+ * DaisyUI's indicator utility classes).
  *
- * @component
- * @example
- * // Basic badge with count
- * <ModernBadge count={5} variant="primary">
- *   <Avatar />
- * </ModernBadge>
- *
- * @example
- * // Outline style badge
- * <ModernBadge content="New" badgeStyle="outline" variant="success" />
- *
- * @param props - Badge component props
- * @returns React element with DaisyUI Badge
+ * @param props - Unified BadgeProps from the design system type contract
+ * @returns React element using DaisyUI badge/indicator markup
  */
 export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const {
@@ -94,7 +49,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     style,
   } = props;
 
-  // Determine display value (content takes precedence)
+  // `content` (string/ReactNode) takes precedence over numeric `count`
   const displayValue = content !== undefined ? content : count;
 
   /**
@@ -106,7 +61,8 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     return displayValue > max! ? `${max}+` : displayValue;
   })();
 
-  // Calculate badge visibility
+  // Badge is hidden when visible=false, or when there is no dot and the count
+  // is zero (unless showZero is set). This avoids rendering an empty indicator.
   const shouldShowBadge = visible && (
     dot ||
     (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero))
@@ -168,7 +124,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     onClose?.();
   };
 
-  // Build badge class list
+  // Assemble the full DaisyUI class string from variant, size, style, and state modifiers
   const badgeClasses = [
     'badge',
     variantClass,
@@ -190,7 +146,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   };
   const positionClass = positionClassMap[position!] || 'indicator-top indicator-end';
 
-  // Render standalone badge (no children)
+  // Standalone path: render the badge as an inline tag without indicator wrapper
   if (!children) {
     return (
       <span
@@ -213,12 +169,12 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     );
   }
 
-  // Return children only if badge should not be shown
+  // When the badge should be hidden, render children without any indicator overlay
   if (!shouldShowBadge) {
     return <div className={className} style={style}>{children}</div>;
   }
 
-  // Render with DaisyUI indicator
+  // Indicator path: wrap children in DaisyUI indicator container with positioned badge
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
 
   return (

@@ -1,50 +1,18 @@
 /**
- * @fileoverview Toast Provider Component - Rottay Design System
- * @description React context provider for managing toast stack state.
- * Provides toast methods to all descendant components via context.
+ * @fileoverview ToastProvider - context provider for toast stack state management.
+ * Uses a reducer pattern for predictable state transitions (ADD, DISMISS, PAUSE, etc.).
+ * Injects CSS animation keyframes on mount and exposes imperative methods via context.
  *
- * @remarks
- * The ToastProvider is the core state management component for the toast system.
- * It uses a reducer pattern for predictable state updates and provides:
- * - Toast stack state management
- * - Configuration for default toast behavior
- * - Methods for showing, dismissing, and updating toasts
- * - Automatic injection of animation styles
- *
- * @example Basic Setup
+ * @example
  * ```tsx
- * import { ToastProvider, Toast, useToast } from '@rottay/design-system';
- *
- * function App() {
- *   return (
- *     <ToastProvider>
- *       <MyApp />
- *       <Toast.Container />
- *     </ToastProvider>
- *   );
- * }
- * ```
- *
- * @example With Configuration
- * ```tsx
- * <ToastProvider
- *   position="bottom-center"
- *   duration={3000}
- *   max={3}
- *   gap={12}
- *   pauseOnHover={true}
- * >
+ * <ToastProvider position="top-right" duration={5000} max={5}>
  *   <App />
  *   <Toast.Container />
  * </ToastProvider>
  * ```
  *
- * @see {@link useToast} for accessing toast methods in components
- * @see {@link Toast.Container} for rendering the toast stack
- *
  * @module Toast/Provider
  * @category Feedback
- * @package @rottay/design-system
  */
 
 'use client';
@@ -68,41 +36,23 @@ import { TOAST_DEFAULTS, TOAST_CONTAINER_DEFAULTS } from '../Toast.types';
 import { injectToastStyles } from './animations';
 import { clearToastMethods, setToastMethods } from './useToast';
 
-// ============================================================================
+// ---------------------------------------------------------------------------
 // ID Generation
-// ============================================================================
+// ---------------------------------------------------------------------------
 
-/** Counter for generating unique toast IDs */
+/** Monotonic counter combined with timestamp for collision-free toast IDs. */
 let toastIdCounter = 0;
 
-/**
- * Generates a unique ID for a toast.
- *
- * @returns Unique toast ID string
- *
- * @internal
- */
+/** @internal */
 function generateToastId(): string {
   return `toast-${++toastIdCounter}-${Date.now()}`;
 }
 
-// ============================================================================
+// ---------------------------------------------------------------------------
 // Action Types
-// ============================================================================
+// ---------------------------------------------------------------------------
 
-/**
- * Dispatch action types for the toast reducer.
- *
- * @description
- * Defines all possible actions that can modify toast state:
- * - ADD: Add a new toast to the stack
- * - UPDATE: Update an existing toast's options
- * - DISMISS: Mark a toast as not visible (triggers exit animation)
- * - DISMISS_ALL: Dismiss all toasts
- * - PAUSE: Pause auto-dismiss for a toast
- * - RESUME: Resume auto-dismiss for a toast
- * - REMOVE: Remove a toast from the stack entirely
- */
+/** Discriminated union of all actions the toast reducer can process. */
 export type ToastDispatchAction =
   | { type: 'ADD'; payload: ToastState }
   | { type: 'UPDATE'; payload: { id: string; options: Partial<ToastOptions> } }
@@ -112,23 +62,11 @@ export type ToastDispatchAction =
   | { type: 'RESUME'; payload: string }
   | { type: 'REMOVE'; payload: string };
 
-// ============================================================================
+// ---------------------------------------------------------------------------
 // Reducer
-// ============================================================================
+// ---------------------------------------------------------------------------
 
-/**
- * Toast state reducer.
- *
- * @description
- * Pure function that handles all toast state transitions.
- * Each action type maps to a specific state transformation.
- *
- * @param state - Current toast state array
- * @param action - Dispatch action to apply
- * @returns New toast state array
- *
- * @internal
- */
+/** Pure reducer for toast state transitions. @internal */
 function toastReducer(state: ToastState[], action: ToastDispatchAction): ToastState[] {
   switch (action.type) {
     case 'ADD':
@@ -167,16 +105,11 @@ function toastReducer(state: ToastState[], action: ToastDispatchAction): ToastSt
   }
 }
 
-// ============================================================================
+// ---------------------------------------------------------------------------
 // Context Types
-// ============================================================================
+// ---------------------------------------------------------------------------
 
-/**
- * Toast context value interface.
- *
- * @description
- * The shape of the value provided by ToastProvider via context.
- */
+/** Shape of the value provided by ToastProvider via React context. */
 export interface ToastContextValue {
   /** Current array of all toasts */
   toasts: ToastState[];
@@ -188,60 +121,23 @@ export interface ToastContextValue {
   methods: ToastMethods;
 }
 
-/** Toast context with null initial value */
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-// ============================================================================
+// ---------------------------------------------------------------------------
 // Provider Props
-// ============================================================================
-
-/**
- * Props for the ToastProvider component.
- *
- * @description
- * Extends ToastProviderConfig with children prop.
- * All configuration props are optional with sensible defaults.
- */
+// ---------------------------------------------------------------------------
 export interface ToastProviderProps extends Partial<ToastProviderConfig> {
   /** Child components that can access toast context */
   children: ReactNode;
 }
 
-// ============================================================================
+// ---------------------------------------------------------------------------
 // Toast Provider Component
-// ============================================================================
+// ---------------------------------------------------------------------------
 
 /**
- * ToastProvider - Context provider for toast state management.
- *
- * @description
- * Manages the toast stack state and provides methods for showing,
- * dismissing, and updating toasts. Must wrap any components that
- * need access to the toast system.
- *
- * @remarks
- * Features:
- * - Configurable default position and duration
- * - Maximum toast limit
- * - Pause on hover support
- * - Automatic animation style injection
- * - Optimized re-renders with useMemo
- *
- * @param props - {@link ToastProviderProps}
- * @returns Provider component with toast context
- *
- * @example
- * ```tsx
- * <ToastProvider
- *   position="top-right"
- *   duration={5000}
- *   max={5}
- *   pauseOnHover={true}
- * >
- *   <App />
- *   <Toast.Container />
- * </ToastProvider>
- * ```
+ * Manages the toast stack via reducer and exposes imperative methods through context.
+ * Also registers methods globally so the standalone `toast()` helper works outside React.
  */
 export function ToastProvider({
   children,
@@ -254,24 +150,12 @@ export function ToastProvider({
 }: ToastProviderProps): React.ReactElement {
   const [toasts, dispatch] = useReducer(toastReducer, []);
 
-  // ========================================================================
-  // Animation Styles Injection
-  // ========================================================================
-
-  /**
-   * Effect to inject CSS animation keyframes on mount.
-   */
+  // Inject CSS animation keyframes once on mount
   useEffect(() => {
     injectToastStyles();
   }, []);
 
-  // ========================================================================
-  // Configuration Memoization
-  // ========================================================================
-
-  /**
-   * Memoized configuration object with all defaults applied.
-   */
+  // Memoized config with all defaults applied
   const config = useMemo<Required<ToastProviderConfig>>(
     () => ({
       position,
@@ -284,15 +168,9 @@ export function ToastProvider({
     [position, duration, max, gap, pauseOnHover, reverseOrder]
   );
 
-  // ========================================================================
-  // Toast Methods
-  // ========================================================================
+  // -- Imperative methods exposed via context ----------------------------
 
-  /**
-   * Shows a new toast with the provided options.
-   * @param options - Toast configuration options
-   * @returns The generated toast ID
-   */
+  /** Enqueue a new toast and return its generated ID. */
   const show = useCallback(
     (options: ToastOptions): string => {
       const id = options.id || generateToastId();
@@ -314,13 +192,7 @@ export function ToastProvider({
     [duration]
   );
 
-  /**
-   * Shows a success toast.
-   * @param title - Toast title
-   * @param description - Optional description
-   * @param options - Additional options
-   * @returns The generated toast ID
-   */
+  /** Shorthand: success variant. */
   const success = useCallback(
     (
       title: ReactNode,
@@ -337,13 +209,7 @@ export function ToastProvider({
     [show]
   );
 
-  /**
-   * Shows an error toast.
-   * @param title - Toast title
-   * @param description - Optional description
-   * @param options - Additional options
-   * @returns The generated toast ID
-   */
+  /** Shorthand: error variant. */
   const error = useCallback(
     (
       title: ReactNode,
@@ -360,13 +226,7 @@ export function ToastProvider({
     [show]
   );
 
-  /**
-   * Shows a warning toast.
-   * @param title - Toast title
-   * @param description - Optional description
-   * @param options - Additional options
-   * @returns The generated toast ID
-   */
+  /** Shorthand: warning variant. */
   const warning = useCallback(
     (
       title: ReactNode,
@@ -383,13 +243,7 @@ export function ToastProvider({
     [show]
   );
 
-  /**
-   * Shows an info toast.
-   * @param title - Toast title
-   * @param description - Optional description
-   * @param options - Additional options
-   * @returns The generated toast ID
-   */
+  /** Shorthand: info variant. */
   const info = useCallback(
     (
       title: ReactNode,
@@ -406,26 +260,17 @@ export function ToastProvider({
     [show]
   );
 
-  /**
-   * Dismisses a toast by ID (triggers exit animation).
-   * @param id - Toast ID to dismiss
-   */
+  /** Mark a toast as not-visible (triggers exit animation). */
   const dismiss = useCallback((id: string): void => {
     dispatch({ type: 'DISMISS', payload: id });
   }, []);
 
-  /**
-   * Dismisses all toasts.
-   */
+  /** Dismiss every toast in the stack. */
   const dismissAll = useCallback((): void => {
     dispatch({ type: 'DISMISS_ALL' });
   }, []);
 
-  /**
-   * Updates an existing toast's options.
-   * @param id - Toast ID to update
-   * @param options - New options to merge
-   */
+  /** Merge new options into an existing toast (e.g. update progress). */
   const update = useCallback(
     (id: string, options: Partial<ToastOptions>): void => {
       dispatch({ type: 'UPDATE', payload: { id, options } });
@@ -433,13 +278,7 @@ export function ToastProvider({
     []
   );
 
-  // ========================================================================
-  // Methods Memoization
-  // ========================================================================
-
-  /**
-   * Memoized methods object for stable reference.
-   */
+  // Bundle methods into a stable object for context consumers
   const methods = useMemo<ToastMethods>(
     () => ({
       show,
@@ -454,21 +293,12 @@ export function ToastProvider({
     [show, success, error, warning, info, dismiss, dismissAll, update]
   );
 
+  // Register methods globally so the standalone `toast()` helper works
+  // outside of React component trees.
   useEffect(() => {
     setToastMethods(methods);
-
-    return () => {
-      clearToastMethods();
-    };
+    return () => { clearToastMethods(); };
   }, [methods]);
-
-  // ========================================================================
-  // Context Value Memoization
-  // ========================================================================
-
-  /**
-   * Memoized context value for stable reference.
-   */
   const contextValue = useMemo<ToastContextValue>(
     () => ({
       toasts,
@@ -479,10 +309,6 @@ export function ToastProvider({
     [toasts, config, methods]
   );
 
-  // ========================================================================
-  // Render
-  // ========================================================================
-
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
@@ -492,22 +318,11 @@ export function ToastProvider({
 
 ToastProvider.displayName = 'ToastProvider';
 
-// ============================================================================
+// ---------------------------------------------------------------------------
 // Context Hook
-// ============================================================================
+// ---------------------------------------------------------------------------
 
-/**
- * Hook to access toast context.
- *
- * @description
- * Internal hook for accessing the toast context. Throws an error
- * if used outside of a ToastProvider.
- *
- * @returns Toast context value
- * @throws Error if used outside ToastProvider
- *
- * @internal
- */
+/** @internal Throws if called outside a ToastProvider tree. */
 export function useToastContext(): ToastContextValue {
   const context = useContext(ToastContext);
   if (!context) {

@@ -532,6 +532,10 @@ export function usePdfExport(options?: PdfExportOptions): UsePdfExportReturn {
       const opts = optionsRef.current ?? {};
       const printHtml = buildFullHtmlDocument(element.innerHTML, opts);
 
+      // A hidden iframe is used instead of window.print() on the main document
+      // because it isolates the print content from the application's own styles
+      // and lets us inject custom @page rules, headers, and footers without
+      // affecting the main page layout.
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
       iframe.style.top = '-10000px';
@@ -571,7 +575,9 @@ export function usePdfExport(options?: PdfExportOptions): UsePdfExportReturn {
       // Use iframe load event, with a fallback timeout
       iframe.addEventListener('load', handleLoad);
 
-      // Fallback: if load doesn't fire within 2 seconds, proceed anyway
+      // Safety timeout: some browsers (especially in CI environments) do not
+      // fire the iframe load event reliably. After 2 seconds we proceed anyway
+      // to avoid leaving the user stuck in a "printing" state.
       setTimeout(() => {
         iframe.removeEventListener('load', handleLoad);
         handleLoad();

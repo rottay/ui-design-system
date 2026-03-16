@@ -1,12 +1,36 @@
 'use client';
 
 /**
- * AutoComplete - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview AutoComplete Modern engine -- custom dropdown built with DaisyUI/Tailwind classes.
+ * Unlike the Classic engine, this manages its own controlled/uncontrolled state, keyboard
+ * navigation, click-outside dismissal, and option filtering without relying on Ant Design.
+ *
+ * @example
+ * ```tsx
+ * <AutoComplete engine="modern" options={cities} onSearch={fetchCities} allowClear />
+ * ```
+ *
+ * @module ModernAutoComplete
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { AutoCompleteProps, AutoCompleteOption } from '../AutoComplete.types';
 import { AUTOCOMPLETE_DEFAULTS } from '../AutoComplete.types';
 
+/**
+ * Modern (DaisyUI) implementation of the AutoComplete input.
+ *
+ * Renders a plain `<input>` with a DaisyUI-styled dropdown list. Supports both
+ * controlled (`value` + `onChange`) and uncontrolled (`defaultValue`) modes.
+ * Keyboard navigation (Arrow keys, Enter, Escape) and click-outside dismissal
+ * are handled internally, keeping parity with the Classic engine's UX.
+ *
+ * @param props - Standardized AutoCompleteProps from the DS type contract.
+ * @param ref   - Forwarded ref attached to the outer wrapper div.
+ * @returns A DaisyUI-styled autocomplete input with dropdown suggestion list.
+ */
 export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
   (props, ref) => {
     const {
@@ -29,10 +53,15 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       style,
     } = props;
 
+    // Three pieces of internal state mirror what Ant Design manages automatically
+    // in the Classic engine: the text value, dropdown visibility, and the
+    // keyboard-focused option index (-1 means no option is focused).
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
 
+    // Controlled vs uncontrolled detection -- when the consumer passes `value`
+    // we defer to it; otherwise we own the value in local state.
     const isControlled = controlledValue !== undefined;
     const value = isControlled ? controlledValue : internalValue;
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -40,6 +69,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    // Only update internal open state when the dropdown is uncontrolled;
+    // always notify the parent so controlled consumers stay in sync.
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (controlledOpen === undefined) {
         setInternalOpen(newOpen);
@@ -47,6 +78,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       onDropdownVisibleChange?.(newOpen);
     }, [controlledOpen, onDropdownVisibleChange]);
 
+    // Fires on every keystroke. Also opens the dropdown so suggestions
+    // appear immediately while the user types (matching native browser behavior).
     const handleChange = useCallback((newValue: string) => {
       if (!isControlled) {
         setInternalValue(newValue);
@@ -56,6 +89,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       handleOpenChange(true);
     }, [isControlled, onChange, onSearch, handleOpenChange]);
 
+    // Commits a selected option: updates the text value, notifies parent,
+    // closes the dropdown, and resets the keyboard focus index.
     const handleSelect = useCallback((option: AutoCompleteOption) => {
       const newValue = option.value;
       if (!isControlled) {
@@ -67,6 +102,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       setFocusedIndex(-1);
     }, [isControlled, onChange, onSelect, handleOpenChange]);
 
+    // Memoized filtering: `filterOption === true` enables the default
+    // case-insensitive substring match; a function enables custom logic;
+    // `false` disables client-side filtering (useful for server-side search).
     const filteredOptions = useMemo(() => {
       if (!filterOption) return options;
       if (filterOption === true) {
@@ -77,7 +115,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       return options.filter((opt) => filterOption(value, opt));
     }, [options, value, filterOption]);
 
-    // Click outside
+    // Dismiss the dropdown when the user clicks outside the component.
+    // The listener is only attached while the dropdown is open to avoid
+    // unnecessary event overhead on every mousedown.
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -90,7 +130,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, handleOpenChange]);
 
-    // Keyboard navigation
+    // Keyboard navigation with circular wrapping (ArrowDown at the end goes
+    // back to the first option, ArrowUp at the start goes to the last).
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (!isOpen) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -124,6 +165,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       }
     };
 
+    // Map DS size tokens to DaisyUI input size modifiers.
     const getSizeClass = () => {
       switch (size) {
         case 'small': return 'input-sm';
@@ -134,6 +176,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
 
     return (
       <div
+        // Merge the internal containerRef with the forwarded ref so both
+        // the click-outside effect and the consumer can reference this node.
         ref={(node) => {
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
           if (typeof ref === 'function') ref(node);
@@ -155,6 +199,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             disabled={disabled}
             autoFocus={autoFocus}
           />
+          {/* Clear button only visible when there is a non-empty value and the input is interactive. */}
           {allowClear && value && !disabled && (
             <button
               type="button"
@@ -166,6 +211,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           )}
         </div>
 
+        {/* Dropdown list positioned absolutely below the input. Uses DaisyUI's
+            `menu` + `rounded-box` for consistent theming and `max-h-60` to
+            keep the list scrollable when there are many options. */}
         {isOpen && (
           <ul className="absolute z-50 w-full mt-1 menu bg-base-100 rounded-box shadow-lg max-h-60 overflow-auto">
             {filteredOptions.length > 0 ? (
@@ -176,6 +224,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                     className={`${option.disabled ? 'disabled' : ''} ${focusedIndex === index ? 'active' : ''}`}
                     disabled={option.disabled}
                     onClick={() => handleSelect(option)}
+                    // Sync keyboard focus index on hover so mouse and keyboard
+                    // navigation stay coordinated.
                     onMouseEnter={() => setFocusedIndex(index)}
                   >
                     {option.label ?? option.value}

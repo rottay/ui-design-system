@@ -1,6 +1,15 @@
 /**
  * @fileoverview ScrollArea Rustic Engine - Rottay Design System
- * @description Pure CSS implementation with ::-webkit-scrollbar styling.
+ * Pure CSS scrollable container with no external dependencies. Uses inline
+ * styles for overflow control and Firefox scrollbar properties, plus an
+ * injected `<style>` block for WebKit ::-webkit-scrollbar customization.
+ *
+ * @example
+ * ```tsx
+ * <ScrollArea engine="rustic" maxHeight={500} hideScrollbar>
+ *   <LongContent />
+ * </ScrollArea>
+ * ```
  *
  * @module RusticScrollArea
  * @category Layout
@@ -13,6 +22,18 @@ import React, { useId } from 'react';
 import type { ScrollAreaProps } from '../ScrollArea.types';
 import { SCROLL_AREA_DEFAULTS, SCROLLBAR_SIZES } from '../ScrollArea.types';
 
+/**
+ * Rustic ScrollArea component using pure CSS for scrollbar styling.
+ *
+ * Combines inline styles (overflow, scrollbar-width, scrollbar-color) with an
+ * injected `<style>` block for ::-webkit-scrollbar rules. The scrollbar-corner
+ * rule prevents a mismatched background when both axes scroll simultaneously.
+ * Font family is set via the design system token to ensure consistent rendering
+ * even in embedded contexts without a parent stylesheet.
+ *
+ * @param props - ScrollArea props (maxHeight, maxWidth, orientation, scrollbarSize, hideScrollbar, etc.)
+ * @returns A React element containing a scoped `<style>` block and a scrollable div.
+ */
 export default function RusticScrollArea(props: ScrollAreaProps): React.ReactElement {
   const {
     children,
@@ -26,10 +47,12 @@ export default function RusticScrollArea(props: ScrollAreaProps): React.ReactEle
     'data-testid': dataTestId,
   } = props;
 
+  // SSR-safe unique ID; colons from useId are stripped for CSS class validity
   const generatedId = useId();
   const scrollId = `scroll-rustic-${generatedId.replace(/:/g, '')}`;
   const barWidth = SCROLLBAR_SIZES[scrollbarSize];
 
+  // Determine overflow axes based on the scroll orientation
   const getOverflow = (): React.CSSProperties => {
     switch (orientation) {
       case 'horizontal': return { overflowX: 'auto', overflowY: 'hidden' };
@@ -38,6 +61,8 @@ export default function RusticScrollArea(props: ScrollAreaProps): React.ReactEle
     }
   };
 
+  // Inline styles cover Firefox (scrollbar-width, scrollbar-color) and the
+  // base font family token; WebKit requires the injected <style> block below
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     maxHeight,
@@ -49,6 +74,8 @@ export default function RusticScrollArea(props: ScrollAreaProps): React.ReactEle
     ...style,
   };
 
+  // WebKit scrollbar CSS with design system color tokens and hardcoded fallbacks.
+  // The corner rule prevents a white square when both scrollbars are visible.
   const scrollbarCSS = `
     .${scrollId}::-webkit-scrollbar {
       width: ${barWidth}px;

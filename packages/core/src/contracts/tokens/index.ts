@@ -1,5 +1,17 @@
 /**
- * Design token types
+ * @fileoverview Design Token contracts - Rottay Design System
+ * @description Types for the resolved design token graph (DesignTokens) including
+ * color scales, spacing, typography, border radius, shadows, glass, gradients,
+ * transitions, surface, motion, overlay, and personality tokens.
+ *
+ * @remarks
+ * These types describe the fully resolved token graph after engine defaults,
+ * product profile, and tenant overrides have been merged -- not the raw token
+ * source files. The `useTokens()` hook returns a `DesignTokens` instance.
+ *
+ * @module Contracts/Tokens
+ * @category Types
+ * @package @rottay/design-system
  */
 
 export type { PersonalityTokens, AnimationPersonalityTokens, ChartPersonalityTokens, TypographyPersonalityTokens, AccentPersonalityTokens, CardPersonalityTokens } from './personality';
@@ -7,7 +19,7 @@ import type { PersonalityTokens } from './personality';
 
 /**
  * Color scale with 10 levels (50-900)
- * Used for semantic color categories that need background, text, and border variants
+ * Used for semantic color categories that need background, text, and border variants.
  */
 export interface ColorScale {
   50: string;

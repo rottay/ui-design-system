@@ -82,15 +82,22 @@ import { errorInDev, warnInDev } from '../utils/runtime-logger';
 // ─────────────────────────────────────────────────────────────────
 
 /**
- * Runtime white-labeling only works if we update the same CSS variables the
- * components actually consume. The previous implementation wrote `--tenant-*`
- * variables that nothing in the system read, so tenant branding appeared to
- * "work" in config but not on screen.
+ * Validates that a string is a well-formed 3- or 6-digit hex color.
+ *
+ * WHY strict validation: runtime white-labeling only works if we update the
+ * same CSS variables the components actually consume. The previous implementation
+ * wrote `--tenant-*` variables that nothing in the system read, so tenant
+ * branding appeared to "work" in config but not on screen. Now we target
+ * `--ds-color-*` directly and need clean hex input for the scale generator.
  */
 function isHexColor(value: string): boolean {
   return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
 }
 
+/**
+ * Expands shorthand hex (`#abc`) to full form (`#aabbcc`) for consistent
+ * parsing in `hexToRgb()`. Non-hex strings pass through unchanged.
+ */
 function normalizeHexColor(value: string): string {
   if (!isHexColor(value)) {
     return value;
@@ -103,10 +110,16 @@ function normalizeHexColor(value: string): string {
   return value;
 }
 
+/** Clamps a color channel to the valid 0-255 range and rounds to integer. */
 function clampChannel(value: number): number {
   return Math.max(0, Math.min(255, Math.round(value)));
 }
 
+/**
+ * Parses a hex color string into its RGB components.
+ * Returns `null` for non-hex inputs so callers can skip scale generation
+ * and fall back to the raw value for CSS variable inputs.
+ */
 function hexToRgb(value: string): { r: number; g: number; b: number } | null {
   const normalizedValue = normalizeHexColor(value);
 
@@ -122,12 +135,18 @@ function hexToRgb(value: string): { r: number; g: number; b: number } | null {
   };
 }
 
+/** Converts RGB components back to a 6-digit hex string. */
 function rgbToHex(rgb: { r: number; g: number; b: number }): string {
   return `#${[rgb.r, rgb.g, rgb.b]
     .map((channel) => clampChannel(channel).toString(16).padStart(2, '0'))
     .join('')}`;
 }
 
+/**
+ * Linearly interpolates between two hex colors by `mixRatio` (0 = base, 1 = mix).
+ * If either input is not a valid hex color, returns `baseColor` unchanged.
+ * This keeps the runtime safe when CSS variable references are passed through.
+ */
 function mixColor(baseColor: string, mixWith: string, mixRatio: number): string {
   const baseRgb = hexToRgb(baseColor);
   const mixRgb = hexToRgb(mixWith);
@@ -145,6 +164,15 @@ function mixColor(baseColor: string, mixWith: string, mixRatio: number): string 
   });
 }
 
+/**
+ * Generates a 10-step color scale (50-900) from a single base color.
+ *
+ * WHY runtime scale generation: tenant branding provides a single primary
+ * color, but the DS token system expects a full scale (50-900). Pre-computing
+ * a palette server-side would add latency and coupling. Generating it here
+ * keeps the branding API simple (one color) while the components get a rich
+ * palette. Steps 50-400 mix toward white; 600-900 mix toward black.
+ */
 function buildRuntimeScale(baseColor: string): Record<50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900, string> {
   return {
     50: mixColor(baseColor, '#ffffff', 0.92),
@@ -160,6 +188,11 @@ function buildRuntimeScale(baseColor: string): Record<50 | 100 | 200 | 300 | 400
   };
 }
 
+/**
+ * Picks a readable foreground color (dark or white) for text placed on top
+ * of `baseColor`, using the NTSC luminance formula. The 186 threshold is
+ * a standard heuristic that produces good contrast for WCAG AA compliance.
+ */
 function getReadableForegroundColor(baseColor: string): string {
   const rgbColor = hexToRgb(baseColor);
 
@@ -178,6 +211,19 @@ function getReadableForegroundColor(baseColor: string): string {
  */
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
+/**
+ * Writes a full color scale (50-900) plus semantic aliases to the `:root`
+ * element's inline styles for the given brand color family.
+ *
+ * WHY inline styles on `:root`: the CSS token layer may have already loaded a
+ * tenant stylesheet via `<link>`. Runtime branding overrides need higher
+ * specificity than the stylesheet, and inline styles on the root element
+ * achieve that without `!important` or injecting additional `<style>` tags.
+ *
+ * For `primary`, we also set semantic tokens like `--ds-color-primary-hover`,
+ * `--ds-color-primary-foreground`, `--ds-color-link`, etc. so that buttons,
+ * links, and focus rings all pick up the brand color automatically.
+ */
 function applyRuntimeBrandColorScale(
   variablePrefix: 'primary' | 'secondary',
   colorValue: string
@@ -225,14 +271,23 @@ function applyRuntimeBrandColorScale(
 // ─────────────────────────────────────────────────────────────────
 
 /**
- * IMPORTANT: Rottay is the base and fallback tenant.
- * If any other theme fails to load, Rottay is used.
+ * Rottay is the base and fallback tenant. If any other theme fails to load,
+ * the provider attempts Rottay CSS; if even that fails, emergency inline
+ * tokens are injected so the UI is never left without styling.
  */
 const DEFAULT_TENANT = 'rottay';
-const THEME_LOAD_TIMEOUT = 5000; // 5 seconds max to load theme
+
+/** Maximum time (ms) to wait for a tenant CSS `<link>` to load before giving up. */
+const THEME_LOAD_TIMEOUT = 5000;
+
+/** ID prefix for tenant CSS `<link>` elements so we can find/remove them later. */
 const THEME_LINK_ID_PREFIX = 'tenant-theme-';
 
-// Emergency Rottay tokens inline (if even Rottay CSS fails)
+// Emergency Rottay tokens inline (if even Rottay CSS fails).
+// WHY hardcoded: these tokens are the absolute last resort. They are a minimal
+// subset of the Rottay token system -- just enough to make text, backgrounds,
+// borders, and spacing render sensibly. The full token set is ~200 variables;
+// we only include the ones that prevent a blank/broken UI.
 const ROTTAY_EMERGENCY_TOKENS = `
   :root {
     --ds-color-primary: #0066CC;
@@ -262,24 +317,44 @@ const ROTTAY_EMERGENCY_TOKENS = `
 // CONTEXT
 // ─────────────────────────────────────────────────────────────────
 
+// WHY `null` default: same pattern as FeatureContext -- lets consumer hooks
+// distinguish "no provider" from "provider with default state" and throw a
+// helpful error message.
 export const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 // ─────────────────────────────────────────────────────────────────
 // PROVIDER
 // ─────────────────────────────────────────────────────────────────
 
+/**
+ * Props for the {@link ThemeProvider} component.
+ *
+ * The provider manages two orthogonal axes of styling:
+ * - **Tenant** (which brand): determines the CSS token file to load.
+ * - **Theme** (which variant): determines light/dark/auto via `data-theme` attribute.
+ *
+ * Both can change at runtime via `setTenant` / `setTheme` on the context value.
+ */
 export interface ThemeProviderProps {
+  /** React subtree that gains access to the theme context. */
   children: ReactNode;
+  /** Initial theme variant. Defaults to `'base'`. Supports `'light'`, `'dark'`, `'auto'`. */
   theme?: string;
+  /** Initial tenant slug. Defaults to `'rottay'`. */
   tenant?: string;
+  /** Runtime branding overrides (primaryColor, secondaryColor, accentColor). Applied as inline CSS variables. */
   branding?: TenantBranding;
+  /** Called when tenant CSS loading fails, before fallback kicks in. */
   onError?: (error: Error, tenant: string) => void;
+  /** Called when the provider falls back from the requested tenant to Rottay. */
   onFallback?: (originalTenant: string) => void;
-  cssBaseUrl?: string; // Base URL for tenant CSS files (e.g., '/themes' or 'https://cdn.example.com/themes')
+  /** Base URL for tenant CSS files (e.g., `'/themes'` or `'https://cdn.example.com/themes'`). */
+  cssBaseUrl?: string;
   /**
-   * When true, skips loading individual tenant CSS files.
-   * Use this when importing the bundled CSS via @rottay/design-system/tokens/css
-   * which includes all tenant styles using html[data-tenant='x'] selectors.
+   * When `true`, skips loading individual tenant CSS `<link>` elements.
+   * Use this when importing the bundled CSS via `@rottay/design-system/tokens/css`,
+   * which includes all tenant styles using `html[data-tenant='x']` selectors.
+   * The `TenantProvider` sets the `data-tenant` attribute on the HTML element.
    */
   skipCssLoading?: boolean;
 }
@@ -531,7 +606,10 @@ export function ThemeProvider({
     setThemeState(newTheme);
   }, []);
 
-  // Apply branding colors as CSS variables
+  // Apply branding colors as CSS variables.
+  // WHY a separate effect: branding can change independently of tenant/theme
+  // (e.g., a white-label admin adjusting colors in real time). Running this
+  // in its own effect avoids re-triggering the tenant CSS load cycle.
   useEffect(() => {
     // Runtime branding has to target the variable families the live DS
     // actually consumes. We separate semantic secondary from accent-specific
@@ -606,7 +684,9 @@ export function ThemeProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTenant]);
 
-  // Memoize context value
+  // Memoize context value to prevent unnecessary re-renders in consumers.
+  // Every field in the dependency array is either a primitive or a stable
+  // callback (via useCallback), so this memo only breaks when real state changes.
   const value: ThemeContextValue = useMemo(
     () => ({
       theme,
@@ -628,8 +708,13 @@ export function ThemeProvider({
 // ─────────────────────────────────────────────────────────────────
 
 /**
- * Hook to access theme context
- * @throws Error if used outside ThemeProvider
+ * Hook to access the full theme context value from the nearest ThemeProvider.
+ *
+ * Provides the current theme variant, tenant slug, loading/fallback state,
+ * and setter functions (`setTheme`, `setTenant`).
+ *
+ * @returns The current ThemeContextValue.
+ * @throws If called outside a ThemeProvider subtree.
  */
 export function useThemeContext(): ThemeContextValue {
   const context = useContext(ThemeContext);
@@ -643,5 +728,7 @@ export function useThemeContext(): ThemeContextValue {
 // EXPORTS
 // ─────────────────────────────────────────────────────────────────
 
-// ThemeContext is already exported at line 52 via inline export
+// ThemeContext is exported inline at declaration. Types are re-exported from
+// contracts so consumers can import them alongside the provider without
+// needing a separate `contracts` import.
 export type { ThemeConfig, ThemeContextValue } from '../contracts';

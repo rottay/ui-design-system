@@ -1,12 +1,18 @@
 'use client';
 
 /**
- * @fileoverview Upload Rustic Engine - Rottay Design System
- * @description Pure vanilla HTML/CSS implementation of the Upload component
- * using CSS variables for multi-tenant theming. Supports picture-card,
- * picture-circle, progress bars, image preview, itemRender, and directory upload.
+ * @fileoverview Upload Rustic Engine - Rottay Design System.
+ * Pure vanilla HTML/CSS implementation of the Upload component using inline
+ * styles backed by CSS variables (--ds-upload-*) for multi-tenant theming.
+ * Supports picture-card, picture-circle, progress bars, image preview,
+ * custom itemRender, and directory upload - all without external CSS frameworks.
  *
- * @module RusticUpload
+ * @example
+ * ```tsx
+ * <Upload engine="rustic" listType="picture-card" maxCount={3} />
+ * ```
+ *
+ * @module Upload/Engines/Rustic
  * @category Inputs
  * @package @rottay/design-system
  */
@@ -21,6 +27,9 @@ import { useTranslation } from '../../../../../i18n';
 // Helpers
 // ---------------------------------------------------------------------------
 
+// Generates a data URL thumbnail for image files using FileReader.
+// This avoids a network round-trip for newly selected files that have not
+// been uploaded yet. Non-image files resolve to undefined (no preview).
 function getFileThumbUrl(file: UploadFile): Promise<string | undefined> {
   return new Promise((resolve) => {
     const raw = file.originFileObj;
@@ -32,6 +41,9 @@ function getFileThumbUrl(file: UploadFile): Promise<string | undefined> {
   });
 }
 
+// Determines if a file should show an image preview. Checks MIME type first
+// (for newly selected files), then falls back to URL extension matching
+// (for server-returned files that may lack a MIME type).
 function isImageFile(file: UploadFile): boolean {
   if (file.type?.startsWith('image/')) return true;
   const url = file.thumbUrl || file.url || '';
@@ -75,6 +87,8 @@ const sharedStyles = {
     overflow: 'hidden',
     marginTop: '4px',
   } as React.CSSProperties,
+  // Card container is 104x104 to match antd's picture-card convention.
+  // Error state doubles the border width for increased visibility.
   cardContainer: (isCircle: boolean, hasError: boolean): React.CSSProperties => ({
     position: 'relative',
     width: 104,
@@ -256,6 +270,11 @@ interface FileItemProps {
   thumbUrls: Record<string, string>;
 }
 
+/**
+ * Renders a single file entry using inline styles. Adapts layout based on
+ * listType (picture-card, picture-circle, picture, or text). Hover-triggered
+ * overlay shows preview/remove actions for card/circle modes.
+ */
 const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onPreview, itemRender, progress, thumbUrls }) => {
   const [hovered, setHovered] = useState(false);
   const thumb = file.thumbUrl || file.url || thumbUrls[file.uid];
@@ -269,7 +288,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
     remove: () => onRemove(file),
   };
 
-  // -- picture-card / picture-circle --
+  // -- picture-card / picture-circle: 104x104 tile with hover overlay --
   if (listType === 'picture-card' || listType === 'picture-circle') {
     const originNode = (
       <div
@@ -306,7 +325,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
   }
 
-  // -- picture (list with thumbnails) --
+  // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
       <div style={{ ...sharedStyles.pictureRow, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
@@ -325,7 +344,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
   }
 
-  // -- text (default) --
+  // -- text (default): simple filename row with remove button --
   const originNode = (
     <div style={{ ...sharedStyles.fileItemText, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -342,6 +361,17 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
 // Upload Component
 // ---------------------------------------------------------------------------
 
+/**
+ * Rustic Upload component (pure HTML/CSS with CSS variables).
+ *
+ * Manages file selection via a hidden native input. Uses inline styles from
+ * the `sharedStyles` object for all visual rendering, making it fully
+ * independent of external CSS. Supports controlled/uncontrolled file lists,
+ * picture grid modes, and directory upload via the webkitdirectory attribute.
+ *
+ * @param props - {@link UploadProps}
+ * @returns A themed upload component with file list and preview modal
+ */
 export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -382,6 +412,8 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       });
     }, [actualFileList, listType, thumbUrls]);
 
+    // Processes selected files through beforeUpload validation, updates state,
+    // and fires onChange with progressive file list snapshots.
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
       if (!files.length) return;
@@ -395,6 +427,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       if (inputRef.current) inputRef.current.value = '';
     };
 
+    // Allows onRemove to veto deletion by returning false
     const handleRemove = async (file: UploadFile) => {
       if (onRemove) { const result = await onRemove(file); if (result === false) return; }
       const newFileList = removeUploadFile(actualFileList, file);
@@ -402,12 +435,14 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       onChange?.({ file: { ...file, status: 'removed' }, fileList: newFileList });
     };
 
+    // Falls back to built-in image preview when no custom onPreview is provided
     const handlePreview = useCallback((file: UploadFile) => {
       if (onPreview) { onPreview(file); return; }
       const src = file.thumbUrl || file.url || thumbUrls[file.uid];
       if (src && isImageFile(file)) setPreviewImage({ src, alt: file.name });
     }, [onPreview, thumbUrls]);
 
+    // BEM-style class names for optional external CSS targeting
     const containerClasses = [
       'rottay-upload',
       'rottay-upload--rustic',
@@ -515,6 +550,16 @@ Upload.displayName = 'Upload.Rustic';
 // Dragger Component
 // ---------------------------------------------------------------------------
 
+/**
+ * Rustic Upload.Dragger component (pure HTML/CSS with CSS variables).
+ *
+ * Provides a drag-and-drop zone styled entirely with inline styles. The
+ * dropzone border and background change on dragOver via state-driven style
+ * swaps rather than CSS pseudo-classes, keeping the zero-framework promise.
+ *
+ * @param props - {@link DraggerProps}
+ * @returns A drag-and-drop upload zone with file list below
+ */
 export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -558,6 +603,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       });
     }, [actualFileList, listType, thumbUrls]);
 
+    // Shared file processing for both drag-drop and manual selection paths
     const processFiles = async (files: File[]) => {
       if (disabled) { if (inputRef.current) inputRef.current.value = ''; return; }
       const { nextFileList, acceptedFiles } = await resolveAcceptedUploadFiles(actualFileList, files, maxCount, beforeUpload);
@@ -570,6 +616,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       if (inputRef.current) inputRef.current.value = '';
     };
 
+    // Resets drag visual state and delegates to the shared processFiles pipeline
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       if (disabled) return;
@@ -578,6 +625,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       processFiles(Array.from(e.dataTransfer.files));
     };
 
+    // Allows onRemove to veto deletion by returning false
     const handleRemove = async (file: UploadFile) => {
       if (onRemove) { const result = await onRemove(file); if (result === false) return; }
       const newFileList = removeUploadFile(actualFileList, file);
@@ -591,6 +639,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       if (src && isImageFile(file)) setPreviewImage({ src, alt: file.name });
     }, [onPreview, thumbUrls]);
 
+    // BEM-style class names for optional external CSS targeting
     const containerClasses = [
       'rottay-upload-dragger',
       'rottay-upload-dragger--rustic',

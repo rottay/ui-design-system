@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * EmptyStateSurface
- *
- * A page-sized empty state is different from an inline empty widget. This
- * surface standardizes the route-level version so create-first screens stop
- * hand-rolling their own shell around the same "nothing here yet" message.
+ * @fileoverview EmptyStateSurface -- full-page "nothing here yet" state.
+ * @description Route-level empty state with primary/secondary actions, icon, and
+ * optional guidance content. Different from the inline SurfaceEmptyState used
+ * inside other surfaces.
  */
 
 import React from 'react';
@@ -23,6 +22,8 @@ export interface EmptyStateSurfaceProps {
 export function EmptyStateSurface({
   config,
 }: EmptyStateSurfaceProps): React.ReactElement {
+  // Primary and secondary actions are permission-filtered so the empty
+  // state gracefully degrades when the user lacks create permissions.
   const primaryAction = resolveSurfaceAction(config.behavior.primaryAction, config.permissions);
   const secondaryActions = filterSurfaceActions(
     config.behavior.secondaryAction ? [config.behavior.secondaryAction] : undefined,
@@ -48,6 +49,9 @@ export function EmptyStateSurface({
     </Stack>
   );
 
+  // When no chrome is provided, the empty state renders without page shell
+  // wrapping. This is useful when the empty state is embedded inside another
+  // surface rather than being a standalone route.
   if (!config.presentation.chrome) {
     return content;
   }

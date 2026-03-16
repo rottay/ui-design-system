@@ -133,15 +133,20 @@ function isMac(): boolean {
  * - If any part is a modifier key, it's a combo: `ctrl+k`
  * - If all parts are non-modifier single chars, it's a sequence: `g+i`
  * - Single keys are treated as combos with no modifiers: `escape`, `?`
+ *
+ * @param definition - The shortcut definition to parse
+ * @returns A structured representation for efficient matching at runtime
  */
 function parseShortcut(definition: ShortcutDefinition): ParsedShortcut {
   const parts = definition.key.split('+').map((p) => p.trim().toLowerCase());
 
-  // Check if any part is a known modifier
+  // Disambiguation: if any token is a known modifier, the entire shortcut
+  // is a combo (single keypress with modifiers held). Otherwise multi-token
+  // shortcuts are sequences (multiple keypresses in order).
   const hasModifier = parts.some((p) => MODIFIER_KEYS.has(p));
 
   if (hasModifier || parts.length === 1) {
-    // Combo mode (including single key like 'escape')
+    // Combo mode: extract modifier flags and a single main key.
     const modifiers = { ctrl: false, alt: false, shift: false, meta: false };
     let mainKey = '';
 
@@ -294,14 +299,19 @@ export interface ShortcutProviderProps {
  * ```
  */
 export function ShortcutProvider({ children }: ShortcutProviderProps) {
+  // Registry is a ref-held Map for O(1) lookup/delete and to avoid
+  // re-rendering the Provider on every register/unregister.
   const registryRef = useRef<Map<string, ShortcutRegistryEntry>>(new Map());
+  // Sequence buffer accumulates recent keystrokes for multi-key sequence
+  // matching (e.g. pressing 'g' then 'i' within SEQUENCE_TIMEOUT).
   const sequenceBufferRef = useRef<string[]>([]);
   const sequenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const register = useCallback((entry: ShortcutRegistryEntry) => {
     const existing = registryRef.current.get(entry.id);
     if (!existing) {
-      // Check for conflicts
+      // Dev-only conflict warning: helps catch accidental duplicate bindings
+      // before they reach production.
       for (const [existingId, existingEntry] of registryRef.current.entries()) {
         if (existingEntry.parsed.definition.key === entry.parsed.definition.key) {
           if (process.env.NODE_ENV !== 'production') {
@@ -329,30 +339,33 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
     return definitions;
   }, []);
 
-  // Global keydown handler
+  // Global keydown handler -- uses capture phase (third arg = true) so it
+  // runs BEFORE any bubble-phase handlers in child components, giving
+  // global shortcuts first dibs on the event.
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      // Skip if user is typing in an input
+      // Suppress shortcuts when typing in form fields / contentEditable.
       if (isEditableElement(event.target)) return;
 
-      // Skip modifier-only keypresses
+      // Ignore modifier-only keypresses (e.g. pressing Ctrl alone).
       if (['Control', 'Alt', 'Shift', 'Meta'].includes(event.key)) return;
 
       const eventKey = normalizeKey(event.key);
 
-      // First: check combo shortcuts
+      // --- Pass 1: combo shortcuts (modifier + key) ---
+      // Combos are checked first because they are unambiguous: the modifier
+      // state tells us immediately whether it matches.
       for (const entry of registryRef.current.values()) {
         const { parsed } = entry;
         if (parsed.isSequence) continue;
 
         if (matchesCombo(event, parsed)) {
-          // Check conditional
           if (parsed.definition.when && !parsed.definition.when()) continue;
 
           event.preventDefault();
           event.stopPropagation();
           parsed.definition.handler();
-          // Clear any pending sequence
+          // A combo match invalidates any in-progress sequence.
           sequenceBufferRef.current = [];
           if (sequenceTimerRef.current) {
             clearTimeout(sequenceTimerRef.current);
@@ -362,22 +375,22 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
         }
       }
 
-      // Second: handle sequences
-      // Only process sequences when no modifiers are held (except shift for chars)
+      // --- Pass 2: key sequences (e.g. g then i) ---
+      // Sequences only apply when no modifier keys are held, because
+      // modifier combos are already handled above.
       if (event.ctrlKey || event.altKey || event.metaKey) {
         sequenceBufferRef.current = [];
         return;
       }
 
-      // Add to sequence buffer
+      // Append the current key to the rolling buffer.
       sequenceBufferRef.current.push(eventKey);
 
-      // Clear previous timer
       if (sequenceTimerRef.current) {
         clearTimeout(sequenceTimerRef.current);
       }
 
-      // Check if any sequence matches
+      // Check if the tail of the buffer matches any registered sequence.
       for (const entry of registryRef.current.values()) {
         const { parsed } = entry;
         if (!parsed.isSequence) continue;
@@ -385,13 +398,11 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
         const { sequence } = parsed;
         const buffer = sequenceBufferRef.current;
 
-        // Check if buffer ends with the sequence
         if (buffer.length >= sequence.length) {
           const tail = buffer.slice(buffer.length - sequence.length);
           const matches = tail.every((k, i) => k === sequence[i]);
 
           if (matches) {
-            // Check conditional
             if (parsed.definition.when && !parsed.definition.when()) continue;
 
             event.preventDefault();
@@ -406,7 +417,7 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
         }
       }
 
-      // Set timeout to clear sequence buffer
+      // Reset the buffer after SEQUENCE_TIMEOUT if no further keys are pressed.
       sequenceTimerRef.current = setTimeout(() => {
         sequenceBufferRef.current = [];
         sequenceTimerRef.current = null;
@@ -457,18 +468,24 @@ export function useGlobalShortcut(shortcut: ShortcutDefinition): void {
   const ctx = useShortcutContext();
   const idRef = useRef<string>('');
 
-  // Stable id across renders
+  // Generate a stable ID on first render. The ID never changes across
+  // re-renders so the registry can track this shortcut's lifecycle.
   if (!idRef.current) {
     shortcutIdCounter++;
     idRef.current = `shortcut-${shortcutIdCounter}`;
   }
 
-  // Use a ref to always have latest handler/when without re-registering
+  // Ref holds the latest shortcut definition so the registered handler
+  // and when() always call the current version without requiring
+  // re-registration on every render.
   const shortcutRef = useRef(shortcut);
   shortcutRef.current = shortcut;
 
   useEffect(() => {
     const id = idRef.current;
+    // Wrap handler/when in closures that read from the ref, so the
+    // registered definition is always up-to-date even though the effect
+    // only re-runs on structural changes (key, description, category).
     const wrappedDefinition: ShortcutDefinition = {
       key: shortcutRef.current.key,
       description: shortcutRef.current.description,
@@ -483,8 +500,6 @@ export function useGlobalShortcut(shortcut: ShortcutDefinition): void {
     return () => {
       ctx.unregister(id);
     };
-    // Only re-register when the key or description changes (structural changes)
-    // Handler/when changes are picked up via ref
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctx, shortcut.key, shortcut.description, shortcut.category]);
 }
@@ -507,12 +522,15 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
   const ctx = useShortcutContext();
   const idsRef = useRef<string[]>([]);
 
-  // Use a ref to always have latest handlers
+  // Ref holds the latest shortcuts array so registered handlers always
+  // call the current version (same pattern as useGlobalShortcut).
   const shortcutsRef = useRef(shortcuts);
   shortcutsRef.current = shortcuts;
 
   useEffect(() => {
-    // Generate ids if needed
+    // Lazily grow the ID array. IDs are never removed because the effect
+    // cleanup unregisters by ID, and re-running the effect re-registers
+    // with the same stable IDs for the same positions.
     while (idsRef.current.length < shortcutsRef.current.length) {
       shortcutIdCounter++;
       idsRef.current.push(`shortcut-${shortcutIdCounter}`);
@@ -520,7 +538,8 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
 
     const ids = idsRef.current;
 
-    // Register all
+    // Register all shortcuts. Each handler/when closure reads from the
+    // ref at invocation time, not registration time.
     shortcutsRef.current.forEach((shortcut, index) => {
       const id = ids[index];
       const wrappedDefinition: ShortcutDefinition = {
@@ -538,7 +557,8 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
     return () => {
       ids.forEach((id) => ctx.unregister(id));
     };
-    // Serialize the key/description array to detect structural changes
+    // Serialized fingerprint dep: same technique as useRegisterCommands
+    // to re-register only when the set of bindings structurally changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ctx,

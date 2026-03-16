@@ -1,3 +1,11 @@
+/**
+ * @fileoverview Source governance guardrails.
+ * Static analysis tests that prevent regressions: no legacy engine names in
+ * source, no removed folder imports, DS-prefixed custom properties, no
+ * !important in tenant CSS, no unused visx packages, and cascade-safe
+ * tenant selectors.
+ */
+
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';

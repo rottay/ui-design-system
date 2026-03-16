@@ -1,5 +1,11 @@
 'use client';
 
+/**
+ * @fileoverview Chart hooks barrel -- exports useChartDimensions (responsive
+ * container measurement via ResizeObserver) and useChartPersonality (personality
+ * token resolution for chart rendering behavior).
+ */
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface ChartDimensions {
@@ -7,6 +13,29 @@ interface ChartDimensions {
   height: number;
 }
 
+/**
+ * Measures a chart container's width via ResizeObserver and returns
+ * reactive dimensions that update when the container resizes.
+ *
+ * The height is fixed (passed as `defaultHeight`) because most chart
+ * layouts pin height and let width flex. The initial width falls back
+ * to 600px when `defaultWidth` is a CSS string like `'100%'`, since
+ * the observer needs at least one paint cycle to measure the real width.
+ *
+ * @param defaultWidth - Initial width (number in px, or CSS string like '100%').
+ * @param defaultHeight - Fixed chart height in pixels (default 400).
+ * @returns A ref to attach to the container div and the current dimensions.
+ *
+ * @example
+ * ```tsx
+ * const { containerRef, dimensions } = useChartDimensions('100%', 300);
+ * return (
+ *   <div ref={containerRef}>
+ *     <svg width={dimensions.width} height={dimensions.height} />
+ *   </div>
+ * );
+ * ```
+ */
 export function useChartDimensions(
   defaultWidth: number | string = '100%',
   defaultHeight: number = 400,
@@ -20,6 +49,11 @@ export function useChartDimensions(
     height: defaultHeight,
   });
 
+  // Attaches a ResizeObserver to the container element. The initial
+  // `measure()` call handles the first paint; the observer handles
+  // subsequent layout shifts (viewport resize, sidebar collapse, etc.).
+  // The guard `rect.width > 0` prevents a zero-width flash before the
+  // element is laid out.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;

@@ -124,6 +124,10 @@ const styles = {
   /**
    * Container positioning styles based on placement.
    */
+  // Fixed positioning with translateX(-50%) centers the container without
+  // requiring a parent flex wrapper. pointerEvents: 'none' on the container
+  // prevents it from blocking clicks on underlying content -- individual
+  // messages re-enable pointer events via 'auto'.
   container: (placement: 'top' | 'bottom', top: number): React.CSSProperties => ({
     position: 'fixed',
     left: '50%',
@@ -150,6 +154,10 @@ const styles = {
       boxShadow: 'var(--ds-message-shadow, 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05))',
       backgroundColor: 'var(--ds-message-bg, var(--ds-color-bg-elevated))',
       pointerEvents: 'auto' as const,
+      // cubic-bezier(0.22, 1, 0.36, 1) is an "ease-out-expo" curve that
+      // decelerates sharply, giving messages a snappy entrance that settles
+      // naturally. Duration and easing are exposed as CSS vars so tenants
+      // can adjust animation feel without JS changes.
       animation:
         'messageSlideIn var(--ds-message-enter-duration, 220ms) var(--ds-message-enter-easing, cubic-bezier(0.22, 1, 0.36, 1))',
       maxWidth: 'var(--ds-message-max-width, 400px)',
@@ -224,6 +232,10 @@ const styles = {
   /**
    * Loading spinner styles.
    */
+  // CSS-only spinner avoids importing a spinner component or animation library.
+  // borderTopColor: transparent creates the rotating gap illusion.
+  // Linear timing keeps constant speed -- easing would create a pulsing feel
+  // that conflicts with the "indeterminate loading" semantic.
   loadingSpinner: {
     display: 'inline-block',
     width: '14px',
@@ -244,6 +256,10 @@ const styles = {
  * Only runs on client-side and only once per page load.
  * @internal
  */
+// Runtime style injection is necessary because Rustic has zero CSS file
+// dependencies. The SSR guard (typeof document === 'undefined') prevents
+// server-side crashes. The ID check avoids duplicate <style> tags when
+// multiple MessageProviders mount (e.g., in nested micro-frontends).
 const injectStyles = () => {
   if (typeof document === 'undefined') return;
 
@@ -427,6 +443,10 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
   return (
     <MessageContext.Provider value={messageApi}>
       {children}
+      {/* role="log" + aria-live="polite" tells assistive technologies to
+          announce new messages without interrupting the user's current task.
+          "polite" is preferred over "assertive" for messages since they are
+          informational, not urgent (unlike error notifications). */}
       <div style={styles.container(placement, top)} role="log" aria-live="polite">
         {messages.map(({ key: _messageKey, ...msg }) => (
           <MessageItem key={msg.id} {...msg} onRemove={removeMessage} />
@@ -563,9 +583,10 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     };
   }, [id, duration]);
 
-  /**
-   * Handle close with exit animation.
-   */
+  // Two-phase close: first trigger exit animation via isExiting state,
+  // then remove from DOM after the animation completes (220ms matches
+  // the CSS exit animation duration). This prevents the abrupt
+  // disappearance that would occur with immediate DOM removal.
   const handleClose = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -616,6 +637,10 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     >
       {renderIcon()}
       <span style={styles.content}>{content}</span>
+      {/* Hover state is handled via JS events rather than CSS :hover
+          because all styling is inline (no stylesheet). This trades a small
+          performance cost for zero-dependency styling consistency.
+          aria-label is essential since the button only contains "x" text. */}
       {closable && (
         <button
           onClick={handleClose}

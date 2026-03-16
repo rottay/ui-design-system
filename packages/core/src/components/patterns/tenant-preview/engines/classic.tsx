@@ -1,10 +1,19 @@
 'use client';
 
 /**
- * TenantPreview - Classic Engine (Ant Design)
+ * @fileoverview TenantPreview -- Classic engine (Ant Design / inline styles).
+ * Renders a live preview of tenant branding by injecting generated CSS
+ * variables into a scoped container. Shows color palette swatches,
+ * sample UI components (button, card, input, badge, table), and
+ * personality token metadata. Uses inline styles with --ds-* token
+ * references for the preview chrome itself.
  *
- * Renders a live preview of tenant branding using CSS variable injection
- * and sample component demonstrations.
+ * @example
+ * <ClassicTenantPreview
+ *   config={{ name: 'Acme', slug: 'acme', primaryColor: '#3b82f6', engine: 'classic' }}
+ *   components={['button', 'card']}
+ *   showColorPalette
+ * />
  */
 
 import React, { useMemo, useEffect, useRef } from 'react';
@@ -13,10 +22,13 @@ import { createTenantConfig } from '../../../../hooks/tenant/create-tenant';
 import { resolvePersonalityPreset } from '../../../../hooks/tenant/personality-presets';
 import { generateTenantCss } from '../../../../tenancy/storage/static/generator';
 
+/** Default set of component samples to display when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
 
 /**
- * Simple hex-to-RGB color mixing to generate a preview palette.
+ * Parses a hex color string into RGB components.
+ * Handles both shorthand (#abc) and full (#aabbcc) formats.
+ * Used by the palette generation utilities below.
  */
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const normalized = hex.length === 4
@@ -28,6 +40,7 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   return { r: (parsed >> 16) & 255, g: (parsed >> 8) & 255, b: parsed & 255 };
 }
 
+/** Linearly interpolates between two hex colors at the given ratio (0-1) */
 function mixColor(base: string, target: string, ratio: number): string {
   const b = hexToRgb(base);
   const t = hexToRgb(target);
@@ -38,6 +51,7 @@ function mixColor(base: string, target: string, ratio: number): string {
   return `#${[r, g, bl].map((c) => Math.max(0, Math.min(255, c)).toString(16).padStart(2, '0')).join('')}`;
 }
 
+/** Generates a 10-step palette (50-900) by mixing the base color with white/black */
 function buildPaletteSteps(base: string): { step: number; color: string }[] {
   return [
     { step: 50, color: mixColor(base, '#ffffff', 0.92) },
@@ -53,6 +67,7 @@ function buildPaletteSteps(base: string): { step: number; color: string }[] {
   ];
 }
 
+/** Returns black or white text color for optimal contrast against the given background */
 function getContrastColor(hex: string): string {
   const rgb = hexToRgb(hex);
   if (!rgb) return '#000000';
@@ -60,6 +75,14 @@ function getContrastColor(hex: string): string {
   return luminance > 186 ? '#171717' : '#ffffff';
 }
 
+/**
+ * Classic (inline styles) implementation of the TenantPreview pattern.
+ * Injects scoped CSS via a `<style>` tag and sets `data-tenant` on the
+ * container so the generated CSS variables apply only within the preview.
+ *
+ * @param props - See {@link TenantPreviewProps} for the full prop contract.
+ * @returns The rendered tenant preview with palette, components, and personality info.
+ */
 export default function ClassicTenantPreview(props: TenantPreviewProps) {
   const {
     config: creationConfig,
@@ -72,11 +95,13 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
 
   const previewRef = useRef<HTMLDivElement>(null);
 
+  /* Build a full tenant config from the creation input -- memoized to avoid recalc */
   const tenantConfig = useMemo(
     () => createTenantConfig(creationConfig),
     [creationConfig]
   );
 
+  /* Resolve personality preset tokens for the info grid display */
   const personalityInfo = useMemo(() => {
     const preset = creationConfig.personality ?? 'neutral';
     const tokens = resolvePersonalityPreset(preset);
@@ -93,12 +118,14 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
     [creationConfig.secondaryColor]
   );
 
-  // Inject scoped CSS into the preview container
+  /* Generate scoped CSS; dark mode selectors excluded since this is a preview card */
   const previewCss = useMemo(() => generateTenantCss(tenantConfig, {
     includeDarkSelector: false,
     includeSystemDarkSelector: false,
   }), [tenantConfig]);
 
+  /* Set data-tenant attribute so the injected CSS scopes correctly to this container.
+     Cleanup removes the attribute to avoid leaking into other previews. */
   useEffect(() => {
     const container = previewRef.current;
     if (!container) return;
@@ -108,6 +135,7 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
     };
   }, [tenantConfig.slug]);
 
+  /* Shorthand color references used throughout the component samples */
   const primary500 = creationConfig.primaryColor;
   const primaryFg = getContrastColor(primary500);
   const textPrimary = 'var(--ds-color-text-primary, var(--ds-color-text))';
@@ -222,13 +250,15 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
         </div>
       )}
 
-      {/* Component Samples */}
+      {/* Component Samples -- renders interactive (but non-functional) UI samples
+          that reflect the tenant's branding. Each sample type is gated behind the
+          components array so consumers can cherry-pick which previews to show. */}
       {components.length > 0 && (
         <div style={sectionStyle}>
           <span style={labelStyle}>Component Preview</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-            {/* Buttons */}
+            {/* Buttons -- primary/outlined/default trio shows the color hierarchy */}
             {components.includes('button') && (
               <div>
                 <div style={{ fontSize: '12px', color: textSecondary, marginBottom: '8px' }}>
@@ -284,7 +314,8 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
-            {/* Card */}
+            {/* Card -- border visibility respects the tenant's personality.card.showBorder token.
+                The colored accent bar at the top reinforces brand identity within containers. */}
             {components.includes('card') && (
               <div>
                 <div style={{ fontSize: '12px', color: textSecondary, marginBottom: '8px' }}>
@@ -294,6 +325,7 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
                   style={{
                     padding: '16px',
                     borderRadius: '8px',
+                    /* Personality token controls whether the card has a visible border */
                     border: tenantConfig.personality?.card?.showBorder !== false
                       ? `1px solid ${borderPrimary}`
                       : 'none',
@@ -301,6 +333,7 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
                     backgroundColor: bgPrimary,
                   }}
                 >
+                  {/* Accent bar -- thin colored strip that establishes brand presence */}
                   <div style={{
                     width: '100%',
                     height: '3px',
@@ -343,7 +376,8 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
-            {/* Badge */}
+            {/* Badge -- three variants (Active/Pending/Draft) demonstrate the badge shape
+                token from the personality preset (pill, square, or default rounded). */}
             {components.includes('badge') && (
               <div>
                 <div style={{ fontSize: '12px', color: textSecondary, marginBottom: '8px' }}>
@@ -351,11 +385,13 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
                 </div>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {['Active', 'Pending', 'Draft'].map((label, i) => {
+                    /* Each badge uses a different color tier: primary, warning, neutral */
                     const colors = [
                       { bg: primary500, fg: primaryFg },
                       { bg: 'var(--ds-color-warning)', fg: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))' },
                       { bg: bgSecondary, fg: textPrimary },
                     ];
+                    /* Badge border-radius driven by personality accent token */
                     const badgeRadius = tenantConfig.personality?.accent?.badgeShape === 'pill'
                       ? '9999px'
                       : tenantConfig.personality?.accent?.badgeShape === 'square'
@@ -382,7 +418,8 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
-            {/* Table */}
+            {/* Table -- two sample rows with inline status badges showing how the
+                primary color integrates into data-dense views (8% opacity background). */}
             {components.includes('table') && (
               <div>
                 <div style={{ fontSize: '12px', color: textSecondary, marginBottom: '8px' }}>
@@ -436,7 +473,9 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
         </div>
       )}
 
-      {/* Personality Info */}
+      {/* Personality Info -- auto-fill grid displays key personality tokens so
+          designers can verify that the preset maps to the expected behaviors.
+          Each cell shows a label/value pair from the resolved personality preset. */}
       {showPersonalityInfo && (
         <div style={sectionStyle}>
           <span style={labelStyle}>Personality: {personalityInfo.preset}</span>

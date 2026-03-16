@@ -95,10 +95,16 @@ const engineMap: Record<
  *   if the content exceeds that limit.
  * </TypographyParagraph>
  * ```
+ *
+ * @param props - ParagraphProps including engine, size, color, align, lineClamp, and children
+ * @param ref - Forwarded ref to the underlying paragraph element
+ * @returns The engine-specific paragraph element with personality token styles merged in
  */
 export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   ({ engine = 'classic', ...props }, ref) => {
+    // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
+    // Fall back to ClassicParagraph if an unrecognized engine name is provided
     const Component = engineMap[engine] || ClassicParagraph;
 
     return (
@@ -107,6 +113,7 @@ export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphPro
         {...props}
         style={mergePersonalityStyle(
           props.style,
+          // Pass false for isLabel since paragraphs are never label elements
           tokens ? resolveTypographyTextStyle(tokens, false) : undefined
         )}
       />

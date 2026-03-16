@@ -1,3 +1,5 @@
+/** @fileoverview FormSurface tests -- field rendering, aside layout, and action submission. */
+
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';

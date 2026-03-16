@@ -37,6 +37,17 @@ import React from 'react';
 import type { FlexProps } from '../Flex.types';
 import { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from '../Flex.types';
 
+/**
+ * Rustic Flex component using pure inline CSS styles.
+ *
+ * Every flexbox property is expressed as an inline style, making this engine
+ * fully self-contained with zero dependency on external CSS frameworks. The
+ * shared FLEX_JUSTIFY_MAP / FLEX_ALIGN_MAP translate shorthand prop values
+ * (e.g. "between") into standard CSS values (e.g. "space-between").
+ *
+ * @param props - Engine-agnostic flex layout props (direction, wrap, justify, align, gap, etc.)
+ * @returns A ref-forwarding div element styled entirely with inline CSS.
+ */
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {
     const {
@@ -53,6 +64,8 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...rest
     } = props;
 
+    // Build the complete style object up-front; the rustic engine places all
+    // layout concerns in inline styles so no external stylesheet is needed
     const flexStyle: React.CSSProperties = {
       display: inline ? 'inline-flex' : 'flex',
       flexDirection: direction,
@@ -63,6 +76,7 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...style,
     };
 
+    // Gap supports both uniform (number) and asymmetric ([column, row]) spacing
     if (gap !== undefined) {
       if (Array.isArray(gap)) {
         flexStyle.columnGap = `${gap[0]}px`;

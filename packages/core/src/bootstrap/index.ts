@@ -1,6 +1,11 @@
 /**
- * Design System Provider
- * Root provider that composes all system providers.
+ * @fileoverview Bootstrap barrel - Rottay Design System
+ * @description Canonical entry point for wiring the full design system runtime
+ * into a React application. Exports the root provider and CSS variable bridge.
+ *
+ * @module System/Bootstrap
+ * @category System
+ * @package @rottay/design-system
  */
 export { DesignSystemProvider } from './DesignSystemProvider';
 export type { DesignSystemProviderProps } from './DesignSystemProvider';

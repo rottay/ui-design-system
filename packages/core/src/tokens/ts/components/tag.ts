@@ -1,8 +1,8 @@
 /**
- * Tag Component Tokens - TypeScript Mirror
+ * @fileoverview Tag component token mirrors.
  *
- * TypeScript representation of Tag CSS custom properties.
- * Use these for type-safe Tag token references.
+ * Covers 5 size tiers, radius options, icon/close spacing, border width,
+ * typography (weight, lineHeight), and transition tokens.
  */
 
 // Tag Sizes

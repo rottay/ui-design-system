@@ -1,8 +1,10 @@
 /**
- * Z-Index Tokens - TypeScript Mirror
+ * @fileoverview Z-index layering token mirrors.
  *
- * TypeScript representation of z-index CSS custom properties.
- * Use these for type-safe z-index references in JavaScript/TypeScript.
+ * Defines a global elevation scale (base through max) and domain-specific
+ * sub-scales for navigation, menus, overlays, feedback toasts, form dropdowns,
+ * and utility layers. Also provides relative z-index values (below/above) for
+ * local stacking within a component.
  */
 
 // Z-Index Scale - Layering System

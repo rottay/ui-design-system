@@ -149,6 +149,10 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     // Render
     // ---------------------------------------------------------------------------
 
+    // getCurrentAnchor overrides AntD's built-in scroll detection with
+    // our controlled activeKey, enabling parent-driven active state.
+    // offsetBottom maps to targetOffset because AntD uses that name for
+    // the pixel threshold that triggers section activation.
     return (
       <AntAnchor
         getContainer={getContainer}

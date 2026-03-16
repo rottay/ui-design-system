@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * SidebarSurface
- *
- * The point of this surface is layout ownership, not domain ownership. It
- * gives app shells, admin workspaces, and split-pane pages a first-class DS
- * contract instead of pushing every sidebar arrangement into one-off wrappers.
+ * @fileoverview SidebarSurface -- collapsible sidebar layout shell.
+ * @description Provides first-class DS contract for sidebar layouts used in app
+ * shells, admin workspaces, and split-pane pages. Handles collapse/expand state,
+ * responsive stacking, and optional overlay mode on mobile.
  */
 
 import React, { useEffect, useState } from 'react';
@@ -22,8 +21,11 @@ export interface SidebarSurfaceProps {
 export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  // Collapse state supports controlled (app owns state) and uncontrolled
+  // (surface manages toggling) modes.
   const [internalCollapsed, setInternalCollapsed] = useState(config.behavior.collapsed ?? false);
 
+  // Sync internal state when the app takes control of the collapsed prop.
   useEffect(() => {
     if (config.behavior.collapsed !== undefined) {
       setInternalCollapsed(config.behavior.collapsed);
@@ -31,6 +33,9 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
   }, [config.behavior.collapsed]);
 
   const collapsed = config.behavior.collapsed ?? internalCollapsed;
+  // Collapsed width defaults to 88px -- enough for icon-only navigation.
+  // Expanded width defaults to 280px, a standard sidebar width that
+  // accommodates most nav label lengths without wrapping.
   const sidebarWidth = collapsed
     ? config.visual.collapsedWidth ?? 88
     : config.visual.sidebarWidth ?? 280;
@@ -43,6 +48,9 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
     config.behavior.onCollapsedChange?.(nextValue);
   };
 
+  // On desktop, a CSS grid creates the sidebar | main | aside three-column
+  // layout. On mobile, flexbox column stacking replaces it. The minmax(0, 1fr)
+  // on the main column prevents content from overflowing into the sidebar.
   return (
     <Box
       style={{

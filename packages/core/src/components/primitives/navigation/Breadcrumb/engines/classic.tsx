@@ -151,10 +151,9 @@ export default function ClassicBreadcrumb(props: BreadcrumbProps): React.ReactEl
       ]
     : items;
 
-  /**
-   * Transform Rottay items to Ant Design format.
-   * Maps our standardized props to Ant Design's expected structure.
-   */
+  // Transform Rottay items to Ant Design format. AntD's breadcrumb expects
+  // a single `title` ReactNode; we wrap icon+label in a Fragment so they
+  // render inline without introducing an extra DOM wrapper element.
   const antItems = displayItems.map((item) => ({
     title: (
       <>

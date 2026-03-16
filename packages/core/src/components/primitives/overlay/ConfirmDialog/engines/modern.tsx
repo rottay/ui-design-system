@@ -1,10 +1,18 @@
 /**
- * @fileoverview ConfirmDialog Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the ConfirmDialog component.
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the ConfirmDialog overlay component.
+ * Renders a confirmation modal using DaisyUI `modal` classes, with variant-specific
+ * button styling (btn-primary / btn-warning / btn-error) and a built-in loading spinner.
  *
- * @module ModernConfirmDialog
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <ModernConfirmDialog
+ *   open={show}
+ *   title="Archive project?"
+ *   variant="info"
+ *   onConfirm={archive}
+ *   onCancel={close}
+ * />
+ * ```
  */
 
 'use client';
@@ -13,12 +21,14 @@ import React, { useCallback, useEffect } from 'react';
 import type { ConfirmDialogProps } from '../ConfirmDialog.types';
 import { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS } from '../ConfirmDialog.types';
 
+/** Maps variant to the DaisyUI button class applied on the confirm button. */
 const VARIANT_BTN_CLASS: Record<string, string> = {
   info: 'btn-primary',
   warning: 'btn-warning',
   danger: 'btn-error',
 };
 
+/** Maps each variant to an inline SVG so the component stays icon-library-free. */
 const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   info: (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -43,6 +53,16 @@ const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   ),
 };
 
+/**
+ * ConfirmDialog implementation using DaisyUI modal and button classes.
+ *
+ * Body scroll is locked while the dialog is open. The confirm button receives
+ * a variant-specific DaisyUI class (e.g. `btn-error` for danger) and shows
+ * a DaisyUI spinner when `loading` is true. Backdrop click dismisses via `onCancel`.
+ *
+ * @param props - {@link ConfirmDialogProps} shared across all engines.
+ * @returns A DaisyUI-styled modal element, or an empty fragment when closed.
+ */
 export default function ModernConfirmDialog(props: ConfirmDialogProps): React.ReactElement {
   const {
     open,
@@ -61,6 +81,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
   } = props;
 
   const colors = VARIANT_COLORS[variant];
+  // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
   const btnClass = VARIANT_BTN_CLASS[variant];
 
@@ -68,7 +89,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
     onConfirm?.();
   }, [onConfirm]);
 
-  // Prevent body scroll when open
+  // Lock body scroll while the dialog is visible to prevent background interaction
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -86,6 +107,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
       style={style}
       data-testid={dataTestId}
     >
+      {/* Backdrop delegates dismiss to onCancel (always allowed, unlike AlertDialog) */}
       <div className="modal-backdrop" onClick={onCancel} />
       <div className="modal-box max-w-sm">
         <div className="flex gap-3">
@@ -103,6 +125,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
             )}
           </div>
         </div>
+        {/* DaisyUI modal-action provides right-aligned flex container */}
         <div className="modal-action">
           <button
             type="button"

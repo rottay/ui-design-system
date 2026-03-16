@@ -1,10 +1,18 @@
 /**
- * @fileoverview ConfirmDialog Classic Engine - Rottay Design System
- * @description Ant Design Modal composition for confirmation dialogs.
+ * @fileoverview Classic (Ant Design) engine for the ConfirmDialog overlay component.
+ * Wraps Ant Design's Modal to present variant-aware confirmation prompts (info,
+ * warning, danger) with matching icons, coloured action buttons, and a loading state.
  *
- * @module ClassicConfirmDialog
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <ClassicConfirmDialog
+ *   open={show}
+ *   title="Discard changes?"
+ *   variant="warning"
+ *   onConfirm={discard}
+ *   onCancel={close}
+ * />
+ * ```
  */
 
 'use client';
@@ -14,6 +22,7 @@ import { Modal as AntModal, Button as AntButton } from 'antd';
 import type { ConfirmDialogProps } from '../ConfirmDialog.types';
 import { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS } from '../ConfirmDialog.types';
 
+/** Maps each variant to an inline SVG so the component stays icon-library-free. */
 const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   info: (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -38,6 +47,17 @@ const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   ),
 };
 
+/**
+ * ConfirmDialog implementation backed by Ant Design's Modal primitive.
+ *
+ * The variant prop drives visual differentiation: icon colour, background tint,
+ * and confirm-button styling are all derived from the shared VARIANT_COLORS map.
+ * For the `danger` variant, Ant Design's native `danger` button prop is used
+ * instead of manual colour overrides to preserve hover/focus states.
+ *
+ * @param props - {@link ConfirmDialogProps} shared across all engines.
+ * @returns A centred Ant Design Modal element.
+ */
 export default function ClassicConfirmDialog(props: ConfirmDialogProps): React.ReactElement {
   const {
     open,
@@ -56,6 +76,7 @@ export default function ClassicConfirmDialog(props: ConfirmDialogProps): React.R
   } = props;
 
   const colors = VARIANT_COLORS[variant];
+  // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
 
   const handleConfirm = useCallback(() => {
@@ -76,6 +97,8 @@ export default function ClassicConfirmDialog(props: ConfirmDialogProps): React.R
           <AntButton onClick={onCancel} disabled={loading}>
             {cancelLabel}
           </AntButton>
+          {/* For danger variant, rely on Ant's built-in danger styling;
+              for info/warning, apply variant colour as inline override */}
           <AntButton
             type="primary"
             danger={variant === 'danger'}
@@ -89,6 +112,7 @@ export default function ClassicConfirmDialog(props: ConfirmDialogProps): React.R
       }
     >
       <div style={{ display: 'flex', gap: '12px' }} data-testid={dataTestId}>
+        {/* Pill-shaped icon badge tinted per variant */}
         {displayIcon && (
           <div
             style={{

@@ -73,12 +73,13 @@ function renderDaisyMenuItems(
   level: number = 0
 ): React.ReactNode {
   return items.map((item) => {
-    // Handle divider type
+    // DaisyUI uses the `divider` class to render a horizontal separator
     if (item.type === 'divider') {
       return <li key={item.key} className="divider" />;
     }
 
-    // Handle group type
+    // Groups display a non-interactive heading via DaisyUI's `menu-title` class.
+    // Children are nested inside a <ul> to maintain DaisyUI's menu structure.
     if (item.type === 'group') {
       return (
         <li key={item.key} className="menu-title">
@@ -92,7 +93,9 @@ function renderDaisyMenuItems(
       );
     }
 
-    // Handle submenu (item with children)
+    // Submenus use the native <details>/<summary> pattern which DaisyUI
+    // leverages for collapsible sections. This avoids custom JS state for
+    // open/close and provides built-in keyboard toggling via Enter/Space.
     if (item.children && item.children.length > 0) {
       return (
         <li key={item.key}>
@@ -109,7 +112,8 @@ function renderDaisyMenuItems(
       );
     }
 
-    // Handle regular item
+    // Regular leaf items. DaisyUI uses `active` class for the selected state
+    // and `text-error` for destructive/danger actions (e.g., "Delete").
     const isSelected = selectedKeys.includes(item.key);
     const itemClasses = [
       item.disabled ? 'disabled' : '',
@@ -205,7 +209,8 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
    */
   const handleItemClick = useCallback(
     (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => {
-      // Call onClick callback
+      // Fire click callback first, before selection logic, so consumers
+      // can inspect the raw click even when selection is disabled
       const clickInfo: MenuClickInfo = {
         key,
         keyPath,
@@ -218,16 +223,17 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
         let newSelectedKeys: string[];
 
         if (multiple) {
-          // Toggle selection in multiple mode
+          // Multiple mode: toggle the clicked key on/off in the selection set
           newSelectedKeys = selectedKeys.includes(key)
             ? selectedKeys.filter((k) => k !== key)
             : [...selectedKeys, key];
         } else {
-          // Single selection
+          // Single mode: replace entire selection with the clicked key
           newSelectedKeys = [key];
         }
 
-        // Update internal state if uncontrolled
+        // Only update internal state when running in uncontrolled mode.
+        // In controlled mode the parent owns the selectedKeys array.
         if (controlledSelectedKeys === undefined) {
           setInternalSelectedKeys(newSelectedKeys);
         }
@@ -251,6 +257,9 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   /**
    * DaisyUI menu classes based on props.
    */
+  // Build DaisyUI class list. `menu-compact` reduces padding/spacing when
+  // the sidebar is collapsed, mimicking antd's inlineCollapsed behavior.
+  // Background color tokens switch between DaisyUI's base shades for theming.
   const menuClasses = [
     'menu',
     mode === 'horizontal' ? 'menu-horizontal' : 'menu-vertical',

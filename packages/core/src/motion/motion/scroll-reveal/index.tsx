@@ -1,16 +1,56 @@
 'use client';
 
+/**
+ * @fileoverview ScrollReveal motion primitive - Rottay Design System
+ *
+ * A viewport-triggered reveal component that fades and optionally slides
+ * content upward as it scrolls into view. Unlike `FadeIn`, ScrollReveal
+ * exposes IntersectionObserver-level controls (`threshold`, `rootMargin`)
+ * for fine-grained trigger tuning within long scrollable pages.
+ *
+ * @example
+ * ```tsx
+ * <ScrollReveal threshold={0.25} rootMargin="-50px">
+ *   <FeatureSection />
+ * </ScrollReveal>
+ * ```
+ */
+
 import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import type { ScrollRevealProps } from '../../types';
 import { useMotionPersonality } from '../../hooks';
 
+/**
+ * Reveal content when it enters the viewport, with configurable intersection thresholds.
+ *
+ * The component delegates entrance style (fade, slide, spring, bounce) to the
+ * active motion personality and passes `threshold` and `rootMargin` straight
+ * through to framer-motion's `viewport` option, which maps to IntersectionObserver.
+ *
+ * @param props - {@link ScrollRevealProps}
+ * @param props.children - Content to reveal on scroll.
+ * @param props.threshold - Fraction of the element that must be visible to trigger. Defaults to `0.1`.
+ * @param props.rootMargin - CSS margin string applied to the intersection root (e.g. `"-100px"`).
+ * @param props.once - When `true` (default), the animation plays only on first intersection.
+ * @param props.className - CSS class applied to the motion wrapper.
+ * @param props.style - Inline styles applied to the motion wrapper.
+ * @returns A `motion.div` that animates into view based on scroll position.
+ */
 export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
   ({ children, threshold = 0.1, rootMargin, once = true, className, style }, ref) => {
     const motionPersonality = useMotionPersonality();
     const shouldReduceMotion = motionPersonality.shouldReduceMotion;
+
+    // Two easing curves tuned for perceptual smoothness: `slideEase` has a
+    // sharper initial acceleration for positional movement, while `fadeEase`
+    // is gentler and better suited for pure opacity transitions.
     const slideEase = [0.22, 1, 0.36, 1] as const;
     const fadeEase = [0.16, 1, 0.3, 1] as const;
+
+    // -- Transition selection -------------------------------------------------
+    // Floor the tween duration at 0.2s so the entrance is always perceptible
+    // even if the personality configures a very short default.
     const transition = shouldReduceMotion || motionPersonality.entrance === 'none'
       ? { duration: 0 }
       : motionPersonality.entrance === 'spring' || motionPersonality.entrance === 'bounce' || motionPersonality.useSpring
@@ -24,6 +64,10 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
             duration: Math.max(motionPersonality.durationSeconds, 0.2),
             ease: motionPersonality.entrance === 'slideUp' ? slideEase : fadeEase,
           };
+
+    // -- Initial state --------------------------------------------------------
+    // `fade` entrance omits the vertical offset for a clean crossfade; all
+    // other modes use the personality's `offsetDistance` for the upward slide.
     const initial =
       shouldReduceMotion || motionPersonality.entrance === 'none'
         ? { opacity: 1, y: 0 }

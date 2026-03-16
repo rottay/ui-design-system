@@ -1,45 +1,20 @@
 'use client';
 
 /**
- * @fileoverview Table Classic Engine - Rottay Design System
- * @description Ant Design-based table with full feature support.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Classic Table engine -- thin Ant Design wrapper.
  *
- * @remarks
- * This engine wraps Ant Design's Table component to provide
- * comprehensive data table functionality.
+ * Delegates all table behavior (sorting, filtering, pagination, virtual scroll,
+ * row selection, expandable rows, column pinning) to antd's Table internally.
+ * The engine exists so the DS can expose a unified TableProps surface while
+ * Ant Design handles the heavy rendering and accessibility under the hood.
  *
- * **Implementation Details:**
- * - Uses `antd/Table` for core rendering
- * - Maps size variants to Ant Design sizes
- * - Full pagination configuration support
- * - Row selection with checkbox/radio
- * - Expandable rows with custom render
- * - Virtual scrolling for large datasets
- * - Fixed columns and headers
+ * Engine: **Ant Design** (`antd/Table`)
  *
- * **Ant Design Features:**
- * - Column filtering with menus
- * - Nested column groups
- * - Summary rows
- * - Sticky headers
- * - Resizable columns
- * - Tree data structure
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Table } from '@rottay/design-system';
- *
- * <Table
- *   engine="classic"
- *   dataSource={data}
- *   columns={columns}
- *   pagination={{ pageSize: 20 }}
- * />
+ * <Table engine="classic" dataSource={users} columns={columns} pagination={{ pageSize: 20 }} />
  * ```
  *
- * @see {@link Table} for the main component
- * @see {@link https://ant.design/components/table} Ant Design Table
  * @module Table/engines/classic
  * @category Display
  * @package @rottay/design-system
@@ -47,6 +22,18 @@
 import { Table as AntTable } from 'antd';
 import type { TableProps } from '../Table.types';
 
+/**
+ * Classic Table engine backed by Ant Design.
+ *
+ * Acts as a near-passthrough to `antd/Table`, translating only the DS size
+ * tokens ("small" | "default" | "large") into antd's naming ("small" | "middle" | "large").
+ * All other props are forwarded as-is. The `as any` casts throughout the JSX
+ * bridge structural type differences between DS generics and antd's internal
+ * generics -- they are safe because the runtime shapes are identical.
+ *
+ * @param props - Unified DS TableProps (see Table.types.ts)
+ * @returns An Ant Design Table element
+ */
 export const Table = <T extends object = object>(props: TableProps<T>) => {
   const {
     dataSource,
@@ -80,9 +67,13 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     id,
   } = props;
 
-  // Map size
+  // Antd uses "middle" where the DS uses "default". Other sizes pass through.
   const antSize = size === 'default' ? 'middle' : size;
 
+  // Classic engine is a thin wrapper -- antd handles sorting, filtering,
+  // pagination, virtual scroll, and all other table features internally.
+  // The `as any` casts bridge DS types with antd's internal types which are
+  // structurally compatible but use different generics.
   return (
     <AntTable<T>
       dataSource={dataSource}

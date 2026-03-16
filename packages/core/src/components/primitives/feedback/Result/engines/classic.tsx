@@ -174,6 +174,8 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
     // Render
     // -------------------------------------------------------------------------
 
+    // Wrapper div accepts the forwarded ref and consumer styles,
+    // while AntResult handles its own internal layout and icon rendering
     return (
       <div ref={ref} className={className} style={style}>
         <AntResult

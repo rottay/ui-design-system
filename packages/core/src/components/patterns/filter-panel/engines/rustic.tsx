@@ -1,13 +1,33 @@
 'use client';
 
 /**
- * FilterPanel - Rustic Engine (Pure inline styles with --ds-* CSS vars)
+ * @fileoverview Rustic (Vanilla / CSS variables) engine for the FilterPanel pattern.
+ * Uses zero third-party UI libraries -- all styling is expressed through inline
+ * styles referencing `--ds-*` design-token CSS variables. Includes active filter
+ * chips (inline layout), a slide-down entrance animation for collapsible panels,
+ * and hover effects via direct DOM style manipulation. Fully themeable through
+ * CSS variable overrides without any build-time CSS framework.
+ *
+ * @example
+ * <FilterPanel
+ *   engine="rustic"
+ *   filters={[
+ *     { key: 'query', label: 'Search', type: 'text' },
+ *     { key: 'date', label: 'Date', type: 'date' },
+ *   ]}
+ *   values={filterValues}
+ *   onChange={setFilterValues}
+ *   layout="inline"
+ *   collapsible
+ * />
  */
 
 import React, { useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../types';
 
+// Shared base style for native inputs. All visual tokens reference --ds-*
+// variables with fallbacks so the component works even with partial themes.
 const baseInput: React.CSSProperties = {
   padding: '6px 10px',
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
@@ -20,6 +40,10 @@ const baseInput: React.CSSProperties = {
   outline: 'none',
 };
 
+/**
+ * Renders the appropriate native HTML form control for a given filter definition,
+ * styled entirely with inline styles and `--ds-*` CSS variables.
+ */
 function renderFilterControl(
   filter: FilterDef,
   value: unknown,
@@ -111,6 +135,8 @@ function renderFilterControl(
         </div>
       );
     }
+    // Number range: empty strings coerce to undefined so consumers can
+    // distinguish "no bound" from an explicit zero.
     case 'number-range': {
       const range = (value as [number | '', number | '']) ?? ['', ''];
       return (
@@ -148,9 +174,20 @@ function renderFilterControl(
   }
 }
 
+// Easing and duration pulled from design-system personality tokens so each
+// tenant's animation feel is preserved. The fallback values match a smooth
+// deceleration curve and 300ms entrance, suitable for most brands.
 const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
 
+/**
+ * Rustic FilterPanel using only inline styles and `--ds-*` CSS variables.
+ * Supports inline, stacked, and sidebar layouts with active filter chips,
+ * collapsible sections, and animated transitions.
+ *
+ * @param props - See {@link FilterPanelProps} for full prop documentation.
+ * @returns A themeable, framework-free filter panel.
+ */
 export default function RusticFilterPanel(props: FilterPanelProps) {
   const {
     filters,
@@ -172,13 +209,18 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
 
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
+  // Spread existing values and overwrite the changed key so the consumer
+  // receives a complete snapshot on every change, not just the delta.
   const handleChange = (key: string, val: unknown) => {
     onChange({ ...values, [key]: val });
   };
 
+  // Layout modes: inline = horizontal toolbar, stacked = vertical list,
+  // sidebar = vertical with right border separator.
   const isInline = layout === 'inline';
   const isSidebar = layout === 'sidebar';
 
+  // Base button style for action buttons (Apply, Reset).
   const btnBase: React.CSSProperties = {
     padding: '6px 14px',
     borderRadius: 'var(--ds-radius-sm, 4px)',
@@ -197,6 +239,9 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
     border: 'none',
   };
 
+  // Compute active filters for chip rendering. A filter is "active" when
+  // its value is non-null, non-empty-string, and non-empty-array. This
+  // avoids showing chips for cleared or default-state filters.
   const activeChipValues = Object.entries(values).filter(([, v]) => v != null && v !== '' && !(Array.isArray(v) && v.length === 0));
 
   return (
@@ -207,6 +252,9 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
         ...style,
       }}
     >
+      {/* Injected keyframes for the collapsible slide-down animation.
+          Defined inline because the rustic engine avoids external stylesheets
+          and CSS-in-JS libraries entirely. */}
       <style>{`@keyframes ds-filter-slide-down { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       {(title || collapsible) && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
@@ -245,7 +293,9 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
         </div>
       )}
 
-      {/* Active filter chips */}
+      {/* Active filter chips -- only shown in inline layout where horizontal
+          space allows chip pills. Clicking a chip clears that filter value,
+          providing a quick "remove one" affordance without opening dropdowns. */}
       {activeChipValues.length > 0 && isInline && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
           {activeChipValues.map(([key]) => {
@@ -327,6 +377,10 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
                   Apply
                 </button>
               )}
+              {/* Reset button uses transparent styling at rest and
+                  transitions to a primary tint on hover via direct DOM
+                  manipulation because CSS :hover cannot conditionally
+                  reference token variables in an inline-only engine. */}
               {showReset && (
                 <button
                   style={{ ...btnBase, border: '1px solid transparent', background: 'transparent' }}

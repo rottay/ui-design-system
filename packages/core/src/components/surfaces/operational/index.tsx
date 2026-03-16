@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * OperationalSurface
- *
- * Operational pages are different from dashboards: they combine live queues,
- * real-time feed updates, and a few high-value panels that operators need in
- * one glance. This surface gives that layout a formal DS contract.
+ * @fileoverview OperationalSurface -- real-time operations dashboard.
+ * @description Combines live feeds, queue stats, and high-value operator panels.
+ * Different from DashboardSurface in that it prioritizes real-time data and
+ * denser information display for active monitoring workflows.
  */
 
 import React from 'react';
@@ -30,6 +29,9 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
 }: OperationalSurfaceProps<TFeed>): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
+  // Content check is broad because operational dashboards may have any
+  // combination of panels, feeds, queues, and sections. An entirely empty
+  // config should show the empty state rather than a blank shell.
   const hasContent =
     !!config.presentation.primaryPanel ||
     !!config.presentation.secondaryPanel ||
@@ -37,6 +39,9 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
     !!config.behavior.feed ||
     (config.presentation.sections?.length ?? 0) > 0;
 
+  // The refresh action is merged into the standard actions array so it
+  // renders alongside other header buttons without special-casing in the
+  // action bar.
   const actions = [
     ...(config.behavior.actions ?? []),
     ...(config.behavior.refreshAction ? [config.behavior.refreshAction] : []),
@@ -72,6 +77,9 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
             />
           )}
 
+          {/* The 8/4 grid split only activates when a queue or feed exists.
+              Without a sidebar panel, the main content takes full width. On
+              mobile everything stacks vertically. */}
           <Grid columns={config.presentation.queue || config.behavior.feed ? (shouldStack ? 1 : 12) : 1} gap="lg">
             <Grid.Item span={config.presentation.queue || config.behavior.feed ? (!shouldStack ? 8 : undefined) : undefined}>
               <Stack spacing="lg">

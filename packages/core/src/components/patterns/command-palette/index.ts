@@ -1,10 +1,13 @@
 'use client';
 
 /**
- * CommandPalette - Pattern Component
+ * @fileoverview CommandPalette pattern - Rottay Design System
+ * @description Modal command palette with search, grouping, keyboard
+ * navigation, and shortcut display.
  *
- * Modal command palette with search, grouping, keyboard navigation,
- * and shortcut display. Inspired by VS Code / Spotlight.
+ * @remarks
+ * This pattern centralizes a recurring power-user interaction model so apps
+ * can plug in commands without rebuilding the full Spotlight-style shell.
  */
 
 import { createEngineComponent } from '../../../engines/factory';
@@ -12,6 +15,7 @@ import type { CommandPaletteProps } from './CommandPalette.types';
 
 export type { CommandPaletteProps, CommandItem } from './CommandPalette.types';
 
+/** Public command-palette entry point resolved through the engine factory. */
 export const PatternCommandPalette = createEngineComponent<CommandPaletteProps>(
   'PatternCommandPalette',
   {

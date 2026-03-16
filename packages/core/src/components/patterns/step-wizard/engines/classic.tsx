@@ -1,13 +1,37 @@
 'use client';
 
 /**
- * StepWizard - Classic Engine (Ant Design)
+ * @fileoverview Classic engine for the StepWizard pattern, powered by Ant Design.
+ * Renders a multi-step wizard with Ant Steps for progress indication, a content
+ * area for the active step, and a navigation bar with Back / Next / Complete / Skip
+ * buttons. Supports both horizontal and vertical orientations, per-step async
+ * validation, and controlled or uncontrolled step state.
+ *
+ * @example
+ * <ClassicStepWizard
+ *   steps={[
+ *     { key: 'info', title: 'Basic Info', content: <BasicInfoForm /> },
+ *     { key: 'review', title: 'Review', content: <ReviewStep />, validate: () => formIsValid() },
+ *   ]}
+ *   onComplete={() => submitForm()}
+ * />
  */
 
 import React, { useState } from 'react';
 import { Alert, Card, Steps, Button, Space, Skeleton, Progress } from 'antd';
 import type { StepWizardProps } from '../StepWizard.types';
 
+/**
+ * Classic (Ant Design) engine for the StepWizard pattern.
+ *
+ * Wraps the wizard in an Ant Card. The Steps component shows progress while
+ * the content area renders the active step's `content` ReactNode. Navigation
+ * buttons are rendered in a footer bar with left-aligned Back and right-aligned
+ * Skip / Next / Complete buttons.
+ *
+ * @param props - {@link StepWizardProps}
+ * @returns An Ant Design Card containing the step wizard.
+ */
 export default function ClassicStepWizard(props: StepWizardProps) {
   const {
     steps,
@@ -30,11 +54,15 @@ export default function ClassicStepWizard(props: StepWizardProps) {
     style,
   } = props;
 
+  // Controlled/uncontrolled step index pattern. When `controlledStep` is
+  // provided, the parent owns the step state; otherwise internal state drives.
   const [internalStep, setInternalStep] = useState(0);
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const current = controlledStep ?? internalStep;
 
+  // Clear the validation message on every step change so stale errors from
+  // a previous step do not persist when the user navigates forward or back.
   const setCurrent = (step: number) => {
     if (controlledStep == null) setInternalStep(step);
     onStepChange?.(step);
@@ -45,14 +73,20 @@ export default function ClassicStepWizard(props: StepWizardProps) {
   const currentDef = steps[current];
 
   /**
+   * Runs the active step's async `validate` function (if defined).
+   *
    * `StepWizardProps` has always exposed `validate`, but the engine was not
    * actually executing it. That made the contract misleading and forced every
    * consumer to re-implement guard rails outside the pattern.
    *
    * We fix that here so all surfaces and apps get real step validation from
    * the underlying pattern instead of building on a broken abstraction.
+   *
+   * @returns `true` when validation passes (or no validator exists); `false`
+   *          when it fails (sets `validationMessage` as a side effect).
    */
   const validateCurrentStep = async (): Promise<boolean> => {
+    // No validator means the step is unconditionally valid.
     if (!currentDef?.validate) {
       setValidationMessage(null);
       return true;
@@ -61,6 +95,8 @@ export default function ClassicStepWizard(props: StepWizardProps) {
     setIsValidating(true);
 
     try {
+      // validate() returns true/undefined for pass, false for a generic failure,
+      // or a string for a specific error message shown below the step content.
       const result = await currentDef.validate();
 
       if (result === true || result === undefined) {
@@ -80,6 +116,8 @@ export default function ClassicStepWizard(props: StepWizardProps) {
     }
   };
 
+  // Both advance and complete run validation first. If it fails, navigation
+  // is blocked and the error message is rendered below the step content.
   const handleAdvance = async () => {
     const isValid = await validateCurrentStep();
 
@@ -110,6 +148,8 @@ export default function ClassicStepWizard(props: StepWizardProps) {
 
   return (
     <Card className={className} style={style}>
+      {/* Progress indicator: horizontal renders steps inline above content;
+          vertical renders steps in a sidebar with content alongside. */}
       {showProgress && (
         <div style={{ marginBottom: 24 }}>
           {orientation === 'horizontal' ? (
@@ -139,6 +179,8 @@ export default function ClassicStepWizard(props: StepWizardProps) {
         </div>
       )}
 
+      {/* In horizontal mode, the content renders below the progress bar.
+          The Progress component provides a compact percentage-based bar on top. */}
       {(orientation === 'horizontal' || !showProgress) && (
         <>
           {showProgress && (
@@ -148,6 +190,8 @@ export default function ClassicStepWizard(props: StepWizardProps) {
         </>
       )}
 
+      {/* Validation error banner shown when the current step's validate()
+          returns false or an error string */}
       {validationMessage && (
         <Alert
           type="error"
@@ -158,6 +202,9 @@ export default function ClassicStepWizard(props: StepWizardProps) {
         />
       )}
 
+      {/* Navigation bar: Back on the left, Skip/Next/Complete on the right.
+          Skip only appears when `allowSkip` is true AND the step is optional.
+          All buttons disable during validation to prevent double-submission. */}
       <div style={{ marginTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           {current > 0 && (

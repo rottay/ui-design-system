@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * TeamSurface
- *
- * Team member management surface with role assignment, invite, and remove
- * actions. Supports table and card layouts. The app owns the actual team
- * operations; this surface standardizes how team management pages are composed.
+ * @fileoverview TeamSurface -- team member management page.
+ * @description Composes member list (table or card layout), role assignment, invite,
+ * and remove actions. The app owns CRUD operations; this surface standardizes
+ * the page composition and action presentation.
  */
 
 import React from 'react';
@@ -20,6 +19,9 @@ export interface TeamSurfaceProps {
   loading?: boolean;
 }
 
+// Maps member status to tag colors. 'invited' uses warning (amber) because
+// these members have not yet accepted, signaling an action may be needed.
+// 'disabled' and unknown statuses share the neutral default color.
 function statusColor(status?: TeamMember['status']): string {
   switch (status) {
     case 'active':
@@ -61,6 +63,9 @@ function MemberRow({
           <Tag color={statusColor(member.status)}>{member.status}</Tag>
         )}
 
+        {/* When onRoleChange is provided the role displays as an editable
+            dropdown; otherwise it renders as static text. This dual rendering
+            avoids showing a dropdown the user cannot interact with. */}
         {config.behavior.onRoleChange ? (
           <Select
             value={member.role}
@@ -70,6 +75,8 @@ function MemberRow({
             size="sm"
           />
         ) : (
+          // Fall back to the role label from the roles list; if not found
+          // (stale data), show the raw role id as last resort.
           <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
             {config.behavior.roles.find((r) => r.id === member.role)?.label ?? member.role}
           </Text>
@@ -96,6 +103,9 @@ export function TeamSurface({
   config,
   loading = false,
 }: TeamSurfaceProps): React.ReactElement {
+  // Invite button is rendered alongside generic actions when the app provides
+  // the handler. It always appears first (primary prominence) because
+  // inviting new members is the highest-value action on a team page.
   const inviteAction = config.behavior.onInvite ? (
     <Flex gap={8} wrap="wrap" justify="end">
       <Button variant="primary" size="sm" onClick={config.behavior.onInvite}>

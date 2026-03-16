@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * NotificationSurface
- *
- * Notification center with notification history list and preference management.
- * Supports tabbed and sectioned layouts. The surface standardizes how
- * notification pages look and feel while the app owns the actual notification
- * data and preference persistence.
+ * @fileoverview NotificationSurface -- notification center with preferences.
+ * @description Composes notification history list and preference management into
+ * tabbed or sectioned layouts. The app owns notification data and preference
+ * persistence; this surface standardizes the page structure.
  */
 
 import React, { useMemo } from 'react';
@@ -20,6 +18,9 @@ export interface NotificationSurfaceProps {
   loading?: boolean;
 }
 
+// Maps notification types to tag color tokens. 'info' and undefined both
+// resolve to 'processing' (blue) because untyped notifications should feel
+// neutral rather than alarming.
 function notificationTypeColor(type?: SurfaceNotificationItem['type']): string {
   switch (type) {
     case 'success':
@@ -62,6 +63,9 @@ function NotificationList({
 
   return (
     <Stack spacing="sm">
+      {/* Read notifications are dimmed (opacity 0.7) and lose the accent
+          border. The left border on unread items provides a quick visual
+          scan indicator without requiring a separate badge. */}
       {notifications.map((notification) => (
         <Card
           key={notification.id}
@@ -146,6 +150,8 @@ function PreferencesPanel({
   preferences: NotificationPreference[];
   onPreferenceChange?: (id: string, enabled: boolean) => void;
 }): React.ReactElement {
+  // Group preferences by category so the UI can render section headers.
+  // Uncategorized preferences default to "General" to avoid orphaned items.
   const grouped = useMemo(() => {
     const groups: Record<string, NotificationPreference[]> = {};
     for (const pref of preferences) {
@@ -204,8 +210,12 @@ export function NotificationSurface({
   loading = false,
 }: NotificationSurfaceProps): React.ReactElement {
   const useTabs = config.visual.layout === 'tabs';
+  // Unread count is computed here because it drives both the "mark all read"
+  // button visibility and the badge on the notifications tab label.
   const unreadCount = config.behavior.notifications.filter((n) => !n.read).length;
 
+  // "Mark all read" only appears when there are unread items AND the app
+  // provides the handler. This prevents confusing no-op buttons.
   const actionsNode = (
     <Flex gap={8} wrap="wrap" justify="end">
       {unreadCount > 0 && config.behavior.onMarkAllRead && (

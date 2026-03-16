@@ -1,3 +1,5 @@
+/** @fileoverview HeaderSurface tests -- chrome rendering, tab navigation. */
+
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';

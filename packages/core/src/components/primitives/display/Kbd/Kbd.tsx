@@ -1,19 +1,10 @@
 'use client';
 
 /**
- * @fileoverview Kbd - Rottay Design System
- * @description Keyboard key display component with monospace font and subtle styling.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Kbd - Renders a keyboard key in monospace with subtle styling.
+ * A simple display primitive with no compound sub-components.
  *
- * @remarks
- * The Kbd component displays keyboard keys or shortcuts in a styled element.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Styled with Ant Design tokens
- * - **Modern**: DaisyUI kbd class
- * - **Rustic**: Pure CSS styled kbd element
- *
- * @example Basic Usage
+ * @example
  * ```tsx
  * import { Kbd } from '@rottay/design-system';
  *
@@ -22,7 +13,6 @@
  *
  * @module Kbd
  * @category Display
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -34,6 +24,7 @@ export {
   KBD_DEFAULTS,
 } from './Kbd.types';
 
+/** Single engine-routed component with no compound sub-components. */
 export const Kbd = createEngineComponent<KbdProps>('Kbd', {
   classic: () => import('./engines/classic'),
   modern: () => import('./engines/modern'),

@@ -148,13 +148,20 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
   // Circle Type Rendering
   // ---------------------------------------------------------------------------
 
-  // DaisyUI only supports line progress, for circle we'll use radial-progress
+  // DaisyUI's radial-progress component uses CSS custom properties (--value,
+  // --size) to drive the circular indicator via a conic-gradient technique.
+  // This avoids SVG entirely, keeping bundle size minimal, but limits
+  // customization compared to Rustic's SVG approach.
   if (type === 'circle') {
     const circleStyle: React.CSSProperties = {
       ...style,
       ...(strokeColor ? { '--value': percent, '--size': '6rem', color: strokeColor } as React.CSSProperties : {}),
     };
 
+    // role="progressbar" provides semantic accessibility information.
+    // DaisyUI radial-progress renders as a styled div with conic-gradient,
+    // so the ARIA role is necessary for screen readers to interpret it
+    // as a progress indicator rather than generic content.
     return (
       <div
         className={`radial-progress ${STATUS_CLASSES[status!]} ${className}`}
@@ -177,7 +184,10 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
 
   return (
     <div className="w-full">
-      {/* Native progress element with DaisyUI styling */}
+      {/* Native <progress> element provides built-in accessibility (no ARIA
+          needed) and works with browser defaults when CSS fails to load.
+          DaisyUI progress classes override the native appearance while
+          preserving the semantic meaning for assistive technologies. */}
       <progress
         className={`progress ${STATUS_CLASSES[status!]} w-full ${className}`}
         value={percent}

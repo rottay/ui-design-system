@@ -256,6 +256,13 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+/**
+ * Recursively merges locale dictionaries while preserving namespace structure.
+ *
+ * A plain object spread would replace an entire translation namespace when an
+ * app only wants to override one key. This helper keeps overrides surgical,
+ * which is especially important for tenant-specific copy tweaks.
+ */
 function mergeLocaleTranslations(
   baseTranslations?: Partial<LocaleTranslations>,
   overrideTranslations?: Partial<LocaleTranslations>
@@ -316,7 +323,9 @@ export function DesignSystemProvider({
   const [loading, setLoading] = useState(!propTenantConfig);
 
   useEffect(() => {
-    // If tenant config provided via props, use it (takes precedence)
+    // Direct tenantConfig is the highest-priority entry point. This is the
+    // "standalone mode" path used by local previews, story helpers, and apps
+    // that already resolved tenant state outside the DS.
     if (propTenantConfig) {
       const mergedTenantConfig = mergeTenantConfig(propTenantConfig, tenantOverrides);
       setTenantConfig(mergedTenantConfig);
@@ -325,7 +334,8 @@ export function DesignSystemProvider({
       return;
     }
 
-    // Resolve tenant from slug or use default
+    // Otherwise the DS owns tenant resolution. The storage facade encapsulates
+    // cache -> known registry -> static -> remote -> default fallback.
     const loadTenant = async () => {
       try {
         const slug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
@@ -335,7 +345,8 @@ export function DesignSystemProvider({
         onTenantResolved?.(mergedTenantConfig);
       } catch (error) {
         onError?.(error as Error);
-        // Fallback to default tenant on error
+        // We always recover to the default tenant so the app keeps rendering
+        // even when tenant resolution fails upstream.
         const defaultTenantConfig = await resolveTenantConfig(DEFAULT_TENANT_SLUG);
         setTenantConfig(mergeTenantConfig(defaultTenantConfig, tenantOverrides));
       } finally {
@@ -350,8 +361,9 @@ export function DesignSystemProvider({
     return <LoadingScreen />;
   }
 
-  // Resolve the vertical preset (if any)
-  // Priority: explicit `vertical` prop > tenantConfig.vertical (from DB) > undefined
+  // Vertical can come from the app explicitly or from the resolved tenant
+  // record itself. This keeps platform-managed tenants fully runtime-driven
+  // while still letting apps force a different preset for previews or local experiments.
   const verticalSource = vertical ?? tenantConfig.vertical ?? undefined;
   const resolvedVertical: VerticalPreset | undefined =
     verticalSource == null
@@ -360,7 +372,8 @@ export function DesignSystemProvider({
         ? getVerticalPreset(verticalSource)
         : verticalSource;
 
-  // Engine: forceEngine > tenant config > vertical preset > 'classic'
+  // Final precedence used by the runtime:
+  // force props -> tenant config -> vertical defaults -> DS fallback.
   const engine = forceEngine ?? tenantConfig.engine ?? resolvedVertical?.engine ?? 'classic';
   const theme = forceTheme ?? tenantConfig.theme ?? 'base';
   const locale = forcedLocale ?? tenantConfig.locale ?? 'en';
@@ -370,7 +383,9 @@ export function DesignSystemProvider({
     appCustomTranslations
   );
 
-  // Product profile: explicit prop > vertical default > undefined (falls back to generic.default)
+  // Product profile intentionally resolves after vertical. Vertical answers
+  // "which kind of product is this?", while product profile answers
+  // "which UX preset should we apply within that product space?".
   const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
 
   return (

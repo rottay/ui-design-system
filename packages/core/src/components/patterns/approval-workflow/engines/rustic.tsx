@@ -1,12 +1,31 @@
 'use client';
 
 /**
- * ApprovalWorkflow - Rustic Engine (Vanilla HTML/CSS with --ds-* vars)
+ * @fileoverview Rustic (Vanilla CSS) engine for the ApprovalWorkflow pattern.
+ * Uses only inline styles backed by `--ds-*` CSS custom properties, making it
+ * framework-agnostic -- no Ant Design or Tailwind dependency. Hardcoded hex
+ * fallbacks ensure the component renders acceptably even when design-system
+ * tokens are not loaded (e.g. in isolated tests or Storybook).
+ *
+ * Injects a minimal `@keyframes pulse` via an inline `<style>` tag for the
+ * active-step dot animation, avoiding an external stylesheet requirement.
+ *
+ * @example
+ * <RusticApprovalWorkflow
+ *   title="Contract Approval"
+ *   entity="CTR-0088"
+ *   steps={[{ key: 'legal', approver: 'Legal Dept', status: 'pending' }]}
+ *   currentStep={0}
+ *   onApprove={(key) => approve(key)}
+ * />
  */
 
 import React from 'react';
 import type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from '../ApprovalWorkflow.types';
 
+// Per-status color triplets for badge backgrounds, text, and timeline dots.
+// Each value uses a CSS variable with a hardcoded hex fallback so the component
+// degrades gracefully when tokens are missing.
 const statusColors: Record<ApprovalStatus, { bg: string; text: string; dot: string }> = {
   pending: { bg: 'var(--ds-color-neutral-100)', text: 'var(--ds-color-neutral-600)', dot: 'var(--ds-color-neutral-400)' },
   approved: { bg: 'var(--ds-color-success-50, #ecfdf5)', text: 'var(--ds-color-success-700, #15803d)', dot: 'var(--ds-color-success-500, #22c55e)' },
@@ -23,6 +42,9 @@ const statusLabel: Record<ApprovalStatus, string> = {
   skipped: 'Skipped',
 };
 
+// Centralized style objects (the `s` namespace) keep all visual constants in
+// one place. Using factory functions (e.g. `dot()`, `btn()`) for styles that
+// vary by state avoids scattering ternary logic inside JSX.
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
@@ -117,6 +139,9 @@ const s = {
     gap: '0.5rem',
     marginTop: '0.5rem',
   } as React.CSSProperties,
+  // Button factory: "approve" and "reject" are filled (high emphasis), while
+  // "escalate" uses a transparent background with a colored border to signal
+  // it as a secondary action that should not be the default click target.
   btn: (variant: 'approve' | 'reject' | 'escalate') => {
     const base: React.CSSProperties = {
       display: 'inline-flex',
@@ -158,9 +183,26 @@ const s = {
   } as React.CSSProperties),
 };
 
+/**
+ * Rustic (Vanilla CSS) engine for the ApprovalWorkflow pattern.
+ *
+ * Renders the approval chain using only inline styles backed by `--ds-*`
+ * CSS custom properties. No external CSS framework is required, making this
+ * engine ideal for environments where Ant Design or Tailwind are not available.
+ *
+ * The `<style>` tag injected at the top of the render tree defines the
+ * `@keyframes pulse` animation used by the active-step dot. It is safe to
+ * render multiple instances -- the browser de-duplicates identical keyframe
+ * declarations.
+ *
+ * @param props - {@link ApprovalWorkflowProps}
+ * @returns A framework-agnostic card with a vertical approval timeline.
+ */
 export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
   const { title, entity, steps, currentStep = 0, onApprove, onReject, onEscalate, actionsDisabled, footer, loading, className, style } = props;
 
+  // Skeleton state renders 3 placeholder rows matching the timeline structure.
+  // Uses the injected pulse keyframe for the shimmer effect.
   if (loading) {
     return (
       <div className={className} style={{ ...s.container, ...style }}>
@@ -183,6 +225,7 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
 
   return (
     <div className={className} style={{ ...s.container, ...style }}>
+      {/* Inline keyframe needed for the pulsing dot on the active step */}
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
 
       <div style={s.header}>
@@ -198,6 +241,8 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
 
           return (
             <div key={step.key} style={s.stepRow}>
+              {/* Timeline column: dot uses primary color + pulse when this is
+                  the active pending step; otherwise falls back to status color */}
               <div style={s.timeline}>
                 <div style={s.dot(isCurrent && step.status === 'pending' ? 'var(--ds-color-primary-500)' : colors.dot, isCurrent && step.status === 'pending')} />
                 {!isLast && <div style={s.line(colors.dot)} />}
@@ -214,6 +259,7 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
                   </div>
                 )}
                 {step.comments && <div style={s.comment}>{step.comments}</div>}
+                {/* Metadata key-value pairs for domain-specific context */}
                 {step.metadata && (
                   <div style={{ marginTop: '0.25rem', fontSize: 'var(--ds-font-size-xs)', color: 'var(--ds-color-neutral-500)' }}>
                     {Object.entries(step.metadata).map(([k, v]) => (
@@ -221,6 +267,8 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
                     ))}
                   </div>
                 )}
+                {/* Disabled buttons use reduced opacity because native :disabled
+                    styling is not reliably consistent across browsers without CSS */}
                 {isCurrent && step.status === 'pending' && (
                   <div style={s.actions}>
                     {onApprove && (

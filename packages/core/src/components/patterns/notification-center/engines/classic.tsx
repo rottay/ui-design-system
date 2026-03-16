@@ -1,7 +1,19 @@
 'use client';
 
 /**
- * NotificationCenter - Classic Engine (Ant Design)
+ * @fileoverview Classic engine for the NotificationCenter pattern, powered by Ant Design.
+ * Renders a bell-icon trigger with an unread badge, opening an Ant Popover that
+ * contains a scrollable List of notifications. Supports controlled and uncontrolled
+ * open state, read/clear per-item and bulk actions, and a custom trigger element.
+ *
+ * Relies on Ant's Popover for positioning and List for virtualizable item layout.
+ *
+ * @example
+ * <ClassicNotificationCenter
+ *   notifications={[{ id: '1', title: 'Deployed', message: 'v2.3.0 is live', type: 'success', read: false, timestamp: new Date().toISOString() }]}
+ *   onRead={(id) => markRead(id)}
+ *   onReadAll={() => markAllRead()}
+ * />
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -17,6 +29,9 @@ import {
 } from '@ant-design/icons';
 import type { NotificationCenterProps, Notification } from '../NotificationCenter.types';
 
+// Default icons per notification type using Ant's outlined icon set.
+// Each icon is colored via the design system's semantic color tokens so they
+// adapt when the theme changes without any code modifications.
 const typeIcons: Record<string, React.ReactNode> = {
   info: <InfoCircleOutlined style={{ color: 'var(--ds-color-info)' }} />,
   success: <CheckCircleOutlined style={{ color: 'var(--ds-color-success)' }} />,
@@ -24,6 +39,9 @@ const typeIcons: Record<string, React.ReactNode> = {
   error: <CloseCircleOutlined style={{ color: 'var(--ds-color-error)' }} />,
 };
 
+// Ant Tag color strings mapped from notification types. Used only when
+// rendering type indicators via Tag components (currently unused in the
+// default layout but available if consumers extend the item renderer).
 const typeColors: Record<string, string> = {
   info: 'blue',
   success: 'green',
@@ -31,6 +49,8 @@ const typeColors: Record<string, string> = {
   error: 'red',
 };
 
+// Progressive degradation from relative ("3m ago") to calendar ("Mar 5")
+// keeps recent notifications scannable while older ones stay unambiguous.
 function formatTimestamp(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
@@ -45,6 +65,16 @@ function formatTimestamp(ts: string): string {
   return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
+/**
+ * Classic (Ant Design) engine for the NotificationCenter pattern.
+ *
+ * Uses Ant's Popover as the dropdown container and List for notification items.
+ * Supports both controlled (`open` / `onOpenChange`) and uncontrolled modes.
+ * The bell trigger renders an Ant Badge with the unread count.
+ *
+ * @param props - {@link NotificationCenterProps}
+ * @returns A bell-icon trigger with a popover notification list.
+ */
 export default function ClassicNotificationCenter(props: NotificationCenterProps) {
   const {
     notifications,
@@ -63,6 +93,8 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
     style,
   } = props;
 
+  // Controlled/uncontrolled open state pattern: when `controlledOpen` is
+  // provided, internal state is ignored and the parent drives visibility.
   const [internalOpen, setInternalOpen] = useState(false);
   const isOpen = controlledOpen ?? internalOpen;
 
@@ -71,12 +103,19 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
     onOpenChange?.(newOpen);
   };
 
+  // Prefer the explicit unreadCount prop (server-authoritative) over client-side
+  // counting, since the notification array may be paginated or incomplete.
   const displayCount = unreadCount ?? notifications.filter(n => !n.read).length;
+  // Limit the rendered list to avoid performance issues with very large backlogs.
   const visibleNotifications = notifications.slice(0, maxVisible);
 
+  // The popover content is built as a flex column: fixed header on top,
+  // scrollable list body below. Max height is capped to prevent the popover
+  // from growing taller than the viewport on long notification lists.
   const content = (
     <div style={{ width: 360, maxHeight: 420, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
+      {/* Header with bulk actions. "Mark all read" only shows when there are
+          unread items; "Clear all" only shows when there are items at all. */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-200, #e5e7eb))' }}>
         <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ds-color-text-primary, var(--ds-color-neutral-900, #171717))' }}>Notifications</span>
         <Space size="small">
@@ -93,7 +132,9 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
         </Space>
       </div>
 
-      {/* List */}
+      {/* Scrollable notification list. Uses Ant List for consistent item spacing.
+          Unread items get a tinted background via the DS token, falling back to
+          the primary-50 shade when the notification-center-specific token is unset. */}
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {visibleNotifications.length === 0 ? (
           <Empty description={emptyMessage} style={{ padding: 32 }} />
@@ -148,6 +189,9 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
                       >
                         {item.message}
                       </div>
+                      {/* Footer row: relative timestamp on the left, optional
+                          action button on the right. stopPropagation on the action
+                          prevents it from also triggering the row-level onRead. */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span
                           style={{
@@ -174,6 +218,9 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
     </div>
   );
 
+  // Popover is positioned bottom-right with no arrow to match typical app-bar
+  // dropdown patterns. The body padding is zeroed because the content already
+  // manages its own internal padding.
   return (
     <div className={`ds-pattern-notification-center ds-engine-classic ${className ?? ''}`} style={style}>
       <Popover
@@ -185,6 +232,8 @@ export default function ClassicNotificationCenter(props: NotificationCenterProps
         arrow={false}
         styles={{ body: { padding: 0 } }}
       >
+        {/* When a custom trigger is provided, it replaces the default bell.
+            The Badge wraps the default trigger to overlay the unread count. */}
         {trigger || (
           <Badge count={displayCount} size="small" offset={[-2, 2]}>
             <Button

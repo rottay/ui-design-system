@@ -54,7 +54,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ModalHeaderProps } from '../../../../../../contracts/primitives/feedback/Modal';
+import type { ModalHeaderProps } from '../../Modal.types';
 import { ModalCloseButton } from '../CloseButton';
 import { PADDING_MAP } from '../../Modal.types';
 

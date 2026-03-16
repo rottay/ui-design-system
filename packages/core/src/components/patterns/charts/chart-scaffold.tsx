@@ -1,5 +1,12 @@
 'use client';
 
+/**
+ * @fileoverview ChartScaffold -- shared wrapper for all D3-backed charts.
+ * Standardises loading state, title/subtitle rendering, ARIA metadata
+ * (role, roledescription, keyboard navigation), and an accessible textual
+ * summary table that is visually hidden but screen-reader readable.
+ */
+
 import React, { useId, useMemo, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 /**
@@ -41,6 +48,11 @@ interface ChartScaffoldProps {
   legend?: ReactNode;
 }
 
+/**
+ * Renders the summary as an HTML `<table>` for screen readers. This table
+ * lives inside a visually-hidden container so sighted users see the chart
+ * while assistive technology gets structured tabular data.
+ */
 function renderSummary(summary?: ChartSummaryTable): ReactNode {
   if (!summary || summary.rows.length === 0) {
     return null;
@@ -70,8 +82,32 @@ function renderSummary(summary?: ChartSummaryTable): ReactNode {
 }
 
 /**
- * Shared chart shell that standardises loading, title/subtitle, ARIA metadata
- * and an accessible textual summary for every D3-backed chart.
+ * Shared chart shell that standardizes loading, title/subtitle, ARIA metadata,
+ * keyboard navigation, and an accessible textual summary for every D3-backed chart.
+ *
+ * Accessibility strategy:
+ * - The `<svg>` is focusable (`tabIndex=0`) and has `role="img"` +
+ *   `aria-roledescription="interactive chart"` for assistive technology.
+ * - Arrow/Home/End keys cycle through summary data points, announced via
+ *   `aria-live="polite"` so screen reader users can explore chart data.
+ * - A visually hidden `<table>` provides a full textual summary of the data.
+ *
+ * @param props - Chart layout, ARIA labels, optional summary table, and legend.
+ * @returns A container with loading state, title bar, accessible SVG, and legend slot.
+ *
+ * @example
+ * ```tsx
+ * <ChartScaffold
+ *   containerRef={containerRef}
+ *   svgRef={svgRef}
+ *   height={400}
+ *   loading={isLoading}
+ *   loadingLabel="Loading chart..."
+ *   ariaLabel="Monthly revenue"
+ *   ariaDescription="Bar chart showing revenue by month"
+ *   summary={{ headers: ['Month', 'Revenue'], rows: data }}
+ * />
+ * ```
  */
 export function ChartScaffold({
   containerRef,
@@ -94,7 +130,10 @@ export function ChartScaffold({
   const svgTitleId = useId();
   const svgDescId = useId();
   const summaryListId = useId();
+  // Tracks which data point the user navigated to via keyboard so we can
+  // announce it via aria-live for screen readers.
   const [activeSummaryIndex, setActiveSummaryIndex] = useState(0);
+  // Flatten the summary table into human-readable strings for keyboard nav.
   const summaryItems = useMemo(() => {
     if (!summary) {
       return [];
@@ -115,6 +154,8 @@ export function ChartScaffold({
       ? summaryItems[Math.min(activeSummaryIndex, Math.max(summaryItems.length - 1, 0))]
       : null;
 
+  // Arrow/Home/End keys cycle through summary items and trigger an aria-live
+  // announcement, giving screen reader users a way to explore chart data.
   const handleKeyboardNavigation = (event: React.KeyboardEvent<SVGSVGElement>) => {
     if (summaryItems.length === 0) {
       return;
@@ -198,6 +239,9 @@ export function ChartScaffold({
         {renderSummary(summary)}
       </div>
 
+      {/* The SVG is focusable (tabIndex=0) so keyboard users can reach it,
+          and aria-roledescription overrides the generic "img" semantics with
+          "interactive chart" for assistive technology. */}
       <svg
         ref={svgRef}
         role="img"
@@ -218,6 +262,24 @@ export function ChartScaffold({
   );
 }
 
+/**
+ * Builds a human-readable ARIA description string for a chart.
+ *
+ * Combines the chart kind, item count, optional subtitle, and any extra
+ * context into a single sentence suitable for `ariaDescription`.
+ *
+ * @param chartKind - e.g. "bar chart", "line chart", "pie chart".
+ * @param itemCount - Number of data items displayed.
+ * @param subtitle - Optional subtitle text to prepend.
+ * @param extra - Optional extra context to append.
+ * @returns A description string like "Monthly revenue. Bar chart containing 12 data items."
+ *
+ * @example
+ * ```tsx
+ * describeChart('line chart', 30, 'Daily signups', 'Last 30 days')
+ * // => "Daily signups. line chart containing 30 data items. Last 30 days"
+ * ```
+ */
 export function describeChart(
   chartKind: string,
   itemCount: number,

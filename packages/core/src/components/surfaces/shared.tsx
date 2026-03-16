@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * Shared surface UI helpers
+ * @fileoverview Shared surface UI helpers - Rottay Design System
+ * @description Small reusable chrome for the surface layer.
  *
- * The surface layer needs a tiny amount of reusable chrome so the individual
- * surface files do not each re-implement the same button normalization and
- * card-section scaffolding. This stays intentionally small: the goal is to
- * reduce repetition, not to hide the surface behavior behind another layer.
+ * @remarks
+ * Surfaces need a bit of consistent page scaffolding, but this module stays
+ * intentionally shallow so surface-specific behavior remains in each surface.
  */
 
 import type { MouseEvent, ReactNode } from 'react';
@@ -23,6 +23,7 @@ export interface SurfaceActionBarProps<TView = void> {
   stopPropagation?: boolean;
 }
 
+/** Render a permission-aware action row using the standard DS button contract. */
 export function SurfaceActionBar<TView>({
   actions,
   item,
@@ -71,6 +72,7 @@ export interface SurfaceTabbedLabelProps {
   view: Pick<SurfaceTabbedView, 'label' | 'badge'>;
 }
 
+/** Compact helper for tabs that optionally include badge content. */
 export function SurfaceTabbedLabel({ view }: SurfaceTabbedLabelProps): React.ReactElement {
   if (!view.badge) {
     return <>{view.label}</>;
@@ -92,6 +94,7 @@ export interface SurfaceSectionCardProps {
   plain?: boolean;
 }
 
+/** Shared card wrapper for sectioned surfaces with optional title, copy, and actions. */
 export function SurfaceSectionCard({
   title,
   description,
@@ -107,6 +110,7 @@ export function SurfaceSectionCard({
     <Card variant="outlined">
       <Card.Body>
         <Stack spacing="md">
+          {/* The header chrome stays optional so the same wrapper can be used for plain sections. */}
           {(title || description || actions) && (
             <Flex justify="between" align="start" gap={12}>
               <Stack spacing="xs">

@@ -165,7 +165,10 @@ export function useUndoRedo<T>(
     isEqual = defaultIsEqual,
   } = options;
 
-  // Single atomic state for history + index to avoid stale closures
+  // History and index are stored as a single state object rather than two separate
+  // useState calls. This is critical because undo/redo must atomically update
+  // both the history array and the index pointer. With separate states, a render
+  // could see an updated index but a stale history array.
   const [undoRedoState, setUndoRedoState] = useState<UndoRedoState<T>>(() => ({
     history: [initialState],
     index: 0,
@@ -202,13 +205,14 @@ export function useUndoRedo<T>(
           return prev;
         }
 
-        // Truncate future states (everything after current index)
+        // Standard undo behavior: setting new state while in the middle of the
+        // history discards all "future" entries. This matches how text editors
+        // work -- you can't redo after making a new edit.
         const truncated = prev.history.slice(0, prev.index + 1);
 
-        // Add new state
         truncated.push(resolvedState);
 
-        // Enforce max history: trim from the beginning if over limit
+        // Trim from the oldest end so the most recent states are always kept.
         const max = maxHistoryRef.current;
         if (truncated.length > max) {
           const trimmed = truncated.slice(truncated.length - max);
@@ -249,7 +253,10 @@ export function useUndoRedo<T>(
     []
   );
 
-  // Keyboard handlers for useGlobalShortcut integration
+  // Keyboard handlers use a ref-based pattern so their identity is stable
+  // across renders. This matters because useGlobalShortcut registers handlers
+  // by reference, and changing the reference would cause unnecessary
+  // re-registrations.
   const keyboardHandlers = useRef({
     onUndo: () => {
       setUndoRedoState((prev) => {

@@ -1,12 +1,12 @@
 'use client';
 
+/** @fileoverview Eye icon for password visibility toggle (show). */
+
 import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
 import type { SvgIconProps as IconProps } from '../../types';
 
-/**
- * Icono de ojo - usado para mostrar contraseñas.
- */
+/** Open eye icon, paired with EyeOffIcon for password show/hide toggling. */
 export const EyeIcon = forwardRef<SVGSVGElement, IconProps>((props, ref) => (
   <BaseIcon ref={ref} {...props}>
     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />

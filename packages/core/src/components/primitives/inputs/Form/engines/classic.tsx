@@ -73,7 +73,16 @@ import {
 
 export { useForm } from './classic/shared';
 
-// Compound component using Object.assign
+/**
+ * Classic Form compound component assembled via Object.assign.
+ *
+ * Attaching sub-components (Item, List, ErrorList, useForm) directly onto the
+ * base Form component allows the familiar `<Form.Item>` JSX pattern without
+ * requiring separate imports for each piece.
+ *
+ * @param props - Ant Design Form props passed through to `ClassicFormBase`
+ * @returns A fully-featured form element backed by Ant Design
+ */
 export const Form = Object.assign(ClassicFormBase, {
   Item: ClassicFormItem,
   List: ClassicFormList,

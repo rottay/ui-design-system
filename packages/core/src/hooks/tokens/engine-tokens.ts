@@ -1,11 +1,21 @@
 /**
- * Engine-specific token overrides.
- * Each engine gets DIFFERENT visual values for borderRadius, shadows, surface, and motion
- * so that Classic, Modern, and Rustic actually look distinct.
+ * @fileoverview Engine Token Overrides - Rottay Design System
+ * @description Defines per-engine visual token values for borderRadius, shadows,
+ * surface treatment, motion, and density so that Classic, Modern, and Rustic
+ * engines produce visually distinct output from the same component tree.
+ *
+ * @module System/Hooks/Tokens/EngineTokens
+ * @category System
+ * @package @rottay/design-system
  */
 
 import type { SurfaceTokens, MotionTokens } from '../../contracts';
 
+/**
+ * Token overrides that differentiate one engine from another.
+ * The token resolution pipeline in `useTokens` layers these under
+ * product-profile and tenant overrides.
+ */
 export interface EngineTokenOverrides {
   borderRadius: {
     none: string;
@@ -31,6 +41,9 @@ export interface EngineTokenOverrides {
  * Classic engine: Enterprise, structured, corporate.
  * Visible borders, subtle multi-layer shadows, compact spacing, fast transitions, no gradients.
  */
+// Classic uses smaller radii and multi-layer shadows to create depth through
+// layering rather than bold visual effects. The 0.9375 density scale gives
+// enterprise UIs ~6% tighter spacing than the 1.0 baseline.
 const CLASSIC_TOKENS: EngineTokenOverrides = {
   borderRadius: {
     none: '0',
@@ -65,6 +78,9 @@ const CLASSIC_TOKENS: EngineTokenOverrides = {
  * Modern engine: Contemporary, rounded, glassmorphism.
  * No visible borders, color-tinted bold shadows, gradient backgrounds, spring animations.
  */
+// Modern uses larger radii and color-tinted shadows (via primary-50/100 CSS vars)
+// to create a softer, more contemporary feel. The translateY(-1px) hover transform
+// and spring cubic-bezier give interactive elements a tactile "lift" effect.
 const MODERN_TOKENS: EngineTokenOverrides = {
   borderRadius: {
     none: '0',
@@ -99,6 +115,9 @@ const MODERN_TOKENS: EngineTokenOverrides = {
  * Rustic engine: Minimal, spacious, understated.
  * Ultra-subtle borders, barely-there shadows, max whitespace, thin typography, minimal motion.
  */
+// Rustic deliberately minimizes visual effects: barely-visible shadows, minimal
+// radii, and faster-than-default transitions (0.6 duration scale). The 1.125
+// density scale adds extra whitespace to let content breathe.
 const RUSTIC_TOKENS: EngineTokenOverrides = {
   borderRadius: {
     none: '0',
@@ -129,13 +148,23 @@ const RUSTIC_TOKENS: EngineTokenOverrides = {
   densityScale: 1.125,
 };
 
+/** Lookup table of all engine token sets, keyed by engine name. */
 export const ENGINE_TOKENS: Record<string, EngineTokenOverrides> = {
   classic: CLASSIC_TOKENS,
   modern: MODERN_TOKENS,
   rustic: RUSTIC_TOKENS,
 };
 
-/** Get engine token overrides, defaults to classic if unknown */
+/**
+ * Resolve engine token overrides by name. Falls back to classic if the
+ * engine name is not recognized.
+ *
+ * @param engine - Engine identifier ('classic', 'modern', or 'rustic')
+ * @returns The corresponding token overrides
+ */
 export function getEngineTokens(engine: string): EngineTokenOverrides {
+  // Classic is the safe default because it has the most conservative visual
+  // settings -- visible borders, subtle shadows, compact spacing -- so unknown
+  // engine names never produce an unexpectedly flashy UI.
   return ENGINE_TOKENS[engine] || CLASSIC_TOKENS;
 }

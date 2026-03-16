@@ -1,14 +1,40 @@
 /**
- * Modal - Classic Engine (Ant Design)
+ * @fileoverview Modal Classic Engine - Rottay Design System.
+ * Wraps Ant Design's Modal component, mapping the unified ModalProps interface
+ * to Ant Design's API. Supports fullscreen mode, configurable placement, and
+ * lazy portal container creation for isolated z-index stacking.
+ *
+ * @example
+ * ```tsx
+ * <Modal engine="classic" open={open} onClose={close} title="Confirm" size="md">
+ *   <Text>Are you sure?</Text>
+ * </Modal>
+ * ```
+ *
+ * @module Modal/Engines/Classic
+ * @category Overlay
+ * @package @rottay/design-system
  */
 
 'use client';
 
 import React from 'react';
 import { Modal as AntModal } from 'antd';
-import type { ModalProps } from '../../../../../contracts/primitives/feedback/Modal';
+import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP } from '../Modal.types';
 
+/**
+ * Classic engine implementation of Modal using Ant Design.
+ *
+ * Converts the design-system ModalProps to Ant Design's Modal API, handling
+ * fullscreen overrides (100vw width, full-height body), placement via
+ * the `centered` prop, and animation disabling through empty transitionNames.
+ * The portal container is lazily created under a dedicated `#rottay-portal-root`
+ * element to prevent z-index collisions with other Ant Design overlays.
+ *
+ * @param props - Modal configuration props
+ * @returns Ant Design Modal element, or null when closed
+ */
 export default function ClassicModal(props: ModalProps): React.ReactElement | null {
   const {
     open,
@@ -30,18 +56,17 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
     style = {},
   } = props;
 
-  // Calculate width based on size
+  // Fullscreen bypasses the SIZE_MAP entirely to fill the viewport
   const width = fullScreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md;
 
-  // Map placement to Ant Design centered prop
+  // Ant Design uses a boolean `centered` prop instead of a placement string
   const centered = placement === 'center';
 
-  // Handle modal close
   const handleCancel = () => {
     onClose();
   };
 
-  // Custom modal styles for fullscreen
+  // Fullscreen needs margin/padding overrides to eliminate default Ant spacing
   const modalStyle: React.CSSProperties = fullScreen
     ? {
         top: 0,
@@ -80,10 +105,11 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
         body: bodyStyle,
         mask: showBackdrop ? undefined : { display: 'none' },
       }}
+      /* Empty string disables the CSS transition; undefined keeps Ant Design defaults */
       transitionName={disableAnimation ? '' : undefined}
       maskTransitionName={disableAnimation ? '' : undefined}
       getContainer={() => {
-        // Get or create portal container
+        // Lazily create a dedicated portal root to isolate modal z-index stacking
         let root = document.getElementById('rottay-portal-root');
         if (!root) {
           root = document.createElement('div');

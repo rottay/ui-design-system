@@ -51,10 +51,40 @@
 import type { ReactNode, CSSProperties, Key } from 'react';
 import type { SizeType } from '../../../../contracts/common';
 
+/**
+ * Table size variant, derived from the shared SizeType token.
+ * Controls row height, padding, and font-size of the table.
+ */
 export type TableSize = SizeType;
+
+/**
+ * Table layout algorithm.
+ * - `'auto'` - Column widths adjust automatically based on content.
+ * - `'fixed'` - Column widths are distributed evenly or honor explicit widths;
+ *   improves rendering performance for large datasets.
+ */
 export type TableLayout = 'auto' | 'fixed';
+
+/**
+ * Scroll behavior when programmatically scrolling the table viewport.
+ * - `'smooth'` - Animated scroll transition.
+ * - `'auto'` - Instant jump (browser default).
+ */
 export type TableScrollBehavior = 'smooth' | 'auto';
+
+/**
+ * Sort direction for sortable columns.
+ * - `'ascend'` - Ascending order (A-Z, 0-9).
+ * - `'descend'` - Descending order (Z-A, 9-0).
+ * - `null` - Unsorted / reset to default order.
+ */
 export type SortOrder = 'ascend' | 'descend' | null;
+
+/**
+ * Display mode for column filter dropdowns.
+ * - `'menu'` - Flat list of checkable filter options.
+ * - `'tree'` - Hierarchical tree of checkable filter options.
+ */
 export type FilterMode = 'menu' | 'tree';
 
 /**
@@ -71,6 +101,33 @@ export interface EditingCell {
   columnKey: string;
 }
 
+/**
+ * Column definition for the Table component.
+ *
+ * Each object in the `columns` array describes one column: its header,
+ * data binding, width, sorting/filtering behavior, and optional inline
+ * editing configuration.
+ *
+ * @typeParam T - Type of a single row record in the data source.
+ *
+ * @example
+ * ```tsx
+ * const columns: ColumnType<User>[] = [
+ *   { title: 'Name', dataIndex: 'name', sorter: true, width: 200 },
+ *   { title: 'Email', dataIndex: 'email', ellipsis: true },
+ *   {
+ *     title: 'Role',
+ *     dataIndex: 'role',
+ *     editable: true,
+ *     fieldType: 'select',
+ *     selectOptions: [
+ *       { label: 'Admin', value: 'admin' },
+ *       { label: 'User', value: 'user' },
+ *     ],
+ *   },
+ * ];
+ * ```
+ */
 export interface ColumnType<T = unknown> {
   /** Column key */
   key?: Key;
@@ -149,6 +206,23 @@ export interface ColumnType<T = unknown> {
   selectOptions?: Array<{ label: ReactNode; value: string | number }>;
 }
 
+/**
+ * Configuration for table pagination.
+ *
+ * Controls page size, navigation UI, and positioning of the pagination bar.
+ * Pass `false` to `TableProps.pagination` to disable pagination entirely.
+ *
+ * @example
+ * ```tsx
+ * const pagination: TablePaginationConfig = {
+ *   current: 1,
+ *   pageSize: 20,
+ *   total: 500,
+ *   showSizeChanger: true,
+ *   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+ * };
+ * ```
+ */
 export interface TablePaginationConfig {
   /** Current page */
   current?: number;
@@ -180,6 +254,26 @@ export interface TablePaginationConfig {
   onChange?: (page: number, pageSize: number) => void;
 }
 
+/**
+ * Row selection configuration for the Table component.
+ *
+ * Enables checkbox or radio selection of rows. Supports controlled
+ * and uncontrolled modes, custom selection logic, and bulk actions.
+ *
+ * @typeParam T - Type of a single row record in the data source.
+ *
+ * @example
+ * ```tsx
+ * const rowSelection: TableRowSelection<User> = {
+ *   type: 'checkbox',
+ *   selectedRowKeys,
+ *   onChange: (keys, rows) => setSelectedRowKeys(keys),
+ *   getCheckboxProps: (record) => ({
+ *     disabled: record.status === 'archived',
+ *   }),
+ * };
+ * ```
+ */
 export interface TableRowSelection<T = unknown> {
   /** Selected row keys */
   selectedRowKeys?: Key[];
@@ -211,6 +305,24 @@ export interface TableRowSelection<T = unknown> {
   selections?: boolean | object[];
 }
 
+/**
+ * Configuration for expandable table rows.
+ *
+ * Allows each row to expand and reveal additional detail content.
+ * Supports controlled/uncontrolled expansion, custom icons, and
+ * nested indentation.
+ *
+ * @typeParam T - Type of a single row record in the data source.
+ *
+ * @example
+ * ```tsx
+ * const expandable: ExpandableConfig<Order> = {
+ *   expandedRowRender: (record) => <OrderDetails order={record} />,
+ *   rowExpandable: (record) => record.items.length > 0,
+ *   expandRowByClick: true,
+ * };
+ * ```
+ */
 export interface ExpandableConfig<T = unknown> {
   /** Expandable row keys */
   expandedRowKeys?: Key[];
@@ -242,6 +354,27 @@ export interface ExpandableConfig<T = unknown> {
   showExpandColumn?: boolean;
 }
 
+/**
+ * Props for the Table component.
+ *
+ * Table renders tabular data with support for sorting, filtering,
+ * pagination, row selection, expandable rows, virtual scrolling,
+ * sticky headers, and inline cell editing.
+ *
+ * @typeParam T - Type of a single row record in the data source.
+ *
+ * @example
+ * ```tsx
+ * <Table<User>
+ *   dataSource={users}
+ *   columns={columns}
+ *   rowKey="id"
+ *   pagination={{ pageSize: 20 }}
+ *   rowSelection={{ type: 'checkbox', onChange: handleSelect }}
+ *   onChange={handleTableChange}
+ * />
+ * ```
+ */
 export interface TableProps<T = unknown> {
   /** Data source */
   dataSource?: T[];
@@ -316,10 +449,21 @@ export interface TableProps<T = unknown> {
   editingCell?: EditingCell | null;
 }
 
+/**
+ * Default values for Table component props.
+ * Applied when no explicit value is provided by the consumer.
+ *
+ * @constant
+ */
 export const TABLE_DEFAULTS: Partial<TableProps> = {
+  /** Compact/default/large row density. */
   size: 'default',
+  /** No outer border by default. */
   bordered: false,
+  /** Column headers are visible by default. */
   showHeader: true,
+  /** Row highlight on mouse-over is enabled by default. */
   rowHoverable: true,
+  /** Column widths auto-size based on content by default. */
   tableLayout: 'auto',
 };

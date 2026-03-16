@@ -1,5 +1,5 @@
 /**
- * Barrel re-export for Calendar component.
+ * @fileoverview Barrel re-export for Calendar component.
  * Entry point: ./Calendar.tsx
  */
 export * from './Calendar';

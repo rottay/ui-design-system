@@ -146,21 +146,25 @@ function fuzzyMatch(query: string, target: string): number {
   const q = query.toLowerCase();
   const t = target.toLowerCase();
 
-  // Exact substring match gets best score
+  // Fast path: exact substring match gets the best possible score.
+  // The score equals the position of the match, so "abc" at index 0
+  // scores 0 (best), at index 5 scores 5 (slightly worse).
   const substringIndex = t.indexOf(q);
   if (substringIndex !== -1) {
-    // Prefer matches at the start
     return substringIndex;
   }
 
-  // Character-by-character fuzzy match
+  // Slow path: character-by-character fuzzy match. Each query character
+  // must appear in order within the target, but gaps are allowed.
   let qi = 0;
   let score = 0;
   let lastMatchIndex = -1;
 
   for (let ti = 0; ti < t.length && qi < q.length; ti++) {
     if (t[ti] === q[qi]) {
-      // Penalize gaps between matched characters
+      // Penalize gaps between consecutive matched characters -- larger
+      // gaps indicate a weaker match (e.g. "gp" matching "go to projects"
+      // has a large gap vs "gp" matching "gps").
       if (lastMatchIndex !== -1) {
         score += (ti - lastMatchIndex - 1);
       }
@@ -169,17 +173,23 @@ function fuzzyMatch(query: string, target: string): number {
     }
   }
 
-  // All query characters matched
   if (qi === q.length) {
-    return 100 + score; // Offset so fuzzy matches rank below substring matches
+    // Offset by 100 so that ANY fuzzy match scores worse than ANY
+    // substring match, keeping substring results above fuzzy ones.
+    return 100 + score;
   }
 
-  return -1; // No match
+  return -1; // No match -- not all query characters were found in order
 }
 
 /**
  * Score a command against a search query.
  * Searches across label and description. Returns the best score or -1.
+ */
+/**
+ * Score a command against a search query by searching both label and
+ * description. Description matches are penalized by +50 so label matches
+ * always rank higher for the same fuzzy distance.
  */
 function scoreCommand(command: Command, query: string): number {
   const labelScore = fuzzyMatch(query, command.label);
@@ -189,7 +199,8 @@ function scoreCommand(command: Command, query: string): number {
 
   if (labelScore === -1 && descScore === -1) return -1;
 
-  // Label matches are preferred (lower offset)
+  // When both match, take the better score but penalize description
+  // to prefer label-based matches in the final ranking.
   if (labelScore !== -1 && descScore !== -1) {
     return Math.min(labelScore, descScore + 50);
   }
@@ -217,12 +228,19 @@ export interface CommandRegistryProviderProps {
  * ```
  */
 export function CommandRegistryProvider({ children }: CommandRegistryProviderProps) {
+  // The registry is stored in a ref (not state) so that register/unregister
+  // calls don't trigger a re-render of the Provider itself. Only the
+  // version counter is state, and it only bumps when the set of IDs
+  // actually changes, minimizing downstream re-renders.
   const registryRef = useRef<Map<string, Command>>(new Map());
   const [version, setVersion] = useState(0);
 
   const register = useCallback((commands: Command[]) => {
     let changed = false;
     for (const cmd of commands) {
+      // Only flag as changed when a genuinely new ID appears. Overwriting
+      // an existing ID (e.g. due to a re-render with updated action) is
+      // silent to avoid unnecessary version bumps.
       if (!registryRef.current.has(cmd.id)) {
         changed = true;
       }
@@ -306,7 +324,9 @@ export function CommandRegistryProvider({ children }: CommandRegistryProviderPro
 export function useRegisterCommands(commands: Command[]): void {
   const ctx = useCommandRegistryContext();
 
-  // Use ref to always have the latest commands without re-registering
+  // Ref keeps the latest commands array without adding it to the effect
+  // dependency array, so the effect only re-runs when the structural
+  // fingerprint (ids, labels, shortcuts, categories) changes.
   const commandsRef = useRef(commands);
   commandsRef.current = commands;
 
@@ -319,7 +339,11 @@ export function useRegisterCommands(commands: Command[]): void {
     return () => {
       ctx.unregister(ids);
     };
-    // Re-register when command structure changes (ids, labels, shortcuts)
+    // The dependency is a serialized fingerprint of the commands array
+    // structure. This lets us re-register when IDs/labels/shortcuts change
+    // without re-running on every render (which would happen if the
+    // commands array were a direct dependency, since it's usually a new
+    // array reference each render).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ctx,
@@ -327,13 +351,19 @@ export function useRegisterCommands(commands: Command[]): void {
     commands.map((c) => `${c.id}::${c.label}::${c.shortcut ?? ''}::${c.category ?? ''}`).join('|'),
   ]);
 
-  // Auto-register keyboard shortcuts for commands that have them
+  // Wire up keyboard shortcuts for commands that declare a shortcut string.
   useShortcutIntegration(commands);
 }
 
 /**
  * Internal hook that registers keyboard shortcuts for commands with shortcut strings.
  * Uses the ShortcutProvider if available, falls back to native keydown listeners.
+ */
+/**
+ * Internal hook that registers native keydown listeners for commands with
+ * shortcut strings. Uses bubble-phase listeners (not capture) so that the
+ * ShortcutProvider's capture-phase handler always takes priority, preventing
+ * double-firing when both systems are active.
  */
 function useShortcutIntegration(commands: Command[]): void {
   const commandsRef = useRef(commands);
@@ -344,12 +374,9 @@ function useShortcutIntegration(commands: Command[]): void {
   useEffect(() => {
     if (shortcutCommands.length === 0) return;
 
-    // Attempt to use the ShortcutProvider integration via import
-    // For simplicity and to avoid circular dependencies, we use native
-    // keydown listeners here. The ShortcutProvider's own shortcuts take
-    // priority since they use capture phase.
     function handleKeyDown(event: KeyboardEvent) {
-      // Skip if in editable element
+      // Suppress shortcuts when the user is typing in form elements or
+      // contentEditable regions to avoid intercepting normal text input.
       const target = event.target;
       if (target && target instanceof HTMLElement) {
         const tagName = target.tagName.toLowerCase();
@@ -364,6 +391,7 @@ function useShortcutIntegration(commands: Command[]): void {
         }
       }
 
+      // Iterate through commands with shortcuts; first match wins.
       for (const cmd of commandsRef.current) {
         if (!cmd.shortcut) continue;
         if (cmd.when && !cmd.when()) continue;
@@ -382,13 +410,20 @@ function useShortcutIntegration(commands: Command[]): void {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
+    // Fingerprint-based dep: re-register only when the set of shortcut
+    // bindings structurally changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shortcutCommands.map((c) => `${c.id}::${c.shortcut}`).join('|')]);
 }
 
 /**
- * Simple shortcut matching for combo-style shortcuts (e.g. 'ctrl+n').
- * Sequence shortcuts (e.g. 'g+i') should be handled by the ShortcutProvider.
+ * Match a keyboard event against a combo-style shortcut string (e.g. 'ctrl+n').
+ * Sequence shortcuts (e.g. 'g+i') are intentionally skipped here because they
+ * require multi-keystroke buffering that the ShortcutProvider handles.
+ *
+ * @param event - The native keyboard event to test
+ * @param shortcut - The shortcut string to match against
+ * @returns `true` if the event matches the shortcut
  */
 function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
   const parts = shortcut.split('+').map((p) => p.trim().toLowerCase());
@@ -396,8 +431,9 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
   const MODIFIERS = new Set(['ctrl', 'control', 'alt', 'option', 'shift', 'meta', 'cmd', 'command', 'mod']);
   const hasModifier = parts.some((p) => MODIFIERS.has(p));
 
+  // Multi-part shortcuts without a modifier are sequences (e.g. 'g+i').
+  // We deliberately return false to let the ShortcutProvider handle them.
   if (!hasModifier && parts.length > 1) {
-    // Sequence shortcut - skip (handled by ShortcutProvider)
     return false;
   }
 
@@ -473,7 +509,9 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
 export function useCommands(): UseCommandsReturn {
   const ctx = useCommandRegistryContext();
 
-  // Re-derive commands when version changes
+  // Re-derive the filtered and sorted command list whenever the registry
+  // version changes (i.e. commands are registered/unregistered). The
+  // version dependency ensures stale command lists are never shown.
   const commands = useMemo(() => ctx.getAll(), [ctx, ctx.version]);
 
   const search = useCallback(

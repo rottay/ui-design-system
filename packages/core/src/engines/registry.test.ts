@@ -1,3 +1,7 @@
+/**
+ * Tests for the engine registry: metadata lookup, stable/available engine
+ * listing, engine name validation, and default engine selection.
+ */
 import { describe, expect, it } from 'vitest';
 
 import {

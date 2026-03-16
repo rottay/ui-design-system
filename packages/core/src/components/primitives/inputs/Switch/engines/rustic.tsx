@@ -1,9 +1,15 @@
 'use client';
 
 /**
- * @fileoverview Switch Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Switch component using CSS variables.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Switch Rustic Engine -- pure HTML/CSS with CSS variable theming.
+ * Renders a custom toggle switch (track + sliding knob) using only inline
+ * styles driven by `--ds-switch-*` design tokens. Includes a lightweight SVG
+ * spinner for loading state and full ARIA `role="switch"` semantics.
+ *
+ * @example
+ * ```tsx
+ * <Switch engine="rustic" size="large" checkedChildren="On" unCheckedChildren="Off" />
+ * ```
  *
  * @module RusticSwitch
  * @category Inputs
@@ -13,7 +19,11 @@
 import React, { useState } from 'react';
 import type { SwitchProps } from '../Switch.types';
 
-// Size configuration using CSS variables
+/**
+ * Size configuration using CSS variables for each switch variant.
+ * The `translate` value is a CSS calc() that moves the thumb knob from
+ * left edge to right edge, accounting for thumb size and internal offset.
+ */
 const SIZE_CONFIG: Record<string, { width: string; height: string; thumbSize: string; translate: string }> = {
   small: {
     width: 'var(--ds-switch-sm-width)',
@@ -35,6 +45,18 @@ const SIZE_CONFIG: Record<string, { width: string; height: string; thumbSize: st
   },
 };
 
+/**
+ * Rustic engine Switch -- framework-free, CSS-variable-driven toggle.
+ *
+ * Uses a hidden native checkbox for accessibility while rendering a custom
+ * track and sliding knob. The knob position is animated via CSS transition
+ * and `translateX`, calculated from the size configuration CSS variables.
+ * An inline `<style>` block injects the `@keyframes spin` animation for
+ * the loading spinner SVG.
+ *
+ * @param props - {@link SwitchProps} unified switch props shared across engines.
+ * @returns A ref-forwarding toggle switch with pure CSS variable styling.
+ */
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   (props, ref) => {
     const {
@@ -55,11 +77,14 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       name,
     } = props;
 
+    // Controlled vs uncontrolled: external `checked` prop takes precedence
     const isControlled = checked !== undefined;
     const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    // Focus state drives the outline ring on the slider track
     const [isFocused, setIsFocused] = useState(false);
     const isChecked = isControlled ? checked : internalChecked;
 
+    // Guard against state changes while disabled or loading
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (disabled || loading) return;
       const newChecked = e.target.checked;
@@ -69,14 +94,16 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       onChange?.(newChecked);
     };
 
+    // Propagate click with current checked state, matching AntD's callback signature
     const handleClick = (e: React.MouseEvent<HTMLLabelElement>) => {
       if (disabled || loading) return;
       onClick?.(isChecked, e as unknown as React.MouseEvent);
     };
 
+    // Fall back to 'default' if an unrecognised size string is passed
     const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
 
-    // Build class names
+    // BEM class names for external CSS targeting and state-driven modifiers
     const containerClasses = [
       'rottay-switch',
       'rottay-switch--rustic',
@@ -110,6 +137,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       position: 'absolute',
     };
 
+    // "Slider" here is the visible track background, not the component type
     const sliderStyle: React.CSSProperties = {
       position: 'absolute',
       cursor: disabled || loading ? 'not-allowed' : 'pointer',
@@ -127,6 +155,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       outlineOffset: '2px',
     };
 
+    // Knob = the circular thumb that slides between checked/unchecked positions
     const knobStyle: React.CSSProperties = {
       position: 'absolute',
       height: sizeConfig.thumbSize,
@@ -179,6 +208,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         {isChecked && checkedChildren && (
           <span style={labelStyle}>{checkedChildren}</span>
         )}
+        {/* Inline SVG spinner shown during async operations (e.g., saving state) */}
         {loading && (
           <svg
             width="14"
@@ -197,6 +227,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             />
           </svg>
         )}
+        {/* Inject keyframes for the loading spinner animation */}
         <style>{`
           @keyframes spin {
             from { transform: rotate(0deg); }

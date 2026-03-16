@@ -1,9 +1,16 @@
 'use client';
 
 /**
- * @fileoverview FormField Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the FormField component.
- * Uses semantic HTML with Tailwind utility classes.
+ * @fileoverview Modern engine for FormField, built with DaisyUI's `form-control` and Tailwind.
+ * Injects `id`, `aria-describedby`, and `aria-invalid` into children via `React.cloneElement`
+ * to ensure accessibility without requiring consumers to wire those attributes manually.
+ *
+ * @example
+ * ```tsx
+ * <FormField engine="modern" label="Username" name="username" error="Already taken">
+ *   <Input />
+ * </FormField>
+ * ```
  *
  * @module FormField/Engines/Modern
  * @category Inputs
@@ -14,9 +21,7 @@ import React from 'react';
 import type { FormFieldProps } from '../FormField.types';
 import { FORMFIELD_DEFAULTS } from '../FormField.types';
 
-/**
- * Size class mappings for Modern engine.
- */
+/** Tailwind text size and gap classes keyed by DS size token. */
 const SIZE_CLASSES = {
   sm: { label: 'text-xs', help: 'text-xs', gap: 'gap-1' },
   md: { label: 'text-sm', help: 'text-xs', gap: 'gap-1.5' },
@@ -24,8 +29,15 @@ const SIZE_CLASSES = {
 } as const;
 
 /**
- * Modern Engine implementation of the FormField component.
- * Uses DaisyUI form-control classes with Tailwind utilities.
+ * Modern (DaisyUI) implementation of FormField.
+ *
+ * Renders a semantic `<label>` + content wrapper, cloning accessibility attributes
+ * (`id`, `aria-describedby`, `aria-invalid`) onto child input elements. Supports
+ * vertical (default) and horizontal layouts, with error text shown as a `role="alert"`
+ * paragraph that screen readers announce immediately.
+ *
+ * @param props - Standard FormFieldProps shared across all engines.
+ * @returns A DaisyUI form-control wrapper with label, children, and error/help text.
  */
 export default function ModernFormField(props: FormFieldProps): React.ReactElement {
   const {
@@ -46,9 +58,12 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
 
   const sizeClasses = SIZE_CLASSES[size];
   const isHorizontal = layout === 'horizontal';
+
+  // Deterministic IDs derived from `name` for label-input association and aria-describedby
   const fieldId = `formfield-${name}`;
   const errorId = `${fieldId}-error`;
   const helpId = `${fieldId}-help`;
+  // Error takes priority: screen readers should announce the error, not the help text
   const describedBy = error ? errorId : help ? helpId : undefined;
 
   return (
@@ -71,6 +86,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
       </label>
 
       <div className={`flex-1 flex flex-col ${sizeClasses.gap}`}>
+        {/* Clone accessibility props onto children so consumers don't have to wire them */}
         {React.Children.map(children, (child) => {
           if (React.isValidElement<{ id?: string; 'aria-describedby'?: string; 'aria-invalid'?: boolean }>(child)) {
             return React.cloneElement(child, {

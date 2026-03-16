@@ -91,6 +91,9 @@ export const BackTop = React.forwardRef<HTMLDivElement, BackTopProps>(
     // Render
     // ========================================================================
 
+    // Wrapper div receives the forwarded ref because Ant Design's
+    // FloatButton.BackTop does not support ref forwarding directly.
+    // This allows parent components to measure or position the button.
     return (
       <div ref={ref} className={className} style={style}>
         <FloatButton.BackTop

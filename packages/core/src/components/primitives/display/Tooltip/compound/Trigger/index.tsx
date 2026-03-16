@@ -61,6 +61,10 @@ import type { TooltipTriggerProps } from '../../Tooltip.types';
  *   <Button>Hover me</Button>
  * </Tooltip.Trigger>
  * ```
+ *
+ * @param props - TooltipTriggerProps including asChild flag, children, and style overrides
+ * @param ref - Forwarded ref to the wrapper span or cloned child element
+ * @returns A span wrapper around children, or a cloned child element when asChild is true
  */
 export const TooltipTrigger = forwardRef<HTMLElement, TooltipTriggerProps>(
   (props, ref) => {

@@ -1,45 +1,20 @@
 'use client';
 
 /**
- * @fileoverview Calendar Classic Engine - Rottay Design System
- * @description Ant Design-based calendar with dayjs integration.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Classic Calendar engine -- Ant Design wrapper with Date/dayjs bridge.
  *
- * @remarks
- * This engine wraps Ant Design's Calendar component with dayjs
- * for date manipulation and full feature support.
+ * Wraps antd's Calendar component and converts between the DS's native `Date`
+ * surface and antd's internal `dayjs` objects. Every callback (onChange, onSelect,
+ * onPanelChange, cellRender, headerRender) is intercepted to perform the
+ * conversion, so consumers never need to import or interact with dayjs directly.
  *
- * **Implementation Details:**
- * - Uses `antd/Calendar` for core rendering
- * - Converts Date/string to dayjs internally
- * - Full cell render customization
- * - Header render customization
- * - Locale support via Ant Design
+ * Engine: **Ant Design** (`antd/Calendar` + `dayjs`)
  *
- * **Date Handling:**
- * - Input: Date | string | null
- * - Internal: dayjs objects
- * - Output: Date objects in callbacks
- *
- * **Advantages:**
- * - Full Ant Design theming
- * - Comprehensive localization
- * - Rich cell customization
- * - Consistent date handling
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Calendar } from '@rottay/design-system';
- *
- * <Calendar
- *   engine="classic"
- *   defaultValue={new Date()}
- *   fullscreen={true}
- * />
+ * <Calendar engine="classic" defaultValue={new Date()} fullscreen onSelect={(d) => setDate(d)} />
  * ```
  *
- * @see {@link Calendar} for the main component
- * @see {@link https://ant.design/components/calendar} Ant Design Calendar
  * @module Calendar/engines/classic
  * @category Display
  * @package @rottay/design-system
@@ -50,18 +25,30 @@ import type { CalendarProps } from '../Calendar.types';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
-// Convert Date/string to dayjs
+// ---- Date bridge helpers ----
+// The DS surface uses native Date/string; antd uses dayjs internally.
+// These two functions are the single conversion boundary so every handler
+// and prop mapping goes through the same path.
 const toDayjs = (value: Date | string | null | undefined): Dayjs | undefined => {
   if (!value) return undefined;
   return dayjs(value);
 };
 
-// Convert dayjs to Date
 const toDate = (value: Dayjs | null | undefined): Date | null => {
   if (!value) return null;
   return value.toDate();
 };
 
+/**
+ * Classic Calendar backed by Ant Design, with automatic Date <-> dayjs bridging.
+ *
+ * All incoming Date/string props are converted to dayjs before passing to antd,
+ * and all outgoing callbacks convert dayjs back to Date, keeping the DS surface
+ * library-agnostic.
+ *
+ * @param props - Unified DS CalendarProps (see Calendar.types.ts)
+ * @returns An Ant Design Calendar wrapped in a forwarded-ref div
+ */
 export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, ref) => {
   const {
     value,
@@ -99,11 +86,14 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     onSelect?.(toDate(date) as Date, info);
   };
 
+  // Wrap disabledDate so the consumer receives native Dates, not dayjs.
   const handleDisabledDate = disabledDate
     ? (current: Dayjs) => disabledDate(current.toDate())
     : undefined;
 
-  // Map cell render functions
+  // Map cell render functions -- each wrapper converts the dayjs `current` and
+  // `today` values to native Dates before calling the consumer's render function.
+  // The `as any` casts bridge antd's internal CellRenderInfo generics.
   const handleCellRender = cellRender
     ? (current: Dayjs, info: { originNode: React.ReactNode; today: Dayjs; type: 'date' | 'month' }) =>
         cellRender(current.toDate(), {
@@ -122,6 +112,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
         })
     : undefined;
 
+  // headerRender bidirectional bridge: the consumer receives a Date and
+  // calls onChange with a Date; we convert in both directions so antd sees dayjs.
   const handleHeaderRender = headerRender
     ? (props: { value: Dayjs; type: 'month' | 'year'; onChange: (date: Dayjs) => void; onTypeChange: (type: 'month' | 'year') => void }) =>
         headerRender({

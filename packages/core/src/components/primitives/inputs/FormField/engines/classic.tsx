@@ -1,9 +1,16 @@
 'use client';
 
 /**
- * @fileoverview FormField Classic Engine - Rottay Design System
- * @description Ant Design implementation of the FormField component.
- * Wraps Ant Design's Form.Item for a simplified, standalone usage.
+ * @fileoverview Classic engine for FormField, wrapping Ant Design's `Form.Item`.
+ * Provides label, error/help text, required marker, and horizontal/vertical layout
+ * by delegating to Ant's built-in form machinery while keeping a thin DS interface.
+ *
+ * @example
+ * ```tsx
+ * <FormField engine="classic" label="Email" name="email" required error="Invalid email">
+ *   <Input />
+ * </FormField>
+ * ```
  *
  * @module FormField/Engines/Classic
  * @category Inputs
@@ -16,8 +23,14 @@ import type { FormFieldProps } from '../FormField.types';
 import { FORMFIELD_DEFAULTS } from '../FormField.types';
 
 /**
- * Classic Engine implementation of the FormField component.
- * Wraps Ant Design's Form.Item component.
+ * Classic (Ant Design) implementation of FormField.
+ *
+ * Wraps children inside `Form.Item`, mapping the DS error prop to Ant's `validateStatus`
+ * and merging error/help into a single help slot. Horizontal layout uses `labelCol`/`wrapperCol`
+ * flex sizing driven by the `labelWidth` prop.
+ *
+ * @param props - Standard FormFieldProps shared across all engines.
+ * @returns A wrapper div containing an Ant Form.Item with the provided children.
  */
 export default function ClassicFormField(props: FormFieldProps): React.ReactElement {
   const {
@@ -36,9 +49,12 @@ export default function ClassicFormField(props: FormFieldProps): React.ReactElem
     'data-testid': testId,
   } = props;
 
+  // Ant Form.Item shows red styling when validateStatus is 'error'
   const validateStatus = error ? 'error' : undefined;
+  // Error takes priority over help text in the single Ant help slot
   const helpText = error || help;
 
+  // In horizontal layout, labelCol/wrapperCol control the flex split
   const labelCol = layout === 'horizontal'
     ? { flex: `0 0 ${labelWidth}` }
     : undefined;

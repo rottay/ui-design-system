@@ -1,3 +1,5 @@
+/** @fileoverview FileBrowserSurface tests -- file list rendering and toolbar actions. */
+
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

@@ -1,12 +1,24 @@
 'use client';
 
 /**
- * InvoiceTemplate - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview InvoiceTemplate -- Rustic engine (Vanilla / CSS variables).
+ * Full invoice document rendered with pure inline styles referencing
+ * --ds-* design tokens. No Ant Design or Tailwind dependency.
+ * All visual properties (colors, radii, font sizes) flow from the
+ * tenant's CSS custom properties, enabling full theme portability.
+ * The "no-print" CSS class hides action buttons during printing.
+ *
+ * @example
+ * <RusticInvoiceTemplate
+ *   invoice={{ number: 'INV-001', date: '2026-03-01', company: { name: 'Acme' }, client: { name: 'Corp' }, items: [], subtotal: 0, tax: 0, total: 0 }}
+ *   onPrint={() => window.print()}
+ * />
  */
 
 import React, { type CSSProperties } from 'react';
 import type { InvoiceTemplateProps } from '../InvoiceTemplate.types';
 
+/** Maps invoice status to --ds-* color tokens for the status badge */
 const statusColors: Record<string, string> = {
   draft: 'var(--ds-color-neutral-400)',
   sent: 'var(--ds-color-primary)',
@@ -14,6 +26,7 @@ const statusColors: Record<string, string> = {
   overdue: 'var(--ds-color-error, #ef4444)',
 };
 
+/** Outer container -- constrains invoice width and centers it horizontally */
 const containerStyle: CSSProperties = {
   maxWidth: 800,
   margin: '0 auto',
@@ -23,6 +36,7 @@ const containerStyle: CSSProperties = {
   padding: 32,
 };
 
+/** Lightweight button style using design tokens for border/radius */
 const btnStyle: CSSProperties = {
   padding: '6px 14px',
   fontSize: 'var(--ds-font-size-sm, 13px)',
@@ -34,6 +48,7 @@ const btnStyle: CSSProperties = {
   fontWeight: 500,
 };
 
+/** Table header cell style -- uppercase labels with a 2px bottom border */
 const thStyle: CSSProperties = {
   padding: '8px 12px',
   fontSize: 'var(--ds-font-size-xs, 12px)',
@@ -43,12 +58,21 @@ const thStyle: CSSProperties = {
   borderBottom: '2px solid var(--ds-color-neutral-200, #e5e7eb)',
 };
 
+/** Table data cell style -- subtle 1px separator between rows */
 const tdStyle: CSSProperties = {
   padding: '10px 12px',
   fontSize: 'var(--ds-font-size-sm, 13px)',
   borderBottom: '1px solid var(--ds-color-neutral-100, #f3f4f6)',
 };
 
+/**
+ * Rustic (Vanilla CSS) implementation of the InvoiceTemplate pattern.
+ * All styling uses inline CSSProperties with --ds-* token fallbacks.
+ * The table is a native HTML table with manually applied styles.
+ *
+ * @param props - See {@link InvoiceTemplateProps} for the full prop contract.
+ * @returns The rendered invoice template.
+ */
 export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
   const {
     invoice,
@@ -60,9 +84,12 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
     style,
   } = props;
 
+  /* Default currency symbol when none provided on the invoice data */
   const cur = invoice.currency || '$';
+  /** Formats a numeric amount with the invoice currency prefix, always 2 decimal places */
   const formatCurrency = (amount: number) => `${cur}${amount.toFixed(2)}`;
 
+  /* Text-only loading state -- no spinner dependency since this engine avoids frameworks */
   if (loading) {
     return (
       <div className={className} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
@@ -71,6 +98,7 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
     );
   }
 
+  /** Reusable section background for "Bill To" and "Notes" panels */
   const sectionBg: CSSProperties = {
     padding: 16,
     background: 'var(--ds-color-neutral-50, #f9fafb)',
@@ -78,6 +106,7 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
     marginBottom: 24,
   };
 
+  /** Section label style -- uppercase, muted, small font for "Bill To" / "Notes" headings */
   const labelStyle: CSSProperties = {
     fontSize: 'var(--ds-font-size-xs, 11px)',
     fontWeight: 600,
@@ -97,9 +126,10 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
         </div>
       )}
 
-      {/* Header */}
+      {/* Header -- company branding on left, invoice metadata on right */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 32 }}>
         <div>
+          {/* Company logo is optional; falls back to name-only when absent */}
           {invoice.company.logo && (
             <img src={invoice.company.logo} alt={invoice.company.name} style={{ height: 48, marginBottom: 8 }} />
           )}
@@ -113,11 +143,14 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
           {invoice.company.taxId && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>Tax ID: {invoice.company.taxId}</div>}
           {invoice.company.email && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.company.email}</div>}
         </div>
+        {/* Invoice metadata -- watermark at 10% opacity for a subtle document label */}
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontSize: 28, fontWeight: 800, opacity: 0.1, marginBottom: 8 }}>INVOICE</div>
           <div style={{ fontSize: 14 }}><strong>Invoice #:</strong> {invoice.number}</div>
           <div style={{ fontSize: 14 }}><strong>Date:</strong> {invoice.date}</div>
           {invoice.dueDate && <div style={{ fontSize: 14 }}><strong>Due:</strong> {invoice.dueDate}</div>}
+          {/* Status badge -- uses --ds-* color tokens from the statusColors map.
+              White text is hardcoded since all status colors have sufficient contrast. */}
           {invoice.status && (
             <div style={{
               display: 'inline-block',
@@ -149,7 +182,8 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
         {invoice.client.email && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.client.email}</div>}
       </div>
 
-      {/* Line Items */}
+      {/* Line Items -- native HTML table with manually applied thStyle/tdStyle from above.
+          borderCollapse ensures consistent cell borders without double-line artifacts. */}
       <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
         <thead>
           <tr>
@@ -173,18 +207,21 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
         </tbody>
       </table>
 
-      {/* Totals */}
+      {/* Totals -- fixed 280px column right-aligned for consistent number alignment */}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div style={{ width: 280 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>
             <span>Subtotal</span>
             <span>{formatCurrency(invoice.subtotal)}</span>
           </div>
+          {/* Tax line -- muted color to de-emphasize relative to grand total */}
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, color: 'var(--ds-color-text-muted)' }}>
             <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
             <span>{formatCurrency(invoice.tax)}</span>
           </div>
+          {/* Horizontal rule separating subtotal/tax from the grand total */}
           <div style={{ borderTop: '2px solid var(--ds-color-neutral-200, #e5e7eb)', margin: '8px 0' }} />
+          {/* Grand total -- larger font makes this the visual focal point */}
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 18, fontWeight: 700 }}>
             <span>Total</span>
             <span>{formatCurrency(invoice.total)}</span>
@@ -192,7 +229,7 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
         </div>
       </div>
 
-      {/* Notes */}
+      {/* Notes -- pre-wrap preserves user-entered line breaks in the notes field */}
       {invoice.notes && (
         <div style={{ ...sectionBg, marginTop: 32, marginBottom: 0 }}>
           <div style={labelStyle}>Notes</div>

@@ -1,5 +1,6 @@
 /**
- * Layout primitives
+ * @fileoverview Layout primitives barrel export.
+ * Re-exports all layout-category primitive components.
  */
 
 export { Box } from './Box';

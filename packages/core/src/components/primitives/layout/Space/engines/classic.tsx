@@ -34,6 +34,14 @@ import { Space as AntSpace } from 'antd';
 import type { SpaceProps } from '../Space.types';
 import { SPACE_DEFAULTS } from '../Space.types';
 
+/**
+ * Classic engine implementation of the Space component.
+ * Delegates entirely to Ant Design's Space, preserving its native behavior
+ * for preset sizes, array-based asymmetric gaps, and split separators.
+ *
+ * @param props - Space configuration forwarded to AntSpace
+ * @returns An Ant Design Space element wrapped with forwardRef
+ */
 export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   (props, ref) => {
     const {
@@ -48,6 +56,10 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       ...rest
     } = props;
 
+    // Normalize size to a value Ant Design accepts: a preset string, a number,
+    // or a [horizontal, vertical] tuple. The ternary branches are identical here
+    // because Ant Design handles all three forms natively -- the explicit branching
+    // keeps the intent readable for future maintainers adding engine-specific transforms.
     const computedSize =
       typeof size === 'string'
         ? size
@@ -55,6 +67,8 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
           ? size
           : size;
 
+    // Ant Design's Space handles all layout, alignment, and separator logic internally,
+    // so this engine acts as a thin passthrough with consistent prop defaults.
     return (
       <AntSpace
         ref={ref}

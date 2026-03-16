@@ -1,11 +1,17 @@
 /**
- * Design System Rottay - TypeScript Types
+ * @fileoverview Contracts - Rottay Design System Public Type Hub
+ * @description Aggregates all system-level type contracts (engine, theme, tenant,
+ * tokens, extensions, product profiles) into a single import surface.
  *
- * Sistema completo de tipos TypeScript para el Design System Rottay.
- * Incluye tipos comunes, engine-aware, y tipos de sistema.
+ * @remarks
+ * This barrel intentionally re-exports system-level contracts only. Primitive
+ * component props (Button, Avatar, Modal, etc.) live next to their components
+ * to avoid duplicate type hierarchies and drift between runtime code and
+ * public APIs. Import those from `contracts/primitives/*` directly.
  *
- * Note: Primitive component types (ButtonProps, InputProps, etc.) are exported
- * directly from their component files in ./components/primitives to avoid duplicates.
+ * @module Contracts
+ * @category Types
+ * @package @rottay/design-system
  */
 
 // Common types
@@ -32,9 +38,5 @@ export * from './tokens';
 // Extension types (Universal Extension System)
 export * from './extensions';
 
-// NOTE: Primitive component types are NOT exported here to avoid duplicates.
-// They are already exported from ./components/primitives/*/
-// If you need primitive types, import them from the component:
-//   import type { ButtonProps } from './components/primitives/inputs/Button';
-// or from the main package:
-//   import type { ButtonProps } from '@rottay/design-system';
+// Primitive props are intentionally not re-exported from here. The component
+// folder remains the canonical owner for those contracts.

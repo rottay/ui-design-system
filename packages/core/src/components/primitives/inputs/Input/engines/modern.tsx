@@ -63,6 +63,8 @@ import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'rea
 import type { InputProps } from '../Input.types';
 import { INPUT_DEFAULTS, DAISY_SIZE_MAP } from '../Input.types';
 
+// DaisyUI input status classes change the border/ring color to semantic colors.
+// Unlike antd, DaisyUI does support a success state natively via input-success.
 const STATUS_MAP = {
   default: '',
   error: 'input-error',
@@ -70,6 +72,17 @@ const STATUS_MAP = {
   success: 'input-success',
 };
 
+/**
+ * Modern (DaisyUI/Tailwind) engine for the Input component.
+ *
+ * Renders a native `<input>` styled with DaisyUI utility classes. When prefix,
+ * suffix, or clearable content is present, wraps the input in a `<label>` for
+ * correct flex alignment. Otherwise renders a standalone input for minimal DOM.
+ *
+ * @param props - Standardized InputProps from the design system contract.
+ * @param ref   - Forwarded ref merged with an internal ref for imperative focus.
+ * @returns The rendered DaisyUI-styled input.
+ */
 const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     size = INPUT_DEFAULTS.size,
@@ -115,7 +128,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Merge refs
+  // Merge the consumer's forwarded ref with our internal ref so we can
+  // imperatively focus the input (e.g., after clear) while still exposing
+  // the DOM node to parent components.
   useEffect(() => {
     if (ref) {
       if (typeof ref === 'function') {
@@ -180,7 +195,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const computedStatus = error ? 'error' : status;
   const hasError = error || status === 'error';
 
-  // Build DaisyUI class names
+  // Map DS variant names to DaisyUI utility classes. The "flushed" variant
+  // (Material Design-style bottom border) requires custom border overrides
+  // since DaisyUI does not ship a native equivalent.
   const variantClass = variant === 'filled'
     ? 'bg-base-200'
     : variant === 'flushed'
@@ -203,7 +220,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const showClearButton = clearable && currentValue && !disabled && !readOnly;
 
-  // If we have prefix/suffix, wrap in a label component
+  // When addons are present, the input is wrapped in a DaisyUI <label> so
+  // prefix, suffix, and clear button sit in a single flex row. The inner
+  // <input> strips its own border/bg to avoid double-styling the container.
   if (prefix || suffix || showClearButton) {
     return (
       <div className="w-full" style={style}>

@@ -1,15 +1,18 @@
 'use client';
 
 /**
- * TreeSelect - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview TreeSelect Modern Engine -- DaisyUI/Tailwind implementation for
+ * the Rottay Design System. Renders a fully custom tree dropdown using Tailwind
+ * utility classes, with no dependency on Ant Design's rc-tree.
  *
- * Features:
- * - treeCheckStrictly: independent parent/child checkbox selection
- * - filterTreeNode + search input with auto-expand of matching parents
- * - fieldNames: custom field mapping (title, value, children)
- * - loadData: lazy load children with loading spinner
- * - treeLine: CSS border connector lines between nodes
- * - Controlled expand: treeExpandedKeys + onTreeExpand callback
+ * @example
+ * ```tsx
+ * <TreeSelect engine="modern" treeData={nodes} showSearch treeCheckable />
+ * ```
+ *
+ * @module ModernTreeSelect
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback, useMemo, type ReactNode } from 'react';
 import type { TreeSelectProps, TreeSelectNode, TreeSelectValue } from '../TreeSelect.types';
@@ -25,7 +28,11 @@ function resolveField<T>(node: Record<string, unknown>, field: string, fallback:
   return (node[field] ?? node[fallback]) as T;
 }
 
-/** Normalize raw tree data through fieldNames mapping */
+/**
+ * Recursively remaps tree data through fieldNames so the component can use
+ * standard property names (title/value/children) regardless of the consumer's
+ * data shape. This runs once per treeData change (memoized in the component).
+ */
 function normalizeNodes(
   nodes: TreeSelectNode[],
   fieldNames?: { title?: string; value?: string; children?: string }
@@ -64,7 +71,10 @@ function collectAllKeys(nodes: TreeSelectNode[]): Set<string | number> {
   return keys;
 }
 
-/** Collect all descendant values of a node */
+/**
+ * Collect all descendant values of a node. Used in cascading checkbox mode
+ * to select/deselect entire sub-trees in a single click.
+ */
 function collectDescendantValues(node: TreeSelectNode): Set<string | number> {
   const values = new Set<string | number>();
   const traverse = (n: TreeSelectNode) => {
@@ -85,7 +95,11 @@ function areAllChildrenSelected(node: TreeSelectNode, selectedKeys: Set<string |
   return node.children.every((child) => areAllChildrenSelected(child, selectedKeys));
 }
 
-/** Find parent keys for nodes that match a filter */
+/**
+ * Walk the tree and collect keys of parent nodes that have at least one
+ * descendant matching the filter. Used to auto-expand ancestors during search
+ * so matching leaf nodes are always visible.
+ */
 function findMatchingParentKeys(
   nodes: TreeSelectNode[],
   filterFn: (node: TreeSelectNode) => boolean
@@ -136,6 +150,9 @@ interface TreeNodeProps {
   filterFn: ((inputValue: string, treeNode: TreeSelectNode) => boolean) | null;
 }
 
+/** Renders a single tree node row with expand toggle, optional checkbox, and
+ *  highlighted title. Recurses into children when expanded. Nodes that do not
+ *  match the active search filter (and have no matching descendants) are hidden. */
 const TreeNode: React.FC<TreeNodeProps> = ({
   node,
   level,
@@ -158,7 +175,8 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   const isLeaf = node.isLeaf === true || (!hasChildren && !loadData);
   const isLoading = loadingKeys.has(key);
 
-  // For cascading checkable mode, determine visual check state
+  // Indeterminate state shows a dash in the checkbox when some, but not all,
+  // descendants are selected. Only relevant in cascading (non-strict) mode.
   const isIndeterminate = checkable && !treeCheckStrictly && hasChildren
     ? !areAllChildrenSelected(node, selectedKeys) &&
       node.children!.some((child) => selectedKeys.has(child.value) || (child.children && collectDescendantValues(child).size > 0 && Array.from(collectDescendantValues(child)).some((v) => selectedKeys.has(v))))
@@ -267,6 +285,17 @@ const TreeNode: React.FC<TreeNodeProps> = ({
 // TreeSelect component
 // ---------------------------------------------------------------------------
 
+/**
+ * Modern (DaisyUI/Tailwind) engine for the TreeSelect component.
+ *
+ * Builds a fully custom dropdown tree using Tailwind utilities. Supports
+ * single and multi-select, cascading or strict checkbox behaviour, lazy
+ * loading via `loadData`, and live search with automatic ancestor expansion.
+ *
+ * @param props - Standardized TreeSelectProps from the design system contract.
+ * @param ref   - Forwarded ref attached to the root container div.
+ * @returns A self-contained tree-select dropdown with keyboard-friendly UX.
+ */
 export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -302,13 +331,15 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     const displayPlaceholder = placeholder ?? t('treeselect.placeholder');
     const displayNotFound = notFoundContent ?? t('treeselect.not_found');
 
-    // Normalize data through fieldNames mapping
+    // Normalize once per data/fieldNames change so every downstream helper
+    // can rely on standard title/value/children property names.
     const treeData = useMemo(
       () => normalizeNodes(rawTreeData, fieldNames),
       [rawTreeData, fieldNames]
     );
 
-    // Determine filter function
+    // Resolve the effective filter: explicit function, default case-insensitive
+    // title match when showSearch is on, or null (no filtering).
     const filterFn = useMemo<((inputValue: string, treeNode: TreeSelectNode) => boolean) | null>(() => {
       if (filterTreeNode === false) return null;
       if (typeof filterTreeNode === 'function') return filterTreeNode;
@@ -446,7 +477,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       onChange?.(multiple || treeCheckable ? [] : '', [], { triggerValue: '' });
     };
 
-    // Auto-expand matching parents when searching
+    // When the search value changes, automatically expand ancestor nodes of
+    // any matching nodes so the user can see results without manual expansion.
     useEffect(() => {
       if (searchValue && filterFn) {
         const matchingParents = findMatchingParentKeys(treeData, (n) => filterFn(searchValue, n));
@@ -460,7 +492,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
     }, [searchValue, filterFn, treeData]);
 
-    // Click outside
+    // Close the dropdown when the user clicks outside the component boundary.
+    // The listener is only active while the dropdown is open.
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(e.target as Node)) {

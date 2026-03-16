@@ -1,54 +1,26 @@
 'use client';
 
 /**
- * @fileoverview Dropdown Rustic Engine - Rottay Design System
- * @description Rustic (Pure HTML/CSS) implementation of the Dropdown component.
- * Uses inline CSS styles with portal rendering for proper z-index stacking.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the Dropdown overlay component.
+ * Uses inline CSS with portal rendering (createPortal to document.body) for proper
+ * z-index stacking, and getBoundingClientRect-based placement calculation.
  *
- * @remarks
- * The Rustic engine provides:
- * - Pure inline CSS with absolute positioning
- * - Portal rendering to document.body
- * - Custom trigger handling for click, hover, contextMenu
- * - Click-outside dismissal via event listeners
- * - Placement calculation based on trigger element rect
- *
- * Implementation details:
- * - MenuItem component renders items, dividers, and groups
- * - Hover effects via onMouseEnter/onMouseLeave
- * - Danger items styled from semantic danger tokens
- * - Menu positioned absolutely based on trigger getBoundingClientRect()
- * - Uses createPortal for proper overlay stacking
- *
- * This implementation is ideal for:
- * - Embedded applications without CSS framework dependencies
- * - Server-side rendering without CSS extraction
- * - Maximum browser compatibility scenarios
- *
- * @example Using Rustic Engine
+ * @example
  * ```tsx
- * import { Dropdown, Button } from '@rottay/design-system';
- *
- * // Pure inline CSS dropdown
- * <Dropdown
- *   engine="rustic"
- *   trigger={['click']}
- *   menu={{ items: [{ key: '1', label: 'Option' }] }}
- * >
- *   <Button>Vanilla Dropdown</Button>
+ * <Dropdown engine="rustic" trigger={['click']}
+ *   menu={{ items: [{ key: '1', label: 'Option' }] }}>
+ *   <Button>Open Menu</Button>
  * </Dropdown>
  * ```
- *
- * @see {@link Dropdown} - The main engine-aware component
- * @module Dropdown/Engines/Rustic
- * @category Overlay
- * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { DropdownProps, DropdownMenuItem } from '../Dropdown.types';
 import { DROPDOWN_DEFAULTS } from '../Dropdown.types';
 
+// Renders a single menu item, divider, or group header. Uses role="separator"
+// for dividers per WAI-ARIA menu pattern. Hover effects are applied via
+// inline style mutations because the rustic engine avoids external CSS.
 const MenuItem: React.FC<{
   item: DropdownMenuItem;
   onClick?: (key: string) => void;
@@ -119,6 +91,18 @@ const MenuItem: React.FC<{
   );
 };
 
+/**
+ * Dropdown implementation using pure inline CSS and React portals.
+ *
+ * The menu is portalled to `document.body` so it escapes any ancestor stacking
+ * context. Position is recalculated from the trigger's `getBoundingClientRect()`
+ * every time the menu opens or placement changes. Supports controlled/uncontrolled
+ * open state, three trigger modes (click, hover, contextMenu), and vertical/
+ * horizontal placement via the shared placement prop.
+ *
+ * @param props - {@link DropdownProps} shared across all engines.
+ * @returns A ref-forwarded inline-block trigger plus a portal-rendered menu.
+ */
 export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
   (props, ref) => {
     const {
@@ -151,7 +135,8 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Calculate position
+    // Recalculate menu position from the trigger's bounding rect whenever
+    // the menu opens or the placement prop changes
     useEffect(() => {
       if (isOpen && triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
@@ -183,7 +168,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       }
     }, [isOpen, placement]);
 
-    // Click outside handler
+    // Close when clicking outside both the trigger and the portal menu
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;

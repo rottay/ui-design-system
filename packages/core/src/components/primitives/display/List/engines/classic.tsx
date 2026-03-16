@@ -1,54 +1,27 @@
 'use client';
 
 /**
- * @fileoverview List Classic Engine - Rottay Design System
- * @description Ant Design-based list with full feature support.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Classic (Ant Design) engine for the List display primitive.
+ * Thin wrapper around `antd/List` that exposes List, Item, and Meta
+ * sub-components with DS-level prop types and forwarded refs.
  *
- * @remarks
- * This engine wraps Ant Design's List component to provide
- * comprehensive list functionality including pagination and grid layout.
- *
- * **Exported Components:**
- * - `List` - Main list container
- * - `Item` - List item wrapper
- * - `Meta` - Item metadata display
- *
- * **Implementation Details:**
- * - Uses `antd/List` for core rendering
- * - Full pagination configuration
- * - Grid layout support
- * - Loading states
- * - Locale customization
- *
- * **Ant Design Features:**
- * - Built-in pagination
- * - Responsive grid
- * - Item actions
- * - Virtual scrolling (via rowKey)
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { List } from '@rottay/design-system';
- *
- * <List
- *   engine="classic"
- *   dataSource={data}
- *   renderItem={(item) => <List.Item>{item.name}</List.Item>}
- * />
+ * <List engine="classic" dataSource={items} renderItem={(i) => <List.Item>{i.name}</List.Item>} />
  * ```
- *
- * @see {@link List} for the main component
- * @see {@link https://ant.design/components/list} Ant Design List
- * @module List/engines/classic
- * @category Display
- * @package @rottay/design-system
  */
 import React from 'react';
 import { List as AntList } from 'antd';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../List.types';
 import { LIST_DEFAULTS } from '../List.types';
 
+/**
+ * Classic List container. Wraps `antd/List` inside a forwarded-ref div so
+ * consumers can measure or scroll-to the list programmatically.
+ *
+ * @param props - DS ListProps (subset of antd ListProps with engine-agnostic types).
+ * @returns A div-wrapped `antd/List`.
+ */
 export const List = React.forwardRef<HTMLDivElement, ListProps>(
   (props, ref) => {
     const {
@@ -69,6 +42,8 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       style,
     } = props;
 
+    // Outer div receives the forwarded ref; `locale` cast to any because
+    // the DS type is a simplified subset of antd's full locale shape.
     return (
       <div ref={ref} className={className} style={style}>
         <AntList
@@ -93,6 +68,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
 );
 List.displayName = 'List.Classic';
 
+/** Classic List Item. Delegates directly to `antd/List.Item` for actions/extra support. */
 export const Item = React.forwardRef<HTMLDivElement, ListItemProps>(
   (props, ref) => {
     const { actions, extra, children, className, style } = props;
@@ -111,6 +87,7 @@ export const Item = React.forwardRef<HTMLDivElement, ListItemProps>(
 );
 Item.displayName = 'List.Item.Classic';
 
+/** Classic List Item Meta. Provides avatar + title + description via `antd/List.Item.Meta`. */
 export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
   (props, ref) => {
     const { avatar, title, description, className, style } = props;

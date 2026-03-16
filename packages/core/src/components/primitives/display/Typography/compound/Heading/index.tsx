@@ -88,10 +88,16 @@ const engineMap: Record<
  *   Subsection
  * </TypographyHeading>
  * ```
+ *
+ * @param props - HeadingProps including engine, level, size, weight, color, and children
+ * @param ref - Forwarded ref to the underlying heading element (h1-h6)
+ * @returns The engine-specific heading element with optional personality token styles applied
  */
 export const TypographyHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ engine = 'classic', ...props }, ref) => {
+    // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
+    // Fall back to ClassicHeading if an unrecognized engine name is provided
     const Component = engineMap[engine] || ClassicHeading;
 
     return (
@@ -99,6 +105,8 @@ export const TypographyHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         ref={ref}
         {...props}
         style={
+          // When personality tokens are available, merge resolved heading styles
+          // with any inline styles passed via props
           tokens
             ? mergePersonalityStyle(props.style, resolveTypographyHeadingStyle(tokens))
             : props.style

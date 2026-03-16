@@ -1,8 +1,9 @@
 /**
- * Button Component Tokens - TypeScript Mirror
+ * @fileoverview Button component token mirrors.
  *
- * TypeScript representation of Button CSS custom properties.
- * Use these for type-safe Button token references.
+ * Covers 5 size tiers (xs-xl), 7 visual variants (primary through link),
+ * 3 semantic variants (success/warning/error), disabled/loading/focus states,
+ * shape options, icon-only sizing, button groups, and spinner/transition tokens.
  */
 
 // Button Sizes

@@ -1,8 +1,8 @@
 /**
- * Badge Component Tokens - TypeScript Mirror
+ * @fileoverview Badge component token mirrors.
  *
- * TypeScript representation of Badge CSS custom properties.
- * Use these for type-safe Badge token references.
+ * Covers 5 size tiers, dot indicator sizes, 7 color variants, processing/status
+ * animations, radius options, spacing, border, typography, and transition tokens.
  */
 
 // Badge Sizes

@@ -1,12 +1,30 @@
 'use client';
 
 /**
- * CommentThread - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla CSS) engine for the CommentThread pattern.
+ * Renders a recursive tree of comments using only inline CSSProperties backed
+ * by --ds-* design tokens with hardcoded fallbacks. Zero dependency on Ant
+ * Design or Tailwind. Defines reusable style objects (avatarStyle, btnStyle,
+ * primaryBtnStyle, linkBtnStyle, textareaStyle) at module scope so they are
+ * allocated once rather than on every render.
+ *
+ * @example
+ * <RusticCommentThread
+ *   comments={[{ id: '1', author: { name: 'Eve' }, content: 'Nice!', timestamp: new Date().toISOString() }]}
+ *   currentUser={{ name: 'Eve' }}
+ *   onEdit={(id, text) => editComment(id, text)}
+ *   onDelete={(id) => deleteComment(id)}
+ * />
  */
 
 import React, { useState, useCallback, type CSSProperties } from 'react';
 import type { CommentThreadProps, Comment } from '../CommentThread.types';
 
+/**
+ * Convert an ISO timestamp string into a human-readable relative time label.
+ * Uses progressively coarser units (minutes, hours, days) and falls back to
+ * an absolute date for timestamps older than 7 days.
+ */
 function formatTimestamp(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
@@ -21,6 +39,10 @@ function formatTimestamp(ts: string): string {
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+/**
+ * Generate a circular avatar style for the given pixel size. Font size is
+ * scaled to 40% of the container so the initial letter fits proportionally.
+ */
 const avatarStyle = (size: number): CSSProperties => ({
   width: size,
   height: size,
@@ -36,6 +58,7 @@ const avatarStyle = (size: number): CSSProperties => ({
   flexShrink: 0,
 });
 
+/** Shared textarea style for comment input and reply fields. */
 const textareaStyle: CSSProperties = {
   width: '100%',
   padding: '8px 12px',
@@ -48,6 +71,7 @@ const textareaStyle: CSSProperties = {
   fontFamily: 'inherit',
 };
 
+/** Base button style -- neutral border, white background, used for Cancel actions. */
 const btnStyle: CSSProperties = {
   padding: '4px 12px',
   fontSize: 'var(--ds-font-size-sm, 13px)',
@@ -59,6 +83,7 @@ const btnStyle: CSSProperties = {
   fontWeight: 500,
 };
 
+/** Primary action button style -- inherits from btnStyle and overrides to the DS primary color. */
 const primaryBtnStyle: CSSProperties = {
   ...btnStyle,
   background: 'var(--ds-color-primary)',
@@ -66,6 +91,7 @@ const primaryBtnStyle: CSSProperties = {
   borderColor: 'var(--ds-color-primary)',
 };
 
+/** Ghost/link button style for inline actions (Reply, Edit, Delete). No border or background. */
 const linkBtnStyle: CSSProperties = {
   background: 'none',
   border: 'none',
@@ -76,6 +102,7 @@ const linkBtnStyle: CSSProperties = {
   fontWeight: 500,
 };
 
+/** Props for the recursive CommentNode used internally by RusticCommentThread. */
 interface CommentNodeProps {
   comment: Comment;
   depth: number;
@@ -87,14 +114,24 @@ interface CommentNodeProps {
   onReaction?: (commentId: string, emoji: string) => void;
 }
 
+/**
+ * Recursive comment node using inline styles. Each instance renders its own
+ * content, reactions, action links, and optionally its children (replies),
+ * indented by 24px per depth level via marginLeft.
+ */
 function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, onDelete, onReaction }: CommentNodeProps) {
   const [replyVisible, setReplyVisible] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(comment.content);
 
+  // Only the comment author can edit or delete their own comments.
+  // Identity is matched by name since the Comment type only exposes
+  // author.name at this level (no user ID available).
   const isOwner = currentUser?.name === comment.author.name;
 
+  // Submit the reply text to the parent handler and reset local state.
+  // Whitespace-only text is rejected to prevent empty replies.
   const handleReply = useCallback(() => {
     if (replyText.trim() && onReply) {
       onReply(comment.id, replyText.trim());
@@ -103,6 +140,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
     }
   }, [replyText, onReply, comment.id]);
 
+  // Submit the edited content and exit edit mode. The trim() guard
+  // prevents saving a comment that contains only whitespace.
   const handleEdit = useCallback(() => {
     if (editText.trim() && onEdit) {
       onEdit(comment.id, editText.trim());
@@ -173,7 +212,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
             </div>
           )}
 
-          {/* Actions */}
+          {/* Actions -- reply is depth-gated to prevent infinitely nested threads.
+              Edit and delete are restricted to the comment owner. */}
           <div style={{ display: 'flex', gap: 8 }}>
             {depth < maxDepth && onReply && (
               <button style={linkBtnStyle} onClick={() => setReplyVisible(!replyVisible)}>Reply</button>
@@ -211,7 +251,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
         </div>
       </div>
 
-      {/* Nested replies */}
+      {/* Nested replies -- rendered recursively with a left border line for
+          visual threading. Stops at maxDepth to cap DOM nesting depth. */}
       {comment.replies && comment.replies.length > 0 && depth < maxDepth && (
         <div style={{ borderLeft: '2px solid var(--ds-color-neutral-200, #e5e7eb)', paddingLeft: 12 }}>
           {comment.replies.map(reply => (
@@ -233,6 +274,14 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
   );
 }
 
+/**
+ * Rustic (Vanilla CSS) comment thread with recursive nesting, reactions, and CRUD.
+ * All styling uses inline CSSProperties backed by --ds-* design tokens with
+ * hardcoded fallbacks, ensuring the component works without any CSS framework.
+ * @param props - CommentThreadProps controlling the comment list, user identity,
+ *   CRUD callbacks, nesting depth, and display options.
+ * @returns A comment list with an optional top-level input for adding new comments.
+ */
 export default function RusticCommentThread(props: CommentThreadProps) {
   const {
     comments,
@@ -269,7 +318,8 @@ export default function RusticCommentThread(props: CommentThreadProps) {
 
   return (
     <div className={className} style={style}>
-      {/* New comment input */}
+      {/* New comment input -- only rendered when both onAdd and currentUser
+          are provided. Without a user identity we cannot attribute the comment. */}
       {onAdd && currentUser && (
         <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
           <div style={avatarStyle(32)}>

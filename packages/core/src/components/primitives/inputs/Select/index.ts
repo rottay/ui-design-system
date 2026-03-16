@@ -126,9 +126,12 @@ export {
 // Export compound components
 export { SelectOption, SelectOptGroup };
 
-// Export base component
-
-// Create engine-aware Select component
+/**
+ * Engine-aware Select namespace.
+ *
+ * The wrapper intentionally stays thin: engines own most of the interaction
+ * complexity, while this entry point keeps compounds and the public contract stable.
+ */
 export const Select = Object.assign(
   createEngineComponent<SelectProps>('Select', {
     classic: () => import('./engines/classic'),
@@ -136,7 +139,9 @@ export const Select = Object.assign(
     rustic: () => import('./engines/rustic'),
   }),
   {
+    /** Declarative option helper for JSX-based select configuration. */
     Option: SelectOption,
+    /** Groups related options while preserving the same filtering contract. */
     OptGroup: SelectOptGroup,
   }
 );

@@ -110,9 +110,13 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       style,
     } = props;
 
+    // Convert children to an indexable array for slide positioning math
+    // and to derive total count for navigation boundary checks.
     const slides = React.Children.toArray(children);
     const [currentSlide, setCurrentSlide] = useState(initialSlide);
     const [isPaused, setIsPaused] = useState(false);
+    // Timer ref is kept outside React state to avoid unnecessary re-renders
+    // when the autoplay interval is created or cleared.
     const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
     /**
@@ -126,9 +130,11 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       (slideNumber: number, _dontAnimate?: boolean) => {
         let targetSlide = slideNumber;
         if (infinite) {
+          // Double-modulo handles negative indices (e.g. -1 wraps to last slide).
           targetSlide =
             ((slideNumber % slides.length) + slides.length) % slides.length;
         } else {
+          // Without infinite mode, clamp to valid index range.
           targetSlide = Math.max(0, Math.min(slideNumber, slides.length - 1));
         }
 
@@ -175,7 +181,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       };
     }, [autoplay, autoplaySpeed, isPaused, next]);
 
-    // Container styles with CSS custom properties
+    // All visual properties use inline styles (no external CSS) to keep
+    // the rustic engine fully self-contained and dependency-free.
     const containerStyle: React.CSSProperties = {
       position: 'relative',
       width: '100%',
@@ -210,7 +217,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       transition: `all ${speed}ms ease-in-out`,
     });
 
-    // Arrow button base styles
+    // Arrow buttons use DS CSS variables with hardcoded fallbacks so they
+    // render correctly even without a theme provider (SSR-safe).
     const arrowStyle: React.CSSProperties = {
       position: 'absolute',
       top: '50%',
@@ -314,7 +322,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         aria-roledescription="carousel"
         aria-label="Image carousel"
       >
-        {/* Slides Container */}
+        {/* aria-live="polite" announces slide changes to screen readers
+            without interrupting the current speech queue. */}
         <div style={slidesContainerStyle} aria-live="polite">
           {slides.map((slide, index) => (
             <div

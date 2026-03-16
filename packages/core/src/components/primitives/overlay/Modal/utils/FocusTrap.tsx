@@ -1,6 +1,14 @@
 /**
- * FocusTrap - Utility Component
- * Traps focus within a container for accessibility (a11y)
+ * @fileoverview FocusTrap - traps keyboard focus within a container for WCAG 2.1 compliance.
+ * Used by Modal/Drawer/AlertDialog to prevent Tab from escaping the overlay.
+ * Exports both a `<FocusTrap>` component and a `useFocusTrap` hook.
+ *
+ * @example
+ * ```tsx
+ * <FocusTrap active={isOpen} autoFocus restoreFocus>
+ *   <dialog>...focusable content...</dialog>
+ * </FocusTrap>
+ * ```
  */
 
 'use client';
@@ -32,7 +40,7 @@ export interface FocusTrapProps {
   style?: React.CSSProperties;
 }
 
-// Focusable element selectors
+// Comprehensive list of focusable element selectors per WCAG guidelines.
 const FOCUSABLE_SELECTORS = [
   'a[href]',
   'area[href]',
@@ -47,9 +55,7 @@ const FOCUSABLE_SELECTORS = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(',');
 
-/**
- * Gets all focusable elements within a container
- */
+/** Returns visible, enabled focusable elements inside `container`. */
 function getFocusableElements(container: HTMLElement): HTMLElement[] {
   const elements = container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS);
   return Array.from(elements).filter(
@@ -60,9 +66,7 @@ function getFocusableElements(container: HTMLElement): HTMLElement[] {
   );
 }
 
-/**
- * Resolves a focus target (selector string or element)
- */
+/** Resolves a focus target from a CSS selector string or direct element reference. */
 function resolveFocusTarget(
   target: string | HTMLElement | null | undefined,
   container?: HTMLElement
@@ -76,8 +80,9 @@ function resolveFocusTarget(
 }
 
 /**
- * FocusTrap component that traps keyboard focus within its children.
- * Essential for modal accessibility (WCAG 2.1 compliance).
+ * FocusTrap component -- wraps children in a div that intercepts Tab/Shift+Tab
+ * to cycle focus through focusable descendants. Auto-focuses the first element
+ * on mount and restores the previously focused element on unmount.
  */
 export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
   (props, ref) => {
@@ -95,14 +100,14 @@ export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
-    // Store the previously focused element
+    // Capture which element had focus before the trap activated (for restore on unmount)
     useEffect(() => {
       if (active && restoreFocus) {
         previouslyFocusedRef.current = document.activeElement as HTMLElement;
       }
     }, [active, restoreFocus]);
 
-    // Auto-focus initial element
+    // On activation, move focus to initialFocus target or the first focusable child
     useEffect(() => {
       if (!active || !autoFocus) return;
 
@@ -131,7 +136,7 @@ export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
       return () => clearTimeout(timeoutId);
     }, [active, autoFocus, initialFocus]);
 
-    // Restore focus on deactivation/unmount
+    // On unmount/deactivation, return focus to finalFocus or the previously focused element
     useEffect(() => {
       return () => {
         if (!restoreFocus) return;
@@ -148,7 +153,7 @@ export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
       };
     }, [finalFocus, restoreFocus]);
 
-    // Handle keyboard navigation
+    // Tab/Shift+Tab handler -- wraps focus at boundaries so it never leaves the trap
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
         if (!active) return;
@@ -222,9 +227,7 @@ FocusTrap.displayName = 'FocusTrap';
 
 export default FocusTrap;
 
-/**
- * Hook for managing focus trap behavior
- */
+/** Imperative hook alternative -- call `trapFocus(el)` and `releaseFocus()` manually. */
 export function useFocusTrap(active: boolean = true) {
   const containerRef = useRef<HTMLElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);

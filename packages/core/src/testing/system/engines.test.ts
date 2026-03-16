@@ -1,5 +1,7 @@
 /**
- * Engine Registry Tests
+ * @fileoverview Engine registry tests. Validates ENGINE_REGISTRY shape,
+ * getEngine/getAvailableEngines/getStableEngines lookups, isValidEngine
+ * guard, and getDefaultEngine return value.
  */
 
 import { describe, it, expect } from 'vitest';

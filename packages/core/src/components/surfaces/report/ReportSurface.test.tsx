@@ -1,3 +1,5 @@
+/** @fileoverview ReportSurface tests -- template selection, filters, and export. */
+
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

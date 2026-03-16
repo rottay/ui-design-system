@@ -82,6 +82,9 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       style,
     } = props;
 
+    // Wrapper div is needed because Ant Design's FloatButton does not
+    // accept a ref; this lets consumers measure or position the button.
+    // The ref type cast bridges HTMLButtonElement (our API) to HTMLDivElement.
     return (
       <div ref={ref as unknown as React.Ref<HTMLDivElement>}>
         <AntFloatButton

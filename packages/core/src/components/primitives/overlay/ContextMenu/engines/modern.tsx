@@ -1,18 +1,24 @@
 'use client';
 
 /**
- * @fileoverview ContextMenu Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the ContextMenu component.
- * Uses DaisyUI dropdown with a right-click handler.
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the ContextMenu overlay component.
+ * Positions a DaisyUI-styled menu at the cursor location on right-click, with
+ * click-outside dismissal and keyboard shortcut display support.
  *
- * @module ContextMenu/Engines/Modern
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <ModernContextMenu
+ *   items={[{ key: 'paste', label: 'Paste', shortcut: 'Ctrl+V' }]}
+ *   trigger={<div className="p-8">Right-click area</div>}
+ *   onSelect={(key) => console.log(key)}
+ * />
+ * ```
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ContextMenuProps, ContextMenuItem } from '../ContextMenu.types';
 
+/** Renders a single menu row: standard item, divider, or group title. */
 const MenuItem: React.FC<{
   item: ContextMenuItem;
   onClick?: (key: string) => void;
@@ -52,6 +58,16 @@ const MenuItem: React.FC<{
   );
 };
 
+/**
+ * ContextMenu implementation using DaisyUI menu classes and Tailwind utilities.
+ *
+ * The menu is positioned absolutely within the trigger container using the
+ * cursor's offset from the container's bounding rect. A mousedown listener
+ * on the document handles click-outside dismissal.
+ *
+ * @param props - {@link ContextMenuProps} shared across all engines.
+ * @returns A relatively-positioned container that intercepts right-click.
+ */
 export default function ModernContextMenu(props: ContextMenuProps): React.ReactElement {
   const {
     items,
@@ -68,6 +84,8 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLUListElement>(null);
 
+  // Capture cursor position relative to the container so the menu appears at
+  // the exact right-click location rather than at a fixed offset
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
     e.preventDefault();
@@ -81,11 +99,13 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     setIsOpen(true);
   }, [disabled]);
 
+  // Close the menu and propagate the selected item key to the consumer
   const handleItemClick = useCallback((key: string) => {
     onSelect?.(key);
     setIsOpen(false);
   }, [onSelect]);
 
+  // Dismiss the menu when clicking anywhere outside of it
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {

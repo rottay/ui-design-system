@@ -1,22 +1,32 @@
 'use client';
 
 /**
- * Cascader - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Cascader Modern Engine - Rottay Design System.
+ * DaisyUI/Tailwind CSS implementation of a hierarchical option selector.
+ * Supports click/hover expansion, cross-level search, async data loading,
+ * custom fieldNames mapping, and controlled/uncontrolled value modes.
  *
- * Features:
- * - expandTrigger: 'click' | 'hover'
- * - showSearch: search input filtering across all levels
- * - fieldNames: custom property mapping (label, value, children)
- * - loadData: async loading with spinner when expanding nodes
+ * @example
+ * ```tsx
+ * <Cascader engine="modern" options={categories} showSearch expandTrigger="hover" />
+ * ```
+ *
+ * @module Cascader/Engines/Modern
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../Cascader.types';
 import { CASCADER_DEFAULTS } from '../Cascader.types';
 
 // ---------------------------------------------------------------------------
-// Helpers for fieldNames mapping
+// Helpers for fieldNames mapping.
+// fieldNames lets consumers use their own data shape (e.g., {name, id, items})
+// instead of the default {label, value, children}. These accessors abstract
+// the mapping so the rest of the component uses a uniform API.
 // ---------------------------------------------------------------------------
 
+/** Reads the label property from an option, respecting custom fieldNames. */
 function getLabel(option: CascaderOption, fn?: CascaderFieldNames): React.ReactNode {
   const key = fn?.label ?? 'label';
   return (option as Record<string, unknown>)[key] as React.ReactNode;
@@ -39,7 +49,10 @@ function isLeaf(option: CascaderOption, fn?: CascaderFieldNames): boolean {
 }
 
 // ---------------------------------------------------------------------------
-// Flatten options for search
+// Flatten options for search.
+// Cascader options are hierarchical, but search needs to match across all
+// levels. Flattening produces one entry per leaf path (e.g., "US > CA > SF")
+// so the search filter can match against the concatenated label string.
 // ---------------------------------------------------------------------------
 
 interface FlatOption {
@@ -72,6 +85,16 @@ function flattenOptions(
   return result;
 }
 
+/**
+ * Modern Cascader component (DaisyUI/Tailwind CSS).
+ *
+ * Renders a trigger input that opens a multi-column dropdown. Each column
+ * represents one level of the option hierarchy. Selecting a leaf node
+ * commits the value and closes the dropdown.
+ *
+ * @param props - {@link CascaderProps}
+ * @returns A positioned cascader dropdown with search and async-load support
+ */
 export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
   (props, ref) => {
     const {
@@ -102,6 +125,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
     const [searchValue, setSearchValue] = useState('');
 
+    // Support both controlled (value prop provided) and uncontrolled modes.
+    // When controlled, external state is the source of truth for the selection.
     const isControlled = controlledValue !== undefined;
     const value = (isControlled ? controlledValue : internalValue) as CascaderValue;
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -152,6 +177,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     }, [value, options, fieldNames]);
 
     // ------ Async load helpers ------
+    // When loadData is provided, children are fetched on-demand as the user
+    // expands nodes. A loading spinner replaces the expand arrow during fetch.
 
     const triggerLoadData = useCallback(async (option: CascaderOption, path: CascaderOption[]) => {
       if (!loadData) return;
@@ -169,6 +196,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     }, [loadData, fieldNames]);
 
     // ------ Expand / Select ------
+    // Hover expansion only fires when expandTrigger === 'hover'. Click
+    // expansion handles both expanding parent nodes and selecting leaf nodes.
 
     const handleOptionHover = (option: CascaderOption, columnIndex: number) => {
       if (expandTrigger !== 'hover' || option.disabled) return;
@@ -196,16 +225,18 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       }
     };
 
+    // Expands a parent node by appending its children as a new column.
+    // If the node has no children and loadData is provided, triggers an
+    // async fetch first. loadData mutates the option object in-place
+    // (adding children), then we re-read the children to build the column.
     const expandOption = async (option: CascaderOption, columnIndex: number) => {
       const newPath = [...selectedPath.slice(0, columnIndex), option];
       setSelectedPath(newPath);
 
       const children = getChildren(option, fieldNames);
 
-      // If no children loaded yet and loadData provided, trigger async load
       if (!children && !isLeaf(option, fieldNames) && loadData) {
         await triggerLoadData(option, selectedPath.slice(0, columnIndex));
-        // After load, children should be on the option object (mutated in place)
         const loadedChildren = getChildren(option, fieldNames);
         if (loadedChildren && loadedChildren.length > 0) {
           setActiveColumns([...activeColumns.slice(0, columnIndex + 1), loadedChildren]);
@@ -217,6 +248,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         const newColumns = [...activeColumns.slice(0, columnIndex + 1), children];
         setActiveColumns(newColumns);
       } else {
+        // No children means this column is the deepest level; trim any stale columns
         setActiveColumns(activeColumns.slice(0, columnIndex + 1));
       }
     };
@@ -232,6 +264,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     };
 
     // ------ Search ------
+    // When showSearch is enabled, all leaf paths are pre-flattened so the user
+    // can type a query and see matching results across every hierarchy level.
 
     const flatOptions = useMemo(
       () => (showSearch ? flattenOptions(options, fieldNames) : []),
@@ -255,7 +289,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       handleOpenChange(false);
     };
 
-    // Click outside
+    // Close the dropdown when clicking outside the container
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(e.target as Node)) {

@@ -1,8 +1,9 @@
 /**
- * Select Component Tokens - TypeScript Mirror
+ * @fileoverview Select component token mirrors.
  *
- * TypeScript representation of Select CSS custom properties.
- * Use these for type-safe Select token references.
+ * Covers 5 size tiers, outline/filled/flushed variants, validation status,
+ * dropdown panel, option items, arrow/clear icons, multi-select tags,
+ * search input, loading/empty states, option groups, and transition tokens.
  */
 
 // Select Sizes

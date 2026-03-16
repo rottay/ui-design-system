@@ -1,8 +1,8 @@
 /**
- * Border Tokens - TypeScript Mirror
+ * @fileoverview Border token mirrors -- widths, radii, styles, colors, dividers, and outlines.
  *
- * TypeScript representation of border CSS custom properties.
- * Use these for type-safe border references in JavaScript/TypeScript.
+ * Includes both primitive values (borderWidth, radius) and semantic composites
+ * (border.default, border.error) that map to shorthand CSS variable declarations.
  */
 
 // Border Widths

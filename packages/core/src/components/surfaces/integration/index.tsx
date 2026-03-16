@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * IntegrationSurface
- *
- * API keys management, webhook configuration, and connected apps overview.
- * Supports both tabbed and sectioned layouts. The app owns the actual
- * integration operations; this surface standardizes how developer settings
- * and integration management pages are composed.
+ * @fileoverview IntegrationSurface -- developer settings and connected apps page.
+ * @description Composes API key management, webhook configuration, and connected
+ * apps overview. Supports tabbed and sectioned layouts. The app owns the actual
+ * integration CRUD; this surface standardizes the page composition.
  */
 
 import React from 'react';
@@ -181,6 +179,9 @@ export function IntegrationSurface({
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
   const useTabs = config.visual.layout === 'tabs';
 
+  // API Keys and Webhooks always appear because they are the minimum
+  // developer tooling any integration page needs. Connected Apps is
+  // excluded from the tab bar when empty to avoid a confusing blank tab.
   const content = useTabs ? (
     <Tabs
       items={[

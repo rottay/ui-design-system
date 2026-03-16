@@ -1,5 +1,10 @@
 /**
- * Locale Translations Export
+ * @fileoverview Barrel for all locale translation dictionaries.
+ *
+ * Each locale directory contains four JSON namespace files (common, components,
+ * errors, validation) aggregated into a single `LocaleTranslations` object.
+ * Adding a new locale requires creating its directory, JSON files, and
+ * re-exporting here plus registering it in `LOCALE_CONFIGS` in `../types`.
  */
 
 export { es } from './es';

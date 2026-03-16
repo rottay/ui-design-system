@@ -1,11 +1,12 @@
 /**
- * Rottay Tenant Tokens - TypeScript Mirror
+ * @fileoverview Rottay (default tenant) token mirrors.
  *
- * This file only mirrors tenant tokens that exist in the live DS runtime.
- * The previous version exposed a fantasy token API that did not match the
- * actual CSS shipped by the package.
+ * Mirrors only the CSS custom properties that actually exist in the shipped
+ * stylesheets. Organized by semantic role: brand colors, backgrounds, text,
+ * borders, status indicators, links, typography, border radius, and shadows.
  */
 
+/** Primary and accent brand color references for the Rottay tenant. */
 export const rottayBrand = {
   primary: 'var(--ds-color-primary)',
   primaryHover: 'var(--ds-color-primary-hover)',
@@ -14,6 +15,7 @@ export const rottayBrand = {
   accentHover: 'var(--ds-color-accent-hover)',
 } as const;
 
+/** Surface and background color tokens for layered UI elevation. */
 export const rottayBackground = {
   primary: 'var(--ds-color-bg-primary)',
   secondary: 'var(--ds-color-bg-secondary)',
@@ -23,6 +25,7 @@ export const rottayBackground = {
   overlay: 'var(--ds-color-bg-overlay)',
 } as const;
 
+/** Text color tokens ranging from primary to disabled, plus on-primary contrast. */
 export const rottayText = {
   primary: 'var(--ds-color-text-primary)',
   secondary: 'var(--ds-color-text-secondary)',
@@ -32,6 +35,7 @@ export const rottayText = {
   onPrimary: 'var(--ds-color-text-on-primary)',
 } as const;
 
+/** Border color tokens for default, semantic, and focus states. */
 export const rottayBorder = {
   default: 'var(--ds-color-border)',
   primary: 'var(--ds-color-border-primary)',
@@ -40,6 +44,7 @@ export const rottayBorder = {
   focus: 'var(--ds-color-border-focus)',
 } as const;
 
+/** Success/warning/error/info status tokens with foreground, background, and border variants. */
 export const rottayStatus = {
   success: 'var(--ds-color-success)',
   successBg: 'var(--ds-color-success-bg)',
@@ -55,12 +60,14 @@ export const rottayStatus = {
   infoBorder: 'var(--ds-color-info-border)',
 } as const;
 
+/** Hyperlink color tokens for default, hover, and visited states. */
 export const rottayLink = {
   default: 'var(--ds-color-link)',
   hover: 'var(--ds-color-link-hover)',
   visited: 'var(--ds-color-link-visited)',
 } as const;
 
+/** Font family, letter spacing, and line height tokens for the Rottay tenant. */
 export const rottayTypography = {
   fontFamilyBase: 'var(--ds-font-family-base)',
   fontFamilyHeading: 'var(--ds-font-family-heading)',
@@ -77,6 +84,7 @@ export const rottayTypography = {
   lineHeightRelaxed: 'var(--ds-line-height-relaxed)',
 } as const;
 
+/** Border radius scale tokens. */
 export const rottayRadius = {
   sm: 'var(--ds-radius-sm)',
   md: 'var(--ds-radius-md)',
@@ -85,6 +93,7 @@ export const rottayRadius = {
   full: 'var(--ds-radius-full)',
 } as const;
 
+/** Box shadow elevation scale tokens. */
 export const rottayShadows = {
   sm: 'var(--ds-shadow-sm)',
   md: 'var(--ds-shadow-md)',
@@ -92,6 +101,7 @@ export const rottayShadows = {
   xl: 'var(--ds-shadow-xl)',
 } as const;
 
+/** Combined aggregate of all Rottay tenant token categories. */
 export const rottayTokens = {
   brand: rottayBrand,
   background: rottayBackground,

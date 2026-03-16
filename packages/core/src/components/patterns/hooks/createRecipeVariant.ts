@@ -1,16 +1,22 @@
 'use client';
 
 /**
- * createRecipeVariant - Recipe Customization Utility
+ * @fileoverview createRecipeVariant -- factory function for creating recipe
+ * component variants with modified default props, extra/hidden columns,
+ * and preset overrides without forking the base component.
  *
- * Creates a variant of a recipe component with modified defaults.
+ * Use this when you need a domain-specific version of a pattern (e.g. a
+ * "CompactUserTable" that hides certain columns and defaults to a smaller
+ * page size) without duplicating the base component code.
  *
  * @example
- * const MyCandidateTable = createRecipeVariant(BhCandidateTable, {
- *   extraColumns: [column('salary', { render: (v) => <Text>${v}k</Text> })],
- *   hideColumns: ['score'],
- *   defaultPreset: 'compact',
+ * ```tsx
+ * const CompactUserTable = createRecipeVariant(PatternDataTable, {
+ *   defaultProps: { pageSize: 10, bordered: true },
+ *   hideColumns: ['avatar', 'bio'],
+ *   displayName: 'CompactUserTable',
  * });
+ * ```
  */
 
 import React, { ComponentType, forwardRef } from 'react';
@@ -29,6 +35,26 @@ export interface RecipeVariantConfig<P> {
   displayName?: string;
 }
 
+/**
+ * Creates a new component that wraps `BaseComponent` with preset defaults,
+ * column modifications, and/or a default recipe preset.
+ *
+ * Props passed at the call site always win over `defaultProps`, following
+ * the standard React "controlled overrides default" convention.
+ *
+ * @param BaseComponent - The pattern component to wrap.
+ * @param config - Variant configuration (defaults, column changes, preset).
+ * @returns A new component with the same prop interface as `BaseComponent`.
+ *
+ * @example
+ * ```tsx
+ * const HRDataTable = createRecipeVariant(PatternDataTable, {
+ *   defaultProps: { striped: true },
+ *   extraColumns: [column('department')],
+ *   hideColumns: ['internalId'],
+ * });
+ * ```
+ */
 export function createRecipeVariant<P extends Record<string, any>>(
   BaseComponent: ComponentType<P>,
   config: RecipeVariantConfig<P>
@@ -36,9 +62,11 @@ export function createRecipeVariant<P extends Record<string, any>>(
   const { defaultProps = {}, extraColumns, hideColumns, defaultPreset, displayName } = config;
 
   const VariantComponent = (props: P) => {
+    // Spread defaultProps first so explicit props take precedence.
     let mergedProps = { ...defaultProps, ...props } as P;
 
-    // Handle column modifications
+    // -- Column modifications --
+    // Only run when the component actually has a `columns` prop.
     if ((extraColumns || hideColumns) && 'columns' in mergedProps && Array.isArray(mergedProps.columns)) {
       let cols = [...mergedProps.columns] as ColumnDef<any>[];
 
@@ -55,7 +83,7 @@ export function createRecipeVariant<P extends Record<string, any>>(
       mergedProps = { ...mergedProps, columns: cols };
     }
 
-    // Handle preset override
+    // Apply the default preset only when the consumer hasn't explicitly set one.
     if (defaultPreset && 'preset' in mergedProps && !props.preset) {
       mergedProps = { ...mergedProps, preset: defaultPreset };
     }

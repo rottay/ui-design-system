@@ -34,6 +34,14 @@ import React from 'react';
 import type { FlexProps } from '../Flex.types';
 import { FLEX_DEFAULTS } from '../Flex.types';
 
+/**
+ * Lookup tables that map engine-agnostic prop values to Tailwind utility classes.
+ * Each table mirrors the CSS flexbox spec values to their Tailwind equivalents,
+ * enabling the modern engine to compose a pure-class output with no inline styles
+ * for the core layout axis.
+ */
+
+/** Maps flexDirection values to Tailwind direction utilities */
 const DIRECTION_CLASSES: Record<string, string> = {
   row: 'flex-row',
   'row-reverse': 'flex-row-reverse',
@@ -41,12 +49,14 @@ const DIRECTION_CLASSES: Record<string, string> = {
   'column-reverse': 'flex-col-reverse',
 };
 
+/** Maps flexWrap values to Tailwind wrap utilities */
 const WRAP_CLASSES: Record<string, string> = {
   nowrap: 'flex-nowrap',
   wrap: 'flex-wrap',
   'wrap-reverse': 'flex-wrap-reverse',
 };
 
+/** Maps justifyContent shorthand values to Tailwind justify utilities */
 const JUSTIFY_CLASSES: Record<string, string> = {
   start: 'justify-start',
   end: 'justify-end',
@@ -56,6 +66,7 @@ const JUSTIFY_CLASSES: Record<string, string> = {
   evenly: 'justify-evenly',
 };
 
+/** Maps alignItems shorthand values to Tailwind items utilities */
 const ALIGN_CLASSES: Record<string, string> = {
   start: 'items-start',
   end: 'items-end',
@@ -64,6 +75,16 @@ const ALIGN_CLASSES: Record<string, string> = {
   stretch: 'items-stretch',
 };
 
+/**
+ * Modern Flex component using Tailwind CSS utility classes.
+ *
+ * Builds a className string from the engine-agnostic props and falls back to
+ * inline styles only for values Tailwind cannot express statically (gap as
+ * pixel numbers and the CSS `flex` shorthand).
+ *
+ * @param props - Engine-agnostic flex layout props (direction, wrap, justify, align, gap, etc.)
+ * @returns A ref-forwarding div element styled with Tailwind flex utilities.
+ */
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {
     const {
@@ -80,6 +101,8 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...rest
     } = props;
 
+    // Start with the display class; inline-flex is uncommon but required for
+    // inline flow contexts like text-beside-icon layouts
     const classes: string[] = [inline ? 'inline-flex' : 'flex'];
 
     if (direction) {
@@ -98,9 +121,12 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       classes.push(ALIGN_CLASSES[align] || ALIGN_CLASSES.stretch);
     }
 
+    // Gap and flex are applied as inline styles because Tailwind gap classes
+    // use a spacing scale while we accept arbitrary pixel values and tuples
     const customStyle: React.CSSProperties = { ...style };
     if (gap !== undefined) {
       if (Array.isArray(gap)) {
+        // Tuple form: [columnGap, rowGap] for asymmetric spacing
         customStyle.columnGap = `${gap[0]}px`;
         customStyle.rowGap = `${gap[1]}px`;
       } else {
@@ -111,6 +137,7 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       customStyle.flex = flex;
     }
 
+    // Merge Tailwind classes with any consumer-provided className
     const combinedClassName = [classes.join(' '), className]
       .filter(Boolean)
       .join(' ');

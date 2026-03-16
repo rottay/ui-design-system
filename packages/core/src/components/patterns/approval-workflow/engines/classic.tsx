@@ -1,7 +1,19 @@
 'use client';
 
 /**
- * ApprovalWorkflow - Classic Engine (Ant Design)
+ * @fileoverview Classic engine for the ApprovalWorkflow pattern, powered by Ant Design.
+ * Renders a vertical Steps component where each step represents one approver in a
+ * sequential approval chain. Action buttons (Approve / Reject / Escalate) appear only
+ * on the current pending step, enforcing a single-active-step progression model.
+ *
+ * @example
+ * <ClassicApprovalWorkflow
+ *   title="Purchase Order Approval"
+ *   entity="PO-2026-0042"
+ *   steps={[{ key: 'mgr', approver: 'Jane Doe', status: 'approved' }]}
+ *   currentStep={1}
+ *   onApprove={(key) => handleApprove(key)}
+ * />
  */
 
 import React from 'react';
@@ -11,6 +23,11 @@ import type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from '../App
 
 const { Text, Title } = Typography;
 
+// Map domain-level approval statuses to Ant Steps visual states. "escalated"
+// maps to "process" because it is an active state requiring attention, while
+// "skipped" maps to "wait" since it is inactive but not failed.
+// Ant Steps only supports four visual states (wait/process/finish/error), so
+// the five-value ApprovalStatus union must be collapsed into those four.
 const statusMap: Record<ApprovalStatus, { color: string; label: string; antStatus: 'wait' | 'process' | 'finish' | 'error' }> = {
   pending: { color: 'default', label: 'Pending', antStatus: 'wait' },
   approved: { color: 'success', label: 'Approved', antStatus: 'finish' },
@@ -19,6 +36,15 @@ const statusMap: Record<ApprovalStatus, { color: string; label: string; antStatu
   skipped: { color: 'default', label: 'Skipped', antStatus: 'wait' },
 };
 
+/**
+ * Renders the description area below each step in the Ant Steps component.
+ * Shows timestamp, reviewer comments, arbitrary metadata key-value pairs, and
+ * -- only for the currently active pending step -- action buttons.
+ *
+ * Action buttons are conditionally rendered based on which callbacks the parent
+ * provides. This lets consumers selectively disable escalation (for example) by
+ * simply omitting the `onEscalate` prop.
+ */
 function StepDescription({ step, isCurrent, onApprove, onReject, onEscalate, actionsDisabled }: {
   step: ApprovalStep;
   isCurrent: boolean;
@@ -29,6 +55,8 @@ function StepDescription({ step, isCurrent, onApprove, onReject, onEscalate, act
 }) {
   return (
     <div style={{ paddingTop: 4 }}>
+      {/* Timestamp supports both pre-formatted strings and Date objects.
+          Date objects are locale-formatted so the display adapts to the user's browser. */}
       {step.timestamp && (
         <Text type="secondary" style={{ fontSize: 12 }}>
           {typeof step.timestamp === 'string' ? step.timestamp : step.timestamp.toLocaleString()}
@@ -39,6 +67,8 @@ function StepDescription({ step, isCurrent, onApprove, onReject, onEscalate, act
           {step.comments}
         </div>
       )}
+      {/* Metadata is an open-ended Record<string, ReactNode> that consumers use
+          for domain-specific data like department, cost center, or risk score. */}
       {step.metadata && (
         <div style={{ marginTop: 4 }}>
           {Object.entries(step.metadata).map(([k, v]) => (
@@ -48,6 +78,8 @@ function StepDescription({ step, isCurrent, onApprove, onReject, onEscalate, act
           ))}
         </div>
       )}
+      {/* Actions only render when this step is both active AND pending. A step
+          that is current but already approved/rejected should not show buttons. */}
       {isCurrent && step.status === 'pending' && (
         <Space style={{ marginTop: 8 }}>
           {onApprove && (
@@ -71,9 +103,22 @@ function StepDescription({ step, isCurrent, onApprove, onReject, onEscalate, act
   );
 }
 
+/**
+ * Classic (Ant Design) engine for the ApprovalWorkflow pattern.
+ *
+ * Wraps the entire workflow in an Ant Card with a vertical Steps component.
+ * Each step's `status` is mapped through `statusMap` so domain states translate
+ * into Ant's four-value visual model. The `currentStep` index determines which
+ * step renders action buttons via the `StepDescription` sub-component.
+ *
+ * @param props - {@link ApprovalWorkflowProps}
+ * @returns A card containing a vertical approval chain with inline actions.
+ */
 export default function ClassicApprovalWorkflow(props: ApprovalWorkflowProps) {
   const { title, entity, steps, currentStep = 0, onApprove, onReject, onEscalate, actionsDisabled, footer, loading, className, style } = props;
 
+  // Loading state uses Ant Skeleton with 6 rows to approximate the visual
+  // height of a typical 3-step workflow, preventing layout shift on load.
   if (loading) {
     return (
       <Card className={className} style={style}>
@@ -84,11 +129,15 @@ export default function ClassicApprovalWorkflow(props: ApprovalWorkflowProps) {
 
   return (
     <Card className={className} style={style}>
+      {/* Header: workflow title + optional entity tag (e.g. "PO-2026-0042") */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
         <Title level={5} style={{ margin: 0 }}>{title}</Title>
         {entity && <Tag>{entity}</Tag>}
       </div>
 
+      {/* Vertical Steps -- each item maps an ApprovalStep into Ant's Step shape.
+          The `status` override per-item lets completed/rejected steps show the
+          correct icon/color regardless of the global `current` index. */}
       <Steps
         direction="vertical"
         current={currentStep}

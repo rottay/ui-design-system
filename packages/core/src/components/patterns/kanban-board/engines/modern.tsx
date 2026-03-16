@@ -1,12 +1,31 @@
 'use client';
 
 /**
- * KanbanBoard - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview Modern (DaisyUI / Tailwind) engine for the KanbanBoard pattern.
+ * Renders a horizontally-scrollable drag-and-drop board using DaisyUI's card,
+ * badge, and button utility classes. Drop-target columns highlight with a
+ * primary-tinted ring to give users clear visual feedback during drag.
+ *
+ * @example
+ * <KanbanBoard
+ *   engine="modern"
+ *   columns={[{ id: 'backlog', title: 'Backlog', items: stories }]}
+ *   renderCard={(story) => <span>{story.title}</span>}
+ *   itemKey={(story) => story.id}
+ *   onItemMove={(id, from, to, pos) => reorder(id, from, to, pos)}
+ * />
  */
 
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../KanbanBoard.types';
 
+/**
+ * Modern Kanban board built on DaisyUI / Tailwind utility classes.
+ * Generic over `T` so any item shape can be used with a string key extractor.
+ *
+ * @param props - See {@link KanbanBoardProps} for full prop documentation.
+ * @returns A flex-based board with DaisyUI-styled columns and cards.
+ */
 export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const {
     columns,
@@ -26,6 +45,10 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     style,
   } = props;
 
+  // Two pieces of drag state: `dragData` mirrors what we put in dataTransfer
+  // (needed because the browser API restricts reading dataTransfer during
+  // dragOver), and `dropTarget` tracks which column is being hovered so we
+  // can highlight it with a ring indicator.
   const [dragData, setDragData] = useState<{
     itemId: string;
     fromColumn: string;
@@ -35,6 +58,8 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     position: number;
   } | null>(null);
 
+  // Store item ID in both dataTransfer (for the native DnD pipeline) and
+  // React state (for rendering hover indicators during dragOver).
   const handleDragStart = useCallback(
     (e: React.DragEvent, item: T, columnId: string) => {
       const id = itemKey(item);
@@ -45,6 +70,8 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     [itemKey]
   );
 
+  // preventDefault on dragOver is mandatory -- without it the browser
+  // defaults to "not droppable" and will never fire the drop event.
   const handleDragOver = useCallback(
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
@@ -54,6 +81,8 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     []
   );
 
+  // Delegate actual data mutation to the parent via onItemMove so the
+  // board remains a controlled component (data source of truth is external).
   const handleDrop = useCallback(
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
@@ -66,6 +95,8 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     [dragData, onItemMove]
   );
 
+  // Always clean up drag state on end, even if the drop landed outside a
+  // valid target, to avoid stale ghost opacity on cards.
   const handleDragEnd = useCallback(() => {
     setDragData(null);
     setDropTarget(null);
@@ -90,8 +121,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         style={{ gap: columnGap }}
       >
         {columns.map((column) => {
+          // WIP limit uses badge-error (red) when at or over capacity to
+          // signal that further additions violate the team's WIP policy.
           const isOverLimit =
             column.limit !== undefined && column.items.length >= column.limit;
+          // Track whether this column is the active drop target so we can
+          // show a primary-tinted ring as a drop affordance.
           const isDropping = dropTarget?.columnId === column.id;
 
           return (
@@ -129,7 +164,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 )}
               </div>
 
-              {/* Column body */}
+              {/* Column body -- uses a primary ring + tinted bg when this
+                  column is the active drop target so users can see exactly
+                  where the item will land. */}
               {!column.collapsed && (
                 <div
                   className={`flex-1 rounded-xl p-2 min-h-[100px] transition-colors ${
@@ -148,6 +185,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                     </div>
                   ) : (
                     <div className="flex flex-col gap-2">
+                      {/* Each card is both a drag source (draggable) and a
+                          drop target (onDragOver/onDrop) to allow reordering
+                          within the same column or moving across columns. */}
                       {column.items.map((item, index) => (
                         <div
                           key={itemKey(item)}
@@ -162,8 +202,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           onDragEnd={handleDragEnd}
                           onClick={() => onItemClick?.(item, column.id)}
                           className={`card card-compact bg-base-100 shadow-sm hover:shadow-md transition-all rounded-lg border border-base-300 ${
+                            // Pointer cursor signals clickable cards; grab
+                            // cursor signals draggable-only cards.
                             onItemClick ? 'cursor-pointer' : 'cursor-grab'
                           } ${
+                            // Dim the source card to 40% opacity while it is
+                            // being dragged so the user sees the "picked up" state.
                             dragData?.itemId === itemKey(item)
                               ? 'opacity-40'
                               : 'opacity-100'

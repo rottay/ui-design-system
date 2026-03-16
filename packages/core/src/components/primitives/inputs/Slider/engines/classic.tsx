@@ -45,6 +45,19 @@ import React, { CSSProperties } from 'react';
 import { Slider as AntSlider } from 'antd';
 import type { SliderProps } from '../Slider.types';
 
+/**
+ * Classic engine Slider -- thin wrapper around Ant Design's Slider.
+ *
+ * Destructures DS-level style props (`trackStyle`, `railStyle`, `handleStyle`)
+ * and remaps them into Ant Design's `styles` object, since AntD v5 deprecated
+ * the top-level style props in favour of a single `styles` bag.
+ *
+ * A wrapping `<div>` is used so the forwarded ref attaches to a real DOM node
+ * rather than the internal AntD component instance.
+ *
+ * @param props - {@link SliderProps} unified slider props shared across engines.
+ * @returns A ref-forwarding wrapper around `antd/Slider`.
+ */
 export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
   (props, ref) => {
     const {
@@ -71,6 +84,8 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       style,
     } = props;
 
+    // Re-map DS-level style shortcuts into AntD v5's consolidated `styles` prop.
+    // Cast to CSSProperties because the DS types allow broader style-like objects.
     const sliderProps = {
       value,
       defaultValue,
@@ -96,7 +111,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     };
 
     return (
+      // Outer div receives the forwarded ref and pass-through layout props
       <div ref={ref} className={className} style={style}>
+        {/* Spread as `any` to avoid TS conflicts between DS and AntD generic overloads */}
         <AntSlider {...sliderProps as any} />
       </div>
     );

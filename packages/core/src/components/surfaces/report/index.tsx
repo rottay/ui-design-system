@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * ReportSurface
- *
- * Report builder surface with template selection, configurable filters, data
- * generation, chart rendering, and export capabilities. Supports both sidebar
- * and top-aligned filter layouts. The app owns the actual data querying and
- * report generation; this surface provides consistent report page structure.
+ * @fileoverview ReportSurface -- report builder with filters, charts, and export.
+ * @description Composes template selection, configurable filters, chart rendering,
+ * and export capabilities. Supports sidebar and top-aligned filter layouts. The app
+ * owns data querying and report generation; this surface owns the page structure.
  */
 
 import React, { useCallback, useState } from 'react';
@@ -42,6 +40,8 @@ function TemplateSelector({
   return (
     <Stack spacing="sm">
       <Text style={{ fontSize: 14, fontWeight: 600 }}>Templates</Text>
+      {/* Selected template gets a primary border highlight to give a clear
+          visual indicator without requiring a separate radio/checkbox UI. */}
       {templates.map((template) => (
         <Card
           key={template.id}
@@ -137,6 +137,9 @@ function FilterPanel({
   );
 }
 
+// Report results uses a manual table (display:table CSS) instead of the Table
+// primitive because report column shapes are dynamic and determined at runtime
+// by the report template, not by a static config.
 function ReportResults({
   config,
 }: {
@@ -248,6 +251,8 @@ export function ReportSurface({
   config,
   loading = false,
 }: ReportSurfaceProps): React.ReactElement {
+  // sidebar-filters layout puts templates + filters in a persistent left
+  // column. On tablet, this gets too cramped so it stacks.
   const isSidebarLayout = config.visual.layout === 'sidebar-filters';
   const { shouldStack } = useSurfaceResponsiveLayout({
     stackOnMobile: true,
@@ -266,6 +271,8 @@ export function ReportSurface({
           <Text>Generate</Text>
         </Button>
       )}
+      {/* All three export formats are always offered when onExport is set.
+          The app decides which formats to actually support in its callback. */}
       {config.behavior.onExport && (
         <Flex gap={4}>
           {(['pdf', 'excel', 'csv'] as const).map((format) => (

@@ -1,17 +1,15 @@
 'use client';
 
 /**
- * @fileoverview TreeSelect Rustic Engine - Rottay Design System
- * @description Pure vanilla HTML/CSS implementation of the TreeSelect component
- * using CSS variables for multi-tenant theming.
+ * @fileoverview TreeSelect Rustic Engine -- pure vanilla HTML/CSS implementation
+ * for the Rottay Design System. All styling uses CSS variables (`--ds-treeselect-*`)
+ * for multi-tenant theming. The dropdown is rendered via React portal to escape
+ * parent overflow/stacking contexts.
  *
- * Features:
- * - treeCheckStrictly: independent parent/child checkbox selection
- * - filterTreeNode + search input with auto-expand of matching parents
- * - fieldNames: custom field mapping (title, value, children)
- * - loadData: lazy load children with loading spinner
- * - treeLine: CSS border connector lines between nodes
- * - Controlled expand: treeExpandedKeys + onTreeExpand callback
+ * @example
+ * ```tsx
+ * <TreeSelect engine="rustic" treeData={nodes} showSearch treeLine />
+ * ```
  *
  * @module RusticTreeSelect
  * @category Inputs
@@ -43,7 +41,9 @@ function resolveField<T>(node: Record<string, unknown>, field: string, fallback:
   return (node[field] ?? node[fallback]) as T;
 }
 
-/** Normalize raw tree data through fieldNames mapping */
+// Recursively remaps tree data through fieldNames so the component can use
+// standard property names (title/value/children) regardless of the consumer's
+// data shape. This runs once per treeData change (memoized in the component).
 function normalizeNodes(
   nodes: TreeSelectNode[],
   fieldNames?: { title?: string; value?: string; children?: string }
@@ -103,7 +103,11 @@ function areAllChildrenSelected(node: TreeSelectNode, selectedKeys: Set<string |
   return node.children.every((child) => areAllChildrenSelected(child, selectedKeys));
 }
 
-/** Check if some (but not all) descendants are selected */
+/**
+ * Check if at least one (but not necessarily all) descendants are selected.
+ * Used together with `areAllChildrenSelected` to determine the indeterminate
+ * checkbox state in cascading mode.
+ */
 function hasSomeDescendantSelected(node: TreeSelectNode, selectedKeys: Set<string | number>): boolean {
   if (!node.children) return false;
   return node.children.some((child) =>
@@ -162,6 +166,11 @@ interface TreeNodeProps {
   filterFn: ((inputValue: string, treeNode: TreeSelectNode) => boolean) | null;
 }
 
+/**
+ * Renders a single tree node row with expand toggle, optional checkbox, and
+ * highlighted title. Recurses into children when expanded. Inline styles use
+ * CSS variables so each tenant's theme is applied automatically.
+ */
 const TreeNodeItem: React.FC<TreeNodeProps> = ({
   node,
   level,
@@ -357,6 +366,18 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
 // TreeSelect component
 // ---------------------------------------------------------------------------
 
+/**
+ * Rustic (vanilla HTML/CSS) engine for the TreeSelect component.
+ *
+ * Renders a trigger button and a portal-mounted dropdown tree. All visual
+ * chrome is driven by `--ds-treeselect-*` CSS variables, enabling full
+ * multi-tenant customization without class overrides. Keyframe animations
+ * for the spinner and dropdown entrance are injected once into `<head>`.
+ *
+ * @param props - Standardized TreeSelectProps from the design system contract.
+ * @param ref   - Forwarded ref attached to the trigger element.
+ * @returns A fully self-contained tree-select with portal dropdown.
+ */
 export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -458,7 +479,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
     }, [controlledOpen, onDropdownVisibleChange]);
 
-    // Update position
+    // Re-measure trigger position each time the dropdown opens so the portal
+    // aligns correctly even after layout shifts (scroll, resize, etc.).
     useEffect(() => {
       if (isOpen && triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
@@ -709,7 +731,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       fontSize: 'var(--ds-font-size-sm)',
     };
 
-    // Inject keyframe animation for spinner (only once)
+    // Inject keyframe animations into <head> once per page lifecycle. The
+    // style element is id-gated so multiple TreeSelect instances share it.
     useEffect(() => {
       const styleId = 'rottay-treeselect-spin-keyframes';
       if (!document.getElementById(styleId)) {
@@ -723,6 +746,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
     }, []);
 
+    // Portal the dropdown to document.body so it escapes parent overflow
+    // containers and z-index stacking contexts (e.g., modals, drawers).
     const dropdownContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div

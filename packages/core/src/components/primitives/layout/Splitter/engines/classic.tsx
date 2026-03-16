@@ -36,6 +36,16 @@ import React from 'react';
 import { Splitter as AntSplitter } from 'antd';
 import type { SplitterProps, SplitterPanelProps } from '../Splitter.types';
 
+/**
+ * Classic engine implementation of the Splitter container.
+ * Thin passthrough to Ant Design's Splitter, which provides native
+ * drag-to-resize, collapsible panels, and accessible keyboard controls
+ * out of the box. The ref is accepted but not forwarded because
+ * AntSplitter does not expose a ref on the outer container.
+ *
+ * @param props - Splitter configuration (layout, resize callbacks)
+ * @returns An Ant Design Splitter element
+ */
 export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
   (props, _ref) => {
     const { layout, onResize, onResizeStart, onResizeEnd, children, className, style } = props;
@@ -55,6 +65,14 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 );
 Splitter.displayName = 'Splitter.Classic';
 
+/**
+ * Classic engine implementation of the Splitter.Panel sub-component.
+ * Delegates to Ant Design's Panel, which manages size constraints,
+ * collapsibility, and resizability natively through its internal logic.
+ *
+ * @param props - Panel configuration (defaultSize, min, max, collapsible, resizable)
+ * @returns An Ant Design Splitter.Panel element
+ */
 export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps>(
   (props, _ref) => {
     const { defaultSize, min, max, collapsible, resizable, children, className, style } = props;

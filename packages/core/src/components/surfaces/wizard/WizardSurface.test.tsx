@@ -1,3 +1,5 @@
+/** @fileoverview WizardSurface tests -- step progression, validation gating, and back/next. */
+
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

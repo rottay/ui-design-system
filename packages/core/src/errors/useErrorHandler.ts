@@ -1,7 +1,13 @@
 'use client';
 
 /**
- * useErrorHandler - React hook for error handling
+ * @fileoverview useErrorHandler hook - Rottay Design System
+ * @description React hook providing component-level access to the centralized
+ * ErrorHandler for reporting errors and subscribing to error events.
+ *
+ * @module System/Errors/useErrorHandler
+ * @category System
+ * @package @rottay/design-system
  */
 import { useCallback, useEffect, useId } from 'react';
 import { ErrorHandler } from './ErrorHandler';
@@ -39,10 +45,14 @@ export function useErrorHandler(
   options: UseErrorHandlerOptions = {}
 ): UseErrorHandlerReturn {
   const { category = 'all', onError } = options;
+  // useId generates a stable, unique ID per component instance. This is used
+  // as the subscriber key so that each component's subscription is independent
+  // and automatically cleaned up when the component unmounts.
   const subscriberId = useId();
   const errorHandler = ErrorHandler.getInstance();
 
-  // Subscribe to errors if callback provided
+  // Subscription is optional so components can use the hook only for reporting
+  // without becoming long-lived listeners.
   useEffect(() => {
     if (onError) {
       return errorHandler.subscribe(subscriberId, onError, category);

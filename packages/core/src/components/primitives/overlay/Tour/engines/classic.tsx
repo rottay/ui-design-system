@@ -86,7 +86,9 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       className,
     } = props;
 
-    // Map steps to Ant Design format
+    // Ant Design expects target as a getter function returning an HTMLElement.
+    // Convert CSS selectors to querySelector calls and React refs to getters,
+    // while passing existing getter functions through unchanged.
     const antSteps = steps.map((step) => ({
       ...step,
       target: typeof step.target === 'string'
@@ -99,6 +101,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     }));
 
     return (
+      /* Wrapper div provides the forwarded ref anchor; AntTour renders its own portal */
       <div ref={ref} className={className}>
         <AntTour
           steps={antSteps as any}

@@ -83,9 +83,12 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   // Render
   // ============================================================================
 
+  // DaisyUI's `loading loading-spinner` classes produce a CSS-only rotating
+  // spinner. The size class controls both width and height via DaisyUI tokens.
   return (
     <div className={`flex flex-col items-center gap-2 ${className}`} style={style}>
       <span className={`loading loading-spinner ${SIZE_CLASSES[size!]}`}></span>
+      {/* Label is text-sm to maintain visual hierarchy below the spinner */}
       {label && <span className="text-sm">{label}</span>}
     </div>
   );

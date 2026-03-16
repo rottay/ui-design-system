@@ -103,10 +103,16 @@ const engineMap: Record<
  *   Underlined link text
  * </TypographyText>
  * ```
+ *
+ * @param props - TextProps including engine, as, size, weight, color, monospace, italic, underline, and children
+ * @param ref - Forwarded ref to the underlying inline element (span, p, div, or label)
+ * @returns The engine-specific inline text element with personality token styles merged in
  */
 export const TypographyText = forwardRef<HTMLElement, TextProps>(
   ({ engine = 'classic', ...props }, ref) => {
+    // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
+    // Fall back to ClassicText if an unrecognized engine name is provided
     const Component = engineMap[engine] || ClassicText;
 
     return (
@@ -115,6 +121,7 @@ export const TypographyText = forwardRef<HTMLElement, TextProps>(
         {...props}
         style={mergePersonalityStyle(
           props.style,
+          // When as="label", resolveTypographyTextStyle applies label-specific token overrides
           tokens ? resolveTypographyTextStyle(tokens, props.as === 'label') : undefined
         )}
       />

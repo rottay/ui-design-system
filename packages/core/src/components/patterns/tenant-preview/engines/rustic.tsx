@@ -1,10 +1,19 @@
 'use client';
 
 /**
- * TenantPreview - Rustic Engine (Vanilla CSS)
+ * @fileoverview TenantPreview -- Rustic engine (Vanilla / CSS variables).
+ * Renders a live preview of tenant branding using only inline styles
+ * with --ds-* design tokens. Injects scoped CSS via a `<style>` tag
+ * for accurate color representation. Shows palette swatches, sample
+ * components using component-specific tokens (--ds-button-*, --ds-card-*,
+ * --ds-input-*, --ds-badge-*), and personality metadata.
  *
- * Minimal, vanilla HTML/CSS implementation of the tenant preview.
- * Uses CSS variables and inline styles exclusively.
+ * @example
+ * <RusticTenantPreview
+ *   config={{ name: 'Acme', slug: 'acme', primaryColor: '#3b82f6', engine: 'rustic' }}
+ *   showColorPalette
+ *   showPersonalityInfo
+ * />
  */
 
 import React, { useMemo, useEffect, useRef } from 'react';
@@ -13,8 +22,10 @@ import { createTenantConfig } from '../../../../hooks/tenant/create-tenant';
 import { resolvePersonalityPreset } from '../../../../hooks/tenant/personality-presets';
 import { generateTenantCss } from '../../../../tenancy/storage/static/generator';
 
+/** Default component samples shown when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
 
+/** Parses hex color to RGB; handles shorthand (#abc) and full (#aabbcc) */
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const normalized = hex.length === 4
     ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
@@ -25,6 +36,7 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   return { r: (parsed >> 16) & 255, g: (parsed >> 8) & 255, b: parsed & 255 };
 }
 
+/** Linear interpolation between two hex colors at the given ratio (0-1) */
 function mixColor(base: string, target: string, ratio: number): string {
   const b = hexToRgb(base);
   const t = hexToRgb(target);
@@ -35,6 +47,7 @@ function mixColor(base: string, target: string, ratio: number): string {
   return `#${[r, g, bl].map((c) => Math.max(0, Math.min(255, c)).toString(16).padStart(2, '0')).join('')}`;
 }
 
+/** Generates a 10-step palette (50-900) by mixing base with white/black */
 function buildPaletteSteps(base: string): { step: number; color: string }[] {
   return [
     { step: 50, color: mixColor(base, '#ffffff', 0.92) },
@@ -50,6 +63,7 @@ function buildPaletteSteps(base: string): { step: number; color: string }[] {
   ];
 }
 
+/** Returns black or white for optimal contrast against the given background */
 function getContrastColor(hex: string): string {
   const rgb = hexToRgb(hex);
   if (!rgb) return '#000000';
@@ -57,6 +71,15 @@ function getContrastColor(hex: string): string {
   return luminance > 186 ? '#171717' : '#ffffff';
 }
 
+/**
+ * Rustic (Vanilla CSS) implementation of the TenantPreview pattern.
+ * Uses component-specific --ds-* tokens (--ds-button-*, --ds-card-*,
+ * --ds-input-*, --ds-badge-*) for the sample components, giving an
+ * accurate representation of how the tenant theme applies at every level.
+ *
+ * @param props - See {@link TenantPreviewProps} for the full prop contract.
+ * @returns The rendered tenant preview with palette, components, and personality info.
+ */
 export default function RusticTenantPreview(props: TenantPreviewProps) {
   const {
     config: creationConfig,
@@ -69,11 +92,13 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
 
   const previewRef = useRef<HTMLDivElement>(null);
 
+  /* Build full tenant config from creation input */
   const tenantConfig = useMemo(
     () => createTenantConfig(creationConfig),
     [creationConfig]
   );
 
+  /* Resolve personality preset tokens for the info grid */
   const personalityInfo = useMemo(() => {
     const preset = creationConfig.personality ?? 'neutral';
     const tokens = resolvePersonalityPreset(preset);
@@ -90,11 +115,13 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
     [creationConfig.secondaryColor]
   );
 
+  /* Generate scoped CSS; dark mode excluded for preview context */
   const previewCss = useMemo(() => generateTenantCss(tenantConfig, {
     includeDarkSelector: false,
     includeSystemDarkSelector: false,
   }), [tenantConfig]);
 
+  /* Attach data-tenant for CSS scoping; cleanup removes attribute on unmount */
   useEffect(() => {
     const container = previewRef.current;
     if (!container) return;
@@ -107,6 +134,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
   const primary500 = creationConfig.primaryColor;
   const primaryFg = getContrastColor(primary500);
 
+  /* Shorthand token references for consistent use across all preview sections */
   const previewSurface = 'var(--ds-color-surface, var(--ds-color-bg-primary))';
   const previewSurfaceSecondary = 'var(--ds-color-surface-secondary, var(--ds-color-bg-secondary))';
   const previewSurfaceMuted = 'var(--ds-color-surface-muted, var(--ds-color-bg-secondary))';
@@ -210,12 +238,15 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
         </div>
       )}
 
-      {/* Component Samples */}
+      {/* Component Samples -- uses component-specific --ds-* tokens (e.g. --ds-button-*,
+          --ds-card-*, --ds-input-*, --ds-badge-*) so each sample accurately reflects
+          how the tenant theme cascades down to individual component levels. */}
       {components.length > 0 && (
         <div style={{ marginBottom: '20px' }}>
           <span style={sectionLabel}>Component Preview</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
+            {/* Buttons -- primary/outlined/default trio using --ds-button-* component tokens */}
             {components.includes('button') && (
               <div>
                 <div style={{ fontSize: '11px', color: previewTextSecondary, marginBottom: '6px' }}>Buttons</div>
@@ -267,6 +298,8 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
+            {/* Card -- all visual properties flow from --ds-card-* tokens with generic fallbacks.
+                The accent bar width/color reinforces brand identity within containers. */}
             {components.includes('card') && (
               <div>
                 <div style={{ fontSize: '11px', color: previewTextSecondary, marginBottom: '6px' }}>Card</div>
@@ -277,6 +310,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                   background: 'var(--ds-card-bg, var(--ds-color-surface))',
                   boxShadow: 'var(--ds-card-shadow, var(--ds-shadow-sm))',
                 }}>
+                  {/* Accent bar in primary color for brand reinforcement */}
                   <div style={{ width: '100%', height: '2px', backgroundColor: primary500, marginBottom: '10px' }} />
                   <div style={{ fontSize: '13px', fontWeight: 600, color: previewText }}>Sample Card Title</div>
                   <div style={{ fontSize: '12px', color: previewTextSecondary, marginTop: '4px' }}>
@@ -286,6 +320,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
+            {/* Input -- readOnly to prevent user interaction; styled with --ds-input-* tokens */}
             {components.includes('input') && (
               <div>
                 <div style={{ fontSize: '11px', color: previewTextSecondary, marginBottom: '6px' }}>Input</div>
@@ -308,11 +343,14 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
+            {/* Badge -- three tiers (primary, warning, neutral) using --ds-badge-radius
+                for consistent shape across the tenant theme. */}
             {components.includes('badge') && (
               <div>
                 <div style={{ fontSize: '11px', color: previewTextSecondary, marginBottom: '6px' }}>Badges</div>
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                   {['Active', 'Pending', 'Draft'].map((label, i) => {
+                    /* Each badge tier uses a different semantic color token */
                     const colors = [
                       { bg: 'var(--ds-color-primary-500)', fg: previewOnPrimary },
                       { bg: 'var(--ds-color-warning-500)', fg: previewOnPrimary },
@@ -339,6 +377,8 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
+            {/* Table -- native HTML table using design tokens for borders and text color.
+                Status badges inside cells use --ds-badge-radius for consistent shape. */}
             {components.includes('table') && (
               <div>
                 <div style={{ fontSize: '11px', color: previewTextSecondary, marginBottom: '6px' }}>Table</div>
@@ -384,7 +424,9 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
         </div>
       )}
 
-      {/* Personality Info */}
+      {/* Personality Info -- auto-fill grid displays key personality tokens so
+          designers can verify the preset maps to expected animation, shape, and
+          typography behaviors. minmax(140px) keeps cells readable on narrow screens. */}
       {showPersonalityInfo && (
         <div>
           <span style={sectionLabel}>Personality: {personalityInfo.preset}</span>

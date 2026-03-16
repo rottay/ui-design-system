@@ -1,11 +1,24 @@
 /**
- * Default personality tokens.
- * Applied when a tenant does not specify personality overrides.
- * Produces behavior identical to the pre-personality system.
+ * @fileoverview Default Personality Tokens - Rottay Design System
+ * @description Baseline personality token values applied when a tenant or
+ * product profile does not specify personality overrides. These defaults
+ * produce behavior identical to the pre-personality system, ensuring
+ * backward compatibility across all verticals.
+ *
+ * @module System/Personality/Defaults
+ * @category System
+ * @package @rottay/design-system
  */
 
 import type { PersonalityTokens } from '../contracts/tokens/personality';
 
+/**
+ * Baseline personality tokens. Used as the bottom of the merge chain:
+ * `DEFAULT_PERSONALITY -> vertical -> productProfile -> tenant`.
+ *
+ * Values are intentionally conservative (low intensity, no spring, no
+ * hover lift) so the defaults feel neutral across all verticals.
+ */
 export const DEFAULT_PERSONALITY: PersonalityTokens = {
   animation: {
     intensity: 0.5,

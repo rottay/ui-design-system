@@ -1,10 +1,16 @@
 'use client';
 
 /**
- * @fileoverview DatePicker Modern Engine - Rottay Design System
- * @description Full calendar UI implementation using DaisyUI/Tailwind classes.
- * Supports date/month/year pickers, time selection, date ranges,
- * disabled dates, keyboard navigation, and ARIA accessibility.
+ * @fileoverview DatePicker Modern Engine (DaisyUI/Tailwind) - Rottay Design System.
+ * Full calendar UI built from DaisyUI classes and native DOM -- no Ant Design,
+ * no dayjs dependency. Renders date/month/year grids with keyboard navigation,
+ * range highlighting, optional time selection, and ARIA dialog semantics.
+ * Positioning uses a lightweight hook instead of floating-ui.
+ *
+ * @example
+ * ```tsx
+ * <DatePicker engine="modern" showTime showToday disabledDate={(d) => d < today} />
+ * ```
  *
  * @module DatePicker/engines/modern
  * @category Inputs
@@ -38,6 +44,8 @@ import {
 // Size config
 // ---------------------------------------------------------------------------
 
+// DaisyUI input component sizes map directly to our DS size tokens.
+// Text classes are separate because DaisyUI input-* only controls padding/height.
 const sizeClasses: Record<string, string> = {
   small: 'input-sm',
   default: 'input-md',
@@ -52,6 +60,8 @@ const sizeTextClasses: Record<string, string> = {
 
 // ---------------------------------------------------------------------------
 // SVG Icons (inline to avoid extra deps)
+// Modern engine uses inline SVGs instead of an icon library so that it stays
+// self-contained -- no @ant-design/icons or heroicons dependency required.
 // ---------------------------------------------------------------------------
 
 const CalendarIcon = () => (
@@ -97,6 +107,9 @@ const ClockIcon = () => (
 // usePopoverPosition hook
 // ---------------------------------------------------------------------------
 
+// Custom positioning hook replaces a floating-ui dependency. It calculates
+// absolute coordinates from the trigger's bounding rect and recomputes on
+// scroll (captured phase to catch nested scrollable containers) and resize.
 function usePopoverPosition(
   triggerRef: React.RefObject<HTMLElement | null>,
   isOpen: boolean,
@@ -109,11 +122,12 @@ function usePopoverPosition(
 
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
+      // 4px gap between trigger and dropdown for visual separation
       let top = rect.bottom + window.scrollY + 4;
       let left = rect.left + window.scrollX;
 
       if (placement.includes('top')) {
-        top = rect.top + window.scrollY - 4; // will be adjusted by transform
+        top = rect.top + window.scrollY - 4;
       }
       if (placement.includes('Right')) {
         left = rect.right + window.scrollX;
@@ -123,6 +137,7 @@ function usePopoverPosition(
     };
 
     update();
+    // Capture phase on scroll ensures we catch scrolls inside overflow containers
     window.addEventListener('scroll', update, true);
     window.addEventListener('resize', update);
     return () => {
@@ -145,6 +160,8 @@ interface TimePickerPanelProps {
   onMinutesChange: (m: number) => void;
 }
 
+// Time selection uses native <select> elements for reliable mobile behavior
+// and consistent scroll-based picking. DaisyUI select-xs keeps it compact.
 const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
   hours,
   minutes,
@@ -295,7 +312,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     [focusedDate, selectedDate, today, viewMonth, viewYear, onFocusedDateChange, onViewChange, onDateSelect, disabledDate],
   );
 
-  // Month picker mode
+  // Month picker mode -- renders a 3x4 grid of abbreviated month names.
+  // Reuses the same panel container/header for visual consistency with the
+  // date picker. Only year-level nav buttons are shown (month nav is N/A).
   if (picker === 'month') {
     return (
       <div className="p-3 bg-base-100 rounded-lg shadow-xl border border-base-300 w-64" style={{ animation: 'rottay-select-slide-in 0.15s ease-out' }}>
@@ -343,7 +362,8 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     );
   }
 
-  // Year picker mode
+  // Year picker mode -- shows a 12-cell grid for a decade range.
+  // Two boundary years (first/last) are outside the decade for context.
   if (picker === 'year') {
     const startYear = Math.floor(viewYear / 10) * 10;
     return (
@@ -361,6 +381,8 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
         </div>
         <div className="grid grid-cols-3 gap-1">
           {Array.from({ length: 12 }, (_, i) => {
+            // startYear-1 and startYear+10 are shown dimmed as context
+            // for the previous/next decade (isOutOfRange flag below).
             const yr = startYear - 1 + i;
             const isSelected = selectedDate ? selectedDate.getFullYear() === yr : false;
             const isCurrent = today.getFullYear() === yr;
@@ -395,7 +417,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     );
   }
 
-  // Default: date picker grid
+  // Default: full day-level calendar grid (42 cells = 6 rows x 7 columns).
+  // Overflow cells from the previous/next month are included and rendered
+  // with reduced opacity so users can see month boundaries at a glance.
   const grid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
 
   return (
@@ -478,6 +502,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               aria-disabled={cell.isDisabled}
               aria-label={formatDateStr(cell.date)}
               tabIndex={isFocused ? 0 : -1}
+              // Layered class logic: disabled > selected/endpoint > range fill > today > focus.
+              // scale-105 on selected dates provides a subtle "pop" without layout shift.
+              // ring-offset-1 ensures the focus ring does not overlap adjacent cells.
               className={[
                 'w-9 h-9 flex items-center justify-center rounded-md text-xs transition-all duration-150',
                 cell.isDisabled
@@ -539,6 +566,18 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
 // DatePickerBase
 // ---------------------------------------------------------------------------
 
+/**
+ * Modern (DaisyUI/Tailwind) DatePicker engine.
+ *
+ * Renders a read-only input that opens a `CalendarPanel` popover on click.
+ * Supports controlled and uncontrolled usage, date/month/year picker modes,
+ * optional time selection, disabled dates, cell customization, and Today/Now
+ * quick-select. The popover is absolutely positioned via `usePopoverPosition`.
+ *
+ * @param props - Rottay DatePickerProps (engine-agnostic interface).
+ * @param ref   - Forwarded to the text input element.
+ * @returns The rendered DaisyUI-styled DatePicker with calendar popover.
+ */
 const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -574,6 +613,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     const displayPlaceholder = placeholder ?? t('datepicker.placeholder');
     const showTime = !!showTimeProp;
+    // Controlled vs uncontrolled pattern: if value/open are explicitly passed
+    // (even as null), the consumer owns that state. undefined means uncontrolled.
     const isControlled = value !== undefined;
     const isOpenControlled = controlledOpen !== undefined;
 
@@ -631,7 +672,9 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       [isOpenControlled, onOpenChange],
     );
 
-    // Click outside
+    // Click-outside dismissal. Uses mousedown (not click) so the popover
+    // closes before the external element's click handler fires -- this avoids
+    // a flash where both the popover and the clicked element are active.
     useEffect(() => {
       if (!isOpen) return;
       const handler = (e: MouseEvent) => {
@@ -647,7 +690,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       return () => document.removeEventListener('mousedown', handler);
     }, [isOpen, setOpen]);
 
-    // Escape key
+    // Global Escape key listener -- separate from click-outside so both
+    // keyboard and pointer users get a consistent dismiss experience.
     useEffect(() => {
       if (!isOpen) return;
       const handler = (e: KeyboardEvent) => {
@@ -657,7 +701,9 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       return () => document.removeEventListener('keydown', handler);
     }, [isOpen, setOpen]);
 
-    // Select a date
+    // When showTime is active, we merge the time portion from the time picker
+    // state into the selected calendar date. Without this, selecting a new day
+    // would reset the previously chosen time to midnight.
     const handleDateSelect = useCallback(
       (date: Date) => {
         const finalDate = showTime
@@ -669,6 +715,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
         onChange?.(finalDate, dateStr);
         setFocusedDate(null);
 
+        // Keep the popover open when showTime is active so the user can
+        // adjust hours/minutes after selecting the date, then dismiss manually.
         if (!showTime) {
           setOpen(false);
         }
@@ -733,6 +781,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     return (
       <>
+        {/* Inline keyframes avoid requiring a global CSS file. The subtle
+            translateY + scale gives a "growing from trigger" entrance feel. */}
         <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
         <div
           ref={triggerRef}
@@ -742,6 +792,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
           <input
             ref={setInputRef}
             type="text"
+            // readOnly prevents keyboard input -- dates must be selected via the
+            // calendar panel. pr-16 reserves space for the clear + calendar icons.
             readOnly
             className={`input input-bordered ${sizeClass} ${statusClass} ${textClass} cursor-pointer pr-16`}
             value={displayText}
@@ -757,6 +809,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
                 setOpen(!isOpen);
               }
             }}
+            // ARIA combobox pattern: the input acts as the trigger, the calendar
+            // panel is the dialog popup. Screen readers announce the expanded state.
             role="combobox"
             aria-expanded={isOpen}
             aria-haspopup="dialog"
@@ -781,7 +835,9 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
           </span>
         </div>
 
-        {/* Calendar popover */}
+        {/* Calendar popover -- positioned absolutely at document level.
+            typeof document check guards against SSR. zIndex 1050 matches
+            the DS overlay stacking layer (above modals at 1040). */}
         {isOpen && typeof document !== 'undefined' && (
           <div
             ref={panelRef}
@@ -830,6 +886,19 @@ DatePickerBase.displayName = 'DatePicker.Modern';
 // RangePicker
 // ---------------------------------------------------------------------------
 
+/**
+ * Modern (DaisyUI/Tailwind) RangePicker engine.
+ *
+ * Renders two read-only inputs (start/end) with a shared `CalendarPanel`.
+ * Selection follows a ping-pong pattern: the first click sets the start
+ * date and auto-advances focus to end; the second click sets the end date
+ * and closes the popover. Range highlighting is applied between the two
+ * endpoints in the calendar grid.
+ *
+ * @param props - Rottay RangePickerProps (engine-agnostic interface).
+ * @param ref   - Forwarded to the wrapper div element.
+ * @returns The rendered DaisyUI-styled RangePicker with calendar popover.
+ */
 const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -874,6 +943,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       defaultValue ? parseDateValue(defaultValue[1]) : null,
     );
     const [internalOpen, setInternalOpen] = useState(false);
+    // Tracks which side of the range the calendar is filling. After selecting
+    // a start date, we auto-advance to 'end' so the next click sets the end.
     const [activeInput, setActiveInput] = useState<'start' | 'end'>('start');
     const [focusedDate, setFocusedDate] = useState<Date | null>(null);
     const [hours, setHours] = useState(0);
@@ -937,7 +1008,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       [format, picker, showTime, onChange],
     );
 
-    // Select a date in range mode
+    // Range selection follows a ping-pong pattern: start -> end -> close.
+    // The calendar stays open between selections so users see the range highlight.
     const handleDateSelect = useCallback(
       (date: Date) => {
         if (activeInput === 'start') {
@@ -948,6 +1020,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           if (!isControlled) setInternalEnd(date);
           setActiveInput('start');
           emitChange(startDate, date);
+          // Close after both ends are selected (unless time picker keeps it open)
           if (!showTime) setOpen(false);
         }
         setFocusedDate(null);

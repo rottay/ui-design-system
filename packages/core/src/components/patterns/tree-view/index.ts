@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * TreeView - Pattern Component
- *
- * Interactive tree hierarchy with expand/collapse, checkboxes, drag, and search.
- * Used by: OrgCharts (bh), CategoryHierarchy (bar), PermissionTree (pl), MenuEditor (pl)
+ * @fileoverview TreeView pattern -- engine-aware interactive tree hierarchy
+ * with expand/collapse, checkboxes, drag-and-drop, and search filtering.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

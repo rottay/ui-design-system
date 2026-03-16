@@ -146,10 +146,14 @@ export default function ClassicToast(props: ToastProps): React.ReactElement | nu
     if (!visible) return;
 
     const type = mapVariantToType(variant!);
+    // Ant Design expects duration in seconds, but our API uses milliseconds
+    // for consistency with setTimeout and other JS timing functions
     const durationInSeconds = duration! / 1000;
 
-    // Use notification for toasts with title or action
+    // Toasts with a title or action need the richer notification API;
+    // simple description-only toasts use the lightweight message API
     if (title || action) {
+      // Unique key per toast allows targeted destroy on action click
       const key = `toast-${Date.now()}`;
 
       notification[type]({
@@ -199,7 +203,8 @@ export default function ClassicToast(props: ToastProps): React.ReactElement | nu
     };
   }, [visible, variant, title, description, icon, duration, closable, onClose, action, className, style]);
 
-  // Ant Design handles rendering via its own portal
+  // Returns null because Ant Design's message/notification APIs render via
+  // their own portals outside the React tree; no DOM output needed here
   return null;
 }
 

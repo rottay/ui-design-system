@@ -1,8 +1,8 @@
 /**
- * Space Component Tokens - TypeScript Mirror
+ * @fileoverview Space (layout gap) component token mirrors.
  *
- * TypeScript representation of Space CSS custom properties.
- * Use these for type-safe Space token references.
+ * Provides small/middle/large size presets used by the Space component to
+ * control gap between inline or stacked children.
  */
 
 // Space Sizes

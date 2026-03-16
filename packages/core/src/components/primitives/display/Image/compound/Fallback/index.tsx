@@ -1,6 +1,5 @@
 /**
- * Image.Fallback - Compound Component
- *
+ * @fileoverview Image.Fallback compound component.
  * Displays custom fallback content when an image fails to load.
  * Can be used standalone or as part of the Image component.
  */
@@ -18,6 +17,10 @@ import type { ImageFallbackProps } from '../../Image.types';
  * - Default broken image icon
  * - Flexible sizing
  * - Accessible styling
+ *
+ * @param props - ImageFallbackProps including optional children, width, height, and style overrides
+ * @param ref - Forwarded ref to the root div element
+ * @returns A styled div container with fallback content or a default broken-image SVG icon
  *
  * @example
  * ```tsx

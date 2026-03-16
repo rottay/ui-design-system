@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for engine test utilities: renderWithEngine,
+ * renderWithAllEngines, describeEachEngine, and assertAcrossEngines.
+ */
+
 import React from 'react';
 import { describe, expect, it, vi, afterEach } from 'vitest';
 

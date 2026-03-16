@@ -1,3 +1,5 @@
+/** @fileoverview OperationalSurface tests -- live feed, stats, and queue panels. */
+
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';

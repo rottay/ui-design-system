@@ -1,9 +1,8 @@
 'use client';
 
 /**
- * Timeline<T> - Pattern Component
- *
- * Engine-aware timeline component for displaying chronological events.
+ * @fileoverview Timeline pattern -- engine-aware chronological event display
+ * with left/right/alternate modes and optional date grouping.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

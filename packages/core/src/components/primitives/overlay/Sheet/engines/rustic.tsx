@@ -1,9 +1,17 @@
 'use client';
 
 /**
- * @fileoverview Sheet Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Sheet component.
- * Uses portal + slide animation + drag-to-close handle.
+ * @fileoverview Sheet Rustic (Apollo) Engine - Rottay Design System.
+ * Pure inline-CSS implementation of a slide-in panel overlay that renders via
+ * createPortal into document.body. Zero external CSS dependencies, making it
+ * suitable for embedded or SSR contexts with no framework stylesheet.
+ *
+ * @example
+ * ```tsx
+ * <Sheet engine="rustic" open={open} onOpenChange={setOpen} side="left" title="Navigation">
+ *   <NavMenu />
+ * </Sheet>
+ * ```
  *
  * @module Sheet/Engines/Rustic
  * @category Overlay
@@ -15,6 +23,16 @@ import { createPortal } from 'react-dom';
 import type { SheetProps } from '../Sheet.types';
 import { SHEET_DEFAULTS } from '../Sheet.types';
 
+/**
+ * Rustic engine implementation of Sheet using vanilla HTML/CSS and createPortal.
+ *
+ * Builds all positioning, animations, and theming from inline styles backed
+ * by CSS custom properties (--ds-*). Supports bottom, left, and right sides
+ * with distinct border-radius patterns and size constraints.
+ *
+ * @param props - Sheet configuration props
+ * @returns Slide-in panel portaled to document.body, or empty fragment when closed
+ */
 export default function RusticSheet(props: SheetProps): React.ReactElement {
   const {
     open,
@@ -41,6 +59,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
     }
   }, [closeOnEscape, onOpenChange]);
 
+  // Lock body scroll and bind Escape handler while open; cleanup restores both
   useEffect(() => {
     if (open) {
       document.addEventListener('keydown', handleEscape);
@@ -52,8 +71,14 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
     };
   }, [open, handleEscape]);
 
+  // Bail early when closed or during SSR where document is unavailable
   if (!open || typeof document === 'undefined') return <></>;
 
+  /**
+   * Builds panel positioning styles based on the chosen side.
+   * Each side variant differs in which edges are pinned, fixed dimensions,
+   * and which corners receive border-radius to create a rounded opening edge.
+   */
   const getPanelStyle = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
@@ -109,6 +134,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
 
   return createPortal(
     <div className={className} style={style}>
+      {/* Overlay sits one z-index below the panel so clicks land on it for dismissal */}
       {showOverlay && (
         <div
           style={{
@@ -129,6 +155,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
         className={panelClassName}
         style={{ ...getPanelStyle(), ...panelStyle }}
       >
+        {/* Drag handle indicator for bottom sheets -- visual affordance for swipe-to-close */}
         {isBottom && showHandle && (
           <div
             style={{

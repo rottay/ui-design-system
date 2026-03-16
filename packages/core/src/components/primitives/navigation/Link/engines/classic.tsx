@@ -63,8 +63,9 @@ const { Link: AntLink } = Typography;
 // ============================================================================
 
 /**
- * Maps semantic link types to color values.
- * Used to apply custom colors while leveraging Ant Design's Link component.
+ * Maps semantic link types to CSS variable colors rather than Ant Design
+ * theme tokens, so tenant-specific themes can override link colors
+ * without reconfiguring the Ant Design ConfigProvider.
  */
 const typeColorMap: Record<string, string> = {
   default: 'var(--ds-color-link)',
@@ -150,6 +151,8 @@ export default function ClassicLink(props: LinkProps): React.ReactElement {
   // Render
   // ========================================================================
 
+  // When disabled, we omit our type color so Ant Design applies its own
+  // muted color, ensuring a consistent disabled appearance across themes
   return (
     <AntLink
       href={disabled ? undefined : href}

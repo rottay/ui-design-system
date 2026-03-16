@@ -1,5 +1,8 @@
 /**
- * Tenant System Tests
+ * @fileoverview Tenant system unit tests covering schema validation
+ * (isValidTenantConfig, createTenantConfig), default config generation
+ * (getDefaultTenantConfig), and all three resolver strategies (subdomain,
+ * domain, header).
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';

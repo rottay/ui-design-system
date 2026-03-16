@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * SavedViewsBar - Pattern Component
- *
- * Tab bar for saving, switching, and managing custom data views.
- * Inspired by Airtable/Linear view management patterns.
+ * @fileoverview SavedViewsBar pattern -- engine-aware tab bar for saving,
+ * switching, and managing custom data views (Airtable/Linear style).
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -179,19 +179,24 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       style,
     } = props;
 
-    // Format the display value
+    // Resolve display value: custom formatter wins, then formatNumber for
+    // numeric formatting, and '--' as the empty-state fallback.
     const displayValue = formatter
       ? formatter(value ?? '')
       : value !== undefined
         ? formatNumber(value, precision, groupSeparator, decimalSeparator)
         : '--';
+
+    // Gate animation on: explicit opt-in, numeric value, no conflicting
+    // formatter, and not in loading state (skeleton takes priority).
     const shouldAnimateValue =
       animateValue && typeof value === 'number' && !formatter && !loading;
 
-    // Get color for value type
+    // Fallback to 'default' when an unrecognised valueType is supplied
     const valueColor = VALUE_TYPE_COLOR_MAP[valueType] || VALUE_TYPE_COLOR_MAP.default;
 
-    // Loading skeleton
+    // Accessible loading skeleton: role="status" + aria-busy lets assistive
+    // tech announce the loading state, sr-only span provides a text label.
     if (loading) {
       return (
         <div ref={ref} className={className} style={style} role="status" aria-busy="true">
@@ -296,14 +301,15 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     } = props;
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
+    // Guards against firing onFinish more than once per countdown cycle
     const [isFinished, setIsFinished] = useState(false);
 
-    // Calculate target time
+    // Accept ISO date strings or epoch-ms numbers as the target timestamp
     const getTargetTime = useCallback(() => {
       return typeof value === 'string' ? new Date(value).getTime() : value;
     }, [value]);
 
-    // Update countdown with interval
+    // Drive the countdown via a 1-second interval; clamp to 0 to avoid negatives
     useEffect(() => {
       const targetTime = getTargetTime();
 
@@ -328,7 +334,8 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
       return () => clearInterval(interval);
     }, [value, onFinish, onChange, getTargetTime, isFinished]);
 
-    // Reset finished state when value changes
+    // When a new target value is supplied (e.g. deadline extended),
+    // reset the guard so onFinish can fire again for the new countdown.
     useEffect(() => {
       setIsFinished(false);
     }, [value]);
@@ -336,7 +343,7 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     // Get color for value type
     const valueColor = VALUE_TYPE_COLOR_MAP[valueType] || VALUE_TYPE_COLOR_MAP.default;
 
-    // Countdown-specific value style with monospace font
+    // Monospace font prevents layout jitter as digits change during countdown
     const countdownValueStyle: React.CSSProperties = {
       ...STYLES.value,
       fontFamily: 'monospace',

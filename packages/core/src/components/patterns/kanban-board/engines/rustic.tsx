@@ -1,15 +1,38 @@
 'use client';
 
 /**
- * KanbanBoard - Rustic Engine (Inline styles with CSS variables)
+ * @fileoverview Rustic (Vanilla / CSS variables) engine for the KanbanBoard pattern.
+ * Uses zero third-party UI libraries -- all styling is expressed through inline
+ * styles referencing `--ds-*` design-token CSS variables. This makes the engine
+ * fully themeable without any build-time CSS framework dependency. Animations
+ * use the tenant's personality tokens for easing and duration.
+ *
+ * @example
+ * <KanbanBoard
+ *   engine="rustic"
+ *   columns={[{ id: 'in-progress', title: 'In Progress', items: tickets, limit: 5 }]}
+ *   renderCard={(ticket) => <span>{ticket.summary}</span>}
+ *   itemKey={(ticket) => ticket.id}
+ *   onItemMove={(id, from, to, pos) => moveTicket(id, from, to, pos)}
+ * />
  */
 
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../KanbanBoard.types';
 
+// Easing and duration pulled from design-system personality tokens so each
+// tenant's animation feel is preserved. The fallback values match a smooth
+// deceleration curve and a 300ms entrance, suitable for most brands.
 const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
 
+/**
+ * Rustic Kanban board using only inline styles and `--ds-*` CSS variables.
+ * Generic over `T` so any item shape can be used with a string key extractor.
+ *
+ * @param props - See {@link KanbanBoardProps} for full prop documentation.
+ * @returns A themeable, framework-free kanban board.
+ */
 export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const {
     columns,
@@ -29,6 +52,10 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
     style,
   } = props;
 
+  // Drag data mirrors what is stored in dataTransfer because the browser's
+  // DnD API does not expose dataTransfer contents during dragOver. We also
+  // track the drop target so we can swap the column border to a dashed
+  // primary indicator when the user hovers a potential destination.
   const [dragData, setDragData] = useState<{
     itemId: string;
     fromColumn: string;
@@ -48,6 +75,8 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
     [itemKey]
   );
 
+  // preventDefault is required on dragOver to mark the element as a valid
+  // drop target; the browser defaults to "no-drop" otherwise.
   const handleDragOver = useCallback(
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
@@ -57,6 +86,8 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
     []
   );
 
+  // Actual reordering logic is delegated to the parent via onItemMove
+  // so this component stays controlled and stateless regarding item data.
   const handleDrop = useCallback(
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
@@ -69,6 +100,8 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
     [dragData, onItemMove]
   );
 
+  // Always reset on drag end regardless of drop validity to avoid
+  // stale visual states (ghost opacity, rotated cards).
   const handleDragEnd = useCallback(() => {
     setDragData(null);
     setDropTarget(null);
@@ -107,8 +140,12 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
         }}
       >
         {columns.map((column) => {
+          // WIP limit badge turns error red when at or over capacity,
+          // following the traffic-light metaphor users expect in kanban tools.
           const isOverLimit =
             column.limit !== undefined && column.items.length >= column.limit;
+          // Active drop target gets a dashed primary border to differentiate
+          // it from passive columns during a drag operation.
           const isDropping = dropTarget?.columnId === column.id;
 
           return (
@@ -189,7 +226,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 )}
               </div>
 
-              {/* Column body */}
+              {/* Column body -- border and background animate between idle
+                  and drop-target states using the tenant's personality tokens
+                  so the transition feels consistent with the brand. */}
               {!column.collapsed && (
                 <div
                   style={{
@@ -197,6 +236,8 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                     borderRadius: 'var(--ds-radius-sm, 4px)',
                     padding: 8,
                     minHeight: 100,
+                    // Swap to primary-tinted background + dashed border when
+                    // this column is the active drop target.
                     background: isDropping
                       ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))'
                       : 'var(--ds-color-bg-primary, var(--ds-color-background))',
@@ -221,6 +262,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       {emptyColumn}
                     </div>
                   ) : (
+                    // Each card is simultaneously a drag source and a drop
+                    // target, enabling both cross-column moves and intra-column
+                    // reordering via the same DnD event pipeline.
                     column.items.map((item, index) => {
                       const isDragging = dragData?.itemId === itemKey(item);
                       return (
@@ -244,10 +288,16 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                             border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
                             boxShadow: 'var(--ds-card-shadow, var(--ds-shadow-sm))',
                             cursor: isDragging ? 'grabbing' : onItemClick ? 'pointer' : 'grab',
+                            // Slight rotation + scale on drag gives a physical
+                            // "picked up" feel, reinforcing the direct-manipulation
+                            // metaphor without needing a drag preview image.
                             opacity: isDragging ? 0.6 : 1,
                             transform: isDragging ? 'rotate(2deg) scale(1.02)' : 'translateY(0)',
                             transition: `opacity ${RUSTIC_DURATION} ${RUSTIC_EASING}, transform ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
                           }}
+                          // Direct DOM manipulation for hover because CSS :hover
+                          // cannot reference CSS variables conditionally on drag
+                          // state, and we need to suppress the lift when dragging.
                           onMouseEnter={(e) => {
                             if (!isDragging) {
                               const el = e.currentTarget as HTMLDivElement;
@@ -269,6 +319,10 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                     })
                   )}
 
+                  {/* Add-item button uses a dashed border to visually
+                      differentiate it from cards. Hover state transitions to
+                      primary color so it feels interactive but stays
+                      unobtrusive at rest. */}
                   {onAddItem && (
                     <button
                       onClick={() => onAddItem(column.id)}

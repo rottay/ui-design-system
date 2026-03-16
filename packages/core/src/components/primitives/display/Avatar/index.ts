@@ -1,5 +1,5 @@
 /**
- * Barrel re-export for Avatar component.
+ * @fileoverview Barrel re-export for Avatar component.
  * Entry point: ./Avatar.tsx
  */
 export * from './Avatar';

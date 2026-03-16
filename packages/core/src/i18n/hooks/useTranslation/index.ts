@@ -1,8 +1,10 @@
 'use client';
 
 /**
- * useTranslation Hook
- * Design System Rottay - Wave 0 - Agente D
+ * @fileoverview Hook for accessing the translation function with optional namespace scoping.
+ *
+ * When a namespace is provided, keys are automatically prefixed so component code
+ * can use short keys like `t('avatar.loading')` instead of `t('components.avatar.loading')`.
  */
 
 import { useCallback } from 'react';
@@ -40,6 +42,9 @@ export interface UseTranslationResult {
 export function useTranslation(namespace?: TranslationNamespace): UseTranslationResult {
   const context = useI18nContext();
 
+  // Prefix the key with the namespace so component code can use short keys
+  // (e.g., t('avatar.loading')) while the underlying dictionary is organized
+  // by top-level namespace (e.g., 'components.avatar.loading').
   const t: TranslateFunction = useCallback(
     (key: string, params?: Record<string, string | number>) => {
       const fullKey = namespace ? `${namespace}.${key}` : key;

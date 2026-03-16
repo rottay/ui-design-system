@@ -90,7 +90,10 @@ const defaultContextValue: EngineContextValue = {
 
 export function useEngineContext(): EngineContextValue {
   const context = useContext(EngineContext);
-  // Return default context if no provider is present (SSR-safe)
+  // Unlike useTenant/useFeatures which throw when the provider is missing, the
+  // engine context falls back to a default. This is intentional: many components
+  // can render with the default engine during SSR or in unit tests without
+  // requiring the full provider tree.
   return context || defaultContextValue;
 }
 

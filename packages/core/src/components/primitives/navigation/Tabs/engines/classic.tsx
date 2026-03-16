@@ -45,6 +45,9 @@ import { TABS_DEFAULTS } from '../Tabs.types';
  * Maps Rottay tab types to Ant Design tab types.
  * 'pills' maps to 'card' as closest equivalent.
  */
+// Antd only supports 'line' and 'card' tab types natively.
+// Our 'pills' variant has no direct antd equivalent, so it maps to 'card'
+// as the closest visual match (raised appearance with background fill).
 const TYPE_MAP = {
   line: 'line' as const,
   card: 'card' as const,
@@ -112,6 +115,9 @@ export default function ClassicTabs(props: TabsProps): React.ReactElement {
    * Convert Rottay TabItems to Ant Design's item format.
    * Handles icon rendering within the label.
    */
+  // Antd expects `label` to be a ReactNode. We compose the icon and text
+  // into a single fragment so both render together in the tab header.
+  // The `children` prop becomes the tab panel content.
   const antItems = items.map((item: TabItem) => ({
     key: item.key,
     label: (

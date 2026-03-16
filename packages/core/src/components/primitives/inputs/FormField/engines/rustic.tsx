@@ -1,9 +1,16 @@
 'use client';
 
 /**
- * @fileoverview FormField Rustic Engine - Rottay Design System
- * @description Vanilla HTML/CSS implementation of the FormField component.
- * Uses inline styles and semantic HTML for zero-dependency rendering.
+ * @fileoverview Rustic (zero-dependency) engine for FormField, using inline CSS and DS variables.
+ * Like Modern, it clones accessibility attributes onto children, but does so with pure
+ * inline styles instead of Tailwind classes, making it framework-agnostic.
+ *
+ * @example
+ * ```tsx
+ * <FormField engine="rustic" label="Password" name="password" required help="Min 8 chars">
+ *   <Input type="password" />
+ * </FormField>
+ * ```
  *
  * @module FormField/Engines/Rustic
  * @category Inputs
@@ -14,9 +21,7 @@ import React from 'react';
 import type { FormFieldProps } from '../FormField.types';
 import { FORMFIELD_DEFAULTS } from '../FormField.types';
 
-/**
- * Size style mappings for Rustic engine.
- */
+/** Inline style tokens per size -- font sizes and gap spacing. */
 const SIZE_STYLES = {
   sm: {
     label: { fontSize: '12px' },
@@ -36,8 +41,14 @@ const SIZE_STYLES = {
 } as const;
 
 /**
- * Rustic Engine implementation of the FormField component.
- * Pure vanilla HTML/CSS implementation with semantic markup.
+ * Rustic (vanilla HTML/CSS) implementation of FormField.
+ *
+ * Builds the label + content + error/help layout entirely from inline CSSProperties
+ * and DS CSS custom properties. Accessibility attributes (`id`, `aria-describedby`,
+ * `aria-invalid`) are cloned onto child elements via `React.cloneElement`.
+ *
+ * @param props - Standard FormFieldProps shared across all engines.
+ * @returns A flex container with label, children, and contextual error/help text.
  */
 export default function RusticFormField(props: FormFieldProps): React.ReactElement {
   const {
@@ -58,9 +69,12 @@ export default function RusticFormField(props: FormFieldProps): React.ReactEleme
 
   const sizeStyles = SIZE_STYLES[size];
   const isHorizontal = layout === 'horizontal';
+
+  // Deterministic IDs derived from `name` for label-input association and aria-describedby
   const fieldId = `formfield-${name}`;
   const errorId = `${fieldId}-error`;
   const helpId = `${fieldId}-help`;
+  // Error takes priority over help for the describedby association
   const describedBy = error ? errorId : help ? helpId : undefined;
 
   const containerStyle: React.CSSProperties = {
@@ -123,6 +137,7 @@ export default function RusticFormField(props: FormFieldProps): React.ReactEleme
       </label>
 
       <div style={contentStyle}>
+        {/* Clone accessibility props onto children so consumers don't have to wire them */}
         {React.Children.map(children, (child) => {
           if (React.isValidElement<{ id?: string; 'aria-describedby'?: string; 'aria-invalid'?: boolean }>(child)) {
             return React.cloneElement(child, {

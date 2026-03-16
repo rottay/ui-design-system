@@ -1,5 +1,25 @@
 'use client';
 
+/**
+ * @fileoverview PieChart -- D3-backed pie/donut chart using `d3.pie()` and `d3.arc()` generators.
+ * Supports donut mode via configurable inner radius ratio, percentage or label display inside
+ * slices, and a clockwise "unfurl" animation powered by `d3.interpolate` on arc angles.
+ * Slice order is preserved (not sorted by value) for predictable colour assignment.
+ *
+ * @example
+ * <PieChart
+ *   data={[
+ *     { label: 'Desktop', value: 60 },
+ *     { label: 'Mobile', value: 30 },
+ *     { label: 'Tablet', value: 10 },
+ *   ]}
+ *   donut
+ *   showPercentage
+ *   height={350}
+ *   title="Traffic Sources"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import { arc, interpolate, pie, select, sum, type PieArcDatum } from 'd3';
 
@@ -8,6 +28,7 @@ import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** Props for the {@link PieChart} component. */
 export interface PieChartProps extends ChartBaseProps {
   data: DataPoint[];
   donut?: boolean;
@@ -16,6 +37,12 @@ export interface PieChartProps extends ChartBaseProps {
   showPercentage?: boolean;
 }
 
+/**
+ * Renders a pie or donut chart using D3's `pie()` + `arc()` generators.
+ *
+ * @param props - See {@link PieChartProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const PieChart = memo(function PieChart({
   data,
   donut = false,
@@ -63,7 +90,11 @@ export const PieChart = memo(function PieChart({
     const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
+    // The outer radius is derived from the smallest dimension so the chart
+    // stays circular even in non-square containers; 20px padding prevents clipping.
     const radius = Math.min(chartWidth, chartHeight) / 2 - 20;
+    // When donut mode is off, inner=0 produces a full pie. In donut mode the
+    // innerRadius prop is a ratio (0-1) of the outer radius.
     const inner = donut ? radius * innerRadius : 0;
 
     const g = svg
@@ -72,6 +103,8 @@ export const PieChart = memo(function PieChart({
       .append('g')
       .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
+    // sort(null) preserves the data's original order rather than sorting by
+    // value, which keeps the slice arrangement predictable for the consumer.
     const pieGenerator = pie<DataPoint>()
       .value((d) => d.value)
       .sort(null);
@@ -80,6 +113,9 @@ export const PieChart = memo(function PieChart({
       .innerRadius(inner)
       .outerRadius(radius);
 
+    // labelArc uses a collapsed radius (inner == outer) at 70% of the full
+    // radius so `.centroid()` returns the midpoint along that ring -- this
+    // places text labels at a readable position inside or over the slices.
     const labelArc = arc<PieArcDatum<DataPoint>>()
       .innerRadius(radius * 0.7)
       .outerRadius(radius * 0.7);
@@ -106,6 +142,8 @@ export const PieChart = memo(function PieChart({
       });
     }
 
+    // attrTween interpolates from a zero-area arc (0,0) to each slice's final
+    // angles, producing a clockwise "unfurl" animation around the centre.
     if (chartPersonality.animate) {
       paths
         .transition()

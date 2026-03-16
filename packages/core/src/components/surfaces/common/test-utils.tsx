@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Surface test utilities -- render helpers for testing surfaces
+ * with a pre-configured DesignSystemProvider, tenant config, and product profile.
+ */
+
 import React, { Suspense, type ReactElement } from 'react';
 import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
 import { DesignSystemProvider } from '../../../bootstrap';

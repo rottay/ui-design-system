@@ -1,10 +1,19 @@
 /**
- * Timeline - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern engine for the Timeline component, powered by DaisyUI/Tailwind.
+ * Renders a vertical timeline using DaisyUI's `timeline` utility classes,
+ * with automatic alternate positioning and color-coded dots.
  *
- * Renders the Timeline component using DaisyUI's timeline classes.
- * Lightweight utility-first implementation.
+ * @example
+ * ```tsx
+ * <Timeline engine="modern" mode="alternate">
+ *   <Timeline.Item color="green">Task completed</Timeline.Item>
+ * </Timeline>
+ * ```
  *
  * @see https://daisyui.com/components/timeline/
+ * @module Timeline/engines/modern
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -54,22 +63,26 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
     style,
   } = props;
 
+  // Normalise data source: items array prop takes priority over JSX children.
+  // React.Children.toArray strips nulls and assigns stable keys.
   const timelineItems = items || React.Children.toArray(children);
   const orderedItems = reverse ? [...timelineItems].reverse() : timelineItems;
 
   /**
-   * Get DaisyUI position class based on mode and index.
+   * Resolves the DaisyUI position class for a given item index.
+   * In 'alternate' mode, even items go left and odd items go right.
    */
   const getPositionClass = (index: number): string => {
     if (mode === 'left') return 'timeline-start';
     if (mode === 'right') return 'timeline-end';
-    // alternate
     return index % 2 === 0 ? 'timeline-start' : 'timeline-end';
   };
 
   return (
     <ul className={`timeline timeline-vertical ${className}`} style={style}>
       {orderedItems.map((item, index) => {
+        // Items can arrive as React elements (JSX children) or plain objects
+        // (items prop). Extract props uniformly for consistent rendering.
         const isElement = React.isValidElement(item);
         const itemProps: TimelineItemProps = isElement
           ? (item.props as TimelineItemProps)
@@ -77,6 +90,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
 
         const colorClass = COLOR_CLASS_MAP[itemProps.color as string] || 'bg-primary';
 
+        // Per-item position override takes precedence over the mode-based default
         const positionClass = itemProps.position
           ? itemProps.position === 'left' ? 'timeline-start' : 'timeline-end'
           : getPositionClass(index);
@@ -104,7 +118,8 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
         );
       })}
 
-      {/* Pending item */}
+      {/* Pending item uses DaisyUI's loading spinner + pulse animation
+          to visually indicate an in-progress or upcoming event. */}
       {pending && (
         <li>
           <hr className="bg-base-300" />
@@ -145,5 +160,11 @@ const ModernTimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
 
 ModernTimelineItem.displayName = 'ModernTimelineItem';
 
+/**
+ * Default export for the modern Timeline engine.
+ *
+ * @param props - {@link TimelineProps} controlling mode, items, and pending state.
+ * @returns A DaisyUI-styled vertical timeline element.
+ */
 export default ModernTimeline;
 export { ModernTimeline as Timeline, ModernTimelineItem as Item };

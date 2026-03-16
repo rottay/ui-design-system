@@ -1,9 +1,19 @@
 'use client';
 
 /**
- * TenantPreview - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview TenantPreview -- Modern engine (DaisyUI / Tailwind).
+ * Renders a live preview of tenant branding inside a DaisyUI card.
+ * Injects scoped CSS variables via a `<style>` tag so the preview
+ * accurately reflects the tenant's color scheme. Shows palette swatches,
+ * sample DaisyUI components (buttons, card, input, badges, table), and
+ * personality token metadata in a responsive grid.
  *
- * Same preview functionality as Classic but styled with Tailwind/DaisyUI classes.
+ * @example
+ * <ModernTenantPreview
+ *   config={{ name: 'Acme', slug: 'acme', primaryColor: '#3b82f6', engine: 'modern' }}
+ *   components={['button', 'badge']}
+ *   showColorPalette
+ * />
  */
 
 import React, { useMemo, useEffect, useRef } from 'react';
@@ -12,8 +22,10 @@ import { createTenantConfig } from '../../../../hooks/tenant/create-tenant';
 import { resolvePersonalityPreset } from '../../../../hooks/tenant/personality-presets';
 import { generateTenantCss } from '../../../../tenancy/storage/static/generator';
 
+/** Default component samples shown when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
 
+/** Parses hex color to RGB; handles shorthand (#abc) and full (#aabbcc) */
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const normalized = hex.length === 4
     ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
@@ -24,6 +36,7 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   return { r: (parsed >> 16) & 255, g: (parsed >> 8) & 255, b: parsed & 255 };
 }
 
+/** Linear interpolation between two hex colors at the given ratio (0-1) */
 function mixColor(base: string, target: string, ratio: number): string {
   const b = hexToRgb(base);
   const t = hexToRgb(target);
@@ -34,6 +47,7 @@ function mixColor(base: string, target: string, ratio: number): string {
   return `#${[r, g, bl].map((c) => Math.max(0, Math.min(255, c)).toString(16).padStart(2, '0')).join('')}`;
 }
 
+/** Generates a 10-step palette (50-900) by mixing base with white/black */
 function buildPaletteSteps(base: string): { step: number; color: string }[] {
   return [
     { step: 50, color: mixColor(base, '#ffffff', 0.92) },
@@ -49,6 +63,7 @@ function buildPaletteSteps(base: string): { step: number; color: string }[] {
   ];
 }
 
+/** Returns black or white for optimal contrast against the given background */
 function getContrastColor(hex: string): string {
   const rgb = hexToRgb(hex);
   if (!rgb) return '#000000';
@@ -56,6 +71,14 @@ function getContrastColor(hex: string): string {
   return luminance > 186 ? '#171717' : '#ffffff';
 }
 
+/**
+ * Modern (DaisyUI/Tailwind) implementation of the TenantPreview pattern.
+ * Wraps everything in a DaisyUI card and injects scoped CSS via a
+ * `<style>` tag with `data-tenant` scoping on the container.
+ *
+ * @param props - See {@link TenantPreviewProps} for the full prop contract.
+ * @returns The rendered tenant preview card.
+ */
 export default function ModernTenantPreview(props: TenantPreviewProps) {
   const {
     config: creationConfig,
@@ -68,11 +91,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
 
   const previewRef = useRef<HTMLDivElement>(null);
 
+  /* Build full tenant config from creation input -- memoized for performance */
   const tenantConfig = useMemo(
     () => createTenantConfig(creationConfig),
     [creationConfig]
   );
 
+  /* Resolve personality preset tokens for the info grid */
   const personalityInfo = useMemo(() => {
     const preset = creationConfig.personality ?? 'neutral';
     const tokens = resolvePersonalityPreset(preset);
@@ -89,11 +114,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     [creationConfig.secondaryColor]
   );
 
+  /* Generate scoped CSS; dark mode excluded since this is a preview card */
   const previewCss = useMemo(() => generateTenantCss(tenantConfig, {
     includeDarkSelector: false,
     includeSystemDarkSelector: false,
   }), [tenantConfig]);
 
+  /* Set data-tenant attribute for CSS scoping; cleanup on unmount */
   useEffect(() => {
     const container = previewRef.current;
     if (!container) return;
@@ -175,7 +202,9 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
           </div>
         )}
 
-        {/* Component Samples */}
+        {/* Component Samples -- interactive (but non-functional) DaisyUI elements
+            styled with the tenant's primary color to demonstrate real-world appearance.
+            Each sample type is gated behind the components array for selective rendering. */}
         {components.length > 0 && (
           <div>
             <div className="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">
@@ -183,6 +212,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             </div>
             <div className="flex flex-col gap-4">
 
+              {/* Buttons -- inline style overrides DaisyUI's default palette with tenant color */}
               {components.includes('button') && (
                 <div>
                   <div className="text-xs opacity-60 mb-2">Buttons</div>
@@ -208,11 +238,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 </div>
               )}
 
+              {/* Card -- nested DaisyUI card with accent bar in tenant primary color */}
               {components.includes('card') && (
                 <div>
                   <div className="text-xs opacity-60 mb-2">Card</div>
                   <div className="card card-compact bg-base-100 shadow-sm border border-base-200">
                     <div className="card-body">
+                      {/* Accent bar reinforces brand identity within card containers */}
                       <div className="h-1 rounded-full mb-2" style={{ backgroundColor: primary500 }} />
                       <h3 className="font-semibold text-sm">Sample Card Title</h3>
                       <p className="text-xs opacity-60">
@@ -235,10 +267,12 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 </div>
               )}
 
+              {/* Badge -- primary badge uses tenant color; warning/ghost use DaisyUI defaults */}
               {components.includes('badge') && (
                 <div>
                   <div className="text-xs opacity-60 mb-2">Badges</div>
                   <div className="flex gap-2 flex-wrap">
+                    {/* Primary badge overrides DaisyUI color with tenant's primary */}
                     <span
                       className="badge badge-sm"
                       style={{ backgroundColor: primary500, color: primaryFg, borderColor: primary500 }}
@@ -251,6 +285,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 </div>
               )}
 
+              {/* Table -- DaisyUI table with inline status badges using 8% opacity primary */}
               {components.includes('table') && (
                 <div>
                   <div className="text-xs opacity-60 mb-2">Table</div>
@@ -267,6 +302,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         <tr>
                           <td>Project Alpha</td>
                           <td>
+                            {/* "18" hex suffix = ~9% opacity for a subtle colored background */}
                             <span
                               className="badge badge-sm"
                               style={{ backgroundColor: `${primary500}18`, color: primary500, border: 'none' }}
@@ -290,7 +326,8 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
           </div>
         )}
 
-        {/* Personality Info */}
+        {/* Personality Info -- responsive grid (2 cols on mobile, 4 on sm+) showing
+            key personality tokens so designers can verify the preset configuration. */}
         {showPersonalityInfo && (
           <div>
             <div className="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">

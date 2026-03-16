@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for the remote tenant config fetcher --
+ * validates API endpoint configuration, fetch behavior, and schema validation.
+ */
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { configureTenantApi, fetchRemoteTenantConfig } from '..';

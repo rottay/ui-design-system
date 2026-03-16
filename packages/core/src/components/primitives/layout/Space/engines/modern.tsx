@@ -35,6 +35,7 @@ import React, { Children, Fragment } from 'react';
 import type { SpaceProps } from '../Space.types';
 import { SPACE_DEFAULTS, SPACE_SIZE_MAP } from '../Space.types';
 
+/** Tailwind utility classes for cross-axis alignment, keyed by SpaceAlign value. */
 const ALIGN_CLASSES: Record<string, string> = {
   start: 'items-start',
   end: 'items-end',
@@ -42,6 +43,15 @@ const ALIGN_CLASSES: Record<string, string> = {
   baseline: 'items-baseline',
 };
 
+/**
+ * Modern engine implementation of the Space component.
+ * Builds Tailwind utility classes for flex layout while using inline `gap`
+ * styles for spacing, since Tailwind's gap utilities cannot accept dynamic
+ * pixel values or CSS variable tokens at runtime.
+ *
+ * @param props - Space configuration (size, direction, wrap, align, split)
+ * @returns A plain div with Tailwind classes and inline gap style
+ */
 export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   (props, ref) => {
     const {
@@ -56,6 +66,7 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       ...rest
     } = props;
 
+    // Build Tailwind layout classes: inline-flex base + direction axis
     const isVertical = direction === 'vertical';
     const classes: string[] = [
       'inline-flex',
@@ -66,14 +77,19 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       classes.push('flex-wrap');
     }
 
+    // Fall back to center alignment when an unrecognized align value is provided
     if (align) {
       classes.push(ALIGN_CLASSES[align] || ALIGN_CLASSES.center);
     }
 
+    // Resolve the gap as an inline CSS value rather than a Tailwind class because
+    // the size prop can be a number, an array tuple, or a CSS variable token string --
+    // none of which map cleanly to static Tailwind gap-* classes.
     let gapValue: string;
     if (typeof size === 'number') {
       gapValue = `${size}px`;
     } else if (Array.isArray(size)) {
+      // CSS gap shorthand: row-gap first, then column-gap
       gapValue = `${size[1]}px ${size[0]}px`;
     } else {
       gapValue = `${SPACE_SIZE_MAP[size || 'small'] || SPACE_SIZE_MAP.small}px`;
@@ -88,6 +104,8 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       .filter(Boolean)
       .join(' ');
 
+    // When a split separator is provided, interleave it between each child.
+    // Otherwise pass children through unmodified to avoid unnecessary array conversion.
     const childArray = Children.toArray(children).filter(Boolean);
     const renderedChildren = split
       ? childArray.map((child, index) => (

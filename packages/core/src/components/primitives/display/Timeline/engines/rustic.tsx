@@ -1,8 +1,18 @@
 /**
- * Timeline - Rustic Engine (Pure HTML/CSS)
+ * @fileoverview Rustic engine for the Timeline component, using pure HTML/CSS.
+ * Renders a fully accessible vertical timeline with zero external CSS
+ * dependencies, relying on inline styles and CSS variables for theming.
  *
- * Renders the Timeline component using vanilla HTML and CSS.
- * Minimal dependencies, maximum accessibility.
+ * @example
+ * ```tsx
+ * <Timeline engine="rustic" mode="left">
+ *   <Timeline.Item color="green">Task completed</Timeline.Item>
+ * </Timeline>
+ * ```
+ *
+ * @module Timeline/engines/rustic
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -50,15 +60,19 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
     style,
   } = props;
 
+  // Normalise data source: array prop wins over JSX children
   const timelineItems = items || React.Children.toArray(children);
   const orderedItems = reverse ? [...timelineItems].reverse() : timelineItems;
 
+  // Left padding reserves space for the dot column that sits absolutely positioned
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     padding: `0 0 0 ${TIMELINE_SIZE_MAP.dotOffset}`,
     ...style,
   };
 
+  // The vertical connector line is centred under the dots using calc().
+  // When a pending item exists, the line stops short to leave room for it.
   const lineStyle: React.CSSProperties = {
     position: 'absolute',
     left: `calc((${TIMELINE_SIZE_MAP.dotSize} - ${TIMELINE_SIZE_MAP.lineWidth}) / 2)`,
@@ -78,8 +92,9 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
       {/* Vertical line */}
       <div style={lineStyle} aria-hidden="true" />
 
-      {/* Items */}
+      {/* Render each timeline entry with its dot, optional label, and content */}
       {orderedItems.map((item, index) => {
+        // Extract props uniformly whether item is a React element or plain object
         const isElement = React.isValidElement(item);
         const itemProps: TimelineItemProps = isElement
           ? (item.props as TimelineItemProps)
@@ -89,6 +104,7 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
         const isAlternate = mode === 'alternate';
         const isRight = mode === 'right' || (isAlternate && index % 2 === 1);
 
+        // Right-aligned items flip text direction and padding to the opposite side
         const itemStyle: React.CSSProperties = {
           position: 'relative',
           paddingBottom: TIMELINE_SIZE_MAP.itemPadding,
@@ -98,6 +114,9 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
           ...itemProps.style,
         };
 
+        // When a custom dot element is supplied, we make the default circle
+        // transparent so the custom content shows through without overlap.
+        // The boxShadow technique creates a coloured ring without adding to layout.
         const dotStyle: React.CSSProperties = {
           position: 'absolute',
           left: `calc(-1 * ${TIMELINE_SIZE_MAP.dotOffset})`,
@@ -164,7 +183,8 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
         </div>
       )}
 
-      {/* Keyframes for pending animation */}
+      {/* Inline keyframes for the pending dot pulse. Scoped via a unique
+          animation name to avoid collisions with other @keyframes on the page. */}
       <style>{`
         @keyframes rottay-timeline-pulse {
           0%, 100% { opacity: 1; transform: scale(1); }
@@ -199,5 +219,11 @@ const RusticTimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
 
 RusticTimelineItem.displayName = 'RusticTimelineItem';
 
+/**
+ * Default export for the rustic Timeline engine.
+ *
+ * @param props - {@link TimelineProps} controlling mode, items, and pending state.
+ * @returns A pure HTML/CSS timeline element with ARIA list semantics.
+ */
 export default RusticTimeline;
 export { RusticTimeline as Timeline, RusticTimelineItem as Item };

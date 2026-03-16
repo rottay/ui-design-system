@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Multi-engine integration tests for MessageItem, NotificationItem,
+ * and Toast. Verifies that all three feedback channels render content correctly
+ * through each stable engine.
+ */
+
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';

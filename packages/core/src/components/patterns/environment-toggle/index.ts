@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * EnvironmentToggle - Pattern Component
- *
- * Engine-aware environment switcher (test/live toggle) with persistent banners
- * and production switch warnings. Follows the Stripe pattern.
+ * @fileoverview EnvironmentToggle pattern -- engine-aware environment switcher
+ * (test/live toggle) with persistent banners and production switch warnings.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

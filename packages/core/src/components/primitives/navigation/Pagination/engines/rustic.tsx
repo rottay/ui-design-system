@@ -154,24 +154,31 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
     const pages: (number | string)[] = [];
     const showPages = 5;
 
+    // When total pages fit within the visible window, show all without ellipsis
     if (totalPages <= showPages) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
+    // Always show page 1 as an anchor for quick navigation back to start
     pages.push(1);
 
+    // Leading ellipsis signals there are hidden pages between 1 and the window
     if (current > 3) {
       pages.push('...');
     }
 
+    // Sliding window: show current page +/- 1 neighbor, clamped to
+    // avoid duplicating the always-visible first and last pages
     for (let i = Math.max(2, current - 1); i <= Math.min(totalPages - 1, current + 1); i++) {
       pages.push(i);
     }
 
+    // Trailing ellipsis signals hidden pages between the window and the last page
     if (current < totalPages - 2) {
       pages.push('...');
     }
 
+    // Always show the last page as an anchor for quick navigation to end
     if (totalPages > 1) {
       pages.push(totalPages);
     }
@@ -210,6 +217,10 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
    * @param isDisabled - Whether the button is disabled
    * @returns Complete button style object
    */
+  // Button styles use CSS custom properties with multi-level fallbacks so that:
+  // 1. Tenant-specific overrides (--ds-pagination-*) take highest priority
+  // 2. Design system tokens (--ds-color-*) provide themed defaults
+  // 3. Hardcoded values ensure the component renders correctly outside a provider
   const getButtonStyle = (isActive: boolean, isDisabled: boolean): React.CSSProperties => ({
     ...SIZE_STYLES[sizeKey],
     border: '1px solid var(--ds-pagination-border-color, var(--ds-color-neutral-300, #d9d9d9))',

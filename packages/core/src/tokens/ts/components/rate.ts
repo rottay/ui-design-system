@@ -1,8 +1,8 @@
 /**
- * Rate Component Tokens - TypeScript Mirror
+ * @fileoverview Rate (star rating) component token mirrors.
  *
- * TypeScript representation of Rate CSS custom properties.
- * Use these for type-safe Rate token references.
+ * Covers 5 size tiers, active/inactive/hover colors, hover scale interaction,
+ * focus ring, gap, and transition tokens.
  */
 
 // Rate Sizes

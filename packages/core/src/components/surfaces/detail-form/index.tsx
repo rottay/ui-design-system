@@ -1,11 +1,10 @@
 'use client';
 
 /**
- * DetailFormSurface
- *
- * Edit screens often need more than a plain form: a summary, supporting
- * guidance, or side detail about the entity being edited. This surface keeps
- * that split layout in the DS instead of forcing every app to rebuild it.
+ * @fileoverview DetailFormSurface -- split-layout edit page with summary aside.
+ * @description Combines PatternFormBuilder with an optional detail/summary sidebar.
+ * Useful when edit screens need supporting context (entity preview, guidance, or
+ * related metadata) alongside the form fields.
  */
 
 import React from 'react';
@@ -34,8 +33,12 @@ export function DetailFormSurface({
 }: DetailFormSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  // Permission-aware field filtering removes fields the current user cannot
+  // see before they reach the form builder, avoiding empty-field placeholders.
   const visibleFields = filterSurfaceFields(config.behavior.fields, config.permissions);
   const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.permissions);
+  // Surface maxWidth overrides chrome maxWidth so individual surfaces can
+  // constrain form width without altering the shared chrome config.
   const chrome = {
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
@@ -49,6 +52,9 @@ export function DetailFormSurface({
     );
   }
 
+  // Secondary and cancel actions are merged into a single bar. The submit
+  // action is excluded here because it lives inside the form builder as
+  // the HTML submit button, which enables native form validation.
   const actionBar = (
     <SurfaceActionBar
       actions={[
@@ -119,6 +125,10 @@ export function DetailFormSurface({
     </Stack>
   );
 
+  // Three conditions force a stacked (single-column) layout:
+  // 1. Explicit stacked layout preference
+  // 2. Responsive breakpoint triggers stacking
+  // 3. No summary/aside content to put in a sidebar
   if (
     config.visual.layout === 'stacked' ||
     shouldStack ||

@@ -92,16 +92,22 @@ export interface ResponsiveValueConfig<T> {
  * @returns {T} The value for the current viewport breakpoint
  */
 export function useResponsiveValue<T>(values: ResponsiveValueConfig<T>): T {
-  // Check breakpoints from largest to smallest (cascade)
-  // This ensures we get the most specific match
+  // All five hooks MUST be called unconditionally to satisfy React's Rules of
+  // Hooks (no conditional hook calls). Each hook subscribes to a min-width
+  // media query, so on a 1400px viewport both isSm and isMd and isLg will
+  // be true simultaneously. The if-chain below resolves this by checking
+  // largest-first.
   const is2xl = useMediaQuery(buildMinWidthQuery('2xl'));
   const isXl = useMediaQuery(buildMinWidthQuery('xl'));
   const isLg = useMediaQuery(buildMinWidthQuery('lg'));
   const isMd = useMediaQuery(buildMinWidthQuery('md'));
   const isSm = useMediaQuery(buildMinWidthQuery('sm'));
 
-  // Return the most specific value that matches
-  // Fall back to base if no breakpoint matches
+  // Resolve the largest matching breakpoint that has a user-defined value.
+  // This implements mobile-first cascade: if only `base` and `lg` are defined,
+  // the `lg` value applies to xl and 2xl as well because those tiers lack an
+  // explicit override. The `!== undefined` check allows falsy values like 0
+  // or empty string to be valid breakpoint values.
   if (is2xl && values['2xl'] !== undefined) {
     return values['2xl'];
   }
@@ -122,6 +128,8 @@ export function useResponsiveValue<T>(values: ResponsiveValueConfig<T>): T {
     return values.sm;
   }
 
-  // Always return base as fallback
+  // `base` is always the final fallback and is required in the config type.
+  // During SSR all media queries return false, so this guarantees a
+  // deterministic server-side value that matches the mobile-first baseline.
   return values.base;
 }

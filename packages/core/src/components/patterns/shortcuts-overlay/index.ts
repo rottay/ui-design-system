@@ -1,11 +1,8 @@
 'use client';
 
 /**
- * ShortcutsOverlay - Pattern Component
- *
- * A modal overlay that displays all registered keyboard shortcuts
- * organized by category with search. Uses the Kbd primitive for
- * key display. Inspired by Linear/Figma shortcuts dialog.
+ * @fileoverview ShortcutsOverlay pattern -- engine-aware modal overlay
+ * displaying registered keyboard shortcuts organized by category with search.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

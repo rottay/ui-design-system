@@ -1,10 +1,9 @@
 'use client';
 
 /**
- * CalendarView<T> - Pattern Component
- *
- * Month/week/day calendar grid with event rendering.
- * Implements a simple month view with events placed on dates.
+ * @fileoverview CalendarView pattern -- engine-aware month/week/day calendar
+ * grid with event rendering. Supports navigation, view switching, custom event
+ * renderers, and date/event click callbacks.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

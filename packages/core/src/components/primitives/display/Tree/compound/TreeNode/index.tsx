@@ -1,6 +1,5 @@
 /**
- * TreeNode - Compound Component
- *
+ * @fileoverview TreeNode compound component.
  * Allows declarative tree building with JSX syntax.
  * Used as Tree.TreeNode for defining tree structure inline.
  *
@@ -21,8 +20,23 @@ import type { TreeNodeProps } from '../../Tree.types';
 
 /**
  * TreeNode component for declarative tree structure.
- * Note: This is primarily used for JSX-based tree definition.
- * The actual rendering is handled by the parent Tree component.
+ *
+ * Primarily used for JSX-based tree definition. The parent Tree component
+ * consumes these nodes and handles the actual rendering and interaction logic.
+ *
+ * @param props - TreeNodeProps including title, icon, disabled state, and nested children
+ * @param ref - Forwarded ref to the root div element
+ * @returns A treeitem div with icon, title, and optional nested children group
+ *
+ * @example
+ * ```tsx
+ * <Tree>
+ *   <TreeNode key="docs" title="Documents" icon={<FolderIcon />}>
+ *     <TreeNode key="readme" title="README.md" />
+ *     <TreeNode key="license" title="LICENSE" disabled />
+ *   </TreeNode>
+ * </Tree>
+ * ```
  */
 export const TreeNode = forwardRef<HTMLDivElement, TreeNodeProps>(
   (props, ref) => {
@@ -35,7 +49,7 @@ export const TreeNode = forwardRef<HTMLDivElement, TreeNodeProps>(
       style,
     } = props;
 
-    // Base CSS variables
+    // CSS custom properties for theming; opacity is reduced when the node is disabled
     const nodeVars: React.CSSProperties = {
       '--ds-tree-node-opacity': disabled ? '0.5' : '1',
     } as React.CSSProperties;

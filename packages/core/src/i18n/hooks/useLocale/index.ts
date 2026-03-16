@@ -1,8 +1,10 @@
 'use client';
 
 /**
- * useLocale Hook
- * Design System Rottay - Wave 0 - Agente D
+ * @fileoverview Hook for reading and switching the active locale.
+ *
+ * Returns the current locale code, its full configuration (name, direction,
+ * Intl locale strings), and a setter to change it at runtime.
  */
 
 import { useI18nContext } from '../../context';

@@ -1,52 +1,15 @@
 'use client';
 
 /**
- * @fileoverview List - Rottay Design System
- * @description Versatile list component for displaying collections of items.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview List - Collection display with item metadata and pagination.
+ * Two-level compound structure: `List.Item` wraps each row, and
+ * `List.Item.Meta` provides avatar + title + description layout.
+ * Supports both declarative children and data-driven `renderItem` patterns.
  *
- * @remarks
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design List with full feature support
- * - **Modern**: DaisyUI/Tailwind list with responsive design
- * - **Rustic**: Pure CSS list with maximum accessibility
- *
- * **Key Features:**
- * - Bordered and borderless variants
- * - Header and footer support
- * - Loading states with skeleton
- * - Multiple sizes (small, default, large)
- * - Horizontal and vertical layouts
- * - Grid layout support
- * - Pagination integration
- * - Item actions
- * - Item metadata (avatar, title, description)
- *
- * **Compound Components:**
- * - `List.Item` - Individual list item container
- * - `List.Item.Meta` - Structured metadata display
- *
- * **Data Rendering:**
- * - Declarative: Use `List.Item` children
- * - Dynamic: Use `dataSource` + `renderItem`
- *
- * @example Declarative Usage
+ * @example
  * ```tsx
- * import { List, Avatar } from '@rottay/design-system';
+ * import { List } from '@rottay/design-system';
  *
- * <List bordered>
- *   <List.Item>
- *     <List.Item.Meta
- *       avatar={<Avatar src="/user.jpg" />}
- *       title="John Doe"
- *       description="Software Engineer"
- *     />
- *   </List.Item>
- * </List>
- * ```
- *
- * @example Dynamic Rendering
- * ```tsx
  * <List
  *   dataSource={users}
  *   renderItem={(user) => (
@@ -58,25 +21,8 @@
  * />
  * ```
  *
- * @example Grid Layout
- * ```tsx
- * <List
- *   dataSource={products}
- *   grid={{ column: 3, gutter: 16 }}
- *   renderItem={(product) => (
- *     <List.Item>
- *       <Card>{product.name}</Card>
- *     </List.Item>
- *   )}
- * />
- * ```
- *
- * @see {@link ListProps} for available props
- * @see {@link ListItemProps} for item props
- * @see {@link ListItemMetaProps} for metadata props
  * @module List
  * @category Display
- * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
 import type { ListProps, ListItemProps, ListItemMetaProps } from './List.types';
@@ -88,24 +34,32 @@ export {
   LIST_DEFAULTS,
 } from './List.types';
 
+/** Engine-routed container -- the outer <ul>/<ol> wrapper. */
 const ListBase = createEngineComponent<ListProps>('List', {
   classic: () => import('./engines/classic').then(m => ({ default: m.List })),
   modern: () => import('./engines/modern').then(m => ({ default: m.List })),
   rustic: () => import('./engines/rustic').then(m => ({ default: m.List })),
 });
 
+/** Engine-routed row -- wraps each individual list entry. */
 const Item = createEngineComponent<ListItemProps>('List.Item', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Item })),
   modern: () => import('./engines/modern').then(m => ({ default: m.Item })),
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Item })),
 });
 
+/** Engine-routed metadata -- avatar + title + description layout inside an Item. */
 const Meta = createEngineComponent<ListItemMetaProps>('List.Item.Meta', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Meta })),
   modern: () => import('./engines/modern').then(m => ({ default: m.Meta })),
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Meta })),
 });
 
+/**
+ * Compound assembly: List -> Item -> Meta (two-level nesting).
+ * This mirrors the Ant Design API so consumers can write:
+ *   <List.Item><List.Item.Meta ... /></List.Item>
+ */
 export const List = Object.assign(ListBase, {
   Item: Object.assign(Item, { Meta }),
 });

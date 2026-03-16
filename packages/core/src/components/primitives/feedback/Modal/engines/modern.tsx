@@ -217,10 +217,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   // Keyboard Handling
   // ---------------------------------------------------------------------------
 
-  /**
-   * Effect: Handle Escape key press to close modal.
-   * Only active when modal is open and closeOnEscape is true.
-   */
+  // Manual Escape key handling because DaisyUI's modal component doesn't
+  // provide built-in keyboard dismiss. The listener is scoped to the
+  // document level so it works regardless of focus position within the modal.
+  // Cleanup on unmount or when open/closeOnEscape changes prevents stale handlers.
   useEffect(() => {
     if (!open || !closeOnEscape) return;
 
@@ -236,17 +236,16 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   // Body Scroll Lock
   // ---------------------------------------------------------------------------
 
-  /**
-   * Effect: Lock body scroll when modal is open.
-   * Prevents background content from scrolling while modal is visible.
-   */
+  // Body scroll lock prevents the page from scrolling behind the modal overlay,
+  // which is disorienting on mobile. Setting overflow to '' (empty) rather than
+  // 'auto' restores whatever the original value was. The cleanup function ensures
+  // scroll is restored if the component unmounts while open (e.g., route change).
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = '';
     };
@@ -256,7 +255,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   // Early Return
   // ---------------------------------------------------------------------------
 
-  // Don't render anything when closed
+  // Early return with empty fragment instead of null to satisfy the
+  // ReactElement return type. Unlike Classic (which delegates visibility
+  // to Ant Design's open prop), Modern must conditionally render because
+  // DaisyUI's modal-open class only controls visibility, not DOM presence.
   if (!open) return <></>;
 
   // ---------------------------------------------------------------------------
@@ -274,7 +276,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
       className={`modal modal-open ${centered ? 'modal-middle' : ''}`}
       style={style}
     >
-      {/* Backdrop - click to close if enabled */}
+      {/* DaisyUI modal-backdrop creates a semi-transparent overlay.
+          Click handler is conditionally attached rather than using
+          stopPropagation on the content, keeping the event flow cleaner. */}
       <div
         className="modal-backdrop"
         onClick={closeOnOverlayClick ? handleCancel : undefined}
@@ -309,6 +313,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                     {cancelText}
                   </button>
                 )}
+                {/* DaisyUI's "loading" class shows a spinner inside the button.
+                    disabled prevents double-submission during async operations
+                    like API calls triggered by onOk. */}
                 {onOk && (
                   <button
                     className={`btn btn-primary ${confirmLoading ? 'loading' : ''}`}

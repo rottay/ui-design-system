@@ -1,9 +1,12 @@
 /**
- * QRCode - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (DaisyUI/Tailwind) engine for the QRCode display primitive.
+ * Renders a QR-like visual on a `<canvas>` with DaisyUI-styled status overlays.
+ * NOTE: Uses a simplified hash-based pattern, not real Reed-Solomon encoding.
  *
- * Lightweight QR code implementation using DaisyUI styling.
- * Note: Uses a simplified pattern generator. For production use,
- * consider integrating a proper QR code library.
+ * @example
+ * ```tsx
+ * <QRCode engine="modern" value="https://example.com" bordered />
+ * ```
  */
 
 'use client';
@@ -13,10 +16,12 @@ import type { QRCodeProps } from '../QRCode.types';
 import { QRCODE_DEFAULTS } from '../QRCode.types';
 
 /**
- * Generates a visual pattern that resembles a QR code.
- * This is a placeholder - real QR encoding requires a proper library.
+ * Creates a deterministic boolean grid from a string hash, then stamps three
+ * finder patterns in the corners to visually resemble a real QR code.
+ * This is a visual placeholder -- real QR encoding requires a dedicated library.
  */
 function generatePattern(value: string, gridSize: number): boolean[][] {
+  // Build a simple hash from the input string (djb2-like)
   const pattern: boolean[][] = [];
   let hash = 0;
   for (let i = 0; i < value.length; i++) {
@@ -24,6 +29,7 @@ function generatePattern(value: string, gridSize: number): boolean[][] {
     hash = hash & hash;
   }
 
+  // Fill the grid using the Knuth multiplicative hash for pseudo-random distribution
   for (let i = 0; i < gridSize; i++) {
     pattern[i] = [];
     for (let j = 0; j < gridSize; j++) {
@@ -32,7 +38,7 @@ function generatePattern(value: string, gridSize: number): boolean[][] {
     }
   }
 
-  // Add finder patterns (the three squares in corners)
+  // Stamp the three 7x7 finder patterns that make QR codes recognizable
   const addFinderPattern = (startX: number, startY: number) => {
     for (let i = 0; i < 7; i++) {
       for (let j = 0; j < 7; j++) {
@@ -53,12 +59,11 @@ function generatePattern(value: string, gridSize: number): boolean[][] {
 }
 
 /**
- * Modern QRCode component using DaisyUI/Tailwind.
+ * Modern QRCode engine. Draws the pattern on a `<canvas>`, centers an optional
+ * icon, and overlays DaisyUI-styled loading/expired/scanned status indicators.
  *
- * @example
- * ```tsx
- * <ModernQRCode value="https://example.com" />
- * ```
+ * @param props - DS QRCodeProps (value, size, colors, status, icon, etc.).
+ * @returns A DaisyUI-styled container with canvas, icon, and status overlay.
  */
 export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
   const {
@@ -76,10 +81,11 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
   } = props;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // 25x25 matches QR version 2 dimensions for a realistic appearance
   const gridSize = 25;
   const pattern = useMemo(() => generatePattern(value || '', gridSize), [value]);
 
-  // Draw QR code pattern on canvas
+  // Re-paint the canvas whenever value, size, or colors change
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -101,9 +107,7 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
     }
   }, [value, size, color, bgColor, pattern]);
 
-  /**
-   * Renders the status overlay based on current status.
-   */
+  // Each status state gets its own DaisyUI-themed overlay on top of the canvas
   const renderOverlay = () => {
     switch (status) {
       case 'loading':

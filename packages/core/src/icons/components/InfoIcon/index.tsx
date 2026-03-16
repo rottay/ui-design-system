@@ -1,12 +1,12 @@
 'use client';
 
+/** @fileoverview Circled "i" information icon for help text and info alerts. */
+
 import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
 import type { SvgIconProps as IconProps } from '../../types';
 
-/**
- * Icono de información - usado en estados informativos.
- */
+/** Information icon used in tooltips, info banners, and contextual help. */
 export const InfoIcon = forwardRef<SVGSVGElement, IconProps>((props, ref) => (
   <BaseIcon ref={ref} {...props}>
     <circle cx="12" cy="12" r="10" />

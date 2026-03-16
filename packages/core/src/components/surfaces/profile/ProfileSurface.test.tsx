@@ -1,3 +1,5 @@
+/** @fileoverview ProfileSurface tests -- section rendering, avatar, and save actions. */
+
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

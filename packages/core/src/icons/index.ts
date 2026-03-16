@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Icon exports - Rottay Design System
+ * @description Public barrel for shared icon primitives and icon types.
+ */
+
 // Types
 export type { SvgIconProps, IconComponent } from './types';
 export { ICON_SIZE_MAP } from './types';

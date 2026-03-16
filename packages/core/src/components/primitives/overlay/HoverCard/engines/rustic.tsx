@@ -1,13 +1,20 @@
 'use client';
 
 /**
- * @fileoverview HoverCard Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the HoverCard component.
- * Uses a portal card with mouse enter/leave + delay.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the HoverCard overlay component.
+ * Renders a portal-based card at a position computed from the trigger's bounding
+ * rect, styled entirely via inline CSS and DS custom properties. Supports
+ * configurable open/close delays and all four side placements.
  *
- * @module HoverCard/Engines/Rustic
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <RusticHoverCard
+ *   content={<UserProfileCard />}
+ *   trigger={<span>@username</span>}
+ *   side="right"
+ *   openDelay={300}
+ * />
+ * ```
  */
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
@@ -15,6 +22,18 @@ import { createPortal } from 'react-dom';
 import type { HoverCardProps } from '../HoverCard.types';
 import { HOVERCARD_DEFAULTS } from '../HoverCard.types';
 
+/**
+ * HoverCard implementation using pure inline CSS and React portals.
+ *
+ * The card is portalled to `document.body` and positioned absolutely using
+ * the trigger's bounding rect plus scroll offsets. A CSS `transform` based on
+ * the `side` prop ensures the card is centred/aligned correctly. Debounced
+ * open/close timers allow the user to move the cursor from trigger to card
+ * without the card disappearing.
+ *
+ * @param props - {@link HoverCardProps} shared across all engines.
+ * @returns The trigger element plus a portal-rendered hover card.
+ */
 export default function RusticHoverCard(props: HoverCardProps): React.ReactElement {
   const {
     content,
@@ -35,10 +54,12 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
   const [internalOpen, setInternalOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const isControlled = controlledOpen !== undefined;
+  // Disabled always wins: forces card hidden even if controlled open is true
   const isOpen = disabled ? false : (isControlled ? controlledOpen : internalOpen);
 
   const triggerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  // Timer refs enable cancellation when cursor moves between trigger and card
   const openTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -58,6 +79,8 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
     closeTimerRef.current = setTimeout(() => handleOpen(false), closeDelay);
   }, [closeDelay, handleOpen]);
 
+  // Recalculate card position from the trigger's bounding rect each time
+  // the card opens or the side prop changes
   useEffect(() => {
     if (isOpen && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
@@ -88,6 +111,7 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
     }
   }, [isOpen, side]);
 
+  // CSS transform centres the card relative to the computed anchor point
   const getCardTransform = () => {
     switch (side) {
       case 'top': return 'translate(-50%, -100%)';

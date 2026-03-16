@@ -1,14 +1,31 @@
 'use client';
 
 /**
- * CalendarView - Rustic Engine (Pure inline styles with --ds-* CSS vars)
+ * @fileoverview Rustic (Vanilla CSS) engine for the CalendarView pattern.
+ * Renders a month grid using only inline styles backed by --ds-* design-token
+ * CSS variables. Zero dependency on Ant Design or Tailwind -- every visual
+ * property is resolved through CSS custom properties with hardcoded fallbacks,
+ * making this engine safe for any host environment.
+ *
+ * @example
+ * <RusticCalendarView
+ *   events={[{ id: '1', title: 'Standup', start: '2026-03-15' }]}
+ *   currentDate={new Date(2026, 2, 1)}
+ *   onViewChange={(view) => console.log(view)}
+ * />
  */
 
 import React, { useMemo } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../CalendarView.types';
 
+/** Abbreviated day headers starting at Sunday to match JS Date.getDay() indices. */
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+/**
+ * Build a 7-column grid for the given month. Leading nulls pad the days
+ * before the 1st (Sunday-aligned); trailing nulls complete the last row
+ * to exactly 7 columns, preventing layout shift between months.
+ */
 function getMonthGrid(date: Date) {
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -24,15 +41,25 @@ function getMonthGrid(date: Date) {
   return cells;
 }
 
+/** Normalize a Date or ISO string into a YYYY-MM-DD key for event lookup. */
 function toDateKey(d: Date | string): string {
   const date = typeof d === 'string' ? new Date(d) : d;
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+/** Format a date as "March 2026" using the browser's default locale. */
 function formatMonth(date: Date) {
   return date.toLocaleString('default', { month: 'long', year: 'numeric' });
 }
 
+/**
+ * Rustic (Vanilla CSS) calendar view rendering a month grid with event chips.
+ * All styling uses inline CSSProperties backed by --ds-* design tokens with
+ * hardcoded fallbacks, ensuring the component works without any CSS framework.
+ * @param props - CalendarViewProps including events array, navigation callbacks,
+ *   optional custom toolbar/header, and a generic `T` for event payload data.
+ * @returns A rounded month grid with inline loading text for the loading state.
+ */
 export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
   const {
     events,
@@ -52,6 +79,8 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
 
   const cells = useMemo(() => getMonthGrid(currentDate), [currentDate]);
 
+  // Index events by date string for O(1) lookup per cell during render.
+  // Only keyed by start date -- multi-day events appear on their start day only.
   const eventsByDate = useMemo(() => {
     const map: Record<string, CalendarEvent<T>[]> = {};
     for (const ev of events) {
@@ -62,6 +91,8 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
     return map;
   }, [events]);
 
+  // Navigate forward or backward by one month. Creates a new Date to
+  // avoid mutating the controlled currentDate prop.
   const navigateMonth = (delta: number) => {
     const next = new Date(currentDate);
     next.setMonth(next.getMonth() + delta);
@@ -70,6 +101,9 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
 
   const today = toDateKey(new Date());
 
+  // Shared button style object reused by nav buttons, Today, and the
+  // view-mode select. Uses --ds-color-border-primary with a fallback chain
+  // so it renders correctly even without a full DS theme loaded.
   const btn: React.CSSProperties = {
     padding: '4px 10px',
     border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
@@ -83,6 +117,9 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
   return (
     <div className={className} style={style}>
       {header}
+      {/* Render custom toolbar if provided; otherwise show the default
+          inline-styled nav with prev/next buttons, a Today shortcut, and
+          a view-mode select dropdown. */}
       {toolbar ?? (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -117,6 +154,8 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
               {d}
             </div>
           ))}
+          {/* Render each date cell. Null cells (padding before the 1st and
+              after the last day) use a secondary background and no click handler. */}
           {cells.map((cell, i) => {
             const key = cell ? toDateKey(cell) : `empty-${i}`;
             const dayEvents = cell ? eventsByDate[toDateKey(cell)] ?? [] : [];
@@ -128,6 +167,8 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                 style={{
                   minHeight: 80,
                   padding: 4,
+                  // Suppress the right border on the last column (Saturday) to
+                  // avoid a double-border with the grid's outer border.
                   borderRight: (i + 1) % 7 !== 0 ? '1px solid var(--ds-color-border-primary, var(--ds-color-border))' : undefined,
                   borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
                   background: cell ? 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))' : 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))',
@@ -145,6 +186,8 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                     }}>
                       {cell.getDate()}
                     </div>
+                    {/* Show at most 3 event chips per cell to keep the grid compact;
+                        overflow is shown as "+N more" below. */}
                     {dayEvents.slice(0, 3).map((ev) => (
                       <div
                         key={ev.id}

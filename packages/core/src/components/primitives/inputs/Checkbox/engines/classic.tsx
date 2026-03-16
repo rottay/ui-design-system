@@ -55,6 +55,16 @@ import { Checkbox as AntCheckbox } from 'antd';
 import type { CheckboxProps } from '../Checkbox.types';
 import { CHECKBOX_DEFAULTS, SIZE_MAP_NUMERIC, COLOR_MAP } from '../Checkbox.types';
 
+/**
+ * Classic (Ant Design) implementation of the DS Checkbox.
+ *
+ * Wraps `antd/Checkbox`, mapping the DS-standard `onChange(checked, event)` callback
+ * to Ant's `onChange(event)` format. Color and size overrides are applied via inline
+ * CSS custom properties so tenant themes propagate into the Ant component.
+ *
+ * @param props - Standardized CheckboxProps from the DS type contract.
+ * @returns An Ant Design Checkbox with DS class-name hooks for external styling.
+ */
 export default function ClassicCheckbox(props: CheckboxProps): React.ReactElement {
   const {
     size = CHECKBOX_DEFAULTS.size,
@@ -75,17 +85,23 @@ export default function ClassicCheckbox(props: CheckboxProps): React.ReactElemen
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
   const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
 
+  // Ant Design's onChange provides the full event object; the DS contract
+  // expects `(checked: boolean, event)` so we extract `target.checked` first.
   const handleChange = (e: any) => {
     onChange?.(e.target.checked, e);
   };
 
-  // Custom styles based on size and color
+  // Override Ant's internal primary color via CSS custom property so the
+  // checkbox indicator respects the DS color prop. Font size scales
+  // proportionally with the numeric size to keep the label readable.
   const customStyle: React.CSSProperties = {
     '--ant-primary-color': colors.bg,
     fontSize: sizeNumeric * 0.9,
     ...style,
   } as React.CSSProperties;
 
+  // `label` takes precedence over `children` for backward compatibility
+  // with both prop-based and JSX-children patterns.
   const displayLabel = label || children;
 
   return (

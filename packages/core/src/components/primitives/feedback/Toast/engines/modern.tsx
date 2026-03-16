@@ -212,6 +212,8 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
     if (!visible || duration === 0 || isPaused) return;
 
     const startTime = Date.now();
+    // Scale remaining time by current progress so pausing and resuming
+    // continues from where it left off instead of restarting the timer
     const remainingTime = (progress / 100) * duration;
 
     const timer = setTimeout(() => {
@@ -264,7 +266,8 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   // Class Names
   // ========================================================================
 
-  // Build class names
+  // DaisyUI alert classes provide the variant colouring; shadow-lg adds
+  // elevation so the toast visually floats above the page content
   const alertClass = getAlertClass(variant as ToastVariant);
   const baseClasses = `alert ${alertClass} shadow-lg`.trim();
   const animationClass = isExiting ? 'animate-fade-out' : 'animate-fade-in';
@@ -278,7 +281,8 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   /** Handle mouse leave for pause on hover */
   const handleMouseLeave = pauseOnHover ? () => setIsPaused(false) : undefined;
 
-  // Determine icon to display
+  // Explicit `icon` prop (including null to suppress) overrides the default.
+  // Checking !== undefined distinguishes "no prop" from "intentionally null".
   const displayIcon = icon !== undefined ? icon : getDefaultIcon(variant as ToastVariant);
 
   // ========================================================================
@@ -337,7 +341,8 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
         )}
       </div>
 
-      {/* Progress Bar */}
+      {/* Progress bar shrinks from 100% to 0% matching the auto-dismiss timer.
+          bg-current inherits the alert's text color for consistent theming. */}
       {showProgress && duration > 0 && (
         <div
           className="absolute bottom-0 left-0 h-1 bg-current opacity-30"

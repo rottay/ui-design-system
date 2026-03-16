@@ -1,3 +1,5 @@
+/** @fileoverview SettingsSurface tests -- tab rendering, sidebar, and permission filtering. */
+
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';

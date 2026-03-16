@@ -1,6 +1,12 @@
 /**
- * @fileoverview PasswordInput Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the PasswordInput component.
+ * @fileoverview PasswordInput Modern Engine - Rottay Design System.
+ * DaisyUI/Tailwind CSS implementation with a custom visibility toggle button,
+ * inline SVG eye icons, and an optional strength indicator bar.
+ *
+ * @example
+ * ```tsx
+ * <PasswordInput engine="modern" showToggle strengthIndicator strengthLevel="medium" />
+ * ```
  *
  * @module ModernPasswordInput
  * @category Inputs
@@ -13,6 +19,10 @@ import React, { useState, useCallback, useId } from 'react';
 import type { PasswordInputProps } from '../PasswordInput.types';
 import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../PasswordInput.types';
 
+/**
+ * Maps DS 5-tier size tokens to DaisyUI input size utility classes.
+ * xl collapses to 'input-lg' because DaisyUI does not provide an xl tier.
+ */
 const DAISY_SIZE_MAP = {
   xs: 'input-xs',
   sm: 'input-sm',
@@ -21,6 +31,14 @@ const DAISY_SIZE_MAP = {
   xl: 'input-lg',
 };
 
+/**
+ * Modern engine PasswordInput built with DaisyUI / Tailwind CSS.
+ * Manages its own visibility toggle state and renders inline SVG eye icons
+ * rather than importing an icon library, keeping the bundle lightweight.
+ *
+ * @param props - Unified PasswordInputProps from the design system contract.
+ * @returns A DaisyUI-styled password input with toggle, strength bar, and error label.
+ */
 export default function ModernPasswordInput(props: PasswordInputProps): React.ReactElement {
   const {
     size = PASSWORD_INPUT_DEFAULTS.size,
@@ -53,6 +71,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
 
   const generatedId = useId();
   const inputId = providedId || `password-modern-${generatedId}`;
+  // Local toggle state for password visibility (not exposed to parent)
   const [visible, setVisible] = useState(false);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +85,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     }
   }, [onKeyDown, onPressEnter]);
 
+  // Build DaisyUI class list; pr-10 reserves space for the toggle button
   const inputClasses = [
     'input',
     'input-bordered',
@@ -125,6 +145,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           </button>
         )}
       </div>
+      {/* Strength indicator bar: width and color driven by STRENGTH_WIDTHS/STRENGTH_COLORS constants */}
       {strengthIndicator && strengthLevel && (
         <div className="w-full h-1 rounded-full bg-base-300 mt-1 overflow-hidden">
           <div

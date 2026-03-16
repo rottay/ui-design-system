@@ -110,11 +110,17 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       style,
     } = props;
 
-    // Apply valueType coloring to valueStyle
+    // Merge user-supplied valueStyle with semantic color override.
+    // The spread order ensures valueType color only applies when non-default,
+    // allowing explicit valueStyle.color to still win via the spread above.
     const computedValueStyle: React.CSSProperties = {
       ...valueStyle,
       ...(valueType !== 'default' && { color: VALUE_TYPE_COLOR_MAP[valueType] }),
     };
+
+    // When animateValue is requested and no custom formatter is provided,
+    // swap in the CountUp motion component to animate from countFrom to value.
+    // CountUp handles its own rAF loop, so we only supply the locale formatter.
     const resolvedFormatter =
       !formatter && animateValue && typeof value === 'number'
         ? () => (
@@ -187,7 +193,7 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
       style,
     } = props;
 
-    // Apply valueType coloring to valueStyle
+    // Apply semantic color based on valueType (same pattern as Statistic above)
     const computedValueStyle: React.CSSProperties = {
       ...valueStyle,
       ...(valueType !== 'default' && { color: VALUE_TYPE_COLOR_MAP[valueType] }),
@@ -195,6 +201,10 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
 
     return (
       <div ref={ref} className={className} style={style}>
+        {/* AntStatistic.Timer with type="countdown" handles the decrement logic
+            internally -- we only supply the target timestamp and format pattern.
+            The onChange cast to any is needed because Ant expects a slightly
+            different signature than our DS-unified CountdownProps. */}
         <AntStatistic.Timer
           type="countdown"
           title={title}

@@ -155,10 +155,13 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   // Derived Values
   // ---------------------------------------------------------------------------
 
-  // Determine color from status or custom strokeColor
+  // Custom strokeColor takes precedence over status-derived colors,
+  // allowing consumers to use brand colors or gradients that don't
+  // fit the predefined status palette.
   const color = strokeColor || STATUS_COLORS[status!];
 
-  // Clamp percent to valid range
+  // Defensive clamping prevents visual overflow (bar exceeding track)
+  // and negative values that would cause SVG rendering artifacts.
   const clampedPercent = Math.min(100, Math.max(0, percent));
 
   // ---------------------------------------------------------------------------
@@ -166,7 +169,10 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   if (type === 'circle') {
-    // Circle dimensions
+    // SVG circle math: strokeDasharray = full circumference creates a
+    // continuous stroke, then strokeDashoffset hides a portion to show
+    // the progress arc. rotate(-90) starts the arc from 12 o'clock
+    // (default SVG starts at 3 o'clock).
     const size = 120;
     const center = size / 2;
     const radius = (size - strokeWidth!) / 2;
@@ -198,7 +204,10 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
             strokeWidth={strokeWidth}
           />
 
-          {/* Progress Circle */}
+          {/* strokeLinecap="round" gives the arc endpoints a rounded cap
+              for a polished look. The 0.3s ease transition smoothly animates
+              percent changes rather than jumping, providing visual feedback
+              during incremental progress updates. */}
           <circle
             cx={center}
             cy={center}
@@ -251,7 +260,10 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
     position: 'relative',
   };
 
-  // Progress bar styles with optional animation for active status
+  // Active status uses a 45-degree striped gradient animation (barbershop pole
+  // effect) to convey ongoing activity. This pattern provides motion cues
+  // beyond color alone, benefiting users who may miss subtle color differences.
+  // The semi-transparent white stripes (alpha-white-20) work on any bar color.
   const barStyle: React.CSSProperties = {
     height: '100%',
     width: `${clampedPercent}%`,
@@ -276,7 +288,10 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
 
   return (
     <div className={className} style={containerStyle}>
-      {/* Keyframes for active animation - injected as style tag */}
+      {/* Inline <style> tag for active animation keyframes. Unlike the
+          Notification/Message engines which inject styles once via document.head,
+          Progress uses a co-located <style> tag because the animation is only
+          needed when status="active", avoiding unnecessary global CSS. */}
       {status === 'active' && (
         <style>{`
           @keyframes rustic-progress-active {

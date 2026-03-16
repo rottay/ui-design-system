@@ -1,6 +1,5 @@
 /**
- * Image.Skeleton - Compound Component
- *
+ * @fileoverview Image.Skeleton compound component.
  * Displays a loading skeleton placeholder while an image is loading.
  * Can be used standalone or as part of the Image component.
  */
@@ -19,6 +18,10 @@ import { RADIUS_MAP } from '../../Image.types';
  * - Customizable dimensions
  * - Border radius options
  * - Accessible (hidden from screen readers)
+ *
+ * @param props - ImageSkeletonProps including width, height, radius, and animate toggle
+ * @param ref - Forwarded ref to the root div element
+ * @returns A div with pulsing skeleton animation and inline keyframe styles
  *
  * @example
  * ```tsx

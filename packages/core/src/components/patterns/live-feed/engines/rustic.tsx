@@ -1,11 +1,31 @@
 'use client';
 
 /**
- * LiveFeed - Rustic Engine (Vanilla HTML/CSS with --ds-* vars)
+ * @fileoverview Rustic (Vanilla / CSS variables) engine for the LiveFeed pattern.
+ * Renders a real-time feed using only inline styles with `--ds-*` design tokens,
+ * making it framework-agnostic. Supports auto-refresh polling, a "new items" bar,
+ * load-more pagination, and a custom `feedPulse` keyframe animation for new entries.
+ * Injects its own `@keyframes` via an inline `<style>` tag to stay self-contained.
+ *
+ * @example
+ * <RusticLiveFeed
+ *   items={[{ key: '1', title: 'New signup', isNew: true }]}
+ *   renderItem={(item) => <span>{item.title}</span>}
+ *   autoRefresh={8000}
+ *   maxHeight={400}
+ *   header={<strong>Activity</strong>}
+ * />
  */
 
 import React, { useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../LiveFeed.types';
+
+// ---------------------------------------------------------------------------
+// Static style objects.
+// All visual tokens reference --ds-* CSS custom properties with optional
+// component-scoped overrides (--ds-live-feed-*) so consumers can theme the
+// feed independently of the global palette.
+// ---------------------------------------------------------------------------
 
 const s = {
   container: {
@@ -76,6 +96,8 @@ const s = {
     padding: '0.25rem 0.75rem',
     borderRadius: 'var(--ds-radius-md)',
   } as React.CSSProperties,
+  // Skeleton factory: returns a pulsing placeholder block at the given width/height.
+  // Used during initial loading state to hint at incoming content layout.
   skeleton: (w: string, h: string) => ({
     width: w,
     height: h,
@@ -85,6 +107,17 @@ const s = {
   } as React.CSSProperties),
 };
 
+/**
+ * Rustic (Vanilla) LiveFeed engine.
+ *
+ * Uses inline styles exclusively, referencing `--ds-*` CSS custom properties for
+ * theming. Injects `@keyframes pulse` and `@keyframes feedPulse` via an inline
+ * `<style>` tag so no external stylesheet is needed.
+ *
+ * @typeParam T - Feed item shape, must extend {@link FeedItem}.
+ * @param props - {@link LiveFeedProps} -- items, renderItem callback, refresh/load-more controls.
+ * @returns A scrollable feed as a styled container div.
+ */
 export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<T>) {
   const {
     items,
@@ -104,8 +137,10 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
     style,
   } = props;
 
+  // Interval ref persists across renders for correct cleanup on unmount.
   const intervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
+  // Auto-refresh: polls at the given interval. Setting autoRefresh to 0 disables it.
   useEffect(() => {
     if (autoRefresh && autoRefresh > 0 && onRefresh) {
       intervalRef.current = setInterval(onRefresh, autoRefresh);
@@ -113,11 +148,15 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
     }
   }, [autoRefresh, onRefresh]);
 
+  // Cap visible items to prevent excessive DOM rendering in high-throughput feeds.
   const displayItems = maxItems ? items.slice(0, maxItems) : items;
 
+  // Skeleton loading: only on first load (empty items). Subsequent refreshes
+  // preserve existing items so users see continuous content.
   if (loading && items.length === 0) {
     return (
       <div className={className} style={{ ...s.container, ...style }}>
+        {/* Inline @keyframes since rustic engine has no external CSS dependency. */}
         <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
         <div style={s.skeleton('30%', '1rem')} />
         {[1, 2, 3].map((i) => (
@@ -129,6 +168,10 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
 
   return (
     <div className={className} style={{ ...s.container, ...style }}>
+      {/* Two keyframes injected inline:
+          - pulse: skeleton loading shimmer
+          - feedPulse: background flash on newly arrived feed items,
+            fading from info-bg to transparent over 1s. */}
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} } @keyframes feedPulse { 0%{background:var(--ds-live-feed-new-bg,var(--ds-color-info-bg))} 100%{background:transparent} }`}</style>
 
       {(header || onRefresh) && (
@@ -142,6 +185,8 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         </div>
       )}
 
+      {/* New items bar -- clickable banner that tells the user how many unseen items
+          are buffered. The parent decides how to merge them into the visible list. */}
       {newItemsCount != null && newItemsCount > 0 && (
         <div style={s.newBar} onClick={onShowNewItems}>
           <span style={s.newBadge}>{newItemsCount}</span>
@@ -149,11 +194,15 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         </div>
       )}
 
+      {/* Scrollable feed area. maxHeight makes the container scroll;
+          when omitted, the list grows without constraint. */}
       <div style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
         {displayItems.length === 0 ? (
           emptyState ?? <div style={s.empty}>No items</div>
         ) : (
           <div style={s.feedList}>
+            {/* New items receive feedPulse animation: a 1s background flash from
+                info-bg to transparent, drawing the user's eye to the fresh entry. */}
             {displayItems.map((item, i) => (
               <div
                 key={item.key}
@@ -166,6 +215,8 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         )}
       </div>
 
+      {/* Load-more button. Text changes to "Loading..." during fetch to give
+          the user feedback without adding a separate spinner element. */}
       {hasMore && onLoadMore && (
         <button style={s.loadMore} onClick={onLoadMore}>
           {loading ? 'Loading...' : 'Load more'}

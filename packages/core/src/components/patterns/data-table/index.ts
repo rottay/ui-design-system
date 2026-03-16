@@ -1,11 +1,14 @@
 'use client';
 
 /**
- * DataTable<T> - Pattern Component
+ * @fileoverview DataTable pattern - Rottay Design System
+ * @description Generic, engine-aware data table with composable slots for
+ * toolbars, bulk actions, mobile cards, and row expansion.
  *
- * Generic, engine-aware data table with composable slots.
- * Supports toolbar, actions, bulk actions, row expansion,
- * pagination, sorting, filtering, and mobile card view.
+ * @remarks
+ * This pattern sits above the primitive table: it packages product-facing
+ * mechanics such as toolbars and bulk actions while keeping the row/cell
+ * rendering API reusable across domains.
  */
 
 import { createEngineComponent } from '../../../engines/factory';
@@ -21,6 +24,7 @@ export type {
   BulkAction,
 } from '../types';
 
+/** Public data-table pattern entry point resolved through the engine factory. */
 export const PatternDataTable = createEngineComponent<DataTablePatternProps<any>>(
   'PatternDataTable',
   {

@@ -1,12 +1,27 @@
 'use client';
 
 /**
- * WorkspaceSwitcher - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla/CSS-variable) engine for the WorkspaceSwitcher pattern.
+ * Zero external UI library dependency -- renders with plain HTML elements and inline
+ * styles that reference `--ds-*` CSS custom properties for theming. This makes the
+ * component portable to any host app without requiring Ant Design or DaisyUI.
+ *
+ * @example
+ * <RusticWorkspaceSwitcher
+ *   workspaces={[{ id: '1', name: 'Acme Corp', role: 'Admin' }]}
+ *   activeWorkspaceId="1"
+ *   onSwitch={(id) => setActiveWs(id)}
+ *   position="topbar"
+ * />
  */
 
 import React, { useState, useRef, useEffect, useCallback, type CSSProperties } from 'react';
 import type { WorkspaceSwitcherProps, Workspace } from '../WorkspaceSwitcher.types';
 
+/**
+ * Extracts up to two uppercase initials from a workspace or user name.
+ * Used as a fallback when no logo/avatar image is available.
+ */
 function getInitials(name: string): string {
   return name
     .split(' ')
@@ -15,6 +30,10 @@ function getInitials(name: string): string {
     .toUpperCase()
     .slice(0, 2);
 }
+
+// --- Shared style constants ---
+// Extracted as module-level objects to avoid re-creating on every render.
+// All colors reference --ds-* tokens so themes can override appearance.
 
 const dropdownStyle: CSSProperties = {
   position: 'absolute',
@@ -74,6 +93,14 @@ const dividerStyle: CSSProperties = {
   margin: 0,
 };
 
+/**
+ * Rustic engine workspace switcher using only inline styles and CSS variables.
+ * Mirrors the feature set of Classic/Modern engines (keyboard nav, unread badges,
+ * create workspace, current user footer) without any third-party UI dependency.
+ *
+ * @param props - {@link WorkspaceSwitcherProps}
+ * @returns A button trigger that toggles an absolutely-positioned workspace list.
+ */
 export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   const {
     workspaces,
@@ -91,11 +118,14 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   } = props;
 
   const [open, setOpen] = useState(false);
+  // -1 means no keyboard focus; updated on ArrowUp/Down or mouse hover.
   const [focusIndex, setFocusIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId);
 
+  // Close the dropdown when the user clicks anywhere outside the container.
+  // This replaces focus-trap behavior that would otherwise require a library.
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -187,6 +217,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
             {activeWorkspace?.name ?? 'Select workspace'}
           </span>
         )}
+        {/* Unicode down-pointing triangle as a lightweight caret icon */}
         <span style={{ fontSize: 10, opacity: 0.5 }}>{'\u25BC'}</span>
       </button>
 

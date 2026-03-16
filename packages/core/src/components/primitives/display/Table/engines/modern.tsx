@@ -1,35 +1,24 @@
 'use client';
 
 /**
- * @fileoverview Table Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based table with full feature parity with Classic.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Modern Table engine -- DaisyUI/Tailwind implementation.
  *
- * @remarks
- * This engine uses DaisyUI's table classes with Tailwind utilities
- * for lightweight, responsive table rendering.
+ * Full-featured data table built on DaisyUI table classes and Tailwind utilities
+ * instead of Ant Design. Implements sorting, filtering, pagination, row selection,
+ * expandable rows, virtual scrolling, column resize, nested header groups, inline
+ * cell editing, and summary rows -- all with WAI-ARIA grid semantics.
  *
- * **Supported Features:**
- * - Column sorting (single column, toggle ascend/descend/none)
- * - Column filtering (text input per column)
- * - Client-side pagination with page size control
- * - Row selection (checkbox/radio)
- * - Expandable rows with custom render
- * - Virtual scrolling for large datasets
- * - Fixed/sticky columns and headers
- * - Column resize via drag handles
- * - Nested column groups (multi-row headers)
- * - Summary rows (tfoot)
- * - Title and footer render functions
+ * The heavy lifting (sort/filter/paginate/virtual-scroll state) lives in the
+ * shared `useTableFeatures` hook; this file is responsible only for rendering
+ * that state into DaisyUI markup and wiring user interactions back to the hook.
  *
- * **ARIA Compliance:**
- * - role="grid" on table element
- * - aria-sort on sortable header cells
- * - aria-expanded on expandable rows
- * - aria-label on interactive controls
+ * Engine: **DaisyUI / Tailwind CSS**
  *
- * @see {@link Table} for the main component
- * @see {@link https://daisyui.com/components/table/} DaisyUI Table
+ * @example
+ * ```tsx
+ * <Table engine="modern" dataSource={orders} columns={cols} rowSelection={{ type: 'checkbox' }} />
+ * ```
+ *
  * @module Table/engines/modern
  * @category Display
  * @package @rottay/design-system
@@ -43,12 +32,24 @@ import {
 } from '../hooks/useTableFeatures';
 import { useTranslation } from '../../../../../i18n';
 
+// DaisyUI uses table-xs/md/lg for size variants. The DS uses small/default/large
+// as size tokens, so we map between the two naming conventions here.
 const sizeClasses: Record<string, string> = {
   small: 'table-xs',
   default: 'table-md',
   large: 'table-lg',
 };
 
+/**
+ * Modern Table engine backed by DaisyUI/Tailwind.
+ *
+ * Renders a full-featured data grid using semantic `<table>` markup styled
+ * with DaisyUI classes. All stateful logic (sort, filter, pagination,
+ * selection, virtual scroll, column resize) is delegated to `useTableFeatures`.
+ *
+ * @param props - Unified DS TableProps (see Table.types.ts)
+ * @returns A DaisyUI-styled table element with pagination controls
+ */
 export const Table = <T extends object = object>(props: TableProps<T>) => {
   const { t } = useTranslation('components');
 
@@ -117,14 +118,22 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   } = features;
 
   const { onCellEdit } = props;
+  // Normalize size to one of our three DaisyUI tokens. Any unrecognized value
+  // falls through to 'default' so the table never renders without a size class.
   const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
   const hasExpandable = !!expandable?.expandedRowRender;
+  // The expand column is rendered unless the consumer explicitly opts out via
+  // showExpandColumn: false -- useful when they want expand-on-row-click only.
   const showExpandCol = hasExpandable && expandable?.showExpandColumn !== false;
+  // Only render the filter row if at least one column declares filterSearch or filters.
   const hasFilters = leafColumns.some((c) => c.filterSearch || c.filters);
 
-  // Fixed column helpers
+  // Fixed (pinned) columns use sticky positioning with an opaque background
+  // to prevent scrolling content from bleeding through. z-10 keeps them above
+  // normal cells but below sticky headers (z-20) and loading overlays (z-30).
   const getFixedClass = (col: ColumnType<T>, position: 'left' | 'right' | boolean | undefined): string => {
     if (!position) return '';
+    // `fixed: true` is treated as left-fixed for backwards compatibility.
     if (position === 'left' || position === true) return 'sticky left-0 z-10 bg-base-100';
     if (position === 'right') return 'sticky right-0 z-10 bg-base-100';
     return '';
@@ -137,6 +146,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Inline editable cell component ----
+  // Defined as a nested component (not extracted to module scope) so it can
+  // close over handleCellSave/handleCellKeyNav without prop drilling. Each
+  // render of the table creates a new component identity, but React reconciles
+  // by key so this does not cause unmount/remount issues in practice.
   const EditableCellInput = ({
     value: initialValue,
     record,
@@ -154,6 +167,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     const inputRef = useRef<HTMLInputElement | HTMLSelectElement>(null);
     const fieldType: TableCellFieldType = column.fieldType || 'text';
 
+    // Auto-focus the input on mount so the user can immediately start typing
+    // without an extra click. This mirrors spreadsheet inline-edit UX.
     useEffect(() => {
       inputRef.current?.focus();
     }, []);
@@ -165,6 +180,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       [record, index, column, cellValue]
     );
 
+    // Enter/Tab commits the value and advances focus to the next editable cell
+    // (via handleCellKeyNav). Escape discards changes. This keyboard model
+    // follows spreadsheet conventions so power users can tab through rows.
     const onKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Escape') {
         if (e.key !== 'Escape') {
@@ -174,7 +192,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       }
     };
 
-    // Custom editRender
+    // If the column provides a custom editRender, defer to it entirely.
+    // This lets consumers render rich editors (color pickers, date pickers, etc.)
+    // while still getting keyboard navigation from the wrapping onKeyDown.
     if (column.editRender) {
       return (
         <div onKeyDown={onKeyDown}>
@@ -257,6 +277,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Render header cells for a single row (nested column groups) ----
+  // Column groups produce multiple header rows: parent groups span multiple
+  // columns via colSpan, while leaf columns span multiple rows via rowSpan.
+  // This renders one <tr>'s worth of <th> cells.
   const renderHeaderRow = (cells: HeaderCell<T>[], rowIndex: number) => {
     return cells.map((cell, cellIndex) => {
       const { column, colSpan, rowSpan } = cell;
@@ -266,6 +289,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       const fixedClass = getFixedClass(column, column.fixed);
       const width = getColumnWidth(column);
 
+      // WAI-ARIA requires aria-sort to distinguish ascending, descending, and
+      // unsorted states on sortable column headers for screen readers.
       let ariaSortValue: 'ascending' | 'descending' | 'none' | undefined;
       if (isSortable) {
         if (isCurrentSort && sortState.order === 'ascend') ariaSortValue = 'ascending';
@@ -307,7 +332,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   : '\u21C5'}
               </span>
             )}
-            {/* Resize handle */}
+            {/* Resize handle -- only on leaf columns (colSpan <= 1) because
+                dragging a group header's edge is ambiguous about which child
+                column should resize. */}
             {colSpan <= 1 && (
               <span
                 className={[
@@ -330,6 +357,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Render filter row under headers ----
+  // An additional <tr> in <thead> holds per-column text filter inputs. Only
+  // rendered when at least one column declares filterSearch or filters.
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     return (
@@ -373,7 +402,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       );
     }
 
-    // Offset for virtual row indices in the full paginatedData
+    // When virtual scrolling, displayData is a slice of the full paginated set.
+    // indexOffset maps local display indices back to their position in the
+    // original dataset so row keys, selection, and callbacks use correct indices.
     const indexOffset = virtualEnabled ? virtualSlice.start : 0;
 
     return displayData.map((record, displayIdx) => {
@@ -505,6 +536,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Virtual scroll wrapper ----
+  // scroll.y constrains the table body height and enables vertical overflow.
+  // scroll.x sets the table's minimum width for horizontal scrolling.
   const scrollYValue = typeof scroll?.y === 'number' ? scroll.y : typeof scroll?.y === 'string' ? scroll.y : undefined;
   const scrollXValue = scroll?.x;
 
@@ -573,7 +606,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         </thead>
       )}
 
-      {/* Body */}
+      {/* Body -- when virtual scrolling is on, invisible spacer rows above and
+          below the visible window maintain the scroll container's total height
+          so the scrollbar thumb size and position stay correct. 48px is the
+          estimated average row height used for offset calculations. */}
       <tbody>
         {virtualEnabled && virtualSlice.offsetTop > 0 && (
           <tr style={{ height: virtualSlice.offsetTop }} aria-hidden="true">
@@ -609,7 +645,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
   return (
     <div className={`relative ${className}`} style={style} id={id}>
-      {/* Inline keyframes for expand animation */}
+      {/* Inline keyframes avoid a global CSS file dependency. dangerouslySetInnerHTML
+          is safe here because the content is a static string, not user input. */}
       <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-table-expand{from{opacity:0;max-height:0;transform:translateY(-8px)}to{opacity:1;max-height:500px;transform:translateY(0)}}` }} />
       {/* Title */}
       {title && (
@@ -650,7 +687,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Pagination -- `pagination !== false` keeps the controls visible even
+          when the consumer passes an empty object (default). Explicitly passing
+          `false` hides them for cases like infinite scroll or server-side paging. */}
       {pagination !== false && (
         <div className="flex justify-end items-center gap-2 mt-4">
           <span className="text-sm text-base-content/60">{paginationRange}</span>

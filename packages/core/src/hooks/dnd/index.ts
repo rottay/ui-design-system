@@ -180,23 +180,32 @@ export function useSortableList<T>(
   } = options;
 
   // ---- State ----
+  // Two parallel state pairs: one for mouse/touch drag (HTML5 DnD API),
+  // one for keyboard drag. They are independent because the interaction
+  // models differ, but both feed into the same isDragging flag.
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
-  // Keyboard-grab state (Space to grab, arrows to move, Space/Enter to drop, Escape to cancel)
+  // Keyboard grab: Space/Enter to grab, arrows to choose target, then
+  // Space/Enter to drop or Escape to cancel.
   const [keyboardGrabbedIndex, setKeyboardGrabbedIndex] = useState<number | null>(null);
   const [keyboardTargetIndex, setKeyboardTargetIndex] = useState<number | null>(null);
 
-  // Refs for stable callback references
+  // Refs hold the latest items/onReorder without adding them to callback
+  // deps, so handler functions remain stable across renders.
   const itemsRef = useRef(items);
   itemsRef.current = items;
 
   const onReorderRef = useRef(onReorder);
   onReorderRef.current = onReorder;
 
+  // Unified dragging flag: true when either mouse or keyboard drag is active.
   const isDragging = draggedIndex !== null || keyboardGrabbedIndex !== null;
 
   // ---- Drag handlers ----
+  // Each handler is a curried function (index) => (event) so that
+  // getItemProps can bind the index at call time without creating
+  // a new closure on every render for every item.
   const handleDragStart = useCallback(
     (index: number) => (e: DragEvent) => {
       if (disabled) {
@@ -204,7 +213,7 @@ export function useSortableList<T>(
         return;
       }
       e.dataTransfer.effectAllowed = 'move';
-      // Store a text fallback for accessibility
+      // text/plain fallback enables assistive tech that reads drag data.
       e.dataTransfer.setData('text/plain', String(index));
       setDraggedIndex(index);
     },
@@ -242,14 +251,19 @@ export function useSortableList<T>(
   );
 
   // ---- Keyboard handlers ----
+  // Keyboard reorder follows a two-phase interaction: first grab (Space/Enter),
+  // then move with arrows and drop (Space/Enter) or cancel (Escape).
+  // This matches common screen-reader drag-and-drop patterns.
   const handleKeyDown = useCallback(
     (index: number) => (e: KeyboardEvent) => {
       if (disabled) return;
 
+      // Map arrow keys based on list direction so the same handler
+      // works for both vertical and horizontal layouts.
       const prevKey = direction === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
       const nextKey = direction === 'vertical' ? 'ArrowDown' : 'ArrowRight';
 
-      // If not grabbed yet
+      // Phase 1: nothing grabbed yet -- Space/Enter initiates the grab.
       if (keyboardGrabbedIndex === null) {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
@@ -259,7 +273,7 @@ export function useSortableList<T>(
         return;
       }
 
-      // Item is grabbed - handle movement/drop/cancel
+      // Phase 2: item is grabbed -- handle movement, drop, or cancel.
       switch (e.key) {
         case prevKey: {
           e.preventDefault();
@@ -308,6 +322,10 @@ export function useSortableList<T>(
   };
 
   // ---- Item props factory ----
+  // getItemProps computes all drag-related props for a single item,
+  // including visual feedback styles and ARIA attributes. It is memoized
+  // on the full set of drag state values so items only re-render when
+  // drag state actually changes.
   const getItemProps = useCallback(
     (item: T, index: number): SortableItemProps => {
       const key = keyExtractor(item);
@@ -316,7 +334,8 @@ export function useSortableList<T>(
       const isKeyboardGrabbed = keyboardGrabbedIndex === index;
       const isKeyboardTarget = keyboardTargetIndex === index && keyboardGrabbedIndex !== null && keyboardGrabbedIndex !== index;
 
-      // Build style with visual feedback
+      // Visual feedback: dragged items become translucent, drop targets
+      // get a directional border indicator using the DS primary color.
       const style: CSSProperties = {
         cursor: disabled ? 'default' : 'grab',
       };
@@ -329,6 +348,8 @@ export function useSortableList<T>(
         style.opacity = 0.5;
       }
 
+      // Drop indicator border direction matches the list layout so
+      // users see a visual "insert here" line in the correct axis.
       if (isDragTarget || isKeyboardTarget) {
         if (direction === 'vertical') {
           style.borderTop = '2px solid var(--ds-color-primary, #1677ff)';

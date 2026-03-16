@@ -1,8 +1,9 @@
 /**
- * Toggle Component Tokens - TypeScript Mirror
+ * @fileoverview Toggle (switch) component token mirrors.
  *
- * TypeScript representation of Toggle CSS custom properties.
- * Use these for type-safe Toggle token references.
+ * Covers 5 size tiers, 6 color variants, dot/track/label/inner-label styling,
+ * helper text, error state, focus ring, loading state, disabled opacity,
+ * and transition tokens.
  */
 
 // Toggle Sizes

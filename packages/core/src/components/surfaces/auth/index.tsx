@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * AuthSurface
- *
- * Authentication screens need stronger layout ownership than a plain card
- * because the product often wants a branded split view, contextual guidance,
- * and legal/footer content. This surface keeps that shell in the DS while the
- * app still owns the actual auth form component.
+ * @fileoverview AuthSurface -- branded authentication page shell.
+ * @description Provides split-view layout with hero panel, centered card form,
+ * and legal/footer slots. Supports responsive stacking and hero positioning.
+ * The app owns the actual auth form component; this surface owns the page chrome.
  */
 
 import React from 'react';
@@ -21,8 +19,13 @@ export interface AuthSurfaceProps {
 
 export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  // Split layout requires all three conditions: a non-centered layout preference,
+  // hero content to display, and enough viewport width. Missing any one falls
+  // back to the vertically-centered single-column design.
   const isSplitLayout =
     config.visual.layout !== 'centered' && !!config.presentation.hero && !shouldStack;
+  // Default hero placement is "start" (left side). Only when explicitly set
+  // to 'end' does the hero swap to the right/bottom position.
   const heroFirst = config.visual.heroPosition !== 'end';
 
   const formPanel = (
@@ -69,6 +72,12 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
     >
       {config.presentation.topBar}
 
+      {/* Two layout branches:
+          - Split: hero and form side by side (50/50 grid), hero position swappable
+          - Centered: form constrained to 520px max, hero stacks above or below
+          The centered branch uses gridColumn: '1 / -1' to break out of the
+          12-column grid and center itself, since Grid.Item span alone cannot
+          achieve horizontal centering. */}
       {isSplitLayout ? (
         <Grid columns={12} gap="lg">
           {heroFirst && heroPanel && <Grid.Item span={6}>{heroPanel}</Grid.Item>}

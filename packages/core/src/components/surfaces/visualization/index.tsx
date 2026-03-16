@@ -1,12 +1,10 @@
 'use client';
 
 /**
- * VisualizationSurface
- *
- * Charts, maps, timelines, and custom visualizations all need the same page
- * mechanics: title, actions, optional stats, and a way to switch between
- * alternate visual views. The actual chart implementation still belongs to the
- * app or pattern layer; this surface only owns the page skeleton.
+ * @fileoverview VisualizationSurface -- chart/map/timeline page shell.
+ * @description Provides page-level skeleton for visual data pages: title, actions,
+ * optional KPI stats, and tabbed view switching. The actual chart implementation
+ * belongs to the app or pattern layer; this surface owns the page skeleton only.
  */
 
 import React from 'react';
@@ -33,12 +31,18 @@ export function VisualizationSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { tSurface } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
+  // Views are permission-filtered so restricted chart types never appear
+  // in the tab bar (e.g. financial charts hidden from non-admin users).
   const visibleViews = filterSurfaceTabbedViews(config.behavior.views, config.permissions);
+  // If the configured active view was hidden by permissions, fall back to
+  // the first visible view to avoid a blank content area.
   const resolvedActiveView =
     visibleViews.some((view) => view.key === config.behavior.activeView)
       ? config.behavior.activeView
       : visibleViews[0]?.key;
   const isControlledViewState = config.behavior.activeView !== undefined;
+  // Stats grid adapts from 4 columns on desktop to 1 on mobile so KPI
+  // numbers remain readable at every breakpoint.
   const statsColumns = resolveResponsiveColumnCount(responsiveLayout, 4, 2, 1);
 
   return (

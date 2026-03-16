@@ -1,96 +1,22 @@
 'use client';
 
 /**
- * @fileoverview Tour Component - Rottay Design System
- * @description A multi-step guided tour component that highlights elements and displays
- * informational popovers. Perfect for onboarding flows, feature introductions,
- * interactive tutorials, and new user education.
+ * @fileoverview Tour - multi-step guided onboarding with spotlight and popovers.
+ * Targets can be CSS selectors, React refs, or getter functions.
+ * Provides mask overlay, step navigation, and onChange/onClose/onFinish callbacks.
+ * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
  *
- * @remarks
- * The Tour component creates spotlight-guided experiences that walk users through
- * features and workflows. It's ideal for:
- * - New user onboarding flows
- * - Feature introduction after updates
- * - Interactive tutorials and help systems
- * - Complex workflow guidance
- * - Contextual product education
- *
- * Key features:
- * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
- * - **Flexible targeting**: CSS selectors, React refs, or getter functions
- * - **Spotlight effect**: Highlights target with mask overlay
- * - **Step navigation**: Previous/Next buttons with step indicators
- * - **Callback hooks**: onChange, onClose, onFinish for full control
- * - **Visual types**: Default or primary styling
- *
- * @example Basic tour with CSS selector targets
- * ```tsx
- * import { Tour, Button } from '@rottay/design-system';
- *
- * const steps = [
- *   { target: '#step1', title: 'Welcome', description: 'Start here' },
- *   { target: '#step2', title: 'Next Step', description: 'Continue here' },
- *   { target: '.feature', title: 'Feature', description: 'Try this!' },
- * ];
- *
- * <Tour steps={steps} open={isOpen} onClose={() => setIsOpen(false)} />
- * ```
- *
- * @example Tour with React ref targets
- * ```tsx
- * const buttonRef = useRef<HTMLButtonElement>(null);
- * const inputRef = useRef<HTMLInputElement>(null);
- *
- * const steps = [
- *   { target: buttonRef, title: 'Click here', description: 'Start the action' },
- *   { target: inputRef, title: 'Enter data', description: 'Type your info' },
- * ];
- *
- * <Tour steps={steps} open={tourOpen} onFinish={() => markComplete()} />
- * ```
- *
- * @example Primary styled tour with cover images
+ * @example
  * ```tsx
  * const steps = [
- *   {
- *     target: '#dashboard',
- *     title: 'Your Dashboard',
- *     description: 'View all your metrics here',
- *     cover: <img src="/dashboard-guide.png" alt="Guide" />,
- *   },
- *   {
- *     target: '#settings',
- *     title: 'Settings',
- *     description: 'Customize your experience',
- *   },
+ *   { target: '#sidebar', title: 'Navigation', description: 'Browse sections here' },
+ *   { target: btnRef, title: 'Create', description: 'Click to add a new item' },
  * ];
- *
- * <Tour
- *   steps={steps}
- *   type="primary"
- *   open={isOpen}
- *   onFinish={() => console.log('Tour completed')}
- * />
+ * <Tour steps={steps} open={showTour} onFinish={() => markOnboarded()} />
  * ```
  *
- * @example Multi-engine usage
- * ```tsx
- * // Classic engine (Ant Design - default)
- * <Tour engine="classic" steps={steps} open={isOpen} mask />
- *
- * // Modern engine (DaisyUI/Tailwind)
- * <Tour engine="modern" steps={steps} type="primary" open={isOpen} />
- *
- * // Rustic engine (Pure HTML/CSS)
- * <Tour engine="rustic" steps={steps} open={isOpen} zIndex={2000} />
- * ```
- *
- * @see {@link TourProps} for available props
- * @see {@link TourStepProps} for step configuration
- * @see {@link TourPlacement} for placement options
  * @module Tour
  * @category Overlay
- * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../engines/factory';
 import type { TourProps } from './Tour.types';
@@ -103,27 +29,11 @@ export {
   TOUR_DEFAULTS,
 } from './Tour.types';
 
-/**
- * Tour component with multi-engine support.
- * Provides guided tours with spotlight effects and step navigation.
- *
- * @param props - Tour configuration props
- * @param props.steps - Array of tour steps with targets and content
- * @param props.current - Current step index (controlled mode)
- * @param props.open - Whether the tour is visible
- * @param props.onChange - Callback when step changes
- * @param props.onClose - Callback when tour is closed
- * @param props.onFinish - Callback when tour completes
- * @param props.type - Visual style ('default' | 'primary')
- * @param props.mask - Whether to show backdrop mask
- * @param props.arrow - Whether to show arrow pointing to target
- * @param props.placement - Default popover placement
- * @returns The tour overlay with spotlight and popover
- */
+/** Tour component with multi-engine support. No compound sub-components. */
 export const Tour = createEngineComponent<TourProps>('Tour', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+  classic: () => import('./engines/classic'),  // Ant Design Tour
+  modern: () => import('./engines/modern'),     // DaisyUI / Tailwind
+  rustic: () => import('./engines/rustic'),      // Vanilla spotlight + popover
 });
 
 export default Tour;

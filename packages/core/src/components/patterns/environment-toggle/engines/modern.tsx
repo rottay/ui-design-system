@@ -1,12 +1,33 @@
 'use client';
 
 /**
- * EnvironmentToggle - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview EnvironmentToggle -- Modern engine (DaisyUI / Tailwind).
+ * Provides a UI control for switching between deployment environments.
+ * Supports three display variants: join-group toggle (default), pill
+ * buttons, and a custom dropdown with click-outside dismissal.
+ * A colored banner warns when a non-production environment is active.
+ * Production switches can require a DaisyUI modal confirmation.
+ *
+ * @example
+ * <ModernEnvironmentToggle
+ *   environments={[{ id: 'dev', name: 'Development', color: '#3b82f6' }]}
+ *   activeEnvironment="dev"
+ *   onChange={(envId) => setEnv(envId)}
+ * />
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { EnvironmentToggleProps, EnvironmentDef } from '../EnvironmentToggle.types';
 
+/**
+ * Modern (DaisyUI/Tailwind) implementation of the EnvironmentToggle pattern.
+ * Uses DaisyUI's join component for the default toggle, a custom
+ * dropdown with outside-click detection, and DaisyUI modal for
+ * production confirmation.
+ *
+ * @param props - See {@link EnvironmentToggleProps} for the full prop contract.
+ * @returns The rendered environment toggle with optional banner and confirmation modal.
+ */
 export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
   const {
     environments,
@@ -22,13 +43,16 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     style,
   } = props;
 
+  /* Dropdown open/close state for the dropdown variant */
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  /* Tracks which environment needs production confirmation (null = no pending confirmation) */
   const [confirmEnv, setConfirmEnv] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeEnv = environments.find(e => e.id === activeEnvironment);
   const isProduction = activeEnvironment === productionId;
 
+  /** Closes dropdown when user clicks outside the dropdown container */
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -38,15 +62,21 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     [],
   );
 
+  /* Register/unregister click-outside listener only while dropdown is open */
   useEffect(() => {
     if (dropdownOpen) document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dropdownOpen, handleClickOutside]);
 
+  /**
+   * Handles environment switching with production safety gate.
+   * Routes to a confirmation modal if switching to production.
+   */
   const handleSwitch = useCallback(
     (envId: string) => {
       if (envId === activeEnvironment) return;
       if (envId === productionId && confirmProductionSwitch) {
+        /* Show confirmation modal instead of switching immediately */
         setConfirmEnv(envId);
       } else {
         onChange(envId);
@@ -56,7 +86,9 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     [activeEnvironment, productionId, confirmProductionSwitch, onChange],
   );
 
+  /** Renders the appropriate toggle control based on the variant prop */
   const renderToggle = () => {
+    /* Dropdown variant: custom positioned menu with click-outside dismissal */
     if (variant === 'dropdown') {
       return (
         <div ref={dropdownRef} className="relative inline-block">
@@ -112,6 +144,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       );
     }
 
+    /* Pills variant: individual buttons with environment color applied to active button */
     if (variant === 'pills') {
       return (
         <div className="flex gap-1" data-testid="env-toggle-trigger">
@@ -136,7 +169,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       );
     }
 
-    // Default: toggle
+    /* Default: DaisyUI join group -- buttons share borders for a segmented control look */
     return (
       <div className="join" data-testid="env-toggle-trigger">
         {environments.map(env => (
@@ -164,7 +197,8 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   return (
     <div className={`ds-pattern-environment-toggle ds-engine-modern ${className ?? ''}`} style={style}>
-      {/* Banner */}
+      {/* Banner -- pulsing dot + message in env color; only for non-production environments */}
+      {/* Color suffix '15' gives ~9% hex opacity for a subtle background tint */}
       {showBanner && !isProduction && activeEnv && (
         <div
           className="flex items-center justify-center gap-2 py-1.5 px-4 text-xs font-medium"
@@ -175,6 +209,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           }}
           data-testid="env-banner"
         >
+          {/* Pulsing dot for visual attention */}
           <span
             className="w-2 h-2 rounded-full animate-pulse"
             style={{ background: activeEnv.color }}
@@ -188,7 +223,9 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
         {renderToggle()}
       </div>
 
-      {/* Production confirmation modal */}
+      {/* Production confirmation modal -- DaisyUI modal triggered by setting confirmEnv state.
+          Confirming fires onChange and resets both modal and dropdown state.
+          Clicking the backdrop or Cancel dismisses without switching. */}
       {confirmEnv && (
         <div className="modal modal-open">
           <div className="modal-box max-w-sm">
@@ -204,6 +241,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               <button
                 className="btn btn-sm btn-error"
                 onClick={() => {
+                  /* Commit the environment switch and clean up all UI state */
                   onChange(confirmEnv);
                   setConfirmEnv(null);
                   setDropdownOpen(false);
@@ -214,6 +252,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               </button>
             </div>
           </div>
+          {/* Transparent backdrop -- closes modal on click without switching */}
           <div className="modal-backdrop" onClick={() => setConfirmEnv(null)} />
         </div>
       )}

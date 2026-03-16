@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Public API contract tests. Validates the root barrel exports
+ * canonical DS surfaces (ListSurface, DashboardSurface, etc.), excludes
+ * removed/legacy exports, and verifies package.json exposes only the
+ * supported subpaths.
+ */
+
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';

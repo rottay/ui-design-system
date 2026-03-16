@@ -77,7 +77,8 @@ const styles = {
     zIndex: 'var(--ds-backtop-z-index, 1000)' as unknown as number,
     transition: 'opacity 0.3s, transform 0.3s',
   } as React.CSSProperties,
-  /** Hidden state styles - invisible and non-interactive */
+  /** Hidden state: scale(0) + opacity 0 provides a shrink-out animation;
+   *  pointerEvents:'none' ensures the invisible button cannot be clicked */
   hidden: {
     opacity: 0,
     transform: 'scale(0)',
@@ -198,7 +199,8 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     // Render
     // ========================================================================
 
-    /** Merged button styles including visibility state */
+    // Style merge order: base button -> visibility state -> consumer overrides.
+    // Consumer styles come last so they can override position/color if needed.
     const buttonStyle: React.CSSProperties = {
       ...styles.button,
       ...(visible ? styles.visible : styles.hidden),

@@ -1,9 +1,17 @@
 'use client';
 
 /**
- * @fileoverview Sheet Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Sheet component.
- * Uses DaisyUI drawer pattern.
+ * @fileoverview Sheet Modern (Hermes) Engine - Rottay Design System.
+ * Implements a slide-in panel overlay using DaisyUI classes and Tailwind
+ * utilities. Manages body scroll lock and Escape key dismissal internally
+ * so no external modal manager is needed.
+ *
+ * @example
+ * ```tsx
+ * <Sheet engine="modern" open={open} onOpenChange={setOpen} side="bottom" title="Filters">
+ *   <FilterForm />
+ * </Sheet>
+ * ```
  *
  * @module Sheet/Engines/Modern
  * @category Overlay
@@ -14,6 +22,11 @@ import React, { useEffect, useCallback } from 'react';
 import type { SheetProps } from '../Sheet.types';
 import { SHEET_DEFAULTS } from '../Sheet.types';
 
+/**
+ * Tailwind class presets for each side variant. `panel` controls fixed
+ * positioning and border radius, `translate` provides the off-screen
+ * transform used for slide-in/slide-out animation.
+ */
 const SIDE_CLASSES: Record<string, { panel: string; translate: string }> = {
   bottom: {
     panel: 'inset-x-0 bottom-0 rounded-t-2xl',
@@ -29,6 +42,15 @@ const SIDE_CLASSES: Record<string, { panel: string; translate: string }> = {
   },
 };
 
+/**
+ * Modern engine implementation of Sheet using DaisyUI/Tailwind.
+ *
+ * Locks body scroll while open, listens for Escape key, and returns an
+ * empty fragment when closed so no DOM nodes remain in the tree.
+ *
+ * @param props - Sheet configuration props
+ * @returns Slide-in panel rendered with Tailwind utility classes
+ */
 export default function ModernSheet(props: SheetProps): React.ReactElement {
   const {
     open,
@@ -51,6 +73,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     }
   }, [closeOnEscape, onOpenChange]);
 
+  // Lock body scroll and bind Escape handler while open; cleanup restores both
   useEffect(() => {
     if (open) {
       document.addEventListener('keydown', handleEscape);
@@ -62,6 +85,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     };
   }, [open, handleEscape]);
 
+  // Bail early when closed -- no DOM footprint remains
   if (!open) return <></>;
 
   const sideConfig = SIDE_CLASSES[side] || SIDE_CLASSES.bottom;
@@ -102,6 +126,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             </button>
           </div>
         )}
+        {/* Scrollable content area - bottom sheets need explicit max-height accounting for header */}
         <div className="p-4 overflow-y-auto" style={isBottom ? { maxHeight: 'calc(85vh - 80px)' } : { height: '100%' }}>
           {children}
         </div>

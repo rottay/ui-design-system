@@ -64,7 +64,8 @@ import { LINK_DEFAULTS } from '../Link.types';
 
 /**
  * Maps semantic link types to DaisyUI link color classes.
- * DaisyUI uses 'link-error' for danger state (following their naming convention).
+ * DaisyUI uses 'link-error' for danger (not 'link-danger'), so we bridge
+ * our API naming convention to DaisyUI's naming convention here.
  */
 const typeClassMap: Record<string, string> = {
   default: 'link-info',
@@ -157,6 +158,8 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
    * - `no-underline`: Removes underline when underline=false
    * - Disabled classes: opacity-50, cursor-not-allowed, pointer-events-none
    */
+  // Array + filter(Boolean) pattern drops empty strings from conditional
+  // classes, producing clean class attributes without extra whitespace
   const linkClasses = [
     'link',
     typeClassMap[type],

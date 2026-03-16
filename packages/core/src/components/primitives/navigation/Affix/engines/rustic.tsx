@@ -283,7 +283,8 @@ export const RusticAffix = forwardRef<HTMLDivElement, AffixProps>(
     // CSS Variables
     // ========================================================================
 
-    // CSS variables for theming (enables tenant customization)
+    // CSS variables let tenant themes override affix behavior (e.g. shadow,
+    // transition timing) without touching component props or JavaScript
     const cssVars: React.CSSProperties = {
       '--ds-affix-z-index': zIndex,
       '--ds-affix-offset-top': `${offsetTop}px`,
@@ -295,7 +296,8 @@ export const RusticAffix = forwardRef<HTMLDivElement, AffixProps>(
     // Render - Simple Sticky Mode
     // ========================================================================
 
-    // Simple sticky mode (no onChange callback) - pure CSS solution
+    // When no onChange callback is needed, CSS sticky is sufficient and avoids
+    // the cost of scroll event listeners and layout measurements
     if (!onChange) {
       const stickyStyle: React.CSSProperties = {
         ...cssVars,
@@ -323,7 +325,9 @@ export const RusticAffix = forwardRef<HTMLDivElement, AffixProps>(
     // Render - Advanced Mode with onChange
     // ========================================================================
 
-    // Advanced mode with onChange tracking - uses JavaScript positioning
+    // Advanced mode: CSS variables are spread into both affixed and non-affixed
+    // styles so tenant overrides remain active regardless of scroll state.
+    // The box-shadow gives visual feedback that the element is floating.
     const affixedStyle: React.CSSProperties = state.affixed
       ? {
           ...cssVars,

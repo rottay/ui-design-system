@@ -19,6 +19,10 @@ import type { TableProps, ColumnType, SortOrder, EditingCell } from '../Table.ty
 // ---------------------------------------------------------------------------
 export type TableKey = string | number;
 
+/**
+ * Normalize arbitrary row identifiers into the primitive key shapes used by
+ * selection, expansion, and editing state.
+ */
 export function normalizeTableKey(value: unknown, fallback: number): TableKey {
   if (typeof value === 'string' || typeof value === 'number') return value;
   return String(value ?? fallback);
@@ -27,6 +31,7 @@ export function normalizeTableKey(value: unknown, fallback: number): TableKey {
 // ---------------------------------------------------------------------------
 // Flatten nested column groups into leaf columns
 // ---------------------------------------------------------------------------
+/** Flatten grouped headers so downstream features can operate on leaf columns only. */
 export function flattenColumns<T>(columns: ColumnType<T>[]): ColumnType<T>[] {
   const result: ColumnType<T>[] = [];
   for (const col of columns) {
@@ -42,6 +47,7 @@ export function flattenColumns<T>(columns: ColumnType<T>[]): ColumnType<T>[] {
 // ---------------------------------------------------------------------------
 // Compute the max header depth for nested column groups
 // ---------------------------------------------------------------------------
+/** Calculate header depth so grouped table headers can render correct row spans. */
 export function getHeaderDepth<T>(columns: ColumnType<T>[]): number {
   let max = 1;
   for (const col of columns) {
@@ -67,6 +73,10 @@ function getLeafCount<T>(col: ColumnType<T>): number {
   return col.children.reduce((sum, c) => sum + getLeafCount(c), 0);
 }
 
+/**
+ * Convert nested column groups into the row structure consumed by custom
+ * header renderers.
+ */
 export function buildHeaderRows<T>(columns: ColumnType<T>[], totalDepth: number): HeaderCell<T>[][] {
   const rows: HeaderCell<T>[][] = Array.from({ length: totalDepth }, () => []);
 
@@ -98,6 +108,7 @@ export function buildHeaderRows<T>(columns: ColumnType<T>[], totalDepth: number)
 // ---------------------------------------------------------------------------
 // Column field key helper
 // ---------------------------------------------------------------------------
+/** Resolve a stable field key regardless of whether `dataIndex` is flat or nested. */
 export function columnFieldKey<T>(col: ColumnType<T>): string | undefined {
   return Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : col.dataIndex;
 }
@@ -105,6 +116,7 @@ export function columnFieldKey<T>(col: ColumnType<T>): string | undefined {
 // ---------------------------------------------------------------------------
 // Value accessor
 // ---------------------------------------------------------------------------
+/** Read nested values from a record using the same rules as the public column API. */
 export function getNestedValue<T>(record: T, dataIndex?: string | string[]): unknown {
   if (!dataIndex) return undefined;
   if (Array.isArray(dataIndex)) {
@@ -192,6 +204,13 @@ export interface UseTableFeaturesReturn<T> {
 const ROW_HEIGHT_ESTIMATE = 48;
 const VIRTUAL_BUFFER = 5;
 
+/**
+ * Shared advanced table state machine used by Modern and Rustic engines.
+ *
+ * Classic delegates more to Ant Design, but the custom engines need a shared
+ * source of truth for sorting, filtering, virtualization, selection, and
+ * inline editing.
+ */
 export function useTableFeatures<T extends object>(
   options: UseTableFeaturesOptions<T>
 ): UseTableFeaturesReturn<T> {
@@ -213,6 +232,7 @@ export function useTableFeatures<T extends object>(
   } = props;
 
   // ---- Row key helper ----
+  // Memoized because row identity participates in several independent state machines.
   const getRowKey = useCallback(
     (record: T, index: number): TableKey => {
       if (typeof rowKey === 'function') return normalizeTableKey(rowKey(record), index);
@@ -227,6 +247,7 @@ export function useTableFeatures<T extends object>(
   );
 
   // ---- Nested column helpers ----
+  // Derived once per column set and reused by sorting, headers, and editing.
   const visibleColumns = useMemo(() => columns.filter((c) => !c.hidden), [columns]);
   const leafColumns = useMemo(() => flattenColumns(visibleColumns), [visibleColumns]);
   const headerDepth = useMemo(() => getHeaderDepth(visibleColumns), [visibleColumns]);

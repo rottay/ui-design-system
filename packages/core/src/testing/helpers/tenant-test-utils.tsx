@@ -81,6 +81,9 @@ export interface RenderWithTenantOptions extends Omit<RenderOptions, 'wrapper'> 
 /**
  * Creates wrapper component for tenant tests
  */
+// Creates a fresh wrapper function on each call rather than returning a shared
+// component. This ensures each test gets an isolated provider tree without
+// state leaking between test runs.
 function createTenantWrapper(
   tenant: TestTenantName,
   engine: EngineName,
@@ -88,11 +91,15 @@ function createTenantWrapper(
   suspenseFallback: React.ReactNode
 ): React.FC<{ children: React.ReactNode }> {
   return function TenantWrapper({ children }) {
+    // Shallow spread lets individual tests override specific config fields
+    // (e.g., features, plan) without constructing a full TenantConfig.
     const config: TenantConfig = {
       ...TENANT_CONFIGS[tenant],
       ...tenantConfigOverride,
     };
 
+    // Provider order matters: TenantProvider must wrap EngineProvider because
+    // engine resolution depends on tenant config in production code.
     return (
       <TenantProvider config={config}>
         <EngineProvider defaultEngine={engine}>
@@ -224,6 +231,8 @@ export function itEachTenant(
  * });
  * ```
  */
+// Builds a 3x3 test matrix (3 engines x 3 tenants = 9 combinations) to verify
+// that component behavior is consistent across all supported configurations.
 export function describeEachEngineAndTenant(
   name: string,
   fn: (engine: StableEngineName, tenant: TestTenantName) => void

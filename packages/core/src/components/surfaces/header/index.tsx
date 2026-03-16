@@ -1,12 +1,9 @@
 'use client';
 
 /**
- * HeaderSurface
- *
- * This surface exists for pages that primarily need strong page chrome plus an
- * optional tabbed body. It is deliberately lighter than SettingsSurface or
- * DashboardSurface because not every route with tabs should inherit those
- * heavier mechanics.
+ * @fileoverview HeaderSurface -- lightweight page chrome with optional tabs.
+ * @description For pages that need strong title/breadcrumb chrome and optional
+ * tabbed body without the heavier mechanics of SettingsSurface or DashboardSurface.
  */
 
 import React from 'react';
@@ -27,13 +24,20 @@ export function HeaderSurface({
   loading = false,
 }: HeaderSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
+  // Tabs are permission-filtered so restricted tabs never appear in the
+  // navigation, avoiding confusing "access denied" states.
   const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs ?? [], config.permissions);
+  // Fall back to the first visible tab if the requested activeTab was
+  // hidden by permissions or does not exist in the config.
   const resolvedActiveTabKey =
     visibleTabs.some((tab) => tab.key === config.behavior.activeTab)
       ? config.behavior.activeTab
       : visibleTabs[0]?.key;
   const isControlledTabState = config.behavior.activeTab !== undefined;
 
+  // actionsStart allows apps to inject custom UI (e.g. search or status
+  // indicators) before the standard action buttons. Both slots live inside
+  // a Stack so they share consistent spacing.
   const actionsNode = (
     <Stack spacing="sm">
       {config.presentation.actionsStart}
@@ -76,8 +80,14 @@ export function HeaderSurface({
                 </Stack>
               ),
             }))}
+            // Tabs type (line vs card) falls back to the personality-derived
+            // default so the surface stays visually consistent with the rest
+            // of the product without per-page overrides.
             type={config.visual.tabsType ?? profileDefaults.tabsType}
             centered={config.visual.centeredTabs}
+            // Controlled vs uncontrolled: passing activeKey makes the Tabs
+            // component fully controlled; passing defaultActiveKey lets it
+            // manage its own state. We never pass both.
             activeKey={isControlledTabState ? resolvedActiveTabKey : undefined}
             defaultActiveKey={!isControlledTabState ? resolvedActiveTabKey : undefined}
             onChange={config.behavior.onTabChange}

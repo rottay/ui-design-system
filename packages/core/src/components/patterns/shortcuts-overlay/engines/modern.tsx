@@ -1,13 +1,32 @@
 'use client';
 
 /**
- * ShortcutsOverlay - Modern Engine (DaisyUI / Tailwind)
+ * @fileoverview ShortcutsOverlay -- Modern engine (DaisyUI / Tailwind).
+ * Full-screen modal dialog displaying keyboard shortcuts grouped by
+ * category with a search filter. Key combinations use DaisyUI's `kbd`
+ * component. The dialog is custom-built (not DaisyUI modal) for more
+ * control over backdrop click and auto-focus behavior.
+ *
+ * @example
+ * <ModernShortcutsOverlay
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ *   shortcuts={[{ key: 'ctrl+s', description: 'Save', category: 'File' }]}
+ * />
  */
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { formatShortcutKey } from '../../../../hooks/shortcuts';
 import type { ShortcutsOverlayProps, ShortcutDisplayItem } from '../ShortcutsOverlay.types';
 
+/**
+ * Modern (DaisyUI/Tailwind) implementation of the ShortcutsOverlay pattern.
+ * Renders a fixed-position dialog with search input, categorized shortcut
+ * list, and DaisyUI kbd elements for key combinations.
+ *
+ * @param props - See {@link ShortcutsOverlayProps} for the full prop contract.
+ * @returns The rendered shortcuts overlay, or null when closed.
+ */
 export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
   const {
     open,
@@ -24,6 +43,8 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /* Reset search and auto-focus the input when the overlay opens.
+     The 50ms delay ensures the DOM has rendered before focusing. */
   useEffect(() => {
     if (open) {
       setQuery('');
@@ -31,6 +52,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
     }
   }, [open]);
 
+  /* Filter shortcuts by query matching description, key combo, or category */
   const filtered = useMemo(() => {
     if (!query) return shortcuts;
     const q = query.toLowerCase();
@@ -42,6 +64,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
     );
   }, [shortcuts, query]);
 
+  /* Group filtered shortcuts by category -- uncategorized items go to "General" */
   const grouped = useMemo(() => {
     const groups: Record<string, ShortcutDisplayItem[]> = {};
     for (const item of filtered) {
@@ -52,18 +75,22 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
     return groups;
   }, [filtered]);
 
+  /** Closes the overlay, clears the search, and notifies the parent */
   const handleClose = () => {
     onOpenChange(false);
     setQuery('');
   };
 
+  /* Early-return prevents DOM rendering when the overlay is closed */
   if (!open) return null;
 
   return (
+    /* Fixed overlay with 10vh top offset so the dialog sits comfortably below
+         the page header rather than dead-center, which feels more natural for reference panels */
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]" style={style}>
-      {/* Backdrop */}
+      {/* Semi-transparent backdrop closes the dialog on click */}
       <div className="absolute inset-0 bg-black/50" onClick={handleClose} />
-      {/* Dialog */}
+      {/* Dialog card -- max-w-lg prevents overly wide layouts on ultrawide screens */}
       <div
         className={`relative bg-base-100 rounded-xl shadow-2xl w-full max-w-lg overflow-hidden ${className}`}
         role="dialog"
@@ -100,12 +127,14 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
                   {category}
                 </span>
               </div>
+              {/* Each shortcut row: description on left, DaisyUI kbd badges on right */}
               {items.map((item) => (
                 <div
                   key={item.key}
                   className="flex items-center justify-between px-5 py-1.5"
                 >
                   <span className="text-sm">{item.description}</span>
+                  {/* formatShortcutKey splits "ctrl+shift+s" into ["Ctrl", "Shift", "S"] */}
                   <div className="flex items-center gap-1">
                     {formatShortcutKey(item.key).map((segment, i) => (
                       <kbd key={i} className="kbd kbd-sm">

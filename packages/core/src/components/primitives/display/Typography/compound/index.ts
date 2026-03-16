@@ -11,6 +11,7 @@
  * - `TypographyHeading` - Engine-aware heading (h1-h6)
  * - `TypographyText` - Engine-aware inline text
  * - `TypographyParagraph` - Engine-aware paragraph
+ * - `TypographyLink` - Engine-aware anchor/link with hover effects
  *
  * **Usage Patterns:**
  * ```tsx
@@ -31,6 +32,7 @@
  * @see {@link TypographyHeading} for heading component
  * @see {@link TypographyText} for text component
  * @see {@link TypographyParagraph} for paragraph component
+ * @see {@link TypographyLink} for link component
  * @module Typography/compound
  * @category Display
  * @package @rottay/design-system

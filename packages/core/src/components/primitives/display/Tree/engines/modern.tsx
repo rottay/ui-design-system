@@ -1,11 +1,25 @@
 /**
- * Tree - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern Tree engine -- DaisyUI/Tailwind implementation.
  *
- * Full-featured tree implementation using DaisyUI classes and Tailwind CSS.
- * Supports drag-and-drop, async loading, search/filter, checkable with
- * half-checked cascading, tree lines, keyboard navigation, and full ARIA.
+ * Full-featured hierarchical tree built with DaisyUI classes and Tailwind utilities.
+ * Implements expand/collapse, checkable nodes with cascading half-checked state,
+ * drag-and-drop reordering, async child loading, search/filter with auto-expand,
+ * tree-line connectors, and WAI-ARIA TreeView keyboard navigation -- all without
+ * Ant Design.
+ *
+ * The component is split into a recursive `TreeNodeInternal` (one per visible node)
+ * and a root `ModernTree` that manages shared state and event handlers.
+ *
+ * Engine: **DaisyUI / Tailwind CSS**
+ *
+ * @example
+ * ```tsx
+ * <Tree engine="modern" treeData={files} showLine draggable onDrop={handleReorder} />
+ * ```
  *
  * @module Tree/Modern
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -29,6 +43,9 @@ import {
 // Highlight helper
 // ---------------------------------------------------------------------------
 
+// Wraps the matching substring in a warning-tinted span for search highlighting.
+// Uses DaisyUI's warning color palette since it provides good contrast
+// across both light and dark themes without custom color variables.
 function highlightText(
   text: React.ReactNode,
   searchValue: string,
@@ -181,7 +198,11 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   parentIsLast,
 }) => {
   const hasChildren = children && children.length > 0;
+  // Non-leaf nodes without children are assumed to support async loading,
+  // so they get an expander arrow that triggers loadData on first click.
   const showExpander = (hasChildren || (!isLeaf && !hasChildren)) && !isLeaf;
+  // 24px indent per level. Modern engine uses paddingLeft via inline style
+  // because Tailwind's pl-* utilities are static and don't support dynamic values.
   const paddingLeft = level * 24;
 
   const isDraggable = propDraggable && !disabled;
@@ -268,6 +289,9 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
       )}
 
       {/* Node content */}
+      {/* Node row classes use DaisyUI color utilities with opacity modifiers.
+          The border-l-2 accent appears on hover (30% opacity) and selected (full),
+          providing a progressive disclosure of the selection state. */}
       <div
         className={[
           'flex items-center py-1 px-2 rounded cursor-pointer',
@@ -276,6 +300,8 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           disabled ? 'opacity-50 cursor-not-allowed' : '',
           isFocused ? 'ring-2 ring-primary/30 ring-offset-1 rounded' : '',
           blockNode ? 'w-full' : 'inline-flex',
+          // "inside" drop target uses ring-inset so the indicator does not
+          // overlap adjacent nodes (ring-2 alone would extend outward).
           isDropTarget && dropPosition === 'inside'
             ? 'ring-2 ring-primary ring-inset bg-primary/5'
             : '',
@@ -339,6 +365,9 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         )}
 
         {/* Checkbox */}
+        {/* DaisyUI checkbox-primary provides themed coloring. The indeterminate
+            state is set via ref because there is no HTML attribute for it --
+            the checkbox-indeterminate class only styles, it does not set the property. */}
         {checkable && (
           <input
             type="checkbox"
@@ -432,6 +461,17 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
 // ModernTree (main export)
 // ---------------------------------------------------------------------------
 
+/**
+ * Modern Tree engine backed by DaisyUI/Tailwind.
+ *
+ * Manages expand, select, check, drag-and-drop, async loading, search/filter,
+ * and keyboard navigation state. Renders tree nodes recursively via
+ * `TreeNodeInternal`. Supports both controlled and uncontrolled modes for
+ * expandedKeys, selectedKeys, and checkedKeys.
+ *
+ * @param props - Unified DS TreeProps (see Tree.types.ts)
+ * @returns A DaisyUI-styled tree with role="tree" ARIA semantics
+ */
 export default function ModernTree(props: TreeProps): React.ReactElement {
   const {
     treeData = [],
@@ -503,7 +543,9 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
     position: 'before' | 'inside' | 'after';
   } | null>(null);
 
-  // Resolve controlled vs uncontrolled
+  // Resolve controlled vs uncontrolled -- when the consumer provides controlled
+  // keys we normalize them on every render (cheap string coercion). When
+  // uncontrolled, internal state is the source of truth.
   const actualExpandedKeys = controlledExpandedKeys
     ? controlledExpandedKeys.map(normalizeTreeKey)
     : expandedKeys;
@@ -514,7 +556,9 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
     ? controlledCheckedKeys.map(normalizeTreeKey)
     : (controlledCheckedKeys?.checked.map(normalizeTreeKey) ?? checkedKeys);
 
-  // Half-checked computation
+  // Half-checked (indeterminate) keys: a parent is half-checked when some but
+  // not all of its descendants are checked. Skipped in strict mode because
+  // parent/child checking is independent there.
   const halfCheckedKeys = useMemo(() => {
     if (!checkable || treeCheckStrictly) return [];
     return computeHalfCheckedKeys(treeData, actualCheckedKeys, parentMap);
@@ -528,7 +572,9 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
   const filteredKeys = filterResult?.filteredKeys ?? null;
 
-  // Auto-expand parents of search matches
+  // Auto-expand ancestor nodes of search matches so the user can see the
+  // matching nodes without manually opening each parent. Merges with existing
+  // expanded keys to avoid collapsing nodes the user already opened.
   useEffect(() => {
     if (filterResult && filterResult.expandKeys.length > 0) {
       setExpandedKeys((prev) => {
@@ -538,7 +584,9 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
     }
   }, [filterResult]);
 
-  // Visible flat keys for keyboard navigation
+  // Flatten the tree into a linear list of keys representing the currently
+  // visible nodes (respecting which branches are expanded). This powers
+  // ArrowUp/ArrowDown keyboard navigation with O(1) index lookups.
   const visibleKeys = useMemo(
     () => flattenVisibleKeys(treeData, actualExpandedKeys),
     [treeData, actualExpandedKeys],
@@ -600,7 +648,9 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         setCheckedKeys(newKeys);
         onCheck?.(newKeys, { node, checked: !actualCheckedKeys.includes(key) });
       } else {
-        // Cascade mode: check/uncheck node + all descendants, then recompute parents
+        // Cascade mode: toggling a node propagates downward to all descendants
+        // and then bubbles upward to fix parent states. This two-phase approach
+        // is simpler than a single-pass algorithm and handles arbitrary depth.
         const isChecking = !actualCheckedKeys.includes(key);
         const descendantKeys = getDescendantKeys(node);
         let newChecked: TreeEngineKey[];
@@ -647,7 +697,10 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   );
 
   // -----------------------------------------------------------------------
-  // Drag and drop
+  // Drag and drop -- uses HTML5 Drag and Drop API. Drop position is inferred
+  // from cursor Y within the target node: top 25% = before, middle = inside
+  // (reparent), bottom 25% = after. This 3-zone model matches macOS Finder
+  // and Windows Explorer tree drag semantics.
   // -----------------------------------------------------------------------
 
   const handleDragStart = useCallback(
@@ -708,11 +761,17 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   }, []);
 
   // -----------------------------------------------------------------------
-  // Keyboard navigation
+  // Keyboard navigation -- follows WAI-ARIA TreeView pattern:
+  // ArrowUp/Down = move focus, ArrowRight = expand or no-op if leaf,
+  // ArrowLeft = collapse or move to parent, Space = toggle checkbox,
+  // Enter = select node. Focus is tracked via focusedKey state and
+  // programmatically moved to the DOM element via nodeRefs.
   // -----------------------------------------------------------------------
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      // Auto-focus the first visible node when the tree receives keyboard
+      // input but no node is focused yet (e.g., first Tab into the tree).
       if (!focusedKey) {
         if (visibleKeys.length > 0) setFocusedKey(visibleKeys[0]);
         return;
@@ -808,6 +867,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
+      {/* Inline keyframe for the drop indicator's expand-from-center animation.
+          Injected via dangerouslySetInnerHTML to avoid needing a global CSS file. */}
       <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-drop-indicator{from{opacity:0;transform:scaleX(0.3)}to{opacity:1;transform:scaleX(1)}}` }} />
       {treeData.map((node, index) => {
         const { key: rawNodeKey, ...nodeRest } = node;

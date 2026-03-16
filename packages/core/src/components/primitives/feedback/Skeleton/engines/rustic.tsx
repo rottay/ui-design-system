@@ -154,7 +154,8 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
       return { animation: 'rottay-skeleton-pulse 1.5s ease-in-out infinite' };
     }
 
-    // Wave animation uses gradient background
+    // Wave uses a wide gradient that slides across the element, creating
+    // a shimmer effect that better suggests content is loading
     return {
       background:
         'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
@@ -180,10 +181,9 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
   // CSS Keyframes
   // ---------------------------------------------------------------------------
 
-  /**
-   * Inline CSS keyframes for skeleton animations.
-   * Injected via style tag for zero-dependency approach.
-   */
+  // Keyframes are injected as an inline <style> tag because the rustic
+  // engine cannot rely on external CSS files or preprocessors.
+  // Pulse fades opacity; wave slides a gradient across the element.
   const keyframeStyles = `
     @keyframes rottay-skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     @keyframes rottay-skeleton-wave { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
@@ -193,7 +193,8 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
   // Shape Variant Rendering
   // ---------------------------------------------------------------------------
 
-  // Handle circular, rectangular, and rounded variants
+  // Shape variants produce a single styled div; the border-radius
+  // differentiates circles from rectangles and rounded rectangles
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
       <>

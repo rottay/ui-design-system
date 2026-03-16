@@ -1,13 +1,38 @@
 'use client';
 
 /**
- * FormBuilder - Modern Engine (DaisyUI/Tailwind)
+ * @fileoverview Modern (Hermes) engine for the FormBuilder pattern, rendered
+ * with native HTML form elements styled via DaisyUI and Tailwind CSS utility
+ * classes. Unlike the Classic engine, this implementation uses no Ant Design
+ * components -- all inputs, selects, checkboxes, and validation messages are
+ * native HTML, keeping the bundle lean and the markup SSR-friendly. Supports
+ * vertical, horizontal, grid, and wizard (steps) layouts.
+ *
+ * @example
+ * <ModernFormBuilder
+ *   fields={[
+ *     { name: 'name', label: 'Full Name', type: 'text', required: true },
+ *     { name: 'bio', label: 'Bio', type: 'textarea' },
+ *   ]}
+ *   layout="grid"
+ *   columns={2}
+ *   onSubmit={(values) => updateProfile(values)}
+ *   actions={<button type="submit" className="btn btn-primary">Save</button>}
+ * />
  */
 
 import React, { useState, useCallback, useMemo, type ReactNode } from 'react';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../types';
 
+/**
+ * DaisyUI/Tailwind-backed form builder that renders native HTML input elements
+ * with utility classes. Manages value state, validation, conditional visibility,
+ * and multi-step wizard navigation internally -- no form library required.
+ *
+ * @param props - Engine-agnostic form configuration; see {@link FormBuilderProps}.
+ * @returns A rendered `<form>` element styled with DaisyUI classes.
+ */
 export default function ModernFormBuilder(props: FormBuilderProps) {
   const {
     fields,
@@ -35,6 +60,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     style,
   } = props;
 
+  // Lazy initializer: field-level defaults are merged first, then overridden
+  // by initialValues so server-loaded data always takes precedence.
   const [internalValues, setInternalValues] = useState<Record<string, unknown>>(() => {
     const defaults: Record<string, unknown> = {};
     fields.forEach((f) => {
@@ -49,6 +76,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   const currentValues = controlledValues ?? internalValues;
   const currentStep = controlledStep ?? internalStep;
 
+  // Shallow-copy-on-write: only update internal state when uncontrolled.
+  // Always fires onChange so both controlled and uncontrolled consumers stay in sync.
   const updateValue = useCallback(
     (name: string, value: unknown) => {
       const next = { ...currentValues, [name]: value };
@@ -58,6 +87,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     [currentValues, controlledValues, onChange]
   );
 
+  // `hidden` can be a static boolean or a function of current form values,
+  // enabling conditional visibility (e.g. "show city only if country is selected").
   const isHidden = useCallback(
     (field: FieldDef): boolean => {
       if (typeof field.hidden === 'function') return field.hidden(currentValues);
@@ -71,9 +102,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     fields.forEach((field) => {
       if (isHidden(field)) return;
       const val = currentValues[field.name];
+      // Empty string is treated as "not provided" for required checks because
+      // HTML inputs default to '' rather than undefined/null.
       if (field.required && (val === undefined || val === null || val === '')) {
         errs[field.name] = field.validation?.message ?? `${field.label ?? field.name} is required`;
       }
+      // Only validate non-empty values to avoid false positives on optional fields.
       if (field.validation && val !== undefined && val !== null && val !== '') {
         const v = field.validation;
         if (v.minLength && typeof val === 'string' && val.length < v.minLength) {
@@ -96,6 +130,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     return errs;
   }, [fields, currentValues, isHidden]);
 
+  // Intercepts native form submit to run validation first. Only calls
+  // onSubmit when all visible fields pass -- hidden fields are excluded.
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
@@ -109,9 +145,13 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     [validate, onSubmit, currentValues, onValidationChange]
   );
 
+  // Maps each FieldDef type to a native HTML input element styled with
+  // DaisyUI classes. All inputs use `rounded-xl` for consistency with the
+  // Modern engine's rounded card aesthetic.
   const renderFieldInput = useCallback(
     (field: FieldDef): ReactNode => {
       const val = currentValues[field.name];
+      // Per-field disabled merges with form-level disabled: either wins.
       const fieldDisabled = disabled || field.disabled;
 
       switch (field.type) {
@@ -169,6 +209,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               ))}
             </select>
           );
+        // Native multi-select requires extracting selected options from the DOM
+        // element because onChange only exposes the event, not the selected set.
         case 'multi-select':
           return (
             <select
@@ -285,6 +327,9 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     [fields, isHidden]
   );
 
+  // Distribute fields evenly across steps when explicit step assignments are
+  // not provided. This auto-grouping lets consumers add a wizard layout by
+  // just supplying stepLabels without restructuring their field array.
   const stepFields = useMemo(() => {
     if (layout !== 'steps' || !stepLabels) return [visibleFields];
     const perStep = Math.ceil(visibleFields.length / stepLabels.length);
@@ -295,15 +340,22 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     return groups;
   }, [layout, stepLabels, visibleFields]);
 
+  // Step navigation supports both controlled (parent manages step) and
+  // uncontrolled (internal state) modes -- same pattern as value management.
   const handleStepChange = (step: number) => {
     if (controlledStep === undefined) setInternalStep(step);
     onStepChange?.(step);
   };
 
+  // renderField is the consumer's escape hatch: it receives the default
+  // control, the field definition, and current value so it can wrap, replace,
+  // or augment the rendering without reimplementing the entire switch.
   const renderFormField = (field: FieldDef) => {
     const defaultRender = renderFieldInput(field);
     const content = renderField ? renderField(field, defaultRender, currentValues[field.name]) : defaultRender;
     const error = errors[field.name];
+    // Checkbox fields embed their label inline, so the outer label is hidden
+    // to avoid a redundant double-label.
     const showLabel = showLabels && field.type !== 'checkbox';
 
     return (
@@ -335,6 +387,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   const fieldElements = fieldsToRender.map(renderFormField);
 
+  // Returns the outer container class for the non-grid layouts. Grid mode
+  // gets its own CSS Grid container in the JSX below, so it returns empty.
   const getLayoutClass = () => {
     if (layout === 'grid') return '';
     if (layout === 'horizontal') return 'flex flex-wrap items-start';
@@ -348,6 +402,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       {title && <h3 className="text-xl font-semibold mb-1">{title}</h3>}
       {description && <p className="text-base-content/60 mb-6">{description}</p>}
 
+      {/* DaisyUI steps component renders a horizontal progress bar. Steps
+          up to and including the current one get `step-primary` colouring. */}
       {layout === 'steps' && stepLabels && (
         <ul className="steps steps-horizontal w-full mb-8">
           {stepLabels.map((label, i) => (

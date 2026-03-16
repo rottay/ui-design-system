@@ -150,7 +150,8 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     // Render
     // ========================================================================
 
-    /** Return null when not visible (conditional rendering) */
+    // Conditional rendering (vs CSS opacity) fully removes the element from
+    // the DOM, preventing accidental focus or click interactions when hidden
     if (!visible) return null;
 
     return (
@@ -162,6 +163,8 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         onClick={handleClick}
         aria-label="Back to top"
       >
+        {/* Default chevron-up icon; consumers can override with children prop
+            for brand-specific icons without needing an icon library */}
         {children || (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />

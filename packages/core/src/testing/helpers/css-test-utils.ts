@@ -78,6 +78,9 @@ export function getComputedStyleProperty(
 /**
  * Asserts that an element has a specific CSS variable value
  */
+// Throws a descriptive error instead of returning a boolean because it is
+// designed to be called directly inside test bodies. The error message includes
+// both expected and actual values for easy debugging without extra assertions.
 export function expectCSSVariable(
   element: Element,
   variableName: string,
@@ -146,6 +149,9 @@ export const TENANT_CSS_EXPECTATIONS: Record<TestTenantName, Record<string, stri
 /**
  * Expected class prefixes for each engine
  */
+// Each engine produces classes with a distinct prefix. This mapping allows
+// tests to verify that the correct engine rendered by inspecting the DOM
+// without needing access to React internals.
 export const ENGINE_CLASS_PREFIXES: Record<Exclude<EngineName, 'custom'>, string> = {
   classic: 'ant-',
   modern: 'btn',

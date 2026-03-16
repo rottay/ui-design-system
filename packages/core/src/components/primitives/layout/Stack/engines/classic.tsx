@@ -44,6 +44,10 @@ import { STACK_DEFAULTS, SPACING_MAP, ALIGN_MAP, JUSTIFY_MAP } from '../Stack.ty
 
 /**
  * Converts a spacing value to its CSS equivalent.
+ * Handles presets via SPACING_MAP, raw numbers as pixels, and undefined/none as zero.
+ *
+ * @param value - A preset name ('xs'..'4xl'), a pixel number, or undefined
+ * @returns A CSS-compatible string value (e.g. '1rem', '24px', '0')
  */
 function resolveSpacing(value: StackSpacing | undefined): string {
   if (value === undefined || value === 'none') return '0';
@@ -52,7 +56,14 @@ function resolveSpacing(value: StackSpacing | undefined): string {
 }
 
 /**
- * Build flexbox styles from Stack props
+ * Assembles a complete inline flexbox CSSProperties object from Stack props.
+ * The `gap` prop takes precedence over `spacing` (they are aliases), and both
+ * fall back to STACK_DEFAULTS.spacing when omitted. The `reverse` flag flips
+ * the flex-direction suffix rather than reordering children in the DOM, which
+ * preserves tab order and accessibility.
+ *
+ * @param props - The full StackProps to derive styles from
+ * @returns A CSSProperties object ready for inline application
  */
 function buildStackStyles(props: StackProps): CSSProperties {
   const {
@@ -68,6 +79,7 @@ function buildStackStyles(props: StackProps): CSSProperties {
     style,
   } = props;
 
+  // `gap` alias takes priority over `spacing` for CSS gap consistency
   const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
 
   const baseStyles: CSSProperties = {
@@ -88,7 +100,14 @@ function buildStackStyles(props: StackProps): CSSProperties {
 }
 
 /**
- * Renders children with optional dividers between them
+ * Interleaves divider elements between children when a divider is provided.
+ * Clones React elements to inject stable keys and aria-hidden for accessibility;
+ * wraps non-element dividers (strings, numbers) in a span.
+ *
+ * @param children - The child nodes to separate
+ * @param divider - The separator element or node to insert
+ * @param direction - Stack direction (reserved for future orientation-aware dividers)
+ * @returns The original children with dividers inserted between them
  */
 function renderStackChildren(
   children: ReactNode,
@@ -104,6 +123,7 @@ function renderStackChildren(
     if (index === 0) {
       return [child];
     }
+    // Clone valid React elements to add a stable key; wrap primitives in a span
     const dividerElement = React.isValidElement(divider)
       ? React.cloneElement(divider as React.ReactElement<Record<string, unknown>>, {
           key: `divider-${index}`,
@@ -116,9 +136,14 @@ function renderStackChildren(
 }
 
 /**
- * Classic Stack component.
- * Uses Ant Design's styling conventions while maintaining
- * compatibility with the Stack API.
+ * Classic (Titan) engine implementation of the Stack component.
+ * Renders a flex container with the `rottay-stack--classic` CSS class hook
+ * for Ant Design-aligned styling. All layout logic is handled via inline
+ * flexbox styles built by `buildStackStyles`, while the BEM-style class
+ * names enable external theme overrides.
+ *
+ * @param props - Stack configuration (direction, spacing, align, justify, divider, etc.)
+ * @returns A polymorphic element (default `div`) with flexbox layout
  */
 const TitanStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const {
@@ -132,13 +157,16 @@ const TitanStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const computedStyle = buildStackStyles(props);
   const renderedChildren = renderStackChildren(children, divider, direction);
 
-  // Build class names with Classic-specific prefixes
+  // BEM-style class names allow engine-specific CSS overrides without
+  // conflicting with other engine implementations
   const classNames = [
     'rottay-stack',
     'rottay-stack--classic',
     className,
   ].filter(Boolean).join(' ');
 
+  // Use createElement instead of JSX to support the polymorphic `as` prop,
+  // which can be any valid HTML tag or React component type
   const ElementType = Component as ElementType;
 
   return React.createElement(

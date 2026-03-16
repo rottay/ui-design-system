@@ -1,12 +1,27 @@
 'use client';
 
 /**
- * NotificationCenter - Rustic Engine (Inline styles with --ds-* CSS variables)
+ * @fileoverview Rustic (Vanilla CSS) engine for the NotificationCenter pattern.
+ * Uses only inline styles backed by `--ds-*` CSS custom properties -- no Ant
+ * Design or Tailwind dependency. Implements its own absolute-positioned dropdown
+ * with manual click-outside detection, matching the same controlled/uncontrolled
+ * open state contract as the Classic and Modern engines.
+ *
+ * The default trigger is a bell emoji button. A custom trigger can replace it.
+ *
+ * @example
+ * <RusticNotificationCenter
+ *   notifications={[{ id: '1', title: 'Alert', message: 'Disk usage at 90%', type: 'warning', read: false, timestamp: new Date().toISOString() }]}
+ *   onRead={(id) => markRead(id)}
+ *   onClear={(id) => dismiss(id)}
+ * />
  */
 
 import React, { useState, useRef, useEffect, useCallback, type CSSProperties } from 'react';
 import type { NotificationCenterProps, Notification } from '../NotificationCenter.types';
 
+// Semantic color tokens for per-type icon coloring. Uses design system
+// variables so the colors adapt to theme changes automatically.
 const typeColors: Record<string, string> = {
   info: 'var(--ds-color-primary)',
   success: 'var(--ds-color-success)',
@@ -14,6 +29,11 @@ const typeColors: Record<string, string> = {
   error: 'var(--ds-color-error)',
 };
 
+/**
+ * Progressive degradation from relative ("3m ago") to calendar ("Mar 5").
+ * Shared logic across all three engines, duplicated here because the Rustic
+ * engine cannot import from Ant/DaisyUI utility files.
+ */
 function formatTimestamp(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
@@ -28,6 +48,9 @@ function formatTimestamp(ts: string): string {
   return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
+// Static style objects for the trigger, badge, dropdown, header, and link
+// buttons. Extracted here to avoid re-creating objects on every render and
+// to keep the JSX focused on structure rather than styling details.
 const triggerBtnStyle: CSSProperties = {
   position: 'relative',
   background: 'none',
@@ -91,6 +114,16 @@ const linkBtnStyle: CSSProperties = {
   fontWeight: 500,
 };
 
+/**
+ * Rustic (Vanilla CSS) engine for the NotificationCenter pattern.
+ *
+ * Renders a framework-agnostic dropdown using `position: absolute` and manual
+ * click-outside handling. Styles are driven entirely by `--ds-*` CSS custom
+ * properties with hardcoded fallbacks for graceful degradation.
+ *
+ * @param props - {@link NotificationCenterProps}
+ * @returns A framework-agnostic notification dropdown with inline styles.
+ */
 export default function RusticNotificationCenter(props: NotificationCenterProps) {
   const {
     notifications,
@@ -109,6 +142,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
     style,
   } = props;
 
+  // Same controlled/uncontrolled pattern as Classic and Modern engines.
   const [internalOpen, setInternalOpen] = useState(false);
   const isOpen = controlledOpen ?? internalOpen;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -118,6 +152,8 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
     onOpenChange?.(newOpen);
   }, [controlledOpen, onOpenChange]);
 
+  // Click-outside listener is only attached while the dropdown is open to
+  // minimize the number of active document-level event listeners.
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -128,6 +164,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleOpenChange]);
 
+  // Prefer server-authoritative unread count; fall back to client-side filter.
   const displayCount = unreadCount ?? notifications.filter(n => !n.read).length;
   const visibleNotifications = notifications.slice(0, maxVisible);
 
@@ -137,7 +174,9 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
       className={className}
       style={{ position: 'relative', display: 'inline-block', ...style }}
     >
-      {/* Trigger */}
+      {/* Trigger: custom element or default bell emoji button.
+          The badge is absolutely positioned relative to the trigger button,
+          which has position:relative in triggerBtnStyle. */}
       {trigger ? (
         <div onClick={() => handleOpenChange(!isOpen)} style={{ cursor: 'pointer' }} data-testid="notification-trigger">
           {trigger}
@@ -170,7 +209,8 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
             </div>
           </div>
 
-          {/* List */}
+          {/* Scrollable notification list. Unread items get a primary-50 tinted
+              background. Each row is clickable to trigger onRead. */}
           <div style={{ flex: 1, overflowY: 'auto', maxHeight: 360 }}>
             {visibleNotifications.length === 0 ? (
               <div style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
@@ -191,6 +231,8 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                   }}
                   onClick={() => onRead?.(item.id)}
                 >
+                  {/* Type icon: custom icon or Unicode fallback. Colored with
+                      the semantic token matching the notification type. */}
                   <span style={{ fontSize: 16, marginTop: 2, flexShrink: 0, color: typeColors[item.type] }}>
                     {item.icon || (
                       item.type === 'success' ? '\u2713' :
@@ -201,9 +243,11 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                   </span>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      {/* Unread titles are bold (600); read titles are normal (400) */}
                       <span style={{ fontSize: 'var(--ds-font-size-sm, 13px)', fontWeight: item.read ? 400 : 600 }}>
                         {item.title}
                       </span>
+                      {/* Small primary dot for visual unread indicator */}
                       {!item.read && (
                         <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--ds-color-primary)', flexShrink: 0 }} />
                       )}
@@ -211,6 +255,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                     <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 2 }}>
                       {item.message}
                     </div>
+                    {/* Footer row: timestamp + optional action button */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
                       <span style={{ fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-muted)', opacity: 0.7 }}>
                         {formatTimestamp(item.timestamp)}
@@ -225,6 +270,8 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                       )}
                     </div>
                   </div>
+                  {/* Dismiss button with muted styling so it does not compete
+                      visually with the notification content */}
                   {onClear && (
                     <button
                       style={{ ...linkBtnStyle, color: 'var(--ds-color-text-muted)', opacity: 0.5, fontSize: 14, padding: 2 }}

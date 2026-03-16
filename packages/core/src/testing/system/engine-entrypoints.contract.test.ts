@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Engine entrypoint contract tests. Ensures every engine barrel
+ * exports at least one implementation, compound barrels stay wired, and the
+ * public root entrypoints expose the expected DS surfaces.
+ */
+
 import { describe, expect, it } from 'vitest';
 
 import * as componentsEntry from '../../components';

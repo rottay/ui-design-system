@@ -376,39 +376,70 @@ export interface TypographyProps extends BaseComponentProps, EngineAwareProps {
  * Provides consistent defaults across all engine implementations.
  */
 export const TYPOGRAPHY_DEFAULTS = {
+  /** Defaults for `<Typography.Heading>`. */
   heading: {
+    /** Renders as `<h2>` by default for a sensible document outline. */
     level: 'h2' as const,
+    /** Bold weight for maximum heading visibility. */
     weight: 'bold' as const,
+    /** Left-aligned by default, matching LTR reading direction. */
     align: 'left' as const,
+    /** Standard high-contrast text color. */
     color: 'default' as const,
+    /** No truncation by default; content flows naturally. */
     truncate: false,
   },
+  /** Defaults for `<Typography.Text>`. */
   text: {
+    /** Medium (base) font size for inline text. */
     size: 'md' as const,
+    /** Normal weight (400) for body text readability. */
     weight: 'normal' as const,
+    /** Left-aligned by default. */
     align: 'left' as const,
+    /** Standard high-contrast text color. */
     color: 'default' as const,
+    /** Renders as `<span>` for inline semantics. */
     as: 'span' as const,
+    /** No truncation by default. */
     truncate: false,
+    /** Underline decoration off by default. */
     underline: false,
+    /** Strikethrough decoration off by default. */
     strikethrough: false,
+    /** Not italic by default. */
     italic: false,
+    /** Proportional (not monospace) font by default. */
     monospace: false,
   },
+  /** Defaults for `<Typography.Paragraph>`. */
   paragraph: {
+    /** Medium (base) font size for block text. */
     size: 'md' as const,
+    /** Normal weight (400) for comfortable reading. */
     weight: 'normal' as const,
+    /** Left-aligned by default. */
     align: 'left' as const,
+    /** Standard high-contrast text color. */
     color: 'default' as const,
+    /** No truncation by default. */
     truncate: false,
   },
+  /** Defaults for `<Typography.Link>`. */
   link: {
+    /** Medium (base) font size matching surrounding text. */
     size: 'md' as const,
+    /** Normal weight so links blend with body copy. */
     weight: 'normal' as const,
+    /** Primary brand color to distinguish links from plain text. */
     color: 'primary' as const,
+    /** Underline appears on hover for discoverability. */
     underlineOnHover: true,
+    /** No permanent underline by default. */
     underline: false,
+    /** Links are enabled by default. */
     disabled: false,
+    /** Not bold by default. */
     strong: false,
   },
 } as const;
@@ -418,44 +449,70 @@ export const TYPOGRAPHY_DEFAULTS = {
  * Uses design system tokens for consistent sizing across tenants.
  */
 export const SIZE_MAP = {
+  /**
+   * Heading sizes are shifted up relative to text sizes so that even
+   * the smallest heading (`xs`) is visually larger than body text.
+   */
   heading: {
-    xs: 'var(--ds-font-size-base, 1rem)',
-    sm: 'var(--ds-font-size-xl, 1.25rem)',
-    md: 'var(--ds-font-size-2xl, 1.5rem)',
-    lg: 'var(--ds-font-size-3xl, 1.875rem)',
-    xl: 'var(--ds-font-size-4xl, 2.25rem)',
-    '2xl': 'var(--ds-font-size-5xl, 3rem)',
-    '3xl': 'var(--ds-font-size-6xl, 3.75rem)',
+    xs: 'var(--ds-font-size-base, 1rem)',       // 16px
+    sm: 'var(--ds-font-size-xl, 1.25rem)',       // 20px
+    md: 'var(--ds-font-size-2xl, 1.5rem)',       // 24px
+    lg: 'var(--ds-font-size-3xl, 1.875rem)',     // 30px
+    xl: 'var(--ds-font-size-4xl, 2.25rem)',      // 36px
+    '2xl': 'var(--ds-font-size-5xl, 3rem)',      // 48px
+    '3xl': 'var(--ds-font-size-6xl, 3.75rem)',   // 60px
   },
+  /**
+   * Text sizes follow a standard typographic scale for inline
+   * and body text. `md` matches the base font-size (1rem / 16px).
+   */
   text: {
-    xs: 'var(--ds-font-size-xs, 0.75rem)',
-    sm: 'var(--ds-font-size-sm, 0.875rem)',
-    md: 'var(--ds-font-size-base, 1rem)',
-    lg: 'var(--ds-font-size-lg, 1.125rem)',
-    xl: 'var(--ds-font-size-xl, 1.25rem)',
-    '2xl': 'var(--ds-font-size-2xl, 1.5rem)',
-    '3xl': 'var(--ds-font-size-3xl, 1.875rem)',
+    xs: 'var(--ds-font-size-xs, 0.75rem)',       // 12px
+    sm: 'var(--ds-font-size-sm, 0.875rem)',      // 14px
+    md: 'var(--ds-font-size-base, 1rem)',        // 16px
+    lg: 'var(--ds-font-size-lg, 1.125rem)',      // 18px
+    xl: 'var(--ds-font-size-xl, 1.25rem)',       // 20px
+    '2xl': 'var(--ds-font-size-2xl, 1.5rem)',    // 24px
+    '3xl': 'var(--ds-font-size-3xl, 1.875rem)',  // 30px
   },
 } as const;
 
 /**
- * Weight mapping to numeric values.
+ * Weight mapping to numeric CSS `font-weight` values.
+ * Provides a semantic-to-numeric lookup for consistent rendering
+ * across all engine implementations.
+ *
+ * @constant
  */
 export const WEIGHT_MAP = {
+  /** Regular weight (400) - body text default. */
   normal: 400,
+  /** Medium weight (500) - subtle emphasis. */
   medium: 500,
+  /** Semi-bold weight (600) - subheadings and labels. */
   semibold: 600,
+  /** Bold weight (700) - headings and strong emphasis. */
   bold: 700,
 } as const;
 
 /**
- * Color mapping to CSS variables.
+ * Color mapping from semantic color names to CSS variable references.
+ * Used by all typography subcomponents to resolve the `color` prop
+ * into a concrete CSS value that respects multi-tenant theming.
+ *
+ * @constant
  */
 export const COLOR_MAP = {
+  /** Standard text color - highest contrast, used for body content. */
   default: 'var(--ds-color-text-primary)',
+  /** Muted / secondary text color - lower contrast for supporting text. */
   muted: 'var(--ds-color-text-secondary)',
+  /** Primary brand color - links, key labels, and interactive highlights. */
   primary: 'var(--ds-color-primary-500)',
+  /** Success / positive color - confirmation messages, status indicators. */
   success: 'var(--ds-color-success-500)',
+  /** Warning / caution color - alerts, degraded-state notices. */
   warning: 'var(--ds-color-warning-500)',
+  /** Error / danger color - validation errors, destructive actions. */
   error: 'var(--ds-color-error-500)',
 } as const;

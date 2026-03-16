@@ -1,50 +1,25 @@
 'use client';
 
 /**
- * @fileoverview Calendar Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS calendar implementation with maximum accessibility.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Rustic Calendar engine -- pure HTML/CSS (zero UI-library dependencies).
  *
- * @remarks
- * This engine provides a lightweight, dependency-free calendar using only
- * inline styles and semantic HTML elements.
+ * Lightweight calendar using only inline styles with CSS custom properties
+ * (`var(--ds-*)`) and semantic HTML. Supports month view (7-column CSS Grid),
+ * year view (3-column month grid), controlled and uncontrolled value modes,
+ * date disabling, and custom cell renderers -- all with rich ARIA attributes
+ * (role="application", role="grid", role="gridcell", aria-selected, aria-disabled).
  *
- * **Implementation Details:**
- * - CSS Grid for layout
- * - Inline styles for all visual properties
- * - Native Date object handling
- * - ARIA attributes for accessibility
- * - Keyboard navigation support
+ * Hover states are tracked in React state because inline styles cannot express
+ * `:hover`. All visual properties are driven by CSS custom properties with
+ * sensible fallbacks, so tenant themes can re-skin the calendar without JS changes.
  *
- * **Accessibility Features:**
- * - `role="application"` on container
- * - `role="grid"` on calendar grid
- * - `role="gridcell"` on day/month cells
- * - `aria-selected` on selected items
- * - `aria-disabled` on disabled items
- * - `aria-label` on navigation buttons
+ * Engine: **Vanilla HTML + CSS custom properties**
  *
- * **CSS Custom Properties:**
- * - `--primary-color` - Primary theme color
- *
- * **Advantages:**
- * - Zero external dependencies
- * - Smallest bundle size
- * - Maximum browser compatibility
- * - Full accessibility compliance
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Calendar } from '@rottay/design-system';
- *
- * <Calendar
- *   engine="rustic"
- *   fullscreen={false}
- *   onChange={(date) => console.log(date)}
- * />
+ * <Calendar engine="rustic" fullscreen={false} onChange={(d) => console.log(d)} />
  * ```
  *
- * @see {@link Calendar} for the main component
  * @module Calendar/engines/rustic
  * @category Display
  * @package @rottay/design-system
@@ -52,9 +27,15 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import type { CalendarProps, CalendarMode } from '../Calendar.types';
 
+// English day/month labels. Localization is handled at a higher layer.
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+// ---------------------------------------------------------------------------
+// Style definitions using CSS custom properties with layered fallbacks.
+// Each property resolves: component-specific var -> semantic DS var -> literal.
+// This three-level cascade lets tenants override at any specificity level.
+// ---------------------------------------------------------------------------
 const styles = {
   container: {
     backgroundColor: 'var(--ds-calendar-bg, var(--ds-color-bg-elevated))',
@@ -166,11 +147,23 @@ const styles = {
   },
 };
 
+// Normalizes the incoming value (Date, ISO string, or undefined) into a Date.
+// Falls back to "now" so the calendar always has a valid reference date.
 const parseDate = (value: Date | string | undefined): Date => {
   if (!value) return new Date();
   return typeof value === 'string' ? new Date(value) : value;
 };
 
+/**
+ * Rustic Calendar engine -- dependency-free, inline-styled calendar.
+ *
+ * Uses CSS Grid for both month (7-col) and year (3-col) views. Hover effects
+ * are managed via React state because inline styles cannot express `:hover`.
+ * Supports controlled (`value`) and uncontrolled (`defaultValue`) modes.
+ *
+ * @param props - Unified DS CalendarProps (see Calendar.types.ts)
+ * @returns A vanilla HTML calendar with role="application" ARIA semantics
+ */
 export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, ref) => {
   const {
     value,
@@ -190,9 +183,13 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     id,
   } = props;
 
+  // Controlled vs uncontrolled: when `value` is provided, the consumer owns
+  // the selected date. Otherwise internal state tracks the selection.
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<Date>(() => parseDate(defaultValue));
   const [mode, setMode] = useState<CalendarMode>(modeProp || defaultMode);
+  // Tracks which element is currently hovered so we can apply hover styles
+  // imperatively (inline styles cannot express :hover pseudo-selectors).
   const [hovered, setHovered] = useState<string | null>(null);
 
   const currentDate = isControlled ? parseDate(value) : internalValue;
@@ -201,10 +198,13 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   const [viewYear, setViewYear] = useState(currentDate.getFullYear());
   const [viewMonth, setViewMonth] = useState(currentDate.getMonth());
 
+  // Day 0 of the *next* month gives the last day of the current month.
   const daysInMonth = useMemo(() => {
     return new Date(viewYear, viewMonth + 1, 0).getDate();
   }, [viewYear, viewMonth]);
 
+  // getDay() returns 0=Sunday..6=Saturday. Determines how many empty cells
+  // precede the 1st of the month in the 7-column grid.
   const firstDayOfMonth = useMemo(() => {
     return new Date(viewYear, viewMonth, 1).getDay();
   }, [viewYear, viewMonth]);
@@ -229,6 +229,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     onSelect?.(date, { source: 'date' });
   }, [viewYear, viewMonth, isControlled, onChange, onSelect, isDateDisabled]);
 
+  // Selecting a month in year view both selects the date AND switches back to
+  // month view, letting the user drill down from year -> month -> day.
   const handleMonthClick = useCallback((month: number) => {
     const date = new Date(viewYear, month, 1);
     setViewMonth(month);
@@ -242,6 +244,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     onPanelChange?.(date, 'month');
   }, [viewYear, isControlled, onChange, onSelect, onPanelChange]);
 
+  // Month navigation wraps around the year boundary: going before January
+  // decrements the year and sets month to December, and vice versa.
   const handlePrevMonth = () => {
     if (viewMonth === 0) {
       setViewYear((y) => y - 1);
@@ -270,11 +274,15 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
 
+  // Fullscreen fills the parent container; compact mode constrains width
+  // (default 320px via CSS var) for use in popovers or date picker dropdowns.
   const containerStyle = {
     ...styles.container,
     ...(fullscreen ? styles.containerFullscreen : styles.containerCompact),
     ...style,
   };
+  // Shared hover background token -- extracted to avoid repeating the triple
+  // CSS variable fallback chain in every onMouseEnter handler.
   const calendarHoverBackground = 'var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)))';
 
   return (

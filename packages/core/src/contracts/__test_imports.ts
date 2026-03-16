@@ -1,6 +1,6 @@
 /**
- * Test file to verify all types can be imported correctly.
- * This file should compile without errors.
+ * Compile-time verification that all contract types can be imported correctly.
+ * This file should compile without errors; it is not executed as a runtime test.
  */
 
 // Common types

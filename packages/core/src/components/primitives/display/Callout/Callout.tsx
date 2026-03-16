@@ -1,43 +1,21 @@
 'use client';
 
 /**
- * @fileoverview Callout - Rottay Design System
- * @description Rich callout box for info/warning/error/success messages.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Callout - Rich message box for info/warning/error/success states.
+ * A richer alternative to Alert with title, icon, closable state, and action
+ * slots. No compound sub-components -- a single engine-routed primitive.
  *
- * @remarks
- * The Callout component provides a richer alternative to Alert with
- * support for title, icon, closable state, and action elements.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Styled div with Ant Design tokens
- * - **Modern**: DaisyUI alert with enhancements
- * - **Rustic**: Semantic aside element with pure CSS
- *
- * @example Basic Usage
+ * @example
  * ```tsx
  * import { Callout } from '@rottay/design-system';
  *
- * <Callout variant="warning" title="Attention">
+ * <Callout variant="warning" title="Attention" closable>
  *   Your subscription expires in 3 days.
- * </Callout>
- * ```
- *
- * @example With Action
- * ```tsx
- * <Callout
- *   variant="info"
- *   title="New Feature"
- *   closable
- *   action={<Button size="sm">Learn More</Button>}
- * >
- *   Check out the new dashboard analytics.
  * </Callout>
  * ```
  *
  * @module Callout
  * @category Display
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -50,6 +28,7 @@ export {
   CALLOUT_COLORS,
 } from './Callout.types';
 
+/** Single engine-routed component with no compound sub-components. */
 export const Callout = createEngineComponent<CalloutProps>('Callout', {
   classic: () => import('./engines/classic'),
   modern: () => import('./engines/modern'),

@@ -1,3 +1,7 @@
+/**
+ * Tests for the useErrorHandler hook: reporting through the shared singleton,
+ * category-scoped subscriptions with cleanup on unmount, and log clearing.
+ */
 import React from 'react';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';

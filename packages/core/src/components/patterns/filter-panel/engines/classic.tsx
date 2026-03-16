@@ -1,7 +1,23 @@
 'use client';
 
 /**
- * FilterPanel - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the FilterPanel pattern.
+ * Renders a flat list of filter controls (text, select, multi-select, boolean,
+ * date, date-range, number-range) using Ant Design form components. Supports
+ * inline and stacked layouts, optional collapsible wrapper via Ant Collapse,
+ * and Apply/Reset action buttons.
+ *
+ * @example
+ * <FilterPanel
+ *   engine="classic"
+ *   filters={[
+ *     { key: 'name', label: 'Name', type: 'text', placeholder: 'Search...' },
+ *     { key: 'role', label: 'Role', type: 'select', options: roleOpts },
+ *   ]}
+ *   values={filterValues}
+ *   onChange={setFilterValues}
+ *   showReset
+ * />
  */
 
 import React, { useState } from 'react';
@@ -25,6 +41,11 @@ import type { FilterDef } from '../../types';
 const { Panel } = Collapse;
 const { Title } = Typography;
 
+/**
+ * Renders the appropriate Ant Design form control for a given filter definition.
+ * Each filter type maps to a specific Ant component (Input, Select, Switch, etc.)
+ * to provide a type-safe, accessible editing experience.
+ */
 function renderFilterControl(
   filter: FilterDef,
   value: unknown,
@@ -106,6 +127,13 @@ function renderFilterControl(
   }
 }
 
+/**
+ * Classic FilterPanel using Ant Design form components.
+ * Provides inline, stacked, or collapsible layouts with optional Apply/Reset buttons.
+ *
+ * @param props - See {@link FilterPanelProps} for full prop documentation.
+ * @returns A configurable filter panel with Ant Design controls.
+ */
 export default function ClassicFilterPanel(props: FilterPanelProps) {
   const {
     filters,
@@ -127,10 +155,14 @@ export default function ClassicFilterPanel(props: FilterPanelProps) {
 
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
+  // Spread existing values and overwrite the changed key so the consumer
+  // receives a complete snapshot on every change (not just the delta).
   const handleChange = (key: string, val: unknown) => {
     onChange({ ...values, [key]: val });
   };
 
+  // Inline layout arranges filters horizontally with flex-wrap, suitable for
+  // toolbar-style filter bars. Stacked (default) uses vertical block flow.
   const isInline = layout === 'inline';
 
   const filterContent = (
@@ -172,6 +204,8 @@ export default function ClassicFilterPanel(props: FilterPanelProps) {
     </Spin>
   );
 
+  // When collapsible, wrap the filter content in Ant's Collapse with ghost
+  // mode (no background/border) so it blends into the parent container.
   if (collapsible) {
     return (
       <div className={className} style={style}>

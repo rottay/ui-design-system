@@ -142,8 +142,11 @@ export default function ClassicSkeleton(props: SkeletonProps): React.ReactElemen
   // Shape Variant Rendering
   // ---------------------------------------------------------------------------
 
-  // Handle circular, rectangular, and rounded variants using Skeleton.Button
+  // Shape variants use Skeleton.Button because Ant Design's base Skeleton
+  // only supports text-like layouts; Button variant allows arbitrary shapes
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
+    // Dimensions accept both numbers (auto-converted to px) and strings
+    // (rem, %, etc.) for flexibility in different layout contexts
     const skeletonStyle: React.CSSProperties = {
       width: typeof width === 'number' ? `${width}px` : width,
       height: typeof height === 'number' ? `${height}px` : height,
@@ -166,7 +169,8 @@ export default function ClassicSkeleton(props: SkeletonProps): React.ReactElemen
   // Text/Default Variant Rendering
   // ---------------------------------------------------------------------------
 
-  // Configure paragraph based on prop type
+  // paragraph can be a boolean (use default rows) or an object (custom config).
+  // When false, Ant Design hides the paragraph section entirely.
   const paragraphConfig =
     typeof paragraph === 'object' ? paragraph : paragraph ? { rows } : false;
 

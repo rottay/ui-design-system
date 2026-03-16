@@ -1,10 +1,19 @@
 /**
- * Timeline - Classic Engine (Ant Design)
+ * @fileoverview Classic engine for the Timeline component, powered by Ant Design.
+ * Wraps `antd/Timeline` to provide enterprise-grade chronological displays
+ * with left, right, and alternate layout modes.
  *
- * Renders the Timeline component using Ant Design's Timeline component.
- * Provides enterprise-grade features with full accessibility support.
+ * @example
+ * ```tsx
+ * <Timeline engine="classic" mode="alternate">
+ *   <Timeline.Item color="green" label="2024-01-01">Done</Timeline.Item>
+ * </Timeline>
+ * ```
  *
  * @see https://ant.design/components/timeline
+ * @module Timeline/engines/classic
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -47,7 +56,8 @@ function ClassicTimeline(props: TimelineProps): React.ReactElement {
     style,
   } = props;
 
-  // Convert items to Ant Design format if provided
+  // Re-map our DS item shape to Ant Design's expected format.
+  // We add a numeric key since Ant internally requires unique keys for each item.
   const antItems = items?.map((item, index) => ({
     key: index,
     dot: item.dot,
@@ -69,6 +79,8 @@ function ClassicTimeline(props: TimelineProps): React.ReactElement {
       className={className}
       style={style}
     >
+      {/* When items are provided as an array prop, Ant renders them directly.
+          Otherwise fall back to children (JSX composition pattern). */}
       {!items && children}
     </AntTimeline>
   );
@@ -115,5 +127,11 @@ const ClassicTimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
 
 ClassicTimelineItem.displayName = 'ClassicTimelineItem';
 
+/**
+ * Default export for the classic Timeline engine.
+ *
+ * @param props - {@link TimelineProps} controlling mode, items, and pending state.
+ * @returns An Ant Design Timeline element configured with the DS API.
+ */
 export default ClassicTimeline;
 export { ClassicTimeline as Timeline, ClassicTimelineItem as Item };

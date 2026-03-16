@@ -147,6 +147,9 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     // Render
     // ---------------------------------------------------------------------------
 
+    // Wrapped in a div to attach the forwarded ref. AntSegmented does not
+    // expose a ref to its root element, so the wrapper ensures consumers
+    // can still measure or position the component via ref.
     return (
       <div ref={ref} className={className} style={style}>
         <AntSegmented

@@ -1,58 +1,12 @@
 /**
- * @fileoverview Avatar Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS avatar implementation with zero dependencies.
- * Part of the Rottay Design System's display primitives collection.
+ * @fileoverview Rustic engine for the Avatar component, using pure HTML/CSS.
+ * Zero external dependencies -- all styling is inline via CSS custom properties,
+ * making it the smallest bundle option and fully portable across environments.
  *
- * @remarks
- * This engine provides a lightweight, dependency-free avatar using
- * only inline styles and standard HTML elements.
- *
- * **Implementation Details:**
- * - Uses inline styles for all visual properties
- * - Computes sizes from SIZE_MAP constants
- * - Handles image loading and fallback to initials
- * - Supports all variant colors with gradient option
- *
- * **Advantages:**
- * - Zero external dependencies
- * - Smallest bundle size
- * - Maximum browser compatibility
- * - Full control over styles
- *
- * **Variant Colors:**
- * - Each variant has predefined `bg` and `color` values
- * - Gradient variant uses CSS `linear-gradient`
- * - Custom colors via `backgroundColor` and `textColor` props
- *
- * **Status Indicator:**
- * - Positioned absolute at bottom-right
- * - Size scales with avatar (25% of avatar size, min 8px)
- * - White border for separation from avatar
- *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { Avatar } from '@rottay/design-system';
- *
- * <Avatar engine="rustic" src="/user.jpg" name="John Doe" />
+ * <Avatar engine="rustic" name="JD" backgroundColor="#1a1a2e" ring ringColor="#00ff88" />
  * ```
- *
- * @example Custom Colors
- * ```tsx
- * <Avatar
- *   engine="rustic"
- *   name="JD"
- *   backgroundColor="#1a1a2e"
- *   textColor="#eaeaea"
- *   ring
- *   ringColor="#00ff88"
- * />
- * ```
- *
- * @see {@link Avatar} for the main component
- * @see {@link BaseAvatar} for CSS variable implementation
- * @module RusticAvatar
- * @category Display
- * @package @rottay/design-system
  */
 
 'use client';
@@ -62,7 +16,12 @@ import type { AvatarProps } from '../Avatar.types';
 import { AVATAR_DEFAULTS } from '../Avatar.types';
 
 /**
- * Generates initials from name or alt text
+ * Derives up to two uppercase initials from a display name or alt text.
+ * Uses first and last word so "John Michael Doe" produces "JD", not "JM".
+ *
+ * @param name - Primary display name
+ * @param alt - Fallback alt text if name is absent
+ * @returns One or two uppercase characters, or empty string
  */
 function getInitials(name?: string, alt?: string): string {
   const text = name || alt || '';
@@ -71,9 +30,21 @@ function getInitials(name?: string, alt?: string): string {
   if (parts.length === 0) return '';
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
 
+  // Take first + last word to handle multi-word names gracefully
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
+/**
+ * Rustic (pure HTML/CSS) implementation of the Avatar component.
+ *
+ * Every visual property is expressed via inline styles backed by CSS custom
+ * properties (--ds-avatar-*), so tenant theming works without any CSS
+ * framework dependency. Supports images, initials fallback, ring outlines,
+ * and status indicator dots.
+ *
+ * @param props - Unified AvatarProps from the design system type contract
+ * @returns A React element built entirely from native HTML elements and inline styles
+ */
 export default function RusticAvatar(props: AvatarProps): React.ReactElement {
   const {
     src,
@@ -97,8 +68,10 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
     style,
   } = props;
 
+  // Track image load failures so we can fall back to initials/children
   const [imageError, setImageError] = useState(false);
 
+  // Reset error state whenever the src URL changes, giving the new image a chance to load
   useEffect(() => {
     setImageError(false);
   }, [src]);
@@ -114,7 +87,9 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
 
   const displayInitials = initials || getInitials(name, alt);
 
-  // Use CSS custom properties for all visual styles
+  // All visual properties use CSS custom properties (--ds-avatar-*) so the
+  // avatar adapts to tenant themes automatically. Explicit backgroundColor /
+  // textColor / ringColor props override the token values per-instance.
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-flex',
@@ -122,6 +97,7 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
     justifyContent: 'center',
     width: `var(--ds-avatar-${size}-size)`,
     height: `var(--ds-avatar-${size}-size)`,
+    // Three shape tiers: circle (50%), square (small radius), rounded (medium radius)
     borderRadius: shape === 'circle'
       ? 'var(--ds-avatar-radius-circle)'
       : shape === 'square'
@@ -136,6 +112,7 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
     border: bordered
       ? 'var(--ds-avatar-border-width) solid var(--ds-avatar-border-color)'
       : 'none',
+    // Ring uses CSS outline so it doesn't affect layout (unlike border)
     outline: ring
       ? `var(--ds-avatar-ring-width) solid ${ringColor || 'var(--ds-avatar-ring-color)'}`
       : 'none',
@@ -150,6 +127,8 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
     objectFit: 'cover',
   };
 
+  // Status dot is positioned absolutely at bottom-right with a small translate
+  // to overlap the avatar edge. White border separates it from the avatar bg.
   const statusStyle: React.CSSProperties = status ? {
     position: 'absolute',
     bottom: 0,
@@ -173,6 +152,7 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
           onLoad={handleLoad}
         />
       ) : (
+        // Prevent accidental text selection of initials during click interactions
         <span style={{ userSelect: 'none' }}>
           {displayInitials || children}
         </span>

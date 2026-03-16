@@ -1,8 +1,10 @@
 /**
- * Component Composition Helpers
+ * @fileoverview Component composition helpers for the sub-component pattern.
  *
- * Utilities for building compound components following the
- * sub-component pattern (e.g., Menu.Item, Tabs.Panel).
+ * Provides `createSubComponent`, `createCompoundComponent`, and the
+ * `PolymorphicProps` type helper. These are intentionally thin wrappers
+ * around standard React patterns to keep the DS API consistent without
+ * hiding React itself.
  */
 
 import type { ComponentPropsWithRef, ElementType, FC } from 'react';
@@ -32,6 +34,8 @@ export function createSubComponent<P extends Record<string, unknown>>(
   displayName: string,
   component: FC<P>
 ): FC<P> {
+  // Setting displayName is essential for React DevTools to show meaningful
+  // names (e.g. "Menu.Item" instead of "Anonymous") in the component tree.
   component.displayName = displayName;
   return component;
 }
@@ -63,6 +67,7 @@ export function createCompoundComponent<
   TParent extends FC<any>,
   TSubs extends Record<string, FC<any>>
 >(parent: TParent, subs: TSubs): TParent & TSubs {
+  // Object.assign keeps the runtime shape familiar (`Menu.Item`) while preserving types.
   return Object.assign(parent, subs);
 }
 
@@ -93,5 +98,10 @@ export function createCompoundComponent<
  * // Usage: <Text as="h1" size="lg">Title</Text>
  * ```
  */
+// The intersection merges the component's own props (P) with the native
+// element's props (via ComponentPropsWithRef<E>), then adds the `as` prop.
+// `Omit<..., keyof P>` prevents native attrs from overriding the component's
+// explicit prop definitions (e.g. a custom `size` prop won't clash with
+// the native HTMLInputElement `size` attribute).
 export type PolymorphicProps<E extends ElementType, P = {}> = P &
   Omit<ComponentPropsWithRef<E>, keyof P> & { as?: E };

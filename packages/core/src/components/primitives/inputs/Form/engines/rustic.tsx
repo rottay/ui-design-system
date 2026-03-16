@@ -70,7 +70,9 @@ import React, { createContext, useContext, useState, useCallback, useMemo, useRe
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../Form.types';
 import { useTranslation } from '../../../../../i18n';
 
-// Feedback Icons (pure inline SVG, no external deps)
+// Feedback icon data keyed by validation status. Using a static lookup table
+// instead of a switch statement keeps the rendering logic minimal and lets us
+// share the same SVG rendering path for all statuses.
 const feedbackIcons: Record<string, { svg: string; color: string; label: string }> = {
   success: {
     svg: 'M5 13l4 4L19 7',
@@ -94,6 +96,11 @@ const feedbackIcons: Record<string, { svg: string; color: string; label: string 
   },
 };
 
+/**
+ * Renders a feedback SVG icon for the given validation status.
+ * All styling is inline to avoid CSS framework dependencies.
+ * The validating status uses a spin animation; others use a scale-in entrance.
+ */
 const RusticFeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'validating' }> = ({ status }) => {
   const { svg, color, label } = feedbackIcons[status];
   const iconStyle: React.CSSProperties = {
@@ -114,7 +121,11 @@ const RusticFeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | '
   );
 };
 
-// Styles using CSS variables
+// ---------------------------------------------------------------------------
+// Inline style definitions using CSS custom properties (--ds-form-*).
+// CSS variables enable multi-tenant theming without class name collisions,
+// which is critical for the Rustic engine's zero-dependency approach.
+// ---------------------------------------------------------------------------
 const styles = {
   formHorizontal: {
     display: 'flex',
@@ -194,7 +205,10 @@ const styles = {
   },
 };
 
-// Form Context
+// ---------------------------------------------------------------------------
+// Form Context - carries form-wide state and callbacks to nested Form.Items.
+// Includes a `t` function for i18n so validation messages can be translated.
+// ---------------------------------------------------------------------------
 interface FormContextValue {
   values: Record<string, unknown>;
   errors: Record<string, string[]>;
@@ -217,7 +231,16 @@ interface FormContextValue {
 
 const FormContext = createContext<FormContextValue | null>(null);
 
-// useForm hook
+/**
+ * Custom useForm hook for the Rustic engine.
+ *
+ * Returns a stable FormInstance stored in refs so the object identity does not
+ * change between renders. This is nearly identical to the Modern engine's hook
+ * but kept separate to allow future engine-specific divergence.
+ *
+ * @template T - Shape of the form values object
+ * @returns A single-element tuple containing the FormInstance
+ */
 export function useForm<T = unknown>(): [FormInstance<T>] {
   const valuesRef = useRef<Record<string, unknown>>({});
   const errorsRef = useRef<Record<string, string[]>>({});
@@ -285,7 +308,17 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
   return [instance];
 }
 
-// Form component
+/**
+ * Rustic Form base component (pure HTML/CSS with inline styles).
+ *
+ * Provides the same state management and validation engine as Modern but
+ * renders using inline styles backed by CSS variables instead of Tailwind
+ * classes. This guarantees the component works without any CSS framework
+ * and supports multi-tenant theming via custom property overrides.
+ *
+ * @param props - {@link FormProps}
+ * @returns A `<form>` element with role="form" wrapped in FormContext
+ */
 const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   const { t } = useTranslation('components');
 
@@ -410,6 +443,8 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     }
   }, [values]);
 
+  // Validates a single field against all its rules. Uses the `t` function for
+  // translatable default error messages (unlike Modern which hardcodes English).
   const validateField = useCallback(async (fieldName: string, rules?: FormRule[]): Promise<string[]> => {
     if (!rules || rules.length === 0) return [];
 
@@ -549,7 +584,17 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 
 FormBase.displayName = 'Form.Rustic';
 
-// Form.Item component
+/**
+ * Rustic Form.Item - wraps a field with label, validation feedback, and help text.
+ *
+ * All layout and styling is handled through inline styles from the `styles`
+ * object, making it completely independent of external CSS. Supports
+ * horizontal/vertical/inline layouts, required-mark display, and dependencies
+ * for cross-field validation.
+ *
+ * @param props - {@link FormItemProps}
+ * @returns A labelled form control wrapper with inline-styled error display
+ */
 const FormItem: React.FC<FormItemProps> = (props) => {
   const {
     name,
@@ -710,7 +755,15 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
 FormItem.displayName = 'Form.Item.Rustic';
 
-// Form.List component
+/**
+ * Rustic Form.List - dynamic field array management via render-prop pattern.
+ *
+ * Provides add/remove/move operations to children. Monotonically increasing
+ * keys ensure React reconciliation is stable across reorders and deletions.
+ *
+ * @param props - {@link FormListProps}
+ * @returns Rendered children with field descriptors and operation helpers
+ */
 const FormList: React.FC<FormListProps> = (props) => {
   const { initialValue = [], children } = props;
   const [fields, setFields] = useState<Array<{ key: number; name: number }>>(() =>
@@ -753,7 +806,13 @@ const FormList: React.FC<FormListProps> = (props) => {
 
 FormList.displayName = 'Form.List.Rustic';
 
-// Form.ErrorList component
+/**
+ * Rustic Form.ErrorList - displays validation errors with role="alert" for
+ * screen readers. Uses inline styles from the `styles.errorList` object.
+ *
+ * @param props - {@link FormErrorListProps}
+ * @returns An accessible error list or null if there are no errors
+ */
 const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   const { fieldName, className = '', style } = props;
   const context = useContext(FormContext);
@@ -777,7 +836,12 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
 
 FormErrorList.displayName = 'Form.ErrorList.Rustic';
 
-// Compound component
+/**
+ * Rustic Form compound component.
+ *
+ * @param props - {@link FormProps}
+ * @returns A zero-dependency form with CSS-variable theming support
+ */
 export const Form = Object.assign(FormBase, {
   Item: FormItem,
   List: FormList,

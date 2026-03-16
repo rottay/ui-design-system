@@ -1,15 +1,17 @@
 /**
- * Component type definitions
- * Base types for all components in the design system
+ * @fileoverview Component contracts - Rottay Design System
+ * @description Backwards-compatible entry point re-exporting shared component
+ * base types. The source of truth lives in `contracts/common`; this file keeps
+ * older imports working during the convergence to a single home.
  *
- * Note: BaseComponentProps is defined in ./common to be the single source of truth.
- * WithChildren is also defined in ./common as WithChildren.
- * This file re-exports them for backward compatibility.
+ * @module Contracts/Components
+ * @category Types
+ * @package @rottay/design-system
  */
 
 import type { ReactNode } from 'react';
 
-// Re-export from common (single source of truth)
+// Re-export from common (single source of truth).
 export type { BaseComponentProps } from '../common';
 
 /**

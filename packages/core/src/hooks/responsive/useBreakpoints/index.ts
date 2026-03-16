@@ -83,16 +83,22 @@ export interface UseBreakpointsResult {
  * @returns {UseBreakpointsResult} Object with boolean flags for each breakpoint and device capability
  */
 export function useBreakpoints(): UseBreakpointsResult {
-  // Core breakpoints (mobile-first)
-  const isMobile = useMediaQuery(buildRangeQuery('xs', 'sm'));
-  const isTablet = useMediaQuery(buildRangeQuery('sm', 'lg'));
-  const isDesktop = useMediaQuery(buildMinWidthQuery('lg'));
+  // Range queries produce mutually exclusive breakpoint tiers. Using
+  // buildRangeQuery ensures exactly one of isMobile/isTablet/isDesktop is
+  // true at any viewport width, avoiding ambiguity from overlapping queries.
+  const isMobile = useMediaQuery(buildRangeQuery('xs', 'sm'));   // 0-639px
+  const isTablet = useMediaQuery(buildRangeQuery('sm', 'lg'));   // 640-1023px
+  const isDesktop = useMediaQuery(buildMinWidthQuery('lg'));      // 1024px+
 
-  // Device capabilities
+  // Device capability queries use CSS Level 4 interaction media features.
+  // `hover: none` + `pointer: coarse` together identify true touch devices
+  // (not just small screens), while `prefers-reduced-motion` respects the
+  // OS-level accessibility setting for motion-sensitive users.
   const isTouchDevice = useMediaQuery('(hover: none) and (pointer: coarse)');
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
 
-  // Convenience combinations
+  // Derived combinations avoid forcing consumers to write `||` checks repeatedly.
+  // These are plain booleans (not hooks), so no additional subscriptions are created.
   const isMobileOrTablet = isMobile || isTablet;
   const isTabletOrDesktop = isTablet || isDesktop;
 

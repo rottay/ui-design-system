@@ -42,6 +42,17 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { PopoverProps } from '../Popover.types';
 import { POPOVER_DEFAULTS } from '../Popover.types';
 
+/**
+ * Modern (Hermes) engine implementation of Popover using DaisyUI/Tailwind.
+ *
+ * Manages open state internally (controlled/uncontrolled pattern), with
+ * debounced hover delays via timeout refs. Renders the popover content
+ * inline (not portaled) and uses DaisyUI tooltip classes for placement.
+ *
+ * @param props - Popover configuration props
+ * @param ref - Forwarded ref merged with the internal container ref
+ * @returns DaisyUI tooltip-based popover with trigger handling
+ */
 export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
   (props, ref) => {
     const {
@@ -61,6 +72,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       overlayStyle,
     } = props;
 
+    // Controlled/uncontrolled pattern: external `open` prop takes precedence
     const [internalOpen, setInternalOpen] = useState(defaultOpen);
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
@@ -76,6 +88,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
+    // Clear pending hover timeouts on unmount to prevent state updates after disposal
     useEffect(() => {
       return () => {
         if (enterTimeoutRef.current) clearTimeout(enterTimeoutRef.current);
@@ -100,8 +113,10 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       };
     }, [isOpen, handleOpenChange]);
 
+    // Normalize trigger to array so multi-trigger combos (e.g. ['click', 'hover']) work uniformly
     const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
 
+    /** Maps the 12-position placement prop to DaisyUI tooltip directional classes. */
     const getPlacementClasses = () => {
       const classes: string[] = [];
       if (placement?.includes('top')) classes.push('tooltip-top');
@@ -117,6 +132,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }
     };
 
+    // Cancel any pending leave timeout before starting the enter delay, and vice versa,
+    // to prevent flickering when the cursor rapidly enters/leaves the trigger area.
     const handleMouseEnter = () => {
       if (triggerArray.includes('hover')) {
         if (leaveTimeoutRef.current) clearTimeout(leaveTimeoutRef.current);
@@ -163,6 +180,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         onBlur={handleBlur}
       >
         {children}
+        {/* Content panel rendered conditionally within the tooltip container (not portaled) */}
         {isOpen && (
           <div
             className={`absolute z-50 bg-base-100 shadow-lg rounded-lg p-3 ${overlayClassName || ''}`}

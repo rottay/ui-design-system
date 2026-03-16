@@ -1,10 +1,8 @@
 'use client';
 
 /**
- * LiveFeed - Pattern Component
- *
- * Real-time data feed with auto-refresh, new-items indicator, and load-more.
- * Used by: OrderQueue (bar), CheckIns (ev), Notifications (pl), ActivityFeed (generic)
+ * @fileoverview LiveFeed pattern -- engine-aware real-time data feed with
+ * auto-refresh, new-items indicator, and load-more pagination.
  */
 
 import { createEngineComponent } from '../../../engines/factory';

@@ -1,19 +1,30 @@
 'use client';
 
 /**
- * @fileoverview ContextMenu Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the ContextMenu component.
- * Uses a portal menu with contextmenu event listener.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the ContextMenu overlay component.
+ * Renders a portal-based floating menu at the cursor position on right-click,
+ * styled entirely via inline CSS and design-system token variables.
  *
- * @module ContextMenu/Engines/Rustic
- * @category Overlay
- * @package @rottay/design-system
+ * @example
+ * ```tsx
+ * <RusticContextMenu
+ *   items={[{ key: 'undo', label: 'Undo', shortcut: 'Ctrl+Z' }]}
+ *   trigger={<div>Right-click target</div>}
+ *   onSelect={(key) => console.log(key)}
+ * />
+ * ```
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { ContextMenuProps, ContextMenuItem } from '../ContextMenu.types';
 
+/**
+ * Renders a single menu row -- standard item, divider, or group header.
+ * Hover effects are applied via inline style mutations because the rustic
+ * engine avoids external CSS. The translateX micro-interaction provides
+ * visual feedback that the item is interactive.
+ */
 const MenuItem: React.FC<{
   item: ContextMenuItem;
   onClick?: (key: string) => void;
@@ -100,6 +111,17 @@ const MenuItem: React.FC<{
   );
 };
 
+/**
+ * ContextMenu implementation using pure inline CSS and a React portal.
+ *
+ * The menu is portalled to `document.body` so it is not constrained by any
+ * ancestor's `overflow` or `z-index` stacking context. Position is calculated
+ * from the cursor's viewport coordinates plus scroll offsets for accuracy in
+ * scrollable pages. Both click-outside and Escape-key dismissal are supported.
+ *
+ * @param props - {@link ContextMenuProps} shared across all engines.
+ * @returns The trigger element plus a portal-rendered floating menu.
+ */
 export default function RusticContextMenu(props: ContextMenuProps): React.ReactElement {
   const {
     items,
@@ -117,6 +139,8 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Use absolute page coordinates (clientXY + scroll) so the portal menu
+  // appears exactly at the cursor regardless of scroll position
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
     e.preventDefault();
@@ -132,6 +156,7 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
     setIsOpen(false);
   }, [onSelect]);
 
+  // Two dismissal vectors: clicking outside the menu, or pressing Escape
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -155,6 +180,7 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
     };
   }, [isOpen]);
 
+  // Portal the menu to document.body to escape overflow/z-index constraints
   const menuContent = isOpen && typeof document !== 'undefined'
     ? createPortal(
         <div

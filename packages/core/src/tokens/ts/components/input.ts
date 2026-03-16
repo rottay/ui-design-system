@@ -1,8 +1,9 @@
 /**
- * Input Component Tokens - TypeScript Mirror
+ * @fileoverview Input component token mirrors.
  *
- * TypeScript representation of Input CSS custom properties.
- * Use these for type-safe Input token references.
+ * Covers 5 size tiers, default/hover/focus/disabled states, validation variants
+ * (success/warning/error), addon/prefix/suffix styling, label and helper text,
+ * clear button, input groups, textarea, readonly, and transition tokens.
  */
 
 // Input Sizes

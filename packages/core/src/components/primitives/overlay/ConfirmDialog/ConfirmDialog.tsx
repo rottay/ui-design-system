@@ -1,37 +1,24 @@
 'use client';
 
 /**
- * @fileoverview ConfirmDialog - Rottay Design System
- * @description "Are you sure?" confirmation modal pattern.
- * Part of the Rottay Design System's overlay primitives collection.
+ * @fileoverview ConfirmDialog - "Are you sure?" modal with onConfirm/onCancel callbacks.
+ * Variants: info, warning, danger. Composes the Modal component internally.
+ * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
  *
- * @remarks
- * The ConfirmDialog component provides a standardized confirmation dialog
- * with title, description, confirm/cancel actions, and visual variants
- * (info, warning, danger). It composes the existing Modal component internally.
- *
- * **Multi-Engine Architecture:**
- * - **Classic**: Ant Design Modal composition with styled confirm/cancel buttons
- * - **Modern**: DaisyUI modal with Tailwind-styled action buttons
- * - **Rustic**: Pure CSS modal with inline-styled confirmation UI
- *
- * @example Basic ConfirmDialog
+ * @example
  * ```tsx
- * import { ConfirmDialog } from '@rottay/design-system';
- *
  * <ConfirmDialog
- *   open={showConfirm}
- *   title="Delete Item"
- *   description="Are you sure you want to delete this item? This action cannot be undone."
+ *   open={show}
  *   variant="danger"
+ *   title="Delete Item"
+ *   description="This cannot be undone."
  *   onConfirm={handleDelete}
- *   onCancel={() => setShowConfirm(false)}
+ *   onCancel={() => setShow(false)}
  * />
  * ```
  *
  * @module ConfirmDialog
  * @category Overlay
- * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../engines/factory';
@@ -44,11 +31,14 @@ export {
   VARIANT_COLORS,
 } from './ConfirmDialog.types';
 
-
+/**
+ * ConfirmDialog component with multi-engine support.
+ * No compound sub-components -- title/description/variant props control layout.
+ */
 export const ConfirmDialog = createEngineComponent<ConfirmDialogProps>('ConfirmDialog', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+  classic: () => import('./engines/classic'),  // Ant Design Modal composition
+  modern: () => import('./engines/modern'),     // DaisyUI modal
+  rustic: () => import('./engines/rustic'),      // Pure CSS modal
 });
 
 ConfirmDialog.displayName = 'ConfirmDialog';

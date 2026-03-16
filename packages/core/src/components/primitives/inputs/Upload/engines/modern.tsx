@@ -48,6 +48,11 @@ import { useTranslation } from '../../../../../i18n';
 // Helpers
 // ---------------------------------------------------------------------------
 
+/**
+ * Generates a data URL thumbnail for image files using FileReader.
+ * Non-image files resolve to undefined (no preview). This avoids a network
+ * round-trip for newly selected files that have not been uploaded yet.
+ */
 function getFileThumbUrl(file: UploadFile): Promise<string | undefined> {
   return new Promise((resolve) => {
     const raw = file.originFileObj;
@@ -62,6 +67,11 @@ function getFileThumbUrl(file: UploadFile): Promise<string | undefined> {
   });
 }
 
+/**
+ * Determines if a file should show an image preview. Checks MIME type first
+ * (for newly selected files), then falls back to URL extension matching
+ * (for server-returned files that may lack a MIME type).
+ */
 function isImageFile(file: UploadFile): boolean {
   if (file.type?.startsWith('image/')) return true;
   const url = file.thumbUrl || file.url || '';
@@ -78,6 +88,7 @@ interface PreviewModalProps {
   onClose: () => void;
 }
 
+/** Full-screen image preview overlay. Closes on Escape key or backdrop click. */
 const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
   const { t } = useTranslation('components');
 
@@ -122,6 +133,7 @@ interface ProgressBarProps {
   strokeWidth?: number;
 }
 
+/** Horizontal progress bar with optional gradient stroke color. */
 const ProgressBar: React.FC<ProgressBarProps> = ({ percent = 0, strokeColor, strokeWidth = 2 }) => {
   const bg = typeof strokeColor === 'object'
     ? `linear-gradient(to right, ${strokeColor.from}, ${strokeColor.to})`
@@ -156,6 +168,12 @@ interface FileItemProps {
   thumbUrls: Record<string, string>;
 }
 
+/**
+ * Renders a single file entry in the upload list. Adapts its layout based on
+ * `listType`: picture-card (grid thumbnail), picture-circle (avatar), picture
+ * (row with thumbnail), or text (filename only). Supports hover overlays with
+ * preview/remove actions and upload progress display.
+ */
 const FileItem: React.FC<FileItemProps> = ({
   file,
   listType,
@@ -176,7 +194,7 @@ const FileItem: React.FC<FileItemProps> = ({
     remove: () => onRemove(file),
   };
 
-  // -- picture-card --
+  // -- picture-card: 104x104 grid tile with hover overlay for actions --
   if (listType === 'picture-card') {
     const originNode = (
       <div
@@ -216,7 +234,7 @@ const FileItem: React.FC<FileItemProps> = ({
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
   }
 
-  // -- picture-circle --
+  // -- picture-circle: circular avatar variant of picture-card --
   if (listType === 'picture-circle') {
     const originNode = (
       <div
@@ -256,7 +274,7 @@ const FileItem: React.FC<FileItemProps> = ({
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
   }
 
-  // -- picture (list with thumbnails) --
+  // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
       <div className={`flex items-center gap-2 p-2 bg-base-200 rounded transition-colors duration-200 hover:bg-base-200/50 ${file.status === 'error' ? 'border border-error' : ''}`} role="listitem" aria-label={file.name}>
@@ -277,7 +295,7 @@ const FileItem: React.FC<FileItemProps> = ({
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
   }
 
-  // -- text (default) --
+  // -- text (default): simple filename row with remove button --
   const originNode = (
     <div className={`flex items-center justify-between p-2 bg-base-200 rounded transition-colors duration-200 hover:bg-base-200/50 ${file.status === 'error' ? 'border border-error' : ''}`} role="listitem" aria-label={file.name}>
       <div className="flex-1 min-w-0">
@@ -294,6 +312,16 @@ const FileItem: React.FC<FileItemProps> = ({
 // Upload Component
 // ---------------------------------------------------------------------------
 
+/**
+ * Modern Upload component (DaisyUI/Tailwind CSS).
+ *
+ * Provides file selection via a hidden input triggered by a label or button.
+ * Supports controlled/uncontrolled file lists, picture-card and picture-circle
+ * grid modes, directory upload, and per-file progress bars.
+ *
+ * @param props - {@link UploadProps}
+ * @returns A file upload component with file list display and preview modal
+ */
 export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -336,6 +364,8 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       });
     }, [actualFileList, listType, thumbUrls]);
 
+    // Processes selected files through beforeUpload validation, then updates
+    // state and fires onChange for each accepted file with a progressive snapshot.
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
       if (!files.length) return;
@@ -358,6 +388,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       if (inputRef.current) inputRef.current.value = '';
     };
 
+    // Allows onRemove to veto deletion by returning false
     const handleRemove = async (file: UploadFile) => {
       if (onRemove) {
         const result = await onRemove(file);
@@ -471,6 +502,17 @@ Upload.displayName = 'Upload.Modern';
 // Dragger Component
 // ---------------------------------------------------------------------------
 
+/**
+ * Modern Upload.Dragger component (DaisyUI/Tailwind CSS).
+ *
+ * Provides a drag-and-drop zone that highlights on dragOver. Dropped files
+ * go through the same beforeUpload validation as manually selected files.
+ * Supports all the same list types and preview capabilities as the regular
+ * Upload component.
+ *
+ * @param props - {@link DraggerProps}
+ * @returns A drag-and-drop upload zone with file list below
+ */
 export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
   (props, ref) => {
     const { t } = useTranslation('components');
@@ -514,6 +556,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       });
     }, [actualFileList, listType, thumbUrls]);
 
+    // Shared file processing for both drag-drop and manual selection paths
     const processFiles = async (files: File[]) => {
       if (disabled) { if (inputRef.current) inputRef.current.value = ''; return; }
       const { nextFileList, acceptedFiles } = await resolveAcceptedUploadFiles(actualFileList, files, maxCount, beforeUpload);

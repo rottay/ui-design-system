@@ -1,7 +1,25 @@
 'use client';
 
 /**
- * DetailPanel - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the DetailPanel pattern.
+ * Renders an entity detail view inside an Ant Design Card with a header
+ * (avatar, title, status badge, action buttons), tabbed content via Ant Tabs,
+ * an optional sidebar (left or right), breadcrumb navigation, and a footer.
+ * Supports both controlled and uncontrolled tab state.
+ *
+ * @example
+ * <ClassicDetailPanel
+ *   data={user}
+ *   title="Jane Doe"
+ *   subtitle="Senior Engineer"
+ *   status={{ label: 'Active', color: 'green' }}
+ *   tabs={[
+ *     { key: 'overview', label: 'Overview', content: <UserOverview /> },
+ *     { key: 'activity', label: 'Activity', content: <ActivityLog />, badge: 12 },
+ *   ]}
+ *   actions={[{ key: 'edit', label: 'Edit', variant: 'primary', onClick: openEditor }]}
+ *   onBack={() => router.back()}
+ * />
  */
 
 import React, { useState } from 'react';
@@ -9,6 +27,17 @@ import { Card, Tabs, Button, Breadcrumb, Space, Tag, Skeleton, Spin } from 'antd
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import type { DetailPanelProps } from '../DetailPanel.types';
 
+/**
+ * Classic (Ant Design) DetailPanel engine.
+ *
+ * Tab state can be controlled (via activeTab + onTabChange) or uncontrolled
+ * (internal state, first tab selected by default). The sidebar is rendered
+ * inside a nested Card for visual grouping.
+ *
+ * @typeParam T - Shape of the entity data object being displayed.
+ * @param props - {@link DetailPanelProps} -- data, header info, tabs, sidebar, and actions.
+ * @returns The detail view wrapped in an Ant Design Card.
+ */
 export default function ClassicDetailPanel<T>(props: DetailPanelProps<T>) {
   const {
     data,
@@ -32,14 +61,20 @@ export default function ClassicDetailPanel<T>(props: DetailPanelProps<T>) {
     style,
   } = props;
 
+  // Uncontrolled tab state: defaults to the first tab's key. When the consumer
+  // provides controlledActiveTab, internalActiveTab is ignored.
   const [internalActiveTab, setInternalActiveTab] = useState<string>(tabs?.[0]?.key ?? '');
   const activeTab = controlledActiveTab ?? internalActiveTab;
 
+  // Only update internal state when uncontrolled. Always notify the parent so
+  // controlled consumers can sync their own state.
   const handleTabChange = (key: string) => {
     if (!controlledActiveTab) setInternalActiveTab(key);
     onTabChange?.(key);
   };
 
+  // Loading skeleton: shows avatar + paragraph placeholders to approximate
+  // the final layout before data arrives.
   if (loading) {
     return (
       <Card className={className} style={style}>
@@ -49,6 +84,8 @@ export default function ClassicDetailPanel<T>(props: DetailPanelProps<T>) {
     );
   }
 
+  // Breadcrumb node: items with href render as <a>, items with onClick render as
+  // a clickable <span>, and plain items render as static text.
   const breadcrumbNode = breadcrumbs && breadcrumbs.length > 0 ? (
     <Breadcrumb
       style={{ marginBottom: 16 }}
@@ -64,6 +101,8 @@ export default function ClassicDetailPanel<T>(props: DetailPanelProps<T>) {
     />
   ) : null;
 
+  // Header: left side has back button + avatar + title/status; right side has action buttons.
+  // Action variant mapping: 'primary' -> Ant primary, 'ghost' -> text, 'danger' -> default+danger.
   const headerNode = (
     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1 }}>
@@ -83,6 +122,8 @@ export default function ClassicDetailPanel<T>(props: DetailPanelProps<T>) {
           )}
         </div>
       </div>
+      {/* Action buttons and headerExtra are right-aligned. The variant prop maps to
+          Ant Design's Button type/danger props. */}
       {(actions || headerExtra) && (
         <Space>
           {headerExtra}
@@ -104,6 +145,8 @@ export default function ClassicDetailPanel<T>(props: DetailPanelProps<T>) {
     </div>
   );
 
+  // Tabs node: each tab label optionally includes an icon (prepended) and a badge
+  // (appended via Ant Tag). Tab content is rendered by Ant Tabs in a children slot.
   const tabsNode = tabs && tabs.length > 0 ? (
     <Tabs
       activeKey={activeTab}
@@ -125,18 +168,24 @@ export default function ClassicDetailPanel<T>(props: DetailPanelProps<T>) {
     />
   ) : null;
 
+  // minWidth:0 on the main content prevents flex children from overflowing
+  // when tab content contains elements wider than the available space.
   const mainContent = (
     <div style={{ flex: 1, minWidth: 0 }}>
       {tabsNode}
     </div>
   );
 
+  // Sidebar is wrapped in a compact Ant Card for visual separation from main content.
   const sidebarNode = sidebar ? (
     <div style={{ width: sidebarWidth, flexShrink: 0 }}>
       <Card size="small">{sidebar}</Card>
     </div>
   ) : null;
 
+  // Layout: when a sidebar is present, main + sidebar are arranged in a flex row.
+  // sidebarPosition controls which side it appears on. Without a sidebar, tabs
+  // span the full width.
   const bodyNode = sidebar ? (
     <div style={{ display: 'flex', gap: 16, marginTop: tabs ? 0 : 16 }}>
       {sidebarPosition === 'left' && sidebarNode}

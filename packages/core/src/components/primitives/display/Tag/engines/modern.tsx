@@ -150,7 +150,9 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     }
   }, [clickable, onClick]);
 
-  // Build class list
+  // Assemble DaisyUI utility classes. Falsy values (from disabled booleans)
+  // are removed by .filter(Boolean) so they never produce stray whitespace.
+  // The order matters: base -> layout -> size -> variant -> modifiers -> user.
   const classNames = [
     'badge',
     'inline-flex',
@@ -168,12 +170,14 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     .filter(Boolean)
     .join(' ');
 
-  // Build custom styles
+  // Custom color overrides the variant background, allowing one-off branding
   const tagStyle: React.CSSProperties = {
     ...(color && { backgroundColor: color }),
     ...style,
   };
 
+  // Conditionally add button semantics so keyboard users can activate
+  // clickable tags via Enter/Space without extra JS key handlers.
   return (
     <span
       className={classNames}
@@ -183,6 +187,7 @@ export default function ModernTag(props: TagProps): React.ReactElement {
       tabIndex={clickable ? 0 : undefined}
       {...restProps}
     >
+      {/* flex-shrink-0 prevents icon from collapsing in tight layouts */}
       {icon && <span className="flex-shrink-0">{icon}</span>}
 
       <span>{children}</span>

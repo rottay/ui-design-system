@@ -1,5 +1,5 @@
 /**
- * Navigation Primitives - Usage Examples
+ * @fileoverview Navigation primitives usage examples.
  *
  * This file demonstrates how to use the Tabs, Breadcrumb, and Pagination components
  * in real-world scenarios.

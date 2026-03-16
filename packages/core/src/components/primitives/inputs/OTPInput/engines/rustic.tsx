@@ -1,9 +1,15 @@
 'use client';
 
 /**
- * @fileoverview OTPInput Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the OTPInput component.
- * Row of individual input boxes with auto-advance and paste support.
+ * @fileoverview OTPInput Rustic Engine - Rottay Design System.
+ * Pure HTML/CSS implementation using CSS custom properties (--ds-color-*)
+ * so theming is driven entirely by tenant-level token overrides. Renders a
+ * row of individual digit inputs with auto-advance and paste distribution.
+ *
+ * @example
+ * ```tsx
+ * <OTPInput engine="rustic" length={6} type="numeric" mask onComplete={handleVerify} />
+ * ```
  *
  * @module OTPInput/Engines/Rustic
  * @category Inputs
@@ -14,12 +20,21 @@ import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
 import type { OTPInputProps } from '../OTPInput.types';
 import { OTPINPUT_DEFAULTS } from '../OTPInput.types';
 
+/** Pixel dimensions and font size for each size tier. */
 const SIZE_STYLES: Record<string, { width: number; height: number; fontSize: number }> = {
   sm: { width: 36, height: 36, fontSize: 16 },
   md: { width: 44, height: 44, fontSize: 20 },
   lg: { width: 52, height: 52, fontSize: 24 },
 };
 
+/**
+ * Rustic engine OTPInput built with pure HTML/CSS and design-system CSS variables.
+ * Each digit occupies its own `<input maxLength={1}>` box. Tracks focused slot
+ * to render a ring shadow without relying on CSS :focus-visible (cross-browser safety).
+ *
+ * @param props - Unified OTPInputProps from the design system contract.
+ * @returns A theme-aware flex row of single-character inputs with optional error display.
+ */
 export default function RusticOTPInput(props: OTPInputProps): React.ReactElement {
   const {
     length = OTPINPUT_DEFAULTS.length,
@@ -44,21 +59,28 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const sizeConfig = SIZE_STYLES[size] || SIZE_STYLES.md;
 
+  // Initialize per-slot values by splitting the controlled value and padding with empty strings
   const [internalValues, setInternalValues] = useState<string[]>(
     () => (controlledValue || '').split('').concat(Array(length).fill('')).slice(0, length)
   );
 
+  // Sync internal state when parent changes the controlled value
   useEffect(() => {
     if (controlledValue !== undefined) {
       setInternalValues(controlledValue.split('').concat(Array(length).fill('')).slice(0, length));
     }
   }, [controlledValue, length]);
 
+  /** Validate a single character against the configured input type (numeric or alphanumeric). */
   const isValidChar = useCallback((char: string) => {
     if (type === 'numeric') return /^[0-9]$/.test(char);
     return /^[a-zA-Z0-9]$/.test(char);
   }, [type]);
 
+  /**
+   * Persist slot values and fire onChange/onComplete callbacks.
+   * onComplete only fires when every slot is filled, enabling auto-submit flows.
+   */
   const updateValue = useCallback((newValues: string[]) => {
     setInternalValues(newValues);
     const joined = newValues.join('');
@@ -68,6 +90,7 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
     }
   }, [length, onChange, onComplete]);
 
+  /** Write a valid character to the current slot and auto-advance focus to the next. */
   const handleChange = useCallback((index: number, char: string) => {
     if (!isValidChar(char)) return;
     const newValues = [...internalValues];
@@ -78,6 +101,10 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
     }
   }, [internalValues, isValidChar, length, updateValue]);
 
+  /**
+   * Keyboard navigation: Backspace clears the current slot (or retreats to
+   * the previous one if already empty); ArrowLeft/Right moves focus laterally.
+   */
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
       e.preventDefault();
@@ -97,6 +124,10 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
     }
   }, [internalValues, length, updateValue]);
 
+  /**
+   * Paste handler: distributes clipboard text across slots (filtered by type),
+   * then focuses the slot after the last pasted character.
+   */
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData('text').trim();
@@ -111,6 +142,10 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
     inputRefs.current[focusIndex]?.focus();
   }, [internalValues, isValidChar, length, updateValue]);
 
+  /**
+   * Compute per-slot inline styles: border color varies by error/focus/filled state,
+   * and a focus ring shadow is applied via JS since :focus-visible is not fully portable.
+   */
   const getInputStyle = (index: number): React.CSSProperties => ({
     width: sizeConfig.width,
     height: sizeConfig.height,

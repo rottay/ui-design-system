@@ -1,22 +1,30 @@
 /**
- * Modal - Modern Engine (DaisyUI)
+ * @fileoverview Modal Modern (Hermes) Engine - Rottay Design System.
+ * DaisyUI/Tailwind implementation using the native HTML <dialog> element for
+ * proper focus management. Provides a scale+opacity entrance animation,
+ * backdrop blur, scrollbar-width compensation, and close-button hover effects.
  *
- * Enhancements:
- * - Scale + opacity entrance animation (0.95 -> 1, 0 -> 1, 0.3s)
- * - Backdrop-filter: blur(4px) on overlay
- * - Scrollbar compensation (padding to body when scroll is hidden)
- * - Close button with hover background color transition
+ * @example
+ * ```tsx
+ * <Modal engine="modern" open={open} onClose={close} title="Edit Profile" size="lg">
+ *   <ProfileForm />
+ * </Modal>
+ * ```
+ *
+ * @module Modal/Engines/Modern
+ * @category Overlay
+ * @package @rottay/design-system
  */
 
 'use client';
 
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-import type { ModalProps } from '../../../../../contracts/primitives/feedback/Modal';
+import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../Modal.types';
 import { Portal } from '../utils/Portal';
 import { useTranslation } from '../../../../../i18n';
 
-// DaisyUI size class mapping
+/** Maps design-system size tokens to Tailwind max-width utility classes. */
 const SIZE_CLASS_MAP: Record<string, string> = {
   xs: 'max-w-xs',
   sm: 'max-w-sm',
@@ -38,6 +46,17 @@ function getScrollbarWidth(): number {
   return window.innerWidth - document.documentElement.clientWidth;
 }
 
+/**
+ * Modern engine implementation of Modal using DaisyUI and the native <dialog> API.
+ *
+ * Leverages showModal()/close() for built-in top-layer stacking and browser
+ * focus trapping. Compensates for scrollbar layout shift by adding padding-right
+ * to <body> equal to the scrollbar width while the modal is open. Injects
+ * keyframe animations via a <style> tag so no external stylesheet is required.
+ *
+ * @param props - Modal configuration props
+ * @returns DaisyUI-styled dialog element, or null when closed
+ */
 export default function ModernModal(props: ModalProps): React.ReactElement | null {
   const { t } = useTranslation('components');
 
@@ -82,7 +101,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     [closeOnEscape, open, onClose]
   );
 
-  // Open/close dialog
+  // Sync the native <dialog> open state with the controlled `open` prop.
+  // showModal() promotes the element to the top layer with a built-in backdrop.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
@@ -108,7 +128,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     }
   }, [open, closeOnEscape, handleEscKey]);
 
-  // Prevent scroll + scrollbar compensation
+  // Lock body scroll and compensate for disappearing scrollbar to prevent layout shift
   useEffect(() => {
     if (!preventScroll) return;
 
@@ -129,25 +149,26 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     }
   }, [open, preventScroll]);
 
-  // Handle backdrop click
+  // Only dismiss when the click target is the dialog itself (the backdrop area),
+  // not any child content -- e.target === e.currentTarget ensures this.
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget && closeOnBackdropClick) {
       onClose();
     }
   };
 
-  // Handle native dialog close event
+  // Sync controlled state when the browser closes the dialog (e.g. via Escape)
   const handleDialogClose = () => {
     if (open) {
       onClose();
     }
   };
 
-  // Build DaisyUI classes
+  // Fullscreen overrides all max-width constraints; otherwise use the size lookup
   const sizeClass = fullScreen ? 'w-screen h-screen max-w-full max-h-full' : SIZE_CLASS_MAP[size] || SIZE_CLASS_MAP.md;
   const placementClass = placement === 'top' ? 'modal-top' : placement === 'bottom' ? 'modal-bottom' : 'modal-middle';
 
-  // Modal box styles
+  // Inline styles enable CSS custom property theming without requiring a stylesheet
   const modalBoxStyle: React.CSSProperties = {
     width: fullScreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md,
     maxWidth: fullScreen ? '100vw' : '90vw',

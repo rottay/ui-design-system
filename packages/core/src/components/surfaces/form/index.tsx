@@ -1,11 +1,13 @@
 'use client';
 
 /**
- * FormSurface
+ * @fileoverview FormSurface - Rottay Design System
+ * @description Reusable page-level form shell built on top of the schema-driven
+ * form builder pattern.
  *
- * Wraps the generic form builder pattern in page chrome and optional sidebar
- * content. This gives the app a declarative page-level form shell instead of a
- * one-off component for every create/edit screen.
+ * @remarks
+ * This surface owns page chrome, responsive two-column layout, and action
+ * presentation while delegating actual field rendering to `PatternFormBuilder`.
  */
 
 import { Button, Card, Grid, Stack, Text, Flex } from '../../primitives';
@@ -30,6 +32,7 @@ export interface FormSurfaceProps {
   onRetry?: () => void | Promise<void>;
 }
 
+/** Page-level form shell with error handling, action normalization, and optional aside content. */
 export function FormSurface({
   config,
   loading = false,
@@ -38,8 +41,13 @@ export function FormSurface({
 }: FormSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  // Fields are permission-filtered before reaching the form builder so
+  // restricted fields never appear in the DOM at all.
   const visibleFields = filterSurfaceFields(config.behavior.fields, config.permissions);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
+  // Label text transform (uppercase, capitalize, sentence) comes from the
+  // product personality profile, keeping form labels consistent across
+  // every form surface without per-instance configuration.
   const labelTransform = resolveLabelTextTransform(profileDefaults.labelStyle);
   const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.permissions);
   const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.permissions);
@@ -87,6 +95,9 @@ export function FormSurface({
     </Flex>
   );
 
+  // Aside column only renders when content is provided AND viewport is wide
+  // enough. This keeps the form full-width by default, matching the most
+  // common create/edit screen layout without explicit configuration.
   const formContent = (
     <Grid columns={config.presentation.aside && !shouldStack ? 12 : 1} gap={sectionSpacing}>
       <Grid.Item span={config.presentation.aside && !shouldStack ? 8 : undefined}>
@@ -110,6 +121,7 @@ export function FormSurface({
                 </Card>
               )}
 
+              {/* The form builder owns field generation; the surface owns page framing and submit actions. */}
               <PatternFormBuilder
                 fields={visibleFields}
                 layout={config.visual.layout}

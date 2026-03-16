@@ -59,7 +59,10 @@ import { Button as AntButton } from 'antd';
 import type { ButtonProps } from '../Button.types';
 import { BUTTON_DEFAULTS } from '../Button.types';
 
-// Map our variants to Ant Design button props
+// Translate DS variant tokens to Ant Design's `type` + `danger` props.
+// "outline" maps to type="default" (Ant renders a bordered button by default).
+// "ghost" maps to type="text" (borderless, transparent bg) rather than Ant's
+// own `ghost` prop, which inverts colors for dark backgrounds.
 const VARIANT_MAP: Record<string, { type?: 'primary' | 'default' | 'dashed' | 'link' | 'text'; danger?: boolean }> = {
   primary: { type: 'primary' },
   secondary: { type: 'default' },
@@ -72,7 +75,8 @@ const VARIANT_MAP: Record<string, { type?: 'primary' | 'default' | 'dashed' | 'l
   link: { type: 'link' },
 };
 
-// Map our sizes to Ant Design sizes
+// DS supports 5 sizes (xs-xl) but Ant Design only has 3 (small/middle/large).
+// xs and sm both collapse to "small"; lg and xl both expand to "large".
 const SIZE_MAP: Record<string, 'small' | 'middle' | 'large'> = {
   xs: 'small',
   sm: 'small',
@@ -81,13 +85,25 @@ const SIZE_MAP: Record<string, 'small' | 'middle' | 'large'> = {
   xl: 'large',
 };
 
-// Map our shapes to Ant Design shapes
+// Shape mapping is 1:1 with Ant Design's shape options.
 const SHAPE_MAP: Record<string, 'default' | 'circle' | 'round'> = {
   default: 'default',
   round: 'round',
   circle: 'circle',
 };
 
+/**
+ * Classic (Ant Design) implementation of the DS Button.
+ *
+ * Normalizes Rottay DS props (variant, size, shape, iconPosition) into Ant
+ * Design's API, then delegates all rendering and interaction to `antd/Button`.
+ * The ref type is `any` because Ant's internal ref can be either an HTMLElement
+ * or a component instance depending on the rendered element (button vs anchor).
+ *
+ * @param props - Standardized ButtonProps from the DS type contract.
+ * @param ref   - Forwarded ref passed through to Ant Design's Button.
+ * @returns An Ant Design Button with DS class-name hooks for external styling.
+ */
 const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   const {
     children,
@@ -115,21 +131,25 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
     tabIndex,
   } = props;
 
-  // fullWidth is an alias for block
+  // `fullWidth` is the DS-preferred name; `block` is kept for backward
+  // compatibility with Ant Design's naming convention.
   const isFullWidth = fullWidth ?? block;
 
-  // Get variant props (danger prop overrides variant)
+  // Explicit `danger` prop takes precedence over `variant="danger"` so
+  // consumers can toggle danger mode independently of the base variant.
   const effectiveVariant = danger ? 'danger' : (variant || 'primary');
   const variantProps = VARIANT_MAP[effectiveVariant] || VARIANT_MAP.primary;
 
-  // Build class names
+  // BEM class names allow external CSS to target engine-specific styles
+  // without leaking into other engines.
   const classNames = [
     'rottay-button',
     `rottay-button--classic`,
     className,
   ].filter(Boolean).join(' ');
 
-  // Determine start and end content
+  // Ant Design's `icon` prop only supports start-positioned icons.
+  // End-positioned icons are rendered manually after children.
   const startIcon = iconPosition === 'start' ? icon : undefined;
   const endIcon = iconPosition === 'end' ? icon : undefined;
 
@@ -141,6 +161,8 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
       shape={SHAPE_MAP[shape || 'default']}
       disabled={disabled}
       loading={loading}
+      // `prefix` is an alternative to `icon` for non-icon start content
+      // (e.g., a badge or avatar). Only one is used at a time.
       icon={startIcon || prefix}
       block={isFullWidth}
       htmlType={htmlType}
@@ -155,6 +177,9 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
       tabIndex={tabIndex}
     >
       {children}
+      {/* End icon / suffix is rendered outside Ant's icon slot because Ant
+          only supports a single icon position (start). The left margin is
+          removed when there are no children to avoid asymmetric spacing. */}
       {(endIcon || suffix) && (
         <span style={{ marginLeft: children ? 8 : 0 }}>
           {endIcon || suffix}

@@ -203,7 +203,8 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
 
     const [isHovered, setIsHovered] = useState(false);
 
-    // Compose button styles based on props and state
+    // Style composition follows a specificity chain: base -> shape -> color -> hover -> consumer.
+    // Each layer only overrides what it needs, keeping the rest from previous layers.
     const buttonStyle = {
       ...styles.button,
       ...(shape === 'circle' ? styles.buttonCircle : styles.buttonSquare),
@@ -229,7 +230,8 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       </>
     );
 
-    // Common props for both button and anchor elements
+    // Shared props extracted to avoid duplication between <a> and <button>
+    // rendering paths; keeps behavior consistent regardless of element type
     const commonProps = {
       className,
       style: buttonStyle,
@@ -416,6 +418,8 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
     } = props;
 
     const [visible, setVisible] = useState(false);
+    // Hover state managed in JS because inline styles cannot use :hover;
+    // this is the trade-off for zero-dependency styling in Rustic engine
     const [isHovered, setIsHovered] = useState(false);
 
     // Monitor scroll position and update visibility

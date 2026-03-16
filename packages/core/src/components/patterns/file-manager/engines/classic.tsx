@@ -1,7 +1,20 @@
 'use client';
 
 /**
- * FileManager - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the FileManager pattern.
+ * Renders a file/folder browser with list and grid views, breadcrumb navigation,
+ * upload (click + drag-and-drop), multi-select, rename, and bulk delete.
+ * Built on Ant Design's Table, Card, Breadcrumb, and Upload primitives.
+ *
+ * @example
+ * <ClassicFileManager
+ *   files={[{ id: '1', name: 'report.pdf', type: 'file', mimeType: 'application/pdf', size: 204800 }]}
+ *   folders={[{ id: 'f1', name: 'Documents', type: 'folder' }]}
+ *   currentPath={['Documents']}
+ *   viewMode="list"
+ *   onUpload={(files) => upload(files)}
+ *   onNavigate={(folderId) => setFolder(folderId)}
+ * />
  */
 
 import React, { useCallback, useRef } from 'react';
@@ -20,10 +33,17 @@ import {
 } from '@ant-design/icons';
 import type { FileManagerProps, FileItem, FolderItem, FileSystemItem } from '../FileManager.types';
 
+/**
+ * Returns a visually distinct Ant Design icon based on file MIME type.
+ * Thumbnails take priority so image files show their actual preview
+ * instead of a generic icon.
+ */
 function getFileIcon(item: FileItem): React.ReactNode {
+  // If the file has a thumbnail (e.g. image preview from the server), show that instead of an icon.
   if (item.thumbnail) {
     return <img src={item.thumbnail} alt={item.name} style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: 4 }} />;
   }
+  // Color-code by MIME family so users can visually distinguish file types at a glance.
   const mime = item.mimeType || '';
   if (mime.startsWith('image/')) {
     return <FileImageOutlined style={{ fontSize: 24, color: 'var(--ds-color-primary-500, #1677ff)' }} />;
@@ -34,9 +54,11 @@ function getFileIcon(item: FileItem): React.ReactNode {
   if (mime.startsWith('text/')) {
     return <FileTextOutlined style={{ fontSize: 24, color: 'var(--ds-color-success-600, #16a34a)' }} />;
   }
+  // Fallback: generic file icon in muted color for unknown MIME types.
   return <FileOutlined style={{ fontSize: 24, color: 'var(--ds-color-text-tertiary, #8c8c8c)' }} />;
 }
 
+/** Converts raw byte count to a human-friendly size string (B/KB/MB/GB). */
 function formatSize(bytes?: number): string {
   if (bytes == null) return '--';
   if (bytes < 1024) return `${bytes} B`;
@@ -45,11 +67,22 @@ function formatSize(bytes?: number): string {
   return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
 }
 
+/** Formats an ISO date string to a short locale-aware date (e.g. "Mar 15, 2026"). */
 function formatDate(date?: string): string {
   if (!date) return '--';
   return new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+/**
+ * Classic (Ant Design) FileManager engine.
+ *
+ * Supports two view modes: a sortable Table ("list") and a grid of thumbnails ("grid").
+ * Selection is toggle-based (checkbox per item). Folders always render before files
+ * to match OS file explorer conventions.
+ *
+ * @param props - {@link FileManagerProps} -- files, folders, callbacks, and display options.
+ * @returns The FileManager UI wrapped in an Ant Design Card.
+ */
 export default function ClassicFileManager(props: FileManagerProps) {
   const {
     files,
@@ -70,13 +103,19 @@ export default function ClassicFileManager(props: FileManagerProps) {
     style,
   } = props;
 
+  // Hidden <input type="file"> is triggered programmatically by the Upload button
+  // so we can use a styled button while still leveraging the native file picker.
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Merge folders and files into a single array with a discriminator.
+  // Folders render first so they always appear above files, matching OS convention.
   const items: FileSystemItem[] = [
     ...folders.map(f => ({ ...f, type: 'folder' as const })),
     ...files.map(f => ({ ...f, type: 'file' as const })),
   ];
 
+  // Toggle an item's selection. Uses controlled selection via onSelectionChange,
+  // so the parent owns the selected state array.
   const handleSelect = useCallback((id: string) => {
     if (!onSelectionChange) return;
     const isSelected = selectedItems.includes(id);
@@ -87,6 +126,8 @@ export default function ClassicFileManager(props: FileManagerProps) {
     }
   }, [selectedItems, onSelectionChange]);
 
+  // Reset the input value after read so the same file can be re-selected
+  // (browsers skip onChange if the value hasn't changed).
   const handleUploadChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && onUpload) {
       onUpload(Array.from(e.target.files));
@@ -101,6 +142,8 @@ export default function ClassicFileManager(props: FileManagerProps) {
     }
   }, [onUpload]);
 
+  // Build breadcrumb trail. Each intermediate segment is clickable for navigation;
+  // the last segment is plain text because the user is already there.
   const breadcrumbItems = [
     { title: <a onClick={() => onNavigate?.(null)}>Root</a>, key: 'root' },
     ...currentPath.map((segment, i) => ({
@@ -111,6 +154,8 @@ export default function ClassicFileManager(props: FileManagerProps) {
     })),
   ];
 
+  // Ant Design Table column definitions for the "list" view mode.
+  // Folders show a folder icon + clickable name; files show a MIME-based icon + plain name.
   const columns = [
     {
       title: '',
@@ -130,6 +175,7 @@ export default function ClassicFileManager(props: FileManagerProps) {
       key: 'name',
       render: (_: unknown, record: FileSystemItem) => (
         <Space>
+          {/* Folders always use a standard folder icon; files delegate to renderFileIcon or the default helper. */}
           {record.type === 'folder'
             ? <FolderOutlined style={{ fontSize: 18, color: 'var(--ds-color-warning-500, #faad14)' }} />
             : renderFileIcon
@@ -161,6 +207,8 @@ export default function ClassicFileManager(props: FileManagerProps) {
       title: 'Actions',
       key: 'actions',
       width: 100,
+      // Per-row actions. Rename uses window.prompt as a lightweight inline rename;
+      // delete wraps the single ID in an array to match the bulk-delete signature.
       render: (_: unknown, record: FileSystemItem) => (
         <Space size="small">
           {onRename && (
@@ -192,6 +240,8 @@ export default function ClassicFileManager(props: FileManagerProps) {
     },
   ];
 
+  // Grid view: each item is a fixed-width card. Clicking a folder navigates into it;
+  // clicking a file toggles its selection. Selected items get a primary-colored border.
   const gridItems = items.map(item => (
     <div
       key={item.id}
@@ -257,6 +307,8 @@ export default function ClassicFileManager(props: FileManagerProps) {
         </Space>
       </div>
 
+      {/* Drop zone wraps the entire content area. onDragOver must preventDefault
+          so the browser treats this element as a valid drop target. */}
       <div
         onDragOver={e => e.preventDefault()}
         onDrop={handleDrop}

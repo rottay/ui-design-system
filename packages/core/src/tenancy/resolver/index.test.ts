@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for the central tenant slug resolver chain:
+ * header -> subdomain -> domain -> fallback.
+ */
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {

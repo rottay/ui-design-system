@@ -1,12 +1,13 @@
 'use client';
 
 /**
- * OnboardingSurface
+ * @fileoverview OnboardingSurface - Rottay Design System
+ * @description Specialized wizard surface for onboarding and setup flows with
+ * extra emphasis on guidance, checklist content, and hero copy.
  *
- * Onboarding is a specialized wizard: same progression mechanics, but with
- * much stronger emphasis on guidance, value framing, and side education. This
- * surface formalizes that experience instead of forcing product teams to fork
- * WizardSurface for every setup flow.
+ * @remarks
+ * This surface intentionally builds on top of `WizardSurface` so progression
+ * logic stays centralized while onboarding adds richer supporting content.
  */
 
 import React from 'react';
@@ -20,6 +21,7 @@ export interface OnboardingSurfaceProps {
   onRetry?: () => void | Promise<void>;
 }
 
+/** Thin onboarding specialization over `WizardSurface`. */
 export function OnboardingSurface({
   config,
   loading = false,
@@ -46,6 +48,8 @@ export function OnboardingSurface({
       renderField: config.presentation.renderField,
       emptyState: config.presentation.emptyState,
       footer: config.presentation.footer,
+      // The aside is deliberately assembled here so onboarding can reorder hero
+      // content without teaching WizardSurface about onboarding semantics.
       aside: (
         <React.Fragment>
           {config.visual.heroPosition !== 'end' && config.presentation.hero}

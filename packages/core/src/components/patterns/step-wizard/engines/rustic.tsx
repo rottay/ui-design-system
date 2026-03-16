@@ -1,12 +1,33 @@
 'use client';
 
 /**
- * StepWizard - Rustic Engine (Vanilla HTML/CSS with --ds-* vars)
+ * @fileoverview Rustic (Vanilla CSS) engine for the StepWizard pattern.
+ * Uses only inline styles backed by `--ds-*` CSS custom properties, making it
+ * framework-agnostic. Renders step indicators as numbered dots with a connecting
+ * line, a content area, and a navigation bar -- all without Ant Design or
+ * Tailwind. Hardcoded hex fallbacks ensure the component renders acceptably when
+ * design-system tokens are not loaded.
+ *
+ * Injects a minimal `@keyframes pulse` via an inline `<style>` tag for the
+ * skeleton loading animation.
+ *
+ * @example
+ * <RusticStepWizard
+ *   steps={[
+ *     { key: 'payment', title: 'Payment', content: <PaymentForm /> },
+ *     { key: 'ship', title: 'Shipping', content: <ShippingForm />, optional: true },
+ *   ]}
+ *   allowSkip
+ *   onComplete={() => placeOrder()}
+ * />
  */
 
 import React, { useState } from 'react';
 import type { StepWizardProps } from '../StepWizard.types';
 
+// Centralized style objects (the `s` namespace). Factory functions like
+// `stepDot()`, `stepLine()`, `btn()` accept state parameters to derive
+// visual variants without scattering ternary logic inside JSX.
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
@@ -28,6 +49,9 @@ const s = {
     gap: '0.5rem',
     flex: 1,
   } as React.CSSProperties),
+  // Step dot factory: three visual states -- completed (filled primary),
+  // active (outlined primary), and future (neutral). Completed dots show a
+  // checkmark; active/future dots show the 1-based step number.
   stepDot: (active: boolean, completed: boolean) => ({
     width: 28,
     height: 28,
@@ -112,6 +136,16 @@ const s = {
   } as React.CSSProperties),
 };
 
+/**
+ * Rustic (Vanilla CSS) engine for the StepWizard pattern.
+ *
+ * Renders numbered dot indicators, a connecting line, a progress bar, a content
+ * area, and a navigation bar -- all using inline styles backed by `--ds-*` CSS
+ * custom properties. No external CSS framework required.
+ *
+ * @param props - {@link StepWizardProps}
+ * @returns A framework-agnostic card containing the step wizard.
+ */
 export default function RusticStepWizard(props: StepWizardProps) {
   const {
     steps,
@@ -134,11 +168,14 @@ export default function RusticStepWizard(props: StepWizardProps) {
     style,
   } = props;
 
+  // Controlled/uncontrolled step index -- same pattern as Classic and Modern.
   const [internalStep, setInternalStep] = useState(0);
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const current = controlledStep ?? internalStep;
 
+  // Reset validation message on every navigation so errors from one step
+  // do not bleed into the next step's view.
   const setCurrent = (step: number) => {
     if (controlledStep == null) setInternalStep(step);
     onStepChange?.(step);
@@ -147,8 +184,13 @@ export default function RusticStepWizard(props: StepWizardProps) {
 
   const isLast = current === steps.length - 1;
   const currentDef = steps[current];
+  // Progress percentage: 1-based (step 1 of 3 = 33%, not 0%).
   const progress = Math.round(((current + 1) / steps.length) * 100);
 
+  /**
+   * Runs the active step's async `validate` function (if defined).
+   * Returns `true` when valid, `false` when validation fails.
+   */
   const validateCurrentStep = async (): Promise<boolean> => {
     if (!currentDef?.validate) {
       setValidationMessage(null);
@@ -158,6 +200,8 @@ export default function RusticStepWizard(props: StepWizardProps) {
     setIsValidating(true);
 
     try {
+      // validate() can return true/undefined (pass), false (generic fail),
+      // or a string (specific error message).
       const result = await currentDef.validate();
 
       if (result === true || result === undefined) {
@@ -177,6 +221,7 @@ export default function RusticStepWizard(props: StepWizardProps) {
     }
   };
 
+  // Both advance and complete gate on validation before proceeding.
   const handleAdvance = async () => {
     const isValid = await validateCurrentStep();
 
@@ -197,6 +242,8 @@ export default function RusticStepWizard(props: StepWizardProps) {
     await onComplete?.();
   };
 
+  // Skeleton loading: two shimmer blocks (progress + content) that match the
+  // typical rendered height to prevent layout shift.
   if (loading) {
     return (
       <div className={className} style={{ ...s.container, ...style }}>
@@ -211,6 +258,8 @@ export default function RusticStepWizard(props: StepWizardProps) {
 
   return (
     <div className={className} style={{ ...s.container, ...style }}>
+      {/* Horizontal step indicators: dot + label pairs connected by lines.
+          Completed steps show a checkmark; active/future steps show their number. */}
       {showProgress && !isVertical && (
         <>
           <div style={s.stepsHorizontal}>
@@ -222,16 +271,19 @@ export default function RusticStepWizard(props: StepWizardProps) {
                   </div>
                   <span style={s.stepLabel(i === current)}>{step.title}</span>
                 </div>
+                {/* Connecting line between dots; colored primary when completed */}
                 {i < steps.length - 1 && <div style={s.stepLine(i < current)} />}
               </React.Fragment>
             ))}
           </div>
+          {/* Progress bar below the step dots */}
           <div style={s.progressBar}>
             <div style={s.progressFill(progress)} />
           </div>
         </>
       )}
 
+      {/* Vertical mode: step list sidebar + content area side by side */}
       {showProgress && isVertical ? (
         <div style={{ display: 'flex', gap: '1.5rem' }}>
           <div style={{ width: 180, flexShrink: 0 }}>
@@ -257,10 +309,13 @@ export default function RusticStepWizard(props: StepWizardProps) {
         <div style={s.content}>{currentDef?.content}</div>
       )}
 
+      {/* Validation error banner */}
       {validationMessage && (
         <div style={s.error}>{validationMessage}</div>
       )}
 
+      {/* Navigation bar: Back (ghost) on left, Skip/Next/Complete on right.
+          All buttons disable during async validation. */}
       <div style={s.nav}>
         <div>
           {current > 0 && (
@@ -269,6 +324,7 @@ export default function RusticStepWizard(props: StepWizardProps) {
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           {footer}
+          {/* Skip only appears for optional, non-final steps */}
           {allowSkip && currentDef?.optional && !isLast && (
             <button disabled={isValidating || actionsDisabled} style={s.btn('ghost')} onClick={() => setCurrent(current + 1)}>{skipLabel}</button>
           )}

@@ -1,9 +1,15 @@
 /**
- * Product profile registry
+ * @fileoverview Product profile registry with built-in presets.
  *
- * These defaults intentionally describe product mood and interaction density.
- * They do not encode per-page behavior. Pages still express their own
- * structure through surface configs in the app.
+ * Profiles describe product mood and interaction density at a domain level.
+ * They do NOT encode per-page behavior -- pages express their own structure
+ * through surface configs in the app layer.
+ *
+ * Four built-in profiles ship with the DS:
+ * - `generic.default`     -- Safe baseline for new products
+ * - `events.organizer`    -- Expressive, spacious, media-first (Evnto)
+ * - `recruiting.operator` -- Compact, formal, data-dense (BitHire)
+ * - `platform.admin`      -- Neutral, comfortable, operational (Platform)
  */
 
 import type { ProductProfile, ProductProfileKey } from '../contracts/product-profiles';
@@ -269,5 +275,7 @@ export function getProductProfile(profileKey?: ProductProfileKey | null): Produc
     return PRODUCT_PROFILES[DEFAULT_PRODUCT_PROFILE_KEY];
   }
 
+  // Product profiles always resolve to something concrete so consumers never
+  // need optional chaining just to access token defaults.
   return PRODUCT_PROFILES[profileKey] ?? PRODUCT_PROFILES[DEFAULT_PRODUCT_PROFILE_KEY];
 }

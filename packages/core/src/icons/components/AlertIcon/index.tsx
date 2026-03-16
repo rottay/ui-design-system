@@ -1,12 +1,14 @@
 'use client';
 
+/**
+ * @fileoverview Triangle alert/warning icon for validation and status feedback.
+ */
+
 import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
 import type { SvgIconProps as IconProps } from '../../types';
 
-/**
- * Icono de alerta/warning - usado en estados de advertencia.
- */
+/** Warning triangle icon used in alert banners and validation error states. */
 export const AlertIcon = forwardRef<SVGSVGElement, IconProps>((props, ref) => (
   <BaseIcon ref={ref} {...props}>
     <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />

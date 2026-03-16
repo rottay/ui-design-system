@@ -1,5 +1,25 @@
 'use client';
 
+/**
+ * @fileoverview AreaChart -- D3-backed multi-series area chart with optional stacking via
+ * `d3.stack()`. Uses `scalePoint` for categories and `scaleLinear` for values. Stacked mode
+ * applies `stackOffsetNone` / `stackOrderNone` to preserve insertion order. Non-stacked series
+ * each receive an independent baseline at `y=0`. Gradient fills and stroke-dashoffset animations
+ * are personality-driven.
+ *
+ * @example
+ * <AreaChart
+ *   series={[
+ *     { name: 'Desktop', data: [{ x: 'Jan', y: 80 }, { x: 'Feb', y: 120 }] },
+ *     { name: 'Mobile', data: [{ x: 'Jan', y: 40 }, { x: 'Feb', y: 90 }] },
+ *   ]}
+ *   stacked
+ *   curved
+ *   height={350}
+ *   title="Traffic by Device"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import {
   area,
@@ -24,6 +44,7 @@ import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** Props for the {@link AreaChart} component. */
 export interface AreaChartProps extends ChartBaseProps {
   series: Series[];
   curved?: boolean;
@@ -33,6 +54,12 @@ export interface AreaChartProps extends ChartBaseProps {
   yAxisLabel?: string;
 }
 
+/**
+ * Renders a multi-series area chart with optional D3 stacking and gradient fills.
+ *
+ * @param props - See {@link AreaChartProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const AreaChart = memo(function AreaChart({
   series,
   curved,
@@ -98,6 +125,8 @@ export const AreaChart = memo(function AreaChart({
 
     const x = scalePoint().domain(categories).range([0, innerWidth]);
 
+    // In stacked mode the y-axis must accommodate the summed values at each
+    // category, not just the individual maximums, to avoid clipping.
     const yMax = stacked
       ? max(categories, (cat) =>
           sum(series, (s) => {
@@ -140,7 +169,8 @@ export const AreaChart = memo(function AreaChart({
           : curveLinear;
 
     if (stacked) {
-      // Build stacked data
+      // Build a row-per-category matrix that d3.stack expects: each row is an
+      // object { x, seriesA, seriesB, ... } with numeric values per series.
       const stackData = categories.map((cat) => {
         const row: Record<string, number | string> = { x: cat };
         series.forEach((s) => {
@@ -150,6 +180,8 @@ export const AreaChart = memo(function AreaChart({
         return row;
       });
 
+      // stackOrderNone keeps series in their original order (first series at bottom),
+      // stackOffsetNone starts from zero baseline -- both ensure predictable stacking.
       const stackedSeries = stack()
         .keys(series.map((s) => s.name))
         .order(stackOrderNone)
@@ -157,6 +189,8 @@ export const AreaChart = memo(function AreaChart({
 
       const stacked = stackedSeries(stackData as any);
 
+      // Each layer contains [y0, y1] pairs; y0 is the cumulative baseline from
+      // lower layers, y1 is the top of the current layer's contribution.
       stacked.forEach((layer, i) => {
         const color = series[i]?.color ?? colors[i % colors.length];
         const gradientId = `area-chart-stack-${i}`;
@@ -190,6 +224,8 @@ export const AreaChart = memo(function AreaChart({
           .attr('d', stackedArea);
       });
     } else {
+      // Non-stacked: each series is an independent area from y=0 to d.y, layered
+      // with opacity so overlapping regions remain visible underneath.
       series.forEach((s, i) => {
         const color = s.color ?? colors[i % colors.length];
         const gradientId = `area-chart-series-${i}`;

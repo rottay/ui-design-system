@@ -76,6 +76,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
     } = props;
 
     return (
+      /* Wrapper div provides ref forwarding; AntWatermark generates its own background pattern */
       <div ref={ref} className={className} style={style}>
         <AntWatermark
           content={content}
@@ -86,6 +87,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
           gap={gap}
           offset={offset}
           zIndex={zIndex}
+          /* Cast required because DS WatermarkFont is a superset of Ant Design's font type */
           font={font as any}
           inherit={inherit}
         >

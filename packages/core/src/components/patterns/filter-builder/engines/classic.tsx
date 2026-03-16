@@ -1,7 +1,22 @@
 'use client';
 
 /**
- * FilterBuilder - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the FilterBuilder pattern.
+ * Renders a recursive, composable filter tree inspired by tools like Airtable
+ * and Notion. Each filter group can contain rules and/or nested groups with
+ * AND/OR logic toggles. Uses Ant Design's Select, Input, DatePicker, and
+ * Switch components for type-appropriate value inputs.
+ *
+ * @example
+ * <FilterBuilder
+ *   engine="classic"
+ *   fields={[
+ *     { key: 'name', label: 'Name', type: 'text' },
+ *     { key: 'age', label: 'Age', type: 'number' },
+ *   ]}
+ *   value={filterGroup}
+ *   onChange={setFilterGroup}
+ * />
  */
 
 import React, { useCallback } from 'react';
@@ -29,6 +44,11 @@ import {
 
 const { Text } = Typography;
 
+/**
+ * Converts an unknown value (string, Date, or existing Dayjs) into a Dayjs
+ * instance for use with Ant Design's DatePicker, which requires Dayjs objects
+ * rather than raw date strings.
+ */
 function toDayjsValue(value: unknown): Dayjs | null {
   if (!value) {
     return null;
@@ -42,10 +62,22 @@ function toDayjsValue(value: unknown): Dayjs | null {
   return parsed.isValid() ? parsed : null;
 }
 
+/**
+ * Converts a Dayjs back to an ISO date string for storage. We normalize to
+ * YYYY-MM-DD so the consumer's data model stays serializable (no Dayjs objects
+ * leaking into state or API payloads).
+ */
 function fromDayjsValue(value: Dayjs | null): string | undefined {
   return value ? value.format('YYYY-MM-DD') : undefined;
 }
 
+/**
+ * Classic FilterBuilder using Ant Design form controls for each value type.
+ * Manages a recursive filter tree (FilterGroup) via immutable updates.
+ *
+ * @param props - See {@link FilterBuilderProps} for full prop documentation.
+ * @returns An interactive filter composer with AND/OR grouping and nesting.
+ */
 export default function ClassicFilterBuilder(props: FilterBuilderProps) {
   const {
     fields,
@@ -64,6 +96,8 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     style,
   } = props;
 
+  // Recursively walk the filter tree to find and update the target group.
+  // Immutable updates at every level so React detects changes correctly.
   const updateGroup = useCallback(
     (
       root: FilterGroup,
@@ -121,6 +155,8 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     []
   );
 
+  // New rules default to the first available field and its first valid
+  // operator. Value starts as undefined so the input renders empty.
   const handleAddRule = useCallback(
     (groupId: string) => {
       const defaultField = fields[0];
@@ -166,6 +202,9 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, removeNode]
   );
 
+  // Toggle between AND / OR. Only two options because more complex logic
+  // (e.g. XOR) would break the composable tree model. Users who need custom
+  // logic can nest groups creatively (AND containing ORs, etc.).
   const handleToggleLogic = useCallback(
     (groupId: string) => {
       onChange(
@@ -178,6 +217,9 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateGroup]
   );
 
+  // When the field changes, reset operator and value because the valid
+  // operator set differs by type (e.g. "contains" is invalid for numbers)
+  // and the previous value may be the wrong shape (string vs number).
   const handleFieldChange = useCallback(
     (ruleId: string, fieldKey: string) => {
       const fieldDef = fields.find((f) => f.key === fieldKey);
@@ -195,6 +237,8 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     [fields, value, onChange, updateRule]
   );
 
+  // Clear the value when switching to an operator that doesn't need one
+  // (e.g. "is empty"), but preserve it when the new operator still does.
   const handleOperatorChange = useCallback(
     (ruleId: string, operator: FilterOperator) => {
       const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === operator);
@@ -221,12 +265,17 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateRule]
   );
 
+  // Renders the appropriate Ant Design input control based on the field type
+  // and operator. Some operators (isEmpty, isNotEmpty) need no value input at
+  // all, while "between" needs a paired range of two inputs.
   const renderValueInput = (rule: FilterRule, fieldDef: FilterFieldDefinition) => {
     const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === rule.operator);
+    // Operators like "isEmpty" / "isNotEmpty" are unary -- no value needed.
     if (!opDef?.requiresValue) return null;
 
     const size = compact ? 'small' as const : 'middle' as const;
 
+    // Range operators ("between") require two inputs (from / to).
     if (opDef.requiresRange) {
       const rangeVal = Array.isArray(rule.value) ? rule.value : [undefined, undefined];
       if (fieldDef.type === 'number') {
@@ -291,6 +340,8 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
             style={{ width: 140 }}
           />
         );
+      // Select / multiSelect: use Ant's "multiple" mode when the operator
+      // implies a set comparison (in / notIn) or the field is inherently multi.
       case 'select':
       case 'multiSelect':
         return (
@@ -324,6 +375,8 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     }
   };
 
+  // Renders a single filter rule row: logic label, field selector, operator
+  // selector, value input, and delete button -- all laid out in a horizontal strip.
   const renderRule = (rule: FilterRule, isFirst: boolean, parentLogic: 'and' | 'or') => {
     const fieldDef = fields.find((f) => f.key === rule.field);
     const operators = fieldDef ? getOperatorsForField(fieldDef) : [];
@@ -385,8 +438,11 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     );
   };
 
+  // Groups render recursively. The root group has no border/background so it
+  // integrates cleanly into any container; nested groups get visual indentation.
   const renderGroup = (group: FilterGroup, depth: number = 0) => {
     const isRoot = depth === 0;
+    // maxDepth-1 because the "Add group" button creates a child at depth+1.
     const canNest = allowGrouping && depth < maxDepth - 1;
 
     return (

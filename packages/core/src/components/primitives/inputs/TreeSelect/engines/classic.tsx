@@ -1,12 +1,35 @@
 'use client';
 
 /**
- * TreeSelect - Classic Engine (Ant Design)
+ * @fileoverview TreeSelect Classic Engine -- Ant Design adapter for the Rottay
+ * Design System. Delegates all rendering, keyboard navigation, and accessibility
+ * to Ant Design's `<TreeSelect>` while mapping the DS-neutral TreeSelectProps.
+ *
+ * @example
+ * ```tsx
+ * <TreeSelect engine="classic" treeData={nodes} placeholder="Pick a node" />
+ * ```
+ *
+ * @module ClassicTreeSelect
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { TreeSelect as AntTreeSelect } from 'antd';
 import type { TreeSelectProps } from '../TreeSelect.types';
 
+/**
+ * Classic (Ant Design) engine for the TreeSelect component.
+ *
+ * Thin wrapper that forwards every standardized DS prop straight to
+ * `antd/TreeSelect`. Type casts (`as any`) bridge minor contract differences
+ * between the DS interface and Ant Design's internal rc-tree types without
+ * affecting runtime behaviour.
+ *
+ * @param props - Standardized TreeSelectProps from the design system contract.
+ * @param ref   - Forwarded ref attached to the outer `<div>` wrapper.
+ * @returns The rendered Ant Design TreeSelect inside a ref-able container.
+ */
 export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
   (props, ref) => {
     const {
@@ -41,6 +64,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       popupClassName,
     } = props;
 
+    // Ant Design v5+ uses a `classNames` prop with a nested `popup.root` key
+    // instead of a flat `popupClassName`, so we restructure when provided.
     const popupClassNames = popupClassName
       ? ({ popup: { root: popupClassName } } as const)
       : undefined;

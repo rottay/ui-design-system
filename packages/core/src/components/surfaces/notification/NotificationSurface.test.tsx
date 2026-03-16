@@ -1,3 +1,5 @@
+/** @fileoverview NotificationSurface tests -- history list, preferences, and mark-read. */
+
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';

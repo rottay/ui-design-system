@@ -150,24 +150,32 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
     const pages: (number | string)[] = [];
     const showPages = 5;
 
+    // When total pages fit within the visible window, show all without ellipsis
     if (totalPages <= showPages) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
+    // Always show page 1 as an anchor point for navigation
     pages.push(1);
 
+    // Insert leading ellipsis when the current page is far from the start
     if (current > 3) {
       pages.push('...');
     }
 
+    // Show a sliding window of pages around the current position.
+    // The window is clamped to [2, totalPages-1] to avoid duplicating
+    // the first/last page that are always shown separately.
     for (let i = Math.max(2, current - 1); i <= Math.min(totalPages - 1, current + 1); i++) {
       pages.push(i);
     }
 
+    // Insert trailing ellipsis when the current page is far from the end
     if (current < totalPages - 2) {
       pages.push('...');
     }
 
+    // Always show the last page as an anchor point
     if (totalPages > 1) {
       pages.push(totalPages);
     }

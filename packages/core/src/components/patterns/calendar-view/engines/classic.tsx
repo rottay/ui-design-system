@@ -1,7 +1,17 @@
 'use client';
 
 /**
- * CalendarView - Classic Engine (Ant Design)
+ * @fileoverview Classic (Ant Design) engine for the CalendarView pattern.
+ * Renders a month grid using Ant Design's Button, Select, Spin, and Typography
+ * primitives. The grid is a CSS 7-column layout with date cells that display up
+ * to 3 event chips each, falling back to a "+N more" overflow indicator.
+ *
+ * @example
+ * <ClassicCalendarView
+ *   events={[{ id: '1', title: 'Standup', start: new Date() }]}
+ *   currentDate={new Date()}
+ *   onEventClick={(ev) => console.log(ev.id)}
+ * />
  */
 
 import React, { useMemo } from 'react';
@@ -10,8 +20,15 @@ import type { CalendarViewProps, CalendarEvent } from '../CalendarView.types';
 
 const { Title, Text } = Typography;
 
+/** Abbreviated day headers starting at Sunday to match JS Date.getDay() indices. */
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+/**
+ * Build a 7-column grid for the given month. Leading nulls pad Sunday-start
+ * weeks before the 1st; trailing nulls pad the last row to a full 7 columns.
+ * The grid always produces rows of exactly 7 cells, which prevents layout
+ * shift when navigating between months that span different numbers of weeks.
+ */
 function getMonthGrid(date: Date) {
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -27,15 +44,23 @@ function getMonthGrid(date: Date) {
   return cells;
 }
 
+/** Normalize a Date or ISO string into a YYYY-MM-DD key for event lookup. */
 function toDateKey(d: Date | string): string {
   const date = typeof d === 'string' ? new Date(d) : d;
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+/** Format a date as "March 2026" using the browser's default locale. */
 function formatMonth(date: Date) {
   return date.toLocaleString('default', { month: 'long', year: 'numeric' });
 }
 
+/**
+ * Classic (Ant Design) calendar view rendering a month grid with event chips.
+ * @param props - CalendarViewProps including events array, navigation callbacks,
+ *   optional custom toolbar/header, and a generic `T` for event payload data.
+ * @returns A month grid wrapped in an Ant Design Spin overlay for loading state.
+ */
 export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
   const {
     events,
@@ -55,6 +80,8 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
 
   const cells = useMemo(() => getMonthGrid(currentDate), [currentDate]);
 
+  // Index events by date string for O(1) lookup per cell during render.
+  // Only keyed by start date -- multi-day events appear on their start day only.
   const eventsByDate = useMemo(() => {
     const map: Record<string, CalendarEvent<T>[]> = {};
     for (const ev of events) {
@@ -65,6 +92,8 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
     return map;
   }, [events]);
 
+  // Navigate forward or backward by one month. Creates a new Date to
+  // avoid mutating the controlled currentDate prop.
   const navigateMonth = (delta: number) => {
     const next = new Date(currentDate);
     next.setMonth(next.getMonth() + delta);
@@ -76,6 +105,9 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
   return (
     <div className={className} style={style}>
       {header}
+      {/* Render custom toolbar if provided; otherwise show the default
+          nav controls with prev/next month buttons, a Today shortcut, and
+          a view-mode selector (month/week/day). */}
       {toolbar ?? (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <Space>
@@ -106,6 +138,8 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
               {d}
             </div>
           ))}
+          {/* Render each date cell. Null cells (padding before the 1st and after
+              the last day) get a muted background and no click handler. */}
           {cells.map((cell, i) => {
             const key = cell ? toDateKey(cell) : `empty-${i}`;
             const dayEvents = cell ? eventsByDate[toDateKey(cell)] ?? [] : [];
@@ -117,6 +151,8 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
                 style={{
                   minHeight: 80,
                   padding: 4,
+                  // Suppress the right border on the last column (Saturday) to
+                  // avoid a double-border with the grid's outer border.
                   borderRight: (i + 1) % 7 !== 0 ? '1px solid var(--ds-color-border-subtle)' : undefined,
                   borderBottom: '1px solid var(--ds-color-border-subtle)',
                   background: cell ? 'var(--ds-color-bg-primary)' : 'var(--ds-color-bg-secondary)',
@@ -134,6 +170,8 @@ export default function ClassicCalendarView<T>(props: CalendarViewProps<T>) {
                     }}>
                       {cell.getDate()}
                     </div>
+                    {/* Show at most 3 events per cell to keep the grid compact;
+                        overflow is shown as "+N more" below. */}
                     {dayEvents.slice(0, 3).map((ev) => (
                       <div
                         key={ev.id}

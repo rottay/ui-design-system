@@ -1,5 +1,6 @@
 /**
- * Input primitives
+ * @fileoverview Input primitives barrel export.
+ * Re-exports all input-category primitive components.
  */
 
 export { Button } from './Button';

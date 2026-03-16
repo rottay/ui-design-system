@@ -60,6 +60,13 @@ type ComponentRegistry = Map<string, ComponentType<unknown>>;
  * Pack-scoped registries of custom engine implementations.
  * Each pack (identified by a string key) has its own independent ComponentRegistry,
  * enabling different tenants to use different component packs in the same runtime.
+ *
+ * Important distinction:
+ * - config is still global (`configureCustomEngine`)
+ * - component registrations are pack-scoped
+ *
+ * That split lets platform teams tune fallback/logging once while still isolating
+ * the actual component implementations per tenant or per vertical pack.
  */
 const packRegistries: Map<string, ComponentRegistry> = new Map();
 
@@ -416,6 +423,8 @@ export function createCustomWrapper<P extends object>(
     | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
 }> {
   return async () => {
+    // Resolution is intentionally local to a single pack. The engine factory is
+    // responsible for deciding which pack to use based on tenant context.
     const registered = getCustomComponent<P>(componentName, pack);
 
     if (registered) {
@@ -481,6 +490,8 @@ export function getRegisteredPacks(): string[] {
  * @returns Object containing custom engine status and utility functions
  */
 export function useCustomStatus(pack?: string) {
+  // This hook is intentionally read-only. Registration happens through the
+  // imperative API so apps can wire packs during bootstrap or lazy module load.
   return {
     registeredComponents: getRegisteredComponents(pack),
     componentCount: getRegisteredComponentCount(pack),

@@ -1,10 +1,16 @@
 'use client';
 
 /**
- * @fileoverview DatePicker Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the DatePicker component using CSS variables
- * and portal-based calendar dropdown. Supports date/month/year pickers, time selection,
- * date ranges, disabled dates, keyboard navigation, and ARIA accessibility.
+ * @fileoverview DatePicker Rustic Engine (Vanilla CSS) - Rottay Design System.
+ * Zero-dependency calendar picker styled entirely through CSS custom properties
+ * (`--ds-datepicker-*`). Uses `createPortal` to render the calendar panel at
+ * `document.body`, escaping overflow:hidden ancestors. Supports date/month/year
+ * pickers, time selection, ranges, disabled dates, keyboard nav, and ARIA.
+ *
+ * @example
+ * ```tsx
+ * <DatePicker engine="rustic" picker="date" showTime showToday />
+ * ```
  *
  * @module RusticDatePicker
  * @category Inputs
@@ -38,6 +44,8 @@ import {
 
 // ---------------------------------------------------------------------------
 // Size configuration using CSS variables
+// Rustic engine uses CSS custom properties with hardcoded fallbacks throughout,
+// so tenant theming works at the CSS layer without any JavaScript re-renders.
 // ---------------------------------------------------------------------------
 
 const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; minWidth: string }> = {
@@ -59,7 +67,9 @@ const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; minWidth:
 };
 
 // ---------------------------------------------------------------------------
-// Inline SVG icons
+// Inline SVG icons -- rustic engine inlines all icons to avoid any dependency
+// on @ant-design/icons or other icon libraries, keeping the bundle minimal.
+// aria-hidden="true" on each SVG prevents screen readers from announcing them.
 // ---------------------------------------------------------------------------
 
 const CalendarSvg: React.FC<{ size?: number }> = ({ size = 16 }) => (
@@ -103,6 +113,8 @@ const ClockSvg: React.FC = () => (
 
 // ---------------------------------------------------------------------------
 // Shared inline styles (CSS-variable based)
+// The border color cascade: validation status > focus > default. This ordering
+// ensures error/warning states are always visible even when the input is focused.
 // ---------------------------------------------------------------------------
 
 function getBorderColor(
@@ -146,6 +158,14 @@ interface RusticCalendarPanelProps {
   panelRef: React.RefObject<HTMLDivElement | null>;
 }
 
+/**
+ * Portal-rendered calendar panel used by both DatePickerBase and RangePicker.
+ *
+ * Mounts at `document.body` via `createPortal` so it is never clipped by
+ * parent overflow rules. Supports date grid, month picker, year picker,
+ * optional time selection, keyboard navigation, and range highlighting.
+ * All colors use `--ds-datepicker-*` CSS variables with hardcoded fallbacks.
+ */
 const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   selectedDate,
   viewYear,
@@ -213,6 +233,8 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   );
 
   // -- Shared panel styles --
+  // The panel is portal-rendered at document.body level with absolute positioning
+  // so it escapes any overflow:hidden ancestors. zIndex 1050 sits above modals.
   const panelStyle: React.CSSProperties = {
     position: 'absolute',
     top: position.top,
@@ -276,6 +298,9 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
     gap: '2px',
   };
 
+  // Cell style function is computed per-cell to handle the layered visual states:
+  // selected, range endpoint, in-range fill, today indicator, focused, disabled.
+  // Each state uses CSS variables so tenant themes override colors automatically.
   const getCellStyle = (cell: CalendarDay, isSelected: boolean, isFocused: boolean, inRange: boolean, isEndpoint: boolean): React.CSSProperties => ({
     width: '36px',
     height: '36px',
@@ -378,6 +403,9 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   };
 
   // -- Month picker --
+  // All picker modes use createPortal to render at document.body, escaping
+  // overflow:hidden from modals or scroll areas. The panel is absolutely
+  // positioned using coordinates computed from the trigger's bounding rect.
   if (picker === 'month') {
     return createPortal(
       <div ref={panelRef} style={panelStyle} role="dialog" aria-label="Month picker">
@@ -538,6 +566,9 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
               onClick={() => {
                 if (!cell.isDisabled) onDateSelect(cell.date);
               }}
+              // Hover effects are applied via inline style mutations instead of CSS
+              // :hover because inline styles (needed for CSS variable theming) have
+              // higher specificity than pseudo-classes in stylesheets.
               onMouseEnter={(e) => {
                 if (!cell.isDisabled) {
                   e.currentTarget.style.transform = 'scale(1.1)';
@@ -646,6 +677,18 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
 // DatePickerBase (Rustic)
 // ---------------------------------------------------------------------------
 
+/**
+ * Rustic (Vanilla CSS) DatePicker engine.
+ *
+ * Renders a read-only input with a portal-based `RusticCalendarPanel`. All
+ * styling uses CSS custom properties so tenant themes work at the CSS layer
+ * without JavaScript re-renders. Supports controlled/uncontrolled usage,
+ * date/month/year picker modes, time selection, and disabled date predicates.
+ *
+ * @param props - Rottay DatePickerProps (engine-agnostic interface).
+ * @param ref   - Forwarded to the text input element.
+ * @returns The rendered vanilla-CSS DatePicker with portal calendar.
+ */
 const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((props, ref) => {
   const { t } = useTranslation('components');
 
@@ -996,6 +1039,18 @@ DatePickerBase.displayName = 'DatePicker.Rustic';
 // RangePicker (Rustic)
 // ---------------------------------------------------------------------------
 
+/**
+ * Rustic (Vanilla CSS) RangePicker engine.
+ *
+ * Renders two styled inputs (start/end) sharing a single portal-based
+ * `RusticCalendarPanel`. Uses the same ping-pong selection pattern as the
+ * modern engine: first click sets start, second click sets end and closes.
+ * Range highlighting between endpoints is handled by the calendar panel.
+ *
+ * @param props - Rottay RangePickerProps (engine-agnostic interface).
+ * @param ref   - Forwarded to the wrapper div element.
+ * @returns The rendered vanilla-CSS RangePicker with portal calendar.
+ */
 const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, ref) => {
   const { t } = useTranslation('components');
 
@@ -1121,7 +1176,9 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
     [format, picker, showTime, onChange],
   );
 
-  // Date selection (range mode)
+  // Range selection ping-pong: first click fills activeInput ('start' or
+  // 'end'), then flips to the other side. After both endpoints are set and
+  // showTime is off, the panel auto-closes.
   const handleDateSelect = useCallback(
     (date: Date) => {
       if (activeInput === 'start') {
@@ -1309,7 +1366,9 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
 RangePicker.displayName = 'DatePicker.RangePicker.Rustic';
 
 // ---------------------------------------------------------------------------
-// Compound export
+// Compound export -- Object.assign merges RangePicker onto DatePickerBase so
+// consumers can use `DatePicker.RangePicker` while DatePicker itself remains
+// a valid forwardRef component with proper displayName.
 // ---------------------------------------------------------------------------
 
 export const DatePicker = Object.assign(DatePickerBase, {

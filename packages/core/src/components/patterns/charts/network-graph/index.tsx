@@ -1,5 +1,30 @@
 'use client';
 
+/**
+ * @fileoverview NetworkGraph -- D3 force-directed graph using `forceSimulation` with four
+ * cooperating forces: `forceLink` (spring-like edge attraction), `forceManyBody` (electrostatic
+ * node repulsion at -200 strength), `forceCenter` (gravity toward the viewport centre), and
+ * `forceCollide` (radius-based overlap prevention). Nodes are draggable via `d3.drag()`.
+ * When animation is disabled the simulation is fast-forwarded 300 ticks synchronously to reach
+ * a settled layout without visual motion.
+ *
+ * @example
+ * <NetworkGraph
+ *   nodes={[
+ *     { id: 'a', label: 'Auth', group: 'core' },
+ *     { id: 'b', label: 'Users', group: 'core' },
+ *     { id: 'c', label: 'Billing', group: 'payments' },
+ *   ]}
+ *   links={[
+ *     { source: 'a', target: 'b' },
+ *     { source: 'b', target: 'c', value: 3 },
+ *   ]}
+ *   directed
+ *   height={500}
+ *   title="Service Dependencies"
+ * />
+ */
+
 import { memo, useEffect, useRef } from 'react';
 import {
   drag,
@@ -17,6 +42,7 @@ import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+/** A node in the network graph. `group` drives automatic colour assignment. */
 export interface NetworkNode {
   id: string;
   label?: string;
@@ -25,6 +51,7 @@ export interface NetworkNode {
   group?: string;
 }
 
+/** An edge connecting two nodes. `value` scales the stroke width (defaults to 1). */
 export interface NetworkLink {
   source: string;
   target: string;
@@ -32,12 +59,19 @@ export interface NetworkLink {
   label?: string;
 }
 
+/** Props for the {@link NetworkGraph} component. */
 export interface NetworkGraphProps extends ChartBaseProps {
   nodes: NetworkNode[];
   links: NetworkLink[];
   directed?: boolean;
 }
 
+/**
+ * Renders a force-directed network graph with draggable nodes and optional directed edges.
+ *
+ * @param props - See {@link NetworkGraphProps} for the full option set.
+ * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ */
 export const NetworkGraph = memo(function NetworkGraph({
   nodes,
   links,
@@ -77,7 +111,8 @@ export const NetworkGraph = memo(function NetworkGraph({
 
     svg.attr('width', chartWidth).attr('height', chartHeight);
 
-    // Group color mapping
+    // Stable group-to-colour mapping: groups are collected in insertion order
+    // so the same group always maps to the same palette index across renders.
     const groups = [...new Set(nodes.map((n) => n.group).filter(Boolean))] as string[];
     const groupColor = (group?: string) => {
       if (!group) return colors[0];
@@ -85,7 +120,8 @@ export const NetworkGraph = memo(function NetworkGraph({
       return colors[idx % colors.length];
     };
 
-    // Arrow marker for directed graphs
+    // SVG marker definition for directed edge arrows. refX=20 offsets the tip
+    // so it does not overlap the target node's circle (radius ~8px + padding).
     if (directed) {
       svg
         .append('defs')
@@ -102,9 +138,14 @@ export const NetworkGraph = memo(function NetworkGraph({
         .attr('fill', 'var(--ds-color-border-primary)');
     }
 
+    // Clone input data so D3's simulation can mutate x/y/vx/vy without side
+    // effects on the consumer's data structures.
     const simNodes: (NetworkNode & SimulationNodeDatum)[] = nodes.map((n) => ({ ...n }));
     const simLinks = links.map((l) => ({ ...l }));
 
+    // Four forces cooperate: links pull connected nodes together, charge
+    // pushes all nodes apart (like electrons), center keeps the graph from
+    // drifting off-screen, and collision prevents node overlap.
     const simulation = forceSimulation(simNodes as any)
       .force(
         'link',
@@ -130,6 +171,8 @@ export const NetworkGraph = memo(function NetworkGraph({
       linkElements.attr('marker-end', 'url(#arrow)');
     }
 
+    // Drag behaviour: on start, fix the node in place and reheat the simulation
+    // (alphaTarget > 0). On end, release the node (fx/fy = null) and cool down.
     const nodeElements = svg
       .selectAll('.node')
       .data(simNodes)
@@ -185,6 +228,8 @@ export const NetworkGraph = memo(function NetworkGraph({
       nodeElements.attr('transform', (d: any) => `translate(${d.x},${d.y})`);
     });
 
+    // When animation is disabled, run the simulation synchronously to its
+    // settled position (300 ticks is enough for most graph topologies).
     if (!chartPersonality.animate) {
       simulation.stop();
       for (let i = 0; i < 300; i++) simulation.tick();

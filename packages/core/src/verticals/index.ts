@@ -1,9 +1,9 @@
 /**
- * Vertical Presets System
+ * @fileoverview Public entry point for vertical presets.
  *
- * Industry-specific configuration bundles for Rottay applications.
- * Each vertical maps to a product domain (events, recruiting, admin)
- * and provides a complete set of design system defaults.
+ * Verticals are the DS-owned fallback layer for product domains such as events,
+ * recruiting, or platform admin. They bundle engine preference, personality
+ * tokens, density, and surface defaults into a single configuration object.
  */
 
 export type { VerticalKey, VerticalPreset } from './types';

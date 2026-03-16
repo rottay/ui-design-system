@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Type definitions for the ShortcutsOverlay pattern. Defines
+ * ShortcutDisplayItem (key combo, description, category) and the overlay
+ * props controlling visibility, search, and footer content.
+ */
+
 import type { ReactNode } from 'react';
 import type { PatternBaseProps } from '../types';
 
@@ -14,7 +20,25 @@ export interface ShortcutDisplayItem {
 }
 
 /**
- * Props for the ShortcutsOverlay pattern.
+ * Props for the ShortcutsOverlay pattern component.
+ * Renders a modal overlay listing all registered keyboard shortcuts,
+ * grouped by category and searchable. Typically triggered by pressing "?".
+ *
+ * @example
+ * ```tsx
+ * <ShortcutsOverlay
+ *   open={showShortcuts}
+ *   onOpenChange={setShowShortcuts}
+ *   shortcuts={[
+ *     { key: 'ctrl+k', description: 'Open command palette', category: 'Navigation' },
+ *     { key: 'ctrl+/', description: 'Toggle sidebar', category: 'Navigation' },
+ *     { key: 'ctrl+s', description: 'Save changes', category: 'Editing' },
+ *   ]}
+ *   title="Keyboard Shortcuts"
+ *   searchPlaceholder="Search shortcuts..."
+ *   emptyMessage="No shortcuts match your search"
+ * />
+ * ```
  */
 export interface ShortcutsOverlayProps extends PatternBaseProps {
   /** Whether the overlay is visible */

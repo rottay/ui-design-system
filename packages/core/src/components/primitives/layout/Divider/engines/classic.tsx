@@ -1,31 +1,14 @@
 /**
- * @fileoverview Divider Classic Engine - Rottay Design System
- * @description Classic (Ant Design) implementation of the Divider component.
- * Uses Ant Design styling conventions with `ant-divider` class structure.
+ * @fileoverview Divider Classic Engine - Rottay Design System.
+ * Ant Design compatible divider using `ant-divider-*` class conventions.
+ * Renders as a flexbox row (horizontal) or inline-flex column (vertical)
+ * with optional inline text positioned at left/center/right.
  *
- * @remarks
- * The Classic engine provides Ant Design-compatible styling:
- * - Class names follow Ant Design conventions (`ant-divider`, `ant-divider-horizontal`, etc.)
- * - Text styling matches Ant Design's typography
- * - Default colors use Ant Design's border color palette
- *
- * CSS Classes Applied:
- * - `ant-divider`: Base class
- * - `ant-divider-horizontal` / `ant-divider-vertical`: Orientation
- * - `ant-divider-with-text`: When text content is present
- * - `ant-divider-with-text-left/center/right`: Text positioning
- * - `ant-divider-dashed` / `ant-divider-dotted`: Line variants
- * - `ant-divider-plain`: Plain text without styling
- *
- * @example Using Classic Engine
+ * @example
  * ```tsx
- * import { Divider } from '@rottay/design-system';
- *
- * // Ant Design styled divider
- * <Divider engine="classic" dashed>Section</Divider>
+ * <ClassicDivider dashed>Section Title</ClassicDivider>
  * ```
  *
- * @see {@link Divider} - The main engine-aware component
  * @module Divider/Engines/Classic
  * @category Layout
  * @package @rottay/design-system
@@ -43,8 +26,15 @@ import {
 } from '../Divider.types';
 
 /**
- * Classic Divider component.
- * Styled to match Ant Design conventions.
+ * Classic Divider component styled to match Ant Design conventions.
+ *
+ * Supports horizontal and vertical orientations, optional inline text with
+ * left/center/right positioning, and solid/dashed/dotted line variants.
+ * The `dashed` boolean prop takes priority over `variant` for backward
+ * compatibility with the Ant Design API.
+ *
+ * @param props - {@link DividerProps} with orientation, variant, text, and styling options.
+ * @returns A separator element with `role="separator"` and `aria-orientation`.
  */
 const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
   (props, ref) => {
@@ -67,21 +57,23 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...rest
     } = props;
 
-    // Resolve prop aliases
+    // Resolve prop aliases: `type` is the legacy name for `orientation`,
+    // `orientationMargin` is the Ant Design alias for `textPosition`,
+    // and `margin` is the legacy alias for `spacing`
     const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
     const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
     const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
     const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
     const isHorizontal = orientation === 'horizontal';
+    // Text is only rendered inside horizontal dividers
     const hasChildren = !!children && isHorizontal;
 
-    // Calculate values
     const lineThickness = getThicknessValue(thickness);
     const lineColor = color || DEFAULT_COLORS.classic;
     const spacingValue = SPACING_MAP[spacing];
 
-    // Build class names (Ant Design style)
+    // Build Ant Design class names for external CSS overrides
     const classNames = [
       'ant-divider',
       `ant-divider-${orientation}`,
@@ -93,7 +85,8 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       className,
     ].filter(Boolean).join(' ');
 
-    // Container style
+    // Flexbox container: row for horizontal, inline-flex for vertical.
+    // `clear: both` ensures the divider breaks past floated elements.
     const containerStyle: React.CSSProperties = {
       display: isHorizontal ? 'flex' : 'inline-flex',
       alignItems: 'center',
@@ -107,7 +100,7 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...style,
     };
 
-    // Line style
+    // Base line style using border-top (horizontal) or border-left (vertical)
     const lineStyle: React.CSSProperties = {
       flex: 1,
       borderTop: isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
@@ -116,7 +109,8 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       width: isHorizontal ? '100%' : '0',
     };
 
-    // Line before text
+    // When text is left-aligned, the line before it is short (5%)
+    // and the line after it fills the remaining space
     const lineBeforeStyle: React.CSSProperties = {
       ...lineStyle,
       flex: textPosition === 'left' ? '0 0 5%' :
@@ -124,7 +118,7 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: textPosition === 'left' ? '5%' : undefined,
     };
 
-    // Line after text
+    // Mirror logic for right-aligned text
     const lineAfterStyle: React.CSSProperties = {
       ...lineStyle,
       flex: textPosition === 'left' ? 1 :
@@ -132,7 +126,8 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: textPosition === 'right' ? '5%' : undefined,
     };
 
-    // Text style (Ant Design style)
+    // Text styling follows Ant Design conventions: 16px/500 weight when
+    // not plain, with a three-level CSS variable fallback chain for color
     const textStyle: React.CSSProperties = {
       padding: '0 1em',
       display: 'inline-block',
@@ -145,7 +140,7 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
           : 'var(--ds-divider-text-color, var(--ds-color-text-primary, var(--ds-color-neutral-900, rgba(0, 0, 0, 0.85))))',
     };
 
-    // Render with text
+    // Two render paths: with inline text (three spans) or simple line (single div)
     if (hasChildren) {
       return (
         <div
@@ -166,7 +161,7 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       );
     }
 
-    // Simple divider without text
+    // Simple divider: container and line styles are merged into one element
     return (
       <div
         ref={ref}

@@ -1,8 +1,8 @@
 /**
- * Timeline Component Tokens - TypeScript Mirror
+ * @fileoverview Timeline component token mirrors.
  *
- * TypeScript representation of Timeline CSS custom properties.
- * Use these for type-safe Timeline token references.
+ * Covers dot/line sizing, semantic colors (blue, red, green, gray, and
+ * status colors), content/label typography, pending animation, and transitions.
  */
 
 // Timeline element sizes

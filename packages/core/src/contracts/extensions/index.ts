@@ -1,11 +1,41 @@
 /**
- * Universal Extension System - Type Definitions
+ * @fileoverview Universal Extension System - Rottay Design System
+ * @description Provides the unified `ComponentExtensions<T>` protocol that lets
+ * apps inject columns, actions, filters, slots, and more into DS presets
+ * without modifying the design system source.
  *
- * Provides a unified ComponentExtensions<T> protocol for all custom (Tier 3)
- * components. Each category is independently optional - presets adopt whichever
- * categories apply to their UI.
+ * @remarks
+ * The extension system is organized into 16 independently optional categories:
  *
- * T = row/item data shape (generic per component).
+ * 1. **SlotExtensions** - Content injection at named locations
+ * 2. **ColumnExtensions** - Table/grid column customization
+ * 3. **ActionExtensions** - Buttons, menus, row/bulk interactions
+ * 4. **FilterExtensions** - Search, filtering, faceted navigation
+ * 5. **RenderExtensions** - Replace, wrap, or augment rendered sections
+ * 6. **SelectionExtensions** - Row/item selection behavior
+ * 7. **SortExtensions** - Sorting configuration
+ * 8. **PaginationExtensions** - Pagination, infinite scroll, virtual scroll
+ * 9. **MotionExtensions** - Animations and transitions
+ * 10. **LayoutExtensions** - Density, responsive, sizing
+ * 11. **DataExtensions** - Data transforms, grouping, aggregation
+ * 12. **DragAndDropExtensions** - Reorder, cross-group drag
+ * 13. **ExportExtensions** - Export to CSV/JSON/PDF/clipboard
+ * 14. **KeyboardExtensions** - Shortcuts and focus management
+ * 15. **LifecycleExtensions** - Before/after hooks for data and view events
+ * 16. **AccessibilityExtensions** - ARIA, a11y, i18n overrides
+ *
+ * Presets adopt whichever categories apply to their UI. The generic `T`
+ * parameter represents the row/item data shape, enabling type-safe
+ * renderers, sort comparators, and action handlers.
+ *
+ * The `ExtensionHelpers<T>` interface provides a convenience API consumed
+ * by presets via `ctx.ext` to merge defaults with app-provided extensions.
+ *
+ * @see {@link ComponentExtensions} - Top-level extension container
+ * @see {@link ExtensionHelpers} - Helper API for preset authors
+ * @module Contracts/Extensions
+ * @category Types
+ * @package @rottay/design-system
  */
 
 import type { ReactNode, CSSProperties } from 'react';

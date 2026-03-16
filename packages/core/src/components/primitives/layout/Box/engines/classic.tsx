@@ -41,9 +41,9 @@ import React, { forwardRef, type ElementType, type Ref, type CSSProperties } fro
 import type { BoxProps } from '../Box.types';
 import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../Box.types';
 
-/**
- * Builds CSSProperties from BoxProps
- */
+// Classic engine uses the same inline-style approach as rustic for layout props.
+// Even though antd provides some layout utilities, inline styles give us
+// consistent cross-engine behavior and avoid coupling to antd's class API.
 function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
 

@@ -50,6 +50,10 @@ import { STACK_DEFAULTS, SPACING_MAP, ALIGN_MAP, JUSTIFY_MAP } from '../Stack.ty
 
 /**
  * Converts a spacing value to its CSS equivalent.
+ * Handles presets via SPACING_MAP, raw numbers as pixels, and undefined/none as zero.
+ *
+ * @param value - A preset name ('xs'..'4xl'), a pixel number, or undefined
+ * @returns A CSS-compatible string value (e.g. '1rem', '24px', '0')
  */
 function resolveSpacing(value: StackSpacing | undefined): string {
   if (value === undefined || value === 'none') return '0';
@@ -58,7 +62,13 @@ function resolveSpacing(value: StackSpacing | undefined): string {
 }
 
 /**
- * Build flexbox styles from Stack props
+ * Assembles a complete inline flexbox CSSProperties object from Stack props.
+ * All layout properties are expressed inline, making this engine completely
+ * independent of any CSS framework. The `gap` prop takes precedence over
+ * `spacing` (they are aliases), with both falling back to STACK_DEFAULTS.spacing.
+ *
+ * @param props - The full StackProps to derive styles from
+ * @returns A CSSProperties object with all flexbox layout properties
  */
 function buildStackStyles(props: StackProps): CSSProperties {
   const {
@@ -74,6 +84,7 @@ function buildStackStyles(props: StackProps): CSSProperties {
     style,
   } = props;
 
+  // `gap` alias takes priority over `spacing` for CSS gap consistency
   const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
 
   const baseStyles: CSSProperties = {
@@ -94,7 +105,14 @@ function buildStackStyles(props: StackProps): CSSProperties {
 }
 
 /**
- * Renders children with optional dividers between them
+ * Interleaves divider elements between children when a divider is provided.
+ * Clones React elements with stable keys and aria-hidden for accessibility;
+ * wraps non-element dividers (strings, numbers) in a span.
+ *
+ * @param children - The child nodes to separate
+ * @param divider - The separator element to insert between children
+ * @param direction - Stack direction (reserved for future orientation-aware dividers)
+ * @returns Children with dividers interleaved, or unmodified children if no divider
  */
 function renderStackChildren(
   children: ReactNode,
@@ -110,6 +128,7 @@ function renderStackChildren(
     if (index === 0) {
       return [child];
     }
+    // Clone valid React elements to add a stable key; wrap primitives in a span
     const dividerElement = React.isValidElement(divider)
       ? React.cloneElement(divider as React.ReactElement<Record<string, unknown>>, {
           key: `divider-${index}`,
@@ -122,9 +141,15 @@ function renderStackChildren(
 }
 
 /**
- * Rustic Stack component.
- * Uses pure HTML and inline CSS styles for maximum compatibility
- * and accessibility without external dependencies.
+ * Rustic (Apollo) engine implementation of the Stack component.
+ * Relies entirely on inline flexbox styles with no CSS framework dependency,
+ * making it suitable for embedded widgets, SSR without CSS extraction, and
+ * environments where Ant Design or Tailwind are unavailable. The
+ * `rottay-stack--rustic` class is applied purely as a styling hook for
+ * consumers who want to add external CSS overrides.
+ *
+ * @param props - Stack configuration (direction, spacing, align, justify, divider, etc.)
+ * @returns A polymorphic element (default `div`) with pure inline flexbox styles
  */
 const ApolloStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const {
@@ -138,13 +163,15 @@ const ApolloStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const computedStyle = buildStackStyles(props);
   const renderedChildren = renderStackChildren(children, divider, direction);
 
-  // Build class names with Rustic-specific prefixes
+  // BEM-style class names for optional external CSS targeting,
+  // though Rustic intentionally relies on inline styles for layout
   const classNames = [
     'rottay-stack',
     'rottay-stack--rustic',
     className,
   ].filter(Boolean).join(' ');
 
+  // Use createElement for polymorphic `as` prop support
   const ElementType = Component as ElementType;
 
   return React.createElement(

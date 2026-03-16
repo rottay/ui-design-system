@@ -276,7 +276,8 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     // Tailwind Classes
     // ========================================================================
 
-    // Build z-index class based on value (Tailwind utility mapping)
+    // Map numeric zIndex to Tailwind utility classes so Tailwind can purge
+    // unused z-index values. Arbitrary values fall through to inline style.
     const zIndexClass = zIndex === 10 ? 'z-10' :
                         zIndex === 20 ? 'z-20' :
                         zIndex === 30 ? 'z-30' :
@@ -287,7 +288,8 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     // Render - Simple Sticky Mode
     // ========================================================================
 
-    // Simple sticky mode (no onChange callback) - pure CSS solution
+    // When no onChange callback is needed, we use pure CSS sticky positioning
+    // to avoid JavaScript scroll listeners entirely, reducing CPU usage
     if (!onChange) {
       const stickyStyle: React.CSSProperties = {
         position: 'sticky',
@@ -314,7 +316,10 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     // Render - Advanced Mode with onChange
     // ========================================================================
 
-    // Advanced mode with onChange tracking - uses JavaScript positioning
+    // Advanced mode: a placeholder div preserves document flow when the
+    // content switches to fixed positioning, preventing layout jumps.
+    // The ref callback merges internal and forwarded refs so both the
+    // component's measurement logic and parent consumers share the same node.
     return (
       <div ref={placeholderRef} style={state.placeholderStyle}>
         <div

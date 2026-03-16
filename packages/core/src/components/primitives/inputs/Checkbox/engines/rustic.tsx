@@ -1,7 +1,14 @@
 /**
- * @fileoverview Checkbox Rustic Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Checkbox component using CSS variables.
- * Part of the Rottay Design System's input primitives collection.
+ * @fileoverview Checkbox Rustic engine -- zero-dependency implementation using only native
+ * HTML elements and CSS custom properties. Renders a custom-styled checkbox box with an
+ * SVG checkmark animation and an indeterminate horizontal line, all themed through
+ * `--ds-checkbox-*` CSS variables. Supports label placement, error states, and radius
+ * customization not available in the Classic or Modern engines.
+ *
+ * @example
+ * ```tsx
+ * <Checkbox engine="rustic" label="Accept terms" color="success" radius="sm" />
+ * ```
  *
  * @module RusticCheckbox
  * @category Inputs
@@ -14,7 +21,9 @@ import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
 import type { CheckboxProps } from '../Checkbox.types';
 import { CHECKBOX_DEFAULTS } from '../Checkbox.types';
 
-// Size mapping using CSS variables
+// CSS variable references for the checkbox box dimensions. xs and sm share
+// the same token because a checkbox smaller than 14px is too hard to target
+// on touch devices.
 const SIZE_VAR_MAP: Record<string, string> = {
   xs: 'var(--ds-checkbox-size-sm)',
   sm: 'var(--ds-checkbox-size-sm)',
@@ -23,7 +32,8 @@ const SIZE_VAR_MAP: Record<string, string> = {
   xl: 'var(--ds-checkbox-size-xl)',
 };
 
-// Numeric sizes for SVG scaling
+// Numeric counterparts used to scale the SVG checkmark and indeterminate line.
+// These must stay in sync with the CSS variable values defined in the theme.
 const SIZE_NUMERIC_MAP: Record<string, number> = {
   xs: 14,
   sm: 14,
@@ -32,6 +42,20 @@ const SIZE_NUMERIC_MAP: Record<string, number> = {
   xl: 24,
 };
 
+/**
+ * Rustic (vanilla HTML/CSS) implementation of the DS Checkbox.
+ *
+ * Renders a visually hidden native `<input type="checkbox">` overlaid on a
+ * custom-styled `<span>` that displays the checkmark/indeterminate indicator.
+ * All visual tokens are resolved from CSS custom properties, enabling tenant
+ * theming without class-name changes. Additional rustic-specific props
+ * (`radius`, `labelPlacement`, `error`, `required`) extend beyond what
+ * Classic and Modern offer.
+ *
+ * @param props - Standardized CheckboxProps from the DS type contract, plus
+ *                rustic-specific extras: `radius`, `labelPlacement`, `error`, `required`.
+ * @returns A fully themed checkbox rendered without any UI library dependency.
+ */
 export default function RusticCheckbox(props: CheckboxProps): React.ReactElement {
   const {
     size = CHECKBOX_DEFAULTS.size,
@@ -57,19 +81,24 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   const inputId = `checkbox-rustic-${generatedId}`;
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Internal state for uncontrolled mode
+  // Controlled vs. uncontrolled pattern. `isFocused` drives the focus
+  // ring via inline styles since the native input is visually hidden and
+  // its :focus pseudo-class would not be visible.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const [isFocused, setIsFocused] = useState(false);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
-  // Handle indeterminate state
+  // `indeterminate` is a DOM property, not an HTML attribute, so it must
+  // be set imperatively. This keeps visual state in sync when the prop changes.
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.indeterminate = indeterminate;
     }
   }, [indeterminate]);
 
+  // Stable change handler: updates local state only in uncontrolled mode,
+  // then forwards the checked boolean to the consumer's callback.
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newChecked = e.target.checked;
 
@@ -80,6 +109,8 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
     onChange?.(newChecked, e);
   }, [isControlled, onChange]);
 
+  // Keyboard toggle: delegates to the hidden input's native click so the
+  // change event fires through the normal DOM path.
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
@@ -93,7 +124,8 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   const sizeVar = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
   const sizeNumeric = SIZE_NUMERIC_MAP[size] || SIZE_NUMERIC_MAP.md;
 
-  // Determine radius based on prop
+  // Radius options allow the checkbox to range from square (none) to
+  // fully circular (full). The default falls back to a theme-defined value.
   const getRadius = () => {
     if (radius === 'full') return '50%';
     if (radius === 'none') return '0';
@@ -103,7 +135,9 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
     return 'var(--ds-checkbox-radius)';
   };
 
-  // Get colors based on color prop (for theming flexibility)
+  // Resolve the checked background color from the DS palette. "primary"
+  // uses the checkbox-specific token so it can be overridden independently
+  // from the global primary color.
   const getCheckedBg = () => {
     if (color === 'primary') return 'var(--ds-checkbox-checked-bg)';
     if (color === 'success') return 'var(--ds-color-success-500)';
@@ -124,6 +158,9 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
     ...style,
   };
 
+  // The visible checkbox box. Border and background both change color on
+  // check to give a filled-indicator look. The cubic-bezier easing on
+  // background-color creates a subtle overshoot "pop" animation.
   const checkboxBoxStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-flex',
@@ -149,6 +186,9 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
       : 'none',
   };
 
+  // The native input is visually hidden (opacity: 0) but stretched to fill
+  // the checkbox box so it captures clicks and focus events. This preserves
+  // full accessibility without needing ARIA role overrides.
   const inputStyle: React.CSSProperties = {
     position: 'absolute',
     opacity: 0,
@@ -171,7 +211,8 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
 
   const displayLabel = label || children;
 
-  // Checkmark SVG for checked state with scale entrance animation
+  // SVG checkmark with a scale(0)->scale(1) entrance animation. The
+  // cubic-bezier overshoot easing creates a satisfying "bounce" effect.
   const CheckmarkIcon = () => (
     <svg
       width={sizeNumeric * 0.6}
@@ -194,7 +235,8 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
     </svg>
   );
 
-  // Indeterminate line
+  // Horizontal dash displayed when `indeterminate` is true, indicating
+  // a partial/mixed selection (e.g., "select all" with some items checked).
   const IndeterminateLine = () => (
     <div
       style={{
@@ -207,7 +249,8 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
     />
   );
 
-  // Build class names
+  // BEM class names for external CSS hooks. State modifiers enable
+  // selectors like `.rottay-checkbox--checked.rottay-checkbox--error`.
   const containerClasses = [
     'rottay-checkbox',
     'rottay-checkbox--rustic',

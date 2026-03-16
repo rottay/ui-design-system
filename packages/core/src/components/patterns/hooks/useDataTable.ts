@@ -1,10 +1,23 @@
 'use client';
 
 /**
- * useDataTable<T> - Composition Hook
+ * @fileoverview useDataTable composition hook -- manages DataTable state
+ * (sorting, pagination, selection) and returns props ready to spread
+ * onto PatternDataTable. Supports both client-side and server-side modes.
  *
- * Manages DataTable state: sorting, pagination, selection, filtering.
- * Returns props ready to spread onto PatternDataTable.
+ * Use this hook when you need to control a DataTable from outside the component,
+ * e.g. coordinating selection with a toolbar, or switching between client-side
+ * and server-side data processing without changing the component tree.
+ *
+ * @example
+ * ```tsx
+ * const { tableProps, selectedRows } = useDataTable({
+ *   data: users,
+ *   columns: [column<User>('name'), column<User>('email')],
+ *   pageSize: 25,
+ * });
+ * return <PatternDataTable {...tableProps} />;
+ * ```
  */
 
 import { useState, useMemo, useCallback } from 'react';
@@ -48,6 +61,28 @@ export interface UseDataTableReturn<T> {
   totalCount: number;
 }
 
+/**
+ * Manages sorting, pagination, and row selection state for a DataTable pattern.
+ *
+ * When `clientSideSorting` / `clientSidePagination` are true (the default),
+ * the hook derives sorted and paginated slices from `data` via `useMemo`.
+ * Set them to false for server-side mode, where the caller is responsible
+ * for providing the correct page of pre-sorted data.
+ *
+ * @param options - Configuration including data source, columns, and initial state.
+ * @returns An object containing `tableProps` (spread onto PatternDataTable),
+ *          plus individual state accessors and setters for external coordination.
+ *
+ * @example
+ * ```tsx
+ * const { tableProps, selectedRows, clearSelection } = useDataTable({
+ *   data: invoices,
+ *   columns: invoiceColumns,
+ *   pageSize: 50,
+ *   rowKey: 'id',
+ * });
+ * ```
+ */
 export function useDataTable<T extends Record<string, unknown>>(
   options: UseDataTableOptions<T>
 ): UseDataTableReturn<T> {
@@ -67,7 +102,9 @@ export function useDataTable<T extends Record<string, unknown>>(
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  // Client-side sort
+  // -- Client-side sort --
+  // Memoized to avoid re-sorting on every render. The sort is skipped entirely
+  // when the consumer handles sorting server-side (clientSideSorting=false).
   const sortedData = useMemo(() => {
     if (!clientSideSorting || !sorting) return data;
     const col = columns.find((c) => c.key === sorting.key);
@@ -83,7 +120,9 @@ export function useDataTable<T extends Record<string, unknown>>(
     });
   }, [data, sorting, columns, clientSideSorting]);
 
-  // Client-side pagination
+  // -- Client-side pagination --
+  // Slices the sorted array. Depends on `sortedData` so pagination
+  // automatically updates when sort changes.
   const processedData = useMemo(() => {
     if (!clientSidePagination) return sortedData;
     const start = (page - 1) * pageSize;
@@ -92,6 +131,8 @@ export function useDataTable<T extends Record<string, unknown>>(
 
   const totalCount = data.length;
 
+  // Resolve selected row objects from keys. Searches the full `data` array
+  // (not processedData) so selections persist across page changes.
   const selectedRows = useMemo(() => {
     if (selectedKeys.length === 0) return [];
     return data.filter((row, i) => {
@@ -106,11 +147,15 @@ export function useDataTable<T extends Record<string, unknown>>(
     setSelectedKeys(keys);
   }, []);
 
+  // Reset to page 1 on sort change so the user sees the top of the
+  // newly-sorted data instead of a potentially out-of-range page.
   const handleSortChange = useCallback((sort: SortConfig) => {
     setSorting(sort);
     setPage(1);
   }, []);
 
+  // When the page size changes, reset to page 1 to avoid showing an empty
+  // page beyond the new total page count.
   const handlePageChange = useCallback((newPage: number, newPageSize: number) => {
     setPage(newPage);
     if (newPageSize !== pageSize) {

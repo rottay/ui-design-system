@@ -137,7 +137,12 @@ export interface UseRouterStateReturn<T extends Record<string, any>> {
 
 /**
  * Default serializer: converts state values to URL-safe strings.
- * Omits values that match their default to keep URLs clean.
+ * Omits values that match their default to keep URLs clean and short.
+ * Uses JSON.stringify for deep equality checking of objects/arrays.
+ *
+ * @param state - The current state to serialize
+ * @param defaults - Default values used to determine which keys to omit
+ * @returns A flat string record suitable for URLSearchParams
  */
 function defaultSerialize<T extends Record<string, any>>(
   state: T,
@@ -149,7 +154,7 @@ function defaultSerialize<T extends Record<string, any>>(
     const value = state[key];
     const defaultValue = defaults[key];
 
-    // Skip values that match defaults (keep URL clean)
+    // Omit default values so the URL only contains meaningful overrides.
     if (JSON.stringify(value) === JSON.stringify(defaultValue)) {
       continue;
     }
@@ -171,7 +176,12 @@ function defaultSerialize<T extends Record<string, any>>(
 
 /**
  * Default deserializer: parses URL param strings back into typed values.
- * Uses the defaults object to infer the expected type for each key.
+ * Infers the expected type for each key from the defaults object, which
+ * means the consumer's defaults shape acts as a runtime type schema.
+ *
+ * @param params - Raw string key-value pairs from the URL
+ * @param defaults - Default values used for type inference
+ * @returns A partial state object with correctly typed values
  */
 function defaultDeserialize<T extends Record<string, any>>(
   params: Record<string, string>,
@@ -270,9 +280,13 @@ export function useRouterState<T extends Record<string, any>>(
     setSearchParams,
   } = options;
 
+  // hasRouter determines whether URL synchronization is active. When false,
+  // the hook operates as pure in-memory state (safe for tests and SSR).
   const hasRouter = !!(getSearchParams && setSearchParams);
 
-  // Stable refs for callbacks to avoid effect re-runs
+  // All callback and config options are stored in refs so that pushToUrl,
+  // getInitialState, and setState have stable identities. This prevents
+  // unnecessary effect re-runs when the consumer passes inline functions.
   const serializeRef = useRef(serialize);
   serializeRef.current = serialize;
 
@@ -288,13 +302,15 @@ export function useRouterState<T extends Record<string, any>>(
   const defaultsRef = useRef(defaults);
   defaultsRef.current = defaults;
 
-  // Debounce timer ref
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Flag to prevent URL -> state -> URL loop
+  // Guard flag: set to true during programmatic URL writes to prevent the
+  // URL change from triggering a state -> URL -> state feedback loop.
   const isUpdatingFromUrlRef = useRef(false);
 
   // ---- Read initial state from URL (or use defaults) ----
+  // Called once on mount to hydrate state from URL params. Falls back to
+  // defaults on any parse error to ensure a valid initial render.
   const getInitialState = useCallback((): T => {
     if (!hasRouter || !getSearchParamsRef.current) {
       return { ...defaults };
@@ -308,6 +324,8 @@ export function useRouterState<T extends Record<string, any>>(
         return { ...defaults };
       }
 
+      // Merge URL-derived values onto defaults so unspecified keys still
+      // have their default values.
       const deserialized = deserializeRef.current
         ? deserializeRef.current(raw)
         : defaultDeserialize(raw, defaults);
@@ -321,11 +339,13 @@ export function useRouterState<T extends Record<string, any>>(
   const [state, setStateInternal] = useState<T>(getInitialState);
 
   // ---- Push state to URL (debounced) ----
+  // Debouncing prevents flooding the browser history when state changes
+  // rapidly (e.g. typing in a search field). Each call resets the timer
+  // so only the final state within the debounce window gets pushed.
   const pushToUrl = useCallback(
     (newState: T) => {
       if (!hasRouter || !setSearchParamsRef.current) return;
 
-      // Clear any pending debounce
       if (debounceTimerRef.current !== null) {
         clearTimeout(debounceTimerRef.current);
       }
@@ -337,6 +357,8 @@ export function useRouterState<T extends Record<string, any>>(
           ? serializeRef.current(newState)
           : defaultSerialize(newState, defaultsRef.current);
 
+        // Build a fresh URLSearchParams; skip empty/undefined values
+        // to keep the URL clean.
         const params = new URLSearchParams();
         for (const [key, value] of Object.entries(serialized)) {
           if (value !== '' && value !== undefined) {
@@ -344,10 +366,13 @@ export function useRouterState<T extends Record<string, any>>(
           }
         }
 
+        // Set the guard flag BEFORE writing to URL so that any sync
+        // effects triggered by the URL change know to skip re-reading.
         isUpdatingFromUrlRef.current = true;
         setSearchParamsRef.current!(params);
 
-        // Reset the flag after a microtask to allow sync effects to see it
+        // Clear the guard after a microtask -- by then, any synchronous
+        // effects from the URL change have already run.
         Promise.resolve().then(() => {
           isUpdatingFromUrlRef.current = false;
         });
@@ -378,12 +403,15 @@ export function useRouterState<T extends Record<string, any>>(
   );
 
   // ---- resetState ----
+  // Reset bypasses debounce and clears the URL immediately because the
+  // user's intent is an explicit "clear all filters" action, and any
+  // pending debounced push from a previous setState should be discarded.
   const resetState = useCallback(() => {
     const fresh = { ...defaultsRef.current };
     setStateInternal(fresh);
 
-    // Clear URL immediately (no debounce for reset)
     if (hasRouter && setSearchParamsRef.current) {
+      // Cancel any pending debounced URL push.
       if (debounceTimerRef.current !== null) {
         clearTimeout(debounceTimerRef.current);
         debounceTimerRef.current = null;
@@ -397,6 +425,10 @@ export function useRouterState<T extends Record<string, any>>(
   }, [hasRouter]);
 
   // ---- Build surfaceQueryProps ----
+  // Extracts the standard pagination/sort/filter/search fields from the
+  // generic state object into the shape useSurfaceQuery expects. Type
+  // guards ensure safe defaults when the state keys are missing or have
+  // unexpected types (e.g. from malformed URL params).
   const surfaceQueryProps = useMemo(() => {
     const page = typeof state.page === 'number' ? state.page : 1;
     const pageSize = typeof state.pageSize === 'number' ? state.pageSize : 10;

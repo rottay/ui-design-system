@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tests for surface helpers: permission resolution, column/action
+ * filtering, variant mapping, and value normalization.
+ */
+
 import { describe, expect, it, vi } from 'vitest';
 import {
   countActiveFilters,

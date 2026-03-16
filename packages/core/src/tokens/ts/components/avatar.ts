@@ -1,8 +1,9 @@
 /**
- * Avatar Component Tokens - TypeScript Mirror
+ * @fileoverview Avatar component token mirrors.
  *
- * TypeScript representation of Avatar CSS custom properties.
- * Use these for type-safe Avatar token references.
+ * Covers 7 size tiers (xs-3xl), 3 shape options, 7 color variants,
+ * online/offline/away/busy status indicators, group stacking,
+ * hover/focus/active interactions, badge overlay, and transition tokens.
  */
 
 // Avatar Sizes

@@ -1,18 +1,13 @@
 'use client';
 
 /**
- * ListSurface
+ * @fileoverview ListSurface - Rottay Design System
+ * @description Reusable list-page surface with filters, table/card views,
+ * row actions, and standard empty/loading handling.
  *
- * This surface centralizes the mechanics of list pages:
- * - page chrome
- * - filters
- * - table view
- * - card view
- * - row actions
- * - empty/loading states
- *
- * The app still owns the product-specific renderers. That is the whole point:
- * the surface owns mechanics, while the app owns identity.
+ * @remarks
+ * The surface owns mechanics rather than product identity. Apps supply adapters,
+ * renderers, and actions while the DS owns the layout and interaction shell.
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -39,6 +34,7 @@ import {
 } from '../personality-helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../states';
 
+/** Render a single surface action using the normalized surface-to-button mapping. */
 function renderActionButton<TView>(
   action: SurfaceAction<TView>,
   item: TView,
@@ -70,6 +66,7 @@ function renderActionButton<TView>(
   );
 }
 
+/** Resolve the most specific cell renderer available for a list field. */
 function buildSurfaceCellRenderer<TView>(
   config: ListSurfaceConfig<TView>,
   columnKey: string,
@@ -79,6 +76,11 @@ function buildSurfaceCellRenderer<TView>(
   index: number,
   defaultRenderer?: (value: unknown, item: TView, index: number) => React.ReactNode
 ): React.ReactNode {
+  // Renderer resolution chain (most specific wins):
+  // 1. presentation.renderCell keyed by fieldId (domain-specific override)
+  // 2. presentation.renderCell keyed by columnKey (column-level override)
+  // 3. Column's own default renderer from the column config
+  // 4. stringifySurfaceValue fallback (toString with null safety)
   const presentationRenderer =
     config.presentation.renderCell?.[fieldId] ?? config.presentation.renderCell?.[columnKey];
 
@@ -93,6 +95,7 @@ function buildSurfaceCellRenderer<TView>(
   return stringifySurfaceValue(value);
 }
 
+/** Default card-based presentation used when the list is not shown as a table. */
 function DefaultCardView<TView>({
   items,
   config,
@@ -134,6 +137,7 @@ function DefaultCardView<TView>({
   const gridContent = (
     <Grid templateColumns={`repeat(auto-fit, minmax(${cardMinWidth}px, 1fr))`} gap="lg">
       {items.map((item, index) => {
+        // Give apps a full escape hatch before falling back to the stock card rendering.
         const customCard = config.presentation.renderCard?.(item, index);
 
         if (customCard) {
@@ -221,6 +225,7 @@ export interface ListSurfaceProps<TRaw, TView> {
   onRetry?: () => void | Promise<void>;
 }
 
+/** Full list-page shell with data mapping, permission filtering, and responsive view switching. */
 export function ListSurface<TRaw, TView>({
   data,
   adapter,
@@ -231,6 +236,9 @@ export function ListSurface<TRaw, TView>({
 }: ListSurfaceProps<TRaw, TView>): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
   const { tSurface } = useSurfaceTranslations();
+  // Visual defaults cascade: explicit surface config -> product profile -> DS defaults.
+  // This three-tier resolution lets apps override per-page while the product
+  // profile provides a consistent baseline.
   const resolvedDefaultView = config.visual.defaultView ?? profileDefaults.listView;
   const resolvedCompact = config.visual.compact ?? profileDefaults.listCompact;
   const resolvedCardMinWidth = config.visual.cardMinWidth ?? profileDefaults.listCardMinWidth;
@@ -244,10 +252,14 @@ export function ListSurface<TRaw, TView>({
     setActiveView(resolvedDefaultView);
   }, [resolvedDefaultView]);
 
+  // Adapter mapping runs once per data change, transforming raw API records
+  // into the view shape that column renderers and actions expect.
   const mappedItems = useMemo(() => {
     return mapSurfaceData(data, adapter);
   }, [data, adapter]);
 
+  // Permission filtering is memoized because it drives both column visibility
+  // and the "no visible columns" edge case detection.
   const permittedColumns = useMemo(() => {
     return filterSurfaceColumns(config.behavior.columns, config.permissions);
   }, [config.behavior.columns, config.permissions]);
@@ -265,6 +277,8 @@ export function ListSurface<TRaw, TView>({
     <Flex gap={8} wrap="wrap" justify="end">
       {config.presentation.toolbarEnd}
 
+      {/* View switch defaults to visible. Apps opt out with allowViewSwitch:false
+          when only one view makes sense (e.g. audit logs should always be tabular). */}
       {config.visual.allowViewSwitch !== false && (
         <Flex gap={8}>
           <Button
