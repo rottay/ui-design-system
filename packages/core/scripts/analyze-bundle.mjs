@@ -183,7 +183,7 @@ for (const f of jsFiles) {
 }
 
 // 3. Total CSS size
-const cssDirs = [distDir, join(ROOT, 'src', 'theme', 'tokens', 'css')];
+const cssDirs = [distDir, join(ROOT, 'src', 'tokens', 'css')];
 let totalCSS = 0;
 for (const dir of cssDirs) {
   const cssFiles = collectFiles(dir, (name) => name.endsWith('.css'));

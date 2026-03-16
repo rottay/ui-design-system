@@ -17,7 +17,7 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 
 | Metric | Limit |
 |--------|-------|
-| Total CSS (tokens + themes) | < 50 KB gzipped |
+| Total CSS (tokens + themes + components + animations) | < 50 KB gzipped |
 
 ## Uncompressed Limits (CI Gate)
 

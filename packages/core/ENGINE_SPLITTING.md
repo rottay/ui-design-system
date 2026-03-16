@@ -2,11 +2,15 @@
 
 ## Current State
 
-All 3 engines (classic/Ant Design, modern/DaisyUI, rustic/Vanilla) bundle into a single `index.js` entry point. Even if an application only uses the `classic` engine, all code for `modern` and `rustic` ships in the bundle. This creates unnecessary bloat and slower initial load times for every consumer.
+The build produces separate engine entry points via Vite library mode. Engine implementations
+are loaded dynamically through `createEngineComponent` using `import()`. The `package.json`
+already declares subpath exports for `./engines/classic`, `./engines/modern`, and
+`./engines/rustic`. A fourth engine (`custom`) supports pack-scoped component registration
+for white-label scenarios.
 
-## Proposed Solution
+## Entry Points
 
-Create separate entry points per engine so consumers only pay for what they use:
+Consumers only pay for the engine they use:
 
 - `@rottay/design-system` -- Main entry point. Includes engine routing, providers, hooks, tokens, and the component factory, but no engine implementation code.
 - `@rottay/design-system/engines/classic` -- Ant Design engine implementations.
@@ -30,41 +34,44 @@ App renders <Button>
   --> fallback engine stays unloaded until needed
 ```
 
-## Migration Path
+## Migration Status
 
-### Phase 1: Add exports to package.json (non-breaking)
+### Phase 1: Add exports to package.json -- DONE
 
-Add the three engine subpath exports to `package.json`. These initially point to placeholder/empty modules. No consumer changes required -- existing imports continue to work via the main entry point.
+Engine subpath exports (`./engines/classic`, `./engines/modern`, `./engines/rustic`) are declared
+in `package.json` and point to built output in `dist/engines/`.
 
-### Phase 2: Move engine implementations to separate bundles
+### Phase 2: Move engine implementations to separate bundles -- DONE
 
-Refactor internal build (Vite library mode) to produce separate output chunks for each engine. The main entry keeps only the engine routing infrastructure. Each engine entry exports all component implementations for that engine.
+Vite library mode produces separate output chunks for each engine. The main entry keeps only
+the engine routing infrastructure.
 
-### Phase 3: Update createEngineComponent to use new paths
+### Phase 3: Update createEngineComponent to use new paths -- DONE
 
-Modify the engine loader functions to `import()` from the new subpath exports instead of from the main bundle. This is the actual split -- after this point, unused engines no longer ship.
+Engine loader functions use `import()` from the subpath exports. Unused engines do not ship.
 
-### Phase 4: Deprecate bundled engines in main entry
+### Phase 4: Deprecate bundled engines in main entry -- PENDING
 
-Remove engine implementation code from the main entry point entirely. Add deprecation warnings if any consumer still imports engine components from the root path.
+Remove any residual engine implementation code from the main entry point. Add deprecation
+warnings if any consumer still imports engine components from the root path.
 
-## Estimated Bundle Impact
+## Bundle Size Reference
 
-| Scenario | Size |
-|----------|------|
-| Current (all engines in one bundle) | ~400KB total |
-| After split: main entry only | ~120KB |
-| After split: main + one active engine | ~220KB |
-| **Total reduction** | **~45%** |
+| Scenario | Approximate Size (gzipped) |
+|----------|---------------------------|
+| Main entry only (no engine loaded) | ~120 KB |
+| Main + one active engine | ~220 KB |
+| All engines loaded | ~400 KB |
 
-These are approximate gzipped sizes. Actual savings depend on tree-shaking effectiveness and shared dependencies between engines.
+Actual sizes depend on tree-shaking effectiveness and shared dependencies between engines.
+See `PERFORMANCE_BUDGET.md` for enforced CI limits.
 
-## Prerequisites
+## Build Infrastructure
 
-- **Vite library mode** supports multiple entry points via `build.lib.entry` (object form).
-- **package.json exports** already uses the subpath pattern for `./tokens`, `./i18n`, `./icons`.
-- **Dynamic `import()`** is already the loading mechanism in `createEngineComponent`.
-- **No breaking API changes** -- components continue to be imported from `@rottay/design-system`. The engine loading is an internal implementation detail.
+- **Vite library mode** uses multiple entry points via `build.lib.entry` (object form) in `vite.config.ts`.
+- **package.json exports** declares subpath exports for `./tokens`, `./i18n`, `./icons`, and all three engine paths.
+- **Dynamic `import()`** is the loading mechanism in `createEngineComponent`.
+- **No breaking API changes** -- components are always imported from `@rottay/design-system`. Engine loading is an internal detail.
 
 ## File Structure After Split
 

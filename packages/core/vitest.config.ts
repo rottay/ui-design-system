@@ -2,20 +2,29 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
+const isCoverage = !!process.env.COVERAGE;
+
 export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: 'jsdom',
+    environment: 'happy-dom',
     setupFiles: './src/testing/test-setup.ts',
     css: true,
-    // The DS suite mixes lazy engines, Ant Design portals, and heavy jsdom usage.
-    // Running in a single worker is slower, but it avoids the flaky timeouts we see
-    // under coverage when several heavy integration files compete for resources.
-    maxWorkers: 1,
-    minWorkers: 1,
-    testTimeout: 30000,
-    hookTimeout: 30000,
+    pool: 'forks',
+    // Under coverage, V8 instrumentation + heavy engine files cause resource
+    // contention that produces flaky timeouts. Restrict to a single worker only
+    // for coverage runs; normal test runs use half the available CPUs.
+    ...(isCoverage
+      ? { maxWorkers: 1, minWorkers: 1 }
+      : { maxWorkers: '50%', minWorkers: 1 }),
+    testTimeout: 15000,
+    hookTimeout: 15000,
+    retry: 1,
+    reporters: ['verbose', 'json'],
+    outputFile: {
+      json: './test-results.json',
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'json-summary', 'html'],

@@ -49,6 +49,8 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import type { EngineName } from '../contracts';
 import { errorInDev } from '../utils/runtime-logger';
+import { ErrorHandler } from '../errors/ErrorHandler';
+import { ErrorCategory, ErrorSeverity } from '../errors/types';
 
 export interface EngineErrorBoundaryProps {
   /** Child components to render */
@@ -93,6 +95,21 @@ export class EngineErrorBoundary extends Component<EngineErrorBoundaryProps, Sta
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     errorInDev('[EngineErrorBoundary] Engine loading failed:', error);
     this.props.onError?.(error, errorInfo);
+
+    // Report to the centralized error handler so subscribers (Sentry, etc.)
+    // receive structured engine-level errors automatically.
+    ErrorHandler.getInstance().reportError({
+      code: 'ENGINE_COMPONENT_LOAD_FAILED',
+      message: error.message,
+      technicalMessage: errorInfo.componentStack ?? undefined,
+      category: ErrorCategory.ENGINE,
+      severity: ErrorSeverity.ERROR,
+      component: 'EngineErrorBoundary',
+      originalError: error,
+      metadata: {
+        fallbackEngine: this.props.fallbackEngine,
+      },
+    });
   }
 
   reset = () => {
@@ -126,6 +143,23 @@ export class EngineErrorBoundary extends Component<EngineErrorBoundaryProps, Sta
               {this.state.error.message}
             </div>
           )}
+          <div style={{ marginTop: '12px' }}>
+            <button
+              type="button"
+              onClick={this.reset}
+              style={{
+                padding: '6px 16px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                border: '1px solid var(--ds-color-error-border)',
+                borderRadius: 'var(--ds-radius-sm)',
+                background: 'transparent',
+                color: 'inherit',
+              }}
+            >
+              Retry
+            </button>
+          </div>
         </div>
       );
     }

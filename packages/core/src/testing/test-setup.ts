@@ -3,7 +3,7 @@
  * @description Configures the test environment before any suite runs:
  * - Extends Vitest `expect` with Testing Library DOM matchers
  * - Sets a generous async timeout (30s) for lazy-loaded engine code
- * - Polyfills browser APIs absent in jsdom/happy-dom: ResizeObserver,
+ * - Polyfills browser APIs absent in happy-dom: ResizeObserver,
  *   IntersectionObserver, matchMedia, Canvas getContext, getComputedStyle
  * - Cleans up tenant/theme/engine data attributes between tests
  */

@@ -1,35 +1,17 @@
+# Retained for backward compatibility and badge URLs.
+# All work is done by ci.yml.
+#
+# Badge URL:
+# https://github.com/rottay/design-system/actions/workflows/tests.yml/badge.svg
 name: Tests
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: blacksmith-2vcpu-ubuntu-2204
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run typecheck
-        run: pnpm --filter @rottay/design-system run typecheck
-
-      - name: Run tests with coverage
-        run: pnpm --filter @rottay/design-system run test:coverage
+  tests:
+    name: Tests (via CI)
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+      pull-requests: write

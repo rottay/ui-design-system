@@ -54,6 +54,8 @@ export default defineConfig({
         '@heroui/react',
         'framer-motion',
         'lucide-react',
+        'd3',
+        'geist',
         'dayjs',
         // @rottay domain modules (provided by consuming app)
         /^@rottay\/.*/,
@@ -62,6 +64,9 @@ export default defineConfig({
         /^@ant-design\/icons\/.*/,
         /^@heroui\/.*/,
         /^lucide-react\/.*/,
+        /^d3-.*/,
+        /^geist\/.*/,
+        /^framer-motion\/.*/,
         /^dayjs\/.*/,
       ],
       output: [

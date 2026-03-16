@@ -91,3 +91,7 @@ export * from './operational';
 
 // -- Shared surface states (loading, error, etc.) --
 export * from './states';
+
+// -- Surface error boundary (isolates individual surface crashes) --
+export { SurfaceErrorBoundary } from './SurfaceErrorBoundary';
+export type { SurfaceErrorBoundaryProps } from './SurfaceErrorBoundary';

@@ -1,0 +1,301 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  ci:
+    name: Typecheck / Test / Build
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # ── Step 1: Typecheck ──────────────────────────────────────────────
+      - name: Typecheck
+        run: pnpm --filter @rottay/design-system run typecheck
+
+      # ── Step 2: Test with coverage ─────────────────────────────────────
+      - name: Run tests with coverage
+        run: pnpm --filter @rottay/design-system run test:coverage -- --run
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            packages/core/coverage/coverage-summary.json
+            packages/core/coverage/coverage-final.json
+            packages/core/coverage/index.html
+            packages/core/coverage/**/*.html
+            packages/core/coverage/**/*.css
+            packages/core/coverage/**/*.js
+          retention-days: 30
+
+      - name: Generate coverage summary
+        if: always()
+        id: coverage
+        run: |
+          COVERAGE_FILE="packages/core/coverage/coverage-summary.json"
+          if [ ! -f "$COVERAGE_FILE" ]; then
+            echo "Coverage summary file not found"
+            echo "has_coverage=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "has_coverage=true" >> "$GITHUB_OUTPUT"
+
+          # Extract total coverage percentages
+          LINES=$(node -e "const c = require('./$COVERAGE_FILE'); console.log(c.total.lines.pct)")
+          BRANCHES=$(node -e "const c = require('./$COVERAGE_FILE'); console.log(c.total.branches.pct)")
+          FUNCTIONS=$(node -e "const c = require('./$COVERAGE_FILE'); console.log(c.total.functions.pct)")
+          STATEMENTS=$(node -e "const c = require('./$COVERAGE_FILE'); console.log(c.total.statements.pct)")
+
+          echo "lines=$LINES" >> "$GITHUB_OUTPUT"
+          echo "branches=$BRANCHES" >> "$GITHUB_OUTPUT"
+          echo "functions=$FUNCTIONS" >> "$GITHUB_OUTPUT"
+          echo "statements=$STATEMENTS" >> "$GITHUB_OUTPUT"
+
+          # Determine status icon based on threshold (80%)
+          status_icon() {
+            local pct=$1
+            if (( $(echo "$pct >= 80" | bc -l) )); then
+              echo "pass"
+            else
+              echo "fail"
+            fi
+          }
+
+          LINES_STATUS=$(status_icon "$LINES")
+          BRANCHES_STATUS=$(status_icon "$BRANCHES")
+          FUNCTIONS_STATUS=$(status_icon "$FUNCTIONS")
+          STATEMENTS_STATUS=$(status_icon "$STATEMENTS")
+
+          echo "lines_status=$LINES_STATUS" >> "$GITHUB_OUTPUT"
+          echo "branches_status=$BRANCHES_STATUS" >> "$GITHUB_OUTPUT"
+          echo "functions_status=$FUNCTIONS_STATUS" >> "$GITHUB_OUTPUT"
+          echo "statements_status=$STATEMENTS_STATUS" >> "$GITHUB_OUTPUT"
+
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request' && steps.coverage.outputs.has_coverage == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const lines = '${{ steps.coverage.outputs.lines }}';
+            const branches = '${{ steps.coverage.outputs.branches }}';
+            const functions = '${{ steps.coverage.outputs.functions }}';
+            const statements = '${{ steps.coverage.outputs.statements }}';
+
+            const icon = (status) => status === 'pass' ? '(pass)' : '(FAIL)';
+            const linesStatus = icon('${{ steps.coverage.outputs.lines_status }}');
+            const branchesStatus = icon('${{ steps.coverage.outputs.branches_status }}');
+            const functionsStatus = icon('${{ steps.coverage.outputs.functions_status }}');
+            const statementsStatus = icon('${{ steps.coverage.outputs.statements_status }}');
+
+            const body = [
+              '## Coverage Report -- @rottay/design-system',
+              '',
+              '| Metric | Coverage | Threshold | Status |',
+              '|--------|----------|-----------|--------|',
+              `| Lines | ${lines}% | 80% | ${linesStatus} |`,
+              `| Branches | ${branches}% | 80% | ${branchesStatus} |`,
+              `| Functions | ${functions}% | 80% | ${functionsStatus} |`,
+              `| Statements | ${statements}% | 80% | ${statementsStatus} |`,
+              '',
+              `> Commit: \`${context.sha.substring(0, 8)}\` | [Full HTML report](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) (download artifact)`,
+            ].join('\n');
+
+            // Find existing comment to update (avoid spamming)
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const marker = '## Coverage Report -- @rottay/design-system';
+            const existing = comments.find(c => c.body && c.body.startsWith(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      # ── Step 3: Build ──────────────────────────────────────────────────
+      - name: Build
+        run: pnpm --filter @rottay/design-system run build
+
+      - name: Generate build size report
+        id: build_size
+        run: |
+          DIST_DIR="packages/core/dist"
+          if [ ! -d "$DIST_DIR" ]; then
+            echo "dist/ directory not found"
+            echo "has_dist=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+          echo "has_dist=true" >> "$GITHUB_OUTPUT"
+
+          # Total dist size
+          TOTAL_BYTES=$(du -sb "$DIST_DIR" | cut -f1)
+          TOTAL_KB=$((TOTAL_BYTES / 1024))
+          TOTAL_MB=$(echo "scale=2; $TOTAL_BYTES / 1048576" | bc)
+          echo "total_bytes=$TOTAL_BYTES" >> "$GITHUB_OUTPUT"
+          echo "total_kb=$TOTAL_KB" >> "$GITHUB_OUTPUT"
+          echo "total_mb=$TOTAL_MB" >> "$GITHUB_OUTPUT"
+
+          # JS bundle size (ESM)
+          JS_ESM_BYTES=$(find "$DIST_DIR" -name '*.js' -not -name '*.d.ts' | xargs cat 2>/dev/null | wc -c || echo 0)
+          JS_ESM_KB=$((JS_ESM_BYTES / 1024))
+          echo "js_esm_kb=$JS_ESM_KB" >> "$GITHUB_OUTPUT"
+
+          # JS bundle size (CJS)
+          JS_CJS_BYTES=$(find "$DIST_DIR" -name '*.cjs' | xargs cat 2>/dev/null | wc -c || echo 0)
+          JS_CJS_KB=$((JS_CJS_BYTES / 1024))
+          echo "js_cjs_kb=$JS_CJS_KB" >> "$GITHUB_OUTPUT"
+
+          # Type declarations size
+          DTS_BYTES=$(find "$DIST_DIR" -name '*.d.ts' | xargs cat 2>/dev/null | wc -c || echo 0)
+          DTS_KB=$((DTS_BYTES / 1024))
+          echo "dts_kb=$DTS_KB" >> "$GITHUB_OUTPUT"
+
+          # File count
+          FILE_COUNT=$(find "$DIST_DIR" -type f | wc -l)
+          echo "file_count=$FILE_COUNT" >> "$GITHUB_OUTPUT"
+
+          # Generate size report file
+          cat > "$DIST_DIR/../build-size-report.json" <<EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit": "$GITHUB_SHA",
+            "total_bytes": $TOTAL_BYTES,
+            "total_kb": $TOTAL_KB,
+            "js_esm_kb": $JS_ESM_KB,
+            "js_cjs_kb": $JS_CJS_KB,
+            "dts_kb": $DTS_KB,
+            "file_count": $FILE_COUNT
+          }
+          EOF
+
+          # Size threshold check (warn if total dist > 10MB)
+          THRESHOLD_BYTES=10485760
+          if [ "$TOTAL_BYTES" -gt "$THRESHOLD_BYTES" ]; then
+            echo "::warning::dist/ size (${TOTAL_MB}MB) exceeds 10MB threshold"
+            echo "size_warning=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "size_warning=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "--- Build Size Report ---"
+          echo "Total: ${TOTAL_KB}KB (${TOTAL_MB}MB)"
+          echo "ESM JS: ${JS_ESM_KB}KB"
+          echo "CJS JS: ${JS_CJS_KB}KB"
+          echo "Types (.d.ts): ${DTS_KB}KB"
+          echo "Files: ${FILE_COUNT}"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            packages/core/dist/
+            packages/core/build-size-report.json
+          retention-days: 15
+
+      - name: Comment build size on PR
+        if: github.event_name == 'pull_request' && steps.build_size.outputs.has_dist == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const totalKb = '${{ steps.build_size.outputs.total_kb }}';
+            const totalMb = '${{ steps.build_size.outputs.total_mb }}';
+            const esmKb = '${{ steps.build_size.outputs.js_esm_kb }}';
+            const cjsKb = '${{ steps.build_size.outputs.js_cjs_kb }}';
+            const dtsKb = '${{ steps.build_size.outputs.dts_kb }}';
+            const fileCount = '${{ steps.build_size.outputs.file_count }}';
+            const sizeWarning = '${{ steps.build_size.outputs.size_warning }}';
+
+            const warning = sizeWarning === 'true'
+              ? '\n\n> WARNING: dist/ size exceeds 10MB threshold'
+              : '';
+
+            const body = [
+              '## Build Size Report -- @rottay/design-system',
+              '',
+              '| Output | Size |',
+              '|--------|------|',
+              `| Total dist/ | ${totalKb}KB (${totalMb}MB) |`,
+              `| ESM (.js) | ${esmKb}KB |`,
+              `| CJS (.cjs) | ${cjsKb}KB |`,
+              `| Types (.d.ts) | ${dtsKb}KB |`,
+              `| File count | ${fileCount} |`,
+              warning,
+              '',
+              `> Commit: \`${context.sha.substring(0, 8)}\``,
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const marker = '## Build Size Report -- @rottay/design-system';
+            const existing = comments.find(c => c.body && c.body.startsWith(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
