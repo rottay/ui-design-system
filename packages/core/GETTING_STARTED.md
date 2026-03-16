@@ -2,11 +2,17 @@
 
 This guide covers everything from a 2-minute quick start to full multi-tenant configuration.
 
+> **Note:** `@rottay/design-system` is a **private, internal package** distributed via GitHub Packages.
+> It is not available on the public npm registry and is not intended for third-party consumption.
+> You must be a member of the `rottay` GitHub organization with a valid `GITHUB_TOKEN` to install it.
+
 ---
 
 ## Quick Start (2 minutes)
 
 ### 1. Install
+
+Within the Rottay monorepo, the package resolves automatically via the workspace protocol. For Rottay apps in separate repositories, configure `.npmrc` authentication first (see "Usage in a Separate Rottay Repository" below).
 
 ```bash
 pnpm add @rottay/design-system
@@ -41,20 +47,26 @@ That is all you need. The DS defaults to the `classic` engine (Ant Design), the 
 
 ---
 
-## Standalone Usage (Outside the Rottay Monorepo)
+## Usage in a Separate Rottay Repository
 
-If you are using `@rottay/design-system` in a project that is NOT part of the Rottay monorepo, follow these steps.
+If you are building a new Rottay application in its own repository (outside the monorepo), follow these steps to access the private package.
 
-### 1. Configure the package registry
+### 1. Configure GitHub Packages authentication
 
-The package is published to the GitHub Packages registry under the `@rottay` scope. Add this to your project root `.npmrc`:
+The package is published to the GitHub Packages registry under the `@rottay` scope with restricted access. You must be a member of the `rottay` GitHub organization.
+
+Create or update the `.npmrc` file in your project root:
 
 ```ini
 @rottay:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
-Set `GITHUB_TOKEN` as an environment variable with `read:packages` scope.
+Set `GITHUB_TOKEN` as an environment variable. The token needs:
+- **Scope:** `read:packages`
+- **Access:** Must belong to a user/bot with access to the `rottay` organization
+
+For CI/CD pipelines (GitHub Actions), use the built-in `GITHUB_TOKEN` secret or a fine-grained PAT with `packages:read` permission.
 
 ### 2. Install the package and all peer dependencies
 
@@ -434,7 +446,7 @@ test('renders a button', () => {
   ```json
   "@rottay/design-system": "workspace:*"
   ```
-- For standalone projects, verify your `.npmrc` has the correct registry configuration (see Standalone Usage above)
+- For projects outside the monorepo, verify your `.npmrc` has the correct registry configuration (see "Usage in a Separate Rottay Repository" above)
 
 ### Components render as blank / `null`
 

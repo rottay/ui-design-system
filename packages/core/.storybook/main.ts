@@ -22,10 +22,11 @@ const config: StorybookConfig = {
       },
       build: {
         ...config.build,
-        // Storybook's preview bundle intentionally pulls heavy vendor graphs
-        // (notably Ant Design and Storybook's own mocker entry). Raising the
-        // warning threshold keeps CI noise focused on actionable regressions.
-        chunkSizeWarningLimit: 2200,
+        // Vite/Rollup warning threshold. Real enforcement is handled by
+        // scripts/check-storybook-budget.mjs (runs post-build, fails CI).
+        // This limit keeps the build log free of noise from expected vendor
+        // chunks while the post-build script enforces hard limits.
+        chunkSizeWarningLimit: 1500,
         rollupOptions: {
           ...config.build?.rollupOptions,
           output: {

@@ -1,7 +1,7 @@
 {
   "name": "@rottay/design-system",
   "version": "2.4.4",
-  "description": "Multi-tenant, multi-engine design system with classic, modern, rustic, and experimental custom engines",
+  "description": "Internal multi-tenant, multi-engine design system for Rottay products",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -57,7 +57,7 @@
     "dev": "vite build --watch",
     "build": "tsc && vite build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build && node scripts/check-storybook-budget.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
@@ -137,6 +137,6 @@
     "theme",
     "ui-components"
   ],
-  "author": "Emmanuel Rottay",
-  "license": "MIT"
+  "author": "Daniel Avila <daniel.avila@rottay.com>",
+  "license": "UNLICENSED"
 }

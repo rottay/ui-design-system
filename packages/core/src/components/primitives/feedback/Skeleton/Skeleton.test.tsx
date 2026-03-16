@@ -8,7 +8,7 @@ import React from 'react';
 import { Skeleton } from './';
 
 // Mock the engine factory
-vi.mock('../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockSkeleton = React.forwardRef<HTMLDivElement, any>(({
       active = true,

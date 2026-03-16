@@ -83,7 +83,7 @@ describe('useGlobalSearch', () => {
   let storage: ReturnType<typeof mockLocalStorage>;
 
   beforeEach(() => {
-    vi.useFakeTimers();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     storage = mockLocalStorage();
   });
 

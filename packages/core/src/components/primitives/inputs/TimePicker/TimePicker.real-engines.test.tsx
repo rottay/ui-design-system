@@ -5,7 +5,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import ClassicTimePicker, { TimePicker as ClassicTimePickerCompound } from './engines/classic';
 import ModernTimePicker, { TimePicker as ModernTimePickerCompound } from './engines/modern';
 import RusticTimePicker, { TimePicker as RusticTimePickerCompound } from './engines/rustic';
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 
 describe('TimePicker real engine coverage', () => {
   it('covers classic base and range picker branches', () => {

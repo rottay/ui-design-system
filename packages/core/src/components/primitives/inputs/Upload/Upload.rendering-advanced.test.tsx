@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Upload as ModernUpload } from './engines/modern';
 import { Upload as RusticUpload } from './engines/rustic';
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 
 const imageFile = {
   uid: 'image',

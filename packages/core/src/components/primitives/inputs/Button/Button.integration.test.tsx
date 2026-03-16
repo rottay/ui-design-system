@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithEngine, STABLE_ENGINES } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
 
 describe('Button integration', () => {
   it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {

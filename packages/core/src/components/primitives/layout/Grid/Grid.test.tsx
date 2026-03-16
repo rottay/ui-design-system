@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import React, { createRef } from 'react';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../core/engines/factory', () => {
+vi.mock('../../../../engines/factory', () => {
   // Define MockGridItem inside the factory to avoid hoisting issues
   const MockGridItem = React.forwardRef<HTMLElement, any>(({
     children,

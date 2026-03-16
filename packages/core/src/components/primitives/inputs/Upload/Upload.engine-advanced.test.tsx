@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Upload as ModernUpload, Dragger as ModernDragger } from './engines/modern';
 import { Upload as RusticUpload, Dragger as RusticDragger } from './engines/rustic';
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 
 function makeFile(name: string, type = 'text/plain') {
   return new File([`file:${name}`], name, { type });

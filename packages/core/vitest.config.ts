@@ -4,6 +4,22 @@ import { resolve } from 'path';
 
 const isCoverage = !!process.env.COVERAGE;
 
+/**
+ * Integration/engine test patterns:
+ *   *.integration.test.*
+ *   *.real-engines.test.*
+ *   *.engine-advanced.test.*
+ *   *-engine.test.*
+ *   *-engine-advanced.test.*
+ */
+const integrationPatterns = [
+  'src/**/*.integration.test.{ts,tsx}',
+  'src/**/*.real-engines.test.{ts,tsx}',
+  'src/**/*.engine-advanced.test.{ts,tsx}',
+  'src/**/*-engine.test.{ts,tsx}',
+  'src/**/*-engine-advanced.test.{ts,tsx}',
+];
+
 export default defineConfig({
   plugins: [react()],
   test: {
@@ -12,12 +28,19 @@ export default defineConfig({
     setupFiles: './src/testing/test-setup.ts',
     css: true,
     pool: 'forks',
-    // Under coverage, V8 instrumentation + heavy engine files cause resource
-    // contention that produces flaky timeouts. Restrict to a single worker only
-    // for coverage runs; normal test runs use half the available CPUs.
+    // Each fork loads React + Ant Design + engine tree (~1-2 GB per worker).
+    // With 220+ unit test files, a single long-lived fork accumulates heap
+    // and OOMs on Node 25.x. Using singleFork: false creates a fresh fork
+    // per file, preventing heap accumulation at the cost of slower startup.
+    // Coverage stays single-fork (V8 instrumentation needs persistence).
     ...(isCoverage
       ? { maxWorkers: 1, minWorkers: 1 }
-      : { maxWorkers: '50%', minWorkers: 1 }),
+      : { maxWorkers: 3, minWorkers: 1 }),
+    poolOptions: {
+      forks: {
+        singleFork: isCoverage,
+      },
+    },
     testTimeout: 15000,
     hookTimeout: 15000,
     retry: 1,
@@ -49,6 +72,28 @@ export default defineConfig({
         '.storybook/',
       ],
     },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          include: ['src/**/*.test.{ts,tsx}'],
+          exclude: [
+            ...integrationPatterns,
+            'node_modules/**',
+          ],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'integration',
+          include: integrationPatterns,
+          testTimeout: 30000,
+          hookTimeout: 30000,
+        },
+      },
+    ],
   },
   resolve: {
     alias: {

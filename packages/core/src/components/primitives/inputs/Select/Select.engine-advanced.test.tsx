@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 
 const OPTIONS = [
   { label: 'Alpha', value: 'alpha' },

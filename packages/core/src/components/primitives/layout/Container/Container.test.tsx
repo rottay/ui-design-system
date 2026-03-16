@@ -9,7 +9,7 @@ import React, { createRef } from 'react';
 import { Container } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockContainer = React.forwardRef<HTMLDivElement, any>(({
       children,

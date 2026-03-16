@@ -2,8 +2,8 @@ import React, { Suspense, createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
-import { STABLE_ENGINES } from '../../../../../testing/helpers/engine-test-utils';
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 import type { TenantConfig } from '../../../../contracts';
 
 const OPTIONS = [
@@ -31,7 +31,7 @@ const TEST_TENANT_CONFIG: TenantConfig = {
 describe('Select integration', () => {
   it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {
     const { Select } = await import('.');
-    const { DesignSystemProvider } = await import('../../../../../core/providers');
+    const { DesignSystemProvider } = await import('../../../../bootstrap');
     render(
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
@@ -49,7 +49,7 @@ describe('Select integration', () => {
 
   it.each(STABLE_ENGINES)('forwards refs through the factory with the %s engine', async (engine) => {
     const { Select } = await import('.');
-    const { DesignSystemProvider } = await import('../../../../../core/providers');
+    const { DesignSystemProvider } = await import('../../../../bootstrap');
     const ref = createRef<any>();
 
     render(

@@ -14,7 +14,7 @@ vi.mock('./utils/Portal', () => ({
 }));
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockModal = React.forwardRef<HTMLDivElement, any>(({
       open,

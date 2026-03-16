@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { TreeSelect as ModernTreeSelect } from './engines/modern';
 import { TreeSelect as RusticTreeSelect } from './engines/rustic';
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 
 const mappedTreeData = [
   {

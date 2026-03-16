@@ -10,7 +10,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { Carousel } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockCarousel = ({
       children,

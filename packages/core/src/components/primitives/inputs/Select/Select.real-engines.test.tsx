@@ -7,7 +7,7 @@ import ModernSelect from './engines/modern';
 import RusticSelect from './engines/rustic';
 import { SelectOption } from './compound/Option';
 import { SelectOptGroup } from './compound/OptGroup';
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 
 const OPTIONS = [
   { label: 'Alpha', value: 'alpha' },

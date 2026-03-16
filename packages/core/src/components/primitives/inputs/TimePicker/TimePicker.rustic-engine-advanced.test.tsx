@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { renderWithEngine } from '../../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
 
 describe('TimePicker rustic advanced coverage', () => {
   it('covers rustic parsing branches, clear handling, disabled clear guards, and range updates', async () => {

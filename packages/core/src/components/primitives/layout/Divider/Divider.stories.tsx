@@ -5,8 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Divider } from '../';
-import { DesignSystemProvider } from '../../../../../bootstrap';
-import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
+import { DesignSystemProvider } from '../../../../bootstrap';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 import React from 'react';
 
 const meta: Meta<typeof Divider> = {

@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Tabs } from './';
 
 // Mock the engine factory
-vi.mock('../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockTabs = ({
       items,

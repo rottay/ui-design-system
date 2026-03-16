@@ -28,8 +28,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build Storybook
+      - name: Build Storybook + enforce bundle budget
         run: pnpm run build-storybook
+        working-directory: packages/core
 
       # TODO: Add deployment step
       # Options:

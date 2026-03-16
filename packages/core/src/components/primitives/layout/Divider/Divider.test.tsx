@@ -12,10 +12,10 @@ import {
   SPACING_MAP,
   THICKNESS_MAP,
   getThicknessValue,
-} from '../Divider.types';
+} from './Divider.types';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockDivider = React.forwardRef<HTMLDivElement, any>(({
       children,

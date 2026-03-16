@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import { ScrollArea } from './ScrollArea';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockScrollArea = ({
       children,

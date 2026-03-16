@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import { Timeline } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockTimeline = ({ children, mode, pending, reverse, items, ...props }: any) => (
       <div

@@ -14,7 +14,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Card } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../core/engines/factory', () => ({
+vi.mock('../../../../engines/factory', () => ({
   createEngineComponent: () => {
     const MockCard = ({
       children,
