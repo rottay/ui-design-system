@@ -49,6 +49,8 @@ export default defineConfig({
         'react',
         'react-dom',
         'react/jsx-runtime',
+        'd3',
+        /^d3\/.*/,
         'antd',
         '@ant-design/icons',
         '@heroui/react',
