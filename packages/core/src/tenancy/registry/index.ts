@@ -168,8 +168,8 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
 
   /**
    * Evnto - Event management platform
-   * Fun, animated, vibrant
-   * Orange + cyan, bounce animations, spacious layout
+   * Light minimal, elegant
+   * Black text on white backgrounds, warm beige accents
    */
   evnto: {
     slug: 'evnto',
@@ -180,66 +180,62 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     features: ['*'],
     branding: {
       companyName: 'Evnto',
-      primaryColor: '#f97316',
-      secondaryColor: '#EA580C',
-      accentColor: '#06b6d4',
+      primaryColor: '#171717',
+      secondaryColor: '#b8a898',
+      accentColor: '#b8a898',
       logo: undefined,
     },
-    // Evnto personality: vibrant, fun, event-centric.
-    // High animation intensity and bounce entrances create an energetic feel
-    // appropriate for event discovery and ticketing UIs. Spacious padding and
-    // large border radii (via tokenOverrides) give a friendly, rounded look.
+    // Evnto personality: clean, professional, operator-focused.
+    // Subtle animations and fade entrances create a polished feel.
+    // Cards use borders (not shadows) for definition on white backgrounds.
     personality: {
       animation: {
-        intensity: 1.5,          // Exaggerated -- events are about excitement
-        staggerDelay: 80,
-        staggerMax: 600,
-        entrance: 'bounce',      // WHY bounce: playful entrance for event cards
-        entranceDuration: 500,
-        hoverLift: 4,            // Pronounced lift for interactive discovery
-        hoverScale: 1.03,
-        useSpring: true,
-        springTension: 200,      // Snappier springs than Rottay for a bouncy feel
-        springFriction: 18,      // Lower friction = more oscillation
-        pulseSpeed: 'fast',
-        skeletonStyle: 'wave',
+        intensity: 0.6,
+        staggerDelay: 40,
+        staggerMax: 300,
+        entrance: 'fade',
+        entranceDuration: 250,
+        hoverLift: 1,
+        hoverScale: 1.005,
+        useSpring: false,
+        springTension: 170,
+        springFriction: 26,
+        pulseSpeed: 'normal',
+        skeletonStyle: 'shimmer',
         countUpEnabled: true,
       },
       chart: {
         animateOnMount: true,
-        mountDuration: 1200,     // Slow reveal for dramatic chart unveils
+        mountDuration: 600,
         lineStyle: 'smooth',
-        showDots: true,
-        useGradientFill: true,
-        tooltipStyle: 'detailed',
+        showDots: false,
+        useGradientFill: false,
+        tooltipStyle: 'glass',
       },
       typography: {
         headingWeightBias: 'heavier',
         headingLetterSpacing: '-0.02em',
-        labelStyle: 'capitalize', // WHY capitalize: friendly title-case for event labels
+        labelStyle: 'uppercase',
       },
       accent: {
         barPosition: 'top',
-        barThickness: 4,         // Thicker bar for bold accent
-        barStyle: 'animated',    // WHY animated: CSS shimmer draws attention to featured content
+        barThickness: 0,
+        barStyle: 'solid',
         iconContainerShape: 'circle',
         badgeShape: 'pill',
-        dividerStyle: 'dashed',
+        dividerStyle: 'solid',
       },
       card: {
-        defaultElevation: 'md',
-        hoverElevation: 'lift-two',
-        showBorder: false,
-        hoverTint: true,
-        paddingDensity: 'spacious', // WHY spacious: event cards need room for imagery
+        defaultElevation: 'sm',
+        hoverElevation: 'lift-one',
+        showBorder: true,
+        hoverTint: false,
+        paddingDensity: 'normal',
       },
     },
-    // WHY tokenOverrides: Evnto is the only first-party tenant with custom density
-    // and border-radius tokens. The larger radii (10-24px vs default 4-16px) and
-    // 1.125x density scale create a distinctly rounded, airy layout.
     tokenOverrides: {
-      densityScale: 1.125,
-      borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px' },
+      densityScale: 1.02,
+      borderRadius: { sm: '8px', md: '10px', lg: '14px', xl: '20px' },
     },
   },
 };

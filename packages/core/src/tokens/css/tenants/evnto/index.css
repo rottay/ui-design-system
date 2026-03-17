@@ -62,12 +62,12 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-color-bg-elevated: #ffffff;
   --ds-color-bg-overlay: rgba(0, 0, 0, 0.5);
 
-  /* Text - Dark on light */
-  --ds-color-text-primary: #171717;
-  --ds-color-text-secondary: #525252;
-  --ds-color-text-tertiary: #737373;
-  --ds-color-text-muted: #a3a3a3;
-  --ds-color-text-disabled: #d4d4d4;
+  /* Text - Dark on light (high contrast for readability) */
+  --ds-color-text-primary: #111111;
+  --ds-color-text-secondary: #3d3d3d;
+  --ds-color-text-tertiary: #5c5c5c;
+  --ds-color-text-muted: #737373;
+  --ds-color-text-disabled: #b3b3b3;
   --ds-color-text-on-primary: #ffffff;
 
   /* Borders - Subtle on light */
@@ -120,15 +120,15 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-color-link-hover: #525252;
   --ds-color-link-visited: #737373;
 
-  /* Status colors - Muted for light theme */
-  --ds-color-success: #16a34a;
+  /* Status colors - Neutral tones, avoid bright blue/red */
+  --ds-color-success: #15803d;
   --ds-color-success-bg: #f0fdf4;
-  --ds-color-warning: #ca8a04;
+  --ds-color-warning: #a16207;
   --ds-color-warning-bg: #fefce8;
-  --ds-color-error: #dc2626;
+  --ds-color-error: #b91c1c;
   --ds-color-error-bg: #fef2f2;
-  --ds-color-info: #2563eb;
-  --ds-color-info-bg: #eff6ff;
+  --ds-color-info: #475569;
+  --ds-color-info-bg: #f8fafc;
 
   /* ============================================
      SIDEBAR NAVIGATION
@@ -138,7 +138,7 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   /* Group Headers */
   --ds-sidebar-group-font-size: 11px;
   --ds-sidebar-group-font-weight: 600;
-  --ds-sidebar-group-color: #a3a3a3;
+  --ds-sidebar-group-color: #737373;
   --ds-sidebar-group-letter-spacing: 0.04em;
   --ds-sidebar-group-margin-top: 12px;
   --ds-sidebar-group-margin-bottom: 4px;
@@ -149,7 +149,7 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-sidebar-item-font-size: 14px;
   --ds-sidebar-item-font-weight: 400;
   --ds-sidebar-item-font-weight-active: 500;
-  --ds-sidebar-item-color: #525252;
+  --ds-sidebar-item-color: #3d3d3d;
   --ds-sidebar-item-color-active: #171717;
   --ds-sidebar-item-bg-active: rgba(0, 0, 0, 0.06);
   --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.03);
@@ -337,7 +337,7 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) .ant-table {
 html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) .ant-table-thead > tr > th {
   background: #fafafa;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  color: #525252;
+  color: #3d3d3d;
   font-weight: 600;
   font-size: 12px;
   text-transform: uppercase;
