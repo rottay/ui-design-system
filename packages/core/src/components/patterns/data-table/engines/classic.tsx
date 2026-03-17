@@ -419,7 +419,7 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
   return (
     <div
       className={`ds-pattern-data-table ds-engine-classic ${densityClass} ${className ?? ''}`}
-      style={style}
+      style={{ width: '100%', ...style }}
     >
       {header}
       {(toolbar || (bulkActions && selectedKeys.length > 0)) && (
@@ -473,7 +473,12 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
         bordered={bordered}
         size={tableSize}
         sticky={stickyHeader}
-        scroll={maxHeight ? { y: maxHeight, x: 'max-content' } : pinnedColumns ? { x: 'max-content' } : undefined}
+        scroll={(() => {
+          const hasPinnedColumns = pinnedColumns && (pinnedColumns.left.length > 0 || pinnedColumns.right.length > 0);
+          if (maxHeight) return { y: maxHeight, ...(hasPinnedColumns ? { x: 'max-content' as const } : {}) };
+          if (hasPinnedColumns) return { x: 'max-content' as const };
+          return undefined;
+        })()}
         pagination={paginationConfig}
         onChange={handleTableChange}
         locale={{
