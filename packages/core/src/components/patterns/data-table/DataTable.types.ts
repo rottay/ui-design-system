@@ -285,6 +285,106 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    * compatibility (e.g. `"var(--ds-color-surface-secondary)"`).
    */
   zebraColor?: string;
+
+  // ---------------------------------------------------------------------------
+  // Column Visibility
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Enables column visibility management. When true, the table respects
+   * `visibleColumns` to show/hide columns dynamically.
+   * @default false
+   */
+  columnVisibility?: boolean;
+
+  /**
+   * Array of column keys that should be visible. Only effective when
+   * `columnVisibility` is true. Columns not in this array are hidden.
+   * When omitted, all columns are visible.
+   */
+  visibleColumns?: string[];
+
+  /**
+   * Called when the visible columns set changes (e.g., from an external
+   * column settings panel).
+   */
+  onVisibleColumnsChange?: (keys: string[]) => void;
+
+  /**
+   * Column keys that cannot be hidden by the user. These columns are
+   * always visible regardless of `visibleColumns`.
+   */
+  lockedColumns?: string[];
+
+  // ---------------------------------------------------------------------------
+  // Column Resizing
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Enables column resizing via drag handles on column borders.
+   * @default false
+   */
+  resizable?: boolean;
+
+  /**
+   * Controlled column widths keyed by column key. Takes precedence over
+   * the column definition's `width` property.
+   */
+  columnWidths?: Record<string, number>;
+
+  /**
+   * Called when a column is resized by dragging.
+   */
+  onColumnResize?: (key: string, width: number) => void;
+
+  // ---------------------------------------------------------------------------
+  // Column Reordering
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Enables column reordering via drag & drop on column headers.
+   * @default false
+   */
+  reorderable?: boolean;
+
+  /**
+   * Controlled column order as an array of column keys. Columns are
+   * rendered in this order. Missing keys are appended at the end.
+   */
+  columnOrder?: string[];
+
+  /**
+   * Called when columns are reordered via drag & drop.
+   */
+  onColumnReorder?: (order: string[]) => void;
+
+  // ---------------------------------------------------------------------------
+  // Column Pinning
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Controlled pinned columns configuration. Overrides the `pin` property
+   * on individual column definitions.
+   */
+  pinnedColumns?: { left: string[]; right: string[] };
+
+  /**
+   * Called when a column's pin state changes.
+   */
+  onPinChange?: (pinned: { left: string[]; right: string[] }) => void;
+
+  // ---------------------------------------------------------------------------
+  // Density
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Row density mode controlling vertical padding and font size.
+   * - `compact`: Minimal padding, smaller text
+   * - `comfortable`: Default balanced padding (default)
+   * - `spacious`: Extra padding, larger touch targets
+   * @default 'comfortable'
+   */
+  density?: 'compact' | 'comfortable' | 'spacious';
 }
 
 /**

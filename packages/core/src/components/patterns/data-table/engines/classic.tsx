@@ -2,35 +2,31 @@
 
 /**
  * @fileoverview Classic (Titan) engine for the DataTable pattern, built on top
- * of Ant Design's `<Table>` component. It maps the design-system-agnostic
+ * of Ant Design's `<Table>` component. Maps the design-system-agnostic
  * `DataTablePatternProps` into Ant Design's column/row/selection/pagination
  * contracts, handling controlled-vs-uncontrolled selection, sort direction
- * mapping, and bulk-action toolbars entirely within this adapter layer.
- *
- * @example
- * <ClassicDataTable
- *   data={users}
- *   columns={[{ key: 'name', header: 'Name', accessorKey: 'name', sortable: true }]}
- *   rowKey="id"
- *   selectable
- *   pagination={{ current: 1, pageSize: 10, total: 100, onChange: handlePage }}
- *   onRowClick={(row) => router.push(`/users/${row.id}`)}
- * />
+ * mapping, column visibility/resize/reorder/pin, density modes, and
+ * bulk-action toolbars entirely within this adapter layer.
  */
 
-import React, { useMemo, useState } from 'react';
-import { Table, Checkbox, Space, Button, Empty, Dropdown } from 'antd';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
+import { Table, Space, Button, Empty } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 
+/** Density → Ant Table size mapping */
+const DENSITY_SIZE_MAP = {
+  compact: 'small' as const,
+  comfortable: 'middle' as const,
+  spacious: 'large' as const,
+};
+
 /**
  * Ant Design-backed data table that adapts `DataTablePatternProps` into
  * `antd/Table` configuration. Supports selection, sorting, expandable rows,
- * bulk actions, pagination, and sticky headers out of the box.
- *
- * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
- * @returns A fully-featured data table rendered with Ant Design components.
+ * bulk actions, pagination, sticky headers, column visibility/resize/reorder/pin,
+ * and density modes out of the box.
  */
 export default function ClassicDataTable<T extends Record<string, unknown>>(
   props: DataTablePatternProps<T>
@@ -62,19 +58,38 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     hoverable = true,
     className,
     style,
+    // Column visibility
+    columnVisibility,
+    visibleColumns,
+    lockedColumns,
+    // Column resizing
+    resizable,
+    columnWidths,
+    onColumnResize,
+    // Column reordering
+    reorderable,
+    columnOrder,
+    onColumnReorder,
+    // Column pinning
+    pinnedColumns,
+    // Density
+    density = 'comfortable',
   } = props;
 
-  // Internal selection state acts as fallback when the consumer does not provide
-  // controlled selection -- this lets the table work standalone or inside a list surface.
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
-  /**
-   * Ant Design deprecated the `(record, index)` rowKey signature. We precompute
-   * stable keys once per data array so the table can consume a single-argument
-   * lookup and still preserve index-based fallback behavior when callers do not
-   * provide an explicit row key.
-   */
+  // --- Column resize state ---
+  const resizeRef = useRef<{
+    key: string;
+    startX: number;
+    startWidth: number;
+  } | null>(null);
+
+  // --- Column reorder state ---
+  const [dragSourceKey, setDragSourceKey] = useState<string | null>(null);
+  const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+
   const rowKeyLookup = useMemo(() => {
     const lookup = new Map<T, string>();
     data.forEach((record, index) => {
@@ -83,34 +98,257 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     return lookup;
   }, [data, rowKey]);
 
-  // Transform DS-agnostic column definitions into Ant Design's ColumnsType.
-  // Filtering out hidden columns here avoids layout shifts when visibility toggles.
-  const antColumns: ColumnsType<T> = useMemo(() => {
-    const cols: ColumnsType<T> = columns
-      .filter((col) => col.visible !== false)
-      .map((col) => ({
-        key: col.key,
-        title: col.header,
-        dataIndex: col.accessorKey ?? col.key,
-        width: col.width,
-        align: col.align,
-        fixed: col.pin === 'left' ? ('left' as const) : col.pin === 'right' ? ('right' as const) : undefined,
-        sorter: col.sortable ? true : undefined,
-        sortOrder: sorting?.key === col.key
-          ? sorting.direction === 'asc' ? 'ascend' : 'descend'
-          : undefined,
-        render: col.render
-          ? (_: unknown, record: T, index: number) => col.render!(resolveAccessor(col, record), record, index)
-          : undefined,
-      }));
+  // --- Process columns: visibility -> order -> pin -> widths ---
+  const processedColumns = useMemo(() => {
+    let cols = [...columns];
 
-    // Actions column is pinned right and has no header label so it stays
-    // visually subordinate to data columns in the table header.
+    // 1. Column visibility filtering
+    if (columnVisibility && visibleColumns) {
+      const lockedSet = new Set(lockedColumns ?? []);
+      const visibleSet = new Set(visibleColumns);
+      cols = cols.filter(
+        (col) => lockedSet.has(col.key) || visibleSet.has(col.key)
+      );
+    }
+
+    // 2. Column reordering
+    if (reorderable && columnOrder && columnOrder.length > 0) {
+      const orderMap = new Map(columnOrder.map((key, i) => [key, i]));
+      cols.sort((a, b) => {
+        const ai = orderMap.get(a.key) ?? Infinity;
+        const bi = orderMap.get(b.key) ?? Infinity;
+        return ai - bi;
+      });
+    }
+
+    return cols;
+  }, [columns, columnVisibility, visibleColumns, lockedColumns, reorderable, columnOrder]);
+
+  // --- Resize handlers ---
+  const handleResizeStart = useCallback(
+    (e: React.MouseEvent, key: string, currentWidth: number) => {
+      e.preventDefault();
+      e.stopPropagation();
+      resizeRef.current = { key, startX: e.clientX, startWidth: currentWidth };
+
+      const handleMouseMove = (moveEvent: MouseEvent) => {
+        if (!resizeRef.current) return;
+        const diff = moveEvent.clientX - resizeRef.current.startX;
+        const newWidth = Math.max(50, resizeRef.current.startWidth + diff);
+        onColumnResize?.(resizeRef.current.key, newWidth);
+      };
+
+      const handleMouseUp = () => {
+        resizeRef.current = null;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      };
+
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    },
+    [onColumnResize]
+  );
+
+  // --- Column drag handlers ---
+  const handleDragStart = useCallback((e: React.DragEvent, key: string) => {
+    setDragSourceKey(key);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', key);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, key: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverKey(key);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    setDragSourceKey(null);
+    setDragOverKey(null);
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent, targetKey: string) => {
+      e.preventDefault();
+      const sourceKey = e.dataTransfer.getData('text/plain');
+      if (!sourceKey || sourceKey === targetKey) {
+        setDragSourceKey(null);
+        setDragOverKey(null);
+        return;
+      }
+
+      const currentOrder = columnOrder ?? processedColumns.map((c) => c.key);
+      const newOrder = [...currentOrder];
+      const sourceIdx = newOrder.indexOf(sourceKey);
+      const targetIdx = newOrder.indexOf(targetKey);
+      if (sourceIdx === -1 || targetIdx === -1) return;
+
+      newOrder.splice(sourceIdx, 1);
+      newOrder.splice(targetIdx, 0, sourceKey);
+      onColumnReorder?.(newOrder);
+      setDragSourceKey(null);
+      setDragOverKey(null);
+    },
+    [columnOrder, processedColumns, onColumnReorder]
+  );
+
+  // --- Build Ant columns ---
+  const antColumns: ColumnsType<T> = useMemo(() => {
+    const cols: ColumnsType<T> = processedColumns
+      .filter((col) => col.visible !== false)
+      .map((col) => {
+        // Resolve pin: controlled pinnedColumns > column def
+        let fixed: 'left' | 'right' | undefined;
+        if (pinnedColumns) {
+          if (pinnedColumns.left.includes(col.key)) fixed = 'left';
+          else if (pinnedColumns.right.includes(col.key)) fixed = 'right';
+        } else {
+          fixed = col.pin === 'left' ? 'left' : col.pin === 'right' ? 'right' : undefined;
+        }
+
+        // Resolve width: controlled columnWidths > column def
+        const width = columnWidths?.[col.key] ?? col.width;
+
+        const antCol: any = {
+          key: col.key,
+          title: col.header,
+          dataIndex: col.accessorKey ?? col.key,
+          width,
+          align: col.align,
+          fixed,
+          sorter: col.sortable ? true : undefined,
+          sortOrder:
+            sorting?.key === col.key
+              ? sorting.direction === 'asc'
+                ? 'ascend'
+                : 'descend'
+              : undefined,
+          render: col.render
+            ? (_: unknown, record: T, index: number) =>
+                col.render!(resolveAccessor(col, record), record, index)
+            : undefined,
+          ellipsis: true,
+        };
+
+        // Wrap title for reorder + resize
+        if (reorderable || resizable) {
+          const headerContent = (
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                position: 'relative',
+                userSelect: 'none',
+              }}
+              draggable={reorderable}
+              onDragStart={reorderable ? (e) => handleDragStart(e, col.key) : undefined}
+              onDragOver={reorderable ? (e) => handleDragOver(e, col.key) : undefined}
+              onDrop={reorderable ? (e) => handleDrop(e, col.key) : undefined}
+              onDragEnd={reorderable ? handleDragEnd : undefined}
+            >
+              {reorderable && (
+                <span
+                  style={{
+                    cursor: 'grab',
+                    opacity: 0.4,
+                    fontSize: 10,
+                    lineHeight: 1,
+                    flexShrink: 0,
+                  }}
+                  aria-hidden="true"
+                >
+                  ⠿
+                </span>
+              )}
+              <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {col.header}
+              </span>
+              {dragOverKey === col.key && dragSourceKey !== col.key && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    left: -2,
+                    top: 0,
+                    bottom: 0,
+                    width: 2,
+                    background: 'var(--ds-color-primary, #1677ff)',
+                    borderRadius: 1,
+                  }}
+                />
+              )}
+            </span>
+          );
+          antCol.title = headerContent;
+        }
+
+        // Resize handle
+        if (resizable && onColumnResize) {
+          antCol.onHeaderCell = () => ({
+            style: { position: 'relative' as const },
+          });
+          const originalTitle = antCol.title;
+          antCol.title = (
+            <span style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+              <span style={{ flex: 1, overflow: 'hidden' }}>{originalTitle}</span>
+              <span
+                role="separator"
+                aria-label={`Resize column ${typeof col.header === 'string' ? col.header : col.key}`}
+                tabIndex={0}
+                style={{
+                  position: 'absolute',
+                  right: -4,
+                  top: 0,
+                  bottom: 0,
+                  width: 8,
+                  cursor: 'col-resize',
+                  zIndex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onMouseDown={(e) =>
+                  handleResizeStart(e, col.key, (typeof width === 'number' ? width : 150))
+                }
+                onKeyDown={(e) => {
+                  if (!onColumnResize) return;
+                  const currentW = typeof width === 'number' ? width : 150;
+                  if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    onColumnResize(col.key, Math.min(currentW + 10, col.maxWidth ?? 1000));
+                  } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    onColumnResize(col.key, Math.max(currentW - 10, col.minWidth ?? 50));
+                  }
+                }}
+              >
+                <span
+                  style={{
+                    width: 1,
+                    height: '60%',
+                    background: 'rgba(0,0,0,0.12)',
+                    borderRadius: 1,
+                    transition: 'background 150ms ease',
+                  }}
+                />
+              </span>
+            </span>
+          );
+        }
+
+        return antCol;
+      });
+
     if (actions) {
       cols.push({
         key: '__actions',
         title: '',
-        width: 'auto',
+        width: 120,
         align: 'right',
         fixed: 'right',
         render: (_: unknown, record: T, index: number) => actions(record, index),
@@ -118,18 +356,30 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     }
 
     return cols;
-  }, [columns, actions, sorting]);
+  }, [
+    processedColumns,
+    actions,
+    sorting,
+    pinnedColumns,
+    columnWidths,
+    resizable,
+    onColumnResize,
+    reorderable,
+    dragOverKey,
+    dragSourceKey,
+    handleResizeStart,
+    handleDragStart,
+    handleDragOver,
+    handleDrop,
+    handleDragEnd,
+  ]);
 
-  // Ant Design passes React.Key[] (string | number); we normalise to string[]
-  // so consumers always receive a consistent type regardless of rowKey format.
   const handleSelectionChange = (keys: React.Key[], rows: T[]) => {
     const strKeys = keys.map(String);
     if (!controlledSelectedKeys) setInternalSelectedKeys(strKeys);
     onSelectionChange?.(strKeys, rows);
   };
 
-  // Ant Table fires onChange for pagination, filters, AND sorting in one callback.
-  // We only care about sorting here; pagination is handled separately.
   const handleTableChange = (_pagination: unknown, _filters: unknown, sorter: any) => {
     if (sorter?.columnKey && onSortChange) {
       onSortChange({
@@ -143,39 +393,56 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
     return rowKeyLookup.get(record) ?? '';
   };
 
-  // Three-way config: `false` disables pagination entirely, an object maps to
-  // Ant's pagination props, and `undefined` falls back to sensible defaults.
-  const paginationConfig = pagination === false
-    ? false
-    : pagination
-      ? {
-          current: pagination.current,
-          pageSize: pagination.pageSize,
-          total: pagination.total,
-          pageSizeOptions: pagination.pageSizeOptions?.map(String),
-          showSizeChanger: true,
-          onChange: pagination.onChange,
-        }
-      : { pageSize: 20, showSizeChanger: true };
+  const paginationConfig =
+    pagination === false
+      ? false
+      : pagination
+        ? {
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
+            pageSizeOptions: pagination.pageSizeOptions?.map(String),
+            showSizeChanger: true,
+            onChange: pagination.onChange,
+          }
+        : { pageSize: 20, showSizeChanger: true };
 
-  // --- Render ---
+  // Resolve table size from density (density prop takes precedence over compact boolean)
+  const tableSize = density !== 'comfortable'
+    ? DENSITY_SIZE_MAP[density]
+    : compact
+      ? 'small'
+      : 'middle';
+
+  const densityClass = `ds-table-density-${density}`;
 
   return (
-    <div className={`ds-pattern-data-table ds-engine-classic ${className ?? ''}`} style={style}>
+    <div
+      className={`ds-pattern-data-table ds-engine-classic ${densityClass} ${className ?? ''}`}
+      style={style}
+    >
       {header}
-      {/* Toolbar row only mounts when there is toolbar content or active bulk
-          actions -- avoids an empty spacer div when neither is needed. */}
       {(toolbar || (bulkActions && selectedKeys.length > 0)) && (
-        <div className="ds-pattern-data-table__toolbar" style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div
+          className="ds-pattern-data-table__toolbar"
+          style={{
+            marginBottom: 16,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <div>{toolbar}</div>
           {bulkActions && selectedKeys.length > 0 && (
             <Space>
-              <span style={{ color: 'var(--ds-color-neutral-500)', fontSize: 'var(--ds-font-size-sm)' }}>
+              <span
+                style={{
+                  color: 'var(--ds-color-neutral-500)',
+                  fontSize: 'var(--ds-font-size-sm)',
+                }}
+              >
                 {selectedKeys.length} selected
               </span>
-              {/* Each bulk action button resolves the selected rows at click
-                  time (not at render time) so stale closures are avoided when
-                  the data array changes between renders. */}
               {bulkActions.map((action) => (
                 <Button
                   key={action.key}
@@ -183,7 +450,9 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
                   type={action.variant === 'primary' ? 'primary' : 'default'}
                   disabled={action.disabled}
                   onClick={() => {
-                    const selectedRows = data.filter((row) => selectedKeys.includes(getRowKey(row)));
+                    const selectedRows = data.filter((row) =>
+                      selectedKeys.includes(getRowKey(row))
+                    );
                     action.onExecute(selectedRows);
                   }}
                   icon={action.icon}
@@ -196,39 +465,44 @@ export default function ClassicDataTable<T extends Record<string, unknown>>(
           )}
         </div>
       )}
-      {/* Ant Table is the single rendering primitive -- selection, expansion,
-          sorting, and pagination are all configured via props rather than
-          custom markup, keeping this engine thin. */}
       <Table<T>
         columns={antColumns}
         dataSource={data}
         rowKey={getRowKey}
         loading={loading}
         bordered={bordered}
-        size={compact ? 'small' : 'middle'}
+        size={tableSize}
         sticky={stickyHeader}
-        scroll={maxHeight ? { y: maxHeight } : undefined}
+        scroll={maxHeight ? { y: maxHeight, x: 'max-content' } : pinnedColumns ? { x: 'max-content' } : undefined}
         pagination={paginationConfig}
         onChange={handleTableChange}
         locale={{
           emptyText: emptyState ?? <Empty description="No data" />,
         }}
-        rowSelection={selectable ? {
-          type: 'checkbox',
-          selectedRowKeys: selectedKeys,
-          onChange: handleSelectionChange,
-        } : undefined}
-        expandable={expandedRow ? {
-          expandedRowRender: (record: T) => expandedRow(record),
-        } : undefined}
-        // onRow applies per-row styles for click cursor and zebra striping.
-        // Ant Design passes `undefined` for index on virtual rows, so we
-        // default to 0 to prevent NaN-based CSS glitches.
+        rowSelection={
+          selectable
+            ? {
+                type: 'checkbox',
+                selectedRowKeys: selectedKeys,
+                onChange: handleSelectionChange,
+              }
+            : undefined
+        }
+        expandable={
+          expandedRow
+            ? {
+                expandedRowRender: (record: T) => expandedRow(record),
+              }
+            : undefined
+        }
         onRow={(record, index) => ({
           onClick: onRowClick ? () => onRowClick(record, index ?? 0) : undefined,
           style: {
             cursor: onRowClick ? 'pointer' : undefined,
-            background: striped && ((index ?? 0) % 2 === 1) ? 'var(--ds-color-neutral-50)' : undefined,
+            background:
+              striped && (index ?? 0) % 2 === 1
+                ? 'var(--ds-color-neutral-50)'
+                : undefined,
           },
         })}
         className={hoverable ? 'ds-table-hoverable' : undefined}
