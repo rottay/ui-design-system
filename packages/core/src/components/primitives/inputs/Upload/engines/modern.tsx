@@ -196,36 +196,69 @@ const FileItem: React.FC<FileItemProps> = ({
 
   // -- picture-card: 104x104 grid tile with hover overlay for actions --
   if (listType === 'picture-card') {
+    const cardStyle: React.CSSProperties = {
+      position: 'relative',
+      width: 104,
+      height: 104,
+      borderRadius: 8,
+      overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'var(--ds-color-bg-secondary, #fafafa)',
+      border: `1px solid ${file.status === 'error' ? 'var(--ds-color-error, #ef4444)' : 'var(--ds-color-border, #e5e5e5)'}`,
+      transition: 'box-shadow 0.2s, transform 0.2s',
+      cursor: 'pointer',
+    };
+    const overlayStyle: React.CSSProperties = {
+      position: 'absolute',
+      inset: 0,
+      background: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    };
+    const overlayBtnStyle: React.CSSProperties = {
+      width: 32,
+      height: 32,
+      borderRadius: '50%',
+      border: 'none',
+      background: 'rgba(255,255,255,0.2)',
+      color: '#fff',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'background 0.15s',
+    };
     const originNode = (
       <div
-        className={`relative group border rounded-lg overflow-hidden flex items-center justify-center bg-base-200 transition-all duration-200 hover:shadow-lg hover:scale-105 ${
-          file.status === 'error' ? 'border-error' : 'border-base-300'
-        }`}
-        style={{ width: 104, height: 104 }}
+        style={cardStyle}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         role="listitem"
         aria-label={file.name}
       >
         {isImg && thumb ? (
-          <img src={thumb} alt={file.name} className="w-full h-full object-cover" />
+          <img src={thumb} alt={file.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
-          <span className="text-xs text-base-content/60 truncate px-1 text-center">{file.name}</span>
+          <span style={{ fontSize: 12, color: 'var(--ds-color-text-muted, #a3a3a3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '0 4px', textAlign: 'center' }}>{file.name}</span>
         )}
         {isUploading && (
-          <div className="absolute inset-x-0 bottom-0 p-1 bg-black/40">
+          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 4, background: 'rgba(0,0,0,0.4)' }}>
             <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
         {hovered && !isUploading && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center gap-2">
+          <div style={overlayStyle}>
             {isImg && (
-              <button type="button" className="btn btn-circle btn-xs btn-ghost text-white" onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+              <button type="button" style={overlayBtnStyle} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
               </button>
             )}
-            <button type="button" className="btn btn-circle btn-xs btn-ghost text-white" onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            <button type="button" style={overlayBtnStyle} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
             </button>
           </div>
         )}
@@ -421,7 +454,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           multiple={multiple}
           disabled={disabled}
           onChange={handleFileChange}
-          className="hidden"
+          style={{ display: 'none' }}
           id={inputId}
           aria-label={t('upload.upload_file')}
           {...directoryAttrs}
@@ -433,7 +466,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               className={`flex items-center justify-center border-2 border-dashed border-base-300 hover:border-primary hover:bg-primary/5 transition-all duration-300 ${
                 listType === 'picture-circle' ? 'rounded-full' : 'rounded-lg'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-              style={{ width: 104, height: 104 }}
+              style={{ minWidth: 104, minHeight: 104, padding: 16 }}
               role="button"
               tabIndex={disabled ? -1 : 0}
               aria-label={t('upload.add_file')}
@@ -449,11 +482,14 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
             </label>
           )
         ) : (
-          <label htmlFor={inputId} className={disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}>
+          <span
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) inputRef.current?.click(); }}
+            style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1 }}
+          >
             {children || (
               <button type="button" className="btn btn-outline" disabled={disabled}>{t('upload.button')}</button>
             )}
-          </label>
+          </span>
         )}
       </>
     );
@@ -619,7 +655,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
             multiple={multiple}
             disabled={disabled}
             onChange={(e) => processFiles(Array.from(e.target.files || []))}
-            className="hidden"
+            style={{ display: 'none' }}
             aria-label="Upload file"
             {...directoryAttrs}
           />

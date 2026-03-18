@@ -24,6 +24,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
+import { createPortal } from 'react-dom';
 import type { DatePickerMode, DatePickerProps, RangePickerProps } from '../DatePicker.types';
 import { useTranslation } from '../../../../../i18n';
 import {
@@ -122,15 +123,16 @@ function usePopoverPosition(
 
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
+      // Fixed positioning uses viewport-relative coordinates (no scrollY/scrollX)
       // 4px gap between trigger and dropdown for visual separation
-      let top = rect.bottom + window.scrollY + 4;
-      let left = rect.left + window.scrollX;
+      let top = rect.bottom + 4;
+      let left = rect.left;
 
       if (placement.includes('top')) {
-        top = rect.top + window.scrollY - 4;
+        top = rect.top - 4;
       }
       if (placement.includes('Right')) {
-        left = rect.right + window.scrollX;
+        left = rect.right;
       }
 
       setPos({ top, left });
@@ -160,18 +162,18 @@ interface TimePickerPanelProps {
   onMinutesChange: (m: number) => void;
 }
 
-// Time selection uses native <select> elements for reliable mobile behavior
-// and consistent scroll-based picking. DaisyUI select-xs keeps it compact.
+// Time selection uses native <select> elements for reliable mobile behavior.
+// All styles are inline because this component renders inside a portal.
 const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
   hours,
   minutes,
   onHoursChange,
   onMinutesChange,
 }) => (
-  <div className="flex items-center gap-2 px-2 py-2 border-t border-base-300">
+  <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderTop: '1px solid var(--ds-color-border)' }}>
     <ClockIcon />
     <select
-      className="select select-bordered select-xs w-16"
+      style={{ padding: '2px 8px', border: '1px solid var(--ds-color-border)', borderRadius: 6, fontSize: 13, height: 28, background: 'var(--ds-color-bg-elevated)', color: 'var(--ds-color-text-primary)' }}
       value={hours}
       onChange={(e) => onHoursChange(Number(e.target.value))}
       aria-label="Hour"
@@ -180,9 +182,9 @@ const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
         <option key={i} value={i}>{pad2(i)}</option>
       ))}
     </select>
-    <span className="text-base-content font-bold">:</span>
+    <span style={{ fontWeight: 700, color: 'var(--ds-color-text-primary)' }}>:</span>
     <select
-      className="select select-bordered select-xs w-16"
+      style={{ padding: '2px 8px', border: '1px solid var(--ds-color-border)', borderRadius: 6, fontSize: 13, height: 28, background: 'var(--ds-color-bg-elevated)', color: 'var(--ds-color-text-primary)' }}
       value={minutes}
       onChange={(e) => onMinutesChange(Number(e.target.value))}
       aria-label="Minute"
@@ -312,22 +314,104 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     [focusedDate, selectedDate, today, viewMonth, viewYear, onFocusedDateChange, onViewChange, onDateSelect, disabledDate],
   );
 
-  // Month picker mode -- renders a 3x4 grid of abbreviated month names.
-  // Reuses the same panel container/header for visual consistency with the
-  // date picker. Only year-level nav buttons are shown (month nav is N/A).
+  // ---------------------------------------------------------------------------
+  // Shared inline styles for portal-rendered panels.
+  // All styles must be inline because portal content renders outside the app's
+  // Tailwind scope, so utility classes get purged. DaisyUI oklch vars are set
+  // on :root and cascade to portals.
+  // ---------------------------------------------------------------------------
+  const panelStyle: React.CSSProperties = {
+    padding: 12,
+    background: 'var(--ds-color-bg-elevated)',
+    borderRadius: 12,
+    boxShadow: '0 10px 25px -5px rgba(0,0,0,.15), 0 4px 10px -5px rgba(0,0,0,.1)',
+    border: '1px solid var(--ds-color-border)',
+    width: 288,
+    fontFamily: 'inherit',
+    animation: 'rottay-select-slide-in 0.15s ease-out',
+  };
+
+  const headerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  };
+
+  const navBtnStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    border: 'none',
+    background: 'transparent',
+    cursor: 'pointer',
+    color: 'var(--ds-color-text-primary)',
+    fontSize: 14,
+    transition: 'background 0.15s',
+  };
+
+  const gridCellStyle = (
+    isSelected: boolean,
+    isToday: boolean,
+    isDisabled: boolean,
+    isCurrentMonth: boolean,
+    inRange: boolean,
+    isEndpoint: boolean | null | undefined,
+  ): React.CSSProperties => ({
+    width: 36,
+    height: 36,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    fontSize: 13,
+    border: isToday && !isSelected && !isEndpoint ? '1px solid var(--ds-color-primary)' : 'none',
+    fontWeight: isToday || isSelected ? 600 : 400,
+    cursor: isDisabled ? 'not-allowed' : 'pointer',
+    opacity: isDisabled ? 0.2 : isCurrentMonth ? 1 : 0.3,
+    background: isSelected || isEndpoint
+      ? 'var(--ds-color-primary)'
+      : inRange
+        ? 'var(--ds-color-bg-hover)'
+        : 'transparent',
+    color: isSelected || isEndpoint
+      ? 'var(--ds-color-white)'
+      : 'var(--ds-color-text-primary)',
+    transition: 'all 0.15s',
+    outline: 'none',
+  });
+
+  const gridBtnStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    border: 'none',
+    cursor: 'pointer',
+    padding: '6px 0',
+    fontSize: 13,
+    transition: 'background 0.15s',
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+  };
+
+  // Month picker mode
   if (picker === 'month') {
     return (
-      <div className="p-3 bg-base-100 rounded-lg shadow-xl border border-base-300 w-64" style={{ animation: 'rottay-select-slide-in 0.15s ease-out' }}>
-        <div className="flex items-center justify-between mb-3">
-          <button type="button" className="btn btn-xs btn-ghost" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+      <div style={{ ...panelStyle, width: 256 }}>
+        <div style={headerStyle}>
+          <button type="button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             <ChevronLeft />
           </button>
-          <span className="font-semibold text-sm text-base-content">{viewYear}</span>
-          <button type="button" className="btn btn-xs btn-ghost" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ds-color-text-primary)' }}>{viewYear}</span>
+          <button type="button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             <ChevronRight />
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-1">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
           {MONTHS_SHORT.map((m, i) => {
             const isSelected = selectedDate
               ? selectedDate.getMonth() === i && selectedDate.getFullYear() === viewYear
@@ -337,11 +421,15 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               <button
                 key={m}
                 type="button"
-                className={[
-                  'btn btn-sm',
-                  isSelected ? 'btn-primary' : 'btn-ghost',
-                  isCurrent && !isSelected ? 'border border-primary' : '',
-                ].join(' ')}
+                style={{
+                  ...gridBtnStyle,
+                  padding: '8px 0',
+                  background: isSelected ? 'var(--ds-color-primary)' : 'transparent',
+                  color: isSelected ? 'var(--ds-color-white)' : 'var(--ds-color-text-primary)',
+                  border: isCurrent && !isSelected ? '1px solid var(--ds-color-primary)' : 'none',
+                  fontWeight: isSelected || isCurrent ? 600 : 400,
+                  borderRadius: 8,
+                }}
                 onClick={() => {
                   const date = new Date(viewYear, i, 1);
                   onDateSelect(date);
@@ -354,7 +442,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
           })}
         </div>
         {renderExtraFooter && (
-          <div className="border-t border-base-300 mt-2 pt-2 text-xs">
+          <div style={{ borderTop: '1px solid var(--ds-color-border)', marginTop: 8, paddingTop: 8, fontSize: 12 }}>
             {renderExtraFooter()}
           </div>
         )}
@@ -362,27 +450,24 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     );
   }
 
-  // Year picker mode -- shows a 12-cell grid for a decade range.
-  // Two boundary years (first/last) are outside the decade for context.
+  // Year picker mode
   if (picker === 'year') {
     const startYear = Math.floor(viewYear / 10) * 10;
     return (
-      <div className="p-3 bg-base-100 rounded-lg shadow-xl border border-base-300 w-64" style={{ animation: 'rottay-select-slide-in 0.15s ease-out' }}>
-        <div className="flex items-center justify-between mb-3">
-          <button type="button" className="btn btn-xs btn-ghost" onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
+      <div style={{ ...panelStyle, width: 256 }}>
+        <div style={headerStyle}>
+          <button type="button" style={navBtnStyle} onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
             <ChevronLeft />
           </button>
-          <span className="font-semibold text-sm text-base-content">
+          <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ds-color-text-primary)' }}>
             {startYear} - {startYear + 9}
           </span>
-          <button type="button" className="btn btn-xs btn-ghost" onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
+          <button type="button" style={navBtnStyle} onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
             <ChevronRight />
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-1">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
           {Array.from({ length: 12 }, (_, i) => {
-            // startYear-1 and startYear+10 are shown dimmed as context
-            // for the previous/next decade (isOutOfRange flag below).
             const yr = startYear - 1 + i;
             const isSelected = selectedDate ? selectedDate.getFullYear() === yr : false;
             const isCurrent = today.getFullYear() === yr;
@@ -391,12 +476,16 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               <button
                 key={yr}
                 type="button"
-                className={[
-                  'btn btn-sm',
-                  isSelected ? 'btn-primary' : 'btn-ghost',
-                  isCurrent && !isSelected ? 'border border-primary' : '',
-                  isOutOfRange ? 'opacity-40' : '',
-                ].join(' ')}
+                style={{
+                  ...gridBtnStyle,
+                  padding: '8px 0',
+                  opacity: isOutOfRange ? 0.4 : 1,
+                  background: isSelected ? 'var(--ds-color-primary)' : 'transparent',
+                  color: isSelected ? 'var(--ds-color-white)' : 'var(--ds-color-text-primary)',
+                  border: isCurrent && !isSelected ? '1px solid var(--ds-color-primary)' : 'none',
+                  fontWeight: isSelected || isCurrent ? 600 : 400,
+                  borderRadius: 8,
+                }}
                 onClick={() => {
                   const date = new Date(yr, 0, 1);
                   onDateSelect(date);
@@ -409,7 +498,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
           })}
         </div>
         {renderExtraFooter && (
-          <div className="border-t border-base-300 mt-2 pt-2 text-xs">
+          <div style={{ borderTop: '1px solid var(--ds-color-border)', marginTop: 8, paddingTop: 8, fontSize: 12 }}>
             {renderExtraFooter()}
           </div>
         )}
@@ -418,46 +507,39 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   }
 
   // Default: full day-level calendar grid (42 cells = 6 rows x 7 columns).
-  // Overflow cells from the previous/next month are included and rendered
-  // with reduced opacity so users can see month boundaries at a glance.
   const grid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
 
   return (
-    <div
-      className="p-3 bg-base-100 rounded-lg shadow-xl border border-base-300 w-72"
-      role="dialog"
-      aria-label={t('datepicker.date_picker')}
-      style={{ animation: 'rottay-select-slide-in 0.15s ease-out' }}
-    >
+    <div style={panelStyle} role="dialog" aria-label={t('datepicker.date_picker')}>
       {/* Header navigation */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-0.5">
-          <button type="button" className="btn btn-xs btn-ghost hover:btn-primary transition-all duration-200" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+      <div style={headerStyle}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <button type="button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             «
           </button>
-          <button type="button" className="btn btn-xs btn-ghost hover:btn-primary transition-all duration-200" onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
+          <button type="button" style={navBtnStyle} onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
             <ChevronLeft />
           </button>
         </div>
-        <span className="font-semibold text-sm text-base-content">
+        <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ds-color-text-primary)' }}>
           {MONTHS_FULL[viewMonth]} {viewYear}
         </span>
-        <div className="flex items-center gap-0.5">
-          <button type="button" className="btn btn-xs btn-ghost hover:btn-primary transition-all duration-200" onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <button type="button" style={navBtnStyle} onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
             <ChevronRight />
           </button>
-          <button type="button" className="btn btn-xs btn-ghost hover:btn-primary transition-all duration-200" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <button type="button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             »
           </button>
         </div>
       </div>
 
       {/* Day-of-week headers */}
-      <div className="grid grid-cols-7 gap-0.5 mb-1" role="row">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, marginBottom: 4 }} role="row">
         {DAYS_SHORT.map((d) => (
           <div
             key={d}
-            className="text-center text-xs font-medium text-base-content/50 py-1"
+            style={{ textAlign: 'center', fontSize: 12, fontWeight: 500, color: 'var(--ds-color-text-muted)', padding: '4px 0' }}
             role="columnheader"
             aria-label={d}
           >
@@ -469,7 +551,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
       {/* Calendar grid */}
       <div
         ref={gridRef}
-        className="grid grid-cols-7 gap-0.5"
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}
         role="grid"
         tabIndex={0}
         onKeyDown={handleGridKeyDown}
@@ -483,16 +565,6 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
             (rangeStart && isSameDay(cell.date, rangeStart)) ||
             (rangeEnd && isSameDay(cell.date, rangeEnd));
 
-          const defaultNode = (
-            <span className={cell.isCurrentMonth ? '' : 'opacity-30'}>
-              {cell.day}
-            </span>
-          );
-
-          const content = cellRender
-            ? cellRender(cell.date, { originNode: defaultNode, today, range: undefined })
-            : defaultNode;
-
           return (
             <button
               key={idx}
@@ -502,32 +574,24 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               aria-disabled={cell.isDisabled}
               aria-label={formatDateStr(cell.date)}
               tabIndex={isFocused ? 0 : -1}
-              // Layered class logic: disabled > selected/endpoint > range fill > today > focus.
-              // scale-105 on selected dates provides a subtle "pop" without layout shift.
-              // ring-offset-1 ensures the focus ring does not overlap adjacent cells.
-              className={[
-                'w-9 h-9 flex items-center justify-center rounded-md text-xs transition-all duration-150',
-                cell.isDisabled
-                  ? 'opacity-20 cursor-not-allowed'
-                  : 'cursor-pointer hover:bg-primary/10 hover:scale-110',
-                isSelected || isEndpoint
-                  ? 'bg-primary text-primary-content hover:bg-primary/80 ring-2 ring-primary ring-offset-1 scale-105'
-                  : '',
-                inRange && !isEndpoint
-                  ? 'bg-primary/10 transition-colors duration-200'
-                  : '',
-                cell.isToday && !isSelected && !isEndpoint
-                  ? 'border border-primary font-semibold'
-                  : '',
-                isFocused
-                  ? 'ring-2 ring-primary ring-offset-1'
-                  : '',
-              ].filter(Boolean).join(' ')}
+              style={gridCellStyle(isSelected, cell.isToday, cell.isDisabled, cell.isCurrentMonth, inRange, isEndpoint)}
+              onMouseEnter={(e) => {
+                if (!cell.isDisabled && !isSelected && !isEndpoint) {
+                  (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-hover)';
+                  (e.currentTarget as HTMLElement).style.transform = 'scale(1.1)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!cell.isDisabled && !isSelected && !isEndpoint) {
+                  (e.currentTarget as HTMLElement).style.background = inRange ? 'var(--ds-color-bg-hover)' : 'transparent';
+                  (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
+                }
+              }}
               onClick={() => {
                 if (!cell.isDisabled) onDateSelect(cell.date);
               }}
             >
-              {content}
+              {cell.day}
             </button>
           );
         })}
@@ -544,18 +608,28 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between mt-2 pt-2 border-t border-base-300">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--ds-color-border)' }}>
         {showToday && (
           <button
             type="button"
-            className="btn btn-xs btn-primary transition-all duration-200 hover:shadow-[0_0_12px_rgba(var(--p)/0.4)]"
+            style={{
+              padding: '4px 12px',
+              fontSize: 12,
+              fontWeight: 500,
+              borderRadius: 6,
+              border: 'none',
+              background: 'var(--ds-color-primary)',
+              color: 'var(--ds-color-white)',
+              cursor: 'pointer',
+              transition: 'opacity 0.15s',
+            }}
             onClick={onTodayClick}
           >
             {showTime && showNow ? t('datepicker.now') : t('datepicker.today')}
           </button>
         )}
         {renderExtraFooter && (
-          <div className="text-xs">{renderExtraFooter()}</div>
+          <div style={{ fontSize: 12 }}>{renderExtraFooter()}</div>
         )}
       </div>
     </div>
@@ -786,7 +860,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
         <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
         <div
           ref={triggerRef}
-          className={`relative inline-flex items-center ${className}`}
+          className={`relative w-full ${className}`}
           style={style}
         >
           <input
@@ -795,7 +869,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             // readOnly prevents keyboard input -- dates must be selected via the
             // calendar panel. pr-16 reserves space for the clear + calendar icons.
             readOnly
-            className={`input input-bordered ${sizeClass} ${statusClass} ${textClass} cursor-pointer pr-16`}
+            className={`input input-bordered w-full ${sizeClass} ${statusClass} ${textClass} cursor-pointer`}
+            style={{ paddingRight: 48 }}
             value={displayText}
             disabled={disabled}
             placeholder={displayPlaceholder}
@@ -819,7 +894,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
           {allowClear && displayText && !disabled && (
             <button
               type="button"
-              className="absolute right-8 btn btn-xs btn-ghost btn-circle opacity-50 hover:opacity-100"
+              style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 4, borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={handleClear}
               tabIndex={-1}
               aria-label={t('datepicker.clear_date')}
@@ -828,21 +903,22 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             </button>
           )}
           <span
-            className="absolute right-2 text-base-content/50 pointer-events-none"
+            style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ds-color-text-muted)', display: 'flex' }}
             aria-hidden="true"
           >
             <CalendarIcon />
           </span>
         </div>
 
-        {/* Calendar popover -- positioned absolutely at document level.
-            typeof document check guards against SSR. zIndex 1050 matches
-            the DS overlay stacking layer (above modals at 1040). */}
-        {isOpen && typeof document !== 'undefined' && (
+        {/* Calendar popover -- portalled to document.body to avoid
+            ancestor overflow:hidden clipping. Uses fixed positioning
+            based on trigger bounding rect. zIndex 1050 matches the DS
+            overlay stacking layer (above modals at 1040). */}
+        {isOpen && typeof document !== 'undefined' && createPortal(
           <div
             ref={panelRef}
             style={{
-              position: 'absolute',
+              position: 'fixed',
               top: popPos.top,
               left: popPos.left,
               zIndex: 1050,
@@ -873,7 +949,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
               onFocusedDateChange={setFocusedDate}
               onPanelChange={onPanelChange}
             />
-          </div>
+          </div>,
+          document.body,
         )}
       </>
     );
@@ -1064,7 +1141,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
           }}
-          className={`inline-flex items-center gap-2 ${className}`}
+          className={`flex items-center gap-2 w-full ${className}`}
           style={style}
           id={id}
         >
@@ -1072,7 +1149,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             type="text"
             readOnly
             className={[
-              `input input-bordered ${sizeClass} ${textClass} cursor-pointer`,
+              `input input-bordered w-full ${sizeClass} ${textClass} cursor-pointer`,
               statusClass,
               activeInput === 'start' && isOpen ? 'ring-2 ring-primary' : '',
             ].join(' ')}
@@ -1089,12 +1166,12 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             aria-expanded={isOpen}
             aria-label={displayPlaceholder[0]}
           />
-          <span className="text-base-content/60">{separator}</span>
+          <span className="text-base-content/60 shrink-0">{separator}</span>
           <input
             type="text"
             readOnly
             className={[
-              `input input-bordered ${sizeClass} ${textClass} cursor-pointer`,
+              `input input-bordered w-full ${sizeClass} ${textClass} cursor-pointer`,
               statusClass,
               activeInput === 'end' && isOpen ? 'ring-2 ring-primary' : '',
             ].join(' ')}
@@ -1124,11 +1201,11 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           )}
         </div>
 
-        {isOpen && typeof document !== 'undefined' && (
+        {isOpen && typeof document !== 'undefined' && createPortal(
           <div
             ref={panelRef}
             style={{
-              position: 'absolute',
+              position: 'fixed',
               top: popPos.top,
               left: popPos.left,
               zIndex: 1050,
@@ -1161,7 +1238,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
               onFocusedDateChange={setFocusedDate}
               onPanelChange={onPanelChange}
             />
-          </div>
+          </div>,
+          document.body,
         )}
       </>
     );
