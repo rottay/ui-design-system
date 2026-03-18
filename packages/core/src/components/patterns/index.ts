@@ -171,9 +171,45 @@ export {
   DEFAULT_OPERATORS_BY_TYPE,
 } from './filter-builder';
 
+// StatsHeader
+export { StatsHeader } from './stats-header';
+export type { StatItem, StatsHeaderProps } from './stats-header';
+
+// ListToolbar
+export { PatternListToolbar, ListToolbar } from './list-toolbar';
+export type { ListToolbarProps, FilterPillConfig, DensityKey, ViewMode } from './list-toolbar';
+
+// ColumnSettings
+export { PatternColumnSettings, ColumnSettingsDropdown } from './column-settings';
+export type { ColumnSettingsProps, ColumnSettingItem } from './column-settings';
+
 // TenantPreview
 export { PatternTenantPreview } from './tenant-preview';
 export type { TenantPreviewProps, PreviewComponent } from './tenant-preview';
+
+// WorkbenchHeader
+export { PatternWorkbenchHeader } from './workbench-header';
+export type { WorkbenchHeaderProps, WorkbenchQuickAction, WorkbenchSavedView } from './workbench-header';
+
+// CockpitHeader
+export { PatternCockpitHeader } from './cockpit-header';
+export type { CockpitHeaderProps, CockpitBreadcrumb, CockpitStatus } from './cockpit-header';
+
+// OperationalLedger
+export { PatternOperationalLedger } from './operational-ledger';
+export type { OperationalLedgerProps, LedgerEntry, LedgerFilter } from './operational-ledger';
+
+// ApprovalInbox
+export { PatternApprovalInbox } from './approval-inbox';
+export type { ApprovalInboxProps, ApprovalItem, ApprovalGroup } from './approval-inbox';
+
+// ShiftMatrix
+export { PatternShiftMatrix } from './shift-matrix';
+export type { ShiftMatrixProps, ShiftTimeSlot, ShiftAssignment } from './shift-matrix';
+
+// ModerationGallery
+export { PatternModerationGallery } from './moderation-gallery';
+export type { ModerationGalleryProps, ModerationItem, ModerationBulkAction } from './moderation-gallery';
 
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';

@@ -396,11 +396,11 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
             {emptyState ?? 'No data'}
           </div>
         ) : (
-          <table className={tableClasses} style={{ width: '100%' }}>
+          <table className={tableClasses} style={{ width: '100%', tableLayout: resizable ? 'fixed' : undefined }}>
             {/* Sticky header uses z-10 to sit above scrolling rows and a
                 solid background so text doesn't bleed through. */}
             <thead className={stickyHeader ? 'sticky top-0 z-10 bg-base-100' : ''}>
-              <tr>
+              <tr className="bg-base-200/40">
                 {/* Select-all checkbox: checked state is derived from length
                     comparison rather than a separate boolean to stay in sync
                     when data changes externally (e.g. server-side filter). */}
@@ -429,12 +429,12 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                         maxWidth: col.maxWidth,
                         textAlign: col.align,
                         padding: densityPadding,
-                        position: pinnedStyle.position as any,
+                        position: (pinnedStyle.position as any) ?? 'relative',
                         left: pinnedStyle.left as any,
                         right: pinnedStyle.right as any,
                         zIndex: pinnedStyle.zIndex as any,
                         backgroundColor: pinSide
-                          ? 'var(--fallback-b1, oklch(var(--b1)))'
+                          ? 'var(--fallback-b2, oklch(var(--b2)))'
                           : undefined,
                         userSelect: reorderable || resizable ? 'none' : undefined,
                       }}
@@ -472,9 +472,10 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                             style={{
                               cursor: 'grab',
                               opacity: 0.4,
-                              fontSize: 10,
+                              fontSize: 14,
                               lineHeight: 1,
                               flexShrink: 0,
+                              marginRight: -2,
                             }}
                             aria-hidden="true"
                           >
@@ -580,9 +581,12 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                       position: 'sticky',
                       right: 0,
                       zIndex: 2,
-                      backgroundColor: 'var(--fallback-b1, oklch(var(--b1)))',
+                      backgroundColor: 'var(--fallback-b2, oklch(var(--b2)))',
+                      borderLeft: '1px solid oklch(var(--bc) / 0.1)',
                     }}
-                  />
+                  >
+                    Actions
+                  </th>
                 )}
               </tr>
             </thead>
@@ -655,6 +659,10 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                               backgroundColor: pinSide
                                 ? 'var(--fallback-b1, oklch(var(--b1)))'
                                 : undefined,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              maxWidth: 0,
                             }}
                           >
                             {col.render
@@ -674,6 +682,7 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                             right: 0,
                             zIndex: 2,
                             backgroundColor: 'var(--fallback-b1, oklch(var(--b1)))',
+                            borderLeft: '1px solid oklch(var(--bc) / 0.1)',
                           }}
                           onClick={(e) => e.stopPropagation()}
                         >
@@ -685,8 +694,8 @@ export default function ModernDataTable<T extends Record<string, unknown>>(
                         data columns, actions) to span the full table width. */}
                     {expandedRow && isExpanded && (
                       <tr>
-                        <td colSpan={totalColSpan}>
-                          <div className="p-4 bg-base-200/30 rounded-lg">
+                        <td colSpan={totalColSpan} style={{ padding: 0 }}>
+                          <div style={{ width: '100%', padding: '12px 16px' }}>
                             {expandedRow(row)}
                           </div>
                         </td>
