@@ -14,6 +14,11 @@
  * - Tablet: 640-1023px
  * - Desktop: 1024px+
  *
+ * When a `ResponsiveProvider` is present in the tree, this hook reads from
+ * the shared context (zero additional matchMedia subscriptions). When no
+ * provider exists, it falls back to creating its own per-component listeners
+ * for backward compatibility during gradual adoption.
+ *
  * @example Responsive navigation
  * ```tsx
  * const { isMobile, isDesktop, isTouchDevice } = useBreakpoints();
@@ -24,8 +29,10 @@
  * @category System
  * @package @rottay/design-system
  */
+import { useContext } from 'react';
 import { useMediaQuery } from '../useMediaQuery';
 import { buildMinWidthQuery, buildRangeQuery } from '../breakpoints';
+import { ResponsiveContext } from '../../../providers/responsive';
 
 /**
  * Breakpoint detection results
@@ -52,6 +59,10 @@ export interface UseBreakpointsResult {
  *
  * Uses a mobile-first system based on Tailwind CSS breakpoints.
  * SSR-safe: returns false for all breakpoints on the server.
+ *
+ * When wrapped in a `ResponsiveProvider`, reads from shared context (no
+ * additional matchMedia subscriptions). Without a provider, creates its
+ * own subscriptions for backward compatibility.
  *
  * Breakpoints:
  * - Mobile: 0-639px (default, no media query needed)
@@ -83,6 +94,33 @@ export interface UseBreakpointsResult {
  * @returns {UseBreakpointsResult} Object with boolean flags for each breakpoint and device capability
  */
 export function useBreakpoints(): UseBreakpointsResult {
+  const responsiveContext = useContext(ResponsiveContext);
+
+  // Fast path: when a ResponsiveProvider is in the tree, derive everything
+  // from the shared context without creating any matchMedia subscriptions.
+  if (responsiveContext) {
+    return {
+      isMobile: responsiveContext.isPhone,
+      isTablet: responsiveContext.isTablet,
+      isDesktop: responsiveContext.isDesktop,
+      isTouchDevice: responsiveContext.isTouchDevice,
+      prefersReducedMotion: responsiveContext.prefersReducedMotion,
+      isMobileOrTablet: responsiveContext.isPhoneOrTablet,
+      isTabletOrDesktop: responsiveContext.isTabletOrDesktop,
+    };
+  }
+
+  // Fallback path: no provider -- create per-component subscriptions.
+  // This preserves backward compatibility so existing code keeps working
+  // while the app gradually adopts ResponsiveProvider.
+  return useBreakpointsFallback();
+}
+
+/**
+ * Internal fallback that creates its own matchMedia subscriptions.
+ * Only called when no ResponsiveProvider exists in the tree.
+ */
+function useBreakpointsFallback(): UseBreakpointsResult {
   // Range queries produce mutually exclusive breakpoint tiers. Using
   // buildRangeQuery ensures exactly one of isMobile/isTablet/isDesktop is
   // true at any viewport width, avoiding ambiguity from overlapping queries.

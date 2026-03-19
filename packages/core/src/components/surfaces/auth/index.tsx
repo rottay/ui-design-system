@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { Card, Grid, Stack, Text } from '../../primitives';
+import { Box, Card, Grid, Stack, Text } from '../../primitives';
 import { useSurfaceResponsiveLayout } from '../responsive';
 import type { AuthSurfaceConfig } from '../types';
 import { SurfaceActionBar } from '../shared';
@@ -18,7 +18,7 @@ export interface AuthSurfaceProps {
 }
 
 export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
-  const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
   // Split layout requires all three conditions: a non-centered layout preference,
   // hero content to display, and enough viewport width. Missing any one falls
   // back to the vertically-centered single-column design.
@@ -27,12 +27,29 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
   // Default hero placement is "start" (left side). Only when explicitly set
   // to 'end' does the hero swap to the right/bottom position.
   const heroFirst = config.visual.heroPosition !== 'end';
+  const heroContent =
+    isMobile && config.presentation.mobileHero
+      ? config.presentation.mobileHero
+      : config.presentation.hero;
 
   const formPanel = (
-    <Card variant="outlined">
+      <Card variant="outlined">
       <Card.Body>
         <Stack spacing="lg">
           <Stack spacing="sm">
+            {config.presentation.eyebrow && (
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: 'var(--ds-color-text-muted)',
+                }}
+              >
+                {config.presentation.eyebrow}
+              </Text>
+            )}
             <Text style={{ fontSize: 28, fontWeight: 700 }}>{config.presentation.title}</Text>
             {config.presentation.subtitle && (
               <Text style={{ color: 'var(--ds-color-text-muted)' }}>
@@ -55,46 +72,54 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
     </Card>
   );
 
-  const heroPanel = config.presentation.hero ? (
+  const heroPanel = heroContent ? (
     <Card variant="elevated">
-      <Card.Body>{config.presentation.hero}</Card.Body>
+      <Card.Body>{heroContent}</Card.Body>
     </Card>
   ) : null;
 
   return (
-    <Stack
-      spacing="xl"
+    <Box
       style={{
-        maxWidth: config.visual.maxWidth ?? 1120,
-        margin: '0 auto',
-        padding: '48px 24px',
+        minHeight: '100vh',
+        background:
+          'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-neutral-900) 1%, var(--ds-color-bg-primary)), var(--ds-color-bg-primary))',
       }}
     >
-      {config.presentation.topBar}
+      <Stack
+        spacing="xl"
+        style={{
+          maxWidth: config.visual.maxWidth ?? 1120,
+          margin: '0 auto',
+          padding: isMobile ? '28px 20px 40px' : '48px 24px',
+        }}
+      >
+        {config.presentation.topBar}
 
-      {/* Two layout branches:
-          - Split: hero and form side by side (50/50 grid), hero position swappable
-          - Centered: form constrained to 520px max, hero stacks above or below
-          The centered branch uses gridColumn: '1 / -1' to break out of the
-          12-column grid and center itself, since Grid.Item span alone cannot
-          achieve horizontal centering. */}
-      {isSplitLayout ? (
-        <Grid columns={12} gap="lg">
-          {heroFirst && heroPanel && <Grid.Item span={6}>{heroPanel}</Grid.Item>}
-          <Grid.Item span={heroPanel ? 6 : 12}>{formPanel}</Grid.Item>
-          {!heroFirst && heroPanel && <Grid.Item span={6}>{heroPanel}</Grid.Item>}
-        </Grid>
-      ) : (
-        <Stack spacing="lg">
-          {heroFirst && heroPanel}
+        {/* Two layout branches:
+            - Split: hero and form side by side (50/50 grid), hero position swappable
+            - Centered: form constrained to 520px max, hero stacks above or below
+            The centered branch uses gridColumn: '1 / -1' to break out of the
+            12-column grid and center itself, since Grid.Item span alone cannot
+            achieve horizontal centering. */}
+        {isSplitLayout ? (
           <Grid columns={12} gap="lg">
-            <Grid.Item span={6} style={{ gridColumn: '1 / -1', maxWidth: 520, margin: '0 auto' }}>
-              {formPanel}
-            </Grid.Item>
+            {heroFirst && heroPanel && <Grid.Item span={6}>{heroPanel}</Grid.Item>}
+            <Grid.Item span={heroPanel ? 6 : 12}>{formPanel}</Grid.Item>
+            {!heroFirst && heroPanel && <Grid.Item span={6}>{heroPanel}</Grid.Item>}
           </Grid>
-          {!heroFirst && heroPanel}
-        </Stack>
-      )}
-    </Stack>
+        ) : (
+          <Stack spacing="lg">
+            {heroFirst && heroPanel}
+            <Grid columns={12} gap="lg">
+              <Grid.Item span={6} style={{ gridColumn: '1 / -1', maxWidth: 520, margin: '0 auto' }}>
+                {formPanel}
+              </Grid.Item>
+            </Grid>
+            {!heroFirst && heroPanel}
+          </Stack>
+        )}
+      </Stack>
+    </Box>
   );
 }

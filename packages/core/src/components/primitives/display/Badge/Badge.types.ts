@@ -38,6 +38,7 @@
 import type { ReactNode } from 'react';
 import type { BaseComponentProps, Size, Variant, WithChildren } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 /** Badge size type alias derived from the global Size scale. */
 export type BadgeSize = Size;
@@ -62,10 +63,15 @@ export type BadgeStatus = 'processing' | 'default' | 'success' | 'error' | 'warn
  */
 export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithChildren {
   /**
-   * Badge size.
+   * Badge size. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
+   * @example
+   * ```tsx
+   * <Badge size="lg" />
+   * <Badge size={{ base: 'sm', md: 'md', xl: 'lg' }} />
+   * ```
    */
-  size?: BadgeSize;
+  size?: ResponsiveValue<BadgeSize>;
 
   /**
    * Badge color variant.

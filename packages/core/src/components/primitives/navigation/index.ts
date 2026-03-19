@@ -76,3 +76,16 @@ export type {
   FloatButtonBackTopProps,
 } from './FloatButton';
 export { FLOAT_BUTTON_DEFAULTS } from './FloatButton';
+
+// Mobile Navigation Primitives
+export { MobileHeader } from './MobileHeader';
+export type { MobileHeaderProps } from './MobileHeader';
+export { MOBILE_HEADER_DEFAULTS } from './MobileHeader';
+
+export { BottomTabBar } from './BottomTabBar';
+export type { BottomTabBarProps, BottomTabBarItem } from './BottomTabBar';
+export { BOTTOM_TAB_BAR_DEFAULTS } from './BottomTabBar';
+
+export { ActionDock } from './ActionDock';
+export type { ActionDockProps } from './ActionDock';
+export { ACTION_DOCK_DEFAULTS } from './ActionDock';

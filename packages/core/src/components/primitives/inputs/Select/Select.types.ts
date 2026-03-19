@@ -66,6 +66,7 @@
 
 import type { ReactNode, CSSProperties, FocusEvent } from 'react';
 import type { EngineAwareProps } from '../../../../contracts/engine';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 // Size types - extended to include xs and xl
 export type SelectSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -121,8 +122,16 @@ export interface SelectProps<T = string | number> extends EngineAwareProps {
   options?: SelectOption<T>[];
   /** Placeholder text */
   placeholder?: string;
-  /** Select size */
-  size?: SelectSize;
+  /**
+   * Select size. Accepts a plain value or a responsive breakpoint object.
+   * @default 'md'
+   * @example
+   * ```tsx
+   * <Select size="lg" />
+   * <Select size={{ base: 'sm', md: 'md', xl: 'lg' }} />
+   * ```
+   */
+  size?: ResponsiveValue<SelectSize>;
   /** Visual variant */
   variant?: SelectVariant;
   /** Allow multiple selection */

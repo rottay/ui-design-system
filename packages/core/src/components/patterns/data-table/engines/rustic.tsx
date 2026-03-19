@@ -204,7 +204,7 @@ const styles = {
  * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
  * @returns A data table rendered entirely with inline styles and CSS variables.
  */
-export default function RusticDataTable<T extends Record<string, unknown>>(
+export default function RusticDataTable<T extends object>(
   props: DataTablePatternProps<T>
 ) {
   const {

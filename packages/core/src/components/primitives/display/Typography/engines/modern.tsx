@@ -44,9 +44,11 @@
 
 'use client';
 
-import { forwardRef } from 'react';
-import type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../Typography.types';
-import { TYPOGRAPHY_DEFAULTS } from '../Typography.types';
+import React, { forwardRef, useId } from 'react';
+import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../Typography.types';
+import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP } from '../Typography.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
 
 /**
  * Heading sizes are intentionally one step larger than text sizes (e.g.
@@ -124,6 +126,16 @@ const COLOR_CLASSES: Record<string, string> = {
  * </ModernHeading>
  * ```
  */
+/**
+ * Extracts the scalar value from a prop that may be a ResponsiveValue.
+ * Returns undefined if the prop is a responsive object.
+ */
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
+
 export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
   (
     {
@@ -145,10 +157,38 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     // so the output is semantically correct without extra mapping.
     const Component = level;
 
+    // Responsive size handling
+    const reactId = useId();
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    const sizeIsResponsive = isResponsiveValue(size);
+
+    if (sizeIsResponsive) {
+      responsiveEntries.push({
+        cssProperty: 'font-size',
+        value: size,
+        resolve: (v: TextSize) => SIZE_MAP.heading[v] || SIZE_MAP.heading.md,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'line-height',
+        value: size,
+        resolve: (v: TextSize) => LINE_HEIGHT_MAP.heading[v] || '1.2',
+      } as ResponsivePropEntry<any>);
+    }
+
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+    const elementId = needsResponsiveCSS ? `heading-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
+    const scalarSize = scalarOrUndefined(size);
+
     // Class list is assembled as an array and filtered to avoid
     // stray spaces from falsy entries (e.g. when size is undefined).
+    // When size is responsive, do NOT emit a Tailwind size class -- the
+    // injected <style> tag handles sizing via @media queries instead.
     const classes = [
-      size ? HEADING_SIZE_CLASSES[size] : '',
+      !sizeIsResponsive && scalarSize ? HEADING_SIZE_CLASSES[scalarSize] : '',
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
       COLOR_CLASSES[color],
@@ -160,14 +200,20 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       .join(' ');
 
     return (
-      <Component
-        ref={ref as React.Ref<HTMLHeadingElement>}
-        className={classes}
-        style={style}
-        {...props}
-      >
-        {children}
-      </Component>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <Component
+          ref={ref as React.Ref<HTMLHeadingElement>}
+          className={classes}
+          style={style}
+          {...(responsive ? responsive.attrs : {})}
+          {...props}
+        >
+          {children}
+        </Component>
+      </>
     );
   }
 );
@@ -190,7 +236,7 @@ ModernHeading.displayName = 'ModernHeading';
 export const ModernText = forwardRef<HTMLElement, TextProps>(
   (
     {
-      size = TYPOGRAPHY_DEFAULTS.text.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.text.size,
       weight = TYPOGRAPHY_DEFAULTS.text.weight,
       color = TYPOGRAPHY_DEFAULTS.text.color,
       align = TYPOGRAPHY_DEFAULTS.text.align,
@@ -212,10 +258,38 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
     // giving consumers semantic flexibility without additional wrappers.
     const Component = as;
 
+    // Responsive size handling
+    const reactId = useId();
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+    if (sizeIsResponsive) {
+      responsiveEntries.push({
+        cssProperty: 'font-size',
+        value: sizeProp,
+        resolve: (v: TextSize) => SIZE_MAP.text[v] || SIZE_MAP.text.md,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'line-height',
+        value: sizeProp,
+        resolve: (v: TextSize) => LINE_HEIGHT_MAP.text[v] || '1.5',
+      } as ResponsivePropEntry<any>);
+    }
+
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+    const elementId = needsResponsiveCSS ? `text-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.text.size;
+
     // Text decorations and style modifiers are each a single Tailwind class,
     // keeping the compiled output minimal compared to inline style equivalents.
+    // When size is responsive, do NOT emit a Tailwind size class -- the
+    // injected <style> tag handles sizing via @media queries instead.
     const classes = [
-      TEXT_SIZE_CLASSES[size],
+      !sizeIsResponsive ? TEXT_SIZE_CLASSES[size] : '',
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
       COLOR_CLASSES[color],
@@ -231,14 +305,20 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       .join(' ');
 
     return (
-      <Component
-        ref={ref as any}
-        className={classes}
-        style={style}
-        {...props}
-      >
-        {children}
-      </Component>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <Component
+          ref={ref as any}
+          className={classes}
+          style={style}
+          {...(responsive ? responsive.attrs : {})}
+          {...props}
+        >
+          {children}
+        </Component>
+      </>
     );
   }
 );

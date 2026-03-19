@@ -41,7 +41,7 @@ import {
 
 import type { ChartBaseProps, Series } from '../Charts.types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link AreaChart} component. */
@@ -80,12 +80,17 @@ export const AreaChart = memo(function AreaChart({
   colors = DEFAULT_COLORS,
   tooltip,
   margin = DEFAULT_MARGIN,
+  compact,
+  autoCompact,
+  compactBreakpoint,
 }: AreaChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, curved, tooltip });
+  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = height;
+  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
+  const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
   const pointCount = series.reduce((count, currentSeries) => count + currentSeries.data.length, 0);
   const summary = {
     caption: title ? `${title} data summary` : 'Area chart data summary',
@@ -140,7 +145,7 @@ export const AreaChart = memo(function AreaChart({
 
     // Grid
     g.append('g')
-      .call(axisLeft(y).ticks(5).tickSize(-innerWidth).tickFormat(() => ''))
+      .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
       .selectAll('line')
       .style('stroke', 'var(--ds-color-border-secondary)')
       .style('stroke-opacity', 0.5);
@@ -156,7 +161,7 @@ export const AreaChart = memo(function AreaChart({
       .style('font-size', '12px');
 
     g.append('g')
-      .call(axisLeft(y).ticks(5))
+      .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
@@ -297,7 +302,7 @@ export const AreaChart = memo(function AreaChart({
             .attr('fill', color)
             .attr('opacity', 0)
             .append('title')
-            .text((d) => `${s.name}: ${d.y}`);
+            .text((d) => compactState.compactTooltip ? String(d.y) : `${s.name}: ${d.y}`);
         }
       });
     }
@@ -311,7 +316,7 @@ export const AreaChart = memo(function AreaChart({
 
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [series, chartWidth, chartHeight, stacked, opacity, chartPersonality, colors, margin, xAxisLabel, yAxisLabel]);
+  }, [series, chartWidth, chartHeight, stacked, opacity, chartPersonality, colors, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
 
   return (
     <ChartScaffold
@@ -333,6 +338,8 @@ export const AreaChart = memo(function AreaChart({
       ].filter(Boolean).join(' '))}
       summary={summary}
       legend={legendNode}
+      hideLegend={compactState.hideLegend}
+      minHeight={compactState.isCompact ? compactState.minHeight : undefined}
     />
   );
 });

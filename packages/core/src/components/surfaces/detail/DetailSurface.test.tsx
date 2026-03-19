@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { DetailSurface } from '.';
 import type { DetailSurfaceConfig, EntityAdapter } from '../types';
 import { renderSurface } from '../common/test-utils';
+import { mockMatchMedia } from '../../../testing/helpers/match-media';
 
 interface RawWorkspace {
   id: string;
@@ -246,5 +247,38 @@ describe('DetailSurface', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /edit/i }));
     expect(editAction).toHaveBeenCalledTimes(1);
+  });
+
+  it('moves the sidebar into the footer stack on mobile by default', async () => {
+    mockMatchMedia(390);
+
+    renderSurface(
+      <DetailSurface
+        data={{ id: 'ws-1', name: 'Acme Workspace' }}
+        adapter={adapter}
+        config={buildConfig({
+          presentation: {
+            title: (item) => item.name,
+            sidebar: () => <div>Workspace sidebar</div>,
+            footer: () => <div>Workspace footer</div>,
+            tabs: [
+              {
+                key: 'overview',
+                label: 'Overview',
+                content: () => <div>Overview content</div>,
+              },
+            ],
+          },
+          behavior: {
+            activeTab: 'overview',
+            actions: [],
+          },
+          permissions: undefined,
+        })}
+      />
+    );
+
+    expect(await screen.findByText('Workspace sidebar')).toBeInTheDocument();
+    expect(screen.getByText('Workspace footer')).toBeInTheDocument();
   });
 });

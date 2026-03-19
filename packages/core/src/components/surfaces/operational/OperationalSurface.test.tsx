@@ -61,4 +61,37 @@ describe('OperationalSurface', () => {
     expect(await screen.findByText('Queue module')).toBeInTheDocument();
     expect(await screen.findByText('Scanner spike detected')).toBeInTheDocument();
   });
+
+  it('repositions feed and queue while hiding the secondary panel on mobile', async () => {
+    mockMatchMedia(390);
+
+    renderSurface(
+      <OperationalSurface
+        config={buildConfig({
+          visual: {
+            mobileQueuePosition: 'top',
+            mobileFeedPosition: 'bottom',
+            hideSecondaryPanelOnMobile: true,
+          },
+          presentation: {
+            chrome: { title: 'Operational Center' },
+            primaryPanel: <div>Primary operator panel</div>,
+            secondaryPanel: <div>Secondary operator panel</div>,
+            queue: <div>Queue module</div>,
+          },
+          behavior: {
+            stats: [{ key: 'alerts', label: 'Alerts', value: 4 }],
+            feed: {
+              items: [{ key: 'feed-1', title: 'Scanner spike detected' }],
+              renderItem: (item) => <div>{item.title}</div>,
+            },
+          },
+        })}
+      />
+    );
+
+    expect(await screen.findByText('Queue module')).toBeInTheDocument();
+    expect(await screen.findByText('Scanner spike detected')).toBeInTheDocument();
+    expect(screen.queryByText('Secondary operator panel')).not.toBeInTheDocument();
+  });
 });

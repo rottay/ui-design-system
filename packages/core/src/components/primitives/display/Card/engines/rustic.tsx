@@ -55,9 +55,10 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import type { CardProps } from '../Card.types';
 import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 /**
  * Rustic engine Card component using pure HTML/CSS.
@@ -113,13 +114,34 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     bordered: _bordered = CARD_DEFAULTS.bordered,
     shadowed: _shadowed,
     radius = CARD_DEFAULTS.radius,
-    padding = CARD_DEFAULTS.padding,
+    padding: paddingProp = CARD_DEFAULTS.padding,
     divider,
     backgroundColor,
     onClick,
     className = '',
     style,
   } = props;
+
+  // Responsive padding handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const paddingIsResponsive = isResponsiveValue(paddingProp);
+
+  if (paddingIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: paddingProp,
+      resolve: (v: string) => PADDING_MAP[v] || PADDING_MAP.md,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `card-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
 
   // Hover state is tracked via React state rather than CSS :hover because
   // inline styles cannot respond to pseudo-classes. This lets us apply
@@ -258,6 +280,10 @@ export default function RusticCard(props: CardProps): React.ReactElement {
   );
 
   return (
+    <>
+    {responsive && responsive.css && (
+      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+    )}
     <div
       className={`rottay-card rottay-card--rustic ${className}`}
       style={cardStyle}
@@ -269,6 +295,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       role={clickable || onClick ? 'button' : undefined}
       tabIndex={clickable || onClick ? 0 : undefined}
       aria-busy={loading}
+      {...(responsive ? responsive.attrs : {})}
     >
       {loadingOverlay}
 
@@ -348,6 +375,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
         }
       `}</style>
     </div>
+    </>
   );
 }
 

@@ -32,10 +32,24 @@
  * @package @rottay/design-system
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 import { Tabs as AntTabs } from 'antd';
 import type { TabsProps, TabItem, TabsType, TabsSize } from '../Tabs.types';
 import { TABS_DEFAULTS } from '../Tabs.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+const TABS_SIZE_STYLES: Record<string, { padding: string; fontSize: string }> = {
+  sm: { padding: '4px 12px', fontSize: '0.875rem' },
+  md: { padding: '8px 16px', fontSize: '1rem' },
+  lg: { padding: '12px 20px', fontSize: '1.125rem' },
+};
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 // ============================================================================
 // Type Mappings
@@ -100,12 +114,38 @@ export default function ClassicTabs(props: TabsProps): React.ReactElement {
     activeKey,
     defaultActiveKey,
     type = TABS_DEFAULTS.type,
-    size = TABS_DEFAULTS.size,
+    size: sizeProp = TABS_DEFAULTS.size,
     centered = TABS_DEFAULTS.centered,
     onChange,
     className,
     style,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: sizeProp,
+      resolve: (v: TabsSize) => `${(TABS_SIZE_STYLES[v as keyof typeof TABS_SIZE_STYLES] || TABS_SIZE_STYLES.md).padding} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: TabsSize) => `${(TABS_SIZE_STYLES[v as keyof typeof TABS_SIZE_STYLES] || TABS_SIZE_STYLES.md).fontSize} !important`,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `tabs-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
 
   // ============================================================================
   // Transform Items to Ant Design Format
@@ -134,16 +174,22 @@ export default function ClassicTabs(props: TabsProps): React.ReactElement {
   // ============================================================================
 
   return (
-    <AntTabs
-      items={antItems}
-      activeKey={activeKey}
-      defaultActiveKey={defaultActiveKey}
-      type={TYPE_MAP[type as TabsType]}
-      size={SIZE_MAP[size as TabsSize]}
-      centered={centered}
-      onChange={onChange}
-      className={className}
-      style={style}
-    />
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
+      <AntTabs
+        items={antItems}
+        activeKey={activeKey}
+        defaultActiveKey={defaultActiveKey}
+        type={TYPE_MAP[type as TabsType]}
+        size={SIZE_MAP[size as TabsSize]}
+        centered={centered}
+        onChange={onChange}
+        className={className}
+        style={style}
+        {...(responsive ? responsive.attrs : {})}
+      />
+    </>
   );
 }

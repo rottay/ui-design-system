@@ -11,25 +11,15 @@
  * rendering API reusable across domains.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
-import type { DataTablePatternProps } from './DataTable.types';
-
 export type { DataTablePatternProps } from './DataTable.types';
 export { resolveAccessor, resolveRowKey } from './DataTable.types';
 export type {
   ColumnDef,
+  ColumnResponsiveConfig,
+  ResponsiveColumnMode,
   SortConfig,
   FilterDef,
   PaginationConfig,
   BulkAction,
 } from '../types';
-
-/** Public data-table pattern entry point resolved through the engine factory. */
-export const PatternDataTable = createEngineComponent<DataTablePatternProps<any>>(
-  'PatternDataTable',
-  {
-    classic: () => import('./engines/classic'),
-    modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
-  }
-);
+export { PatternDataTable } from './PatternDataTable';

@@ -59,6 +59,7 @@
 
 import type { EngineAwareProps } from '../../../../contracts';
 import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent } from 'react';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 /**
  * Size variants for the Input component.
@@ -117,8 +118,16 @@ export type InputType = 'text' | 'password' | 'email' | 'number' | 'tel' | 'url'
  * ```
  */
 export interface InputProps extends EngineAwareProps {
-  /** Input size */
-  size?: InputSize;
+  /**
+   * Input size. Accepts a plain value or a responsive breakpoint object.
+   * @default 'md'
+   * @example
+   * ```tsx
+   * <Input size="lg" />
+   * <Input size={{ base: 'sm', md: 'md', xl: 'lg' }} />
+   * ```
+   */
+  size?: ResponsiveValue<InputSize>;
   /** Visual variant */
   variant?: InputVariant;
   /** Validation status */

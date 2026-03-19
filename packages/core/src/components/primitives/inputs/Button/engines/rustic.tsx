@@ -75,9 +75,12 @@
 
 'use client';
 
-import React, { forwardRef, useState } from 'react';
-import type { ButtonProps } from '../Button.types';
+import React, { forwardRef, useState, useId } from 'react';
+import type { ButtonProps, ButtonSize } from '../Button.types';
 import { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from '../Button.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
 
 /**
  * Loading spinner component for Rustic engine
@@ -140,7 +143,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const {
       children,
       variant = BUTTON_DEFAULTS.variant,
-      size = BUTTON_DEFAULTS.size,
+      size: sizeProp = BUTTON_DEFAULTS.size,
       shape = BUTTON_DEFAULTS.shape,
       htmlType = BUTTON_DEFAULTS.htmlType,
       disabled = BUTTON_DEFAULTS.disabled,
@@ -172,6 +175,37 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const [isHovered, setIsHovered] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
     const [isActive, setIsActive] = useState(false);
+
+    // Responsive size handling
+    const reactId = useId();
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+    if (sizeIsResponsive) {
+      responsiveEntries.push({
+        cssProperty: 'height',
+        value: sizeProp,
+        resolve: (v: ButtonSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'padding',
+        value: sizeProp,
+        resolve: (v: ButtonSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).padding,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'font-size',
+        value: sizeProp,
+        resolve: (v: ButtonSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize,
+      } as ResponsivePropEntry<any>);
+    }
+
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+    const elementId = needsResponsiveCSS ? `btn-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
+    const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
 
     // Resolve configuration objects from the shared type maps. These maps
     // live in Button.types.ts so all three engines share the same token
@@ -211,11 +245,14 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       alignItems: 'center',
       justifyContent: 'center',
       gap: '8px',
-      height: sizeConfig.height,
-      padding: shape === 'circle' ? '0' : sizeConfig.padding,
+      // When size is responsive, height/padding/fontSize are handled by injected CSS
+      ...(!sizeIsResponsive && {
+        height: sizeConfig.height,
+        padding: shape === 'circle' ? '0' : sizeConfig.padding,
+        fontSize: sizeConfig.fontSize,
+      }),
       width: isFullWidth ? '100%' : (shape === 'circle' ? sizeConfig.height : 'auto'),
       minWidth: shape === 'circle' ? sizeConfig.height : 'auto',
-      fontSize: sizeConfig.fontSize,
       fontWeight: 500,
       fontFamily: 'inherit',
       lineHeight: 1.5,
@@ -293,22 +330,62 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const renderPrefix = prefix && !loading ? prefix : null;
     const renderSuffix = suffix ? suffix : null;
 
+    const responsiveAttrs = responsive ? responsive.attrs : {};
+    const responsiveStyleTag = responsive && responsive.css ? (
+      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+    ) : null;
+
     // When href is set, render an <a> instead of <button> for correct
     // semantics (screen readers announce it as a link, browser features like
     // Cmd+Click to open in new tab work). Disabled links stay as <button>.
     if (href && !disabled && !loading) {
       return (
-        <a
-          href={href}
-          target={target}
+        <>
+          {responsiveStyleTag}
+          <a
+            href={href}
+            target={target}
+            className={classNames}
+            style={buttonStyle}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onMouseDown={() => setIsActive(true)}
+            onMouseUp={() => setIsActive(false)}
+            {...responsiveAttrs}
+          >
+            {loading && <LoadingSpinner size={size} />}
+            {!loading && iconPosition === 'start' && renderIcon}
+            {!loading && renderPrefix}
+            {children && <span className="rottay-button__content">{children}</span>}
+            {renderSuffix}
+            {!loading && iconPosition === 'end' && renderIcon}
+          </a>
+        </>
+      );
+    }
+
+    return (
+      <>
+        {responsiveStyleTag}
+        <button
+          ref={ref}
+          type={htmlType}
           className={classNames}
           style={buttonStyle}
+          disabled={disabled || loading}
+          onClick={handleClick}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onMouseDown={() => setIsActive(true)}
           onMouseUp={() => setIsActive(false)}
+          aria-disabled={disabled || loading}
+          aria-busy={loading}
+          {...responsiveAttrs}
+          {...rest}
         >
           {loading && <LoadingSpinner size={size} />}
           {!loading && iconPosition === 'start' && renderIcon}
@@ -316,35 +393,8 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           {children && <span className="rottay-button__content">{children}</span>}
           {renderSuffix}
           {!loading && iconPosition === 'end' && renderIcon}
-        </a>
-      );
-    }
-
-    return (
-      <button
-        ref={ref}
-        type={htmlType}
-        className={classNames}
-        style={buttonStyle}
-        disabled={disabled || loading}
-        onClick={handleClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        onMouseDown={() => setIsActive(true)}
-        onMouseUp={() => setIsActive(false)}
-        aria-disabled={disabled || loading}
-        aria-busy={loading}
-        {...rest}
-      >
-        {loading && <LoadingSpinner size={size} />}
-        {!loading && iconPosition === 'start' && renderIcon}
-        {!loading && renderPrefix}
-        {children && <span className="rottay-button__content">{children}</span>}
-        {renderSuffix}
-        {!loading && iconPosition === 'end' && renderIcon}
-      </button>
+        </button>
+      </>
     );
   }
 );

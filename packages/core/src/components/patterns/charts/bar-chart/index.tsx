@@ -21,7 +21,7 @@ import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select } from 'd3';
 
 import type { ChartBaseProps, DataPoint, Series } from '../Charts.types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link BarChart} component. */
@@ -68,12 +68,17 @@ export const BarChart = memo(function BarChart({
   colors = DEFAULT_COLORS,
   tooltip,
   margin = DEFAULT_MARGIN,
+  compact,
+  autoCompact,
+  compactBreakpoint,
 }: BarChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
+  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = height;
+  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
+  const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
   const summary = {
     caption: title ? `${title} data summary` : 'Bar chart data summary',
     headers: ['Label', 'Value'],
@@ -132,7 +137,7 @@ export const BarChart = memo(function BarChart({
 
       // Y axis
       g.append('g')
-        .call(axisLeft(y).ticks(5))
+        .call(axisLeft(y).ticks(tickCount))
         .selectAll('text')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
@@ -140,7 +145,7 @@ export const BarChart = memo(function BarChart({
       // Grid lines
       g.append('g')
         .attr('class', 'grid')
-        .call(axisLeft(y).ticks(5).tickSize(-innerWidth).tickFormat(() => ''))
+        .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
         .selectAll('line')
         .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
@@ -161,7 +166,7 @@ export const BarChart = memo(function BarChart({
         .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
 
       if (chartPersonality.tooltip) {
-        bars.append('title').text((d) => `${d.label}: ${d.value}`);
+        bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
       }
 
       // Bars grow upward from the x-axis with staggered delay so the viewer
@@ -208,7 +213,7 @@ export const BarChart = memo(function BarChart({
 
       g.append('g')
         .attr('transform', `translate(0,${innerHeight})`)
-        .call(axisBottom(x).ticks(5))
+        .call(axisBottom(x).ticks(tickCount))
         .selectAll('text')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
@@ -232,7 +237,7 @@ export const BarChart = memo(function BarChart({
         .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
 
       if (chartPersonality.tooltip) {
-        bars.append('title').text((d) => `${d.label}: ${d.value}`);
+        bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
       }
 
       // Horizontal bars grow rightward from the y-axis, mirroring the vertical
@@ -292,7 +297,7 @@ export const BarChart = memo(function BarChart({
     // Style axis lines
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [data, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, colors, margin, xAxisLabel, yAxisLabel]);
+  }, [data, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, colors, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
 
   return (
     <ChartScaffold
@@ -314,6 +319,8 @@ export const BarChart = memo(function BarChart({
       ].filter(Boolean).join(' '))}
       summary={summary}
       legend={legendNode}
+      hideLegend={compactState.hideLegend}
+      minHeight={compactState.isCompact ? compactState.minHeight : undefined}
     />
   );
 });

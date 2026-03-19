@@ -1,0 +1,134 @@
+/**
+ * BottomTabBar Tests
+ * Colocated with component following approved architecture
+ */
+
+import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { BottomTabBar } from './';
+
+vi.mock('../../../../engines/factory', () => ({
+  createEngineComponent: () => {
+    const { BottomTabBar: Impl } = require('./BottomTabBar');
+    Impl.displayName = 'BottomTabBar';
+    return Impl;
+  },
+}));
+
+const mockItems = [
+  { key: 'home', label: 'Home', icon: <span data-testid="icon-home">H</span> },
+  { key: 'search', label: 'Search', icon: <span data-testid="icon-search">S</span> },
+  { key: 'profile', label: 'Profile', icon: <span data-testid="icon-profile">P</span> },
+];
+
+describe('BottomTabBar', () => {
+  it('renders correctly', () => {
+    render(<BottomTabBar items={mockItems} />);
+    expect(screen.getByTestId('bottom-tab-bar')).toBeInTheDocument();
+  });
+
+  it('renders all tab items', () => {
+    render(<BottomTabBar items={mockItems} />);
+    expect(screen.getByTestId('tab-item-home')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-item-search')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-item-profile')).toBeInTheDocument();
+  });
+
+  it('renders item labels', () => {
+    render(<BottomTabBar items={mockItems} />);
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('Search')).toBeInTheDocument();
+    expect(screen.getByText('Profile')).toBeInTheDocument();
+  });
+
+  it('renders item icons', () => {
+    render(<BottomTabBar items={mockItems} />);
+    expect(screen.getByTestId('icon-home')).toBeInTheDocument();
+    expect(screen.getByTestId('icon-search')).toBeInTheDocument();
+    expect(screen.getByTestId('icon-profile')).toBeInTheDocument();
+  });
+
+  it('highlights active item with aria-selected', () => {
+    render(<BottomTabBar items={mockItems} activeKey="search" />);
+    expect(screen.getByTestId('tab-item-search')).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByTestId('tab-item-home')).toHaveAttribute('aria-selected', 'false');
+  });
+
+  it('calls onChange when a tab is clicked', () => {
+    const handleChange = vi.fn();
+    render(<BottomTabBar items={mockItems} onChange={handleChange} />);
+    fireEvent.click(screen.getByTestId('tab-item-search'));
+    expect(handleChange).toHaveBeenCalledWith('search');
+  });
+
+  it('calls item onClick handler', () => {
+    const handleClick = vi.fn();
+    const items = [
+      { key: 'test', label: 'Test', icon: <span>T</span>, onClick: handleClick },
+    ];
+    render(<BottomTabBar items={items} />);
+    fireEvent.click(screen.getByTestId('tab-item-test'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders badge on item', () => {
+    const items = [
+      { key: 'notif', label: 'Notifications', icon: <span>N</span>, badge: 5 },
+    ];
+    render(<BottomTabBar items={items} />);
+    expect(screen.getByTestId('tab-badge-notif')).toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
+  });
+
+  it('renders 99+ for badges over 99', () => {
+    const items = [
+      { key: 'notif', label: 'Notifications', icon: <span>N</span>, badge: 150 },
+    ];
+    render(<BottomTabBar items={items} />);
+    expect(screen.getByText('99+')).toBeInTheDocument();
+  });
+
+  it('does not render badge when badge is 0', () => {
+    const items = [
+      { key: 'notif', label: 'Notifications', icon: <span>N</span>, badge: 0 },
+    ];
+    render(<BottomTabBar items={items} />);
+    expect(screen.queryByTestId('tab-badge-notif')).not.toBeInTheDocument();
+  });
+
+  it('enforces max 5 items', () => {
+    const manyItems = Array.from({ length: 7 }, (_, i) => ({
+      key: `tab-${i}`,
+      label: `Tab ${i}`,
+      icon: <span>{i}</span>,
+    }));
+    render(<BottomTabBar items={manyItems} />);
+    // Only first 5 should be rendered
+    expect(screen.getByTestId('tab-item-tab-0')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-item-tab-4')).toBeInTheDocument();
+    expect(screen.queryByTestId('tab-item-tab-5')).not.toBeInTheDocument();
+  });
+
+  it('has fixed bottom positioning', () => {
+    render(<BottomTabBar items={mockItems} />);
+    const bar = screen.getByTestId('bottom-tab-bar');
+    expect(bar).toHaveStyle({ position: 'fixed', bottom: '0' });
+  });
+
+  it('has tablist role for accessibility', () => {
+    render(<BottomTabBar items={mockItems} />);
+    expect(screen.getByRole('tablist')).toBeInTheDocument();
+  });
+
+  it('each item has tab role', () => {
+    render(<BottomTabBar items={mockItems} />);
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs).toHaveLength(3);
+  });
+
+  it('merges custom style', () => {
+    render(<BottomTabBar items={mockItems} style={{ background: 'blue' }} />);
+    expect(screen.getByTestId('bottom-tab-bar')).toHaveStyle({ background: 'blue' });
+  });
+});

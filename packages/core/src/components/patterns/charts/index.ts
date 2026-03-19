@@ -8,15 +8,16 @@
 // Types
 export type {
   ChartBaseProps,
+  ChartCompactConfig,
   DataPoint,
   SeriesDataPoint,
   Series,
 } from './Charts.types';
-export { DEFAULT_COLORS, DEFAULT_MARGIN } from './Charts.types';
+export { DEFAULT_COLORS, DEFAULT_MARGIN, DEFAULT_COMPACT_CONFIG } from './Charts.types';
 
 // Hooks
-export { useChartDimensions, useChartPersonality } from './hooks';
-export type { ChartPersonalityOptions, ResolvedChartPersonality } from './hooks';
+export { useChartDimensions, useChartPersonality, useChartCompact } from './hooks';
+export type { ChartPersonalityOptions, ResolvedChartPersonality, UseChartCompactOptions, ResolvedChartCompact } from './hooks';
 
 // Charts
 export { BarChart } from './bar-chart';

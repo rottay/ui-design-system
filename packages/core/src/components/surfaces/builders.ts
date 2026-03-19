@@ -4,9 +4,9 @@
  * surface configuration without forcing consumers to spell complex generics.
  *
  * @remarks
- * These builders are intentionally boring: they do not transform config.
- * Their only job is to give TypeScript a stable inference boundary so surface
- * setup in app code stays ergonomic and strongly typed.
+ * These builders provide a stable inference boundary and apply conservative
+ * mobile-first defaults. Apps can always override them explicitly, but the
+ * design system owns the baseline responsive posture.
  */
 
 import type { FeedItem } from '../patterns';
@@ -29,6 +29,7 @@ import type {
   IntegrationSurfaceConfig,
   KanbanSurfaceConfig,
   ListSurfaceConfig,
+  MarketingSurfaceConfig,
   MediaSurfaceConfig,
   NotificationSurfaceConfig,
   OnboardingSurfaceConfig,
@@ -46,17 +47,17 @@ import type {
 } from './types';
 
 // ---------------------------------------------------------------------------
-// Identity builders
+// Surface config builders
 // ---------------------------------------------------------------------------
 //
-// Each function below is a no-op at runtime -- it returns the config object
-// unchanged. The value is purely at the type level: TypeScript uses the
-// function signature to infer the full generic config type so consumers
-// never need to write `ListSurfaceConfig<MyView>` explicitly.
+// Each function below injects conservative mobile-first defaults into the
+// `visual` section while preserving type inference. Defaults are spread
+// BEFORE the consumer's config, so explicit overrides always win.
 //
 // Pattern:
 //   const config = createListSurfaceConfig({ ... });
 //   // `config` is correctly inferred as `ListSurfaceConfig<MyView>`
+//   // mobile defaults are injected unless the app overrides them
 // ---------------------------------------------------------------------------
 
 /**
@@ -78,7 +79,15 @@ import type {
 export function createListSurfaceConfig<TView>(
   config: ListSurfaceConfig<TView>
 ): ListSurfaceConfig<TView> {
-  return config;
+  return {
+    ...config,
+    visual: {
+      mobileDefaultView: 'cards',
+      hideViewSwitchOnMobile: true,
+      mobileFiltersLayout: 'stacked',
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -89,7 +98,14 @@ export function createListSurfaceConfig<TView>(
 export function createDashboardSurfaceConfig(
   config: DashboardSurfaceConfig
 ): DashboardSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      mobileStatsLimit: 2,
+      stackSectionsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -101,7 +117,14 @@ export function createDashboardSurfaceConfig(
 export function createChatSurfaceConfig(
   config: ChatSurfaceConfig
 ): ChatSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      hideListOnMobile: true,
+      stickyInputOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -113,7 +136,13 @@ export function createChatSurfaceConfig(
 export function createDetailSurfaceConfig<TView>(
   config: DetailSurfaceConfig<TView>
 ): DetailSurfaceConfig<TView> {
-  return config;
+  return {
+    ...config,
+    visual: {
+      collapseSidebarOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -125,7 +154,14 @@ export function createDetailSurfaceConfig<TView>(
 export function createFormSurfaceConfig(
   config: FormSurfaceConfig
 ): FormSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      hideAsideOnMobile: true,
+      mobileActionsSticky: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -136,7 +172,14 @@ export function createFormSurfaceConfig(
 export function createWizardSurfaceConfig(
   config: WizardSurfaceConfig
 ): WizardSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      compactStepsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -148,7 +191,14 @@ export function createWizardSurfaceConfig(
 export function createHeaderSurfaceConfig(
   config: HeaderSurfaceConfig
 ): HeaderSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      compactOnMobile: true,
+      hideSecondaryActionsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -159,7 +209,14 @@ export function createHeaderSurfaceConfig(
 export function createSidebarSurfaceConfig(
   config: SidebarSurfaceConfig
 ): SidebarSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      collapsible: true,
+      collapseOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -170,7 +227,14 @@ export function createSidebarSurfaceConfig(
 export function createDetailFormSurfaceConfig(
   config: DetailFormSurfaceConfig
 ): DetailFormSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      hideAsideOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -181,7 +245,14 @@ export function createDetailFormSurfaceConfig(
 export function createVisualizationSurfaceConfig(
   config: VisualizationSurfaceConfig
 ): VisualizationSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      compactChartsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -192,7 +263,14 @@ export function createVisualizationSurfaceConfig(
 export function createSearchSurfaceConfig(
   config: SearchSurfaceConfig
 ): SearchSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      stickySearchOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -203,7 +281,14 @@ export function createSearchSurfaceConfig(
 export function createEditorSurfaceConfig(
   config: EditorSurfaceConfig
 ): EditorSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      hideToolbarOnMobile: false,
+      compactToolbarOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -215,7 +300,16 @@ export function createEditorSurfaceConfig(
 export function createOperationalSurfaceConfig<TFeed extends FeedItem = FeedItem>(
   config: OperationalSurfaceConfig<TFeed>
 ): OperationalSurfaceConfig<TFeed> {
-  return config;
+  return {
+    ...config,
+    visual: {
+      mobileStatsLimit: 2,
+      mobileQueuePosition: 'bottom',
+      mobileFeedPosition: 'bottom',
+      stackSectionsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -226,7 +320,14 @@ export function createOperationalSurfaceConfig<TFeed extends FeedItem = FeedItem
 export function createMediaSurfaceConfig(
   config: MediaSurfaceConfig
 ): MediaSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      mobileColumnsLimit: 2,
+      stackOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -237,7 +338,14 @@ export function createMediaSurfaceConfig(
 export function createSchedulerSurfaceConfig(
   config: SchedulerSurfaceConfig
 ): SchedulerSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      mobileView: 'list',
+      hideTimelineOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -248,7 +356,14 @@ export function createSchedulerSurfaceConfig(
 export function createCompareSurfaceConfig(
   config: CompareSurfaceConfig
 ): CompareSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      mobileCompareLimit: 2,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -259,7 +374,31 @@ export function createCompareSurfaceConfig(
 export function createAuthSurfaceConfig(
   config: AuthSurfaceConfig
 ): AuthSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      compactFormOnMobile: true,
+      ...config.visual,
+    },
+  };
+}
+
+/**
+ * Create a type-safe marketing surface config.
+ * @param config - Full marketing surface configuration.
+ * @returns The same config object, strongly typed.
+ */
+export function createMarketingSurfaceConfig(
+  config: MarketingSurfaceConfig
+): MarketingSurfaceConfig {
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -270,7 +409,14 @@ export function createAuthSurfaceConfig(
 export function createOnboardingSurfaceConfig(
   config: OnboardingSurfaceConfig
 ): OnboardingSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      hideIllustrationOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -281,7 +427,14 @@ export function createOnboardingSurfaceConfig(
 export function createEmptyStateSurfaceConfig(
   config: EmptyStateSurfaceConfig
 ): EmptyStateSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      compactOnMobile: true,
+      hideIllustrationOnMobile: false,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -292,7 +445,14 @@ export function createEmptyStateSurfaceConfig(
 export function createSettingsSurfaceConfig(
   config: SettingsSurfaceConfig
 ): SettingsSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      collapseSidebarOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -303,7 +463,14 @@ export function createSettingsSurfaceConfig(
 export function createAuditSurfaceConfig(
   config: AuditSurfaceConfig
 ): AuditSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      compactEntriesOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -314,7 +481,14 @@ export function createAuditSurfaceConfig(
 export function createBillingSurfaceConfig(
   config: BillingSurfaceConfig
 ): BillingSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      collapseSidebarOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -325,7 +499,14 @@ export function createBillingSurfaceConfig(
 export function createProfileSurfaceConfig(
   config: ProfileSurfaceConfig
 ): ProfileSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      collapseSidebarOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -336,7 +517,14 @@ export function createProfileSurfaceConfig(
 export function createNotificationSurfaceConfig(
   config: NotificationSurfaceConfig
 ): NotificationSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      compactItemsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -347,7 +535,13 @@ export function createNotificationSurfaceConfig(
 export function createImportExportSurfaceConfig(
   config: ImportExportSurfaceConfig
 ): ImportExportSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -358,7 +552,14 @@ export function createImportExportSurfaceConfig(
 export function createReportSurfaceConfig(
   config: ReportSurfaceConfig
 ): ReportSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackSectionsOnMobile: true,
+      compactChartsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -369,7 +570,14 @@ export function createReportSurfaceConfig(
 export function createTeamSurfaceConfig(
   config: TeamSurfaceConfig
 ): TeamSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      mobileDefaultView: 'cards',
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -380,7 +588,14 @@ export function createTeamSurfaceConfig(
 export function createIntegrationSurfaceConfig(
   config: IntegrationSurfaceConfig
 ): IntegrationSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      compactCardsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -391,7 +606,14 @@ export function createIntegrationSurfaceConfig(
 export function createKanbanSurfaceConfig(
   config: KanbanSurfaceConfig
 ): KanbanSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      mobileColumnsLimit: 1,
+      stackColumnsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -402,7 +624,14 @@ export function createKanbanSurfaceConfig(
 export function createActivitySurfaceConfig(
   config: ActivitySurfaceConfig
 ): ActivitySurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      compactEntriesOnMobile: true,
+      stackOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -413,7 +642,14 @@ export function createActivitySurfaceConfig(
 export function createFileBrowserSurfaceConfig(
   config: FileBrowserSurfaceConfig
 ): FileBrowserSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      mobileView: 'list',
+      stackOnMobile: true,
+      ...config.visual,
+    },
+  };
 }
 
 /**
@@ -424,5 +660,12 @@ export function createFileBrowserSurfaceConfig(
 export function createPricingSurfaceConfig(
   config: PricingSurfaceConfig
 ): PricingSurfaceConfig {
-  return config;
+  return {
+    ...config,
+    visual: {
+      stackOnMobile: true,
+      compactColumnsOnMobile: true,
+      ...config.visual,
+    },
+  };
 }

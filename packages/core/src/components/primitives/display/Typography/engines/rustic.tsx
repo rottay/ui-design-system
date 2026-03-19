@@ -40,9 +40,21 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
-import type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../Typography.types';
-import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP } from '../Typography.types';
+import React, { forwardRef, useId } from 'react';
+import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../Typography.types';
+import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP, LINE_HEIGHT_MAP } from '../Typography.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+/**
+ * Extracts the scalar value from a prop that may be a ResponsiveValue.
+ * Returns undefined if the prop is a responsive object.
+ */
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 /**
  * Apollo (Vanilla/CSS) implementation of Heading component.
@@ -79,20 +91,48 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       h5: 'md',
       h6: 'sm',
     };
-    const effectiveSize = size || defaultSizeMap[level];
+
+    // Responsive size handling
+    const reactId = useId();
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    const sizeIsResponsive = isResponsiveValue(size);
+
+    if (sizeIsResponsive) {
+      responsiveEntries.push({
+        cssProperty: 'font-size',
+        value: size,
+        resolve: (v: TextSize) => SIZE_MAP.heading[v] || SIZE_MAP.heading.md,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'line-height',
+        value: size,
+        resolve: (v: TextSize) => LINE_HEIGHT_MAP.heading[v] || '1.2',
+      } as ResponsivePropEntry<any>);
+    }
+
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+    const elementId = needsResponsiveCSS ? `heading-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
+    const scalarSize = scalarOrUndefined(size);
+    const effectiveSize = scalarSize || defaultSizeMap[level];
 
     // All visual properties are set via inline styles referencing DS CSS
     // variables (var(--ds-*)) with hardcoded fallbacks, ensuring the heading
     // renders correctly without a theme provider (SSR, email, etc.).
     const headingStyle: React.CSSProperties = {
-      fontSize: SIZE_MAP.heading[effectiveSize] || SIZE_MAP.heading.md,
+      // Only set font-size/line-height inline when NOT responsive
+      ...(!sizeIsResponsive && {
+        fontSize: SIZE_MAP.heading[effectiveSize] || SIZE_MAP.heading.md,
+        lineHeight: 1.2,
+      }),
       fontWeight: WEIGHT_MAP[weight] || WEIGHT_MAP.bold,
       color: COLOR_MAP[color] || COLOR_MAP.default,
       textAlign: align,
       // Reset margin to zero; DS layout components handle spacing.
       margin: 0,
-      // Tight line-height for headings keeps multi-line titles compact.
-      lineHeight: 1.2,
       // Single-line truncation (ellipsis).
       ...(truncate && {
         overflow: 'hidden',
@@ -112,14 +152,20 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     const HeadingElement = Tag as React.ElementType;
     return (
-      <HeadingElement
-        ref={ref}
-        className={`rottay-heading rottay-heading--${level} ${className}`.trim()}
-        style={headingStyle}
-        {...restProps}
-      >
-        {children}
-      </HeadingElement>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <HeadingElement
+          ref={ref}
+          className={`rottay-heading rottay-heading--${level} ${className}`.trim()}
+          style={headingStyle}
+          {...(responsive ? responsive.attrs : {})}
+          {...restProps}
+        >
+          {children}
+        </HeadingElement>
+      </>
     );
   }
 );
@@ -135,7 +181,7 @@ ApolloHeading.displayName = 'ApolloHeading';
 export const ApolloText = forwardRef<HTMLElement, TextProps>(
   (props, ref) => {
     const {
-      size = TYPOGRAPHY_DEFAULTS.text.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.text.size,
       weight = TYPOGRAPHY_DEFAULTS.text.weight,
       color = TYPOGRAPHY_DEFAULTS.text.color,
       align = TYPOGRAPHY_DEFAULTS.text.align,
@@ -154,6 +200,32 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
 
     const Tag = as as keyof React.JSX.IntrinsicElements;
 
+    // Responsive size handling
+    const reactId = useId();
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+    if (sizeIsResponsive) {
+      responsiveEntries.push({
+        cssProperty: 'font-size',
+        value: sizeProp,
+        resolve: (v: TextSize) => SIZE_MAP.text[v] || SIZE_MAP.text.md,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'line-height',
+        value: sizeProp,
+        resolve: (v: TextSize) => LINE_HEIGHT_MAP.text[v] || '1.5',
+      } as ResponsivePropEntry<any>);
+    }
+
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+    const elementId = needsResponsiveCSS ? `text-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.text.size;
+
     // Multiple text decorations can be combined in a single CSS value
     // (e.g. "underline line-through"), so we collect them into an array
     // and join with a space. An empty array produces `undefined`.
@@ -162,7 +234,10 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
     if (strikethrough) decorations.push('line-through');
 
     const textStyle: React.CSSProperties = {
-      fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
+      // Only set font-size inline when NOT responsive
+      ...(!sizeIsResponsive && {
+        fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
+      }),
       fontWeight: WEIGHT_MAP[weight] || WEIGHT_MAP.normal,
       color: COLOR_MAP[color] || COLOR_MAP.default,
       textAlign: align,
@@ -185,14 +260,20 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
 
     const TextElement = Tag as React.ElementType;
     return (
-      <TextElement
-        ref={ref}
-        className={`rottay-text ${className}`.trim()}
-        style={textStyle}
-        {...restProps}
-      >
-        {children}
-      </TextElement>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <TextElement
+          ref={ref}
+          className={`rottay-text ${className}`.trim()}
+          style={textStyle}
+          {...(responsive ? responsive.attrs : {})}
+          {...restProps}
+        >
+          {children}
+        </TextElement>
+      </>
     );
   }
 );

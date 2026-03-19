@@ -66,9 +66,10 @@
  * @package @rottay/design-system
  */
 
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import type { AlertProps, AlertType } from '../Alert.types';
 import { ALERT_DEFAULTS } from '../Alert.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 // ============================================================================
 // Constants
@@ -196,6 +197,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     description,
 
     // Behavior
+    compact: compactProp = ALERT_DEFAULTS.compact,
     closable = ALERT_DEFAULTS.closable,
     onClose,
 
@@ -203,6 +205,32 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     className = '',
     style,
   } = props;
+
+  // Responsive compact handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const compactIsResponsive = isResponsiveValue(compactProp);
+
+  if (compactIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: compactProp,
+      resolve: (v: boolean) => v ? '0.5rem 0.75rem' : '1rem',
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: compactProp,
+      resolve: (v: boolean) => v ? '0.8125rem' : '0.875rem',
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `alert-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const isCompact = !compactIsResponsive && compactProp === true;
 
   // ---------------------------------------------------------------------------
   // Early Return
@@ -235,7 +263,15 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
   // ---------------------------------------------------------------------------
 
   return (
-    <div className={`alert ${TYPE_CLASSES[alertType]} ${className}`} style={style}>
+    <>
+    {responsive && responsive.css && (
+      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+    )}
+    <div
+      className={`alert ${TYPE_CLASSES[alertType]} ${isCompact ? 'p-2 text-sm' : ''} ${className}`}
+      style={style}
+      {...(responsive ? responsive.attrs : {})}
+    >
       {/* Icon Section */}
       {showIcon && <span>{icon || TYPE_ICONS[alertType]}</span>}
 
@@ -254,5 +290,6 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
         </button>
       )}
     </div>
+    </>
   );
 }

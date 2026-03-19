@@ -151,6 +151,9 @@ export { useFeatures, useHasFeature, useFeatureContext } from '../features';
 
 // ============================================================================
 // Responsive hooks -- viewport detection and breakpoint-based values
+// When a ResponsiveProvider is in the tree, useBreakpoints and
+// useResponsiveValue read from shared context (zero extra subscriptions).
+// Without a provider they fall back to per-component matchMedia listeners.
 // ============================================================================
 export {
   useMediaQuery,

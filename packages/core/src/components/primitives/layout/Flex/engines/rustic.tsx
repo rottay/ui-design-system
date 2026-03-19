@@ -5,56 +5,27 @@
  * @description Rustic (Pure HTML/CSS) implementation of the Flex component.
  * Uses inline CSS styles for maximum compatibility without external dependencies.
  *
- * @remarks
- * The Rustic engine applies all flexbox properties via inline styles:
- * - `display: flex` or `display: inline-flex`
- * - `flexDirection`, `flexWrap`, `justifyContent`, `alignItems`
- * - `gap`, `columnGap`, `rowGap` for spacing
- *
- * This makes it ideal for:
- * - Embedding in third-party applications
- * - Server-side rendering without CSS extraction
- * - Maximum browser compatibility
- *
- * @example Using Rustic Engine
- * ```tsx
- * import { Flex } from '@rottay/design-system';
- *
- * // Pure inline CSS, no external dependencies
- * <Flex engine="rustic" direction="column" gap={16} align="center">
- *   <span>First</span>
- *   <span>Second</span>
- * </Flex>
- * ```
- *
- * @see {@link Flex} - The main engine-aware component
  * @module Flex/Engines/Rustic
  * @category Layout
  * @package @rottay/design-system
  */
 
-import React from 'react';
-import type { FlexProps } from '../Flex.types';
+import React, { useId } from 'react';
+import type { FlexProps, FlexDirection, FlexWrap, FlexJustify, FlexAlign } from '../Flex.types';
 import { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from '../Flex.types';
+import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
+import { scalarOrDefault, collectFlexResponsiveEntries } from '../../shared/responsive-helpers.js';
 
 /**
  * Rustic Flex component using pure inline CSS styles.
- *
- * Every flexbox property is expressed as an inline style, making this engine
- * fully self-contained with zero dependency on external CSS frameworks. The
- * shared FLEX_JUSTIFY_MAP / FLEX_ALIGN_MAP translate shorthand prop values
- * (e.g. "between") into standard CSS values (e.g. "space-between").
- *
- * @param props - Engine-agnostic flex layout props (direction, wrap, justify, align, gap, etc.)
- * @returns A ref-forwarding div element styled entirely with inline CSS.
  */
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {
     const {
-      direction = FLEX_DEFAULTS.direction,
-      wrap = FLEX_DEFAULTS.wrap,
-      justify = FLEX_DEFAULTS.justify,
-      align = FLEX_DEFAULTS.align,
+      direction,
+      wrap,
+      justify,
+      align,
       gap,
       flex,
       inline = FLEX_DEFAULTS.inline,
@@ -64,32 +35,58 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...rest
     } = props;
 
-    // Build the complete style object up-front; the rustic engine places all
-    // layout concerns in inline styles so no external stylesheet is needed
+    const reactId = useId();
+    const responsiveEntries = collectFlexResponsiveEntries(props);
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+
+    const elementId = needsResponsiveCSS ? `flex-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
+    // Scalar values for inline styles
+    const scalarDirection = scalarOrDefault<FlexDirection>(direction, 'row');
+    const scalarWrap = scalarOrDefault<FlexWrap>(wrap, 'nowrap');
+    const scalarJustify = scalarOrDefault<FlexJustify>(justify, 'start');
+    const scalarAlign = scalarOrDefault<FlexAlign>(align, 'stretch');
+
     const flexStyle: React.CSSProperties = {
       display: inline ? 'inline-flex' : 'flex',
-      flexDirection: direction,
-      flexWrap: wrap,
-      justifyContent: FLEX_JUSTIFY_MAP[justify!],
-      alignItems: FLEX_ALIGN_MAP[align!],
+      // Only set inline values for non-responsive props
+      ...(!isResponsiveValue(direction) && { flexDirection: scalarDirection }),
+      ...(!isResponsiveValue(wrap) && { flexWrap: scalarWrap }),
+      ...(!isResponsiveValue(justify) && { justifyContent: FLEX_JUSTIFY_MAP[scalarJustify] }),
+      ...(!isResponsiveValue(align) && { alignItems: FLEX_ALIGN_MAP[scalarAlign] }),
       ...(flex !== undefined && { flex }),
       ...style,
     };
 
     // Gap supports both uniform (number) and asymmetric ([column, row]) spacing
-    if (gap !== undefined) {
-      if (Array.isArray(gap)) {
-        flexStyle.columnGap = `${gap[0]}px`;
-        flexStyle.rowGap = `${gap[1]}px`;
+    const scalarGap = isResponsiveValue(gap) ? undefined : gap;
+    if (scalarGap !== undefined) {
+      if (Array.isArray(scalarGap)) {
+        flexStyle.columnGap = `${scalarGap[0]}px`;
+        flexStyle.rowGap = `${scalarGap[1]}px`;
       } else {
-        flexStyle.gap = `${gap}px`;
+        flexStyle.gap = `${scalarGap}px`;
       }
     }
 
     return (
-      <div ref={ref} className={className} style={flexStyle} {...rest}>
-        {children}
-      </div>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <div
+          ref={ref}
+          className={className}
+          style={flexStyle}
+          {...(responsive ? responsive.attrs : {})}
+          {...rest}
+        >
+          {children}
+        </div>
+      </>
     );
   }
 );

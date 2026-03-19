@@ -39,7 +39,7 @@ import {
 
 import type { ChartBaseProps, Series } from '../Charts.types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link LineChart} component. */
@@ -80,12 +80,17 @@ export const LineChart = memo(function LineChart({
   colors = DEFAULT_COLORS,
   tooltip,
   margin = DEFAULT_MARGIN,
+  compact,
+  autoCompact,
+  compactBreakpoint,
 }: LineChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip });
+  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = height;
+  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
+  const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
   const pointCount = series.reduce((count, currentSeries) => count + currentSeries.data.length, 0);
   const summary = {
     caption: title ? `${title} data summary` : 'Line chart data summary',
@@ -146,7 +151,7 @@ export const LineChart = memo(function LineChart({
 
     // Grid
     g.append('g')
-      .call(axisLeft(y).ticks(5).tickSize(-innerWidth).tickFormat(() => ''))
+      .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
       .selectAll('line')
       .style('stroke', 'var(--ds-color-border-secondary)')
       .style('stroke-opacity', 0.5);
@@ -156,13 +161,13 @@ export const LineChart = memo(function LineChart({
     // Axes
     g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(axisBottom(x as any).ticks(6))
+      .call(axisBottom(x as any).ticks(tickCount))
       .selectAll('text')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     g.append('g')
-      .call(axisLeft(y).ticks(5))
+      .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
@@ -279,7 +284,7 @@ export const LineChart = memo(function LineChart({
           .attr('stroke-width', 2);
 
         if (chartPersonality.tooltip) {
-          dots.append('title').text((d) => `${s.name}: ${d.y}`);
+          dots.append('title').text((d) => compactState.compactTooltip ? String(d.y) : `${s.name}: ${d.y}`);
         }
       }
     });
@@ -310,7 +315,7 @@ export const LineChart = memo(function LineChart({
 
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [series, chartWidth, chartHeight, showArea, xType, chartPersonality, colors, margin, xAxisLabel, yAxisLabel]);
+  }, [series, chartWidth, chartHeight, showArea, xType, chartPersonality, colors, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
 
   return (
     <ChartScaffold
@@ -331,6 +336,8 @@ export const LineChart = memo(function LineChart({
       ].filter(Boolean).join(' '))}
       summary={summary}
       legend={legendNode}
+      hideLegend={compactState.hideLegend}
+      minHeight={compactState.isCompact ? compactState.minHeight : undefined}
     />
   );
 });

@@ -41,6 +41,14 @@
 import React, { useCallback, useId, useRef, useState } from 'react';
 import type { TabsProps, TabItem, TabsSize } from '../Tabs.types';
 import { TABS_DEFAULTS } from '../Tabs.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 // ============================================================================
 // Style Constants
@@ -93,7 +101,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     activeKey,
     defaultActiveKey,
     type = TABS_DEFAULTS.type,
-    size = TABS_DEFAULTS.size,
+    size: sizeProp = TABS_DEFAULTS.size,
     centered = TABS_DEFAULTS.centered,
     onChange,
     className,
@@ -102,6 +110,31 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
   // Strip colons from generated IDs because colons are invalid in
   // CSS selectors and break aria-controls / aria-labelledby references
   const tabsId = useId().replace(/:/g, '');
+
+  // Responsive size handling
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: sizeProp,
+      resolve: (v: TabsSize) => (SIZE_STYLES[v as keyof typeof SIZE_STYLES] || SIZE_STYLES.md).padding,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: TabsSize) => (SIZE_STYLES[v as keyof typeof SIZE_STYLES] || SIZE_STYLES.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const responsiveElementId = needsResponsiveCSS ? `tabs-${tabsId}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(responsiveElementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
   // Ref map for imperative focus management during keyboard navigation
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
@@ -232,8 +265,11 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
 
   return (
     <div className={className} style={style}>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
       {/* Tab List */}
-      <div role="tablist" style={tabListStyle}>
+      <div role="tablist" style={tabListStyle} {...(responsive ? responsive.attrs : {})}>
         {items.map((item: TabItem) => (
           <button
             key={item.key}

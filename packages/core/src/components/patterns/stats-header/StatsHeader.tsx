@@ -21,6 +21,7 @@ import type { CSSProperties } from 'react';
 
 import { Box, Flex } from '../../primitives/layout';
 import { Text } from '../../primitives/display';
+import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 
 import type { StatItem, StatsHeaderProps, AccentColor } from './types';
 
@@ -427,7 +428,7 @@ function ProgressBar({ value, accent }: { value: number; accent: AccentColor }) 
 // STAT CARD
 // ============================================================================
 
-function StatCard({ stat }: { stat: StatItem }) {
+function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean }) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
   const accent = stat.accentColor ?? 'primary';
@@ -444,14 +445,14 @@ function StatCard({ stat }: { stat: StatItem }) {
   const cardStyle: CSSProperties = {
     flex: '1 1 0',
     minWidth: 0,
-    padding: '20px 24px',
+    padding: compact ? '18px 18px' : '20px 24px',
     background: 'var(--ds-color-bg-primary)',
     border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
     borderRadius: 12,
     transition: 'transform 200ms ease, box-shadow 200ms ease',
     position: 'relative',
     overflow: 'hidden',
-    minHeight: 140,
+    minHeight: compact ? 120 : 140,
     cursor: isClickable ? 'pointer' : 'default',
     ...(pressed
       ? {
@@ -528,7 +529,7 @@ function StatCard({ stat }: { stat: StatItem }) {
           )}
           <Text
             style={{
-              fontSize: 36,
+              fontSize: compact ? 28 : 36,
               fontWeight: 800,
               color: 'var(--ds-color-text-primary)',
               fontVariantNumeric: 'tabular-nums',
@@ -540,7 +541,7 @@ function StatCard({ stat }: { stat: StatItem }) {
           {stat.suffix && (
             <Text
               style={{
-                fontSize: 14,
+                fontSize: compact ? 12 : 14,
                 fontWeight: 500,
                 color: 'var(--ds-color-text-muted)',
                 lineHeight: 1,
@@ -623,16 +624,27 @@ function StatCard({ stat }: { stat: StatItem }) {
  * which themselves resolve through the engine system.
  */
 function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
+  const { isMobile, isTablet } = useBreakpoints();
+  const compact = isMobile || isTablet;
+  const columns = isMobile ? 1 : isTablet ? 2 : Math.max(Math.min(stats.length, 4), 1);
+
   return (
     <Box>
       <style dangerouslySetInnerHTML={{ __html: KEYFRAMES }} />
-      <Flex gap={12} style={{ width: '100%' }}>
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+          gap: 12,
+          width: '100%',
+        }}
+      >
         {loading
           ? Array.from({ length: stats.length || 4 }).map((_, i) => (
               <SkeletonCard key={`skeleton-${i}`} />
             ))
-          : stats.map((stat) => <StatCard key={stat.key} stat={stat} />)}
-      </Flex>
+          : stats.map((stat) => <StatCard key={stat.key} stat={stat} compact={compact} />)}
+      </Box>
     </Box>
   );
 }

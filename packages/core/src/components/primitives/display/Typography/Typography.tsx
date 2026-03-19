@@ -40,7 +40,7 @@ export type {
   TextColor,
 } from './Typography.types';
 
-export { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP } from './Typography.types';
+export { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP, LINE_HEIGHT_MAP } from './Typography.types';
 
 export { TypographyHeading, TypographyText, TypographyParagraph, TypographyLink };
 

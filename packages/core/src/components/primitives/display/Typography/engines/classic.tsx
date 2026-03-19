@@ -42,10 +42,13 @@
 
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, useId } from 'react';
+import React from 'react';
 import { Typography as AntTypography } from 'antd';
-import type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../Typography.types';
-import { TYPOGRAPHY_DEFAULTS } from '../Typography.types';
+import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../Typography.types';
+import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP } from '../Typography.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
 
 const { Title, Text: AntText, Paragraph: AntParagraph, Link: AntLink } = AntTypography;
 
@@ -78,6 +81,16 @@ const TYPE_MAP: Record<string, 'secondary' | 'success' | 'warning' | 'danger' | 
   warning: 'warning',
   error: 'danger',
 };
+
+/**
+ * Extracts the scalar value from a prop that may be a ResponsiveValue.
+ * Returns undefined if the prop is a responsive object.
+ */
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 /**
  * Classic (Ant Design) implementation of Heading component.
@@ -116,24 +129,55 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       ? { rows: lineClamp || 1 }
       : undefined;
 
+    // Responsive size handling
+    const reactId = useId();
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    const sizeIsResponsive = isResponsiveValue(size);
+
+    if (sizeIsResponsive) {
+      // Use !important to override Ant Design's inline heading styles
+      responsiveEntries.push({
+        cssProperty: 'font-size',
+        value: size,
+        resolve: (v: TextSize) => `${SIZE_MAP.heading[v] || SIZE_MAP.heading.md} !important`,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'line-height',
+        value: size,
+        resolve: (v: TextSize) => `${LINE_HEIGHT_MAP.heading[v] || '1.2'} !important`,
+      } as ResponsivePropEntry<any>);
+    }
+
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+    const elementId = needsResponsiveCSS ? `heading-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
     return (
-      <Title
-        ref={ref as React.Ref<HTMLElement>}
-        level={LEVEL_MAP[level]}
-        type={TYPE_MAP[color]}
-        ellipsis={ellipsisConfig}
-        style={{
-          textAlign: align,
-          // Reset AntD's default Title margin to let the DS layout
-          // components (Stack, Flex) control spacing instead.
-          margin: 0,
-          ...style,
-        }}
-        className={className}
-        {...props}
-      >
-        {children}
-      </Title>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <Title
+          ref={ref as React.Ref<HTMLElement>}
+          level={LEVEL_MAP[level]}
+          type={TYPE_MAP[color]}
+          ellipsis={ellipsisConfig}
+          style={{
+            textAlign: align,
+            // Reset AntD's default Title margin to let the DS layout
+            // components (Stack, Flex) control spacing instead.
+            margin: 0,
+            ...style,
+          }}
+          className={className}
+          {...(responsive ? responsive.attrs : {})}
+          {...props}
+        >
+          {children}
+        </Title>
+      </>
     );
   }
 );
@@ -156,7 +200,7 @@ ClassicHeading.displayName = 'ClassicHeading';
 export const ClassicText = forwardRef<HTMLElement, TextProps>(
   (
     {
-      size = TYPOGRAPHY_DEFAULTS.text.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.text.size,
       weight,
       color = TYPOGRAPHY_DEFAULTS.text.color,
       align = TYPOGRAPHY_DEFAULTS.text.align,
@@ -179,26 +223,57 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
     // single-line. The `lineClamp` prop is accepted but effectively ignored.
     const ellipsisConfig = truncate || lineClamp ? true : undefined;
 
+    // Responsive size handling
+    const reactId = useId();
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+    if (sizeIsResponsive) {
+      // Use !important to override Ant Design's inline text styles
+      responsiveEntries.push({
+        cssProperty: 'font-size',
+        value: sizeProp,
+        resolve: (v: TextSize) => `${SIZE_MAP.text[v] || SIZE_MAP.text.md} !important`,
+      } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'line-height',
+        value: sizeProp,
+        resolve: (v: TextSize) => `${LINE_HEIGHT_MAP.text[v] || '1.5'} !important`,
+      } as ResponsivePropEntry<any>);
+    }
+
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+    const elementId = needsResponsiveCSS ? `text-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
     return (
-      <AntText
-        ref={ref as React.Ref<HTMLElement>}
-        type={TYPE_MAP[color]}
-        underline={underline}
-        // AntD uses `delete` (not `strikethrough`) for line-through styling
-        delete={strikethrough}
-        italic={italic}
-        // `code` renders a <code> tag with monospace font
-        code={monospace}
-        ellipsis={ellipsisConfig}
-        style={{
-          textAlign: align,
-          ...style,
-        }}
-        className={className}
-        {...props}
-      >
-        {children}
-      </AntText>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <AntText
+          ref={ref as React.Ref<HTMLElement>}
+          type={TYPE_MAP[color]}
+          underline={underline}
+          // AntD uses `delete` (not `strikethrough`) for line-through styling
+          delete={strikethrough}
+          italic={italic}
+          // `code` renders a <code> tag with monospace font
+          code={monospace}
+          ellipsis={ellipsisConfig}
+          style={{
+            textAlign: align,
+            ...style,
+          }}
+          className={className}
+          {...(responsive ? responsive.attrs : {})}
+          {...props}
+        >
+          {children}
+        </AntText>
+      </>
     );
   }
 );

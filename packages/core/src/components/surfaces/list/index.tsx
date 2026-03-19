@@ -14,6 +14,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../primitives';
 import { PatternDataTable, PatternFilterPanel } from '../../patterns';
 import { FadeIn, StaggerChildren } from '../../../motion';
+import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 import {
   countActiveFilters,
   resolveSurfaceAction,
@@ -52,6 +53,7 @@ function renderActionButton<TView>(
       size={options?.size ?? 'sm'}
       disabled={action.disabled}
       loading={action.loading}
+      icon={action.icon}
       onClick={(event) => {
         if (options?.stopPropagation) {
           event.stopPropagation();
@@ -60,8 +62,7 @@ function renderActionButton<TView>(
         action.onClick?.(item);
       }}
     >
-      {action.icon}
-      <Text style={{ marginLeft: action.icon ? 8 : 0 }}>{action.label}</Text>
+      {action.label}
     </Button>
   );
 }
@@ -216,7 +217,7 @@ function DefaultCardView<TView>({
   return gridContent;
 }
 
-export interface ListSurfaceProps<TRaw, TView> {
+export interface ListSurfaceProps<TRaw, TView extends object> {
   data: TRaw[];
   adapter: EntityAdapter<TRaw, TView>;
   config: ListSurfaceConfig<TView>;
@@ -226,7 +227,7 @@ export interface ListSurfaceProps<TRaw, TView> {
 }
 
 /** Full list-page shell with data mapping, permission filtering, and responsive view switching. */
-export function ListSurface<TRaw, TView>({
+export function ListSurface<TRaw, TView extends object>({
   data,
   adapter,
   config,
@@ -236,10 +237,12 @@ export function ListSurface<TRaw, TView>({
 }: ListSurfaceProps<TRaw, TView>): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
   const { tSurface } = useSurfaceTranslations();
+  const { isMobile } = useBreakpoints();
   // Visual defaults cascade: explicit surface config -> product profile -> DS defaults.
   // This three-tier resolution lets apps override per-page while the product
   // profile provides a consistent baseline.
   const resolvedDefaultView = config.visual.defaultView ?? profileDefaults.listView;
+  const resolvedMobileView = config.visual.mobileDefaultView ?? 'cards';
   const resolvedCompact = config.visual.compact ?? profileDefaults.listCompact;
   const resolvedCardMinWidth = config.visual.cardMinWidth ?? profileDefaults.listCardMinWidth;
   const [activeView, setActiveView] = useState<ListSurfaceView>(resolvedDefaultView);
@@ -272,6 +275,10 @@ export function ListSurface<TRaw, TView>({
   }, [config.behavior.rowActions, config.permissions]);
 
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);
+  const effectiveView = isMobile ? resolvedMobileView : activeView;
+  const shouldShowViewSwitch =
+    config.visual.allowViewSwitch !== false &&
+    (!isMobile || config.visual.hideViewSwitchOnMobile === false);
 
   const headerActions = (
     <Flex gap={8} wrap="wrap" justify="end">
@@ -279,7 +286,7 @@ export function ListSurface<TRaw, TView>({
 
       {/* View switch defaults to visible. Apps opt out with allowViewSwitch:false
           when only one view makes sense (e.g. audit logs should always be tabular). */}
-      {config.visual.allowViewSwitch !== false && (
+      {shouldShowViewSwitch && (
         <Flex gap={8}>
           <Button
             variant={resolveSurfaceButtonVariant(activeView === 'table' ? 'primary' : 'secondary')}
@@ -304,11 +311,9 @@ export function ListSurface<TRaw, TView>({
           disabled={primaryAction.disabled}
           loading={primaryAction.loading}
           onClick={() => primaryAction.onClick?.(undefined as void)}
+          icon={primaryAction.icon}
         >
-          {primaryAction.icon}
-          <Text style={{ marginLeft: primaryAction.icon ? 8 : 0 }}>
-            {primaryAction.label}
-          </Text>
+          {primaryAction.label}
         </Button>
       )}
     </Flex>
@@ -341,15 +346,15 @@ export function ListSurface<TRaw, TView>({
               onApply={config.behavior.onFilterApply}
               activeCount={activeFilterCount}
               title={tSurface('list.filters_title')}
-              layout="inline"
+              layout={isMobile ? (config.visual.mobileFiltersLayout ?? 'stacked') : 'inline'}
             />
           </Card.Body>
         </Card>
       )}
 
-      {activeView === 'table' ? (
-        <PatternDataTable
-          data={mappedItems as Array<Record<string, unknown>>}
+      {effectiveView === 'table' ? (
+        <PatternDataTable<TView>
+          data={mappedItems}
           columns={permittedColumns
             .filter((column) => !column.hideInTable)
             .map((column) => ({
@@ -365,14 +370,14 @@ export function ListSurface<TRaw, TView>({
                   column.render
                 ),
             }))}
-          rowKey={config.behavior.rowKey as never}
+          rowKey={config.behavior.rowKey}
           sorting={config.behavior.sorting}
           onSortChange={config.behavior.onSortChange}
           pagination={config.behavior.pagination}
           compact={resolvedCompact}
           stickyHeader={config.visual.stickyHeader}
           maxHeight={config.visual.maxHeight}
-          onRowClick={config.behavior.onRowClick as never}
+          onRowClick={config.behavior.onRowClick}
           actions={
             rowActions.length > 0
               ? (item: TView) => (

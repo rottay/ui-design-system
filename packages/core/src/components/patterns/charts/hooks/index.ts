@@ -83,3 +83,6 @@ export function useChartDimensions(
 
 export { useChartPersonality } from './use-chart-personality';
 export type { ChartPersonalityOptions, ResolvedChartPersonality } from './use-chart-personality';
+
+export { useChartCompact } from './use-chart-compact';
+export type { UseChartCompactOptions, ResolvedChartCompact } from './use-chart-compact';

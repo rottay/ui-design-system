@@ -62,10 +62,18 @@
 
 'use client';
 
-import React, { forwardRef, useState, useCallback } from 'react';
+import React, { forwardRef, useState, useCallback, useId } from 'react';
 import { Input as AntInput, InputNumber } from 'antd';
-import type { InputProps } from '../Input.types';
-import { INPUT_DEFAULTS, ANT_SIZE_MAP } from '../Input.types';
+import type { InputProps, InputSize } from '../Input.types';
+import { INPUT_DEFAULTS, ANT_SIZE_MAP, SIZE_MAP as INPUT_SIZE_MAP } from '../Input.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 // Antd Input only supports error/warning status natively. Success is rendered
 // through the DS Form.Item layer instead, so we pass undefined.
@@ -100,7 +108,7 @@ const VARIANT_MAP = {
  */
 const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
-    size = INPUT_DEFAULTS.size,
+    size: sizeProp = INPUT_DEFAULTS.size,
     variant = INPUT_DEFAULTS.variant,
     status = INPUT_DEFAULTS.status,
     type = INPUT_DEFAULTS.type,
@@ -133,6 +141,32 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: InputSize) => `${(INPUT_SIZE_MAP[v as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md).height} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: InputSize) => `${(INPUT_SIZE_MAP[v as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md).fontSize} !important`,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `input-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
   // Handle controlled/uncontrolled for number type
   const [internalValue, setInternalValue] = useState(defaultValue ?? '');
@@ -246,12 +280,18 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-required': required,
   };
 
+  const responsiveStyleTag = responsive && responsive.css ? (
+    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+  ) : null;
+  const responsiveAttrs = responsive ? responsive.attrs : {};
+
   // Ant Design's InputNumber is a separate component with a different API,
   // so numeric inputs branch here to avoid prop mismatches (e.g., allowClear
   // is not supported on InputNumber).
   if (type === 'number') {
     return (
       <div style={{ width: '100%' }}>
+        {responsiveStyleTag}
         <InputNumber
           {...numberProps}
           ref={ref as any}
@@ -281,6 +321,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   if (type === 'password') {
     return (
       <div style={{ width: '100%' }}>
+        {responsiveStyleTag}
         <AntInput.Password
           {...commonProps}
           ref={ref as any}
@@ -309,6 +350,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   if (type === 'search') {
     return (
       <div style={{ width: '100%' }}>
+        {responsiveStyleTag}
         <AntInput.Search
           {...commonProps}
           ref={ref as any}
@@ -341,6 +383,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Default text input (also handles email, tel, url)
   return (
     <div style={{ width: '100%' }}>
+      {responsiveStyleTag}
       <AntInput
         {...commonProps}
         ref={ref as any}
@@ -348,6 +391,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         value={currentValue}
         defaultValue={defaultValue}
         onChange={handleChange}
+        {...responsiveAttrs}
       />
       {hasError && errorMessage && (
         <span

@@ -59,9 +59,17 @@
 
 'use client';
 
-import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'react';
-import type { InputProps } from '../Input.types';
-import { INPUT_DEFAULTS, DAISY_SIZE_MAP } from '../Input.types';
+import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } from 'react';
+import type { InputProps, InputSize } from '../Input.types';
+import { INPUT_DEFAULTS, DAISY_SIZE_MAP, SIZE_MAP as INPUT_SIZE_MAP } from '../Input.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 // DaisyUI input status classes change the border/ring color to semantic colors.
 // Unlike antd, DaisyUI does support a success state natively via input-success.
@@ -85,7 +93,7 @@ const STATUS_MAP = {
  */
 const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
-    size = INPUT_DEFAULTS.size,
+    size: sizeProp = INPUT_DEFAULTS.size,
     variant = INPUT_DEFAULTS.variant,
     status = INPUT_DEFAULTS.status,
     type = INPUT_DEFAULTS.type,
@@ -119,6 +127,32 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: InputSize) => (INPUT_SIZE_MAP[v as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md).height,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: InputSize) => (INPUT_SIZE_MAP[v as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `input-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
   // Handle controlled/uncontrolled
   const [internalValue, setInternalValue] = useState(defaultValue ?? '');
@@ -223,9 +257,15 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // When addons are present, the input is wrapped in a DaisyUI <label> so
   // prefix, suffix, and clear button sit in a single flex row. The inner
   // <input> strips its own border/bg to avoid double-styling the container.
+  const responsiveStyleTag = responsive && responsive.css ? (
+    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+  ) : null;
+  const responsiveAttrs = responsive ? responsive.attrs : {};
+
   if (prefix || suffix || showClearButton) {
     return (
       <div className="w-full" style={style}>
+        {responsiveStyleTag}
         <label
           className={[
             'input',
@@ -316,8 +356,10 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Simple input without prefix/suffix
   return (
     <div className="w-full" style={style}>
+      {responsiveStyleTag}
       <input
         ref={inputRef}
+        {...responsiveAttrs}
         id={id}
         name={name}
         type={type}

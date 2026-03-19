@@ -47,6 +47,7 @@
 
 import type { BaseComponentProps } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 /**
  * Semantic heading levels corresponding to HTML heading elements.
@@ -100,10 +101,15 @@ export interface HeadingProps extends BaseComponentProps, EngineAwareProps {
   level?: HeadingLevel;
 
   /**
-   * Visual size of the heading.
+   * Visual size of the heading. Accepts a plain value or a responsive breakpoint object.
    * Can differ from semantic level for design flexibility.
+   * @example
+   * ```tsx
+   * <Heading size="3xl" />
+   * <Heading size={{ base: 'lg', md: '2xl', xl: '3xl' }} />
+   * ```
    */
-  size?: TextSize;
+  size?: ResponsiveValue<TextSize>;
 
   /**
    * Font weight of the heading.
@@ -154,10 +160,15 @@ export interface HeadingProps extends BaseComponentProps, EngineAwareProps {
  */
 export interface TextProps extends BaseComponentProps, EngineAwareProps {
   /**
-   * Text size.
+   * Text size. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
+   * @example
+   * ```tsx
+   * <Text size="lg" />
+   * <Text size={{ base: 'sm', md: 'lg', xl: '2xl' }} />
+   * ```
    */
-  size?: TextSize;
+  size?: ResponsiveValue<TextSize>;
 
   /**
    * Font weight.
@@ -515,4 +526,32 @@ export const COLOR_MAP = {
   warning: 'var(--ds-color-warning-500)',
   /** Error / danger color - validation errors, destructive actions. */
   error: 'var(--ds-color-error-500)',
+} as const;
+
+/**
+ * Line-height mapping keyed by text size.
+ * Provides proportional line-heights that scale with each size tier.
+ * Used by responsive typography to set line-height alongside font-size.
+ *
+ * @constant
+ */
+export const LINE_HEIGHT_MAP = {
+  heading: {
+    xs: '1.4',
+    sm: '1.35',
+    md: '1.3',
+    lg: '1.25',
+    xl: '1.2',
+    '2xl': '1.15',
+    '3xl': '1.1',
+  },
+  text: {
+    xs: '1.5',
+    sm: '1.5',
+    md: '1.5',
+    lg: '1.5',
+    xl: '1.45',
+    '2xl': '1.4',
+    '3xl': '1.35',
+  },
 } as const;

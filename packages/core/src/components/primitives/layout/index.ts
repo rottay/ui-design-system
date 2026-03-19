@@ -115,3 +115,14 @@ export { ASPECT_RATIO_DEFAULTS, RATIO_PRESETS } from './AspectRatio';
 export { ScrollArea } from './ScrollArea';
 export type { ScrollAreaProps, ScrollAreaOrientation, ScrollAreaScrollbarSize } from './ScrollArea';
 export { SCROLL_AREA_DEFAULTS, SCROLLBAR_SIZES } from './ScrollArea';
+
+// Show / Hide - CSS-first responsive visibility
+export { Show, buildShowMediaQuery } from './Show';
+export type { ShowProps } from './Show';
+
+export { Hide, buildHideMediaQuery } from './Hide';
+export type { HideProps } from './Hide';
+
+// ResponsiveSlot - CSS-first responsive content swapping
+export { ResponsiveSlot } from './ResponsiveSlot';
+export type { ResponsiveSlotProps } from './ResponsiveSlot';

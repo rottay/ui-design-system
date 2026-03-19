@@ -10,9 +10,10 @@
  * to supply field rendering and item-specific tab content.
  */
 
-import { Box } from '../../primitives';
+import { Box, Stack } from '../../primitives';
 import { PatternDetailPanel } from '../../patterns';
 import { FadeIn } from '../../../motion';
+import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 import {
   filterDetailSurfaceTabs,
   filterSurfaceActions,
@@ -44,6 +45,7 @@ export function DetailSurface<TRaw, TView>({
 }: DetailSurfaceProps<TRaw, TView>): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaults();
+  const { isMobile } = useBreakpoints();
 
   if (error) {
     return (
@@ -112,6 +114,16 @@ export function DetailSurface<TRaw, TView>({
   // When activeTab is undefined the Tabs component manages its own state
   // (uncontrolled mode). We track this so we pass the right prop.
   const isControlledTabState = config.behavior.activeTab !== undefined;
+  const resolvedSidebar = item ? config.presentation.sidebar?.(item) : undefined;
+  const shouldCollapseSidebarOnMobile =
+    isMobile && !!resolvedSidebar && config.visual.collapseSidebarOnMobile !== false;
+  const resolvedFooter =
+    item && (config.presentation.footer?.(item) || shouldCollapseSidebarOnMobile) ? (
+      <Stack spacing="md">
+        {config.presentation.footer?.(item)}
+        {shouldCollapseSidebarOnMobile ? resolvedSidebar : null}
+      </Stack>
+    ) : undefined;
 
   const detailContent = (
     <Box
@@ -147,12 +159,12 @@ export function DetailSurface<TRaw, TView>({
           status={item ? config.presentation.status?.(item) : undefined}
           tabs={visibleTabs}
           actions={actions}
-          sidebar={item ? config.presentation.sidebar?.(item) : undefined}
+          sidebar={shouldCollapseSidebarOnMobile ? undefined : resolvedSidebar}
           sidebarPosition={config.visual.sidebarPosition}
           sidebarWidth={config.visual.sidebarWidth}
           onBack={config.presentation.chrome?.back?.onClick}
           headerExtra={item ? config.presentation.headerExtra?.(item) : undefined}
-          footer={item ? config.presentation.footer?.(item) : undefined}
+          footer={resolvedFooter}
           breadcrumbs={config.presentation.chrome?.breadcrumbs}
           activeTab={isControlledTabState ? resolvedActiveTab : undefined}
           onTabChange={config.behavior.onTabChange}

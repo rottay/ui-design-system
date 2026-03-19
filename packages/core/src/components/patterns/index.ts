@@ -10,6 +10,8 @@
 export type {
   PatternBaseProps,
   ColumnDef,
+  ColumnResponsiveConfig,
+  ResponsiveColumnMode,
   SortConfig,
   FilterDef,
   PaginationConfig,

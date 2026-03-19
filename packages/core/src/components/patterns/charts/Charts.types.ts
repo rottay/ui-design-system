@@ -8,6 +8,42 @@
 import type { CSSProperties, ReactNode } from 'react';
 
 /**
+ * Configuration for compact/responsive chart rendering on small screens.
+ * When compact mode is active, charts reduce visual clutter by hiding legends,
+ * limiting axis ticks, simplifying tooltips, and enforcing a minimum height.
+ *
+ * @example
+ * ```tsx
+ * <LineChart
+ *   series={data}
+ *   compact={{ hideLegend: true, maxTicks: 3, compactTooltip: true }}
+ *   autoCompact
+ * />
+ * ```
+ */
+export interface ChartCompactConfig {
+  /** Hide legend when compact mode is active */
+  hideLegend?: boolean;
+  /** Maximum number of axis ticks in compact mode */
+  maxTicks?: number;
+  /** Use compact tooltip (value only, no series name) */
+  compactTooltip?: boolean;
+  /** Hide series labels on chart elements */
+  hideSeriesLabels?: boolean;
+  /** Minimum height in pixels when compact mode is active */
+  minHeight?: number;
+}
+
+/** Sensible defaults for compact mode so charts work well on mobile without config */
+export const DEFAULT_COMPACT_CONFIG: Required<ChartCompactConfig> = {
+  hideLegend: true,
+  maxTicks: 4,
+  compactTooltip: true,
+  hideSeriesLabels: false,
+  minHeight: 150,
+};
+
+/**
  * Common base props shared by every chart component (BarChart, LineChart,
  * PieChart, AreaChart, etc.). Controls dimensions, loading state,
  * title/subtitle, legend visibility, animation, color palette, and margins.
@@ -57,6 +93,12 @@ export interface ChartBaseProps {
   tooltip?: boolean;
   /** Pixel margins around the chart drawing area */
   margin?: { top: number; right: number; bottom: number; left: number };
+  /** Responsive compact configuration for small screens */
+  compact?: ChartCompactConfig;
+  /** Auto-detect compact mode based on container width (default: false) */
+  autoCompact?: boolean;
+  /** Container width breakpoint below which compact mode activates (default: 640px) */
+  compactBreakpoint?: number;
 }
 
 /** Default 10-color palette using mid-range design system token values */

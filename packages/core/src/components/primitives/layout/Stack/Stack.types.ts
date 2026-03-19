@@ -37,6 +37,7 @@
 
 import type { CSSProperties, ElementType, HTMLAttributes, ReactNode } from 'react';
 import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../contracts';
+import type { ResponsiveValue } from '../shared/types';
 
 /**
  * Direction of the stack layout
@@ -94,40 +95,40 @@ export interface StackProps extends
   as?: ElementType;
 
   /**
-   * The direction of the stack layout
+   * The direction of the stack layout. Accepts a responsive object.
    * @default 'vertical'
    */
-  direction?: StackDirection;
+  direction?: ResponsiveValue<StackDirection>;
 
   /**
-   * Spacing between stack items.
+   * Spacing between stack items. Accepts a responsive object.
    * Can be a preset string (xs, sm, md, lg, xl, 2xl, 3xl, 4xl) or a number in pixels.
    * @default 'md'
    */
-  spacing?: StackSpacing;
+  spacing?: ResponsiveValue<StackSpacing>;
 
   /**
-   * Alias for spacing prop (for consistency with CSS gap)
+   * Alias for spacing prop (for consistency with CSS gap). Accepts a responsive object.
    */
-  gap?: StackSpacing;
+  gap?: ResponsiveValue<StackSpacing>;
 
   /**
-   * Alignment of items along the cross axis
+   * Alignment of items along the cross axis. Accepts a responsive object.
    * @default 'stretch'
    */
-  align?: StackAlign;
+  align?: ResponsiveValue<StackAlign>;
 
   /**
-   * Justification of items along the main axis
+   * Justification of items along the main axis. Accepts a responsive object.
    * @default 'start'
    */
-  justify?: StackJustify;
+  justify?: ResponsiveValue<StackJustify>;
 
   /**
-   * Whether items should wrap to the next line when they overflow
+   * Whether items should wrap to the next line when they overflow. Accepts a responsive object.
    * @default false
    */
-  wrap?: boolean;
+  wrap?: ResponsiveValue<boolean>;
 
   /**
    * Optional divider element to render between stack items.

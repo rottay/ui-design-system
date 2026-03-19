@@ -63,10 +63,11 @@
  * @package @rottay/design-system
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 import { Alert as AntAlert } from 'antd';
 import type { AlertProps } from '../Alert.types';
 import { ALERT_DEFAULTS } from '../Alert.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 // ============================================================================
 // Component
@@ -128,6 +129,7 @@ export default function ClassicAlert(props: AlertProps): React.ReactElement {
     description,
 
     // Behavior
+    compact: compactProp = ALERT_DEFAULTS.compact,
     closable = ALERT_DEFAULTS.closable,
     onClose,
 
@@ -136,28 +138,63 @@ export default function ClassicAlert(props: AlertProps): React.ReactElement {
     style,
   } = props;
 
+  // Responsive compact handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const compactIsResponsive = isResponsiveValue(compactProp);
+
+  if (compactIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: compactProp,
+      resolve: (v: boolean) => `${v ? '8px 12px' : '16px'} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: compactProp,
+      resolve: (v: boolean) => `${v ? '0.8125rem' : '0.875rem'} !important`,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `alert-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const isCompact = !compactIsResponsive && compactProp === true;
+
   // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
 
   return (
-    <AntAlert
-      // Type & Appearance
-      type={type}
-      icon={icon}
-      showIcon={showIcon}
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
+      <AntAlert
+        // Type & Appearance
+        type={type}
+        icon={icon}
+        showIcon={showIcon}
 
-      // Content
-      message={message}
-      description={description}
+        // Content
+        message={message}
+        description={description}
 
-      // Behavior
-      closable={closable}
-      onClose={onClose}
+        // Behavior
+        closable={closable}
+        onClose={onClose}
 
-      // Styling
-      className={className}
-      style={style}
-    />
+        // Styling
+        className={className}
+        style={{
+          ...(isCompact ? { padding: '8px 12px', fontSize: '0.8125rem' } : {}),
+          ...style,
+        }}
+        {...(responsive ? responsive.attrs : {})}
+      />
+    </>
   );
 }

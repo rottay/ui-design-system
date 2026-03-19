@@ -52,6 +52,7 @@ export function SurfaceActionBar<TView>({
           size={size}
           disabled={action.disabled}
           loading={action.loading}
+          icon={action.icon}
           onClick={(event: MouseEvent<HTMLButtonElement>) => {
             if (stopPropagation) {
               event.stopPropagation();
@@ -60,8 +61,7 @@ export function SurfaceActionBar<TView>({
             action.onClick?.(item as TView);
           }}
         >
-          {action.icon}
-          <Text style={{ marginLeft: action.icon ? 8 : 0 }}>{action.label}</Text>
+          {action.label}
         </Button>
       ))}
     </Flex>

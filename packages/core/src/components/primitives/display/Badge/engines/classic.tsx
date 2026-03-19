@@ -11,10 +11,18 @@
 
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
 import { Badge as AntBadge } from 'antd';
-import type { BadgeProps } from '../Badge.types';
+import type { BadgeProps, BadgeSize } from '../Badge.types';
 import { BADGE_DEFAULTS, VARIANT_COLOR_MAP, SIZE_MAP } from '../Badge.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 /**
  * Formats a numeric count value for display with overflow handling.
@@ -47,7 +55,7 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     showZero = BADGE_DEFAULTS.showZero,
     max = BADGE_DEFAULTS.overflowCount,
     variant = BADGE_DEFAULTS.variant,
-    size = BADGE_DEFAULTS.size,
+    size: sizeProp = BADGE_DEFAULTS.size,
     pulse,
     position = BADGE_DEFAULTS.position,
     icon,
@@ -59,6 +67,37 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     className,
     style,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'min-width',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => `${(SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).minWidth} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => `${(SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => `${(SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize} !important`,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementIdVal = needsResponsiveCSS ? `badge-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementIdVal, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? BADGE_DEFAULTS.size;
 
   // `content` (string/ReactNode) takes precedence over numeric `count`
   const displayValue = content !== undefined ? content : count;
@@ -124,44 +163,56 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     };
 
     return (
-      <span
-        className={className}
-        style={standaloneStyle}
-        onClick={clickable || onClick ? handleClick : undefined}
-      >
-        {icon && <span style={{ marginRight: 4 }}>{icon}</span>}
-        {props.children}
-        {closable && (
-          <span
-            style={{ marginLeft: 4, cursor: 'pointer', opacity: 0.7 }}
-            onClick={(e) => { e.stopPropagation(); onClose?.(); }}
-            aria-label="Close badge"
-          >
-            x
-          </span>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
         )}
-      </span>
+        <span
+          className={className}
+          style={standaloneStyle}
+          onClick={clickable || onClick ? handleClick : undefined}
+          {...(responsive ? responsive.attrs : {})}
+        >
+          {icon && <span style={{ marginRight: 4 }}>{icon}</span>}
+          {props.children}
+          {closable && (
+            <span
+              style={{ marginLeft: 4, cursor: 'pointer', opacity: 0.7 }}
+              onClick={(e) => { e.stopPropagation(); onClose?.(); }}
+              aria-label="Close badge"
+            >
+              x
+            </span>
+          )}
+        </span>
+      </>
     );
   }
 
   // Standard path: delegate to antd Badge which handles count overflow,
   // dot rendering, status animation, and positioning automatically
   return (
-    <AntBadge
-      count={typeof displayValue === 'string' ? displayValue : formatCount(displayValue as number, max!)}
-      dot={dot}
-      color={color}
-      size={antSize}
-      showZero={showZero}
-      overflowCount={max}
-      offset={offset}
-      status={status}
-      className={className}
-      style={badgeStyle}
-      onClick={clickable || onClick ? handleClick : undefined}
-    >
-      {children}
-    </AntBadge>
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
+      <AntBadge
+        count={typeof displayValue === 'string' ? displayValue : formatCount(displayValue as number, max!)}
+        dot={dot}
+        color={color}
+        size={antSize}
+        showZero={showZero}
+        overflowCount={max}
+        offset={offset}
+        status={status}
+        className={className}
+        style={badgeStyle}
+        onClick={clickable || onClick ? handleClick : undefined}
+        {...(responsive ? responsive.attrs : {})}
+      >
+        {children}
+      </AntBadge>
+    </>
   );
 }
 

@@ -127,6 +127,8 @@ export type {
   StackSpacingPreset,
 } from './Stack.types';
 
+export type { ResponsiveValue } from '../shared/types';
+
 // ============================================================================
 // CONSTANT EXPORTS
 // ============================================================================

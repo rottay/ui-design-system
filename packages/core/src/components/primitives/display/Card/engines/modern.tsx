@@ -52,9 +52,10 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import type { CardProps } from '../Card.types';
 import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 /**
  * Custom loading spinner for Card overlay.
@@ -144,12 +145,33 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     bordered = CARD_DEFAULTS.bordered,
     shadowed: _shadowed,
     radius = CARD_DEFAULTS.radius,
-    padding = CARD_DEFAULTS.padding,
+    padding: paddingProp = CARD_DEFAULTS.padding,
     divider,
     onClick,
     className = '',
     style,
   } = props;
+
+  // Responsive padding handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const paddingIsResponsive = isResponsiveValue(paddingProp);
+
+  if (paddingIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: paddingProp,
+      resolve: (v: string) => PADDING_MAP[v] || PADDING_MAP.md,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `card-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
 
   // Hover state is tracked in React (not pure CSS :hover) because we need
   // to apply CSS variable-driven transforms and shadows via inline styles,
@@ -211,9 +233,16 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   // 1) Low-opacity skeleton bars that approximate the card's eventual layout,
   // 2) A frosted-glass spinner overlay so the user understands content is
   //    incoming while the card retains its correct dimensions.
+  const responsiveStyleTag = responsive && responsive.css ? (
+    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+  ) : null;
+  const responsiveAttrs = responsive ? responsive.attrs : {};
+
   if (loading) {
     return (
-      <div className={cardClasses} style={cardStyle}>
+      <>
+      {responsiveStyleTag}
+      <div className={cardClasses} style={cardStyle} {...responsiveAttrs}>
         {/* Placeholder cover: a muted rectangle preserving aspect ratio */}
         {cover && (
           <figure>
@@ -250,16 +279,20 @@ export default function ModernCard(props: CardProps): React.ReactElement {
           </div>
         </div>
       </div>
+      </>
     );
   }
 
   return (
+    <>
+    {responsiveStyleTag}
     <div
       className={cardClasses}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={cardStyle}
+      {...responsiveAttrs}
     >
       {/* Cover image at top */}
       {cover && coverPosition === 'top' && (
@@ -310,6 +343,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         </figure>
       )}
     </div>
+    </>
   );
 }
 

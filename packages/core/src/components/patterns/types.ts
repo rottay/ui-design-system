@@ -32,6 +32,29 @@ export interface PatternBaseProps {
 }
 
 /**
+ * Responsive visibility mode for a column at a given device class.
+ *
+ * - `visible` - Column renders normally (table column or card field).
+ * - `hidden`  - Column is completely hidden at this breakpoint.
+ * - `summary` - Column data appears in the mobile card summary area (detail rows below the title).
+ * - `primary` - Column becomes the card title / primary content on mobile card layouts.
+ */
+export type ResponsiveColumnMode = 'visible' | 'hidden' | 'summary' | 'primary';
+
+/**
+ * Per-device-class responsive configuration for a column.
+ * When omitted, all breakpoints default to `'visible'`.
+ */
+export interface ColumnResponsiveConfig {
+  /** Behavior on phone viewports (0-639px). @default 'visible' */
+  phone?: ResponsiveColumnMode;
+  /** Behavior on tablet viewports (640-1023px). @default 'visible' */
+  tablet?: ResponsiveColumnMode;
+  /** Behavior on desktop viewports (1024px+). @default 'visible' */
+  desktop?: ResponsiveColumnMode;
+}
+
+/**
  * Generic column definition for data-driven patterns.
  */
 export interface ColumnDef<T> {
@@ -61,6 +84,24 @@ export interface ColumnDef<T> {
   pin?: 'left' | 'right';
   /** Enable cell editing */
   editable?: boolean;
+  /**
+   * Responsive column behavior per device class.
+   *
+   * Controls whether the column is shown, hidden, or treated as a card
+   * title/summary field at each breakpoint. When omitted, all breakpoints
+   * default to `'visible'` (backward-compatible).
+   *
+   * @example
+   * ```tsx
+   * {
+   *   key: 'email',
+   *   header: 'Email',
+   *   accessorKey: 'email',
+   *   responsive: { phone: 'hidden', tablet: 'visible', desktop: 'visible' },
+   * }
+   * ```
+   */
+  responsive?: ColumnResponsiveConfig;
 }
 
 /**

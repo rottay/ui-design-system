@@ -54,6 +54,7 @@
 
 import type { EngineAwareProps, BaseComponentProps } from '../../../../contracts';
 import type { ReactNode } from 'react';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 // ============================================================================
 // Type Definitions
@@ -183,6 +184,18 @@ export interface AlertProps extends BaseComponentProps, EngineAwareProps {
   // ---------------------------------------------------------------------------
 
   /**
+   * Whether the alert uses compact styling (reduced padding and font size).
+   * Accepts a plain boolean or a responsive breakpoint object.
+   * @default false
+   * @example
+   * ```tsx
+   * <Alert compact message="Short" />
+   * <Alert compact={{ base: true, md: false }} message="Responsive compact" />
+   * ```
+   */
+  compact?: ResponsiveValue<boolean>;
+
+  /**
    * Whether the alert can be dismissed.
    * Shows a close button when true.
    * @default false
@@ -236,4 +249,7 @@ export const ALERT_DEFAULTS: Partial<AlertProps> = {
 
   /** Alerts are not dismissible by default */
   closable: false,
+
+  /** Alerts use normal (non-compact) styling by default */
+  compact: false,
 };

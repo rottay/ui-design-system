@@ -37,6 +37,7 @@
 import type { ReactNode } from 'react';
 import type { BaseComponentProps, Size, WithChildren, ClickableProps, ShadowedProps, BorderedProps } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 /** Card size type alias derived from the global Size scale. */
 export type CardSize = Size;
@@ -139,10 +140,15 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
   radius?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
   /**
-   * Card content padding.
+   * Card content padding. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
+   * @example
+   * ```tsx
+   * <Card padding="lg" />
+   * <Card padding={{ base: 'sm', md: 'md', xl: 'lg' }} />
+   * ```
    */
-  padding?: 'none' | 'sm' | 'md' | 'lg';
+  padding?: ResponsiveValue<'none' | 'sm' | 'md' | 'lg'>;
 
   /**
    * Whether to show a divider between header and body.

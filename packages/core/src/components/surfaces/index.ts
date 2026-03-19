@@ -70,6 +70,7 @@ export * from './pricing';
 
 // -- Auth & onboarding surfaces --
 export * from './auth';
+export * from './marketing';
 export * from './onboarding';
 export * from './empty-state';
 

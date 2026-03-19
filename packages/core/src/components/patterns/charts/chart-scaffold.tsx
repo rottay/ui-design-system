@@ -46,6 +46,10 @@ interface ChartScaffoldProps {
   ariaDescription: string;
   summary?: ChartSummaryTable;
   legend?: ReactNode;
+  /** When true, the legend slot is hidden (compact mode) */
+  hideLegend?: boolean;
+  /** Minimum height override for compact mode (applied as CSS min-height on container) */
+  minHeight?: number;
 }
 
 /**
@@ -124,6 +128,8 @@ export function ChartScaffold({
   ariaDescription,
   summary,
   legend,
+  hideLegend = false,
+  minHeight,
 }: ChartScaffoldProps) {
   const descriptionId = useId();
   const titleId = useId();
@@ -204,7 +210,7 @@ export function ChartScaffold({
   }
 
   return (
-    <div ref={containerRef} className={className} style={{ position: 'relative', width: width ?? '100%', ...style }}>
+    <div ref={containerRef} className={className} style={{ position: 'relative', width: width ?? '100%', ...(minHeight ? { minHeight } : {}), ...style }}>
       {title ? (
         <div style={{ marginBottom: 4 }}>
           <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
@@ -257,7 +263,7 @@ export function ChartScaffold({
         <desc id={svgDescId}>{ariaDescription}</desc>
       </svg>
 
-      {legend ?? null}
+      {hideLegend ? null : (legend ?? null)}
     </div>
   );
 }

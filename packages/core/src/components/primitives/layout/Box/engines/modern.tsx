@@ -3,35 +3,6 @@
  * @description Modern (DaisyUI/Tailwind) implementation of the Box component.
  * Provides utility-first Box using Tailwind CSS classes.
  *
- * @remarks
- * The Modern engine leverages Tailwind CSS utility classes for styling,
- * making it ideal for projects using the utility-first paradigm. Spacing,
- * shadows, and border-radius values are mapped to Tailwind class names.
- *
- * Tailwind Class Mappings:
- * - Spacing: `p-1` (xs) through `p-16` (4xl)
- * - Shadows: `shadow-xs` through `shadow-2xl`
- * - Border Radius: `rounded-sm` through `rounded-full`
- * - Display: Direct passthrough (`flex`, `grid`, etc.)
- *
- * @example Using Modern Engine
- * ```tsx
- * import { Box } from '@rottay/design-system';
- *
- * // Use Modern engine for Tailwind classes
- * <Box engine="modern" p="md" rounded="lg" shadow="md">
- *   Outputs: class="p-4 rounded-lg shadow"
- * </Box>
- *
- * // Combine with global EngineProvider
- * <EngineProvider engine="modern">
- *   <Box p="sm" m="lg">Tailwind classes applied</Box>
- * </EngineProvider>
- * ```
- *
- * @see {@link Box} - The main engine-aware component
- * @see {@link ClassicBox} - Ant Design implementation
- * @see {@link RusticBox} - Pure HTML/CSS implementation
  * @module Box/Engines/Modern
  * @category Layout
  * @package @rottay/design-system
@@ -39,19 +10,19 @@
 
 'use client';
 
-import React, { forwardRef, type ElementType, type Ref, type CSSProperties } from 'react';
+import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
 import type { BoxProps, BoxSpacing, BoxBorderRadius, BoxShadow } from '../Box.types';
 import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../Box.types';
+import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
+import { scalarOrUndefined, collectBoxResponsiveEntries } from '../../shared/responsive-helpers.js';
 
 // Inline style builder for properties that cannot be expressed as static
-// Tailwind classes (dimensions, colors, transforms, etc.). This runs in
-// parallel with buildTailwindClasses -- classes handle spacing/shadow/radius,
-// inline styles handle everything else.
+// Tailwind classes (dimensions, colors, transforms, etc.).
 function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
 
-  // Dimensions
-  const widthValue = props.width || props.w;
+  // Dimensions - only inline when NOT responsive
+  const widthValue = scalarOrUndefined(props.width) || scalarOrUndefined(props.w);
   if (widthValue !== undefined) {
     style.width = widthValue;
   }
@@ -59,11 +30,11 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (heightValue !== undefined) {
     style.height = heightValue;
   }
-  const minWidthValue = props.minWidth || props.minW;
+  const minWidthValue = scalarOrUndefined(props.minWidth) || scalarOrUndefined(props.minW);
   if (minWidthValue !== undefined) {
     style.minWidth = minWidthValue;
   }
-  const maxWidthValue = props.maxWidth || props.maxW;
+  const maxWidthValue = scalarOrUndefined(props.maxWidth) || scalarOrUndefined(props.maxW);
   if (maxWidthValue !== undefined) {
     style.maxWidth = maxWidthValue;
   }
@@ -223,127 +194,100 @@ const SHADOW_CLASS_MAP: Record<BoxShadow, string> = {
   '2xl': 'shadow-2xl',
 };
 
-// Builds an array of Tailwind utility classes from Box layout props.
-// Modern engine prefers classes over inline styles so Tailwind's purge
-// can detect them and include only used utilities in the production build.
-// Values like dimensions, colors, and transforms fall through to inline
-// styles because they are dynamic and not in Tailwind's static class set.
 function buildTailwindClasses(props: BoxProps): string[] {
   const classes: string[] = [];
-  const {
-    padding, p,
-    paddingX, px,
-    paddingY, py,
-    paddingTop, pt,
-    paddingRight, pr,
-    paddingBottom, pb,
-    paddingLeft, pl,
-    margin, m,
-    marginX, mx,
-    marginY, my,
-    marginTop, mt,
-    marginRight, mr,
-    marginBottom, mb,
-    marginLeft, ml,
-    borderRadius, rounded,
-    shadow,
-    display,
-    position,
-    overflow,
-    overflowX,
-    overflowY,
-  } = props;
 
-  // Padding classes
-  const paddingValue = padding || p;
-  if (paddingValue && paddingValue !== 'none') {
-    classes.push(`p-${SPACING_CLASS_MAP[paddingValue]}`);
+  // Only use Tailwind classes for scalar (non-responsive) props
+  const padding = scalarOrUndefined(props.padding) || scalarOrUndefined(props.p);
+  if (padding && padding !== 'none') {
+    classes.push(`p-${SPACING_CLASS_MAP[padding]}`);
   }
-  const pxValue = paddingX || px;
-  if (pxValue && pxValue !== 'none') {
-    classes.push(`px-${SPACING_CLASS_MAP[pxValue]}`);
+  const pxVal = scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
+  if (pxVal && pxVal !== 'none') {
+    classes.push(`px-${SPACING_CLASS_MAP[pxVal]}`);
   }
-  const pyValue = paddingY || py;
-  if (pyValue && pyValue !== 'none') {
-    classes.push(`py-${SPACING_CLASS_MAP[pyValue]}`);
+  const pyVal = scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
+  if (pyVal && pyVal !== 'none') {
+    classes.push(`py-${SPACING_CLASS_MAP[pyVal]}`);
   }
-  const ptValue = paddingTop || pt;
-  if (ptValue && ptValue !== 'none') {
-    classes.push(`pt-${SPACING_CLASS_MAP[ptValue]}`);
+  const ptVal = scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
+  if (ptVal && ptVal !== 'none') {
+    classes.push(`pt-${SPACING_CLASS_MAP[ptVal]}`);
   }
-  const prValue = paddingRight || pr;
-  if (prValue && prValue !== 'none') {
-    classes.push(`pr-${SPACING_CLASS_MAP[prValue]}`);
+  const prVal = scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
+  if (prVal && prVal !== 'none') {
+    classes.push(`pr-${SPACING_CLASS_MAP[prVal]}`);
   }
-  const pbValue = paddingBottom || pb;
-  if (pbValue && pbValue !== 'none') {
-    classes.push(`pb-${SPACING_CLASS_MAP[pbValue]}`);
+  const pbVal = scalarOrUndefined(props.paddingBottom) || scalarOrUndefined(props.pb);
+  if (pbVal && pbVal !== 'none') {
+    classes.push(`pb-${SPACING_CLASS_MAP[pbVal]}`);
   }
-  const plValue = paddingLeft || pl;
-  if (plValue && plValue !== 'none') {
-    classes.push(`pl-${SPACING_CLASS_MAP[plValue]}`);
+  const plVal = scalarOrUndefined(props.paddingLeft) || scalarOrUndefined(props.pl);
+  if (plVal && plVal !== 'none') {
+    classes.push(`pl-${SPACING_CLASS_MAP[plVal]}`);
   }
 
-  // Margin classes
-  const marginValue = margin || m;
-  if (marginValue && marginValue !== 'none') {
-    classes.push(`m-${SPACING_CLASS_MAP[marginValue]}`);
+  // Margin
+  const margin = scalarOrUndefined(props.margin) || scalarOrUndefined(props.m);
+  if (margin && margin !== 'none') {
+    classes.push(`m-${SPACING_CLASS_MAP[margin]}`);
   }
-  const mxValue = marginX || mx;
-  if (mxValue && mxValue !== 'none') {
-    classes.push(`mx-${SPACING_CLASS_MAP[mxValue]}`);
+  const mxVal = scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
+  if (mxVal && mxVal !== 'none') {
+    classes.push(`mx-${SPACING_CLASS_MAP[mxVal]}`);
   }
-  const myValue = marginY || my;
-  if (myValue && myValue !== 'none') {
-    classes.push(`my-${SPACING_CLASS_MAP[myValue]}`);
+  const myVal = scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
+  if (myVal && myVal !== 'none') {
+    classes.push(`my-${SPACING_CLASS_MAP[myVal]}`);
   }
-  const mtValue = marginTop || mt;
-  if (mtValue && mtValue !== 'none') {
-    classes.push(`mt-${SPACING_CLASS_MAP[mtValue]}`);
+  const mtVal = scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
+  if (mtVal && mtVal !== 'none') {
+    classes.push(`mt-${SPACING_CLASS_MAP[mtVal]}`);
   }
-  const mrValue = marginRight || mr;
-  if (mrValue && mrValue !== 'none') {
-    classes.push(`mr-${SPACING_CLASS_MAP[mrValue]}`);
+  const mrVal = scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
+  if (mrVal && mrVal !== 'none') {
+    classes.push(`mr-${SPACING_CLASS_MAP[mrVal]}`);
   }
-  const mbValue = marginBottom || mb;
-  if (mbValue && mbValue !== 'none') {
-    classes.push(`mb-${SPACING_CLASS_MAP[mbValue]}`);
+  const mbVal = scalarOrUndefined(props.marginBottom) || scalarOrUndefined(props.mb);
+  if (mbVal && mbVal !== 'none') {
+    classes.push(`mb-${SPACING_CLASS_MAP[mbVal]}`);
   }
-  const mlValue = marginLeft || ml;
-  if (mlValue && mlValue !== 'none') {
-    classes.push(`ml-${SPACING_CLASS_MAP[mlValue]}`);
+  const mlVal = scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
+  if (mlVal && mlVal !== 'none') {
+    classes.push(`ml-${SPACING_CLASS_MAP[mlVal]}`);
   }
 
   // Border radius
-  const radiusValue = borderRadius || rounded;
+  const radiusValue = props.borderRadius || props.rounded;
   if (radiusValue && radiusValue !== 'none') {
     classes.push(ROUNDED_CLASS_MAP[radiusValue]);
   }
 
   // Shadow
-  if (shadow && shadow !== 'none') {
-    classes.push(SHADOW_CLASS_MAP[shadow]);
+  if (props.shadow && props.shadow !== 'none') {
+    classes.push(SHADOW_CLASS_MAP[props.shadow]);
   }
 
-  // Display
+  // Display - only scalar
+  const display = scalarOrUndefined(props.display);
   if (display) {
     classes.push(display as string);
   }
 
   // Position
-  if (position) {
-    classes.push(position);
+  if (props.position) {
+    classes.push(props.position);
   }
 
   // Overflow
-  if (overflow) {
-    classes.push(`overflow-${overflow}`);
+  if (props.overflow) {
+    classes.push(`overflow-${props.overflow}`);
   }
-  if (overflowX) {
-    classes.push(`overflow-x-${overflowX}`);
+  if (props.overflowX) {
+    classes.push(`overflow-x-${props.overflowX}`);
   }
-  if (overflowY) {
-    classes.push(`overflow-y-${overflowY}`);
+  if (props.overflowY) {
+    classes.push(`overflow-y-${props.overflowY}`);
   }
 
   return classes;
@@ -446,6 +390,16 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const computedStyle = buildBoxStyles(props);
   const tailwindClasses = buildTailwindClasses(props);
 
+  // Responsive CSS generation
+  const reactId = useId();
+  const responsiveEntries = collectBoxResponsiveEntries(props);
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+
+  const elementId = needsResponsiveCSS ? `box-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
   // Build class names with Modern-specific prefixes and Tailwind classes
   const classNames = [
     'rottay-box',
@@ -456,15 +410,23 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   const ElementType = Component as ElementType;
 
-  return React.createElement(
-    ElementType,
-    {
-      ...htmlAttributes,
-      ref: ref as Ref<HTMLElement>,
-      className: classNames,
-      style: computedStyle,
-    },
-    children
+  return (
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
+      {React.createElement(
+        ElementType,
+        {
+          ...htmlAttributes,
+          ref: ref as Ref<HTMLElement>,
+          className: classNames,
+          style: computedStyle,
+          ...(responsive ? responsive.attrs : {}),
+        },
+        children
+      )}
+    </>
   );
 });
 

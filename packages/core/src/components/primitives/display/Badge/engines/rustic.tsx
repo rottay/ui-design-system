@@ -11,9 +11,17 @@
 
 'use client';
 
-import React from 'react';
-import type { BadgeProps } from '../Badge.types';
+import React, { useId } from 'react';
+import type { BadgeProps, BadgeSize } from '../Badge.types';
 import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP } from '../Badge.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 /**
  * Rustic (pure HTML/CSS) implementation of the Badge component.
@@ -34,7 +42,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     showZero = BADGE_DEFAULTS.showZero,
     max = BADGE_DEFAULTS.overflowCount,
     variant = BADGE_DEFAULTS.variant,
-    size = BADGE_DEFAULTS.size,
+    size: sizeProp = BADGE_DEFAULTS.size,
     badgeStyle = BADGE_DEFAULTS.badgeStyle,
     visible = BADGE_DEFAULTS.visible,
     pulse,
@@ -49,6 +57,37 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     className = '',
     style,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'min-width',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).minWidth,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementIdVal = needsResponsiveCSS ? `badge-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementIdVal, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? BADGE_DEFAULTS.size;
 
   // `content` (string/ReactNode) takes precedence over numeric `count`
   const displayValue = content !== undefined ? content : count;
@@ -176,10 +215,16 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     animation: 'badge-pulse 1.5s ease-in-out infinite',
   } : {};
 
+  const responsiveStyleTag = responsive && responsive.css ? (
+    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+  ) : null;
+  const responsiveAttrs = responsive ? responsive.attrs : {};
+
   // Standalone path: render as an inline tag without any wrapper container
   if (!children) {
     return (
       <>
+        {responsiveStyleTag}
         {pulse && (
           <style>{`
             @keyframes badge-pulse {
@@ -192,6 +237,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
           className={className}
           style={{ ...badgeIndicatorStyle, ...pulseAnimation, ...style }}
           onClick={clickable || onClick ? handleClick : undefined}
+          {...responsiveAttrs}
         >
           {icon && <span style={{ marginRight: formattedValue !== undefined ? 4 : 0 }}>{icon}</span>}
           {!dot && formattedValue}
@@ -229,6 +275,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
 
   return (
     <>
+      {responsiveStyleTag}
       {pulse && (
         <style>{`
           @keyframes badge-pulse {

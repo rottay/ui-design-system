@@ -36,6 +36,7 @@
 
 import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../contracts';
 import type { CSSProperties, ElementType, HTMLAttributes } from 'react';
+import type { ResponsiveValue } from '../shared/types';
 
 /**
  * Spacing values for padding and margin
@@ -80,15 +81,15 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   as?: ElementType;
 
   /**
-   * Padding on all sides
+   * Padding on all sides. Accepts a responsive object for breakpoint-aware values.
    * @default 'none'
    */
-  padding?: BoxSpacing;
+  padding?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Shorthand for padding
+   * Shorthand for padding. Accepts a responsive object for breakpoint-aware values.
    */
-  p?: BoxSpacing;
+  p?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Padding on top
@@ -131,35 +132,35 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   pl?: BoxSpacing;
 
   /**
-   * Padding on horizontal axis (left and right)
+   * Padding on horizontal axis (left and right). Accepts a responsive object.
    */
-  paddingX?: BoxSpacing;
+  paddingX?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Shorthand for paddingX
+   * Shorthand for paddingX. Accepts a responsive object.
    */
-  px?: BoxSpacing;
+  px?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Padding on vertical axis (top and bottom)
+   * Padding on vertical axis (top and bottom). Accepts a responsive object.
    */
-  paddingY?: BoxSpacing;
+  paddingY?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Shorthand for paddingY
+   * Shorthand for paddingY. Accepts a responsive object.
    */
-  py?: BoxSpacing;
+  py?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Margin on all sides
+   * Margin on all sides. Accepts a responsive object for breakpoint-aware values.
    * @default 'none'
    */
-  margin?: BoxSpacing;
+  margin?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Shorthand for margin
+   * Shorthand for margin. Accepts a responsive object for breakpoint-aware values.
    */
-  m?: BoxSpacing;
+  m?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Margin on top
@@ -202,39 +203,39 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   ml?: BoxSpacing;
 
   /**
-   * Margin on horizontal axis (left and right)
+   * Margin on horizontal axis (left and right). Accepts a responsive object.
    */
-  marginX?: BoxSpacing;
+  marginX?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Shorthand for marginX
+   * Shorthand for marginX. Accepts a responsive object.
    */
-  mx?: BoxSpacing;
+  mx?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Margin on vertical axis (top and bottom)
+   * Margin on vertical axis (top and bottom). Accepts a responsive object.
    */
-  marginY?: BoxSpacing;
+  marginY?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * Shorthand for marginY
+   * Shorthand for marginY. Accepts a responsive object.
    */
-  my?: BoxSpacing;
+  my?: ResponsiveValue<BoxSpacing>;
 
   /**
-   * CSS display property
+   * CSS display property. Accepts a responsive object for breakpoint-aware values.
    */
-  display?: BoxDisplay;
+  display?: ResponsiveValue<BoxDisplay>;
 
   /**
-   * Width of the box
+   * Width of the box. Accepts a responsive object for breakpoint-aware values.
    */
-  width?: CSSProperties['width'];
+  width?: ResponsiveValue<CSSProperties['width']>;
 
   /**
-   * Shorthand for width
+   * Shorthand for width. Accepts a responsive object for breakpoint-aware values.
    */
-  w?: CSSProperties['width'];
+  w?: ResponsiveValue<CSSProperties['width']>;
 
   /**
    * Height of the box
@@ -247,24 +248,24 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   h?: CSSProperties['height'];
 
   /**
-   * Minimum width of the box
+   * Minimum width of the box. Accepts a responsive object for breakpoint-aware values.
    */
-  minWidth?: CSSProperties['minWidth'];
+  minWidth?: ResponsiveValue<CSSProperties['minWidth']>;
 
   /**
-   * Shorthand for minWidth
+   * Shorthand for minWidth. Accepts a responsive object for breakpoint-aware values.
    */
-  minW?: CSSProperties['minWidth'];
+  minW?: ResponsiveValue<CSSProperties['minWidth']>;
 
   /**
-   * Maximum width of the box
+   * Maximum width of the box. Accepts a responsive object for breakpoint-aware values.
    */
-  maxWidth?: CSSProperties['maxWidth'];
+  maxWidth?: ResponsiveValue<CSSProperties['maxWidth']>;
 
   /**
-   * Shorthand for maxWidth
+   * Shorthand for maxWidth. Accepts a responsive object for breakpoint-aware values.
    */
-  maxW?: CSSProperties['maxWidth'];
+  maxW?: ResponsiveValue<CSSProperties['maxWidth']>;
 
   /**
    * Minimum height of the box

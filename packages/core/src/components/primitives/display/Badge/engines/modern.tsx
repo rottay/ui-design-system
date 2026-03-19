@@ -11,9 +11,17 @@
 
 'use client';
 
-import React from 'react';
-import type { BadgeProps } from '../Badge.types';
-import { BADGE_DEFAULTS, DOT_SIZE_MAP } from '../Badge.types';
+import React, { useId } from 'react';
+import type { BadgeProps, BadgeSize } from '../Badge.types';
+import { BADGE_DEFAULTS, DOT_SIZE_MAP, SIZE_MAP } from '../Badge.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 /**
  * Modern (DaisyUI) implementation of the Badge component.
@@ -34,7 +42,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     showZero = BADGE_DEFAULTS.showZero,
     max = BADGE_DEFAULTS.overflowCount,
     variant = BADGE_DEFAULTS.variant,
-    size = BADGE_DEFAULTS.size,
+    size: sizeProp = BADGE_DEFAULTS.size,
     badgeStyle = BADGE_DEFAULTS.badgeStyle,
     visible = BADGE_DEFAULTS.visible,
     pulse,
@@ -48,6 +56,37 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     className = '',
     style,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'min-width',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).minWidth,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: BadgeSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementIdVal = needsResponsiveCSS ? `badge-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementIdVal, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? BADGE_DEFAULTS.size;
 
   // `content` (string/ReactNode) takes precedence over numeric `count`
   const displayValue = content !== undefined ? content : count;
@@ -146,13 +185,21 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   };
   const positionClass = positionClassMap[position!] || 'indicator-top indicator-end';
 
+  const responsiveStyleTag = responsive && responsive.css ? (
+    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+  ) : null;
+  const responsiveAttrs = responsive ? responsive.attrs : {};
+
   // Standalone path: render the badge as an inline tag without indicator wrapper
   if (!children) {
     return (
+      <>
+      {responsiveStyleTag}
       <span
         className={`${badgeClasses} ${className}`}
         style={style}
         onClick={clickable || onClick ? handleClick : undefined}
+        {...responsiveAttrs}
       >
         {icon && <span className="mr-1">{icon}</span>}
         {!dot && formattedValue !== undefined ? formattedValue : props.children}
@@ -166,6 +213,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
           </span>
         )}
       </span>
+      </>
     );
   }
 
@@ -178,9 +226,12 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
 
   return (
+    <>
+    {responsiveStyleTag}
     <div className={`indicator ${className}`} style={style}>
       <span
         className={`indicator-item ${positionClass} ${badgeClasses}`}
+        {...responsiveAttrs}
         style={dot ? { width: dotSize, height: dotSize, padding: 0, minWidth: 'auto' } as React.CSSProperties : undefined}
         onClick={clickable || onClick ? handleClick : undefined}
       >
@@ -193,6 +244,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
       </span>
       {children}
     </div>
+    </>
   );
 }
 

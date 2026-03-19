@@ -75,9 +75,10 @@
  * @package @rottay/design-system
  */
 
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import type { AlertProps, AlertType } from '../Alert.types';
 import { ALERT_DEFAULTS } from '../Alert.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 // ============================================================================
 // Constants
@@ -209,6 +210,7 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
     description,
 
     // Behavior
+    compact: compactProp = ALERT_DEFAULTS.compact,
     closable = ALERT_DEFAULTS.closable,
     onClose,
 
@@ -216,6 +218,32 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
     className,
     style,
   } = props;
+
+  // Responsive compact handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const compactIsResponsive = isResponsiveValue(compactProp);
+
+  if (compactIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: compactProp,
+      resolve: (v: boolean) => v ? '0.5rem 0.75rem' : '1rem',
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: compactProp,
+      resolve: (v: boolean) => v ? '0.8125rem' : '0.875rem',
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `alert-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const isCompact = !compactIsResponsive && compactProp === true;
 
   // ---------------------------------------------------------------------------
   // Early Return
@@ -241,8 +269,9 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
   const baseStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'flex-start',
-    gap: '0.75rem',
-    padding: '1rem',
+    gap: isCompact ? '0.5rem' : '0.75rem',
+    padding: isCompact ? '0.5rem 0.75rem' : '1rem',
+    fontSize: isCompact ? '0.8125rem' : undefined,
     borderRadius: 'var(--ds-radius-md, 0.375rem)',
     borderLeft: '4px solid',
     ...TYPE_STYLES[alertType],
@@ -306,7 +335,11 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
   // ---------------------------------------------------------------------------
 
   return (
-    <div className={className} style={baseStyle} role="alert">
+    <>
+    {responsive && responsive.css && (
+      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+    )}
+    <div className={className} style={baseStyle} role="alert" {...(responsive ? responsive.attrs : {})}>
       {/* Icon Section */}
       {showIcon && (
         <span style={iconStyle}>
@@ -327,5 +360,6 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
         </button>
       )}
     </div>
+    </>
   );
 }

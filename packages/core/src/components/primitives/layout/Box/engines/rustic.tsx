@@ -3,37 +3,6 @@
  * @description Rustic (Pure HTML/CSS) implementation of the Box component.
  * Provides a dependency-free Box using inline styles for maximum compatibility.
  *
- * @remarks
- * The Rustic engine uses pure inline CSS styles without any external CSS framework
- * dependencies. This makes it ideal for:
- * - Server-side rendering without CSS extraction
- * - Embedding in third-party applications
- * - Maximum browser compatibility
- * - Accessibility-focused implementations
- *
- * All styles are computed and applied inline, ensuring consistent rendering
- * regardless of the host application's CSS setup.
- *
- * @example Using Rustic Engine
- * ```tsx
- * import { Box } from '@rottay/design-system';
- *
- * // Use Rustic for dependency-free styling
- * <Box engine="rustic" p="md" shadow="sm">
- *   Pure inline CSS, no framework dependencies
- * </Box>
- *
- * // Ideal for embedded widgets
- * <EngineProvider engine="rustic">
- *   <Box p="lg" bg="white" rounded="md">
- *     Self-contained styling
- *   </Box>
- * </EngineProvider>
- * ```
- *
- * @see {@link Box} - The main engine-aware component
- * @see {@link ClassicBox} - Ant Design implementation
- * @see {@link ModernBox} - Tailwind implementation
  * @module Box/Engines/Rustic
  * @category Layout
  * @package @rottay/design-system
@@ -41,84 +10,82 @@
 
 'use client';
 
-import React, { forwardRef, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { BoxProps } from '../Box.types';
+import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
+import type { BoxProps, BoxSpacing } from '../Box.types';
 import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../Box.types';
+import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
+import { scalarOrUndefined, collectBoxResponsiveEntries } from '../../shared/responsive-helpers.js';
 
-// Rustic engine converts ALL layout props to inline CSSProperties. Unlike
-// the modern engine (which splits between Tailwind classes and styles), rustic
-// uses pure inline styles so it works without any CSS framework dependency.
-// SPACING_MAP/RADIUS_MAP/SHADOW_MAP translate DS tokens (xs/sm/md/lg) to
-// actual CSS values (4px/8px/16px/24px).
+// Rustic engine converts ALL layout props to inline CSSProperties.
 function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
 
-  // Padding
-  const paddingValue = props.padding || props.p;
+  // Padding - only inline when NOT responsive
+  const paddingValue = scalarOrUndefined(props.padding) || scalarOrUndefined(props.p);
   if (paddingValue && paddingValue !== 'none') {
     style.padding = SPACING_MAP[paddingValue];
   }
-  const pxValue = props.paddingX || props.px;
+  const pxValue = scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
   if (pxValue && pxValue !== 'none') {
     style.paddingLeft = SPACING_MAP[pxValue];
     style.paddingRight = SPACING_MAP[pxValue];
   }
-  const pyValue = props.paddingY || props.py;
+  const pyValue = scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
   if (pyValue && pyValue !== 'none') {
     style.paddingTop = SPACING_MAP[pyValue];
     style.paddingBottom = SPACING_MAP[pyValue];
   }
-  const ptValue = props.paddingTop || props.pt;
+  const ptValue = scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
   if (ptValue && ptValue !== 'none') {
     style.paddingTop = SPACING_MAP[ptValue];
   }
-  const prValue = props.paddingRight || props.pr;
+  const prValue = scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
   if (prValue && prValue !== 'none') {
     style.paddingRight = SPACING_MAP[prValue];
   }
-  const pbValue = props.paddingBottom || props.pb;
+  const pbValue = scalarOrUndefined(props.paddingBottom) || scalarOrUndefined(props.pb);
   if (pbValue && pbValue !== 'none') {
     style.paddingBottom = SPACING_MAP[pbValue];
   }
-  const plValue = props.paddingLeft || props.pl;
+  const plValue = scalarOrUndefined(props.paddingLeft) || scalarOrUndefined(props.pl);
   if (plValue && plValue !== 'none') {
     style.paddingLeft = SPACING_MAP[plValue];
   }
 
-  // Margin
-  const marginValue = props.margin || props.m;
+  // Margin - only inline when NOT responsive
+  const marginValue = scalarOrUndefined(props.margin) || scalarOrUndefined(props.m);
   if (marginValue && marginValue !== 'none') {
     style.margin = SPACING_MAP[marginValue];
   }
-  const mxValue = props.marginX || props.mx;
+  const mxValue = scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
   if (mxValue && mxValue !== 'none') {
     style.marginLeft = SPACING_MAP[mxValue];
     style.marginRight = SPACING_MAP[mxValue];
   }
-  const myValue = props.marginY || props.my;
+  const myValue = scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
   if (myValue && myValue !== 'none') {
     style.marginTop = SPACING_MAP[myValue];
     style.marginBottom = SPACING_MAP[myValue];
   }
-  const mtValue = props.marginTop || props.mt;
+  const mtValue = scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
   if (mtValue && mtValue !== 'none') {
     style.marginTop = SPACING_MAP[mtValue];
   }
-  const mrValue = props.marginRight || props.mr;
+  const mrValue = scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
   if (mrValue && mrValue !== 'none') {
     style.marginRight = SPACING_MAP[mrValue];
   }
-  const mbValue = props.marginBottom || props.mb;
+  const mbValue = scalarOrUndefined(props.marginBottom) || scalarOrUndefined(props.mb);
   if (mbValue && mbValue !== 'none') {
     style.marginBottom = SPACING_MAP[mbValue];
   }
-  const mlValue = props.marginLeft || props.ml;
+  const mlValue = scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
   if (mlValue && mlValue !== 'none') {
     style.marginLeft = SPACING_MAP[mlValue];
   }
 
-  // Dimensions
-  const widthValue = props.width || props.w;
+  // Dimensions - only inline when NOT responsive
+  const widthValue = scalarOrUndefined(props.width) || scalarOrUndefined(props.w);
   if (widthValue !== undefined) {
     style.width = widthValue;
   }
@@ -126,11 +93,11 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (heightValue !== undefined) {
     style.height = heightValue;
   }
-  const minWidthValue = props.minWidth || props.minW;
+  const minWidthValue = scalarOrUndefined(props.minWidth) || scalarOrUndefined(props.minW);
   if (minWidthValue !== undefined) {
     style.minWidth = minWidthValue;
   }
-  const maxWidthValue = props.maxWidth || props.maxW;
+  const maxWidthValue = scalarOrUndefined(props.maxWidth) || scalarOrUndefined(props.maxW);
   if (maxWidthValue !== undefined) {
     style.maxWidth = maxWidthValue;
   }
@@ -178,9 +145,10 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
     style.boxShadow = SHADOW_MAP[props.shadow];
   }
 
-  // Display & Position
-  if (props.display !== undefined) {
-    style.display = props.display;
+  // Display & Position - only display inline when NOT responsive
+  const displayValue = scalarOrUndefined(props.display);
+  if (displayValue !== undefined) {
+    style.display = displayValue;
   }
   if (props.position !== undefined) {
     style.position = props.position;
@@ -372,6 +340,16 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   const computedStyle = buildBoxStyles(props);
 
+  // Responsive CSS generation
+  const reactId = useId();
+  const responsiveEntries = collectBoxResponsiveEntries(props);
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+
+  const elementId = needsResponsiveCSS ? `box-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
   // Build class names with Rustic-specific prefixes
   const classNames = [
     'rottay-box',
@@ -381,15 +359,23 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   const ElementType = Component as ElementType;
 
-  return React.createElement(
-    ElementType,
-    {
-      ...htmlAttributes,
-      ref: ref as Ref<HTMLElement>,
-      className: classNames,
-      style: computedStyle,
-    },
-    children
+  return (
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
+      {React.createElement(
+        ElementType,
+        {
+          ...htmlAttributes,
+          ref: ref as Ref<HTMLElement>,
+          className: classNames,
+          style: computedStyle,
+          ...(responsive ? responsive.attrs : {}),
+        },
+        children
+      )}
+    </>
   );
 });
 

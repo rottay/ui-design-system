@@ -25,9 +25,18 @@ import React, {
   useCallback,
   useMemo,
   useImperativeHandle,
+  useId,
 } from 'react';
-import type { SelectProps, SelectOption } from '../Select.types';
+import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 import { useTranslation } from '../../../../../i18n';
 import {
   getLabelText,
@@ -68,7 +77,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     defaultValue,
     options: flatOptions = [],
     placeholder,
-    size = SELECT_DEFAULTS.size,
+    size: sizeProp = SELECT_DEFAULTS.size,
     variant = SELECT_DEFAULTS.variant,
     multiple = SELECT_DEFAULTS.multiple,
     searchable,
@@ -96,6 +105,32 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     virtual,
     tokenSeparators,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'min-height',
+      value: sizeProp,
+      resolve: (v: SelectSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: SelectSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `select-${reactId.replace(/:/g, '')}` : '';
+  const responsiveCSS = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
   // Use translation as default, allow prop override
   const displayPlaceholder = placeholder ?? t('select.placeholder');
@@ -679,6 +714,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       style={containerStyle}
       onKeyDown={handleKeyDown}
     >
+      {responsiveCSS && responsiveCSS.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
+      )}
+
       {/* Hidden input for form submission */}
       {name && (
         <input

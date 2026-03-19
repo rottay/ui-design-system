@@ -5,41 +5,16 @@
  * @description Modern (DaisyUI/Tailwind) implementation of the Flex component.
  * Generates Tailwind CSS utility classes for flexbox layouts.
  *
- * @remarks
- * The Modern engine translates Flex props to Tailwind CSS classes:
- * - Direction: `flex-row`, `flex-col`, `flex-row-reverse`, `flex-col-reverse`
- * - Wrap: `flex-nowrap`, `flex-wrap`, `flex-wrap-reverse`
- * - Justify: `justify-start`, `justify-end`, `justify-center`, `justify-between`, etc.
- * - Align: `items-start`, `items-end`, `items-center`, `items-baseline`, `items-stretch`
- *
- * Gap values are applied via inline styles since Tailwind gap classes are spacing-based.
- *
- * @example Using Modern Engine
- * ```tsx
- * import { Flex } from '@rottay/design-system';
- *
- * // Generates Tailwind classes
- * <Flex engine="modern" direction="row" justify="between" align="center">
- *   Outputs: class="flex flex-row justify-between items-center"
- * </Flex>
- * ```
- *
- * @see {@link Flex} - The main engine-aware component
  * @module Flex/Engines/Modern
  * @category Layout
  * @package @rottay/design-system
  */
 
-import React from 'react';
-import type { FlexProps } from '../Flex.types';
+import React, { useId } from 'react';
+import type { FlexProps, FlexDirection, FlexWrap, FlexJustify, FlexAlign } from '../Flex.types';
 import { FLEX_DEFAULTS } from '../Flex.types';
-
-/**
- * Lookup tables that map engine-agnostic prop values to Tailwind utility classes.
- * Each table mirrors the CSS flexbox spec values to their Tailwind equivalents,
- * enabling the modern engine to compose a pure-class output with no inline styles
- * for the core layout axis.
- */
+import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
+import { scalarOrDefault, collectFlexResponsiveEntries } from '../../shared/responsive-helpers.js';
 
 /** Maps flexDirection values to Tailwind direction utilities */
 const DIRECTION_CLASSES: Record<string, string> = {
@@ -77,21 +52,14 @@ const ALIGN_CLASSES: Record<string, string> = {
 
 /**
  * Modern Flex component using Tailwind CSS utility classes.
- *
- * Builds a className string from the engine-agnostic props and falls back to
- * inline styles only for values Tailwind cannot express statically (gap as
- * pixel numbers and the CSS `flex` shorthand).
- *
- * @param props - Engine-agnostic flex layout props (direction, wrap, justify, align, gap, etc.)
- * @returns A ref-forwarding div element styled with Tailwind flex utilities.
  */
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {
     const {
-      direction = FLEX_DEFAULTS.direction,
-      wrap = FLEX_DEFAULTS.wrap,
-      justify = FLEX_DEFAULTS.justify,
-      align = FLEX_DEFAULTS.align,
+      direction,
+      wrap,
+      justify,
+      align,
       gap,
       flex,
       inline = FLEX_DEFAULTS.inline,
@@ -101,56 +69,73 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...rest
     } = props;
 
-    // Start with the display class; inline-flex is uncommon but required for
-    // inline flow contexts like text-beside-icon layouts
+    const reactId = useId();
+    const responsiveEntries = collectFlexResponsiveEntries(props);
+    const needsResponsiveCSS = responsiveEntries.length > 0;
+
+    const elementId = needsResponsiveCSS ? `flex-${reactId.replace(/:/g, '')}` : '';
+    const responsive = needsResponsiveCSS
+      ? generateResponsiveCSS(elementId, responsiveEntries)
+      : null;
+
+    // Start with the display class
     const classes: string[] = [inline ? 'inline-flex' : 'flex'];
 
-    if (direction) {
-      classes.push(DIRECTION_CLASSES[direction] || DIRECTION_CLASSES.row);
+    // Only add Tailwind classes for scalar (non-responsive) values
+    const scalarDirection = scalarOrDefault<FlexDirection>(direction, 'row');
+    if (scalarDirection && !isResponsiveValue(direction)) {
+      classes.push(DIRECTION_CLASSES[scalarDirection] || DIRECTION_CLASSES.row);
     }
 
-    if (wrap) {
-      classes.push(WRAP_CLASSES[wrap] || WRAP_CLASSES.nowrap);
+    const scalarWrap = scalarOrDefault<FlexWrap>(wrap, 'nowrap');
+    if (scalarWrap && !isResponsiveValue(wrap)) {
+      classes.push(WRAP_CLASSES[scalarWrap] || WRAP_CLASSES.nowrap);
     }
 
-    if (justify) {
-      classes.push(JUSTIFY_CLASSES[justify] || JUSTIFY_CLASSES.start);
+    const scalarJustify = scalarOrDefault<FlexJustify>(justify, 'start');
+    if (scalarJustify && !isResponsiveValue(justify)) {
+      classes.push(JUSTIFY_CLASSES[scalarJustify] || JUSTIFY_CLASSES.start);
     }
 
-    if (align) {
-      classes.push(ALIGN_CLASSES[align] || ALIGN_CLASSES.stretch);
+    const scalarAlign = scalarOrDefault<FlexAlign>(align, 'stretch');
+    if (scalarAlign && !isResponsiveValue(align)) {
+      classes.push(ALIGN_CLASSES[scalarAlign] || ALIGN_CLASSES.stretch);
     }
 
-    // Gap and flex are applied as inline styles because Tailwind gap classes
-    // use a spacing scale while we accept arbitrary pixel values and tuples
+    // Gap and flex via inline styles for non-responsive values
     const customStyle: React.CSSProperties = { ...style };
-    if (gap !== undefined) {
-      if (Array.isArray(gap)) {
-        // Tuple form: [columnGap, rowGap] for asymmetric spacing
-        customStyle.columnGap = `${gap[0]}px`;
-        customStyle.rowGap = `${gap[1]}px`;
+    const scalarGap = isResponsiveValue(gap) ? undefined : gap;
+    if (scalarGap !== undefined) {
+      if (Array.isArray(scalarGap)) {
+        customStyle.columnGap = `${scalarGap[0]}px`;
+        customStyle.rowGap = `${scalarGap[1]}px`;
       } else {
-        customStyle.gap = `${gap}px`;
+        customStyle.gap = `${scalarGap}px`;
       }
     }
     if (flex !== undefined) {
       customStyle.flex = flex;
     }
 
-    // Merge Tailwind classes with any consumer-provided className
     const combinedClassName = [classes.join(' '), className]
       .filter(Boolean)
       .join(' ');
 
     return (
-      <div
-        ref={ref}
-        className={combinedClassName}
-        style={Object.keys(customStyle).length > 0 ? customStyle : undefined}
-        {...rest}
-      >
-        {children}
-      </div>
+      <>
+        {responsive && responsive.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+        )}
+        <div
+          ref={ref}
+          className={combinedClassName}
+          style={Object.keys(customStyle).length > 0 ? customStyle : undefined}
+          {...(responsive ? responsive.attrs : {})}
+          {...rest}
+        >
+          {children}
+        </div>
+      </>
     );
   }
 );

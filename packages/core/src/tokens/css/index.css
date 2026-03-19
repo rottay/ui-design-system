@@ -105,6 +105,40 @@
 @import './responsive/index.css' layer(rottay-responsive);
 
 /* =============================================================================
+   ACCESSIBILITY: TOUCH TARGETS (unlayered)
+   Enforces 44x44px minimum touch targets on coarse pointer devices (WCAG 2.5.5).
+   Kept outside layers so the @media (pointer: coarse) rules always apply
+   regardless of cascade layer ordering.
+   @see https://www.w3.org/WAI/WCAG21/Understanding/target-size.html
+   ============================================================================= */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  a,
+  [data-ds-interactive="true"],
+  input[type="checkbox"],
+  input[type="radio"],
+  select,
+  .ant-btn,
+  .ant-select-selector,
+  .ant-tabs-tab,
+  .ant-pagination-item,
+  .ant-tag {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .ant-tabs-tab {
+    padding: 12px 16px !important;
+  }
+
+  .ant-tag {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* =============================================================================
    ANIMATIONS (unlayered)
    Transitions and keyframe animations are kept outside layers so @keyframes
    definitions are always reachable regardless of layer ordering.

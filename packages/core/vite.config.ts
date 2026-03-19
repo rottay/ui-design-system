@@ -40,6 +40,14 @@ export default defineConfig({
         icons: resolve(__dirname, 'src/icons.ts'),
         i18n: resolve(__dirname, 'src/i18n.ts'),
         tokens: resolve(__dirname, 'src/tokens.ts'),
+        'components/index': resolve(__dirname, 'src/components/index.ts'),
+        'components/patterns/index': resolve(__dirname, 'src/components/patterns/index.ts'),
+        'components/primitives/index': resolve(__dirname, 'src/components/primitives/index.ts'),
+        'components/surfaces/index': resolve(__dirname, 'src/components/surfaces/index.ts'),
+        'components/patterns/data-table/index': resolve(
+          __dirname,
+          'src/components/patterns/data-table/index.ts'
+        ),
       },
       name: 'DesignSystem',
     },

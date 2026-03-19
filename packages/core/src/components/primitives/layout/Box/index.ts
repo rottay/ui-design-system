@@ -116,6 +116,8 @@ export type {
   BoxOverflow,
 } from './Box.types';
 
+export type { ResponsiveValue } from '../shared/types';
+
 // ============================================================================
 // CONSTANT EXPORTS
 // ============================================================================

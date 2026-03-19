@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { DashboardSurface } from '.';
 import type { DashboardSurfaceConfig } from '../types';
 import { renderSurface } from '../common/test-utils';
+import { mockMatchMedia } from '../../../testing/helpers/match-media';
 
 function buildDashboardConfig(onHeaderAction = vi.fn()): DashboardSurfaceConfig {
   return {
@@ -78,5 +79,58 @@ describe('DashboardSurface', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /try again/i }));
     expect(onRetry).toHaveBeenCalledTimes(1);
+  });
+
+  it('prioritizes and hides sections on mobile when configured', async () => {
+    mockMatchMedia(390);
+
+    renderSurface(
+      <DashboardSurface
+        config={{
+          visual: {
+            statsColumns: 4,
+            mobileStatsLimit: 2,
+            stackSectionsOnMobile: true,
+          },
+          presentation: {
+            chrome: {
+              title: 'Operations dashboard',
+            },
+            sections: [
+              {
+                key: 'secondary',
+                title: 'Secondary section',
+                content: <div>Secondary content</div>,
+                mobilePriority: 2,
+              },
+              {
+                key: 'primary',
+                title: 'Primary section',
+                content: <div>Primary content</div>,
+                mobilePriority: 1,
+              },
+              {
+                key: 'hidden',
+                title: 'Hidden section',
+                content: <div>Hidden content</div>,
+                hideOnMobile: true,
+              },
+            ],
+          },
+          behavior: {
+            stats: [
+              { key: 'one', label: 'One', value: 1 },
+              { key: 'two', label: 'Two', value: 2 },
+              { key: 'three', label: 'Three', value: 3 },
+            ],
+          },
+        }}
+      />
+    );
+
+    expect(await screen.findByText('Primary section')).toBeInTheDocument();
+    expect(screen.getByText('Secondary section')).toBeInTheDocument();
+    expect(screen.queryByText('Hidden section')).not.toBeInTheDocument();
+    expect(screen.queryByText('Three')).not.toBeInTheDocument();
   });
 });

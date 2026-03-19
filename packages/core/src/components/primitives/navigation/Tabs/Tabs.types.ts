@@ -15,6 +15,7 @@
 import type React from 'react';
 import type { ReactNode } from 'react';
 import type { EngineAwareProps } from '../../../../contracts';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 // ============================================================================
 // Tab Item Interface
@@ -172,11 +173,16 @@ export interface TabsProps extends EngineAwareProps {
   type?: TabsType;
 
   /**
-   * Size variant of the tabs.
+   * Size variant of the tabs. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
    * @see {@link TabsSize}
+   * @example
+   * ```tsx
+   * <Tabs size="lg" items={items} />
+   * <Tabs size={{ base: 'sm', md: 'md', xl: 'lg' }} items={items} />
+   * ```
    */
-  size?: TabsSize;
+  size?: ResponsiveValue<TabsSize>;
 
   /**
    * Whether to center the tabs in the container.

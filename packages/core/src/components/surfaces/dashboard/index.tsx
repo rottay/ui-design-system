@@ -17,6 +17,7 @@ import { filterSurfaceActions, resolveSurfaceButtonVariant } from '../helpers';
 import type { DashboardSurfaceConfig } from '../types';
 import { PageShellSurface } from '../page-shell';
 import { useSurfaceProfileDefaults } from '../profile-defaults';
+import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../responsive';
 import {
   resolveHeadingFontWeight,
   resolveStackSpacing,
@@ -39,6 +40,11 @@ export function DashboardSurface({
   onRetry,
 }: DashboardSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
+  const responsiveLayout = useSurfaceResponsiveLayout({
+    stackOnMobile: true,
+    stackOnTablet: false,
+  });
+  const isMobile = responsiveLayout.isMobile;
   // Permission filtering happens early so the action count drives both
   // rendering and layout decisions (e.g. no empty action bar wrapper).
   const headerActions = filterSurfaceActions(config.behavior.headerActions, config.permissions);
@@ -46,6 +52,30 @@ export function DashboardSurface({
   // the same dashboard config to render differently across product profiles.
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
+  const visibleSections = (config.presentation.sections ?? [])
+    .filter((section) => !(isMobile && section.hideOnMobile))
+    .sort((left, right) => {
+      if (!isMobile) {
+        return 0;
+      }
+
+      return (left.mobilePriority ?? Number.MAX_SAFE_INTEGER) - (right.mobilePriority ?? Number.MAX_SAFE_INTEGER);
+    });
+  const stats = isMobile && config.visual.mobileStatsLimit
+    ? (config.behavior.stats ?? []).slice(0, config.visual.mobileStatsLimit)
+    : config.behavior.stats;
+  const statsColumns = resolveResponsiveColumnCount(
+    responsiveLayout,
+    config.visual.statsColumns ?? 4,
+    Math.min(config.visual.statsColumns ?? 4, 2),
+    1
+  );
+  const sectionsColumns =
+    isMobile && config.visual.stackSectionsOnMobile !== false
+      ? 1
+      : isMobile
+        ? (config.visual.mobileSectionsColumns ?? 1)
+        : (config.visual.sectionsColumns ?? 12);
 
   const actionsNode = (
     <Flex gap={8} wrap="wrap" justify="end">
@@ -55,10 +85,10 @@ export function DashboardSurface({
           variant={resolveSurfaceButtonVariant(action.variant)}
           disabled={action.disabled}
           loading={action.loading}
+          icon={action.icon}
           onClick={() => action.onClick?.(undefined as void)}
         >
-          {action.icon}
-          <Text style={{ marginLeft: action.icon ? 8 : 0 }}>{action.label}</Text>
+          {action.label}
         </Button>
       ))}
     </Flex>
@@ -83,18 +113,18 @@ export function DashboardSurface({
       {config.presentation.headerContent}
 
       {/* Stats stay optional so the same surface can power sparse and dense dashboards. */}
-      {config.behavior.stats && config.behavior.stats.length > 0 && (
+      {stats && stats.length > 0 && (
         <PatternStatsGrid
-          stats={config.behavior.stats}
-          columns={config.visual.statsColumns ?? 4}
+          stats={stats}
+          columns={statsColumns}
           variant="glass"
           onStatClick={config.behavior.onStatClick}
         />
       )}
 
-      {config.presentation.sections && config.presentation.sections.length > 0 && (
-        <Grid columns={config.visual.sectionsColumns ?? 12} gap={sectionSpacing}>
-          {config.presentation.sections.map((section) => {
+      {visibleSections.length > 0 && (
+        <Grid columns={sectionsColumns} gap={sectionSpacing}>
+          {visibleSections.map((section) => {
             // Sections can opt out of the card shell when the content already brings its own chrome.
             const sectionContent = section.chrome === 'plain' ? (
               section.content
@@ -126,7 +156,16 @@ export function DashboardSurface({
             );
 
             return (
-              <Grid.Item key={section.key} span={section.span}>
+              <Grid.Item
+                key={section.key}
+                span={
+                  isMobile && config.visual.stackSectionsOnMobile !== false
+                    ? undefined
+                    : isMobile
+                      ? section.mobileSpan
+                      : section.span
+                }
+              >
                 {sectionContent}
               </Grid.Item>
             );

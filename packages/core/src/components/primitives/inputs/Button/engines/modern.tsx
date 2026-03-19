@@ -60,9 +60,12 @@
 
 'use client';
 
-import React, { forwardRef, useState } from 'react';
-import type { ButtonProps } from '../Button.types';
-import { BUTTON_DEFAULTS } from '../Button.types';
+import React, { forwardRef, useState, useId } from 'react';
+import type { ButtonProps, ButtonSize } from '../Button.types';
+import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP } from '../Button.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
 
 // Translate DS variant tokens to DaisyUI button classes.
 // "outline" combines `btn-outline` with `btn-primary` so the outline color
@@ -157,7 +160,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const {
     children,
     variant = BUTTON_DEFAULTS.variant,
-    size = BUTTON_DEFAULTS.size,
+    size: sizeProp = BUTTON_DEFAULTS.size,
     shape = BUTTON_DEFAULTS.shape,
     htmlType = BUTTON_DEFAULTS.htmlType,
     disabled = BUTTON_DEFAULTS.disabled,
@@ -184,17 +187,50 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
 
   const isFullWidth = fullWidth ?? block;
 
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: ButtonSize) => (BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).height,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: sizeProp,
+      resolve: (v: ButtonSize) => (BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).padding,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: ButtonSize) => (BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `btn-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
+
   // Explicit `danger` prop takes priority over the `variant` prop so
   // consumers can conditionally toggle destructive styling.
   const effectiveVariant = danger ? 'danger' : (variant || 'primary');
 
   // Build class names
+  // When size is responsive, do NOT emit a DaisyUI size class -- the
+  // injected <style> tag handles sizing via @media queries instead.
   const classes = [
     'btn',
     'rottay-button',
     'rottay-button--modern',
     VARIANT_CLASSES[effectiveVariant] || VARIANT_CLASSES.primary,
-    SIZE_CLASSES[size || 'md'],
+    !sizeIsResponsive ? SIZE_CLASSES[size || 'md'] : '',
     SHAPE_CLASSES[shape || 'default'],
     isFullWidth && 'btn-block w-full',
     loading && 'btn-disabled',
@@ -229,27 +265,33 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const endContent = iconPosition === 'end' ? icon : undefined;
 
   return (
-    <button
-      ref={ref}
-      type={htmlType}
-      className={classes}
-      disabled={disabled || loading}
-      onClick={onClick}
-      style={interactiveStyle}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
-      onMouseDown={() => setIsActive(true)}
-      onMouseUp={() => setIsActive(false)}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      aria-disabled={disabled || loading}
-      aria-busy={loading}
-    >
-      {loading && <LoadingSpinner size={size} />}
-      {!loading && (startContent || prefix)}
-      {children && <span>{children}</span>}
-      {!loading && (endContent || suffix)}
-    </button>
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
+      <button
+        ref={ref}
+        type={htmlType}
+        className={classes}
+        disabled={disabled || loading}
+        onClick={onClick}
+        style={interactiveStyle}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
+        onMouseDown={() => setIsActive(true)}
+        onMouseUp={() => setIsActive(false)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        aria-disabled={disabled || loading}
+        aria-busy={loading}
+        {...(responsive ? responsive.attrs : {})}
+      >
+        {loading && <LoadingSpinner size={size} />}
+        {!loading && (startContent || prefix)}
+        {children && <span>{children}</span>}
+        {!loading && (endContent || suffix)}
+      </button>
+    </>
   );
 });
 

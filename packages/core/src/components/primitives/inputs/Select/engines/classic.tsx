@@ -65,11 +65,19 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useId } from 'react';
 import { Select as AntSelect } from 'antd';
-import type { SelectProps, SelectOption } from '../Select.types';
+import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
 import { useTranslation } from '../../../../../i18n';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 /**
  * Utility to get label text from option
@@ -139,7 +147,7 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
     defaultValue,
     options = [],
     placeholder,
-    size = SELECT_DEFAULTS.size,
+    size: sizeProp = SELECT_DEFAULTS.size,
     variant = SELECT_DEFAULTS.variant,
     multiple = SELECT_DEFAULTS.multiple,
     searchable,
@@ -165,6 +173,32 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
     showSearch,
     ...rest
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: SelectSize) => `${(SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: SelectSize) => `${(SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize} !important`,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `select-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
   // Use translation as default, allow prop override
   const displayPlaceholder = placeholder ?? t('select.placeholder');
@@ -248,6 +282,10 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
   } = rest as any;
 
   return (
+    <>
+    {responsive && responsive.css && (
+      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+    )}
     <AntSelect
       ref={ref}
       value={value}
@@ -275,7 +313,9 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
       id={id}
       autoFocus={autoFocus}
       {...antProps}
+      {...(responsive ? responsive.attrs : {})}
     />
+    </>
   );
 });
 

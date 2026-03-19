@@ -25,9 +25,17 @@
 
 'use client';
 
-import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'react';
-import type { InputProps } from '../Input.types';
+import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } from 'react';
+import type { InputProps, InputSize } from '../Input.types';
 import { INPUT_DEFAULTS, SIZE_MAP } from '../Input.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 
 /**
  * Rustic (vanilla HTML/CSS) engine for the Input component.
@@ -43,7 +51,7 @@ import { INPUT_DEFAULTS, SIZE_MAP } from '../Input.types';
  */
 const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
-    size = INPUT_DEFAULTS.size,
+    size: sizeProp = INPUT_DEFAULTS.size,
     variant = INPUT_DEFAULTS.variant,
     status = INPUT_DEFAULTS.status,
     type = INPUT_DEFAULTS.type,
@@ -77,6 +85,32 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: InputSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: InputSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `input-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
   // Handle controlled/uncontrolled
   const [internalValue, setInternalValue] = useState(defaultValue ?? '');
@@ -295,9 +329,13 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
       <div
         className={containerClasses}
         style={containerStyle}
+        {...(responsive ? responsive.attrs : {})}
         onClick={() => inputRef.current?.focus()}
       >
         {prefix && (

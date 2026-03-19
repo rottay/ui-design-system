@@ -57,6 +57,7 @@
 import type { ReactNode, MouseEvent, ButtonHTMLAttributes } from 'react';
 import type { BaseComponentProps, Size, Variant, LoadableProps, DisableableProps } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
+import type { ResponsiveValue } from '../../layout/shared/types';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -85,10 +86,15 @@ export type ButtonHtmlType = 'button' | 'submit' | 'reset';
  */
 export interface ButtonProps extends BaseComponentProps, EngineAwareProps, LoadableProps, DisableableProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'prefix'> {
   /**
-   * Button size.
+   * Button size. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
+   * @example
+   * ```tsx
+   * <Button size="lg" />
+   * <Button size={{ base: 'sm', md: 'md', xl: 'lg' }} />
+   * ```
    */
-  size?: ButtonSize;
+  size?: ResponsiveValue<ButtonSize>;
 
   /**
    * Button color variant.

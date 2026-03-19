@@ -25,7 +25,7 @@ import { arc, interpolate, pie, select, sum, type PieArcDatum } from 'd3';
 
 import type { ChartBaseProps, DataPoint } from '../Charts.types';
 import { DEFAULT_COLORS } from '../Charts.types';
-import { useChartDimensions, useChartPersonality } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link PieChart} component. */
@@ -61,12 +61,16 @@ export const PieChart = memo(function PieChart({
   responsive = true,
   colors = DEFAULT_COLORS,
   tooltip,
+  compact,
+  autoCompact,
+  compactBreakpoint,
 }: PieChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
+  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
-  const chartHeight = height;
+  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const summary = {
     caption: title ? `${title} data summary` : 'Pie chart data summary',
@@ -137,6 +141,9 @@ export const PieChart = memo(function PieChart({
 
     if (chartPersonality.tooltip) {
       paths.append('title').text((d) => {
+        if (compactState.compactTooltip) {
+          return String(d.data.value);
+        }
         const pct = ((d.data.value / total) * 100).toFixed(1);
         return `${d.data.label}: ${d.data.value} (${pct}%)`;
       });
@@ -156,8 +163,8 @@ export const PieChart = memo(function PieChart({
       paths.attr('d', arcGenerator);
     }
 
-    // Labels
-    if (showLabels) {
+    // Labels (hidden when compact mode has hideSeriesLabels active)
+    if (showLabels && !compactState.hideSeriesLabels) {
       slices
         .append('text')
         .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
@@ -173,7 +180,7 @@ export const PieChart = memo(function PieChart({
           return d.data.label;
         });
     }
-  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, colors]);
+  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, colors, compactState.compactTooltip, compactState.hideSeriesLabels]);
 
   return (
     <ChartScaffold
@@ -191,6 +198,8 @@ export const PieChart = memo(function PieChart({
       ariaDescription={describeChart('Pie chart', data.length, subtitle, donut ? 'Rendered as a donut chart.' : undefined)}
       summary={summary}
       legend={legendNode}
+      hideLegend={compactState.hideLegend}
+      minHeight={compactState.isCompact ? compactState.minHeight : undefined}
     />
   );
 });

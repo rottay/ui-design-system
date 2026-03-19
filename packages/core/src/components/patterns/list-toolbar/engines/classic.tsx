@@ -17,6 +17,7 @@ import { useState, useCallback, useMemo } from 'react';
 import {
   Box,
   Flex,
+  Stack,
   Text,
   Button,
   Badge,
@@ -39,6 +40,7 @@ import {
 } from 'lucide-react';
 
 import type { ListToolbarProps, FilterPillConfig, DensityKey } from '../ListToolbar.types';
+import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
 
 // ============================================================================
 // CONSTANTS
@@ -394,6 +396,7 @@ export default function ClassicListToolbar({
   style,
 }: ListToolbarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { isMobile } = useBreakpoints();
 
   const handleSearchChange = useCallback(
     (value: string) => {
@@ -431,6 +434,186 @@ export default function ClassicListToolbar({
         ...style,
       }}
     >
+      {isMobile ? (
+        <>
+          <Stack spacing="md" style={{ padding: '14px 14px 12px' }}>
+            <Flex align="center" justify="between" gap={12}>
+              <Flex align="center" gap={10} style={{ minWidth: 0 }}>
+                {icon && (
+                  <Box
+                    style={{
+                      color: 'var(--ds-color-text-secondary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {icon}
+                  </Box>
+                )}
+                <Flex direction="column" gap={2} style={{ minWidth: 0 }}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: 'var(--ds-color-text-primary)',
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {title}
+                  </Text>
+                  <Badge variant="secondary">{totalCount.toLocaleString()}</Badge>
+                </Flex>
+              </Flex>
+
+              <ViewModeToggle
+                viewMode={viewMode}
+                onViewModeChange={onViewModeChange}
+              />
+            </Flex>
+
+            <Input
+              size="sm"
+              placeholder={searchPlaceholder}
+              value={search}
+              onChange={handleSearchChange}
+              prefix={
+                <Search
+                  size={14}
+                  style={{ color: 'var(--ds-color-text-muted)' }}
+                />
+              }
+              style={{ height: 38 }}
+            />
+
+            {filterPills && filterPills.length > 0 && (
+              <Box
+                style={{
+                  overflowX: 'auto',
+                  paddingBottom: 2,
+                  marginInline: -2,
+                }}
+              >
+                <Flex align="center" gap={8} style={{ width: 'max-content', minWidth: '100%' }}>
+                  {filterPills.map((pill) => (
+                    <FilterPillsRow
+                      key={pill.key}
+                      pill={pill}
+                      onFilterChange={onFilterChange}
+                    />
+                  ))}
+                </Flex>
+              </Box>
+            )}
+
+            <Flex align="center" gap={8}>
+              <Popover
+                trigger="click"
+                placement="bottomRight"
+                open={settingsOpen}
+                onOpenChange={setSettingsOpen}
+                arrow={false}
+                content={
+                  <SettingsDropdownContent
+                    columnSettingsContent={columnSettingsContent}
+                    savedViewsContent={savedViewsContent}
+                    density={density}
+                    onDensityChange={onDensityChange}
+                  />
+                }
+              >
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Settings"
+                  icon={<Settings2 size={15} />}
+                  style={{
+                    minWidth: 36,
+                    height: 36,
+                    paddingInline: 10,
+                    flexShrink: 0,
+                  }}
+                />
+              </Popover>
+
+              {onExport && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onExport}
+                  aria-label="Export"
+                  icon={<Download size={15} />}
+                  style={{
+                    minWidth: 36,
+                    height: 36,
+                    paddingInline: 10,
+                    flexShrink: 0,
+                  }}
+                />
+              )}
+
+              {primaryAction && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={primaryAction.onClick}
+                  icon={primaryAction.icon ?? <Plus size={15} />}
+                  style={{ flex: 1, justifyContent: 'center', minHeight: 36 }}
+                >
+                  {primaryAction.label}
+                </Button>
+              )}
+            </Flex>
+          </Stack>
+
+          {activeFilterChips.length > 0 && (
+            <Flex
+              align="center"
+              gap={6}
+              wrap="wrap"
+              style={{
+                padding: '0 14px 12px',
+                borderTop: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)',
+              }}
+            >
+              <Filter
+                size={12}
+                style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}
+              />
+              {activeFilterChips.map((chip) => (
+                <Tag
+                  key={chip.key}
+                  closable
+                  onClose={() => onFilterChange?.(chip.key, '')}
+                  size="sm"
+                  style={{
+                    fontSize: 11,
+                    transition: `opacity ${TRANSITION_FAST}`,
+                  }}
+                >
+                  {chip.label}: {chip.value}
+                </Tag>
+              ))}
+              {activeFilterCount > 0 && onClearFilters && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onClearFilters}
+                  style={{
+                    fontSize: 11,
+                    height: 24,
+                    padding: '0 8px',
+                    color: 'var(--ds-color-text-muted)',
+                  }}
+                >
+                  Clear All
+                </Button>
+              )}
+            </Flex>
+          )}
+        </>
+      ) : (
+        <>
       {/* ------------------------------------------------------------------ */}
       {/* ROW 1: Title + Count  (spacer)  Filter Pills  |  View Toggle      */}
       {/* ------------------------------------------------------------------ */}
@@ -655,6 +838,8 @@ export default function ClassicListToolbar({
             </Button>
           )}
         </Flex>
+      )}
+        </>
       )}
     </Box>
   );

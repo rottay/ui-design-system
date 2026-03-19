@@ -54,10 +54,13 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useId } from 'react';
 import { Button as AntButton } from 'antd';
-import type { ButtonProps } from '../Button.types';
-import { BUTTON_DEFAULTS } from '../Button.types';
+import type { ButtonProps, ButtonSize } from '../Button.types';
+import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP } from '../Button.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
 
 // Translate DS variant tokens to Ant Design's `type` + `danger` props.
 // "outline" maps to type="default" (Ant renders a bordered button by default).
@@ -108,7 +111,7 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   const {
     children,
     variant = BUTTON_DEFAULTS.variant,
-    size = BUTTON_DEFAULTS.size,
+    size: sizeProp = BUTTON_DEFAULTS.size,
     shape = BUTTON_DEFAULTS.shape,
     htmlType = BUTTON_DEFAULTS.htmlType,
     disabled = BUTTON_DEFAULTS.disabled,
@@ -135,6 +138,38 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   // compatibility with Ant Design's naming convention.
   const isFullWidth = fullWidth ?? block;
 
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    // Use !important to override Ant Design's inline button styles
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: ButtonSize) => `${(BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).height} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: sizeProp,
+      resolve: (v: ButtonSize) => `${(BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).padding} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: ButtonSize) => `${(BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).fontSize} !important`,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `btn-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
+
   // Explicit `danger` prop takes precedence over `variant="danger"` so
   // consumers can toggle danger mode independently of the base variant.
   const effectiveVariant = danger ? 'danger' : (variant || 'primary');
@@ -154,38 +189,44 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   const endIcon = iconPosition === 'end' ? icon : undefined;
 
   return (
-    <AntButton
-      ref={ref}
-      {...variantProps}
-      size={SIZE_MAP[size || 'md']}
-      shape={SHAPE_MAP[shape || 'default']}
-      disabled={disabled}
-      loading={loading}
-      // `prefix` is an alternative to `icon` for non-icon start content
-      // (e.g., a badge or avatar). Only one is used at a time.
-      icon={startIcon || prefix}
-      block={isFullWidth}
-      htmlType={htmlType}
-      href={href}
-      target={target}
-      onClick={onClick}
-      className={classNames}
-      style={style}
-      id={id}
-      aria-label={ariaLabel}
-      data-testid={dataTestId}
-      tabIndex={tabIndex}
-    >
-      {children}
-      {/* End icon / suffix is rendered outside Ant's icon slot because Ant
-          only supports a single icon position (start). The left margin is
-          removed when there are no children to avoid asymmetric spacing. */}
-      {(endIcon || suffix) && (
-        <span style={{ marginLeft: children ? 8 : 0 }}>
-          {endIcon || suffix}
-        </span>
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
-    </AntButton>
+      <AntButton
+        ref={ref}
+        {...variantProps}
+        size={SIZE_MAP[size || 'md']}
+        shape={SHAPE_MAP[shape || 'default']}
+        disabled={disabled}
+        loading={loading}
+        // `prefix` is an alternative to `icon` for non-icon start content
+        // (e.g., a badge or avatar). Only one is used at a time.
+        icon={startIcon || prefix}
+        block={isFullWidth}
+        htmlType={htmlType}
+        href={href}
+        target={target}
+        onClick={onClick}
+        className={classNames}
+        style={style}
+        id={id}
+        aria-label={ariaLabel}
+        data-testid={dataTestId}
+        tabIndex={tabIndex}
+        {...(responsive ? responsive.attrs : {})}
+      >
+        {children}
+        {/* End icon / suffix is rendered outside Ant's icon slot because Ant
+            only supports a single icon position (start). The left margin is
+            removed when there are no children to avoid asymmetric spacing. */}
+        {(endIcon || suffix) && (
+          <span style={{ marginLeft: children ? 8 : 0 }}>
+            {endIcon || suffix}
+          </span>
+        )}
+      </AntButton>
+    </>
   );
 });
 

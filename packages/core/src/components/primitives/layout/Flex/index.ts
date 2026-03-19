@@ -146,6 +146,8 @@ export {
   FLEX_ALIGN_MAP,
 } from './Flex.types';
 
+export type { ResponsiveValue } from '../shared/types';
+
 // ============================================================================
 // ENGINE-AWARE COMPONENT
 // ============================================================================

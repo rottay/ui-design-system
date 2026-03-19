@@ -35,6 +35,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
+import type { ResponsiveValue } from '../shared/types';
 
 export type FlexDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse';
 export type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
@@ -42,16 +43,16 @@ export type FlexJustify = 'start' | 'end' | 'center' | 'between' | 'around' | 'e
 export type FlexAlign = 'start' | 'end' | 'center' | 'baseline' | 'stretch';
 
 export interface FlexProps {
-  /** Flex direction */
-  direction?: FlexDirection;
-  /** Flex wrap behavior */
-  wrap?: FlexWrap;
-  /** Justify content alignment */
-  justify?: FlexJustify;
-  /** Align items alignment */
-  align?: FlexAlign;
-  /** Gap between items: number (px) or [horizontal, vertical] */
-  gap?: number | [number, number];
+  /** Flex direction. Accepts a responsive object for breakpoint-aware values. */
+  direction?: ResponsiveValue<FlexDirection>;
+  /** Flex wrap behavior. Accepts a responsive object for breakpoint-aware values. */
+  wrap?: ResponsiveValue<FlexWrap>;
+  /** Justify content alignment. Accepts a responsive object for breakpoint-aware values. */
+  justify?: ResponsiveValue<FlexJustify>;
+  /** Align items alignment. Accepts a responsive object for breakpoint-aware values. */
+  align?: ResponsiveValue<FlexAlign>;
+  /** Gap between items: number (px) or [horizontal, vertical]. Accepts a responsive object. */
+  gap?: ResponsiveValue<number | [number, number]>;
   /** Flex property value */
   flex?: string | number;
   /** Use inline-flex instead of flex */

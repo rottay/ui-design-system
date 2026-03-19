@@ -227,8 +227,12 @@ export interface SurfaceColumn<TView> extends ColumnDef<TView> {
 export interface ListSurfaceVisualConfig {
   /** Initial view mode. Defaults to product profile's `listView` preference. */
   defaultView?: ListSurfaceView;
+  /** View mode used on mobile by default. Defaults to `'cards'` for dense lists. */
+  mobileDefaultView?: ListSurfaceView;
   /** Show a toggle letting users switch between table and card views. */
   allowViewSwitch?: boolean;
+  /** Hide the list/cards toggle on mobile when the surface already chooses the best presentation. */
+  hideViewSwitchOnMobile?: boolean;
   /** Minimum card width in card view. Overrides the profile-driven default. */
   cardMinWidth?: number;
   /** Render the list in compact density regardless of profile settings. */
@@ -237,6 +241,8 @@ export interface ListSurfaceVisualConfig {
   stickyHeader?: boolean;
   /** Constrain list height and enable vertical scrolling. */
   maxHeight?: number | string;
+  /** Filter layout used on mobile; defaults to the more legible stacked layout. */
+  mobileFiltersLayout?: 'inline' | 'stacked' | 'sidebar';
 }
 
 /** Presentation slots for list chrome, empty states, and custom renderers. */
@@ -321,14 +327,26 @@ export interface DashboardSurfaceSection {
   chrome?: 'card' | 'plain';
   /** Optional action nodes rendered in the section header. */
   actions?: ReactNode;
+  /** Lower values render earlier on mobile, letting key sections rise to the top. */
+  mobilePriority?: number;
+  /** Hide the section completely on mobile when it is secondary context. */
+  hideOnMobile?: boolean;
+  /** Optional span override used only on mobile when sections do not fully stack. */
+  mobileSpan?: number;
 }
 
 /** Visual layout hints for the dashboard grid and KPI row. */
 export interface DashboardSurfaceVisualConfig {
   /** Number of columns in the KPI stat row at desktop width. */
   statsColumns?: number;
+  /** Limit the number of KPI cards shown on mobile to the most important few. */
+  mobileStatsLimit?: number;
   /** Grid column configuration for the sections area. */
   sectionsColumns?: GridColumns;
+  /** Mobile grid column configuration for the sections area. Defaults to a single column. */
+  mobileSectionsColumns?: GridColumns;
+  /** Stack sections into a single column on mobile. Defaults to `true`. */
+  stackSectionsOnMobile?: boolean;
 }
 
 /** Presentation slots for dashboard page chrome and content sections. */
@@ -426,6 +444,8 @@ export interface DetailSurfaceVisualConfig {
   sidebarPosition?: DetailPanelProps<unknown>['sidebarPosition'];
   /** Fixed sidebar width. Accepts CSS values or pixel numbers. */
   sidebarWidth?: number | string;
+  /** Move the sidebar content below the main detail content on mobile. Defaults to `true`. */
+  collapseSidebarOnMobile?: boolean;
 }
 
 /**
@@ -467,6 +487,10 @@ export interface FormSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Stack form fields vertically on tablet. Defaults to false. */
   stackOnTablet?: boolean;
+  /** Hide the aside rail on mobile so forms stay focused. Defaults to `true`. */
+  hideAsideOnMobile?: boolean;
+  /** Keep the submit/cancel action cluster visible near the bottom on mobile. */
+  mobileActionsSticky?: boolean;
 }
 
 /** Presentation slots for form page chrome, descriptions, and field rendering. */
@@ -587,6 +611,8 @@ export interface WizardSurfaceVisualConfig {
   allowSkip?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Use a compact step indicator on mobile (numbers only, no labels). */
+  compactStepsOnMobile?: boolean;
 }
 
 /** Presentation slots for wizard chrome, step-aware aside/footer, and error display. */
@@ -653,6 +679,10 @@ export interface HeaderSurfaceVisualConfig {
   tabsType?: TabsProps['type'];
   /** Center-align tabs within the header. Useful for marketing or focused layouts. */
   centeredTabs?: boolean;
+  /** Reduce header padding and font sizes on mobile viewports. */
+  compactOnMobile?: boolean;
+  /** Hide secondary (non-primary) actions on mobile to reduce clutter. */
+  hideSecondaryActionsOnMobile?: boolean;
 }
 
 /** Presentation slots for header page chrome, description, metadata, and tab content. */
@@ -712,6 +742,8 @@ export interface SidebarSurfaceVisualConfig {
   bordered?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Automatically collapse the sidebar on mobile viewports. */
+  collapseOnMobile?: boolean;
 }
 
 /** Presentation slots for the sidebar, content area, header, footer, and aside. */
@@ -772,6 +804,8 @@ export interface DetailFormSurfaceVisualConfig {
   columns?: number;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Hide the aside/summary panel on mobile to focus on the form. */
+  hideAsideOnMobile?: boolean;
 }
 
 /** Presentation slots for detail-form chrome, summary panel, and error display. */
@@ -829,6 +863,8 @@ export interface VisualizationSurfaceVisualConfig {
   centeredTabs?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
+  compactChartsOnMobile?: boolean;
 }
 
 /** Presentation slots for visualization chrome and introductory content. */
@@ -901,6 +937,8 @@ export interface SearchSurfaceVisualConfig {
   minQueryLength?: number;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Keep the search input sticky at the top on mobile. */
+  stickySearchOnMobile?: boolean;
 }
 
 /** Presentation slots for search input, result rendering, and empty states. */
@@ -973,6 +1011,10 @@ export interface EditorSurfaceVisualConfig {
   previewWidth?: number | string;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Completely hide the toolbar on mobile. */
+  hideToolbarOnMobile?: boolean;
+  /** Use a compact single-row toolbar on mobile. */
+  compactToolbarOnMobile?: boolean;
 }
 
 /** Presentation slots for editor chrome, toolbar, preview panel, and status bar. */
@@ -1063,10 +1105,22 @@ export interface OperationalSurfaceVisualConfig {
   maxWidth?: number | string;
   /** Grid columns for the dashboard-style sections area. */
   sectionsColumns?: GridColumns;
+  /** Grid columns for sections on mobile. Defaults to a single column. */
+  mobileSectionsColumns?: GridColumns;
   /** Fixed height for the live feed panel. */
   feedHeight?: number | string;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Limit the number of KPI cards shown on mobile. */
+  mobileStatsLimit?: number;
+  /** Where to place the queue module on mobile. Defaults to `'bottom'`. */
+  mobileQueuePosition?: 'top' | 'bottom' | 'hidden';
+  /** Where to place the live feed on mobile. Defaults to `'bottom'`. */
+  mobileFeedPosition?: 'top' | 'bottom' | 'hidden';
+  /** Hide the secondary panel on mobile to reduce parallel information density. */
+  hideSecondaryPanelOnMobile?: boolean;
+  /** Stack the dashboard-style sections into a single column on mobile. Defaults to `true`. */
+  stackSectionsOnMobile?: boolean;
 }
 
 /** Presentation slots for operational chrome, panels, and dashboard sections. */
@@ -1149,6 +1203,8 @@ export interface MediaSurfaceVisualConfig {
   detailsWidth?: number | string;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Maximum number of gallery columns on mobile. */
+  mobileColumnsLimit?: number;
 }
 
 /** Presentation slots for media rendering: grid items, preview, and details panel. */
@@ -1235,6 +1291,10 @@ export interface ChatSurfaceVisualConfig {
   transcriptHeight?: number | string;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Hide the conversation list sidebar on mobile. */
+  hideListOnMobile?: boolean;
+  /** Keep the message composer input sticky at the bottom on mobile. */
+  stickyInputOnMobile?: boolean;
 }
 
 /** Presentation slots for chat chrome, message rendering, and composer placeholder. */
@@ -1296,6 +1356,10 @@ export interface SchedulerSurfaceVisualConfig {
   defaultView?: 'month' | 'week' | 'day';
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Override the default calendar view on mobile (e.g., 'list' for a simpler layout). */
+  mobileView?: 'list' | 'day' | 'week' | 'month';
+  /** Hide the timeline sidebar on mobile. */
+  hideTimelineOnMobile?: boolean;
 }
 
 /** Presentation slots for scheduler chrome, event rendering, and sidebar. */
@@ -1382,6 +1446,10 @@ export interface CompareSurfaceVisualConfig {
   maxWidth?: number | string;
   /** Render the comparison in compact mode (smaller cells, tighter spacing). */
   compact?: boolean;
+  /** Stack comparison columns vertically on mobile. */
+  stackOnMobile?: boolean;
+  /** Maximum number of items to compare side-by-side on mobile. */
+  mobileCompareLimit?: number;
 }
 
 /** Presentation slots for comparison page chrome, intro text, and footer. */
@@ -1429,10 +1497,14 @@ export interface AuthSurfaceVisualConfig {
   heroPosition?: 'start' | 'end';
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Use a compact form layout on mobile (reduce spacing and padding). */
+  compactFormOnMobile?: boolean;
 }
 
 /** Presentation slots for auth pages: form, hero image, legal text, and top bar. */
 export interface AuthSurfacePresentationConfig {
+  /** Small label shown above the auth title (e.g., "Sign in", "Password recovery"). */
+  eyebrow?: ReactNode;
   /** Auth page title (e.g., "Sign In", "Create Account"). */
   title: ReactNode;
   subtitle?: ReactNode;
@@ -1440,6 +1512,8 @@ export interface AuthSurfacePresentationConfig {
   form: ReactNode;
   /** Hero image or illustration for split layout. */
   hero?: ReactNode;
+  /** Simplified hero content rendered on mobile instead of squeezing the desktop hero. */
+  mobileHero?: ReactNode;
   /** Footer content (e.g., "Don't have an account? Sign up"). */
   footer?: ReactNode;
   /** Legal text rendered at the bottom (e.g., terms of service, privacy policy). */
@@ -1463,6 +1537,58 @@ export interface AuthSurfaceConfig {
 }
 
 // ---------------------------------------------------------------------------
+// Marketing surface contracts
+// ---------------------------------------------------------------------------
+
+/**
+ * Visual configuration for public marketing and pre-auth surfaces.
+ *
+ * Unlike app-authenticated shells, these surfaces need to support editorial
+ * hero layouts, denser desktop previews, and deliberately simplified mobile
+ * summaries. The layout system owns stacking and width decisions; apps only
+ * provide content.
+ */
+export interface MarketingSurfaceVisualConfig {
+  maxWidth?: number | string;
+  heroPosition?: 'start' | 'end';
+  stackOnMobile?: boolean;
+  stackOnTablet?: boolean;
+}
+
+/**
+ * Presentation slots for public marketing pages.
+ *
+ * `hero` is the default rich preview. `mobileHero` lets apps provide a smaller
+ * summary card instead of squeezing the desktop preview into a narrow viewport.
+ */
+export interface MarketingSurfacePresentationConfig {
+  topBar?: ReactNode;
+  eyebrow?: ReactNode;
+  badge?: ReactNode;
+  title: ReactNode;
+  description?: ReactNode;
+  supporting?: ReactNode;
+  mobileSupporting?: ReactNode;
+  hero?: ReactNode;
+  mobileHero?: ReactNode;
+  sections?: ReactNode[];
+  footer?: ReactNode;
+}
+
+/** Behavioral config for public marketing surfaces. */
+export interface MarketingSurfaceBehaviorConfig {
+  actions?: SurfaceAction<void>[];
+}
+
+/** Complete marketing surface configuration for public landing/pre-auth pages. */
+export interface MarketingSurfaceConfig {
+  visual: MarketingSurfaceVisualConfig;
+  presentation: MarketingSurfacePresentationConfig;
+  behavior: MarketingSurfaceBehaviorConfig;
+  permissions?: SurfacePermissionsConfig;
+}
+
+// ---------------------------------------------------------------------------
 // Onboarding surface contracts
 // ---------------------------------------------------------------------------
 
@@ -1475,6 +1601,8 @@ export interface OnboardingSurfaceVisualConfig {
   allowSkip?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Hide the hero illustration on mobile to save vertical space. */
+  hideIllustrationOnMobile?: boolean;
 }
 
 /** Presentation slots for onboarding chrome, hero, and progress checklist. */
@@ -1514,9 +1642,13 @@ export interface OnboardingSurfaceConfig {
  * user toward their first interaction.
  */
 
-/** Visual config for empty-state surfaces. Intentionally minimal. */
+/** Visual config for empty-state surfaces. */
 export interface EmptyStateSurfaceVisualConfig {
   maxWidth?: number | string;
+  /** Reduce padding and font sizes on mobile viewports. */
+  compactOnMobile?: boolean;
+  /** Hide the illustration graphic on mobile. Set to false to keep it visible. */
+  hideIllustrationOnMobile?: boolean;
 }
 
 /** Presentation for empty-state: title, description, icon, and optional custom content. */
@@ -1560,6 +1692,8 @@ export interface SettingsSurfaceVisualConfig {
   centeredTabs?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+  /** Collapse the settings sidebar navigation on mobile. */
+  collapseSidebarOnMobile?: boolean;
 }
 
 /** Presentation slots for settings chrome, intro text, and optional sidebar. */
@@ -1638,6 +1772,10 @@ export interface AuditSurfaceVisualConfig {
   density?: 'compact' | 'comfortable';
   /** Constrain table height and enable vertical scrolling. */
   maxHeight?: string;
+  /** Stack audit sections vertically on mobile. */
+  stackOnMobile?: boolean;
+  /** Use compact audit entries on mobile (fewer visible columns). */
+  compactEntriesOnMobile?: boolean;
 }
 
 /** Presentation slots for audit log chrome and custom entry rendering. */
@@ -1722,6 +1860,10 @@ export interface BillingPaymentMethod {
 export interface BillingSurfaceVisualConfig {
   /** 'tabs' groups plan/usage/invoices into tabs; 'sections' stacks them vertically. */
   layout?: 'tabs' | 'sections';
+  /** Stack billing sections vertically on mobile. */
+  stackOnMobile?: boolean;
+  /** Collapse the billing sidebar on mobile. */
+  collapseSidebarOnMobile?: boolean;
 }
 
 /** Presentation slots for billing chrome and custom plan rendering. */
@@ -1786,6 +1928,10 @@ export interface ProfileField {
 export interface ProfileSurfaceVisualConfig {
   /** 'sidebar' shows section nav on the side; 'stacked' renders all sections vertically. */
   layout?: 'sidebar' | 'stacked';
+  /** Stack profile sections vertically on mobile. */
+  stackOnMobile?: boolean;
+  /** Collapse the profile sidebar navigation on mobile. */
+  collapseSidebarOnMobile?: boolean;
 }
 
 /** Presentation slots for profile chrome, avatar, and header content. */
@@ -1856,6 +2002,10 @@ export interface NotificationPreference {
 export interface NotificationSurfaceVisualConfig {
   /** 'tabs' separates feed and preferences into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
+  /** Stack notification sections vertically on mobile. */
+  stackOnMobile?: boolean;
+  /** Use compact notification items on mobile (smaller avatars, shorter text). */
+  compactItemsOnMobile?: boolean;
 }
 
 /** Presentation slots for notification chrome and empty state. */
@@ -1945,6 +2095,8 @@ export interface ImportExportHistoryEntry {
 /** Visual configuration for import/export surfaces. */
 export interface ImportExportSurfaceVisualConfig {
   maxWidth?: number | string;
+  /** Stack import/export sections vertically on mobile. */
+  stackOnMobile?: boolean;
 }
 
 /** Presentation slots for import/export chrome and empty state. */
@@ -2030,6 +2182,10 @@ export interface ReportSurfaceVisualConfig {
   /** 'sidebar-filters' places filters in a side panel; 'top-filters' stacks them above the report. */
   layout?: 'sidebar-filters' | 'top-filters';
   maxWidth?: number | string;
+  /** Stack filter and report sections vertically on mobile. */
+  stackSectionsOnMobile?: boolean;
+  /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
+  compactChartsOnMobile?: boolean;
 }
 
 /** Presentation slots for report chrome, chart rendering, and empty state. */
@@ -2100,6 +2256,10 @@ export interface TeamRole {
 export interface TeamSurfaceVisualConfig {
   maxWidth?: number | string;
   layout?: 'table' | 'cards';
+  /** Stack team member views vertically on mobile. */
+  stackOnMobile?: boolean;
+  /** Default view mode on mobile ('cards' or 'table'). */
+  mobileDefaultView?: 'cards' | 'table';
 }
 
 /** Presentation slots for team chrome, empty state, and custom member rendering. */
@@ -2178,6 +2338,10 @@ export interface IntegrationSurfaceVisualConfig {
   maxWidth?: number | string;
   /** 'tabs' separates keys/webhooks/apps into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
+  /** Stack integration sections vertically on mobile. */
+  stackOnMobile?: boolean;
+  /** Use compact card rendering for integration items on mobile. */
+  compactCardsOnMobile?: boolean;
 }
 
 /** Presentation slots for integration chrome and empty state. */
@@ -2256,6 +2420,10 @@ export interface KanbanSurfaceVisualConfig {
   columnMinWidth?: number | string;
   /** Gap between kanban columns. */
   columnGap?: number | string;
+  /** Maximum number of visible columns on mobile. */
+  mobileColumnsLimit?: number;
+  /** Stack columns vertically on mobile instead of horizontal scroll. */
+  stackColumnsOnMobile?: boolean;
 }
 
 /** Presentation slots for kanban chrome, card rendering, and column headers. */
@@ -2326,6 +2494,10 @@ export interface ActivitySurfaceFilter {
 /** Visual configuration for activity feed surfaces. */
 export interface ActivitySurfaceVisualConfig {
   maxWidth?: number | string;
+  /** Use compact entry rendering (smaller avatars, tighter spacing) on mobile. */
+  compactEntriesOnMobile?: boolean;
+  /** Stack activity feed layout vertically on mobile. */
+  stackOnMobile?: boolean;
 }
 
 /** Presentation slots for activity chrome and custom activity rendering. */
@@ -2396,6 +2568,10 @@ export interface FileBrowserSurfaceVisualConfig {
   maxWidth?: number | string;
   /** 'grid' shows thumbnails; 'list' shows a detailed table. */
   viewMode?: 'grid' | 'list';
+  /** Default view mode on mobile. Overrides `viewMode` on small screens. */
+  mobileView?: 'grid' | 'list';
+  /** Stack file browser layout vertically on mobile (breadcrumb + list). */
+  stackOnMobile?: boolean;
 }
 
 /** Presentation slots for file browser chrome and custom file icon rendering. */
@@ -2474,6 +2650,10 @@ export interface PricingSurfaceFeature {
 /** Visual configuration for pricing surfaces. */
 export interface PricingSurfaceVisualConfig {
   maxWidth?: number | string;
+  /** Stack pricing plans vertically on mobile instead of side-by-side. */
+  stackOnMobile?: boolean;
+  /** Use compact column rendering on mobile (reduced feature rows, smaller text). */
+  compactColumnsOnMobile?: boolean;
 }
 
 /** Presentation slots for pricing chrome, intro, footer, and custom plan headers. */

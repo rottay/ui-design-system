@@ -49,10 +49,11 @@
 
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
 import { Card as AntCard, Skeleton } from 'antd';
 import type { CardProps } from '../Card.types';
 import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 /**
  * Classic engine Card component using Ant Design.
@@ -105,12 +106,33 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
     bordered = CARD_DEFAULTS.bordered,
     shadowed,
     radius = CARD_DEFAULTS.radius,
-    padding = CARD_DEFAULTS.padding,
+    padding: paddingProp = CARD_DEFAULTS.padding,
     divider,
     onClick,
     className = '',
     style,
   } = props;
+
+  // Responsive padding handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const paddingIsResponsive = isResponsiveValue(paddingProp);
+
+  if (paddingIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'padding',
+      value: paddingProp,
+      resolve: (v: string) => `${PADDING_MAP[v] || PADDING_MAP.md} !important`,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `card-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
 
   // AntD 5.x replaced the `bordered` boolean with a `variant` prop.
   // We pass `undefined` (the AntD default, which renders borders) when our DS
@@ -165,43 +187,49 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
   ) : undefined;
 
   return (
-    <AntCard
-      title={cardTitle}
-      extra={extra}
-      cover={coverElement}
-      actions={actions}
-      variant={antVariant}
-      hoverable={hoverable || clickable}
-      loading={loading}
-      onClick={onClick}
-      className={`rottay-card rottay-card--classic ${className}`}
-      styles={{
-        body: bodyStyle,
-        // By default we hide the header divider to match the DS spec;
-        // it only appears when the consumer explicitly sets `divider`.
-        header: divider ? undefined : { borderBottom: 'none' },
-      }}
-      style={{
-        borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
-        cursor: clickable || onClick ? 'pointer' : undefined,
-        ...shadowStyle,
-        // Color variant overrides both border-left and background, giving
-        // cards a semantic accent (e.g. green for success, red for error).
-        ...(hasColorVariant && {
-          borderLeft: `4px solid ${colorStyles.borderColor}`,
-          backgroundColor: colorStyles.background,
-        }),
-        ...style,
-      }}
-    >
-      {/* When loading we render AntD Skeleton instead of children so the card
-          maintains its approximate dimensions while content is being fetched. */}
-      {loading ? (
-        <Skeleton active paragraph={{ rows: 3 }} />
-      ) : (
-        children
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
-    </AntCard>
+      <AntCard
+        title={cardTitle}
+        extra={extra}
+        cover={coverElement}
+        actions={actions}
+        variant={antVariant}
+        hoverable={hoverable || clickable}
+        loading={loading}
+        onClick={onClick}
+        className={`rottay-card rottay-card--classic ${className}`}
+        styles={{
+          body: bodyStyle,
+          // By default we hide the header divider to match the DS spec;
+          // it only appears when the consumer explicitly sets `divider`.
+          header: divider ? undefined : { borderBottom: 'none' },
+        }}
+        style={{
+          borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
+          cursor: clickable || onClick ? 'pointer' : undefined,
+          ...shadowStyle,
+          // Color variant overrides both border-left and background, giving
+          // cards a semantic accent (e.g. green for success, red for error).
+          ...(hasColorVariant && {
+            borderLeft: `4px solid ${colorStyles.borderColor}`,
+            backgroundColor: colorStyles.background,
+          }),
+          ...style,
+        }}
+        {...(responsive ? responsive.attrs : {})}
+      >
+        {/* When loading we render AntD Skeleton instead of children so the card
+            maintains its approximate dimensions while content is being fetched. */}
+        {loading ? (
+          <Skeleton active paragraph={{ rows: 3 }} />
+        ) : (
+          children
+        )}
+      </AntCard>
+    </>
   );
 }
 

@@ -25,9 +25,18 @@ import React, {
   useCallback,
   useMemo,
   useImperativeHandle,
+  useId,
 } from 'react';
-import type { SelectProps, SelectOption } from '../Select.types';
-import { SELECT_DEFAULTS } from '../Select.types';
+import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
+import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import type { ResponsiveValue } from '../../../layout/shared/types';
+
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (isResponsiveValue(value)) return undefined;
+  return value as T;
+}
 import { useTranslation } from '../../../../../i18n';
 import {
   getLabelText,
@@ -88,7 +97,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     defaultValue,
     options: flatOptions = [],
     placeholder,
-    size = SELECT_DEFAULTS.size,
+    size: sizeProp = SELECT_DEFAULTS.size,
     variant = SELECT_DEFAULTS.variant,
     multiple = SELECT_DEFAULTS.multiple,
     searchable,
@@ -118,6 +127,32 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     tokenSeparators,
     ...rest
   } = props;
+
+  // Responsive size handling
+  const reactId = useId();
+  const responsiveEntries: ResponsivePropEntry<any>[] = [];
+  const sizeIsResponsive = isResponsiveValue(sizeProp);
+
+  if (sizeIsResponsive) {
+    responsiveEntries.push({
+      cssProperty: 'height',
+      value: sizeProp,
+      resolve: (v: SelectSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'font-size',
+      value: sizeProp,
+      resolve: (v: SelectSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+  }
+
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+  const elementId = needsResponsiveCSS ? `select-${reactId.replace(/:/g, '')}` : '';
+  const responsiveCSS = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
   // Use translation as default, allow prop override
   const displayPlaceholder = placeholder ?? t('select.placeholder');
@@ -487,8 +522,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
     return (
       <div className="relative w-full" style={style}>
+        {responsiveCSS && responsiveCSS.css && (
+          <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
+        )}
         <select
           ref={nativeSelectRef}
+          {...(responsiveCSS ? responsiveCSS.attrs : {})}
           className={selectClasses}
           value={internalValue[0] ?? ''}
           disabled={disabled}
@@ -594,6 +633,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   return (
     <div ref={containerRef} className="relative w-full" style={style} onKeyDown={handleKeyDown}>
+      {responsiveCSS && responsiveCSS.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
+      )}
       {/* Trigger */}
       <div
         className={triggerClasses}

@@ -28,7 +28,7 @@ const DENSITY_SIZE_MAP = {
  * bulk actions, pagination, sticky headers, column visibility/resize/reorder/pin,
  * and density modes out of the box.
  */
-export default function ClassicDataTable<T extends Record<string, unknown>>(
+export default function ClassicDataTable<T extends object>(
   props: DataTablePatternProps<T>
 ) {
   const {

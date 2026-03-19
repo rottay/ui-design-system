@@ -19,6 +19,11 @@ export * from './contracts';
 export * from './errors';
 
 // ============================================
+// PROVIDERS (ResponsiveProvider, etc.)
+// ============================================
+export * from './providers';
+
+// ============================================
 // HOOKS (promoted from core/hooks/)
 // ============================================
 export * from './hooks';

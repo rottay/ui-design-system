@@ -89,6 +89,7 @@ import type { VerticalKey, VerticalPreset } from '../verticals/types';
 import { getVerticalPreset } from '../verticals/registry';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenancy/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
+import { ResponsiveProvider } from '../providers/responsive';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -406,8 +407,10 @@ export function DesignSystemProvider({
               cssBaseUrl={cssBaseUrl}
             >
               <FeatureProvider features={tenantConfig.features ?? []}>
-                <SystemCssVariablesBridge />
-                <MemoizedChildren>{children}</MemoizedChildren>
+                <ResponsiveProvider>
+                  <SystemCssVariablesBridge />
+                  <MemoizedChildren>{children}</MemoizedChildren>
+                </ResponsiveProvider>
               </FeatureProvider>
             </ThemeProvider>
           </EngineProvider>

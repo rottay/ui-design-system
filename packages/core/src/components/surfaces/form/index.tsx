@@ -40,7 +40,7 @@ export function FormSurface({
   onRetry,
 }: FormSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
-  const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
   // Fields are permission-filtered before reaching the form builder so
   // restricted fields never appear in the DOM at all.
   const visibleFields = filterSurfaceFields(config.behavior.fields, config.permissions);
@@ -55,6 +55,14 @@ export function FormSurface({
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
+  const showAside =
+    !!config.presentation.aside &&
+    (!isMobile || config.visual.hideAsideOnMobile === false);
+  const resolvedLayout =
+    shouldStack && config.visual.layout === 'horizontal'
+      ? 'vertical'
+      : config.visual.layout;
+  const resolvedColumns = shouldStack ? 1 : config.visual.columns;
 
   if (error) {
     return (
@@ -65,18 +73,34 @@ export function FormSurface({
   }
 
   const actionsNode = (
-    <Flex gap={8} wrap="wrap" justify="end">
+    <Flex
+      direction={isMobile ? 'column' : 'row'}
+      gap={8}
+      wrap="wrap"
+      justify="end"
+      style={
+        isMobile && config.visual.mobileActionsSticky
+          ? {
+              position: 'sticky',
+              bottom: 0,
+              paddingTop: 12,
+              paddingBottom: 4,
+              background: 'linear-gradient(to top, var(--ds-color-bg-primary) 85%, transparent)',
+              zIndex: 1,
+            }
+          : undefined
+      }
+    >
       {cancelAction && (
         <Button
           variant={resolveSurfaceButtonVariant(cancelAction.variant)}
           disabled={cancelAction.disabled}
           loading={cancelAction.loading}
+          icon={cancelAction.icon}
           onClick={() => cancelAction.onClick?.(undefined as void)}
+          style={isMobile ? { width: '100%', justifyContent: 'center' } : undefined}
         >
-          {cancelAction.icon}
-          <Text style={{ marginLeft: cancelAction.icon ? 8 : 0 }}>
-            {cancelAction.label}
-          </Text>
+          {cancelAction.label}
         </Button>
       )}
       {submitAction && (
@@ -85,11 +109,10 @@ export function FormSurface({
           htmlType="submit"
           disabled={submitAction.disabled}
           loading={submitAction.loading}
+          icon={submitAction.icon}
+          style={isMobile ? { width: '100%', justifyContent: 'center' } : undefined}
         >
-          {submitAction.icon}
-          <Text style={{ marginLeft: submitAction.icon ? 8 : 0 }}>
-            {submitAction.label}
-          </Text>
+          {submitAction.label}
         </Button>
       )}
     </Flex>
@@ -99,8 +122,8 @@ export function FormSurface({
   // enough. This keeps the form full-width by default, matching the most
   // common create/edit screen layout without explicit configuration.
   const formContent = (
-    <Grid columns={config.presentation.aside && !shouldStack ? 12 : 1} gap={sectionSpacing}>
-      <Grid.Item span={config.presentation.aside && !shouldStack ? 8 : undefined}>
+    <Grid columns={showAside && !shouldStack ? 12 : 1} gap={sectionSpacing}>
+      <Grid.Item span={showAside && !shouldStack ? 8 : undefined}>
         <Card variant={profileDefaults.cardVariant}>
           <Card.Body>
             <Stack spacing={sectionSpacing}>
@@ -124,8 +147,8 @@ export function FormSurface({
               {/* The form builder owns field generation; the surface owns page framing and submit actions. */}
               <PatternFormBuilder
                 fields={visibleFields}
-                layout={config.visual.layout}
-                columns={config.visual.columns}
+                layout={resolvedLayout}
+                columns={resolvedColumns}
                 renderField={config.presentation.renderField}
                 actions={actionsNode}
                 onSubmit={(values) => submitAction?.onClick?.(values)}
@@ -146,7 +169,7 @@ export function FormSurface({
         </Card>
       </Grid.Item>
 
-      {config.presentation.aside && (
+      {showAside && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
           <Card variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.aside}</Card.Body>

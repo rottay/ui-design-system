@@ -9,6 +9,11 @@
  * - SSR-safe (returns base value on server)
  * - Supports any value type (numbers, strings, objects, etc.)
  *
+ * When a `ResponsiveProvider` is present in the tree, this hook reads the
+ * device class from context and resolves the value without creating any
+ * matchMedia subscriptions. Without a provider, it falls back to its own
+ * per-component listeners for backward compatibility.
+ *
  * Breakpoints (min-width):
  * - base: 0px (required, always applies)
  * - sm: 640px
@@ -26,8 +31,10 @@
  * @category System
  * @package @rottay/design-system
  */
+import { useContext } from 'react';
 import { useMediaQuery } from '../useMediaQuery';
-import { buildMinWidthQuery } from '../breakpoints';
+import { buildMinWidthQuery, RESPONSIVE_BREAKPOINTS } from '../breakpoints';
+import { ResponsiveContext } from '../../../providers/responsive';
 
 /**
  * Responsive value configuration object
@@ -53,6 +60,10 @@ export interface ResponsiveValueConfig<T> {
  * Follows Tailwind CSS mobile-first breakpoint system. Values cascade up,
  * meaning smaller breakpoint values apply until a larger breakpoint overrides them.
  * SSR-safe: returns the base value on the server.
+ *
+ * When wrapped in a `ResponsiveProvider`, reads the device class from context
+ * and resolves the value without creating matchMedia subscriptions. Without a
+ * provider, creates its own subscriptions for backward compatibility.
  *
  * Breakpoints (min-width):
  * - base: 0px (always applies, required)
@@ -92,6 +103,58 @@ export interface ResponsiveValueConfig<T> {
  * @returns {T} The value for the current viewport breakpoint
  */
 export function useResponsiveValue<T>(values: ResponsiveValueConfig<T>): T {
+  const responsiveContext = useContext(ResponsiveContext);
+
+  // Fast path: when a ResponsiveProvider is in the tree, resolve the value
+  // from the shared context's activeBreakpoint for precise resolution.
+  if (responsiveContext) {
+    return resolveFromActiveBreakpoint(values, responsiveContext.activeBreakpoint);
+  }
+
+  // Fallback path: no provider -- create per-component subscriptions.
+  return useResponsiveValueFallback(values);
+}
+
+// ---------------------------------------------------------------------------
+// Context-based resolution
+// ---------------------------------------------------------------------------
+
+/**
+ * Resolves the correct value using the precise active breakpoint from the
+ * ResponsiveProvider. Uses mobile-first cascade: check from the active
+ * breakpoint downward, returning the first defined value.
+ *
+ * Example: activeBreakpoint='lg', values={ base: 1, md: 2, xl: 4 }
+ * -> checks xl (above lg, skip), lg (undefined), md (2) -> returns 2
+ */
+function resolveFromActiveBreakpoint<T>(
+  values: ResponsiveValueConfig<T>,
+  activeBreakpoint: string,
+): T {
+  // Breakpoint order from largest to smallest for cascade
+  const cascade: (keyof ResponsiveValueConfig<T>)[] = ['2xl', 'xl', 'lg', 'md', 'sm', 'base'];
+  const activeIndex = cascade.indexOf(
+    activeBreakpoint === 'xs' ? 'base' : activeBreakpoint as keyof ResponsiveValueConfig<T>
+  );
+
+  // Start from the active breakpoint and go downward (mobile-first cascade)
+  for (let i = Math.max(activeIndex, 0); i < cascade.length; i++) {
+    const key = cascade[i];
+    if (values[key] !== undefined) return values[key] as T;
+  }
+
+  return values.base;
+}
+
+// ---------------------------------------------------------------------------
+// Fallback (own subscriptions)
+// ---------------------------------------------------------------------------
+
+/**
+ * Internal fallback that creates its own matchMedia subscriptions.
+ * Only called when no ResponsiveProvider exists in the tree.
+ */
+function useResponsiveValueFallback<T>(values: ResponsiveValueConfig<T>): T {
   // All five hooks MUST be called unconditionally to satisfy React's Rules of
   // Hooks (no conditional hook calls). Each hook subscribes to a min-width
   // media query, so on a 1400px viewport both isSm and isMd and isLg will
@@ -104,32 +167,11 @@ export function useResponsiveValue<T>(values: ResponsiveValueConfig<T>): T {
   const isSm = useMediaQuery(buildMinWidthQuery('sm'));
 
   // Resolve the largest matching breakpoint that has a user-defined value.
-  // This implements mobile-first cascade: if only `base` and `lg` are defined,
-  // the `lg` value applies to xl and 2xl as well because those tiers lack an
-  // explicit override. The `!== undefined` check allows falsy values like 0
-  // or empty string to be valid breakpoint values.
-  if (is2xl && values['2xl'] !== undefined) {
-    return values['2xl'];
-  }
+  if (is2xl && values['2xl'] !== undefined) return values['2xl'];
+  if (isXl && values.xl !== undefined) return values.xl;
+  if (isLg && values.lg !== undefined) return values.lg;
+  if (isMd && values.md !== undefined) return values.md;
+  if (isSm && values.sm !== undefined) return values.sm;
 
-  if (isXl && values.xl !== undefined) {
-    return values.xl;
-  }
-
-  if (isLg && values.lg !== undefined) {
-    return values.lg;
-  }
-
-  if (isMd && values.md !== undefined) {
-    return values.md;
-  }
-
-  if (isSm && values.sm !== undefined) {
-    return values.sm;
-  }
-
-  // `base` is always the final fallback and is required in the config type.
-  // During SSR all media queries return false, so this guarantees a
-  // deterministic server-side value that matches the mobile-first baseline.
   return values.base;
 }

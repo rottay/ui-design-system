@@ -118,3 +118,12 @@ export { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS as CONFIRM_DIALOG_VARIANT_COLOR
 export { AlertDialog } from './AlertDialog';
 export type { AlertDialogProps } from './AlertDialog';
 export { ALERT_DIALOG_DEFAULTS } from './AlertDialog';
+
+// AdaptiveOverlay
+export { AdaptiveOverlay } from './AdaptiveOverlay';
+export type {
+  AdaptiveOverlayProps,
+  AdaptiveOverlayMode,
+  ResolvedOverlayMode,
+} from './AdaptiveOverlay';
+export { ADAPTIVE_OVERLAY_DEFAULTS } from './AdaptiveOverlay';

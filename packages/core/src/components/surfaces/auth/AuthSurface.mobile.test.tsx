@@ -33,4 +33,16 @@ describe('AuthSurface responsive layout', () => {
     expect(await screen.findByText('Hero content')).toBeInTheDocument();
     expect(await screen.findByText('Auth form')).toBeInTheDocument();
   });
+
+  it('prefers the mobile hero when one is provided', async () => {
+    mockMatchMedia(375);
+
+    const config = buildConfig();
+    config.presentation.mobileHero = <div>Mobile hero summary</div>;
+
+    renderSurface(<AuthSurface config={config} />);
+
+    expect(await screen.findByText('Mobile hero summary')).toBeInTheDocument();
+    expect(screen.queryByText('Hero content')).not.toBeInTheDocument();
+  });
 });

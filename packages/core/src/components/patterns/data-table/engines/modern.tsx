@@ -45,7 +45,7 @@ const DENSITY_PADDING_MAP = {
  * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
  * @returns A data table rendered with DaisyUI-styled native HTML elements.
  */
-export default function ModernDataTable<T extends Record<string, unknown>>(
+export default function ModernDataTable<T extends object>(
   props: DataTablePatternProps<T>
 ) {
   const {
