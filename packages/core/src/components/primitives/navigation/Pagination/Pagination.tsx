@@ -23,7 +23,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { PaginationProps } from './Pagination.types';
 
 export { type PaginationProps, type PaginationSize, PAGINATION_DEFAULTS } from './Pagination.types';

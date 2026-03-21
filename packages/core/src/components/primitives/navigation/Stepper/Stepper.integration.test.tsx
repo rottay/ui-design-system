@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest';
 
 import { Stepper, StepperContent, StepperStep } from '.';
-import { renderWithEngine, STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Stepper compound integration', () => {
   it('renders the standalone Step compound with keyboard activation and disabled guards', () => {

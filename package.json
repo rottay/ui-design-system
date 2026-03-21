@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.5.1",
+  "version": "2.6.1",
   "sideEffects": [
     "*.css"
   ],
@@ -9,7 +9,7 @@
   "types": "./packages/core/dist/index.d.ts",
   "files": [
     "packages/core/dist",
-    "packages/core/src/theme/tokens/css",
+    "packages/core/src/tokens/css",
     "LICENSE",
     "README.md"
   ],
@@ -18,25 +18,6 @@
       "types": "./packages/core/dist/index.d.ts",
       "import": "./packages/core/dist/index.js",
       "require": "./packages/core/dist/index.cjs"
-    },
-    "./tokens": {
-      "types": "./packages/core/dist/tokens.d.ts",
-      "import": "./packages/core/dist/tokens.js",
-      "require": "./packages/core/dist/tokens.cjs"
-    },
-    "./tokens/css": "./packages/core/src/theme/tokens/css/index.css",
-    "./tokens/css/*": "./packages/core/src/theme/tokens/css/*",
-    "./i18n": {
-      "types": "./packages/core/dist/i18n.d.ts",
-      "import": "./packages/core/dist/i18n.js",
-      "require": "./packages/core/dist/i18n.cjs"
-    },
-    "./styles": "./packages/core/src/theme/tokens/css/index.css",
-    "./styles.css": "./packages/core/src/theme/tokens/css/index.css",
-    "./icons": {
-      "types": "./packages/core/dist/icons.d.ts",
-      "import": "./packages/core/dist/icons.js",
-      "require": "./packages/core/dist/icons.cjs"
     }
   },
   "workspaces": [

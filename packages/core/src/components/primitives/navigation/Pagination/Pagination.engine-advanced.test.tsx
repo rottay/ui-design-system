@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import ModernPagination from './engines/modern';
 import RusticPagination from './engines/rustic';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Pagination engine advanced coverage', () => {
   it('renders ellipsis and respects navigation boundaries in the modern engine', () => {

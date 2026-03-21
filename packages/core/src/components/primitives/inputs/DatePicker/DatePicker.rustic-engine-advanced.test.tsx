@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('DatePicker rustic advanced coverage', () => {
   it('covers rustic picker variants, clear handling, disabled clear guards, and range updates', async () => {

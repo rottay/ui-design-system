@@ -5,7 +5,7 @@
  * with progress tracking, per-step async validation, and skip support.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { StepWizardProps } from './StepWizard.types';
 
 export type { StepWizardProps, WizardStep } from './StepWizard.types';

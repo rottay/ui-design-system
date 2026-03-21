@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Sheet } from './';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 
 const meta: Meta<typeof Sheet> = {
   title: 'Primitives/Overlay/Sheet',

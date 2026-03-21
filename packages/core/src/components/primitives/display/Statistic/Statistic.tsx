@@ -26,12 +26,12 @@
 
 import { createElement, forwardRef } from 'react';
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import { useOptionalTokens } from '../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveStatisticPersonalityStyle,
-} from '../../../../personality/primitives';
+} from '../../../../runtime/personality/primitives';
 import type { StatisticProps, CountdownProps } from './Statistic.types';
 import { Countdown } from './compound';
 

@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { OperationalSurface } from '.';
 import type { OperationalSurfaceConfig } from '../types';
 import { renderSurface } from '../common/test-utils';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
 
 function buildConfig(
   overrides?: Partial<OperationalSurfaceConfig<{ key: string; title: string }>>

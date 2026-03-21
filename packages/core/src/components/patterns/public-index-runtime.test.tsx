@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { describeEachEngine, renderWithEngine } from '../../testing/helpers/engine-test-utils';
+import { describeEachEngine, renderWithEngine } from '../../_internal/testing/helpers/engine-test-utils';
 import { PatternActivityLog } from './activity-log';
 import { PatternCommentThread } from './comment-thread';
 import { PatternFileManager } from './file-manager';

@@ -5,7 +5,7 @@
  * with expand/collapse, checkboxes, drag-and-drop, and search filtering.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { TreeViewProps } from './TreeView.types';
 
 export type { TreeViewProps, TreeNode } from './TreeView.types';

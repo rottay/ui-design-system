@@ -21,7 +21,7 @@
  * @category Feedback
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { DrawerProps } from './Drawer.types';
 import { DrawerHeader, DrawerBody, DrawerFooter } from './compound';
 

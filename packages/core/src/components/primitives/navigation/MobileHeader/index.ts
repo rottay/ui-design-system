@@ -13,7 +13,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { MobileHeaderProps } from './MobileHeader.types';
 
 export type { MobileHeaderProps } from './MobileHeader.types';

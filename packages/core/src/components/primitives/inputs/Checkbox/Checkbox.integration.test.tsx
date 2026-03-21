@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Checkbox integration', () => {
   it.each(['modern', 'rustic'] as const)(

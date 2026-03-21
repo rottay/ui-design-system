@@ -6,7 +6,7 @@
  * quantities, reason codes, actor attribution, and inline filtering.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { OperationalLedgerProps } from './OperationalLedger.types';
 
 export type {

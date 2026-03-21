@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Kbd } from './Kbd';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 
 const meta: Meta<typeof Kbd> = {
   title: 'Primitives/Display/Kbd',

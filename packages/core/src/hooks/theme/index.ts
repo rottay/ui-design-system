@@ -23,4 +23,4 @@
  */
 
 // Re-export from canonical location to maintain backwards compatibility.
-export { useTheme, useThemeContext } from '../../theming/useTheme';
+export { useTheme, useThemeContext } from '../../runtime/theming/useTheme';

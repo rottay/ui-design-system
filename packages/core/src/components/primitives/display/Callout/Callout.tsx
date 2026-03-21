@@ -18,7 +18,7 @@
  * @category Display
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { CalloutProps } from './Callout.types';
 
 export {

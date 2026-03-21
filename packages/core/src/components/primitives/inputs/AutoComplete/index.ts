@@ -88,7 +88,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { AutoCompleteProps } from './AutoComplete.types';
 
 // Export types

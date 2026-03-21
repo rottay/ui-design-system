@@ -33,7 +33,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { StepperProps } from './Stepper.types';
 import { StepperStep, StepperContent } from './compound';
 

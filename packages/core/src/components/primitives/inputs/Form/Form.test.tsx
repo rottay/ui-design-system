@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { Form } from '.';
-import { renderWithEngine, STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Form integration', () => {
   it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {

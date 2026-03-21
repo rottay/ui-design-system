@@ -8,7 +8,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Badge } from './';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 import { EngineComparison, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 /**

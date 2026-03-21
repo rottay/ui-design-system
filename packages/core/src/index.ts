@@ -1,5 +1,9 @@
 'use client';
 
+// Auto-load base design tokens + engine CSS when importing the package.
+// Tenant CSS loads dynamically via ThemeProvider based on active tenant.
+import './tokens/css/index-base.css';
+
 /**
  * Rottay Design System
  * Multi-tenant, multi-engine UI component library
@@ -10,18 +14,25 @@
 // ============================================
 // CORE (Engines, Providers, Types, Errors)
 // ============================================
-export * from './engines';
-export { ThemeProvider, ThemeContext } from './theming';
-export type { ThemeProviderProps, ThemeConfig, ThemeContextValue } from './theming';
-export * from './features';
-export * from './bootstrap';
+export * from './runtime/engines';
+export { ThemeProvider, ThemeContext } from './runtime/theming';
+export type { ThemeProviderProps, ThemeConfig, ThemeContextValue } from './runtime/theming';
+export * from './runtime/features';
+export * from './runtime/bootstrap';
 export * from './contracts';
-export * from './errors';
+
+// ============================================
+// ERROR HANDLING (public API, hosted in _internal for structural clarity)
+// ============================================
+export { ErrorHandler } from './_internal/errors';
+export { useErrorHandler } from './_internal/errors';
+export { ErrorCategory, ErrorSeverity } from './_internal/errors';
+export type { DSError, DSErrorInput, ErrorSubscriber, UseErrorHandlerOptions, UseErrorHandlerReturn } from './_internal/errors';
 
 // ============================================
 // PROVIDERS (ResponsiveProvider, etc.)
 // ============================================
-export * from './providers';
+export * from './runtime/providers';
 
 // ============================================
 // HOOKS (promoted from core/hooks/)
@@ -29,9 +40,12 @@ export * from './providers';
 export * from './hooks';
 
 // ============================================
-// UTILS (merged from core/utils + shared/utils)
+// UTILS (public helpers, hosted in _internal for structural clarity)
 // ============================================
-export * from './utils';
+export { createSubComponent, createCompoundComponent } from './_internal/utils';
+export type { PolymorphicProps } from './_internal/utils';
+export { warnInDev, warnOnceInDev, errorInDev } from './_internal/utils';
+export { arePropsEqual, createPropsComparator } from './_internal/utils';
 
 // ============================================
 // ICONS (promoted from shared/icons/)
@@ -41,17 +55,17 @@ export * from './icons';
 // ============================================
 // TENANCY (schema, registry, resolver, storage, CSS generation)
 // ============================================
-export * from './tenancy';
+export * from './runtime/tenancy';
 
 // ============================================
 // PRODUCT PROFILES (registry, provider, hooks)
 // ============================================
-export * from './product-profiles';
+export * from './runtime/product-profiles';
 
 // ============================================
 // VERTICALS (presets, registry, types)
 // ============================================
-export * from './verticals';
+export * from './runtime/verticals';
 
 // ============================================
 // I18N (locales, provider, hooks)

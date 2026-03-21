@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { Skeleton } from '.';
 import { renderSurface } from '../../../surfaces/tests/test-utils';
-import { renderWithEngine, STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Skeleton integration', () => {
   it.each(STABLE_ENGINES)('renders the live skeleton through the %s engine', async (engine) => {

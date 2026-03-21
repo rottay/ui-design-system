@@ -2,8 +2,8 @@ import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { StableEngineName } from '../../../testing/helpers/engine-test-utils';
-import { STABLE_ENGINES, renderWithEngine } from '../../../testing/helpers/engine-test-utils';
+import type { StableEngineName } from '../../../_internal/testing/helpers/engine-test-utils';
+import { STABLE_ENGINES, renderWithEngine } from '../../../_internal/testing/helpers/engine-test-utils';
 import type { TimelinePatternProps } from './Timeline.types';
 import ClassicTimeline from './engines/classic';
 import ModernTimeline from './engines/modern';

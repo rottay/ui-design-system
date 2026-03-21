@@ -28,4 +28,4 @@
 // Re-exported with a shorter alias (`useProductProfile` vs `useProductProfileContext`)
 // to provide a cleaner public API. The canonical context hook lives inside the
 // product-profiles module; this barrel avoids exposing that internal path.
-export { useProductProfileContext as useProductProfile } from '../../product-profiles';
+export { useProductProfileContext as useProductProfile } from '../../runtime/product-profiles';

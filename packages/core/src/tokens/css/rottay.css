@@ -1,0 +1,10 @@
+/**
+ * Rottay Vertical CSS - Base + rottay tenant only
+ *
+ * Import this instead of index.css to avoid bundling all tenant CSS.
+ * Usage: @import '@rottay/design-system/styles/rottay';
+ *
+ * @version 0.6.0
+ */
+@import './index-base.css';
+@import './tenants/rottay/index.css' layer(rottay-tenants);

@@ -5,7 +5,7 @@
  * with avatar, role, online status, and configurable action buttons.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { UserProfileCardProps } from './UserProfileCard.types';
 
 export type { UserProfileCardProps, UserProfile, ProfileAction } from './UserProfileCard.types';

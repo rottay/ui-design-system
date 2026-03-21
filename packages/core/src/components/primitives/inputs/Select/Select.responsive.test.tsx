@@ -8,7 +8,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 
 import ClassicSelect from './engines/classic';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 const OPTIONS = [
   { label: 'Alpha', value: 'alpha' },

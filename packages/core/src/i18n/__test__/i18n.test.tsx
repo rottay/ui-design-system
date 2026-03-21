@@ -14,7 +14,7 @@ import {
   formatCurrency,
   formatRelativeTime,
   formatFileSize,
-} from '../utils/formatters';
+} from '../_internal/utils/formatters';
 
 describe('i18n System', () => {
   describe('I18nProvider', () => {

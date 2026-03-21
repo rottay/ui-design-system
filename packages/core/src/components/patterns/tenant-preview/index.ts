@@ -26,7 +26,7 @@
  * ```
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { TenantPreviewProps } from './TenantPreview.types';
 
 export type { TenantPreviewProps, PreviewComponent } from './TenantPreview.types';

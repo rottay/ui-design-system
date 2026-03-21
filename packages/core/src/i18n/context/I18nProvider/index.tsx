@@ -21,7 +21,7 @@ import type {
 } from '../../types';
 import { LOCALE_CONFIGS } from '../../types';
 import { es, en, pt, fr, ar } from '../../locales';
-import { warnOnceInDev } from '../../../utils/runtime-logger';
+import { warnOnceInDev } from '../../../_internal/utils/runtime-logger';
 
 /** Lookup table mapping each supported locale to its translation dictionary. */
 const TRANSLATIONS = {

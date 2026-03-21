@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { AspectRatio } from './AspectRatio';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 import { EngineComparison } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof AspectRatio> = {

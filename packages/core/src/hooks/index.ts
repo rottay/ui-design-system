@@ -113,7 +113,7 @@
 // ============================================================================
 // Theme hooks -- light/dark mode toggling and theme context access
 // ============================================================================
-export { useTheme, useThemeContext } from '../theming/useTheme';
+export { useTheme, useThemeContext } from '../runtime/theming/useTheme';
 
 // Tenant hooks -- exported from src/tenancy/, not re-exported here (avoids circular deps)
 // Product profile hooks -- exported from src/product-profiles/, same reason
@@ -147,7 +147,7 @@ export type {
 // ============================================================================
 // Feature hooks -- tenant-scoped feature flag gating
 // ============================================================================
-export { useFeatures, useHasFeature, useFeatureContext } from '../features';
+export { useFeatures, useHasFeature, useFeatureContext } from '../runtime/features';
 
 // ============================================================================
 // Responsive hooks -- viewport detection and breakpoint-based values

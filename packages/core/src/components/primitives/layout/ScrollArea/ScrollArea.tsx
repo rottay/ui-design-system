@@ -21,7 +21,7 @@
  * @category Layout
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { ScrollAreaProps } from './ScrollArea.types';
 
 export {

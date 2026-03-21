@@ -6,7 +6,7 @@
  * action buttons. Designed as the top-level entry point for workbench pages.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { WorkbenchHeaderProps } from './WorkbenchHeader.types';
 
 export type {

@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 const COLUMNS = [
   {

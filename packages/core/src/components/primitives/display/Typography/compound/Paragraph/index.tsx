@@ -52,7 +52,7 @@ import { useOptionalTokens } from '../../../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
-} from '../../../../../../personality/primitives';
+} from '../../../../../../runtime/personality/primitives';
 import type { ParagraphProps } from '../../Typography.types';
 import { ClassicParagraph } from '../../engines/classic';
 import { ModernParagraph } from '../../engines/modern';

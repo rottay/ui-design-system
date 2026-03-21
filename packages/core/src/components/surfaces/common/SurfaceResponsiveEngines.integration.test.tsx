@@ -17,8 +17,8 @@ import type {
   MarketingSurfaceConfig,
   OperationalSurfaceConfig,
 } from '../types';
-import { STABLE_ENGINES, renderWithEngine } from '../../../testing/helpers/engine-test-utils';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
+import { STABLE_ENGINES, renderWithEngine } from '../../../_internal/testing/helpers/engine-test-utils';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
 
 interface CandidateRow {
   id: string;

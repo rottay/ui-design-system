@@ -10,7 +10,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Tag } from './';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 /**

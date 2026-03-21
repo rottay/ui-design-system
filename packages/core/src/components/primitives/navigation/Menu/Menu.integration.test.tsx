@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithEngine, STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 const items = [
   { key: 'dashboard', label: 'Dashboard' },

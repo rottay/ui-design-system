@@ -107,7 +107,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { StackProps } from './Stack.types';
 
 // ============================================================================

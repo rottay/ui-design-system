@@ -22,7 +22,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { BreadcrumbProps } from './Breadcrumb.types';
 import { BreadcrumbItem } from './compound';
 

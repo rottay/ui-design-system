@@ -110,7 +110,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { GridProps } from './Grid.types';
 import { GridItem } from './compound';
 

@@ -16,7 +16,7 @@
  * @module Watermark
  * @category Overlay
  */
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { WatermarkProps } from './Watermark.types';
 
 export {

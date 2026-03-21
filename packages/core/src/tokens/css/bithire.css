@@ -1,0 +1,10 @@
+/**
+ * BitHire Vertical CSS - Base + bithire tenant only
+ *
+ * Import this instead of index.css to avoid bundling all tenant CSS.
+ * Usage: @import '@rottay/design-system/styles/bithire';
+ *
+ * @version 0.6.0
+ */
+@import './index-base.css';
+@import './tenants/bithire/index.css' layer(rottay-tenants);

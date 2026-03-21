@@ -58,7 +58,7 @@ import { useOptionalTokens } from '../../../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
-} from '../../../../../../personality/primitives';
+} from '../../../../../../runtime/personality/primitives';
 import type { TextProps } from '../../Typography.types';
 import { ClassicText } from '../../engines/classic';
 import { ModernText } from '../../engines/modern';

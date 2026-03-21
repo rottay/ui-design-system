@@ -32,7 +32,7 @@
 import { useContext } from 'react';
 import { useMediaQuery } from '../useMediaQuery';
 import { buildMinWidthQuery, buildRangeQuery } from '../breakpoints';
-import { ResponsiveContext } from '../../../providers/responsive';
+import { ResponsiveContext } from '../../../runtime/providers/responsive';
 
 /**
  * Breakpoint detection results

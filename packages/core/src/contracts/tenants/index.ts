@@ -26,9 +26,43 @@ export interface TenantBranding {
   logoMark?: string;
   favicon?: string;
   companyName: string;
+  // Light mode colors
   primaryColor?: string;
   secondaryColor?: string;
   accentColor?: string;
+  // Dark mode colors
+  darkPrimaryColor?: string;
+  darkSecondaryColor?: string;
+  darkAccentColor?: string;
+  darkBackgroundColor?: string;
+  // Semantic colors
+  successColor?: string;
+  warningColor?: string;
+  errorColor?: string;
+  infoColor?: string;
+  // Fonts
+  fontFamilyBase?: string;
+  fontFamilyHeading?: string;
+  fontFamilyMono?: string;
+  fontFamilyDisplay?: string;
+}
+
+export interface TenantGlassTokens {
+  blur?: string;
+  background?: string;
+  border?: string;
+}
+
+export interface TenantGradientTokens {
+  primary?: string;
+  surface?: string;
+  mesh?: string;
+}
+
+export interface TenantOverlayTokens {
+  light?: string;
+  medium?: string;
+  heavy?: string;
 }
 
 export interface TenantTokenOverrides {
@@ -42,6 +76,12 @@ export interface TenantTokenOverrides {
   shadows?: Partial<Record<'sm' | 'md' | 'lg' | 'xl', string>>;
   /** Global density multiplier applied to spacing-driven UI */
   densityScale?: number;
+  /** Glass/morphism tokens (blur, background, border) */
+  glass?: TenantGlassTokens;
+  /** Gradient tokens (primary, surface, mesh) */
+  gradients?: TenantGradientTokens;
+  /** Overlay tokens (light, medium, heavy) */
+  overlays?: TenantOverlayTokens;
 }
 
 // TenantConfig is intentionally a flat object (not deeply nested) so it can be
@@ -84,5 +124,5 @@ export interface TenantContextValue {
   config: TenantConfig;
   isLoading: boolean;
   /** Resolved vertical preset, if one was provided to DesignSystemProvider */
-  vertical?: import('../../verticals/types').VerticalPreset;
+  vertical?: import('../../runtime/verticals/types').VerticalPreset;
 }

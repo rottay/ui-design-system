@@ -5,7 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { NotificationProvider, useNotification } from './';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 const NotificationTester = ({ onMount }: { onMount: (api: any) => void }) => {
   const [notificationApi, contextHolder] = useNotification();

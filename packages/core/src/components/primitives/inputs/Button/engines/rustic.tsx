@@ -229,10 +229,10 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       '--ds-button-transition': 'color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.2s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
     } as React.CSSProperties;
 
-    // Compute effective background with hover state
+    // Compute effective background with hover state, using CSS var with fallback
     const effectiveBg = isHovered && !disabled && !loading
-      ? variantConfig.hoverBg
-      : variantConfig.bg;
+      ? `var(--ds-button-${effectiveVariant}-hover-bg, ${variantConfig.hoverBg})`
+      : `var(--ds-button-${effectiveVariant}-bg, ${variantConfig.bg})`;
 
     // All button styles are computed inline because rustic engine cannot rely
     // on Tailwind/antd classes. Hover, focus, and active states are managed

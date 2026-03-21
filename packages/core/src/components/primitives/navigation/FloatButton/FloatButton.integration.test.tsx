@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
 
-import { renderWithEngine, STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('FloatButton integration', () => {
   it.each(STABLE_ENGINES)('renders the live float button with the %s engine', async (engine) => {

@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
 import { PatternFormBuilder } from '.';
-import { STABLE_ENGINES, renderWithEngine } from '../../../testing/helpers/engine-test-utils';
+import { STABLE_ENGINES, renderWithEngine } from '../../../_internal/testing/helpers/engine-test-utils';
 
 describe('PatternFormBuilder integration', () => {
   it.each(STABLE_ENGINES)('renders the live pattern through the %s engine', async (engine) => {

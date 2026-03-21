@@ -2,8 +2,8 @@ import React, { Suspense, createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
-import { STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 import type { TenantConfig } from '../../../../contracts';
 
 const OPTIONS = [

@@ -5,7 +5,7 @@
  * (test/live toggle) with persistent banners and production switch warnings.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { EnvironmentToggleProps } from './EnvironmentToggle.types';
 
 export type { EnvironmentToggleProps, EnvironmentDef } from './EnvironmentToggle.types';

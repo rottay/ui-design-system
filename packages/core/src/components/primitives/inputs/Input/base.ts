@@ -9,7 +9,7 @@
  * engine component isolated from the public compound wrapper.
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { InputProps } from './Input.types';
 
 export const BaseInput = createEngineComponent<InputProps>('Input', {

@@ -22,7 +22,7 @@
  */
 
 import React from 'react';
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { TableProps } from './Table.types';
 
 export type {

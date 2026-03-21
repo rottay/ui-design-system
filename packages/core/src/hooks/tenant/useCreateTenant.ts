@@ -38,7 +38,7 @@ import {
 } from './create-tenant';
 import {
   generateTenantCss as generateCss,
-} from '../../tenancy/storage/static/generator';
+} from '../../runtime/tenancy/storage/static/generator';
 
 const STYLE_TAG_PREFIX = 'ds-tenant-css';
 

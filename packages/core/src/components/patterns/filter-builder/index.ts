@@ -10,7 +10,7 @@
  * leaving visual implementation details to the active engine.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { FilterBuilderProps } from './FilterBuilder.types';
 
 export type {

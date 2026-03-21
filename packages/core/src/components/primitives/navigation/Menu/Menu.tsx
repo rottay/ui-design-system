@@ -33,7 +33,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { MenuProps } from './Menu.types';
 import { MenuItem, MenuGroup, MenuSubMenu, MenuDivider } from './compound';
 

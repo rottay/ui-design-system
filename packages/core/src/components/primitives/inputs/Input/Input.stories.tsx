@@ -4,7 +4,7 @@
  */
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from './';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 import { EngineComparison, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Input> = {

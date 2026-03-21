@@ -6,7 +6,7 @@
  * of user actions with diff rendering, avatar, and action-type filtering.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { ActivityLogProps } from './ActivityLog.types';
 
 export type { ActivityLogProps, Activity, ActivityFilter } from './ActivityLog.types';

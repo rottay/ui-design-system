@@ -29,7 +29,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { TabsProps } from './Tabs.types';
 import { TabPane } from './compound';
 

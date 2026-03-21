@@ -5,7 +5,7 @@
  * auto-refresh, new-items indicator, and load-more pagination.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { LiveFeedProps } from './LiveFeed.types';
 
 export type { LiveFeedProps, FeedItem } from './LiveFeed.types';

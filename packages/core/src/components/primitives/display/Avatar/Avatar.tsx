@@ -22,7 +22,7 @@
  * @category Display
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { AvatarProps } from './Avatar.types';
 import { AvatarGroup, AvatarBadge, AvatarFallback } from './compound';
 

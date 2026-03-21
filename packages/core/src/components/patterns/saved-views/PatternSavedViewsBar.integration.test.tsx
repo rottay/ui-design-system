@@ -2,8 +2,8 @@ import React from 'react';
 import { act, fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { StableEngineName } from '../../../testing/helpers/engine-test-utils';
-import { STABLE_ENGINES, renderWithEngine } from '../../../testing/helpers/engine-test-utils';
+import type { StableEngineName } from '../../../_internal/testing/helpers/engine-test-utils';
+import { STABLE_ENGINES, renderWithEngine } from '../../../_internal/testing/helpers/engine-test-utils';
 import type { SavedViewsBarProps, SavedView } from './SavedViews.types';
 import ClassicSavedViewsBar from './engines/classic';
 import ModernSavedViewsBar from './engines/modern';

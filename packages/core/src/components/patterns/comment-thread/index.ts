@@ -6,7 +6,7 @@
  * a recursive comment tree with avatar, timestamp, and inline editing.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { CommentThreadProps } from './CommentThread.types';
 
 export type { CommentThreadProps, Comment, CommentReaction } from './CommentThread.types';

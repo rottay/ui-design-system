@@ -46,9 +46,9 @@
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { ErrorHandler } from '../../errors/ErrorHandler';
-import { ErrorCategory, ErrorSeverity } from '../../errors/types';
-import { errorInDev } from '../../utils/runtime-logger';
+import { ErrorHandler } from '../../_internal/errors/ErrorHandler';
+import { ErrorCategory, ErrorSeverity } from '../../_internal/errors/types';
+import { errorInDev } from '../../_internal/utils/runtime-logger';
 
 export interface SurfaceErrorBoundaryProps {
   /** Child components (the surface being wrapped) */

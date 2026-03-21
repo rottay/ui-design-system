@@ -5,7 +5,7 @@
  * document layout with company/client info, line items, and totals.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { InvoiceTemplateProps } from './InvoiceTemplate.types';
 
 export type { InvoiceTemplateProps, InvoiceData, InvoiceCompany, InvoiceClient, InvoiceLineItem } from './InvoiceTemplate.types';

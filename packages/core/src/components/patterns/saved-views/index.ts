@@ -5,7 +5,7 @@
  * switching, and managing custom data views (Airtable/Linear style).
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { SavedViewsBarProps } from './SavedViews.types';
 
 export type { SavedViewsBarProps, SavedView, SavedViewConfig, ViewMenuAction } from './SavedViews.types';

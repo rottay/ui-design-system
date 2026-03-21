@@ -5,7 +5,7 @@
  * displaying registered keyboard shortcuts organized by category with search.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { ShortcutsOverlayProps } from './ShortcutsOverlay.types';
 
 export type { ShortcutsOverlayProps, ShortcutDisplayItem } from './ShortcutsOverlay.types';

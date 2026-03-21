@@ -20,7 +20,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { BackTopProps } from './BackTop.types';
 
 export { type BackTopProps, BACKTOP_DEFAULTS } from './BackTop.types';

@@ -10,7 +10,7 @@
 import React, { useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tour } from './';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
 /**

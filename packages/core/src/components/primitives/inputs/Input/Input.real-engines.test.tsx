@@ -10,7 +10,7 @@ import { InputGroup } from './compound/Group';
 import { InputPassword } from './compound/Password';
 import { InputSearch } from './compound/Search';
 import { InputTextArea } from './compound/TextArea';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Input real engine coverage', () => {
   it('covers classic number, password, search, and error branches', async () => {

@@ -16,7 +16,7 @@
  * @category Display
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { ImageProps } from './Image.types';
 import { ImageFallback, ImageSkeleton } from './compound';
 

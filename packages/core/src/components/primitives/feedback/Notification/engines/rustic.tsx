@@ -64,7 +64,7 @@ import type {
   NotificationPlacement,
 } from '../Notification.types';
 import { NOTIFICATION_DEFAULTS, NOTIFICATION_ICONS } from '../Notification.types';
-import { warnOnceInDev } from '../../../../../utils/runtime-logger';
+import { warnOnceInDev } from '../../../../../_internal/utils/runtime-logger';
 
 // ============================================================================
 // Internal Types

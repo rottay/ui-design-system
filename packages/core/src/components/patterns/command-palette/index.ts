@@ -10,7 +10,7 @@
  * can plug in commands without rebuilding the full Spotlight-style shell.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { CommandPaletteProps } from './CommandPalette.types';
 
 export type { CommandPaletteProps, CommandItem } from './CommandPalette.types';

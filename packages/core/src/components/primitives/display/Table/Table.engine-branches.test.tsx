@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import ModernTable from './engines/modern';
 import RusticTable from './engines/rustic';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 const ENGINE_TABLES = [
   ['modern', ModernTable],

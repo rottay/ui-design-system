@@ -5,7 +5,7 @@
  * with marker list display. Designed for Leaflet/Mapbox extension by consumers.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { MapViewProps } from './MapView.types';
 
 export type { MapViewProps, MapMarker } from './MapView.types';

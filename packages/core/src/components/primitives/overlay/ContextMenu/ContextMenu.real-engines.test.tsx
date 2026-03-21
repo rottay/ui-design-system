@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { ContextMenu } from '.';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('ContextMenu real engines', () => {
   it('covers divider, group, disabled, select, outside-click, and escape branches in the rustic engine', async () => {

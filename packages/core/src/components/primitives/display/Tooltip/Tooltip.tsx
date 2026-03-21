@@ -18,7 +18,7 @@
  * @category Display
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { TooltipProps } from './Tooltip.types';
 import { TooltipTrigger, TooltipContent } from './compound';
 

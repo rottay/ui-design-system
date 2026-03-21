@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Callout } from './Callout';
-import { DesignSystemProvider } from '../../../../bootstrap';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 
 const meta: Meta<typeof Callout> = {
   title: 'Primitives/Display/Callout',

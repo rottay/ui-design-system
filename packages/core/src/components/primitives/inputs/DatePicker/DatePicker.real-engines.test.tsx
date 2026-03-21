@@ -5,7 +5,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ClassicDatePicker, { DatePicker as ClassicDatePickerCompound } from './engines/classic';
 import ModernDatePicker, { DatePicker as ModernDatePickerCompound } from './engines/modern';
 import RusticDatePicker, { DatePicker as RusticDatePickerCompound } from './engines/rustic';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('DatePicker real engine coverage', () => {
   it('covers classic base and range picker branches', () => {

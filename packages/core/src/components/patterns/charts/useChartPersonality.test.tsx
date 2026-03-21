@@ -2,10 +2,10 @@ import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { DesignSystemProvider } from '../../../bootstrap';
+import { DesignSystemProvider } from '../../../runtime/bootstrap';
 import type { TenantConfig } from '../../../contracts';
 import { useChartPersonality } from './hooks';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
 
 const CHART_TEST_TENANT: TenantConfig = {
   slug: 'chart-test',

@@ -21,9 +21,9 @@
 
 import { createElement, forwardRef } from 'react';
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import { useOptionalTokens } from '../../../../hooks';
-import { resolveBadgePersonalityDefaults } from '../../../../personality/primitives';
+import { resolveBadgePersonalityDefaults } from '../../../../runtime/personality/primitives';
 import type { TagProps } from './Tag.types';
 import { TagGroup } from './compound';
 

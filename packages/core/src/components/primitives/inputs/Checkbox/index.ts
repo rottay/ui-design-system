@@ -86,7 +86,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { CheckboxProps } from './Checkbox.types';
 import { CheckboxGroup } from './compound';
 

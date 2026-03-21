@@ -48,7 +48,7 @@ import { useOptionalTokens } from '../../../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveTypographyHeadingStyle,
-} from '../../../../../../personality/primitives';
+} from '../../../../../../runtime/personality/primitives';
 import type { HeadingProps } from '../../Typography.types';
 import { ClassicHeading } from '../../engines/classic';
 import { ModernHeading } from '../../engines/modern';

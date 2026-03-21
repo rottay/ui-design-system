@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { CompareSurface } from '.';

@@ -5,7 +5,7 @@
  * wrapper with title, breadcrumbs, tabs, and action buttons.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { PageShellProps } from './PageShell.types';
 
 export type { PageShellProps } from './PageShell.types';

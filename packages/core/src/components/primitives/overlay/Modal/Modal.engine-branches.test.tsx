@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { Modal } from '.';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Modal advanced engine coverage', () => {
   it('covers rustic modal branches for placement, callbacks, scroll locking, backdrop guard, and escape handling', async () => {

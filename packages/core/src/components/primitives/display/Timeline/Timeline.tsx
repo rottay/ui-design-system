@@ -20,7 +20,7 @@
  * @category Display
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { TimelineProps } from './Timeline.types';
 import { TimelineItem } from './compound';
 

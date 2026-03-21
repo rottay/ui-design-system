@@ -69,7 +69,7 @@
 
 'use client';
 
-import { createEngineComponent } from '../../../../../engines/factory';
+import { createEngineComponent } from '../../../../../runtime/engines/factory';
 import type { AnchorLinkProps } from '../Anchor.types';
 
 // ============================================================================

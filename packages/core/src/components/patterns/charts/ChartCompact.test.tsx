@@ -2,12 +2,12 @@ import React, { createRef } from 'react';
 import { render, renderHook, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { DesignSystemProvider } from '../../../bootstrap';
+import { DesignSystemProvider } from '../../../runtime/bootstrap';
 import type { TenantConfig } from '../../../contracts';
 import { useChartCompact } from './hooks';
 import { ChartScaffold } from './chart-scaffold';
 import { DEFAULT_COMPACT_CONFIG } from './Charts.types';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
 
 const TEST_TENANT: TenantConfig = {
   slug: 'compact-test',

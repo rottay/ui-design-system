@@ -107,12 +107,12 @@
 
 import { createElement, forwardRef } from 'react';
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import { useOptionalTokens } from '../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveDividerPersonalityDefaults,
-} from '../../../../personality/primitives';
+} from '../../../../runtime/personality/primitives';
 import type { DividerProps } from './Divider.types';
 
 // ============================================================================

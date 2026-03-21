@@ -22,12 +22,12 @@
 
 import { createElement, forwardRef } from 'react';
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import { useOptionalTokens } from '../../../../hooks';
 import {
   mergePersonalityStyle,
   resolveCardPersonalityDefaults,
-} from '../../../../personality/primitives';
+} from '../../../../runtime/personality/primitives';
 import type { CardProps } from './Card.types';
 import { CardHeader, CardBody, CardFooter, CardImage } from './compound';
 

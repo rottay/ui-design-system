@@ -2,8 +2,8 @@ import React from 'react';
 import { act, fireEvent, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { StableEngineName } from '../../../testing/helpers/engine-test-utils';
-import { STABLE_ENGINES, renderWithEngine } from '../../../testing/helpers/engine-test-utils';
+import type { StableEngineName } from '../../../_internal/testing/helpers/engine-test-utils';
+import { STABLE_ENGINES, renderWithEngine } from '../../../_internal/testing/helpers/engine-test-utils';
 import type { StatsGridProps } from './StatsGrid.types';
 import ClassicStatsGrid from './engines/classic';
 import ModernStatsGrid from './engines/modern';

@@ -5,7 +5,7 @@
  * for empty lists, pages, or search results with icon, actions, and sizing.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { EmptyStateProps } from './EmptyState.types';
 
 export type { EmptyStateProps } from './EmptyState.types';

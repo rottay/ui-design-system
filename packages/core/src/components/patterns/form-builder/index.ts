@@ -11,7 +11,7 @@
  * `Form`, but lower-level than a full product surface.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { FormBuilderProps } from './FormBuilder.types';
 
 export type { FormBuilderProps } from './FormBuilder.types';

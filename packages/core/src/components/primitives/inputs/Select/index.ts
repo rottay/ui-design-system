@@ -96,7 +96,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { SelectProps } from './Select.types';
 import { SelectOption, SelectOptGroup } from './compound';
 

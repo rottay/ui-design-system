@@ -10,7 +10,7 @@
  * UX so apps do not each rebuild switching, badges, and menu state from scratch.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { WorkspaceSwitcherProps } from './WorkspaceSwitcher.types';
 
 export type { WorkspaceSwitcherProps, Workspace } from './WorkspaceSwitcher.types';

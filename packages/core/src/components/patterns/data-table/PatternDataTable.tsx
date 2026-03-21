@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useMemo, useState } from 'react';
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 import { useMediaQuery } from '../../../hooks/responsive/useMediaQuery';
 import { Box, Button, Flex, Stack, Text } from '../../primitives';

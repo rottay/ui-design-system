@@ -23,7 +23,7 @@
  * @category Display
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { TreeProps } from './Tree.types';
 import { TreeNode } from './compound';
 

@@ -51,7 +51,7 @@
  */
 
 import React from 'react';
-import { useResponsive } from '../../../../providers/responsive';
+import { useResponsive } from '../../../../runtime/providers/responsive';
 import { Modal } from '../Modal';
 import { Drawer } from '../../feedback/Drawer';
 import { Sheet } from '../Sheet';

@@ -37,7 +37,7 @@
  * @package @rottay/design-system
  */
 import { useContext } from 'react';
-import { EngineContext } from '../../engines';
+import { EngineContext } from '../../runtime/engines';
 import type { EngineContextValue } from '../../contracts';
 
 /**

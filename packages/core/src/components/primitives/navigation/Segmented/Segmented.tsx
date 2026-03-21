@@ -22,7 +22,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { SegmentedProps } from './Segmented.types';
 
 export { type SegmentedProps, type SegmentedOption, SEGMENTED_DEFAULTS } from './Segmented.types';

@@ -23,7 +23,7 @@
  * @module ColorPicker
  * @category Inputs
  */
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { ColorPickerProps } from './ColorPicker.types';
 
 export {

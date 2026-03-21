@@ -6,7 +6,7 @@ import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { ThemeContext } from '../../theming';
+import { ThemeContext } from '../../runtime/theming';
 import { useTheme, useThemeContext } from '.';
 
 describe('useTheme hook (backward compat proxy)', () => {

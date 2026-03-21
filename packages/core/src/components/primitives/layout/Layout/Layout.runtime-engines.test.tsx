@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { Layout } from '.';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Layout runtime engines', () => {
   it.each(['classic', 'modern', 'rustic'] as const)(

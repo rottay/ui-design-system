@@ -6,7 +6,7 @@
  * cluster, action buttons, and optional sticky compact mode on scroll.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { CockpitHeaderProps } from './CockpitHeader.types';
 
 export type {

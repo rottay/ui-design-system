@@ -5,7 +5,7 @@
  * tabs, sidebar info, action buttons, breadcrumbs, and status badges.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { DetailPanelProps } from './DetailPanel.types';
 
 export type { DetailPanelProps, DetailTab, DetailAction } from './DetailPanel.types';

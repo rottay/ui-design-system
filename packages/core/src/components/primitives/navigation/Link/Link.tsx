@@ -17,7 +17,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { LinkProps } from './Link.types';
 
 export type { LinkProps, LinkType } from './Link.types';

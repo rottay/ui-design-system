@@ -7,7 +7,7 @@ vi.mock('../../../../utils/runtime-logger', () => ({
   warnOnceInDev: vi.fn(),
 }));
 
-import { warnOnceInDev } from '../../../../utils/runtime-logger';
+import { warnOnceInDev } from '../../../../_internal/utils/runtime-logger';
 import {
   NotificationItem as ClassicNotificationItem,
   notification as classicNotification,

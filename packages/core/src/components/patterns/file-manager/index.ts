@@ -5,7 +5,7 @@
  * tree, file list, grid/list view modes, and upload support.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { FileManagerProps } from './FileManager.types';
 
 export type { FileManagerProps, FileItem, FolderItem, FileSystemItem } from './FileManager.types';

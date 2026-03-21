@@ -97,7 +97,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { CascaderProps } from './Cascader.types';
 
 // Export types

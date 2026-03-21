@@ -2,9 +2,9 @@ import React, { Suspense } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-import { STABLE_ENGINES } from '../../../testing/helpers/engine-test-utils';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
-import { DesignSystemProvider } from '../../../bootstrap';
+import { STABLE_ENGINES } from '../../../_internal/testing/helpers/engine-test-utils';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
+import { DesignSystemProvider } from '../../../runtime/bootstrap';
 import type { TenantConfig } from '../../../contracts';
 import { PatternDataTable } from '.';
 

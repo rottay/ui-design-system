@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import ModernTable from './engines/modern';
 import RusticTable from './engines/rustic';
-import { renderWithEngine } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 const RENDER_COLUMNS = [
   {

@@ -8,7 +8,7 @@
  * avoids circular preserveModules chunks during library builds.
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { ToastProps } from './Toast.types';
 
 export const BaseToast = createEngineComponent<ToastProps>('Toast', {

@@ -6,7 +6,7 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { FormSurface } from '.';
 import type { FormSurfaceConfig } from '../types';
 import { renderSurface } from '../common/test-utils';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
 
 function buildConfig(): FormSurfaceConfig {
   return {

@@ -6,7 +6,7 @@
  * renderers, and date/event click callbacks.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { CalendarViewProps } from './CalendarView.types';
 
 export type { CalendarViewProps, CalendarEvent } from './CalendarView.types';

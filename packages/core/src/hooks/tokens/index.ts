@@ -26,14 +26,14 @@
 import { useMemo } from 'react';
 import { useTenant } from '../tenant';
 import { useProductProfile } from '../product-profile';
-import { useEngineContext } from '../../engines';
+import { useEngineContext } from '../../runtime/engines';
 import { getEngineTokens } from './engine-tokens';
-import { DEFAULT_PERSONALITY } from './personality-defaults';
+import { DEFAULT_PERSONALITY } from '../../runtime/personality/defaults';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../contracts';
 
 export { getEngineTokens, ENGINE_TOKENS } from './engine-tokens';
 export type { EngineTokenOverrides } from './engine-tokens';
-export { DEFAULT_PERSONALITY } from './personality-defaults';
+export { DEFAULT_PERSONALITY } from '../../runtime/personality/defaults';
 
 // Granular sub-hooks for subscribing to specific token slices
 export {

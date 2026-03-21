@@ -15,7 +15,7 @@
  * (Box, Flex, Text) which themselves resolve through the engine system.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { StatsHeaderProps } from './types';
 
 export type { StatsHeaderProps, StatItem, AccentColor } from './types';

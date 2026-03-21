@@ -4,7 +4,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { AlertDialog } from '.';
 import { Button } from '../../inputs/Button';
-import { renderWithEngine, STABLE_ENGINES } from '../../../../testing/helpers/engine-test-utils';
+import { renderWithEngine, STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 async function preloadAlertDialogEngine(engine: (typeof STABLE_ENGINES)[number]) {
   switch (engine) {

@@ -6,7 +6,7 @@
  * review capabilities.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { ModerationGalleryProps } from './ModerationGallery.types';
 
 export type {

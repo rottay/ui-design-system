@@ -15,7 +15,7 @@
  * @category Feedback
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { ProgressProps } from './Progress.types';
 import { ProgressCircle, ProgressLine } from './compound';
 

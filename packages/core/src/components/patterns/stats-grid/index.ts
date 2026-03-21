@@ -10,7 +10,7 @@
  * cards that should still respect tenant personality and motion rules.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { StatsGridProps } from './StatsGrid.types';
 
 export type { StatsGridProps } from './StatsGrid.types';

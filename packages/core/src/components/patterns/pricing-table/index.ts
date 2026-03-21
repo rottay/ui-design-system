@@ -10,7 +10,7 @@
  * swap engines or tenant theming without rewriting the comparison structure.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { PricingTableProps } from './PricingTable.types';
 
 export type { PricingTableProps, PricingPlan, PricingFeature } from './PricingTable.types';

@@ -20,7 +20,7 @@
 'use client';
 
 import React from 'react';
-import { useEngineContext } from '../../../../engines/EngineProvider';
+import { useEngineContext } from '../../../../runtime/engines/EngineProvider';
 import type { EngineName } from '../../../../contracts';
 import * as classicEngine from './engines/classic';
 import * as modernEngine from './engines/modern';

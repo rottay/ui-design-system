@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { waitFor } from '@testing-library/react';
 
 import { PatternApprovalWorkflow } from '.';
-import { STABLE_ENGINES, renderWithEngine } from '../../../testing/helpers/engine-test-utils';
+import { STABLE_ENGINES, renderWithEngine } from '../../../_internal/testing/helpers/engine-test-utils';
 
 describe('PatternApprovalWorkflow integration', () => {
   it.each(STABLE_ENGINES)('renders the live pattern with the %s engine', async (engine) => {

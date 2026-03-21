@@ -10,7 +10,7 @@
  * list rendering, unread state, and item actions into a reusable shell.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { NotificationCenterProps } from './NotificationCenter.types';
 
 export type { NotificationCenterProps, Notification } from './NotificationCenter.types';

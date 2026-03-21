@@ -5,7 +5,7 @@
  * showing coverage gaps and availability overlay with quick-assign interaction.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { ShiftMatrixProps } from './ShiftMatrix.types';
 
 export type {

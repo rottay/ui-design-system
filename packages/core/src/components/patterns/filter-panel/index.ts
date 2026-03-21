@@ -5,7 +5,7 @@
  * with multiple filter types, layout modes, and collapsible sections.
  */
 
-import { createEngineComponent } from '../../../engines/factory';
+import { createEngineComponent } from '../../../runtime/engines/factory';
 import type { FilterPanelProps } from './FilterPanel.types';
 
 export type { FilterPanelProps } from './FilterPanel.types';

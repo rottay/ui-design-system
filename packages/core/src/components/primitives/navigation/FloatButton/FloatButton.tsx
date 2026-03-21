@@ -25,7 +25,7 @@
  * @category Navigation
  */
 
-import { createEngineComponent } from '../../../../engines/factory';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { FloatButtonProps, FloatButtonGroupProps, FloatButtonBackTopProps } from './FloatButton.types';
 
 export {

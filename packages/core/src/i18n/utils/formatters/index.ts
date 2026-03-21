@@ -7,7 +7,7 @@
  * sensible plaintext fallbacks to avoid crashing on unsupported locales.
  */
 
-import { errorInDev } from '../../../utils/runtime-logger';
+import { errorInDev } from '../../../_internal/utils/runtime-logger';
 
 /**
  * Formats a Date object into a locale-aware string using `Intl.DateTimeFormat`.

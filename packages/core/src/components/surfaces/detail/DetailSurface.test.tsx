@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { DetailSurface } from '.';
 import type { DetailSurfaceConfig, EntityAdapter } from '../types';
 import { renderSurface } from '../common/test-utils';
-import { mockMatchMedia } from '../../../testing/helpers/match-media';
+import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
 
 interface RawWorkspace {
   id: string;

@@ -2,8 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { StableEngineName } from '../../../testing/helpers/engine-test-utils';
-import { STABLE_ENGINES } from '../../../testing/helpers/engine-test-utils';
+import type { StableEngineName } from '../../../_internal/testing/helpers/engine-test-utils';
+import { STABLE_ENGINES } from '../../../_internal/testing/helpers/engine-test-utils';
 import type { TreeViewProps } from './TreeView.types';
 import ClassicTreeView from './engines/classic';
 import ModernTreeView from './engines/modern';

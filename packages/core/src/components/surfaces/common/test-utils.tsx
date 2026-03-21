@@ -5,7 +5,7 @@
 
 import React, { Suspense, type ReactElement } from 'react';
 import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
-import { DesignSystemProvider } from '../../../bootstrap';
+import { DesignSystemProvider } from '../../../runtime/bootstrap';
 import type { ProductProfileKey, TenantConfig } from '../../../contracts';
 
 const SURFACE_TEST_TENANT: TenantConfig = {
