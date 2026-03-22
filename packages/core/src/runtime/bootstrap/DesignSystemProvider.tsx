@@ -368,7 +368,8 @@ export function DesignSystemProvider({
     };
 
     loadTenant();
-  }, [propTenantSlug, propTenantConfig, tenantOverrides, onTenantResolved, onError]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propTenantSlug, JSON.stringify(propTenantConfig), JSON.stringify(tenantOverrides)]);
 
   if (loading || !tenantConfig) {
     return <LoadingScreen />;
