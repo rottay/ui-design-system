@@ -977,7 +977,8 @@ export function ThemeProvider({
         style.removeProperty(varName);
       }
     };
-  }, [branding, tokenOverrides]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(branding), JSON.stringify(tokenOverrides)]);
 
   /**
    * Theme state needs to materialize into DOM attributes because the CSS token
