@@ -1,9 +1,5 @@
 'use client';
 
-// Auto-load base design tokens + engine CSS when importing the package.
-// Tenant CSS loads dynamically via ThemeProvider based on active tenant.
-import './tokens/css/index-base.css';
-
 /**
  * Rottay Design System
  * Multi-tenant, multi-engine UI component library

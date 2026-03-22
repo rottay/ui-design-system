@@ -1,30 +1,15 @@
 /**
- * Rottay Design System - Main CSS Entry Point
+ * Rottay Design System - Base CSS (no tenant-specific imports)
  *
- * Central import file for the complete design token system.
- * Import this single file to get all tokens, themes, and engine styles.
+ * Contains everything from index.css EXCEPT tenant overrides.
+ * Use this with a per-vertical tenant import for tree-shaken CSS.
  *
- * CSS Layer Order (cascade priority, lowest to highest):
- * 0. rottay-reset       - Ant Design base styles (for icons support)
- * 1. rottay-tokens      - DS semantic foundation + default theme
- * 2. rottay-components  - Shared component-level CSS variables
- * 3. rottay-engines     - Engine themes mapping tokens to library classes
- * 4. rottay-tenants     - Tenant overrides via [data-tenant="x"] selector
- * 5. rottay-personality - Cross-engine personality-driven overrides
- * 6. rottay-responsive  - Media query overrides (web-first, NOT mobile-first)
+ * @see ./rottay.css   - Base + rottay tenant only
+ * @see ./bithire.css  - Base + bithire tenant only
+ * @see ./evnto.css    - Base + evnto tenant only
+ * @see ./index.css    - Full bundle (all tenants, backward compat)
  *
- * Architecture:
- * - All tokens use --ds-* naming convention
- * - Tenants ONLY override values that differ from default
- * - Engines map --ds-* tokens to library-specific classes (.ant-*, .btn, .ds-*)
- * - Consumers can insert custom layers between rottay layers for precise cascade control
- *
- * Usage:
- * @import '@rottay/design-system/tokens/css';
- * or
- * import '@rottay/design-system/tokens/css/index.css';
- *
- * @version 0.5.0
+ * @version 0.6.0
  */
 
 /* =============================================================================
@@ -85,10 +70,9 @@
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)
-   Brand-specific customizations via [data-tenant="x"] selector
-   Only includes values that DIFFER from default.css
+   Intentionally omitted in base. Per-vertical entry points import only
+   the tenant CSS they need in this layer slot.
    ============================================================================= */
-@import './tenants/index.css' layer(rottay-tenants);
 
 /* =============================================================================
    LAYER 5: PERSONALITY OVERRIDES (rottay-personality)
