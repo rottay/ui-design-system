@@ -76,7 +76,7 @@
  * @package @rottay/design-system
  */
 
-import React, { ReactNode, useState, useEffect, useRef, memo } from 'react';
+import React, { ReactNode, useState, useEffect, useRef, useMemo, memo } from 'react';
 import { EngineProvider } from '../engines/EngineProvider';
 import { ThemeProvider } from '../theming';
 import { TenantProvider } from '../tenancy/TenantProvider';
