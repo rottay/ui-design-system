@@ -27,7 +27,7 @@
  * @package @rottay/design-system
  */
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useTokens } from '../../hooks/tokens';
 import { resolvePersonalityCssVariables } from '../personality/primitives';
@@ -38,8 +38,14 @@ import { resolvePersonalityCssVariables } from '../personality/primitives';
  */
 export function SystemCssVariablesBridge(): null {
   const tokens = useTokens();
+  const tokensKey = JSON.stringify(tokens);
+  const lastKeyRef = useRef<string>('');
 
   useEffect(() => {
+    // Skip if tokens haven't actually changed (prevents Fast Refresh loops)
+    if (lastKeyRef.current === tokensKey) return;
+    lastKeyRef.current = tokensKey;
+
     const rootElement = document.documentElement;
     const cssVariables = Object.entries(resolvePersonalityCssVariables(tokens));
 
@@ -56,7 +62,8 @@ export function SystemCssVariablesBridge(): null {
         rootElement.style.removeProperty(name);
       });
     };
-  }, [tokens]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokensKey]);
 
   return null;
 }
