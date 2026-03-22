@@ -70,9 +70,10 @@
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)
-   Intentionally omitted in base. Per-vertical entry points import only
-   the tenant CSS they need in this layer slot.
+   First-party tenant variable definitions. These are pure CSS custom property
+   overrides (~200-500 lines each, ~1KB total) - no component selectors.
    ============================================================================= */
+@import './tenants/index.css' layer(rottay-tenants);
 
 /* =============================================================================
    LAYER 5: PERSONALITY OVERRIDES (rottay-personality)
