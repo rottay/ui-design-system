@@ -330,44 +330,32 @@ export function DesignSystemProvider({
   skipCssLoading = true,
   cssBaseUrl = '/themes',
 }: DesignSystemProviderProps): React.ReactElement {
-  const [tenantConfig, setTenantConfig] = useState<TenantConfig | null>(
-    propTenantConfig ?? null
-  );
+  // SYNC PATH: When propTenantConfig is provided, derive config with useMemo
+  // (no useState needed - avoids re-render from state update with new object ref)
+  const syncTenantConfig = useMemo(() => {
+    if (!propTenantConfig) return null;
+    return mergeTenantConfig(propTenantConfig, tenantOverrides);
+  }, [propTenantConfig, tenantOverrides]);
+
+  // ASYNC PATH: When only tenantSlug is provided, resolve via storage facade
+  const [asyncTenantConfig, setAsyncTenantConfig] = useState<TenantConfig | null>(null);
   const [loading, setLoading] = useState(!propTenantConfig);
-  const configKeyRef = useRef<string>('');
 
   useEffect(() => {
-    // Guard: skip if inputs haven't changed (prevents Fast Refresh loops)
-    const configKey = JSON.stringify(propTenantConfig) + '|' + JSON.stringify(tenantOverrides) + '|' + propTenantSlug;
-    if (configKeyRef.current === configKey) return;
-    configKeyRef.current = configKey;
+    // Skip async resolution when sync config is available
+    if (propTenantConfig) return;
 
-    // Direct tenantConfig is the highest-priority entry point. This is the
-    // "standalone mode" path used by local previews, story helpers, and apps
-    // that already resolved tenant state outside the DS.
-    if (propTenantConfig) {
-      const mergedTenantConfig = mergeTenantConfig(propTenantConfig, tenantOverrides);
-      setTenantConfig(mergedTenantConfig);
-      setLoading(false);
-      onTenantResolved?.(mergedTenantConfig);
-      return;
-    }
-
-    // Otherwise the DS owns tenant resolution. The storage facade encapsulates
-    // cache -> known registry -> static -> remote -> default fallback.
     const loadTenant = async () => {
       try {
         const slug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
         const resolvedTenantConfig = await resolveTenantConfig(slug);
         const mergedTenantConfig = mergeTenantConfig(resolvedTenantConfig, tenantOverrides);
-        setTenantConfig(mergedTenantConfig);
+        setAsyncTenantConfig(mergedTenantConfig);
         onTenantResolved?.(mergedTenantConfig);
       } catch (error) {
         onError?.(error as Error);
-        // We always recover to the default tenant so the app keeps rendering
-        // even when tenant resolution fails upstream.
         const defaultTenantConfig = await resolveTenantConfig(DEFAULT_TENANT_SLUG);
-        setTenantConfig(mergeTenantConfig(defaultTenantConfig, tenantOverrides));
+        setAsyncTenantConfig(mergeTenantConfig(defaultTenantConfig, tenantOverrides));
       } finally {
         setLoading(false);
       }
@@ -375,7 +363,10 @@ export function DesignSystemProvider({
 
     loadTenant();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propTenantSlug, JSON.stringify(propTenantConfig), JSON.stringify(tenantOverrides)]);
+  }, [propTenantSlug]);
+
+  // Final resolved config: sync path takes priority
+  const tenantConfig = syncTenantConfig ?? asyncTenantConfig;
 
   if (loading || !tenantConfig) {
     return <LoadingScreen />;
