@@ -76,7 +76,7 @@
  * @package @rottay/design-system
  */
 
-import React, { ReactNode, useState, useEffect, memo } from 'react';
+import React, { ReactNode, useState, useEffect, useRef, memo } from 'react';
 import { EngineProvider } from '../engines/EngineProvider';
 import { ThemeProvider } from '../theming';
 import { TenantProvider } from '../tenancy/TenantProvider';
@@ -334,8 +334,14 @@ export function DesignSystemProvider({
     propTenantConfig ?? null
   );
   const [loading, setLoading] = useState(!propTenantConfig);
+  const configKeyRef = useRef<string>('');
 
   useEffect(() => {
+    // Guard: skip if inputs haven't changed (prevents Fast Refresh loops)
+    const configKey = JSON.stringify(propTenantConfig) + '|' + JSON.stringify(tenantOverrides) + '|' + propTenantSlug;
+    if (configKeyRef.current === configKey) return;
+    configKeyRef.current = configKey;
+
     // Direct tenantConfig is the highest-priority entry point. This is the
     // "standalone mode" path used by local previews, story helpers, and apps
     // that already resolved tenant state outside the DS.

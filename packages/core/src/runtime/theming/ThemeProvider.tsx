@@ -72,6 +72,7 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
+  useRef,
   ReactNode,
 } from 'react';
 import type { ThemeContextValue, ThemeConfig, TenantBranding, TenantTokenOverrides } from '../../contracts';
@@ -809,7 +810,15 @@ export function ThemeProvider({
   // variables. WHY a separate effect: branding can change independently of
   // tenant/theme (e.g., a white-label admin adjusting colors in real time).
   // Running this in its own effect avoids re-triggering the tenant CSS load cycle.
+  const brandingKey = JSON.stringify(branding);
+  const tokenOverridesKey = JSON.stringify(tokenOverrides);
+  const lastBrandingRef = useRef<string>('');
+
   useEffect(() => {
+    // Skip if branding hasn't actually changed (prevents Fast Refresh loops)
+    if (lastBrandingRef.current === brandingKey + tokenOverridesKey) return;
+    lastBrandingRef.current = brandingKey + tokenOverridesKey;
+
     const style = document.documentElement.style;
     // Track every CSS variable we set so we can clean them up on unmount or
     // when branding/tokenOverrides change.
