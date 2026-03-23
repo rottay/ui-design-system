@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.6.11",
+  "version": "2.6.12",
   "sideEffects": [
     "*.css"
   ],
@@ -18,6 +18,11 @@
       "types": "./packages/core/dist/index.d.ts",
       "import": "./packages/core/dist/index.js",
       "require": "./packages/core/dist/index.cjs"
+    },
+    "./server": {
+      "types": "./packages/core/dist/server.d.ts",
+      "import": "./packages/core/dist/server.js",
+      "require": "./packages/core/dist/server.cjs"
     },
     "./styles": "./packages/core/src/tokens/css/index.css",
     "./styles.css": "./packages/core/src/tokens/css/index.css"

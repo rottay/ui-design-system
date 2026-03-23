@@ -37,6 +37,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
+        server: resolve(__dirname, 'src/server.ts'),
         icons: resolve(__dirname, 'src/icons.ts'),
         i18n: resolve(__dirname, 'src/i18n.ts'),
         tokens: resolve(__dirname, 'src/tokens.ts'),
