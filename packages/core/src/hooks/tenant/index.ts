@@ -96,3 +96,7 @@ export type { TenantCreationConfig } from './create-tenant';
 
 /** Hook that wraps createTenantConfig with React state for dynamic tenant creation flows. */
 export { useCreateTenant } from './useCreateTenant';
+
+/** 2-step tenant branding hook: session-instant + async-full. */
+export { useTenantBranding } from './branding';
+export type { UseTenantBrandingOptions, UseTenantBrandingReturn, TenantBrandingSession } from './branding';

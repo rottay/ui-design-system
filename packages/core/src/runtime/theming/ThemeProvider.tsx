@@ -813,6 +813,11 @@ export function ThemeProvider({
   const brandingKey = JSON.stringify(branding);
   const tokenOverridesKey = JSON.stringify(tokenOverrides);
   const lastBrandingRef = useRef<string>('');
+  const tpRenderRef = useRef(0);
+  tpRenderRef.current++;
+  if (tpRenderRef.current <= 5 || tpRenderRef.current % 50 === 0) {
+    console.log(`[TP] render #${tpRenderRef.current}`, { tenant, brandingChanged: lastBrandingRef.current !== brandingKey + tokenOverridesKey });
+  }
 
   useEffect(() => {
     // Skip if branding hasn't actually changed (prevents Fast Refresh loops)

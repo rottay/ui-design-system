@@ -6,3 +6,6 @@
  */
 
 export * from './i18n/index';
+
+// Locale normalization utility
+export { toSupportedLocale } from './i18n/toSupportedLocale';

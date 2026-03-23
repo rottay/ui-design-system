@@ -330,31 +330,49 @@ export function DesignSystemProvider({
   skipCssLoading = true,
   cssBaseUrl = '/themes',
 }: DesignSystemProviderProps): React.ReactElement {
+  // DEBUG: Track renders
+  const renderCountRef = useRef(0);
+  renderCountRef.current++;
+  if (renderCountRef.current <= 5 || renderCountRef.current % 50 === 0) {
+    console.log(`[DSP] render #${renderCountRef.current}`, {
+      hasPropConfig: !!propTenantConfig,
+      slug: propTenantSlug,
+      overridesRef: tenantOverrides ? 'present' : 'none',
+    });
+  }
+
   // SYNC PATH: When propTenantConfig is provided, derive config with useMemo
-  // (no useState needed - avoids re-render from state update with new object ref)
   const syncTenantConfig = useMemo(() => {
     if (!propTenantConfig) return null;
-    return mergeTenantConfig(propTenantConfig, tenantOverrides);
+    const merged = mergeTenantConfig(propTenantConfig, tenantOverrides);
+    if (renderCountRef.current <= 5) {
+      console.log('[DSP] syncTenantConfig computed');
+    }
+    return merged;
   }, [propTenantConfig, tenantOverrides]);
 
   // ASYNC PATH: When only tenantSlug is provided, resolve via storage facade
   const [asyncTenantConfig, setAsyncTenantConfig] = useState<TenantConfig | null>(null);
   const [loading, setLoading] = useState(!propTenantConfig);
+  const asyncLoadedRef = useRef(false);
 
   useEffect(() => {
-    // Skip async resolution when sync config is available
     if (propTenantConfig) return;
+    if (asyncLoadedRef.current) return; // Only load once
 
     const loadTenant = async () => {
       try {
         const slug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
+        console.log('[DSP] async loading tenant:', slug);
         const resolvedTenantConfig = await resolveTenantConfig(slug);
         const mergedTenantConfig = mergeTenantConfig(resolvedTenantConfig, tenantOverrides);
+        asyncLoadedRef.current = true;
         setAsyncTenantConfig(mergedTenantConfig);
         onTenantResolved?.(mergedTenantConfig);
       } catch (error) {
         onError?.(error as Error);
         const defaultTenantConfig = await resolveTenantConfig(DEFAULT_TENANT_SLUG);
+        asyncLoadedRef.current = true;
         setAsyncTenantConfig(mergeTenantConfig(defaultTenantConfig, tenantOverrides));
       } finally {
         setLoading(false);

@@ -82,3 +82,7 @@ export {
   getDefaultTenant,
   DEFAULT_TENANT_SLUG,
 } from './registry';
+
+// Middleware tenant resolution utility
+export { resolveRequestTenant } from './resolve-request-tenant';
+export type { TenantResolutionOptions } from './resolve-request-tenant';
