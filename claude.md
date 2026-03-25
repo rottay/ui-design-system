@@ -2,8 +2,8 @@
 
 ## AI Documentation
 
-- **Catálogo Central**: `/.ai-docs/CATALOG.md`
-- **Component Reference**: `/.ai-docs/design-system/COMPONENTS.md`
+- **Catálogo Central**: `/docs-engineering/README.md`
+- **Component Reference**: `/docs-engineering/engineering/design-system/`
 
 ---
 
