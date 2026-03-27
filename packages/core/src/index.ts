@@ -46,7 +46,8 @@ export { arePropsEqual, createPropsComparator } from './_internal/utils';
 // ============================================
 // ICONS (promoted from shared/icons/)
 // ============================================
-export * from './icons';
+// Icons re-exported via separate entry point (not root to avoid 'export *' in client boundary)
+// Apps should import directly from '@ant-design/icons'
 
 // ============================================
 // TENANCY (schema, registry, resolver, storage, CSS generation)
