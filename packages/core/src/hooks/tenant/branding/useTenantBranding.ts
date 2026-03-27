@@ -21,7 +21,7 @@
  * ```
  */
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { TenantConfig } from '../../../contracts';
 import type { VerticalKey } from '../../../runtime/verticals/types';
 
@@ -107,6 +107,30 @@ function buildConfigFromSession(
   };
 }
 
+/**
+ * Builds a full TenantConfig from the branding API response payload.
+ * Shared by the initial fetch and periodic/visibility-based refreshes.
+ */
+function buildConfigFromResponse(
+  data: Record<string, unknown>,
+  tenantSlug: string,
+  vertical: VerticalKey,
+  session: TenantBrandingSession | null,
+): TenantConfig {
+  return {
+    slug: tenantSlug,
+    name: (data.branding as Record<string, unknown> | undefined)?.companyName as string || tenantSlug,
+    engine: (data.engine as TenantConfig['engine']) || undefined,
+    theme: (data.theme as string) || 'base',
+    plan: (session?.user?.tenancy?.tenant?.plan as TenantConfig['plan']) || 'starter',
+    features: session?.user?.tenancy?.tenant?.features || [],
+    vertical,
+    branding: (data.branding as TenantConfig['branding']) || {},
+    personality: (data.personality as TenantConfig['personality']) || undefined,
+    tokenOverrides: (data.tokenOverrides as TenantConfig['tokenOverrides']) || undefined,
+  };
+}
+
 export function useTenantBranding(
   options: UseTenantBrandingOptions,
 ): UseTenantBrandingReturn {
@@ -130,39 +154,58 @@ export function useTenantBranding(
   const [loading, setLoading] = useState(false);
   const fetchedRef = useRef(false);
 
+  const slug = session?.user?.tenancy?.tenant?.slug;
+
+  // Shared refetch function for interval and visibility refresh
+  const refetch = useCallback(async () => {
+    if (!slug) return;
+    try {
+      const res = await fetch(`${brandingEndpoint}/${slug}`);
+      if (!res.ok) return;
+      const json = await res.json();
+      if (!json?.success || !json?.data) return;
+      const newConfig = buildConfigFromResponse(json.data, tenantSlug, vertical, session);
+      setFullConfig((prev) => {
+        if (JSON.stringify(prev) === JSON.stringify(newConfig)) return prev;
+        return newConfig;
+      });
+    } catch {
+      /* Non-critical: keep current config */
+    }
+  }, [slug, brandingEndpoint, tenantSlug, vertical, session]);
+
+  // Initial fetch (guarded by fetchedRef)
   useEffect(() => {
     if (isSuperAdmin || !hasWhitelabeling || fetchedRef.current) return;
-
-    const slug = session?.user?.tenancy?.tenant?.slug;
     if (!slug) return;
 
     fetchedRef.current = true;
     setLoading(true);
 
-    fetch(`${brandingEndpoint}/${slug}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((json) => {
-        if (!json?.success || !json?.data) return;
-        const d = json.data;
-        setFullConfig({
-          slug: tenantSlug,
-          name: d.branding?.companyName || tenantSlug,
-          engine: (d.engine as TenantConfig['engine']) || undefined,
-          theme: d.theme || 'base',
-          plan: (session?.user?.tenancy?.tenant?.plan as TenantConfig['plan']) || 'starter',
-          features: session?.user?.tenancy?.tenant?.features || [],
-          vertical,
-          branding: d.branding || {},
-          personality: d.personality || undefined,
-          tokenOverrides: d.tokenOverrides || undefined,
-        });
-      })
-      .catch(() => {
-        /* Non-critical: fall back to session config */
-      })
-      .finally(() => setLoading(false));
+    refetch().finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuperAdmin, hasWhitelabeling, brandingEndpoint]);
+  }, [isSuperAdmin, hasWhitelabeling, slug, refetch]);
+
+  // Periodic refresh (every 5 minutes) + visibility-based refresh
+  useEffect(() => {
+    if (isSuperAdmin || !hasWhitelabeling || !slug) return;
+
+    const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+    const interval = setInterval(refetch, REFRESH_INTERVAL);
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refetch();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, [isSuperAdmin, hasWhitelabeling, slug, refetch]);
 
   // Final config: full (80+ fields) > session (9 fields) > undefined (vertical defaults)
   const tenantConfig = fullConfig ?? sessionConfig;
