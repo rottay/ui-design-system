@@ -84,5 +84,12 @@ export {
 } from './registry';
 
 // Middleware tenant resolution utility
-export { resolveRequestTenant } from './resolve-request-tenant';
-export type { TenantResolutionOptions } from './resolve-request-tenant';
+export {
+  resolveRequestTenant,
+  resolveRequestTenantAsync,
+  createEdgeConfigDomainLookup,
+} from './resolve-request-tenant';
+export type {
+  TenantResolutionOptions,
+  EdgeConfigDomainLookupOptions,
+} from './resolve-request-tenant';
