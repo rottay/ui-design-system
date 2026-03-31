@@ -5,16 +5,21 @@
  *
  * Design Philosophy: Dark-first, professional, AI-native aesthetic
  * Primary: Cyan (#00B4D8) - techy, AI feel
- * Secondary: Violet (#7C3AED) - AI/innovation association
- * Inspired by: Vercel, Linear, GitHub Dark, OpenAI
+ * Secondary: Cool Slate/Blue-Gray (#475569) - professional, neutral
+ * Inspired by: Vercel, Linear, GitHub Dark
  */
 
 /* ============================================
-   ROTTAY BRAND COLORS (Dark Mode Default)
+   ROTTAY DARK THEME (Default for tenant)
    ============================================ */
 html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
+  color-scheme: dark;
 
-  /* ── Primary - Cyan scale ────────────────── */
+  /* ============================================
+     1. COLOR PRIMITIVES
+     ============================================ */
+
+  /* -- Primary - Cyan scale -------------------- */
   --ds-color-primary-50: #ecfeff;
   --ds-color-primary-100: #cffafe;
   --ds-color-primary-200: #a5f3fc;
@@ -28,20 +33,27 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
 
   --ds-color-primary: #00B4D8;
   --ds-color-primary-hover: #0891b2;
+  --ds-color-primary-subtle: rgba(0, 180, 216, 0.1);
+  --ds-color-primary-foreground: #09090B;
+  --ds-color-primary-rgb: 0, 180, 216;
 
-  /* ── Secondary - Violet scale ────────────── */
-  --ds-color-secondary-50: #f5f3ff;
-  --ds-color-secondary-100: #ede9fe;
-  --ds-color-secondary-200: #ddd6fe;
-  --ds-color-secondary-300: #c4b5fd;
-  --ds-color-secondary-400: #a78bfa;
-  --ds-color-secondary-500: #7C3AED;
-  --ds-color-secondary-600: #6d28d9;
-  --ds-color-secondary-700: #5b21b6;
-  --ds-color-secondary-800: #4c1d95;
-  --ds-color-secondary-900: #3b0764;
+  /* -- Secondary - Cool Slate/Blue-Gray -------- */
+  --ds-color-secondary-50: #f8fafc;
+  --ds-color-secondary-100: #f1f5f9;
+  --ds-color-secondary-200: #e2e8f0;
+  --ds-color-secondary-300: #cbd5e1;
+  --ds-color-secondary-400: #94a3b8;
+  --ds-color-secondary-500: #475569;
+  --ds-color-secondary-600: #334155;
+  --ds-color-secondary-700: #1e293b;
+  --ds-color-secondary-800: #0f172a;
+  --ds-color-secondary-900: #020617;
 
-  /* ── Accent - Cyan for cohesion ──────────── */
+  --ds-color-secondary: #475569;
+  --ds-color-secondary-hover: #334155;
+  --ds-color-secondary-rgb: 71, 85, 105;
+
+  /* -- Accent - Cyan for cohesion -------------- */
   --ds-color-accent: #00B4D8;
   --ds-color-accent-hover: #0891b2;
   --ds-color-accent-50: #ecfeff;
@@ -55,7 +67,8 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-accent-800: #155e75;
   --ds-color-accent-900: #164e63;
 
-  /* ── Neutral - Cool slate grays ──────────── */
+  /* -- Neutral - Cool zinc grays --------------- */
+  --ds-color-neutral-0: #09090B;
   --ds-color-neutral-50: #FAFAFA;
   --ds-color-neutral-100: #F4F4F5;
   --ds-color-neutral-200: #E4E4E7;
@@ -67,73 +80,69 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-neutral-800: #27272A;
   --ds-color-neutral-900: #18181B;
 
-  /* ── Backgrounds - Dark hierarchy ────────── */
+  /* -- Alpha semantic aliases ------------------ */
+  --ds-color-alpha-primary-10: rgba(0, 180, 216, 0.10);
+  --ds-color-alpha-primary-20: rgba(0, 180, 216, 0.20);
+  --ds-color-alpha-secondary-10: rgba(71, 85, 105, 0.10);
+  --ds-color-alpha-secondary-20: rgba(71, 85, 105, 0.20);
+  --ds-color-alpha-success-10: rgba(16, 185, 129, 0.10);
+  --ds-color-alpha-success-20: rgba(16, 185, 129, 0.20);
+  --ds-color-alpha-warning-10: rgba(245, 158, 11, 0.10);
+  --ds-color-alpha-warning-20: rgba(245, 158, 11, 0.20);
+  --ds-color-alpha-error-10: rgba(239, 68, 68, 0.10);
+  --ds-color-alpha-error-20: rgba(239, 68, 68, 0.20);
+  --ds-color-alpha-info-10: rgba(59, 130, 246, 0.10);
+  --ds-color-alpha-info-20: rgba(59, 130, 246, 0.20);
+
+  /* ============================================
+     2. SEMANTIC COLORS
+     ============================================ */
+
+  /* -- Backgrounds - Dark hierarchy ------------ */
   --ds-color-bg-primary: #09090B;
   --ds-color-bg-secondary: #111113;
   --ds-color-bg-tertiary: #18181B;
+  --ds-color-bg-subtle: #111113;
+  --ds-color-bg-hover: #1E1E22;
+  --ds-color-bg-canvas: #09090B;
   --ds-color-bg-elevated: #1E1E22;
-  --ds-color-bg-surface: #18181B;
+  --ds-color-bg-input: #111113;
+  --ds-color-bg-info: rgba(59, 130, 246, 0.1);
   --ds-color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --ds-color-bg-surface: #18181B;
+  --ds-color-bg: #09090B;
+  --ds-color-background: #09090B;
 
-  /* ── Text - Light text for dark backgrounds ─ */
+  /* -- Text - Light text for dark backgrounds -- */
   --ds-color-text-primary: #FAFAFA;
   --ds-color-text-secondary: #A1A1AA;
   --ds-color-text-tertiary: #71717A;
   --ds-color-text-muted: #52525B;
   --ds-color-text-disabled: #3F3F46;
   --ds-color-text-on-primary: #09090B;
+  --ds-color-text: #FAFAFA;
+  --ds-color-text-inverse: #09090B;
 
-  /* ── Borders - Light-alpha for dark surfaces ─ */
+  /* -- Borders - Light-alpha for dark surfaces - */
   --ds-color-border: rgba(255, 255, 255, 0.08);
   --ds-color-border-primary: rgba(255, 255, 255, 0.08);
   --ds-color-border-secondary: rgba(255, 255, 255, 0.06);
+  --ds-color-border-subtle: rgba(255, 255, 255, 0.04);
   --ds-color-border-tertiary: rgba(255, 255, 255, 0.04);
   --ds-color-border-focus: rgba(0, 180, 216, 0.5);
 
-  /* ── Typography ──────────────────────────── */
-  --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --ds-font-family-mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
-  --ds-font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* -- Surfaces -------------------------------- */
+  --ds-color-surface: #09090B;
+  --ds-color-surface-secondary: #111113;
+  --ds-color-surface-muted: #18181B;
+  --ds-color-shadow: rgba(0, 0, 0, 0.5);
 
-  /* Letter Spacing */
-  --ds-letter-spacing-display: -0.025em;
-  --ds-letter-spacing-heading: -0.015em;
-  --ds-letter-spacing-body: 0;
-  --ds-letter-spacing-mono: 0;
-
-  /* Line Heights */
-  --ds-line-height-display: 1.1;
-  --ds-line-height-heading: 1.2;
-  --ds-line-height-body: 1.6;
-  --ds-line-height-tight: 1.25;
-  --ds-line-height-relaxed: 1.75;
-
-  /* ── Border Radius ───────────────────────── */
-  --ds-radius-sm: 4px;
-  --ds-radius-md: 6px;
-  --ds-radius-lg: 8px;
-  --ds-radius-xl: 12px;
-  --ds-radius-full: 9999px;
-
-  /* ── Shadows - Dark mode ─────────────────── */
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
-  --ds-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2);
-  --ds-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.25);
-  --ds-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.4), 0 16px 48px rgba(0, 0, 0, 0.3);
-
-  /* ── Links ───────────────────────────────── */
+  /* -- Links ----------------------------------- */
   --ds-color-link: #00B4D8;
   --ds-color-link-hover: #22d3ee;
-  --ds-color-link-visited: var(--ds-color-neutral-500);
+  --ds-color-link-visited: #71717A;
 
-  /* ── Interactive states ──────────────────── */
-  --ds-color-interactive-border: rgba(255, 255, 255, 0.15);
-  --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-color-interactive-bg-active: rgba(0, 180, 216, 0.08);
-  --ds-color-interactive-bg-muted: rgba(255, 255, 255, 0.06);
-
-  /* ── Status Colors ───────────────────────── */
+  /* -- Status Colors - Dark-adapted ------------ */
 
   /* Success - Emerald */
   --ds-color-success: #10B981;
@@ -179,6 +188,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-error-900: #7f1d1d;
   --ds-color-error-bg: rgba(239, 68, 68, 0.1);
   --ds-color-error-border: rgba(239, 68, 68, 0.25);
+  --ds-color-danger: #EF4444;
 
   /* Info - Blue */
   --ds-color-info: #3B82F6;
@@ -199,7 +209,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-accent-live: #10B981;
   --ds-color-accent-live-bg: rgba(16, 185, 129, 0.1);
 
-  /* ── Alpha overlays ──────────────────────── */
+  /* -- Alpha overlays -------------------------- */
   --ds-color-alpha-black-50: rgba(0, 0, 0, 0.05);
   --ds-color-alpha-black-100: rgba(0, 0, 0, 0.1);
   --ds-color-alpha-black-200: rgba(0, 0, 0, 0.2);
@@ -213,165 +223,1206 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-alpha-white-400: rgba(255, 255, 255, 0.4);
   --ds-color-alpha-white-500: rgba(255, 255, 255, 0.5);
 
-  /* ── Button tokens ───────────────────────── */
+  /* -- Interactive states ---------------------- */
+  --ds-color-interactive-border: rgba(255, 255, 255, 0.15);
+  --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-color-interactive-bg-active: rgba(0, 180, 216, 0.08);
+  --ds-color-interactive-bg-muted: rgba(255, 255, 255, 0.06);
+
+  /* ============================================
+     3. SEMANTIC TOKEN ALIASES
+     ============================================ */
+
+  /* -- Text aliases ---------------------------- */
+  --ds-text-primary: #FAFAFA;
+  --ds-text-secondary: #A1A1AA;
+  --ds-text-tertiary: #71717A;
+  --ds-text-muted: #52525B;
+  --ds-text-disabled: #3F3F46;
+  --ds-text-inverse: #09090B;
+
+  /* -- Background aliases ---------------------- */
+  --ds-bg-primary: #09090B;
+  --ds-bg-secondary: #111113;
+  --ds-bg-tertiary: #18181B;
+  --ds-bg-hover: #1E1E22;
+  --ds-bg-active: #27272A;
+  --ds-bg-disabled: #111113;
+
+  /* -- Border aliases -------------------------- */
+  --ds-border-color: rgba(255, 255, 255, 0.08);
+  --ds-border-color-default: rgba(255, 255, 255, 0.08);
+  --ds-border-color-muted: rgba(255, 255, 255, 0.04);
+  --ds-border-color-strong: rgba(255, 255, 255, 0.12);
+  --ds-border-color-hover: rgba(255, 255, 255, 0.12);
+  --ds-border-color-focus: rgba(0, 180, 216, 0.5);
+  --ds-border-color-disabled: rgba(255, 255, 255, 0.04);
+
+  /* ============================================
+     4. TYPOGRAPHY
+     ============================================ */
+
+  --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ds-font-family-mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+  --ds-font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --ds-letter-spacing-display: -0.025em;
+  --ds-letter-spacing-heading: -0.015em;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-mono: 0;
+
+  --ds-line-height-display: 1.1;
+  --ds-line-height-heading: 1.2;
+  --ds-line-height-body: 1.6;
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-relaxed: 1.75;
+
+  /* ============================================
+     5. BORDERS & RADIUS
+     ============================================ */
+
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 6px;
+  --ds-radius-lg: 8px;
+  --ds-radius-xl: 12px;
+  --ds-radius-full: 9999px;
+
+  /* ============================================
+     6. SHADOWS - Dark mode
+     ============================================ */
+
+  --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
+  --ds-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2);
+  --ds-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.25);
+  --ds-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.4), 0 16px 48px rgba(0, 0, 0, 0.3);
+  --ds-shadow-2xl: 0 16px 48px rgba(0, 0, 0, 0.5), 0 32px 64px rgba(0, 0, 0, 0.35);
+  --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+
+  --ds-shadow-primary: 0 4px 14px rgba(0, 180, 216, 0.15), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --ds-shadow-success: 0 4px 14px rgba(16, 185, 129, 0.15), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --ds-shadow-warning: 0 4px 14px rgba(245, 158, 11, 0.15), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --ds-shadow-error: 0 4px 14px rgba(239, 68, 68, 0.15), 0 8px 24px rgba(0, 0, 0, 0.2);
+
+  --ds-shadow-focus-ring: 0 0 0 2px rgba(0, 180, 216, 0.3);
+  --ds-shadow-focus-ring-error: 0 0 0 2px rgba(239, 68, 68, 0.3);
+
+  /* ============================================
+     7. COMPONENT TOKENS - BUTTON
+     ============================================ */
+
+  /* Button Primary - Cyan bg with dark text */
   --ds-button-primary-bg: #00B4D8;
   --ds-button-primary-bg-hover: #0891b2;
   --ds-button-primary-bg-active: #0e7490;
+  --ds-button-primary-color: #09090B;
   --ds-button-primary-text: #09090B;
+  --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   --ds-button-primary-shadow-hover: 0 2px 12px rgba(0, 180, 216, 0.3);
-  --ds-button-secondary-bg: transparent;
-  --ds-button-secondary-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-button-secondary-border: rgba(255, 255, 255, 0.15);
-  --ds-button-secondary-border-hover: rgba(255, 255, 255, 0.25);
+
+  /* Button Secondary - Subtle dark bg */
+  --ds-button-secondary-bg: #27272A;
+  --ds-button-secondary-bg-hover: #3F3F46;
+  --ds-button-secondary-bg-active: #52525B;
+  --ds-button-secondary-color: #FAFAFA;
+  --ds-button-secondary-border: rgba(255, 255, 255, 0.08);
   --ds-button-secondary-text: #FAFAFA;
+  --ds-button-secondary-border-hover: rgba(255, 255, 255, 0.15);
+
+  /* Button Default - Dark gray bg with border */
+  --ds-button-default-bg: #18181B;
+  --ds-button-default-bg-hover: #1E1E22;
+  --ds-button-default-bg-active: #27272A;
+  --ds-button-default-color: #FAFAFA;
+  --ds-button-default-color-hover: #FAFAFA;
+  --ds-button-default-color-active: #FAFAFA;
+  --ds-button-default-border: rgba(255, 255, 255, 0.12);
+  --ds-button-default-border-hover: rgba(255, 255, 255, 0.2);
+  --ds-button-default-border-active: rgba(255, 255, 255, 0.25);
+
+  /* Button Ghost */
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-button-ghost-bg-active: rgba(255, 255, 255, 0.08);
+  --ds-button-ghost-color: #A1A1AA;
+  --ds-button-ghost-color-hover: #FAFAFA;
+  --ds-button-ghost-color-active: #FAFAFA;
+  --ds-button-ghost-border: transparent;
+  --ds-button-ghost-border-hover: transparent;
+  --ds-button-ghost-border-active: transparent;
+
+  /* Button Text */
+  --ds-button-text-bg: transparent;
+  --ds-button-text-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-button-text-bg-active: rgba(255, 255, 255, 0.08);
   --ds-button-text-color: #A1A1AA;
   --ds-button-text-color-hover: #FAFAFA;
-  --ds-button-text-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-button-text-color-active: #FAFAFA;
+
+  /* Button Link */
   --ds-button-link-color: #00B4D8;
   --ds-button-link-color-hover: #22d3ee;
+  --ds-button-link-color-active: #67e8f9;
 
-  /* ── Card tokens ─────────────────────────── */
-  --ds-card-bg: #18181B;
-  --ds-card-bg-hover: #1E1E22;
-  --ds-card-border: rgba(255, 255, 255, 0.06);
-  --ds-card-border-hover: rgba(255, 255, 255, 0.1);
-  --ds-card-border-accent-hover: rgba(0, 180, 216, 0.15);
-  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
-  --ds-card-shadow-hover: 0 0 0 1px rgba(0, 180, 216, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
-  --ds-card-header-border: rgba(255, 255, 255, 0.06);
-  --ds-card-header-color: #FAFAFA;
-  --ds-card-body-color: #A1A1AA;
+  /* Button Semantic Variants */
+  --ds-button-success-bg: #10B981;
+  --ds-button-success-bg-hover: #059669;
+  --ds-button-success-bg-active: #047857;
+  --ds-button-success-color: #ffffff;
+  --ds-button-success-border: transparent;
 
-  /* ── Input tokens ────────────────────────── */
+  --ds-button-warning-bg: #F59E0B;
+  --ds-button-warning-bg-hover: #d97706;
+  --ds-button-warning-bg-active: #b45309;
+  --ds-button-warning-color: #09090B;
+  --ds-button-warning-border: transparent;
+
+  --ds-button-error-bg: #EF4444;
+  --ds-button-error-bg-hover: #dc2626;
+  --ds-button-error-bg-active: #b91c1c;
+  --ds-button-error-color: #ffffff;
+  --ds-button-error-border: transparent;
+
+  --ds-button-info-bg: #3B82F6;
+  --ds-button-info-bg-hover: #2563eb;
+  --ds-button-info-bg-active: #1d4ed8;
+  --ds-button-info-color: #ffffff;
+  --ds-button-info-border: transparent;
+
+  /* Button States */
+  --ds-button-disabled-bg: #1E1E22;
+  --ds-button-disabled-color: #3F3F46;
+  --ds-button-disabled-border: rgba(255, 255, 255, 0.04);
+  --ds-button-disabled-opacity: 0.5;
+
+  --ds-button-focus-ring: 0 0 0 2px rgba(0, 180, 216, 0.3);
+
+  /* ============================================
+     8. COMPONENT TOKENS - INPUT
+     ============================================ */
+
   --ds-input-bg: #111113;
+  --ds-input-bg-hover: #18181B;
+  --ds-input-bg-focus: #111113;
+  --ds-input-bg-disabled: #0D0D0F;
+
+  --ds-input-color: #FAFAFA;
+  --ds-input-color-placeholder: #52525B;
+  --ds-input-color-disabled: #3F3F46;
+
   --ds-input-border: rgba(255, 255, 255, 0.12);
   --ds-input-border-hover: rgba(255, 255, 255, 0.2);
   --ds-input-border-focus: rgba(0, 180, 216, 0.5);
-  --ds-input-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
-  --ds-input-color: var(--ds-color-text-primary);
-  --ds-input-color-placeholder: var(--ds-color-text-muted);
+  --ds-input-border-disabled: rgba(255, 255, 255, 0.04);
 
-  /* ── Table tokens ────────────────────────── */
+  --ds-input-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
+
+  /* Input Status */
+  --ds-input-success-border: #10B981;
+  --ds-input-success-shadow-focus: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  --ds-input-warning-border: #F59E0B;
+  --ds-input-warning-shadow-focus: 0 0 0 2px rgba(245, 158, 11, 0.2);
+  --ds-input-error-border: #EF4444;
+  --ds-input-error-shadow-focus: 0 0 0 2px rgba(239, 68, 68, 0.2);
+  --ds-input-error-color: #EF4444;
+
+  /* Input Filled Variant */
+  --ds-input-filled-bg: #18181B;
+  --ds-input-filled-bg-hover: #1E1E22;
+  --ds-input-filled-bg-focus: #111113;
+
+  /* Input Addon */
+  --ds-input-addon-bg: #18181B;
+  --ds-input-addon-color: #71717A;
+  --ds-input-addon-border: rgba(255, 255, 255, 0.08);
+
+  /* Input Clear */
+  --ds-input-clear-color: #52525B;
+  --ds-input-clear-color-hover: #A1A1AA;
+
+  /* Input Label */
+  --ds-input-label-color: #A1A1AA;
+
+  /* Input Helper */
+  --ds-input-helper-color: #71717A;
+
+  /* ============================================
+     9. COMPONENT TOKENS - CARD
+     ============================================ */
+
+  --ds-card-bg: #18181B;
+  --ds-card-bg-hover: #1E1E22;
+  --ds-card-color: #FAFAFA;
+  --ds-card-border: rgba(255, 255, 255, 0.06);
+  --ds-card-border-hover: rgba(255, 255, 255, 0.1);
+  --ds-card-border-accent-hover: rgba(0, 180, 216, 0.15);
+
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --ds-card-shadow-hover: 0 0 0 1px rgba(0, 180, 216, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
+  --ds-card-shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.25);
+
+  /* Card Header */
+  --ds-card-header-border: rgba(255, 255, 255, 0.06);
+  --ds-card-header-color: #FAFAFA;
+  --ds-card-title-color: #FAFAFA;
+  --ds-card-subtitle-color: #71717A;
+  --ds-card-image-placeholder-bg: #111113;
+  --ds-card-image-placeholder-color: #52525B;
+  --ds-card-image-loading-track: rgba(255, 255, 255, 0.06);
+  --ds-card-image-loading-active: #00B4D8;
+
+  /* Card Body */
+  --ds-card-body-color: #A1A1AA;
+
+  /* Card Footer */
+  --ds-card-footer-border: rgba(255, 255, 255, 0.06);
+  --ds-card-footer-bg: #111113;
+
+  /* Card Cover Overlay */
+  --ds-card-cover-overlay-bg: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+
+  /* Card divider & page shell */
+  --ds-divider-text-color: #FAFAFA;
+  --ds-page-shell-subtitle-color: #A1A1AA;
+
+  /* ============================================
+     10. COMPONENT TOKENS - MODAL
+     ============================================ */
+
+  --ds-modal-bg: #1E1E22;
+  --ds-modal-color: #FAFAFA;
+  --ds-modal-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* Modal Overlay */
+  --ds-overlay-bg: rgba(0, 0, 0, 0.7);
+  --ds-modal-overlay-bg: rgba(0, 0, 0, 0.7);
+  --ds-modal-overlay-backdrop: blur(8px);
+
+  /* Modal Header */
+  --ds-modal-header-bg: #1E1E22;
+  --ds-modal-header-border: rgba(255, 255, 255, 0.06);
+  --ds-modal-title-color: #FAFAFA;
+  --ds-modal-subtitle-color: #71717A;
+
+  /* Modal Body */
+  --ds-modal-body-color: #A1A1AA;
+
+  /* Modal Footer */
+  --ds-modal-footer-border: rgba(255, 255, 255, 0.06);
+  --ds-modal-footer-bg: #18181B;
+
+  /* Modal Close */
+  --ds-modal-close-color: #52525B;
+  --ds-modal-close-color-hover: #FAFAFA;
+  --ds-modal-close-bg-hover: rgba(255, 255, 255, 0.05);
+
+  /* Message Close */
+  --ds-message-close-color: #52525B;
+  --ds-message-close-color-hover: #FAFAFA;
+
+  /* ============================================
+     11. COMPONENT TOKENS - TABLE
+     ============================================ */
+
   --ds-table-bg: #09090B;
   --ds-table-border: rgba(255, 255, 255, 0.06);
-  --ds-table-radius: var(--ds-radius-lg);
+
+  /* Table Header */
   --ds-table-header-bg: #111113;
-  --ds-table-header-color: var(--ds-color-text-secondary);
+  --ds-table-header-color: #A1A1AA;
   --ds-table-header-font-weight: 600;
   --ds-table-header-font-size: 0.6875rem;
+
+  /* Table Row */
   --ds-table-row-bg: #09090B;
   --ds-table-row-bg-hover: rgba(255, 255, 255, 0.03);
   --ds-table-row-bg-striped: #111113;
   --ds-table-row-bg-selected: rgba(0, 180, 216, 0.08);
   --ds-table-row-border: rgba(255, 255, 255, 0.04);
+  --ds-table-loading-overlay-bg: rgba(9, 9, 11, 0.7);
+
+  /* Table Cell */
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-cell-font-size: 0.875rem;
-  --ds-table-cell-color: var(--ds-color-text-primary);
+  --ds-table-cell-color: #FAFAFA;
 
-  /* ── Modal tokens ────────────────────────── */
-  --ds-modal-bg: #1E1E22;
-  --ds-modal-header-bg: #1E1E22;
-  --ds-modal-header-border: rgba(255, 255, 255, 0.06);
-  --ds-modal-footer-bg: #18181B;
-  --ds-modal-footer-border: rgba(255, 255, 255, 0.06);
-  --ds-modal-title-color: #FAFAFA;
-  --ds-modal-body-color: #A1A1AA;
-  --ds-modal-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  /* ============================================
+     12. COMPONENT TOKENS - TABS
+     ============================================ */
 
-  /* ── Drawer tokens ───────────────────────── */
-  --ds-drawer-bg: #18181B;
-  --ds-drawer-header-border: rgba(255, 255, 255, 0.06);
-  --ds-drawer-title-color: #FAFAFA;
-  --ds-drawer-body-color: #A1A1AA;
+  --ds-tabs-border: rgba(255, 255, 255, 0.06);
+  --ds-tab-color: #71717A;
+  --ds-tab-color-hover: #FAFAFA;
+  --ds-tab-color-active: #00B4D8;
+  --ds-tab-bg-hover: rgba(255, 255, 255, 0.03);
+  --ds-tab-border-active: #00B4D8;
 
-  /* ── Dropdown tokens ─────────────────────── */
-  --ds-dropdown-bg: #1E1E22;
-  --ds-dropdown-border: rgba(255, 255, 255, 0.06);
-  --ds-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  --ds-dropdown-item-color: #A1A1AA;
-  --ds-dropdown-item-color-hover: #FAFAFA;
-  --ds-dropdown-item-bg-hover: rgba(255, 255, 255, 0.05);
+  /* ============================================
+     13. COMPONENT TOKENS - AVATAR
+     ============================================ */
 
-  /* ── Select tokens ───────────────────────── */
+  /* Avatar Variants */
+  --ds-avatar-default-bg: #27272A;
+  --ds-avatar-default-color: #A1A1AA;
+  --ds-avatar-default-border: rgba(255, 255, 255, 0.06);
+
+  --ds-avatar-primary-bg: #00B4D8;
+  --ds-avatar-primary-color: #09090B;
+  --ds-avatar-primary-border: #00B4D8;
+
+  --ds-avatar-secondary-bg: #27272A;
+  --ds-avatar-secondary-color: #A1A1AA;
+  --ds-avatar-secondary-border: rgba(255, 255, 255, 0.06);
+
+  --ds-avatar-success-bg: rgba(16, 185, 129, 0.15);
+  --ds-avatar-success-color: #10B981;
+  --ds-avatar-success-border: rgba(16, 185, 129, 0.25);
+
+  --ds-avatar-warning-bg: rgba(245, 158, 11, 0.15);
+  --ds-avatar-warning-color: #F59E0B;
+  --ds-avatar-warning-border: rgba(245, 158, 11, 0.25);
+
+  --ds-avatar-error-bg: rgba(239, 68, 68, 0.15);
+  --ds-avatar-error-color: #EF4444;
+  --ds-avatar-error-border: rgba(239, 68, 68, 0.25);
+
+  --ds-avatar-gradient-bg: linear-gradient(135deg, #00B4D8 0%, #0e7490 100%);
+  --ds-avatar-gradient-color: #09090B;
+  --ds-avatar-gradient-border: transparent;
+
+  /* Avatar Status */
+  --ds-avatar-status-border: #18181B;
+
+  /* Avatar Ring */
+  --ds-avatar-ring-color: #00B4D8;
+
+  /* Avatar Border */
+  --ds-avatar-border-color: rgba(255, 255, 255, 0.05);
+
+  /* Avatar Group */
+  --ds-avatar-group-border: #18181B;
+  --ds-avatar-group-border-color: #18181B;
+  --ds-avatar-group-overflow-bg: #27272A;
+  --ds-avatar-group-overflow-color: #A1A1AA;
+
+  /* Avatar legacy tokens */
+  --ds-avatar-bg: rgba(0, 180, 216, 0.1);
+  --ds-avatar-color: #00B4D8;
+
+  /* ============================================
+     14. COMPONENT TOKENS - BADGE
+     ============================================ */
+
+  --ds-badge-default-bg: #52525B;
+  --ds-badge-default-color: #FAFAFA;
+
+  --ds-badge-primary-bg: #00B4D8;
+  --ds-badge-primary-color: #09090B;
+
+  --ds-badge-secondary-bg: #27272A;
+  --ds-badge-secondary-color: #A1A1AA;
+
+  --ds-badge-success-bg: #10B981;
+  --ds-badge-success-color: #09090B;
+
+  --ds-badge-warning-bg: #F59E0B;
+  --ds-badge-warning-color: #09090B;
+
+  --ds-badge-error-bg: #EF4444;
+  --ds-badge-error-color: #ffffff;
+
+  --ds-badge-info-bg: #3B82F6;
+  --ds-badge-info-color: #ffffff;
+
+  --ds-badge-text-color: #FAFAFA;
+  --ds-badge-border-color: #18181B;
+
+  /* ============================================
+     15. COMPONENT TOKENS - TAG
+     ============================================ */
+
+  --ds-tag-bg: #1E1E22;
+  --ds-tag-border: rgba(255, 255, 255, 0.08);
+  --ds-tag-color: #A1A1AA;
+
+  --ds-tag-default-bg: #1E1E22;
+  --ds-tag-default-color: #A1A1AA;
+  --ds-tag-default-border: rgba(255, 255, 255, 0.08);
+
+  --ds-tag-primary-bg: rgba(0, 180, 216, 0.15);
+  --ds-tag-primary-color: #22d3ee;
+  --ds-tag-primary-border: rgba(0, 180, 216, 0.25);
+
+  --ds-tag-secondary-bg: #27272A;
+  --ds-tag-secondary-color: #A1A1AA;
+  --ds-tag-secondary-border: rgba(255, 255, 255, 0.06);
+
+  --ds-tag-success-bg: rgba(16, 185, 129, 0.15);
+  --ds-tag-success-color: #34d399;
+  --ds-tag-success-border: rgba(16, 185, 129, 0.25);
+
+  --ds-tag-warning-bg: rgba(245, 158, 11, 0.15);
+  --ds-tag-warning-color: #fbbf24;
+  --ds-tag-warning-border: rgba(245, 158, 11, 0.25);
+
+  --ds-tag-error-bg: rgba(239, 68, 68, 0.15);
+  --ds-tag-error-color: #f87171;
+  --ds-tag-error-border: rgba(239, 68, 68, 0.25);
+
+  /* ============================================
+     16. COMPONENT TOKENS - ALERT
+     ============================================ */
+
+  --ds-alert-info-bg: rgba(59, 130, 246, 0.1);
+  --ds-alert-info-border: rgba(59, 130, 246, 0.25);
+  --ds-alert-info-color: #93c5fd;
+  --ds-alert-info-icon: #3B82F6;
+
+  --ds-alert-success-bg: rgba(16, 185, 129, 0.1);
+  --ds-alert-success-border: rgba(16, 185, 129, 0.25);
+  --ds-alert-success-color: #6ee7b7;
+  --ds-alert-success-icon: #10B981;
+
+  --ds-alert-warning-bg: rgba(245, 158, 11, 0.1);
+  --ds-alert-warning-border: rgba(245, 158, 11, 0.25);
+  --ds-alert-warning-color: #fcd34d;
+  --ds-alert-warning-icon: #F59E0B;
+
+  --ds-alert-error-bg: rgba(239, 68, 68, 0.1);
+  --ds-alert-error-border: rgba(239, 68, 68, 0.25);
+  --ds-alert-error-color: #fca5a5;
+  --ds-alert-error-icon: #EF4444;
+
+  /* ============================================
+     17. COMPONENT TOKENS - TOOLTIP
+     ============================================ */
+
+  --ds-tooltip-bg: #FAFAFA;
+  --ds-tooltip-color: #09090B;
+  --ds-tooltip-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  --ds-tooltip-default-bg: #FAFAFA;
+  --ds-tooltip-default-color: #09090B;
+
+  --ds-tooltip-primary-bg: #FAFAFA;
+  --ds-tooltip-primary-color: #09090B;
+
+  --ds-tooltip-secondary-bg: #27272A;
+  --ds-tooltip-secondary-color: #FAFAFA;
+
+  --ds-tooltip-success-bg: #10B981;
+  --ds-tooltip-success-color: #09090B;
+
+  --ds-tooltip-warning-bg: #F59E0B;
+  --ds-tooltip-warning-color: #09090B;
+
+  --ds-tooltip-error-bg: #EF4444;
+  --ds-tooltip-error-color: #ffffff;
+
+  /* ============================================
+     18. COMPONENT TOKENS - CHECKBOX / RADIO
+     ============================================ */
+
+  /* Checkbox */
+  --ds-checkbox-bg: #111113;
+  --ds-checkbox-bg-disabled: #0D0D0F;
+  --ds-checkbox-border: rgba(255, 255, 255, 0.2);
+  --ds-checkbox-border-hover: rgba(255, 255, 255, 0.3);
+  --ds-checkbox-border-disabled: rgba(255, 255, 255, 0.06);
+  --ds-checkbox-checked-bg: #00B4D8;
+  --ds-checkbox-checked-border: #00B4D8;
+  --ds-checkbox-checked-color: #09090B;
+  --ds-checkbox-focus-ring: 0 0 0 2px rgba(0, 180, 216, 0.3);
+  --ds-checkbox-focus-ring-color: rgba(0, 180, 216, 0.15);
+  --ds-checkbox-error-border: #EF4444;
+  --ds-checkbox-error-color: #EF4444;
+  --ds-checkbox-label-color: #FAFAFA;
+  --ds-checkbox-label-color-disabled: #3F3F46;
+
+  /* Radio */
+  --ds-radio-bg: #111113;
+  --ds-radio-bg-disabled: #0D0D0F;
+  --ds-radio-border: rgba(255, 255, 255, 0.2);
+  --ds-radio-border-hover: rgba(255, 255, 255, 0.3);
+  --ds-radio-border-disabled: rgba(255, 255, 255, 0.06);
+  --ds-radio-checked-bg: #111113;
+  --ds-radio-checked-border: #00B4D8;
+  --ds-radio-checked-dot: #00B4D8;
+  --ds-radio-focus-ring: 0 0 0 2px rgba(0, 180, 216, 0.3);
+  --ds-radio-focus-ring-color: rgba(0, 180, 216, 0.15);
+  --ds-radio-error-border: #EF4444;
+  --ds-radio-error-color: #EF4444;
+  --ds-radio-label-color: #FAFAFA;
+  --ds-radio-label-color-disabled: #3F3F46;
+  --ds-radio-description-color: #71717A;
+
+  /* Radio Button Style */
+  --ds-radio-button-bg: #18181B;
+  --ds-radio-button-bg-checked: #00B4D8;
+  --ds-radio-button-border: rgba(255, 255, 255, 0.08);
+  --ds-radio-button-color-checked: #09090B;
+
+  /* ============================================
+     19. COMPONENT TOKENS - SWITCH
+     ============================================ */
+
+  --ds-switch-bg: rgba(255, 255, 255, 0.15);
+  --ds-switch-bg-hover: rgba(255, 255, 255, 0.2);
+  --ds-switch-bg-disabled: rgba(255, 255, 255, 0.06);
+  --ds-switch-checked-bg: #00B4D8;
+  --ds-switch-checked-bg-hover: #0891b2;
+  --ds-switch-thumb-bg: #09090B;
+  --ds-switch-handle-bg: #09090B;
+  --ds-switch-thumb-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --ds-switch-focus-ring: 0 0 0 2px rgba(0, 180, 216, 0.3);
+  --ds-switch-label-color: #FAFAFA;
+
+  /* ============================================
+     20. COMPONENT TOKENS - SLIDER
+     ============================================ */
+
+  --ds-slider-track-color: #00B4D8;
+  --ds-slider-track-color-disabled: #3F3F46;
+  --ds-slider-rail-color: rgba(255, 255, 255, 0.1);
+  --ds-slider-handle-bg: #00B4D8;
+  --ds-slider-handle-bg-disabled: #3F3F46;
+  --ds-slider-handle-border: #09090B;
+  --ds-slider-handle-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --ds-slider-handle-shadow-hover: 0 2px 6px rgba(0, 180, 216, 0.3);
+  --ds-slider-focus-ring: 0 0 0 2px rgba(0, 180, 216, 0.3);
+  --ds-slider-mark-color: #71717A;
+  --ds-slider-tooltip-bg: #FAFAFA;
+  --ds-slider-tooltip-color: #09090B;
+
+  /* ============================================
+     21. COMPONENT TOKENS - SELECT
+     ============================================ */
+
   --ds-select-bg: #111113;
+  --ds-select-bg-disabled: #0D0D0F;
+  --ds-select-color: #FAFAFA;
+  --ds-select-color-placeholder: #52525B;
+  --ds-select-color-disabled: #3F3F46;
   --ds-select-border: rgba(255, 255, 255, 0.12);
   --ds-select-border-hover: rgba(255, 255, 255, 0.2);
   --ds-select-border-focus: rgba(0, 180, 216, 0.5);
   --ds-select-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
+
+  /* Select Status */
+  --ds-select-error-border: #EF4444;
+  --ds-select-warning-border: #F59E0B;
+  --ds-select-success-border: #10B981;
+
+  /* Select Filled */
+  --ds-select-filled-bg: #18181B;
+
+  /* Select Dropdown */
   --ds-select-dropdown-bg: #1E1E22;
+  --ds-select-dropdown-border: rgba(255, 255, 255, 0.06);
   --ds-select-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* Select Option */
+  --ds-select-option-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-select-option-bg-selected: rgba(0, 180, 216, 0.1);
+  --ds-select-option-color-selected: #00B4D8;
+  --ds-select-option-color-disabled: #3F3F46;
+
+  /* Select Item (legacy) */
   --ds-select-item-color: #A1A1AA;
   --ds-select-item-selected-bg: rgba(0, 180, 216, 0.1);
   --ds-select-item-selected-color: #00B4D8;
   --ds-select-item-active-bg: rgba(255, 255, 255, 0.05);
 
-  /* ── Tooltip tokens ──────────────────────── */
-  --ds-tooltip-bg: #FAFAFA;
-  --ds-tooltip-color: #09090B;
+  /* Select Tag (multiple mode) */
+  --ds-select-tag-bg: #27272A;
+  --ds-select-tag-color: #A1A1AA;
 
-  /* ── Popover tokens ──────────────────────── */
+  /* Select Arrow/Icon */
+  --ds-select-arrow-color: #52525B;
+  --ds-select-clear-color: #52525B;
+  --ds-select-clear-color-hover: #A1A1AA;
+  --ds-select-check-color: #00B4D8;
+
+  /* ============================================
+     22. COMPONENT TOKENS - DATEPICKER
+     ============================================ */
+
+  --ds-datepicker-bg: #111113;
+  --ds-datepicker-bg-disabled: #0D0D0F;
+  --ds-datepicker-color: #FAFAFA;
+  --ds-datepicker-color-placeholder: #52525B;
+  --ds-datepicker-border: rgba(255, 255, 255, 0.12);
+  --ds-datepicker-border-hover: rgba(255, 255, 255, 0.2);
+  --ds-datepicker-border-focus: rgba(0, 180, 216, 0.5);
+  --ds-datepicker-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
+
+  --ds-datepicker-error-border: #EF4444;
+  --ds-datepicker-warning-border: #F59E0B;
+
+  --ds-datepicker-icon-color: #52525B;
+  --ds-datepicker-clear-color: #52525B;
+  --ds-datepicker-clear-color-hover: #A1A1AA;
+  --ds-datepicker-separator-color: #52525B;
+
+  /* Picker (shared DatePicker/TimePicker tokens from rottay original) */
+  --ds-picker-bg: #111113;
+  --ds-picker-border: rgba(255, 255, 255, 0.12);
+  --ds-picker-border-hover: rgba(255, 255, 255, 0.2);
+  --ds-picker-border-focus: rgba(0, 180, 216, 0.5);
+  --ds-picker-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
+  --ds-picker-color: #FAFAFA;
+  --ds-picker-dropdown-bg: #1E1E22;
+  --ds-picker-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-picker-selected-bg: #00B4D8;
+  --ds-picker-selected-color: #09090B;
+  --ds-picker-today-border: #00B4D8;
+  --ds-picker-hover-bg: rgba(0, 180, 216, 0.1);
+
+  /* ============================================
+     23. COMPONENT TOKENS - INPUTNUMBER
+     ============================================ */
+
+  --ds-inputnumber-bg: #111113;
+  --ds-inputnumber-bg-disabled: #0D0D0F;
+  --ds-inputnumber-color: #FAFAFA;
+  --ds-inputnumber-border: rgba(255, 255, 255, 0.12);
+  --ds-inputnumber-border-hover: rgba(255, 255, 255, 0.2);
+  --ds-inputnumber-border-focus: rgba(0, 180, 216, 0.5);
+  --ds-inputnumber-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
+
+  --ds-inputnumber-error-border: #EF4444;
+  --ds-inputnumber-warning-border: #F59E0B;
+
+  --ds-inputnumber-control-bg: transparent;
+  --ds-inputnumber-control-color: #52525B;
+  --ds-inputnumber-control-color-hover: #FAFAFA;
+
+  --ds-inputnumber-addon-bg: #18181B;
+  --ds-inputnumber-addon-border: rgba(255, 255, 255, 0.08);
+  --ds-inputnumber-addon-color: #71717A;
+
+  --ds-inputnumber-affix-color: #52525B;
+
+  /* ============================================
+     24. COMPONENT TOKENS - TEXTAREA
+     ============================================ */
+
+  --ds-textarea-bg: #111113;
+  --ds-textarea-bg-disabled: #0D0D0F;
+  --ds-textarea-color: #FAFAFA;
+  --ds-textarea-color-placeholder: #52525B;
+  --ds-textarea-border: rgba(255, 255, 255, 0.12);
+  --ds-textarea-border-hover: rgba(255, 255, 255, 0.2);
+  --ds-textarea-border-focus: rgba(0, 180, 216, 0.5);
+  --ds-textarea-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
+
+  --ds-textarea-error-border: #EF4444;
+  --ds-textarea-warning-border: #F59E0B;
+  --ds-textarea-success-border: #10B981;
+
+  --ds-textarea-filled-bg: #18181B;
+  --ds-textarea-count-color: #52525B;
+
+  /* ============================================
+     25. COMPONENT TOKENS - TIMEPICKER
+     ============================================ */
+
+  --ds-timepicker-bg: #111113;
+  --ds-timepicker-bg-disabled: #0D0D0F;
+  --ds-timepicker-color: #FAFAFA;
+  --ds-timepicker-border: rgba(255, 255, 255, 0.12);
+  --ds-timepicker-border-focus: rgba(0, 180, 216, 0.5);
+  --ds-timepicker-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
+
+  --ds-timepicker-error-border: #EF4444;
+  --ds-timepicker-warning-border: #F59E0B;
+
+  --ds-timepicker-icon-color: #52525B;
+  --ds-timepicker-clear-color: #52525B;
+  --ds-timepicker-separator-color: #52525B;
+
+  /* ============================================
+     26. COMPONENT TOKENS - FORM
+     ============================================ */
+
+  --ds-form-label-color: #A1A1AA;
+  --ds-form-label-font-weight: 600;
+  --ds-form-required-color: #EF4444;
+  --ds-form-help-color: #71717A;
+  --ds-form-error-color: #EF4444;
+  --ds-form-warning-color: #F59E0B;
+  --ds-form-success-color: #10B981;
+  --ds-form-extra-color: #52525B;
+
+  /* ============================================
+     27. COMPONENT TOKENS - UPLOAD
+     ============================================ */
+
+  --ds-upload-bg: #111113;
+  --ds-upload-border: rgba(255, 255, 255, 0.1);
+  --ds-upload-border-hover: rgba(0, 180, 216, 0.3);
+
+  --ds-upload-button-bg: #111113;
+  --ds-upload-button-border: rgba(255, 255, 255, 0.08);
+  --ds-upload-button-color: #A1A1AA;
+
+  --ds-upload-dragger-bg: #111113;
+  --ds-upload-dragger-bg-hover: #18181B;
+  --ds-upload-dragger-border: rgba(255, 255, 255, 0.08);
+  --ds-upload-dragger-border-active: #00B4D8;
+  --ds-upload-dragger-icon-color: #52525B;
+  --ds-upload-dragger-text-color: #A1A1AA;
+
+  --ds-upload-file-bg: #18181B;
+  --ds-upload-file-color: #A1A1AA;
+  --ds-upload-file-remove-color: #EF4444;
+  --ds-upload-progress-track: rgba(255, 255, 255, 0.04);
+  --ds-upload-progress-bar: #00B4D8;
+  --ds-upload-card-border: rgba(255, 255, 255, 0.06);
+  --ds-upload-card-bg: #18181B;
+  --ds-upload-error-border: #EF4444;
+  --ds-upload-preview-overlay: rgba(0, 0, 0, 0.5);
+  --ds-upload-preview-backdrop: rgba(0, 0, 0, 0.7);
+
+  /* ============================================
+     28. COMPONENT TOKENS - AUTOCOMPLETE
+     ============================================ */
+
+  --ds-autocomplete-bg: #111113;
+  --ds-autocomplete-border: rgba(255, 255, 255, 0.12);
+  --ds-autocomplete-border-focus: rgba(0, 180, 216, 0.5);
+  --ds-autocomplete-error-border: #EF4444;
+  --ds-autocomplete-warning-border: #F59E0B;
+
+  --ds-autocomplete-dropdown-bg: #1E1E22;
+  --ds-autocomplete-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-autocomplete-option-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-autocomplete-option-bg-selected: rgba(0, 180, 216, 0.1);
+  --ds-autocomplete-empty-color: #52525B;
+  --ds-autocomplete-clear-color: #52525B;
+
+  /* ============================================
+     29. COMPONENT TOKENS - TOGGLE
+     ============================================ */
+
+  --ds-toggle-track-bg: rgba(255, 255, 255, 0.15);
+  --ds-toggle-track-bg-checked: #00B4D8;
+  --ds-toggle-dot-bg: #09090B;
+  --ds-toggle-dot-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --ds-toggle-focus-ring: 0 0 0 2px rgba(0, 180, 216, 0.3);
+
+  --ds-toggle-success-bg: #10B981;
+  --ds-toggle-warning-bg: #F59E0B;
+  --ds-toggle-error-bg: #EF4444;
+
+  --ds-toggle-label-color: #FAFAFA;
+  --ds-toggle-description-color: #71717A;
+  --ds-toggle-error-color: #EF4444;
+  --ds-toggle-inner-label-color: #09090B;
+
+  /* ============================================
+     30. COMPONENT TOKENS - DROPDOWN
+     ============================================ */
+
+  --ds-dropdown-bg: #1E1E22;
+  --ds-dropdown-border: rgba(255, 255, 255, 0.06);
+  --ds-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  --ds-dropdown-item-color: #A1A1AA;
+  --ds-dropdown-item-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-dropdown-item-color-hover: #FAFAFA;
+  --ds-dropdown-item-bg-active: rgba(0, 180, 216, 0.08);
+  --ds-dropdown-item-color-active: #FAFAFA;
+
+  /* ============================================
+     31. COMPONENT TOKENS - POPOVER
+     ============================================ */
+
   --ds-popover-bg: #1E1E22;
+  --ds-popover-border: rgba(255, 255, 255, 0.06);
   --ds-popover-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
   --ds-popover-title-color: #FAFAFA;
   --ds-popover-title-border: rgba(255, 255, 255, 0.06);
   --ds-popover-content-color: #A1A1AA;
 
-  /* ── Message / Notification tokens ───────── */
+  /* ============================================
+     32. COMPONENT TOKENS - DRAWER
+     ============================================ */
+
+  --ds-drawer-bg: #18181B;
+  --ds-drawer-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --ds-drawer-header-border: rgba(255, 255, 255, 0.06);
+  --ds-drawer-footer-border: rgba(255, 255, 255, 0.06);
+  --ds-drawer-title-color: #FAFAFA;
+  --ds-drawer-body-color: #A1A1AA;
+
+  /* ============================================
+     33. COMPONENT TOKENS - NOTIFICATION / MESSAGE
+     ============================================ */
+
+  --ds-notification-bg: #1E1E22;
+  --ds-notification-border: rgba(255, 255, 255, 0.06);
+  --ds-notification-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-notification-title-color: #FAFAFA;
+  --ds-notification-content-color: #A1A1AA;
+  --ds-notification-body-color: #A1A1AA;
+
   --ds-message-bg: #1E1E22;
   --ds-message-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
   --ds-message-color: #FAFAFA;
-  --ds-notification-bg: #1E1E22;
-  --ds-notification-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  --ds-notification-title-color: #FAFAFA;
-  --ds-notification-body-color: var(--ds-color-text-secondary);
 
-  /* ── Tag tokens ──────────────────────────── */
-  --ds-tag-bg: #1E1E22;
-  --ds-tag-border: rgba(255, 255, 255, 0.08);
-  --ds-tag-color: #A1A1AA;
+  /* ============================================
+     34. COMPONENT TOKENS - PROGRESS
+     ============================================ */
 
-  /* ── Progress tokens ─────────────────────── */
   --ds-progress-bg: rgba(255, 255, 255, 0.08);
   --ds-progress-fill: linear-gradient(90deg, #00B4D8, #22d3ee);
-  --ds-progress-success-fill: var(--ds-color-success);
+  --ds-progress-success-fill: #10B981;
 
-  /* ── Checkbox / Radio / Switch tokens ────── */
-  --ds-checkbox-bg: #111113;
-  --ds-checkbox-border: rgba(255, 255, 255, 0.2);
-  --ds-checkbox-checked-bg: #00B4D8;
-  --ds-checkbox-checked-border: #00B4D8;
-  --ds-checkbox-checked-color: #09090B;
-  --ds-radio-bg: #111113;
-  --ds-radio-border: rgba(255, 255, 255, 0.2);
-  --ds-radio-checked-border: #00B4D8;
-  --ds-radio-checked-dot: #00B4D8;
-  --ds-switch-bg: rgba(255, 255, 255, 0.15);
-  --ds-switch-checked-bg: #00B4D8;
-  --ds-switch-checked-bg-hover: #0891b2;
-  --ds-switch-handle-bg: #09090B;
+  --ds-progress-fill-primary: #00B4D8;
+  --ds-progress-fill-success: #10B981;
+  --ds-progress-fill-warning: #F59E0B;
+  --ds-progress-fill-error: #EF4444;
 
-  /* ── Avatar tokens ───────────────────────── */
-  --ds-avatar-bg: rgba(0, 180, 216, 0.1);
-  --ds-avatar-color: #00B4D8;
-  --ds-avatar-group-border: #18181B;
+  /* ============================================
+     35. COMPONENT TOKENS - SKELETON
+     ============================================ */
 
-  /* ── Collapse tokens ─────────────────────── */
+  --ds-skeleton-bg: #18181B;
+  --ds-skeleton-highlight: #27272A;
+  --ds-skeleton-wave-gradient: linear-gradient(90deg, #18181B 25%, #27272A 50%, #18181B 75%);
+
+  /* ============================================
+     36. COMPONENT TOKENS - SPINNER
+     ============================================ */
+
+  --ds-spinner-color: #00B4D8;
+  --ds-spinner-track: rgba(255, 255, 255, 0.08);
+  --ds-spin-color: #00B4D8;
+
+  /* ============================================
+     37. COMPONENT TOKENS - DIVIDER
+     ============================================ */
+
+  --ds-divider-color: rgba(255, 255, 255, 0.06);
+  --ds-divider-text-color: #FAFAFA;
+
+  /* ============================================
+     38. COMPONENT TOKENS - PAGINATION
+     ============================================ */
+
+  --ds-pagination-item-bg: transparent;
+  --ds-pagination-item-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-pagination-item-bg-active: rgba(0, 180, 216, 0.1);
+  --ds-pagination-item-color: #A1A1AA;
+  --ds-pagination-item-color-hover: #FAFAFA;
+  --ds-pagination-item-color-active: #00B4D8;
+  --ds-pagination-item-border: transparent;
+  --ds-pagination-item-border-hover: rgba(255, 255, 255, 0.08);
+  --ds-pagination-item-border-active: rgba(0, 180, 216, 0.25);
+  --ds-pagination-active-bg: rgba(0, 180, 216, 0.1);
+  --ds-pagination-active-border: rgba(0, 180, 216, 0.25);
+  --ds-pagination-active-color: #00B4D8;
+
+  /* ============================================
+     39. COMPONENT TOKENS - BREADCRUMB
+     ============================================ */
+
+  --ds-breadcrumb-color: #52525B;
+  --ds-breadcrumb-color-hover: #00B4D8;
+  --ds-breadcrumb-color-active: #FAFAFA;
+  --ds-breadcrumb-active-color: #FAFAFA;
+  --ds-breadcrumb-separator-color: #3F3F46;
+
+  /* ============================================
+     40. COMPONENT TOKENS - MENU / NAVIGATION
+     ============================================ */
+
+  --ds-menu-bg: #09090B;
+  --ds-menu-item-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-menu-item-bg-active: rgba(0, 180, 216, 0.08);
+  --ds-menu-item-color: #A1A1AA;
+  --ds-menu-item-color-hover: #FAFAFA;
+  --ds-menu-item-color-active: #00B4D8;
+  --ds-menu-group-title-color: #52525B;
+  --ds-menu-divider-color: rgba(255, 255, 255, 0.06);
+
+  --ds-menu-item-hover-bg: rgba(255, 255, 255, 0.05);
+  --ds-menu-item-selected-bg: rgba(0, 180, 216, 0.1);
+  --ds-menu-item-selected-color: #00B4D8;
+  --ds-menu-item-danger-color: #EF4444;
+  --ds-menu-submenu-bg: #111113;
+  --ds-menu-focus-ring-color: #00B4D8;
+  --ds-menu-dark-bg: #09090B;
+  --ds-menu-dark-item-color: #A1A1AA;
+
+  /* ============================================
+     41. COMPONENT TOKENS - STEPS
+     ============================================ */
+
+  --ds-steps-connector-color: rgba(255, 255, 255, 0.08);
+  --ds-steps-connector-color-active: #00B4D8;
+  --ds-steps-item-bg: #27272A;
+  --ds-steps-item-bg-active: #00B4D8;
+  --ds-steps-item-bg-complete: #10B981;
+  --ds-steps-item-color: #52525B;
+  --ds-steps-item-color-active: #09090B;
+  --ds-steps-item-color-complete: #09090B;
+
+  --ds-steps-finish-bg: #10B981;
+  --ds-steps-finish-border: #10B981;
+  --ds-steps-finish-icon-color: #09090B;
+  --ds-steps-process-bg: #00B4D8;
+  --ds-steps-process-border: #00B4D8;
+  --ds-steps-process-icon-color: #09090B;
+  --ds-steps-wait-bg: transparent;
+  --ds-steps-wait-border: rgba(255, 255, 255, 0.15);
+  --ds-steps-wait-icon-color: #52525B;
+  --ds-steps-tail-finish-color: #10B981;
+
+  /* ============================================
+     42. COMPONENT TOKENS - COLLAPSE / ACCORDION
+     ============================================ */
+
   --ds-collapse-bg: #111113;
   --ds-collapse-border: rgba(255, 255, 255, 0.06);
+  --ds-collapse-header-bg: #111113;
+  --ds-collapse-header-bg-hover: #18181B;
   --ds-collapse-header-color: #FAFAFA;
   --ds-collapse-content-bg: #18181B;
-  --ds-collapse-content-color: var(--ds-color-text-secondary);
+  --ds-collapse-content-color: #A1A1AA;
 
-  /* ── Segmented tokens ────────────────────── */
+  /* ============================================
+     43. COMPONENT TOKENS - CALENDAR
+     ============================================ */
+
+  --ds-calendar-bg: #18181B;
+  --ds-calendar-border: rgba(255, 255, 255, 0.06);
+  --ds-calendar-header-color: #FAFAFA;
+  --ds-calendar-day-color: #FAFAFA;
+  --ds-calendar-day-color-other: #3F3F46;
+  --ds-calendar-day-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-calendar-day-bg-selected: #00B4D8;
+  --ds-calendar-day-color-selected: #09090B;
+  --ds-calendar-day-bg-today: rgba(0, 180, 216, 0.1);
+
+  /* ============================================
+     44. COMPONENT TOKENS - TREE
+     ============================================ */
+
+  --ds-tree-node-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-tree-node-bg-selected: rgba(0, 180, 216, 0.08);
+  --ds-tree-node-color: #A1A1AA;
+  --ds-tree-node-color-selected: #00B4D8;
+  --ds-tree-connector-color: rgba(255, 255, 255, 0.06);
+
+  /* ============================================
+     45. COMPONENT TOKENS - TIMELINE
+     ============================================ */
+
+  --ds-timeline-line-color: rgba(255, 255, 255, 0.06);
+  --ds-timeline-dot-bg: #00B4D8;
+  --ds-timeline-dot-border: #18181B;
+  --ds-timeline-content-color: #A1A1AA;
+  --ds-timeline-dot-blue: #00B4D8;
+  --ds-timeline-dot-green: #10B981;
+  --ds-timeline-tail-color: rgba(255, 255, 255, 0.08);
+
+  /* ============================================
+     46. COMPONENT TOKENS - EMPTY STATE
+     ============================================ */
+
+  --ds-empty-icon-color: #3F3F46;
+  --ds-empty-title-color: #A1A1AA;
+  --ds-empty-description-color: #52525B;
+
+  /* ============================================
+     47. COMPONENT TOKENS - RESULT
+     ============================================ */
+
+  --ds-result-title-color: #FAFAFA;
+  --ds-result-subtitle-color: #71717A;
+  --ds-result-icon-color: #09090B;
+
+  /* ============================================
+     48. COMPONENT TOKENS - SEGMENTED CONTROL
+     ============================================ */
+
   --ds-segmented-bg: #111113;
+  --ds-segmented-item-bg: transparent;
+  --ds-segmented-item-bg-selected: #1E1E22;
   --ds-segmented-item-color: #71717A;
   --ds-segmented-item-color-hover: #A1A1AA;
+  --ds-segmented-item-color-selected: #FAFAFA;
   --ds-segmented-item-selected-bg: #1E1E22;
   --ds-segmented-item-selected-color: #FAFAFA;
   --ds-segmented-item-selected-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --ds-segmented-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 
-  /* ── Sidebar tokens ──────────────────────── */
+  /* ============================================
+     49. COMPONENT TOKENS - RATE
+     ============================================ */
+
+  --ds-rate-color: #3F3F46;
+  --ds-rate-color-active: #fbbf24;
+  --ds-rate-color-hover: #fcd34d;
+  --ds-rate-star-color: #F59E0B;
+
+  /* ============================================
+     50. COMPONENT TOKENS - STATISTIC
+     ============================================ */
+
+  --ds-statistic-title-color: #71717A;
+  --ds-statistic-value-color: #FAFAFA;
+  --ds-statistic-prefix-color: #71717A;
+  --ds-statistic-suffix-color: #71717A;
+
+  /* ============================================
+     51. COMPONENT TOKENS - IMAGE
+     ============================================ */
+
+  --ds-image-bg: #111113;
+  --ds-image-border: rgba(255, 255, 255, 0.06);
+  --ds-image-overlay-bg: rgba(0, 0, 0, 0.7);
+
+  /* ============================================
+     52. COMPONENT TOKENS - LIST
+     ============================================ */
+
+  --ds-list-bg: #18181B;
+  --ds-list-item-bg-hover: #1E1E22;
+  --ds-list-item-border: rgba(255, 255, 255, 0.06);
+  --ds-list-border-color: rgba(255, 255, 255, 0.06);
+  --ds-list-split-color: rgba(255, 255, 255, 0.04);
+  --ds-list-skeleton-bg: #27272A;
+  --ds-list-meta-description-color: #A1A1AA;
+
+  --ds-list-background-color: #18181B;
+  --ds-list-item-background-color: #18181B;
+  --ds-list-item-hover-background-color: #1E1E22;
+  --ds-list-text-color: #FAFAFA;
+  --ds-list-secondary-text-color: #A1A1AA;
+
+  /* ============================================
+     53. COMPONENT TOKENS - FLOAT BUTTON
+     ============================================ */
+
+  --ds-floatbutton-default-bg: #1E1E22;
+  --ds-floatbutton-default-color: #A1A1AA;
+  --ds-floatbutton-primary-bg: #00B4D8;
+  --ds-floatbutton-primary-color: #09090B;
+  --ds-floatbutton-badge-bg: #EF4444;
+  --ds-floatbutton-badge-color: #ffffff;
+  --ds-floatbutton-description-color: #A1A1AA;
+
+  /* ============================================
+     54. COMPONENT TOKENS - COMMAND PALETTE
+     ============================================ */
+
+  --ds-command-palette-backdrop: rgba(0, 0, 0, 0.7);
+  --ds-command-palette-bg: #1E1E22;
+  --ds-command-palette-border: rgba(255, 255, 255, 0.08);
+  --ds-command-palette-item-hover-bg: rgba(255, 255, 255, 0.05);
+  --ds-command-palette-group-color: #52525B;
+  --ds-command-palette-empty-color: #52525B;
+  --ds-command-palette-shortcut-border: rgba(255, 255, 255, 0.08);
+
+  /* ============================================
+     55. COMPONENT TOKENS - LIVE FEED
+     ============================================ */
+
+  --ds-live-feed-bg: #1E1E22;
+  --ds-live-feed-border: rgba(255, 255, 255, 0.06);
+  --ds-live-feed-refresh-color: #A1A1AA;
+  --ds-live-feed-new-bg: rgba(59, 130, 246, 0.1);
+  --ds-live-feed-new-border: rgba(59, 130, 246, 0.25);
+  --ds-live-feed-new-color: #3B82F6;
+  --ds-live-feed-badge-bg: #00B4D8;
+  --ds-live-feed-badge-color: #09090B;
+  --ds-live-feed-empty-color: #52525B;
+  --ds-live-feed-load-more-color: #00B4D8;
+  --ds-live-feed-skeleton-bg: #27272A;
+
+  /* ============================================
+     56. COMPONENT TOKENS - STATS GRID
+     ============================================ */
+
+  --ds-stats-grid-card-bg: #1E1E22;
+  --ds-stats-grid-card-border: rgba(255, 255, 255, 0.06);
+  --ds-stats-grid-card-filled-bg: #18181B;
+  --ds-stats-grid-card-glass-bg: rgba(255, 255, 255, 0.05);
+  --ds-stats-grid-card-glass-border: rgba(255, 255, 255, 0.08);
+  --ds-stats-grid-hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --ds-stats-grid-label-color: #A1A1AA;
+  --ds-stats-grid-value-color: #FAFAFA;
+  --ds-stats-grid-description-color: #52525B;
+  --ds-stats-grid-trend-positive: #10B981;
+  --ds-stats-grid-trend-negative: #EF4444;
+  --ds-stats-grid-trend-neutral: #52525B;
+  --ds-stats-grid-skeleton-bg: #27272A;
+  --ds-stats-grid-skeleton-wave-gradient:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.1) 37%,
+      rgba(255, 255, 255, 0.05) 63%
+    );
+
+  /* ============================================
+     57. COMPONENT TOKENS - DESCRIPTIONS
+     ============================================ */
+
+  --ds-descriptions-label-color: #71717A;
+  --ds-descriptions-content-color: #FAFAFA;
+  --ds-descriptions-border: rgba(255, 255, 255, 0.06);
+  --ds-descriptions-bg: #111113;
+
+  /* ============================================
+     58. COMPONENT TOKENS - BACK TOP
+     ============================================ */
+
+  --ds-backtop-bg: #00B4D8;
+  --ds-backtop-bg-hover: #0891b2;
+  --ds-backtop-color: #09090B;
+  --ds-backtop-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+
+  /* ============================================
+     59. COMPONENT TOKENS - ANCHOR
+     ============================================ */
+
+  --ds-anchor-link-color: #71717A;
+  --ds-anchor-link-color-active: #00B4D8;
+  --ds-anchor-ink-color: #00B4D8;
+  --ds-anchor-border-color: rgba(255, 255, 255, 0.06);
+
+  /* ============================================
+     60. COMPONENT TOKENS - WATERMARK
+     ============================================ */
+
+  --ds-watermark-color: rgba(255, 255, 255, 0.04);
+
+  /* ============================================
+     61. COMPONENT TOKENS - TRANSFER
+     ============================================ */
+
+  --ds-transfer-bg: #18181B;
+  --ds-transfer-border: rgba(255, 255, 255, 0.08);
+  --ds-transfer-header-bg: #111113;
+  --ds-transfer-header-border: rgba(255, 255, 255, 0.06);
+  --ds-transfer-item-color: #A1A1AA;
+  --ds-transfer-item-bg-hover: rgba(255, 255, 255, 0.05);
+
+  /* ============================================
+     62. SIDEBAR TOKENS
+     ============================================ */
+
   --ds-sidebar-bg: #09090B;
   --ds-sidebar-border: rgba(255, 255, 255, 0.06);
   --ds-sidebar-text: #FAFAFA;
@@ -394,8 +1445,12 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-sidebar-item-indent: 6px;
   --ds-sidebar-item-padding: 6px 10px;
   --ds-sidebar-icon-size: 16px;
+  --ds-sidebar-footer-bg: #09090B;
 
-  /* ── Layout tokens ───────────────────────── */
+  /* ============================================
+     63. LAYOUT TOKENS
+     ============================================ */
+
   --ds-layout-bg: #09090B;
   --ds-layout-header-bg: rgba(9, 9, 11, 0.85);
   --ds-layout-header-backdrop: blur(12px);
@@ -403,9 +1458,20 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-layout-sider-bg: #09090B;
   --ds-layout-sider-border: rgba(255, 255, 255, 0.06);
 
-  /* ── Highlight accents ───────────────────── */
+  /* ============================================
+     64. ICON COLORS
+     ============================================ */
+
+  --ds-icon-color: #52525B;
+  --ds-icon-color-hover: #71717A;
+  --ds-icon-color-active: #FAFAFA;
+
+  /* ============================================
+     65. HIGHLIGHT & ACCENT
+     ============================================ */
+
   --ds-accent-primary: #00B4D8;
-  --ds-accent-secondary: #7C3AED;
+  --ds-accent-secondary: #475569;
   --ds-accent-light: #67e8f9;
   --ds-highlight-bg: rgba(0, 180, 216, 0.1);
   --ds-highlight-border: rgba(0, 180, 216, 0.25);
@@ -415,117 +1481,128 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-live-indicator-bg: rgba(16, 185, 129, 0.1);
   --ds-live-indicator-border: rgba(16, 185, 129, 0.25);
 
-  /* ── Icon colors ─────────────────────────── */
-  --ds-icon-color: #52525B;
-  --ds-icon-color-hover: #71717A;
-  --ds-icon-color-active: #FAFAFA;
+  /* ============================================
+     66. GLOW EFFECTS
+     ============================================ */
 
-  /* ── Glow effects (dark theme) ───────────── */
   --ds-glow-cyan: rgba(0, 180, 216, 0.4);
-  --ds-glow-violet: rgba(124, 58, 237, 0.4);
+  --ds-glow-violet: rgba(71, 85, 105, 0.4);
   --ds-glow-emerald: rgba(16, 185, 129, 0.4);
   --ds-glow-amber: rgba(245, 158, 11, 0.4);
 
-  /* ── Gradient tokens ─────────────────────── */
+  /* ============================================
+     67. GRADIENT TOKENS
+     ============================================ */
+
   --ds-gradient-dark: linear-gradient(135deg, #09090B 0%, #111113 50%, #18181B 100%);
   --ds-gradient-ambient-cyan: radial-gradient(ellipse, rgba(0, 180, 216, 0.04) 0%, transparent 60%);
-  --ds-gradient-ambient-violet: radial-gradient(ellipse, rgba(124, 58, 237, 0.03) 0%, transparent 60%);
+  --ds-gradient-ambient-violet: radial-gradient(ellipse, rgba(71, 85, 105, 0.03) 0%, transparent 60%);
 
-  /* ── Scrollbar tokens ────────────────────── */
+  /* ============================================
+     68. SCROLLBAR TOKENS
+     ============================================ */
+
   --ds-scrollbar-width: 6px;
   --ds-scrollbar-track-bg: transparent;
   --ds-scrollbar-thumb-bg: rgba(255, 255, 255, 0.1);
   --ds-scrollbar-thumb-bg-hover: rgba(255, 255, 255, 0.2);
 
-  /* ── Selection token ─────────────────────── */
+  /* ============================================
+     69. SELECTION TOKEN
+     ============================================ */
+
   --ds-selection-bg: rgba(0, 180, 216, 0.25);
   --ds-selection-color: #FAFAFA;
 
-  /* ── Code block tokens ───────────────────── */
+  /* ============================================
+     70. CODE BLOCK TOKENS
+     ============================================ */
+
   --ds-code-bg: #111113;
   --ds-code-color: #00B4D8;
   --ds-code-border: rgba(255, 255, 255, 0.06);
+}
 
-  /* ── Skeleton tokens ─────────────────────── */
-  --ds-skeleton-bg: linear-gradient(90deg, #18181B 25%, #27272A 50%, #18181B 75%);
+/* ============================================
+   ROTTAY DARK MODE SELECTOR (explicit dark)
+   ============================================ */
+html[data-tenant='rottay'][data-theme='dark'],
+html[data-tenant='rottay'].dark {
+  color-scheme: dark;
 
-  /* ── Divider token ───────────────────────── */
-  --ds-divider-color: rgba(255, 255, 255, 0.06);
+  /* -- Primary - Cyan scale -------------------- */
+  --ds-color-primary-50: #ecfeff;
+  --ds-color-primary-100: #cffafe;
+  --ds-color-primary-200: #a5f3fc;
+  --ds-color-primary-300: #67e8f9;
+  --ds-color-primary-400: #22d3ee;
+  --ds-color-primary-500: #00B4D8;
+  --ds-color-primary-600: #0891b2;
+  --ds-color-primary-700: #0e7490;
+  --ds-color-primary-800: #155e75;
+  --ds-color-primary-900: #164e63;
 
-  /* ── Spin token ──────────────────────────── */
-  --ds-spin-color: #00B4D8;
+  --ds-color-primary: #00B4D8;
+  --ds-color-primary-hover: #0891b2;
+  --ds-color-primary-subtle: rgba(0, 180, 216, 0.1);
+  --ds-color-primary-foreground: #09090B;
+  --ds-color-primary-rgb: 0, 180, 216;
 
-  /* ── Steps tokens ────────────────────────── */
-  --ds-steps-finish-bg: var(--ds-color-success);
-  --ds-steps-finish-border: var(--ds-color-success);
-  --ds-steps-finish-icon-color: #09090B;
-  --ds-steps-process-bg: #00B4D8;
-  --ds-steps-process-border: #00B4D8;
-  --ds-steps-process-icon-color: #09090B;
-  --ds-steps-wait-bg: transparent;
-  --ds-steps-wait-border: rgba(255, 255, 255, 0.15);
-  --ds-steps-wait-icon-color: var(--ds-color-text-muted);
-  --ds-steps-tail-finish-color: var(--ds-color-success);
+  /* -- Secondary - Cool Slate/Blue-Gray -------- */
+  --ds-color-secondary-50: #f8fafc;
+  --ds-color-secondary-100: #f1f5f9;
+  --ds-color-secondary-200: #e2e8f0;
+  --ds-color-secondary-300: #cbd5e1;
+  --ds-color-secondary-400: #94a3b8;
+  --ds-color-secondary-500: #475569;
+  --ds-color-secondary-600: #334155;
+  --ds-color-secondary-700: #1e293b;
+  --ds-color-secondary-800: #0f172a;
+  --ds-color-secondary-900: #020617;
 
-  /* ── Upload tokens ───────────────────────── */
-  --ds-upload-bg: #111113;
-  --ds-upload-border: rgba(255, 255, 255, 0.1);
-  --ds-upload-border-hover: rgba(0, 180, 216, 0.3);
+  --ds-color-secondary: #475569;
+  --ds-color-secondary-hover: #334155;
+  --ds-color-secondary-rgb: 71, 85, 105;
 
-  /* ── Breadcrumb tokens ───────────────────── */
-  --ds-breadcrumb-color: var(--ds-color-text-muted);
-  --ds-breadcrumb-color-hover: var(--ds-color-accent);
-  --ds-breadcrumb-active-color: #FAFAFA;
-  --ds-breadcrumb-separator-color: var(--ds-color-text-disabled);
+  /* -- Backgrounds ----------------------------- */
+  --ds-color-bg-primary: #09090B;
+  --ds-color-bg-secondary: #111113;
+  --ds-color-bg-tertiary: #18181B;
+  --ds-color-bg-subtle: #111113;
+  --ds-color-bg-hover: #1E1E22;
+  --ds-color-bg-canvas: #09090B;
+  --ds-color-bg-elevated: #1E1E22;
+  --ds-color-bg-input: #111113;
+  --ds-color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --ds-color-bg-surface: #18181B;
+  --ds-color-bg: #09090B;
+  --ds-color-background: #09090B;
 
-  /* ── Pagination tokens ───────────────────── */
-  --ds-pagination-item-bg: transparent;
-  --ds-pagination-item-border: transparent;
-  --ds-pagination-item-color: var(--ds-color-text-secondary);
-  --ds-pagination-item-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-pagination-item-border-hover: rgba(255, 255, 255, 0.08);
-  --ds-pagination-item-color-hover: #FAFAFA;
-  --ds-pagination-active-bg: rgba(0, 180, 216, 0.1);
-  --ds-pagination-active-border: rgba(0, 180, 216, 0.25);
-  --ds-pagination-active-color: #00B4D8;
+  /* -- Text ------------------------------------ */
+  --ds-color-text-primary: #FAFAFA;
+  --ds-color-text-secondary: #A1A1AA;
+  --ds-color-text-tertiary: #71717A;
+  --ds-color-text-muted: #52525B;
+  --ds-color-text-disabled: #3F3F46;
+  --ds-color-text-on-primary: #09090B;
+  --ds-color-text: #FAFAFA;
 
-  /* ── Form tokens ─────────────────────────── */
-  --ds-form-label-color: var(--ds-color-text-secondary);
-  --ds-form-label-font-weight: 600;
-  --ds-form-error-color: var(--ds-color-error);
+  /* -- Borders --------------------------------- */
+  --ds-color-border: rgba(255, 255, 255, 0.08);
+  --ds-color-border-primary: rgba(255, 255, 255, 0.08);
+  --ds-color-border-secondary: rgba(255, 255, 255, 0.06);
+  --ds-color-border-subtle: rgba(255, 255, 255, 0.04);
+  --ds-color-border-tertiary: rgba(255, 255, 255, 0.04);
+  --ds-color-border-focus: rgba(0, 180, 216, 0.5);
 
-  /* ── Timeline tokens ─────────────────────── */
-  --ds-timeline-dot-blue: #00B4D8;
-  --ds-timeline-dot-green: var(--ds-color-success);
-  --ds-timeline-tail-color: rgba(255, 255, 255, 0.08);
+  /* -- Surfaces -------------------------------- */
+  --ds-color-surface: #09090B;
+  --ds-color-surface-secondary: #111113;
+  --ds-color-surface-muted: #18181B;
 
-  /* ── Transfer tokens ─────────────────────── */
-  --ds-transfer-bg: #18181B;
-  --ds-transfer-border: rgba(255, 255, 255, 0.08);
-  --ds-transfer-header-bg: #111113;
-  --ds-transfer-header-border: rgba(255, 255, 255, 0.06);
-  --ds-transfer-item-color: #A1A1AA;
-  --ds-transfer-item-bg-hover: rgba(255, 255, 255, 0.05);
-
-  /* ── Statistic tokens ────────────────────── */
-  --ds-statistic-title-color: #71717A;
-  --ds-statistic-value-color: #FAFAFA;
-  --ds-statistic-prefix-color: #71717A;
-
-  /* ── Rate token ──────────────────────────── */
-  --ds-rate-star-color: #F59E0B;
-
-  /* ── Picker (DatePicker) tokens ──────────── */
-  --ds-picker-bg: #111113;
-  --ds-picker-border: rgba(255, 255, 255, 0.12);
-  --ds-picker-border-hover: rgba(255, 255, 255, 0.2);
-  --ds-picker-border-focus: rgba(0, 180, 216, 0.5);
-  --ds-picker-shadow-focus: 0 0 0 2px rgba(0, 180, 216, 0.2);
-  --ds-picker-color: #FAFAFA;
-  --ds-picker-dropdown-bg: #1E1E22;
-  --ds-picker-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  --ds-picker-selected-bg: #00B4D8;
-  --ds-picker-selected-color: #09090B;
-  --ds-picker-today-border: #00B4D8;
-  --ds-picker-hover-bg: rgba(0, 180, 216, 0.1);
+  /* -- Accent ---------------------------------- */
+  --ds-color-accent: #00B4D8;
+  --ds-color-accent-hover: #0891b2;
+  --ds-accent-primary: #00B4D8;
+  --ds-accent-secondary: #475569;
 }
