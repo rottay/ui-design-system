@@ -202,7 +202,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
               backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
               backdropFilter: 'blur(4px)',
               WebkitBackdropFilter: 'blur(4px)',
-              animation: 'rottay-modal-backdrop-enter var(--ds-duration-slow, 0.3s) ease-out',
+              animation: 'rottay-modal-backdrop-enter var(--ds-duration-slow, 0.3s) var(--ds-ease-out, ease-out)',
             }}
           />
         )}
@@ -239,7 +239,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                   onMouseLeave={() => setIsCloseHovered(false)}
                   aria-label={t('modal.close')}
                   style={{
-                    transition: 'background-color var(--ds-duration-normal, 0.2s) ease, transform var(--ds-duration-fast, 0.15s) ease',
+                    transition: 'background-color var(--ds-duration-normal, 0.2s) var(--ds-ease-in-out, ease), transform var(--ds-duration-fast, 0.15s) var(--ds-ease-in-out, ease)',
                     backgroundColor: isCloseHovered
                       ? 'var(--ds-modal-close-hover-bg, rgba(0, 0, 0, 0.08))'
                       : 'transparent',
@@ -288,28 +288,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           )}
         </div>
       </dialog>
-
-      {/* Keyframe animations for entrance */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes rottay-modal-enter {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        @keyframes rottay-modal-backdrop-enter {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `}} />
     </Portal>
   );
 }
