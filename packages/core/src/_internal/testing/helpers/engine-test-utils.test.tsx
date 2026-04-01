@@ -19,7 +19,7 @@ import {
 
 describe('engine-test-utils', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders a node through a specific engine wrapper', () => {

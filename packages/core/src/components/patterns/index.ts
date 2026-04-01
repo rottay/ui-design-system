@@ -197,22 +197,6 @@ export type { WorkbenchHeaderProps, WorkbenchQuickAction, WorkbenchSavedView } f
 export { PatternCockpitHeader } from './cockpit-header';
 export type { CockpitHeaderProps, CockpitBreadcrumb, CockpitStatus } from './cockpit-header';
 
-// OperationalLedger
-export { PatternOperationalLedger } from './operational-ledger';
-export type { OperationalLedgerProps, LedgerEntry, LedgerFilter } from './operational-ledger';
-
-// ApprovalInbox
-export { PatternApprovalInbox } from './approval-inbox';
-export type { ApprovalInboxProps, ApprovalItem, ApprovalGroup } from './approval-inbox';
-
-// ShiftMatrix
-export { PatternShiftMatrix } from './shift-matrix';
-export type { ShiftMatrixProps, ShiftTimeSlot, ShiftAssignment } from './shift-matrix';
-
-// ModerationGallery
-export { PatternModerationGallery } from './moderation-gallery';
-export type { ModerationGalleryProps, ModerationItem, ModerationBulkAction } from './moderation-gallery';
-
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
@@ -275,3 +259,11 @@ export type {
   UseFilterPanelReturn,
   RecipeVariantConfig,
 } from './hooks';
+
+// ---------------------------------------------------------------------------
+// Legacy / Domain-Kit Patterns -- INTERNAL ONLY
+// Classic-only, domain-specific patterns (ApprovalInbox, ModerationGallery,
+// OperationalLedger, ShiftMatrix) are NOT exported from this barrel and have
+// no public subpath export. They are internal-only and will move to
+// components/kits/ in a future restructuring.
+// ---------------------------------------------------------------------------

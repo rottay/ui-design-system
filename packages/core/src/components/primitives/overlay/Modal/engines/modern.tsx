@@ -177,8 +177,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-shadow-2xl))' : 'none',
     backgroundColor: 'var(--ds-modal-bg)',
     color: 'var(--ds-modal-color)',
-    // Entrance animation
-    animation: 'rottay-modal-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+    // Entrance animation -- durations and easing resolved from DS motion tokens
+    animation: 'rottay-modal-enter var(--ds-duration-slow, 0.3s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
     ...style,
   };
 
@@ -202,7 +202,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
               backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
               backdropFilter: 'blur(4px)',
               WebkitBackdropFilter: 'blur(4px)',
-              animation: 'rottay-modal-backdrop-enter 0.3s ease-out',
+              animation: 'rottay-modal-backdrop-enter var(--ds-duration-slow, 0.3s) ease-out',
             }}
           />
         )}
@@ -239,7 +239,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                   onMouseLeave={() => setIsCloseHovered(false)}
                   aria-label={t('modal.close')}
                   style={{
-                    transition: 'background-color 0.2s ease, transform 0.15s ease',
+                    transition: 'background-color var(--ds-duration-normal, 0.2s) ease, transform var(--ds-duration-fast, 0.15s) ease',
                     backgroundColor: isCloseHovered
                       ? 'var(--ds-modal-close-hover-bg, rgba(0, 0, 0, 0.08))'
                       : 'transparent',
