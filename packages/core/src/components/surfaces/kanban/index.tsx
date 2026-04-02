@@ -10,6 +10,7 @@
 import React from 'react';
 import { Card, Stack } from '../../primitives';
 import { PatternKanbanBoard, PatternFilterPanel } from '../../patterns';
+import type { KanbanColumnDef } from '../../patterns';
 import type { KanbanSurfaceConfig, KanbanSurfaceCard } from '../types';
 import { countActiveFilters } from '../helpers';
 import { PageShellSurface } from '../page-shell';
@@ -34,12 +35,12 @@ export function KanbanSurface({
 
   // Strip internal-only fields before passing to the pattern. The pattern's
   // column type expects a leaner shape than what the surface config carries.
-  const boardColumns = config.behavior.columns.map((col) => ({
+  const boardColumns: KanbanColumnDef<KanbanSurfaceCard>[] = config.behavior.columns.map((col) => ({
     id: col.id,
-    title: col.title,
+    title: col.title as string,
     items: col.items,
-    limit: col.limit,
     color: col.color,
+    limit: col.limit,
   }));
 
   // Empty state checks both items AND loading: showing "no items" while data
@@ -80,11 +81,8 @@ export function KanbanSurface({
             </Card.Body>
           </Card>
         ) : (
-          // The `as any` cast bridges the surface column type to the pattern's
-          // generic column contract. The pattern does not know about surface-level
-          // config extras.
           <PatternKanbanBoard
-            columns={boardColumns as any}
+            columns={boardColumns}
             // Falls back to just the card title when no custom renderer is provided,
             // keeping the board functional without presentation configuration.
             renderCard={(card: KanbanSurfaceCard, columnId: string) =>
@@ -94,7 +92,7 @@ export function KanbanSurface({
             }
             renderColumnHeader={
               config.presentation.renderColumnHeader
-                ? (col: any, count: number) => config.presentation.renderColumnHeader!(col, count)
+                ? (col: KanbanColumnDef<KanbanSurfaceCard>, count: number) => config.presentation.renderColumnHeader!(col, count)
                 : undefined
             }
             onItemMove={(itemId: string, from: string, to: string, pos: number) =>

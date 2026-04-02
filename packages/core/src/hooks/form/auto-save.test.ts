@@ -52,18 +52,16 @@ describe('useAutoSave', () => {
       expect(result.current.isDirty).toBe(true);
       expect(onSave).not.toHaveBeenCalled();
 
-      // Advance past debounce
+      // Advance past debounce (async version flushes microtasks so the
+      // awaited onSave promise settles and React state updates flush)
       await act(async () => {
-        vi.advanceTimersByTime(1000);
+        await vi.advanceTimersByTimeAsync(1000);
       });
 
       expect(onSave).toHaveBeenCalledWith({ name: 'updated' });
-
-      await waitFor(() => {
-        expect(result.current.status).toBe('saved');
-        expect(result.current.isDirty).toBe(false);
-        expect(result.current.lastSavedAt).toBeInstanceOf(Date);
-      });
+      expect(result.current.status).toBe('saved');
+      expect(result.current.isDirty).toBe(false);
+      expect(result.current.lastSavedAt).toBeInstanceOf(Date);
     });
 
     it('resets debounce timer on rapid changes', async () => {
@@ -209,13 +207,10 @@ describe('useAutoSave', () => {
       rerender({ data: { v: 2 } });
 
       await act(async () => {
-        vi.advanceTimersByTime(500);
+        await vi.advanceTimersByTimeAsync(500);
       });
 
-      await waitFor(() => {
-        expect(result.current.status).toBe('error');
-      });
-
+      expect(result.current.status).toBe('error');
       expect(onError).toHaveBeenCalledWith(expect.any(Error));
       expect(result.current.lastSavedAt).toBeNull();
     });
@@ -232,12 +227,10 @@ describe('useAutoSave', () => {
       rerender({ data: { v: 2 } });
 
       await act(async () => {
-        vi.advanceTimersByTime(500);
+        await vi.advanceTimersByTimeAsync(500);
       });
 
-      await waitFor(() => {
-        expect(onError).toHaveBeenCalledWith(expect.any(Error));
-      });
+      expect(onError).toHaveBeenCalledWith(expect.any(Error));
     });
   });
 
@@ -258,23 +251,21 @@ describe('useAutoSave', () => {
       // Trigger change
       rerender({ data: { v: 2 } });
 
-      // Advance past debounce to trigger save
-      act(() => {
-        vi.advanceTimersByTime(500);
+      // Advance past debounce to trigger save. The async version flushes
+      // microtasks so executeSave() runs up to its first await (onSave),
+      // which sets status to 'saving'.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(500);
       });
 
-      await waitFor(() => {
-        expect(result.current.status).toBe('saving');
-      });
+      expect(result.current.status).toBe('saving');
 
       // Resolve the save
       await act(async () => {
         resolveSave!();
       });
 
-      await waitFor(() => {
-        expect(result.current.status).toBe('saved');
-      });
+      expect(result.current.status).toBe('saved');
     });
   });
 });

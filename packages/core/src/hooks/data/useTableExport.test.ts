@@ -418,8 +418,10 @@ describe('useTableExport', () => {
   describe('Clipboard Export', () => {
     it('copies tab-separated data to clipboard', async () => {
       const writeText = vi.fn().mockResolvedValue(undefined);
-      Object.assign(navigator, {
-        clipboard: { writeText },
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText },
+        writable: true,
+        configurable: true,
       });
 
       const { result } = renderHook(() =>
@@ -444,8 +446,10 @@ describe('useTableExport', () => {
 
     it('escapes tabs in values', async () => {
       const writeText = vi.fn().mockResolvedValue(undefined);
-      Object.assign(navigator, {
-        clipboard: { writeText },
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText },
+        writable: true,
+        configurable: true,
       });
 
       const data = [{ name: 'Has\tTab', email: 'test@test.com' }];
@@ -470,8 +474,10 @@ describe('useTableExport', () => {
 
     it('escapes newlines in values', async () => {
       const writeText = vi.fn().mockResolvedValue(undefined);
-      Object.assign(navigator, {
-        clipboard: { writeText },
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText },
+        writable: true,
+        configurable: true,
       });
 
       const data = [{ name: 'Line1\nLine2', email: 'test@test.com' }];
@@ -494,8 +500,10 @@ describe('useTableExport', () => {
 
     it('applies custom renderers in clipboard output', async () => {
       const writeText = vi.fn().mockResolvedValue(undefined);
-      Object.assign(navigator, {
-        clipboard: { writeText },
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText },
+        writable: true,
+        configurable: true,
       });
 
       const { result } = renderHook(() =>

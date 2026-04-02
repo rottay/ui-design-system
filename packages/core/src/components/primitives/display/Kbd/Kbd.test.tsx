@@ -7,7 +7,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Kbd } from './Kbd';
 
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockKbd = ({ children, size, ...props }: any) => (
       <kbd data-testid="kbd" data-size={size} {...props}>

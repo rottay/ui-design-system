@@ -213,11 +213,11 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
     description: 'Neutral admin profile tuned for breadth, tooling, and operational dashboards.',
     personality: {
       animation: {
-        intensity: 0.4,
-        staggerDelay: 24,
-        staggerMax: 160,
+        intensity: 0.25,
+        staggerDelay: 18,
+        staggerMax: 120,
         entrance: 'fade',
-        entranceDuration: 180,
+        entranceDuration: 160,
         hoverLift: 1,
         hoverScale: 1.0,
         useSpring: false,
@@ -231,7 +231,7 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
         animateOnMount: true,
         mountDuration: 720,
         lineStyle: 'sharp',
-        showDots: true,
+        showDots: false,
         useGradientFill: false,
         tooltipStyle: 'detailed',
       },
@@ -242,7 +242,7 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
       },
       accent: {
         barPosition: 'top',
-        barThickness: 3,
+        barThickness: 2,
         barStyle: 'solid',
         iconContainerShape: 'rounded',
         badgeShape: 'rounded',

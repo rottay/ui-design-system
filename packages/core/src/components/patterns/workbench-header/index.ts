@@ -20,7 +20,7 @@ export const PatternWorkbenchHeader = createEngineComponent<WorkbenchHeaderProps
   'PatternWorkbenchHeader',
   {
     classic: () => import('./engines/classic'),
-    modern: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
     rustic: () => import('./engines/classic'),
   }
 );

@@ -185,12 +185,13 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
    *
    * Derived from: platform.admin product profile + rottay tenant personality
    * Personality: neutral, fade entrance, balanced animations, comfortable density
+   * Engine: modern is the flagship target; classic remains a supported engine path
    */
   platform: {
     key: 'platform',
     label: 'Platform',
     description: 'Admin vertical with neutral aesthetics, comfortable density, and operational dashboard defaults.',
-    engine: 'classic',
+    engine: 'modern',
     density: 'comfortable',
     personality: {
       animation: {

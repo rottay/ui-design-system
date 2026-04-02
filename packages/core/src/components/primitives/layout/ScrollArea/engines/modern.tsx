@@ -75,22 +75,22 @@ export default function ModernScrollArea(props: ScrollAreaProps): React.ReactEle
       height: ${barWidth}px;
     }
     .${scrollId}::-webkit-scrollbar-track {
-      background: oklch(var(--b2, 0.93 0.01 240));
+      background: var(--color-base-200, oklch(0.93 0.01 240));
       border-radius: ${barWidth / 2}px;
     }
     .${scrollId}::-webkit-scrollbar-thumb {
-      background: oklch(var(--bc, 0.27 0.01 240) / 0.3);
+      background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.3);
       border-radius: ${barWidth / 2}px;
     }
     .${scrollId}::-webkit-scrollbar-thumb:hover {
-      background: oklch(var(--bc, 0.27 0.01 240) / 0.5);
+      background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.5);
     }
     ${hideScrollbar ? `
     .${scrollId}::-webkit-scrollbar-thumb {
       background: transparent;
     }
     .${scrollId}:hover::-webkit-scrollbar-thumb {
-      background: oklch(var(--bc, 0.27 0.01 240) / 0.3);
+      background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.3);
     }
     ` : ''}
   `;

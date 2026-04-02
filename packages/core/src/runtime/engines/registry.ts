@@ -118,7 +118,9 @@ export const isValidEngine = (name: string): name is EngineName => {
 
 /**
  * Returns the default engine used when no engine is specified.
- * Currently defaults to 'classic' (Ant Design).
+ * Currently defaults to 'classic' (Ant Design) as the global fallback.
+ * Product verticals may still target a different default engine (for example,
+ * `platform` targeting `modern`) through their own runtime preset.
  *
  * @returns The default engine name ('classic')
  */

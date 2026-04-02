@@ -15,7 +15,13 @@ export type {
   ModerationBulkAction,
 } from './ModerationGallery.types';
 
-/** Engine-resolved ModerationGallery pattern component. */
+/**
+ * @engine classic-only
+ * @category domain-kit (review/ops)
+ * This pattern is domain-specific and ships only with the classic engine.
+ * Modern engine parity is not planned. Consider moving to components/kits/
+ * when the kit infrastructure is established.
+ */
 export const PatternModerationGallery = createEngineComponent<ModerationGalleryProps>(
   'PatternModerationGallery',
   {

@@ -243,6 +243,35 @@ export interface ListSurfaceVisualConfig {
   maxHeight?: number | string;
   /** Filter layout used on mobile; defaults to the more legible stacked layout. */
   mobileFiltersLayout?: 'inline' | 'stacked' | 'sidebar';
+
+  // ---------------------------------------------------------------------------
+  // Column capabilities (forwarded to PatternDataTable)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * @transitional These table interaction props will move to the shared
+   * CollectionWorkspace contract in Tranche 5. Current placement is preserved
+   * for backward compatibility.
+   */
+
+  /** Allow users to resize columns by dragging column borders. */
+  columnResizable?: boolean;
+  /** Allow users to reorder columns by drag and drop. */
+  columnReorderable?: boolean;
+  /** Enable column visibility management. When true, `columnVisibility` controls which columns render. */
+  columnVisibilityEnabled?: boolean;
+  /** List of visible column keys. Only effective when `columnVisibilityEnabled` is true. */
+  columnVisibility?: string[];
+  /** Current column widths (persisted by the consumer). Keyed by column key. */
+  columnWidths?: Record<string, number>;
+  /** Current column order (persisted by the consumer). Array of column keys. */
+  columnOrder?: string[];
+  /** Callback when column order changes via drag and drop. */
+  onColumnReorder?: (columnOrder: string[]) => void;
+  /** Callback when a column width changes via drag resize. */
+  onColumnResize?: (columnKey: string, width: number) => void;
+  /** Callback when visible columns change (e.g., from a column settings panel). */
+  onColumnVisibilityChange?: (visibleKeys: string[]) => void;
 }
 
 /** Presentation slots for list chrome, empty states, and custom renderers. */
@@ -288,6 +317,28 @@ export interface ListSurfaceBehaviorConfig<TView> {
   rowActions?: SurfaceAction<TView>[];
   /** Called when a row is clicked (outside of action buttons). */
   onRowClick?: (item: TView, index: number) => void;
+
+  // ---------------------------------------------------------------------------
+  // Selection & bulk actions
+  // ---------------------------------------------------------------------------
+
+  /** Enable row selection checkboxes. */
+  selectable?: boolean;
+  /** Currently selected row keys (controlled). */
+  selectedKeys?: string[];
+  /** Called when the set of selected rows changes. */
+  onSelectionChange?: (keys: string[], rows: TView[]) => void;
+  /** Bulk actions shown when one or more rows are selected. Uses the pattern's BulkAction contract. */
+  bulkActions?: import('../patterns/types').BulkAction<TView>[];
+
+  // ---------------------------------------------------------------------------
+  // Row interaction
+  // ---------------------------------------------------------------------------
+
+  /** Called when a row is double-clicked. */
+  onRowDoubleClick?: (row: TView, index: number) => void;
+  /** Render an expandable detail section below a row when toggled open. */
+  expandedRow?: (row: TView) => React.ReactNode;
 }
 
 /**

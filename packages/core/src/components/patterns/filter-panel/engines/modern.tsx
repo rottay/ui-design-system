@@ -125,6 +125,18 @@ function renderFilterControl(
         </div>
       );
     }
+    case 'number':
+      return (
+        <input
+          type="number"
+          className="input input-bordered input-sm w-full"
+          placeholder={filter.placeholder}
+          value={(value as number | '') ?? ''}
+          onChange={(e) =>
+            onChange(filter.key, e.target.value === '' ? undefined : Number(e.target.value))
+          }
+        />
+      );
     // Number range: coerce empty strings to undefined so the consumer's
     // query builder can distinguish "no bound" from zero.
     case 'number-range': {

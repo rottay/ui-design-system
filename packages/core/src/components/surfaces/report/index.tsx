@@ -7,8 +7,10 @@
  * owns data querying and report generation; this surface owns the page structure.
  */
 
-import React, { useCallback, useState } from 'react';
-import { Box, Button, Card, Flex, Grid, Input, Select, Stack, Text } from '../../primitives';
+import React from 'react';
+import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../primitives';
+import { PatternDataTable, PatternFilterPanel } from '../../patterns';
+import type { ColumnDef, FilterDef } from '../../patterns';
 import type { ReportData, ReportSurfaceConfig, ReportTemplate } from '../types';
 import { PageShellSurface } from '../page-shell';
 import { useSurfaceResponsiveLayout } from '../responsive';
@@ -82,6 +84,16 @@ function TemplateSelector({
   );
 }
 
+/**
+ * Maps ReportFilter types to FilterDef types. ReportFilter uses 'number'
+ * while FilterDef expects 'text' (rendered as a text input -- the original
+ * manual implementation used <Input type="number"> which is equivalent).
+ */
+function mapReportFilterType(type: string): FilterDef['type'] {
+  if (type === 'number') return 'text';
+  return type as FilterDef['type'];
+}
+
 function FilterPanel({
   config,
 }: {
@@ -91,55 +103,30 @@ function FilterPanel({
 
   if (filters.length === 0) return <></>;
 
+  const filterDefs: FilterDef[] = filters.map((f) => ({
+    key: f.key,
+    label: f.label,
+    type: mapReportFilterType(f.type),
+    options: f.options,
+    placeholder: f.placeholder,
+    defaultValue: f.defaultValue,
+  }));
+
   return (
     <Card variant="outlined">
       <Card.Body>
-        <Stack spacing="md">
-          <Text style={{ fontSize: 14, fontWeight: 600 }}>Filters</Text>
-          {filters.map((filter) => (
-            <Stack key={filter.key} spacing="xs">
-              <Text style={{ fontSize: 13, fontWeight: 500, color: 'var(--ds-color-text-muted)' }}>
-                {filter.label}
-              </Text>
-              {filter.type === 'select' || filter.type === 'multi-select' ? (
-                <Select
-                  value={filterValues?.[filter.key] as string}
-                  onChange={(value) =>
-                    config.behavior.onFilterChange?.({
-                      ...filterValues,
-                      [filter.key]: value,
-                    })
-                  }
-                  options={(filter.options ?? []).map((opt) => ({
-                    label: opt.label,
-                    value: opt.value,
-                  }))}
-                  placeholder={filter.placeholder}
-                />
-              ) : (
-                <Input
-                  value={String(filterValues?.[filter.key] ?? '')}
-                  onChange={(e: any) =>
-                    config.behavior.onFilterChange?.({
-                      ...filterValues,
-                      [filter.key]: typeof e === 'string' ? e : e?.target?.value ?? '',
-                    })
-                  }
-                  placeholder={filter.placeholder}
-                  type={filter.type === 'number' ? 'number' : 'text'}
-                />
-              )}
-            </Stack>
-          ))}
-        </Stack>
+        <PatternFilterPanel
+          filters={filterDefs}
+          values={filterValues ?? {}}
+          onChange={(values) => config.behavior.onFilterChange?.(values)}
+          title="Filters"
+          layout="stacked"
+        />
       </Card.Body>
     </Card>
   );
 }
 
-// Report results uses a manual table (display:table CSS) instead of the Table
-// primitive because report column shapes are dynamic and determined at runtime
-// by the report template, not by a static config.
 function ReportResults({
   config,
 }: {
@@ -174,6 +161,32 @@ function ReportResults({
     );
   }
 
+  // Map dynamic report columns to PatternDataTable ColumnDef format.
+  // Report columns are determined at runtime by the report template,
+  // so we build the column definitions from the report data itself.
+  const tableColumns: ColumnDef<Record<string, unknown>>[] = reportData.columns.map((col) => ({
+    key: col.key,
+    header: col.label,
+    accessorKey: col.key,
+    render: (_: unknown, row: Record<string, unknown>) => {
+      const val = row[col.key];
+      return String(val ?? '-');
+    },
+  }));
+
+  const summaryFooter = reportData.summary ? (
+    <Box style={{ marginTop: 16, padding: '12px 0', borderTop: '1px solid var(--ds-color-border)' }}>
+      <Flex gap={16} wrap="wrap">
+        {Object.entries(reportData.summary).map(([key, value]) => (
+          <Stack key={key} spacing="xs">
+            <Text style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{key}</Text>
+            <Text style={{ fontWeight: 600 }}>{String(value)}</Text>
+          </Stack>
+        ))}
+      </Flex>
+    </Box>
+  ) : undefined;
+
   return (
     <Stack spacing="lg">
       {config.presentation.renderChart && (
@@ -184,63 +197,14 @@ function ReportResults({
 
       <Card variant="outlined">
         <Card.Body>
-          <Box style={{ overflowX: 'auto' }}>
-            <Box style={{ display: 'table', width: '100%', borderCollapse: 'collapse' }}>
-              <Box style={{ display: 'table-header-group' }}>
-                <Box style={{ display: 'table-row' }}>
-                  {reportData.columns.map((col) => (
-                    <Box
-                      key={col.key}
-                      style={{
-                        display: 'table-cell',
-                        padding: '8px 12px',
-                        fontWeight: 600,
-                        fontSize: 13,
-                        borderBottom: '2px solid var(--ds-color-border)',
-                        color: 'var(--ds-color-text-muted)',
-                      }}
-                    >
-                      <Text style={{ fontWeight: 600, fontSize: 13 }}>{col.label}</Text>
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
-              <Box style={{ display: 'table-row-group' }}>
-                {reportData.rows.map((row, rowIndex) => (
-                  <Box key={rowIndex} style={{ display: 'table-row' }}>
-                    {reportData.columns.map((col) => (
-                      <Box
-                        key={col.key}
-                        style={{
-                          display: 'table-cell',
-                          padding: '8px 12px',
-                          fontSize: 13,
-                          borderBottom: '1px solid var(--ds-color-border)',
-                        }}
-                      >
-                        <Text style={{ fontSize: 13 }}>
-                          {String(row[col.key] ?? '-')}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          </Box>
-
-          {reportData.summary && (
-            <Box style={{ marginTop: 16, padding: '12px 0', borderTop: '1px solid var(--ds-color-border)' }}>
-              <Flex gap={16} wrap="wrap">
-                {Object.entries(reportData.summary).map(([key, value]) => (
-                  <Stack key={key} spacing="xs">
-                    <Text style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{key}</Text>
-                    <Text style={{ fontWeight: 600 }}>{String(value)}</Text>
-                  </Stack>
-                ))}
-              </Flex>
-            </Box>
-          )}
+          <PatternDataTable<Record<string, unknown>>
+            data={reportData.rows}
+            columns={tableColumns}
+            compact
+            hoverable
+            pagination={false}
+            footer={summaryFooter}
+          />
         </Card.Body>
       </Card>
     </Stack>

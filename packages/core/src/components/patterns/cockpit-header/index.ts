@@ -20,7 +20,7 @@ export const PatternCockpitHeader = createEngineComponent<CockpitHeaderProps>(
   'PatternCockpitHeader',
   {
     classic: () => import('./engines/classic'),
-    modern: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
     rustic: () => import('./engines/classic'),
   }
 );

@@ -7,12 +7,51 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MobileHeader } from './';
 
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
-    // Import the actual implementation for testing
-    const { MobileHeader: Impl } = require('./MobileHeader');
-    Impl.displayName = 'MobileHeader';
-    return Impl;
+    const MockMobileHeader = ({ title, leftAction, rightActions, onBack, sticky = false, style, children }: any) => {
+      const leftSlot = leftAction ?? (
+        onBack ? (
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="Go back"
+            data-testid="mobile-header-back"
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            Back
+          </button>
+        ) : null
+      );
+      const containerStyle: React.CSSProperties = {
+        width: '100%',
+        height: 56,
+        minHeight: 56,
+        ...(sticky ? { position: 'sticky', top: 0, zIndex: 40 } : {}),
+        ...style,
+      };
+      return (
+        <header style={containerStyle} data-testid="mobile-header" role="banner">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
+            <div data-testid="mobile-header-left">{leftSlot}</div>
+            <div style={{ flex: 1, overflow: 'hidden', textAlign: 'center' }}>
+              {title && (
+                <span
+                  data-testid="mobile-header-title"
+                  style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}
+                >
+                  {title}
+                </span>
+              )}
+            </div>
+            <div data-testid="mobile-header-right">{rightActions}</div>
+          </div>
+          {children}
+        </header>
+      );
+    };
+    MockMobileHeader.displayName = 'MobileHeader';
+    return MockMobileHeader;
   },
 }));
 

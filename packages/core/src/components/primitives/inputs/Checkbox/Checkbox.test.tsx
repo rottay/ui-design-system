@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Checkbox } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockCheckbox = ({
       children,

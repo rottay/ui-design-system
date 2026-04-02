@@ -473,7 +473,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   // Dropdown animation styles
   const dropdownAnimationStyle: React.CSSProperties = {
-    animation: 'rottay-select-slide-in 0.15s ease-out',
+    animation: 'rottay-select-slide-in var(--ds-duration-fast, 0.15s) var(--ds-ease-out, ease-out)',
   };
 
   // For simple cases (no search, single value, no groups, no virtual), fall
@@ -603,11 +603,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             isSelected ? 'active' : '',
             option.disabled ? 'disabled opacity-50' : '',
             isFocused ? 'focus' : '',
-            'flex items-center gap-2 transition-colors duration-150',
+            'flex items-center gap-2',
           ].filter(Boolean).join(' ')}
-          style={isFocused && !isSelected ? {
-            backgroundColor: 'var(--ds-select-option-hover-bg, oklch(var(--b2)))',
-          } : undefined}
+          style={{
+            transition: 'background-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, ease-out)',
+            ...(isFocused && !isSelected ? {
+              backgroundColor: 'var(--ds-select-option-hover-bg, var(--color-base-200))',
+            } : undefined),
+          }}
           onClick={(e) => {
             e.preventDefault();
             if (!option.disabled) {
@@ -651,12 +654,18 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        style={variant === 'flushed' ? {
-          borderRadius: 0,
-          borderTop: 'none',
-          borderLeft: 'none',
-          borderRight: 'none',
-        } : undefined}
+        onFocus={onFocus as any}
+        onBlur={onBlur as any}
+        style={{
+          ...(variant === 'flushed' ? {
+            borderRadius: 0,
+            borderTop: 'none',
+            borderLeft: 'none',
+            borderRight: 'none',
+          } : undefined),
+          boxShadow: isOpen ? '0 0 0 3px var(--ds-color-primary-200, rgba(59, 130, 246, 0.2))' : undefined,
+          transition: 'box-shadow var(--ds-duration-fast, 0.15s) var(--ds-ease-out, ease-out)',
+        }}
       >
         <div className="flex-1 flex items-center gap-2 overflow-hidden">
           {isSearchable && isOpen ? (
@@ -717,7 +726,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               overflowY: 'auto',
               position: 'absolute',
             } : {
-              maxHeight: '15rem',
+              maxHeight: 'var(--ds-select-max-height, 15rem)',
               overflowY: 'auto',
             }),
             ...dropdownAnimationStyle,
@@ -758,11 +767,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             isSelected ? 'active' : '',
                             option.disabled ? 'disabled opacity-50' : '',
                             isFocused ? 'focus' : '',
-                            'flex items-center gap-2 transition-colors duration-150',
+                            'flex items-center gap-2',
                           ].filter(Boolean).join(' ')}
-                          style={isFocused && !isSelected ? {
-                            backgroundColor: 'var(--ds-select-option-hover-bg, oklch(var(--b2)))',
-                          } : undefined}
+                          style={{
+                            transition: 'background-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, ease-out)',
+                            ...(isFocused && !isSelected ? {
+                              backgroundColor: 'var(--ds-select-option-hover-bg, var(--color-base-200))',
+                            } : undefined),
+                          }}
                           onClick={(e) => {
                             e.preventDefault();
                             if (!option.disabled) {

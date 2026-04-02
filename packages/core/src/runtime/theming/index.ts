@@ -17,3 +17,5 @@ export type { ThemeProviderProps } from './ThemeProvider';
 export type { ThemeConfig, ThemeContextValue } from './ThemeProvider';
 
 export { useTheme, useThemeContext as useThemeContextAlias } from './useTheme';
+
+export { hexToOklch, buildDaisyUiColorOverrides } from './hex-to-oklch';

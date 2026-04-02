@@ -79,6 +79,38 @@ import { DRAWER_DEFAULTS } from '../Drawer.types';
 // ============================================================================
 
 /**
+ * Slide-in animation name per placement direction.
+ * Keyframes are injected via a `<style>` tag in the render output.
+ *
+ * @internal
+ */
+const SLIDE_ANIMATION: Record<string, string> = {
+  left: 'rottay-drawer-slide-left',
+  right: 'rottay-drawer-slide-right',
+  top: 'rottay-drawer-slide-top',
+  bottom: 'rottay-drawer-slide-bottom',
+};
+
+const SLIDE_KEYFRAMES = `
+@keyframes rottay-drawer-slide-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes rottay-drawer-slide-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes rottay-drawer-slide-top {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes rottay-drawer-slide-bottom {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+`;
+
+/**
  * Size preset mappings for Modern engine.
  * Uses string pixel values for CSS compatibility.
  *
@@ -259,11 +291,13 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
    */
   const getDrawerStyle = (): React.CSSProperties => {
     // Base styles shared across all placements
+    const animationName = SLIDE_ANIMATION[placement as string] || SLIDE_ANIMATION.right;
     const baseStyle: React.CSSProperties = {
       position: 'fixed',
       backgroundColor: 'var(--ds-drawer-bg, var(--ds-color-bg-elevated, #ffffff))',
-      boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
-      transition: 'transform 0.3s ease-in-out',
+      boxShadow: 'var(--ds-shadow-drawer, var(--ds-shadow-2xl))',
+      transition: 'transform var(--ds-duration-normal, 0.25s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+      animation: `${animationName} var(--ds-duration-normal, 0.25s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both`,
       overflowY: 'auto',
       ...style,
     };
@@ -313,11 +347,19 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
 
   return (
     <>
+      {/* Slide-in keyframes (scoped by unique animation names) */}
+      <style dangerouslySetInnerHTML={{ __html: SLIDE_KEYFRAMES }} />
+
       {/* Overlay/Mask */}
       {mask && (
         <div
           className="drawer-overlay fixed inset-0 bg-black bg-opacity-50"
-          style={{ zIndex: DRAWER_DEFAULTS.zIndex }}
+          style={{
+            zIndex: DRAWER_DEFAULTS.zIndex,
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            transition: 'opacity var(--ds-duration-normal, 0.25s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+          }}
           onClick={closeOnOverlayClick ? handleClose : undefined}
         />
       )}

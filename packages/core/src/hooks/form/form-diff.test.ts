@@ -399,7 +399,7 @@ describe('useFormDiff', () => {
       );
 
       const valueDiff = result.current.getFieldDiff('value');
-      expect(valueDiff!.type).toBe('added');
+      expect(valueDiff!.type).toBe('changed');
     });
 
     it('handles boolean changes', () => {

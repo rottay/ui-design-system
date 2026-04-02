@@ -7,7 +7,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BackTop } from './';
 
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockBackTop = ({ children, visibilityHeight, onClick, className, style, ...props }: any) => {
       return (

@@ -69,9 +69,12 @@ describe('RusticButton responsive size', () => {
       );
       const button = container.querySelector('.rottay-button--rustic');
       const inlineStyle = button?.getAttribute('style') || '';
-      // Inline style should NOT contain height/padding/font-size when responsive
-      // (those are managed by the injected <style> tag)
-      expect(inlineStyle).not.toContain('height:');
+      // Inline style should NOT contain bare height/padding/font-size when
+      // responsive (those are managed by the injected <style> tag).
+      // CSS custom properties like --ds-button-height are allowed.
+      expect(inlineStyle).not.toMatch(/(?<!-)height:/);
+      expect(inlineStyle).not.toMatch(/(?<!-)padding:/);
+      expect(inlineStyle).not.toMatch(/(?<!-)font-size:/);
     });
   });
 });

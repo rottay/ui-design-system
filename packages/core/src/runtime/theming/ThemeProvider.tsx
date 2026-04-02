@@ -78,6 +78,52 @@ import React, {
 import type { ThemeContextValue, ThemeConfig, TenantBranding, TenantTokenOverrides } from '../../contracts';
 import { getDefaultTenant } from '../tenancy/registry';
 import { errorInDev, warnInDev, warnOnceInDev } from '../../_internal/utils/runtime-logger';
+import { buildDaisyUiColorOverrides } from './hex-to-oklch';
+
+// ─────────────────────────────────────────────────────────────────
+// SHALLOW FINGERPRINT (avoids JSON.stringify on every render)
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Builds a lightweight fingerprint string from the scalar fields of a
+ * branding or tokenOverrides object. This replaces `JSON.stringify()` as
+ * the change-detection key for the branding effect.
+ *
+ * WHY not JSON.stringify: `JSON.stringify` walks and serialises the entire
+ * object on every render, allocating a new string each time. For branding
+ * objects (which are flat maps of ~15 string fields) a simple concatenation
+ * of values is cheaper and produces the same change-detection guarantee
+ * because all values are primitives.
+ *
+ * For nested objects (tokenOverrides.glass, .gradients, .overlays) we
+ * concatenate only the leaf values that the effect actually reads.
+ */
+function fingerprintBranding(b: TenantBranding | undefined): string {
+  if (!b) return '';
+  // Concatenate every field the effect reads. Order is fixed so two
+  // identical objects always produce the same key.
+  return [
+    b.primaryColor, b.secondaryColor, b.accentColor,
+    b.successColor, b.warningColor, b.errorColor, b.infoColor,
+    b.darkPrimaryColor, b.darkSecondaryColor, b.darkAccentColor, b.darkBackgroundColor,
+    b.fontFamilyBase, b.fontFamilyHeading, b.fontFamilyMono, b.fontFamilyDisplay,
+  ].join('|');
+}
+
+function fingerprintTokenOverrides(t: TenantTokenOverrides | undefined): string {
+  if (!t) return '';
+  const parts: string[] = [];
+  if (t.glass) {
+    parts.push(t.glass.blur ?? '', t.glass.background ?? '', t.glass.border ?? '');
+  }
+  if (t.gradients) {
+    parts.push(t.gradients.primary ?? '', t.gradients.surface ?? '', t.gradients.mesh ?? '');
+  }
+  if (t.overlays) {
+    parts.push(t.overlays.light ?? '', t.overlays.medium ?? '', t.overlays.heavy ?? '');
+  }
+  return parts.join('|');
+}
 
 // ─────────────────────────────────────────────────────────────────
 // COLOR HELPERS
@@ -382,63 +428,69 @@ const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 /** Color families that support runtime branding scale generation. */
 type BrandColorFamily = 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
 
-function applyRuntimeBrandColorScale(
+/**
+ * Collects all CSS variable updates for a brand color scale into a record.
+ * The caller is responsible for writing them to the DOM in a single pass.
+ *
+ * WHY collect-then-write: grouping updates into a single data structure
+ * makes the logic easier to test, easier to extend, and positions us for
+ * future batch-write optimizations (e.g. cssText replacement) without
+ * changing the call sites.
+ */
+function collectBrandColorScaleVars(
   variablePrefix: BrandColorFamily,
   colorValue: string
-): void {
+): Record<string, string> {
   const runtimeScale = buildRuntimeScale(colorValue);
   const rgbColor = hexToRgb(colorValue);
-  const style = document.documentElement.style;
+  const vars: Record<string, string> = {};
 
-  style.setProperty(`--ds-color-${variablePrefix}`, runtimeScale[500]);
+  vars[`--ds-color-${variablePrefix}`] = runtimeScale[500];
 
   if (rgbColor) {
-    style.setProperty(
-      `--ds-color-${variablePrefix}-rgb`,
-      `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`
-    );
-    style.setProperty(
-      `--ds-color-alpha-${variablePrefix}-10`,
-      `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.10)`
-    );
-    style.setProperty(
-      `--ds-color-alpha-${variablePrefix}-20`,
-      `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.20)`
-    );
+    vars[`--ds-color-${variablePrefix}-rgb`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+    vars[`--ds-color-alpha-${variablePrefix}-10`] = `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.10)`;
+    vars[`--ds-color-alpha-${variablePrefix}-20`] = `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.20)`;
   }
 
-  COLOR_STEPS.forEach((step) => {
-    const colorAtStep = runtimeScale[step];
-    style.setProperty(`--ds-color-${variablePrefix}-${step}`, colorAtStep);
-  });
+  for (const step of COLOR_STEPS) {
+    vars[`--ds-color-${variablePrefix}-${step}`] = runtimeScale[step];
+  }
 
   // Primary-specific semantic aliases
   if (variablePrefix === 'primary') {
-    style.setProperty('--ds-color-primary-hover', runtimeScale[600]);
-    style.setProperty('--ds-color-primary-subtle', runtimeScale[100]);
-    style.setProperty(
-      '--ds-color-primary-foreground',
-      getReadableForegroundColor(runtimeScale[500])
-    );
-    style.setProperty('--ds-color-border-focus', runtimeScale[500]);
-    style.setProperty('--ds-color-link', runtimeScale[500]);
-    style.setProperty('--ds-color-link-hover', runtimeScale[600]);
+    vars['--ds-color-primary-hover'] = runtimeScale[600];
+    vars['--ds-color-primary-subtle'] = runtimeScale[100];
+    vars['--ds-color-primary-foreground'] = getReadableForegroundColor(runtimeScale[500]);
+    vars['--ds-color-border-focus'] = runtimeScale[500];
+    vars['--ds-color-link'] = runtimeScale[500];
+    vars['--ds-color-link-hover'] = runtimeScale[600];
   }
 
   // Semantic color families (success, warning, error, info) get extra
   // -bg and -border tokens that feedback components consume.
   if (variablePrefix === 'success' || variablePrefix === 'warning' || variablePrefix === 'error' || variablePrefix === 'info') {
     if (rgbColor) {
-      style.setProperty(
-        `--ds-color-${variablePrefix}-bg`,
-        `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.1)`
-      );
-      style.setProperty(
-        `--ds-color-${variablePrefix}-border`,
-        `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.25)`
-      );
+      vars[`--ds-color-${variablePrefix}-bg`] = `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.1)`;
+      vars[`--ds-color-${variablePrefix}-border`] = `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.25)`;
     }
   }
+
+  return vars;
+}
+
+/**
+ * Writes a collected set of CSS custom property updates to `:root` in a
+ * single pass. Returns the list of variable names that were written so the
+ * caller can track them for cleanup.
+ */
+function applyVarsBatch(vars: Record<string, string>): string[] {
+  const style = document.documentElement.style;
+  const names = Object.keys(vars);
+  for (const name of names) {
+    style.setProperty(name, vars[name]);
+  }
+  return names;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -810,14 +862,14 @@ export function ThemeProvider({
   // variables. WHY a separate effect: branding can change independently of
   // tenant/theme (e.g., a white-label admin adjusting colors in real time).
   // Running this in its own effect avoids re-triggering the tenant CSS load cycle.
-  const brandingKey = JSON.stringify(branding);
-  const tokenOverridesKey = JSON.stringify(tokenOverrides);
+  //
+  // Change-detection uses lightweight fingerprint strings (concatenated scalar
+  // values) instead of JSON.stringify. The fingerprints are computed on every
+  // render but only produce a short string from known fields, avoiding the
+  // full-object walk + allocation that JSON.stringify performs.
+  const brandingKey = fingerprintBranding(branding);
+  const tokenOverridesKey = fingerprintTokenOverrides(tokenOverrides);
   const lastBrandingRef = useRef<string>('');
-  const tpRenderRef = useRef(0);
-  tpRenderRef.current++;
-  if (tpRenderRef.current <= 5 || tpRenderRef.current % 50 === 0) {
-    console.log(`[TP] render #${tpRenderRef.current}`, { tenant, brandingChanged: lastBrandingRef.current !== brandingKey + tokenOverridesKey });
-  }
 
   useEffect(() => {
     // Skip if branding hasn't actually changed (prevents Fast Refresh loops)
@@ -844,18 +896,13 @@ export function ThemeProvider({
     // Runtime branding has to target the variable families the live DS
     // actually consumes. We separate semantic secondary from accent-specific
     // tokens so tenant config produces predictable output.
+    //
+    // collectBrandColorScaleVars builds the full variable map in memory,
+    // then applyVarsBatch writes them to the DOM in a single pass.
     if (branding?.primaryColor) {
       try {
-        applyRuntimeBrandColorScale('primary', branding.primaryColor);
-        // Track the vars applyRuntimeBrandColorScale sets
-        appliedVars.push(
-          '--ds-color-primary', '--ds-color-primary-rgb',
-          '--ds-color-alpha-primary-10', '--ds-color-alpha-primary-20',
-          '--ds-color-primary-hover', '--ds-color-primary-subtle',
-          '--ds-color-primary-foreground', '--ds-color-border-focus',
-          '--ds-color-link', '--ds-color-link-hover',
-          ...COLOR_STEPS.map((s) => `--ds-color-primary-${s}`)
-        );
+        const vars = collectBrandColorScaleVars('primary', branding.primaryColor);
+        appliedVars.push(...applyVarsBatch(vars));
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
           console.warn(`[DS] Invalid branding color "${branding.primaryColor}":`, error);
@@ -865,12 +912,8 @@ export function ThemeProvider({
 
     if (branding?.secondaryColor) {
       try {
-        applyRuntimeBrandColorScale('secondary', branding.secondaryColor);
-        appliedVars.push(
-          '--ds-color-secondary', '--ds-color-secondary-rgb',
-          '--ds-color-alpha-secondary-10', '--ds-color-alpha-secondary-20',
-          ...COLOR_STEPS.map((s) => `--ds-color-secondary-${s}`)
-        );
+        const vars = collectBrandColorScaleVars('secondary', branding.secondaryColor);
+        appliedVars.push(...applyVarsBatch(vars));
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
           console.warn(`[DS] Invalid branding color "${branding.secondaryColor}":`, error);
@@ -895,18 +938,33 @@ export function ThemeProvider({
       const value = branding?.[key] as string | undefined;
       if (value) {
         try {
-          applyRuntimeBrandColorScale(prefix, value);
-          appliedVars.push(
-            `--ds-color-${prefix}`, `--ds-color-${prefix}-rgb`,
-            `--ds-color-alpha-${prefix}-10`, `--ds-color-alpha-${prefix}-20`,
-            `--ds-color-${prefix}-bg`, `--ds-color-${prefix}-border`,
-            ...COLOR_STEPS.map((s) => `--ds-color-${prefix}-${s}`)
-          );
+          const vars = collectBrandColorScaleVars(prefix, value);
+          appliedVars.push(...applyVarsBatch(vars));
         } catch (error) {
           if (process.env.NODE_ENV === 'development') {
             console.warn(`[DS] Invalid branding ${key} "${value}":`, error);
           }
         }
+      }
+    }
+
+    // ── DaisyUI 5 color bridge (oklch) ─────────────────────────────
+    // DaisyUI 5 uses oklch() format for its --color-* variables.
+    // Convert tenant hex branding colors to oklch and apply as
+    // DaisyUI variable overrides so both DS and DaisyUI components
+    // reflect the tenant's brand.
+    try {
+      const daisyOverrides = buildDaisyUiColorOverrides(
+        branding?.primaryColor,
+        branding?.secondaryColor,
+        branding?.accentColor,
+      );
+      for (const [key, value] of Object.entries(daisyOverrides)) {
+        safeSetProperty(key, value);
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[DS] Failed to generate DaisyUI oklch color overrides:', error);
       }
     }
 
@@ -992,7 +1050,7 @@ export function ThemeProvider({
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(branding), JSON.stringify(tokenOverrides)]);
+  }, [brandingKey, tokenOverridesKey]);
 
   /**
    * Theme state needs to materialize into DOM attributes because the CSS token

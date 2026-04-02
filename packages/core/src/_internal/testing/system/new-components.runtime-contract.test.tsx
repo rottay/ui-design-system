@@ -9,18 +9,18 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { describe, expect } from 'vitest';
 
-import { Callout } from '../../components/primitives/display/Callout';
-import { Kbd } from '../../components/primitives/display/Kbd';
-import { OTPInput } from '../../components/primitives/inputs/OTPInput';
-import { PasswordInput } from '../../components/primitives/inputs/PasswordInput';
-import { TagInput } from '../../components/primitives/inputs/TagInput';
-import { AspectRatio } from '../../components/primitives/layout/AspectRatio';
-import { ScrollArea } from '../../components/primitives/layout/ScrollArea';
-import { AlertDialog } from '../../components/primitives/overlay/AlertDialog';
-import { ConfirmDialog } from '../../components/primitives/overlay/ConfirmDialog';
-import { ContextMenu } from '../../components/primitives/overlay/ContextMenu';
-import { HoverCard } from '../../components/primitives/overlay/HoverCard';
-import { Sheet } from '../../components/primitives/overlay/Sheet';
+import { Callout } from '../../../components/primitives/display/Callout';
+import { Kbd } from '../../../components/primitives/display/Kbd';
+import { OTPInput } from '../../../components/primitives/inputs/OTPInput';
+import { PasswordInput } from '../../../components/primitives/inputs/PasswordInput';
+import { TagInput } from '../../../components/primitives/inputs/TagInput';
+import { AspectRatio } from '../../../components/primitives/layout/AspectRatio';
+import { ScrollArea } from '../../../components/primitives/layout/ScrollArea';
+import { AlertDialog } from '../../../components/primitives/overlay/AlertDialog';
+import { ConfirmDialog } from '../../../components/primitives/overlay/ConfirmDialog';
+import { ContextMenu } from '../../../components/primitives/overlay/ContextMenu';
+import { HoverCard } from '../../../components/primitives/overlay/HoverCard';
+import { Sheet } from '../../../components/primitives/overlay/Sheet';
 import { itEachEngine, renderWithEngine } from '../helpers/engine-test-utils';
 
 describe('new component runtime contracts', () => {

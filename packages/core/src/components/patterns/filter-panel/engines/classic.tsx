@@ -104,6 +104,15 @@ function renderFilterControl(
           style={{ width: '100%' }}
         />
       );
+    case 'number':
+      return (
+        <InputNumber
+          placeholder={filter.placeholder}
+          value={value as number | undefined}
+          onChange={(v) => onChange(filter.key, v)}
+          style={{ width: '100%' }}
+        />
+      );
     case 'number-range': {
       const range = (value as [number | undefined, number | undefined]) ?? [undefined, undefined];
       return (

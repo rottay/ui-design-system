@@ -74,6 +74,23 @@ export * from './marketing';
 export * from './onboarding';
 export * from './empty-state';
 
+// -- Decision & triage surfaces --
+export { DecisionInboxSurface } from './decision-inbox';
+export type { DecisionInboxSurfaceProps, DecisionAction } from './decision-inbox';
+
+// -- Command & dashboard surfaces --
+export { CommandCenterSurface } from './command-center';
+export type { CommandCenterSurfaceProps, QuickAction, CommandSection, InsightItem } from './command-center';
+export type { StatItem as CommandStatItem } from './command-center';
+
+// -- Record & detail surfaces --
+export { RecordWorkbenchSurface } from './record-workbench';
+export type { RecordWorkbenchSurfaceProps, RecordTab, RecordAction, MetadataField } from './record-workbench';
+
+// -- Form & draft surfaces --
+export { GuidedDraftFormSurface } from './guided-draft-form';
+export type { GuidedDraftFormSurfaceProps, FormSection, FormTemplate, ValidationIssue, DraftStatus } from './guided-draft-form';
+
 // -- Settings & administration surfaces --
 export * from './settings';
 export * from './audit';
@@ -86,6 +103,26 @@ export * from './integration';
 export * from './import-export';
 export * from './report';
 export * from './file-browser';
+
+// -- Collection workspace: unified collection screen with shared spine --
+export { CollectionWorkspaceSurface } from './collection-workspace';
+export type { CollectionWorkspaceSurfaceProps } from './collection-workspace';
+export type {
+  CollectionWorkspaceConfig,
+  WorkspaceControlsConfig,
+  CollectionBehaviorConfig,
+  CollectionPresentationConfig,
+  WorkspaceSearchConfig,
+  WorkspaceSavedViewsConfig,
+  WorkspaceColumnSettingsConfig,
+  WorkspaceDensityConfig,
+  WorkspaceExportConfig,
+  WorkspaceViewModeConfig,
+  WorkspaceSelectionConfig,
+  WorkspacePreviewRailConfig,
+  WorkspaceResponsiveConfig,
+} from './contracts/collection';
+export { useCollectionWorkspace } from './hooks/useCollectionWorkspace';
 
 // -- Operational surfaces: control rooms, monitoring --
 export * from './operational';

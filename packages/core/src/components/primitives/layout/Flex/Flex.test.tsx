@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import { Flex } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockFlex = ({
       children,

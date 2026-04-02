@@ -8,6 +8,7 @@
 
 import React from 'react';
 import { PatternFileManager } from '../../patterns';
+import type { FileItem, FolderItem } from '../../patterns';
 import type { FileBrowserSurfaceConfig } from '../types';
 import { PageShellSurface } from '../page-shell';
 import { SurfaceActionBar } from '../shared';
@@ -23,31 +24,12 @@ export function FileBrowserSurface({
 }: FileBrowserSurfaceProps): React.ReactElement {
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
 
-  // Files and folders are mapped separately because the pattern requires
-  // discriminated union types (`type: 'file'` vs `type: 'folder'`). The
-  // surface config uses a looser string type, so we narrow here with a cast
-  // to satisfy the pattern's contract.
-  const files = config.behavior.files.map((f) => ({
-    id: f.id,
-    name: f.name,
-    type: f.type as 'file',
-    mimeType: f.mimeType,
-    size: f.size,
-    thumbnail: f.thumbnail,
-    modifiedAt: f.modifiedAt,
-    createdAt: f.createdAt,
-    parentId: f.parentId,
-  }));
-
-  const folders = config.behavior.folders.map((f) => ({
-    id: f.id,
-    name: f.name,
-    type: f.type as 'folder',
-    parentId: f.parentId,
-    childCount: f.childCount,
-    modifiedAt: f.modifiedAt,
-    createdAt: f.createdAt,
-  }));
+  // The pattern requires discriminated union types (FileItem / FolderItem).
+  // We use type predicates to narrow from the surface config's types into
+  // the pattern's discriminated union instead of casting with `as`.
+  const allItems = [...config.behavior.files, ...config.behavior.folders];
+  const files = allItems.filter((i): i is FileItem => i.type === 'file');
+  const folders = allItems.filter((i): i is FolderItem => i.type === 'folder');
 
   return (
     <PageShellSurface

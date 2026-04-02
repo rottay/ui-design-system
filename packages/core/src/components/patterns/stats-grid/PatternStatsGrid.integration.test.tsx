@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
 import { PatternStatsGrid } from '.';
-import { renderSurface } from '../../surfaces/tests/test-utils';
+import { renderSurface } from '../../surfaces/common/test-utils';
 
 const stats = [
   { key: 'events', label: 'Events', value: 18, change: 12, changeType: 'increase' as const },

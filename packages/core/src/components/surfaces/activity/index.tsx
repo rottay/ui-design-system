@@ -9,6 +9,7 @@
 import React from 'react';
 import { Flex, Text } from '../../primitives';
 import { PatternActivityLog } from '../../patterns';
+import type { Activity } from '../../patterns';
 import type { ActivitySurfaceConfig } from '../types';
 import { PageShellSurface } from '../page-shell';
 import { SurfaceActionBar } from '../shared';
@@ -29,7 +30,7 @@ export function ActivitySurface({
   // Strip surface-specific fields before handing to the pattern. The pattern's
   // activity type is leaner than what the surface config carries, and passing
   // extra fields would violate the pattern's contract.
-  const activities = config.behavior.activities.map((a) => ({
+  const activities: Activity[] = config.behavior.activities.map((a) => ({
     id: a.id,
     user: a.user,
     action: a.action,
@@ -52,17 +53,14 @@ export function ActivitySurface({
         onFilterChange={config.behavior.onFilterChange}
         actionTypes={config.behavior.actionTypes}
         users={config.behavior.users}
-        // The `as any` cast bridges the surface-level activity type to the
-        // pattern's narrower type. The pattern does not know about surface
-        // config extras like permissions or visual overrides.
         renderActivity={
           config.presentation.renderActivity
-            ? (activity) => config.presentation.renderActivity!(activity as any)
+            ? (activity: Activity) => config.presentation.renderActivity!(activity)
             : undefined
         }
         onActivityClick={
           config.behavior.onActivityClick
-            ? (activity) => config.behavior.onActivityClick!(activity as any)
+            ? (activity: Activity) => config.behavior.onActivityClick!(activity)
             : undefined
         }
         emptyMessage="No activity recorded yet."

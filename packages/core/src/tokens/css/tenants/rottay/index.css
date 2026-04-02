@@ -16,6 +16,42 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   color-scheme: dark;
 
   /* ============================================
+     DaisyUI 5 color bridge (oklch format)
+     Maps Rottay flagship colors to DaisyUI 5's --color-* system.
+     These override DaisyUI's default palette so all components
+     (btn, card, badge, table, etc.) render in the flagship palette.
+
+     For whitelabel: the SystemCssVariablesBridge or ThemeProvider must
+     update these --color-* variables when a tenant changes branding.
+     Hex -> oklch conversion is required at runtime.
+     ============================================ */
+  --color-primary: oklch(96.7% 0.008 100);           /* #F7F7F2 off-white */
+  --color-primary-content: oklch(7% 0.01 260);       /* #0B0C0D near-black */
+  --color-secondary: oklch(53% 0.02 250);            /* #6E747E graphite */
+  --color-secondary-content: oklch(96% 0.008 100);   /* #F5F5F2 */
+  --color-accent: oklch(77% 0.04 70);                /* #C7B8A5 warm stone */
+  --color-accent-content: oklch(7% 0.01 260);        /* #0B0C0D */
+  --color-neutral: oklch(20% 0.01 260);              /* #23272D dark border */
+  --color-neutral-content: oklch(96% 0.008 100);     /* #F5F5F2 */
+  --color-base-100: oklch(7% 0.01 260);              /* #0A0B0D canvas */
+  --color-base-200: oklch(10% 0.01 250);             /* #0F1114 secondary bg */
+  --color-base-300: oklch(13% 0.01 250);             /* #15181C tertiary bg */
+  --color-base-content: oklch(96% 0.008 100);        /* #F5F5F2 text */
+  --color-success: oklch(72% 0.15 165);              /* #31C48D */
+  --color-success-content: oklch(7% 0.01 260);
+  --color-warning: oklch(72% 0.12 75);               /* #D6A04B */
+  --color-warning-content: oklch(7% 0.01 260);
+  --color-error: oklch(62% 0.12 20);                 /* #E06A6A */
+  --color-error-content: oklch(96% 0.008 100);
+  --color-info: oklch(67% 0.04 230);                 /* #7E97AD */
+  --color-info-content: oklch(7% 0.01 260);
+  --rounded-box: 14px;
+  --rounded-btn: 10px;
+  --rounded-badge: 10px;
+  --animation-btn: 0.18s;
+  --animation-input: 0.18s;
+
+  /* ============================================
      1. COLOR PRIMITIVES
      ============================================ */
 
@@ -27,14 +63,14 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-primary-400: #A1A1AA;
   --ds-color-primary-500: #71717A;
   --ds-color-primary-600: #52525B;
-  --ds-color-primary-700: #3F3F46;
-  --ds-color-primary-800: #27272A;
-  --ds-color-primary-900: #18181B;
+  --ds-color-primary-700: #3A3A3A;
+  --ds-color-primary-800: #2A2A2A;
+  --ds-color-primary-900: #1A1A1A;
 
-  --ds-color-primary: #FFFFFF;
-  --ds-color-primary-hover: #E4E4E7;
-  --ds-color-primary-subtle: rgba(255, 255, 255, 0.1);
-  --ds-color-primary-foreground: #09090B;
+  --ds-color-primary: #F7F7F2;
+  --ds-color-primary-hover: #FFFFFF;
+  --ds-color-primary-subtle: rgba(247, 247, 242, 0.10);
+  --ds-color-primary-foreground: #0B0C0D;
   --ds-color-primary-rgb: 255, 255, 255;
 
   /* -- Secondary - Cool Slate/Blue-Gray -------- */
@@ -49,13 +85,13 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-secondary-800: #0f172a;
   --ds-color-secondary-900: #020617;
 
-  --ds-color-secondary: #475569;
-  --ds-color-secondary-hover: #334155;
+  --ds-color-secondary: #6E747E;
+  --ds-color-secondary-hover: #848B95;
   --ds-color-secondary-rgb: 71, 85, 105;
 
   /* -- Accent - Neutral gray ------------------ */
-  --ds-color-accent: #A1A1AA;
-  --ds-color-accent-hover: #D4D4D8;
+  --ds-color-accent: #C7B8A5;
+  --ds-color-accent-hover: #D7CBBC;
   --ds-color-accent-50: #FAFAFA;
   --ds-color-accent-100: #F4F4F5;
   --ds-color-accent-200: #E4E4E7;
@@ -63,12 +99,12 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-accent-400: #A1A1AA;
   --ds-color-accent-500: #71717A;
   --ds-color-accent-600: #52525B;
-  --ds-color-accent-700: #3F3F46;
-  --ds-color-accent-800: #27272A;
-  --ds-color-accent-900: #18181B;
+  --ds-color-accent-700: #3A3A3A;
+  --ds-color-accent-800: #2A2A2A;
+  --ds-color-accent-900: #1A1A1A;
 
   /* -- Neutral - Cool zinc grays --------------- */
-  --ds-color-neutral-0: #09090B;
+  --ds-color-neutral-0: #0A0A0A;
   --ds-color-neutral-50: #FAFAFA;
   --ds-color-neutral-100: #F4F4F5;
   --ds-color-neutral-200: #E4E4E7;
@@ -76,9 +112,9 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-neutral-400: #A1A1AA;
   --ds-color-neutral-500: #71717A;
   --ds-color-neutral-600: #52525B;
-  --ds-color-neutral-700: #3F3F46;
-  --ds-color-neutral-800: #27272A;
-  --ds-color-neutral-900: #18181B;
+  --ds-color-neutral-700: #3A3A3A;
+  --ds-color-neutral-800: #2A2A2A;
+  --ds-color-neutral-900: #1A1A1A;
 
   /* -- Alpha semantic aliases ------------------ */
   --ds-color-alpha-primary-10: rgba(255, 255, 255, 0.10);
@@ -98,54 +134,54 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      2. SEMANTIC COLORS
      ============================================ */
 
-  /* -- Backgrounds - Dark hierarchy ------------ */
-  --ds-color-bg-primary: #09090B;
-  --ds-color-bg-secondary: #111113;
-  --ds-color-bg-tertiary: #18181B;
-  --ds-color-bg-subtle: #111113;
-  --ds-color-bg-hover: #1E1E22;
-  --ds-color-bg-canvas: #09090B;
-  --ds-color-bg-elevated: #1E1E22;
-  --ds-color-bg-input: #111113;
+  /* -- Backgrounds - Dark hierarchy with clear steps ------------ */
+  --ds-color-bg-primary: #0A0B0D;
+  --ds-color-bg-secondary: #0F1114;
+  --ds-color-bg-tertiary: #15181C;
+  --ds-color-bg-subtle: #121418;
+  --ds-color-bg-hover: #191C20;
+  --ds-color-bg-canvas: #090A0B;
+  --ds-color-bg-elevated: #1B1F24;
+  --ds-color-bg-input: #0F1114;
   --ds-color-bg-info: rgba(59, 130, 246, 0.1);
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.7);
-  --ds-color-bg-surface: #18181B;
-  --ds-color-bg: #09090B;
-  --ds-color-background: #09090B;
+  --ds-color-bg-overlay: rgba(5, 6, 8, 0.72);
+  --ds-color-bg-surface: #101316;
+  --ds-color-bg: #0A0B0D;
+  --ds-color-background: #0A0B0D;
 
   /* -- Text - Light text for dark backgrounds -- */
-  --ds-color-text-primary: #FAFAFA;
-  --ds-color-text-secondary: #A1A1AA;
-  --ds-color-text-tertiary: #71717A;
-  --ds-color-text-muted: #52525B;
-  --ds-color-text-disabled: #3F3F46;
-  --ds-color-text-on-primary: #09090B;
-  --ds-color-text: #FAFAFA;
-  --ds-color-text-inverse: #09090B;
+  --ds-color-text-primary: #F5F5F2;
+  --ds-color-text-secondary: #C2C4BE;
+  --ds-color-text-tertiary: #9DA19A;
+  --ds-color-text-muted: #727770;
+  --ds-color-text-disabled: #555A53;
+  --ds-color-text-on-primary: #0B0C0D;
+  --ds-color-text: #F5F5F2;
+  --ds-color-text-inverse: #0B0C0D;
 
-  /* -- Borders - Light-alpha for dark surfaces - */
-  --ds-color-border: rgba(255, 255, 255, 0.08);
-  --ds-color-border-primary: rgba(255, 255, 255, 0.08);
-  --ds-color-border-secondary: rgba(255, 255, 255, 0.06);
-  --ds-color-border-subtle: rgba(255, 255, 255, 0.04);
-  --ds-color-border-tertiary: rgba(255, 255, 255, 0.04);
-  --ds-color-border-focus: rgba(255, 255, 255, 0.5);
+  /* -- Borders - Subtle but visible on dark surfaces - */
+  --ds-color-border: #23272D;
+  --ds-color-border-primary: #23272D;
+  --ds-color-border-secondary: #2B3138;
+  --ds-color-border-subtle: #191D22;
+  --ds-color-border-tertiary: #191D22;
+  --ds-color-border-focus: rgba(245, 245, 242, 0.28);
 
   /* -- Surfaces -------------------------------- */
-  --ds-color-surface: #09090B;
-  --ds-color-surface-secondary: #111113;
-  --ds-color-surface-muted: #18181B;
+  --ds-color-surface: #0A0A0A;
+  --ds-color-surface-secondary: #141414;
+  --ds-color-surface-muted: #1A1A1A;
   --ds-color-shadow: rgba(0, 0, 0, 0.5);
 
   /* -- Links ----------------------------------- */
-  --ds-color-link: #FAFAFA;
-  --ds-color-link-hover: #D4D4D8;
-  --ds-color-link-visited: #71717A;
+  --ds-color-link: #F5F5F2;
+  --ds-color-link-hover: #FFFFFF;
+  --ds-color-link-visited: #C2C4BE;
 
   /* -- Status Colors - Dark-adapted ------------ */
 
   /* Success - Emerald */
-  --ds-color-success: #10B981;
+  --ds-color-success: #31C48D;
   --ds-color-success-50: rgba(16, 185, 129, 0.1);
   --ds-color-success-100: rgba(16, 185, 129, 0.15);
   --ds-color-success-200: #6ee7b7;
@@ -156,11 +192,11 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-success-700: #047857;
   --ds-color-success-800: #065f46;
   --ds-color-success-900: #064e3b;
-  --ds-color-success-bg: rgba(16, 185, 129, 0.1);
-  --ds-color-success-border: rgba(16, 185, 129, 0.25);
+  --ds-color-success-bg: rgba(49, 196, 141, 0.10);
+  --ds-color-success-border: rgba(49, 196, 141, 0.24);
 
   /* Warning - Amber */
-  --ds-color-warning: #F59E0B;
+  --ds-color-warning: #D6A04B;
   --ds-color-warning-50: rgba(245, 158, 11, 0.1);
   --ds-color-warning-100: rgba(245, 158, 11, 0.15);
   --ds-color-warning-200: #fcd34d;
@@ -171,11 +207,11 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-warning-700: #b45309;
   --ds-color-warning-800: #92400e;
   --ds-color-warning-900: #78350f;
-  --ds-color-warning-bg: rgba(245, 158, 11, 0.1);
-  --ds-color-warning-border: rgba(245, 158, 11, 0.25);
+  --ds-color-warning-bg: rgba(214, 160, 75, 0.10);
+  --ds-color-warning-border: rgba(214, 160, 75, 0.24);
 
   /* Error - Red */
-  --ds-color-error: #EF4444;
+  --ds-color-error: #E06A6A;
   --ds-color-error-50: rgba(239, 68, 68, 0.1);
   --ds-color-error-100: rgba(239, 68, 68, 0.15);
   --ds-color-error-200: #fca5a5;
@@ -186,12 +222,12 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-error-700: #b91c1c;
   --ds-color-error-800: #991b1b;
   --ds-color-error-900: #7f1d1d;
-  --ds-color-error-bg: rgba(239, 68, 68, 0.1);
-  --ds-color-error-border: rgba(239, 68, 68, 0.25);
+  --ds-color-error-bg: rgba(224, 106, 106, 0.10);
+  --ds-color-error-border: rgba(224, 106, 106, 0.24);
   --ds-color-danger: #EF4444;
 
   /* Info - Blue */
-  --ds-color-info: #3B82F6;
+  --ds-color-info: #7E97AD;
   --ds-color-info-50: rgba(59, 130, 246, 0.1);
   --ds-color-info-100: rgba(59, 130, 246, 0.15);
   --ds-color-info-200: #93c5fd;
@@ -202,8 +238,8 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-color-info-700: #1d4ed8;
   --ds-color-info-800: #1e40af;
   --ds-color-info-900: #1e3a8a;
-  --ds-color-info-bg: rgba(59, 130, 246, 0.1);
-  --ds-color-info-border: rgba(59, 130, 246, 0.25);
+  --ds-color-info-bg: rgba(126, 151, 173, 0.10);
+  --ds-color-info-border: rgba(126, 151, 173, 0.24);
 
   /* Live/Online indicators */
   --ds-color-accent-live: #10B981;
@@ -226,37 +262,37 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   /* -- Interactive states ---------------------- */
   --ds-color-interactive-border: rgba(255, 255, 255, 0.15);
   --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-color-interactive-bg-active: rgba(255, 255, 255, 0.08);
-  --ds-color-interactive-bg-muted: rgba(255, 255, 255, 0.06);
+  --ds-color-interactive-bg-active: #2A2A2A;
+  --ds-color-interactive-bg-muted: #222222;
 
   /* ============================================
      3. SEMANTIC TOKEN ALIASES
      ============================================ */
 
   /* -- Text aliases ---------------------------- */
-  --ds-text-primary: #FAFAFA;
-  --ds-text-secondary: #A1A1AA;
-  --ds-text-tertiary: #71717A;
-  --ds-text-muted: #52525B;
-  --ds-text-disabled: #3F3F46;
-  --ds-text-inverse: #09090B;
+  --ds-text-primary: #F5F5F2;
+  --ds-text-secondary: #C2C4BE;
+  --ds-text-tertiary: #9DA19A;
+  --ds-text-muted: #727770;
+  --ds-text-disabled: #555A53;
+  --ds-text-inverse: #0B0C0D;
 
   /* -- Background aliases ---------------------- */
-  --ds-bg-primary: #09090B;
-  --ds-bg-secondary: #111113;
-  --ds-bg-tertiary: #18181B;
-  --ds-bg-hover: #1E1E22;
-  --ds-bg-active: #27272A;
-  --ds-bg-disabled: #111113;
+  --ds-bg-primary: #0A0B0D;
+  --ds-bg-secondary: #0F1114;
+  --ds-bg-tertiary: #15181C;
+  --ds-bg-hover: #191C20;
+  --ds-bg-active: rgba(255, 255, 255, 0.07);
+  --ds-bg-disabled: #141414;
 
   /* -- Border aliases -------------------------- */
-  --ds-border-color: rgba(255, 255, 255, 0.08);
-  --ds-border-color-default: rgba(255, 255, 255, 0.08);
-  --ds-border-color-muted: rgba(255, 255, 255, 0.04);
-  --ds-border-color-strong: rgba(255, 255, 255, 0.12);
-  --ds-border-color-hover: rgba(255, 255, 255, 0.12);
+  --ds-border-color: #2A2A2A;
+  --ds-border-color-default: #2A2A2A;
+  --ds-border-color-muted: #1E1E1E;
+  --ds-border-color-strong: #333333;
+  --ds-border-color-hover: #333333;
   --ds-border-color-focus: rgba(255, 255, 255, 0.5);
-  --ds-border-color-disabled: rgba(255, 255, 255, 0.04);
+  --ds-border-color-disabled: #1E1E1E;
 
   /* ============================================
      4. TYPOGRAPHY
@@ -282,10 +318,10 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      5. BORDERS & RADIUS
      ============================================ */
 
-  --ds-radius-sm: 4px;
-  --ds-radius-md: 6px;
-  --ds-radius-lg: 8px;
-  --ds-radius-xl: 12px;
+  --ds-radius-sm: 6px;
+  --ds-radius-md: 10px;
+  --ds-radius-lg: 14px;
+  --ds-radius-xl: 18px;
   --ds-radius-full: 9999px;
 
   /* ============================================
@@ -293,10 +329,10 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      ============================================ */
 
   --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
-  --ds-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2);
-  --ds-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.25);
-  --ds-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.4), 0 16px 48px rgba(0, 0, 0, 0.3);
+  --ds-shadow-sm: 0 1px 1px rgba(0, 0, 0, 0.28), 0 8px 20px rgba(0, 0, 0, 0.12);
+  --ds-shadow-md: 0 2px 3px rgba(0, 0, 0, 0.32), 0 12px 28px rgba(0, 0, 0, 0.18);
+  --ds-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.26), 0 24px 48px rgba(0, 0, 0, 0.22);
+  --ds-shadow-xl: 0 20px 56px rgba(0, 0, 0, 0.34), 0 32px 72px rgba(0, 0, 0, 0.28);
   --ds-shadow-2xl: 0 16px 48px rgba(0, 0, 0, 0.5), 0 32px 64px rgba(0, 0, 0, 0.35);
   --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
 
@@ -305,49 +341,49 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-shadow-warning: 0 4px 14px rgba(245, 158, 11, 0.15), 0 8px 24px rgba(0, 0, 0, 0.2);
   --ds-shadow-error: 0 4px 14px rgba(239, 68, 68, 0.15), 0 8px 24px rgba(0, 0, 0, 0.2);
 
-  --ds-shadow-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.3);
-  --ds-shadow-focus-ring-error: 0 0 0 2px rgba(239, 68, 68, 0.3);
+  --ds-shadow-focus-ring: 0 0 0 3px rgba(247, 247, 242, 0.14);
+  --ds-shadow-focus-ring-error: 0 0 0 3px rgba(224, 106, 106, 0.18);
 
   /* ============================================
      7. COMPONENT TOKENS - BUTTON
      ============================================ */
 
   /* Button Primary - White bg with black text (Vercel style) */
-  --ds-button-primary-bg: #FFFFFF;
-  --ds-button-primary-bg-hover: #E4E4E7;
-  --ds-button-primary-bg-active: #D4D4D8;
-  --ds-button-primary-color: #09090B;
-  --ds-button-primary-text: #09090B;
+  --ds-button-primary-bg: #F7F7F2;
+  --ds-button-primary-bg-hover: #FFFFFF;
+  --ds-button-primary-bg-active: #ECEDEA;
+  --ds-button-primary-color: #0B0C0D;
+  --ds-button-primary-text: #0B0C0D;
   --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   --ds-button-primary-shadow-hover: 0 2px 12px rgba(255, 255, 255, 0.1);
 
   /* Button Secondary - Subtle dark bg */
-  --ds-button-secondary-bg: #27272A;
-  --ds-button-secondary-bg-hover: #3F3F46;
+  --ds-button-secondary-bg: #2A2A2A;
+  --ds-button-secondary-bg-hover: #3A3A3A;
   --ds-button-secondary-bg-active: #52525B;
   --ds-button-secondary-color: #FAFAFA;
-  --ds-button-secondary-border: rgba(255, 255, 255, 0.08);
+  --ds-button-secondary-border: #2A2A2A;
   --ds-button-secondary-text: #FAFAFA;
   --ds-button-secondary-border-hover: rgba(255, 255, 255, 0.15);
 
   /* Button Default - Dark gray bg with border */
-  --ds-button-default-bg: #18181B;
-  --ds-button-default-bg-hover: #1E1E22;
-  --ds-button-default-bg-active: #27272A;
-  --ds-button-default-color: #FAFAFA;
-  --ds-button-default-color-hover: #FAFAFA;
-  --ds-button-default-color-active: #FAFAFA;
-  --ds-button-default-border: rgba(255, 255, 255, 0.12);
+  --ds-button-default-bg: #111316;
+  --ds-button-default-bg-hover: #15191D;
+  --ds-button-default-bg-active: #1A1F24;
+  --ds-button-default-color: #F5F5F2;
+  --ds-button-default-color-hover: #F5F5F2;
+  --ds-button-default-color-active: #F5F5F2;
+  --ds-button-default-border: #2B3138;
   --ds-button-default-border-hover: rgba(255, 255, 255, 0.2);
   --ds-button-default-border-active: rgba(255, 255, 255, 0.25);
 
   /* Button Ghost */
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-button-ghost-bg-active: rgba(255, 255, 255, 0.08);
-  --ds-button-ghost-color: #A1A1AA;
-  --ds-button-ghost-color-hover: #FAFAFA;
+  --ds-button-ghost-bg-active: #2A2A2A;
+  --ds-button-ghost-color: #B9BCB6;
+  --ds-button-ghost-color-hover: #F5F5F2;
   --ds-button-ghost-color-active: #FAFAFA;
   --ds-button-ghost-border: transparent;
   --ds-button-ghost-border-hover: transparent;
@@ -356,7 +392,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   /* Button Text */
   --ds-button-text-bg: transparent;
   --ds-button-text-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-button-text-bg-active: rgba(255, 255, 255, 0.08);
+  --ds-button-text-bg-active: #2A2A2A;
   --ds-button-text-color: #A1A1AA;
   --ds-button-text-color-hover: #FAFAFA;
   --ds-button-text-color-active: #FAFAFA;
@@ -376,7 +412,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-button-warning-bg: #F59E0B;
   --ds-button-warning-bg-hover: #d97706;
   --ds-button-warning-bg-active: #b45309;
-  --ds-button-warning-color: #09090B;
+  --ds-button-warning-color: #0A0A0A;
   --ds-button-warning-border: transparent;
 
   --ds-button-error-bg: #EF4444;
@@ -392,9 +428,9 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-button-info-border: transparent;
 
   /* Button States */
-  --ds-button-disabled-bg: #1E1E22;
-  --ds-button-disabled-color: #3F3F46;
-  --ds-button-disabled-border: rgba(255, 255, 255, 0.04);
+  --ds-button-disabled-bg: #222222;
+  --ds-button-disabled-color: #3A3A3A;
+  --ds-button-disabled-border: #1E1E1E;
   --ds-button-disabled-opacity: 0.5;
 
   --ds-button-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.3);
@@ -403,21 +439,21 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      8. COMPONENT TOKENS - INPUT
      ============================================ */
 
-  --ds-input-bg: #111113;
-  --ds-input-bg-hover: #18181B;
-  --ds-input-bg-focus: #111113;
+  --ds-input-bg: #0F1114;
+  --ds-input-bg-hover: #1A1A1A;
+  --ds-input-bg-focus: #0F1114;
   --ds-input-bg-disabled: #0D0D0F;
 
-  --ds-input-color: #FAFAFA;
-  --ds-input-color-placeholder: #52525B;
-  --ds-input-color-disabled: #3F3F46;
+  --ds-input-color: #F5F5F2;
+  --ds-input-color-placeholder: #666B64;
+  --ds-input-color-disabled: #3A3A3A;
 
-  --ds-input-border: rgba(255, 255, 255, 0.12);
-  --ds-input-border-hover: rgba(255, 255, 255, 0.2);
-  --ds-input-border-focus: rgba(255, 255, 255, 0.5);
-  --ds-input-border-disabled: rgba(255, 255, 255, 0.04);
+  --ds-input-border: #2B3138;
+  --ds-input-border-hover: #363D46;
+  --ds-input-border-focus: rgba(247, 247, 242, 0.44);
+  --ds-input-border-disabled: #1E1E1E;
 
-  --ds-input-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.15);
+  --ds-input-shadow-focus: 0 0 0 3px rgba(247, 247, 242, 0.12);
 
   /* Input Status */
   --ds-input-success-border: #10B981;
@@ -429,14 +465,14 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-input-error-color: #EF4444;
 
   /* Input Filled Variant */
-  --ds-input-filled-bg: #18181B;
-  --ds-input-filled-bg-hover: #1E1E22;
-  --ds-input-filled-bg-focus: #111113;
+  --ds-input-filled-bg: #1A1A1A;
+  --ds-input-filled-bg-hover: #222222;
+  --ds-input-filled-bg-focus: #141414;
 
   /* Input Addon */
-  --ds-input-addon-bg: #18181B;
+  --ds-input-addon-bg: #1A1A1A;
   --ds-input-addon-color: #71717A;
-  --ds-input-addon-border: rgba(255, 255, 255, 0.08);
+  --ds-input-addon-border: #2A2A2A;
 
   /* Input Clear */
   --ds-input-clear-color: #52525B;
@@ -452,33 +488,33 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      9. COMPONENT TOKENS - CARD
      ============================================ */
 
-  --ds-card-bg: #18181B;
-  --ds-card-bg-hover: #1E1E22;
-  --ds-card-color: #FAFAFA;
-  --ds-card-border: rgba(255, 255, 255, 0.06);
-  --ds-card-border-hover: rgba(255, 255, 255, 0.1);
+  --ds-card-bg: #111316;
+  --ds-card-bg-hover: #14181C;
+  --ds-card-color: #F5F5F2;
+  --ds-card-border: #22272D;
+  --ds-card-border-hover: #2F353D;
   --ds-card-border-accent-hover: rgba(255, 255, 255, 0.15);
 
-  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
-  --ds-card-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
-  --ds-card-shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.25);
+  --ds-card-shadow: none;
+  --ds-card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.18);
+  --ds-card-shadow-elevated: 0 20px 56px rgba(0, 0, 0, 0.28);
 
   /* Card Header */
-  --ds-card-header-border: rgba(255, 255, 255, 0.06);
-  --ds-card-header-color: #FAFAFA;
-  --ds-card-title-color: #FAFAFA;
-  --ds-card-subtitle-color: #71717A;
-  --ds-card-image-placeholder-bg: #111113;
+  --ds-card-header-border: #22272D;
+  --ds-card-header-color: #F5F5F2;
+  --ds-card-title-color: #F5F5F2;
+  --ds-card-subtitle-color: #9DA19A;
+  --ds-card-image-placeholder-bg: #141414;
   --ds-card-image-placeholder-color: #52525B;
-  --ds-card-image-loading-track: rgba(255, 255, 255, 0.06);
+  --ds-card-image-loading-track: #222222;
   --ds-card-image-loading-active: #FAFAFA;
 
   /* Card Body */
-  --ds-card-body-color: #A1A1AA;
+  --ds-card-body-color: #C2C4BE;
 
   /* Card Footer */
-  --ds-card-footer-border: rgba(255, 255, 255, 0.06);
-  --ds-card-footer-bg: #111113;
+  --ds-card-footer-border: #222222;
+  --ds-card-footer-bg: #141414;
 
   /* Card Cover Overlay */
   --ds-card-cover-overlay-bg: linear-gradient(
@@ -496,18 +532,18 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      10. COMPONENT TOKENS - MODAL
      ============================================ */
 
-  --ds-modal-bg: #1E1E22;
+  --ds-modal-bg: #15191D;
   --ds-modal-color: #FAFAFA;
-  --ds-modal-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-modal-shadow: 0 24px 64px rgba(0, 0, 0, 0.34);
 
   /* Modal Overlay */
-  --ds-overlay-bg: rgba(0, 0, 0, 0.7);
-  --ds-modal-overlay-bg: rgba(0, 0, 0, 0.7);
-  --ds-modal-overlay-backdrop: blur(8px);
+  --ds-overlay-bg: rgba(5, 6, 8, 0.72);
+  --ds-modal-overlay-bg: rgba(5, 6, 8, 0.72);
+  --ds-modal-overlay-backdrop: blur(10px);
 
   /* Modal Header */
-  --ds-modal-header-bg: #1E1E22;
-  --ds-modal-header-border: rgba(255, 255, 255, 0.06);
+  --ds-modal-header-bg: #222222;
+  --ds-modal-header-border: #222222;
   --ds-modal-title-color: #FAFAFA;
   --ds-modal-subtitle-color: #71717A;
 
@@ -515,8 +551,8 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-modal-body-color: #A1A1AA;
 
   /* Modal Footer */
-  --ds-modal-footer-border: rgba(255, 255, 255, 0.06);
-  --ds-modal-footer-bg: #18181B;
+  --ds-modal-footer-border: #222222;
+  --ds-modal-footer-bg: #1A1A1A;
 
   /* Modal Close */
   --ds-modal-close-color: #52525B;
@@ -531,33 +567,33 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      11. COMPONENT TOKENS - TABLE
      ============================================ */
 
-  --ds-table-bg: #09090B;
-  --ds-table-border: rgba(255, 255, 255, 0.06);
+  --ds-table-bg: #0B0C0D;
+  --ds-table-border: #181C21;
 
   /* Table Header */
-  --ds-table-header-bg: #111113;
-  --ds-table-header-color: #A1A1AA;
+  --ds-table-header-bg: #101317;
+  --ds-table-header-color: #9DA19A;
   --ds-table-header-font-weight: 600;
   --ds-table-header-font-size: 0.6875rem;
 
   /* Table Row */
-  --ds-table-row-bg: #09090B;
-  --ds-table-row-bg-hover: rgba(255, 255, 255, 0.03);
-  --ds-table-row-bg-striped: #111113;
+  --ds-table-row-bg: #0B0C0D;
+  --ds-table-row-bg-hover: rgba(255, 255, 255, 0.025);
+  --ds-table-row-bg-striped: #141414;
   --ds-table-row-bg-selected: rgba(255, 255, 255, 0.06);
-  --ds-table-row-border: rgba(255, 255, 255, 0.04);
+  --ds-table-row-border: #161A1F;
   --ds-table-loading-overlay-bg: rgba(9, 9, 11, 0.7);
 
   /* Table Cell */
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-cell-font-size: 0.875rem;
-  --ds-table-cell-color: #FAFAFA;
+  --ds-table-cell-color: #F5F5F2;
 
   /* ============================================
      12. COMPONENT TOKENS - TABS
      ============================================ */
 
-  --ds-tabs-border: rgba(255, 255, 255, 0.06);
+  --ds-tabs-border: #222222;
   --ds-tab-color: #71717A;
   --ds-tab-color-hover: #FAFAFA;
   --ds-tab-color-active: #FAFAFA;
@@ -569,17 +605,17 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      ============================================ */
 
   /* Avatar Variants */
-  --ds-avatar-default-bg: #27272A;
+  --ds-avatar-default-bg: #2A2A2A;
   --ds-avatar-default-color: #A1A1AA;
-  --ds-avatar-default-border: rgba(255, 255, 255, 0.06);
+  --ds-avatar-default-border: #222222;
 
   --ds-avatar-primary-bg: #FFFFFF;
-  --ds-avatar-primary-color: #09090B;
+  --ds-avatar-primary-color: #0A0A0A;
   --ds-avatar-primary-border: #FFFFFF;
 
-  --ds-avatar-secondary-bg: #27272A;
+  --ds-avatar-secondary-bg: #2A2A2A;
   --ds-avatar-secondary-color: #A1A1AA;
-  --ds-avatar-secondary-border: rgba(255, 255, 255, 0.06);
+  --ds-avatar-secondary-border: #222222;
 
   --ds-avatar-success-bg: rgba(16, 185, 129, 0.15);
   --ds-avatar-success-color: #10B981;
@@ -594,11 +630,11 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-avatar-error-border: rgba(239, 68, 68, 0.25);
 
   --ds-avatar-gradient-bg: linear-gradient(135deg, #FAFAFA 0%, #71717A 100%);
-  --ds-avatar-gradient-color: #09090B;
+  --ds-avatar-gradient-color: #0A0A0A;
   --ds-avatar-gradient-border: transparent;
 
   /* Avatar Status */
-  --ds-avatar-status-border: #18181B;
+  --ds-avatar-status-border: #1A1A1A;
 
   /* Avatar Ring */
   --ds-avatar-ring-color: #FFFFFF;
@@ -607,9 +643,9 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-avatar-border-color: rgba(255, 255, 255, 0.05);
 
   /* Avatar Group */
-  --ds-avatar-group-border: #18181B;
-  --ds-avatar-group-border-color: #18181B;
-  --ds-avatar-group-overflow-bg: #27272A;
+  --ds-avatar-group-border: #1A1A1A;
+  --ds-avatar-group-border-color: #1A1A1A;
+  --ds-avatar-group-overflow-bg: #2A2A2A;
   --ds-avatar-group-overflow-color: #A1A1AA;
 
   /* Avatar legacy tokens */
@@ -623,17 +659,17 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-badge-default-bg: #52525B;
   --ds-badge-default-color: #FAFAFA;
 
-  --ds-badge-primary-bg: #27272A;
+  --ds-badge-primary-bg: #2A2A2A;
   --ds-badge-primary-color: #FAFAFA;
 
-  --ds-badge-secondary-bg: #27272A;
+  --ds-badge-secondary-bg: #2A2A2A;
   --ds-badge-secondary-color: #A1A1AA;
 
   --ds-badge-success-bg: #10B981;
-  --ds-badge-success-color: #09090B;
+  --ds-badge-success-color: #0A0A0A;
 
   --ds-badge-warning-bg: #F59E0B;
-  --ds-badge-warning-color: #09090B;
+  --ds-badge-warning-color: #0A0A0A;
 
   --ds-badge-error-bg: #EF4444;
   --ds-badge-error-color: #ffffff;
@@ -642,27 +678,27 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-badge-info-color: #ffffff;
 
   --ds-badge-text-color: #FAFAFA;
-  --ds-badge-border-color: #18181B;
+  --ds-badge-border-color: #1A1A1A;
 
   /* ============================================
      15. COMPONENT TOKENS - TAG
      ============================================ */
 
-  --ds-tag-bg: #1E1E22;
-  --ds-tag-border: rgba(255, 255, 255, 0.08);
+  --ds-tag-bg: #222222;
+  --ds-tag-border: #2A2A2A;
   --ds-tag-color: #A1A1AA;
 
-  --ds-tag-default-bg: #1E1E22;
+  --ds-tag-default-bg: #222222;
   --ds-tag-default-color: #A1A1AA;
-  --ds-tag-default-border: rgba(255, 255, 255, 0.08);
+  --ds-tag-default-border: #2A2A2A;
 
-  --ds-tag-primary-bg: rgba(255, 255, 255, 0.08);
+  --ds-tag-primary-bg: #2A2A2A;
   --ds-tag-primary-color: #FAFAFA;
   --ds-tag-primary-border: rgba(255, 255, 255, 0.15);
 
-  --ds-tag-secondary-bg: #27272A;
+  --ds-tag-secondary-bg: #2A2A2A;
   --ds-tag-secondary-color: #A1A1AA;
-  --ds-tag-secondary-border: rgba(255, 255, 255, 0.06);
+  --ds-tag-secondary-border: #222222;
 
   --ds-tag-success-bg: rgba(16, 185, 129, 0.15);
   --ds-tag-success-color: #34d399;
@@ -705,23 +741,23 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      ============================================ */
 
   --ds-tooltip-bg: #FAFAFA;
-  --ds-tooltip-color: #09090B;
+  --ds-tooltip-color: #0A0A0A;
   --ds-tooltip-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 
   --ds-tooltip-default-bg: #FAFAFA;
-  --ds-tooltip-default-color: #09090B;
+  --ds-tooltip-default-color: #0A0A0A;
 
   --ds-tooltip-primary-bg: #FAFAFA;
-  --ds-tooltip-primary-color: #09090B;
+  --ds-tooltip-primary-color: #0A0A0A;
 
-  --ds-tooltip-secondary-bg: #27272A;
+  --ds-tooltip-secondary-bg: #2A2A2A;
   --ds-tooltip-secondary-color: #FAFAFA;
 
   --ds-tooltip-success-bg: #10B981;
-  --ds-tooltip-success-color: #09090B;
+  --ds-tooltip-success-color: #0A0A0A;
 
   --ds-tooltip-warning-bg: #F59E0B;
-  --ds-tooltip-warning-color: #09090B;
+  --ds-tooltip-warning-color: #0A0A0A;
 
   --ds-tooltip-error-bg: #EF4444;
   --ds-tooltip-error-color: #ffffff;
@@ -731,28 +767,28 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      ============================================ */
 
   /* Checkbox */
-  --ds-checkbox-bg: #111113;
+  --ds-checkbox-bg: #141414;
   --ds-checkbox-bg-disabled: #0D0D0F;
   --ds-checkbox-border: rgba(255, 255, 255, 0.2);
   --ds-checkbox-border-hover: rgba(255, 255, 255, 0.3);
-  --ds-checkbox-border-disabled: rgba(255, 255, 255, 0.06);
+  --ds-checkbox-border-disabled: #222222;
   --ds-checkbox-checked-bg: #FFFFFF;
   --ds-checkbox-checked-border: #FFFFFF;
-  --ds-checkbox-checked-color: #09090B;
+  --ds-checkbox-checked-color: #0A0A0A;
   --ds-checkbox-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.3);
   --ds-checkbox-focus-ring-color: rgba(255, 255, 255, 0.15);
   --ds-checkbox-error-border: #EF4444;
   --ds-checkbox-error-color: #EF4444;
   --ds-checkbox-label-color: #FAFAFA;
-  --ds-checkbox-label-color-disabled: #3F3F46;
+  --ds-checkbox-label-color-disabled: #3A3A3A;
 
   /* Radio */
-  --ds-radio-bg: #111113;
+  --ds-radio-bg: #141414;
   --ds-radio-bg-disabled: #0D0D0F;
   --ds-radio-border: rgba(255, 255, 255, 0.2);
   --ds-radio-border-hover: rgba(255, 255, 255, 0.3);
-  --ds-radio-border-disabled: rgba(255, 255, 255, 0.06);
-  --ds-radio-checked-bg: #111113;
+  --ds-radio-border-disabled: #222222;
+  --ds-radio-checked-bg: #141414;
   --ds-radio-checked-border: #FFFFFF;
   --ds-radio-checked-dot: #FFFFFF;
   --ds-radio-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.3);
@@ -760,14 +796,14 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-radio-error-border: #EF4444;
   --ds-radio-error-color: #EF4444;
   --ds-radio-label-color: #FAFAFA;
-  --ds-radio-label-color-disabled: #3F3F46;
+  --ds-radio-label-color-disabled: #3A3A3A;
   --ds-radio-description-color: #71717A;
 
   /* Radio Button Style */
-  --ds-radio-button-bg: #18181B;
+  --ds-radio-button-bg: #1A1A1A;
   --ds-radio-button-bg-checked: #FFFFFF;
-  --ds-radio-button-border: rgba(255, 255, 255, 0.08);
-  --ds-radio-button-color-checked: #09090B;
+  --ds-radio-button-border: #2A2A2A;
+  --ds-radio-button-color-checked: #0A0A0A;
 
   /* ============================================
      19. COMPONENT TOKENS - SWITCH
@@ -775,11 +811,11 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
 
   --ds-switch-bg: rgba(255, 255, 255, 0.15);
   --ds-switch-bg-hover: rgba(255, 255, 255, 0.2);
-  --ds-switch-bg-disabled: rgba(255, 255, 255, 0.06);
+  --ds-switch-bg-disabled: #222222;
   --ds-switch-checked-bg: #FFFFFF;
   --ds-switch-checked-bg-hover: #E4E4E7;
-  --ds-switch-thumb-bg: #09090B;
-  --ds-switch-handle-bg: #09090B;
+  --ds-switch-thumb-bg: #0A0A0A;
+  --ds-switch-handle-bg: #0A0A0A;
   --ds-switch-thumb-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   --ds-switch-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.3);
   --ds-switch-label-color: #FAFAFA;
@@ -789,28 +825,28 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      ============================================ */
 
   --ds-slider-track-color: #FFFFFF;
-  --ds-slider-track-color-disabled: #3F3F46;
+  --ds-slider-track-color-disabled: #3A3A3A;
   --ds-slider-rail-color: rgba(255, 255, 255, 0.1);
   --ds-slider-handle-bg: #FFFFFF;
-  --ds-slider-handle-bg-disabled: #3F3F46;
-  --ds-slider-handle-border: #09090B;
+  --ds-slider-handle-bg-disabled: #3A3A3A;
+  --ds-slider-handle-border: #0A0A0A;
   --ds-slider-handle-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   --ds-slider-handle-shadow-hover: 0 2px 6px rgba(255, 255, 255, 0.15);
   --ds-slider-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.3);
   --ds-slider-mark-color: #71717A;
   --ds-slider-tooltip-bg: #FAFAFA;
-  --ds-slider-tooltip-color: #09090B;
+  --ds-slider-tooltip-color: #0A0A0A;
 
   /* ============================================
      21. COMPONENT TOKENS - SELECT
      ============================================ */
 
-  --ds-select-bg: #111113;
+  --ds-select-bg: #141414;
   --ds-select-bg-disabled: #0D0D0F;
   --ds-select-color: #FAFAFA;
   --ds-select-color-placeholder: #52525B;
-  --ds-select-color-disabled: #3F3F46;
-  --ds-select-border: rgba(255, 255, 255, 0.12);
+  --ds-select-color-disabled: #3A3A3A;
+  --ds-select-border: #333333;
   --ds-select-border-hover: rgba(255, 255, 255, 0.2);
   --ds-select-border-focus: rgba(255, 255, 255, 0.5);
   --ds-select-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.15);
@@ -821,27 +857,27 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-select-success-border: #10B981;
 
   /* Select Filled */
-  --ds-select-filled-bg: #18181B;
+  --ds-select-filled-bg: #1A1A1A;
 
   /* Select Dropdown */
-  --ds-select-dropdown-bg: #1E1E22;
-  --ds-select-dropdown-border: rgba(255, 255, 255, 0.06);
-  --ds-select-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-select-dropdown-bg: #222222;
+  --ds-select-dropdown-border: #222222;
+  --ds-select-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px #222222;
 
   /* Select Option */
   --ds-select-option-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-select-option-bg-selected: rgba(255, 255, 255, 0.08);
+  --ds-select-option-bg-selected: #2A2A2A;
   --ds-select-option-color-selected: #FAFAFA;
-  --ds-select-option-color-disabled: #3F3F46;
+  --ds-select-option-color-disabled: #3A3A3A;
 
   /* Select Item (legacy) */
   --ds-select-item-color: #A1A1AA;
-  --ds-select-item-selected-bg: rgba(255, 255, 255, 0.08);
+  --ds-select-item-selected-bg: #2A2A2A;
   --ds-select-item-selected-color: #FAFAFA;
   --ds-select-item-active-bg: rgba(255, 255, 255, 0.05);
 
   /* Select Tag (multiple mode) */
-  --ds-select-tag-bg: #27272A;
+  --ds-select-tag-bg: #2A2A2A;
   --ds-select-tag-color: #A1A1AA;
 
   /* Select Arrow/Icon */
@@ -854,11 +890,11 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      22. COMPONENT TOKENS - DATEPICKER
      ============================================ */
 
-  --ds-datepicker-bg: #111113;
+  --ds-datepicker-bg: #141414;
   --ds-datepicker-bg-disabled: #0D0D0F;
   --ds-datepicker-color: #FAFAFA;
   --ds-datepicker-color-placeholder: #52525B;
-  --ds-datepicker-border: rgba(255, 255, 255, 0.12);
+  --ds-datepicker-border: #333333;
   --ds-datepicker-border-hover: rgba(255, 255, 255, 0.2);
   --ds-datepicker-border-focus: rgba(255, 255, 255, 0.5);
   --ds-datepicker-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.15);
@@ -872,27 +908,27 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-datepicker-separator-color: #52525B;
 
   /* Picker (shared DatePicker/TimePicker tokens from rottay original) */
-  --ds-picker-bg: #111113;
-  --ds-picker-border: rgba(255, 255, 255, 0.12);
+  --ds-picker-bg: #141414;
+  --ds-picker-border: #333333;
   --ds-picker-border-hover: rgba(255, 255, 255, 0.2);
   --ds-picker-border-focus: rgba(255, 255, 255, 0.5);
   --ds-picker-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.15);
   --ds-picker-color: #FAFAFA;
-  --ds-picker-dropdown-bg: #1E1E22;
-  --ds-picker-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-picker-dropdown-bg: #222222;
+  --ds-picker-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px #222222;
   --ds-picker-selected-bg: #FFFFFF;
-  --ds-picker-selected-color: #09090B;
+  --ds-picker-selected-color: #0A0A0A;
   --ds-picker-today-border: #FAFAFA;
-  --ds-picker-hover-bg: rgba(255, 255, 255, 0.08);
+  --ds-picker-hover-bg: #2A2A2A;
 
   /* ============================================
      23. COMPONENT TOKENS - INPUTNUMBER
      ============================================ */
 
-  --ds-inputnumber-bg: #111113;
+  --ds-inputnumber-bg: #141414;
   --ds-inputnumber-bg-disabled: #0D0D0F;
   --ds-inputnumber-color: #FAFAFA;
-  --ds-inputnumber-border: rgba(255, 255, 255, 0.12);
+  --ds-inputnumber-border: #333333;
   --ds-inputnumber-border-hover: rgba(255, 255, 255, 0.2);
   --ds-inputnumber-border-focus: rgba(255, 255, 255, 0.5);
   --ds-inputnumber-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.15);
@@ -904,8 +940,8 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-inputnumber-control-color: #52525B;
   --ds-inputnumber-control-color-hover: #FAFAFA;
 
-  --ds-inputnumber-addon-bg: #18181B;
-  --ds-inputnumber-addon-border: rgba(255, 255, 255, 0.08);
+  --ds-inputnumber-addon-bg: #1A1A1A;
+  --ds-inputnumber-addon-border: #2A2A2A;
   --ds-inputnumber-addon-color: #71717A;
 
   --ds-inputnumber-affix-color: #52525B;
@@ -914,11 +950,11 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      24. COMPONENT TOKENS - TEXTAREA
      ============================================ */
 
-  --ds-textarea-bg: #111113;
+  --ds-textarea-bg: #141414;
   --ds-textarea-bg-disabled: #0D0D0F;
   --ds-textarea-color: #FAFAFA;
   --ds-textarea-color-placeholder: #52525B;
-  --ds-textarea-border: rgba(255, 255, 255, 0.12);
+  --ds-textarea-border: #333333;
   --ds-textarea-border-hover: rgba(255, 255, 255, 0.2);
   --ds-textarea-border-focus: rgba(255, 255, 255, 0.5);
   --ds-textarea-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.15);
@@ -927,17 +963,17 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-textarea-warning-border: #F59E0B;
   --ds-textarea-success-border: #10B981;
 
-  --ds-textarea-filled-bg: #18181B;
+  --ds-textarea-filled-bg: #1A1A1A;
   --ds-textarea-count-color: #52525B;
 
   /* ============================================
      25. COMPONENT TOKENS - TIMEPICKER
      ============================================ */
 
-  --ds-timepicker-bg: #111113;
+  --ds-timepicker-bg: #141414;
   --ds-timepicker-bg-disabled: #0D0D0F;
   --ds-timepicker-color: #FAFAFA;
-  --ds-timepicker-border: rgba(255, 255, 255, 0.12);
+  --ds-timepicker-border: #333333;
   --ds-timepicker-border-focus: rgba(255, 255, 255, 0.5);
   --ds-timepicker-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.15);
 
@@ -965,28 +1001,28 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      27. COMPONENT TOKENS - UPLOAD
      ============================================ */
 
-  --ds-upload-bg: #111113;
+  --ds-upload-bg: #141414;
   --ds-upload-border: rgba(255, 255, 255, 0.1);
   --ds-upload-border-hover: rgba(255, 255, 255, 0.25);
 
-  --ds-upload-button-bg: #111113;
-  --ds-upload-button-border: rgba(255, 255, 255, 0.08);
+  --ds-upload-button-bg: #141414;
+  --ds-upload-button-border: #2A2A2A;
   --ds-upload-button-color: #A1A1AA;
 
-  --ds-upload-dragger-bg: #111113;
-  --ds-upload-dragger-bg-hover: #18181B;
-  --ds-upload-dragger-border: rgba(255, 255, 255, 0.08);
+  --ds-upload-dragger-bg: #141414;
+  --ds-upload-dragger-bg-hover: #1A1A1A;
+  --ds-upload-dragger-border: #2A2A2A;
   --ds-upload-dragger-border-active: #FAFAFA;
   --ds-upload-dragger-icon-color: #52525B;
   --ds-upload-dragger-text-color: #A1A1AA;
 
-  --ds-upload-file-bg: #18181B;
+  --ds-upload-file-bg: #1A1A1A;
   --ds-upload-file-color: #A1A1AA;
   --ds-upload-file-remove-color: #EF4444;
-  --ds-upload-progress-track: rgba(255, 255, 255, 0.04);
+  --ds-upload-progress-track: #1E1E1E;
   --ds-upload-progress-bar: #FAFAFA;
-  --ds-upload-card-border: rgba(255, 255, 255, 0.06);
-  --ds-upload-card-bg: #18181B;
+  --ds-upload-card-border: #222222;
+  --ds-upload-card-bg: #1A1A1A;
   --ds-upload-error-border: #EF4444;
   --ds-upload-preview-overlay: rgba(0, 0, 0, 0.5);
   --ds-upload-preview-backdrop: rgba(0, 0, 0, 0.7);
@@ -995,16 +1031,16 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      28. COMPONENT TOKENS - AUTOCOMPLETE
      ============================================ */
 
-  --ds-autocomplete-bg: #111113;
-  --ds-autocomplete-border: rgba(255, 255, 255, 0.12);
+  --ds-autocomplete-bg: #141414;
+  --ds-autocomplete-border: #333333;
   --ds-autocomplete-border-focus: rgba(255, 255, 255, 0.5);
   --ds-autocomplete-error-border: #EF4444;
   --ds-autocomplete-warning-border: #F59E0B;
 
-  --ds-autocomplete-dropdown-bg: #1E1E22;
-  --ds-autocomplete-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-autocomplete-dropdown-bg: #222222;
+  --ds-autocomplete-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px #222222;
   --ds-autocomplete-option-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-autocomplete-option-bg-selected: rgba(255, 255, 255, 0.08);
+  --ds-autocomplete-option-bg-selected: #2A2A2A;
   --ds-autocomplete-empty-color: #52525B;
   --ds-autocomplete-clear-color: #52525B;
 
@@ -1014,7 +1050,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
 
   --ds-toggle-track-bg: rgba(255, 255, 255, 0.15);
   --ds-toggle-track-bg-checked: #FFFFFF;
-  --ds-toggle-dot-bg: #09090B;
+  --ds-toggle-dot-bg: #0A0A0A;
   --ds-toggle-dot-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   --ds-toggle-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.3);
 
@@ -1025,41 +1061,41 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-toggle-label-color: #FAFAFA;
   --ds-toggle-description-color: #71717A;
   --ds-toggle-error-color: #EF4444;
-  --ds-toggle-inner-label-color: #09090B;
+  --ds-toggle-inner-label-color: #0A0A0A;
 
   /* ============================================
      30. COMPONENT TOKENS - DROPDOWN
      ============================================ */
 
-  --ds-dropdown-bg: #1E1E22;
-  --ds-dropdown-border: rgba(255, 255, 255, 0.06);
-  --ds-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-dropdown-bg: #222222;
+  --ds-dropdown-border: #222222;
+  --ds-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px #222222;
 
   --ds-dropdown-item-color: #A1A1AA;
   --ds-dropdown-item-bg-hover: rgba(255, 255, 255, 0.05);
   --ds-dropdown-item-color-hover: #FAFAFA;
-  --ds-dropdown-item-bg-active: rgba(255, 255, 255, 0.08);
+  --ds-dropdown-item-bg-active: #2A2A2A;
   --ds-dropdown-item-color-active: #FAFAFA;
 
   /* ============================================
      31. COMPONENT TOKENS - POPOVER
      ============================================ */
 
-  --ds-popover-bg: #1E1E22;
-  --ds-popover-border: rgba(255, 255, 255, 0.06);
-  --ds-popover-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-popover-bg: #222222;
+  --ds-popover-border: #222222;
+  --ds-popover-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px #222222;
   --ds-popover-title-color: #FAFAFA;
-  --ds-popover-title-border: rgba(255, 255, 255, 0.06);
+  --ds-popover-title-border: #222222;
   --ds-popover-content-color: #A1A1AA;
 
   /* ============================================
      32. COMPONENT TOKENS - DRAWER
      ============================================ */
 
-  --ds-drawer-bg: #18181B;
+  --ds-drawer-bg: #1A1A1A;
   --ds-drawer-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-  --ds-drawer-header-border: rgba(255, 255, 255, 0.06);
-  --ds-drawer-footer-border: rgba(255, 255, 255, 0.06);
+  --ds-drawer-header-border: #222222;
+  --ds-drawer-footer-border: #222222;
   --ds-drawer-title-color: #FAFAFA;
   --ds-drawer-body-color: #A1A1AA;
 
@@ -1067,22 +1103,22 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      33. COMPONENT TOKENS - NOTIFICATION / MESSAGE
      ============================================ */
 
-  --ds-notification-bg: #1E1E22;
-  --ds-notification-border: rgba(255, 255, 255, 0.06);
-  --ds-notification-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-notification-bg: #222222;
+  --ds-notification-border: #222222;
+  --ds-notification-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px #222222;
   --ds-notification-title-color: #FAFAFA;
   --ds-notification-content-color: #A1A1AA;
   --ds-notification-body-color: #A1A1AA;
 
-  --ds-message-bg: #1E1E22;
-  --ds-message-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ds-message-bg: #222222;
+  --ds-message-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px #222222;
   --ds-message-color: #FAFAFA;
 
   /* ============================================
      34. COMPONENT TOKENS - PROGRESS
      ============================================ */
 
-  --ds-progress-bg: rgba(255, 255, 255, 0.08);
+  --ds-progress-bg: #2A2A2A;
   --ds-progress-fill: linear-gradient(90deg, #D4D4D8, #FAFAFA);
   --ds-progress-success-fill: #10B981;
 
@@ -1095,23 +1131,23 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      35. COMPONENT TOKENS - SKELETON
      ============================================ */
 
-  --ds-skeleton-bg: #18181B;
-  --ds-skeleton-highlight: #27272A;
-  --ds-skeleton-wave-gradient: linear-gradient(90deg, #18181B 25%, #27272A 50%, #18181B 75%);
+  --ds-skeleton-bg: #1A1A1A;
+  --ds-skeleton-highlight: #2A2A2A;
+  --ds-skeleton-wave-gradient: linear-gradient(90deg, #1A1A1A 25%, #2A2A2A 50%, #1A1A1A 75%);
 
   /* ============================================
      36. COMPONENT TOKENS - SPINNER
      ============================================ */
 
   --ds-spinner-color: #FAFAFA;
-  --ds-spinner-track: rgba(255, 255, 255, 0.08);
+  --ds-spinner-track: #2A2A2A;
   --ds-spin-color: #FAFAFA;
 
   /* ============================================
      37. COMPONENT TOKENS - DIVIDER
      ============================================ */
 
-  --ds-divider-color: rgba(255, 255, 255, 0.06);
+  --ds-divider-color: #222222;
   --ds-divider-text-color: #FAFAFA;
 
   /* ============================================
@@ -1120,14 +1156,14 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
 
   --ds-pagination-item-bg: transparent;
   --ds-pagination-item-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-pagination-item-bg-active: rgba(255, 255, 255, 0.08);
+  --ds-pagination-item-bg-active: #2A2A2A;
   --ds-pagination-item-color: #A1A1AA;
   --ds-pagination-item-color-hover: #FAFAFA;
   --ds-pagination-item-color-active: #FAFAFA;
   --ds-pagination-item-border: transparent;
-  --ds-pagination-item-border-hover: rgba(255, 255, 255, 0.08);
+  --ds-pagination-item-border-hover: #2A2A2A;
   --ds-pagination-item-border-active: rgba(255, 255, 255, 0.2);
-  --ds-pagination-active-bg: rgba(255, 255, 255, 0.08);
+  --ds-pagination-active-bg: #2A2A2A;
   --ds-pagination-active-border: rgba(255, 255, 255, 0.2);
   --ds-pagination-active-color: #FAFAFA;
 
@@ -1139,49 +1175,49 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-breadcrumb-color-hover: #FAFAFA;
   --ds-breadcrumb-color-active: #FAFAFA;
   --ds-breadcrumb-active-color: #FAFAFA;
-  --ds-breadcrumb-separator-color: #3F3F46;
+  --ds-breadcrumb-separator-color: #3A3A3A;
 
   /* ============================================
      40. COMPONENT TOKENS - MENU / NAVIGATION
      ============================================ */
 
-  --ds-menu-bg: #09090B;
+  --ds-menu-bg: #0A0A0A;
   --ds-menu-item-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-menu-item-bg-active: rgba(255, 255, 255, 0.08);
+  --ds-menu-item-bg-active: #2A2A2A;
   --ds-menu-item-color: #A1A1AA;
   --ds-menu-item-color-hover: #FAFAFA;
   --ds-menu-item-color-active: #FAFAFA;
   --ds-menu-group-title-color: #52525B;
-  --ds-menu-divider-color: rgba(255, 255, 255, 0.06);
+  --ds-menu-divider-color: #222222;
 
   --ds-menu-item-hover-bg: rgba(255, 255, 255, 0.05);
-  --ds-menu-item-selected-bg: rgba(255, 255, 255, 0.08);
+  --ds-menu-item-selected-bg: #2A2A2A;
   --ds-menu-item-selected-color: #FAFAFA;
   --ds-menu-item-danger-color: #EF4444;
-  --ds-menu-submenu-bg: #111113;
+  --ds-menu-submenu-bg: #141414;
   --ds-menu-focus-ring-color: #FAFAFA;
-  --ds-menu-dark-bg: #09090B;
+  --ds-menu-dark-bg: #0A0A0A;
   --ds-menu-dark-item-color: #A1A1AA;
 
   /* ============================================
      41. COMPONENT TOKENS - STEPS
      ============================================ */
 
-  --ds-steps-connector-color: rgba(255, 255, 255, 0.08);
+  --ds-steps-connector-color: #2A2A2A;
   --ds-steps-connector-color-active: #FAFAFA;
-  --ds-steps-item-bg: #27272A;
+  --ds-steps-item-bg: #2A2A2A;
   --ds-steps-item-bg-active: #FFFFFF;
   --ds-steps-item-bg-complete: #10B981;
   --ds-steps-item-color: #52525B;
-  --ds-steps-item-color-active: #09090B;
-  --ds-steps-item-color-complete: #09090B;
+  --ds-steps-item-color-active: #0A0A0A;
+  --ds-steps-item-color-complete: #0A0A0A;
 
   --ds-steps-finish-bg: #10B981;
   --ds-steps-finish-border: #10B981;
-  --ds-steps-finish-icon-color: #09090B;
+  --ds-steps-finish-icon-color: #0A0A0A;
   --ds-steps-process-bg: #FFFFFF;
   --ds-steps-process-border: #FFFFFF;
-  --ds-steps-process-icon-color: #09090B;
+  --ds-steps-process-icon-color: #0A0A0A;
   --ds-steps-wait-bg: transparent;
   --ds-steps-wait-border: rgba(255, 255, 255, 0.15);
   --ds-steps-wait-icon-color: #52525B;
@@ -1191,55 +1227,55 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      42. COMPONENT TOKENS - COLLAPSE / ACCORDION
      ============================================ */
 
-  --ds-collapse-bg: #111113;
-  --ds-collapse-border: rgba(255, 255, 255, 0.06);
-  --ds-collapse-header-bg: #111113;
-  --ds-collapse-header-bg-hover: #18181B;
+  --ds-collapse-bg: #141414;
+  --ds-collapse-border: #222222;
+  --ds-collapse-header-bg: #141414;
+  --ds-collapse-header-bg-hover: #1A1A1A;
   --ds-collapse-header-color: #FAFAFA;
-  --ds-collapse-content-bg: #18181B;
+  --ds-collapse-content-bg: #1A1A1A;
   --ds-collapse-content-color: #A1A1AA;
 
   /* ============================================
      43. COMPONENT TOKENS - CALENDAR
      ============================================ */
 
-  --ds-calendar-bg: #18181B;
-  --ds-calendar-border: rgba(255, 255, 255, 0.06);
+  --ds-calendar-bg: #1A1A1A;
+  --ds-calendar-border: #222222;
   --ds-calendar-header-color: #FAFAFA;
   --ds-calendar-day-color: #FAFAFA;
-  --ds-calendar-day-color-other: #3F3F46;
+  --ds-calendar-day-color-other: #3A3A3A;
   --ds-calendar-day-bg-hover: rgba(255, 255, 255, 0.05);
   --ds-calendar-day-bg-selected: #FFFFFF;
-  --ds-calendar-day-color-selected: #09090B;
-  --ds-calendar-day-bg-today: rgba(255, 255, 255, 0.08);
+  --ds-calendar-day-color-selected: #0A0A0A;
+  --ds-calendar-day-bg-today: #2A2A2A;
 
   /* ============================================
      44. COMPONENT TOKENS - TREE
      ============================================ */
 
   --ds-tree-node-bg-hover: rgba(255, 255, 255, 0.05);
-  --ds-tree-node-bg-selected: rgba(255, 255, 255, 0.08);
+  --ds-tree-node-bg-selected: #2A2A2A;
   --ds-tree-node-color: #A1A1AA;
   --ds-tree-node-color-selected: #FAFAFA;
-  --ds-tree-connector-color: rgba(255, 255, 255, 0.06);
+  --ds-tree-connector-color: #222222;
 
   /* ============================================
      45. COMPONENT TOKENS - TIMELINE
      ============================================ */
 
-  --ds-timeline-line-color: rgba(255, 255, 255, 0.06);
+  --ds-timeline-line-color: #222222;
   --ds-timeline-dot-bg: #FAFAFA;
-  --ds-timeline-dot-border: #18181B;
+  --ds-timeline-dot-border: #1A1A1A;
   --ds-timeline-content-color: #A1A1AA;
   --ds-timeline-dot-blue: #3B82F6;
   --ds-timeline-dot-green: #10B981;
-  --ds-timeline-tail-color: rgba(255, 255, 255, 0.08);
+  --ds-timeline-tail-color: #2A2A2A;
 
   /* ============================================
      46. COMPONENT TOKENS - EMPTY STATE
      ============================================ */
 
-  --ds-empty-icon-color: #3F3F46;
+  --ds-empty-icon-color: #3A3A3A;
   --ds-empty-title-color: #A1A1AA;
   --ds-empty-description-color: #52525B;
 
@@ -1249,19 +1285,19 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
 
   --ds-result-title-color: #FAFAFA;
   --ds-result-subtitle-color: #71717A;
-  --ds-result-icon-color: #09090B;
+  --ds-result-icon-color: #0A0A0A;
 
   /* ============================================
      48. COMPONENT TOKENS - SEGMENTED CONTROL
      ============================================ */
 
-  --ds-segmented-bg: #111113;
+  --ds-segmented-bg: #141414;
   --ds-segmented-item-bg: transparent;
-  --ds-segmented-item-bg-selected: #1E1E22;
+  --ds-segmented-item-bg-selected: #222222;
   --ds-segmented-item-color: #71717A;
   --ds-segmented-item-color-hover: #A1A1AA;
   --ds-segmented-item-color-selected: #FAFAFA;
-  --ds-segmented-item-selected-bg: #1E1E22;
+  --ds-segmented-item-selected-bg: #222222;
   --ds-segmented-item-selected-color: #FAFAFA;
   --ds-segmented-item-selected-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   --ds-segmented-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -1270,7 +1306,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      49. COMPONENT TOKENS - RATE
      ============================================ */
 
-  --ds-rate-color: #3F3F46;
+  --ds-rate-color: #3A3A3A;
   --ds-rate-color-active: #fbbf24;
   --ds-rate-color-hover: #fcd34d;
   --ds-rate-star-color: #F59E0B;
@@ -1279,34 +1315,34 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      50. COMPONENT TOKENS - STATISTIC
      ============================================ */
 
-  --ds-statistic-title-color: #71717A;
+  --ds-statistic-title-color: #A1A1AA;
   --ds-statistic-value-color: #FAFAFA;
-  --ds-statistic-prefix-color: #71717A;
-  --ds-statistic-suffix-color: #71717A;
+  --ds-statistic-prefix-color: #A1A1AA;
+  --ds-statistic-suffix-color: #A1A1AA;
 
   /* ============================================
      51. COMPONENT TOKENS - IMAGE
      ============================================ */
 
-  --ds-image-bg: #111113;
-  --ds-image-border: rgba(255, 255, 255, 0.06);
+  --ds-image-bg: #141414;
+  --ds-image-border: #222222;
   --ds-image-overlay-bg: rgba(0, 0, 0, 0.7);
 
   /* ============================================
      52. COMPONENT TOKENS - LIST
      ============================================ */
 
-  --ds-list-bg: #18181B;
-  --ds-list-item-bg-hover: #1E1E22;
-  --ds-list-item-border: rgba(255, 255, 255, 0.06);
-  --ds-list-border-color: rgba(255, 255, 255, 0.06);
-  --ds-list-split-color: rgba(255, 255, 255, 0.04);
-  --ds-list-skeleton-bg: #27272A;
+  --ds-list-bg: #1A1A1A;
+  --ds-list-item-bg-hover: #222222;
+  --ds-list-item-border: #222222;
+  --ds-list-border-color: #222222;
+  --ds-list-split-color: #1E1E1E;
+  --ds-list-skeleton-bg: #2A2A2A;
   --ds-list-meta-description-color: #A1A1AA;
 
-  --ds-list-background-color: #18181B;
-  --ds-list-item-background-color: #18181B;
-  --ds-list-item-hover-background-color: #1E1E22;
+  --ds-list-background-color: #1A1A1A;
+  --ds-list-item-background-color: #1A1A1A;
+  --ds-list-item-hover-background-color: #222222;
   --ds-list-text-color: #FAFAFA;
   --ds-list-secondary-text-color: #A1A1AA;
 
@@ -1314,10 +1350,10 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      53. COMPONENT TOKENS - FLOAT BUTTON
      ============================================ */
 
-  --ds-floatbutton-default-bg: #1E1E22;
+  --ds-floatbutton-default-bg: #222222;
   --ds-floatbutton-default-color: #A1A1AA;
   --ds-floatbutton-primary-bg: #FFFFFF;
-  --ds-floatbutton-primary-color: #09090B;
+  --ds-floatbutton-primary-color: #0A0A0A;
   --ds-floatbutton-badge-bg: #EF4444;
   --ds-floatbutton-badge-color: #ffffff;
   --ds-floatbutton-description-color: #A1A1AA;
@@ -1327,46 +1363,46 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      ============================================ */
 
   --ds-command-palette-backdrop: rgba(0, 0, 0, 0.7);
-  --ds-command-palette-bg: #1E1E22;
-  --ds-command-palette-border: rgba(255, 255, 255, 0.08);
+  --ds-command-palette-bg: #222222;
+  --ds-command-palette-border: #2A2A2A;
   --ds-command-palette-item-hover-bg: rgba(255, 255, 255, 0.05);
   --ds-command-palette-group-color: #52525B;
   --ds-command-palette-empty-color: #52525B;
-  --ds-command-palette-shortcut-border: rgba(255, 255, 255, 0.08);
+  --ds-command-palette-shortcut-border: #2A2A2A;
 
   /* ============================================
      55. COMPONENT TOKENS - LIVE FEED
      ============================================ */
 
-  --ds-live-feed-bg: #1E1E22;
-  --ds-live-feed-border: rgba(255, 255, 255, 0.06);
+  --ds-live-feed-bg: #222222;
+  --ds-live-feed-border: #222222;
   --ds-live-feed-refresh-color: #A1A1AA;
   --ds-live-feed-new-bg: rgba(59, 130, 246, 0.1);
   --ds-live-feed-new-border: rgba(59, 130, 246, 0.25);
   --ds-live-feed-new-color: #3B82F6;
   --ds-live-feed-badge-bg: #FAFAFA;
-  --ds-live-feed-badge-color: #09090B;
+  --ds-live-feed-badge-color: #0A0A0A;
   --ds-live-feed-empty-color: #52525B;
   --ds-live-feed-load-more-color: #FAFAFA;
-  --ds-live-feed-skeleton-bg: #27272A;
+  --ds-live-feed-skeleton-bg: #2A2A2A;
 
   /* ============================================
      56. COMPONENT TOKENS - STATS GRID
      ============================================ */
 
-  --ds-stats-grid-card-bg: #1E1E22;
-  --ds-stats-grid-card-border: rgba(255, 255, 255, 0.06);
-  --ds-stats-grid-card-filled-bg: #18181B;
+  --ds-stats-grid-card-bg: #222222;
+  --ds-stats-grid-card-border: #222222;
+  --ds-stats-grid-card-filled-bg: #1A1A1A;
   --ds-stats-grid-card-glass-bg: rgba(255, 255, 255, 0.05);
-  --ds-stats-grid-card-glass-border: rgba(255, 255, 255, 0.08);
+  --ds-stats-grid-card-glass-border: #2A2A2A;
   --ds-stats-grid-hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   --ds-stats-grid-label-color: #A1A1AA;
   --ds-stats-grid-value-color: #FAFAFA;
-  --ds-stats-grid-description-color: #52525B;
+  --ds-stats-grid-description-color: #71717A;
   --ds-stats-grid-trend-positive: #10B981;
   --ds-stats-grid-trend-negative: #EF4444;
   --ds-stats-grid-trend-neutral: #52525B;
-  --ds-stats-grid-skeleton-bg: #27272A;
+  --ds-stats-grid-skeleton-bg: #2A2A2A;
   --ds-stats-grid-skeleton-wave-gradient:
     linear-gradient(
       90deg,
@@ -1381,8 +1417,8 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
 
   --ds-descriptions-label-color: #71717A;
   --ds-descriptions-content-color: #FAFAFA;
-  --ds-descriptions-border: rgba(255, 255, 255, 0.06);
-  --ds-descriptions-bg: #111113;
+  --ds-descriptions-border: #222222;
+  --ds-descriptions-bg: #141414;
 
   /* ============================================
      58. COMPONENT TOKENS - BACK TOP
@@ -1390,7 +1426,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
 
   --ds-backtop-bg: #FAFAFA;
   --ds-backtop-bg-hover: #E4E4E7;
-  --ds-backtop-color: #09090B;
+  --ds-backtop-color: #0A0A0A;
   --ds-backtop-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 
   /* ============================================
@@ -1400,22 +1436,22 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-anchor-link-color: #71717A;
   --ds-anchor-link-color-active: #FAFAFA;
   --ds-anchor-ink-color: #FAFAFA;
-  --ds-anchor-border-color: rgba(255, 255, 255, 0.06);
+  --ds-anchor-border-color: #222222;
 
   /* ============================================
      60. COMPONENT TOKENS - WATERMARK
      ============================================ */
 
-  --ds-watermark-color: rgba(255, 255, 255, 0.04);
+  --ds-watermark-color: #1E1E1E;
 
   /* ============================================
      61. COMPONENT TOKENS - TRANSFER
      ============================================ */
 
-  --ds-transfer-bg: #18181B;
-  --ds-transfer-border: rgba(255, 255, 255, 0.08);
-  --ds-transfer-header-bg: #111113;
-  --ds-transfer-header-border: rgba(255, 255, 255, 0.06);
+  --ds-transfer-bg: #1A1A1A;
+  --ds-transfer-border: #2A2A2A;
+  --ds-transfer-header-bg: #141414;
+  --ds-transfer-header-border: #222222;
   --ds-transfer-item-color: #A1A1AA;
   --ds-transfer-item-bg-hover: rgba(255, 255, 255, 0.05);
 
@@ -1423,10 +1459,10 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      62. SIDEBAR TOKENS
      ============================================ */
 
-  --ds-sidebar-bg: #09090B;
-  --ds-sidebar-border: rgba(255, 255, 255, 0.06);
-  --ds-sidebar-text: #FAFAFA;
-  --ds-sidebar-text-muted: #71717A;
+  --ds-sidebar-bg: #0B0C0D;
+  --ds-sidebar-border: #16191C;
+  --ds-sidebar-text: #F5F5F2;
+  --ds-sidebar-text-muted: #727770;
   --ds-sidebar-group-font-size: 11px;
   --ds-sidebar-group-font-weight: 600;
   --ds-sidebar-group-color: #52525B;
@@ -1434,29 +1470,29 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-sidebar-group-margin-top: 8px;
   --ds-sidebar-group-margin-bottom: 4px;
   --ds-sidebar-group-padding-top: 10px;
-  --ds-sidebar-group-border: 1px solid rgba(255, 255, 255, 0.06);
+  --ds-sidebar-group-border: 1px solid #222222;
   --ds-sidebar-item-font-size: 13px;
   --ds-sidebar-item-font-weight: 400;
   --ds-sidebar-item-font-weight-active: 500;
-  --ds-sidebar-item-color: #A1A1AA;
+  --ds-sidebar-item-color: #B9BCB6;
   --ds-sidebar-item-color-active: #FFFFFF;
-  --ds-sidebar-item-bg-active: #27272A;
-  --ds-sidebar-item-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-sidebar-item-bg-active: rgba(255, 255, 255, 0.07);
+  --ds-sidebar-item-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-sidebar-item-indent: 6px;
   --ds-sidebar-item-padding: 6px 10px;
   --ds-sidebar-icon-size: 16px;
-  --ds-sidebar-footer-bg: #09090B;
+  --ds-sidebar-footer-bg: #0B0C0D;
 
   /* ============================================
      63. LAYOUT TOKENS
      ============================================ */
 
-  --ds-layout-bg: #09090B;
-  --ds-layout-header-bg: rgba(9, 9, 11, 0.85);
+  --ds-layout-bg: #0A0B0D;
+  --ds-layout-header-bg: rgba(11, 12, 13, 0.82);
   --ds-layout-header-backdrop: blur(12px);
-  --ds-layout-header-border: rgba(255, 255, 255, 0.06);
-  --ds-layout-sider-bg: #09090B;
-  --ds-layout-sider-border: rgba(255, 255, 255, 0.06);
+  --ds-layout-header-border: rgba(255, 255, 255, 0.05);
+  --ds-layout-sider-bg: #0B0C0D;
+  --ds-layout-sider-border: #16191C;
 
   /* ============================================
      64. ICON COLORS
@@ -1473,7 +1509,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
   --ds-accent-primary: #FFFFFF;
   --ds-accent-secondary: #475569;
   --ds-accent-light: #E4E4E7;
-  --ds-highlight-bg: rgba(255, 255, 255, 0.06);
+  --ds-highlight-bg: #222222;
   --ds-highlight-border: rgba(255, 255, 255, 0.15);
 
   /* Live/Online indicators */
@@ -1494,7 +1530,7 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      67. GRADIENT TOKENS
      ============================================ */
 
-  --ds-gradient-dark: linear-gradient(135deg, #09090B 0%, #111113 50%, #18181B 100%);
+  --ds-gradient-dark: linear-gradient(135deg, #0A0A0A 0%, #141414 50%, #1A1A1A 100%);
   --ds-gradient-ambient-cyan: radial-gradient(ellipse, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
   --ds-gradient-ambient-violet: radial-gradient(ellipse, rgba(71, 85, 105, 0.03) 0%, transparent 60%);
 
@@ -1518,9 +1554,17 @@ html[data-tenant='rottay']:not([data-theme='dark']):not(.dark) {
      70. CODE BLOCK TOKENS
      ============================================ */
 
-  --ds-code-bg: #111113;
+  --ds-code-bg: #141414;
   --ds-code-color: #E4E4E7;
-  --ds-code-border: rgba(255, 255, 255, 0.06);
+  --ds-code-border: #222222;
+
+  /* ============================================
+     71. SHELL GRID TOKENS
+     ============================================ */
+
+  --ds-shell-grid-size: 28px;
+  --ds-shell-grid-line: rgba(255, 255, 255, 0.03);
+  --ds-shell-grid-opacity: 0.9;
 }
 
 /* ============================================
@@ -1530,6 +1574,36 @@ html[data-tenant='rottay'][data-theme='dark'],
 html[data-tenant='rottay'].dark {
   color-scheme: dark;
 
+  /* ============================================
+     DaisyUI 5 color bridge (oklch format) - Dark mode
+     Same values as default block (Rottay is dark-first).
+     ============================================ */
+  --color-primary: oklch(96.7% 0.008 100);           /* #F7F7F2 off-white */
+  --color-primary-content: oklch(7% 0.01 260);       /* #0B0C0D near-black */
+  --color-secondary: oklch(53% 0.02 250);            /* #6E747E graphite */
+  --color-secondary-content: oklch(96% 0.008 100);   /* #F5F5F2 */
+  --color-accent: oklch(77% 0.04 70);                /* #C7B8A5 warm stone */
+  --color-accent-content: oklch(7% 0.01 260);        /* #0B0C0D */
+  --color-neutral: oklch(20% 0.01 260);              /* #23272D dark border */
+  --color-neutral-content: oklch(96% 0.008 100);     /* #F5F5F2 */
+  --color-base-100: oklch(7% 0.01 260);              /* #0A0B0D canvas */
+  --color-base-200: oklch(10% 0.01 250);             /* #0F1114 secondary bg */
+  --color-base-300: oklch(13% 0.01 250);             /* #15181C tertiary bg */
+  --color-base-content: oklch(96% 0.008 100);        /* #F5F5F2 text */
+  --color-success: oklch(72% 0.15 165);              /* #31C48D */
+  --color-success-content: oklch(7% 0.01 260);
+  --color-warning: oklch(72% 0.12 75);               /* #D6A04B */
+  --color-warning-content: oklch(7% 0.01 260);
+  --color-error: oklch(62% 0.12 20);                 /* #E06A6A */
+  --color-error-content: oklch(96% 0.008 100);
+  --color-info: oklch(67% 0.04 230);                 /* #7E97AD */
+  --color-info-content: oklch(7% 0.01 260);
+  --rounded-box: 14px;
+  --rounded-btn: 10px;
+  --rounded-badge: 10px;
+  --animation-btn: 0.18s;
+  --animation-input: 0.18s;
+
   /* -- Primary - White/Neutral scale ---------- */
   --ds-color-primary-50: #FAFAFA;
   --ds-color-primary-100: #F4F4F5;
@@ -1538,14 +1612,14 @@ html[data-tenant='rottay'].dark {
   --ds-color-primary-400: #A1A1AA;
   --ds-color-primary-500: #71717A;
   --ds-color-primary-600: #52525B;
-  --ds-color-primary-700: #3F3F46;
-  --ds-color-primary-800: #27272A;
-  --ds-color-primary-900: #18181B;
+  --ds-color-primary-700: #3A3A3A;
+  --ds-color-primary-800: #2A2A2A;
+  --ds-color-primary-900: #1A1A1A;
 
-  --ds-color-primary: #FFFFFF;
-  --ds-color-primary-hover: #E4E4E7;
-  --ds-color-primary-subtle: rgba(255, 255, 255, 0.1);
-  --ds-color-primary-foreground: #09090B;
+  --ds-color-primary: #F7F7F2;
+  --ds-color-primary-hover: #FFFFFF;
+  --ds-color-primary-subtle: rgba(247, 247, 242, 0.10);
+  --ds-color-primary-foreground: #0B0C0D;
   --ds-color-primary-rgb: 255, 255, 255;
 
   /* -- Secondary - Cool Slate/Blue-Gray -------- */
@@ -1560,49 +1634,49 @@ html[data-tenant='rottay'].dark {
   --ds-color-secondary-800: #0f172a;
   --ds-color-secondary-900: #020617;
 
-  --ds-color-secondary: #475569;
-  --ds-color-secondary-hover: #334155;
+  --ds-color-secondary: #6E747E;
+  --ds-color-secondary-hover: #848B95;
   --ds-color-secondary-rgb: 71, 85, 105;
 
   /* -- Backgrounds ----------------------------- */
-  --ds-color-bg-primary: #09090B;
-  --ds-color-bg-secondary: #111113;
-  --ds-color-bg-tertiary: #18181B;
-  --ds-color-bg-subtle: #111113;
-  --ds-color-bg-hover: #1E1E22;
-  --ds-color-bg-canvas: #09090B;
-  --ds-color-bg-elevated: #1E1E22;
-  --ds-color-bg-input: #111113;
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.7);
-  --ds-color-bg-surface: #18181B;
-  --ds-color-bg: #09090B;
-  --ds-color-background: #09090B;
+  --ds-color-bg-primary: #0A0B0D;
+  --ds-color-bg-secondary: #0F1114;
+  --ds-color-bg-tertiary: #15181C;
+  --ds-color-bg-subtle: #121418;
+  --ds-color-bg-hover: #191C20;
+  --ds-color-bg-canvas: #090A0B;
+  --ds-color-bg-elevated: #1B1F24;
+  --ds-color-bg-input: #0F1114;
+  --ds-color-bg-overlay: rgba(5, 6, 8, 0.72);
+  --ds-color-bg-surface: #101316;
+  --ds-color-bg: #0A0B0D;
+  --ds-color-background: #0A0B0D;
 
   /* -- Text ------------------------------------ */
-  --ds-color-text-primary: #FAFAFA;
-  --ds-color-text-secondary: #A1A1AA;
-  --ds-color-text-tertiary: #71717A;
-  --ds-color-text-muted: #52525B;
-  --ds-color-text-disabled: #3F3F46;
-  --ds-color-text-on-primary: #09090B;
-  --ds-color-text: #FAFAFA;
+  --ds-color-text-primary: #F5F5F2;
+  --ds-color-text-secondary: #C2C4BE;
+  --ds-color-text-tertiary: #9DA19A;
+  --ds-color-text-muted: #727770;
+  --ds-color-text-disabled: #555A53;
+  --ds-color-text-on-primary: #0B0C0D;
+  --ds-color-text: #F5F5F2;
 
   /* -- Borders --------------------------------- */
-  --ds-color-border: rgba(255, 255, 255, 0.08);
-  --ds-color-border-primary: rgba(255, 255, 255, 0.08);
-  --ds-color-border-secondary: rgba(255, 255, 255, 0.06);
-  --ds-color-border-subtle: rgba(255, 255, 255, 0.04);
-  --ds-color-border-tertiary: rgba(255, 255, 255, 0.04);
-  --ds-color-border-focus: rgba(255, 255, 255, 0.5);
+  --ds-color-border: #23272D;
+  --ds-color-border-primary: #23272D;
+  --ds-color-border-secondary: #2B3138;
+  --ds-color-border-subtle: #191D22;
+  --ds-color-border-tertiary: #191D22;
+  --ds-color-border-focus: rgba(245, 245, 242, 0.28);
 
   /* -- Surfaces -------------------------------- */
-  --ds-color-surface: #09090B;
-  --ds-color-surface-secondary: #111113;
-  --ds-color-surface-muted: #18181B;
+  --ds-color-surface: #0A0B0D;
+  --ds-color-surface-secondary: #0F1114;
+  --ds-color-surface-muted: #15181C;
 
   /* -- Accent ---------------------------------- */
-  --ds-color-accent: #A1A1AA;
-  --ds-color-accent-hover: #D4D4D8;
-  --ds-accent-primary: #FFFFFF;
-  --ds-accent-secondary: #475569;
+  --ds-color-accent: #C7B8A5;
+  --ds-color-accent-hover: #D7CBBC;
+  --ds-accent-primary: #F7F7F2;
+  --ds-accent-secondary: #6E747E;
 }

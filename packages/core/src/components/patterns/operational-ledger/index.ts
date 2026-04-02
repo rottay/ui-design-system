@@ -15,7 +15,13 @@ export type {
   LedgerFilter,
 } from './OperationalLedger.types';
 
-/** Engine-resolved OperationalLedger pattern component. */
+/**
+ * @engine classic-only
+ * @category domain-kit (ops/finance)
+ * This pattern is domain-specific and ships only with the classic engine.
+ * Modern engine parity is not planned. Consider moving to components/kits/
+ * when the kit infrastructure is established.
+ */
 export const PatternOperationalLedger = createEngineComponent<OperationalLedgerProps>(
   'PatternOperationalLedger',
   {

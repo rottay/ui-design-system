@@ -7,7 +7,7 @@
 import React from 'react';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
-import * as DS from '../../index';
+import * as DS from '../../../index';
 import { STABLE_ENGINES, renderWithEngine } from '../helpers/engine-test-utils';
 
 type PatternSmokeCase = {
@@ -244,9 +244,9 @@ const PATTERN_CASES: PatternSmokeCase[] = [
 describe('pattern smoke coverage', () => {
   beforeAll(async () => {
     await Promise.all([
-      import('../../components/patterns/detail-panel/engines/classic'),
-      import('../../components/patterns/detail-panel/engines/modern'),
-      import('../../components/patterns/detail-panel/engines/rustic'),
+      import('../../../components/patterns/detail-panel/engines/classic'),
+      import('../../../components/patterns/detail-panel/engines/modern'),
+      import('../../../components/patterns/detail-panel/engines/rustic'),
     ]);
   });
 

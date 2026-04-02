@@ -25,3 +25,4 @@ export * from './binding';
 export * from './boundary';
 export * from './custom';
 export * from './EngineProvider';
+export * from './AntdConfigProvider';

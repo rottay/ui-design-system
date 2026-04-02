@@ -21,10 +21,10 @@
 
 /* =============================================================================
    LAYER 0: ANT DESIGN BASE STYLES (rottay-reset)
-   Required for Ant Design icons (@ant-design/icons) to render correctly
-   NOTE: Commented out - apps should import antd/dist/reset.css directly
+   Required for Ant Design icons (@ant-design/icons) to render correctly.
+   Placed in the lowest-priority layer so DS tokens always override it.
    ============================================================================= */
-/* @import 'antd/dist/reset.css' layer(rottay-reset); */
+@import 'antd/dist/reset.css' layer(rottay-reset);
 
 /* =============================================================================
    LAYER 1: DS FOUNDATION + DEFAULT THEME (rottay-tokens)

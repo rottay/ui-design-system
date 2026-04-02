@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { Skeleton } from '.';
-import { renderSurface } from '../../../surfaces/tests/test-utils';
+import { renderSurface } from '../../../surfaces/common/test-utils';
 import { renderWithEngine, STABLE_ENGINES } from '../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Skeleton integration', () => {

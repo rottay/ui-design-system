@@ -114,15 +114,15 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     success: 'text-success-content',
     warning: 'text-warning-content',
     error: 'text-error-content',
-    gradient: 'text-white',
+    gradient: 'text-[var(--ds-avatar-gradient-color)]',
   }[variant] || 'text-neutral-content';
 
-  // Status indicator maps to DaisyUI semantic feedback colours
-  const statusColor = status ? {
-    online: 'bg-success',
-    offline: 'bg-neutral',
-    away: 'bg-warning',
-    busy: 'bg-error',
+  // Status indicator uses DS token colours for consistent theming
+  const statusTokenColor = status ? {
+    online: 'var(--ds-avatar-status-online)',
+    offline: 'var(--ds-avatar-status-offline)',
+    away: 'var(--ds-avatar-status-away)',
+    busy: 'var(--ds-avatar-status-busy)',
   }[status] : undefined;
 
   // DaisyUI 'online' class on the avatar container enables its built-in status dot
@@ -138,7 +138,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     >
       <div
         className={`mask ${maskClass} ${ringClass}`}
-        style={sizeStyle}
+        style={{ ...sizeStyle, transition: `var(--ds-avatar-transition)` }}
       >
         {src && !imageError ? (
           <img
@@ -149,26 +149,36 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
           />
         ) : (
           <div
-            className={`${variantBgClass} ${variantTextClass} flex items-center justify-center font-medium`}
+            className={`${variantBgClass} ${variantTextClass} flex items-center justify-center`}
             style={{
               width: '100%',
               height: '100%',
               fontSize: `var(--ds-avatar-${size}-font-size)`,
+              fontWeight: `var(--ds-avatar-font-weight)` as any,
+              // Ensure initials maintain contrast by using explicit token colors
+              // when the variant background is too close to text color
+              color: `var(--ds-avatar-${variant}-color)`,
+              textShadow: variant === 'gradient' ? '0 1px 2px rgba(0,0,0,0.15)' : undefined,
             }}
           >
             {displayInitials || children}
           </div>
         )}
       </div>
-      {/* Status dot positioned at the bottom-right corner with a white border
-          to visually separate it from the avatar background */}
+      {/* Status dot positioned at the bottom-right corner with a themed border
+          to visually separate it from the avatar background. Transitions smoothly
+          on appear via opacity + scale for a polished status change effect. */}
       {status && (
         <span
-          className={`absolute bottom-0 right-0 ${statusColor} border-2 border-white rounded-full`}
+          className="absolute bottom-0 right-0 rounded-full"
           style={{
             width: 'var(--ds-avatar-status-size)',
             height: 'var(--ds-avatar-status-size)',
+            backgroundColor: statusTokenColor,
+            border: 'var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border)',
             transform: 'translate(25%, 25%)',
+            transition: `opacity var(--ds-avatar-transition), transform var(--ds-avatar-transition), background-color var(--ds-avatar-transition)`,
+            opacity: 1,
           }}
         />
       )}

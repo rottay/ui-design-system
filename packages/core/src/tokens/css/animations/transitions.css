@@ -254,3 +254,35 @@
     --delay-stagger-increment: 0s;
   }
 }
+
+/* =========================================================================
+   DS-prefixed aliases for component consumption
+   Components should use these --ds-* tokens, not the unprefixed versions.
+   ========================================================================= */
+
+:root {
+  /* Duration aliases */
+  --ds-duration-instant: var(--duration-instant, 0s);
+  --ds-duration-fast: var(--duration-faster, 0.15s);
+  --ds-duration-normal: var(--duration-fast, 0.2s);
+  --ds-duration-slow: var(--duration-normal, 0.3s);
+  --ds-duration-gentle: var(--duration-slow, 0.4s);
+
+  /* Easing aliases */
+  --ds-ease-out: var(--ds-ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
+  --ds-ease-in-out: var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
+
+  /* Reduced motion override */
+  --ds-motion-reduce: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-duration-instant: 0s;
+    --ds-duration-fast: 0s;
+    --ds-duration-normal: 0s;
+    --ds-duration-slow: 0s;
+    --ds-duration-gentle: 0s;
+    --ds-motion-reduce: 1;
+  }
+}

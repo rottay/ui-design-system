@@ -7,7 +7,7 @@
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { waitFor } from '@testing-library/react';
-import * as DS from '../../index';
+import * as DS from '../../../index';
 import { STABLE_ENGINES, renderWithEngine } from '../helpers/engine-test-utils';
 
 const DATA_IMAGE =

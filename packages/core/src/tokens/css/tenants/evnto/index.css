@@ -14,6 +14,38 @@
    EVNTO BRAND COLORS (Light Mode Default)
    ============================================ */
 html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
+  /* ============================================
+     DaisyUI 5 color bridge (oklch format)
+     Maps Evnto brand (minimal light theme) to DaisyUI 5's
+     --color-* system so btn, card, badge, table, etc.
+     render in the Evnto palette instead of DaisyUI defaults.
+     ============================================ */
+  --color-primary: oklch(15% 0.005 250);              /* #171717 near-black */
+  --color-primary-content: oklch(100% 0 0);           /* #FFFFFF white */
+  --color-secondary: oklch(60% 0.03 60);              /* #B8A898 warm beige */
+  --color-secondary-content: oklch(15% 0.005 250);    /* #171717 */
+  --color-accent: oklch(60% 0.03 60);                 /* #B8A898 sand */
+  --color-accent-content: oklch(15% 0.005 250);       /* #171717 */
+  --color-neutral: oklch(42% 0.005 250);              /* #525252 medium gray */
+  --color-neutral-content: oklch(98% 0 0);            /* #FAFAFA */
+  --color-base-100: oklch(100% 0 0);                  /* #FFFFFF canvas */
+  --color-base-200: oklch(98% 0 0);                   /* #FAFAFA secondary bg */
+  --color-base-300: oklch(96% 0 0);                   /* #F5F5F5 tertiary bg */
+  --color-base-content: oklch(12% 0.005 250);         /* #111111 text */
+  --color-success: oklch(45% 0.1 155);                /* #15803D */
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(48% 0.1 75);                 /* #A16207 */
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(42% 0.15 25);                  /* #B91C1C */
+  --color-error-content: oklch(100% 0 0);
+  --color-info: oklch(40% 0.02 250);                  /* #475569 slate */
+  --color-info-content: oklch(100% 0 0);
+  --rounded-box: 8px;
+  --rounded-btn: 6px;
+  --rounded-badge: 6px;
+  --animation-btn: 0.18s;
+  --animation-input: 0.18s;
+
   /* Primary - Black to White scale (inverted for light theme) */
   --ds-color-primary-50: #171717;
   --ds-color-primary-100: #262626;
@@ -198,4 +230,98 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-event-ended-text: #a3a3a3;
   --ds-event-cancelled: #fef2f2;
   --ds-event-cancelled-text: #dc2626;
+}
+
+/* ============================================
+   EVNTO BRAND COLORS (Dark Mode)
+   Warm dark aesthetic - maintains beige hue family
+   ============================================ */
+
+/* Dark mode for Evnto - warm dark aesthetic */
+html[data-tenant='evnto'][data-theme='dark'],
+html[data-tenant='evnto'].dark {
+  color-scheme: dark;
+
+  /* DaisyUI 5 color contract (oklch) - dark variant */
+  --color-primary: oklch(92% 0.005 60);
+  --color-primary-content: oklch(12% 0.005 60);
+  --color-secondary: oklch(55% 0.03 60);
+  --color-secondary-content: oklch(95% 0.005 60);
+  --color-accent: oklch(55% 0.03 60);
+  --color-accent-content: oklch(95% 0.005 60);
+  --color-neutral: oklch(22% 0.005 60);
+  --color-neutral-content: oklch(85% 0.005 60);
+  --color-base-100: oklch(11% 0.005 60);
+  --color-base-200: oklch(15% 0.008 60);
+  --color-base-300: oklch(20% 0.01 60);
+  --color-base-content: oklch(90% 0.005 60);
+  --color-info: oklch(62% 0.15 250);
+  --color-info-content: oklch(98% 0.005 250);
+  --color-success: oklch(62% 0.15 150);
+  --color-success-content: oklch(98% 0.005 150);
+  --color-warning: oklch(72% 0.15 85);
+  --color-warning-content: oklch(15% 0.05 85);
+  --color-error: oklch(58% 0.2 25);
+  --color-error-content: oklch(98% 0.005 25);
+
+  /* DaisyUI 5 structural tokens */
+  --rounded-box: 14px;
+  --rounded-btn: 10px;
+  --rounded-badge: 9999px;
+  --animation-btn: 0.15s;
+  --animation-input: 0.15s;
+
+  /* DS semantic tokens - dark variant */
+  --ds-color-primary: #E8E8E0;
+  --ds-color-primary-hover: #F0F0E8;
+  --ds-color-secondary: #A89880;
+  --ds-color-secondary-hover: #B8A890;
+  --ds-color-accent: #A89880;
+  --ds-color-bg-primary: #131210;
+  --ds-color-bg-secondary: #1C1A16;
+  --ds-color-bg-tertiary: #24221C;
+  --ds-color-bg-elevated: #2A2820;
+  --ds-color-text-primary: #E8E8E0;
+  --ds-color-text-secondary: #A8A898;
+  --ds-color-text-muted: #686858;
+  --ds-color-text-disabled: #484838;
+  --ds-color-border-primary: #2E2C24;
+  --ds-color-border-secondary: #222018;
+  --ds-color-border-focus: #A89880;
+
+  /* Button tokens - dark */
+  --ds-button-primary-bg: #E8E8E0;
+  --ds-button-primary-text: #131210;
+  --ds-button-primary-hover-bg: #F0F0E8;
+  --ds-button-secondary-bg: transparent;
+  --ds-button-secondary-text: #A8A898;
+  --ds-button-secondary-border: #2E2C24;
+  --ds-button-secondary-hover-bg: #1C1A16;
+
+  /* Card tokens - dark */
+  --ds-card-bg: #1C1A16;
+  --ds-card-border: #2E2C24;
+
+  /* Input tokens - dark */
+  --ds-input-bg: #131210;
+  --ds-input-border: #2E2C24;
+  --ds-input-text: #E8E8E0;
+  --ds-input-placeholder: #686858;
+  --ds-input-focus-border: #A89880;
+
+  /* Table tokens - dark */
+  --ds-table-header-bg: #1C1A16;
+  --ds-table-row-hover: #24221C;
+  --ds-table-border: #222018;
+
+  /* Sidebar tokens - dark */
+  --ds-sidebar-bg: #0E0D0B;
+  --ds-sidebar-text: #A8A898;
+  --ds-sidebar-active-bg: #1C1A16;
+  --ds-sidebar-active-text: #E8E8E0;
+
+  /* Evnto domain tokens - dark variant */
+  --ds-evnto-accent-primary: #A89880;
+  --ds-evnto-accent-secondary: #8A7A68;
+  --ds-evnto-highlight: rgba(168, 152, 128, 0.12);
 }

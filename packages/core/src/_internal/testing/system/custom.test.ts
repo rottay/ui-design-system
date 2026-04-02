@@ -19,7 +19,7 @@ import {
   getCustomEngineConfig,
   createCustomWrapper,
   useCustomStatus,
-} from '../../engines/custom';
+} from '../../../runtime/engines/custom';
 
 describe('Custom Engine', () => {
   beforeEach(() => {

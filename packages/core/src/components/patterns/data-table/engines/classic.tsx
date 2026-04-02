@@ -154,47 +154,87 @@ export default function ClassicDataTable<T extends object>(
     [onColumnResize]
   );
 
-  // --- Column drag handlers ---
-  const handleDragStart = useCallback((e: React.DragEvent, key: string) => {
-    setDragSourceKey(key);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', key);
-  }, []);
+  // --- Column reorder handlers (mouse-event based for cross-browser reliability) ---
+  const reorderRef = useRef<{ sourceKey: string } | null>(null);
 
-  const handleDragOver = useCallback((e: React.DragEvent, key: string) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    setDragOverKey(key);
-  }, []);
-
-  const handleDragEnd = useCallback(() => {
-    setDragSourceKey(null);
-    setDragOverKey(null);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, targetKey: string) => {
+  const handleReorderStart = useCallback(
+    (e: React.MouseEvent, key: string) => {
+      if (!reorderable || !onColumnReorder) return;
       e.preventDefault();
-      const sourceKey = e.dataTransfer.getData('text/plain');
-      if (!sourceKey || sourceKey === targetKey) {
+      e.stopPropagation();
+      reorderRef.current = { sourceKey: key };
+      setDragSourceKey(key);
+
+      const handleMouseMove = (moveEvent: MouseEvent) => {
+        if (!reorderRef.current) return;
+        // Find which Ant th the mouse is over by scanning all th with data-col-key
+        const table = (moveEvent.target as HTMLElement)?.closest('.ds-pattern-data-table');
+        if (!table) return;
+        const ths = table.querySelectorAll<HTMLElement>('[data-col-key]');
+        for (const th of ths) {
+          const rect = th.getBoundingClientRect();
+          if (moveEvent.clientX >= rect.left && moveEvent.clientX <= rect.right) {
+            const colKey = th.dataset.colKey;
+            if (colKey && colKey !== reorderRef.current.sourceKey) {
+              setDragOverKey(colKey);
+            }
+            break;
+          }
+        }
+      };
+
+      const handleMouseUp = (upEvent: MouseEvent) => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+
+        if (!reorderRef.current) {
+          setDragSourceKey(null);
+          setDragOverKey(null);
+          return;
+        }
+
+        // Find drop target
+        const table = (upEvent.target as HTMLElement)?.closest('.ds-pattern-data-table');
+        let targetKey: string | null = null;
+        if (table) {
+          const ths = table.querySelectorAll<HTMLElement>('[data-col-key]');
+          for (const th of ths) {
+            const rect = th.getBoundingClientRect();
+            if (upEvent.clientX >= rect.left && upEvent.clientX <= rect.right) {
+              targetKey = th.dataset.colKey ?? null;
+              break;
+            }
+          }
+        }
+
+        const sourceKey = reorderRef.current.sourceKey;
+        reorderRef.current = null;
         setDragSourceKey(null);
         setDragOverKey(null);
-        return;
-      }
 
-      const currentOrder = columnOrder ?? processedColumns.map((c) => c.key);
-      const newOrder = [...currentOrder];
-      const sourceIdx = newOrder.indexOf(sourceKey);
-      const targetIdx = newOrder.indexOf(targetKey);
-      if (sourceIdx === -1 || targetIdx === -1) return;
+        if (!targetKey || targetKey === sourceKey) return;
 
-      newOrder.splice(sourceIdx, 1);
-      newOrder.splice(targetIdx, 0, sourceKey);
-      onColumnReorder?.(newOrder);
-      setDragSourceKey(null);
-      setDragOverKey(null);
+        const currentOrder = columnOrder && columnOrder.length > 0
+          ? columnOrder
+          : processedColumns.map((c) => c.key);
+        const newOrder = [...currentOrder];
+        const sourceIdx = newOrder.indexOf(sourceKey);
+        const targetIdx = newOrder.indexOf(targetKey);
+        if (sourceIdx === -1 || targetIdx === -1) return;
+
+        newOrder.splice(sourceIdx, 1);
+        newOrder.splice(targetIdx, 0, sourceKey);
+        onColumnReorder(newOrder);
+      };
+
+      document.body.style.cursor = 'grabbing';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
     },
-    [columnOrder, processedColumns, onColumnReorder]
+    [reorderable, onColumnReorder, columnOrder, processedColumns]
   );
 
   // --- Build Ant columns ---
@@ -239,31 +279,41 @@ export default function ClassicDataTable<T extends object>(
         if (reorderable || resizable) {
           const headerContent = (
             <span
+              data-col-key={col.key}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 4,
                 position: 'relative',
                 userSelect: 'none',
+                opacity: dragSourceKey === col.key ? 0.45 : 1,
+                backgroundColor: dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key
+                  ? 'color-mix(in srgb, var(--ds-color-primary, #1677ff) 10%, transparent)'
+                  : undefined,
+                transition: 'opacity 0.2s ease, background-color 0.2s ease',
+                borderRadius: 4,
+                padding: '0 2px',
+                margin: '0 -2px',
               }}
-              draggable={reorderable}
-              onDragStart={reorderable ? (e) => handleDragStart(e, col.key) : undefined}
-              onDragOver={reorderable ? (e) => handleDragOver(e, col.key) : undefined}
-              onDrop={reorderable ? (e) => handleDrop(e, col.key) : undefined}
-              onDragEnd={reorderable ? handleDragEnd : undefined}
             >
-              {reorderable && (
+              {reorderable && onColumnReorder && (
                 <span
+                  onMouseDown={(e) => handleReorderStart(e, col.key)}
                   style={{
-                    cursor: 'grab',
-                    opacity: 0.4,
-                    fontSize: 10,
+                    cursor: dragSourceKey ? 'grabbing' : 'grab',
+                    opacity: dragSourceKey === col.key ? 0.8 : 0.35,
+                    fontSize: 11,
                     lineHeight: 1,
                     flexShrink: 0,
+                    marginRight: 4,
+                    padding: '2px 2px',
+                    borderRadius: 3,
+                    transition: 'opacity 0.15s ease',
                   }}
-                  aria-hidden="true"
+                  aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
+                  role="button"
                 >
-                  ⠿
+                  {'\u2807'}
                 </span>
               )}
               <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -276,7 +326,7 @@ export default function ClassicDataTable<T extends object>(
                     left: -2,
                     top: 0,
                     bottom: 0,
-                    width: 2,
+                    width: 3,
                     background: 'var(--ds-color-primary, #1677ff)',
                     borderRadius: 1,
                   }}
@@ -368,10 +418,8 @@ export default function ClassicDataTable<T extends object>(
     dragOverKey,
     dragSourceKey,
     handleResizeStart,
-    handleDragStart,
-    handleDragOver,
-    handleDrop,
-    handleDragEnd,
+    handleReorderStart,
+    onColumnReorder,
   ]);
 
   const handleSelectionChange = (keys: React.Key[], rows: T[]) => {

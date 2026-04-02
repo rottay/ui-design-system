@@ -14,7 +14,13 @@ export type {
   ShiftAssignment,
 } from './ShiftMatrix.types';
 
-/** Engine-resolved ShiftMatrix pattern component. */
+/**
+ * @engine classic-only
+ * @category domain-kit (staffing)
+ * This pattern is domain-specific and ships only with the classic engine.
+ * Modern engine parity is not planned. Consider moving to components/kits/
+ * when the kit infrastructure is established.
+ */
 export const PatternShiftMatrix = createEngineComponent<ShiftMatrixProps>(
   'PatternShiftMatrix',
   {

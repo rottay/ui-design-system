@@ -25,23 +25,60 @@
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
     },
-    "./styles": "./src/tokens/css/index.css",
-    "./styles.css": "./src/tokens/css/index.css",
-    "./styles/rottay": "./src/tokens/css/rottay.css",
-    "./styles/bithire": "./src/tokens/css/bithire.css",
-    "./styles/evnto": "./src/tokens/css/evnto.css"
+    "./styles": {
+      "style": "./dist/styles.css",
+      "import": "./dist/styles.css",
+      "default": "./dist/styles.css"
+    },
+    "./styles.css": {
+      "style": "./dist/styles.css",
+      "import": "./dist/styles.css",
+      "default": "./dist/styles.css"
+    },
+    "./styles/platform": {
+      "style": "./dist/platform.css",
+      "import": "./dist/platform.css",
+      "default": "./dist/platform.css"
+    },
+    "./styles/bithire": {
+      "style": "./dist/bithire.css",
+      "import": "./dist/bithire.css",
+      "default": "./dist/bithire.css"
+    },
+    "./styles/evnto": {
+      "style": "./dist/evnto.css",
+      "import": "./dist/evnto.css",
+      "default": "./dist/evnto.css"
+    },
+    "./styles/rottay": {
+      "style": "./dist/platform.css",
+      "import": "./dist/platform.css",
+      "default": "./dist/platform.css"
+    },
+    "./styles/modern": {
+      "style": "./dist/modern-engine.css",
+      "import": "./dist/modern-engine.css",
+      "default": "./dist/modern-engine.css"
+    },
+    "./dist/*.css": "./dist/*.css"
   },
   "files": [
     "dist/**/*.js",
     "dist/**/*.cjs",
     "dist/**/*.d.ts",
+    "dist/styles.css",
+    "dist/modern-engine.css",
+    "dist/platform.css",
+    "dist/bithire.css",
+    "dist/evnto.css",
     "!dist/**/*.d.ts.map",
-    "src/tokens/css",
     "README.md"
   ],
   "scripts": {
     "dev": "vite build --watch",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:vertical-css",
+    "build:modern-css": "postcss src/tokens/css/engines/modern/compiled.css -o dist/modern-engine.css",
+    "build:vertical-css": "node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build && node scripts/check-storybook-budget.mjs",
     "typecheck": "tsc --noEmit",
@@ -93,6 +130,7 @@
     "@storybook/addon-docs": "^9.1.10",
     "@storybook/addon-onboarding": "^9.1.10",
     "@storybook/react-vite": "^9.1.10",
+    "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -108,6 +146,7 @@
     "happy-dom": "^20.0.0",
     "jsdom": "^27.0.0",
     "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "rollup-plugin-preserve-directives": "^0.4.0",

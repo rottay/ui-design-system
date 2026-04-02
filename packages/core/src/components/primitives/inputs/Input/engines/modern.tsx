@@ -160,6 +160,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const currentValue = isControlled ? controlledValue : internalValue;
 
   const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Merge the consumer's forwarded ref with our internal ref so we can
@@ -262,6 +263,17 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   ) : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
+  // Shared interaction styles for focus ring, hover border, and transitions
+  const interactionStyle: React.CSSProperties = {
+    transition: 'border-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+    boxShadow: isFocused ? '0 0 0 3px var(--ds-color-primary-200, rgba(59, 130, 246, 0.2))' : undefined,
+    borderColor: isHovered && !isFocused && !hasError ? 'var(--ds-color-border-tertiary)' : undefined,
+  };
+
+  const addonTextStyle: React.CSSProperties = {
+    color: 'var(--ds-color-text-muted)',
+  };
+
   if (prefix || suffix || showClearButton) {
     return (
       <div className="w-full" style={style}>
@@ -277,10 +289,13 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           ]
             .filter(Boolean)
             .join(' ')}
+          style={interactionStyle}
           onClick={() => inputRef.current?.focus()}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           {prefix && (
-            <span className="text-base-content/50">{prefix}</span>
+            <span style={addonTextStyle}>{prefix}</span>
           )}
 
           <input
@@ -334,12 +349,15 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           )}
 
           {suffix && (
-            <span className="text-base-content/50">{suffix}</span>
+            <span style={addonTextStyle}>{suffix}</span>
           )}
         </label>
 
         {showCount && maxLength && (
-          <div className={`text-xs mt-1 text-right ${hasError ? 'text-error' : 'text-base-content/50'}`}>
+          <div
+            className={`text-xs mt-1 text-right ${hasError ? 'text-error' : ''}`}
+            style={hasError ? undefined : { color: 'var(--ds-color-text-muted)' }}
+          >
             {currentValue.length}/{maxLength}
           </div>
         )}
@@ -377,14 +395,20 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         aria-invalid={hasError}
         data-testid={dataTestId}
         className={inputClasses}
+        style={interactionStyle}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       />
 
       {showCount && maxLength && (
-        <div className={`text-xs mt-1 text-right ${hasError ? 'text-error' : 'text-base-content/50'}`}>
+        <div
+          className={`text-xs mt-1 text-right ${hasError ? 'text-error' : ''}`}
+          style={hasError ? undefined : { color: 'var(--ds-color-text-muted)' }}
+        >
           {currentValue.length}/{maxLength}
         </div>
       )}

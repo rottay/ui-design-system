@@ -8,17 +8,17 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 
-import * as DS from '../../index';
+import * as DS from '../../../index';
 import { STABLE_ENGINES, renderWithEngine } from '../helpers/engine-test-utils';
 
 describe('engine gap smoke coverage', () => {
   it.each(STABLE_ENGINES)('renders Calendar through the %s engine', async (engine) => {
     if (engine === 'classic') {
-      await import('../../components/primitives/display/Calendar/engines/classic');
+      await import('../../../components/primitives/display/Calendar/engines/classic');
     } else if (engine === 'modern') {
-      await import('../../components/primitives/display/Calendar/engines/modern');
+      await import('../../../components/primitives/display/Calendar/engines/modern');
     } else {
-      await import('../../components/primitives/display/Calendar/engines/rustic');
+      await import('../../../components/primitives/display/Calendar/engines/rustic');
     }
 
     renderWithEngine(
@@ -88,11 +88,11 @@ describe('engine gap smoke coverage', () => {
 
   it.each(STABLE_ENGINES)('renders Tour through the %s engine', async (engine) => {
     if (engine === 'classic') {
-      await import('../../components/primitives/overlay/Tour/engines/classic');
+      await import('../../../components/primitives/overlay/Tour/engines/classic');
     } else if (engine === 'modern') {
-      await import('../../components/primitives/overlay/Tour/engines/modern');
+      await import('../../../components/primitives/overlay/Tour/engines/modern');
     } else {
-      await import('../../components/primitives/overlay/Tour/engines/rustic');
+      await import('../../../components/primitives/overlay/Tour/engines/rustic');
     }
 
     renderWithEngine(

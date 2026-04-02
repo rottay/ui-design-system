@@ -93,7 +93,7 @@ function getTabTypeStyle(
   isHovered: boolean,
 ): React.CSSProperties {
   const base: React.CSSProperties = {
-    transition: 'color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
+    transition: 'color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
   };
 
   switch (type) {
@@ -101,15 +101,15 @@ function getTabTypeStyle(
       return {
         ...base,
         borderBottom: isActive
-          ? '2px solid var(--ds-tabs-active-color, oklch(var(--p)))'
+          ? '2px solid var(--ds-tabs-active-color, var(--color-primary))'
           : isHovered
-            ? '2px solid var(--ds-tabs-hover-color, oklch(var(--p) / 0.4))'
+            ? '2px solid var(--ds-tabs-hover-color, oklch(var(--color-primary) / 0.4))'
             : '2px solid transparent',
         borderRadius: 0,
         paddingBottom: '8px',
         marginBottom: '-1px',
         color: isActive
-          ? 'var(--ds-tabs-active-color, oklch(var(--p)))'
+          ? 'var(--ds-tabs-active-color, var(--color-primary))'
           : undefined,
       };
 
@@ -118,12 +118,12 @@ function getTabTypeStyle(
         ...base,
         borderRadius: isActive ? '8px 8px 0 0' : '8px 8px 0 0',
         backgroundColor: isActive
-          ? 'var(--ds-tabs-active-bg, oklch(var(--b1)))'
+          ? 'var(--ds-tabs-active-bg, var(--color-base-100))'
           : isHovered
-            ? 'var(--ds-tabs-hover-bg, oklch(var(--b2)))'
+            ? 'var(--ds-tabs-hover-bg, var(--color-base-200))'
             : 'transparent',
         boxShadow: isActive
-          ? '0 -1px 3px rgba(0, 0, 0, 0.06)'
+          ? 'var(--ds-shadow-tab-active, 0 -1px 3px var(--ds-color-shadow, rgba(0, 0, 0, 0.06)))'
           : 'none',
         fontWeight: isActive ? 600 : 400,
       };
@@ -133,12 +133,12 @@ function getTabTypeStyle(
         ...base,
         borderRadius: '9999px',
         backgroundColor: isActive
-          ? 'var(--ds-tabs-active-bg, oklch(var(--p)))'
+          ? 'var(--ds-tabs-active-bg, var(--color-primary))'
           : isHovered
-            ? 'var(--ds-tabs-hover-bg, oklch(var(--b2)))'
+            ? 'var(--ds-tabs-hover-bg, var(--color-base-200))'
             : 'transparent',
         color: isActive
-          ? 'var(--ds-tabs-active-color, oklch(var(--pc)))'
+          ? 'var(--ds-tabs-active-color, var(--color-primary-content))'
           : undefined,
         fontWeight: isActive ? 500 : 400,
         padding: '4px 16px',
@@ -369,7 +369,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           tabIndex={0}
           className="p-4"
           style={{
-            animation: 'rottay-tabs-fade-in 0.2s ease-out',
+            animation: 'rottay-tabs-fade-in var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
           }}
         >
           {activeItem.children}

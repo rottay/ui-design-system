@@ -3,7 +3,7 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Toast, ToastProvider, useToast } from '.';
-import { renderSurface } from '../../../surfaces/tests/test-utils';
+import { renderSurface } from '../../../surfaces/common/test-utils';
 
 function SeededToasts(): React.ReactElement {
   const api = useToast();

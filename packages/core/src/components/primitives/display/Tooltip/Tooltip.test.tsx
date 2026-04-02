@@ -13,7 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { Tooltip } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockTooltip = ({
       children,

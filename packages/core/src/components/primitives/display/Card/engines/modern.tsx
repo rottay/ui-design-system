@@ -52,7 +52,7 @@
 
 'use client';
 
-import React, { useState, useId } from 'react';
+import React, { useState, useCallback, useId } from 'react';
 import type { CardProps } from '../Card.types';
 import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -177,6 +177,17 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   // to apply CSS variable-driven transforms and shadows via inline styles,
   // which cannot be toggled with a pseudo-class selector alone.
   const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        onClick();
+      }
+    },
+    [onClick],
+  );
 
   // Each DS variant maps to a combination of DaisyUI utility classes.
   // "elevated" gets shadow, "outlined" gets DaisyUI's bordered modifier, etc.
@@ -212,13 +223,16 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   const cardStyle: React.CSSProperties = {
     borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
     cursor: clickable || onClick ? 'pointer' : undefined,
-    transition: 'box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+    transition: 'box-shadow var(--ds-duration-slow, 0.3s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), transform var(--ds-duration-slow, 0.3s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
     transform: isHovered && isInteractive
       ? 'var(--ds-card-hover-transform, translateY(-2px))'
       : 'translateY(0)',
-    boxShadow: isHovered && isInteractive
-      ? 'var(--ds-card-hover-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08))'
-      : undefined,
+    boxShadow: isFocused && onClick
+      ? 'var(--ds-shadow-card-hover, 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08)), 0 0 0 3px var(--ds-color-primary-200, rgba(59, 130, 246, 0.2))'
+      : isHovered && isInteractive
+        ? 'var(--ds-shadow-card-hover, 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08))'
+        : undefined,
+    outline: onClick ? 'none' : undefined,
     position: 'relative',
     // Color variant accent: a tinted left border + matching background
     // conveys semantic meaning (success, warning, etc.) at a glance.
@@ -270,7 +284,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               justifyContent: 'center',
               backdropFilter: 'blur(2px)',
               WebkitBackdropFilter: 'blur(2px)',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'var(--ds-color-bg-overlay-light, rgba(255, 255, 255, 0.1))',
               borderRadius: 'inherit',
               zIndex: 1,
             }}
@@ -291,6 +305,11 @@ export default function ModernCard(props: CardProps): React.ReactElement {
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      onKeyDown={onClick ? handleKeyDown : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      role={onClick ? 'button' : undefined}
       style={cardStyle}
       {...responsiveAttrs}
     >

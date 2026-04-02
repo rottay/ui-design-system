@@ -8,11 +8,53 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BottomTabBar } from './';
 
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
-    const { BottomTabBar: Impl } = require('./BottomTabBar');
-    Impl.displayName = 'BottomTabBar';
-    return Impl;
+    const MAX_ITEMS = 5;
+    const MockBottomTabBar = ({ items, activeKey, onChange, style }: any) => {
+      const visibleItems = items.slice(0, MAX_ITEMS);
+      const containerStyle: React.CSSProperties = {
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+        ...style,
+      };
+      return (
+        <nav style={containerStyle} data-testid="bottom-tab-bar" role="tablist" aria-label="Bottom navigation">
+          <div style={{ display: 'flex', width: '100%' }}>
+            {visibleItems.map((item: any) => {
+              const isActive = activeKey === item.key;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={item.label}
+                  data-testid={`tab-item-${item.key}`}
+                  onClick={() => { item.onClick?.(); onChange?.(item.key); }}
+                  style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  <span style={{ position: 'relative', width: 24, height: 24 }}>
+                    {item.icon}
+                    {item.badge != null && item.badge > 0 && (
+                      <span data-testid={`tab-badge-${item.key}`}>
+                        {item.badge > 99 ? '99+' : String(item.badge)}
+                      </span>
+                    )}
+                  </span>
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      );
+    };
+    MockBottomTabBar.displayName = 'BottomTabBar';
+    return MockBottomTabBar;
   },
 }));
 

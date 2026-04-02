@@ -371,7 +371,7 @@ describe('Typography namespace', () => {
 
 describe('Type exports', () => {
   it('exports TYPOGRAPHY_DEFAULTS', async () => {
-    const module = await import('../types');
+    const module = await import('./Typography.types');
     expect(module.TYPOGRAPHY_DEFAULTS).toBeDefined();
     expect(module.TYPOGRAPHY_DEFAULTS.heading.level).toBe('h2');
     expect(module.TYPOGRAPHY_DEFAULTS.text.size).toBe('md');
@@ -379,20 +379,20 @@ describe('Type exports', () => {
   });
 
   it('exports SIZE_MAP', async () => {
-    const module = await import('../types');
+    const module = await import('./Typography.types');
     expect(module.SIZE_MAP).toBeDefined();
     expect(module.SIZE_MAP.heading).toBeDefined();
     expect(module.SIZE_MAP.text).toBeDefined();
   });
 
   it('exports WEIGHT_MAP', async () => {
-    const module = await import('../types');
+    const module = await import('./Typography.types');
     expect(module.WEIGHT_MAP).toBeDefined();
     expect(module.WEIGHT_MAP.bold).toBe(700);
   });
 
   it('exports COLOR_MAP', async () => {
-    const module = await import('../types');
+    const module = await import('./Typography.types');
     expect(module.COLOR_MAP).toBeDefined();
     expect(module.COLOR_MAP.primary).toBe('var(--ds-color-primary-500)');
   });

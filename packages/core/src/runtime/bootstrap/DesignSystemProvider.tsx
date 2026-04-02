@@ -90,6 +90,7 @@ import { getVerticalPreset } from '../verticals/registry';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenancy/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../providers/responsive';
+import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -330,25 +331,10 @@ export function DesignSystemProvider({
   skipCssLoading = true,
   cssBaseUrl = '/themes',
 }: DesignSystemProviderProps): React.ReactElement {
-  // DEBUG: Track renders
-  const renderCountRef = useRef(0);
-  renderCountRef.current++;
-  if (renderCountRef.current <= 5 || renderCountRef.current % 50 === 0) {
-    console.log(`[DSP] render #${renderCountRef.current}`, {
-      hasPropConfig: !!propTenantConfig,
-      slug: propTenantSlug,
-      overridesRef: tenantOverrides ? 'present' : 'none',
-    });
-  }
-
   // SYNC PATH: When propTenantConfig is provided, derive config with useMemo
   const syncTenantConfig = useMemo(() => {
     if (!propTenantConfig) return null;
-    const merged = mergeTenantConfig(propTenantConfig, tenantOverrides);
-    if (renderCountRef.current <= 5) {
-      console.log('[DSP] syncTenantConfig computed');
-    }
-    return merged;
+    return mergeTenantConfig(propTenantConfig, tenantOverrides);
   }, [propTenantConfig, tenantOverrides]);
 
   // ASYNC PATH: When only tenantSlug is provided, resolve via storage facade
@@ -363,7 +349,6 @@ export function DesignSystemProvider({
     const loadTenant = async () => {
       try {
         const slug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
-        console.log('[DSP] async loading tenant:', slug);
         const resolvedTenantConfig = await resolveTenantConfig(slug);
         const mergedTenantConfig = mergeTenantConfig(resolvedTenantConfig, tenantOverrides);
         asyncLoadedRef.current = true;
@@ -436,12 +421,14 @@ export function DesignSystemProvider({
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >
-              <FeatureProvider features={tenantConfig.features ?? []}>
-                <ResponsiveProvider>
-                  <SystemCssVariablesBridge />
-                  <MemoizedChildren>{children}</MemoizedChildren>
-                </ResponsiveProvider>
-              </FeatureProvider>
+              <AntdConfigProvider>
+                <FeatureProvider features={tenantConfig.features ?? []}>
+                  <ResponsiveProvider>
+                    <SystemCssVariablesBridge />
+                    <MemoizedChildren>{children}</MemoizedChildren>
+                  </ResponsiveProvider>
+                </FeatureProvider>
+              </AntdConfigProvider>
             </ThemeProvider>
           </EngineProvider>
         </I18nProvider>

@@ -12,7 +12,7 @@ import {
   getStableEngines,
   isValidEngine,
   getDefaultEngine,
-} from '../../engines/registry';
+} from '../../../runtime/engines/registry';
 
 describe('Engine Registry', () => {
   describe('ENGINE_REGISTRY', () => {

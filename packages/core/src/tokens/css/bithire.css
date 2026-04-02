@@ -1,10 +1,14 @@
 /**
- * BitHire Vertical CSS - Base + bithire tenant only
+ * BitHire Vertical CSS (source)
  *
- * Import this instead of index.css to avoid bundling all tenant CSS.
- * Usage: @import '@rottay/design-system/styles/bithire';
+ * Source file for development/symlink scenarios. Imports tenant-free base
+ * + bithire tenant only. Does NOT include compiled engine CSS.
  *
- * @version 0.6.0
+ * For production, apps consume dist/bithire.css (via styles/bithire export)
+ * which includes everything: base + tenant + modern engine.
+ *
+ * @see base.css - Tenant-free DS foundation
+ * @version 1.0.0
  */
-@import './index.css';
+@import './base.css';
 @import './tenants/bithire/index.css' layer(rottay-tenants);

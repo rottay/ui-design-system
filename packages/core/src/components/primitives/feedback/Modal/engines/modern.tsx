@@ -24,11 +24,10 @@
  * - When DaisyUI theme is preferred
  *
  * **Multi-Tenant Theming:**
- * Modern uses DaisyUI's color system with CSS custom properties.
- * Tenant themes can override:
- * - `--b1`: Base background color
- * - `--base-300`: Border color
- * - Other DaisyUI tokens
+ * Modern uses the DS token system with DaisyUI color variables.
+ * Tenant themes override via `--ds-color-*` and `--color-*` (DaisyUI 5 oklch).
+ * Motion uses `--ds-duration-*` and `--ds-ease-*` tokens.
+ * Reduced motion is respected via `--ds-motion-reduce`.
  *
  * **Size Classes:**
  * | Size | CSS Class |
@@ -282,16 +281,36 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
       <div
         className="modal-backdrop"
         onClick={closeOnOverlayClick ? handleCancel : undefined}
+        style={{
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
+          animation: 'ds-backdrop-fade var(--ds-duration-normal, 0.2s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+        }}
       />
 
       {/* Modal Content Container */}
-      <div className={`${SIZE_CLASSES[modalSize]} ${className}`}>
+      <div
+        className={`${SIZE_CLASSES[modalSize]} ${className}`}
+        style={{
+          animation: 'ds-modal-enter var(--ds-duration-slow, 0.3s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+          boxShadow: 'var(--ds-shadow-modal, var(--ds-shadow-2xl, 0 25px 50px -12px rgba(0,0,0,.25)))',
+        }}
+      >
         {/* Close button */}
         {closable && (
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={handleCancel}
             aria-label="Close"
+            style={{
+              transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-tertiary, rgba(0,0,0,0.06))';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = '';
+            }}
           >
             ✕
           </button>

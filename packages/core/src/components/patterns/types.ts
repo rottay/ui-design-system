@@ -124,7 +124,7 @@ export interface FilterDef {
   /** Human-readable label shown in the filter bar. */
   label: string;
   /** Control type that determines the rendered filter widget. */
-  type: 'text' | 'select' | 'multi-select' | 'date' | 'date-range' | 'number-range' | 'boolean';
+  type: 'text' | 'select' | 'multi-select' | 'date' | 'date-range' | 'number' | 'number-range' | 'boolean';
   /** Available choices for select and multi-select filter types. */
   options?: { label: string; value: string }[];
   /** Placeholder text shown when the filter has no value. */

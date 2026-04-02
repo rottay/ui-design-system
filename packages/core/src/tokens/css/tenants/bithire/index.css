@@ -15,6 +15,38 @@
    BITHIRE BRAND COLORS (LinkedIn-Inspired)
    ============================================ */
 html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
+  /* ============================================
+     DaisyUI 5 color bridge (oklch format)
+     Maps BitHire brand (LinkedIn-inspired) to DaisyUI 5's
+     --color-* system so btn, card, badge, table, etc.
+     render in the BitHire palette instead of DaisyUI defaults.
+     ============================================ */
+  --color-primary: oklch(50% 0.14 250);              /* #0A66C2 LinkedIn Blue */
+  --color-primary-content: oklch(100% 0 0);           /* #FFFFFF white */
+  --color-secondary: oklch(42% 0.06 160);             /* #057642 green */
+  --color-secondary-content: oklch(100% 0 0);         /* #FFFFFF */
+  --color-accent: oklch(72% 0.14 135);                /* #7FC15E green accent */
+  --color-accent-content: oklch(7% 0.01 260);         /* near-black */
+  --color-neutral: oklch(30% 0.01 250);               /* #474747 dark gray */
+  --color-neutral-content: oklch(97% 0.005 100);      /* #F3F2EF */
+  --color-base-100: oklch(100% 0 0);                  /* #FFFFFF canvas */
+  --color-base-200: oklch(96% 0.005 80);              /* #F3F2EF secondary bg */
+  --color-base-300: oklch(93% 0.005 80);              /* #EAE9E5 tertiary bg */
+  --color-base-content: oklch(12% 0.01 260);          /* rgba(0,0,0,0.9) text */
+  --color-success: oklch(42% 0.06 160);               /* #057642 */
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(72% 0.12 75);                /* #E7A33E */
+  --color-warning-content: oklch(7% 0.01 260);
+  --color-error: oklch(45% 0.18 25);                  /* #CC1016 */
+  --color-error-content: oklch(100% 0 0);
+  --color-info: oklch(50% 0.14 250);                  /* #0A66C2 same as primary */
+  --color-info-content: oklch(100% 0 0);
+  --rounded-box: 12px;
+  --rounded-btn: 8px;
+  --rounded-badge: 8px;
+  --animation-btn: 0.18s;
+  --animation-input: 0.18s;
+
   /* Primary - LinkedIn Blue */
   --ds-color-primary-50: #f0f7ff;
   --ds-color-primary-100: #e0efff;
@@ -231,6 +263,297 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
 
   /* ============================================
      BITHIRE SPECIFIC - Recruiting Domain Tokens
+     ============================================ */
+
+  /* Candidate Pipeline States */
+  --ds-candidate-new: var(--ds-color-info-100);
+  --ds-candidate-new-text: var(--ds-color-primary-700);
+  --ds-candidate-screening: var(--ds-color-warning-100);
+  --ds-candidate-screening-text: var(--ds-color-warning);
+  --ds-candidate-interview: var(--ds-color-primary-100);
+  --ds-candidate-interview-text: var(--ds-color-primary-700);
+  --ds-candidate-offer: var(--ds-color-success-100);
+  --ds-candidate-offer-text: var(--ds-color-success);
+  --ds-candidate-hired: var(--ds-color-success-200);
+  --ds-candidate-hired-text: var(--ds-color-secondary-800);
+  --ds-candidate-rejected: var(--ds-color-error-100);
+  --ds-candidate-rejected-text: var(--ds-color-error);
+
+  /* Job States */
+  --ds-job-draft: var(--ds-color-neutral-100);
+  --ds-job-draft-text: var(--ds-color-neutral-600);
+  --ds-job-open: var(--ds-color-success-100);
+  --ds-job-open-text: var(--ds-color-success);
+  --ds-job-closed: var(--ds-color-neutral-200);
+  --ds-job-closed-text: var(--ds-color-neutral-500);
+  --ds-job-paused: var(--ds-color-warning-100);
+  --ds-job-paused-text: var(--ds-color-warning);
+
+  /* Interview States */
+  --ds-interview-scheduled: var(--ds-color-info-100);
+  --ds-interview-scheduled-text: var(--ds-color-primary-700);
+  --ds-interview-completed: var(--ds-color-success-100);
+  --ds-interview-completed-text: var(--ds-color-success);
+  --ds-interview-cancelled: var(--ds-color-error-100);
+  --ds-interview-cancelled-text: var(--ds-color-error);
+  --ds-interview-no-show: var(--ds-color-warning-100);
+  --ds-interview-no-show-text: var(--ds-color-warning);
+}
+
+/* ============================================
+   BITHIRE DARK MODE
+   Corporate dark blue palette
+   ============================================ */
+html[data-tenant='bithire'][data-theme='dark'],
+html[data-tenant='bithire'].dark {
+  color-scheme: dark;
+
+  /* ============================================
+     DaisyUI 5 color bridge (oklch format) - dark variant
+     ============================================ */
+  --color-primary: oklch(58% 0.14 250);
+  --color-primary-content: oklch(98% 0.005 250);
+  --color-secondary: oklch(50% 0.06 160);
+  --color-secondary-content: oklch(95% 0.005 160);
+  --color-accent: oklch(62% 0.12 140);
+  --color-accent-content: oklch(98% 0.005 140);
+  --color-neutral: oklch(25% 0.01 250);
+  --color-neutral-content: oklch(88% 0.005 250);
+  --color-base-100: oklch(14% 0.015 250);
+  --color-base-200: oklch(18% 0.015 250);
+  --color-base-300: oklch(23% 0.015 250);
+  --color-base-content: oklch(90% 0.005 250);
+  --color-info: oklch(62% 0.15 250);
+  --color-info-content: oklch(98% 0.005 250);
+  --color-success: oklch(62% 0.15 150);
+  --color-success-content: oklch(98% 0.005 150);
+  --color-warning: oklch(72% 0.15 85);
+  --color-warning-content: oklch(15% 0.05 85);
+  --color-error: oklch(58% 0.2 25);
+  --color-error-content: oklch(98% 0.005 25);
+
+  /* DaisyUI 5 structural tokens */
+  --rounded-box: 10px;
+  --rounded-btn: 8px;
+  --rounded-badge: 9999px;
+  --animation-btn: 0.15s;
+  --animation-input: 0.15s;
+
+  /* Primary - LinkedIn Blue (dark variant) */
+  --ds-color-primary-50: #0D1B2A;
+  --ds-color-primary-100: #112840;
+  --ds-color-primary-200: #163555;
+  --ds-color-primary-300: #1A4F80;
+  --ds-color-primary-400: #1A6DB5;
+  --ds-color-primary-500: #1A7FE0;
+  --ds-color-primary-600: #3B9AF0;
+  --ds-color-primary-700: #6BB5F5;
+  --ds-color-primary-800: #A0D0FA;
+  --ds-color-primary-900: #D6EAFD;
+
+  /* Primary main color */
+  --ds-color-primary: #1A7FE0;
+  --ds-color-primary-hover: #2B8FEF;
+
+  /* Secondary - Teal/Green (dark variant) */
+  --ds-color-secondary-50: #0A1F18;
+  --ds-color-secondary-100: #0F2E24;
+  --ds-color-secondary-200: #153D30;
+  --ds-color-secondary-300: #1E5C48;
+  --ds-color-secondary-400: #267A5E;
+  --ds-color-secondary-500: #2D8A6E;
+  --ds-color-secondary-600: #38A080;
+  --ds-color-secondary-700: #5CBFA0;
+  --ds-color-secondary-800: #90D8C0;
+  --ds-color-secondary-900: #C8EDE0;
+
+  /* Accent - Green */
+  --ds-color-accent: #4CAF50;
+  --ds-color-accent-hover: #5CC060;
+
+  /* Neutral - Dark blues */
+  --ds-color-neutral-50: #0A0F18;
+  --ds-color-neutral-100: #0F1520;
+  --ds-color-neutral-200: #151D2B;
+  --ds-color-neutral-300: #1B2535;
+  --ds-color-neutral-400: #253545;
+  --ds-color-neutral-500: #3A4A5A;
+  --ds-color-neutral-600: #5A7085;
+  --ds-color-neutral-700: #7A90A5;
+  --ds-color-neutral-800: #9AACBF;
+  --ds-color-neutral-900: #C0CDD8;
+
+  /* Backgrounds - Deep corporate blue */
+  --ds-color-bg-primary: #0F1520;
+  --ds-color-bg-secondary: #151D2B;
+  --ds-color-bg-tertiary: #1B2535;
+  --ds-color-bg-elevated: #1F2940;
+  --ds-color-bg-surface: #151D2B;
+  --ds-color-bg-overlay: rgba(0, 0, 0, 0.7);
+
+  /* Text - Light text on dark backgrounds */
+  --ds-color-text-primary: #E4E8ED;
+  --ds-color-text-secondary: #9AACBF;
+  --ds-color-text-tertiary: #7A90A5;
+  --ds-color-text-muted: #5A7085;
+  --ds-color-text-disabled: #3A4A5A;
+  --ds-color-text-on-primary: #FFFFFF;
+
+  /* Borders - Subtle dark borders */
+  --ds-color-border: #253545;
+  --ds-color-border-primary: #253545;
+  --ds-color-border-secondary: #1D2A38;
+  --ds-color-border-tertiary: #182230;
+  --ds-color-border-focus: #1A7FE0;
+
+  /* Typography - Same family, dark mode inherits */
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ds-font-family-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ds-font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+  --ds-font-family-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+
+  /* Letter Spacing */
+  --ds-letter-spacing-display: -0.02em;
+  --ds-letter-spacing-heading: -0.01em;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-mono: 0;
+
+  /* Line Heights */
+  --ds-line-height-display: 1.1;
+  --ds-line-height-heading: 1.25;
+  --ds-line-height-body: 1.6;
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-relaxed: 1.75;
+
+  /* Border Radius */
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+  --ds-radius-xl: 16px;
+  --ds-radius-full: 9999px;
+
+  /* Shadows - Deeper for dark mode */
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --ds-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.25);
+  --ds-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.3);
+
+  /* Button overrides - dark */
+  --ds-button-primary-bg: #1A7FE0;
+  --ds-button-primary-bg-hover: #2B8FEF;
+  --ds-button-primary-text: #FFFFFF;
+  --ds-button-secondary-bg: transparent;
+  --ds-button-secondary-border: #253545;
+  --ds-button-secondary-text: #9AACBF;
+  --ds-button-secondary-bg-hover: #1B2535;
+
+  /* Card overrides - dark */
+  --ds-card-bg: #151D2B;
+  --ds-card-bg-hover: #1B2535;
+  --ds-card-border: #253545;
+  --ds-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --ds-card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  /* Input overrides - dark */
+  --ds-input-bg: #0F1520;
+  --ds-input-border: #253545;
+  --ds-input-border-hover: #3A4A5A;
+  --ds-input-border-focus: #1A7FE0;
+  --ds-input-shadow-focus: 0 0 0 1px #1A7FE0;
+  --ds-input-color: #E4E8ED;
+  --ds-input-color-placeholder: #5A7085;
+
+  /* Table - dark */
+  --ds-table-bg: #0F1520;
+  --ds-table-border: #1D2A38;
+  --ds-table-radius: var(--ds-radius-lg);
+  --ds-table-header-bg: #151D2B;
+  --ds-table-header-color: #9AACBF;
+  --ds-table-header-font-weight: 600;
+  --ds-table-header-font-size: 0.75rem;
+  --ds-table-row-bg: #0F1520;
+  --ds-table-row-bg-hover: #1B2535;
+  --ds-table-row-bg-striped: #131A26;
+  --ds-table-row-bg-selected: #112840;
+  --ds-table-row-border: #1D2A38;
+  --ds-table-cell-padding: 0.875rem 1rem;
+  --ds-table-cell-font-size: 0.875rem;
+  --ds-table-cell-color: #E4E8ED;
+
+  /* Link colors - dark */
+  --ds-color-link: #3B9AF0;
+  --ds-color-link-hover: #6BB5F5;
+  --ds-color-link-visited: #A78BCA;
+
+  /* Interactive states - dark */
+  --ds-color-interactive-border: #253545;
+  --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.04);
+  --ds-color-interactive-bg-active: rgba(26, 127, 224, 0.12);
+  --ds-color-interactive-bg-muted: rgba(255, 255, 255, 0.03);
+
+  /* Status colors - dark */
+  --ds-color-success: #2D8A6E;
+  --ds-color-success-50: #0A1F18;
+  --ds-color-success-100: #0F2E24;
+  --ds-color-success-bg: #0F2E24;
+  --ds-color-success-border: rgba(45, 138, 110, 0.3);
+
+  --ds-color-warning: #D4943A;
+  --ds-color-warning-50: #1F1A0D;
+  --ds-color-warning-100: #2E2615;
+  --ds-color-warning-bg: #2E2615;
+  --ds-color-warning-border: rgba(212, 148, 58, 0.3);
+
+  --ds-color-error: #E04848;
+  --ds-color-error-50: #1F0D0D;
+  --ds-color-error-100: #2E1515;
+  --ds-color-error-bg: #2E1515;
+  --ds-color-error-border: rgba(224, 72, 72, 0.3);
+
+  --ds-color-info: #1A7FE0;
+  --ds-color-info-50: #0D1B2A;
+  --ds-color-info-100: #112840;
+  --ds-color-info-bg: #112840;
+  --ds-color-info-border: rgba(26, 127, 224, 0.3);
+
+  /* Accent for live indicators - dark */
+  --ds-color-accent-live: #38A080;
+  --ds-color-accent-live-bg: #0F2E24;
+
+  /* ============================================
+     SIDEBAR NAVIGATION - dark
+     ============================================ */
+
+  /* Group Headers */
+  --ds-sidebar-group-font-size: 11px;
+  --ds-sidebar-group-font-weight: 600;
+  --ds-sidebar-group-color: #5A7085;
+  --ds-sidebar-group-letter-spacing: 0.04em;
+  --ds-sidebar-group-margin-top: 8px;
+  --ds-sidebar-group-margin-bottom: 4px;
+  --ds-sidebar-group-padding-top: 10px;
+  --ds-sidebar-group-border: 1px solid #1D2A38;
+
+  /* Nav Items */
+  --ds-sidebar-item-font-size: 13px;
+  --ds-sidebar-item-font-weight: 400;
+  --ds-sidebar-item-font-weight-active: 500;
+  --ds-sidebar-item-color: #9AACBF;
+  --ds-sidebar-item-color-active: #3B9AF0;
+  --ds-sidebar-item-bg-active: rgba(26, 127, 224, 0.12);
+  --ds-sidebar-item-bg-hover: rgba(255, 255, 255, 0.04);
+  --ds-sidebar-item-indent: 6px;
+  --ds-sidebar-item-padding: 6px 10px;
+  --ds-sidebar-icon-size: 16px;
+
+  /* Sidebar specific */
+  --ds-sidebar-bg: #0A0F18;
+  --ds-sidebar-border: #1D2A38;
+  --ds-sidebar-text: #9AACBF;
+  --ds-sidebar-text-muted: #5A7085;
+
+  /* ============================================
+     BITHIRE SPECIFIC - Recruiting Domain Tokens (dark)
      ============================================ */
 
   /* Candidate Pipeline States */

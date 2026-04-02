@@ -29,13 +29,12 @@ export default defineConfig({
     css: true,
     pool: 'forks',
     // Each fork loads React + Ant Design + engine tree (~1-2 GB per worker).
-    // With 220+ unit test files, a single long-lived fork accumulates heap
-    // and OOMs on Node 25.x. Using singleFork: false creates a fresh fork
-    // per file, preventing heap accumulation at the cost of slower startup.
-    // Coverage stays single-fork (V8 instrumentation needs persistence).
-    ...(isCoverage
-      ? { maxWorkers: 1, minWorkers: 1 }
-      : { maxWorkers: 3, minWorkers: 1 }),
+    // With 390+ test files, multiple concurrent forks easily exceed 16GB.
+    // Using singleFork: false creates a fresh fork per file, preventing heap
+    // accumulation. Coverage stays single-fork (V8 instrumentation needs
+    // persistence). Default to 1 worker to stay under 8GB heap on CI/local.
+    maxWorkers: isCoverage ? 1 : 1,
+    minWorkers: 1,
     poolOptions: {
       forks: {
         singleFork: isCoverage,
@@ -44,10 +43,7 @@ export default defineConfig({
     testTimeout: 15000,
     hookTimeout: 15000,
     retry: 1,
-    reporters: ['verbose', 'json'],
-    outputFile: {
-      json: './test-results.json',
-    },
+    reporters: ['verbose'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'json-summary', 'html'],

@@ -1,6 +1,6 @@
 import React from 'react';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { renderSurface } from '../../surfaces/tests/test-utils';
+import { renderSurface } from '../../surfaces/common/test-utils';
 import {
   AssistantStatusBadge,
   MessageBubble,

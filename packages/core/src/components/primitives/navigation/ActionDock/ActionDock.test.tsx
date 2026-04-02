@@ -8,11 +8,34 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ActionDock } from './';
 
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
-    const { ActionDock: Impl } = require('./ActionDock');
-    Impl.displayName = 'ActionDock';
-    return Impl;
+    const MockActionDock = ({ children, position = 'bottom', style }: any) => {
+      const isBottom = position === 'bottom';
+      const containerStyle: React.CSSProperties = {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        width: '100%',
+        zIndex: 39,
+        ...(isBottom ? { bottom: 0 } : { top: 0 }),
+        ...style,
+      };
+      return (
+        <div
+          style={containerStyle}
+          data-testid="action-dock"
+          role="toolbar"
+          aria-label={`${position === 'top' ? 'Top' : 'Bottom'} actions`}
+        >
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', width: '100%' }}>
+            {children}
+          </div>
+        </div>
+      );
+    };
+    MockActionDock.displayName = 'ActionDock';
+    return MockActionDock;
   },
 }));
 

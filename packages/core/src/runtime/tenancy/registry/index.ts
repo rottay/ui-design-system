@@ -1,7 +1,7 @@
 /**
  * @fileoverview Known tenants registry -- first-party tenants bundled with the DS.
  * @description Three built-in tenants ship with pre-computed CSS and personality:
- * - `rottay` -- Default/flagship. Cyan + violet, dark bg, fade animations, professional IT/AI SaaS.
+ * - `rottay` -- Default/flagship. Monochrome dark, matte premium, fade animations, professional IT/AI SaaS.
  * - `bithire` -- Recruiting platform. Corporate blue, subtle fade animations, structured borders.
  * - `evnto` -- Event management. Black + warm beige, minimal, clean operator aesthetic.
  *
@@ -29,7 +29,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   /**
    * Rottay - Default tenant
    * Professional dark IT/AI SaaS aesthetic
-   * Cyan + Violet, dark backgrounds, subtle glow effects
+   * Monochrome dark, matte premium
    * References: Vercel, Linear, GitHub Dark, OpenAI
    */
   rottay: {
@@ -41,14 +41,15 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     features: ['*'],
     branding: {
       companyName: 'Rottay',
-      primaryColor: '#00B4D8',      // Cyan - techy, AI feel
-      secondaryColor: '#7C3AED',    // Violet - innovation, AI association
-      accentColor: '#00B4D8',       // Cyan for cohesion
+      // Colors intentionally omitted -- defined in CSS tenant tokens
+      // (tokens/css/tenants/rottay/index.css). Runtime color scale generation
+      // is skipped when branding colors are undefined, letting the CSS layer
+      // control the full monochrome dark palette without inline style overrides.
       logo: undefined,
     },
     // Rottay personality: Professional dark IT/AI SaaS.
     // Controlled animations (no bouncy springs), subtle hover effects,
-    // glass tooltips on dark backgrounds, gradient accents with cyan-violet.
+    // glass tooltips on dark backgrounds, monochrome solid accent bars.
     // Cards have subtle borders for structure on dark bg, minimal lift.
     personality: {
       animation: {
@@ -71,7 +72,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
         mountDuration: 600,
         lineStyle: 'smooth',     // Smooth curves for data visualization
         showDots: false,         // Clean, minimal chart aesthetic
-        useGradientFill: true,   // Cyan gradient under charts
+        useGradientFill: false,  // No gradient fill - monochrome
         tooltipStyle: 'glass',   // Glass tooltip on dark bg = premium
       },
       typography: {
@@ -82,7 +83,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       accent: {
         barPosition: 'top',
         barThickness: 2,
-        barStyle: 'gradient',    // Cyan-violet gradient accent bars
+        barStyle: 'solid',       // Monochrome solid accent
         iconContainerShape: 'rounded',
         badgeShape: 'rounded',
         dividerStyle: 'solid',

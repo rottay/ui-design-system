@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { QRCode } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockQRCode = ({
       value,
@@ -190,22 +190,22 @@ describe('QRCode', () => {
 
 describe('QRCode Defaults', () => {
   it('uses default size of 160', async () => {
-    const { QRCODE_DEFAULTS } = await import('../types');
+    const { QRCODE_DEFAULTS } = await import('./QRCode.types');
     expect(QRCODE_DEFAULTS.size).toBe(160);
   });
 
   it('uses default error level of M', async () => {
-    const { QRCODE_DEFAULTS } = await import('../types');
+    const { QRCODE_DEFAULTS } = await import('./QRCode.types');
     expect(QRCODE_DEFAULTS.errorLevel).toBe('M');
   });
 
   it('uses default status of active', async () => {
-    const { QRCODE_DEFAULTS } = await import('../types');
+    const { QRCODE_DEFAULTS } = await import('./QRCode.types');
     expect(QRCODE_DEFAULTS.status).toBe('active');
   });
 
   it('uses bordered by default', async () => {
-    const { QRCODE_DEFAULTS } = await import('../types');
+    const { QRCODE_DEFAULTS } = await import('./QRCode.types');
     expect(QRCODE_DEFAULTS.bordered).toBe(true);
   });
 });

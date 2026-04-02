@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.6.12",
+  "version": "2.6.19",
   "sideEffects": [
     "*.css"
   ],
@@ -9,7 +9,7 @@
   "types": "./packages/core/dist/index.d.ts",
   "files": [
     "packages/core/dist",
-    "packages/core/src/tokens/css",
+    "packages/core/dist/styles.css",
     "LICENSE",
     "README.md"
   ],
@@ -24,8 +24,13 @@
       "import": "./packages/core/dist/server.js",
       "require": "./packages/core/dist/server.cjs"
     },
-    "./styles": "./packages/core/src/tokens/css/index.css",
-    "./styles.css": "./packages/core/src/tokens/css/index.css"
+    "./styles": "./packages/core/dist/styles.css",
+    "./styles.css": "./packages/core/dist/styles.css",
+    "./styles/platform": "./packages/core/dist/platform.css",
+    "./styles/bithire": "./packages/core/dist/bithire.css",
+    "./styles/evnto": "./packages/core/dist/evnto.css",
+    "./styles/rottay": "./packages/core/dist/platform.css",
+    "./styles/modern": "./packages/core/dist/modern-engine.css"
   },
   "workspaces": [
     "packages/*"

@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 import { Rate } from './';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockRate = React.forwardRef<HTMLDivElement, any>((props, ref) => {
       const {

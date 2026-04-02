@@ -135,6 +135,18 @@ function renderFilterControl(
         </div>
       );
     }
+    case 'number':
+      return (
+        <input
+          type="number"
+          style={baseInput}
+          placeholder={filter.placeholder}
+          value={(value as number | '') ?? ''}
+          onChange={(e) =>
+            onChange(filter.key, e.target.value === '' ? undefined : Number(e.target.value))
+          }
+        />
+      );
     // Number range: empty strings coerce to undefined so consumers can
     // distinguish "no bound" from an explicit zero.
     case 'number-range': {

@@ -7,7 +7,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Input } from './';
 
 // Mock the engine factory
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockInput = ({ children, value, placeholder, size, variant, status, disabled, error, prefix, suffix, clearable, onChange, onFocus, onBlur, onClear, ...props }: any) => (
       <div data-testid="input-wrapper" data-size={size} data-variant={variant} data-status={status} data-disabled={disabled} data-error={error} {...props}>

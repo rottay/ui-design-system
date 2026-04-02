@@ -245,7 +245,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   // 3. Default -> identity transform so transitions animate smoothly
   // Focus adds a 3px ring without removing the native outline.
   const interactiveStyle: React.CSSProperties = {
-    transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.15s ease',
+    transition: 'transform var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-duration-fast, 0.2s) ease, filter var(--ds-duration-fast, 0.15s) ease',
     transform:
       isActive && !disabled && !loading
         ? 'scale(0.98)'

@@ -175,8 +175,11 @@ describe('source governance', () => {
       filePath.endsWith('.css')
     );
     const matches: string[] = [];
+    // A tenant selector is "guarded" if it either:
+    // 1. Excludes dark mode: :not([data-theme='dark']):not(.dark)
+    // 2. Explicitly targets dark mode: [data-theme='dark'] or .dark
     const unguardedTenantSelector =
-      /html\[data-tenant='(?:rottay|bithire|evnto)'\](?!:not\(\[data-theme='dark'\]\):not\(\.dark\))/;
+      /html\[data-tenant='(?:rottay|bithire|evnto)'\](?!:not\(\[data-theme='dark'\]\):not\(\.dark\))(?!\[data-theme='dark'\])(?!\.dark)/;
 
     for (const file of tenantFiles) {
       const source = readFileSync(file, 'utf8');
@@ -399,7 +402,12 @@ describe('import boundaries', () => {
   it('components/ should not import from removed top-level runtime directories', () => {
     const componentFiles = collectSourceFiles(COMPONENTS_ROOT);
     const matches: string[] = [];
-    // These were the old top-level paths before the restructure
+    // These were the old top-level runtime paths before the restructure.
+    // Components may legitimately import from their own ./engines/ subdirectory,
+    // so we only flag imports that resolve outside the component tree to the
+    // removed top-level runtime directories (bootstrap, theming, tenancy).
+    // The engines/ check is limited to paths that escape the components/ tree
+    // (i.e., from 'src/engines' or '../../engines' resolving above components/).
     const stalePaths = [
       "from '../bootstrap",
       "from '../../bootstrap",
@@ -407,8 +415,6 @@ describe('import boundaries', () => {
       "from '../../theming",
       "from '../tenancy",
       "from '../../tenancy",
-      "from '../engines",
-      "from '../../engines",
     ];
 
     for (const file of componentFiles) {

@@ -8,3 +8,14 @@
  */
 @import './index.css';
 @import './tenants/rottay/index.css' layer(rottay-tenants);
+
+/*
+ * Modern Engine (Tailwind + DaisyUI)
+ *
+ * The DS publishes precompiled modern engine CSS via:
+ *   import '@rottay/design-system/styles/modern';
+ *
+ * Apps import that alongside this file to get full modern engine support.
+ * See docs-engineering/engineering/design-system/audits-ds/05-ENGINE-CONTRACT-AND-PARITY.md
+ * for the full integration contract.
+ */

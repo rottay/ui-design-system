@@ -11,7 +11,7 @@ import { Tree } from './';
 import type { TreeDataNode } from './Tree.types';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockTree = ({
       treeData = [],

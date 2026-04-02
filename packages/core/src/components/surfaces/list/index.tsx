@@ -378,6 +378,21 @@ export function ListSurface<TRaw, TView extends object>({
           stickyHeader={config.visual.stickyHeader}
           maxHeight={config.visual.maxHeight}
           onRowClick={config.behavior.onRowClick}
+          selectable={config.behavior.selectable}
+          selectedKeys={config.behavior.selectedKeys}
+          onSelectionChange={config.behavior.onSelectionChange}
+          bulkActions={config.behavior.bulkActions}
+          onRowDoubleClick={config.behavior.onRowDoubleClick}
+          expandedRow={config.behavior.expandedRow}
+          resizable={config.visual.columnResizable}
+          columnWidths={config.visual.columnWidths}
+          onColumnResize={config.visual.onColumnResize}
+          reorderable={config.visual.columnReorderable}
+          columnOrder={config.visual.columnOrder}
+          onColumnReorder={config.visual.onColumnReorder}
+          columnVisibility={config.visual.columnVisibilityEnabled}
+          visibleColumns={config.visual.columnVisibility}
+          onVisibleColumnsChange={config.visual.onColumnVisibilityChange}
           actions={
             rowActions.length > 0
               ? (item: TView) => (

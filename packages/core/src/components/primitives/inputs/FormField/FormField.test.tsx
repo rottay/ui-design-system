@@ -8,7 +8,7 @@ import React from 'react';
 import { FormField } from './';
 
 // Mock the engine factory
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockFormField = React.forwardRef<HTMLDivElement, any>(({
       label,

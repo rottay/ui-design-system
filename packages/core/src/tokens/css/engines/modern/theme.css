@@ -4,13 +4,17 @@
  * Maps --ds-* design tokens to Tailwind CSS and DaisyUI component classes.
  * This file bridges the centralized token system with Tailwind CSS 4.x / DaisyUI 5.x.
  *
+ * CONTRACT: This file defines ONE bridge to DaisyUI 5.
+ * Legacy DaisyUI 4 variables (--p, --b1, etc.) are NOT supported.
+ * All tenant CSS must provide --color-* in oklch format.
+ *
  * Architecture:
  * - Uses [data-tenant] selector for tenant-scoped overrides
  * - All values reference --ds-* variables from default.css
  * - Covers all interactive states: hover, focus, active, disabled
  * - Maintains visual parity with the Classic engine
  *
- * @version 0.4.0
+ * @version 0.5.0
  * @engine Modern (Tailwind CSS 4.x / DaisyUI 5.x)
  */
 
@@ -20,43 +24,41 @@
    ============================================================================= */
 
 [data-tenant] {
-  /* Map design system colors to DaisyUI color system */
-  --p: var(--ds-color-primary-500);
-  --pf: var(--ds-color-primary-600);
-  --pc: var(--ds-color-white);
+  /* -------------------------------------------------------------------------
+     DaisyUI 5 color system (oklch format)
+     Defaults for tenants that don't override.
+     Each tenant CSS should provide its own --color-* values in oklch format.
+     These defaults provide a reasonable neutral dark baseline.
+     ------------------------------------------------------------------------- */
+  --color-primary: oklch(96.7% 0.008 100);
+  --color-primary-content: oklch(7% 0.01 260);
+  --color-secondary: oklch(53% 0.02 250);
+  --color-secondary-content: oklch(96% 0.008 100);
+  --color-accent: oklch(77% 0.04 70);
+  --color-accent-content: oklch(7% 0.01 260);
+  --color-neutral: oklch(20% 0.01 260);
+  --color-neutral-content: oklch(96% 0.008 100);
+  --color-base-100: oklch(7% 0.01 260);
+  --color-base-200: oklch(10% 0.01 250);
+  --color-base-300: oklch(13% 0.01 250);
+  --color-base-content: oklch(96% 0.008 100);
+  --color-success: oklch(72% 0.15 165);
+  --color-success-content: oklch(7% 0.01 260);
+  --color-warning: oklch(72% 0.12 75);
+  --color-warning-content: oklch(7% 0.01 260);
+  --color-error: oklch(62% 0.12 20);
+  --color-error-content: oklch(96% 0.008 100);
+  --color-info: oklch(67% 0.04 230);
+  --color-info-content: oklch(7% 0.01 260);
 
-  --s: var(--ds-color-secondary-500);
-  --sf: var(--ds-color-secondary-600);
-  --sc: var(--ds-color-white);
-
-  --a: var(--ds-color-info-500);
-  --af: var(--ds-color-info-600);
-  --ac: var(--ds-color-white);
-
-  --n: var(--ds-color-neutral-700);
-  --nf: var(--ds-color-neutral-800);
-  --nc: var(--ds-color-white);
-
-  --b1: var(--ds-color-white);
-  --b2: var(--ds-color-neutral-50);
-  --b3: var(--ds-color-neutral-100);
-  --bc: var(--ds-text-primary);
-
-  --su: var(--ds-color-success-500);
-  --wa: var(--ds-color-warning-500);
-  --er: var(--ds-color-error-500);
-  --in: var(--ds-color-info-500);
-
-  /* Border radius */
+  /* -------------------------------------------------------------------------
+     Structural tokens
+     ------------------------------------------------------------------------- */
   --rounded-box: var(--ds-radius-lg);
   --rounded-btn: var(--ds-button-md-radius);
   --rounded-badge: var(--ds-badge-radius);
-
-  /* Animation */
-  --animation-btn: 0.25s;
-  --animation-input: 0.2s;
-
-  /* Button */
+  --animation-btn: 0.18s;
+  --animation-input: 0.18s;
   --btn-focus-scale: 0.98;
   --border-btn: 1px;
   --tab-border: 2px;

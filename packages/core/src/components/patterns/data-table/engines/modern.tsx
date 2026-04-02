@@ -31,9 +31,9 @@ import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 
 /** Density -> cell padding mapping */
 const DENSITY_PADDING_MAP = {
-  compact: '6px 8px',
-  comfortable: '12px',
-  spacious: '16px 14px',
+  compact: 'var(--ds-table-padding-compact, 6px 8px)',
+  comfortable: 'var(--ds-table-padding-comfortable, 10px 12px)',
+  spacious: 'var(--ds-table-padding-spacious, 16px 14px)',
 } as const;
 
 /**
@@ -111,9 +111,10 @@ export default function ModernDataTable<T extends object>(
     startWidth: number;
   } | null>(null);
 
-  // --- Column reorder state ---
+  // --- Column reorder state (mouse-event based, not HTML5 drag & drop) ---
   const [dragSourceKey, setDragSourceKey] = useState<string | null>(null);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+  const reorderRef = useRef<{ sourceKey: string; startX: number } | null>(null);
 
   // ---------------------------------------------------------------------------
   // Derived values
@@ -190,49 +191,85 @@ export default function ModernDataTable<T extends object>(
   );
 
   // ---------------------------------------------------------------------------
-  // Column drag handlers (HTML5 drag & drop)
+  // Column reorder handlers (mouse-event based for cross-browser reliability)
   // ---------------------------------------------------------------------------
 
-  const handleDragStart = useCallback((e: React.DragEvent, key: string) => {
-    setDragSourceKey(key);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', key);
-  }, []);
+  const headerRowRef = useRef<HTMLTableRowElement | null>(null);
 
-  const handleDragOver = useCallback((e: React.DragEvent, key: string) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    setDragOverKey(key);
-  }, []);
-
-  const handleDragEnd = useCallback(() => {
-    setDragSourceKey(null);
-    setDragOverKey(null);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, targetKey: string) => {
+  const handleReorderStart = useCallback(
+    (e: React.MouseEvent, key: string) => {
+      if (!reorderable || !onColumnReorder) return;
       e.preventDefault();
-      const sourceKey = e.dataTransfer.getData('text/plain');
-      if (!sourceKey || sourceKey === targetKey) {
+      e.stopPropagation();
+      reorderRef.current = { sourceKey: key, startX: e.clientX };
+      setDragSourceKey(key);
+
+      const handleMouseMove = (moveEvent: MouseEvent) => {
+        if (!reorderRef.current || !headerRowRef.current) return;
+        // Find which <th> the mouse is over
+        const ths = headerRowRef.current.querySelectorAll<HTMLTableCellElement>('th[data-col-key]');
+        for (const th of ths) {
+          const rect = th.getBoundingClientRect();
+          if (moveEvent.clientX >= rect.left && moveEvent.clientX <= rect.right) {
+            const colKey = th.dataset.colKey;
+            if (colKey && colKey !== reorderRef.current.sourceKey) {
+              setDragOverKey(colKey);
+            }
+            break;
+          }
+        }
+      };
+
+      const handleMouseUp = (upEvent: MouseEvent) => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+
+        if (!reorderRef.current || !headerRowRef.current) {
+          setDragSourceKey(null);
+          setDragOverKey(null);
+          reorderRef.current = null;
+          return;
+        }
+
+        // Find drop target
+        const ths = headerRowRef.current.querySelectorAll<HTMLTableCellElement>('th[data-col-key]');
+        let targetKey: string | null = null;
+        for (const th of ths) {
+          const rect = th.getBoundingClientRect();
+          if (upEvent.clientX >= rect.left && upEvent.clientX <= rect.right) {
+            targetKey = th.dataset.colKey ?? null;
+            break;
+          }
+        }
+
+        const sourceKey = reorderRef.current.sourceKey;
+        reorderRef.current = null;
         setDragSourceKey(null);
         setDragOverKey(null);
-        return;
-      }
 
-      const currentOrder = columnOrder ?? processedColumns.map((c) => c.key);
-      const newOrder = [...currentOrder];
-      const sourceIdx = newOrder.indexOf(sourceKey);
-      const targetIdx = newOrder.indexOf(targetKey);
-      if (sourceIdx === -1 || targetIdx === -1) return;
+        if (!targetKey || targetKey === sourceKey) return;
 
-      newOrder.splice(sourceIdx, 1);
-      newOrder.splice(targetIdx, 0, sourceKey);
-      onColumnReorder?.(newOrder);
-      setDragSourceKey(null);
-      setDragOverKey(null);
+        const currentOrder = columnOrder && columnOrder.length > 0
+          ? columnOrder
+          : processedColumns.map((c) => c.key);
+        const newOrder = [...currentOrder];
+        const sourceIdx = newOrder.indexOf(sourceKey);
+        const targetIdx = newOrder.indexOf(targetKey);
+        if (sourceIdx === -1 || targetIdx === -1) return;
+
+        newOrder.splice(sourceIdx, 1);
+        newOrder.splice(targetIdx, 0, sourceKey);
+        onColumnReorder(newOrder);
+      };
+
+      document.body.style.cursor = 'grabbing';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
     },
-    [columnOrder, processedColumns, onColumnReorder]
+    [reorderable, onColumnReorder, columnOrder, processedColumns]
   );
 
   // ---------------------------------------------------------------------------
@@ -399,8 +436,13 @@ export default function ModernDataTable<T extends object>(
           <table className={tableClasses} style={{ width: '100%', tableLayout: resizable ? 'fixed' : undefined }}>
             {/* Sticky header uses z-10 to sit above scrolling rows and a
                 solid background so text doesn't bleed through. */}
-            <thead className={stickyHeader ? 'sticky top-0 z-10 bg-base-100' : ''}>
-              <tr className="bg-base-200/40">
+            <thead
+              className={stickyHeader ? 'sticky top-0 z-10 bg-base-100' : ''}
+              style={{
+                boxShadow: stickyHeader ? 'var(--ds-shadow-sm, 0 1px 3px rgba(0,0,0,0.08))' : undefined,
+              }}
+            >
+              <tr className="bg-base-200/40" ref={headerRowRef}>
                 {/* Select-all checkbox: checked state is derived from length
                     comparison rather than a separate boolean to stay in sync
                     when data changes externally (e.g. server-side filter). */}
@@ -429,55 +471,48 @@ export default function ModernDataTable<T extends object>(
                         maxWidth: col.maxWidth,
                         textAlign: col.align,
                         padding: densityPadding,
-                        position: (pinnedStyle.position as any) ?? 'relative',
+                        position: (pinnedStyle.position as any) || (resizable ? 'relative' : undefined),
                         left: pinnedStyle.left as any,
                         right: pinnedStyle.right as any,
                         zIndex: pinnedStyle.zIndex as any,
                         backgroundColor: pinSide
-                          ? 'var(--fallback-b2, oklch(var(--b2)))'
-                          : undefined,
+                          ? 'var(--ds-color-bg-secondary, var(--color-base-200))'
+                          : dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key
+                            ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)'
+                            : undefined,
                         userSelect: reorderable || resizable ? 'none' : undefined,
+                        opacity: dragSourceKey === col.key ? 0.45 : 1,
+                        transition: 'opacity 0.2s ease, background-color 0.2s ease',
                       }}
                       className={
                         col.sortable
                           ? 'cursor-pointer select-none hover:bg-base-200/50 transition-colors'
                           : ''
                       }
+                      data-col-key={col.key}
                       onClick={col.sortable ? () => handleSort(col.key) : undefined}
-                      // Drag attributes for column reordering
-                      draggable={reorderable}
-                      onDragStart={
-                        reorderable
-                          ? (e) => {
-                              // Prevent drag from interfering with sort click
-                              handleDragStart(e, col.key);
-                            }
-                          : undefined
-                      }
-                      onDragOver={
-                        reorderable ? (e) => handleDragOver(e, col.key) : undefined
-                      }
-                      onDrop={
-                        reorderable ? (e) => handleDrop(e, col.key) : undefined
-                      }
-                      onDragEnd={reorderable ? handleDragEnd : undefined}
                     >
                       <span
                         className="inline-flex items-center gap-1"
                         style={{ position: 'relative', width: '100%' }}
                       >
-                        {/* Drag grip icon for reorderable columns */}
-                        {reorderable && (
+                        {/* Drag grip - mousedown starts reorder */}
+                        {reorderable && onColumnReorder && (
                           <span
+                            onMouseDown={(e) => handleReorderStart(e, col.key)}
                             style={{
-                              cursor: 'grab',
-                              opacity: 0.4,
-                              fontSize: 14,
+                              cursor: dragSourceKey ? 'grabbing' : 'grab',
+                              opacity: dragSourceKey === col.key ? 0.8 : 0.35,
+                              fontSize: 11,
                               lineHeight: 1,
                               flexShrink: 0,
-                              marginRight: -2,
+                              marginRight: 6,
+                              padding: '2px 2px',
+                              borderRadius: 3,
+                              transition: 'opacity 0.15s ease',
                             }}
-                            aria-hidden="true"
+                            aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
+                            role="button"
                           >
                             {'\u2807'}
                           </span>
@@ -504,8 +539,8 @@ export default function ModernDataTable<T extends object>(
                               left: -2,
                               top: 0,
                               bottom: 0,
-                              width: 2,
-                              background: 'var(--ds-color-primary, oklch(var(--p)))',
+                              width: 3,
+                              background: 'var(--ds-color-primary)',
                               borderRadius: 1,
                             }}
                           />
@@ -561,9 +596,9 @@ export default function ModernDataTable<T extends object>(
                             style={{
                               width: 1,
                               height: '60%',
-                              background: 'rgba(0,0,0,0.12)',
+                              background: 'var(--ds-color-border-secondary, rgba(0,0,0,0.12))',
                               borderRadius: 1,
-                              transition: 'background 150ms ease',
+                              transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
                             }}
                           />
                         </span>
@@ -581,8 +616,8 @@ export default function ModernDataTable<T extends object>(
                       position: 'sticky',
                       right: 0,
                       zIndex: 2,
-                      backgroundColor: 'var(--fallback-b2, oklch(var(--b2)))',
-                      borderLeft: '1px solid oklch(var(--bc) / 0.1)',
+                      backgroundColor: 'var(--ds-color-bg-secondary, var(--color-base-200))',
+                      borderLeft: '1px solid var(--ds-color-border-secondary)',
                     }}
                   >
                     Actions
@@ -603,11 +638,12 @@ export default function ModernDataTable<T extends object>(
                         selectedKeys.includes(key) ? 'bg-primary/5' : ''
                       }`}
                       onClick={onRowClick ? () => onRowClick(row, index) : undefined}
-                      style={
-                        striped && index % 2 === 1
-                          ? { backgroundColor: 'var(--ds-color-neutral-50, oklch(var(--b2)))' }
-                          : undefined
-                      }
+                      style={{
+                        transition: 'background-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
+                        ...(striped && index % 2 === 1
+                          ? { backgroundColor: 'var(--ds-color-neutral-50, var(--color-base-200))' }
+                          : undefined),
+                      }}
                     >
                       {/* stopPropagation prevents the checkbox click from also triggering onRowClick */}
                       {selectable && (
@@ -657,7 +693,7 @@ export default function ModernDataTable<T extends object>(
                               right: pinnedStyle.right as any,
                               zIndex: pinnedStyle.zIndex as any,
                               backgroundColor: pinSide
-                                ? 'var(--fallback-b1, oklch(var(--b1)))'
+                                ? 'var(--ds-color-bg-primary, var(--color-base-100))'
                                 : undefined,
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
@@ -681,8 +717,8 @@ export default function ModernDataTable<T extends object>(
                             position: 'sticky',
                             right: 0,
                             zIndex: 2,
-                            backgroundColor: 'var(--fallback-b1, oklch(var(--b1)))',
-                            borderLeft: '1px solid oklch(var(--bc) / 0.1)',
+                            backgroundColor: 'var(--ds-color-bg-primary, var(--color-base-100))',
+                            borderLeft: '1px solid var(--ds-color-border-secondary)',
                           }}
                           onClick={(e) => e.stopPropagation()}
                         >

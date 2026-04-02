@@ -81,10 +81,12 @@ function App() {
 | Import | Contents |
 |--------|----------|
 | `@rottay/design-system` | Components, providers, hooks |
-| `@rottay/design-system/tokens` | Design token utilities |
+| `@rottay/design-system/server` | Server-side utilities |
 | `@rottay/design-system/icons` | Icon system |
-| `@rottay/design-system/i18n` | Internationalization utilities |
-| `@rottay/design-system/styles.css` | CSS tokens and theme variables |
+| `@rottay/design-system/styles.css` | Full CSS bundle (all tenants, for dev/Storybook) |
+| `@rottay/design-system/styles/platform` | CSS bundle for Platform app (rottay tenant) |
+| `@rottay/design-system/styles/bithire` | CSS bundle for BitHire app |
+| `@rottay/design-system/styles/evnto` | CSS bundle for Evnto app |
 
 ## Scripts
 

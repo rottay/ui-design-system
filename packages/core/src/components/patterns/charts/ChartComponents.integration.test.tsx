@@ -4,7 +4,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { BarChart } from '.';
 import { LineChart } from '.';
-import { renderSurface } from '../../surfaces/tests/test-utils';
+import { renderSurface } from '../../surfaces/common/test-utils';
 
 describe('Chart components integration', () => {
   it('renders a live line chart shell with legend content', async () => {

@@ -6,33 +6,35 @@
 
 import { describe, expect, it } from 'vitest';
 
-import * as componentsEntry from '../../components';
-import * as iconsEntry from '../../icons';
-import * as i18nEntry from '../../i18n';
+import * as componentsEntry from '../../../components';
+import * as iconsEntry from '../../../icons';
+import * as i18nEntry from '../../../i18n';
 
-const engineBarrels = import.meta.glob('../../components/**/engines/index.ts', {
+const engineBarrels = import.meta.glob('../../../components/**/engines/classic.tsx', {
   eager: true,
 }) as Record<string, Record<string, unknown>>;
 
-const compoundBarrels = import.meta.glob('../../components/**/compound/**/index.ts', {
+const compoundBarrels = import.meta.glob('../../../components/**/compound/**/index.ts', {
   eager: true,
 }) as Record<string, Record<string, unknown>>;
 
 describe('engine entrypoint contracts', () => {
   it('keeps every engine barrel wired to at least one implementation export', () => {
     const entries = Object.entries(engineBarrels);
+    // Each component should have a classic engine file with a default export
     expect(entries.length).toBeGreaterThan(70);
 
     for (const [modulePath, moduleExports] of entries) {
       const exportNames = Object.keys(moduleExports);
       expect(exportNames.length, modulePath).toBeGreaterThan(0);
-      expect(Object.values(moduleExports).some(Boolean), modulePath).toBe(true);
+      // Engine files use default exports
       expect(
-        exportNames.some(
-          (name) =>
-            ['classic', 'modern', 'rustic', 'custom'].includes(name) ||
-            /classic|modern|rustic|custom/i.test(name)
-        ),
+        exportNames.includes('default') ||
+          exportNames.some(
+            (name) =>
+              ['classic', 'modern', 'rustic', 'custom'].includes(name) ||
+              /classic|modern|rustic|custom/i.test(name)
+          ),
         modulePath
       ).toBe(true);
     }

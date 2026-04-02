@@ -15,7 +15,7 @@ import {
 } from './Divider.types';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../engines/factory', () => ({
+vi.mock('../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockDivider = React.forwardRef<HTMLDivElement, any>(({
       children,

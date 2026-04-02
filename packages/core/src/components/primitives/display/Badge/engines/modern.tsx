@@ -163,6 +163,10 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     onClose?.();
   };
 
+  // Light-background variants need a visible border for contrast on light surfaces.
+  // Secondary has a near-white bg (#f5f5f5) that disappears against white containers.
+  const needsContrastBorder = variant === 'secondary' && badgeStyle !== 'outline';
+
   // Assemble the full DaisyUI class string from variant, size, style, and state modifiers
   const badgeClasses = [
     'badge',
@@ -170,9 +174,15 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     sizeClass,
     styleClass,
     bordered ? 'ring ring-offset-2 ring-offset-base-100' : '',
+    needsContrastBorder ? 'border border-[var(--ds-color-border)]' : '',
     clickable || onClick ? 'cursor-pointer hover:opacity-80' : '',
     pulse ? 'animate-pulse' : '',
   ].filter(Boolean).join(' ');
+
+  // Transition style using DS token for consistent motion across the system
+  const badgeTransitionStyle: React.CSSProperties = {
+    transition: `all var(--ds-badge-transition)`,
+  };
 
   /**
    * DaisyUI indicator position class mapping.
@@ -197,7 +207,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
       {responsiveStyleTag}
       <span
         className={`${badgeClasses} ${className}`}
-        style={style}
+        style={{ ...badgeTransitionStyle, ...style }}
         onClick={clickable || onClick ? handleClick : undefined}
         {...responsiveAttrs}
       >
@@ -206,6 +216,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
         {closable && (
           <span
             className="ml-1 cursor-pointer opacity-70 hover:opacity-100"
+            style={{ transition: `opacity var(--ds-badge-transition)` }}
             onClick={handleClose}
             aria-label="Close badge"
           >
@@ -232,7 +243,9 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
       <span
         className={`indicator-item ${positionClass} ${badgeClasses}`}
         {...responsiveAttrs}
-        style={dot ? { width: dotSize, height: dotSize, padding: 0, minWidth: 'auto' } as React.CSSProperties : undefined}
+        style={dot
+          ? { ...badgeTransitionStyle, width: dotSize, height: dotSize, padding: 0, minWidth: 'auto' } as React.CSSProperties
+          : badgeTransitionStyle}
         onClick={clickable || onClick ? handleClick : undefined}
       >
         {!dot && (

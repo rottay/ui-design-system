@@ -330,14 +330,21 @@ export function useRegisterCommands(commands: Command[]): void {
   const commandsRef = useRef(commands);
   commandsRef.current = commands;
 
+  // Capture register/unregister in a ref so the effect never depends on
+  // the context object. Including `ctx` in the deps causes an infinite
+  // loop: register -> version bump -> new ctx -> cleanup (unregister) ->
+  // version bump -> new ctx -> register (IDs are "new" again) -> repeat.
+  const ctxRef = useRef(ctx);
+  ctxRef.current = ctx;
+
   useEffect(() => {
     const cmds = commandsRef.current;
-    ctx.register(cmds);
+    ctxRef.current.register(cmds);
 
     const ids = cmds.map((c) => c.id);
 
     return () => {
-      ctx.unregister(ids);
+      ctxRef.current.unregister(ids);
     };
     // The dependency is a serialized fingerprint of the commands array
     // structure. This lets us re-register when IDs/labels/shortcuts change
@@ -346,7 +353,6 @@ export function useRegisterCommands(commands: Command[]): void {
     // array reference each render).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    ctx,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     commands.map((c) => `${c.id}::${c.label}::${c.shortcut ?? ''}::${c.category ?? ''}`).join('|'),
   ]);
@@ -509,10 +515,10 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
 export function useCommands(): UseCommandsReturn {
   const ctx = useCommandRegistryContext();
 
-  // Re-derive the filtered and sorted command list whenever the registry
-  // version changes (i.e. commands are registered/unregistered). The
-  // version dependency ensures stale command lists are never shown.
-  const commands = useMemo(() => ctx.getAll(), [ctx, ctx.version]);
+  // Re-derive the filtered and sorted command list on every render.
+  // Memoizing by version is insufficient because `when()` conditions on
+  // individual commands can change independently of the registry.
+  const commands = ctx.getAll();
 
   const search = useCallback(
     (query: string): Command[] => {
