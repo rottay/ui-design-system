@@ -46,7 +46,7 @@ jobs:
 
       # ── Step 2: Test ───────────────────────────────────────────────────
       - name: Run tests
-        run: pnpm exec vitest run
+        run: pnpm exec vitest run --reporter=dot
         working-directory: packages/core
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
