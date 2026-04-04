@@ -165,12 +165,12 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       }
     };
 
-    // Map DS size tokens to DaisyUI input size modifiers.
-    const getSizeClass = () => {
+    // Map DS size tokens to inline sizing styles.
+    const getSizeStyle = (): React.CSSProperties => {
       switch (size) {
-        case 'small': return 'input-sm';
-        case 'large': return 'input-lg';
-        default: return 'input-md';
+        case 'small': return { height: 32, fontSize: 13, padding: '4px 10px' };
+        case 'large': return { height: 48, fontSize: 16, padding: '8px 14px' };
+        default: return { height: 40, fontSize: 14, padding: '6px 12px' };
       }
     };
 
@@ -190,7 +190,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           <input
             ref={inputRef}
             type="text"
-            className={`input input-bordered w-full ${getSizeClass()}`}
+            style={{ width: '100%', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', boxSizing: 'border-box', ...getSizeStyle() }}
             value={value}
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => handleOpenChange(true)}
@@ -203,7 +203,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           {allowClear && value && !disabled && (
             <button
               type="button"
-              className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-ghost btn-xs btn-circle"
+              className="absolute right-2 top-1/2 -translate-y-1/2"
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
               onClick={() => handleChange('')}
             >
               ✕
@@ -215,7 +216,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             `menu` + `rounded-box` for consistent theming and `max-h-60` to
             keep the list scrollable when there are many options. */}
         {isOpen && (
-          <ul className="absolute z-50 w-full mt-1 menu bg-base-100 rounded-box shadow-lg max-h-60 overflow-auto">
+          <ul style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, listStyle: 'none', margin: 0, marginBlockStart: 4, padding: 4, borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-2)' }}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li key={option.value}>
@@ -233,7 +234,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                 </li>
               ))
             ) : (
-              <li className="text-base-content/50 p-2 text-center">
+              <li className="p-2 text-center" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {notFoundContent}
               </li>
             )}

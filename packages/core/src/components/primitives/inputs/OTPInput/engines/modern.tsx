@@ -19,11 +19,11 @@ import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
 import type { OTPInputProps } from '../OTPInput.types';
 import { OTPINPUT_DEFAULTS } from '../OTPInput.types';
 
-/** Maps size tokens to DaisyUI/Tailwind dimension and typography utility classes. */
-const SIZE_CLASSES: Record<string, string> = {
-  sm: 'w-9 h-9 text-base',
-  md: 'w-11 h-11 text-xl',
-  lg: 'w-13 h-13 text-2xl',
+/** Maps size tokens to inline dimension and typography styles. */
+const SIZE_STYLES: Record<string, React.CSSProperties> = {
+  sm: { width: 36, height: 36, fontSize: 16 },
+  md: { width: 44, height: 44, fontSize: 20 },
+  lg: { width: 52, height: 52, fontSize: 24 },
 };
 
 /**
@@ -139,11 +139,11 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     inputRefs.current[focusIndex]?.focus();
   }, [internalValues, isValidChar, length, updateValue]);
 
-  const sizeClass = SIZE_CLASSES[size] || SIZE_CLASSES.md;
+  const sizeStyle = SIZE_STYLES[size] || SIZE_STYLES.md;
 
   return (
     <div className={`${className || ''}`} style={style}>
-      <div className="flex gap-2">
+      <div style={{ display: 'flex', gap: 8 }}>
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
@@ -155,23 +155,23 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             value={internalValues[index] || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
-            className={`input input-bordered text-center font-mono font-bold ${sizeClass} ${error ? 'input-error' : 'focus:input-primary'} ${disabled ? 'input-disabled' : ''}`}
-            style={{ padding: 0 }}
+            style={{ ...sizeStyle, padding: 0, textAlign: 'center', fontFamily: 'monospace', fontWeight: 700, border: error ? '1px solid var(--ds-color-error)' : '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
+            onFocus={(e) => { if (!error) e.currentTarget.style.borderColor = 'var(--ds-color-primary)'; e.target.select(); }}
+            onBlur={(e) => { if (!error) e.currentTarget.style.borderColor = 'var(--ds-color-border)'; }}
             onChange={(e) => {
               const char = e.target.value.slice(-1);
               if (char) handleChange(index, char);
             }}
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
-            onFocus={(e) => e.target.select()}
             aria-label={`Digit ${index + 1} of ${length}`}
           />
         ))}
       </div>
       {error && errorMessage && (
-        <label className="label">
-          <span className="label-text-alt text-error">{errorMessage}</span>
-        </label>
+        <div style={{ marginTop: 4 }}>
+          <span style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
+        </div>
       )}
     </div>
   );

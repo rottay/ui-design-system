@@ -2,75 +2,30 @@
 
 /**
  * @fileoverview Modal Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Modal component.
- * A lightweight, utility-first alternative to the Classic engine.
+ * @description Premium modal overlay with layered backdrop blur, scale entrance
+ * animation, and polished header/body/footer sections. Uses DS tokens for all
+ * surfaces, elevation, motion, and radii.
  *
  * @remarks
- * **Engine Overview:**
- * Modern is the utility-first engine built on DaisyUI and Tailwind CSS.
- * It provides a smaller bundle size compared to Classic while maintaining
- * core modal functionality.
- *
- * **Key Features:**
- * - Utility-first styling with Tailwind
- * - Smaller bundle size than Ant Design
- * - DaisyUI modal component classes
- * - Custom keyboard and scroll handling
- *
- * **When to Use Modern:**
- * - Projects using Tailwind CSS
- * - When bundle size is a concern
- * - Landing pages and marketing sites
- * - When DaisyUI theme is preferred
- *
- * **Multi-Tenant Theming:**
- * Modern uses the DS token system with DaisyUI color variables.
- * Tenant themes override via `--ds-color-*` and `--color-*` (DaisyUI 5 oklch).
- * Motion uses `--ds-duration-*` and `--ds-ease-*` tokens.
- * Reduced motion is respected via `--ds-motion-reduce`.
- *
- * **Size Classes:**
- * | Size | CSS Class |
+ * **Size Variants:**
+ * | Size | Max-Width |
  * |------|-----------|
- * | xs | w-80 |
- * | sm | w-96 |
- * | md | w-[520px] |
- * | lg | w-[720px] |
- * | xl | w-[900px] |
- * | full | w-11/12 max-w-7xl |
+ * | sm | 440px |
+ * | md | 560px |
+ * | lg | 720px |
+ * | xl | 900px |
+ * | 2xl | 960px |
+ * | 3xl | 1120px |
+ * | 4xl | 1280px |
+ * | 5xl | 1440px |
+ * | full | 95vw |
  *
- * @example Basic Usage
- * ```tsx
- * import { Modal } from '@rottay/design-system';
- *
- * <Modal engine="modern" open={open} onClose={onClose}>
- *   <p>Tailwind-styled modal</p>
- * </Modal>
- * ```
- *
- * @example Global Engine Configuration
- * ```tsx
- * import { EngineProvider, Modal } from '@rottay/design-system';
- *
- * <EngineProvider engine="modern">
- *   <App>
- *     <Modal open={open} onClose={onClose}>
- *       All modals use Modern engine
- *     </Modal>
- *   </App>
- * </EngineProvider>
- * ```
- *
- * @see {@link ModalProps} - Component props interface
- * @see {@link ClassicModal} - Ant Design alternative
- * @see {@link RusticModal} - Vanilla alternative
- * @see {@link https://daisyui.com/components/modal} - DaisyUI Modal docs
  * @module Modal/Engines/Modern
  * @category Feedback
  * @package @rottay/design-system
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import type { ModalProps, ModalSize } from '../Modal.types';
 import { MODAL_DEFAULTS } from '../Modal.types';
 
@@ -78,167 +33,86 @@ import { MODAL_DEFAULTS } from '../Modal.types';
 // Constants
 // ============================================================================
 
-/**
- * Size class mappings for Modern engine.
- * Uses DaisyUI modal-box class with Tailwind width utilities.
- *
- * @internal
- */
-const SIZE_CLASSES: Record<ModalSize, string> = {
-  /** Extra small - 320px */
-  xs: 'modal-box w-80',
-  /** Small - 384px */
-  sm: 'modal-box w-96',
-  /** Medium - 520px (default) */
-  md: 'modal-box w-[520px]',
-  /** Large - 720px */
-  lg: 'modal-box w-[720px]',
-  /** Extra large - 900px */
-  xl: 'modal-box w-[900px]',
-  /** 2X large - 960px */
-  '2xl': 'modal-box w-[960px]',
-  /** 3X large - 1120px */
-  '3xl': 'modal-box w-[1120px]',
-  /** 4X large - 1280px */
-  '4xl': 'modal-box w-[1280px]',
-  /** 5X large - 1440px */
-  '5xl': 'modal-box w-[1440px]',
-  /** Full width with max constraint */
-  full: 'modal-box w-11/12 max-w-7xl',
+/** Max-width in px per size variant. */
+const SIZE_WIDTH_MAP: Record<ModalSize, string> = {
+  xs: '360px',
+  sm: '440px',
+  md: '560px',
+  lg: '720px',
+  xl: '900px',
+  '2xl': '960px',
+  '3xl': '1120px',
+  '4xl': '1280px',
+  '5xl': '1440px',
+  full: '95vw',
 };
+
+/** Keyframe + utility styles injected once. */
+const MODAL_STYLES = `
+@keyframes ds-modal-backdrop-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes ds-modal-panel-enter {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+`;
 
 // ============================================================================
 // Component
 // ============================================================================
 
-/**
- * Modern Engine implementation of the Modal component.
- *
- * @description
- * Custom modal implementation using DaisyUI classes and Tailwind utilities.
- * Provides a lightweight alternative to Ant Design with smaller bundle size.
- *
- * @remarks
- * **Implementation Details:**
- * - Uses `useEffect` for keyboard event handling
- * - Implements body scroll lock when modal is open
- * - DaisyUI modal classes for styling
- * - Custom backdrop handling
- *
- * **CSS Classes Used:**
- * - `modal`, `modal-open`, `modal-middle`: Container classes
- * - `modal-box`: Content container
- * - `modal-backdrop`: Overlay element
- * - `modal-action`: Footer container
- * - `btn`, `btn-primary`, `btn-ghost`: Button classes
- *
- * **Accessibility:**
- * - Close button has `aria-label="Close"`
- * - Escape key handling for keyboard users
- *
- * @param props - {@link ModalProps}
- * @returns The rendered DaisyUI Modal or empty fragment when closed
- *
- * @example
- * ```tsx
- * <ModernModal
- *   open={isOpen}
- *   onClose={() => setIsOpen(false)}
- *   size="lg"
- *   title="Filter Options"
- *   centered
- * >
- *   <FilterForm />
- * </ModernModal>
- * ```
- */
 export default function ModernModal(props: ModalProps): React.ReactElement {
-  // ---------------------------------------------------------------------------
-  // Props Destructuring
-  // ---------------------------------------------------------------------------
-
   const {
-    // Visibility
     open,
-
-    // Layout
     size = MODAL_DEFAULTS.size as ModalSize,
     centered = MODAL_DEFAULTS.centered,
-
-    // Content
     title,
     children,
     footer,
     hideFooter,
-
-    // Behavior
     onClose,
     onOpenChange,
     closable = MODAL_DEFAULTS.closable,
     closeOnOverlayClick = MODAL_DEFAULTS.closeOnOverlayClick,
     closeOnEscape = MODAL_DEFAULTS.closeOnEscape,
-
-    // Confirmation
     okText = 'OK',
     cancelText = 'Cancel',
     onOk,
     onCancel,
     confirmLoading,
-
-    // Styling
     className = '',
     style,
   } = props;
 
-  // ---------------------------------------------------------------------------
-  // Event Handlers
-  // ---------------------------------------------------------------------------
+  const panelRef = useRef<HTMLDivElement>(null);
 
-  /**
-   * Handle cancel/close action.
-   * Called when X button clicked, backdrop clicked, or Escape pressed.
-   */
-  const handleCancel = () => {
+  // -- handlers ---------------------------------------------------------------
+
+  const handleCancel = useCallback(() => {
     onClose?.();
     onCancel?.();
     onOpenChange?.(false);
-  };
+  }, [onClose, onCancel, onOpenChange]);
 
-  /**
-   * Handle OK/confirm action.
-   * Called when OK button is clicked.
-   */
   const handleOk = () => {
     onOk?.();
   };
 
-  // ---------------------------------------------------------------------------
-  // Keyboard Handling
-  // ---------------------------------------------------------------------------
+  // -- escape key -------------------------------------------------------------
 
-  // Manual Escape key handling because DaisyUI's modal component doesn't
-  // provide built-in keyboard dismiss. The listener is scoped to the
-  // document level so it works regardless of focus position within the modal.
-  // Cleanup on unmount or when open/closeOnEscape changes prevents stale handlers.
   useEffect(() => {
     if (!open || !closeOnEscape) return;
-
-    const handleEscape = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCancel();
     };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open, closeOnEscape, handleCancel]);
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [open, closeOnEscape]);
+  // -- body scroll lock -------------------------------------------------------
 
-  // ---------------------------------------------------------------------------
-  // Body Scroll Lock
-  // ---------------------------------------------------------------------------
-
-  // Body scroll lock prevents the page from scrolling behind the modal overlay,
-  // which is disorienting on mobile. Setting overflow to '' (empty) rather than
-  // 'auto' restores whatever the original value was. The cleanup function ensures
-  // scroll is restored if the component unmounts while open (e.g., route change).
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -250,105 +124,208 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
     };
   }, [open]);
 
-  // ---------------------------------------------------------------------------
-  // Early Return
-  // ---------------------------------------------------------------------------
+  // -- focus trap (return focus to panel on open) -----------------------------
 
-  // Early return with empty fragment instead of null to satisfy the
-  // ReactElement return type. Unlike Classic (which delegates visibility
-  // to Ant Design's open prop), Modern must conditionally render because
-  // DaisyUI's modal-open class only controls visibility, not DOM presence.
+  useEffect(() => {
+    if (open && panelRef.current) {
+      panelRef.current.focus();
+    }
+  }, [open]);
+
+  // -- early return -----------------------------------------------------------
+
   if (!open) return <></>;
 
-  // ---------------------------------------------------------------------------
-  // Size Classes
-  // ---------------------------------------------------------------------------
+  const maxWidth = SIZE_WIDTH_MAP[size as ModalSize] || SIZE_WIDTH_MAP.md;
 
-  const modalSize = size as ModalSize;
-
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
+  // -- render -----------------------------------------------------------------
 
   return (
-    <div
-      className={`modal modal-open ${centered ? 'modal-middle' : ''}`}
-      style={style}
-    >
-      {/* DaisyUI modal-backdrop creates a semi-transparent overlay.
-          Click handler is conditionally attached rather than using
-          stopPropagation on the content, keeping the event flow cleaner. */}
-      <div
-        className="modal-backdrop"
-        onClick={closeOnOverlayClick ? handleCancel : undefined}
-        style={{
-          backdropFilter: 'blur(4px)',
-          WebkitBackdropFilter: 'blur(4px)',
-          animation: 'ds-backdrop-fade var(--ds-duration-normal, 0.2s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-        }}
-      />
+    <>
+      <style dangerouslySetInnerHTML={{ __html: MODAL_STYLES }} />
 
-      {/* Modal Content Container */}
+      {/* Fullscreen backdrop */}
       <div
-        className={`${SIZE_CLASSES[modalSize]} ${className}`}
         style={{
-          animation: 'ds-modal-enter var(--ds-duration-slow, 0.3s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-          boxShadow: 'var(--ds-shadow-modal, var(--ds-shadow-2xl, 0 25px 50px -12px rgba(0,0,0,.25)))',
+          position: 'fixed',
+          inset: 0,
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: centered ? 'center' : 'flex-start',
+          justifyContent: 'center',
+          paddingTop: centered ? undefined : '10vh',
         }}
       >
-        {/* Close button */}
-        {closable && (
-          <button
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            onClick={handleCancel}
-            aria-label="Close"
+        {/* Overlay */}
+        <div
+          onClick={closeOnOverlayClick ? handleCancel : undefined}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: 'var(--ds-surface-overlay)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            animation: 'ds-modal-backdrop-fade var(--ds-motion-normal) var(--ds-motion-ease-out)',
+          }}
+        />
+
+        {/* Panel */}
+        <div
+          ref={panelRef}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-label={typeof title === 'string' ? title : undefined}
+          className={className}
+          style={{
+            position: 'relative',
+            width: '100%',
+            maxWidth,
+            maxHeight: '85vh',
+            display: 'flex',
+            flexDirection: 'column',
+            margin: '16px',
+            backgroundColor: 'var(--ds-surface-card)',
+            border: '1px solid var(--ds-color-border)',
+            borderRadius: 'var(--ds-radius-xl)',
+            boxShadow: 'var(--ds-elevation-5)',
+            animation: 'ds-modal-panel-enter var(--ds-motion-normal) var(--ds-motion-ease-out)',
+            outline: 'none',
+            overflow: 'hidden',
+            ...style,
+          }}
+        >
+          {/* ---- Header ---- */}
+          {(title || closable) && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '16px 24px',
+                borderBottom: '1px solid var(--ds-color-border)',
+                flexShrink: 0,
+              }}
+            >
+              {title && (
+                <span
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    lineHeight: '24px',
+                    color: 'inherit',
+                  }}
+                >
+                  {title}
+                </span>
+              )}
+              {!title && <span />}
+              {closable && (
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  aria-label="Close"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '32px',
+                    height: '32px',
+                    border: 'none',
+                    borderRadius: 'var(--ds-radius-md)',
+                    backgroundColor: 'transparent',
+                    cursor: 'pointer',
+                    color: 'inherit',
+                    transition: 'background-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                      'var(--ds-surface-highlight)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* ---- Body ---- */}
+          <div
             style={{
-              transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-tertiary, rgba(0,0,0,0.06))';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = '';
+              flex: '1 1 auto',
+              overflowY: 'auto',
+              padding: '24px',
+              maxHeight: '70vh',
             }}
           >
-            ✕
-          </button>
-        )}
-
-        {/* Title */}
-        {title && <h3 className="font-bold text-lg mb-4">{title}</h3>}
-
-        {/* Body content */}
-        <div className="py-4">{children}</div>
-
-        {/* Footer with action buttons */}
-        {!hideFooter && (
-          <div className="modal-action">
-            {footer || (
-              <>
-                {onCancel && (
-                  <button className="btn" onClick={handleCancel}>
-                    {cancelText}
-                  </button>
-                )}
-                {/* DaisyUI's "loading" class shows a spinner inside the button.
-                    disabled prevents double-submission during async operations
-                    like API calls triggered by onOk. */}
-                {onOk && (
-                  <button
-                    className={`btn btn-primary ${confirmLoading ? 'loading' : ''}`}
-                    onClick={handleOk}
-                    disabled={confirmLoading}
-                  >
-                    {okText}
-                  </button>
-                )}
-              </>
-            )}
+            {children}
           </div>
-        )}
+
+          {/* ---- Footer ---- */}
+          {!hideFooter && (footer || onOk || onCancel) && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                gap: '8px',
+                padding: '16px 24px',
+                borderTop: '1px solid var(--ds-color-border)',
+                flexShrink: 0,
+              }}
+            >
+              {footer || (
+                <>
+                  {onCancel && (
+                    <button
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: 'var(--ds-radius-md, 8px)',
+                        border: '1px solid var(--ds-color-border)',
+                        background: 'transparent',
+                        color: 'var(--ds-color-text-primary)',
+                        fontSize: 14,
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'background 150ms ease-out',
+                      }}
+                      onClick={handleCancel}
+                    >
+                      {cancelText}
+                    </button>
+                  )}
+                  {onOk && (
+                    <button
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: 'var(--ds-radius-md, 8px)',
+                        border: '1px solid var(--ds-color-primary)',
+                        background: 'var(--ds-color-primary)',
+                        color: 'var(--ds-color-text-on-primary)',
+                        fontSize: 14,
+                        fontWeight: 500,
+                        cursor: confirmLoading ? 'wait' : 'pointer',
+                        opacity: confirmLoading ? 0.7 : 1,
+                        transition: 'opacity 150ms ease-out',
+                      }}
+                      onClick={handleOk}
+                      disabled={confirmLoading}
+                    >
+                      {okText}
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

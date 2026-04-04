@@ -24,6 +24,8 @@ import type {
   AssistantMessagePart,
   AssistantMessageRole,
   AssistantDeliveryStatus,
+  FilterPillConfig,
+  DensityKey,
 } from '../patterns';
 import type { GridColumns } from '../primitives/layout/Grid';
 import type { TabsProps } from '../primitives/navigation/Tabs';
@@ -77,8 +79,12 @@ export interface SurfaceBreadcrumb {
 export interface SurfacePageChrome {
   /** Primary page heading rendered in the shell header. */
   title: string;
+  /** Hide the shell header row entirely when the page composes its own top chrome. */
+  hideHeader?: boolean;
   /** Secondary text or node shown below the title. */
   subtitle?: ReactNode;
+  /** Optional rich content rendered below the title/subtitle block inside the page header. */
+  headerContent?: ReactNode;
   /** Breadcrumb trail for hierarchical navigation. */
   breadcrumbs?: SurfaceBreadcrumb[];
   /** Optional badge rendered inline with the title (e.g., status pill, count). */
@@ -223,6 +229,61 @@ export interface SurfaceColumn<TView> extends ColumnDef<TView> {
   hideInTable?: boolean;
 }
 
+/**
+ * Configuration for the integrated PatternListToolbar rendered above list content.
+ *
+ * When provided, the surface delegates search, density, view-mode, export, and
+ * primary action rendering to the canonical toolbar pattern rather than building
+ * those controls manually. The `toolbarStart` / `toolbarEnd` presentation slots
+ * continue to work as extra injection points inside the toolbar area.
+ */
+export interface ListSurfaceToolbarConfig {
+  /** Toolbar heading (e.g., entity name). */
+  title: string;
+  /** When false, the toolbar skips rendering the title/count cluster entirely. */
+  showTitleSection?: boolean;
+  /** Optional icon preceding the toolbar title. */
+  icon?: ReactNode;
+  /** Total item count displayed beside the title. */
+  totalCount: number;
+
+  // Search
+  /** Current search value (controlled). */
+  search: string;
+  /** Search value change handler. */
+  onSearchChange: (value: string) => void;
+  /** Placeholder for the search input. */
+  searchPlaceholder?: string;
+
+  // Filter pills (segmented controls rendered inside the toolbar row)
+  /** Segmented filter pill definitions. */
+  filterPills?: FilterPillConfig[];
+  /** Currently active filter values keyed by filter key. */
+  activeFilters?: Record<string, unknown>;
+  /** Handler when a toolbar filter pill value changes. */
+  onFilterChange?: (key: string, value: unknown) => void;
+  /** Handler to clear all active toolbar filter pills. */
+  onClearFilters?: () => void;
+  /** Number of currently active toolbar filter pills. */
+  activeFilterCount?: number;
+
+  // Density
+  /** Current row density. */
+  density: DensityKey;
+  /** Density change handler. */
+  onDensityChange: (density: DensityKey) => void;
+
+  // Export
+  /** Export handler. When provided, the toolbar renders an export button. */
+  onExport?: () => void;
+
+  // Column / saved-view settings (passed into the toolbar settings dropdown)
+  /** Column settings content rendered inside the toolbar settings dropdown. */
+  columnSettingsContent?: ReactNode;
+  /** Saved views content rendered inside the toolbar settings dropdown. */
+  savedViewsContent?: ReactNode;
+}
+
 /** Visual configuration controlling layout density and view mode for lists. */
 export interface ListSurfaceVisualConfig {
   /** Initial view mode. Defaults to product profile's `listView` preference. */
@@ -243,6 +304,8 @@ export interface ListSurfaceVisualConfig {
   maxHeight?: number | string;
   /** Filter layout used on mobile; defaults to the more legible stacked layout. */
   mobileFiltersLayout?: 'inline' | 'stacked' | 'sidebar';
+  /** Visual chrome used around the secondary filter panel. Defaults to `card`. */
+  filterPanelChrome?: 'card' | 'plain';
 
   // ---------------------------------------------------------------------------
   // Column capabilities (forwarded to PatternDataTable)
@@ -352,6 +415,15 @@ export interface ListSurfaceConfig<TView> {
   presentation: ListSurfacePresentationConfig<TView>;
   behavior: ListSurfaceBehaviorConfig<TView>;
   permissions?: SurfacePermissionsConfig;
+  /**
+   * When provided, the surface renders a `PatternListToolbar` above the filter
+   * panel and data area. The toolbar handles search, density, view-mode toggle,
+   * export, and primary action rendering via the canonical pattern.
+   *
+   * If omitted, the surface falls back to the legacy manual view-switch buttons
+   * and `toolbarStart` / `toolbarEnd` presentation slots.
+   */
+  toolbar?: ListSurfaceToolbarConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -462,8 +534,14 @@ export interface DetailSurfaceTab<TView> {
  * so the UI stays reactive to data changes.
  */
 export interface DetailSurfacePresentationConfig<TView> {
-  /** Partial page chrome. Detail surfaces derive their title from the entity, so only breadcrumbs/back are needed. */
-  chrome?: Pick<SurfacePageChrome, 'breadcrumbs' | 'maxWidth' | 'back'>;
+  /** Partial page chrome. Detail surfaces derive their title from the entity, so only breadcrumbs/back are needed.
+   *  `pageTitle` is an optional plain-string override shown in the PageShell heading.
+   *  When omitted, the shell derives a string from the entity via `title()`. */
+  chrome?: Pick<SurfacePageChrome, 'breadcrumbs' | 'maxWidth' | 'back'> & {
+    /** Explicit string title for the PageShell heading. When provided, avoids
+     *  coercing the ReactNode `title()` return to a string. */
+    pageTitle?: string;
+  };
   /** Derives the page title from the current entity. */
   title: (item: TView) => ReactNode;
   subtitle?: (item: TView) => ReactNode;

@@ -24,12 +24,12 @@ const MenuItem: React.FC<{
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
   if (item.type === 'divider') {
-    return <li className="divider my-1" />;
+    return <li style={{ height: 1, margin: '4px 0', background: 'var(--ds-color-border-subtle)' }} />;
   }
 
   if (item.type === 'group') {
     return (
-      <li className="menu-title">
+      <li style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, color: 'var(--ds-color-text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
         <span>{item.label}</span>
       </li>
     );
@@ -39,7 +39,8 @@ const MenuItem: React.FC<{
     <li>
       <button
         type="button"
-        className={`flex items-center justify-between gap-2 ${item.disabled ? 'disabled opacity-50' : ''} ${item.danger ? 'text-error' : ''}`}
+        className={`flex items-center justify-between gap-2 ${item.disabled ? 'disabled opacity-50' : ''}`}
+        style={item.danger ? { color: 'var(--ds-color-error)' } : undefined}
         disabled={item.disabled}
         onClick={() => {
           item.onClick?.();
@@ -131,8 +132,18 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
       {isOpen && (
         <ul
           ref={menuRef}
-          className={`menu bg-base-100 rounded-box absolute z-50 w-56 p-2 shadow-lg ${overlayClassName || ''}`}
+          className={overlayClassName || undefined}
           style={{
+            position: 'absolute',
+            zIndex: 50,
+            width: 224,
+            padding: 8,
+            listStyle: 'none',
+            margin: 0,
+            borderRadius: 'var(--ds-radius-lg)',
+            background: 'var(--ds-surface-card)',
+            border: '1px solid var(--ds-color-border-subtle)',
+            boxShadow: 'var(--ds-elevation-2)',
             left: position.x,
             top: position.y,
             ...overlayStyle,

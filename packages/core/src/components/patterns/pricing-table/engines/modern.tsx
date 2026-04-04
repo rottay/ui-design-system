@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the PricingTable pattern.
+ * @fileoverview Modern (token-driven) engine for the PricingTable pattern.
  *
- * Builds the same plan-comparison grid as the Classic engine but uses DaisyUI
- * utility classes and Tailwind CSS instead of Ant Design components. This
- * avoids pulling in Ant Design's JavaScript runtime for projects that rely on
- * the Tailwind pipeline, keeping the bundle lightweight.
+ * Builds the same plan-comparison grid as the Classic engine but uses DS token
+ * inline styles and shared modern-styles helpers instead of Ant Design
+ * components. This avoids pulling in Ant Design's JavaScript runtime for
+ * projects that rely on a lightweight pipeline, keeping the bundle small.
  *
  * @example
  * <ModernPricingTable
@@ -19,6 +19,7 @@
 
 import React from 'react';
 import type { PricingTableProps, PricingPlan, PricingFeature } from '../PricingTable.types';
+import { pillBadgeSmStyle, spinnerStyle } from '../../../shared/modern-styles';
 
 /**
  * Renders a tri-state feature indicator using Unicode characters.
@@ -27,21 +28,20 @@ import type { PricingTableProps, PricingPlan, PricingFeature } from '../PricingT
  * - `string` -> custom label (e.g. "10 GB")
  */
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
-  if (value === true) return <span className="text-success text-lg">{'\u2713'}</span>;
-  if (value === false || value === undefined) return <span className="text-base-300 text-lg">{'\u2717'}</span>;
+  if (value === true) return <span className="text-lg" style={{ color: 'var(--ds-color-success)' }}>{'\u2713'}</span>;
+  if (value === false || value === undefined) return <span className="text-lg" style={{ color: 'var(--ds-color-text-secondary)' }}>{'\u2717'}</span>;
   return <span className="text-sm">{value}</span>;
 }
 
 /**
- * Modern (DaisyUI/Tailwind) engine for the PricingTable pattern component.
+ * Modern (token-driven) engine for the PricingTable pattern component.
  *
- * Uses DaisyUI's `table`, `toggle`, `badge`, `card`, and `btn` classes to
- * compose the pricing layout. Loading state leverages DaisyUI's built-in
- * `loading-spinner`. Tooltips use the `tooltip` data attribute instead of a
+ * Uses DS token inline styles and shared modern-styles helpers to compose the
+ * pricing layout. Tooltips use the native title attribute instead of a
  * JS-driven Ant Design Tooltip.
  *
  * @param props - {@link PricingTableProps} controlling plans, features, billing cycle, and callbacks.
- * @returns A feature-comparison pricing table styled with DaisyUI/Tailwind.
+ * @returns A feature-comparison pricing table styled with DS token inline styles.
  */
 export default function ModernPricingTable(props: PricingTableProps) {
   const {
@@ -58,39 +58,39 @@ export default function ModernPricingTable(props: PricingTableProps) {
     style,
   } = props;
 
-  /* Short-circuit: DaisyUI spinner while pricing data loads */
+  /* Short-circuit: spinner while pricing data loads */
   if (loading) {
     return (
       <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span className="loading loading-spinner loading-md" />
+        <span style={spinnerStyle(24)} />
       </div>
     );
   }
 
   return (
     <div className={`ds-pattern-pricing-table ds-engine-modern ${className ?? ''}`} style={style}>
-      {/* Billing toggle -- Uses DaisyUI's toggle component. Only rendered
-          when the consumer provides a billing-cycle change handler, keeping
-          the toggle opt-in for static pricing pages. */}
+      {/* Billing toggle -- Only rendered when the consumer provides a
+          billing-cycle change handler, keeping the toggle opt-in for
+          static pricing pages. */}
       {onBillingCycleChange && (
         <div className="flex justify-center items-center gap-3 mb-8">
           <span className={`text-sm ${billingCycle === 'monthly' ? 'font-bold' : 'opacity-50'}`}>Monthly</span>
           <input
             type="checkbox"
-            className="toggle toggle-primary"
+            style={{ width: 40, height: 20, cursor: 'pointer' }}
             checked={billingCycle === 'yearly'}
             onChange={(e) => onBillingCycleChange(e.target.checked ? 'yearly' : 'monthly')}
           />
           <span className={`text-sm ${billingCycle === 'yearly' ? 'font-bold' : 'opacity-50'}`}>
             Yearly
-            <span className="badge badge-success badge-sm ml-1">Save 20%</span>
+            <span className="ml-1" style={{ ...pillBadgeSmStyle, background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' }}>Save 20%</span>
           </span>
         </div>
       )}
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="table">
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           {/* Plan headers */}
           <thead>
             <tr>
@@ -102,9 +102,9 @@ export default function ModernPricingTable(props: PricingTableProps) {
                   <th key={plan.id} className="text-center align-top">
                     {/* renderPlanHeader lets consumers fully replace the card content */}
                     {renderPlanHeader ? renderPlanHeader(plan) : (
-                      <div className={`card ${isHighlighted ? 'bg-primary/5 border-2 border-primary' : 'bg-base-100 border border-base-300'} p-4`}>
+                      <div className="p-4" style={isHighlighted ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', borderRadius: 'var(--ds-radius-lg)', border: '2px solid var(--ds-color-primary)' } : { background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border)' }}>
                         {plan.popular && (
-                          <span className="badge badge-primary badge-sm mb-2">Most Popular</span>
+                          <span className="mb-2" style={{ ...pillBadgeSmStyle, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>Most Popular</span>
                         )}
                         <div className="font-bold text-lg">{plan.name}</div>
                         {/* Price displayed as currency+number or raw string for "Custom" tiers */}
@@ -118,7 +118,10 @@ export default function ModernPricingTable(props: PricingTableProps) {
                           <div className="text-xs opacity-50 mt-1">{plan.description}</div>
                         )}
                         <button
-                          className={`btn btn-sm w-full mt-3 ${isHighlighted ? 'btn-primary' : 'btn-ghost'}`}
+                          style={isHighlighted
+                            ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', width: '100%', marginTop: 12 }
+                            : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', width: '100%', marginTop: 12 }
+                          }
                           onClick={() => onSelectPlan?.(plan.id)}
                         >
                           {plan.cta}
@@ -143,18 +146,19 @@ export default function ModernPricingTable(props: PricingTableProps) {
                     <tr>
                       <td
                         colSpan={plans.length + 1}
-                        className="font-bold text-xs uppercase opacity-40 pt-6 pb-2 border-t border-base-300"
+                        className="font-bold text-xs uppercase opacity-40 pt-6 pb-2 border-t"
+                        style={{ borderColor: 'var(--ds-color-border)' }}
                       >
                         {feature.category}
                       </td>
                     </tr>
                   )}
-                  {/* Feature row -- DaisyUI "hover" class adds a subtle highlight on mouseover */}
-                  <tr className="hover">
+                  {/* Feature row */}
+                  <tr>
                     <td className="text-sm">
-                      {/* DaisyUI tooltip via data-tip attribute -- no JS overhead */}
+                      {/* Native title tooltip -- no JS overhead */}
                       {feature.description ? (
-                        <span className="tooltip tooltip-right" data-tip={feature.description}>
+                        <span title={feature.description} style={{ cursor: 'help', borderBottom: '1px dotted var(--ds-color-border)' }}>
                           {feature.label}
                         </span>
                       ) : (

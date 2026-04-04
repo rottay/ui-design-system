@@ -23,12 +23,12 @@ const MenuItem: React.FC<{
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
   if (item.type === 'divider') {
-    return <li className="divider my-1" />;
+    return <li style={{ height: 1, margin: '4px 0', background: 'var(--ds-color-border-subtle)' }} />;
   }
 
   if (item.type === 'group') {
     return (
-      <li className="menu-title">
+      <li style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, color: 'var(--ds-color-text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
         <span>{item.label}</span>
       </li>
     );
@@ -38,7 +38,8 @@ const MenuItem: React.FC<{
     <li>
       <button
         type="button"
-        className={`flex items-center gap-2 ${item.disabled ? 'disabled' : ''} ${item.danger ? 'text-error' : ''}`}
+        className={`flex items-center gap-2 ${item.disabled ? 'disabled' : ''}`}
+        style={item.danger ? { color: 'var(--ds-color-error)' } : undefined}
         disabled={item.disabled}
         onClick={() => {
           item.onClick?.();
@@ -112,16 +113,12 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
 
     const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
 
-    // Translate the engine-agnostic placement prop (e.g. "topRight") into
-    // DaisyUI modifier classes (e.g. "dropdown-top dropdown-end")
-    const getPlacementClass = () => {
-      if (!placement) return '';
-
-      const verticalClass = placement.startsWith('top') ? 'dropdown-top' : '';
-      const horizontalClass = placement.endsWith('Right') ? 'dropdown-end' :
-                             placement.endsWith('Left') ? 'dropdown-start' : '';
-
-      return `${verticalClass} ${horizontalClass}`.trim();
+    // Translate the engine-agnostic placement prop into inline position styles
+    const getPlacementStyle = (): React.CSSProperties => {
+      if (!placement) return { top: '100%', left: 0 };
+      const vertical = placement.startsWith('top') ? { bottom: '100%' } : { top: '100%' };
+      const horizontal = placement.endsWith('Right') ? { right: 0 } : placement.endsWith('Left') ? { left: 0 } : { left: 0 };
+      return { ...vertical, ...horizontal };
     };
 
     const handleClick = () => {
@@ -165,7 +162,8 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`dropdown ${getPlacementClass()} ${isOpen ? 'dropdown-open' : ''} ${className || ''}`}
+        className={className || undefined}
+        style={{ position: 'relative', display: 'inline-block' }}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -177,8 +175,8 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         {isOpen && menu?.items && (
           <ul
             tabIndex={0}
-            className={`dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow ${overlayClassName || ''}`}
-            style={overlayStyle}
+            className={overlayClassName || undefined}
+            style={{ position: 'absolute', zIndex: 50, width: 208, padding: 8, borderRadius: 'var(--ds-radius-lg)', listStyle: 'none', margin: 0, background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-1)', ...getPlacementStyle(), ...overlayStyle }}
           >
             {menu.items.map((item) => (
               <MenuItem key={item.key} item={item} onClick={handleItemClick} />

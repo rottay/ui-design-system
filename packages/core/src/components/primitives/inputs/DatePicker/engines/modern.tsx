@@ -45,18 +45,11 @@ import {
 // Size config
 // ---------------------------------------------------------------------------
 
-// DaisyUI input component sizes map directly to our DS size tokens.
-// Text classes are separate because DaisyUI input-* only controls padding/height.
-const sizeClasses: Record<string, string> = {
-  small: 'input-sm',
-  default: 'input-md',
-  large: 'input-lg',
-};
-
-const sizeTextClasses: Record<string, string> = {
-  small: 'text-xs',
-  default: 'text-sm',
-  large: 'text-base',
+// DS size tokens mapped to inline style dimensions.
+const sizeStyleMap: Record<string, React.CSSProperties> = {
+  small: { height: 32, fontSize: 13, padding: '4px 10px' },
+  default: { height: 36, fontSize: 14, padding: '6px 12px' },
+  large: { height: 40, fontSize: 16, padding: '8px 14px' },
 };
 
 // ---------------------------------------------------------------------------
@@ -848,10 +841,13 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
     // Display text
     const displayText = formatDisplay(selectedDate, format, picker, showTime);
 
-    // Size / status classes
-    const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-    const textClass = sizeTextClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-    const statusClass = status === 'error' ? 'input-error' : status === 'warning' ? 'input-warning' : '';
+    // Size / status styles
+    const dateSizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
+    const dateStatusStyle: React.CSSProperties = status === 'error'
+      ? { borderColor: 'var(--ds-color-error)' }
+      : status === 'warning'
+        ? { borderColor: 'var(--ds-color-warning)' }
+        : {};
 
     return (
       <>
@@ -867,10 +863,20 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             ref={setInputRef}
             type="text"
             // readOnly prevents keyboard input -- dates must be selected via the
-            // calendar panel. pr-16 reserves space for the clear + calendar icons.
+            // calendar panel. paddingRight reserves space for the clear + calendar icons.
             readOnly
-            className={`input input-bordered w-full ${sizeClass} ${statusClass} ${textClass} cursor-pointer`}
-            style={{ paddingRight: 48 }}
+            className="w-full cursor-pointer"
+            style={{
+              border: '1px solid var(--ds-color-border)',
+              borderRadius: 'var(--ds-radius-md)',
+              background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
+              color: 'var(--ds-color-text-primary)',
+              outline: 'none',
+              boxSizing: 'border-box',
+              paddingRight: 48,
+              ...dateSizeStyle,
+              ...dateStatusStyle,
+            }}
             value={displayText}
             disabled={disabled}
             placeholder={displayPlaceholder}
@@ -1129,9 +1135,25 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
     const startText = formatDisplay(startDate, format, picker, showTime);
     const endText = formatDisplay(endDate, format, picker, showTime);
 
-    const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-    const textClass = sizeTextClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-    const statusClass = status === 'error' ? 'input-error' : status === 'warning' ? 'input-warning' : '';
+    const rangeSizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
+    const rangeStatusStyle: React.CSSProperties = status === 'error'
+      ? { borderColor: 'var(--ds-color-error)' }
+      : status === 'warning'
+        ? { borderColor: 'var(--ds-color-warning)' }
+        : {};
+
+    const rangeInputBaseStyle: React.CSSProperties = {
+      border: '1px solid var(--ds-color-border)',
+      borderRadius: 'var(--ds-radius-md)',
+      background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
+      color: 'var(--ds-color-text-primary)',
+      outline: 'none',
+      boxSizing: 'border-box' as const,
+      width: '100%',
+      cursor: 'pointer',
+      ...rangeSizeStyle,
+      ...rangeStatusStyle,
+    };
 
     return (
       <>
@@ -1148,11 +1170,10 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           <input
             type="text"
             readOnly
-            className={[
-              `input input-bordered w-full ${sizeClass} ${textClass} cursor-pointer`,
-              statusClass,
-              activeInput === 'start' && isOpen ? 'ring-2 ring-primary' : '',
-            ].join(' ')}
+            style={{
+              ...rangeInputBaseStyle,
+              ...(activeInput === 'start' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
+            }}
             value={startText}
             disabled={disabled}
             placeholder={displayPlaceholder[0]}
@@ -1166,15 +1187,14 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             aria-expanded={isOpen}
             aria-label={displayPlaceholder[0]}
           />
-          <span className="text-base-content/60 shrink-0">{separator}</span>
+          <span className="shrink-0" style={{ color: 'var(--ds-color-text-secondary)' }}>{separator}</span>
           <input
             type="text"
             readOnly
-            className={[
-              `input input-bordered w-full ${sizeClass} ${textClass} cursor-pointer`,
-              statusClass,
-              activeInput === 'end' && isOpen ? 'ring-2 ring-primary' : '',
-            ].join(' ')}
+            style={{
+              ...rangeInputBaseStyle,
+              ...(activeInput === 'end' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
+            }}
             value={endText}
             disabled={disabled}
             placeholder={displayPlaceholder[1]}
@@ -1191,7 +1211,9 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           {allowClear && (startText || endText) && !disabled && (
             <button
               type="button"
-              className="btn btn-xs btn-ghost btn-circle opacity-50 hover:opacity-100"
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, opacity: 0.5 }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.5'; }}
               onClick={handleClear}
               tabIndex={-1}
               aria-label={t('datepicker.clear_dates')}

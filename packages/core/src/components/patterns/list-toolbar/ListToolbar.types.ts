@@ -31,6 +31,8 @@ export interface ListToolbarProps extends PatternBaseProps {
   // Title section
   /** Toolbar heading */
   title: string;
+  /** When false, hides the title/count cluster and lets search lead the bar. */
+  showTitleSection?: boolean;
   /** Optional icon preceding the title */
   icon?: ReactNode;
   /** Total item count displayed beside the title */

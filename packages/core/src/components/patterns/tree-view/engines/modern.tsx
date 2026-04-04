@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the TreeView pattern.
+ * @fileoverview Modern (token-driven) engine for the TreeView pattern.
  *
  * A fully custom tree implementation without Ant Design's Tree component.
  * Manages expand/collapse, selection, and check state internally (via Sets)
  * while supporting controlled mode through external key arrays. Each node row
- * uses DaisyUI button and checkbox classes for consistent styling, and an
- * inline SVG chevron that rotates on expand.
+ * uses DS token inline styles for consistent styling, and an inline SVG
+ * chevron that rotates on expand.
  *
  * @example
  * <ModernTreeView
@@ -20,6 +20,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TreeViewProps, TreeNode } from '../TreeView.types';
+import { panelCardStyle } from '../../../shared/modern-styles';
 
 /**
  * Recursively filters the tree, keeping any node whose label matches the query
@@ -40,7 +41,7 @@ function filterTree(nodes: TreeNode[], query: string): TreeNode[] {
 }
 
 /**
- * Modern (DaisyUI/Tailwind) engine for the TreeView pattern component.
+ * Modern (token-driven) engine for the TreeView pattern component.
  *
  * Unlike the Classic engine which delegates to Ant Design's Tree, this engine
  * implements all tree interactions from scratch using Sets for O(1) key
@@ -48,7 +49,7 @@ function filterTree(nodes: TreeNode[], query: string): TreeNode[] {
  * selected, and checked keys.
  *
  * @param props - {@link TreeViewProps} controlling tree data, selection, checking, and drag-drop.
- * @returns A searchable, interactive tree rendered with DaisyUI/Tailwind classes.
+ * @returns A searchable, interactive tree rendered with DS token inline styles.
  */
 export default function ModernTreeView(props: TreeViewProps) {
   const {
@@ -113,15 +114,18 @@ export default function ModernTreeView(props: TreeViewProps) {
       return (
         <div key={node.key}>
           <div
-            className={`flex items-center gap-1.5 px-2 py-1 rounded-md cursor-pointer hover:bg-base-200 transition-colors ${
-              selected ? 'bg-primary/10 text-primary font-medium' : ''
+            className={`flex items-center gap-1.5 px-2 py-1 rounded-md cursor-pointer transition-colors ${
+              selected ? 'font-medium' : ''
             } ${node.disabled ? 'opacity-40 pointer-events-none' : ''}`}
-            style={{ paddingLeft: `${depth * 1.25 + 0.5}rem` }}
+            style={{
+              paddingLeft: `${depth * 1.25 + 0.5}rem`,
+              ...(selected ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', color: 'var(--ds-color-primary)' } : {}),
+            }}
             onClick={() => handleSelect(node.key)}
             draggable={draggable}
           >
             <button
-              className={`btn btn-ghost btn-xs btn-square ${hasChildren ? '' : 'invisible'}`}
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', visibility: hasChildren ? 'visible' : 'hidden' }}
               onClick={(e) => { e.stopPropagation(); handleToggle(node.key); }}
             >
               <svg
@@ -133,9 +137,9 @@ export default function ModernTreeView(props: TreeViewProps) {
               </svg>
             </button>
             {checkable && (
-              <input type="checkbox" className="checkbox checkbox-xs checkbox-primary" checked={checked} onChange={() => handleCheck(node.key)} onClick={(e) => e.stopPropagation()} />
+              <input type="checkbox" style={{ width: 14, height: 14, cursor: 'pointer', accentColor: 'var(--ds-color-primary)' }} checked={checked} onChange={() => handleCheck(node.key)} onClick={(e) => e.stopPropagation()} />
             )}
-            {draggable && <span className="text-base-content/30 cursor-grab text-xs">::</span>}
+            {draggable && <span className="cursor-grab text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>::</span>}
             {node.icon && <span className="flex-shrink-0">{node.icon}</span>}
             <span className="text-sm truncate flex-1">{renderNode ? renderNode(node, depth) : node.label}</span>
           </div>
@@ -147,10 +151,10 @@ export default function ModernTreeView(props: TreeViewProps) {
 
   if (loading) {
     return (
-      <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
-        <div className="card-body animate-pulse">
+      <div className={className ?? ''} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+        <div className="animate-pulse" style={{ padding: 20 }}>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-6 bg-base-300 rounded" style={{ marginLeft: `${(i % 3) * 1.25}rem`, width: `${70 - (i % 3) * 10}%` }} />
+            <div key={i} style={{ height: 24, borderRadius: 'var(--ds-radius-sm)', marginLeft: `${(i % 3) * 1.25}rem`, width: `${70 - (i % 3) * 10}%`, background: 'var(--ds-surface-panel)' }} />
           ))}
         </div>
       </div>
@@ -158,12 +162,13 @@ export default function ModernTreeView(props: TreeViewProps) {
   }
 
   return (
-    <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
-      <div className="card-body p-3">
+    <div className={className ?? ''} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+      <div style={{ padding: 12 }}>
         {searchable && (
           <input
             type="text"
-            className="input input-bordered input-sm w-full mb-2"
+            className="w-full mb-2"
+            style={{ padding: '6px 10px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', width: '100%' }}
             placeholder={searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

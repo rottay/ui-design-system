@@ -59,7 +59,7 @@ function highlightText(
   return (
     <>
       {before}
-      <span className="bg-warning/30 text-warning-content rounded-sm px-0.5">
+      <span className="rounded-sm px-0.5" style={{ background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)', color: 'var(--ds-color-text-primary)' }}>
         {match}
       </span>
       {after}
@@ -107,7 +107,7 @@ const DropIndicator: React.FC<{ position: 'before' | 'inside' | 'after'; level: 
         paddingLeft: left,
       }}
     >
-      <div className="h-0.5 bg-primary rounded-full" style={{ animation: 'rottay-drop-indicator 0.3s ease-out' }} />
+      <div className="h-0.5 rounded-full" style={{ background: 'var(--ds-color-primary)', animation: 'rottay-drop-indicator 0.3s ease-out' }} />
     </div>
   );
 };
@@ -247,36 +247,39 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             !pIsLast ? (
               <div
                 key={i}
-                className="absolute top-0 bottom-0 border-l border-base-300"
-                style={{ left: i * 24 + 12 }}
+                className="absolute top-0 bottom-0 border-l"
+                style={{ left: i * 24 + 12, borderColor: 'var(--ds-color-border)' }}
               />
             ) : null,
           )}
           <div
-            className="absolute border-t border-base-300"
+            className="absolute border-t"
             style={{
               left: (level - 1) * 24 + 12,
               top: '50%',
               width: 12,
+              borderColor: 'var(--ds-color-border)',
             }}
           />
           {isLast && (
             <div
-              className="absolute border-l border-base-300"
+              className="absolute border-l"
               style={{
                 left: (level - 1) * 24 + 12,
                 top: 0,
                 height: '50%',
+                borderColor: 'var(--ds-color-border)',
               }}
             />
           )}
           {!isLast && (
             <div
-              className="absolute border-l border-base-300"
+              className="absolute border-l"
               style={{
                 left: (level - 1) * 24 + 12,
                 top: 0,
                 bottom: 0,
+                borderColor: 'var(--ds-color-border)',
               }}
             />
           )}
@@ -296,19 +299,49 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         className={[
           'flex items-center py-1 px-2 rounded cursor-pointer',
           'transition-all duration-200 relative',
-          isSelected ? 'bg-primary/10 border-l-2 border-primary text-primary font-medium' : 'hover:bg-base-200/50 hover:border-l-2 hover:border-primary/30',
+          isSelected ? 'border-l-2 font-medium' : '',
           disabled ? 'opacity-50 cursor-not-allowed' : '',
-          isFocused ? 'ring-2 ring-primary/30 ring-offset-1 rounded' : '',
+          isFocused ? 'ring-2 ring-offset-1 rounded' : '',
           blockNode ? 'w-full' : 'inline-flex',
           // "inside" drop target uses ring-inset so the indicator does not
           // overlap adjacent nodes (ring-2 alone would extend outward).
           isDropTarget && dropPosition === 'inside'
-            ? 'ring-2 ring-primary ring-inset bg-primary/5'
+            ? 'ring-2 ring-inset'
             : '',
         ]
           .filter(Boolean)
           .join(' ')}
-        style={{ paddingLeft }}
+        style={{
+          paddingLeft,
+          ...(isSelected
+            ? {
+                background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
+                borderColor: 'var(--ds-color-primary)',
+                color: 'var(--ds-color-primary)',
+              }
+            : {}),
+          ...(isFocused ? { '--tw-ring-color': 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)' } as React.CSSProperties : {}),
+          ...(isDropTarget && dropPosition === 'inside'
+            ? {
+                '--tw-ring-color': 'var(--ds-color-primary)',
+                background: 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)',
+              } as React.CSSProperties
+            : {}),
+        }}
+        onMouseEnter={(e) => {
+          if (!isSelected && !disabled) {
+            const el = e.currentTarget as HTMLElement;
+            el.style.background = 'color-mix(in srgb, var(--ds-surface-inset) 50%, transparent)';
+            el.style.borderLeft = '2px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isSelected && !disabled) {
+            const el = e.currentTarget as HTMLElement;
+            el.style.background = '';
+            el.style.borderLeft = '';
+          }
+        }}
         onClick={handleClick}
         role="treeitem"
         aria-selected={isSelected}
@@ -344,7 +377,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         ) : showExpander ? (
           <button
             type="button"
-            className="btn btn-ghost btn-xs btn-circle mr-1 flex-shrink-0"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, marginRight: 4, flexShrink: 0 }}
             onClick={handleToggle}
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             tabIndex={-1}

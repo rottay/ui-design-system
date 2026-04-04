@@ -10,11 +10,9 @@
  * with custom step control buttons. It provides a lightweight alternative
  * with utility-first styling.
  *
- * **DaisyUI Classes Used:**
- * - `input input-bordered` - Base input styling
- * - `input-{size}` - Size variants (sm, md, lg)
- * - `input-error`, `input-warning` - Status styles
- * - `btn btn-xs btn-ghost` - Step control buttons
+ * **Styling:**
+ * - DS token inline styles for border, radius, size, and status
+ * - Custom step control buttons with inline styles
  *
  * **Custom Implementation:**
  * - Step up/down buttons with ▲/▼ arrows
@@ -45,11 +43,11 @@
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../InputNumber.types';
 
-/** Maps DS size tokens to DaisyUI input size utility classes. */
-const sizeClasses = {
-  small: 'input-sm',
-  default: 'input-md',
-  large: 'input-lg',
+/** Maps DS size tokens to inline style dimensions. */
+const sizeStyles: Record<string, React.CSSProperties> = {
+  small: { height: 32, fontSize: 13, padding: '4px 10px' },
+  default: { height: 36, fontSize: 14, padding: '6px 12px' },
+  large: { height: 40, fontSize: 16, padding: '8px 14px' },
 };
 
 /**
@@ -162,19 +160,35 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       }
     };
 
-    // Normalize DS size tokens ("large"/"small") to DaisyUI class equivalents
-    const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-    const statusClass = status === 'error' ? 'input-error' : status === 'warning' ? 'input-warning' : '';
+    // Resolve size and status to inline style values
+    const sizeKey = size === 'large' ? 'large' : size === 'small' ? 'small' : 'default';
+    const sizeStyle = sizeStyles[sizeKey];
+    const statusStyle: React.CSSProperties = status === 'error'
+      ? { borderColor: 'var(--ds-color-error)' }
+      : status === 'warning'
+        ? { borderColor: 'var(--ds-color-warning)' }
+        : {};
 
     return (
       <div className="flex items-center gap-1" style={style}>
-        {addonBefore && <span className="px-2 py-1 bg-base-200 rounded-l">{addonBefore}</span>}
+        {addonBefore && <span className="px-2 py-1 rounded-l" style={{ background: 'var(--ds-surface-inset)' }}>{addonBefore}</span>}
         <div className="relative flex items-center">
-          {prefix && <span className="absolute left-2 text-base-content/60">{prefix}</span>}
+          {prefix && <span className="absolute left-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{prefix}</span>}
           <input
             ref={ref}
             type="number"
-            className={`input input-bordered ${sizeClass} ${statusClass} ${prefix ? 'pl-8' : ''} ${suffix || controls ? 'pr-16' : ''} ${className}`}
+            className={`${prefix ? 'pl-8' : ''} ${suffix || controls ? 'pr-16' : ''} ${className}`}
+            style={{
+              border: '1px solid var(--ds-color-border)',
+              borderRadius: 'var(--ds-radius-md)',
+              background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
+              color: 'var(--ds-color-text-primary)',
+              outline: 'none',
+              boxSizing: 'border-box',
+              width: '100%',
+              ...sizeStyle,
+              ...statusStyle,
+            }}
             value={formatValue(currentValue)}
             min={min}
             max={max}
@@ -189,12 +203,12 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             name={name}
           />
           <div className="absolute right-2 flex items-center gap-1">
-            {suffix && <span className="text-base-content/60">{suffix}</span>}
+            {suffix && <span style={{ color: 'var(--ds-color-text-secondary)' }}>{suffix}</span>}
             {controls && !disabled && !readOnly && (
               <div className="flex flex-col">
                 <button
                   type="button"
-                  className="btn btn-xs btn-ghost px-1 py-0 h-4 min-h-0"
+                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 4px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('up')}
                   tabIndex={-1}
                 >
@@ -202,7 +216,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
                 </button>
                 <button
                   type="button"
-                  className="btn btn-xs btn-ghost px-1 py-0 h-4 min-h-0"
+                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 4px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('down')}
                   tabIndex={-1}
                 >
@@ -212,7 +226,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             )}
           </div>
         </div>
-        {addonAfter && <span className="px-2 py-1 bg-base-200 rounded-r">{addonAfter}</span>}
+        {addonAfter && <span className="px-2 py-1 rounded-r" style={{ background: 'var(--ds-surface-inset)' }}>{addonAfter}</span>}
       </div>
     );
   }

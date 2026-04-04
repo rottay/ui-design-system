@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the CommentThread pattern.
- * Renders a recursive tree of comments using DaisyUI avatar/btn/textarea classes
- * and Tailwind utility classes. Supports nested replies up to maxDepth, inline
- * editing, deletion, and emoji reactions. Falls back to a first-initial avatar
- * placeholder when no image URL is provided.
+ * @fileoverview Modern engine for the CommentThread pattern.
+ * Renders a recursive tree of comments with DS token inline styles.
+ * Supports nested replies up to maxDepth, inline editing, deletion, and
+ * emoji reactions. Falls back to a first-initial avatar placeholder when
+ * no image URL is provided.
  *
  * @example
  * <ModernCommentThread
@@ -88,8 +88,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
   return (
     <div className={depth > 0 ? 'ml-6' : ''}>
       <div className="flex gap-3 mb-3">
-        <div className="avatar placeholder flex-shrink-0">
-          <div className="bg-neutral text-neutral-content rounded-full w-8 h-8">
+        <div className="flex-shrink-0" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="rounded-full w-8 h-8" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {comment.author.avatar ? (
               <img src={comment.author.avatar} alt={comment.author.name} />
             ) : (
@@ -109,14 +109,15 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
           {editing ? (
             <div className="mb-2">
               <textarea
-                className="textarea textarea-bordered textarea-sm w-full mb-2"
+                className="w-full mb-2"
+                style={{ width: '100%', padding: '6px 10px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', resize: 'vertical' }}
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
                 rows={2}
               />
               <div className="flex gap-2">
-                <button className="btn btn-primary btn-xs" onClick={handleEdit}>Save</button>
-                <button className="btn btn-ghost btn-xs" onClick={() => { setEditing(false); setEditText(comment.content); }}>Cancel</button>
+                <button style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleEdit}>Save</button>
+                <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => { setEditing(false); setEditText(comment.content); }}>Cancel</button>
               </div>
             </div>
           ) : (
@@ -129,7 +130,12 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               {comment.reactions.map(r => (
                 <button
                   key={r.emoji}
-                  className={`btn btn-xs ${r.active ? 'btn-primary' : 'btn-ghost'}`}
+                  style={{
+                    background: r.active ? 'var(--ds-color-primary)' : 'transparent',
+                    color: r.active ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-text-primary)',
+                    height: 24, padding: '0 8px', fontSize: 12,
+                    borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer',
+                  }}
                   onClick={() => onReaction?.(comment.id, r.emoji)}
                 >
                   {r.emoji} {r.count}
@@ -142,17 +148,17 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               Edit and delete are restricted to the comment owner. */}
           <div className="flex gap-3 text-xs opacity-50">
             {depth < maxDepth && onReply && (
-              <button className="btn btn-ghost btn-xs" onClick={() => setReplyVisible(!replyVisible)}>
+              <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => setReplyVisible(!replyVisible)}>
                 Reply
               </button>
             )}
             {isOwner && onEdit && (
-              <button className="btn btn-ghost btn-xs" onClick={() => setEditing(true)}>
+              <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => setEditing(true)}>
                 Edit
               </button>
             )}
             {isOwner && onDelete && (
-              <button className="btn btn-ghost btn-xs text-error" onClick={() => onDelete(comment.id)}>
+              <button style={{ background: 'transparent', color: 'var(--ds-color-error)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => onDelete(comment.id)}>
                 Delete
               </button>
             )}
@@ -162,17 +168,18 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
           {replyVisible && (
             <div className="mt-2">
               <textarea
-                className="textarea textarea-bordered textarea-sm w-full mb-2"
+                className="w-full mb-2"
+                style={{ width: '100%', padding: '6px 10px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', resize: 'vertical' }}
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 rows={2}
                 placeholder="Write a reply..."
               />
               <div className="flex gap-2">
-                <button className="btn btn-primary btn-xs" onClick={handleReply} disabled={!replyText.trim()}>
+                <button style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleReply} disabled={!replyText.trim()}>
                   Reply
                 </button>
-                <button className="btn btn-ghost btn-xs" onClick={() => setReplyVisible(false)}>Cancel</button>
+                <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => setReplyVisible(false)}>Cancel</button>
               </div>
             </div>
           )}
@@ -182,7 +189,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
       {/* Nested replies -- rendered recursively with a left border line for
           visual threading. Stops at maxDepth to cap DOM nesting depth. */}
       {comment.replies && comment.replies.length > 0 && depth < maxDepth && (
-        <div className="border-l-2 border-base-300 pl-3">
+        <div className="border-l-2 pl-3" style={{ borderColor: 'var(--ds-color-border)' }}>
           {comment.replies.map(reply => (
             <CommentNode
               key={reply.id}
@@ -237,7 +244,7 @@ export default function ModernCommentThread(props: CommentThreadProps) {
   if (loading) {
     return (
       <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span className="loading loading-spinner loading-md" />
+        <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin 0.6s linear infinite' }} />
       </div>
     );
   }
@@ -248,8 +255,8 @@ export default function ModernCommentThread(props: CommentThreadProps) {
           are provided. Without a user identity we cannot attribute the comment. */}
       {onAdd && currentUser && (
         <div className="flex gap-3 mb-6">
-          <div className="avatar placeholder flex-shrink-0">
-            <div className="bg-neutral text-neutral-content rounded-full w-8 h-8">
+          <div className="flex-shrink-0" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="rounded-full w-8 h-8" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {currentUser.avatar ? (
                 <img src={currentUser.avatar} alt={currentUser.name} />
               ) : (
@@ -259,13 +266,14 @@ export default function ModernCommentThread(props: CommentThreadProps) {
           </div>
           <div className="flex-1">
             <textarea
-              className="textarea textarea-bordered w-full mb-2"
+              className="w-full mb-2"
+              style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', resize: 'vertical' }}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               rows={3}
               placeholder={placeholder}
             />
-            <button className="btn btn-primary btn-sm" onClick={handleAdd} disabled={!newComment.trim()}>
+            <button style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleAdd} disabled={!newComment.trim()}>
               Comment
             </button>
           </div>

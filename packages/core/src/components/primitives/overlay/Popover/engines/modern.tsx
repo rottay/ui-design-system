@@ -43,15 +43,15 @@ import type { PopoverProps } from '../Popover.types';
 import { POPOVER_DEFAULTS } from '../Popover.types';
 
 /**
- * Modern (Hermes) engine implementation of Popover using DaisyUI/Tailwind.
+ * Modern engine implementation of Popover using DS token inline styles.
  *
  * Manages open state internally (controlled/uncontrolled pattern), with
  * debounced hover delays via timeout refs. Renders the popover content
- * inline (not portaled) and uses DaisyUI tooltip classes for placement.
+ * inline (not portaled) using absolute positioning for placement.
  *
  * @param props - Popover configuration props
  * @param ref - Forwarded ref merged with the internal container ref
- * @returns DaisyUI tooltip-based popover with trigger handling
+ * @returns DS token-styled popover with trigger handling
  */
 export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
   (props, ref) => {
@@ -116,14 +116,27 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     // Normalize trigger to array so multi-trigger combos (e.g. ['click', 'hover']) work uniformly
     const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
 
-    /** Maps the 12-position placement prop to DaisyUI tooltip directional classes. */
-    const getPlacementClasses = () => {
-      const classes: string[] = [];
-      if (placement?.includes('top')) classes.push('tooltip-top');
-      if (placement?.includes('bottom')) classes.push('tooltip-bottom');
-      if (placement?.includes('left') || placement?.includes('Left')) classes.push('tooltip-left');
-      if (placement?.includes('right') || placement?.includes('Right')) classes.push('tooltip-right');
-      return classes.join(' ') || 'tooltip-top';
+    /** Maps the placement prop to CSS positioning styles for the content panel. */
+    const getContentPositionStyles = (): React.CSSProperties => {
+      const base: React.CSSProperties = { position: 'absolute', zIndex: 50 };
+      if (placement?.includes('top')) {
+        Object.assign(base, { bottom: '100%', marginBottom: 8 });
+      } else if (placement?.includes('bottom')) {
+        Object.assign(base, { top: '100%', marginTop: 8 });
+      } else if (placement?.includes('left') || placement?.includes('Left')) {
+        Object.assign(base, { right: '100%', marginRight: 8, top: '50%', transform: 'translateY(-50%)' });
+      } else if (placement?.includes('right') || placement?.includes('Right')) {
+        Object.assign(base, { left: '100%', marginLeft: 8, top: '50%', transform: 'translateY(-50%)' });
+      } else {
+        // default: top
+        Object.assign(base, { bottom: '100%', marginBottom: 8 });
+      }
+      // Horizontal centering for top/bottom placements
+      if (placement?.includes('top') || placement?.includes('bottom') || !placement) {
+        base.left = '50%';
+        base.transform = 'translateX(-50%)';
+      }
+      return base;
     };
 
     const handleClick = () => {
@@ -171,8 +184,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`tooltip ${getPlacementClasses()} ${isOpen ? 'tooltip-open' : ''} ${className || ''}`}
-        data-tip=""
+        className={className || ''}
+        style={{ position: 'relative', display: 'inline-flex' }}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -180,23 +193,28 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         onBlur={handleBlur}
       >
         {children}
-        {/* Content panel rendered conditionally within the tooltip container (not portaled) */}
+        {/* Content panel rendered conditionally, absolutely positioned relative to the wrapper */}
         {isOpen && (
           <div
-            className={`absolute z-50 bg-base-100 shadow-lg rounded-lg p-3 ${overlayClassName || ''}`}
+            className={overlayClassName || ''}
             style={{
-              minWidth: '150px',
+              ...getContentPositionStyles(),
+              borderRadius: 'var(--ds-radius-lg)',
+              padding: 12,
+              background: 'var(--ds-surface-card)',
+              boxShadow: 'var(--ds-elevation-2)',
+              minWidth: 150,
               ...overlayStyle,
             }}
           >
             {title && (
-              <div className="font-semibold mb-2 pb-2 border-b border-base-300">
+              <div style={{ fontWeight: 600, marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--ds-color-border)' }}>
                 {title}
               </div>
             )}
             <div>{content}</div>
             {arrow && (
-              <div className="absolute w-3 h-3 bg-base-100 rotate-45 -z-10" />
+              <div style={{ position: 'absolute', width: 12, height: 12, transform: 'rotate(45deg)', zIndex: -1, background: 'var(--ds-surface-card)' }} />
             )}
           </div>
         )}

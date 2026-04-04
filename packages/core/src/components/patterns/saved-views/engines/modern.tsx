@@ -1,12 +1,21 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the SavedViews bar pattern.
- * Renders a horizontal tab strip using DaisyUI utility classes with drag-and-drop
- * reorder, inline rename, a custom dropdown context menu (rename/duplicate/delete),
- * and a "Create view" button with inline text input. Manages its own menu
- * open/close state via `openMenuId` rather than relying on DaisyUI's native
- * dropdown behavior, allowing programmatic close-on-action.
+ * @fileoverview Modern engine for the SavedViews bar pattern.
+ * Renders a premium horizontal pill/chip strip using DS token-driven inline
+ * styles with drag-and-drop reorder, inline rename, a custom dropdown context
+ * menu (rename/duplicate/delete), and a "Create view" button with inline text
+ * input.
+ *
+ * All styling uses CSS custom properties from the design system:
+ * - Surfaces: --ds-surface-card, --ds-surface-highlight, --ds-surface-inset
+ * - Elevation: --ds-elevation-3
+ * - Motion: --ds-motion-fast, --ds-motion-normal, --ds-motion-ease-out
+ * - Radius: --ds-radius-sm, --ds-radius-md, --ds-radius-full
+ * - Border: --ds-color-border
+ * - Focus: --ds-focus-ring-width, --ds-focus-ring-color
+ * - Colors: --ds-color-primary, --ds-color-primary-foreground, --ds-color-text,
+ *           --ds-color-text-muted, --ds-color-error, --ds-color-warning
  *
  * @example
  * <ModernSavedViewsBar
@@ -19,17 +28,75 @@
  * />
  */
 
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 
+/* ---------------------------------------------------------------------------
+ * Shared inline-style constants
+ * ----------------------------------------------------------------------- */
+
+const inlineInputStyle: React.CSSProperties = {
+  height: 26,
+  padding: '0 8px',
+  fontSize: 13,
+  border: '1px solid var(--ds-color-border)',
+  borderRadius: 'var(--ds-radius-sm)',
+  background: 'var(--ds-surface-inset)',
+  color: 'inherit',
+  outline: 'none',
+  boxSizing: 'border-box' as const,
+  width: 130,
+  transition: `border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+               box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+};
+
+const inputFocusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+  e.currentTarget.style.borderColor = 'var(--ds-focus-ring-color)';
+  e.currentTarget.style.boxShadow =
+    '0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color)';
+};
+
+const inputBlurStyleHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+  e.currentTarget.style.borderColor = 'var(--ds-color-border)';
+  e.currentTarget.style.boxShadow = 'none';
+};
+
+/** Reusable menu-item base style factory */
+function menuItemStyle(
+  isHovered: boolean,
+  isDanger?: boolean,
+  isDisabled?: boolean,
+): React.CSSProperties {
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    width: '100%',
+    padding: '6px 10px',
+    fontSize: 13,
+    border: 'none',
+    background: isHovered ? 'var(--ds-surface-highlight)' : 'transparent',
+    borderRadius: 'var(--ds-radius-sm)',
+    cursor: isDisabled ? 'not-allowed' : 'pointer',
+    color: isDanger ? 'var(--ds-color-error)' : 'inherit',
+    opacity: isDisabled ? 0.5 : 1,
+    textAlign: 'left' as const,
+    transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+  };
+}
+
+/* ---------------------------------------------------------------------------
+ * ModernSavedViewsBar
+ * ----------------------------------------------------------------------- */
+
 /**
- * Modern engine saved views bar built on DaisyUI/Tailwind.
- * Renders a scrollable tab strip with drag-and-drop reorder, inline rename,
- * a manually-controlled dropdown menu per tab, and an inline create input.
- * Default views (isDefault) are protected from deletion.
+ * Modern engine saved views bar built on DS token-driven inline styles.
+ * Renders a scrollable horizontal pill list with drag-and-drop reorder,
+ * inline rename, a manually-controlled dropdown menu per pill, and an
+ * inline create input. Default views (isDefault) are protected from deletion.
  *
  * @param props - {@link SavedViewsBarProps}
- * @returns A horizontal flex container acting as a tab bar for saved views.
+ * @returns A horizontal flex container acting as a pill bar for saved views.
  */
 export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const {
@@ -59,11 +126,27 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const [newViewName, setNewViewName] = useState('');
   const [editingViewId, setEditingViewId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
-  // Tracks which view's context menu is open; only one can be open at a time.
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  // Drag-and-drop state for visual feedback during tab reorder.
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
+  const [hoveredViewId, setHoveredViewId] = useState<string | null>(null);
+  const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
+  const [hoveredMenuBtn, setHoveredMenuBtn] = useState<string | null>(null);
+  const [hoveredCreateBtn, setHoveredCreateBtn] = useState(false);
+
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu on outside click
+  useEffect(() => {
+    if (!openMenuId) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [openMenuId]);
 
   const handleCreate = useCallback(() => {
     if (!newViewName.trim()) return;
@@ -82,7 +165,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       setEditingName(view.name);
       setOpenMenuId(null);
     },
-    [allowRename]
+    [allowRename],
   );
 
   const handleRenameConfirm = useCallback(() => {
@@ -99,7 +182,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       e.dataTransfer.setData('text/plain', viewId);
       setDragViewId(viewId);
     },
-    []
+    [],
   );
 
   const handleDragOver = useCallback(
@@ -110,11 +193,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         setDropTargetId(viewId);
       }
     },
-    [dragViewId]
+    [dragViewId],
   );
 
-  // Reorders by splicing the dragged view out of its old position and inserting
-  // it at the drop target's position, then emitting the new ID order array.
   const handleDrop = useCallback(
     (e: React.DragEvent, targetViewId: string) => {
       e.preventDefault();
@@ -132,7 +213,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       setDragViewId(null);
       setDropTargetId(null);
     },
-    [dragViewId, views, onViewReorder]
+    [dragViewId, views, onViewReorder],
   );
 
   const handleDragEnd = useCallback(() => {
@@ -140,33 +221,103 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     setDropTargetId(null);
   }, []);
 
+  /* -- Loading state -- */
   if (loading) {
     return (
       <div
-        className={`flex items-center justify-center min-h-[40px] ${className ?? ''}`}
-        style={style}
+        className={className ?? ''}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: 40,
+          ...style,
+        }}
       >
-        <span className="loading loading-spinner loading-sm" />
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            animation: 'ds-views-spin 1s linear infinite',
+            color: 'var(--ds-color-primary)',
+          }}
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="3"
+            fill="none"
+            strokeDasharray="60 30"
+            strokeLinecap="round"
+          />
+        </svg>
+        <style>{`@keyframes ds-views-spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
-  // Disable creation when maxViews cap is reached (e.g. plan-based limits).
   const canCreate = allowCreate && (!maxViews || views.length < maxViews);
 
+  /* -- Bar container -- */
+  const barStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6,
+    paddingLeft: 8,
+    paddingRight: 8,
+    minHeight: 40,
+    overflowX: 'auto',
+    ...style,
+  };
+
   return (
-    <div
-      className={`flex items-center gap-1 border-b border-base-300 px-2 min-h-[40px] overflow-x-auto ${className ?? ''}`}
-      style={style}
-    >
+    <div className={className ?? ''} style={barStyle}>
       {views.map((view) => {
         const isActive = view.id === activeViewId;
         const isEditing = editingViewId === view.id;
         const isDragging = dragViewId === view.id;
         const isDropTarget = dropTargetId === view.id;
         const isMenuOpen = openMenuId === view.id;
+        const isHovered = hoveredViewId === view.id;
         const customActions = getMenuActions?.(view) ?? [];
-        const hasMenu = allowRename || allowDelete || onViewDuplicate || customActions.length > 0;
+        const hasMenu =
+          allowRename || allowDelete || onViewDuplicate || customActions.length > 0;
+
+        /* -- Pill/chip style -- */
+        const pillStyle: React.CSSProperties = {
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          padding: '4px 12px',
+          cursor: 'pointer',
+          flexShrink: 0,
+          fontSize: 13,
+          fontWeight: isActive ? 600 : 400,
+          lineHeight: '20px',
+          color: isActive ? 'var(--ds-color-primary-foreground, #fff)' : 'var(--ds-color-text)',
+          background: isActive
+            ? 'var(--ds-color-primary)'
+            : isHovered
+              ? 'var(--ds-surface-highlight)'
+              : 'transparent',
+          border: isActive
+            ? '1px solid var(--ds-color-primary)'
+            : '1px solid var(--ds-color-border)',
+          borderRadius: 'var(--ds-radius-full, 9999px)',
+          opacity: isDragging ? 0.4 : 1,
+          boxShadow: isDropTarget ? 'inset 2px 0 0 var(--ds-color-primary)' : 'none',
+          transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
+                       color var(--ds-motion-fast) var(--ds-motion-ease-out),
+                       border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+                       opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+                       box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+          position: 'relative' as const,
+          userSelect: 'none' as const,
+        };
 
         return (
           <div
@@ -176,145 +327,294 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             onDragOver={(e) => handleDragOver(e, view.id)}
             onDrop={(e) => handleDrop(e, view.id)}
             onDragEnd={handleDragEnd}
+            onMouseEnter={() => setHoveredViewId(view.id)}
+            onMouseLeave={() => setHoveredViewId(null)}
             data-testid={`view-tab-${view.id}`}
-            className={`flex items-center gap-1.5 px-3 py-1.5 cursor-pointer flex-shrink-0 transition-all text-sm border-b-2 ${
-              isActive
-                ? 'border-primary text-primary font-semibold'
-                : 'border-transparent text-base-content/70 hover:text-base-content'
-            } ${isDragging ? 'opacity-40' : 'opacity-100'} ${
-              isDropTarget ? 'border-l-2 border-l-primary' : ''
-            }`}
+            style={pillStyle}
             onClick={() => {
               if (!isEditing) onViewSelect(view.id);
             }}
           >
+            {/* Drag handle */}
             {onViewReorder && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 opacity-40 cursor-grab"
-                fill="none"
+                width="12"
+                height="12"
                 viewBox="0 0 24 24"
+                fill="none"
                 stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ opacity: 0.4, cursor: 'grab', flexShrink: 0 }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 8h16M4 16h16"
-                />
+                <path d="M4 8h16M4 16h16" />
               </svg>
             )}
+
+            {/* View icon */}
             {view.icon}
+
+            {/* Name or rename input */}
             {isEditing ? (
               <input
                 type="text"
-                className="input input-bordered input-xs w-28"
+                style={inlineInputStyle}
                 value={editingName}
                 onChange={(e) => setEditingName(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleRenameConfirm();
+                  if (e.key === 'Escape') {
+                    setEditingViewId(null);
+                    setEditingName('');
+                  }
                 }}
                 onBlur={handleRenameConfirm}
+                onFocus={inputFocusHandler}
                 onClick={(e) => e.stopPropagation()}
                 autoFocus
               />
             ) : (
-              <span>{view.name}</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{view.name}</span>
             )}
+
+            {/* Unsaved changes indicator */}
+            {view.config && (view as any).isDirty && (
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: isActive
+                    ? 'var(--ds-color-primary-foreground, #fff)'
+                    : 'var(--ds-color-primary)',
+                  flexShrink: 0,
+                }}
+                title="Unsaved changes"
+              />
+            )}
+
+            {/* Default star */}
             {view.isDefault && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 text-warning"
-                fill="currentColor"
+                width="12"
+                height="12"
                 viewBox="0 0 24 24"
+                fill="currentColor"
+                style={{
+                  color: isActive
+                    ? 'var(--ds-color-primary-foreground, #fff)'
+                    : 'var(--ds-color-warning)',
+                  flexShrink: 0,
+                }}
               >
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
             )}
+
+            {/* Context menu trigger -- ghost icon button */}
             {hasMenu && (
-              <div className="dropdown dropdown-bottom dropdown-end">
+              <div
+                style={{ position: 'relative' }}
+                ref={isMenuOpen ? menuRef : undefined}
+              >
                 <button
-                  tabIndex={0}
-                  className="btn btn-ghost btn-xs px-0.5 min-h-0 h-5 w-5"
+                  type="button"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 20,
+                    height: 20,
+                    padding: 0,
+                    border: 'none',
+                    background:
+                      hoveredMenuBtn === view.id
+                        ? isActive
+                          ? 'rgba(255,255,255,0.2)'
+                          : 'var(--ds-surface-highlight)'
+                        : 'transparent',
+                    borderRadius: 'var(--ds-radius-sm)',
+                    cursor: 'pointer',
+                    color: 'inherit',
+                    opacity: isHovered || isMenuOpen ? 1 : 0,
+                    transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+                                 background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+                    flexShrink: 0,
+                  }}
                   onClick={(e) => {
                     e.stopPropagation();
                     setOpenMenuId(isMenuOpen ? null : view.id);
                   }}
+                  onMouseEnter={() => setHoveredMenuBtn(view.id)}
+                  onMouseLeave={() => setHoveredMenuBtn(null)}
                   aria-label={`${view.name} options`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-3.5 w-3.5"
-                    fill="none"
+                    width="14"
+                    height="14"
                     viewBox="0 0 24 24"
+                    fill="none"
                     stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 5v.01M12 12v.01M12 19v.01"
-                    />
+                    <circle cx="12" cy="5" r="1" fill="currentColor" />
+                    <circle cx="12" cy="12" r="1" fill="currentColor" />
+                    <circle cx="12" cy="19" r="1" fill="currentColor" />
                   </svg>
                 </button>
+
+                {/* Dropdown menu */}
                 {isMenuOpen && (
-                  <ul
-                    className="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-50"
-                    tabIndex={0}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      right: 0,
+                      marginTop: 4,
+                      minWidth: 160,
+                      background: 'var(--ds-surface-card)',
+                      border: '1px solid var(--ds-color-border)',
+                      borderRadius: 'var(--ds-radius-md)',
+                      boxShadow: 'var(--ds-elevation-3)',
+                      padding: 4,
+                      zIndex: 50,
+                      overflow: 'hidden',
+                    }}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {allowRename && (
-                      <li>
-                        <button onClick={() => handleRenameStart(view)}>
-                          Rename
-                        </button>
-                      </li>
+                      <button
+                        type="button"
+                        style={menuItemStyle(
+                          hoveredMenuItem === `rename-${view.id}`,
+                        )}
+                        onMouseEnter={() =>
+                          setHoveredMenuItem(`rename-${view.id}`)
+                        }
+                        onMouseLeave={() => setHoveredMenuItem(null)}
+                        onClick={() => handleRenameStart(view)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                        </svg>
+                        Rename
+                      </button>
                     )}
                     {onViewDuplicate && (
-                      <li>
-                        <button
-                          onClick={() => {
-                            onViewDuplicate(view.id);
-                            setOpenMenuId(null);
-                          }}
+                      <button
+                        type="button"
+                        style={menuItemStyle(
+                          hoveredMenuItem === `duplicate-${view.id}`,
+                        )}
+                        onMouseEnter={() =>
+                          setHoveredMenuItem(`duplicate-${view.id}`)
+                        }
+                        onMouseLeave={() => setHoveredMenuItem(null)}
+                        onClick={() => {
+                          onViewDuplicate(view.id);
+                          setOpenMenuId(null);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          Duplicate
-                        </button>
-                      </li>
+                          <rect width="14" height="14" x="8" y="8" rx="2" />
+                          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                        </svg>
+                        Duplicate
+                      </button>
                     )}
                     {customActions.map((action) => (
-                      <li key={action.key}>
+                      <button
+                        key={action.key}
+                        type="button"
+                        disabled={action.disabled}
+                        style={menuItemStyle(
+                          hoveredMenuItem === `custom-${action.key}`,
+                          action.danger,
+                          action.disabled,
+                        )}
+                        onMouseEnter={() =>
+                          setHoveredMenuItem(`custom-${action.key}`)
+                        }
+                        onMouseLeave={() => setHoveredMenuItem(null)}
+                        onClick={() => {
+                          action.onClick();
+                          setOpenMenuId(null);
+                        }}
+                      >
+                        {action.icon}
+                        {action.label}
+                      </button>
+                    ))}
+                    {/* Divider + Delete */}
+                    {allowDelete && !view.isDefault && (
+                      <>
+                        <div
+                          style={{
+                            height: 1,
+                            background: 'var(--ds-color-border)',
+                            margin: '4px 0',
+                          }}
+                        />
                         <button
-                          className={action.danger ? 'text-error' : ''}
-                          disabled={action.disabled}
+                          type="button"
+                          style={menuItemStyle(
+                            hoveredMenuItem === `delete-${view.id}`,
+                            true,
+                          )}
+                          onMouseEnter={() =>
+                            setHoveredMenuItem(`delete-${view.id}`)
+                          }
+                          onMouseLeave={() => setHoveredMenuItem(null)}
                           onClick={() => {
-                            action.onClick();
+                            onViewDelete(view.id);
                             setOpenMenuId(null);
                           }}
                         >
-                          {action.icon}
-                          {action.label}
-                        </button>
-                      </li>
-                    ))}
-                    {/* Default views are protected from deletion to prevent
-                        accidental removal of the system-provided baseline. */}
-                    {allowDelete && !view.isDefault && (
-                      <>
-                        <div className="divider my-0" />
-                        <li>
-                          <button
-                            className="text-error"
-                            onClick={() => {
-                              onViewDelete(view.id);
-                              setOpenMenuId(null);
-                            }}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           >
-                            Delete
-                          </button>
-                        </li>
+                            <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                          </svg>
+                          Delete
+                        </button>
                       </>
                     )}
-                  </ul>
+                  </div>
                 )}
               </div>
             )}
@@ -322,21 +622,35 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         );
       })}
 
+      {/* Create view input / button */}
       {isCreating ? (
-        <div className="flex items-center gap-1 py-1 flex-shrink-0">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            padding: '4px 0',
+            flexShrink: 0,
+          }}
+        >
           <input
             type="text"
-            className="input input-bordered input-xs w-36"
+            style={inlineInputStyle}
             placeholder={newViewPlaceholder}
             value={newViewName}
             onChange={(e) => setNewViewName(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleCreate();
+              if (e.key === 'Escape') {
+                setIsCreating(false);
+                setNewViewName('');
+              }
             }}
             onBlur={() => {
               if (!newViewName.trim()) setIsCreating(false);
               else handleCreate();
             }}
+            onFocus={inputFocusHandler}
             autoFocus
             data-testid="new-view-input"
           />
@@ -344,23 +658,43 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       ) : (
         canCreate && (
           <button
-            className="btn btn-ghost btn-sm gap-1 flex-shrink-0"
+            type="button"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 4,
+              padding: '4px 10px',
+              fontSize: 13,
+              fontWeight: 500,
+              border: '1px dashed var(--ds-color-border)',
+              background: hoveredCreateBtn
+                ? 'var(--ds-surface-highlight)'
+                : 'transparent',
+              borderRadius: 'var(--ds-radius-full, 9999px)',
+              cursor: 'pointer',
+              color: 'var(--ds-color-text-muted)',
+              flexShrink: 0,
+              transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
+                           color var(--ds-motion-fast) var(--ds-motion-ease-out),
+                           border-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+            }}
+            onMouseEnter={() => setHoveredCreateBtn(true)}
+            onMouseLeave={() => setHoveredCreateBtn(false)}
             onClick={() => setIsCreating(true)}
             data-testid="create-view-button"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              fill="none"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
+              fill="none"
               stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
+              <path d="M12 4v16m8-8H4" />
             </svg>
             {createLabel}
           </button>

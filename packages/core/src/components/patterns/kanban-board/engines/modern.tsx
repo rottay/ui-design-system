@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI / Tailwind) engine for the KanbanBoard pattern.
- * Renders a horizontally-scrollable drag-and-drop board using DaisyUI's card,
+ * @fileoverview Modern (token-driven) engine for the KanbanBoard pattern.
+ * Renders a horizontally-scrollable drag-and-drop board using card structural classes,
  * badge, and button utility classes. Drop-target columns highlight with a
  * primary-tinted ring to give users clear visual feedback during drag.
  *
@@ -18,13 +18,14 @@
 
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../KanbanBoard.types';
+import { pillBadgeSmStyle, spinnerStyle } from '../../../shared/modern-styles';
 
 /**
- * Modern Kanban board built on DaisyUI / Tailwind utility classes.
+ * Modern Kanban board built on Tailwind utility classes with DS token styling.
  * Generic over `T` so any item shape can be used with a string key extractor.
  *
  * @param props - See {@link KanbanBoardProps} for full prop documentation.
- * @returns A flex-based board with DaisyUI-styled columns and cards.
+ * @returns A flex-based board with DS token-styled columns and cards.
  */
 export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const {
@@ -108,7 +109,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         className={`flex items-center justify-center min-h-[300px] ${className ?? ''}`}
         style={style}
       >
-        <span className="loading loading-spinner loading-lg" />
+        <span style={spinnerStyle(32)} />
       </div>
     );
   }
@@ -121,7 +122,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         style={{ gap: columnGap }}
       >
         {columns.map((column) => {
-          // WIP limit uses badge-error (red) when at or over capacity to
+          // WIP limit uses DS error token (red) when at or over capacity to
           // signal that further additions violate the team's WIP policy.
           const isOverLimit =
             column.limit !== undefined && column.items.length >= column.limit;
@@ -137,8 +138,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
             >
               {/* Column header */}
               <div
-                className="rounded-xl px-4 py-3 mb-2 bg-base-200"
+                className="rounded-xl px-4 py-3 mb-2"
                 style={{
+                  background: 'var(--ds-surface-inset)',
                   borderTop: column.color
                     ? `3px solid ${column.color}`
                     : undefined,
@@ -154,7 +156,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         {column.title}
                       </span>
                       <div
-                        className={`badge badge-sm ${isOverLimit ? 'badge-error' : 'badge-ghost'}`}
+                        style={{
+                          ...pillBadgeSmStyle,
+                          ...(isOverLimit
+                            ? { background: 'color-mix(in srgb, var(--ds-color-error) 15%, transparent)', color: 'var(--ds-color-error)' }
+                            : { background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' }),
+                        }}
                       >
                         {column.items.length}
                         {column.limit !== undefined && ` / ${column.limit}`}
@@ -170,17 +177,23 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
               {!column.collapsed && (
                 <div
                   className={`flex-1 rounded-xl p-2 min-h-[100px] transition-colors ${
-                    isDropping
-                      ? 'bg-primary/10 ring-2 ring-primary/30'
-                      : 'bg-base-100'
+                    isDropping ? 'ring-2' : ''
                   }`}
+                  style={{
+                    background: isDropping
+                      ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)'
+                      : 'var(--ds-surface-card)',
+                    '--tw-ring-color': isDropping
+                      ? 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)'
+                      : undefined,
+                  } as React.CSSProperties}
                   onDragOver={(e) =>
                     handleDragOver(e, column.id, column.items.length)
                   }
                   onDrop={(e) => handleDrop(e, column.id, column.items.length)}
                 >
                   {column.items.length === 0 && emptyColumn ? (
-                    <div className="flex items-center justify-center p-6 text-base-content/50">
+                    <div className="flex items-center justify-center p-6" style={{ color: 'var(--ds-color-text-secondary)' }}>
                       {emptyColumn}
                     </div>
                   ) : (
@@ -201,7 +214,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           onDrop={(e) => handleDrop(e, column.id, index)}
                           onDragEnd={handleDragEnd}
                           onClick={() => onItemClick?.(item, column.id)}
-                          className={`card card-compact bg-base-100 shadow-sm hover:shadow-md transition-all rounded-lg border border-base-300 ${
+                          className={`hover:shadow-md transition-all rounded-lg border ${
                             // Pointer cursor signals clickable cards; grab
                             // cursor signals draggable-only cards.
                             onItemClick ? 'cursor-pointer' : 'cursor-grab'
@@ -212,8 +225,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                               ? 'opacity-40'
                               : 'opacity-100'
                           }`}
+                          style={{ background: 'var(--ds-surface-card)', borderColor: 'var(--ds-color-border)', boxShadow: 'var(--ds-elevation-1)', borderRadius: 'var(--ds-radius-lg)' }}
                         >
-                          <div className="card-body p-3">
+                          <div style={{ padding: 12 }}>
                             {renderCard(item, column.id)}
                           </div>
                         </div>
@@ -223,7 +237,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
 
                   {onAddItem && (
                     <button
-                      className="btn btn-ghost btn-sm btn-block mt-2 border-dashed border-base-300"
+                      style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px dashed var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%', marginTop: 8 }}
                       onClick={() => onAddItem(column.id)}
                     >
                       <svg

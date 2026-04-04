@@ -5,11 +5,12 @@
  * They do NOT encode per-page behavior -- pages express their own structure
  * through surface configs in the app layer.
  *
- * Four built-in profiles ship with the DS:
+ * Five built-in profiles ship with the DS:
  * - `generic.default`     -- Safe baseline for new products
  * - `events.organizer`    -- Expressive, spacious, media-first (Evnto)
  * - `recruiting.operator` -- Compact, formal, data-dense (BitHire)
  * - `platform.admin`      -- Neutral, comfortable, operational (Platform)
+ * - `platform.flagship`   -- Premium flagship for modern engine showcase (Platform)
  */
 
 import type { ProductProfile, ProductProfileKey } from '../../contracts/product-profiles';
@@ -254,6 +255,78 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
         showBorder: true,
         hoverTint: false,
         paddingDensity: 'normal',
+      },
+    },
+    surfaceDefaults: {
+      listView: 'table',
+      density: 'comfortable',
+      schedulerView: 'month',
+    },
+  },
+  /**
+   * Premium flagship profile for the modern engine showcase.
+   *
+   * Based on `platform.admin` but with slightly higher animation intensity,
+   * a slideUp entrance, and explicit border radius overrides for a more
+   * polished, contemporary feel. Intended for tenants opting into the modern
+   * rendering engine on the Platform vertical.
+   */
+  'platform.flagship': {
+    key: 'platform.flagship',
+    label: 'Platform Flagship',
+    description: 'Premium flagship profile for the modern engine showcase on Platform.',
+    personality: {
+      animation: {
+        intensity: 0.5,
+        staggerDelay: 18,
+        staggerMax: 120,
+        entrance: 'slideUp',
+        entranceDuration: 160,
+        hoverLift: 1,
+        hoverScale: 1.0,
+        useSpring: false,
+        springTension: 170,
+        springFriction: 22,
+        pulseSpeed: 'normal',
+        skeletonStyle: 'shimmer',
+        countUpEnabled: true,
+      },
+      chart: {
+        animateOnMount: true,
+        mountDuration: 720,
+        lineStyle: 'sharp',
+        showDots: false,
+        useGradientFill: false,
+        tooltipStyle: 'detailed',
+      },
+      typography: {
+        headingWeightBias: 'normal',
+        headingLetterSpacing: '-0.015em',
+        labelStyle: 'sentence',
+      },
+      accent: {
+        barPosition: 'top',
+        barThickness: 2,
+        barStyle: 'solid',
+        iconContainerShape: 'rounded',
+        badgeShape: 'rounded',
+        dividerStyle: 'solid',
+      },
+      card: {
+        defaultElevation: 'sm',
+        hoverElevation: 'lift-one',
+        showBorder: true,
+        hoverTint: false,
+        paddingDensity: 'normal',
+      },
+    },
+    tokenOverrides: {
+      densityScale: 1.0,
+      borderRadius: {
+        sm: '6px',
+        md: '8px',
+        lg: '12px',
+        xl: '16px',
       },
     },
     surfaceDefaults: {

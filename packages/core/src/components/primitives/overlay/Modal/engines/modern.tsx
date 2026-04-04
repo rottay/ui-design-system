@@ -1,15 +1,12 @@
 /**
  * @fileoverview Modal Modern (Hermes) Engine - Rottay Design System.
- * DaisyUI/Tailwind implementation using the native HTML <dialog> element for
- * proper focus management. Provides a scale+opacity entrance animation,
- * backdrop blur, scrollbar-width compensation, and close-button hover effects.
+ * Premium overlay modal using the native HTML <dialog> element for built-in
+ * top-layer stacking and browser focus trapping. Features backdrop blur,
+ * scale+opacity entrance animation, scrollbar-width compensation, and
+ * polished header/body/footer sections with DS token-driven styling.
  *
- * @example
- * ```tsx
- * <Modal engine="modern" open={open} onClose={close} title="Edit Profile" size="lg">
- *   <ProfileForm />
- * </Modal>
- * ```
+ * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
+ * border, and motion tokens with Drawer and Sheet modern engines.
  *
  * @module Modal/Engines/Modern
  * @category Overlay
@@ -18,25 +15,45 @@
 
 'use client';
 
-import React, { useEffect, useCallback, useRef, useState } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../Modal.types';
 import { Portal } from '../utils/Portal';
 import { useTranslation } from '../../../../../i18n';
 
-/** Maps design-system size tokens to Tailwind max-width utility classes. */
-const SIZE_CLASS_MAP: Record<string, string> = {
-  xs: 'max-w-xs',
-  sm: 'max-w-sm',
-  md: 'max-w-md',
-  lg: 'max-w-lg',
-  xl: 'max-w-xl',
-  '2xl': 'max-w-2xl',
-  '3xl': 'max-w-3xl',
-  '4xl': 'max-w-4xl',
-  '5xl': 'max-w-5xl',
-  full: 'max-w-full',
+// ============================================================================
+// Constants
+// ============================================================================
+
+/** Premium size widths that override the generic SIZE_MAP for this engine. */
+const PREMIUM_SIZE_MAP: Record<string, string> = {
+  xs: '360px',
+  sm: '440px',
+  md: '560px',
+  lg: '720px',
+  xl: '900px',
+  '2xl': '960px',
+  '3xl': '1120px',
+  '4xl': '1280px',
+  '5xl': '1440px',
+  full: '95vw',
 };
+
+/** Shared overlay motion duration. */
+const MOTION_DURATION = 'var(--ds-motion-normal, 250ms)';
+const MOTION_EASING = 'var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
+
+/** Keyframe animations injected via <style> tag -- no external stylesheet needed. */
+const OVERLAY_MODAL_STYLES = `
+@keyframes rottay-modal-backdrop-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes rottay-modal-enter {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+`;
 
 /**
  * Calculate scrollbar width for body padding compensation.
@@ -46,16 +63,62 @@ function getScrollbarWidth(): number {
   return window.innerWidth - document.documentElement.clientWidth;
 }
 
+// ============================================================================
+// Close Button (shared visual)
+// ============================================================================
+
+function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '32px',
+        height: '32px',
+        border: 'none',
+        borderRadius: 'var(--ds-radius-md)',
+        backgroundColor: 'transparent',
+        cursor: 'pointer',
+        color: 'var(--ds-color-text-secondary)',
+        flexShrink: 0,
+        transition: `background-color var(--ds-motion-fast, 150ms) ${MOTION_EASING}`,
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.backgroundColor =
+          'var(--ds-surface-highlight)';
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  );
+}
+
+// ============================================================================
+// Component
+// ============================================================================
+
 /**
- * Modern engine implementation of Modal using DaisyUI and the native <dialog> API.
- *
+ * Modern engine implementation of Modal using the native <dialog> API.
  * Leverages showModal()/close() for built-in top-layer stacking and browser
- * focus trapping. Compensates for scrollbar layout shift by adding padding-right
- * to <body> equal to the scrollbar width while the modal is open. Injects
- * keyframe animations via a <style> tag so no external stylesheet is required.
- *
- * @param props - Modal configuration props
- * @returns DaisyUI-styled dialog element, or null when closed
+ * focus trapping. Compensates for scrollbar layout shift.
  */
 export default function ModernModal(props: ModalProps): React.ReactElement | null {
   const { t } = useTranslation('components');
@@ -88,9 +151,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   } = props;
 
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [isCloseHovered, setIsCloseHovered] = useState(false);
 
-  // Handle ESC key
+  // -- ESC key ----------------------------------------------------------------
+
   const handleEscKey = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape' && closeOnEscape && open) {
@@ -98,50 +161,39 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         onClose();
       }
     },
-    [closeOnEscape, open, onClose]
+    [closeOnEscape, open, onClose],
   );
 
-  // Sync the native <dialog> open state with the controlled `open` prop.
-  // showModal() promotes the element to the top layer with a built-in backdrop.
+  // Sync native <dialog> open state with controlled `open` prop.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-
     if (open) {
-      if (!dialog.open) {
-        dialog.showModal();
-      }
+      if (!dialog.open) dialog.showModal();
     } else {
-      if (dialog.open) {
-        dialog.close();
-      }
+      if (dialog.open) dialog.close();
     }
   }, [open]);
 
-  // ESC key listener
   useEffect(() => {
     if (open && closeOnEscape) {
       document.addEventListener('keydown', handleEscKey);
-      return () => {
-        document.removeEventListener('keydown', handleEscKey);
-      };
+      return () => document.removeEventListener('keydown', handleEscKey);
     }
   }, [open, closeOnEscape, handleEscKey]);
 
-  // Lock body scroll and compensate for disappearing scrollbar to prevent layout shift
+  // -- scroll lock with scrollbar compensation --------------------------------
+
   useEffect(() => {
     if (!preventScroll) return;
-
     if (open) {
       const scrollbarWidth = getScrollbarWidth();
       const originalOverflow = document.body.style.overflow;
       const originalPaddingRight = document.body.style.paddingRight;
-
       document.body.style.overflow = 'hidden';
       if (scrollbarWidth > 0) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
-
       return () => {
         document.body.style.overflow = originalOverflow;
         document.body.style.paddingRight = originalPaddingRight;
@@ -149,138 +201,174 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     }
   }, [open, preventScroll]);
 
-  // Only dismiss when the click target is the dialog itself (the backdrop area),
-  // not any child content -- e.target === e.currentTarget ensures this.
+  // -- backdrop click ---------------------------------------------------------
+
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget && closeOnBackdropClick) {
+    if (e.target === e.currentTarget && closeOnBackdropClick && closable !== false) {
       onClose();
     }
   };
 
-  // Sync controlled state when the browser closes the dialog (e.g. via Escape)
   const handleDialogClose = () => {
-    if (open) {
-      onClose();
-    }
+    if (open) onClose();
   };
 
-  // Fullscreen overrides all max-width constraints; otherwise use the size lookup
-  const sizeClass = fullScreen ? 'w-screen h-screen max-w-full max-h-full' : SIZE_CLASS_MAP[size] || SIZE_CLASS_MAP.md;
-  const placementClass = placement === 'top' ? 'modal-top' : placement === 'bottom' ? 'modal-bottom' : 'modal-middle';
+  // -- derived values ---------------------------------------------------------
 
-  // Inline styles enable CSS custom property theming without requiring a stylesheet
-  const modalBoxStyle: React.CSSProperties = {
-    width: fullScreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md,
-    maxWidth: fullScreen ? '100vw' : '90vw',
-    maxHeight: fullScreen ? '100vh' : '85vh',
-    borderRadius: fullScreen ? '0' : RADIUS_MAP[radius] || RADIUS_MAP.lg,
-    boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-shadow-2xl))' : 'none',
-    backgroundColor: 'var(--ds-modal-bg)',
-    color: 'var(--ds-modal-color)',
-    // Entrance animation -- durations and easing resolved from DS motion tokens
-    animation: 'rottay-modal-enter var(--ds-duration-slow, 0.3s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-    ...style,
-  };
+  const panelWidth = fullScreen
+    ? '100vw'
+    : PREMIUM_SIZE_MAP[size] || SIZE_MAP[size] || PREMIUM_SIZE_MAP.md;
+
+  const panelRadius = fullScreen
+    ? '0'
+    : RADIUS_MAP[radius] || 'var(--ds-radius-lg)';
+
+  const contentPadding = PADDING_MAP[padding] || PADDING_MAP.lg;
 
   // Don't render if not open
   if (!open) return null;
 
   return (
     <Portal>
+      {/* Injected keyframe styles */}
+      <style dangerouslySetInnerHTML={{ __html: OVERLAY_MODAL_STYLES }} />
+
       <dialog
         ref={dialogRef}
-        className={`modal ${open ? 'modal-open' : ''} ${placementClass} rottay-modal rottay-modal--modern ${className}`}
-        style={{ zIndex }}
+        className={`rottay-modal rottay-modal--modern ${className}`}
+        aria-modal="true"
+        style={{
+          /* Reset native dialog styling */
+          position: 'fixed',
+          inset: 0,
+          width: '100vw',
+          height: '100vh',
+          maxWidth: '100vw',
+          maxHeight: '100vh',
+          margin: 0,
+          padding: 0,
+          border: 'none',
+          backgroundColor: 'transparent',
+          display: 'flex',
+          alignItems: placement === 'top' ? 'flex-start' : placement === 'bottom' ? 'flex-end' : 'center',
+          justifyContent: 'center',
+          paddingTop: placement === 'top' ? '10vh' : undefined,
+          paddingBottom: placement === 'bottom' ? '10vh' : undefined,
+          zIndex,
+        }}
         onClick={handleBackdropClick}
         onClose={handleDialogClose}
       >
-        {/* Backdrop with blur */}
+        {/* ---- Backdrop ---- */}
         {showBackdrop && (
           <div
-            className="modal-backdrop"
             style={{
-              backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
-              backdropFilter: 'blur(4px)',
-              WebkitBackdropFilter: 'blur(4px)',
-              animation: 'rottay-modal-backdrop-enter var(--ds-duration-slow, 0.3s) var(--ds-ease-out, ease-out)',
+              position: 'fixed',
+              inset: 0,
+              background: 'color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)',
+              backdropFilter: blurBackdrop !== false ? 'blur(4px)' : undefined,
+              WebkitBackdropFilter: blurBackdrop !== false ? 'blur(4px)' : undefined,
+              animation: `rottay-modal-backdrop-enter ${MOTION_DURATION} ${MOTION_EASING}`,
+              pointerEvents: 'none',
             }}
           />
         )}
 
-        {/* Modal Box */}
+        {/* ---- Panel ---- */}
         <div
-          className={`modal-box ${sizeClass}`}
-          style={modalBoxStyle}
+          role="document"
           onClick={(e) => e.stopPropagation()}
+          style={{
+            position: 'relative',
+            width: panelWidth,
+            maxWidth: fullScreen ? '100vw' : '90vw',
+            maxHeight: fullScreen ? '100vh' : '85vh',
+            display: 'flex',
+            flexDirection: 'column',
+            background: 'var(--ds-surface-card)',
+            color: 'var(--ds-modal-color, inherit)',
+            border: fullScreen ? 'none' : '1px solid var(--ds-color-border-subtle)',
+            borderRadius: panelRadius,
+            boxShadow: shadow ? 'var(--ds-elevation-3)' : 'none',
+            animation: `rottay-modal-enter ${MOTION_DURATION} ${MOTION_EASING}`,
+            overflow: 'hidden',
+            outline: 'none',
+            ...style,
+          }}
         >
-          {/* Header */}
-          {(title || header || closable) && (
+          {/* ---- Header ---- */}
+          {(title || description || header || closable) && (
             <div
-              className="flex items-center justify-between gap-3"
               style={{
-                padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-                paddingBottom: divider ? PADDING_MAP[padding] || PADDING_MAP.lg : '0',
-                borderBottom: divider ? '1px solid var(--ds-modal-header-border, var(--ds-color-border-primary))' : 'none',
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                gap: '12px',
+                padding: '16px 24px',
+                borderBottom: divider
+                  ? '1px solid var(--ds-color-border-subtle)'
+                  : '1px solid var(--ds-color-border-subtle)',
+                flexShrink: 0,
               }}
             >
-              <div className="flex-1">
+              <div style={{ flex: '1 1 auto', minWidth: 0 }}>
                 {header || (
-                  title && (
-                    <h3 className="font-bold text-lg">{title}</h3>
-                  )
+                  <>
+                    {title && (
+                      <div
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          lineHeight: '24px',
+                          color: 'var(--ds-color-text-primary)',
+                        }}
+                      >
+                        {title}
+                      </div>
+                    )}
+                    {description && (
+                      <div
+                        style={{
+                          fontSize: '13px',
+                          lineHeight: '18px',
+                          color: 'var(--ds-color-text-secondary)',
+                          marginTop: title ? '2px' : undefined,
+                        }}
+                      >
+                        {description}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
               {closable && (
-                <button
-                  type="button"
-                  className="btn btn-sm btn-circle btn-ghost"
-                  onClick={onClose}
-                  onMouseEnter={() => setIsCloseHovered(true)}
-                  onMouseLeave={() => setIsCloseHovered(false)}
-                  aria-label={t('modal.close')}
-                  style={{
-                    transition: 'background-color var(--ds-duration-normal, 0.2s) var(--ds-ease-in-out, ease), transform var(--ds-duration-fast, 0.15s) var(--ds-ease-in-out, ease)',
-                    backgroundColor: isCloseHovered
-                      ? 'var(--ds-modal-close-hover-bg, rgba(0, 0, 0, 0.08))'
-                      : 'transparent',
-                    transform: isCloseHovered ? 'scale(1.05)' : 'scale(1)',
-                  }}
-                >
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+                <CloseButton onClick={onClose} label={t('modal.close')} />
               )}
             </div>
           )}
 
-          {/* Body */}
+          {/* ---- Body ---- */}
           <div
-            className="overflow-y-auto"
             style={{
-              padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-              paddingTop: (title || header) ? (divider ? PADDING_MAP[padding] : '12px') : PADDING_MAP[padding],
+              flex: '1 1 auto',
+              overflowY: 'auto',
+              padding: contentPadding,
             }}
           >
-            {description && (
-              <p
-                className="py-2"
-                style={{ color: 'var(--ds-modal-body-color, var(--ds-color-text-secondary))' }}
-              >
-                {description}
-              </p>
-            )}
             {children}
           </div>
 
-          {/* Footer */}
+          {/* ---- Footer ---- */}
           {footer && (
             <div
-              className="modal-action flex justify-end gap-3"
               style={{
-                padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-                paddingTop: divider ? PADDING_MAP[padding] || PADDING_MAP.lg : '0',
-                borderTop: divider ? '1px solid var(--ds-modal-footer-border, var(--ds-color-border-primary))' : 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                gap: '8px',
+                padding: '16px 24px',
+                borderTop: '1px solid var(--ds-color-border-subtle)',
+                flexShrink: 0,
               }}
             >
               {footer}

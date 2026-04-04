@@ -62,8 +62,9 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       middle: 'text-base',
     }[size];
 
-    // Bordered mode adds a visible container outline using DaisyUI's base-300 token
-    const borderClass = bordered ? 'border border-base-300 rounded-lg' : '';
+    // Bordered mode adds a visible container outline using DS border token
+    const borderClass = bordered ? 'border rounded-lg' : '';
+    const borderStyle: React.CSSProperties = bordered ? { borderColor: 'var(--ds-color-border)' } : {};
     // Resolve responsive column config to a concrete number for CSS grid
     const columnCount = resolveColumnCount(column);
 
@@ -78,7 +79,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         {(title || extra) && (
           <div className="flex justify-between items-center mb-4">
             {title && (
-              <h3 className="text-lg font-semibold text-base-content">
+              <h3 className="text-lg font-semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
                 {title}
               </h3>
             )}
@@ -87,7 +88,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         )}
 
         {/* Content section */}
-        <div className={`${borderClass} ${sizeClass}`}>
+        <div className={`${borderClass} ${sizeClass}`} style={borderStyle}>
           {layout === 'horizontal' ? (
             // Horizontal: CSS grid with configurable columns; items can span multiple cells
             <div
@@ -103,21 +104,23 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                   <div
                     className={
                       bordered
-                        ? 'border-b border-base-300 pb-2 last:border-b-0'
+                        ? 'border-b pb-2 last:border-b-0'
                         : ''
                     }
-                    style={{ gridColumn: `span ${span}` }}
+                    style={{
+                      gridColumn: `span ${span}`,
+                      ...(bordered && { borderColor: 'var(--ds-color-border)' }),
+                    }}
                   >
                     <div
-                      className="text-base-content/60 text-sm mb-1"
-                      style={{ ...styles?.label, ...itemProps.styles?.label }}
+                      className="text-sm mb-1"
+                      style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
                     </div>
                     <div
-                      className="text-base-content"
-                      style={{ ...styles?.content, ...itemProps.styles?.content }}
+                      style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
                     </div>
@@ -127,7 +130,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
             </div>
           ) : (
             // Vertical: label on the left (1/3 width), value on the right, separated by dividers
-            <div className="divide-y divide-base-300">
+            <div className="divide-y" style={{ '--tw-divide-color': 'var(--ds-color-border)' } as React.CSSProperties}>
               {React.Children.map(children, (child) => {
                 if (!React.isValidElement(child)) return null;
                 const itemProps = child.props as DescriptionsItemProps;
@@ -135,15 +138,15 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                 return (
                   <div className="flex p-3">
                     <div
-                      className="text-base-content/60 w-1/3"
-                      style={{ ...styles?.label, ...itemProps.styles?.label }}
+                      className="w-1/3"
+                      style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
                     </div>
                     <div
-                      className="flex-1 text-base-content"
-                      style={{ ...styles?.content, ...itemProps.styles?.content }}
+                      className="flex-1"
+                      style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
                     </div>

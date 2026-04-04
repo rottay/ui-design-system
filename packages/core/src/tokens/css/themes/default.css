@@ -183,33 +183,33 @@
   --ds-color-alpha-info-10: rgba(59, 130, 246, 0.10);
   --ds-color-alpha-info-20: rgba(59, 130, 246, 0.20);
 
-  --ds-color-bg-primary: #ffffff;
-  --ds-color-bg-secondary: #fafafa;
-  --ds-color-bg-tertiary: #f5f5f5;
-  --ds-color-bg-subtle: #fafafa;
-  --ds-color-bg-hover: #f5f5f5;
-  --ds-color-bg-canvas: #ffffff;
-  --ds-color-bg-elevated: #ffffff;
-  --ds-color-bg-input: #ffffff;
+  --ds-color-bg-primary: #0A0A0C;
+  --ds-color-bg-secondary: #0F0F12;
+  --ds-color-bg-tertiary: #141417;
+  --ds-color-bg-subtle: #0D0D10;
+  --ds-color-bg-hover: #18181C;
+  --ds-color-bg-canvas: #0A0A0C;
+  --ds-color-bg-elevated: #18181C;
+  --ds-color-bg-input: #0F0F12;
   --ds-color-bg-info: var(--ds-color-info-50);
   --ds-color-bg-overlay: var(--ds-color-alpha-black-50);
   --ds-color-bg-surface: var(--ds-color-bg-secondary);
   --ds-color-bg: var(--ds-color-bg-primary);
   --ds-color-background: var(--ds-color-bg-primary);
 
-  --ds-color-text-primary: #171717;
-  --ds-color-text-secondary: #525252;
-  --ds-color-text-tertiary: #737373;
-  --ds-color-text-muted: #a3a3a3;
-  --ds-color-text-disabled: #a3a3a3;
-  --ds-color-text-on-primary: #ffffff;
+  --ds-color-text-primary: #ECECEC;
+  --ds-color-text-secondary: #A0A0A5;
+  --ds-color-text-tertiary: #8A8A90;
+  --ds-color-text-muted: #6B6B72;
+  --ds-color-text-disabled: #4A4A50;
+  --ds-color-text-on-primary: #0C0C0E;
   --ds-color-text: var(--ds-color-text-primary);
 
-  --ds-color-border: #e5e5e5;
-  --ds-color-border-primary: #e5e5e5;
-  --ds-color-border-secondary: #d4d4d4;
-  --ds-color-border-subtle: #f5f5f5;
-  --ds-color-border-tertiary: #f5f5f5;
+  --ds-color-border: #1C1C20;
+  --ds-color-border-primary: #1C1C20;
+  --ds-color-border-secondary: #252529;
+  --ds-color-border-subtle: #161619;
+  --ds-color-border-tertiary: #161619;
   --ds-color-border-focus: var(--ds-color-primary);
 
   --ds-color-surface: var(--ds-color-bg-primary);

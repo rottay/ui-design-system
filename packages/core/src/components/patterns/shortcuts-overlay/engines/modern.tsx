@@ -92,15 +92,16 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
       <div className="absolute inset-0 bg-black/50" onClick={handleClose} />
       {/* Dialog card -- max-w-lg prevents overly wide layouts on ultrawide screens */}
       <div
-        className={`relative bg-base-100 rounded-xl shadow-2xl w-full max-w-lg overflow-hidden ${className}`}
+        className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`}
+        style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-3)' }}
         role="dialog"
         aria-label={title}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-base-300 px-5 py-3">
+        <div className="flex items-center justify-between border-b px-5 py-3" style={{ borderColor: 'var(--ds-color-border)' }}>
           <h2 className="text-base font-semibold">{title}</h2>
           <button
-            className="btn btn-ghost btn-sm btn-circle"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, width: 32, padding: 0, fontSize: 13, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClose}
             aria-label="Close"
           >
@@ -108,11 +109,12 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
           </button>
         </div>
         {/* Search */}
-        <div className="border-b border-base-300 px-5 py-2">
+        <div className="border-b px-5 py-2" style={{ borderColor: 'var(--ds-color-border)' }}>
           <input
             ref={inputRef}
             type="text"
-            className="input input-ghost input-sm w-full focus:outline-none"
+            className="w-full focus:outline-none"
+            style={{ padding: '6px 0', fontSize: 13, border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -123,7 +125,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
           {Object.entries(grouped).map(([category, items]) => (
             <div key={category} className="py-1">
               <div className="px-5 py-1">
-                <span className="text-xs uppercase tracking-wider text-base-content/50 font-semibold">
+                <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {category}
                 </span>
               </div>
@@ -137,7 +139,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
                   {/* formatShortcutKey splits "ctrl+shift+s" into ["Ctrl", "Shift", "S"] */}
                   <div className="flex items-center gap-1">
                     {formatShortcutKey(item.key).map((segment, i) => (
-                      <kbd key={i} className="kbd kbd-sm">
+                      <kbd key={i} style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 12, fontFamily: 'monospace' }}>
                         {segment}
                       </kbd>
                     ))}
@@ -147,14 +149,14 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="text-center py-8 text-base-content/50 text-sm">
+            <div className="text-center py-8 text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
               {emptyMessage}
             </div>
           )}
         </div>
         {/* Footer */}
         {footer && (
-          <div className="border-t border-base-300 px-5 py-2 text-xs text-base-content/50">
+          <div className="border-t px-5 py-2 text-xs" style={{ borderColor: 'var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>
             {footer}
           </div>
         )}

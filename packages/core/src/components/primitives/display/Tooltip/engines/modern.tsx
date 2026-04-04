@@ -1,11 +1,11 @@
 /**
  * @fileoverview Tooltip Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based tooltip with full trigger support.
+ * @description Custom DS token inline-styled tooltip with full trigger support.
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine uses DaisyUI's tooltip component classes with Tailwind utilities
- * for lightweight tooltip rendering, now enhanced with:
+ * This engine renders a custom tooltip bubble via absolutely-positioned divs
+ * with DS token inline styles. No DaisyUI classes are used.
  *
  * **Enhancements:**
  * - Multi-trigger support: hover, focus, click, manual
@@ -15,20 +15,16 @@
  * - `onVisibleChange` callback for external state sync
  *
  * **Implementation Details:**
- * - Uses DaisyUI `tooltip` class for styling base
- * - Uses `tooltip-{position}` for placement
- * - Uses `tooltip-{color}` for color variants
- * - JS-controlled visibility for trigger flexibility beyond CSS-only
- *
- * **Class Mappings:**
- * - `tooltip-top`, `tooltip-bottom`, `tooltip-left`, `tooltip-right`
- * - `tooltip-primary`, `tooltip-secondary`, `tooltip-success`, etc.
+ * - Wrapper uses `position: relative; display: inline-flex`
+ * - Tooltip bubble is absolutely positioned with DS token colors
+ * - Placement uses top/bottom/left/right with translate transforms
+ * - Color variants map to DS token CSS variables
  *
  * @example Basic Usage
  * ```tsx
  * import { Tooltip } from '@rottay/design-system';
  *
- * <Tooltip engine="modern" content="DaisyUI tooltip" color="primary">
+ * <Tooltip engine="modern" content="DS token tooltip" color="primary">
  *   <Button>Hover me</Button>
  * </Tooltip>
  * ```
@@ -41,7 +37,6 @@
  * ```
  *
  * @see {@link Tooltip} for the main component
- * @see {@link https://daisyui.com/components/tooltip/} DaisyUI Tooltip
  * @module Tooltip/engines/modern
  * @category Display
  * @package @rottay/design-system
@@ -54,33 +49,33 @@ import type { TooltipProps } from '../Tooltip.types';
 import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
 
 /**
- * Maps color variants to DaisyUI tooltip color classes.
+ * Maps color variants to DS token background/color pairs.
  */
-const COLOR_CLASS_MAP: Record<string, string> = {
-  default: '',
-  primary: 'tooltip-primary',
-  secondary: 'tooltip-secondary',
-  success: 'tooltip-success',
-  warning: 'tooltip-warning',
-  error: 'tooltip-error',
+const COLOR_STYLE_MAP: Record<string, React.CSSProperties> = {
+  default: { background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)' },
+  primary: { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' },
+  secondary: { background: 'var(--ds-color-secondary)', color: 'var(--ds-color-text-on-primary)' },
+  success: { background: 'var(--ds-color-success)', color: 'var(--ds-color-text-on-primary)' },
+  warning: { background: 'var(--ds-color-warning)', color: 'var(--ds-color-text-on-primary)' },
+  error: { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' },
 };
 
 /**
- * Maps placement to DaisyUI tooltip position classes.
+ * Maps placement to positioning styles for the tooltip bubble.
  */
-const PLACEMENT_CLASS_MAP: Record<string, string> = {
-  'top': 'tooltip-top',
-  'top-start': 'tooltip-top',
-  'top-end': 'tooltip-top',
-  'bottom': 'tooltip-bottom',
-  'bottom-start': 'tooltip-bottom',
-  'bottom-end': 'tooltip-bottom',
-  'left': 'tooltip-left',
-  'left-start': 'tooltip-left',
-  'left-end': 'tooltip-left',
-  'right': 'tooltip-right',
-  'right-start': 'tooltip-right',
-  'right-end': 'tooltip-right',
+const PLACEMENT_STYLES: Record<string, React.CSSProperties> = {
+  'top':          { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: 6 },
+  'top-start':    { bottom: '100%', left: 0, marginBottom: 6 },
+  'top-end':      { bottom: '100%', right: 0, marginBottom: 6 },
+  'bottom':       { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 6 },
+  'bottom-start': { top: '100%', left: 0, marginTop: 6 },
+  'bottom-end':   { top: '100%', right: 0, marginTop: 6 },
+  'left':         { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: 6 },
+  'left-start':   { right: '100%', top: 0, marginRight: 6 },
+  'left-end':     { right: '100%', bottom: 0, marginRight: 6 },
+  'right':        { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: 6 },
+  'right-start':  { left: '100%', top: 0, marginLeft: 6 },
+  'right-end':    { left: '100%', bottom: 0, marginLeft: 6 },
 };
 
 /**
@@ -93,14 +88,14 @@ function normalizeTriggers(trigger?: string | string[]): string[] {
 }
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the Tooltip component.
+ * Modern (DS token inline-styled) implementation of the Tooltip component.
  *
  * Features:
  * - Multi-trigger support (hover, focus, click, manual)
  * - Show/hide delay with setTimeout
  * - Controlled visibility via `visible` prop
  * - Scale entrance animation
- * - DaisyUI color variants
+ * - DS token color variants
  * - Smooth transitions
  *
  * @example
@@ -207,32 +202,43 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       eventHandlers.onClick = toggle;
     }
 
-    // Assemble DaisyUI classes; tooltip-open forces visibility via CSS
-    const tooltipClasses = [
-      'tooltip',
-      isVisible ? 'tooltip-open' : '',
-      COLOR_CLASS_MAP[color] || '',
-      PLACEMENT_CLASS_MAP[placement] || 'tooltip-top',
-      disabled && 'opacity-50 cursor-not-allowed',
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
+    // Tooltip bubble styles: DS tokens for colors, shadow, radius
+    const bubbleStyle: React.CSSProperties = {
+      position: 'absolute',
+      ...(PLACEMENT_STYLES[placement] || PLACEMENT_STYLES.top),
+      ...(COLOR_STYLE_MAP[color] || COLOR_STYLE_MAP.default),
+      borderRadius: 'var(--ds-radius-md)',
+      boxShadow: 'var(--ds-elevation-2)',
+      padding: '6px 10px',
+      fontSize: 12,
+      whiteSpace: 'nowrap',
+      pointerEvents: 'none',
+      zIndex: 50,
+      opacity: isVisible ? 1 : 0,
+      transform: `${(PLACEMENT_STYLES[placement] || PLACEMENT_STYLES.top).transform || ''} scale(${isVisible ? 1 : 0.95})`.trim(),
+      transition: 'opacity 0.15s ease, transform 0.15s ease',
+    };
+
+    const wrapperStyle: React.CSSProperties = {
+      position: 'relative',
+      display: 'inline-flex',
+      ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}),
+      ...style,
+    };
 
     return (
       <div
         ref={ref}
-        className={tooltipClasses}
-        data-tip={disabled ? undefined : content}
-        style={{
-          ...style,
-          // DaisyUI renders the tooltip content via ::before (text) and ::after
-          // (arrow) pseudo-elements. --tooltip-tail controls the arrow size.
-          '--tooltip-tail': '6px',
-        } as React.CSSProperties}
+        className={className || undefined}
+        style={wrapperStyle}
         {...eventHandlers}
       >
         {children}
+        {!disabled && content && (
+          <div role="tooltip" style={bubbleStyle} aria-hidden={!isVisible}>
+            {content}
+          </div>
+        )}
       </div>
     );
   }

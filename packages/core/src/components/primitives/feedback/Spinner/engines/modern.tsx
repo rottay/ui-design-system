@@ -1,20 +1,21 @@
 /**
  * @fileoverview Spinner Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Spinner component.
- * Uses DaisyUI's loading component classes for utility-first styling.
+ * @description CSS border-based spinner using DS tokens and inline styles.
+ * No DaisyUI dependency -- uses a CSS keyframe animation injected at render
+ * time and DS color tokens for theming.
  *
  * @remarks
- * The Modern engine leverages DaisyUI's loading utilities, providing:
- * - Lightweight, utility-first CSS approach
- * - Tailwind CSS integration for easy customization
- * - DaisyUI's built-in loading animations
- * - Minimal bundle size impact
+ * The Modern engine uses a pure-CSS border spinner approach:
+ * - Zero DaisyUI dependency
+ * - DS token colors (--ds-color-border, --ds-color-primary)
+ * - Inline styles for deterministic rendering
+ * - Injected @keyframes for the spin animation
  *
- * Size mapping from Rottay to DaisyUI:
- * - `sm` -> `loading-sm`
- * - `md` -> `loading-md`
- * - `lg` -> `loading-lg`
- * - `xl` -> `loading-lg` (DaisyUI maximum)
+ * Size mapping (pixel dimensions):
+ * - `sm` -> 16px
+ * - `md` -> 24px
+ * - `lg` -> 32px
+ * - `xl` -> 40px
  *
  * @example
  * ```tsx
@@ -23,8 +24,6 @@
  * // Modern engine for Tailwind projects
  * <Spinner engine="modern" size="lg" label="Loading..." />
  * ```
- *
- * @see {@link https://daisyui.com/components/loading/} DaisyUI Loading documentation
  *
  * @module Spinner/Engines/Modern
  * @category Feedback
@@ -36,35 +35,35 @@ import type { SpinnerProps } from '../Spinner.types';
 import { SPINNER_DEFAULTS } from '../Spinner.types';
 
 // ============================================================================
-// Size Class Mapping
+// Size Mapping
 // ============================================================================
 
 /**
- * Maps Rottay size variants to DaisyUI loading size classes.
- *
- * @remarks
- * DaisyUI doesn't have an 'xl' size, so we map it to 'lg'.
+ * Maps Rottay size variants to pixel dimensions and border widths.
  */
-const SIZE_CLASSES = {
-  sm: 'loading-sm',
-  md: 'loading-md',
-  lg: 'loading-lg',
-  xl: 'loading-lg', // DaisyUI doesn't have xl, use lg
+const SIZE_MAP: Record<string, { dimension: number; borderWidth: number }> = {
+  sm: { dimension: 16, borderWidth: 2 },
+  md: { dimension: 24, borderWidth: 2 },
+  lg: { dimension: 32, borderWidth: 3 },
+  xl: { dimension: 40, borderWidth: 3 },
 };
+
+/** Keyframes injected once per render tree via <style> tag */
+const SPIN_KEYFRAMES = '@keyframes rottay-ds-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
 
 // ============================================================================
 // Modern Engine Implementation
 // ============================================================================
 
 /**
- * Modern (DaisyUI) implementation of the Spinner component.
+ * Modern implementation of the Spinner component.
  *
  * @description
- * Renders a spinner using DaisyUI's loading component classes with
- * Tailwind CSS utilities for layout and spacing.
+ * Renders a CSS border-based spinner using DS tokens for colors and
+ * inline styles for layout. A <style> block injects the spin keyframe.
  *
  * @param props - {@link SpinnerProps} Component properties
- * @returns React element with DaisyUI loading classes
+ * @returns React element with a pure-CSS spinner
  *
  * @example
  * ```tsx
@@ -79,17 +78,41 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
     style,
   } = props;
 
+  const sizeConfig = SIZE_MAP[size!] || SIZE_MAP.md;
+
   // ============================================================================
   // Render
   // ============================================================================
 
-  // DaisyUI's `loading loading-spinner` classes produce a CSS-only rotating
-  // spinner. The size class controls both width and height via DaisyUI tokens.
   return (
-    <div className={`flex flex-col items-center gap-2 ${className}`} style={style}>
-      <span className={`loading loading-spinner ${SIZE_CLASSES[size!]}`}></span>
-      {/* Label is text-sm to maintain visual hierarchy below the spinner */}
-      {label && <span className="text-sm">{label}</span>}
+    <div
+      className={className || undefined}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 8,
+        ...style,
+      }}
+    >
+      {/* Inject spin keyframes -- safe static string, no user input */}
+      <style dangerouslySetInnerHTML={{ __html: SPIN_KEYFRAMES }} />
+      <span
+        style={{
+          display: 'inline-block',
+          width: sizeConfig.dimension,
+          height: sizeConfig.dimension,
+          border: `${sizeConfig.borderWidth}px solid var(--ds-color-border)`,
+          borderTopColor: 'var(--ds-color-primary)',
+          borderRadius: '50%',
+          animation: 'rottay-ds-spin 0.6s linear infinite',
+        }}
+        role="status"
+        aria-label={label || 'Loading'}
+      />
+      {label && (
+        <span style={{ fontSize: 14, color: 'var(--ds-color-text-secondary)' }}>{label}</span>
+      )}
     </div>
   );
 }

@@ -18,10 +18,11 @@ import type { EmptyProps } from '../Empty.types';
 import { EMPTY_DEFAULTS } from '../Empty.types';
 import { useTranslation } from '../../../../../i18n';
 
-/** Detailed empty-box SVG illustration using DaisyUI's base-content colour at 20% opacity. */
+/** Detailed empty-box SVG illustration using DS text-secondary token at reduced opacity. */
 const DefaultImage: React.FC = () => (
   <svg
-    className="w-24 h-24 text-base-content/20"
+    className="w-24 h-24"
+    style={{ color: 'var(--ds-color-text-secondary)', opacity: 0.4 }}
     viewBox="0 0 64 41"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -41,10 +42,11 @@ const DefaultImage: React.FC = () => (
   </svg>
 );
 
-/** Minimal outline-only SVG illustration at 15% opacity for subtle empty states. */
+/** Minimal outline-only SVG illustration at reduced opacity for subtle empty states. */
 const SimpleImage: React.FC = () => (
   <svg
-    className="w-16 h-10 text-base-content/15"
+    className="w-16 h-10"
+    style={{ color: 'var(--ds-color-text-secondary)', opacity: 0.3 }}
     viewBox="0 0 64 41"
     fill="none"
     stroke="currentColor"
@@ -114,7 +116,7 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>(
         )}
 
         {displayDescription && (
-          <p className="text-base-content/50 text-sm mb-4 text-center">
+          <p className="text-sm mb-4 text-center" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {displayDescription}
           </p>
         )}

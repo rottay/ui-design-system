@@ -10,9 +10,11 @@
  * renderers, and actions while the DS owns the layout and interaction shell.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../primitives';
 import { PatternDataTable, PatternFilterPanel } from '../../patterns';
+import { PatternListToolbar } from '../../patterns/list-toolbar';
+import type { ViewMode } from '../../patterns/list-toolbar';
 import { FadeIn, StaggerChildren } from '../../../motion';
 import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 import {
@@ -34,6 +36,20 @@ import {
   SurfaceAccentBarWrapper,
 } from '../personality-helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../states';
+
+// ---------------------------------------------------------------------------
+// View-mode bridging helpers
+// ---------------------------------------------------------------------------
+// ListSurface uses 'table' | 'cards' while PatternListToolbar uses 'list' | 'cards'.
+// These helpers translate between the two vocabularies.
+
+function surfaceViewToToolbarMode(view: ListSurfaceView): ViewMode {
+  return view === 'table' ? 'list' : 'cards';
+}
+
+function toolbarModeToSurfaceView(mode: ViewMode): ListSurfaceView {
+  return mode === 'list' ? 'table' : 'cards';
+}
 
 /** Render a single surface action using the normalized surface-to-button mapping. */
 function renderActionButton<TView>(
@@ -280,7 +296,36 @@ export function ListSurface<TRaw, TView extends object>({
     config.visual.allowViewSwitch !== false &&
     (!isMobile || config.visual.hideViewSwitchOnMobile === false);
 
-  const headerActions = (
+  const hasToolbar = !!config.toolbar;
+
+  // Bridge the toolbar view-mode change back into the surface's view state.
+  const handleToolbarViewModeChange = useCallback(
+    (mode: ViewMode) => {
+      setActiveView(toolbarModeToSurfaceView(mode));
+    },
+    [],
+  );
+
+  // Build the toolbar's primaryAction descriptor from the surface's resolved action.
+  const toolbarPrimaryAction = useMemo(() => {
+    if (!primaryAction) return undefined;
+    return {
+      label: primaryAction.label,
+      onClick: () => primaryAction.onClick?.(undefined as void),
+      icon: primaryAction.icon,
+    };
+  }, [primaryAction]);
+
+  // When the toolbar is active, the PageShellSurface header only renders
+  // toolbarEnd and any extra items -- the toolbar owns the view switch and
+  // primary action.  When the toolbar is absent, we keep the legacy layout.
+  const headerActions = hasToolbar ? (
+    config.presentation.toolbarEnd ? (
+      <Flex gap={8} wrap="wrap" justify="end">
+        {config.presentation.toolbarEnd}
+      </Flex>
+    ) : undefined
+  ) : (
     <Flex gap={8} wrap="wrap" justify="end">
       {config.presentation.toolbarEnd}
 
@@ -331,25 +376,83 @@ export function ListSurface<TRaw, TView extends object>({
 
   const listContent = (
     <Stack spacing={resolvedSectionSpacing}>
+      {/* --------------------------------------------------------------- */}
+      {/* Toolbar: canonical PatternListToolbar when config.toolbar is set */}
+      {/* --------------------------------------------------------------- */}
+      {hasToolbar && config.toolbar && (
+        <PatternListToolbar
+          title={config.toolbar.title}
+          showTitleSection={config.toolbar.showTitleSection}
+          icon={config.toolbar.icon}
+          totalCount={config.toolbar.totalCount}
+          search={config.toolbar.search}
+          onSearchChange={config.toolbar.onSearchChange}
+          searchPlaceholder={config.toolbar.searchPlaceholder}
+          filterPills={config.toolbar.filterPills}
+          activeFilters={config.toolbar.activeFilters}
+          onFilterChange={config.toolbar.onFilterChange}
+          onClearFilters={config.toolbar.onClearFilters}
+          activeFilterCount={config.toolbar.activeFilterCount}
+          viewMode={surfaceViewToToolbarMode(activeView)}
+          onViewModeChange={handleToolbarViewModeChange}
+          density={config.toolbar.density}
+          onDensityChange={config.toolbar.onDensityChange}
+          columnSettingsContent={config.toolbar.columnSettingsContent}
+          savedViewsContent={config.toolbar.savedViewsContent}
+          primaryAction={toolbarPrimaryAction}
+          onExport={config.toolbar.onExport}
+        />
+      )}
+
+      {/* Extra toolbar slots (kept for backward compatibility / injection) */}
       {config.presentation.toolbarStart}
 
       {config.behavior.filters && config.behavior.filters.length > 0 && (
-        <Card variant={profileDefaults.cardVariant}>
-          <Card.Body>
+        config.visual.filterPanelChrome === 'plain' ? (
+          <Box
+            style={{
+              padding: isMobile ? '0 4px' : '0 2px',
+            }}
+          >
             <PatternFilterPanel
               filters={config.behavior.filters}
               values={config.behavior.filterValues ?? {}}
               onChange={(values) => config.behavior.onFilterChange?.(values)}
               onReset={config.behavior.onFilterReset}
-              showReset={!!config.behavior.onFilterReset}
+              showReset={!!config.behavior.onFilterReset && activeFilterCount > 0}
               showApply={!!config.behavior.onFilterApply}
               onApply={config.behavior.onFilterApply}
               activeCount={activeFilterCount}
-              title={tSurface('list.filters_title')}
+              title={
+                isMobile || config.behavior.filters.length > 1
+                  ? tSurface('list.filters_title')
+                  : undefined
+              }
               layout={isMobile ? (config.visual.mobileFiltersLayout ?? 'stacked') : 'inline'}
             />
-          </Card.Body>
-        </Card>
+          </Box>
+        ) : (
+          <Card variant={profileDefaults.cardVariant}>
+            <Card.Body>
+              <PatternFilterPanel
+                filters={config.behavior.filters}
+                values={config.behavior.filterValues ?? {}}
+                onChange={(values) => config.behavior.onFilterChange?.(values)}
+                onReset={config.behavior.onFilterReset}
+                showReset={!!config.behavior.onFilterReset && activeFilterCount > 0}
+                showApply={!!config.behavior.onFilterApply}
+                onApply={config.behavior.onFilterApply}
+                activeCount={activeFilterCount}
+                title={
+                  isMobile || config.behavior.filters.length > 1
+                    ? tSurface('list.filters_title')
+                    : undefined
+                }
+                layout={isMobile ? (config.visual.mobileFiltersLayout ?? 'stacked') : 'inline'}
+              />
+            </Card.Body>
+          </Card>
+        )
       )}
 
       {effectiveView === 'table' ? (

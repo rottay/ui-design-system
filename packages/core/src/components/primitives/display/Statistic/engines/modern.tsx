@@ -1,10 +1,10 @@
 /**
  * @fileoverview Statistic Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based statistic with semantic colors.
+ * @description Token-driven statistic with Tailwind utilities and --ds-* CSS custom properties.
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine uses DaisyUI classes with Tailwind utilities
+ * This engine uses Tailwind utilities with DS token inline styles
  * for a lightweight, theme-integrated statistic display.
  *
  * **Exported Components:**
@@ -12,23 +12,23 @@
  * - `Countdown` - Countdown timer component
  *
  * **Implementation Details:**
- * - DaisyUI semantic color classes
+ * - DS token semantic color styles
  * - Tailwind typography utilities
  * - Interval-based countdown updates
  * - Loading skeleton with animate-pulse
  *
  * **Class Mappings:**
- * - `text-base-content` - Default value color
+ * - `var(--ds-color-text-primary)` - Default value color
  * - `text-success` - Positive value color
  * - `text-error` - Negative value color
  * - `text-warning` - Warning value color
  * - `text-2xl font-semibold` - Value styling
- * - `text-sm text-base-content/60` - Title styling
+ * - `text-sm` + `var(--ds-color-text-secondary)` - Title styling
  *
  * **Advantages:**
  * - Lightweight CSS-only styling
  * - Automatic theme adaptation
- * - DaisyUI semantic colors
+ * - DS token semantic colors
  * - Responsive-friendly
  *
  * @example Statistic Usage
@@ -45,7 +45,7 @@
  * ```
  *
  * @see {@link Statistic} for the main component
- * @see {@link https://daisyui.com/} DaisyUI
+ * @see {@link Statistic} for the main component
  * @module Statistic/engines/modern
  * @category Display
  * @package @rottay/design-system
@@ -53,7 +53,7 @@
 
 'use client';
 
-import { forwardRef, useState, useEffect, useCallback } from 'react';
+import React, { forwardRef, useState, useEffect, useCallback } from 'react';
 import { CountUp } from '../../../../../motion';
 import type { StatisticProps, CountdownProps } from '../Statistic.types';
 import { STATISTIC_DEFAULTS } from '../Statistic.types';
@@ -91,19 +91,19 @@ function formatNumber(
 }
 
 /**
- * Maps valueType to Tailwind CSS text color classes.
+ * Maps valueType to DS token color values for inline styles.
  */
-const VALUE_TYPE_CLASS_MAP: Record<string, string> = {
-  default: 'text-base-content',
-  positive: 'text-success',
-  negative: 'text-error',
-  warning: 'text-warning',
+const VALUE_TYPE_STYLE_MAP: Record<string, React.CSSProperties> = {
+  default: { color: 'var(--ds-color-text-primary)' },
+  positive: { color: 'var(--ds-color-success)' },
+  negative: { color: 'var(--ds-color-error)' },
+  warning: { color: 'var(--ds-color-warning)' },
 };
 
 /**
  * Modern Engine implementation of the Statistic component.
  *
- * This implementation uses DaisyUI and Tailwind CSS utilities
+ * This implementation uses Tailwind CSS utilities and DS token inline styles
  * for a lightweight, customizable appearance.
  *
  * @example
@@ -150,15 +150,15 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     const shouldAnimateValue =
       animateValue && typeof value === 'number' && !formatter && !loading;
 
-    // Get Tailwind class for value color
-    const valueColorClass = VALUE_TYPE_CLASS_MAP[valueType] || VALUE_TYPE_CLASS_MAP.default;
+    // Get DS token style for value color
+    const valueColorStyle = VALUE_TYPE_STYLE_MAP[valueType] || VALUE_TYPE_STYLE_MAP.default;
 
-    // Loading skeleton with DaisyUI animation
+    // Loading skeleton with Tailwind animate-pulse
     if (loading) {
       return (
         <div ref={ref} className={`animate-pulse ${className}`} style={style}>
-          <div className="h-4 bg-base-300 rounded w-16 mb-2" />
-          <div className="h-8 bg-base-300 rounded w-24" />
+          <div className="h-4 rounded w-16 mb-2" style={{ background: 'var(--ds-surface-panel)' }} />
+          <div className="h-8 rounded w-24" style={{ background: 'var(--ds-surface-panel)' }} />
         </div>
       );
     }
@@ -166,13 +166,13 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     return (
       <div ref={ref} className={className} style={style}>
         {title && (
-          <div className="text-sm text-base-content/60 mb-1">
+          <div className="text-sm mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {title}
           </div>
         )}
         <div
-          className={`text-2xl font-semibold ${valueColorClass}`}
-          style={valueStyle}
+          className="text-2xl font-semibold"
+          style={{ ...valueColorStyle, ...valueStyle }}
         >
           {prefix && <span className="mr-1">{prefix}</span>}
           {shouldAnimateValue ? (
@@ -223,7 +223,7 @@ function formatTime(ms: number, format: string): string {
 /**
  * Modern Engine implementation of the Countdown component.
  *
- * Provides a countdown timer with DaisyUI/Tailwind styling.
+ * Provides a countdown timer with Tailwind utility and DS token styling.
  * Uses requestAnimationFrame for smooth updates.
  *
  * @example
@@ -292,21 +292,21 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
       setIsFinished(false);
     }, [value]);
 
-    // Get Tailwind class for value color
-    const valueColorClass = VALUE_TYPE_CLASS_MAP[valueType] || VALUE_TYPE_CLASS_MAP.default;
+    // Get DS token style for value color
+    const valueColorStyle = VALUE_TYPE_STYLE_MAP[valueType] || VALUE_TYPE_STYLE_MAP.default;
 
     return (
       <div ref={ref} className={className} style={style}>
         {title && (
-          <div className="text-sm text-base-content/60 mb-1">
+          <div className="text-sm mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {title}
           </div>
         )}
         {/* font-mono ensures digits occupy equal widths so the layout
             does not shift as numbers change during the countdown. */}
         <div
-          className={`text-2xl font-semibold font-mono ${valueColorClass}`}
-          style={valueStyle}
+          className="text-2xl font-semibold font-mono"
+          style={{ ...valueColorStyle, ...valueStyle }}
         >
           {prefix && <span className="mr-1">{prefix}</span>}
           <span>{formatTime(timeLeft, format)}</span>

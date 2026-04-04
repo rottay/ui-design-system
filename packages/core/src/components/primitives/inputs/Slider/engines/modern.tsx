@@ -2,17 +2,17 @@
 
 /**
  * @fileoverview Slider Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Slider component.
+ * @description Token-driven Tailwind CSS implementation of the Slider component.
  * Part of the Rottay Design System's input primitives collection.
  *
  * @remarks
- * The Modern engine implements sliders using DaisyUI's range input classes
+ * The Modern engine implements sliders using Tailwind range input classes
  * with custom track overlays for range mode support.
  *
- * **DaisyUI Classes Used:**
+ * **Styling:**
  * - `range range-primary` - Base range input styling
- * - `bg-base-300` - Rail background color
- * - `bg-primary` - Active track color
+ * - DS token `--ds-surface-panel` - Rail background color
+ * - DS token `--ds-color-primary` - Active track color
  * - Custom positioning for handles and marks
  *
  * **Custom Implementation:**
@@ -50,7 +50,7 @@ import type { SliderProps } from '../Slider.types';
 import { SLIDER_DEFAULTS } from '../Slider.types';
 
 /**
- * Modern engine Slider -- built with DaisyUI range classes and custom overlays.
+ * Modern engine Slider -- built with Tailwind range classes, DS token styles, and custom overlays.
  *
  * Supports both single and dual-handle range modes. Range mode stacks two
  * invisible native `<input type="range">` elements on top of a custom track
@@ -58,7 +58,7 @@ import { SLIDER_DEFAULTS } from '../Slider.types';
  * accessibility and keyboard control via the native inputs.
  *
  * @param props - {@link SliderProps} unified slider props shared across engines.
- * @returns A ref-forwarding slider with DaisyUI/Tailwind styling.
+ * @returns A ref-forwarding slider with Tailwind/DS token styling.
  */
 export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
   (props, ref) => {
@@ -141,19 +141,22 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         >
           {/* Track */}
           <div
-            className={`absolute bg-base-300 rounded-full ${vertical ? 'w-1 h-full left-1/2 -translate-x-1/2' : 'h-1 w-full top-1/2 -translate-y-1/2'}`}
+            className={`absolute rounded-full ${vertical ? 'w-1 h-full left-1/2 -translate-x-1/2' : 'h-1 w-full top-1/2 -translate-y-1/2'}`}
+            style={{ background: 'var(--ds-surface-panel)' }}
           />
 
           {/* Active range */}
           <div
-            className="absolute bg-primary rounded-full"
+            className="absolute rounded-full"
             style={vertical ? {
+              background: 'var(--ds-color-primary)',
               left: '50%',
               transform: 'translateX(-50%)',
               bottom: `${startPercent}%`,
               height: `${endPercent - startPercent}%`,
               width: '4px',
             } : {
+              background: 'var(--ds-color-primary)',
               top: '50%',
               transform: 'translateY(-50%)',
               left: `${startPercent}%`,
@@ -199,12 +202,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
           {/* Handles */}
           <div
-            className="absolute w-4 h-4 bg-primary rounded-full border-2 border-white shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { left: '50%', bottom: `${startPercent}%` } : { top: '50%', left: `${startPercent}%` }}
+            className="absolute w-4 h-4 rounded-full border-2 border-white shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={vertical ? { background: 'var(--ds-color-primary)', left: '50%', bottom: `${startPercent}%` } : { background: 'var(--ds-color-primary)', top: '50%', left: `${startPercent}%` }}
           />
           <div
-            className="absolute w-4 h-4 bg-primary rounded-full border-2 border-white shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { left: '50%', bottom: `${endPercent}%` } : { top: '50%', left: `${endPercent}%` }}
+            className="absolute w-4 h-4 rounded-full border-2 border-white shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={vertical ? { background: 'var(--ds-color-primary)', left: '50%', bottom: `${endPercent}%` } : { background: 'var(--ds-color-primary)', top: '50%', left: `${endPercent}%` }}
           />
 
           {/* Marks -- positioned absolutely; supports both string and {label,style} shapes */}
@@ -217,13 +220,15 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             return (
               <div
                 key={key}
-                className="absolute text-xs text-base-content/60"
+                className="absolute text-xs"
                 style={vertical ? {
+                  color: 'var(--ds-color-text-secondary)',
                   left: '100%',
                   bottom: `${percent}%`,
                   marginLeft: '8px',
                   transform: 'translateY(50%)',
                 } : {
+                  color: 'var(--ds-color-text-secondary)',
                   top: '100%',
                   left: `${percent}%`,
                   marginTop: '8px',
@@ -269,8 +274,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           return (
             <div
               key={key}
-              className="absolute text-xs text-base-content/60"
+              className="absolute text-xs"
               style={{
+                color: 'var(--ds-color-text-secondary)',
                 top: '100%',
                 left: `${markPercent}%`,
                 marginTop: '4px',

@@ -1,13 +1,13 @@
 /**
  * @fileoverview Message Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Message component.
+ * @description Token-driven Tailwind implementation of the Message component.
  * Provides lightweight, utility-first message functionality with modern styling.
  *
  * @remarks
- * The Modern engine uses DaisyUI's toast and alert components for a lightweight,
+ * The Modern engine uses DS token inline styles and toast structural classes for a lightweight,
  * utility-first implementation:
  *
- * - **Tailwind Classes**: Uses DaisyUI utility classes for styling
+ * - **Tailwind Classes**: Uses Tailwind utilities with DS token inline styles
  * - **Provider Required**: Unlike Classic, requires MessageProvider context
  * - **Lightweight**: Minimal bundle size with CSS-based styling
  * - **Accessible**: Full ARIA support with semantic HTML
@@ -118,12 +118,12 @@ const generateId = () => `modern-message-${++messageId}`;
  * MessageProvider - Modern Engine
  *
  * @description
- * Provides message context and renders the toast container for DaisyUI messages.
+ * Provides message context and renders the toast container for Modern messages.
  * Must wrap any components that use the useMessage hook.
  *
  * @remarks
  * The Modern provider manages message state internally and renders messages
- * using DaisyUI's toast positioning classes. Messages are automatically
+ * using toast positioning classes. Messages are automatically
  * positioned and stacked within the toast container.
  *
  * @param props - {@link MessageProviderProps}
@@ -249,7 +249,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     },
   };
 
-  // DaisyUI toast classes handle fixed positioning and stacking natively,
+  // Toast classes handle fixed positioning and stacking natively,
   // avoiding manual z-index/position CSS. Only top/bottom are supported
   // (unlike Notification which supports 6 placements) because messages
   // are brief, centered alerts by convention.
@@ -349,20 +349,20 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
  * MessageItem - Modern Engine
  *
  * @description
- * Individual message component using DaisyUI alert classes.
+ * Individual message component using DS token inline styles.
  * Renders with appropriate styling based on message type.
  *
  * @remarks
- * Uses DaisyUI's alert component classes for consistent styling:
- * - `alert-success` for success messages
- * - `alert-error` for error messages
- * - `alert-info` for info and loading messages
- * - `alert-warning` for warning messages
+ * Uses DS token alert style mapping for consistent styling:
+ * - `--ds-color-success` tinted background for success messages
+ * - `--ds-color-error` tinted background for error messages
+ * - `--ds-color-info` tinted background for info and loading messages
+ * - `--ds-color-warning` tinted background for warning messages
  *
  * SVG icons are inline for better performance and customization.
  *
  * @param props - {@link MessageItemProps}
- * @returns DaisyUI-styled alert element
+ * @returns DS token-styled alert element
  *
  * @example
  * ```tsx
@@ -416,19 +416,19 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     onClose?.();
   };
 
-  /** DaisyUI alert class mapping */
-  const alertClasses: Record<MessageType, string> = {
-    success: 'alert-success',
-    error: 'alert-error',
-    info: 'alert-info',
-    warning: 'alert-warning',
-    loading: 'alert-info',
+  /** DS token alert style mapping */
+  const alertStyles: Record<MessageType, React.CSSProperties> = {
+    success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
+    error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
+    info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
+    warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
+    loading: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
   };
 
   // Inline SVG icons instead of an icon library to keep the Modern engine's
   // bundle lightweight. Each icon uses stroke-based paths for consistent
   // rendering at small sizes (h-5 w-5 = 20px). The loading type uses
-  // DaisyUI's built-in spinner component for native animation support.
+  // loading-spinner class for native animation support.
   const icons: Record<MessageType, ReactNode> = {
     success: (
       <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -451,17 +451,17 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       </svg>
     ),
     loading: (
-      <span className="loading loading-spinner loading-sm"></span>
+      <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }}></span>
     ),
   };
 
   // role="alert" triggers screen reader announcement on appearance.
-  // DaisyUI alert classes provide semantic color coding that respects
-  // the active DaisyUI theme (light/dark/custom).
+  // DS token alert styles provide semantic color coding that respects
+  // the active tenant theme (light/dark/custom).
   return (
     <div
-      className={`alert ${alertClasses[type]} shadow-lg ${className}`}
-      style={style}
+      className={`alert ${className}`}
+      style={{ ...alertStyles[type], boxShadow: 'var(--ds-elevation-2)', ...style }}
       role="alert"
     >
       <span>{icon || icons[type]}</span>
@@ -471,7 +471,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           minimal so it doesn't compete with the alert content. */}
       {closable && (
         <button
-          className="btn btn-ghost btn-xs"
+          style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
           onClick={handleClose}
           aria-label="Close"
         >

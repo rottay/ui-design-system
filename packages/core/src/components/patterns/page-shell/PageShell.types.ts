@@ -40,8 +40,12 @@ import type { PatternBaseProps } from '../types';
 export interface PageShellProps extends PatternBaseProps {
   /** Page title displayed as the primary heading */
   title: string;
+  /** Hide the shell header row entirely when a surface renders its own top chrome. */
+  hideHeader?: boolean;
   /** Optional subtitle or description rendered below the title */
   subtitle?: ReactNode;
+  /** Optional rich content rendered below the title block inside the header. */
+  headerContent?: ReactNode;
   /** Breadcrumb trail items; last item is treated as current (no link) */
   breadcrumbs?: { label: string; href?: string; onClick?: () => void }[];
   /** Action buttons or controls rendered in the top-right header area */

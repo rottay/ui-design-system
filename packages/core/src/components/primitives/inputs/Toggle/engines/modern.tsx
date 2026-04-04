@@ -19,23 +19,23 @@ import React, { useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../Toggle.types';
 import { TOGGLE_DEFAULTS } from '../Toggle.types';
 
-/** DaisyUI size modifiers. 'md' is the default size so no class is needed; 'xl' reuses 'lg'. */
-const DAISY_SIZE_MAP = {
-  xs: 'toggle-xs',
-  sm: 'toggle-sm',
-  md: '',
-  lg: 'toggle-lg',
-  xl: 'toggle-lg',
+/** Toggle track dimensions per size. */
+const SIZE_DIMS: Record<string, { trackW: number; trackH: number; thumbSize: number }> = {
+  xs: { trackW: 28, trackH: 16, thumbSize: 12 },
+  sm: { trackW: 32, trackH: 18, thumbSize: 14 },
+  md: { trackW: 36, trackH: 20, thumbSize: 16 },
+  lg: { trackW: 44, trackH: 24, thumbSize: 20 },
+  xl: { trackW: 44, trackH: 24, thumbSize: 20 },
 };
 
-/** DaisyUI color modifiers. 'default' uses DaisyUI's base toggle color (neutral). */
-const DAISY_COLOR_MAP = {
-  default: '',
-  primary: 'toggle-primary',
-  secondary: 'toggle-secondary',
-  success: 'toggle-success',
-  warning: 'toggle-warning',
-  error: 'toggle-error',
+/** DS token color for checked track per color prop. */
+const COLOR_TOKENS: Record<string, string> = {
+  default: 'var(--ds-color-primary)',
+  primary: 'var(--ds-color-primary)',
+  secondary: 'var(--ds-color-secondary)',
+  success: 'var(--ds-color-success)',
+  warning: 'var(--ds-color-warning)',
+  error: 'var(--ds-color-error)',
 };
 
 /**
@@ -87,29 +87,43 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
   }, [isControlled, onChange]);
 
   // Error state overrides the color class to ensure the toggle is visually marked
-  const toggleClasses = [
-    'toggle',
-    DAISY_SIZE_MAP[size],
-    error ? 'toggle-error' : DAISY_COLOR_MAP[color],
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const dims = SIZE_DIMS[size] || SIZE_DIMS.md;
+  const thumbInset = (dims.trackH - dims.thumbSize) / 2;
+  const thumbTravel = dims.trackW - dims.thumbSize - thumbInset * 2;
+  const trackColor = error ? 'var(--ds-color-error)' : (isChecked ? (COLOR_TOKENS[color] || COLOR_TOKENS.default) : 'var(--ds-color-border-secondary)');
+
+  const trackStyle: React.CSSProperties = {
+    position: 'relative',
+    display: 'inline-block',
+    width: dims.trackW,
+    height: dims.trackH,
+    borderRadius: dims.trackH,
+    background: trackColor,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    transition: 'background 200ms ease-out',
+    flexShrink: 0,
+  };
+
+  const thumbStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: thumbInset,
+    left: thumbInset,
+    width: dims.thumbSize,
+    height: dims.thumbSize,
+    borderRadius: '50%',
+    background: 'var(--ds-surface-control, var(--ds-color-text-on-primary))',
+    transform: isChecked ? `translateX(${thumbTravel}px)` : 'translateX(0)',
+    transition: 'transform 200ms ease-out',
+    boxShadow: 'var(--ds-elevation-1)',
+  };
 
   const displayLabel = label || children;
 
-  const containerClasses = [
-    'form-control',
-    disabled && 'opacity-50 cursor-not-allowed',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
   return (
-    <div className={containerClasses} style={style}>
+    <div className={className || ''} style={{ display: 'flex', flexDirection: 'column', width: '100%', ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}), ...style }}>
       <label
-        className={`label cursor-pointer gap-2 ${labelPlacement === 'start' ? 'flex-row-reverse justify-end' : 'justify-start'}`}
         htmlFor={inputId}
+        style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: 8, ...(labelPlacement === 'start' ? { flexDirection: 'row-reverse', justifyContent: 'flex-end' } : { justifyContent: 'flex-start' }) }}
       >
         <input
           id={inputId}
@@ -118,23 +132,26 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
           name={name}
           value={value}
           checked={isChecked}
+          style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}
           disabled={disabled}
           onChange={handleChange}
           autoFocus={autoFocus}
-          className={toggleClasses}
           aria-checked={isChecked}
           aria-invalid={error}
           {...rest}
         />
+        <span style={trackStyle} aria-hidden="true">
+          <span style={thumbStyle} />
+        </span>
         {(displayLabel || description) && (
-          <div className="flex flex-col">
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             {displayLabel && (
-              <span className={`label-text ${error ? 'text-error' : ''}`}>
+              <span style={{ fontSize: 14, fontWeight: 500, color: error ? 'var(--ds-color-error)' : 'var(--ds-color-text-primary)' }}>
                 {displayLabel}
               </span>
             )}
             {description && (
-              <span className="label-text-alt text-gray-500">
+              <span style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
                 {description}
               </span>
             )}

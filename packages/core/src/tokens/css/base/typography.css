@@ -80,8 +80,9 @@
   --ds-line-height-loose: 2;
 
   /* Contextual line heights */
-  --ds-line-height-body: var(--ds-line-height-normal);      /* 1.5 */
-  --ds-line-height-heading: var(--ds-line-height-tight);    /* 1.25 */
+  --ds-line-height-body: 1.6;                               /* Relaxed for readability */
+  --ds-line-height-heading: 1.2;                            /* Tight for premium headings */
+  --ds-line-height-label: 1.4;                              /* Balanced for labels/metadata */
   --ds-line-height-display: var(--ds-line-height-none);     /* 1 */
 
   /* ========================================================================
@@ -90,10 +91,21 @@
      ======================================================================== */
   --ds-letter-spacing-tighter: -0.05em;
   --ds-letter-spacing-tight: -0.025em;
+  --ds-letter-spacing-snug: -0.015em;
+  --ds-letter-spacing-subtle: -0.01em;
   --ds-letter-spacing-normal: 0;
   --ds-letter-spacing-wide: 0.025em;
   --ds-letter-spacing-wider: 0.05em;
   --ds-letter-spacing-widest: 0.1em;
+
+  /* Heading-specific tracking: larger sizes get tighter spacing
+     for the editorial, premium feel (Linear / Vercel / Stripe). */
+  --ds-letter-spacing-h1: -0.025em;
+  --ds-letter-spacing-h2: -0.02em;
+  --ds-letter-spacing-h3: -0.015em;
+  --ds-letter-spacing-h4: -0.01em;
+  --ds-letter-spacing-h5: 0;
+  --ds-letter-spacing-h6: 0;
 
   /* ========================================================================
      TEXT TRANSFORM
@@ -128,30 +140,36 @@
   --ds-text-display-2-line-height: var(--ds-line-height-none);
   --ds-text-display-2-letter-spacing: var(--ds-letter-spacing-tight);
 
-  /* Heading styles */
+  /* Heading styles - Premium typography with tighter tracking at larger sizes */
   --ds-text-heading-1-size: var(--ds-font-size-h1);
-  --ds-text-heading-1-weight: var(--ds-font-weight-heading);
-  --ds-text-heading-1-line-height: var(--ds-line-height-heading);
+  --ds-text-heading-1-weight: var(--ds-font-weight-bold);
+  --ds-text-heading-1-line-height: 1.1;
+  --ds-text-heading-1-letter-spacing: var(--ds-letter-spacing-h1);
 
   --ds-text-heading-2-size: var(--ds-font-size-h2);
-  --ds-text-heading-2-weight: var(--ds-font-weight-heading);
-  --ds-text-heading-2-line-height: var(--ds-line-height-heading);
+  --ds-text-heading-2-weight: var(--ds-font-weight-bold);
+  --ds-text-heading-2-line-height: 1.15;
+  --ds-text-heading-2-letter-spacing: var(--ds-letter-spacing-h2);
 
   --ds-text-heading-3-size: var(--ds-font-size-h3);
-  --ds-text-heading-3-weight: var(--ds-font-weight-heading);
-  --ds-text-heading-3-line-height: var(--ds-line-height-heading);
+  --ds-text-heading-3-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-3-line-height: 1.2;
+  --ds-text-heading-3-letter-spacing: var(--ds-letter-spacing-h3);
 
   --ds-text-heading-4-size: var(--ds-font-size-h4);
-  --ds-text-heading-4-weight: var(--ds-font-weight-heading);
-  --ds-text-heading-4-line-height: var(--ds-line-height-heading);
+  --ds-text-heading-4-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-4-line-height: 1.25;
+  --ds-text-heading-4-letter-spacing: var(--ds-letter-spacing-h4);
 
   --ds-text-heading-5-size: var(--ds-font-size-h5);
-  --ds-text-heading-5-weight: var(--ds-font-weight-heading);
-  --ds-text-heading-5-line-height: var(--ds-line-height-heading);
+  --ds-text-heading-5-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-5-line-height: 1.3;
+  --ds-text-heading-5-letter-spacing: var(--ds-letter-spacing-h5);
 
   --ds-text-heading-6-size: var(--ds-font-size-h6);
-  --ds-text-heading-6-weight: var(--ds-font-weight-heading);
-  --ds-text-heading-6-line-height: var(--ds-line-height-heading);
+  --ds-text-heading-6-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-6-line-height: 1.4;
+  --ds-text-heading-6-letter-spacing: var(--ds-letter-spacing-h6);
 
   /* Body styles */
   --ds-text-body-lg-size: var(--ds-font-size-lg);

@@ -225,10 +225,10 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
-    const getStatusClass = () => {
-      if (status === 'error') return 'textarea-error';
-      if (status === 'warning') return 'textarea-warning';
-      return '';
+    const getStatusBorderColor = () => {
+      if (status === 'error') return 'var(--ds-color-error)';
+      if (status === 'warning') return 'var(--ds-color-warning)';
+      return 'var(--ds-color-border)';
     };
 
     return (
@@ -243,7 +243,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
-          className={`textarea textarea-bordered w-full ${getStatusClass()}`}
+          style={{ width: '100%', border: `1px solid ${getStatusBorderColor()}`, borderRadius: 'var(--ds-radius-md)', padding: '8px 12px', fontSize: 14, background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', fontFamily: 'inherit', ...(autoSize ? { resize: 'none' as const } : undefined) }}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -251,7 +251,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           disabled={disabled}
           readOnly={readOnly}
           rows={typeof autoSize === 'object' ? autoSize.minRows || 1 : autoSize === true ? 1 : rows}
-          style={autoSize ? { resize: 'none' } : undefined}
           role="textbox"
           aria-multiline="true"
           aria-haspopup="listbox"
@@ -260,7 +259,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
 
         {isOpen && (
           <ul
-            className={`absolute z-50 w-full menu bg-base-100 rounded-box shadow-lg max-h-48 overflow-auto ${placement === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'} ${popupClassName || ''}`}
+            className={popupClassName || undefined}
+            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 4, maxHeight: 192, overflowY: 'auto', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', ...(placement === 'top' ? { bottom: '100%', marginBottom: 4 } : { top: '100%', marginTop: 4 }) }}
             role="listbox"
             aria-label="Mention suggestions"
           >
@@ -279,7 +279,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                 </li>
               ))
             ) : (
-              <li className="p-3 text-center text-base-content/50" role="option" aria-disabled="true">
+              <li className="p-3 text-center" role="option" aria-disabled="true" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {notFoundContent}
               </li>
             )}

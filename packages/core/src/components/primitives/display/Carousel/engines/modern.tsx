@@ -1,32 +1,16 @@
 /**
  * @fileoverview Carousel Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based carousel with utility-first styling.
- * Part of the Rottay Design System's display primitives collection.
+ * @description DS token inline-styled carousel with scroll-snap navigation.
  *
  * @remarks
- * This engine uses DaisyUI classes with Tailwind utilities
- * for a lightweight, theme-integrated carousel.
+ * All visual styling uses DS token CSS custom properties (`--ds-*`).
+ * Arrow buttons and dot indicators use inline styles, not DaisyUI classes.
  *
- * **Exported Components:**
- * - `Carousel` - Main carousel component
- *
- * **Implementation Details:**
- * - DaisyUI carousel classes
- * - Tailwind utility-first styling
+ * **Features:**
+ * - Scroll-snap based navigation
  * - Interval-based autoplay
  * - Imperative ref methods
- *
- * **Class Mappings:**
- * - `carousel` - Container class
- * - `carousel-vertical` - Vertical mode
- * - `carousel-item` - Slide wrapper
- * - `btn btn-circle btn-sm` - Arrow buttons
- * - `bg-primary`, `bg-base-300` - Dot colors
- *
- * **Advantages:**
- * - Lightweight CSS-only styling
- * - Automatic theme adaptation
- * - DaisyUI component classes
+ * - DS token theme adaptation
  * - Responsive-friendly
  *
  * @example Basic Usage
@@ -40,7 +24,7 @@
  * ```
  *
  * @see {@link Carousel} for the main component
- * @see {@link https://daisyui.com/components/carousel/} DaisyUI Carousel
+ * @see {@link Carousel} for the main component
  * @module Carousel/engines/modern
  * @category Display
  * @package @rottay/design-system
@@ -60,9 +44,9 @@ import type { CarouselProps, CarouselRef } from '../Carousel.types';
 import { CAROUSEL_DEFAULTS } from '../Carousel.types';
 
 /**
- * Modern Carousel - DaisyUI/Tailwind Implementation
+ * Modern Carousel - Token-driven Tailwind Implementation
  *
- * This implementation provides a carousel using DaisyUI and Tailwind CSS utilities.
+ * This implementation provides a carousel using Tailwind CSS utilities and DS token inline styles.
  * It offers a lightweight alternative with full customization through utility classes.
  *
  * @component
@@ -79,7 +63,7 @@ import { CAROUSEL_DEFAULTS } from '../Carousel.types';
  *
  * @param {CarouselProps} props - Component configuration props
  * @param {React.Ref<CarouselRef>} ref - Ref providing imperative carousel methods
- * @returns {React.ReactElement} Rendered DaisyUI carousel
+ * @returns {React.ReactElement} Rendered Modern carousel
  */
 export const Carousel = forwardRef<CarouselRef, CarouselProps>(
   (props, ref) => {
@@ -246,7 +230,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         {arrows && (
           <>
             <button
-              className="btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2 z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
+              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13, boxShadow: 'var(--ds-elevation-1)' }}
               onClick={prev}
               aria-label="Previous slide"
               type="button"
@@ -254,7 +239,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               {vertical ? '\u2191' : '\u2190'}
             </button>
             <button
-              className="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2 z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
+              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13, boxShadow: 'var(--ds-elevation-1)' }}
               onClick={next}
               aria-label="Next slide"
               type="button"
@@ -275,8 +261,13 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               <button
                 key={index}
                 className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentSlide ? 'bg-primary w-4' : 'bg-base-300'
+                  index === currentSlide ? 'w-4' : ''
                 }`}
+                style={{
+                  background: index === currentSlide
+                    ? 'var(--ds-color-primary)'
+                    : 'var(--ds-surface-panel)',
+                }}
                 onClick={() => goTo(index)}
                 aria-label={`Go to slide ${index + 1}`}
                 aria-selected={index === currentSlide}

@@ -1,7 +1,7 @@
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the ConfirmDialog overlay component.
- * Renders a confirmation modal using DaisyUI `modal` classes, with variant-specific
- * button styling (btn-primary / btn-warning / btn-error) and a built-in loading spinner.
+ * @fileoverview Modern (Token-driven/Tailwind) engine for the ConfirmDialog overlay component.
+ * Renders a confirmation modal using DS token inline styles, with variant-specific
+ * button styling (DS token inline styles for primary / warning / error) and a built-in loading spinner.
  *
  * @example
  * ```tsx
@@ -21,11 +21,11 @@ import React, { useCallback, useEffect } from 'react';
 import type { ConfirmDialogProps } from '../ConfirmDialog.types';
 import { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS } from '../ConfirmDialog.types';
 
-/** Maps variant to the DaisyUI button class applied on the confirm button. */
-const VARIANT_BTN_CLASS: Record<string, string> = {
-  info: 'btn-primary',
-  warning: 'btn-warning',
-  danger: 'btn-error',
+/** Maps variant to DS token inline styles applied on the confirm button. */
+const VARIANT_BTN_STYLE: Record<string, React.CSSProperties> = {
+  info: { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' },
+  warning: { background: 'var(--ds-color-warning)', color: 'var(--ds-color-text-on-primary)' },
+  danger: { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' },
 };
 
 /** Maps each variant to an inline SVG so the component stays icon-library-free. */
@@ -54,14 +54,14 @@ const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
 };
 
 /**
- * ConfirmDialog implementation using DaisyUI modal and button classes.
+ * ConfirmDialog implementation using DS token inline styles for modal and buttons.
  *
  * Body scroll is locked while the dialog is open. The confirm button receives
- * a variant-specific DaisyUI class (e.g. `btn-error` for danger) and shows
- * a DaisyUI spinner when `loading` is true. Backdrop click dismisses via `onCancel`.
+ * variant-specific DS token inline styles (e.g. error background for danger) and shows
+ * a CSS spinner when `loading` is true. Backdrop click dismisses via `onCancel`.
  *
  * @param props - {@link ConfirmDialogProps} shared across all engines.
- * @returns A DaisyUI-styled modal element, or an empty fragment when closed.
+ * @returns A DS token-styled modal element, or an empty fragment when closed.
  */
 export default function ModernConfirmDialog(props: ConfirmDialogProps): React.ReactElement {
   const {
@@ -83,7 +83,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
   const colors = VARIANT_COLORS[variant];
   // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
-  const btnClass = VARIANT_BTN_CLASS[variant];
+  const btnStyle = VARIANT_BTN_STYLE[variant] ?? VARIANT_BTN_STYLE.info;
 
   const handleConfirm = useCallback(() => {
     onConfirm?.();
@@ -103,13 +103,34 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
 
   return (
     <div
-      className={`modal modal-open ${className}`}
-      style={style}
+      className={className}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 50,
+        ...style,
+      }}
       data-testid={dataTestId}
     >
       {/* Backdrop delegates dismiss to onCancel (always allowed, unlike AlertDialog) */}
-      <div className="modal-backdrop" onClick={onCancel} />
-      <div className="modal-box max-w-sm">
+      <div
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }}
+        onClick={onCancel}
+      />
+      <div
+        style={{
+          position: 'relative',
+          maxWidth: 384,
+          width: '100%',
+          padding: 24,
+          borderRadius: 'var(--ds-radius-lg)',
+          background: 'var(--ds-surface-card)',
+          boxShadow: 'var(--ds-elevation-3)',
+        }}
+      >
         <div className="flex gap-3">
           {displayIcon && (
             <div className="flex-shrink-0 mt-0.5" style={{ color: colors.icon }}>
@@ -121,27 +142,59 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
               <h3 className="font-bold text-lg mb-2">{title}</h3>
             )}
             {description && (
-              <p className="text-sm text-base-content/70">{description}</p>
+              <p className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</p>
             )}
           </div>
         </div>
-        {/* DaisyUI modal-action provides right-aligned flex container */}
-        <div className="modal-action">
+        {/* Action buttons -- right-aligned flex container */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
           <button
             type="button"
-            className="btn btn-ghost"
             onClick={onCancel}
             disabled={loading}
+            style={{
+              height: 36,
+              padding: '0 16px',
+              borderRadius: 'var(--ds-radius-md)',
+              border: 'none',
+              background: 'transparent',
+              color: 'var(--ds-color-text-primary)',
+              cursor: 'pointer',
+              fontSize: 14,
+            }}
           >
             {cancelLabel}
           </button>
           <button
             type="button"
-            className={`btn ${btnClass} ${loading ? 'loading' : ''}`}
             onClick={handleConfirm}
             disabled={loading}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              height: 36,
+              padding: '0 16px',
+              borderRadius: 'var(--ds-radius-md)',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: 14,
+              ...btnStyle,
+            }}
           >
-            {loading && <span className="loading loading-spinner loading-sm" />}
+            {loading && (
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 16,
+                  height: 16,
+                  border: '2px solid currentColor',
+                  borderTopColor: 'transparent',
+                  borderRadius: '50%',
+                  animation: 'ds-spin 0.6s linear infinite',
+                }}
+              />
+            )}
             {confirmLabel}
           </button>
         </div>

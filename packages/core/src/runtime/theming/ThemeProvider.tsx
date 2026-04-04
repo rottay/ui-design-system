@@ -521,15 +521,15 @@ const THEME_LINK_ID_PREFIX = 'tenant-theme-';
 // we only include the ones that prevent a blank/broken UI.
 const ROTTAY_EMERGENCY_TOKENS = `
   :root {
-    --ds-color-primary: #0066CC;
-    --ds-color-primary-500: #0066CC;
-    --ds-color-secondary: #6B6BD4;
-    --ds-color-secondary-500: #6B6BD4;
-    --ds-color-bg-primary: #FFFFFF;
-    --ds-color-bg-secondary: #FAFAFA;
-    --ds-color-border: #E5E5E5;
-    --ds-color-text-primary: #171717;
-    --ds-color-text-secondary: #525252;
+    --ds-color-primary: #FFFFFF;
+    --ds-color-primary-500: #FFFFFF;
+    --ds-color-secondary: #A0A0A5;
+    --ds-color-secondary-500: #A0A0A5;
+    --ds-color-bg-primary: #0C0C0E;
+    --ds-color-bg-secondary: #131316;
+    --ds-color-border: #2A2A2F;
+    --ds-color-text-primary: #ECECEC;
+    --ds-color-text-secondary: #A0A0A5;
     --ds-text-primary: var(--ds-color-text-primary);
     --ds-text-secondary: var(--ds-color-text-secondary);
     --ds-bg-primary: var(--ds-color-bg-primary);
@@ -1076,6 +1076,22 @@ export function ThemeProvider({
       rootElement.setAttribute('data-theme', resolvedTheme);
       rootElement.classList.toggle('dark', resolvedTheme === 'dark');
       rootElement.style.colorScheme = resolvedTheme === 'dark' ? 'dark' : 'light';
+
+      if (process.env.NODE_ENV === 'development') {
+        const cs = getComputedStyle(rootElement);
+        console.log('[DS:Theme] applied', {
+          resolvedTheme,
+          tenant,
+          dataTenant: rootElement.getAttribute('data-tenant'),
+          dataTheme: rootElement.getAttribute('data-theme'),
+          dataEngine: rootElement.getAttribute('data-engine'),
+          bgPrimary: cs.getPropertyValue('--ds-color-bg-primary').trim(),
+          border: cs.getPropertyValue('--ds-color-border').trim(),
+          borderSubtle: cs.getPropertyValue('--ds-color-border-subtle').trim(),
+          textPrimary: cs.getPropertyValue('--ds-color-text-primary').trim(),
+          surfaceCard: cs.getPropertyValue('--ds-surface-card').trim(),
+        });
+      }
     };
 
     applyThemeToDom();

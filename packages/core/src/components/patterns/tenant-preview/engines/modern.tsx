@@ -1,12 +1,14 @@
 'use client';
 
 /**
- * @fileoverview TenantPreview -- Modern engine (DaisyUI / Tailwind).
- * Renders a live preview of tenant branding inside a DaisyUI card.
+ * @fileoverview TenantPreview -- Modern engine (DS tokens only).
+ * Renders a live preview of tenant branding inside a token-styled card.
  * Injects scoped CSS variables via a `<style>` tag so the preview
  * accurately reflects the tenant's color scheme. Shows palette swatches,
- * sample DaisyUI components (buttons, card, input, badges, table), and
+ * sample DS-token components (buttons, card, input, badges, table), and
  * personality token metadata in a responsive grid.
+ *
+ * Zero DaisyUI / Tailwind utility classes -- all styling via inline DS tokens.
  *
  * @example
  * <ModernTenantPreview
@@ -24,6 +26,43 @@ import { generateTenantCss } from '../../../../runtime/tenancy/storage/static/ge
 
 /** Default component samples shown when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
+
+/* ------------------------------------------------------------------ */
+/*  Shared inline style fragments                                     */
+/* ------------------------------------------------------------------ */
+
+const sectionLabelStyle: React.CSSProperties = {
+  fontSize: 12,
+  fontWeight: 600,
+  textTransform: 'uppercase',
+  letterSpacing: '0.05em',
+  opacity: 0.5,
+  marginBottom: 12,
+};
+
+const subLabelStyle: React.CSSProperties = {
+  fontSize: 12,
+  opacity: 0.6,
+  marginBottom: 8,
+};
+
+const badgeBaseStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: 20,
+  padding: '0 8px',
+  fontSize: 11,
+  fontWeight: 500,
+  borderRadius: 'var(--ds-radius-full)',
+  border: 'none',
+  lineHeight: 1,
+  whiteSpace: 'nowrap',
+};
+
+/* ------------------------------------------------------------------ */
+/*  Color helpers                                                     */
+/* ------------------------------------------------------------------ */
 
 /** Parses hex color to RGB; handles shorthand (#abc) and full (#aabbcc) */
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
@@ -72,8 +111,8 @@ function getContrastColor(hex: string): string {
 }
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the TenantPreview pattern.
- * Wraps everything in a DaisyUI card and injects scoped CSS via a
+ * Modern (DS-token) implementation of the TenantPreview pattern.
+ * Wraps everything in a token-styled card and injects scoped CSS via a
  * `<style>` tag with `data-tenant` scoping on the container.
  *
  * @param props - See {@link TenantPreviewProps} for the full prop contract.
@@ -136,24 +175,22 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
   return (
     <div
       ref={previewRef}
-      className={`ds-pattern-tenant-preview ds-engine-modern card bg-base-100 shadow-md ${className ?? ''}`}
-      style={style}
+      className={`ds-pattern-tenant-preview ds-engine-modern ${className ?? ''}`}
+      style={{ background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-1)', ...style }}
     >
       <style dangerouslySetInnerHTML={{ __html: previewCss }} />
 
-      <div className="card-body gap-6">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: 20 }}>
         {/* Header */}
-        <div className="flex items-center gap-3 pb-4 border-b border-base-200">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 16, borderBottom: '1px solid var(--ds-color-border)' }}>
           {creationConfig.logo && (
-            <div className="avatar">
-              <div className="w-8 rounded-lg">
-                <img src={creationConfig.logo} alt={creationConfig.name} />
-              </div>
+            <div style={{ width: 32, height: 32, borderRadius: 'var(--ds-radius-md)', overflow: 'hidden', flexShrink: 0 }}>
+              <img src={creationConfig.logo} alt={creationConfig.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           )}
           <div>
-            <h2 className="card-title text-lg">{creationConfig.name}</h2>
-            <p className="text-xs opacity-60">
+            <h2 style={{ fontSize: 18, fontWeight: 600, lineHeight: 1.3, margin: 0, color: 'var(--ds-color-text-primary)' }}>{creationConfig.name}</h2>
+            <p style={{ fontSize: 12, opacity: 0.6, margin: 0, color: 'var(--ds-color-text-secondary)' }}>
               {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
             </p>
           </div>
@@ -162,22 +199,21 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
         {/* Color Palette */}
         {showColorPalette && (
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">
+            <div style={sectionLabelStyle}>
               Color Palette
             </div>
-            <div className="flex flex-col gap-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div>
-                <div className="text-xs opacity-60 mb-1">Primary</div>
-                <div className="flex rounded-lg overflow-hidden">
+                <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>Primary</div>
+                <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-md)', overflow: 'hidden' }}>
                   {primaryPalette.map(({ step, color }) => (
                     <div
                       key={step}
-                      className="flex-1 h-8 flex items-center justify-center"
                       title={`${step}: ${color}`}
-                      style={{ backgroundColor: color }}
+                      style={{ flex: 1, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: color }}
                     >
                       {step === 500 && (
-                        <span className="text-[9px] font-bold" style={{ color: primaryFg }}>500</span>
+                        <span style={{ fontSize: 9, fontWeight: 700, color: primaryFg }}>500</span>
                       )}
                     </div>
                   ))}
@@ -185,14 +221,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
               </div>
               {secondaryPalette && (
                 <div>
-                  <div className="text-xs opacity-60 mb-1">Secondary</div>
-                  <div className="flex rounded-lg overflow-hidden">
+                  <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>Secondary</div>
+                  <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-md)', overflow: 'hidden' }}>
                     {secondaryPalette.map(({ step, color }) => (
                       <div
                         key={step}
-                        className="flex-1 h-6"
                         title={`${step}: ${color}`}
-                        style={{ backgroundColor: color }}
+                        style={{ flex: 1, height: 24, backgroundColor: color }}
                       />
                     ))}
                   </div>
@@ -202,52 +237,50 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
           </div>
         )}
 
-        {/* Component Samples -- interactive (but non-functional) DaisyUI elements
+        {/* Component Samples -- non-functional DS-token elements
             styled with the tenant's primary color to demonstrate real-world appearance.
             Each sample type is gated behind the components array for selective rendering. */}
         {components.length > 0 && (
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">
+            <div style={sectionLabelStyle}>
               Component Preview
             </div>
-            <div className="flex flex-col gap-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-              {/* Buttons -- inline style overrides DaisyUI's default palette with tenant color */}
+              {/* Buttons -- inline token styles with tenant color */}
               {components.includes('button') && (
                 <div>
-                  <div className="text-xs opacity-60 mb-2">Buttons</div>
-                  <div className="flex gap-2 flex-wrap">
+                  <div style={subLabelStyle}>Buttons</div>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <button
                       type="button"
-                      className="btn btn-sm"
-                      style={{ backgroundColor: primary500, color: primaryFg, borderColor: primary500 }}
+                      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', backgroundColor: primary500, color: primaryFg }}
                     >
                       Primary
                     </button>
                     <button
                       type="button"
-                      className="btn btn-sm btn-outline"
-                      style={{ color: primary500, borderColor: primary500 }}
+                      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: `1px solid ${primary500}`, cursor: 'pointer', background: 'transparent', color: primary500 }}
                     >
                       Outlined
                     </button>
-                    <button type="button" className="btn btn-sm btn-ghost">
+                    <button type="button" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', background: 'transparent', color: 'var(--ds-color-text-primary)' }}>
                       Default
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* Card -- nested DaisyUI card with accent bar in tenant primary color */}
+              {/* Card -- token-styled card with accent bar in tenant primary color */}
               {components.includes('card') && (
                 <div>
-                  <div className="text-xs opacity-60 mb-2">Card</div>
-                  <div className="card card-compact bg-base-100 shadow-sm border border-base-200">
-                    <div className="card-body">
+                  <div style={subLabelStyle}>Card</div>
+                  <div style={{ background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', boxShadow: 'var(--ds-elevation-1)' }}>
+                    <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
                       {/* Accent bar reinforces brand identity within card containers */}
-                      <div className="h-1 rounded-full mb-2" style={{ backgroundColor: primary500 }} />
-                      <h3 className="font-semibold text-sm">Sample Card Title</h3>
-                      <p className="text-xs opacity-60">
+                      <div style={{ height: 4, borderRadius: 'var(--ds-radius-full)', marginBottom: 8, backgroundColor: primary500 }} />
+                      <h3 style={{ fontSize: 14, fontWeight: 600, margin: 0, color: 'var(--ds-color-text-primary)' }}>Sample Card Title</h3>
+                      <p style={{ fontSize: 12, opacity: 0.6, margin: 0, color: 'var(--ds-color-text-secondary)' }}>
                         This card demonstrates the tenant branding applied to a container component.
                       </p>
                     </div>
@@ -257,65 +290,73 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
 
               {components.includes('input') && (
                 <div>
-                  <div className="text-xs opacity-60 mb-2">Input</div>
+                  <div style={subLabelStyle}>Input</div>
                   <input
                     type="text"
                     placeholder="Type something..."
                     readOnly
-                    className="input input-bordered input-sm w-full max-w-xs"
+                    style={{
+                      height: 32,
+                      padding: '0 12px',
+                      fontSize: 13,
+                      border: '1px solid var(--ds-color-border)',
+                      borderRadius: 'var(--ds-radius-md)',
+                      background: 'var(--ds-surface-card)',
+                      color: 'var(--ds-color-text-primary)',
+                      outline: 'none',
+                      width: '100%',
+                      maxWidth: 320,
+                    }}
                   />
                 </div>
               )}
 
-              {/* Badge -- primary badge uses tenant color; warning/ghost use DaisyUI defaults */}
+              {/* Badge -- primary badge uses tenant color; warning and neutral use DS tokens */}
               {components.includes('badge') && (
                 <div>
-                  <div className="text-xs opacity-60 mb-2">Badges</div>
-                  <div className="flex gap-2 flex-wrap">
-                    {/* Primary badge overrides DaisyUI color with tenant's primary */}
+                  <div style={subLabelStyle}>Badges</div>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    {/* Primary badge with tenant's primary color */}
                     <span
-                      className="badge badge-sm"
-                      style={{ backgroundColor: primary500, color: primaryFg, borderColor: primary500 }}
+                      style={{ ...badgeBaseStyle, backgroundColor: primary500, color: primaryFg }}
                     >
                       Active
                     </span>
-                    <span className="badge badge-sm badge-warning">Pending</span>
-                    <span className="badge badge-sm badge-ghost">Draft</span>
+                    <span style={{ ...badgeBaseStyle, background: 'color-mix(in srgb, var(--ds-color-warning) 15%, transparent)', color: 'var(--ds-color-warning)' }}>Pending</span>
+                    <span style={{ ...badgeBaseStyle, background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' }}>Draft</span>
                   </div>
                 </div>
               )}
 
-              {/* Table -- DaisyUI table with inline status badges using 8% opacity primary */}
+              {/* Table -- DS-token table with inline status badges */}
               {components.includes('table') && (
                 <div>
-                  <div className="text-xs opacity-60 mb-2">Table</div>
-                  <div className="overflow-x-auto">
-                    <table className="table table-sm">
+                  <div style={subLabelStyle}>Table</div>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                       <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Status</th>
-                          <th className="text-right">Amount</th>
+                        <tr style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
+                          <th style={{ textAlign: 'left', padding: '8px 12px', fontWeight: 600, fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Name</th>
+                          <th style={{ textAlign: 'left', padding: '8px 12px', fontWeight: 600, fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Status</th>
+                          <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Amount</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>Project Alpha</td>
-                          <td>
-                            {/* "18" hex suffix = ~9% opacity for a subtle colored background */}
+                        <tr style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
+                          <td style={{ padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>Project Alpha</td>
+                          <td style={{ padding: '8px 12px' }}>
                             <span
-                              className="badge badge-sm"
-                              style={{ backgroundColor: `${primary500}18`, color: primary500, border: 'none' }}
+                              style={{ ...badgeBaseStyle, backgroundColor: `${primary500}18`, color: primary500 }}
                             >
                               Active
                             </span>
                           </td>
-                          <td className="text-right">$12,400</td>
+                          <td style={{ textAlign: 'right', padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>$12,400</td>
                         </tr>
                         <tr>
-                          <td>Project Beta</td>
-                          <td><span className="badge badge-sm badge-ghost">Pending</span></td>
-                          <td className="text-right">$8,200</td>
+                          <td style={{ padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>Project Beta</td>
+                          <td style={{ padding: '8px 12px' }}><span style={{ ...badgeBaseStyle, background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' }}>Pending</span></td>
+                          <td style={{ textAlign: 'right', padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>$8,200</td>
                         </tr>
                       </tbody>
                     </table>
@@ -326,14 +367,14 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
           </div>
         )}
 
-        {/* Personality Info -- responsive grid (2 cols on mobile, 4 on sm+) showing
-            key personality tokens so designers can verify the preset configuration. */}
+        {/* Personality Info -- grid showing key personality tokens
+            so designers can verify the preset configuration. */}
         {showPersonalityInfo && (
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">
+            <div style={sectionLabelStyle}>
               Personality: {personalityInfo.preset}
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 8 }}>
               {[
                 { label: 'Animation', value: personalityInfo.tokens.animation?.entrance ?? 'fade' },
                 { label: 'Intensity', value: String(personalityInfo.tokens.animation?.intensity ?? 0.5) },
@@ -344,9 +385,9 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 { label: 'Hover Lift', value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px` },
                 { label: 'Accent Bar', value: personalityInfo.tokens.accent?.barPosition ?? 'top' },
               ].map(({ label, value }) => (
-                <div key={label} className="bg-base-200 rounded-md p-2">
-                  <div className="text-[11px] opacity-50">{label}</div>
-                  <div className="text-xs font-medium">{value}</div>
+                <div key={label} style={{ borderRadius: 'var(--ds-radius-md)', padding: 8, background: 'var(--ds-surface-inset)' }}>
+                  <div style={{ fontSize: 11, opacity: 0.5 }}>{label}</div>
+                  <div style={{ fontSize: 12, fontWeight: 500 }}>{value}</div>
                 </div>
               ))}
             </div>

@@ -1,7 +1,20 @@
 /**
- * @fileoverview Modern engine for Textarea, built with DaisyUI's `textarea` utility classes.
- * Produces a native `<textarea>` element styled through class composition, keeping the
- * bundle lightweight compared to Classic (no Ant Design runtime).
+ * @fileoverview Modern engine for Textarea - Rottay Design System
+ * @description Premium textarea implementation with pure DS token inline styles.
+ * No DaisyUI dependency -- all styling via CSS custom properties for full theme control.
+ *
+ * @remarks
+ * **Visual Spec:**
+ * - Border: 1px solid `--ds-color-border`, radius `--ds-radius-md`
+ * - Background: `--ds-color-bg-input` (falls back to `--ds-surface-control`)
+ * - Text: `--ds-color-text-primary`, placeholder `--ds-color-text-muted`
+ * - Focus: 2px outline `--ds-color-primary` with offset, `:focus-visible` only
+ * - Error: red border + error message support via status prop
+ * - Warning: amber border, Success: green border
+ * - Disabled: muted background, reduced opacity 0.5
+ * - Resize handle: vertical only, subtle styling
+ * - Touch target: min 44px height ensured
+ * - Transitions: 150ms ease-out on border/outline
  *
  * @example
  * ```tsx
@@ -13,44 +26,53 @@
  * @package @rottay/design-system
  */
 
-import React from 'react';
+'use client';
+
+import React, { useState, useCallback, useRef } from 'react';
 import type { TextareaProps } from '../Textarea.types';
 import { TEXTAREA_DEFAULTS } from '../Textarea.types';
 
-/** DaisyUI size modifier classes for textarea. */
-const SIZE_MAP = {
-  sm: 'textarea-sm',
-  md: 'textarea-md',
-  lg: 'textarea-lg',
+/* ------------------------------------------------------------------ */
+/*  Size config                                                        */
+/* ------------------------------------------------------------------ */
+
+interface SizeConfig {
+  fontSize: number;
+  lineHeight: string;
+  paddingV: number;
+  paddingH: number;
+}
+
+const SIZE_CONFIG: Record<string, SizeConfig> = {
+  sm: { fontSize: 13, lineHeight: '18px', paddingV: 6, paddingH: 10 },
+  md: { fontSize: 14, lineHeight: '20px', paddingV: 8, paddingH: 12 },
+  lg: { fontSize: 16, lineHeight: '24px', paddingV: 10, paddingH: 14 },
 };
 
-/** DaisyUI status color classes. Maps DS status names to DaisyUI equivalents. */
-const STATUS_MAP = {
-  default: '',
-  error: 'textarea-error',
-  warning: 'textarea-warning',
-  success: 'textarea-success',
+/* ------------------------------------------------------------------ */
+/*  Status colors                                                      */
+/* ------------------------------------------------------------------ */
+
+const STATUS_BORDER: Record<string, string> = {
+  default: 'var(--ds-color-border)',
+  error: 'var(--ds-color-error)',
+  warning: 'var(--ds-color-warning)',
+  success: 'var(--ds-color-success)',
 };
+
+/* ------------------------------------------------------------------ */
+/*  Component                                                          */
+/* ------------------------------------------------------------------ */
 
 /**
- * DaisyUI variant classes. Only 'outlined' has a specific class (`textarea-bordered`);
- * 'filled' and 'borderless' rely on default / custom styling.
- */
-const VARIANT_MAP = {
-  outlined: 'textarea-bordered',
-  filled: '',
-  borderless: '',
-};
-
-/**
- * Modern (DaisyUI) implementation of Textarea.
+ * Modern (pure DS tokens) implementation of Textarea.
  *
- * Composes DaisyUI classes for size, variant, and status onto a native `<textarea>`.
- * Does not support autoSize, showCount, or allowClear -- use Classic engine for those.
+ * All styling uses inline styles with DS CSS custom properties.
+ * Supports size, variant, status, disabled, and readOnly props.
  * The onChange signature is normalized to `(value, event)` for DS consistency.
  *
  * @param props - Standard TextareaProps shared across all engines.
- * @returns A native textarea element with DaisyUI class composition.
+ * @returns A styled native textarea element.
  */
 export default function ModernTextarea(props: TextareaProps): React.ReactElement {
   const {
@@ -77,27 +99,88 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
     ...rest
   } = props;
 
-  // Normalize onChange to DS convention: (value, event) instead of just (event)
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (onChange) {
       onChange(e.target.value, e);
     }
-  };
+  }, [onChange]);
 
-  // Assemble DaisyUI classes -- filter(Boolean) drops empty strings from maps
-  const classes = [
-    'textarea',
-    SIZE_MAP[size!],
-    VARIANT_MAP[variant!],
-    STATUS_MAP[status!],
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  }, [onFocus]);
+
+  const handleBlur = useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  }, [onBlur]);
+
+  /* -- Computed styles --------------------------------------------- */
+  const sizeKey = size || 'md';
+  const cfg = SIZE_CONFIG[sizeKey] || SIZE_CONFIG.md;
+  const statusKey = status || 'default';
+  const borderColor = STATUS_BORDER[statusKey] || STATUS_BORDER.default;
+
+  const isError = statusKey === 'error';
+  const isWarning = statusKey === 'warning';
+  const isSuccess = statusKey === 'success';
+
+  const isBorderless = variant === 'borderless';
+  const isFilled = variant === 'filled';
+
+  const transitionTiming = '150ms ease-out';
+
+  const backgroundColor = (() => {
+    if (disabled) return 'var(--ds-color-bg-disabled, var(--ds-color-bg-secondary))';
+    if (isFilled) return 'var(--ds-color-bg-input, var(--ds-surface-control, var(--ds-color-bg-secondary)))';
+    return 'var(--ds-color-bg-input, var(--ds-surface-control, transparent))';
+  })();
+
+  const computedBorderColor = (() => {
+    if (isBorderless) return 'transparent';
+    if (isFocused && !disabled) {
+      if (isError) return 'var(--ds-color-error)';
+      if (isWarning) return 'var(--ds-color-warning)';
+      if (isSuccess) return 'var(--ds-color-success)';
+      return 'var(--ds-color-primary)';
+    }
+    return borderColor;
+  })();
+
+  const textareaStyle: React.CSSProperties = {
+    display: 'block',
+    width: '100%',
+    minHeight: 44,
+    fontSize: cfg.fontSize,
+    lineHeight: cfg.lineHeight,
+    fontFamily: 'inherit',
+    color: disabled ? 'var(--ds-color-text-disabled)' : 'var(--ds-color-text-primary)',
+    backgroundColor,
+    border: `1px solid ${computedBorderColor}`,
+    borderRadius: 'var(--ds-radius-md)',
+    padding: `${cfg.paddingV}px ${cfg.paddingH}px`,
+    resize: 'vertical',
+    transition: `border-color ${transitionTiming}, outline-color ${transitionTiming}, background-color ${transitionTiming}`,
+    outline: 'none',
+    boxSizing: 'border-box',
+    ...(isFocused && !disabled && {
+      outline: `2px solid ${isError ? 'var(--ds-color-error)' : isWarning ? 'var(--ds-color-warning)' : isSuccess ? 'var(--ds-color-success)' : 'var(--ds-color-primary)'}`,
+      outlineOffset: '-1px',
+    }),
+    ...(disabled && {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    }),
+    ...style,
+  };
 
   return (
     <textarea
-      className={classes}
+      ref={textareaRef}
+      className={className}
       placeholder={placeholder}
       value={value}
       defaultValue={defaultValue}
@@ -107,13 +190,14 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
       maxLength={maxLength}
       rows={rows}
       onChange={handleChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      style={style}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      style={textareaStyle}
       name={name}
       id={id}
       autoComplete={autoComplete}
       autoFocus={autoFocus}
+      aria-invalid={isError || undefined}
       {...rest}
     />
   );

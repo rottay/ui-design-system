@@ -92,8 +92,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     'inline-block',
     'overflow-hidden',
     radiusClass,
-    bordered && 'border border-base-300',
-    shadow && 'shadow-md',
+    bordered && 'border',
     (onClick || zoomable) && 'cursor-pointer',
     'transition-all',
     'duration-300',
@@ -129,13 +128,16 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     width: typeof width === 'number' ? `${width}px` : width || 'auto',
     height: typeof height === 'number' ? `${height}px` : height || 'auto',
     aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
+    ...(bordered && { borderColor: 'var(--ds-color-border)' }),
+    ...(shadow && { boxShadow: 'var(--ds-elevation-2)' }),
     ...style,
   };
 
   // Inline SVG used when no consumer fallback is provided and the image fails
   const DefaultFallbackIcon = () => (
     <svg
-      className="w-12 h-12 text-base-content/30"
+      className="w-12 h-12"
+      style={{ color: 'var(--ds-color-text-secondary)' }}
       viewBox="0 0 48 48"
       fill="none"
       aria-hidden="true"
@@ -159,16 +161,22 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     >
       {/* Loading Placeholder */}
       {status === 'loading' && (
-        <div className={`absolute inset-0 flex items-center justify-center bg-base-200 ${radiusClass}`}>
+        <div
+          className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
+          style={{ background: 'var(--ds-surface-inset)' }}
+        >
           {placeholder || (
-            <div className="animate-pulse w-full h-full bg-base-300" />
+            <div className="animate-pulse w-full h-full" style={{ background: 'var(--ds-surface-panel)' }} />
           )}
         </div>
       )}
 
       {/* Error Fallback */}
       {status === 'error' && (
-        <div className={`absolute inset-0 flex items-center justify-center bg-base-200 text-base-content/50 ${radiusClass}`}>
+        <div
+          className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
+          style={{ background: 'var(--ds-surface-inset)', color: 'var(--ds-color-text-secondary)' }}
+        >
           {fallback || <DefaultFallbackIcon />}
         </div>
       )}

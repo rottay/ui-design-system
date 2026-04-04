@@ -2,13 +2,13 @@
 
 /**
  * @fileoverview Splitter Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Splitter compound component.
+ * @description Modern (token-driven) implementation of the Splitter compound component.
  * Uses Tailwind CSS utilities with custom mouse event handling for drag-to-resize.
  *
  * @remarks
  * The Modern engine provides:
  * - Tailwind CSS styled panels with `flex` layout
- * - Custom gutter with `bg-base-300 hover:bg-primary` styling
+ * - Custom gutter with DS token surface and primary color styling
  * - Mouse event-based drag handling for resizing
  * - Percentage-based panel sizing
  * - Size constraints via min/max props
@@ -84,8 +84,8 @@ Panel.displayName = 'Splitter.Panel.Modern';
 /**
  * Modern engine implementation of the Splitter container.
  * Manages panel sizes via React state and handles drag-to-resize through
- * document-level mouse events. Gutter elements are styled with DaisyUI/Tailwind
- * classes (bg-base-300, hover:bg-primary) for consistent theming.
+ * document-level mouse events. Gutter elements are styled with DS token inline
+ * styles (--ds-surface-panel, --ds-color-primary on hover) for consistent theming.
  *
  * @param props - Splitter configuration (layout direction, resize callbacks)
  * @returns A flex container with interleaved gutter drag handles
@@ -189,9 +189,10 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
             {/* Render a gutter drag handle between each pair of panels */}
             {index < childArray.length - 1 && (
               <div
-                className={`flex-shrink-0 bg-base-300 hover:bg-primary transition-colors ${
+                className={`flex-shrink-0 transition-colors ${
                   isVertical ? 'h-2 cursor-row-resize' : 'w-2 cursor-col-resize'
                 }`}
+                style={{ background: 'var(--ds-surface-panel)' }}
                 onMouseDown={handleMouseDown(index)}
               />
             )}

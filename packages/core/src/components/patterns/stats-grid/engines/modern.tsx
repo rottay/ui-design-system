@@ -1,12 +1,15 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the StatsGrid pattern.
+ * @fileoverview Modern engine for the StatsGrid pattern.
  *
- * Implements the same stat-card grid as the Classic engine but using DaisyUI
- * utility classes and Tailwind CSS. Cards are composed from `card`, `card-body`,
- * and `glass` DaisyUI classes. The loading skeleton uses Tailwind's
- * `animate-pulse` for a CSS-only shimmer effect without additional JS.
+ * Premium stat-card grid with:
+ * - Clear number hierarchy (large bold value, muted label, colored trend)
+ * - Responsive auto-filling grid layout
+ * - Animated value count-up with cubic ease-out
+ * - Premium shimmer skeleton with card-shaped placeholders
+ * - Mini SVG sparkline charts for trend visualization
+ * - All styling via DS tokens -- zero hardcoded colors
  *
  * @example
  * <ModernStatsGrid
@@ -24,11 +27,15 @@ import type { StatsGridProps } from '../StatsGrid.types';
 import type { StatDef } from '../../types';
 import { resolveStatsGridMotion } from '../personality';
 
+/* ---------------------------------------------------------------------------
+ * Sparkline
+ * --------------------------------------------------------------------------- */
+
 /**
  * Converts raw numeric data into SVG polyline coordinates for a mini sparkline.
  * Division-by-zero is guarded by `|| 1` when min equals max.
  */
-function normalizeSparkline(data: number[], width = 80, height = 30): string {
+function normalizeSparkline(data: number[], width = 80, height = 28): string {
   const min = Math.min(...data);
   const max = Math.max(...data);
   const range = max - min || 1;
@@ -41,22 +48,45 @@ function normalizeSparkline(data: number[], width = 80, height = 30): string {
     .join(' ');
 }
 
-/** Tiny SVG sparkline chart rendered below a stat value to visualize trends. */
-function Sparkline({ data, color }: { data: number[]; color?: string }) {
+/** Tiny SVG sparkline chart with gradient fill beneath the line. */
+function Sparkline({ data, color, id }: { data: number[]; color?: string; id: string }) {
   if (!data || data.length < 2) return null;
+  const strokeColor = color || 'var(--ds-color-primary-500)';
+  const points = normalizeSparkline(data);
+  // Build closed polygon for gradient fill (line + bottom edge)
+  const fillPoints = `0,28 ${points} 80,28`;
+  const gradientId = `spark-grad-${id}`;
+
   return (
-    <svg viewBox="0 0 80 30" width={80} height={30} className="mt-2">
+    <svg
+      viewBox="0 0 80 28"
+      width={80}
+      height={28}
+      style={{ marginTop: 8, display: 'block', overflow: 'visible' }}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={strokeColor} stopOpacity={0.2} />
+          <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <polygon points={fillPoints} fill={`url(#${gradientId})`} />
       <polyline
-        points={normalizeSparkline(data)}
+        points={points}
         fill="none"
-        stroke={color || 'var(--ds-color-primary-500)'}
-        strokeWidth={2}
+        stroke={strokeColor}
+        strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
   );
 }
+
+/* ---------------------------------------------------------------------------
+ * Animated value hook
+ * --------------------------------------------------------------------------- */
 
 /**
  * Animates a numeric value from 0 to target using cubic ease-out.
@@ -67,9 +97,9 @@ function useAnimatedValue(
   animate?: boolean,
   duration = 600
 ): number | string {
-  // Start at 0 when animating numbers; strings pass through immediately
-  // since they cannot be numerically interpolated.
-  const [value, setValue] = useState<number | string>(animate && typeof target === 'number' ? 0 : target);
+  const [value, setValue] = useState<number | string>(
+    animate && typeof target === 'number' ? 0 : target
+  );
 
   useEffect(() => {
     if (!animate || typeof target !== 'number') {
@@ -77,33 +107,101 @@ function useAnimatedValue(
       return;
     }
     const start = performance.now();
+    let raf: number;
     const tick = (now: number) => {
-      // Normalize progress to [0,1] then apply cubic ease-out
-      // for a fast-start, smooth-deceleration feel.
       const t = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - t, 3);
       setValue(Math.round((target as number) * eased));
-      if (t < 1) requestAnimationFrame(tick);
+      if (t < 1) raf = requestAnimationFrame(tick);
     };
-    requestAnimationFrame(tick);
-  }, [target, animate]);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, animate, duration]);
 
   return value;
 }
 
-/** Maps variant names to DaisyUI/Tailwind class combinations for card styling. */
-const variantClasses: Record<NonNullable<StatsGridProps['variant']>, string> = {
-  default: 'card bg-base-100 shadow-sm',
-  outlined: 'card border border-base-300',
-  filled: 'card bg-base-200',
-  glass: 'card glass',
+/* ---------------------------------------------------------------------------
+ * Variant styles (DS tokens only)
+ * --------------------------------------------------------------------------- */
+
+/** Maps variant names to DS token inline styles for card styling. */
+const variantStyles: Record<NonNullable<StatsGridProps['variant']>, React.CSSProperties> = {
+  default: {
+    background: 'var(--ds-surface-card)',
+    boxShadow: 'var(--ds-elevation-1)',
+    borderRadius: 'var(--ds-radius-lg)',
+  },
+  outlined: {
+    background: 'var(--ds-surface-card)',
+    border: '1px solid var(--ds-color-border)',
+    borderRadius: 'var(--ds-radius-lg)',
+  },
+  filled: {
+    background: 'var(--ds-surface-inset)',
+    borderRadius: 'var(--ds-radius-lg)',
+  },
+  glass: {
+    background: 'color-mix(in srgb, var(--ds-surface-card) 80%, transparent)',
+    backdropFilter: 'blur(12px)',
+    border: '1px solid color-mix(in srgb, var(--ds-color-border) 50%, transparent)',
+    borderRadius: 'var(--ds-radius-lg)',
+  },
 };
 
+/* ---------------------------------------------------------------------------
+ * Trend indicator
+ * --------------------------------------------------------------------------- */
+
+/** Renders an arrow + percentage change in the appropriate semantic color. */
+function TrendIndicator({ change, changeType }: { change: number; changeType?: StatDef['changeType'] }) {
+  const style: React.CSSProperties =
+    changeType === 'increase'
+      ? { color: 'var(--ds-color-success)' }
+      : changeType === 'decrease'
+        ? { color: 'var(--ds-color-error)' }
+        : { color: 'var(--ds-color-text-secondary)' };
+
+  const arrow =
+    changeType === 'increase' ? '\u2191' : changeType === 'decrease' ? '\u2193' : '';
+
+  const bgStyle: React.CSSProperties =
+    changeType === 'increase'
+      ? { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)' }
+      : changeType === 'decrease'
+        ? { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)' }
+        : { background: 'var(--ds-surface-panel)' };
+
+  return (
+    <span
+      style={{
+        ...style,
+        ...bgStyle,
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 2,
+        padding: '2px 6px',
+        borderRadius: 'var(--ds-radius-sm)',
+        fontSize: 12,
+        fontWeight: 500,
+        lineHeight: 1,
+      }}
+    >
+      {arrow} {Math.abs(change)}%
+    </span>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * StatCard
+ * --------------------------------------------------------------------------- */
+
 /**
- * Individual statistic card using DaisyUI card classes.
- *
- * Includes keyboard accessibility (Enter to activate) and ARIA role="button"
- * when clickable, making it screen-reader friendly.
+ * Individual statistic card with clear number hierarchy:
+ * - Label: small, muted, secondary text
+ * - Value: large, bold, primary text
+ * - Trend: color-coded pill with arrow + percentage
+ * - Sparkline: optional mini chart area
  */
 function StatCard({
   stat,
@@ -122,75 +220,188 @@ function StatCard({
 }) {
   const displayValue = useAnimatedValue(stat.value, animate, animationDuration);
 
-  // Map trend direction to semantic DaisyUI color classes.
-  // Neutral changes use reduced opacity for visual de-emphasis.
-  const changeColor =
-    stat.changeType === 'increase'
-      ? 'text-success'
-      : stat.changeType === 'decrease'
-        ? 'text-error'
-        : 'text-base-content/60';
+  const cardStyle: React.CSSProperties = {
+    ...variantStyles[variant || 'default'],
+    padding: '20px 24px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
+    transition: 'box-shadow 0.2s ease, transform 0.15s ease',
+    position: 'relative',
+    overflow: 'hidden',
+  };
 
-  // Unicode arrows provide a lightweight trend indicator without icon imports.
-  const arrow =
-    stat.changeType === 'increase' ? '\u2191' : stat.changeType === 'decrease' ? '\u2193' : '';
+  // Hover-like state handled via inline transitions (no Tailwind hover:)
+  const interactiveStyle: React.CSSProperties = onClick
+    ? { cursor: 'pointer' }
+    : {};
 
   return (
     <div
-      className={`${variantClasses[variant || 'default']} card-body p-4 ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
+      style={{ ...cardStyle, ...interactiveStyle }}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
+      aria-label={onClick ? `${stat.label}: ${stat.value}` : undefined}
     >
-      <div className="flex items-center gap-2">
-        {stat.icon && <span className="text-lg">{stat.icon}</span>}
-        <span className="text-sm font-medium opacity-60">{stat.label}</span>
+      {/* Label row: icon + label */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+        {stat.icon && (
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 32,
+              height: 32,
+              borderRadius: 'var(--ds-radius-md)',
+              background: 'var(--ds-surface-panel)',
+              color: stat.color || 'var(--ds-color-text-secondary)',
+              fontSize: 16,
+              flexShrink: 0,
+            }}
+          >
+            {stat.icon}
+          </span>
+        )}
+        <span
+          style={{
+            fontSize: 13,
+            fontWeight: 500,
+            color: 'var(--ds-color-text-secondary)',
+            letterSpacing: '0.01em',
+            lineHeight: 1.2,
+          }}
+        >
+          {stat.label}
+        </span>
       </div>
-      <div className="stat-value text-2xl font-bold" style={{ color: stat.color }}>
-        {stat.prefix}
-        {displayValue}
-        {stat.suffix && <span className="text-base font-normal ml-1">{stat.suffix}</span>}
+
+      {/* Value row: main value + trend */}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+        <span
+          style={{
+            fontSize: 28,
+            fontWeight: 700,
+            color: stat.color || 'var(--ds-color-text-primary)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          {stat.prefix}
+          {displayValue}
+          {stat.suffix && (
+            <span
+              style={{
+                fontSize: 14,
+                fontWeight: 400,
+                color: 'var(--ds-color-text-secondary)',
+                marginLeft: 4,
+              }}
+            >
+              {stat.suffix}
+            </span>
+          )}
+        </span>
+
+        {stat.change != null && (
+          <TrendIndicator change={stat.change} changeType={stat.changeType} />
+        )}
       </div>
-      {stat.change != null && (
-        <div className={`text-xs font-medium ${changeColor}`}>
-          {arrow} {Math.abs(stat.change)}%
-        </div>
+
+      {/* Description */}
+      {stat.description && (
+        <span
+          style={{
+            fontSize: 12,
+            color: 'var(--ds-color-text-muted)',
+            lineHeight: 1.4,
+            marginTop: 2,
+          }}
+        >
+          {stat.description}
+        </span>
       )}
-      {stat.description && <div className="text-xs opacity-50">{stat.description}</div>}
-      {sparkline && stat.sparklineData && <Sparkline data={stat.sparklineData} color={stat.color} />}
+
+      {/* Sparkline chart area */}
+      {sparkline && stat.sparklineData && (
+        <Sparkline data={stat.sparklineData} color={stat.color} id={stat.key} />
+      )}
     </div>
   );
 }
 
-/** CSS-only loading skeleton using Tailwind's animate-pulse utility. */
+/* ---------------------------------------------------------------------------
+ * Loading skeleton
+ * --------------------------------------------------------------------------- */
+
+/** Inline keyframes for the shimmer animation. */
+const shimmerKeyframes = `
+@keyframes ds-stats-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+`;
+
+/** Premium loading skeleton with shimmer effect and proper card shapes. */
 function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | number }) {
+  const shimmerBg: React.CSSProperties = {
+    background: 'linear-gradient(90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75%)',
+    backgroundSize: '200% 100%',
+    animation: 'ds-stats-shimmer 1.5s ease-in-out infinite',
+    borderRadius: 'var(--ds-radius-sm)',
+  };
+
   return (
-    <div
-      className="grid"
-      style={{ gridTemplateColumns: `repeat(${columns}, 1fr)`, gap }}
-    >
-      {Array.from({ length: columns }).map((_, i) => (
-        <div key={i} className="card bg-base-100 shadow-sm card-body p-4 animate-pulse">
-          <div className="h-3 bg-base-300 rounded w-1/2 mb-2" />
-          <div className="h-6 bg-base-300 rounded w-3/4 mb-1" />
-          <div className="h-2 bg-base-300 rounded w-1/3" />
-        </div>
-      ))}
-    </div>
+    <>
+      <style>{shimmerKeyframes}</style>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(auto-fill, minmax(min(max(200px, calc(100.1% / ${columns})), 100%), 1fr))`,
+          gap,
+        }}
+      >
+        {Array.from({ length: columns }).map((_, i) => (
+          <div
+            key={i}
+            style={{
+              background: 'var(--ds-surface-card)',
+              boxShadow: 'var(--ds-elevation-1)',
+              borderRadius: 'var(--ds-radius-lg)',
+              padding: '20px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+            }}
+          >
+            {/* Label shimmer */}
+            <div style={{ ...shimmerBg, width: '40%', height: 12 }} />
+            {/* Value shimmer */}
+            <div style={{ ...shimmerBg, width: '65%', height: 28 }} />
+            {/* Trend shimmer */}
+            <div style={{ ...shimmerBg, width: '30%', height: 16 }} />
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
+
+/* ---------------------------------------------------------------------------
+ * ModernStatsGrid (main export)
+ * --------------------------------------------------------------------------- */
 
 /**
- * Modern (DaisyUI/Tailwind) engine for the StatsGrid pattern component.
+ * Modern engine for the StatsGrid pattern component.
  *
- * Renders a CSS grid of stat cards styled with DaisyUI utility classes.
- * Supports the same props as the Classic engine -- columns, sparklines,
- * variant, animation, and custom renderStat slot -- but without any Ant
- * Design dependency.
+ * Renders a responsive CSS grid of premium stat cards styled entirely
+ * with DS tokens. Supports columns, sparklines, variant styles, animated
+ * count-up values, and custom renderStat slots.
  *
  * @param props - {@link StatsGridProps} controlling stats data, layout, animation, and callbacks.
- * @returns A grid of statistic cards styled with DaisyUI/Tailwind.
+ * @returns A grid of statistic cards.
  */
 export default function ModernStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
@@ -213,21 +424,31 @@ export default function ModernStatsGrid(props: StatsGridProps) {
   // Respects user's prefers-reduced-motion OS preference.
   const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
 
+  // `columns` is a MAXIMUM column count, not a fixed grid. On narrow
+  // viewports the grid wraps to fewer columns automatically.
+  //
+  // Strategy: auto-fill + minmax where the min-width is computed so that
+  // `columns` items can only fit when the container is wide enough.
+  // For columns=4: min card width ~= 100%/4 ~= 25%, so we use
+  // max(200px, 100.1%/columns) as the floor. The 100.1% (not 100%)
+  // ensures that exactly `columns` items fill the row without an extra
+  // column squeezing in due to rounding.
+  const minCardWidth = columns
+    ? `max(200px, calc(100.1% / ${columns}))`
+    : '240px';
+  const gridStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: `repeat(auto-fill, minmax(min(${minCardWidth}, 100%), 1fr))`,
+    gap,
+    ...style,
+  };
+
   // Show placeholder skeleton during data fetching to prevent layout shift.
   if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
 
   return (
-    <div
-      className={`grid ${className || ''}`}
-      style={{
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gap,
-        ...style,
-      }}
-    >
+    <div className={className || undefined} style={gridStyle}>
       {stats.map((stat) => {
-        // Build the default card first, then allow consumers to override
-        // via renderStat while still receiving the default as a fallback.
         const defaultRender = (
           <StatCard
             key={stat.key}

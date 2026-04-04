@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * @fileoverview EnvironmentToggle -- Modern engine (DaisyUI / Tailwind).
+ * @fileoverview EnvironmentToggle -- Modern engine (token-driven).
  * Provides a UI control for switching between deployment environments.
- * Supports three display variants: join-group toggle (default), pill
+ * Supports three display variants: segmented toggle (default), pill
  * buttons, and a custom dropdown with click-outside dismissal.
  * A colored banner warns when a non-production environment is active.
- * Production switches can require a DaisyUI modal confirmation.
+ * Production switches can require a confirmation modal.
  *
  * @example
  * <ModernEnvironmentToggle
@@ -18,12 +18,13 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { EnvironmentToggleProps, EnvironmentDef } from '../EnvironmentToggle.types';
+import { popupPanelStyle, pillBadgeSmStyle, inlineActionGroupStyle } from '../../../shared/modern-styles';
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the EnvironmentToggle pattern.
- * Uses DaisyUI's join component for the default toggle, a custom
- * dropdown with outside-click detection, and DaisyUI modal for
- * production confirmation.
+ * Modern (token-driven) implementation of the EnvironmentToggle pattern.
+ * Uses a segmented control for the default toggle, a custom dropdown with
+ * outside-click detection, and a token-styled modal for production
+ * confirmation.
  *
  * @param props - See {@link EnvironmentToggleProps} for the full prop contract.
  * @returns The rendered environment toggle with optional banner and confirmation modal.
@@ -88,12 +89,12 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   /** Renders the appropriate toggle control based on the variant prop */
   const renderToggle = () => {
-    /* Dropdown variant: custom positioned menu with click-outside dismissal */
+    /* Dropdown variant: positioned menu with click-outside dismissal */
     if (variant === 'dropdown') {
       return (
         <div ref={dropdownRef} className="relative inline-block">
           <button
-            className="btn btn-sm btn-ghost gap-2"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
           >
@@ -104,8 +105,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             {activeEnv?.name ?? 'Select'}
             {activeEnv?.badge && (
               <span
-                className="badge badge-sm text-white"
-                style={{ background: activeEnv.color }}
+                style={{ ...pillBadgeSmStyle, background: activeEnv.color, color: 'var(--ds-color-text-on-primary)' }}
               >
                 {activeEnv.badge}
               </span>
@@ -116,23 +116,24 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           </button>
 
           {dropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg min-w-[180px] py-1">
+            <div className="absolute top-full left-0 mt-1 z-50 min-w-[180px]" style={{ ...popupPanelStyle, boxShadow: 'var(--ds-elevation-3)' }}>
               {environments.map(env => (
                 <button
                   key={env.id}
-                  className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-base-200 transition-colors ${
-                    env.id === activeEnvironment ? 'bg-base-200 font-semibold' : ''
+                  className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors ${
+                    env.id === activeEnvironment ? 'font-semibold' : ''
                   }`}
+                  style={env.id === activeEnvironment ? { background: 'var(--ds-surface-inset)' } : {}}
                   onClick={() => handleSwitch(env.id)}
                   data-testid={`env-option-${env.id}`}
                 >
                   <span className="w-2 h-2 rounded-full" style={{ background: env.color }} />
                   <span className="flex-1">{env.name}</span>
                   {env.badge && (
-                    <span className="badge badge-xs text-white" style={{ background: env.color }}>{env.badge}</span>
+                    <span style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10, background: env.color, color: 'var(--ds-color-text-on-primary)' }}>{env.badge}</span>
                   )}
                   {env.id === activeEnvironment && (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" style={{ color: 'var(--ds-color-primary)' }} viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   )}
@@ -151,17 +152,17 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           {environments.map(env => (
             <button
               key={env.id}
-              className={`btn btn-sm gap-1.5 ${
-                env.id === activeEnvironment ? 'text-white' : 'btn-ghost'
-              }`}
-              style={env.id === activeEnvironment ? { background: env.color, borderColor: env.color } : {}}
+              style={env.id === activeEnvironment
+                ? { background: env.color, color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: `1px solid ${env.color}`, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }
+                : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }
+              }
               onClick={() => handleSwitch(env.id)}
               data-testid={`env-option-${env.id}`}
             >
               {env.icon}
               {env.name}
               {env.badge && (
-                <span className="badge badge-xs opacity-80">{env.badge}</span>
+                <span style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10, opacity: 0.8 }}>{env.badge}</span>
               )}
             </button>
           ))}
@@ -169,16 +170,16 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       );
     }
 
-    /* Default: DaisyUI join group -- buttons share borders for a segmented control look */
+    /* Default: segmented control -- buttons share borders for a joined look */
     return (
-      <div className="join" data-testid="env-toggle-trigger">
-        {environments.map(env => (
+      <div style={{ display: 'inline-flex' }} data-testid="env-toggle-trigger">
+        {environments.map((env, idx) => (
           <button
             key={env.id}
-            className={`join-item btn btn-sm ${
-              env.id === activeEnvironment ? 'text-white' : ''
-            }`}
-            style={env.id === activeEnvironment ? { background: env.color, borderColor: env.color } : {}}
+            style={env.id === activeEnvironment
+              ? { background: env.color, color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, border: `1px solid ${env.color}`, cursor: 'pointer', borderRadius: idx === 0 ? 'var(--ds-radius-md) 0 0 var(--ds-radius-md)' : idx === environments.length - 1 ? '0 var(--ds-radius-md) var(--ds-radius-md) 0' : 0 }
+              : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, border: '1px solid var(--ds-color-border)', cursor: 'pointer', borderRadius: idx === 0 ? 'var(--ds-radius-md) 0 0 var(--ds-radius-md)' : idx === environments.length - 1 ? '0 var(--ds-radius-md) var(--ds-radius-md) 0' : 0 }
+            }
             onClick={() => handleSwitch(env.id)}
             data-testid={`env-option-${env.id}`}
           >
@@ -186,7 +187,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               {env.icon}
               {env.name}
               {env.badge && (
-                <span className="badge badge-xs">{env.badge}</span>
+                <span style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10 }}>{env.badge}</span>
               )}
             </span>
           </button>
@@ -223,23 +224,23 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
         {renderToggle()}
       </div>
 
-      {/* Production confirmation modal -- DaisyUI modal triggered by setting confirmEnv state.
+      {/* Production confirmation modal -- triggered by setting confirmEnv state.
           Confirming fires onChange and resets both modal and dropdown state.
           Clicking the backdrop or Cancel dismisses without switching. */}
       {confirmEnv && (
-        <div className="modal modal-open">
-          <div className="modal-box max-w-sm">
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-3)', padding: 24, maxWidth: 384, width: '100%', position: 'relative', zIndex: 1 }}>
             <h3 className="font-bold text-lg">Switch to Production</h3>
             <p className="py-4 text-sm opacity-70">{confirmProductionSwitch}</p>
-            <div className="modal-action">
+            <div className="flex justify-end gap-2">
               <button
-                className="btn btn-sm btn-ghost"
+                style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
                 onClick={() => setConfirmEnv(null)}
               >
                 Cancel
               </button>
               <button
-                className="btn btn-sm btn-error"
+                style={{ background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
                 onClick={() => {
                   /* Commit the environment switch and clean up all UI state */
                   onChange(confirmEnv);
@@ -253,7 +254,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             </div>
           </div>
           {/* Transparent backdrop -- closes modal on click without switching */}
-          <div className="modal-backdrop" onClick={() => setConfirmEnv(null)} />
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)' }} onClick={() => setConfirmEnv(null)} />
         </div>
       )}
     </div>

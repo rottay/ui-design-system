@@ -12,12 +12,18 @@ import type { ReactNode } from 'react';
 import type { ColumnDef } from '../../patterns/types';
 import type { CollectionWorkspaceConfig } from '../contracts/collection';
 import { useCollectionWorkspace } from '../hooks/useCollectionWorkspace';
+import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 import { PatternDataTable } from '../../patterns/data-table';
 import { PatternFilterPanel } from '../../patterns/filter-panel';
 import { Box } from '../../primitives/layout/Box';
 import { Stack } from '../../primitives/layout/Stack';
 import { Flex } from '../../primitives/layout/Flex';
 import { Text } from '../../primitives/display/Typography';
+import { Card } from '../../primitives/display/Card';
+import { Badge } from '../../primitives/display/Badge';
+import { Button } from '../../primitives/inputs/Button';
+import { Textarea } from '../../primitives/inputs/Textarea';
+import { Skeleton } from '../../primitives/feedback/Skeleton';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -92,17 +98,117 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
   const diffMin = Math.round(diffMs / 60000);
 
   if (diffMin < 0) {
-    return <Text size="xs" style={{ color: 'var(--ds-color-error)' }}>Overdue</Text>;
+    return (
+      <Badge variant="error" badgeStyle="soft" size="xs">
+        Overdue
+      </Badge>
+    );
   }
   if (diffMin <= criticalMin) {
-    return <Text size="xs" style={{ color: 'var(--ds-color-error)' }}>{diffMin}m left</Text>;
+    return (
+      <Badge variant="error" badgeStyle="soft" size="xs">
+        {diffMin}m left
+      </Badge>
+    );
   }
   if (diffMin <= warningMin) {
-    return <Text size="xs" style={{ color: 'var(--ds-color-warning)' }}>{diffMin}m left</Text>;
+    return (
+      <Badge variant="warning" badgeStyle="soft" size="xs">
+        {diffMin}m left
+      </Badge>
+    );
   }
   const hours = Math.floor(diffMin / 60);
   const mins = diffMin % 60;
-  return <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>{hours}h {mins}m</Text>;
+  return (
+    <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+      {hours}h {mins}m
+    </Text>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Loading skeleton
+// ---------------------------------------------------------------------------
+
+function DecisionInboxSkeleton() {
+  return (
+    <Stack spacing="md">
+      {/* Header skeleton */}
+      <Box>
+        <Skeleton variant="text" width="35%" height={24} />
+        <Skeleton variant="text" width="50%" height={14} style={{ marginTop: 8 }} />
+      </Box>
+
+      {/* Filter skeleton */}
+      <Flex gap={2}>
+        <Skeleton variant="rounded" width={120} height={32} />
+        <Skeleton variant="rounded" width={120} height={32} />
+        <Skeleton variant="rounded" width={120} height={32} />
+      </Flex>
+
+      {/* Table skeleton */}
+      <Card variant="outlined">
+        <Card.Body>
+          <Stack spacing="sm">
+            {/* Header row */}
+            <Flex gap={4} style={{ paddingBottom: 'var(--ds-spacing-sm, 8px)', borderBottom: '1px solid var(--ds-color-border-secondary)' }}>
+              <Skeleton variant="text" width="25%" height={14} />
+              <Skeleton variant="text" width="20%" height={14} />
+              <Skeleton variant="text" width="15%" height={14} />
+              <Skeleton variant="text" width="20%" height={14} />
+            </Flex>
+            {/* Data rows */}
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Flex
+                key={i}
+                gap={4}
+                align="center"
+                style={{
+                  padding: 'var(--ds-spacing-sm, 8px) 0',
+                  borderBottom: '1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary))',
+                }}
+              >
+                <Skeleton variant="text" width="25%" height={14} />
+                <Skeleton variant="text" width="20%" height={14} />
+                <Skeleton variant="rounded" width={60} height={20} />
+                <Skeleton variant="text" width="20%" height={14} />
+              </Flex>
+            ))}
+          </Stack>
+        </Card.Body>
+      </Card>
+    </Stack>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Empty state
+// ---------------------------------------------------------------------------
+
+function DecisionEmptyState() {
+  return (
+    <Card variant="outlined">
+      <Card.Body>
+        <Flex
+          align="center"
+          justify="center"
+          style={{
+            padding: 'var(--ds-spacing-xl, 48px) var(--ds-spacing-md, 16px)',
+            flexDirection: 'column',
+            gap: 'var(--ds-spacing-sm, 8px)',
+          }}
+        >
+          <Text size="lg" weight="medium" color="muted">
+            No pending decisions
+          </Text>
+          <Text size="sm" color="muted">
+            All items have been reviewed. New items will appear here when they require attention.
+          </Text>
+        </Flex>
+      </Card.Body>
+    </Card>
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -132,12 +238,16 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
     defaultViewMode: 'table',
   });
 
+  const { isDesktop } = useBreakpoints();
+
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
   const [reasonText, setReasonText] = useState('');
   const [pendingAction, setPendingAction] = useState<string | null>(null);
 
   const handleRowClick = useCallback((item: T) => {
     setSelectedItem(item);
+    setPendingAction(null);
+    setReasonText('');
   }, []);
 
   const handleDecision = useCallback((action: string) => {
@@ -191,16 +301,44 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
     : columns;
 
   const showReviewRail = reviewRail && selectedItem;
+  const isLoading = workspaceConfig.loading;
+  const isEmpty = !isLoading && (!workspaceConfig.data || workspaceConfig.data.length === 0);
+
+  // Show full-page skeleton on initial load when no data at all
+  if (isLoading && (!workspaceConfig.data || workspaceConfig.data.length === 0)) {
+    return (
+      <Stack spacing="md">
+        {headerSlot}
+        <DecisionInboxSkeleton />
+        {footerSlot}
+      </Stack>
+    );
+  }
 
   return (
     <Stack spacing="md">
       {headerSlot}
 
       {/* Header */}
-      <Box>
-        <Text size="xl" weight="semibold">{queueName}</Text>
-        {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
-      </Box>
+      <Flex align="center" justify="between">
+        <Box>
+          <Text size="xl" weight="semibold">{queueName}</Text>
+          {subtitle && (
+            <Text
+              size="sm"
+              color="muted"
+              style={{ marginTop: 'var(--ds-spacing-xs, 2px)' }}
+            >
+              {subtitle}
+            </Text>
+          )}
+        </Box>
+        {workspaceConfig.data && workspaceConfig.data.length > 0 && (
+          <Badge variant="default" badgeStyle="soft" size="sm">
+            {workspaceConfig.data.length} pending
+          </Badge>
+        )}
+      </Flex>
 
       {/* Filters */}
       {workspaceConfig.controls?.filters && workspaceConfig.controls.filters.length > 0 && (
@@ -216,183 +354,191 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
 
       {/* Batch decision bar */}
       {batchDecisions && workspace.hasSelection && workspace.selectedKeys.length > 1 && (
-        <Flex
-          align="center"
-          gap={3}
+        <Card
+          variant="outlined"
           style={{
-            padding: '12px 16px',
-            borderRadius: 'var(--ds-radius-md, 8px)',
-            border: '1px solid var(--ds-color-primary)',
-            background: 'var(--ds-color-bg-tertiary)',
+            borderColor: 'var(--ds-color-primary)',
+            background: 'var(--ds-color-primary-bg, var(--ds-color-bg-tertiary))',
           }}
         >
-          <Text size="sm" weight="medium" style={{ flex: 1 }}>
-            {workspace.selectedKeys.length} items selected
-          </Text>
+          <Card.Body>
+            <Flex align="center" gap={3} wrap="wrap">
+              <Badge variant="primary" badgeStyle="soft" size="sm">
+                {workspace.selectedKeys.length} selected
+              </Badge>
+              <Box style={{ flex: 1 }} />
 
-          {/* Reason input for batch (if pending action requires it) */}
-          {pendingAction && (
-            <textarea
-              value={reasonText}
-              onChange={(e) => setReasonText(e.target.value)}
-              placeholder="Enter reason..."
-              style={{
-                minWidth: '200px',
-                minHeight: '36px',
-                padding: '6px 12px',
-                border: '1px solid var(--ds-color-border-primary)',
-                borderRadius: 'var(--ds-radius-md, 8px)',
-                background: 'var(--ds-color-bg-primary)',
-                color: 'var(--ds-color-text-primary)',
-                fontSize: '14px',
-                resize: 'horizontal',
-              }}
-            />
-          )}
-
-          <button
-            onClick={() => workspace.clearSelection()}
-            style={{
-              padding: '6px 12px',
-              border: '1px solid var(--ds-color-border-primary)',
-              borderRadius: 'var(--ds-radius-md, 8px)',
-              background: 'var(--ds-color-bg-secondary)',
-              color: 'var(--ds-color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '13px',
-              fontWeight: 500,
-            }}
-          >
-            Clear selection
-          </button>
-          {decisions.map((decision) => (
-            <button
-              key={decision.key}
-              onClick={() => handleBatchDecision(decision.key)}
-              style={{
-                padding: '6px 12px',
-                border: decision.variant === 'danger'
-                  ? '1px solid var(--ds-color-error)'
-                  : '1px solid var(--ds-color-border-primary)',
-                borderRadius: 'var(--ds-radius-md, 8px)',
-                background: decision.variant === 'primary'
-                  ? 'var(--ds-color-primary)'
-                  : decision.variant === 'danger'
-                    ? 'transparent'
-                    : 'var(--ds-color-bg-secondary)',
-                color: decision.variant === 'primary'
-                  ? 'var(--ds-color-text-on-primary, #fff)'
-                  : decision.variant === 'danger'
-                    ? 'var(--ds-color-error)'
-                    : 'var(--ds-color-text-primary)',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: 500,
-                transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
-              }}
-            >
-              {decision.icon && <span style={{ marginRight: '6px' }}>{decision.icon}</span>}
-              {decision.label}
-            </button>
-          ))}
-        </Flex>
-      )}
-
-      {/* Main content */}
-      <Flex gap={4}>
-        {/* Queue table */}
-        <Box style={{ flex: 1, minWidth: 0 }}>
-          <PatternDataTable<T>
-            data={workspaceConfig.data}
-            columns={enrichedColumns}
-            rowKey={rowKey}
-            loading={workspaceConfig.loading}
-            emptyState={workspaceConfig.emptyState}
-            selectable={batchDecisions}
-            selectedKeys={workspace.selectedKeys}
-            onSelectionChange={workspace.setSelection}
-            onRowClick={handleRowClick}
-            sorting={workspaceConfig.behavior?.sorting}
-            onSortChange={workspaceConfig.behavior?.onSortChange}
-            pagination={workspaceConfig.behavior?.pagination}
-            hoverable
-            actions={actions}
-          />
-        </Box>
-
-        {/* Review rail */}
-        {showReviewRail && (
-          <Box
-            style={{
-              width: reviewRail.width ?? '380px',
-              flexShrink: 0,
-              borderLeft: '1px solid var(--ds-color-border-secondary)',
-              paddingLeft: '16px',
-            }}
-          >
-            <Stack spacing="md">
-              {reviewRail.render(selectedItem)}
-
-              {/* Reason input (if pending action requires it) */}
+              {/* Reason input for batch (if pending action requires it) */}
               {pendingAction && (
-                <Box>
-                  <Text size="sm" weight="medium" style={{ marginBottom: '8px' }}>Reason</Text>
-                  <textarea
-                    value={reasonText}
-                    onChange={(e) => setReasonText(e.target.value)}
-                    placeholder="Enter reason..."
-                    style={{
-                      width: '100%',
-                      minHeight: '80px',
-                      padding: '8px 12px',
-                      border: '1px solid var(--ds-color-border-primary)',
-                      borderRadius: 'var(--ds-radius-md, 8px)',
-                      background: 'var(--ds-color-bg-primary)',
-                      color: 'var(--ds-color-text-primary)',
-                      fontSize: '14px',
-                      resize: 'vertical',
-                    }}
-                  />
-                </Box>
+                <Textarea
+                  value={reasonText}
+                  onChange={(val) => setReasonText(val)}
+                  placeholder="Enter reason..."
+                  rows={1}
+                  style={{ minWidth: 200, maxWidth: 320 }}
+                />
               )}
 
-              {/* Decision buttons */}
-              <Flex gap={2} wrap="wrap">
-                {decisions.map((decision) => (
-                  <button
-                    key={decision.key}
-                    onClick={() => handleDecision(decision.key)}
-                    style={{
-                      padding: '8px 16px',
-                      border: decision.variant === 'danger'
-                        ? '1px solid var(--ds-color-error)'
-                        : '1px solid var(--ds-color-border-primary)',
-                      borderRadius: 'var(--ds-radius-md, 8px)',
-                      background: decision.variant === 'primary'
-                        ? 'var(--ds-color-primary)'
-                        : decision.variant === 'danger'
-                          ? 'transparent'
-                          : 'var(--ds-color-bg-secondary)',
-                      color: decision.variant === 'primary'
-                        ? 'var(--ds-color-text-on-primary, #fff)'
-                        : decision.variant === 'danger'
-                          ? 'var(--ds-color-error)'
-                          : 'var(--ds-color-text-primary)',
-                      cursor: 'pointer',
-                      fontSize: '14px',
-                      fontWeight: 500,
-                      transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
-                    }}
-                  >
-                    {decision.icon && <span style={{ marginRight: '6px' }}>{decision.icon}</span>}
-                    {decision.label}
-                  </button>
-                ))}
-              </Flex>
-            </Stack>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => workspace.clearSelection()}
+              >
+                Clear
+              </Button>
+              {decisions.map((decision) => (
+                <Button
+                  key={decision.key}
+                  size="sm"
+                  variant={
+                    decision.variant === 'primary'
+                      ? 'primary'
+                      : decision.variant === 'danger'
+                        ? 'danger'
+                        : 'secondary'
+                  }
+                  onClick={() => handleBatchDecision(decision.key)}
+                  icon={decision.icon}
+                >
+                  {decision.label}
+                </Button>
+              ))}
+            </Flex>
+          </Card.Body>
+        </Card>
+      )}
+
+      {/* Empty state */}
+      {isEmpty && !workspaceConfig.emptyState && <DecisionEmptyState />}
+
+      {/* Main content */}
+      {!isEmpty && (
+        <Flex
+          gap={4}
+          style={{
+            flexDirection: isDesktop ? 'row' : 'column',
+          }}
+        >
+          {/* Queue table */}
+          <Box style={{ flex: 1, minWidth: 0 }}>
+            <PatternDataTable<T>
+              data={workspaceConfig.data}
+              columns={enrichedColumns}
+              rowKey={rowKey}
+              loading={isLoading}
+              emptyState={workspaceConfig.emptyState}
+              selectable={batchDecisions}
+              selectedKeys={workspace.selectedKeys}
+              onSelectionChange={workspace.setSelection}
+              onRowClick={handleRowClick}
+              sorting={workspaceConfig.behavior?.sorting}
+              onSortChange={workspaceConfig.behavior?.onSortChange}
+              pagination={workspaceConfig.behavior?.pagination}
+              hoverable
+              actions={actions}
+            />
           </Box>
-        )}
-      </Flex>
+
+          {/* Review rail */}
+          {showReviewRail && (
+            <Box
+              style={{
+                width: isDesktop ? (reviewRail.width ?? '380px') : '100%',
+                flexShrink: 0,
+              }}
+            >
+              <Card
+                variant="outlined"
+                style={{
+                  position: isDesktop ? 'sticky' : 'relative',
+                  top: isDesktop ? 'var(--ds-spacing-md, 16px)' : undefined,
+                }}
+              >
+                <Card.Body>
+                  <Stack spacing="md">
+                    {/* Rail header */}
+                    <Flex align="center" justify="between">
+                      <Text size="sm" weight="semibold">Review Details</Text>
+                      <Button
+                        size="xs"
+                        variant="secondary"
+                        onClick={() => {
+                          setSelectedItem(null);
+                          setPendingAction(null);
+                          setReasonText('');
+                        }}
+                      >
+                        Close
+                      </Button>
+                    </Flex>
+
+                    {/* Divider */}
+                    <Box
+                      style={{
+                        height: 1,
+                        background: 'var(--ds-color-border-secondary)',
+                      }}
+                    />
+
+                    {/* Custom review content */}
+                    {reviewRail.render(selectedItem)}
+
+                    {/* Reason input (if pending action requires it) */}
+                    {pendingAction && (
+                      <Box>
+                        <Text
+                          size="sm"
+                          weight="medium"
+                          style={{ marginBottom: 'var(--ds-spacing-xs, 6px)' }}
+                        >
+                          Reason
+                        </Text>
+                        <Textarea
+                          value={reasonText}
+                          onChange={(val) => setReasonText(val)}
+                          placeholder="Enter reason for this decision..."
+                          rows={3}
+                          style={{ width: '100%' }}
+                        />
+                      </Box>
+                    )}
+
+                    {/* Divider before actions */}
+                    <Box
+                      style={{
+                        height: 1,
+                        background: 'var(--ds-color-border-secondary)',
+                      }}
+                    />
+
+                    {/* Decision buttons */}
+                    <Flex gap={2} wrap="wrap">
+                      {decisions.map((decision) => (
+                        <Button
+                          key={decision.key}
+                          size="sm"
+                          variant={
+                            decision.variant === 'primary'
+                              ? 'primary'
+                              : decision.variant === 'danger'
+                                ? 'danger'
+                                : 'secondary'
+                          }
+                          onClick={() => handleDecision(decision.key)}
+                          icon={decision.icon}
+                          style={{ flex: 1 }}
+                        >
+                          {decision.label}
+                        </Button>
+                      ))}
+                    </Flex>
+                  </Stack>
+                </Card.Body>
+              </Card>
+            </Box>
+          )}
+        </Flex>
+      )}
 
       {footerSlot}
     </Stack>

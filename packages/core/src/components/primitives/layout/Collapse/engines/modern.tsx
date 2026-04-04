@@ -2,9 +2,9 @@
 
 /**
  * @fileoverview Collapse Modern Engine - Rottay Design System.
- * Tailwind/DaisyUI implementation using React Context for shared accordion
- * state between Collapse and Panel. Supports controlled and uncontrolled
- * modes with CSS transition animations (max-height + rotate).
+ * Pure inline-style implementation using React Context for shared accordion
+ * state between Collapse and Panel. No DaisyUI classes -- uses DS tokens,
+ * inline styles, and a <style> block for the expand/collapse transition.
  *
  * @example
  * ```tsx
@@ -19,9 +19,15 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { useState, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
+import React, { useState, useRef, useEffect, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
 import type { CollapseProps, CollapsePanelProps } from '../Collapse.types';
 import { COLLAPSE_DEFAULTS } from '../Collapse.types';
+
+/** Keyframes for collapse content transition */
+const COLLAPSE_STYLES = `
+.rottay-collapse-content{overflow:hidden;transition:max-height 0.2s ease,opacity 0.2s ease,padding 0.2s ease}
+.rottay-collapse-arrow{display:inline-block;transition:transform 0.2s ease}
+`.trim();
 
 /** Shared state between Collapse and its Panel children via React Context */
 interface CollapseContextValue {
@@ -36,15 +42,15 @@ interface CollapseContextValue {
 const CollapseContext = createContext<CollapseContextValue | null>(null);
 
 /**
- * Modern (Tailwind) Collapse Panel.
+ * Modern Collapse Panel.
  *
  * Reads shared state from CollapseContext to determine active/inactive status.
- * Uses DaisyUI's `collapse` class structure with Tailwind transition utilities
- * for smooth expand/collapse animations. The `index` prop is injected by the
- * parent Collapse via `cloneElement` to generate fallback keys.
+ * Uses inline styles with DS tokens and a CSS transition class for smooth
+ * expand/collapse animations. The `index` prop is injected by the parent
+ * Collapse via `cloneElement` to generate fallback keys.
  *
  * @param props - {@link CollapsePanelProps} with an optional injected `index`.
- * @returns A Tailwind-styled collapsible panel, or null if rendered outside a Collapse.
+ * @returns A styled collapsible panel, or null if rendered outside a Collapse.
  */
 export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { index?: number }>(
   (props, ref) => {
@@ -68,6 +74,16 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     const key = panelKey ?? `panel-${index}`;
     const isActive = context.activeKeys.includes(key);
 
+    // Measure content height for smooth max-height transition
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [contentHeight, setContentHeight] = useState<number>(0);
+
+    useEffect(() => {
+      if (contentRef.current) {
+        setContentHeight(contentRef.current.scrollHeight);
+      }
+    }, [children, isActive]);
+
     const handleClick = () => {
       if (!disabled) {
         context.toggleKey(key);
@@ -77,37 +93,57 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     // Arrow indicator rotates 90deg when panel is expanded
     const arrowIcon = showArrow && (
       <span
-        className={`transition-transform duration-200 ${isActive ? 'rotate-90' : ''}`}
+        className="rottay-collapse-arrow"
+        style={{
+          transform: isActive ? 'rotate(90deg)' : 'rotate(0deg)',
+          fontSize: 12,
+        }}
       >
-        ▶
+        {'\u25B6'}
       </span>
     );
 
     return (
       <div
         ref={ref}
-        className={`collapse ${context.bordered ? 'border border-base-300' : ''} ${
-          context.ghost ? 'bg-transparent' : 'bg-base-100'
-        } ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
-        style={style}
+        className={className || undefined}
+        style={{
+          borderRadius: 'var(--ds-radius-md)',
+          ...(context.bordered ? { border: '1px solid var(--ds-color-border)' } : {}),
+          ...(context.ghost ? {} : { background: 'var(--ds-surface-card)' }),
+          ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}),
+          ...style,
+        }}
       >
         {/* Header row: icon position controlled by expandIconPosition context */}
         <div
-          className={`collapse-title flex items-center gap-2 cursor-pointer ${
-            disabled ? 'pointer-events-none' : ''
-          }`}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '12px 16px',
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            userSelect: 'none',
+            fontWeight: 500,
+          }}
           onClick={handleClick}
+          role="button"
+          aria-expanded={isActive}
         >
           {context.expandIconPosition === 'start' && arrowIcon}
-          <span className="flex-1">{header}</span>
-          {extra && <span className="ml-auto">{extra}</span>}
+          <span style={{ flex: 1 }}>{header}</span>
+          {extra && <span style={{ marginLeft: 'auto' }}>{extra}</span>}
           {context.expandIconPosition === 'end' && arrowIcon}
         </div>
         {/* Content area animated via max-height transition */}
         <div
-          className={`collapse-content overflow-hidden transition-all duration-200 ${
-            isActive ? 'max-h-screen py-4' : 'max-h-0'
-          }`}
+          ref={contentRef}
+          className="rottay-collapse-content"
+          style={{
+            maxHeight: isActive ? contentHeight || 9999 : 0,
+            opacity: isActive ? 1 : 0,
+            padding: isActive ? '0 16px 16px 16px' : '0 16px',
+          }}
         >
           {children}
         </div>
@@ -118,7 +154,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
 Panel.displayName = 'Collapse.Panel.Modern';
 
 /**
- * Modern (Tailwind) Collapse container.
+ * Modern Collapse container.
  *
  * Manages accordion state (controlled or uncontrolled) and shares it with
  * Panel children via CollapseContext. Each child is cloned with an injected
@@ -182,10 +218,17 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       <CollapseContext.Provider
         value={{ activeKeys, toggleKey, accordion, expandIconPosition, bordered, ghost }}
       >
+        {/* Inject transition styles -- safe static string */}
+        <style dangerouslySetInnerHTML={{ __html: COLLAPSE_STYLES }} />
         <div
           ref={ref}
-          className={`flex flex-col gap-1 ${className}`}
-          style={style}
+          className={className || undefined}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4,
+            ...style,
+          }}
         >
           {/* Inject index into each Panel child for fallback key generation */}
           {childArray.map((child, index) =>

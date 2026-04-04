@@ -1,10 +1,19 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI / Tailwind) engine for the FilterPanel pattern.
- * Renders a flat list of filter controls using DaisyUI-styled native HTML form
- * elements. Supports inline (toolbar), stacked, and sidebar layouts, an
- * optional collapsible header, and Apply/Reset action buttons.
+ * @fileoverview Modern engine for the FilterPanel pattern.
+ * Renders a configurable panel of filter controls using pure DS token inline
+ * styles (no DaisyUI, no Tailwind). Supports inline (toolbar), stacked, and
+ * sidebar layouts, an optional collapsible header with smooth transition, an
+ * active-filter count badge, and Apply/Reset action buttons.
+ *
+ * All styling uses CSS custom properties from the design system:
+ * - Surfaces: --ds-surface-card, --ds-surface-highlight, --ds-surface-inset
+ * - Borders: --ds-color-border
+ * - Radius: --ds-radius-sm, --ds-radius-md
+ * - Motion: --ds-motion-fast, --ds-motion-normal, --ds-motion-ease-out
+ * - Focus: --ds-focus-ring-width, --ds-focus-ring-color
+ * - Colors: --ds-color-primary, --ds-color-text, --ds-color-text-muted, --ds-color-error
  *
  * @example
  * <FilterPanel
@@ -20,14 +29,58 @@
  * />
  */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../types';
+import { Switch } from '../../../primitives/inputs/Switch';
+import { Checkbox } from '../../../primitives/inputs/Checkbox';
+
+/* ---------------------------------------------------------------------------
+ * Shared inline-style constants
+ * ----------------------------------------------------------------------- */
+
+const baseInputStyle: React.CSSProperties = {
+  padding: '6px 10px',
+  border: '1px solid var(--ds-color-border)',
+  borderRadius: 'var(--ds-radius-sm)',
+  fontSize: 13,
+  lineHeight: '20px',
+  background: 'var(--ds-surface-inset)',
+  color: 'inherit',
+  width: '100%',
+  boxSizing: 'border-box' as const,
+  outline: 'none',
+  transition: `border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+               box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+};
+
+const focusHandler = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+  e.currentTarget.style.borderColor = 'var(--ds-focus-ring-color)';
+  e.currentTarget.style.boxShadow =
+    '0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color)';
+};
+
+const blurHandler = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+  e.currentTarget.style.borderColor = 'var(--ds-color-border)';
+  e.currentTarget.style.boxShadow = 'none';
+};
+
+const labelStyle: React.CSSProperties = {
+  display: 'block',
+  fontSize: 12,
+  fontWeight: 500,
+  color: 'var(--ds-color-text-muted)',
+  marginBottom: 4,
+  lineHeight: '16px',
+};
+
+/* ---------------------------------------------------------------------------
+ * Filter controls
+ * ----------------------------------------------------------------------- */
 
 /**
- * Renders the appropriate DaisyUI-styled native HTML form control for a given
- * filter definition. Uses input, select, and checkbox elements with DaisyUI
- * utility classes to keep the bundle free of heavy UI-library dependencies.
+ * Renders the appropriate native HTML form control for a given filter
+ * definition, styled with pure DS token inline styles.
  */
 function renderFilterControl(
   filter: FilterDef,
@@ -39,88 +92,108 @@ function renderFilterControl(
       return (
         <input
           type="text"
-          className="input input-bordered input-sm w-full"
+          style={baseInputStyle}
           placeholder={filter.placeholder}
           value={(value as string) ?? ''}
           onChange={(e) => onChange(filter.key, e.target.value)}
+          onFocus={focusHandler}
+          onBlur={blurHandler}
         />
       );
     case 'select':
       return (
         <select
-          className="select select-bordered select-sm w-full"
+          style={{
+            ...baseInputStyle,
+            appearance: 'none' as const,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'right 8px center',
+            paddingRight: 28,
+          }}
           value={(value as string) ?? ''}
           onChange={(e) => onChange(filter.key, e.target.value || undefined)}
+          onFocus={focusHandler}
+          onBlur={blurHandler}
         >
           <option value="">{filter.placeholder ?? 'Select...'}</option>
           {filter.options?.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
           ))}
         </select>
       );
-    // Multi-select renders individual checkboxes because DaisyUI has no
-    // built-in multi-select widget. This also gives better UX on mobile
-    // where native multi-select elements are difficult to use.
     case 'multi-select':
       return (
-        <div className="flex flex-wrap gap-2">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {filter.options?.map((o) => {
             const checked = ((value as string[]) ?? []).includes(o.value);
             return (
-              <label key={o.value} className="label cursor-pointer gap-1">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm"
-                  checked={checked}
-                  onChange={() => {
-                    // Toggle: add if unchecked, remove if checked.
-                    const arr = ((value as string[]) ?? []);
-                    const next = checked
-                      ? arr.filter((v) => v !== o.value)
-                      : [...arr, o.value];
-                    onChange(filter.key, next);
-                  }}
-                />
-                <span className="label-text text-sm">{o.label}</span>
-              </label>
+              <Checkbox
+                key={o.value}
+                size="sm"
+                checked={checked}
+                label={o.label}
+                onChange={() => {
+                  const arr = (value as string[]) ?? [];
+                  const next = checked
+                    ? arr.filter((v) => v !== o.value)
+                    : [...arr, o.value];
+                  onChange(filter.key, next);
+                }}
+              />
             );
           })}
         </div>
       );
     case 'boolean':
       return (
-        <input
-          type="checkbox"
-          className="toggle toggle-sm"
+        <Switch
+          size="small"
           checked={!!value}
-          onChange={(e) => onChange(filter.key, e.target.checked)}
+          onChange={(checked) => onChange(filter.key, checked)}
         />
       );
     case 'date':
       return (
         <input
           type="date"
-          className="input input-bordered input-sm w-full"
+          style={baseInputStyle}
           value={(value as string) ?? ''}
           onChange={(e) => onChange(filter.key, e.target.value)}
+          onFocus={focusHandler}
+          onBlur={blurHandler}
         />
       );
     case 'date-range': {
       const range = (value as [string, string]) ?? ['', ''];
       return (
-        <div className="flex items-center gap-2">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <input
             type="date"
-            className="input input-bordered input-sm flex-1"
+            style={{ ...baseInputStyle, flex: 1 }}
             value={range[0] ?? ''}
             onChange={(e) => onChange(filter.key, [e.target.value, range[1]])}
+            onFocus={focusHandler}
+            onBlur={blurHandler}
           />
-          <span className="text-xs">to</span>
+          <span
+            style={{
+              fontSize: 12,
+              color: 'var(--ds-color-text-muted)',
+              flexShrink: 0,
+            }}
+          >
+            to
+          </span>
           <input
             type="date"
-            className="input input-bordered input-sm flex-1"
+            style={{ ...baseInputStyle, flex: 1 }}
             value={range[1] ?? ''}
             onChange={(e) => onChange(filter.key, [range[0], e.target.value])}
+            onFocus={focusHandler}
+            onBlur={blurHandler}
           />
         </div>
       );
@@ -129,23 +202,26 @@ function renderFilterControl(
       return (
         <input
           type="number"
-          className="input input-bordered input-sm w-full"
+          style={baseInputStyle}
           placeholder={filter.placeholder}
           value={(value as number | '') ?? ''}
           onChange={(e) =>
-            onChange(filter.key, e.target.value === '' ? undefined : Number(e.target.value))
+            onChange(
+              filter.key,
+              e.target.value === '' ? undefined : Number(e.target.value),
+            )
           }
+          onFocus={focusHandler}
+          onBlur={blurHandler}
         />
       );
-    // Number range: coerce empty strings to undefined so the consumer's
-    // query builder can distinguish "no bound" from zero.
     case 'number-range': {
       const range = (value as [number | '', number | '']) ?? ['', ''];
       return (
-        <div className="flex items-center gap-2">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <input
             type="number"
-            className="input input-bordered input-sm flex-1"
+            style={{ ...baseInputStyle, flex: 1 }}
             placeholder="Min"
             value={range[0] ?? ''}
             onChange={(e) =>
@@ -154,11 +230,21 @@ function renderFilterControl(
                 range[1],
               ])
             }
+            onFocus={focusHandler}
+            onBlur={blurHandler}
           />
-          <span className="text-xs">-</span>
+          <span
+            style={{
+              fontSize: 12,
+              color: 'var(--ds-color-text-muted)',
+              flexShrink: 0,
+            }}
+          >
+            -
+          </span>
           <input
             type="number"
-            className="input input-bordered input-sm flex-1"
+            style={{ ...baseInputStyle, flex: 1 }}
             placeholder="Max"
             value={range[1] ?? ''}
             onChange={(e) =>
@@ -167,6 +253,8 @@ function renderFilterControl(
                 e.target.value === '' ? undefined : Number(e.target.value),
               ])
             }
+            onFocus={focusHandler}
+            onBlur={blurHandler}
           />
         </div>
       );
@@ -176,12 +264,17 @@ function renderFilterControl(
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * ModernFilterPanel
+ * ----------------------------------------------------------------------- */
+
 /**
- * Modern FilterPanel using DaisyUI-styled native HTML form controls.
- * Supports inline, stacked, and sidebar layouts with optional collapse.
+ * Modern FilterPanel using pure DS token inline styles.
+ * Supports inline, stacked, and sidebar layouts with optional collapse,
+ * active filter count badge, and clear-all / apply buttons.
  *
  * @param props - See {@link FilterPanelProps} for full prop documentation.
- * @returns A DaisyUI-styled filter panel with configurable layout.
+ * @returns A DS-token-styled filter panel with configurable layout.
  */
 export default function ModernFilterPanel(props: FilterPanelProps) {
   const {
@@ -203,90 +296,280 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
   } = props;
 
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // Spread existing values and overwrite the changed key so the consumer
-  // always receives the full values snapshot, not just the delta.
   const handleChange = (key: string, val: unknown) => {
     onChange({ ...values, [key]: val });
   };
 
-  // Layout modes: inline = horizontal toolbar, stacked = vertical list,
-  // sidebar = vertical with a right border separator.
   const isInline = layout === 'inline';
   const isSidebar = layout === 'sidebar';
 
+  /* -- Filter content area -- */
   const filterContent = (
-    // Inline layout uses items-end alignment so labels and inputs of
-    // different heights share a consistent bottom baseline.
-    <div className={isInline ? 'flex flex-wrap gap-4 items-end' : 'flex flex-col gap-4'}>
+    <div
+      style={
+        isInline
+          ? {
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 12,
+              alignItems: 'flex-end',
+            }
+          : {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+            }
+      }
+    >
       {filters.map((filter) => (
-        <div key={filter.key} className={isInline ? 'min-w-[180px]' : ''}>
-          <label className="label py-0">
-            <span className="label-text text-sm font-medium">{filter.label}</span>
-          </label>
+        <div
+          key={filter.key}
+          style={
+            isInline ? { flex: '1 1 180px', minWidth: 0 } : undefined
+          }
+        >
+          <span style={labelStyle}>{filter.label}</span>
           {renderFilterControl(filter, values[filter.key], handleChange)}
         </div>
       ))}
     </div>
   );
 
+  /* -- Loading spinner -- */
+  if (loading) {
+    return (
+      <div
+        className={className}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '16px 0',
+          ...style,
+        }}
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            animation: 'ds-filter-spin 1s linear infinite',
+            color: 'var(--ds-color-primary)',
+          }}
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="3"
+            fill="none"
+            strokeDasharray="60 30"
+            strokeLinecap="round"
+          />
+        </svg>
+        <style>{`@keyframes ds-filter-spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  /* -- Root container -- */
+  const rootStyle: React.CSSProperties = {
+    ...(isSidebar
+      ? {
+          borderRight: '1px solid var(--ds-color-border)',
+          paddingRight: 16,
+        }
+      : {}),
+    ...style,
+  };
+
   return (
-    <div
-      className={`${isSidebar ? 'border-r border-base-300 pr-4' : ''} ${className}`}
-      style={style}
-    >
-      {(title || collapsible) && (
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+    <div className={className} style={rootStyle}>
+      {/* Header: title, collapse toggle, active count badge, clear all */}
+      {(title || collapsible || (activeCount != null && activeCount > 0) || showReset) && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: !(collapsible && collapsed) ? 12 : 0,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {collapsible && (
               <button
-                className="btn btn-ghost btn-xs"
+                type="button"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 24,
+                  height: 24,
+                  padding: 0,
+                  border: 'none',
+                  background: 'transparent',
+                  borderRadius: 'var(--ds-radius-sm)',
+                  cursor: 'pointer',
+                  color: 'var(--ds-color-text-muted)',
+                  transition: `transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+                               background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+                  transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+                }}
                 onClick={() => setCollapsed(!collapsed)}
+                aria-expanded={!collapsed}
+                aria-label={collapsed ? 'Expand filters' : 'Collapse filters'}
               >
-                {collapsed ? '+' : '-'}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
               </button>
             )}
             {title && (
-              <span className="font-semibold text-sm">{title}</span>
+              <span
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: 'var(--ds-color-text)',
+                }}
+              >
+                {title}
+              </span>
             )}
             {activeCount != null && activeCount > 0 && (
-              <span className="badge badge-primary badge-sm">{activeCount}</span>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: 18,
+                  height: 18,
+                  padding: '0 5px',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  borderRadius: 9,
+                  background: 'var(--ds-color-primary)',
+                  color: 'var(--ds-color-primary-foreground, #fff)',
+                }}
+              >
+                {activeCount}
+              </span>
             )}
           </div>
-        </div>
-      )}
 
-      {loading && (
-        <div className="flex justify-center py-4">
-          <span className="loading loading-spinner loading-sm" />
-        </div>
-      )}
-
-      {/* Hide filter content when collapsed or loading. The guard
-          `!(collapsible && collapsed)` ensures non-collapsible panels
-          always show their content regardless of the collapsed state. */}
-      {!loading && !(collapsible && collapsed) && (
-        <>
-          {filterContent}
-          {(showReset || showApply) && (
-            <div className="flex gap-2 mt-3">
-              {showApply && (
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => onApply?.(values)}
-                >
-                  Apply
-                </button>
-              )}
-              {showReset && (
-                <button className="btn btn-ghost btn-sm" onClick={onReset}>
-                  Reset
-                </button>
-              )}
-            </div>
+          {/* Clear all -- ghost button, right-aligned in header */}
+          {showReset && !(collapsible && collapsed) && (
+            <button
+              type="button"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                padding: '4px 8px',
+                fontSize: 12,
+                fontWeight: 500,
+                border: 'none',
+                background: 'transparent',
+                borderRadius: 'var(--ds-radius-sm)',
+                cursor: 'pointer',
+                color: 'var(--ds-color-text-muted)',
+                transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out),
+                             background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+              }}
+              onClick={onReset}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--ds-color-error)';
+                e.currentTarget.style.background = 'var(--ds-surface-highlight)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--ds-color-text-muted)';
+                e.currentTarget.style.background = 'transparent';
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+              Clear all
+            </button>
           )}
-        </>
+        </div>
       )}
+
+      {/* Collapsible content area with smooth height transition */}
+      <div
+        ref={contentRef}
+        style={{
+          overflow: 'hidden',
+          transition: `max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out),
+                       opacity var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out)`,
+          maxHeight: collapsible && collapsed ? 0 : 2000,
+          opacity: collapsible && collapsed ? 0 : 1,
+        }}
+      >
+        {filterContent}
+
+        {/* Action buttons: Apply */}
+        {showApply && (
+          <div
+            style={{
+              display: 'flex',
+              gap: 8,
+              marginTop: 12,
+            }}
+          >
+            <button
+              type="button"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '6px 16px',
+                fontSize: 13,
+                fontWeight: 500,
+                border: 'none',
+                borderRadius: 'var(--ds-radius-sm)',
+                background: 'var(--ds-color-primary)',
+                color: 'var(--ds-color-primary-foreground, #fff)',
+                cursor: 'pointer',
+                transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+              }}
+              onClick={() => onApply?.(values)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '0.85';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '1';
+              }}
+            >
+              Apply
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 /**
  * @fileoverview Typography Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based typography with utility classes.
+ * @description Token-driven typography with Tailwind utility classes and --ds-* CSS custom properties.
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine uses Tailwind CSS utility classes and DaisyUI colors
+ * This engine uses Tailwind CSS utility classes and DS token inline styles
  * for lightweight, customizable typography rendering.
  *
  * **Available Components:**
@@ -16,14 +16,14 @@
  * - Size: `text-xs`, `text-sm`, `text-base`, `text-lg`, etc.
  * - Weight: `font-normal`, `font-medium`, `font-semibold`, `font-bold`
  * - Align: `text-left`, `text-center`, `text-right`, `text-justify`
- * - Color: `text-base-content`, `text-primary`, `text-success`, etc.
+ * - Color: DS token inline styles via --ds-color-text-primary, --ds-color-primary, etc.
  * - Decoration: `underline`, `line-through`, `italic`, `font-mono`
  * - Truncation: `truncate`, `line-clamp-{n}`
  *
  * **Advantages:**
  * - Lightweight CSS-only approach
  * - Tailwind utility compatibility
- * - DaisyUI theme integration
+ * - DS token theme integration
  * - Responsive design support
  *
  * @example Basic Usage
@@ -36,7 +36,7 @@
  * ```
  *
  * @see {@link Typography} for the main component
- * @see {@link https://daisyui.com/} DaisyUI
+ * @see {@link Typography} for the main component
  * @module Typography/engines/modern
  * @category Display
  * @package @rottay/design-system
@@ -63,6 +63,50 @@ const HEADING_SIZE_CLASSES: Record<string, string> = {
   xl: 'text-3xl',
   '2xl': 'text-4xl',
   '3xl': 'text-5xl',
+};
+
+/**
+ * Negative letter-spacing for larger heading sizes creates the tight,
+ * editorial feel found in premium interfaces (Linear, Vercel, Stripe).
+ * Smaller sizes use normal (0) tracking to preserve readability.
+ */
+const HEADING_LETTER_SPACING: Record<string, string> = {
+  xs: '0',
+  sm: '0',
+  md: '-0.01em',
+  lg: '-0.015em',
+  xl: '-0.02em',
+  '2xl': '-0.025em',
+  '3xl': '-0.025em',
+};
+
+/**
+ * Tighter line-heights for headings create a more compact, authoritative
+ * appearance. Larger sizes get tighter leading since the letterforms
+ * themselves provide enough vertical clearance.
+ */
+const HEADING_LINE_HEIGHT: Record<string, string> = {
+  xs: '1.4',
+  sm: '1.3',
+  md: '1.25',
+  lg: '1.2',
+  xl: '1.15',
+  '2xl': '1.1',
+  '3xl': '1.1',
+};
+
+/**
+ * Default heading level to semantic weight mapping.
+ * h1-h2 use bold (700) for maximum impact; h3-h6 use semibold (600)
+ * to create a clear visual hierarchy without being overpowering.
+ */
+const HEADING_LEVEL_WEIGHTS: Record<string, string> = {
+  h1: 'font-bold',
+  h2: 'font-bold',
+  h3: 'font-semibold',
+  h4: 'font-semibold',
+  h5: 'font-semibold',
+  h6: 'font-semibold',
 };
 
 /**
@@ -100,21 +144,22 @@ const ALIGN_CLASSES: Record<string, string> = {
 };
 
 /**
- * Colors use DaisyUI semantic tokens so they automatically adapt when
- * the theme changes (e.g. light to dark mode). "muted" uses a 70%
- * opacity modifier instead of a separate color to maintain contrast ratio.
+ * Colors use DS tokens so they automatically adapt when the theme changes
+ * (e.g. light to dark mode). "muted" maps to text-secondary for reduced emphasis.
  */
-const COLOR_CLASSES: Record<string, string> = {
-  default: 'text-base-content',
-  muted: 'text-base-content/70',
-  primary: 'text-primary',
-  success: 'text-success',
-  warning: 'text-warning',
-  error: 'text-error',
+const COLOR_STYLES: Record<string, React.CSSProperties> = {
+  default: { color: 'var(--ds-color-text-primary)' },
+  secondary: { color: 'var(--ds-color-text-secondary)' },
+  tertiary: { color: 'var(--ds-color-text-tertiary)' },
+  muted: { color: 'var(--ds-color-text-secondary)' },
+  primary: { color: 'var(--ds-color-primary)' },
+  success: { color: 'var(--ds-color-success)' },
+  warning: { color: 'var(--ds-color-warning)' },
+  error: { color: 'var(--ds-color-error)' },
 };
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of Heading component.
+ * Modern (token-driven) implementation of Heading component.
  *
  * Uses Tailwind CSS utility classes for styling.
  * Provides semantic heading elements with responsive design support.
@@ -173,6 +218,11 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         value: size,
         resolve: (v: TextSize) => LINE_HEIGHT_MAP.heading[v] || '1.2',
       } as ResponsivePropEntry<any>);
+      responsiveEntries.push({
+        cssProperty: 'letter-spacing',
+        value: size,
+        resolve: (v: TextSize) => HEADING_LETTER_SPACING[v] || '0',
+      } as ResponsivePropEntry<any>);
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
@@ -183,21 +233,43 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     const scalarSize = scalarOrUndefined(size);
 
+    // Resolve the effective weight class. When the consumer explicitly
+    // passes a weight we honour it; otherwise fall back to the
+    // level-aware default (bold for h1/h2, semibold for h3-h6).
+    const resolvedWeightClass =
+      weight !== TYPOGRAPHY_DEFAULTS.heading.weight
+        ? WEIGHT_CLASSES[weight]
+        : HEADING_LEVEL_WEIGHTS[level] || WEIGHT_CLASSES[weight];
+
     // Class list is assembled as an array and filtered to avoid
     // stray spaces from falsy entries (e.g. when size is undefined).
     // When size is responsive, do NOT emit a Tailwind size class -- the
     // injected <style> tag handles sizing via @media queries instead.
     const classes = [
       !sizeIsResponsive && scalarSize ? HEADING_SIZE_CLASSES[scalarSize] : '',
-      WEIGHT_CLASSES[weight],
+      resolvedWeightClass,
       ALIGN_CLASSES[align],
-      COLOR_CLASSES[color],
       truncate ? 'truncate' : '',
       lineClamp ? `line-clamp-${lineClamp}` : '',
       className,
     ]
       .filter(Boolean)
       .join(' ');
+
+    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
+
+    // Apply premium typographic refinements: negative letter-spacing
+    // and tighter line-height for larger heading sizes. These inline
+    // styles complement the Tailwind size class and give headings
+    // the editorial feel of Linear/Vercel/Stripe typography.
+    const typographyStyle: React.CSSProperties = {};
+    if (scalarSize && !sizeIsResponsive) {
+      const ls = HEADING_LETTER_SPACING[scalarSize];
+      if (ls && ls !== '0') {
+        typographyStyle.letterSpacing = ls;
+      }
+      typographyStyle.lineHeight = HEADING_LINE_HEIGHT[scalarSize] || '1.25';
+    }
 
     return (
       <>
@@ -207,7 +279,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         <Component
           ref={ref as React.Ref<HTMLHeadingElement>}
           className={classes}
-          style={style}
+          style={{ ...typographyStyle, ...colorStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >
@@ -221,7 +293,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 ModernHeading.displayName = 'ModernHeading';
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of Text component.
+ * Modern (token-driven) implementation of Text component.
  *
  * Uses Tailwind CSS utility classes for styling and decorations.
  * Supports all text decorations through utility classes.
@@ -292,7 +364,6 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       !sizeIsResponsive ? TEXT_SIZE_CLASSES[size] : '',
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
-      COLOR_CLASSES[color],
       underline ? 'underline' : '',
       strikethrough ? 'line-through' : '',
       italic ? 'italic' : '',
@@ -304,6 +375,8 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       .filter(Boolean)
       .join(' ');
 
+    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
+
     return (
       <>
         {responsive && responsive.css && (
@@ -312,7 +385,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
         <Component
           ref={ref as any}
           className={classes}
-          style={style}
+          style={{ ...colorStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >
@@ -326,7 +399,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
 ModernText.displayName = 'ModernText';
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of Paragraph component.
+ * Modern (token-driven) implementation of Paragraph component.
  *
  * Uses Tailwind CSS utility classes for styling.
  * Includes relaxed line-height and bottom margin for readability.
@@ -361,7 +434,6 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       TEXT_SIZE_CLASSES[size],
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
-      COLOR_CLASSES[color],
       'leading-relaxed',
       'mb-4',
       truncate ? 'truncate' : '',
@@ -371,8 +443,10 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       .filter(Boolean)
       .join(' ');
 
+    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
+
     return (
-      <p ref={ref} className={classes} style={style} {...props}>
+      <p ref={ref} className={classes} style={{ ...colorStyle, ...style }} {...props}>
         {children}
       </p>
     );
@@ -382,7 +456,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
 ModernParagraph.displayName = 'ModernParagraph';
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of Link component.
+ * Modern (token-driven) implementation of Link component.
  *
  * Uses Tailwind CSS utility classes for styling.
  * Provides styled anchor elements with hover effects.
@@ -424,7 +498,6 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
     const classes = [
       TEXT_SIZE_CLASSES[size],
       weight ? WEIGHT_CLASSES[weight] : '',
-      COLOR_CLASSES[color],
       strong ? 'font-semibold' : '',
       underline ? 'underline' : '',
       // hover:underline only applies when the link is not already underlined.
@@ -436,6 +509,8 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       .filter(Boolean)
       .join(' ');
 
+    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
+
     return (
       /* Disabled links have href removed entirely so they are not
           navigable via keyboard or assistive technology. */
@@ -446,7 +521,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
         rel={computedRel}
         onClick={disabled ? undefined : onClick}
         className={classes}
-        style={style}
+        style={{ ...colorStyle, ...style }}
         aria-disabled={disabled}
         {...props}
       >

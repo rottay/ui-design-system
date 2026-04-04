@@ -1,22 +1,17 @@
 /**
  * @fileoverview Tag Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based tag with badge classes.
+ * @description Token-driven tag with DS token inline styles only.
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine uses DaisyUI's badge component classes with Tailwind utilities
- * for lightweight, utility-first tag rendering.
+ * This engine uses DS token inline styles exclusively for rendering.
+ * No DaisyUI badge classes are used.
  *
  * **Implementation Details:**
- * - Uses DaisyUI `badge` class for container
- * - Uses `badge-{size}` for size variants
- * - Uses `badge-{variant}` for color variants
- * - Uses `badge-outline` for outlined style
- *
- * **Class Mappings:**
- * - `badge-primary`, `badge-secondary`, etc. for variants
- * - `badge-xs`, `badge-sm`, `badge-md`, `badge-lg` for sizes
- * - `rounded-*` for border radius
+ * - Inline pill styles for the container (display, border-radius, etc.)
+ * - SIZE_STYLES map for size variants via CSSProperties
+ * - DS token inline styles for color variants via --ds-color-*
+ * - Outline variant uses transparent background with border
  *
  * @example Basic Usage
  * ```tsx
@@ -28,7 +23,6 @@
  * ```
  *
  * @see {@link Tag} for the main component
- * @see {@link https://daisyui.com/components/badge/} DaisyUI Badge
  * @module ModernTag
  * @category Display
  * @package @rottay/design-system
@@ -61,47 +55,47 @@ const CloseIcon: React.FC = () => (
 );
 
 /**
- * Maps size prop to DaisyUI badge size classes.
+ * Maps size prop to inline CSSProperties for the tag pill.
  */
-const SIZE_CLASSES: Record<string, string> = {
-  xs: 'badge-xs text-xs',
-  sm: 'badge-sm text-xs',
-  md: 'badge-md text-sm',
-  lg: 'badge-lg text-base',
-  xl: 'badge-lg text-lg',
+const SIZE_STYLES: Record<string, React.CSSProperties> = {
+  xs: { height: 18, padding: '0 4px', fontSize: 10 },
+  sm: { height: 22, padding: '0 6px', fontSize: 11 },
+  md: { height: 26, padding: '0 8px', fontSize: 12 },
+  lg: { height: 30, padding: '0 10px', fontSize: 14 },
+  xl: { height: 30, padding: '0 10px', fontSize: 14 },
 };
 
 /**
- * Maps variant prop to DaisyUI badge color classes.
+ * Maps variant prop to DS token inline styles.
  */
-const VARIANT_CLASSES: Record<string, string> = {
-  default: 'badge-ghost',
-  primary: 'badge-primary',
-  secondary: 'badge-secondary',
-  success: 'badge-success',
-  warning: 'badge-warning',
-  error: 'badge-error',
+const VARIANT_STYLES: Record<string, React.CSSProperties> = {
+  default: { background: 'var(--ds-color-alpha-black-100)', color: 'var(--ds-color-text-primary)' },
+  primary: { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' },
+  secondary: { background: 'var(--ds-color-secondary)', color: 'var(--ds-color-text-on-primary)' },
+  success: { background: 'var(--ds-color-success)', color: 'var(--ds-color-text-on-primary)' },
+  warning: { background: 'var(--ds-color-warning)', color: 'var(--ds-color-text-on-primary)' },
+  error: { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' },
 };
 
 /**
- * Maps radius prop to Tailwind border-radius classes.
+ * Maps radius prop to inline borderRadius values.
  */
-const RADIUS_CLASSES: Record<string, string> = {
-  none: 'rounded-none',
-  sm: 'rounded-sm',
-  md: 'rounded',
-  lg: 'rounded-lg',
-  full: 'rounded-full',
+const RADIUS_STYLES: Record<string, string | number> = {
+  none: 0,
+  sm: 2,
+  md: 'var(--ds-radius-md)',
+  lg: 'var(--ds-radius-lg)',
+  full: 9999,
 };
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the Tag component.
+ * Modern (token-driven) implementation of the Tag component.
  *
- * Uses DaisyUI's badge component with Tailwind utility classes
+ * Uses DS token inline styles exclusively
  * for a lightweight, customizable tag implementation.
  *
  * @param props - Tag component properties
- * @returns DaisyUI badge element
+ * @returns DS token-styled tag element
  *
  * @example
  * ```tsx
@@ -150,29 +144,29 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     }
   }, [clickable, onClick]);
 
-  // Assemble DaisyUI utility classes. Falsy values (from disabled booleans)
-  // are removed by .filter(Boolean) so they never produce stray whitespace.
-  // The order matters: base -> layout -> size -> variant -> modifiers -> user.
-  const classNames = [
-    'badge',
-    'inline-flex',
-    'items-center',
-    'gap-1',
-    SIZE_CLASSES[size] || SIZE_CLASSES.md,
-    VARIANT_CLASSES[variant] || VARIANT_CLASSES.default,
-    outlined && 'badge-outline',
-    RADIUS_CLASSES[radius] || RADIUS_CLASSES.md,
-    bordered && 'ring-1 ring-base-300',
-    clickable && 'cursor-pointer hover:opacity-80 active:scale-95',
-    'transition-all duration-200',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  // Build variant/color styles
+  const variantStyles = VARIANT_STYLES[variant] || VARIANT_STYLES.default;
+  const outlinedOverrides: React.CSSProperties = outlined
+    ? { background: 'transparent', border: `1px solid ${variantStyles.background}`, color: variantStyles.background as string }
+    : {};
 
-  // Custom color overrides the variant background, allowing one-off branding
+  // Assemble all inline styles: base pill -> size -> radius -> variant -> outlined -> bordered -> clickable -> user
   const tagStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 4,
+    lineHeight: 1,
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    transition: 'all 0.2s',
+    borderRadius: RADIUS_STYLES[radius] ?? RADIUS_STYLES.md,
+    ...(SIZE_STYLES[size] || SIZE_STYLES.md),
+    ...variantStyles,
+    ...outlinedOverrides,
     ...(color && { backgroundColor: color }),
+    ...(bordered && { boxShadow: 'inset 0 0 0 1px var(--ds-color-border)' }),
+    ...(clickable && { cursor: 'pointer' }),
     ...style,
   };
 
@@ -180,15 +174,14 @@ export default function ModernTag(props: TagProps): React.ReactElement {
   // clickable tags via Enter/Space without extra JS key handlers.
   return (
     <span
-      className={classNames}
+      className={className || undefined}
       style={tagStyle}
       onClick={handleClick}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       {...restProps}
     >
-      {/* flex-shrink-0 prevents icon from collapsing in tight layouts */}
-      {icon && <span className="flex-shrink-0">{icon}</span>}
+      {icon && <span style={{ flexShrink: 0 }}>{icon}</span>}
 
       <span>{children}</span>
 
@@ -196,7 +189,7 @@ export default function ModernTag(props: TagProps): React.ReactElement {
         <button
           type="button"
           onClick={handleClose}
-          className="ml-0.5 hover:opacity-70 focus:outline-none"
+          style={{ marginLeft: 2, background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'inherit', display: 'inline-flex' }}
           aria-label="Remove tag"
         >
           <CloseIcon />

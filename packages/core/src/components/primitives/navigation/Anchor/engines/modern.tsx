@@ -1,33 +1,33 @@
 /**
  * @fileoverview Anchor Hermes Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Anchor component.
+ * @description Token-driven Tailwind CSS implementation of the Anchor component.
  * A utility-first engine optimized for Tailwind-based projects.
  *
  * @remarks
  * **Engine Overview:**
- * Hermes is built on DaisyUI and Tailwind CSS, providing a lightweight
+ * Hermes is built on Tailwind CSS and DS tokens, providing a lightweight
  * implementation with utility-first styling. Key characteristics:
  * - Minimal JavaScript, maximum CSS utilities
  * - Tailwind-native class composition
- * - DaisyUI semantic color tokens
+ * - DS token semantic color styles via --ds-* custom properties
  * - Smaller bundle size than Titan
  *
  * **When to Use Hermes:**
  * - Projects using Tailwind CSS as the primary styling solution
  * - When you prefer utility-first CSS approach
  * - For smaller bundle sizes compared to Titan
- * - When DaisyUI is already in your stack
+ * - When Tailwind CSS is already in your stack
  *
  * **Multi-Tenant Theming:**
- * Hermes anchors use DaisyUI's semantic color classes (primary, base-content)
- * which automatically adapt to the configured DaisyUI theme. This integrates
+ * Hermes anchors use DS token inline styles (--ds-color-primary, --ds-color-text-secondary)
+ * which automatically adapt to the active tenant theme. This integrates
  * seamlessly with Rottay's multi-tenant theming system.
  *
  * **Tailwind Classes Used:**
  * - `sticky`, `top-0`: Affix positioning
  * - `flex`, `gap-2`: Horizontal direction
- * - `text-primary`, `border-primary`: Active state
- * - `text-base-content/70`: Inactive state
+ * - `var(--ds-color-primary)` via inline style: Active state
+ * - `var(--ds-color-text-secondary)` via inline style: Inactive state
  * - `transition-colors`: Smooth color transitions
  *
  * @example Basic Usage
@@ -64,7 +64,7 @@
  * @see {@link AnchorProps} - Component props interface
  * @see {@link TitanAnchor} - Ant Design alternative
  * @see {@link ApolloAnchor} - Vanilla alternative
- * @see {@link https://daisyui.com/} - DaisyUI documentation
+ * @see {@link Anchor} for the main component
  * @module Anchor/Engines/Hermes
  * @category Navigation
  * @package @rottay/design-system
@@ -109,13 +109,13 @@ const AnchorContext = createContext<AnchorContextValue | null>(null);
  * Hermes Engine implementation of the Anchor.Link component.
  *
  * @description
- * A Tailwind/DaisyUI styled navigation link that scrolls to target sections.
- * Uses utility classes for styling and DaisyUI semantic colors.
+ * A Tailwind-styled navigation link that scrolls to target sections.
+ * Uses utility classes and DS token inline styles for semantic colors.
  *
  * @remarks
  * **Tailwind Classes:**
- * - Active: `text-primary border-l-2 border-primary font-medium`
- * - Inactive: `text-base-content/70 hover:text-primary border-transparent`
+ * - Active: `font-medium` + inline `color: var(--ds-color-primary)`, `borderColor: var(--ds-color-primary)`
+ * - Inactive: `border-transparent` + inline `color: var(--ds-color-text-secondary)`
  * - Base: `block py-1 px-3 text-sm transition-colors`
  *
  * **Features:**
@@ -177,12 +177,14 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
           href={href}
           target={target}
           onClick={handleClick}
-          className={`block py-1 px-3 text-sm transition-colors ${
-            isActive
-              ? 'text-primary border-l-2 border-primary font-medium'
-              : 'text-base-content/70 hover:text-primary border-l-2 border-transparent'
+          className={`block py-1 px-3 text-sm transition-colors border-l-2 ${
+            isActive ? 'font-medium' : 'border-transparent'
           } ${className}`}
-          style={style}
+          style={{
+            color: isActive ? 'var(--ds-color-primary)' : 'var(--ds-color-text-secondary)',
+            ...(isActive ? { borderColor: 'var(--ds-color-primary)' } : {}),
+            ...style,
+          }}
         >
           {title}
         </a>
@@ -205,7 +207,7 @@ Link.displayName = 'Anchor.Link.Hermes';
  * Hermes Engine implementation of the Anchor component.
  *
  * @description
- * A Tailwind/DaisyUI styled anchor navigation container. Tracks scroll
+ * A Tailwind-styled anchor navigation container with DS tokens. Tracks scroll
  * position and provides context for child Link components.
  *
  * @remarks

@@ -1,17 +1,17 @@
 /**
  * @fileoverview Toast Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Toast component.
- * Uses DaisyUI alert classes styled as toast notifications.
+ * @description Token-driven Tailwind implementation of the Toast component.
+ * Uses DS token inline styles for toast notifications.
  *
  * @remarks
- * The Modern engine uses DaisyUI's alert component classes:
- * - `alert` base class for container styling
- * - `alert-{variant}` for color variants
+ * The Modern engine uses DS token inline styles:
+ * - `alert` structural class for container styling
+ * - DS token inline styles (--ds-color-*) for color variants
  * - Tailwind utilities for layout and spacing
  *
  * This implementation provides:
  * - Utility-first styling with Tailwind CSS
- * - DaisyUI's semantic color classes
+ * - DS token semantic color styles
  * - Consistent animation timing
  * - Full feature parity with other engines
  *
@@ -56,29 +56,30 @@ import { getToastAnimationStyle } from '../utils/animations';
 // ============================================================================
 
 /**
- * Maps Toast variant to DaisyUI alert class.
+ * Maps Toast variant to DS token inline styles.
  *
  * @description
- * Converts the design system's variant to DaisyUI's alert-{variant} class.
- * Unknown variants return an empty string for default styling.
+ * Converts the design system's variant to a tinted background and
+ * matching text color using CSS custom properties.
+ * Unknown variants return an empty object for default styling.
  *
  * @param variant - Toast variant
- * @returns DaisyUI alert class name
+ * @returns React.CSSProperties with background and color
  *
  * @internal
  */
-function getAlertClass(variant: ToastVariant): string {
+function getAlertStyle(variant: ToastVariant): React.CSSProperties {
   switch (variant) {
     case 'success':
-      return 'alert-success';
+      return { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' };
     case 'error':
-      return 'alert-error';
+      return { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' };
     case 'warning':
-      return 'alert-warning';
+      return { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' };
     case 'info':
-      return 'alert-info';
+      return { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' };
     default:
-      return '';
+      return {};
   }
 }
 
@@ -86,7 +87,7 @@ function getAlertClass(variant: ToastVariant): string {
  * Returns the default icon SVG for a given variant.
  *
  * @description
- * Provides semantic icons matching DaisyUI's icon styling:
+ * Provides semantic icons matching the alert icon styling:
  * - Success: Checkmark circle
  * - Error: X circle
  * - Warning: Triangle exclamation
@@ -133,16 +134,16 @@ function getDefaultIcon(variant: ToastVariant): React.ReactNode {
 // ============================================================================
 
 /**
- * ModernToast - DaisyUI implementation of Toast.
+ * ModernToast - Token-driven implementation of Toast.
  *
  * @description
  * Renders an alert component styled as a toast notification using
- * DaisyUI classes and Tailwind utilities.
+ * DS token inline styles and Tailwind utilities.
  *
  * @remarks
  * This component manages its own visibility state and animations.
- * It uses DaisyUI's alert classes for consistent styling within
- * DaisyUI-based applications.
+ * It uses DS token inline styles for consistent styling within
+ * token-themed applications.
  *
  * @param props - {@link ToastProps}
  * @returns Styled alert element, or null if not visible
@@ -266,10 +267,10 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   // Class Names
   // ========================================================================
 
-  // DaisyUI alert classes provide the variant colouring; shadow-lg adds
-  // elevation so the toast visually floats above the page content
-  const alertClass = getAlertClass(variant as ToastVariant);
-  const baseClasses = `alert ${alertClass} shadow-lg`.trim();
+  // DS token styles provide the variant colouring; boxShadow via DS elevation
+  // token adds depth so the toast visually floats above the page content
+  const alertStyle = getAlertStyle(variant as ToastVariant);
+  const baseClasses = 'alert';
   const animationClass = isExiting ? 'animate-fade-out' : 'animate-fade-in';
 
   // ========================================================================
@@ -296,6 +297,8 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       style={{
         position: 'relative',
         overflow: 'hidden',
+        boxShadow: 'var(--ds-elevation-2)',
+        ...alertStyle,
         ...getToastAnimationStyle('top-right', isExiting ? 'out' : 'in', 'fade'),
         ...style,
       }}
@@ -316,12 +319,21 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       <div className="flex-none flex gap-2">
         {action && (
           <button
-            className="btn btn-sm btn-ghost"
             onClick={() => {
               action.onClick();
               if (action.closeOnClick !== false) {
                 handleClose();
               }
+            }}
+            style={{
+              height: 32,
+              padding: '0 12px',
+              fontSize: 13,
+              borderRadius: 'var(--ds-radius-md)',
+              border: 'none',
+              background: 'transparent',
+              color: 'var(--ds-color-text-primary)',
+              cursor: 'pointer',
             }}
           >
             {action.label}
@@ -330,9 +342,20 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
 
         {closable && (
           <button
-            className="btn btn-sm btn-ghost btn-circle"
             onClick={handleClose}
             aria-label="Close"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              border: 'none',
+              background: 'transparent',
+              color: 'var(--ds-color-text-primary)',
+              cursor: 'pointer',
+            }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />

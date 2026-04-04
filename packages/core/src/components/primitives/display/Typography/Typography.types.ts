@@ -77,7 +77,7 @@ export type TextAlign = 'left' | 'center' | 'right' | 'justify';
  * Semantic text color options.
  * Maps to design system color tokens for consistent theming.
  */
-export type TextColor = 'default' | 'muted' | 'primary' | 'success' | 'warning' | 'error';
+export type TextColor = 'default' | 'secondary' | 'tertiary' | 'muted' | 'primary' | 'success' | 'warning' | 'error';
 
 /**
  * Props for the Heading component.
@@ -516,6 +516,10 @@ export const WEIGHT_MAP = {
 export const COLOR_MAP = {
   /** Standard text color - highest contrast, used for body content. */
   default: 'var(--ds-color-text-primary)',
+  /** Secondary text color - medium contrast for supporting text. */
+  secondary: 'var(--ds-color-text-secondary)',
+  /** Tertiary text color - lowest contrast for metadata, timestamps, captions. */
+  tertiary: 'var(--ds-color-text-tertiary)',
   /** Muted / secondary text color - lower contrast for supporting text. */
   muted: 'var(--ds-color-text-secondary)',
   /** Primary brand color - links, key labels, and interactive highlights. */
@@ -538,11 +542,11 @@ export const COLOR_MAP = {
 export const LINE_HEIGHT_MAP = {
   heading: {
     xs: '1.4',
-    sm: '1.35',
-    md: '1.3',
-    lg: '1.25',
-    xl: '1.2',
-    '2xl': '1.15',
+    sm: '1.3',
+    md: '1.25',
+    lg: '1.2',
+    xl: '1.15',
+    '2xl': '1.1',
     '3xl': '1.1',
   },
   text: {

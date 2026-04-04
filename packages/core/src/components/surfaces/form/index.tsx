@@ -129,9 +129,10 @@ export function FormSurface({
             <Stack spacing={sectionSpacing}>
               {config.presentation.description && (
                 <Text
+                  size="sm"
                   style={{
                     color: 'var(--ds-color-text-muted)',
-                    textTransform: labelTransform,
+                    lineHeight: 1.5,
                   }}
                 >
                   {config.presentation.description}
@@ -139,7 +140,7 @@ export function FormSurface({
               )}
 
               {config.presentation.error && (
-                <Card variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error-500)' }}>
+                <Card variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error)' }}>
                   <Card.Body>{config.presentation.error}</Card.Body>
                 </Card>
               )}
@@ -171,7 +172,13 @@ export function FormSurface({
 
       {showAside && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
-          <Card variant={profileDefaults.cardVariant}>
+          <Card
+            variant={profileDefaults.cardVariant}
+            style={{
+              position: shouldStack ? undefined : 'sticky',
+              top: shouldStack ? undefined : 16,
+            }}
+          >
             <Card.Body>{config.presentation.aside}</Card.Body>
           </Card>
         </Grid.Item>

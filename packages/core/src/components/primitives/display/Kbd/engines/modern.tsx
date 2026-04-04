@@ -15,19 +15,18 @@ import React from 'react';
 import type { KbdProps } from '../Kbd.types';
 import { KBD_DEFAULTS } from '../Kbd.types';
 
-/** Maps DS size tokens to DaisyUI `kbd-*` modifier classes (md has no modifier). */
-const SIZE_CLASSES: Record<string, string> = {
-  sm: 'kbd-sm',
-  md: '',
-  lg: 'kbd-lg',
+/** Maps size tokens to inline style dimensions. */
+const SIZE_STYLES: Record<string, React.CSSProperties> = {
+  sm: { padding: '1px 4px', fontSize: 11, minHeight: 20 },
+  md: { padding: '2px 6px', fontSize: 12, minHeight: 24 },
+  lg: { padding: '3px 8px', fontSize: 14, minHeight: 28 },
 };
 
 /**
- * Modern Kbd engine. Delegates all visual styling to DaisyUI's `kbd` class,
- * which provides the key-cap appearance, border, and background automatically.
+ * Modern Kbd engine. DS token inline styles for key-cap appearance.
  *
  * @param props - KbdProps with children content and optional size/className/style.
- * @returns A DaisyUI-styled `<kbd>` element.
+ * @returns A DS-token-styled `<kbd>` element.
  */
 export default function ModernKbd(props: KbdProps): React.ReactElement {
   const {
@@ -37,14 +36,25 @@ export default function ModernKbd(props: KbdProps): React.ReactElement {
     style,
   } = props;
 
-  // Empty string for 'md' is intentional -- DaisyUI's base `kbd` class is medium
-  const sizeClass = SIZE_CLASSES[size] || '';
+  const sizeStyle = SIZE_STYLES[size] || SIZE_STYLES.md;
 
-  // `font-mono` is added explicitly because DaisyUI's `kbd` does not enforce it
   return (
     <kbd
-      className={`kbd ${sizeClass} font-mono ${className}`}
-      style={style}
+      className={className || undefined}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'monospace',
+        fontWeight: 500,
+        lineHeight: 1,
+        borderRadius: 'var(--ds-radius-sm)',
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-surface-inset)',
+        color: 'var(--ds-color-text-primary)',
+        ...sizeStyle,
+        ...style,
+      }}
     >
       {children}
     </kbd>

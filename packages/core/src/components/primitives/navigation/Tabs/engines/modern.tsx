@@ -2,51 +2,55 @@
 
 /**
  * @fileoverview Tabs Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Tabs component.
- * Provides a lightweight, utility-first tabs experience.
+ * @description Premium token-driven tabs with sliding indicator, refined states,
+ * and badge/icon support. Linear/Vercel/Stripe quality.
  *
  * @remarks
- * The Modern engine uses DaisyUI's tab classes combined with Tailwind
- * utilities for styling. This results in a smaller bundle size compared
- * to Classic while maintaining visual consistency with the design system.
+ * The Modern engine uses CSS custom property tokens for all visual decisions.
+ * No DaisyUI classes - all styling is inline via design tokens.
  *
- * Enhancements:
- * - Type-aware styling: 'line' gets sliding border-bottom indicator,
- *   'card' gets rounded-top bg, 'pills' gets full rounded
- * - Explicit transition-colors duration-200 on all tabs
- * - Hover underline for line type
- * - Active indicator animation with smooth transitions
+ * **Tab Types:**
+ * - `line`: Bottom border indicator (default). Sliding animated underline.
+ * - `card`: Rounded tab buttons with bg fill + elevation when active.
+ * - `pills`: Pill-shaped buttons with bg fill when active.
  *
- * @example
- * ```tsx
- * // Use Modern engine
- * <Tabs engine="modern" items={items} />
- *
- * // Or set globally
- * <EngineProvider engine="modern">
- *   <Tabs items={items} />
- * </EngineProvider>
- * ```
- *
- * @see {@link Tabs} for the main component documentation
- * @see {@link TabsProps} for prop definitions
+ * **Sizes:**
+ * - `sm`: text-xs, 32px height
+ * - `md`: text-sm, 36px height
+ * - `lg`: text-base, 40px height
  *
  * @module Tabs/Engines/Modern
  * @category Navigation
  * @package @rottay/design-system
  */
 
-import React, { useCallback, useId, useRef, useState, useEffect } from 'react';
-import type { TabsProps, TabItem, TabsType, TabsSize } from '../Tabs.types';
+import React, { useCallback, useId, useLayoutEffect, useRef, useState } from 'react';
+import type { TabsProps, TabItem, TabsSize } from '../Tabs.types';
 import { TABS_DEFAULTS } from '../Tabs.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
-const TABS_SIZE_STYLES: Record<string, { padding: string; fontSize: string }> = {
-  sm: { padding: '4px 12px', fontSize: '0.875rem' },
-  md: { padding: '8px 16px', fontSize: '1rem' },
-  lg: { padding: '12px 20px', fontSize: '1.125rem' },
+// ============================================================================
+// Constants
+// ============================================================================
+
+const TRANSITION_FAST = [
+  'color var(--ds-motion-fast) var(--ds-motion-ease-out)',
+  'background-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
+  'border-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
+  'box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)',
+  'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)',
+].join(', ');
+
+const SIZE_CONFIG: Record<string, { height: string; fontSize: string; padding: string; iconSize: string; badgeFontSize: string }> = {
+  sm: { height: '32px', fontSize: '12px', padding: '8px 12px', iconSize: '14px', badgeFontSize: '10px' },
+  md: { height: '36px', fontSize: '13px', padding: '8px 16px', iconSize: '16px', badgeFontSize: '11px' },
+  lg: { height: '40px', fontSize: '14px', padding: '8px 16px', iconSize: '18px', badgeFontSize: '11px' },
 };
+
+// ============================================================================
+// Helpers
+// ============================================================================
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
   if (value === undefined || value === null) return undefined;
@@ -55,94 +59,113 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
 }
 
 // ============================================================================
-// Style Mappings
+// Indicator position type
 // ============================================================================
 
-/**
- * Maps Rottay tab types to DaisyUI classes.
- */
-// DaisyUI provides `tabs-bordered` (underline) and `tabs-boxed` (filled background).
-// Both "card" and "pills" map to `tabs-boxed` since DaisyUI has no distinct pill
-// variant. The visual difference between card/pills is achieved via the inline
-// type-specific styles returned by `getTabTypeStyle()` below.
-const TYPE_CLASSES: Record<string, string> = {
-  line: 'tabs-bordered',
-  card: 'tabs-boxed',
-  pills: 'tabs-boxed',
-};
-
-/**
- * Maps Rottay sizes to DaisyUI size classes.
- */
-const SIZE_CLASSES: Record<string, string> = {
-  sm: 'tabs-sm',
-  md: '',
-  lg: 'tabs-lg',
-};
+interface IndicatorPos {
+  left: number;
+  width: number;
+}
 
 // ============================================================================
-// Type-specific styling
+// Tab item style by type
 // ============================================================================
 
-/**
- * Get type-specific styles for individual tab buttons.
- */
-function getTabTypeStyle(
+function getTabItemStyle(
   type: string,
   isActive: boolean,
   isHovered: boolean,
+  isDisabled: boolean,
+  sizeKey: string,
 ): React.CSSProperties {
+  const sizeStyle = SIZE_CONFIG[sizeKey] || SIZE_CONFIG.md;
   const base: React.CSSProperties = {
-    transition: 'color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+    transition: TRANSITION_FAST,
+    height: sizeStyle.height,
+    padding: sizeStyle.padding,
+    fontSize: sizeStyle.fontSize,
+    lineHeight: '1',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+    whiteSpace: 'nowrap' as const,
+    border: 'none',
+    outline: 'none',
+    background: 'none',
+    position: 'relative' as const,
+    userSelect: 'none' as const,
+    flexShrink: 0,
+    cursor: isDisabled ? 'not-allowed' : 'pointer',
+    opacity: isDisabled ? 0.4 : 1,
   };
 
   switch (type) {
-    case 'line':
+    case 'line': {
+      // Active: primary text, 500 weight -- indicator handled separately
+      // Hover: secondary text
+      // Inactive: tertiary text
       return {
         ...base,
-        borderBottom: isActive
-          ? '2px solid var(--ds-tabs-active-color, var(--color-primary))'
-          : isHovered
-            ? '2px solid var(--ds-tabs-hover-color, oklch(var(--color-primary) / 0.4))'
-            : '2px solid transparent',
         borderRadius: 0,
-        paddingBottom: '8px',
+        paddingBottom: '10px',
         marginBottom: '-1px',
-        color: isActive
-          ? 'var(--ds-tabs-active-color, var(--color-primary))'
-          : undefined,
+        color: isDisabled
+          ? 'var(--ds-color-text-tertiary)'
+          : isActive
+            ? 'var(--ds-color-text-primary)'
+            : isHovered
+              ? 'var(--ds-color-text-secondary)'
+              : 'var(--ds-color-text-tertiary)',
+        fontWeight: isActive ? 500 : 400,
       };
+    }
 
-    case 'card':
+    case 'card': {
       return {
         ...base,
-        borderRadius: isActive ? '8px 8px 0 0' : '8px 8px 0 0',
-        backgroundColor: isActive
-          ? 'var(--ds-tabs-active-bg, var(--color-base-100))'
-          : isHovered
-            ? 'var(--ds-tabs-hover-bg, var(--color-base-200))'
-            : 'transparent',
-        boxShadow: isActive
-          ? 'var(--ds-shadow-tab-active, 0 -1px 3px var(--ds-color-shadow, rgba(0, 0, 0, 0.06)))'
+        borderRadius: 'var(--ds-radius-md)',
+        backgroundColor: isDisabled
+          ? 'transparent'
+          : isActive
+            ? 'var(--ds-surface-card)'
+            : isHovered
+              ? 'var(--ds-surface-highlight)'
+              : 'transparent',
+        boxShadow: isActive && !isDisabled
+          ? 'var(--ds-elevation-1)'
           : 'none',
-        fontWeight: isActive ? 600 : 400,
+        color: isDisabled
+          ? 'var(--ds-color-text-tertiary)'
+          : isActive
+            ? 'var(--ds-color-text-primary)'
+            : isHovered
+              ? 'var(--ds-color-text-secondary)'
+              : 'var(--ds-color-text-tertiary)',
+        fontWeight: isActive ? 500 : 400,
       };
+    }
 
-    case 'pills':
+    case 'pills': {
       return {
         ...base,
         borderRadius: '9999px',
-        backgroundColor: isActive
-          ? 'var(--ds-tabs-active-bg, var(--color-primary))'
-          : isHovered
-            ? 'var(--ds-tabs-hover-bg, var(--color-base-200))'
-            : 'transparent',
-        color: isActive
-          ? 'var(--ds-tabs-active-color, var(--color-primary-content))'
-          : undefined,
+        backgroundColor: isDisabled
+          ? 'transparent'
+          : isActive
+            ? 'var(--ds-color-primary)'
+            : isHovered
+              ? 'var(--ds-color-alpha-black-100)'
+              : 'transparent',
+        color: isDisabled
+          ? 'var(--ds-color-text-tertiary)'
+          : isActive
+            ? 'var(--ds-color-text-on-primary)'
+            : isHovered
+              ? 'var(--ds-color-text-secondary)'
+              : 'var(--ds-color-text-tertiary)',
         fontWeight: isActive ? 500 : 400,
-        padding: '4px 16px',
       };
+    }
 
     default:
       return base;
@@ -150,36 +173,67 @@ function getTabTypeStyle(
 }
 
 // ============================================================================
-// Component Implementation
+// Badge sub-component (inline)
+// ============================================================================
+
+function TabBadge({ children, sizeKey }: { children: React.ReactNode; sizeKey: string }): React.ReactElement {
+  const sizeStyle = SIZE_CONFIG[sizeKey] || SIZE_CONFIG.md;
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minWidth: '18px',
+        height: '18px',
+        padding: '0 6px',
+        borderRadius: '9999px',
+        backgroundColor: 'var(--ds-color-alpha-black-100)',
+        color: 'var(--ds-color-text-secondary)',
+        fontSize: sizeStyle.badgeFontSize,
+        fontWeight: 500,
+        lineHeight: '1',
+        letterSpacing: '0.01em',
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+// ============================================================================
+// Label parser -- detects label+badge pattern
 // ============================================================================
 
 /**
- * Modern engine implementation of Tabs.
- *
- * @description
- * Renders the Tabs component using DaisyUI classes and Tailwind utilities.
- * Manages tab state internally with controlled mode support.
- *
- * @remarks
- * - Uses DaisyUI's `tabs` component classes
- * - Handles both controlled and uncontrolled modes
- * - Renders content conditionally based on active tab
- * - Applies proper ARIA roles for accessibility
- * - Type-aware styling for line, card, and pills variants
+ * If the label is a string like "Groups 4" where the last token is a number,
+ * we split it into the text label and a badge. Otherwise, render as-is.
+ */
+function parseLabel(label: React.ReactNode, sizeKey: string): React.ReactNode {
+  if (typeof label === 'string') {
+    const match = label.match(/^(.+?)\s+(\d+)$/);
+    if (match) {
+      return (
+        <>
+          {match[1]}
+          <TabBadge sizeKey={sizeKey}>{match[2]}</TabBadge>
+        </>
+      );
+    }
+  }
+  return label;
+}
+
+// ============================================================================
+// Component
+// ============================================================================
+
+/**
+ * Modern engine Tabs component using token-driven inline styles.
+ * Premium quality: sliding indicator, refined states, badge/icon support.
  *
  * @param props - {@link TabsProps}
- * @returns React element rendered with DaisyUI/Tailwind
- *
- * @example
- * ```tsx
- * <ModernTabs
- *   items={[
- *     { key: '1', label: 'Tab 1', children: <Content /> },
- *   ]}
- *   type="line"
- *   centered
- * />
- * ```
+ * @returns React element
  */
 export default function ModernTabs(props: TabsProps): React.ReactElement {
   const {
@@ -193,8 +247,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     className = '',
     style,
   } = props;
-  // useId() generates IDs containing colons which break CSS selectors and
-  // aria-* attribute references, so we strip them for safe DOM id usage
+
   const tabsId = useId().replace(/:/g, '');
 
   // Responsive size handling
@@ -202,6 +255,11 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   const sizeIsResponsive = isResponsiveValue(sizeProp);
 
   if (sizeIsResponsive) {
+    const TABS_SIZE_STYLES: Record<string, { padding: string; fontSize: string }> = {
+      sm: { padding: '8px 12px', fontSize: '12px' },
+      md: { padding: '8px 16px', fontSize: '13px' },
+      lg: { padding: '8px 16px', fontSize: '14px' },
+    };
     responsiveEntries.push({
       cssProperty: 'padding',
       value: sizeProp,
@@ -221,32 +279,22 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     : null;
 
   const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
-  // Ref map for imperative focus management during keyboard navigation
+  const tabListRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  // Tracked hover state enables type-specific hover styles (e.g., underline preview)
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const [indicatorPos, setIndicatorPos] = useState<IndicatorPos | null>(null);
 
   // ============================================================================
   // State Management
   // ============================================================================
 
-  /**
-   * Internal state for uncontrolled mode.
-   * Falls back to first item if no default provided.
-   */
   const [active, setActive] = useState(activeKey || defaultActiveKey || items[0]?.key);
 
-  /**
-   * Handles tab selection.
-   * Updates internal state in uncontrolled mode and calls onChange callback.
-   */
   const handleChange = (key: string) => {
     if (!activeKey) setActive(key);
     onChange?.(key);
   };
 
-  // Filter out disabled items so keyboard navigation only cycles through
-  // actionable tabs, following the WAI-ARIA tabs roving tabindex pattern
   const enabledItems = items.filter((item) => !item.disabled);
 
   const focusAndActivate = useCallback(
@@ -260,7 +308,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>, key: string) => {
       const enabledIndex = enabledItems.findIndex((item) => item.key === key);
-
       if (enabledIndex === -1) return;
 
       let nextKey: string | undefined;
@@ -285,7 +332,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       }
 
       if (!nextKey) return;
-
       event.preventDefault();
       focusAndActivate(nextKey);
     },
@@ -296,18 +342,86 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   // Derived Values
   // ============================================================================
 
-  /** Current active key, preferring controlled value */
   const currentKey = activeKey || active;
-
-  /** Currently active item for content rendering */
   const activeItem = items.find((item: TabItem) => item.key === currentKey);
 
-  // For pills, we omit tabs-boxed from the container class because DaisyUI's
-  // boxed style adds a background that conflicts with the pill button appearance.
-  // The pill styling is applied per-button via getTabTypeStyle() instead.
-  const tabListClass = type === 'pills'
-    ? `tabs ${SIZE_CLASSES[size as TabsSize]} ${centered ? 'justify-center' : ''}`
-    : `tabs ${TYPE_CLASSES[type as TabsType]} ${SIZE_CLASSES[size as TabsSize]} ${centered ? 'justify-center' : ''}`;
+  // ============================================================================
+  // Sliding indicator measurement (line type only)
+  // ============================================================================
+
+  useLayoutEffect(() => {
+    if (type !== 'line' || !currentKey) {
+      setIndicatorPos(null);
+      return;
+    }
+
+    const activeTab = tabRefs.current[currentKey];
+    const tabList = tabListRef.current;
+    if (!activeTab || !tabList) {
+      setIndicatorPos(null);
+      return;
+    }
+
+    const tabListRect = tabList.getBoundingClientRect();
+    const activeRect = activeTab.getBoundingClientRect();
+
+    setIndicatorPos({
+      left: activeRect.left - tabListRect.left + tabList.scrollLeft,
+      width: activeRect.width,
+    });
+  }, [currentKey, type, items]);
+
+  // ============================================================================
+  // Container styles by type
+  // ============================================================================
+
+  const tabListStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'flex-end',
+    gap: type === 'line' ? '4px' : '4px',
+    position: 'relative',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    WebkitOverflowScrolling: 'touch',
+    scrollbarWidth: 'none',
+    ...(type === 'line' && {
+      borderBottom: '1px solid var(--ds-color-border-subtle)',
+    }),
+    ...(type === 'card' && {
+      padding: '4px',
+      backgroundColor: 'var(--ds-surface-inset)',
+      borderRadius: 'var(--ds-radius-lg)',
+      alignItems: 'center',
+      gap: '2px',
+    }),
+    ...(type === 'pills' && {
+      padding: '4px',
+      gap: '4px',
+      alignItems: 'center',
+    }),
+    ...(centered && {
+      justifyContent: 'center',
+    }),
+  };
+
+  // ============================================================================
+  // Sliding indicator style
+  // ============================================================================
+
+  const indicatorStyle: React.CSSProperties | null = (type === 'line' && indicatorPos)
+    ? {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        height: '2px',
+        backgroundColor: 'var(--ds-color-primary)',
+        borderRadius: '1px 1px 0 0',
+        transform: `translateX(${indicatorPos.left}px)`,
+        width: `${indicatorPos.width}px`,
+        transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out), width var(--ds-motion-normal) var(--ds-motion-ease-out)',
+        pointerEvents: 'none',
+      }
+    : null;
 
   // ============================================================================
   // Render
@@ -318,18 +432,35 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
+
+      {/* Scrollbar hide + fade-in keyframe + focus visible */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        [data-tabs-id="${tabsId}"]::-webkit-scrollbar { display: none; }
+        @keyframes rottay-tabs-fade-in {
+          from { opacity: 0; transform: translateY(2px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        [data-tabs-id="${tabsId}"] [role="tab"]:focus-visible {
+          outline: 2px solid var(--ds-color-primary);
+          outline-offset: -2px;
+          border-radius: var(--ds-radius-sm);
+        }
+      `}} />
+
       {/* Tab List */}
       <div
+        ref={tabListRef}
         role="tablist"
         aria-orientation="horizontal"
-        className={tabListClass}
-        style={{ position: 'relative' }}
+        data-tabs-id={tabsId}
+        style={tabListStyle}
         {...(responsive ? responsive.attrs : {})}
       >
         {items.map((item: TabItem) => {
           const isActive = item.key === currentKey;
-          const isHovered = item.key === hoveredKey;
-          const typeStyle = getTabTypeStyle(type || 'line', isActive, isHovered && !item.disabled);
+          const isHovered = item.key === hoveredKey && !item.disabled;
+          const isDisabled = !!item.disabled;
+          const itemStyle = getTabItemStyle(type || 'line', isActive, isHovered, isDisabled, size as string);
 
           return (
             <button
@@ -342,22 +473,34 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
               aria-selected={isActive}
               aria-controls={`tabs-panel-${tabsId}-${item.key}`}
               tabIndex={isActive ? 0 : -1}
-              className={`tab ${isActive ? 'tab-active' : ''}`}
               disabled={item.disabled}
               onClick={() => handleChange(item.key)}
               onKeyDown={(event) => handleKeyDown(event, item.key)}
               onMouseEnter={() => setHoveredKey(item.key)}
               onMouseLeave={() => setHoveredKey(null)}
-              style={{
-                ...typeStyle,
-                opacity: item.disabled ? 0.5 : 1,
-                cursor: item.disabled ? 'not-allowed' : 'pointer',
-              }}
+              style={itemStyle}
             >
-              {item.icon} {item.label}
+              {item.icon && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: (SIZE_CONFIG[size as string] || SIZE_CONFIG.md).iconSize,
+                    height: (SIZE_CONFIG[size as string] || SIZE_CONFIG.md).iconSize,
+                    flexShrink: 0,
+                  }}
+                >
+                  {item.icon}
+                </span>
+              )}
+              {parseLabel(item.label, size as string)}
             </button>
           );
         })}
+
+        {/* Sliding indicator for line type */}
+        {indicatorStyle && <span style={indicatorStyle} aria-hidden="true" />}
       </div>
 
       {/* Tab Panel */}
@@ -367,24 +510,15 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           role="tabpanel"
           aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
           tabIndex={0}
-          className="p-4"
           style={{
-            animation: 'rottay-tabs-fade-in var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+            padding: '16px 0 0 0',
+            outline: 'none',
+            animation: 'rottay-tabs-fade-in var(--ds-motion-fast) var(--ds-motion-ease-out)',
           }}
         >
           {activeItem.children}
         </div>
       )}
-
-      {/* Injected keyframe for the panel fade-in animation. Using
-          dangerouslySetInnerHTML because React does not support @keyframes
-          in inline style objects. The animation is scoped by its unique name. */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes rottay-tabs-fade-in {
-          from { opacity: 0; transform: translateY(2px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}} />
     </div>
   );
 }

@@ -1,53 +1,20 @@
 /**
  * @fileoverview Input Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Input component.
- * Part of the Rottay Design System's input primitives collection.
+ * @description Premium input implementation using CSS custom properties from the
+ * design-system token layer. Styled to feel precise, calm, and editorial --
+ * inspired by Linear, Vercel, and Stripe Dashboard form controls.
  *
  * @remarks
- * The Modern engine implements inputs using DaisyUI's utility-first approach
- * with Tailwind CSS classes. This provides a lightweight alternative to Classic
- * with smaller bundle size and easier customization via CSS utilities.
+ * All visual properties are driven by CSS variables so tenant themes can
+ * override every detail without touching this file.
  *
- * **DaisyUI Features Utilized:**
- * - Semantic input classes (input, input-bordered)
- * - Size modifiers (input-xs, input-sm, input-md, input-lg)
- * - Status classes (input-error, input-warning, input-success, input-primary)
- * - Base content color utilities for prefix/suffix
- * - Ghost button for clear functionality
- *
- * **Prop Mapping:**
- * - `variant="outline"` → `input-bordered`
- * - `variant="filled"` → `bg-base-200`
- * - `variant="flushed"` → Custom border-bottom only styling
- * - `variant="unstyled"` → `border-0 bg-transparent`
- * - `status="error"` → `input-error`
- * - `status="warning"` → `input-warning`
- * - `status="success"` → `input-success`
- * - `size="xs"` → `input-xs`
- *
- * **Layout:**
- * When prefix/suffix is provided, uses a DaisyUI label wrapper with
- * flex layout for proper alignment.
- *
- * @example Using Modern Engine
- * ```tsx
- * import { Input } from '@rottay/design-system';
- *
- * // Explicit Modern engine
- * <Input
- *   engine="modern"
- *   placeholder="Tailwind input"
- *   className="custom-class"
- * />
- *
- * // With DaisyUI styling
- * <Input
- *   engine="modern"
- *   variant="filled"
- *   status="success"
- *   prefix={<CheckIcon />}
- * />
- * ```
+ * **Token Usage:**
+ * - Surface: `--ds-surface-control` (field background)
+ * - Border: `--ds-color-border` (resting), `--ds-color-primary` (focus)
+ * - Radius: `--ds-radius-md` (8px default)
+ * - Focus ring: `--ds-focus-ring-width`, `--ds-focus-ring-offset`, `--ds-focus-ring-color`
+ * - Motion: `--ds-motion-fast` (150ms), `--ds-motion-ease-out`
+ * - Text: `--ds-color-text-primary`, `--ds-color-text-muted` (placeholder)
  *
  * @see {@link Input} for the main component
  * @see {@link ClassicInput} for Ant Design implementation
@@ -61,7 +28,7 @@
 
 import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } from 'react';
 import type { InputProps, InputSize } from '../Input.types';
-import { INPUT_DEFAULTS, DAISY_SIZE_MAP, SIZE_MAP as INPUT_SIZE_MAP } from '../Input.types';
+import { INPUT_DEFAULTS, SIZE_MAP as INPUT_SIZE_MAP } from '../Input.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
@@ -71,25 +38,174 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
   return value as T;
 }
 
-// DaisyUI input status classes change the border/ring color to semantic colors.
-// Unlike antd, DaisyUI does support a success state natively via input-success.
-const STATUS_MAP = {
-  default: '',
-  error: 'input-error',
-  warning: 'input-warning',
-  success: 'input-success',
-};
+/* ------------------------------------------------------------------ */
+/*  Sizing tokens                                                      */
+/* ------------------------------------------------------------------ */
+
+const SIZES = {
+  xs: { height: '28px', paddingX: '8px',  fontSize: '12px', lineHeight: '16px' },
+  sm: { height: '32px', paddingX: '10px', fontSize: '14px', lineHeight: '20px' },
+  md: { height: '36px', paddingX: '12px', fontSize: '14px', lineHeight: '20px' },
+  lg: { height: '40px', paddingX: '14px', fontSize: '16px', lineHeight: '24px' },
+  xl: { height: '44px', paddingX: '16px', fontSize: '16px', lineHeight: '24px' },
+} as const;
+
+/* ------------------------------------------------------------------ */
+/*  Shared inline styles                                               */
+/* ------------------------------------------------------------------ */
+
+const TRANSITION = 'border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), outline-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), outline-offset var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
 
 /**
- * Modern (DaisyUI/Tailwind) engine for the Input component.
+ * Build the shell style object for the input field (or the wrapping label
+ * when prefix/suffix are present). Every visual detail is expressed via CSS
+ * custom properties so theme overrides work without touching JS.
+ */
+function buildShellStyle(
+  size: keyof typeof SIZES,
+  variant: string,
+  isFocused: boolean,
+  isHovered: boolean,
+  hasError: boolean,
+  hasWarning: boolean,
+  isDisabled: boolean,
+): React.CSSProperties {
+  const s = SIZES[size];
+
+  const base: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    width: '100%',
+    height: s.height,
+    paddingLeft: s.paddingX,
+    paddingRight: s.paddingX,
+    fontSize: s.fontSize,
+    lineHeight: s.lineHeight,
+    fontFamily: 'inherit',
+    color: 'var(--ds-color-text-primary)',
+    backgroundColor: 'var(--ds-surface-control)',
+    border: '1px solid var(--ds-color-border)',
+    borderRadius: 'var(--ds-radius-md, 8px)',
+    outline: '2px solid transparent',
+    outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
+    transition: TRANSITION,
+    boxSizing: 'border-box',
+  };
+
+  // Variant overrides
+  if (variant === 'filled') {
+    base.backgroundColor = 'var(--ds-surface-canvas)';
+    base.border = '1px solid transparent';
+  } else if (variant === 'flushed') {
+    base.borderRadius = '0';
+    base.border = 'none';
+    base.borderBottom = '1px solid var(--ds-color-border)';
+    base.paddingLeft = '0';
+    base.paddingRight = '0';
+    base.backgroundColor = 'transparent';
+  } else if (variant === 'unstyled') {
+    base.border = 'none';
+    base.backgroundColor = 'transparent';
+    base.outline = 'none';
+    base.borderRadius = '0';
+  }
+
+  // Hover
+  if (isHovered && !isFocused && !hasError && !hasWarning && !isDisabled && variant !== 'unstyled') {
+    base.borderColor = 'var(--ds-color-border-hover)';
+  }
+
+  // Focus
+  if (isFocused && variant !== 'unstyled') {
+    base.borderColor = 'var(--ds-color-primary)';
+    base.outline = 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)';
+    if (variant === 'flushed') {
+      base.outline = 'none';
+      base.borderBottom = '2px solid var(--ds-color-primary)';
+    }
+  }
+
+  // Error
+  if (hasError) {
+    base.borderColor = 'var(--ds-color-error)';
+    base.backgroundColor = variant === 'unstyled'
+      ? 'transparent'
+      : 'color-mix(in srgb, var(--ds-color-error) 4%, transparent)';
+    if (isFocused) {
+      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-error) 15%, transparent)';
+    }
+  }
+
+  // Warning
+  if (hasWarning && !hasError) {
+    base.borderColor = 'var(--ds-color-warning)';
+    base.backgroundColor = variant === 'unstyled'
+      ? 'transparent'
+      : 'color-mix(in srgb, var(--ds-color-warning) 4%, transparent)';
+    if (isFocused) {
+      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-warning) 15%, transparent)';
+    }
+  }
+
+  // Disabled
+  if (isDisabled) {
+    base.opacity = 0.5;
+    base.cursor = 'not-allowed';
+    base.backgroundColor = 'var(--ds-surface-canvas)';
+  }
+
+  return base;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Clear button (ghost, appears on hover / when content present)      */
+/* ------------------------------------------------------------------ */
+
+function ClearButton({ onClick, visible }: { onClick: () => void; visible: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Clear input"
+      tabIndex={-1}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '20px',
+        height: '20px',
+        padding: 0,
+        border: 'none',
+        borderRadius: 'var(--ds-radius-sm, 6px)',
+        backgroundColor: 'transparent',
+        color: 'var(--ds-color-text-muted)',
+        cursor: 'pointer',
+        opacity: visible ? 1 : 0,
+        transition: 'opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background-color var(--ds-motion-fast, 150ms)',
+        flexShrink: 0,
+      }}
+      onMouseEnter={(e) => { (e.currentTarget.style.backgroundColor as any) = 'var(--ds-surface-canvas)'; }}
+      onMouseLeave={(e) => { (e.currentTarget.style.backgroundColor as any) = 'transparent'; }}
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Component                                                          */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Modern (premium) engine for the Input component.
  *
- * Renders a native `<input>` styled with DaisyUI utility classes. When prefix,
- * suffix, or clearable content is present, wraps the input in a `<label>` for
- * correct flex alignment. Otherwise renders a standalone input for minimal DOM.
- *
- * @param props - Standardized InputProps from the design system contract.
- * @param ref   - Forwarded ref merged with an internal ref for imperative focus.
- * @returns The rendered DaisyUI-styled input.
+ * Renders a native `<input>` styled with CSS custom properties from the
+ * design system token layer. When prefix, suffix, or clearable content
+ * is present, wraps the input in a `<label>` for correct flex alignment.
+ * Otherwise renders a standalone input for minimal DOM.
  */
 const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
@@ -163,9 +279,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Merge the consumer's forwarded ref with our internal ref so we can
-  // imperatively focus the input (e.g., after clear) while still exposing
-  // the DOM node to parent components.
+  // Merge refs
   useEffect(() => {
     if (ref) {
       if (typeof ref === 'function') {
@@ -218,7 +332,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       setInternalValue('');
     }
     onClear?.();
-    // Trigger onChange with empty value
     const syntheticEvent = {
       target: { value: '' },
     } as React.ChangeEvent<HTMLInputElement>;
@@ -229,194 +342,174 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Determine status
   const computedStatus = error ? 'error' : status;
   const hasError = error || status === 'error';
-
-  // Map DS variant names to DaisyUI utility classes. The "flushed" variant
-  // (Material Design-style bottom border) requires custom border overrides
-  // since DaisyUI does not ship a native equivalent.
-  const variantClass = variant === 'filled'
-    ? 'bg-base-200'
-    : variant === 'flushed'
-      ? 'border-0 border-b rounded-none focus:border-b-2'
-      : variant === 'unstyled'
-        ? 'border-0 bg-transparent'
-        : 'input-bordered';
-
-  const inputClasses = [
-    'input',
-    DAISY_SIZE_MAP[size],
-    variantClass,
-    STATUS_MAP[computedStatus],
-    isFocused && !hasError && 'input-primary',
-    'w-full',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const hasWarning = !hasError && status === 'warning';
 
   const showClearButton = clearable && currentValue && !disabled && !readOnly;
 
-  // When addons are present, the input is wrapped in a DaisyUI <label> so
-  // prefix, suffix, and clear button sit in a single flex row. The inner
-  // <input> strips its own border/bg to avoid double-styling the container.
+  const shellStyle = buildShellStyle(
+    size as keyof typeof SIZES,
+    variant,
+    isFocused,
+    isHovered,
+    hasError,
+    hasWarning,
+    disabled,
+  );
+
   const responsiveStyleTag = responsive && responsive.css ? (
     <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
   ) : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
-  // Shared interaction styles for focus ring, hover border, and transitions
-  const interactionStyle: React.CSSProperties = {
-    transition: 'border-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-    boxShadow: isFocused ? '0 0 0 3px var(--ds-color-primary-200, rgba(59, 130, 246, 0.2))' : undefined,
-    borderColor: isHovered && !isFocused && !hasError ? 'var(--ds-color-border-tertiary)' : undefined,
-  };
-
-  const addonTextStyle: React.CSSProperties = {
+  // Addon (prefix/suffix) style
+  const addonStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    flexShrink: 0,
     color: 'var(--ds-color-text-muted)',
+    lineHeight: 1,
   };
 
+  // Inner input style (strips decoration when inside a shell label)
+  const innerInputStyle: React.CSSProperties = {
+    flex: 1,
+    minWidth: 0,
+    width: '100%',
+    border: 'none',
+    outline: 'none',
+    backgroundColor: 'transparent',
+    color: 'inherit',
+    fontSize: 'inherit',
+    lineHeight: 'inherit',
+    fontFamily: 'inherit',
+    padding: 0,
+  };
+
+  // Placeholder color (injected via a tiny style rule since ::placeholder
+  // cannot be set via inline styles).
+  const placeholderStyleId = `ds-input-ph-${reactId.replace(/:/g, '')}`;
+  const placeholderStyleTag = (
+    <style dangerouslySetInnerHTML={{ __html: `
+      .${placeholderStyleId}::placeholder {
+        color: var(--ds-color-text-muted);
+        opacity: 1;
+      }
+    `}} />
+  );
+
+  // Count / error message styles
+  const countStyle: React.CSSProperties = {
+    fontSize: '12px',
+    lineHeight: '16px',
+    marginTop: '4px',
+    textAlign: 'right' as const,
+    color: hasError ? 'var(--ds-color-error)' : 'var(--ds-color-text-muted)',
+  };
+
+  const errorMessageStyle: React.CSSProperties = {
+    fontSize: '12px',
+    lineHeight: '16px',
+    marginTop: '4px',
+    color: 'var(--ds-color-error)',
+    display: 'block',
+  };
+
+  // Shared input props
+  const inputProps = {
+    ref: inputRef,
+    id,
+    name,
+    type,
+    value: currentValue,
+    placeholder,
+    disabled,
+    readOnly,
+    required,
+    maxLength,
+    minLength,
+    autoComplete,
+    autoFocus,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': hasError || undefined,
+    'data-testid': dataTestId,
+    onChange: handleChange,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    onKeyDown: handleKeyDown,
+  };
+
+  // When addons are present, the input is wrapped in a <label> shell
   if (prefix || suffix || showClearButton) {
     return (
-      <div className="w-full" style={style}>
+      <div className={className} style={style}>
         {responsiveStyleTag}
+        {placeholderStyleTag}
         <label
-          className={[
-            'input',
-            DAISY_SIZE_MAP[size],
-            variantClass,
-            STATUS_MAP[computedStatus],
-            isFocused && !hasError && 'input-primary',
-            'flex items-center gap-2 w-full',
-          ]
-            .filter(Boolean)
-            .join(' ')}
-          style={interactionStyle}
+          style={shellStyle}
           onClick={() => inputRef.current?.focus()}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           {prefix && (
-            <span style={addonTextStyle}>{prefix}</span>
+            <span style={addonStyle}>{prefix}</span>
           )}
 
           <input
-            ref={inputRef}
-            id={id}
-            name={name}
-            type={type}
-            value={currentValue}
-            placeholder={placeholder}
-            disabled={disabled}
-            readOnly={readOnly}
-            required={required}
-            maxLength={maxLength}
-            minLength={minLength}
-            autoComplete={autoComplete}
-            autoFocus={autoFocus}
-            aria-label={ariaLabel}
-            aria-describedby={ariaDescribedBy}
-            aria-invalid={hasError}
-            data-testid={dataTestId}
-            className="grow bg-transparent border-none outline-none"
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
+            {...inputProps}
+            className={placeholderStyleId}
+            style={innerInputStyle}
           />
 
           {showClearButton && (
-            <button
-              type="button"
-              className="btn btn-ghost btn-xs btn-circle"
-              onClick={handleClear}
-              aria-label="Clear input"
-              tabIndex={-1}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+            <ClearButton onClick={handleClear} visible={isHovered || isFocused} />
           )}
 
           {suffix && (
-            <span style={addonTextStyle}>{suffix}</span>
+            <span style={addonStyle}>{suffix}</span>
           )}
         </label>
 
         {showCount && maxLength && (
-          <div
-            className={`text-xs mt-1 text-right ${hasError ? 'text-error' : ''}`}
-            style={hasError ? undefined : { color: 'var(--ds-color-text-muted)' }}
-          >
+          <div style={countStyle}>
             {currentValue.length}/{maxLength}
           </div>
         )}
 
         {hasError && errorMessage && (
-          <span className="text-error text-xs mt-1 block">
-            {errorMessage}
-          </span>
+          <span style={errorMessageStyle}>{errorMessage}</span>
         )}
       </div>
     );
   }
 
-  // Simple input without prefix/suffix
+  // Simple input without prefix/suffix -- the shell IS the input element
+  const standaloneStyle: React.CSSProperties = {
+    ...shellStyle,
+    // For standalone, padding is applied directly
+  };
+
   return (
-    <div className="w-full" style={style}>
+    <div className={className} style={style}>
       {responsiveStyleTag}
+      {placeholderStyleTag}
       <input
-        ref={inputRef}
+        {...inputProps}
         {...responsiveAttrs}
-        id={id}
-        name={name}
-        type={type}
-        value={currentValue}
-        placeholder={placeholder}
-        disabled={disabled}
-        readOnly={readOnly}
-        required={required}
-        maxLength={maxLength}
-        minLength={minLength}
-        autoComplete={autoComplete}
-        autoFocus={autoFocus}
-        aria-label={ariaLabel}
-        aria-describedby={ariaDescribedBy}
-        aria-invalid={hasError}
-        data-testid={dataTestId}
-        className={inputClasses}
-        style={interactionStyle}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
+        className={placeholderStyleId}
+        style={standaloneStyle}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       />
 
       {showCount && maxLength && (
-        <div
-          className={`text-xs mt-1 text-right ${hasError ? 'text-error' : ''}`}
-          style={hasError ? undefined : { color: 'var(--ds-color-text-muted)' }}
-        >
+        <div style={countStyle}>
           {currentValue.length}/{maxLength}
         </div>
       )}
 
       {hasError && errorMessage && (
-        <span className="text-error text-xs mt-1 block">
-          {errorMessage}
-        </span>
+        <span style={errorMessageStyle}>{errorMessage}</span>
       )}
     </div>
   );

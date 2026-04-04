@@ -63,6 +63,63 @@
   --border-btn: 1px;
   --tab-border: 2px;
   --tab-radius: var(--ds-radius-md);
+
+  /* -------------------------------------------------------------------------
+     Surface hierarchy - material system
+     Provides semantic surface levels for consistent layering across the UI.
+     Canvas < Shell < Panel < Card < Inset / Control / Overlay
+     ------------------------------------------------------------------------- */
+  --ds-surface-canvas: var(--ds-color-bg-primary);
+  --ds-surface-shell: var(--ds-color-bg-secondary);
+  --ds-surface-panel: var(--ds-color-bg-tertiary);
+  --ds-surface-card: var(--ds-color-bg-elevated, var(--ds-color-bg-tertiary));
+  --ds-surface-inset: var(--ds-color-bg-inset, var(--ds-color-bg-secondary));
+  --ds-surface-control: var(--ds-color-bg-input, var(--ds-color-bg-secondary));
+  --ds-surface-overlay: rgba(0, 0, 0, 0.5);
+  --ds-surface-highlight: var(--ds-color-bg-hover, rgba(255, 255, 255, 0.06));
+
+  /* -------------------------------------------------------------------------
+     Elevation scale
+     Box-shadow layers for perceived depth. 0 = flat, 5 = highest.
+     ------------------------------------------------------------------------- */
+  --ds-elevation-0: none;
+  --ds-elevation-1: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --ds-elevation-2: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --ds-elevation-3: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --ds-elevation-4: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --ds-elevation-5: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  /* -------------------------------------------------------------------------
+     Focus ring
+     Consistent focus indicator for accessibility across all interactive elements.
+     ------------------------------------------------------------------------- */
+  --ds-focus-ring-width: 2px;
+  --ds-focus-ring-offset: 2px;
+  --ds-focus-ring-color: var(--ds-color-primary-200, rgba(10, 10, 10, 0.2));
+
+  /* -------------------------------------------------------------------------
+     Motion contract
+     Duration and easing tokens for animation consistency.
+     Components should reference these instead of hardcoding values.
+     ------------------------------------------------------------------------- */
+  --ds-motion-fast: 150ms;
+  --ds-motion-normal: 250ms;
+  --ds-motion-slow: 350ms;
+  --ds-motion-gentle: 500ms;
+  --ds-motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ds-motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* -------------------------------------------------------------------------
+     Border radius scale
+     Re-declared here for engine-local resolution. Canonical values
+     live in default.css; these ensure the modern engine is self-contained.
+     ------------------------------------------------------------------------- */
+  --ds-radius-sm: 6px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+  --ds-radius-xl: 16px;
+  --ds-radius-full: 9999px;
 }
 
 /* =============================================================================
@@ -4323,26 +4380,6 @@
   justify-content: space-between;
 }
 
-/* Fix for Ant Design Form.Item in Hermes */
-[data-tenant] .ant-form-item,
-[data-tenant] [class*="form-item"] {
-  margin-bottom: 16px;
-}
-
-[data-tenant] .ant-form-item-label,
-[data-tenant] [class*="form-item-label"] {
-  padding-bottom: 4px;
-}
-
-[data-tenant] .ant-form-item-label > label,
-[data-tenant] [class*="form-item-label"] label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ds-text-secondary);
-  text-transform: var(--ds-typography-label-transform, none);
-  letter-spacing: var(--ds-personality-typography-heading-letter-spacing, normal);
-}
-
 /* Full width inputs */
 [data-tenant] .input,
 [data-tenant] .textarea,
@@ -4390,20 +4427,6 @@
 [data-tenant] span:has(> .btn + .btn) {
   display: inline-flex;
   gap: 8px;
-}
-
-/* Ant Design Space with buttons */
-[data-tenant] .ant-space,
-[data-tenant] .ant-space-item {
-  gap: 8px !important;
-}
-
-[data-tenant] .ant-space-horizontal {
-  gap: 8px !important;
-}
-
-[data-tenant] .ant-space-horizontal > .ant-space-item {
-  margin-right: 0 !important;
 }
 
 /* =============================================================================
@@ -4489,8 +4512,7 @@
    ============================================================================= */
 
 /* Form Item - vertical layout by default */
-[data-tenant] .form-item,
-[data-tenant] .ant-form-item {
+[data-tenant] .form-item {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -4505,8 +4527,7 @@
   gap: 16px;
 }
 
-[data-tenant] .form-item-horizontal .form-label,
-[data-tenant] .form-item-horizontal .ant-form-item-label {
+[data-tenant] .form-item-horizontal .form-label {
   min-width: 120px;
   text-align: right;
 }
@@ -4531,15 +4552,13 @@
 }
 
 [data-tenant] .form-inline > .form-item,
-[data-tenant] .form-inline > .ant-form-item,
 [data-tenant] .form-fields-row > * {
   flex: 1;
   min-width: 200px;
 }
 
 /* Upload area styling */
-[data-tenant] .upload-area,
-[data-tenant] .ant-upload {
+[data-tenant] .upload-area {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -4564,8 +4583,7 @@
 }
 
 /* Help text below inputs */
-[data-tenant] .form-help-text,
-[data-tenant] .ant-form-item-explain {
+[data-tenant] .form-help-text {
   font-size: 12px;
   color: var(--ds-text-tertiary);
   margin-top: 4px;

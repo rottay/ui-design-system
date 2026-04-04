@@ -8,14 +8,16 @@
  * workspace layout that all collection-oriented screens can use.
  */
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import type { ColumnDef } from '../../patterns/types';
 import type { CollectionWorkspaceConfig } from '../contracts/collection';
+import type { DensityKey, ViewMode } from '../../patterns/list-toolbar/ListToolbar.types';
 import { useCollectionWorkspace } from '../hooks/useCollectionWorkspace';
 import { PatternDataTable } from '../../patterns/data-table';
 import { PatternFilterPanel } from '../../patterns/filter-panel';
 import { PatternSavedViewsBar } from '../../patterns/saved-views';
+import { PatternListToolbar } from '../../patterns/list-toolbar';
 import { Box } from '../../../components/primitives/layout/Box';
 import { Stack } from '../../../components/primitives/layout/Stack';
 import { Flex } from '../../../components/primitives/layout/Flex';
@@ -53,6 +55,16 @@ export interface CollectionWorkspaceSurfaceProps<T extends object> extends Colle
 
   /** Default view mode. */
   defaultViewMode?: 'table' | 'cards';
+
+  /** Primary CTA shown in the toolbar. */
+  primaryAction?: {
+    label: string;
+    onClick: () => void;
+    icon?: ReactNode;
+  };
+
+  /** Optional icon displayed next to the title in the toolbar. */
+  icon?: ReactNode;
 }
 
 // ---------------------------------------------------------------------------
@@ -71,6 +83,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     footerSlot,
     mobileCard,
     defaultViewMode = 'table',
+    primaryAction,
+    icon,
     // Spread workspace config
     controls,
     behavior,
@@ -87,7 +101,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   });
 
   // Resolve density for DataTable
-  const density = controls?.density?.value ?? 'comfortable';
+  const density: DensityKey = controls?.density?.value ?? 'comfortable';
   const compact = density === 'compact';
 
   // Preview rail
@@ -100,180 +114,67 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     controls?.density?.enabled ||
     controls?.export?.enabled;
 
-  const [showExportMenu, setShowExportMenu] = useState(false);
+  // Map between workspace view mode strings ('table'/'cards') and
+  // ListToolbar's ViewMode union ('list'/'cards').
+  const toolbarViewMode: ViewMode =
+    workspace.activeViewMode === 'table' ? 'list' : 'cards';
+
+  const handleViewModeChange = useMemo(
+    () => (mode: ViewMode) => {
+      workspace.setViewMode(mode === 'list' ? 'table' : mode);
+    },
+    [workspace.setViewMode],
+  );
+
+  // Build export handler -- ListToolbar expects a simple () => void.
+  // When formats are configured we call onExport with the first format;
+  // for multi-format scenarios consumers should provide their own handler.
+  const handleExport = useMemo(() => {
+    if (!controls?.export?.enabled || !controls.export.onExport) return undefined;
+    const fmt = controls.export.formats?.[0] ?? 'csv';
+    return () => controls.export!.onExport!(fmt);
+  }, [controls?.export?.enabled, controls?.export?.onExport, controls?.export?.formats]);
 
   return (
     <Stack spacing="md" style={{ maxWidth: presentation?.maxWidth }}>
       {/* Header slot */}
       {headerSlot}
 
-      {/* Title bar */}
-      <Box>
-        <Text size="xl" weight="semibold">{title}</Text>
-        {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
-      </Box>
+      {/* Title bar (shown only when toolbar is hidden to avoid duplicate titles) */}
+      {!showToolbar && (
+        <Box>
+          <Text size="xl" weight="semibold">{title}</Text>
+          {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
+        </Box>
+      )}
 
-      {/* Toolbar: search + viewMode + density + export */}
+      {/* Toolbar: PatternListToolbar replaces the manual toolbar */}
       {showToolbar && (
-        <Flex gap={3} align="center" wrap="wrap">
-          {/* Search */}
-          {controls?.search?.enabled && (
-            <Box>
-              <input
-                type="text"
-                placeholder={controls.search.placeholder ?? 'Search...'}
-                value={workspace.searchValue}
-                onChange={(e) => workspace.setSearchValue(e.target.value)}
-                style={{
-                  width: '100%',
-                  maxWidth: '320px',
-                  padding: '8px 12px',
-                  border: '1px solid var(--ds-color-border-primary)',
-                  borderRadius: 'var(--ds-radius-md, 8px)',
-                  background: 'var(--ds-color-bg-primary)',
-                  color: 'var(--ds-color-text-primary)',
-                  fontSize: '14px',
-                }}
-              />
-            </Box>
-          )}
-
-          {/* View mode switcher */}
-          {controls?.viewMode?.enabled && (
-            <Flex gap={2}>
-              {controls.viewMode.modes.map((mode) => (
-                <button
-                  key={mode}
-                  onClick={() => workspace.setViewMode(mode)}
-                  style={{
-                    padding: '6px 12px',
-                    border: '1px solid var(--ds-color-border-primary)',
-                    borderRadius: 'var(--ds-radius-sm, 6px)',
-                    background: workspace.activeViewMode === mode
-                      ? 'var(--ds-color-primary)'
-                      : 'var(--ds-color-bg-secondary)',
-                    color: workspace.activeViewMode === mode
-                      ? 'var(--ds-color-text-on-primary, #fff)'
-                      : 'var(--ds-color-text-secondary)',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                  }}
-                >
-                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                </button>
-              ))}
-            </Flex>
-          )}
-
-          {/* Density control */}
-          {controls?.density?.enabled && (
-            <Flex gap={2}>
-              {(['compact', 'comfortable', 'spacious'] as const).map((d) => (
-                <button
-                  key={d}
-                  onClick={() => controls.density?.onChange?.(d)}
-                  style={{
-                    padding: '4px 8px',
-                    border: '1px solid var(--ds-color-border-primary)',
-                    borderRadius: 'var(--ds-radius-sm, 6px)',
-                    background: density === d ? 'var(--ds-color-bg-tertiary)' : 'transparent',
-                    color: 'var(--ds-color-text-secondary)',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                  }}
-                >
-                  {d}
-                </button>
-              ))}
-            </Flex>
-          )}
-
-          {/* Spacer */}
-          <Box style={{ flex: 1 }} />
-
-          {/* Export */}
-          {controls?.export?.enabled && (() => {
-            const formats = controls.export?.formats ?? ['csv'];
-            if (formats.length === 1) {
-              return (
-                <button
-                  onClick={() => controls.export?.onExport?.(formats[0])}
-                  style={{
-                    padding: '6px 12px',
-                    border: '1px solid var(--ds-color-border-primary)',
-                    borderRadius: 'var(--ds-radius-sm, 6px)',
-                    background: 'var(--ds-color-bg-secondary)',
-                    color: 'var(--ds-color-text-secondary)',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                    transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
-                  }}
-                >
-                  Export {formats[0].toUpperCase()}
-                </button>
-              );
-            }
-            return (
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <button
-                  onClick={() => setShowExportMenu(prev => !prev)}
-                  style={{
-                    padding: '6px 12px',
-                    border: '1px solid var(--ds-color-border-primary)',
-                    borderRadius: 'var(--ds-radius-sm, 6px)',
-                    background: 'var(--ds-color-bg-secondary)',
-                    color: 'var(--ds-color-text-secondary)',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                    transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
-                  }}
-                >
-                  Export ▾
-                </button>
-                {showExportMenu && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      right: 0,
-                      marginTop: '4px',
-                      border: '1px solid var(--ds-color-border-primary)',
-                      borderRadius: 'var(--ds-radius-md, 8px)',
-                      background: 'var(--ds-color-bg-primary)',
-                      boxShadow: 'var(--ds-shadow-lg, 0 10px 15px rgba(0,0,0,0.1))',
-                      zIndex: 50,
-                      minWidth: '120px',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {formats.map(fmt => (
-                      <button
-                        key={fmt}
-                        onClick={() => { controls.export?.onExport?.(fmt); setShowExportMenu(false); }}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '8px 16px',
-                          border: 'none',
-                          background: 'transparent',
-                          color: 'var(--ds-color-text-primary)',
-                          cursor: 'pointer',
-                          fontSize: '13px',
-                          textAlign: 'left',
-                          transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
-                        }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--ds-color-bg-tertiary)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        {fmt.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })()}
-        </Flex>
+        <>
+          <PatternListToolbar
+            title={title}
+            icon={icon}
+            totalCount={data.length}
+            // Search
+            search={workspace.searchValue}
+            onSearchChange={workspace.setSearchValue}
+            searchPlaceholder={controls?.search?.placeholder ?? 'Search...'}
+            // View controls
+            viewMode={toolbarViewMode}
+            onViewModeChange={handleViewModeChange}
+            density={density}
+            onDensityChange={(d) => controls?.density?.onChange?.(d)}
+            // Filter pills (passed through when available)
+            activeFilters={workspace.filterValues}
+            onClearFilters={workspace.resetFilters}
+            activeFilterCount={workspace.activeFilterCount}
+            // Primary action
+            primaryAction={primaryAction}
+            // Export
+            onExport={handleExport}
+          />
+          {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
+        </>
       )}
 
       {/* Saved views */}

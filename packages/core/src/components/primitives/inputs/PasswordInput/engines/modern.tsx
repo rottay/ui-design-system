@@ -1,6 +1,6 @@
 /**
  * @fileoverview PasswordInput Modern Engine - Rottay Design System.
- * DaisyUI/Tailwind CSS implementation with a custom visibility toggle button,
+ * DS token inline-styled implementation with a custom visibility toggle button,
  * inline SVG eye icons, and an optional strength indicator bar.
  *
  * @example
@@ -20,24 +20,24 @@ import type { PasswordInputProps } from '../PasswordInput.types';
 import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../PasswordInput.types';
 
 /**
- * Maps DS 5-tier size tokens to DaisyUI input size utility classes.
- * xl collapses to 'input-lg' because DaisyUI does not provide an xl tier.
+ * Maps DS 5-tier size tokens to inline CSSProperties.
+ * xl collapses to the lg tier dimensions.
  */
-const DAISY_SIZE_MAP = {
-  xs: 'input-xs',
-  sm: 'input-sm',
-  md: 'input-md',
-  lg: 'input-lg',
-  xl: 'input-lg',
+const SIZE_STYLES: Record<string, React.CSSProperties> = {
+  xs: { height: 24, fontSize: 12, padding: '4px 8px' },
+  sm: { height: 32, fontSize: 13, padding: '4px 10px' },
+  md: { height: 36, fontSize: 14, padding: '6px 12px' },
+  lg: { height: 40, fontSize: 16, padding: '8px 14px' },
+  xl: { height: 40, fontSize: 16, padding: '8px 14px' },
 };
 
 /**
- * Modern engine PasswordInput built with DaisyUI / Tailwind CSS.
+ * Modern engine PasswordInput built with DS token inline styles.
  * Manages its own visibility toggle state and renders inline SVG eye icons
  * rather than importing an icon library, keeping the bundle lightweight.
  *
  * @param props - Unified PasswordInputProps from the design system contract.
- * @returns A DaisyUI-styled password input with toggle, strength bar, and error label.
+ * @returns A DS token-styled password input with toggle, strength bar, and error label.
  */
 export default function ModernPasswordInput(props: PasswordInputProps): React.ReactElement {
   const {
@@ -85,23 +85,29 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     }
   }, [onKeyDown, onPressEnter]);
 
-  // Build DaisyUI class list; pr-10 reserves space for the toggle button
-  const inputClasses = [
-    'input',
-    'input-bordered',
-    DAISY_SIZE_MAP[size],
-    error && 'input-error',
-    'w-full',
-    'pr-10',
-  ].filter(Boolean).join(' ');
+  // Merge DS size styles with conditional error/disabled overrides
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    paddingRight: 40,
+    border: '1px solid',
+    borderColor: error ? 'var(--ds-color-error)' : 'var(--ds-color-border)',
+    background: disabled ? 'var(--ds-color-alpha-black-50)' : 'var(--ds-surface-input, var(--ds-surface-card))',
+    borderRadius: 'var(--ds-radius-md)',
+    outline: 'none',
+    boxSizing: 'border-box',
+    color: 'var(--ds-color-text-primary)',
+    opacity: disabled ? 0.6 : 1,
+    cursor: disabled ? 'not-allowed' : undefined,
+    ...(SIZE_STYLES[size] || SIZE_STYLES.md),
+  };
 
   return (
     <div
-      className={`form-control w-full ${className}`}
-      style={style}
+      className={className || undefined}
+      style={{ display: 'flex', flexDirection: 'column', width: '100%', ...style }}
       data-testid={dataTestId}
     >
-      <div className="relative">
+      <div style={{ position: 'relative' }}>
         <input
           id={inputId}
           type={visible ? 'text' : 'password'}
@@ -121,12 +127,12 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           autoFocus={autoFocus}
           aria-label={ariaLabel}
           aria-invalid={error}
-          className={inputClasses}
+          style={inputStyle}
         />
         {showToggle && (
           <button
             type="button"
-            className="btn btn-ghost btn-xs absolute right-2 top-1/2 -translate-y-1/2"
+            style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
             onClick={() => setVisible(!visible)}
             tabIndex={-1}
             aria-label={visible ? 'Hide password' : 'Show password'}
@@ -147,10 +153,12 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
       </div>
       {/* Strength indicator bar: width and color driven by STRENGTH_WIDTHS/STRENGTH_COLORS constants */}
       {strengthIndicator && strengthLevel && (
-        <div className="w-full h-1 rounded-full bg-base-300 mt-1 overflow-hidden">
+        <div style={{ width: '100%', height: 4, borderRadius: 9999, marginTop: 4, overflow: 'hidden', background: 'var(--ds-surface-panel)' }}>
           <div
-            className="h-full rounded-full transition-all duration-300"
             style={{
+              height: '100%',
+              borderRadius: 9999,
+              transition: 'all 0.3s',
               width: STRENGTH_WIDTHS[strengthLevel],
               backgroundColor: STRENGTH_COLORS[strengthLevel],
             }}
@@ -158,9 +166,9 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
         </div>
       )}
       {error && errorMessage && (
-        <label className="label">
-          <span className="label-text-alt text-error">{errorMessage}</span>
-        </label>
+        <div style={{ paddingTop: 4 }}>
+          <span style={{ color: 'var(--ds-color-error)', fontSize: 12 }}>{errorMessage}</span>
+        </div>
       )}
     </div>
   );

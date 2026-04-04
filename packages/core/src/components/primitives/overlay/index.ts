@@ -6,7 +6,14 @@
  * './feedback/Modal'. Use OverlayModal for advanced features like Portal.
  */
 
-// Re-export Modal with alias to avoid conflict with feedback/Modal
+// ARCHITECTURE: Two Modal implementations coexist intentionally.
+// - feedback/Modal (canonical public API): Full-featured modal with header/body/footer
+//   compound components, confirmLoading, onOk/onCancel callbacks. Used by consumers.
+// - overlay/Modal (internal/advanced): Lower-level overlay primitive focused on
+//   positioning, animation, and backdrop. Used internally by other overlay components
+//   (Sheet, Drawer, etc.) and available as OverlayModal for advanced use cases.
+// Consolidation is a future consideration but not blocking -- both share the same
+// visual language (backdrop, surface, elevation tokens) as of Wave 2B.
 export { Modal as OverlayModal } from './Modal';
 
 

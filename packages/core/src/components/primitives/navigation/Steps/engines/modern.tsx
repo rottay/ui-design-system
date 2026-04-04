@@ -198,10 +198,10 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
                 <span className="font-medium">{step.title}</span>
 
                 {/* Optional subtitle */}
-                {step.subTitle && <span className="text-xs text-base-content/60">{step.subTitle}</span>}
+                {step.subTitle && <span className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.subTitle}</span>}
 
                 {/* Optional description */}
-                {step.description && <span className="text-sm text-base-content/70 mt-1">{step.description}</span>}
+                {step.description && <span className="text-sm mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</span>}
               </div>
             </li>
           );

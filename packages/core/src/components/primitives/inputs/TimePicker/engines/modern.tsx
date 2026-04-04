@@ -14,11 +14,11 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { TimePickerProps, TimeRangePickerProps } from '../TimePicker.types';
 
-/** Maps DS size values to DaisyUI input size modifier classes. */
-const sizeClasses: Record<string, string> = {
-  small: 'input-sm',
-  default: 'input-md',
-  large: 'input-lg',
+/** Maps DS size values to inline style dimensions. */
+const sizeStyleMap: Record<string, React.CSSProperties> = {
+  small: { height: 32, fontSize: 13, padding: '4px 10px' },
+  default: { height: 36, fontSize: 14, padding: '6px 12px' },
+  large: { height: 40, fontSize: 16, padding: '8px 14px' },
 };
 
 /** Pads a number to 2 digits. */
@@ -380,8 +380,12 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     onChange?.(null, '');
   }, [isControlled, onChange]);
 
-  const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-  const statusClass = status === 'error' ? 'input-error' : status === 'warning' ? 'input-warning' : '';
+  const sizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
+  const statusStyle: React.CSSProperties = status === 'error'
+    ? { borderColor: 'var(--ds-color-error)' }
+    : status === 'warning'
+      ? { borderColor: 'var(--ds-color-warning)' }
+      : {};
 
   return (
     <>
@@ -390,8 +394,18 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           ref={setInputRef}
           type="text"
           readOnly
-          className={`input input-bordered w-full ${sizeClass} ${statusClass} cursor-pointer`}
-          style={{ paddingRight: 48 }}
+          className="w-full cursor-pointer"
+          style={{
+            border: '1px solid var(--ds-color-border)',
+            borderRadius: 'var(--ds-radius-md)',
+            background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
+            color: 'var(--ds-color-text-primary)',
+            outline: 'none',
+            boxSizing: 'border-box',
+            paddingRight: 48,
+            ...sizeStyle,
+            ...statusStyle,
+          }}
           value={displayText}
           disabled={disabled}
           placeholder={placeholder}
@@ -577,9 +591,26 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     setIsOpen(false);
   }, [handleSelect]);
 
-  const sizeClass = sizeClasses[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-  const statusClass = status === 'error' ? 'input-error' : status === 'warning' ? 'input-warning' : '';
+  const rangeSizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
+  const rangeStatusStyle: React.CSSProperties = status === 'error'
+    ? { borderColor: 'var(--ds-color-error)' }
+    : status === 'warning'
+      ? { borderColor: 'var(--ds-color-warning)' }
+      : {};
   const activeTime = activeInput === 'start' ? displayValue[0] : displayValue[1];
+
+  const rangeInputBaseStyle: React.CSSProperties = {
+    border: '1px solid var(--ds-color-border)',
+    borderRadius: 'var(--ds-radius-md)',
+    background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
+    color: 'var(--ds-color-text-primary)',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+    width: '100%',
+    cursor: 'pointer',
+    ...rangeSizeStyle,
+    ...rangeStatusStyle,
+  };
 
   return (
     <>
@@ -596,11 +627,10 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         <input
           type="text"
           readOnly
-          className={[
-            `input input-bordered w-full ${sizeClass} cursor-pointer`,
-            statusClass,
-            activeInput === 'start' && isOpen ? 'ring-2 ring-primary' : '',
-          ].join(' ')}
+          style={{
+            ...rangeInputBaseStyle,
+            ...(activeInput === 'start' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
+          }}
           value={startText}
           disabled={disabled}
           placeholder={placeholder[0]}
@@ -611,15 +641,14 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           aria-expanded={isOpen && activeInput === 'start'}
           aria-label={placeholder[0]}
         />
-        <span className="text-base-content/60 shrink-0">{separator}</span>
+        <span className="shrink-0" style={{ color: 'var(--ds-color-text-secondary)' }}>{separator}</span>
         <input
           type="text"
           readOnly
-          className={[
-            `input input-bordered w-full ${sizeClass} cursor-pointer`,
-            statusClass,
-            activeInput === 'end' && isOpen ? 'ring-2 ring-primary' : '',
-          ].join(' ')}
+          style={{
+            ...rangeInputBaseStyle,
+            ...(activeInput === 'end' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
+          }}
           value={endText}
           disabled={disabled}
           placeholder={placeholder[1]}

@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the WorkspaceSwitcher pattern.
- * Renders a dropdown workspace picker styled with DaisyUI utility classes.
- * Manages its own open/close state via a manual click-outside listener rather
- * than DaisyUI's native dropdown, giving finer control over keyboard navigation
- * and programmatic close-on-select behavior.
+ * @fileoverview Modern (token-driven) engine for the WorkspaceSwitcher pattern.
+ * Renders a dropdown workspace picker styled with inline DS token styles and
+ * shared modern-styles helpers. Manages its own open/close state via a manual
+ * click-outside listener rather than a native dropdown, giving finer control
+ * over keyboard navigation and programmatic close-on-select behavior.
  *
  * @example
  * <ModernWorkspaceSwitcher
@@ -18,6 +18,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { WorkspaceSwitcherProps, Workspace } from '../WorkspaceSwitcher.types';
+import { popupPanelStyle, pillBadgeSmStyle, menuSectionTitleStyle } from '../../../shared/modern-styles';
 
 /**
  * Extracts up to two uppercase initials from a workspace or user name.
@@ -33,9 +34,10 @@ function getInitials(name: string): string {
 }
 
 /**
- * Modern engine workspace switcher built on DaisyUI/Tailwind.
- * Uses a custom click-outside handler and manual dropdown positioning instead of
- * DaisyUI's native dropdown to support full keyboard navigation and close-on-select.
+ * Modern engine workspace switcher built on DS token inline styles and shared
+ * modern-styles helpers. Uses a custom click-outside handler and manual dropdown
+ * positioning instead of a native dropdown to support full keyboard navigation
+ * and close-on-select.
  *
  * @param props - {@link WorkspaceSwitcherProps}
  * @returns A button trigger that toggles an absolutely-positioned workspace list.
@@ -63,7 +65,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
 
   const activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId);
 
-  // Manual click-outside detection because DaisyUI's dropdown component
+  // Manual click-outside detection because a native dropdown component
   // does not support keyboard navigation or programmatic close-on-select.
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
@@ -121,17 +123,17 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     >
       {/* Trigger */}
       <button
-        className={`btn btn-ghost gap-2 ${position === 'sidebar' ? 'w-full justify-start' : ''}`}
+        style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 12px', height: 40, borderRadius: 'var(--ds-radius-md)', ...(position === 'sidebar' ? { width: '100%', justifyContent: 'flex-start' } : {}) }}
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
         aria-label="Switch workspace"
       >
-        <div className="avatar">
+        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
           <div className={`rounded-lg ${position === 'sidebar' ? 'w-8 h-8' : 'w-6 h-6'}`}>
             {activeWorkspace?.logo ? (
               <img src={activeWorkspace.logo} alt={activeWorkspace.name} />
             ) : (
-              <div className="bg-primary text-primary-content flex items-center justify-center w-full h-full text-xs font-bold">
+              <div className="flex items-center justify-center w-full h-full text-xs font-bold" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
                 {activeWorkspace ? getInitials(activeWorkspace.name) : '?'}
               </div>
             )}
@@ -151,15 +153,16 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           doesn't overlap the nav rail; topbar opens below the trigger. */}
       {open && (
         <div
-          className={`absolute z-50 mt-1 w-72 bg-base-100 border border-base-300 rounded-xl shadow-xl overflow-hidden ${
+          className={`absolute z-50 mt-1 w-72 overflow-hidden ${
             position === 'sidebar' ? 'left-full top-0 ml-2' : 'top-full left-0'
           }`}
+          style={{ ...popupPanelStyle, boxShadow: 'var(--ds-elevation-3)', padding: 0 }}
           role="listbox"
           aria-label="Workspaces"
         >
           {/* Header */}
-          <div className="px-3 py-2 border-b border-base-300">
-            <span className="text-xs font-semibold opacity-50 uppercase tracking-wide">Workspaces</span>
+          <div style={{ padding: '6px 12px', borderBottom: '1px solid var(--ds-color-border)' }}>
+            <span style={menuSectionTitleStyle}>Workspaces</span>
           </div>
 
           {/* Workspace list */}
@@ -173,23 +176,27 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   role="option"
                   aria-selected={isActive}
                   data-testid={`workspace-item-${ws.id}`}
-                  // Three visual states: keyboard-focused (bg-base-200), active workspace
+                  // Three visual states: keyboard-focused (--ds-surface-inset), active workspace
                   // (subtle primary tint + left accent border), and default (hover highlight).
                   className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors ${
-                    isFocused ? 'bg-base-200' : isActive ? 'bg-primary/5' : 'hover:bg-base-200'
-                  } ${isActive ? 'border-l-[3px] border-primary' : 'border-l-[3px] border-transparent'}`}
+                    isActive ? 'border-l-[3px]' : 'border-l-[3px] border-transparent'
+                  }`}
+                  style={{
+                    ...(isFocused ? { background: 'var(--ds-surface-inset)' } : isActive ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' } : {}),
+                    ...(isActive ? { borderColor: 'var(--ds-color-primary)' } : {}),
+                  }}
                   onClick={() => {
                     onSwitch(ws.id);
                     setOpen(false);
                   }}
                   onMouseEnter={() => setFocusIndex(idx)}
                 >
-                  <div className="avatar">
+                  <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div className="w-9 h-9 rounded-lg">
                       {ws.logo ? (
                         <img src={ws.logo} alt={ws.name} />
                       ) : (
-                        <div className="bg-primary text-primary-content flex items-center justify-center w-full h-full text-sm font-bold">
+                        <div className="flex items-center justify-center w-full h-full text-sm font-bold" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
                           {getInitials(ws.name)}
                         </div>
                       )}
@@ -202,7 +209,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       <span className={`text-sm truncate ${isActive ? 'font-semibold' : ''}`}>{ws.name}</span>
                       {/* Checkmark confirms which workspace is currently active. */}
                       {isActive && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-primary flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 flex-shrink-0" style={{ color: 'var(--ds-color-primary)' }} viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       )}
@@ -214,7 +221,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       {typeof ws.online === 'number' && (
                         <span className="flex items-center gap-1">
                           {/* Green dot indicates active members. */}
-                          <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
+                          <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: 'var(--ds-color-success)' }} />
                           {ws.online}
                         </span>
                       )}
@@ -225,12 +232,11 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       to keep the row visually clean. */}
                   <div className="flex items-center gap-1.5">
                     {typeof ws.unreadCount === 'number' && ws.unreadCount > 0 && (
-                      <span className="badge badge-primary badge-sm">{ws.unreadCount}</span>
+                      <span style={{ ...pillBadgeSmStyle, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>{ws.unreadCount}</span>
                     )}
                     {onSettings && (
                       <button
-                        className="btn btn-ghost btn-xs btn-circle opacity-0 group-hover:opacity-100 hover:opacity-100"
-                        style={{ opacity: isFocused ? 1 : undefined }}
+                        style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isFocused ? 1 : 0, transition: 'opacity 0.15s' }}
                         onClick={(e) => {
                           e.stopPropagation();
                           onSettings(ws.id);
@@ -252,10 +258,10 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Create workspace */}
           {showCreateButton && onCreate && (
             <>
-              <div className="divider my-0" />
+              <div style={{ borderTop: '1px solid var(--ds-color-border)', margin: '0' }} />
               <div className="px-3 py-2">
                 <button
-                  className="btn btn-outline btn-sm btn-block gap-1"
+                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%' }}
                   onClick={() => {
                     onCreate();
                     setOpen(false);
@@ -274,14 +280,14 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Current user */}
           {currentUser && (
             <>
-              <div className="divider my-0" />
+              <div style={{ borderTop: '1px solid var(--ds-color-border)', margin: '0' }} />
               <div className="flex items-center gap-2 px-3 py-2" data-testid="workspace-current-user">
-                <div className="avatar">
+                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                   <div className="w-7 h-7 rounded-full">
                     {currentUser.avatar ? (
                       <img src={currentUser.avatar} alt={currentUser.name} />
                     ) : (
-                      <div className="bg-accent text-accent-content flex items-center justify-center w-full h-full text-xs font-bold">
+                      <div className="flex items-center justify-center w-full h-full text-xs font-bold" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
                         {getInitials(currentUser.name)}
                       </div>
                     )}

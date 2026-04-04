@@ -1,48 +1,24 @@
 /**
  * @fileoverview Checkbox Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Checkbox component.
- * Part of the Rottay Design System's input primitives collection.
+ * @description Premium checkbox implementation with precise, calm styling.
+ * Inspired by Linear/Vercel design language -- crisp geometry, smooth motion.
  *
  * @remarks
- * The Modern engine implements checkboxes using DaisyUI's utility-first approach
- * with Tailwind CSS classes. It provides a lightweight alternative to Classic
- * with smaller bundle size.
+ * Uses a hidden native input for accessibility and a custom visual indicator
+ * built with inline styles referencing DS CSS custom properties. No DaisyUI
+ * dependency -- pure CSS tokens for full theme control.
  *
- * **DaisyUI Features Utilized:**
- * - Checkbox component classes
- * - Size modifiers (checkbox-xs, checkbox-sm, checkbox-lg)
- * - Color modifiers (checkbox-primary, checkbox-secondary, etc.)
- * - Form control wrapper for label alignment
- * - Label text styling
- *
- * **Prop Mapping:**
- * - `size="xs"` → `checkbox-xs`
- * - `size="sm"` → `checkbox-sm`
- * - `size="lg"` → `checkbox-lg`
- * - `color="primary"` → `checkbox-primary`
- * - `color="success"` → `checkbox-success`
- * - `color="warning"` → `checkbox-warning`
- * - `color="error"` → `checkbox-error`
- *
- * **Group Support:**
- * Includes ModernCheckboxGroup with DaisyUI styling for groups.
- *
- * @example Using Modern Engine
- * ```tsx
- * import { Checkbox } from '@rottay/design-system';
- *
- * // Explicit Modern engine
- * <Checkbox
- *   engine="modern"
- *   label="DaisyUI Checkbox"
- *   color="success"
- *   size="lg"
- * />
- * ```
+ * **Visual Spec:**
+ * - 18x18 indicator, 2px border, `--ds-radius-sm` corners
+ * - Checked: primary fill + white SVG checkmark (2px stroke), smooth scale transition
+ * - Indeterminate: primary fill + white dash SVG
+ * - Hover: border brightens to `--ds-color-border` / `--ds-color-primary`
+ * - Focus: 2px outline `--ds-color-primary` with offset, `:focus-visible` only
+ * - Disabled: opacity 0.5, cursor not-allowed
+ * - Transitions on bg, border-color, transform (150ms ease-out)
+ * - Touch target min 44x44 via padding on the label row
  *
  * @see {@link Checkbox} for the main component
- * @see {@link ClassicCheckbox} for Ant Design implementation
- * @see {@link RusticCheckbox} for vanilla implementation
  * @module ModernCheckbox
  * @category Inputs
  * @package @rottay/design-system
@@ -50,21 +26,71 @@
 
 'use client';
 
-import React, { useState, useRef, useEffect, useId } from 'react';
+import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
 import type { CheckboxProps } from '../Checkbox.types';
-import { CHECKBOX_DEFAULTS } from '../Checkbox.types';
+import { CHECKBOX_DEFAULTS, SIZE_MAP_NUMERIC } from '../Checkbox.types';
 
-/**
- * Modern (DaisyUI/Tailwind) implementation of the DS Checkbox.
- *
- * Uses a native `<input type="checkbox">` with DaisyUI's `checkbox` class and
- * modifier classes for size and color. Supports both controlled (`checked` prop)
- * and uncontrolled (`defaultChecked`) modes. The indeterminate state is set
- * imperatively on the DOM element because there is no HTML attribute for it.
- *
- * @param props - Standardized CheckboxProps from the DS type contract.
- * @returns A DaisyUI-styled checkbox wrapped in a `form-control` label.
- */
+/* ------------------------------------------------------------------ */
+/*  SVG icons                                                          */
+/* ------------------------------------------------------------------ */
+
+/** Crisp checkmark -- 2px stroke, round caps, centered in a 12x12 viewBox. */
+const CheckIcon = ({ size }: { size: number }) => {
+  const svgSize = Math.max(10, Math.round(size * 0.6));
+  return (
+    <svg
+      width={svgSize}
+      height={svgSize}
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        display: 'block',
+        transform: 'scale(1)',
+        transition: 'transform 150ms ease-out',
+      }}
+    >
+      <path
+        d="M2.5 6.5L5 9L9.5 3.5"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+/** Dash for indeterminate state -- centered horizontal bar. */
+const IndeterminateIcon = ({ size }: { size: number }) => {
+  const svgSize = Math.max(10, Math.round(size * 0.6));
+  return (
+    <svg
+      width={svgSize}
+      height={svgSize}
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        display: 'block',
+        transform: 'scale(1)',
+        transition: 'transform 150ms ease-out',
+      }}
+    >
+      <path
+        d="M3 6H9"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+};
+
+/* ------------------------------------------------------------------ */
+/*  Component                                                          */
+/* ------------------------------------------------------------------ */
+
 export default function ModernCheckbox(props: CheckboxProps): React.ReactElement {
   const {
     size = CHECKBOX_DEFAULTS.size,
@@ -82,63 +108,111 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     style,
   } = props;
 
-  // Stable unique ID for the input-label association. The prefix prevents
-  // collision with IDs from other engines rendered on the same page.
   const generatedId = useId();
   const inputId = `checkbox-modern-${generatedId}`;
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Controlled vs. uncontrolled: when `checked` is undefined, local state
-  // owns the checkbox value. This mirrors React's standard input pattern.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
-  // `indeterminate` has no HTML attribute -- it can only be set via the
-  // DOM property, so we use an effect to keep it synchronized.
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocusVisible, setIsFocusVisible] = useState(false);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.indeterminate = indeterminate;
     }
   }, [indeterminate]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newChecked = e.target.checked;
-
     if (!isControlled) {
       setInternalChecked(newChecked);
     }
-
     onChange?.(newChecked, e);
-  };
+  }, [isControlled, onChange]);
 
-  // DaisyUI size classes. `xl` maps to `checkbox-lg` because DaisyUI
-  // does not provide an xl modifier for checkboxes.
-  const sizeClass = {
-    xs: 'checkbox-xs',
-    sm: 'checkbox-sm',
-    md: '',
-    lg: 'checkbox-lg',
-    xl: 'checkbox-lg',
-  }[size] || '';
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    // Only show focus ring for keyboard navigation (focus-visible behavior)
+    if (e.target.matches(':focus-visible')) {
+      setIsFocusVisible(true);
+    }
+  }, []);
 
-  // DaisyUI color classes map directly to DS color tokens.
-  const colorClass = {
-    default: '',
-    primary: 'checkbox-primary',
-    secondary: 'checkbox-secondary',
-    success: 'checkbox-success',
-    warning: 'checkbox-warning',
-    error: 'checkbox-error',
-  }[color] || 'checkbox-primary';
+  const handleBlur = useCallback(() => {
+    setIsFocusVisible(false);
+  }, []);
+
+  /* -- Sizes -------------------------------------------------------- */
+  const boxSize = SIZE_MAP_NUMERIC[size] ?? 18;
+
+  /* -- Active visual state ------------------------------------------ */
+  const active = isChecked || indeterminate;
 
   const displayLabel = label || children;
 
+  /* -- Styles ------------------------------------------------------- */
+  const transitionTiming = '150ms ease-out';
+
+  const boxStyle: React.CSSProperties = {
+    position: 'relative',
+    width: boxSize,
+    height: boxSize,
+    minWidth: boxSize,
+    borderRadius: 'var(--ds-radius-sm)',
+    border: `2px solid ${active ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)'}`,
+    backgroundColor: active ? 'var(--ds-color-primary)' : 'transparent',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: `background-color ${transitionTiming}, border-color ${transitionTiming}, transform ${transitionTiming}, box-shadow ${transitionTiming}`,
+    flexShrink: 0,
+    transform: active ? 'scale(1)' : 'scale(1)',
+    ...(isHovered && !disabled && !active && {
+      borderColor: 'var(--ds-color-border)',
+    }),
+    ...(isHovered && !disabled && active && {
+      borderColor: 'var(--ds-color-primary-hover)',
+      backgroundColor: 'var(--ds-color-primary-hover)',
+    }),
+    ...(isFocusVisible && !disabled && {
+      outline: '2px solid var(--ds-color-primary)',
+      outlineOffset: '2px',
+    }),
+    ...(disabled && {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    }),
+  };
+
+  const labelRowStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    padding: '4px 0',
+    minHeight: 44,
+    userSelect: 'none',
+    WebkitTapHighlightColor: 'transparent',
+  };
+
+  const labelTextStyle: React.CSSProperties = {
+    fontSize: 14,
+    lineHeight: '20px',
+    color: disabled
+      ? 'var(--ds-color-text-disabled)'
+      : 'var(--ds-color-text-primary)',
+  };
+
   return (
-    <div className={`form-control ${className}`} style={style}>
-      {/* `justify-start` overrides DaisyUI's default `justify-between` so
-          the checkbox and label stay visually grouped on the left. */}
-      <label className="label cursor-pointer gap-2 justify-start">
+    <div className={className} style={style}>
+      <label
+        style={labelRowStyle}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Hidden native input for accessibility + form participation */}
         <input
           ref={inputRef}
           id={inputId}
@@ -148,12 +222,33 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           checked={isChecked}
           disabled={disabled}
           onChange={handleChange}
-          className={`checkbox ${sizeClass} ${colorClass}`}
-          // "mixed" signals the indeterminate state to assistive technology.
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           aria-checked={indeterminate ? 'mixed' : isChecked}
+          style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            padding: 0,
+            margin: -1,
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            border: 0,
+          }}
         />
+
+        {/* Custom visual indicator */}
+        <span style={boxStyle}>
+          {active && (
+            indeterminate
+              ? <IndeterminateIcon size={boxSize} />
+              : <CheckIcon size={boxSize} />
+          )}
+        </span>
+
         {displayLabel && (
-          <span className="label-text">{displayLabel}</span>
+          <span style={labelTextStyle}>{displayLabel}</span>
         )}
       </label>
     </div>

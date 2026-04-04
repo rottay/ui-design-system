@@ -32,13 +32,13 @@ function formatDateKey(ts: string | Date): string {
   return date.toLocaleDateString();
 }
 
-/** Maps semantic item types to DaisyUI badge color classes. */
-const typeBadgeClass: Record<string, string> = {
-  default: 'badge-info',
-  success: 'badge-success',
-  warning: 'badge-warning',
-  error: 'badge-error',
-  info: 'badge-info',
+/** Maps semantic item types to DS token badge styles. */
+const typeBadgeStyle: Record<string, React.CSSProperties> = {
+  default: { background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' },
+  success: { background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' },
+  warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 15%, transparent)', color: 'var(--ds-color-warning)' },
+  error: { background: 'color-mix(in srgb, var(--ds-color-error) 15%, transparent)', color: 'var(--ds-color-error)' },
+  info: { background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' },
 };
 
 /**
@@ -105,7 +105,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           {item.icon ? (
             <span className="flex items-center justify-center w-5 h-5">{item.icon}</span>
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 ${item.type === 'error' ? 'text-error' : item.type === 'success' ? 'text-success' : item.type === 'warning' ? 'text-warning' : 'text-primary'}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5" style={{ color: item.type === 'error' ? 'var(--ds-color-error)' : item.type === 'success' ? 'var(--ds-color-success)' : item.type === 'warning' ? 'var(--ds-color-warning)' : 'var(--ds-color-primary)' }}>
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
             </svg>
           )}
@@ -116,15 +116,13 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
         >
           <div className="flex items-center gap-2 mb-1">
             {item.user?.avatar && (
-              <div className="avatar">
-                <div className="w-6 rounded-full">
-                  <img src={item.user.avatar} alt={item.user.name} />
-                </div>
+              <div style={{ display: 'inline-flex', width: 24, height: 24, borderRadius: '50%', overflow: 'hidden' }}>
+                <img src={item.user.avatar} alt={item.user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             )}
             {item.user && <span className="text-xs font-semibold">{item.user.name}</span>}
             {item.type && item.type !== 'default' && (
-              <span className={`badge badge-xs ${typeBadgeClass[item.type]}`}>{item.type}</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', padding: '1px 5px', fontSize: 10, ...typeBadgeStyle[item.type] }}>{item.type}</span>
             )}
           </div>
           <div className="font-semibold text-sm">{item.title}</div>
@@ -158,7 +156,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   if (loading) {
     return (
       <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span className="loading loading-spinner loading-md" />
+        <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin 0.6s linear infinite' }} />
       </div>
     );
   }

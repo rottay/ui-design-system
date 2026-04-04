@@ -3,7 +3,7 @@
 /**
  * @fileoverview Modern (DaisyUI/Tailwind) engine for the CalendarView pattern.
  * Renders a month grid using Tailwind utility classes and DaisyUI component
- * classes (btn, select, loading spinner). Styling is fully class-based with no
+ * classes (select, loading spinner) and DS token inline styles for buttons. Styling uses no
  * inline styles, except for per-event color which must be dynamic.
  *
  * @example
@@ -106,14 +106,14 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
       {toolbar ?? (
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <button className="btn btn-ghost btn-sm" onClick={() => navigateMonth(-1)}>{'<'}</button>
+            <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => navigateMonth(-1)}>{'<'}</button>
             <h3 className="text-lg font-semibold">{formatMonth(currentDate)}</h3>
-            <button className="btn btn-ghost btn-sm" onClick={() => navigateMonth(1)}>{'>'}</button>
+            <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => navigateMonth(1)}>{'>'}</button>
           </div>
           <div className="flex items-center gap-2">
-            <button className="btn btn-ghost btn-sm" onClick={() => onDateChange?.(new Date())}>Today</button>
+            <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => onDateChange?.(new Date())}>Today</button>
             <select
-              className="select select-bordered select-sm"
+              style={{ padding: '4px 8px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit' }}
               value={view}
               onChange={(e) => onViewChange?.(e.target.value as any)}
             >
@@ -129,12 +129,12 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           event sets. */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <span className="loading loading-spinner loading-md" />
+          <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin 0.6s linear infinite' }} />
         </div>
       ) : (
-        <div className="grid grid-cols-7 border border-base-300 rounded-lg overflow-hidden">
+        <div className="grid grid-cols-7 border rounded-lg overflow-hidden" style={{ borderColor: 'var(--ds-color-border)' }}>
           {DAY_NAMES.map((d) => (
-            <div key={d} className="text-center text-xs font-semibold py-2 bg-base-200 border-b border-base-300">
+            <div key={d} className="text-center text-xs font-semibold py-2 border-b" style={{ background: 'var(--ds-surface-inset)', borderColor: 'var(--ds-color-border)' }}>
               {d}
             </div>
           ))}
@@ -148,13 +148,17 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
               <div
                 key={key}
                 onClick={() => cell && onDateClick?.(cell)}
-                className={`min-h-[80px] p-1 border-r border-b border-base-300 last:border-r-0 ${
-                  cell ? 'bg-base-100 cursor-pointer hover:bg-base-200/50' : 'bg-base-200/30'
+                className={`min-h-[80px] p-1 border-r border-b last:border-r-0 ${
+                  cell ? 'cursor-pointer' : ''
                 }`}
+                style={{
+                  borderColor: 'var(--ds-color-border)',
+                  background: cell ? 'var(--ds-surface-card)' : 'var(--ds-surface-inset)',
+                }}
               >
                 {cell && (
                   <>
-                    <div className={`text-xs text-right px-1 ${isToday ? 'font-bold text-primary' : ''}`}>
+                    <div className={`text-xs text-right px-1 ${isToday ? 'font-bold' : ''}`} style={isToday ? { color: 'var(--ds-color-primary)' } : undefined}>
                       {cell.getDate()}
                     </div>
                     {/* Show at most 3 event chips per cell to keep the grid compact;
@@ -163,16 +167,16 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                       <div
                         key={ev.id}
                         onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
-                        className="text-[11px] px-1 mt-0.5 rounded text-white truncate cursor-pointer"
+                        className="text-[11px] px-1 mt-0.5 rounded truncate cursor-pointer"
                         // Per-event color must be inline because it varies per item;
                         // falls back to the DS primary token when no color is set.
-                        style={{ background: ev.color ?? 'var(--ds-color-primary)' }}
+                        style={{ color: 'var(--ds-color-text-on-primary)', background: ev.color ?? 'var(--ds-color-primary)' }}
                       >
                         {renderEvent ? renderEvent(ev) : ev.title}
                       </div>
                     ))}
                     {dayEvents.length > 3 && (
-                      <div className="text-[10px] text-base-content/50 px-1">+{dayEvents.length - 3} more</div>
+                      <div className="text-[10px] px-1" style={{ color: 'var(--ds-color-text-secondary)' }}>+{dayEvents.length - 3} more</div>
                     )}
                   </>
                 )}

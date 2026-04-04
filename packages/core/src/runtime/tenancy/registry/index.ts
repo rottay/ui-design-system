@@ -81,8 +81,8 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
         labelStyle: 'uppercase',  // Uppercase labels - enterprise/dashboard standard
       },
       accent: {
-        barPosition: 'top',
-        barThickness: 2,
+        barPosition: 'none',
+        barThickness: 0,
         barStyle: 'solid',       // Monochrome solid accent
         iconContainerShape: 'rounded',
         badgeShape: 'rounded',

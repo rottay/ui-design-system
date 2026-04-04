@@ -23,18 +23,20 @@ import type { TimelineProps, TimelineItemProps } from '../Timeline.types';
 import { TIMELINE_DEFAULTS } from '../Timeline.types';
 
 /**
- * Map color names to DaisyUI background classes.
+ * Map color names to DS token background styles.
  */
-const COLOR_CLASS_MAP: Record<string, string> = {
-  blue: 'bg-primary',
-  red: 'bg-error',
-  green: 'bg-success',
-  gray: 'bg-neutral',
-  primary: 'bg-primary',
-  success: 'bg-success',
-  warning: 'bg-warning',
-  error: 'bg-error',
+const COLOR_STYLE_MAP: Record<string, React.CSSProperties> = {
+  blue: { background: 'var(--ds-color-primary)' },
+  red: { background: 'var(--ds-color-error)' },
+  green: { background: 'var(--ds-color-success)' },
+  gray: { background: 'var(--ds-surface-panel)' },
+  primary: { background: 'var(--ds-color-primary)' },
+  success: { background: 'var(--ds-color-success)' },
+  warning: { background: 'var(--ds-color-warning)' },
+  error: { background: 'var(--ds-color-error)' },
 };
+
+const DEFAULT_COLOR_STYLE: React.CSSProperties = { background: 'var(--ds-color-primary)' };
 
 /**
  * ModernTimeline - DaisyUI implementation of Timeline.
@@ -88,7 +90,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           ? (item.props as TimelineItemProps)
           : (item as TimelineItemProps);
 
-        const colorClass = COLOR_CLASS_MAP[itemProps.color as string] || 'bg-primary';
+        const colorStyle = COLOR_STYLE_MAP[itemProps.color as string] || DEFAULT_COLOR_STYLE;
 
         // Per-item position override takes precedence over the mode-based default
         const positionClass = itemProps.position
@@ -97,10 +99,10 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
 
         return (
           <li key={index}>
-            {index > 0 && <hr className="bg-base-300" />}
+            {index > 0 && <hr style={{ background: 'var(--ds-surface-panel)' }} />}
             <div className={positionClass}>
               {itemProps.label && (
-                <div className="text-sm text-base-content/60 mb-1">
+                <div className="text-sm mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {itemProps.label}
                 </div>
               )}
@@ -110,10 +112,10 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
             </div>
             <div className="timeline-middle">
               {itemProps.dot || (
-                <div className={`w-3 h-3 rounded-full ${colorClass}`} />
+                <div className="w-3 h-3 rounded-full" style={colorStyle} />
               )}
             </div>
-            {index < orderedItems.length - 1 && <hr className="bg-base-300" />}
+            {index < orderedItems.length - 1 && <hr style={{ background: 'var(--ds-surface-panel)' }} />}
           </li>
         );
       })}
@@ -122,13 +124,13 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           to visually indicate an in-progress or upcoming event. */}
       {pending && (
         <li>
-          <hr className="bg-base-300" />
+          <hr style={{ background: 'var(--ds-surface-panel)' }} />
           <div className="timeline-start">
-            <span className="loading loading-spinner loading-sm mr-2" />
+            <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
             {pending}
           </div>
           <div className="timeline-middle">
-            <div className="w-3 h-3 rounded-full bg-base-300 animate-pulse" />
+            <div className="w-3 h-3 rounded-full animate-pulse" style={{ background: 'var(--ds-surface-panel)' }} />
           </div>
         </li>
       )}

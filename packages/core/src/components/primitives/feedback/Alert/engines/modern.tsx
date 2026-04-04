@@ -2,42 +2,42 @@
 
 /**
  * @fileoverview Alert Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Alert component.
+ * @description Token-driven Tailwind implementation of the Alert component.
  * A lightweight, utility-first alternative to the Classic engine.
  *
  * @remarks
  * **Engine Overview:**
- * Modern is the utility-first engine built on DaisyUI and Tailwind CSS.
+ * Modern is the utility-first engine built on Tailwind CSS with DS token inline styles.
  * It provides a smaller bundle size compared to Classic while maintaining
  * core alert functionality.
  *
  * **Key Features:**
  * - Utility-first styling with Tailwind
  * - Smaller bundle size than Ant Design
- * - DaisyUI component tokens
+ * - DS token inline styles via --ds-* CSS custom properties
  * - Custom dismiss state management
  *
  * **When to Use Modern:**
  * - Projects using Tailwind CSS
  * - When bundle size is a concern
  * - Landing pages and marketing sites
- * - When DaisyUI theme is preferred
+ * - When DS token theming is preferred
  *
  * **Multi-Tenant Theming:**
- * Modern uses DaisyUI's color system with CSS custom properties.
- * Tenant themes can override:
- * - `--alert-info`: Info alert background
- * - `--alert-success`: Success alert background
- * - `--alert-warning`: Warning alert background
- * - `--alert-error`: Error alert background
+ * Modern uses DS token CSS custom properties for theming.
+ * Tenant themes override:
+ * - `--ds-color-info`: Info alert color
+ * - `--ds-color-success`: Success alert color
+ * - `--ds-color-warning`: Warning alert color
+ * - `--ds-color-error`: Error alert color
  *
- * **Type to DaisyUI Class Mapping:**
- * | Type | DaisyUI Class | Icon |
- * |------|---------------|------|
- * | info | alert-info | bulb |
- * | success | alert-success | checkmark |
- * | warning | alert-warning | warning |
- * | error | alert-error | x |
+ * **Type to DS Token Mapping:**
+ * | Type | DS Token | Icon |
+ * |------|----------|------|
+ * | info | --ds-color-info | bulb |
+ * | success | --ds-color-success | checkmark |
+ * | warning | --ds-color-warning | warning |
+ * | error | --ds-color-error | x |
  *
  * @example Basic Usage
  * ```tsx
@@ -60,7 +60,7 @@
  * @see {@link AlertProps} - Component props interface
  * @see {@link ClassicAlert} - Ant Design alternative
  * @see {@link RusticAlert} - Vanilla alternative
- * @see {@link https://daisyui.com/components/alert} - DaisyUI Alert docs
+ * @see {@link Alert} for the main component
  * @module Alert/Engines/Modern
  * @category Feedback
  * @package @rottay/design-system
@@ -76,20 +76,20 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 // ============================================================================
 
 /**
- * DaisyUI class mappings for alert types.
- * Each type corresponds to a DaisyUI modifier class.
+ * DS token inline styles for alert types.
+ * Each type maps to a tinted background and matching text color.
  *
  * @internal
  */
-const TYPE_CLASSES: Record<AlertType, string> = {
+const TYPE_STYLES: Record<AlertType, React.CSSProperties> = {
   /** Blue tint for informational messages */
-  info: 'alert-info',
+  info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
   /** Green tint for success confirmations */
-  success: 'alert-success',
+  success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
   /** Yellow/orange tint for warnings */
-  warning: 'alert-warning',
+  warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
   /** Red tint for error messages */
-  error: 'alert-error',
+  error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
 };
 
 /**
@@ -134,19 +134,19 @@ const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
  * Modern Engine implementation of the Alert component.
  *
  * @description
- * Custom alert implementation using DaisyUI classes and Tailwind utilities.
+ * Custom alert implementation using DS token inline styles and Tailwind utilities.
  * Provides a lightweight alternative to Ant Design with smaller bundle size.
  *
  * @remarks
  * **Implementation Details:**
  * - Uses `useState` for dismiss state management
- * - DaisyUI alert classes for styling
+ * - DS token inline styles for alert type colors
  * - Custom close button with ghost styling
  * - Flexbox layout for icon and content alignment
  *
  * **CSS Classes Used:**
- * - `alert`: Base DaisyUI alert container
- * - `alert-{type}`: Type-specific modifier
+ * - `alert`: Base alert structural class
+ * - DS token inline styles for type-specific colors
  * - `btn`, `btn-sm`, `btn-ghost`: Close button
  * - `font-bold`: Message text styling
  * - `text-sm`: Description text styling
@@ -157,7 +157,7 @@ const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
  * - Icon provides visual context
  *
  * @param props - {@link AlertProps}
- * @returns The rendered DaisyUI Alert or null when dismissed
+ * @returns The rendered DS token-styled Alert or null when dismissed
  *
  * @example
  * ```tsx
@@ -268,8 +268,8 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
       <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
     )}
     <div
-      className={`alert ${TYPE_CLASSES[alertType]} ${isCompact ? 'p-2 text-sm' : ''} ${className}`}
-      style={style}
+      className={`alert ${isCompact ? 'p-2 text-sm' : ''} ${className}`}
+      style={{ ...TYPE_STYLES[alertType], ...style }}
       {...(responsive ? responsive.attrs : {})}
     >
       {/* Icon Section */}
@@ -283,7 +283,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
 
       {/* Close Button */}
       {closable && (
-        <button className="btn btn-sm btn-ghost btn-circle" onClick={handleClose} aria-label="Close">
+        <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={handleClose} aria-label="Close">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current w-4 h-4">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
           </svg>

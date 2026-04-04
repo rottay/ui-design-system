@@ -112,13 +112,13 @@ const TransferList: React.FC<TransferListProps> = ({
   };
 
   return (
-    <div className="flex flex-col border border-base-300 rounded-lg overflow-hidden" style={{ width: '200px', ...listStyle }}>
+    <div className="flex flex-col rounded-lg overflow-hidden" style={{ width: '200px', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid', ...listStyle }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-2 border-b border-base-300 bg-base-200 font-medium">
+      <div className="flex items-center justify-between p-2 font-medium" style={{ borderBottom: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)' }}>
         {showSelectAll && (
           <input
             type="checkbox"
-            className="checkbox checkbox-sm"
+            style={{ width: 16, height: 16, accentColor: 'var(--ds-color-primary)', cursor: 'pointer' }}
             checked={allSelected}
             ref={(el) => {
               if (el) el.indeterminate = someSelected && !allSelected;
@@ -128,17 +128,19 @@ const TransferList: React.FC<TransferListProps> = ({
           />
         )}
         <span className="font-medium ml-2">{title}</span>
-        <span className="text-sm text-base-content/60">
+        <span className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
           {selectedKeys.size}/{items.length}
         </span>
       </div>
 
       {/* Search */}
       {showSearch && (
-        <div className="p-2 border-b border-base-300">
+        <div className="p-2" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
           <input
             type="text"
-            className="input input-sm input-bordered w-full focus:input-primary transition-all duration-200"
+            style={{ width: '100%', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', padding: '4px 10px', fontSize: 13, background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', transition: 'border-color 0.2s' }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--ds-color-primary)'; }}
+            onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--ds-color-border)'; }}
             placeholder={locale?.searchPlaceholder || t('transfer.search_placeholder')}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
@@ -150,15 +152,15 @@ const TransferList: React.FC<TransferListProps> = ({
       {/* Items */}
       <div className="flex-1 overflow-auto max-h-60">
         {paginatedItems.length > 0 ? (
-          <ul className="menu p-1">
+          <ul style={{ listStyle: 'none', margin: 0, padding: 4 }}>
             {paginatedItems.map((item) => (
               <li key={item.key}>
                 <label
-                  className={`flex items-center gap-2 cursor-pointer transition-all duration-200 hover:bg-base-200/50 hover:border-l-2 hover:border-primary/50 ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`flex items-center gap-2 cursor-pointer transition-all duration-200 ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <input
                     type="checkbox"
-                    className="checkbox checkbox-sm"
+                    style={{ width: 16, height: 16, accentColor: 'var(--ds-color-primary)', cursor: 'pointer' }}
                     checked={selectedKeys.has(item.key)}
                     onChange={() => handleSelect(item.key)}
                     disabled={disabled || item.disabled}
@@ -171,7 +173,7 @@ const TransferList: React.FC<TransferListProps> = ({
             ))}
           </ul>
         ) : (
-          <div className="p-4 text-center text-base-content/50">
+          <div className="p-4 text-center" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {locale?.notFoundContent || t('transfer.not_found')}
           </div>
         )}
@@ -179,21 +181,21 @@ const TransferList: React.FC<TransferListProps> = ({
 
       {/* Pagination */}
       {pagination && totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1 p-2 border-t border-base-300">
+        <div className="flex items-center justify-center gap-1 p-2" style={{ borderTop: '1px solid var(--ds-color-border)' }}>
           <button
             type="button"
-            className="btn btn-xs btn-ghost"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
             disabled={currentPage <= 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           >
             ‹
           </button>
-          <span className="text-xs text-base-content/70">
+          <span className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {currentPage} / {totalPages}
           </span>
           <button
             type="button"
-            className="btn btn-xs btn-ghost"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
             disabled={currentPage >= totalPages}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           >
@@ -332,7 +334,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
         <div className="flex flex-col gap-2">
           <button
             type="button"
-            className="btn btn-circle btn-sm btn-ghost hover:btn-primary transition-all duration-200 hover:scale-110"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13, transition: 'all 200ms' }}
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
           >
@@ -341,7 +343,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           {!oneWay && (
             <button
               type="button"
-              className="btn btn-circle btn-sm btn-ghost hover:btn-primary transition-all duration-200 hover:scale-110"
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13, transition: 'all 200ms' }}
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}
             >

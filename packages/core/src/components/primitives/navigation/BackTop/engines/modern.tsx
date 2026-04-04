@@ -2,18 +2,18 @@
 
 /**
  * @fileoverview BackTop Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the BackTop component.
- * Provides a utility-first, lightweight back-to-top button using DaisyUI classes.
+ * @description DS token/Tailwind implementation of the BackTop component.
+ * Provides a utility-first, lightweight back-to-top button using DS token classes.
  *
  * @remarks
  * The Modern engine provides a Tailwind CSS-based implementation featuring:
- * - DaisyUI button components for consistent styling
+ * - DS token button components for consistent styling
  * - Utility-first CSS approach for easy customization
  * - Minimal JavaScript overhead
  * - Optimized for Tailwind CSS projects
  *
- * This implementation uses DaisyUI's btn-circle and btn-primary classes
- * for styling, making it easy to customize via Tailwind configuration.
+ * This implementation uses DS token inline styles for button shape and color,
+ * making it easy to customize via design token overrides.
  *
  * @example
  * ```tsx
@@ -26,13 +26,13 @@
  * ```tsx
  * <BackTop
  *   engine="modern"
- *   className="btn-secondary hover:scale-110 transition-transform"
+ *   className="hover:scale-110 transition-transform"
  * />
  * ```
  *
  * @see {@link BackTop} for the main component
  * @see {@link BackTopProps} for prop documentation
- * @see {@link https://daisyui.com/components/button} DaisyUI Button docs
+ * @see Design System token reference for button styling
  *
  * @module BackTop/Engines/Modern
  * @category Navigation
@@ -48,12 +48,12 @@ import { BACKTOP_DEFAULTS } from '../BackTop.types';
 // ============================================================================
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of BackTop.
+ * Modern (DS token/Tailwind) implementation of BackTop.
  *
  * @description
- * A utility-first implementation using DaisyUI button classes. Features:
+ * A utility-first implementation using DS token button classes. Features:
  * - Conditional rendering (unmounts when not visible)
- * - DaisyUI btn-circle styling for circular button
+ * - Circular button via inline borderRadius: 50%
  * - Fixed positioning with shadow for visibility
  * - Native smooth scroll behavior
  *
@@ -69,7 +69,7 @@ import { BACKTOP_DEFAULTS } from '../BackTop.types';
  * ```tsx
  * <BackTop
  *   engine="modern"
- *   className="btn-accent"
+ *   style={{ background: 'var(--ds-color-accent)' }}
  *   visibilityHeight={100}
  * />
  * ```
@@ -158,8 +158,21 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       <button
         ref={ref}
         type="button"
-        className={`btn btn-circle btn-primary fixed bottom-8 right-8 shadow-lg z-50 ${className}`}
-        style={style}
+        className={`fixed bottom-8 right-8 z-50 ${className}`}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          border: 'none',
+          background: 'var(--ds-color-primary)',
+          color: 'var(--ds-color-text-on-primary)',
+          cursor: 'pointer',
+          boxShadow: 'var(--ds-elevation-2)',
+          ...style,
+        }}
         onClick={handleClick}
         aria-label="Back to top"
       >

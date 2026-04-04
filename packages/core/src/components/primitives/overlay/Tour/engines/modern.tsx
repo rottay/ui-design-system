@@ -2,13 +2,13 @@
 
 /**
  * @fileoverview Tour Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Tour component.
- * Uses DaisyUI card and button components with Tailwind utility classes.
+ * @description Modern (token-driven) implementation of the Tour component.
+ * Uses Tailwind utility classes with DS token inline styles.
  *
  * @remarks
  * The Modern engine provides:
- * - DaisyUI card component for step content
- * - DaisyUI button styling for navigation
+ * - Card structural classes for step content
+ * - Button structural classes for navigation
  * - Tailwind utility classes for layout
  * - Portal rendering via createPortal
  * - Box-shadow spotlight technique
@@ -17,7 +17,7 @@
  * - getTargetElement resolves selectors, refs, and functions
  * - useEffect updates targetRect when step changes
  * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
- * - Step indicators use bg-primary/bg-base-300 classes
+ * - Step indicators use DS token inline styles (--ds-color-primary / --ds-surface-panel)
  *
  * @example Using Modern Engine
  * ```tsx
@@ -66,7 +66,7 @@ const getTargetElement = (target: TourStepProps['target']): HTMLElement | null =
  * Modern engine implementation of Tour using Tailwind CSS.
  *
  * Features:
- * - DaisyUI card and button components
+ * - Card and button structural classes with DS token styles
  * - Tailwind utility classes for layout
  * - Portal rendering for proper z-index stacking
  * - Spotlight effect with box-shadow technique
@@ -177,8 +177,14 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
         {/* Step popover: positioned below the target when available, centered in viewport otherwise */}
         <div
-          className={`fixed card bg-base-100 shadow-xl p-4 max-w-sm ${type === 'primary' ? 'border-2 border-primary' : ''}`}
           style={{
+            position: 'fixed',
+            padding: 16,
+            maxWidth: 384,
+            background: 'var(--ds-surface-card)',
+            borderRadius: 'var(--ds-radius-lg)',
+            border: type === 'primary' ? '2px solid var(--ds-color-primary)' : '1px solid var(--ds-color-border-subtle)',
+            boxShadow: 'var(--ds-elevation-3)',
             top: targetRect ? targetRect.bottom + padding + 8 : '50%',
             left: targetRect ? targetRect.left + targetRect.width / 2 : '50%',
             transform: targetRect ? 'translateX(-50%)' : 'translate(-50%, -50%)',
@@ -188,8 +194,23 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           {/* Close button */}
           <button
             type="button"
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={onClose}
+            style={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 28,
+              height: 28,
+              borderRadius: '50%',
+              border: 'none',
+              background: 'transparent',
+              color: 'var(--ds-color-text-primary)',
+              cursor: 'pointer',
+              fontSize: 14,
+            }}
           >
             ✕
           </button>
@@ -198,7 +219,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           {step?.cover && <div className="mb-3">{step.cover}</div>}
           <h3 className="font-bold text-lg">{step?.title}</h3>
           {step?.description && (
-            <p className="text-base-content/70 mt-2">{step.description}</p>
+            <p className="mt-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</p>
           )}
 
           {/* Footer */}
@@ -208,9 +229,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               {steps.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full ${
-                    index === currentStep ? 'bg-primary' : 'bg-base-300'
-                  }`}
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: index === currentStep ? 'var(--ds-color-primary)' : 'var(--ds-surface-panel)' }}
                 />
               ))}
             </div>
@@ -220,16 +240,35 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               {currentStep > 0 && (
                 <button
                   type="button"
-                  className="btn btn-sm btn-ghost"
                   onClick={handlePrev}
+                  style={{
+                    height: 32,
+                    padding: '0 12px',
+                    fontSize: 13,
+                    borderRadius: 'var(--ds-radius-md)',
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'var(--ds-color-text-primary)',
+                    cursor: 'pointer',
+                  }}
                 >
                   Previous
                 </button>
               )}
               <button
                 type="button"
-                className={`btn btn-sm ${type === 'primary' ? 'btn-primary' : 'btn-neutral'}`}
                 onClick={handleNext}
+                style={{
+                  height: 32,
+                  padding: '0 12px',
+                  fontSize: 13,
+                  borderRadius: 'var(--ds-radius-md)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  ...(type === 'primary'
+                    ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
+                    : { background: 'var(--ds-color-neutral)', color: 'var(--ds-color-text-on-primary)' }),
+                }}
               >
                 {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
               </button>

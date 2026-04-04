@@ -1,11 +1,17 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the ActivityLog pattern.
- * Renders activity entries using DaisyUI's `timeline` component with badge-styled
- * action labels, avatar placeholders, and relative timestamps. Uses native HTML
- * `<select>` elements for filtering (single-select per category) instead of Ant
- * Design's multi-select, matching DaisyUI's form control aesthetic.
+ * @fileoverview Modern engine for the ActivityLog pattern.
+ *
+ * Premium vertical timeline with:
+ * - Color-coded dot indicators per action type (create/update/delete/system)
+ * - Connecting vertical lines between timeline entries
+ * - Relative timestamps ("2h ago") with title tooltip for absolute date
+ * - Actor avatar + name display
+ * - Field-level diff rendering with before/after visualization
+ * - Clean empty state with muted message
+ * - Filter controls using native selects styled with DS tokens
+ * - All styling via DS tokens -- zero DaisyUI classes or hardcoded colors
  *
  * @example
  * <ModernActivityLog
@@ -19,34 +25,73 @@
 
 import React from 'react';
 import type { ActivityLogProps, Activity } from '../ActivityLog.types';
+import { Select } from '../../../primitives/inputs/Select';
+import type { SelectOption as SelectOptionDef } from '../../../primitives/inputs/Select/Select.types';
 
-/**
- * Resolves a DaisyUI badge color class from an action string via substring match.
- * Returns ghost badge for unrecognized actions.
- */
-function getActionBadgeClass(action: string): string {
+/* ---------------------------------------------------------------------------
+ * Action type color mapping
+ * --------------------------------------------------------------------------- */
+
+type ActionCategory = 'create' | 'update' | 'delete' | 'view' | 'system';
+
+/** Classifies an action string into a semantic category. */
+function classifyAction(action: string): ActionCategory {
   const lower = action.toLowerCase();
-  if (lower.includes('created') || lower.includes('added')) return 'badge-success';
-  if (lower.includes('updated') || lower.includes('edited')) return 'badge-info';
-  if (lower.includes('deleted') || lower.includes('removed')) return 'badge-error';
-  if (lower.includes('viewed')) return 'badge-secondary';
-  return 'badge-ghost';
+  if (lower.includes('created') || lower.includes('added')) return 'create';
+  if (lower.includes('updated') || lower.includes('edited') || lower.includes('changed')) return 'update';
+  if (lower.includes('deleted') || lower.includes('removed') || lower.includes('archived')) return 'delete';
+  if (lower.includes('viewed') || lower.includes('read') || lower.includes('accessed')) return 'view';
+  return 'system';
 }
 
-/** Returns a single-character glyph representing the action, used in the timeline dot. */
-function getActionIcon(action: string): string {
-  const lower = action.toLowerCase();
-  if (lower.includes('created') || lower.includes('added')) return '+';
-  if (lower.includes('deleted') || lower.includes('removed')) return 'x';
-  if (lower.includes('viewed')) return '\u25CF';
-  return '\u270E';
+/** Returns DS token color for the dot indicator based on action category. */
+function getDotColor(category: ActionCategory): string {
+  switch (category) {
+    case 'create': return 'var(--ds-color-success)';
+    case 'update': return 'var(--ds-color-info)';
+    case 'delete': return 'var(--ds-color-error)';
+    case 'view': return 'var(--ds-color-text-muted)';
+    case 'system': return 'var(--ds-color-warning)';
+  }
 }
+
+/** Returns the glyph for the dot indicator. */
+function getDotGlyph(category: ActionCategory): string {
+  switch (category) {
+    case 'create': return '+';
+    case 'update': return '\u270E';
+    case 'delete': return '\u2715';
+    case 'view': return '\u25CF';
+    case 'system': return '\u2699';
+  }
+}
+
+/** Returns badge style for the action label. */
+function getActionBadgeStyle(category: ActionCategory): React.CSSProperties {
+  const color = getDotColor(category);
+  return {
+    background: `color-mix(in srgb, ${color} 12%, transparent)`,
+    color,
+    padding: '2px 8px',
+    borderRadius: 'var(--ds-radius-sm)',
+    fontSize: 11,
+    fontWeight: 600,
+    lineHeight: 1.4,
+    letterSpacing: '0.02em',
+    textTransform: 'capitalize' as const,
+    whiteSpace: 'nowrap' as const,
+  };
+}
+
+/* ---------------------------------------------------------------------------
+ * Timestamp formatting
+ * --------------------------------------------------------------------------- */
 
 /**
  * Converts an ISO timestamp to a human-friendly relative string.
  * Uses minute/hour/day thresholds, falling back to locale date for 7+ days.
  */
-function formatTimestamp(ts: string): string {
+function formatRelativeTime(ts: string): string {
   const date = new Date(ts);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -60,29 +105,353 @@ function formatTimestamp(ts: string): string {
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
-/** Renders a field-level diff showing old values with strikethrough and new values in bold. */
-function renderDiff(diff: Record<string, { from: unknown; to: unknown }>): React.ReactNode {
+/** Returns a full absolute timestamp string for title/tooltip. */
+function formatAbsoluteTime(ts: string): string {
+  const date = new Date(ts);
+  return date.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+/* ---------------------------------------------------------------------------
+ * Diff renderer
+ * --------------------------------------------------------------------------- */
+
+/** Renders a field-level diff showing old values with strikethrough and new values emphasized. */
+function DiffView({ diff }: { diff: Record<string, { from: unknown; to: unknown }> }) {
   return (
-    <div className="mt-2 text-xs opacity-60 space-y-1">
+    <div
+      style={{
+        marginTop: 8,
+        padding: '8px 12px',
+        background: 'var(--ds-surface-inset)',
+        borderRadius: 'var(--ds-radius-md)',
+        fontSize: 12,
+        lineHeight: 1.6,
+      }}
+    >
       {Object.entries(diff).map(([field, { from, to }]) => (
-        <div key={field}>
-          <span className="font-medium">{field}:</span>{' '}
-          <span className="line-through">{String(from)}</span>{' -> '}
-          <span className="font-medium">{String(to)}</span>
+        <div
+          key={field}
+          style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: 6,
+            color: 'var(--ds-color-text-secondary)',
+          }}
+        >
+          <span style={{ fontWeight: 600, color: 'var(--ds-color-text-primary)', minWidth: 60 }}>
+            {field}:
+          </span>
+          <span style={{ textDecoration: 'line-through', color: 'var(--ds-color-text-muted)' }}>
+            {String(from)}
+          </span>
+          <span style={{ color: 'var(--ds-color-text-muted)' }}>{'\u2192'}</span>
+          <span style={{ fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>
+            {String(to)}
+          </span>
         </div>
       ))}
     </div>
   );
 }
 
+/* ---------------------------------------------------------------------------
+ * Avatar
+ * --------------------------------------------------------------------------- */
+
+/** Renders a small circular avatar with image or initial fallback. */
+function Avatar({ name, src, size = 28 }: { name: string; src?: string; size?: number }) {
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        style={{
+          width: size,
+          height: size,
+          borderRadius: '50%',
+          objectFit: 'cover',
+          flexShrink: 0,
+        }}
+      />
+    );
+  }
+
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: size,
+        height: size,
+        borderRadius: '50%',
+        background: 'var(--ds-surface-panel)',
+        color: 'var(--ds-color-text-secondary)',
+        fontSize: size * 0.42,
+        fontWeight: 600,
+        flexShrink: 0,
+        lineHeight: 1,
+      }}
+      aria-hidden="true"
+    >
+      {name.charAt(0).toUpperCase()}
+    </span>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Loading skeleton
+ * --------------------------------------------------------------------------- */
+
+const shimmerKeyframes = `
+@keyframes ds-activity-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+`;
+
+function LoadingSkeleton() {
+  const shimmerBg: React.CSSProperties = {
+    background: 'linear-gradient(90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75%)',
+    backgroundSize: '200% 100%',
+    animation: 'ds-activity-shimmer 1.5s ease-in-out infinite',
+    borderRadius: 'var(--ds-radius-sm)',
+  };
+
+  return (
+    <>
+      <style>{shimmerKeyframes}</style>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '16px 0' }}>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} style={{ display: 'flex', gap: 16 }}>
+            {/* Dot skeleton */}
+            <div
+              style={{
+                ...shimmerBg,
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                flexShrink: 0,
+                marginTop: 4,
+              }}
+            />
+            {/* Content skeleton */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ ...shimmerBg, width: '60%', height: 14 }} />
+              <div style={{ ...shimmerBg, width: '40%', height: 10 }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Empty state
+ * --------------------------------------------------------------------------- */
+
+function EmptyState({ message }: { message: string }) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '48px 24px',
+        color: 'var(--ds-color-text-muted)',
+        textAlign: 'center',
+      }}
+    >
+      <span
+        style={{
+          fontSize: 32,
+          lineHeight: 1,
+          marginBottom: 12,
+          opacity: 0.4,
+        }}
+        aria-hidden="true"
+      >
+        {'\u25CB'}
+      </span>
+      <span style={{ fontSize: 14 }}>{message}</span>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Filter bar
+ * --------------------------------------------------------------------------- */
+
+/* selectStyle removed -- filter bar now uses the DS Select primitive. */
+
+/* ---------------------------------------------------------------------------
+ * Timeline item
+ * --------------------------------------------------------------------------- */
+
+function TimelineItem({
+  activity,
+  isLast,
+  onClick,
+  renderActivity,
+}: {
+  activity: Activity;
+  isLast: boolean;
+  onClick?: (activity: Activity) => void;
+  renderActivity?: (activity: Activity) => React.ReactNode;
+}) {
+  const category = classifyAction(activity.action);
+  const dotColor = getDotColor(category);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        gap: 16,
+        position: 'relative',
+        paddingBottom: isLast ? 0 : 24,
+      }}
+    >
+      {/* Timeline column: dot + connecting line */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: 24,
+          flexShrink: 0,
+        }}
+      >
+        {/* Dot indicator */}
+        <div
+          style={{
+            width: 24,
+            height: 24,
+            borderRadius: '50%',
+            background: `color-mix(in srgb, ${dotColor} 15%, transparent)`,
+            border: `2px solid ${dotColor}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 10,
+            fontWeight: 700,
+            color: dotColor,
+            flexShrink: 0,
+            zIndex: 1,
+          }}
+          aria-hidden="true"
+        >
+          {getDotGlyph(category)}
+        </div>
+
+        {/* Connecting line */}
+        {!isLast && (
+          <div
+            style={{
+              width: 2,
+              flex: 1,
+              background: 'var(--ds-color-border)',
+              marginTop: 4,
+            }}
+            aria-hidden="true"
+          />
+        )}
+      </div>
+
+      {/* Content column */}
+      <div
+        style={{
+          flex: 1,
+          minWidth: 0,
+          cursor: onClick ? 'pointer' : undefined,
+          paddingTop: 1,
+        }}
+        onClick={onClick ? () => onClick(activity) : undefined}
+        role={onClick ? 'button' : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick(activity) : undefined}
+      >
+        {renderActivity ? (
+          renderActivity(activity)
+        ) : (
+          <>
+            {/* Header: avatar + name + action badge + entity */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                flexWrap: 'wrap',
+              }}
+            >
+              <Avatar name={activity.user.name} src={activity.user.avatar} size={24} />
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: 'var(--ds-color-text-primary)',
+                }}
+              >
+                {activity.user.name}
+              </span>
+              <span style={getActionBadgeStyle(category)}>
+                {activity.action}
+              </span>
+              {activity.entityType && (
+                <span
+                  style={{
+                    fontSize: 12,
+                    color: 'var(--ds-color-text-muted)',
+                  }}
+                >
+                  on {activity.entityType}
+                  {activity.entityId ? ` #${activity.entityId}` : ''}
+                </span>
+              )}
+            </div>
+
+            {/* Timestamp: relative with absolute tooltip */}
+            <div
+              title={formatAbsoluteTime(activity.timestamp)}
+              style={{
+                fontSize: 12,
+                color: 'var(--ds-color-text-muted)',
+                marginTop: 4,
+                cursor: 'default',
+              }}
+            >
+              {formatRelativeTime(activity.timestamp)}
+            </div>
+
+            {/* Diff view */}
+            {activity.diff && <DiffView diff={activity.diff} />}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * ModernActivityLog (main export)
+ * --------------------------------------------------------------------------- */
+
 /**
- * Modern engine activity log built on DaisyUI's timeline component.
- * Activities are rendered as timeline entries with badge-styled action labels,
- * avatar placeholders, and collapsible diff views. Filters use native select
- * elements (single-select) styled with DaisyUI form classes.
+ * Modern engine for the ActivityLog pattern component.
+ *
+ * Renders a premium vertical timeline with color-coded dot indicators,
+ * connecting lines, relative timestamps, actor avatars, and field-level
+ * diffs. All styling uses DS tokens with zero DaisyUI or hardcoded values.
  *
  * @param props - {@link ActivityLogProps}
- * @returns A DaisyUI card containing a filterable vertical timeline.
+ * @returns A filterable vertical activity timeline.
  */
 export default function ModernActivityLog(props: ActivityLogProps) {
   const {
@@ -99,121 +468,96 @@ export default function ModernActivityLog(props: ActivityLogProps) {
     style,
   } = props;
 
-  /* Show a centered spinner while data is being fetched */
+  /* Loading state */
   if (loading) {
     return (
-      <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span className="loading loading-spinner loading-md" />
+      <div
+        className={className || undefined}
+        style={{
+          ...style,
+          background: 'var(--ds-surface-card)',
+          boxShadow: 'var(--ds-elevation-1)',
+          borderRadius: 'var(--ds-radius-lg)',
+          padding: '16px 24px',
+        }}
+      >
+        <LoadingSkeleton />
       </div>
     );
   }
 
   return (
-    <div className={`card bg-base-100 shadow-sm ds-pattern-activity-log ds-engine-modern ${className ?? ''}`} style={style}>
-      <div className="card-body p-4">
-        {/* Filters -- native selects (single-select) styled with DaisyUI form classes.
-            Uses single-select instead of multi-select to match DaisyUI's form aesthetic.
-            Filter state is lifted to the parent via onFilterChange callback. */}
-        {onFilterChange && (
-          <div className="flex gap-2 mb-4 flex-wrap">
-            {/* Action type filter -- empty string resets to "all" */}
-            {actionTypes && actionTypes.length > 0 && (
-              <select
-                className="select select-bordered select-sm"
-                value={filters?.type?.[0] || ''}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  onFilterChange({ ...filters, type: val ? [val] : [] });
-                }}
-              >
-                <option value="">All actions</option>
-                {actionTypes.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-            )}
-            {/* User filter -- filters by user name; wraps single value in array for consistent API */}
-            {users && users.length > 0 && (
-              <select
-                className="select select-bordered select-sm"
-                value={filters?.user?.[0] || ''}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  onFilterChange({ ...filters, user: val ? [val] : [] });
-                }}
-              >
-                <option value="">All users</option>
-                {users.map(u => (
-                  <option key={u.name} value={u.name}>{u.name}</option>
-                ))}
-              </select>
-            )}
-          </div>
-        )}
+    <div
+      className={className || undefined}
+      style={{
+        ...style,
+        background: 'var(--ds-surface-card)',
+        boxShadow: 'var(--ds-elevation-1)',
+        borderRadius: 'var(--ds-radius-lg)',
+        padding: '20px 24px',
+      }}
+    >
+      {/* Filter bar */}
+      {onFilterChange && (
+        <div
+          style={{
+            display: 'flex',
+            gap: 8,
+            marginBottom: 20,
+            flexWrap: 'wrap',
+          }}
+        >
+          {/* Action type filter */}
+          {actionTypes && actionTypes.length > 0 && (
+            <Select
+              size="sm"
+              placeholder="All actions"
+              value={filters?.type?.[0] || ''}
+              options={[
+                { value: '', label: 'All actions' } as SelectOptionDef,
+                ...actionTypes.map((t) => ({ value: t, label: t } as SelectOptionDef)),
+              ]}
+              onChange={(val) => {
+                const v = val as string;
+                onFilterChange({ ...filters, type: v ? [v] : [] });
+              }}
+            />
+          )}
+          {/* User filter */}
+          {users && users.length > 0 && (
+            <Select
+              size="sm"
+              placeholder="All users"
+              value={filters?.user?.[0] || ''}
+              options={[
+                { value: '', label: 'All users' } as SelectOptionDef,
+                ...users.map((u) => ({ value: u.name, label: u.name } as SelectOptionDef)),
+              ]}
+              onChange={(val) => {
+                const v = val as string;
+                onFilterChange({ ...filters, user: v ? [v] : [] });
+              }}
+            />
+          )}
+        </div>
+      )}
 
-        {activities.length === 0 ? (
-          <div className="flex justify-center items-center py-12 opacity-50">
-            {emptyMessage}
-          </div>
-        ) : (
-          /* DaisyUI timeline-compact removes horizontal padding for a denser layout */
-          <ul className="timeline timeline-vertical timeline-compact">
-            {activities.map((activity, index) => (
-              <li key={activity.id}>
-                {/* DaisyUI timeline requires <hr> between items for the connecting line */}
-                {index > 0 && <hr />}
-                {/* Timestamp positioned to the left of the timeline dot */}
-                <div className="timeline-start text-xs opacity-50">
-                  {formatTimestamp(activity.timestamp)}
-                </div>
-                {/* Timeline dot with action glyph */}
-                <div className="timeline-middle">
-                  <div className="w-6 h-6 rounded-full bg-base-300 flex items-center justify-center text-xs font-bold">
-                    {getActionIcon(activity.action)}
-                  </div>
-                </div>
-                {/* Activity content box -- clickable if onActivityClick is provided */}
-                <div
-                  className={`timeline-end timeline-box ${onActivityClick ? 'cursor-pointer hover:bg-base-200' : ''}`}
-                  onClick={() => onActivityClick?.(activity)}
-                >
-                  {/* Allow consumer to fully override rendering via renderActivity prop */}
-                  {renderActivity ? renderActivity(activity) : (
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {/* Avatar -- shows image if available, otherwise first-initial placeholder */}
-                        <div className="avatar placeholder">
-                          <div className="bg-neutral text-neutral-content rounded-full w-6 h-6">
-                            {activity.user.avatar ? (
-                              <img src={activity.user.avatar} alt={activity.user.name} />
-                            ) : (
-                              <span className="text-xs">{activity.user.name.charAt(0).toUpperCase()}</span>
-                            )}
-                          </div>
-                        </div>
-                        <span className="font-medium text-sm">{activity.user.name}</span>
-                        {/* Color-coded badge derived from action keyword matching */}
-                        <span className={`badge badge-sm ${getActionBadgeClass(activity.action)}`}>
-                          {activity.action}
-                        </span>
-                        {activity.entityType && (
-                          <span className="text-xs opacity-50">
-                            on {activity.entityType}
-                            {activity.entityId ? ` #${activity.entityId}` : ''}
-                          </span>
-                        )}
-                      </div>
-                      {/* Field-level diff only shown when change details are available */}
-                      {activity.diff && renderDiff(activity.diff)}
-                    </div>
-                  )}
-                </div>
-                {index < activities.length - 1 && <hr />}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      {/* Timeline or empty state */}
+      {activities.length === 0 ? (
+        <EmptyState message={emptyMessage} />
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {activities.map((activity, index) => (
+            <TimelineItem
+              key={activity.id}
+              activity={activity}
+              isLast={index === activities.length - 1}
+              onClick={onActivityClick}
+              renderActivity={renderActivity}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

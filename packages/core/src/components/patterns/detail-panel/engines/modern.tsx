@@ -1,64 +1,456 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI / Tailwind) engine for the DetailPanel pattern.
- * Renders an entity detail view inside a DaisyUI card with a header (avatar, title,
- * status badge, action buttons), tab navigation (DaisyUI bordered tabs), an optional
- * sidebar, breadcrumbs, and a footer. Supports controlled and uncontrolled tab state.
+ * @fileoverview Modern engine for the DetailPanel pattern.
  *
- * @example
- * <ModernDetailPanel
- *   data={project}
- *   title="Project Alpha"
- *   subtitle="Q1 2026 Roadmap"
- *   status={{ label: 'In Progress', color: '#3b82f6' }}
- *   tabs={[
- *     { key: 'tasks', label: 'Tasks', content: <TaskList />, badge: 5 },
- *     { key: 'files', label: 'Files', content: <FileList /> },
- *   ]}
- *   sidebar={<ProjectMeta />}
- *   sidebarPosition="right"
- *   onBack={() => router.back()}
- * />
+ * Premium entity detail view with:
+ * - Breadcrumbs: clean, small, muted with "/" separators
+ * - Header: back button + avatar + title + status badge + action buttons
+ * - Tab navigation: token-driven bordered tabs with badge support
+ * - Tab content area: clean rendering with proper padding
+ * - Sidebar: clean panel with `var(--ds-surface-panel)` background
+ * - Loading skeleton: premium pulse animation with proper shapes
+ * - Footer: subtle top border separator
+ *
+ * All visuals use `--ds-*` CSS custom properties. Zero DaisyUI dependency.
+ * Supports controlled and uncontrolled tab state.
+ *
+ * @module Patterns/DetailPanel/Engines/Modern
+ * @category Patterns
+ * @package @rottay/design-system
  */
 
 import React, { useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../DetailPanel.types';
 
+/* ------------------------------------------------------------------ */
+/* Shared style constants                                              */
+/* ------------------------------------------------------------------ */
+
+const TRANSITION_FAST =
+  'var(--ds-motion-fast) var(--ds-motion-ease-out)';
+
+const PULSE_STYLE: React.CSSProperties = {
+  borderRadius: 'var(--ds-radius-sm)',
+  background: 'var(--ds-color-neutral-100)',
+  animation: 'pulse 1.5s ease-in-out infinite',
+};
+
+/* ------------------------------------------------------------------ */
+/* SkeletonBlock                                                       */
+/* ------------------------------------------------------------------ */
+
+function SkeletonBlock(props: {
+  width: number | string;
+  height: number;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <div
+      style={{
+        width: props.width,
+        height: props.height,
+        ...PULSE_STYLE,
+        ...props.style,
+      }}
+    />
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* ActionButton                                                        */
+/* ------------------------------------------------------------------ */
+
 /**
- * Maps a DetailAction variant to the corresponding DaisyUI btn class.
- * Isolated as a small component to keep the main render body readable.
+ * Renders a single action button with token-driven variant styling.
+ * Supports primary, danger, ghost, and default variants with hover states.
  */
 function ActionButton({ action }: { action: DetailAction }) {
-  const variantClasses: Record<string, string> = {
-    default: 'btn-outline',
-    primary: 'btn-primary',
-    danger: 'btn-error',
-    ghost: 'btn-ghost',
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const isInteractive = (hovered || focused) && !action.disabled && !action.loading;
+
+  const variant = action.variant ?? 'default';
+
+  const variantStyles: Record<
+    string,
+    { base: React.CSSProperties; hover: React.CSSProperties }
+  > = {
+    primary: {
+      base: {
+        background: 'var(--ds-color-primary)',
+        color: 'var(--ds-color-text-on-primary)',
+        border: '1px solid var(--ds-color-primary)',
+        boxShadow: 'var(--ds-elevation-1)',
+      },
+      hover: {
+        background: 'var(--ds-color-primary-600)',
+        borderColor: 'var(--ds-color-primary-600)',
+        boxShadow: 'var(--ds-elevation-2)',
+      },
+    },
+    danger: {
+      base: {
+        background: 'transparent',
+        color: 'var(--ds-color-error-600)',
+        border: '1px solid var(--ds-color-error-200)',
+      },
+      hover: {
+        background: 'var(--ds-color-error-50)',
+        borderColor: 'var(--ds-color-error-300)',
+      },
+    },
+    ghost: {
+      base: {
+        background: 'transparent',
+        color: 'var(--ds-color-text-secondary)',
+        border: '1px solid transparent',
+      },
+      hover: {
+        background: 'var(--ds-color-neutral-50)',
+        color: 'var(--ds-color-text-primary)',
+      },
+    },
+    default: {
+      base: {
+        background: 'transparent',
+        color: 'var(--ds-color-text-secondary)',
+        border: '1px solid var(--ds-color-border)',
+      },
+      hover: {
+        background: 'var(--ds-color-neutral-50)',
+        color: 'var(--ds-color-text-primary)',
+        borderColor: 'var(--ds-color-neutral-300)',
+      },
+    },
   };
+
+  const vs = variantStyles[variant] ?? variantStyles.default;
+
   return (
     <button
-      className={`btn btn-sm ${variantClasses[action.variant ?? 'default']} ${action.loading ? 'loading' : ''}`}
+      type="button"
       disabled={action.disabled || action.loading}
       onClick={action.onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '6px 14px',
+        fontSize: 13,
+        fontWeight: 500,
+        lineHeight: 1.4,
+        borderRadius: 'var(--ds-radius-md)',
+        cursor: action.disabled || action.loading ? 'not-allowed' : 'pointer',
+        opacity: action.disabled ? 0.5 : 1,
+        outline: 'none',
+        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
+        ...vs.base,
+        ...(isInteractive ? vs.hover : {}),
+      }}
     >
-      {action.icon && <span className="mr-1">{action.icon}</span>}
+      {action.loading && (
+        <span
+          style={{
+            display: 'inline-block',
+            width: 14,
+            height: 14,
+            border: '2px solid currentColor',
+            borderTopColor: 'transparent',
+            borderRadius: 'var(--ds-radius-full)',
+            animation: 'spin 0.6s linear infinite',
+            flexShrink: 0,
+          }}
+        />
+      )}
+      {action.icon && !action.loading && (
+        <span style={{ display: 'inline-flex', fontSize: 14, flexShrink: 0 }}>
+          {action.icon}
+        </span>
+      )}
       {action.label}
     </button>
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* BackButton                                                          */
+/* ------------------------------------------------------------------ */
+
 /**
- * Modern (DaisyUI) DetailPanel engine.
+ * Clean back navigation button with ghost styling.
+ */
+function BackButton({ onClick }: { onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const isInteractive = hovered || focused;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      aria-label="Go back"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 32,
+        height: 32,
+        flexShrink: 0,
+        border: 'none',
+        borderRadius: 'var(--ds-radius-sm)',
+        background: isInteractive
+          ? 'var(--ds-color-neutral-100)'
+          : 'transparent',
+        color: isInteractive
+          ? 'var(--ds-color-text-primary)'
+          : 'var(--ds-color-text-secondary)',
+        cursor: 'pointer',
+        outline: 'none',
+        padding: 0,
+        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}`,
+      }}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+        style={{ width: 16, height: 16 }}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+        />
+      </svg>
+    </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* TabButton                                                           */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Individual tab button with hover state, active indicator, badge support,
+ * and proper ARIA attributes for accessible tab navigation.
+ */
+function TabButton({
+  tabKey,
+  label,
+  icon,
+  badge,
+  isActive,
+  disabled,
+  onClick,
+}: {
+  tabKey: string;
+  label: string;
+  icon?: React.ReactNode;
+  badge?: number | string;
+  isActive: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const isInteractive = (hovered || focused) && !isActive && !disabled;
+
+  return (
+    <button
+      type="button"
+      role="tab"
+      id={`tab-${tabKey}`}
+      aria-selected={isActive}
+      aria-controls={`panel-${tabKey}`}
+      tabIndex={isActive ? 0 : -1}
+      disabled={disabled}
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '8px 16px',
+        fontSize: 13,
+        fontWeight: isActive ? 600 : 500,
+        lineHeight: 1.4,
+        color: disabled
+          ? 'var(--ds-color-text-disabled)'
+          : isActive
+            ? 'var(--ds-color-primary)'
+            : isInteractive
+              ? 'var(--ds-color-text-primary)'
+              : 'var(--ds-color-text-muted)',
+        background: isInteractive
+          ? 'var(--ds-color-neutral-50)'
+          : 'transparent',
+        border: 'none',
+        borderBottom: isActive
+          ? '2px solid var(--ds-color-primary)'
+          : '2px solid transparent',
+        marginBottom: -1,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+        outline: 'none',
+        borderRadius: 0,
+        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
+      }}
+    >
+      {icon && (
+        <span style={{ display: 'inline-flex', fontSize: 14, flexShrink: 0 }}>
+          {icon}
+        </span>
+      )}
+      {label}
+      {badge != null && (
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1px 7px',
+            fontSize: 11,
+            fontWeight: 600,
+            lineHeight: 1.4,
+            borderRadius: 'var(--ds-radius-full)',
+            background: isActive
+              ? 'var(--ds-color-primary-100)'
+              : 'var(--ds-color-neutral-100)',
+            color: isActive
+              ? 'var(--ds-color-primary-700)'
+              : 'var(--ds-color-text-secondary)',
+            minWidth: 18,
+          }}
+        >
+          {badge}
+        </span>
+      )}
+    </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Breadcrumbs                                                         */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Clean breadcrumb trail with "/" separators and hover states.
+ */
+function Breadcrumbs({
+  items,
+}: {
+  items: { label: string; href?: string; onClick?: () => void }[];
+}) {
+  return (
+    <nav
+      aria-label="Breadcrumb"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        marginBottom: 12,
+        fontSize: 12,
+        lineHeight: 1.4,
+      }}
+    >
+      {items.map((crumb, idx) => {
+        const isLast = idx === items.length - 1;
+        const isClickable = !isLast && (crumb.href || crumb.onClick);
+
+        return (
+          <React.Fragment key={`crumb-${idx}`}>
+            {idx > 0 && (
+              <span
+                style={{
+                  color: 'var(--ds-color-text-disabled)',
+                  userSelect: 'none',
+                  fontSize: 11,
+                }}
+                aria-hidden="true"
+              >
+                /
+              </span>
+            )}
+            {crumb.href && !isLast ? (
+              <a
+                href={crumb.href}
+                onClick={crumb.onClick}
+                style={{
+                  color: 'var(--ds-color-text-muted)',
+                  fontWeight: 500,
+                  textDecoration: 'none',
+                  transition: `color ${TRANSITION_FAST}`,
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.color =
+                    'var(--ds-color-text-secondary)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.color =
+                    'var(--ds-color-text-muted)';
+                }}
+              >
+                {crumb.label}
+              </a>
+            ) : (
+              <span
+                style={{
+                  color: isLast
+                    ? 'var(--ds-color-text-secondary)'
+                    : 'var(--ds-color-text-muted)',
+                  fontWeight: isLast ? 600 : 500,
+                  cursor: isClickable ? 'pointer' : 'default',
+                }}
+                onClick={crumb.onClick}
+              >
+                {crumb.label}
+              </span>
+            )}
+          </React.Fragment>
+        );
+      })}
+    </nav>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Main component                                                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Modern DetailPanel engine.
  *
- * Tab state can be controlled (activeTab + onTabChange) or uncontrolled (defaults
- * to the first tab). The sidebar is positioned via flex-direction reversal to
- * avoid duplicating DOM. Responsive grid columns on the sidebar keep the layout
- * readable on smaller screens.
+ * Premium entity detail view with token-driven styling. Zero DaisyUI
+ * dependency. Supports controlled and uncontrolled tab state.
+ *
+ * Features:
+ * - Breadcrumb trail with "/" separators
+ * - Back navigation ghost button
+ * - Avatar + title (large, bold) + status pill badge
+ * - Action buttons with primary/danger/ghost/default variants
+ * - Tab navigation with badges and icon support
+ * - Optional sidebar with panel background
+ * - Loading skeleton with pulse animation
+ * - Footer with subtle top border
  *
  * @typeParam T - Shape of the entity data object being displayed.
- * @param props - {@link DetailPanelProps} -- data, header info, tabs, sidebar, and actions.
- * @returns The detail view wrapped in a DaisyUI card.
+ * @param props - {@link DetailPanelProps}
+ * @returns The rendered detail panel.
  */
 export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   const {
@@ -85,7 +477,9 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
 
   // Uncontrolled tab state: falls back to the first tab key when the consumer
   // does not provide controlledActiveTab.
-  const [internalActiveTab, setInternalActiveTab] = useState<string>(tabs?.[0]?.key ?? '');
+  const [internalActiveTab, setInternalActiveTab] = useState<string>(
+    tabs?.[0]?.key ?? '',
+  );
   const activeTab = controlledActiveTab ?? internalActiveTab;
 
   // Only update internal state when uncontrolled. Always fire onTabChange
@@ -95,21 +489,87 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     onTabChange?.(key);
   };
 
-  // Skeleton loading: mimics the header + tab layout with animated pulse blocks.
+  /* ---- Container styles ---- */
+  const containerStyle: React.CSSProperties = {
+    background: 'var(--ds-surface-card)',
+    borderRadius: 'var(--ds-radius-lg)',
+    ...style,
+  };
+
+  /* ---- Loading skeleton ---- */
   if (loading) {
     return (
-      <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
-        <div className="card-body">
-          <div className="flex items-center gap-4 animate-pulse">
-            <div className="w-12 h-12 rounded-full bg-base-300" />
-            <div className="flex-1 space-y-2">
-              <div className="h-5 bg-base-300 rounded w-1/3" />
-              <div className="h-3 bg-base-300 rounded w-1/4" />
+      <div
+        className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
+        style={containerStyle}
+      >
+        <div style={{ padding: '20px 24px' }}>
+          {/* Breadcrumb skeleton */}
+          <SkeletonBlock width={180} height={12} style={{ marginBottom: 14 }} />
+
+          {/* Header skeleton */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 14,
+            }}
+          >
+            {/* Avatar skeleton */}
+            <SkeletonBlock
+              width={48}
+              height={48}
+              style={{
+                borderRadius: 'var(--ds-radius-full)',
+                flexShrink: 0,
+              }}
+            />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <SkeletonBlock width={180} height={22} />
+                <SkeletonBlock
+                  width={64}
+                  height={22}
+                  style={{ borderRadius: 'var(--ds-radius-full)' }}
+                />
+              </div>
+              <SkeletonBlock width={140} height={14} />
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <SkeletonBlock
+                width={80}
+                height={34}
+                style={{ borderRadius: 'var(--ds-radius-md)' }}
+              />
+              <SkeletonBlock
+                width={80}
+                height={34}
+                style={{ borderRadius: 'var(--ds-radius-md)' }}
+              />
             </div>
           </div>
-          <div className="mt-6 space-y-3 animate-pulse">
-            <div className="h-8 bg-base-300 rounded w-full" />
-            <div className="h-32 bg-base-300 rounded w-full" />
+
+          {/* Tab bar skeleton */}
+          <div style={{ marginTop: 20, display: 'flex', gap: 4 }}>
+            <SkeletonBlock width={72} height={34} />
+            <SkeletonBlock width={72} height={34} />
+            <SkeletonBlock width={72} height={34} />
+          </div>
+
+          {/* Content skeleton */}
+          <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <SkeletonBlock width="100%" height={120} style={{ borderRadius: 'var(--ds-radius-md)' }} />
+              <SkeletonBlock width="100%" height={80} style={{ borderRadius: 'var(--ds-radius-md)' }} />
+            </div>
+            <SkeletonBlock
+              width={sidebarWidth}
+              height={200}
+              style={{
+                borderRadius: 'var(--ds-radius-lg)',
+                flexShrink: 0,
+              }}
+            />
           </div>
         </div>
       </div>
@@ -120,98 +580,238 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   const activeTabObj = tabs?.find((t) => t.key === activeTab);
 
   return (
-    <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
-      <div className="card-body">
-        {/* Breadcrumbs */}
+    <div
+      className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
+      style={containerStyle}
+    >
+      <div style={{ padding: '20px 24px' }}>
+        {/* ---- Breadcrumbs ---- */}
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <div className="text-sm breadcrumbs mb-2 p-0">
-            <ul>
-              {breadcrumbs.map((b, i) => (
-                <li key={i}>
-                  {b.href ? (
-                    <a href={b.href} onClick={b.onClick}>{b.label}</a>
-                  ) : (
-                    <span className={b.onClick ? 'cursor-pointer' : ''} onClick={b.onClick}>
-                      {b.label}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Breadcrumbs items={breadcrumbs} />
         )}
 
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            {onBack && (
-              <button className="btn btn-ghost btn-sm btn-square" onClick={onBack}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
+        {/* ---- Header ---- */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: 16,
+          }}
+        >
+          {/* Left: back + avatar + title group */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
+            {onBack && <BackButton onClick={onBack} />}
+
+            {avatar && (
+              <div style={{ flexShrink: 0 }}>{avatar}</div>
             )}
-            {avatar && <div className="flex-shrink-0">{avatar}</div>}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-xl font-semibold truncate">{title}</h2>
+
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {/* Only render the heading when a title is actually provided.
+                    When DetailPanel is wrapped by PageShell, title is suppressed
+                    to avoid a double heading -- the shell owns the page title. */}
+                {title != null && title !== '' && (
+                  <h2
+                    style={{
+                      margin: 0,
+                      fontSize: 20,
+                      fontWeight: 600,
+                      lineHeight: 1.3,
+                      letterSpacing: '-0.02em',
+                      color: 'var(--ds-color-text-primary)',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {title}
+                  </h2>
+                )}
+
+                {/* Status pill badge */}
                 {status && (
-                  <div className={`badge ${status.color ? '' : 'badge-neutral'}`} style={status.color ? { backgroundColor: status.color, color: 'var(--ds-color-text-on-primary)' } : undefined}>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '2px 10px',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      lineHeight: 1.5,
+                      borderRadius: 'var(--ds-radius-full)',
+                      whiteSpace: 'nowrap',
+                      ...(status.color
+                        ? {
+                            backgroundColor: status.color,
+                            color: 'var(--ds-color-text-on-primary)',
+                          }
+                        : {
+                            background: 'var(--ds-color-neutral-100)',
+                            color: 'var(--ds-color-neutral-700)',
+                          }),
+                    }}
+                  >
                     {status.label}
-                  </div>
+                  </span>
                 )}
               </div>
-              {subtitle && <p className="text-sm text-base-content/60 mt-1">{subtitle}</p>}
+
+              {/* Subtitle */}
+              {subtitle && (
+                <p
+                  style={{
+                    margin: '4px 0 0',
+                    fontSize: 13,
+                    lineHeight: 1.4,
+                    color: 'var(--ds-color-text-muted)',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {subtitle}
+                </p>
+              )}
             </div>
           </div>
+
+          {/* Right: actions + headerExtra */}
           {(actions || headerExtra) && (
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                flexShrink: 0,
+              }}
+            >
               {headerExtra}
               {actions?.map((a) => <ActionButton key={a.key} action={a} />)}
             </div>
           )}
         </div>
 
-        {/* Body with optional sidebar. flex-direction is reversed when sidebarPosition
-            is 'left' so the sidebar DOM stays after main content (better for a11y reading
-            order) while visually appearing on the left. */}
-        <div className="mt-4 flex gap-4" style={{ flexDirection: sidebarPosition === 'left' ? 'row-reverse' : 'row' }}>
-          {/* Main content -- minWidth:0 prevents long tab content from overflowing. */}
-          <div className="flex-1 min-w-0" style={sidebarPosition === 'left' ? undefined : undefined}>
+        {/* ---- Body: tabs + content + sidebar ---- */}
+        <div
+          style={{
+            display: 'flex',
+            gap: 16,
+            marginTop: 20,
+            flexDirection: sidebarPosition === 'left' ? 'row-reverse' : 'row',
+          }}
+        >
+          {/* Main content area */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {/* Tab navigation */}
             {tabs && tabs.length > 0 && (
               <>
-                <div className="tabs tabs-bordered mb-4">
+                <div
+                  role="tablist"
+                  aria-label="Detail panel tabs"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0,
+                    borderBottom: '1px solid var(--ds-color-border)',
+                    marginBottom: 16,
+                  }}
+                  onKeyDown={(e) => {
+                    const enabledTabs = tabs.filter((t) => !t.disabled);
+                    if (enabledTabs.length === 0) return;
+                    const currentIdx = enabledTabs.findIndex((t) => t.key === activeTab);
+                    let nextIdx = -1;
+                    if (e.key === 'ArrowRight') {
+                      nextIdx = currentIdx < enabledTabs.length - 1 ? currentIdx + 1 : 0;
+                    } else if (e.key === 'ArrowLeft') {
+                      nextIdx = currentIdx > 0 ? currentIdx - 1 : enabledTabs.length - 1;
+                    } else if (e.key === 'Home') {
+                      nextIdx = 0;
+                    } else if (e.key === 'End') {
+                      nextIdx = enabledTabs.length - 1;
+                    }
+                    if (nextIdx >= 0) {
+                      e.preventDefault();
+                      const nextTab = enabledTabs[nextIdx];
+                      handleTabChange(nextTab.key);
+                      // Move focus to the newly activated tab button
+                      const tabEl = document.getElementById(`tab-${nextTab.key}`);
+                      tabEl?.focus();
+                    }
+                  }}
+                >
                   {tabs.map((tab) => (
-                    <button
+                    <TabButton
                       key={tab.key}
-                      className={`tab ${activeTab === tab.key ? 'tab-active' : ''} ${tab.disabled ? 'tab-disabled' : ''}`}
+                      tabKey={tab.key}
+                      label={tab.label}
+                      icon={tab.icon}
+                      badge={tab.badge}
+                      isActive={activeTab === tab.key}
+                      disabled={tab.disabled}
                       onClick={() => !tab.disabled && handleTabChange(tab.key)}
-                    >
-                      {tab.icon && <span className="mr-1.5">{tab.icon}</span>}
-                      {tab.label}
-                      {tab.badge != null && (
-                        <span className="badge badge-sm ml-1.5">{tab.badge}</span>
-                      )}
-                    </button>
+                    />
                   ))}
                 </div>
-                <div>{activeTabObj?.content}</div>
+                <div
+                  role="tabpanel"
+                  id={`panel-${activeTab}`}
+                  aria-labelledby={`tab-${activeTab}`}
+                >
+                  {activeTabObj?.content}
+                </div>
               </>
             )}
           </div>
 
-          {/* Sidebar -- uses order:1 when position is 'left' as a fallback in case
-              flex-direction reversal is overridden by a parent container. */}
+          {/* Sidebar */}
           {sidebar && (
-            <div className="flex-shrink-0" style={{ width: sidebarWidth, order: sidebarPosition === 'left' ? 1 : undefined }}>
-              <div className="card bg-base-200/50 p-4 rounded-lg">{sidebar}</div>
+            <div
+              style={{
+                width: sidebarWidth,
+                flexShrink: 0,
+                order: sidebarPosition === 'left' ? 1 : undefined,
+              }}
+            >
+              <div
+                style={{
+                  background: 'var(--ds-surface-panel)',
+                  padding: 16,
+                  borderRadius: 'var(--ds-radius-lg)',
+                  border: '1px solid var(--ds-color-border)',
+                }}
+              >
+                {sidebar}
+              </div>
             </div>
           )}
         </div>
 
-        {/* Footer */}
+        {/* ---- Footer ---- */}
         {footer && (
-          <div className="mt-4 pt-4 border-t border-base-300">
+          <div
+            style={{
+              marginTop: 20,
+              paddingTop: 16,
+              borderTop: '1px solid var(--ds-color-border)',
+            }}
+          >
             {footer}
           </div>
         )}

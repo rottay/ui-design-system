@@ -60,10 +60,10 @@ import { useTranslation } from '../../../../../i18n';
  * - md: Standard button size (default)
  * - lg: Large buttons for prominent navigation
  */
-const SIZE_CLASSES: Record<PaginationSize, string> = {
-  sm: 'join-item btn-sm',
-  md: 'join-item',
-  lg: 'join-item btn-lg',
+const SIZE_STYLES: Record<PaginationSize, React.CSSProperties> = {
+  sm: { height: 32, padding: '0 12px', fontSize: 13 },
+  md: { height: 36, padding: '0 16px', fontSize: 14 },
+  lg: { height: 44, padding: '0 20px', fontSize: 16 },
 };
 
 // ============================================================================
@@ -188,7 +188,18 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
   // ============================================================================
 
   const sizeKey: PaginationSize = size ?? 'md';
-  const buttonClass = SIZE_CLASSES[sizeKey];
+  const btnStyle = SIZE_STYLES[sizeKey];
+  const baseBtnStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '1px solid var(--ds-color-border)',
+    borderRadius: 0,
+    cursor: 'pointer',
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+    ...btnStyle,
+  };
 
   // ============================================================================
   // Render
@@ -202,10 +213,10 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
       )}
 
       {/* Pagination controls */}
-      <div className="join">
+      <div style={{ display: 'inline-flex' }}>
         {/* Previous button */}
         <button
-          className={`${buttonClass} btn`}
+          style={{ ...baseBtnStyle, borderRadius: 'var(--ds-radius-md) 0 0 var(--ds-radius-md)', borderRight: 'none' }}
           onClick={() => handlePageChange(current - 1)}
           disabled={disabled || current === 1}
         >
@@ -217,14 +228,18 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           typeof page === 'number' ? (
             <button
               key={page}
-              className={`${buttonClass} btn ${page === current ? 'btn-active' : ''}`}
+              style={{
+                ...baseBtnStyle,
+                borderRight: 'none',
+                ...(page === current ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', fontWeight: 600 } : {}),
+              }}
               onClick={() => handlePageChange(page)}
               disabled={disabled}
             >
               {page}
             </button>
           ) : (
-            <button key={`ellipsis-${index}`} className={`${buttonClass} btn btn-disabled`}>
+            <button key={`ellipsis-${index}`} style={{ ...baseBtnStyle, borderRight: 'none', pointerEvents: 'none', opacity: 0.5 }}>
               {page}
             </button>
           )
@@ -232,7 +247,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
 
         {/* Next button */}
         <button
-          className={`${buttonClass} btn`}
+          style={{ ...baseBtnStyle, borderRadius: '0 var(--ds-radius-md) var(--ds-radius-md) 0' }}
           onClick={() => handlePageChange(current + 1)}
           disabled={disabled || current === totalPages}
         >

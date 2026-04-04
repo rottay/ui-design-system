@@ -1,18 +1,17 @@
 /**
  * @fileoverview Menu Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based implementation of the Menu component.
+ * @description Premium CSS-in-JS implementation of the Menu component.
  * Part of the Rottay Design System's multi-engine architecture.
  *
  * @remarks
- * The Modern engine leverages DaisyUI's menu component classes to provide
- * a lightweight, utility-first navigation menu with:
- * - Tailwind CSS utility classes for styling
- * - DaisyUI's menu component classes
- * - Minimal JavaScript for interactivity
- * - Fast rendering with smaller bundle size
- *
- * This implementation is ideal for projects already using Tailwind CSS
- * or requiring lightweight, rapid development.
+ * The Modern engine uses design-system tokens and inline styles to deliver
+ * a Linear/Vercel-quality sidebar menu with:
+ * - Left accent bar for active items
+ * - Subtle hover backgrounds
+ * - Consistent item heights and spacing
+ * - Proper hierarchy for submenu children
+ * - Danger/disabled/focus-visible treatments
+ * - Smooth 150ms ease-out transitions
  *
  * @example
  * ```tsx
@@ -42,103 +41,525 @@
 
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import type { CSSProperties } from 'react';
 import type { MenuProps, MenuItem as MenuItemInterface, MenuSelectInfo, MenuClickInfo } from '../Menu.types';
 import { MENU_DEFAULTS } from '../Menu.types';
 
 // ============================================================================
-// Helper Functions
+// Style Constants
+// ============================================================================
+
+/** Height for top-level menu items */
+const ITEM_HEIGHT_TOP = 44;
+/** Height for child/nested menu items */
+const ITEM_HEIGHT_CHILD = 40;
+/** Horizontal padding for menu items */
+const ITEM_PADDING_X = 12;
+/** Gap between icon and label */
+const ICON_LABEL_GAP = 12;
+/** Left indent for child items (accounts for icon width) */
+const CHILD_INDENT = 40;
+/** Width of the active accent bar */
+const ACCENT_BAR_WIDTH = 3;
+/** Border radius token */
+const RADIUS = 'var(--ds-radius-md, 8px)';
+/** Transition for interactive states */
+const TRANSITION = 'background 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out';
+
+// ============================================================================
+// Inline Style Builders
 // ============================================================================
 
 /**
- * Renders DaisyUI menu items recursively.
- *
- * @description
- * Transforms the menu items array into DaisyUI-styled elements,
- * handling all item types: regular items, submenus, groups, and dividers.
+ * Builds the base style for a menu item anchor/button.
+ */
+function getItemBaseStyle(level: number): CSSProperties {
+  const isChild = level > 0;
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    gap: ICON_LABEL_GAP,
+    height: isChild ? ITEM_HEIGHT_CHILD : ITEM_HEIGHT_TOP,
+    padding: `0 ${ITEM_PADDING_X}px`,
+    paddingLeft: isChild ? CHILD_INDENT : ITEM_PADDING_X,
+    borderRadius: RADIUS,
+    fontSize: isChild ? 14 : 15,
+    fontWeight: 400,
+    lineHeight: 1.4,
+    color: 'var(--ds-color-text-secondary)',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    position: 'relative',
+    transition: TRANSITION,
+    border: 'none',
+    background: 'transparent',
+    width: '100%',
+    boxSizing: 'border-box' as const,
+    outline: 'none',
+    userSelect: 'none' as const,
+    WebkitTapHighlightColor: 'transparent',
+  };
+}
+
+/**
+ * Overlay styles for the active/selected state.
+ */
+function getActiveStyle(level: number): CSSProperties {
+  if (level > 0) {
+    // Children: no accent bar, just bolder text and subtle bg
+    return {
+      background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
+      fontWeight: 500,
+      color: 'var(--ds-color-primary)',
+    };
+  }
+  return {
+    background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
+    fontWeight: 500,
+    color: 'var(--ds-color-primary)',
+  };
+}
+
+/**
+ * Style for the left accent bar (only top-level active items).
+ */
+function getAccentBarStyle(): CSSProperties {
+  return {
+    content: '""',
+    position: 'absolute',
+    left: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: ACCENT_BAR_WIDTH,
+    height: '60%',
+    borderRadius: ACCENT_BAR_WIDTH,
+    background: 'var(--ds-color-primary)',
+    transition: 'opacity 150ms ease-out, height 150ms ease-out',
+  };
+}
+
+/**
+ * Style for danger items.
+ */
+function getDangerStyle(): CSSProperties {
+  return {
+    color: 'var(--ds-color-error)',
+  };
+}
+
+/**
+ * Style for disabled items.
+ */
+function getDisabledStyle(): CSSProperties {
+  return {
+    opacity: 0.5,
+    cursor: 'not-allowed',
+    pointerEvents: 'none' as const,
+  };
+}
+
+/**
+ * Style for submenu summary/trigger elements.
+ */
+function getSummaryStyle(): CSSProperties {
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    gap: ICON_LABEL_GAP,
+    height: ITEM_HEIGHT_TOP,
+    padding: `0 ${ITEM_PADDING_X}px`,
+    borderRadius: RADIUS,
+    fontSize: 15,
+    fontWeight: 400,
+    lineHeight: 1.4,
+    color: 'var(--ds-color-text-secondary)',
+    cursor: 'pointer',
+    position: 'relative',
+    transition: TRANSITION,
+    listStyle: 'none',
+    outline: 'none',
+    userSelect: 'none' as const,
+    WebkitTapHighlightColor: 'transparent',
+  };
+}
+
+/**
+ * Style for group title headers.
+ */
+function getGroupTitleStyle(): CSSProperties {
+  return {
+    padding: `16px ${ITEM_PADDING_X}px 6px`,
+    fontSize: 11,
+    fontWeight: 600,
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    color: 'var(--ds-color-text-muted)',
+    lineHeight: 1.4,
+    userSelect: 'none' as const,
+  };
+}
+
+/**
+ * Style for dividers.
+ */
+function getDividerStyle(): CSSProperties {
+  return {
+    height: 1,
+    margin: '8px 12px',
+    background: 'var(--ds-color-border)',
+    border: 'none',
+    listStyle: 'none',
+  };
+}
+
+// ============================================================================
+// MenuItemRow Component
+// ============================================================================
+
+/**
+ * A single menu item row with hover, active, focus, danger, and disabled states.
+ * Uses a ref-based approach for hover state to inject CSS pseudo-class behavior
+ * via inline styles (since inline styles cannot express :hover or :focus-visible).
+ */
+function MenuItemRow({
+  item,
+  isSelected,
+  level,
+  onItemClick,
+}: {
+  item: MenuItemInterface;
+  isSelected: boolean;
+  level: number;
+  onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const isChild = level > 0;
+
+  const baseStyle = getItemBaseStyle(level);
+
+  // Compose final style
+  let composedStyle: CSSProperties = { ...baseStyle };
+
+  // Hover state (only when not disabled and not already selected)
+  if (isHovered && !item.disabled && !isSelected) {
+    composedStyle = {
+      ...composedStyle,
+      background: item.danger
+        ? 'color-mix(in srgb, var(--ds-color-error) 6%, transparent)'
+        : 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)',
+    };
+  }
+
+  // Active/selected state
+  if (isSelected) {
+    composedStyle = {
+      ...composedStyle,
+      ...getActiveStyle(level),
+    };
+  }
+
+  // Danger color
+  if (item.danger && !isSelected) {
+    composedStyle = {
+      ...composedStyle,
+      ...getDangerStyle(),
+    };
+  }
+
+  // Disabled state (applied last to override everything)
+  if (item.disabled) {
+    composedStyle = {
+      ...composedStyle,
+      ...getDisabledStyle(),
+    };
+  }
+
+  return (
+    <li key={item.key} style={{ listStyle: 'none', margin: '2px 0' }}>
+      <a
+        role="menuitem"
+        tabIndex={item.disabled ? -1 : 0}
+        style={composedStyle}
+        aria-disabled={item.disabled || undefined}
+        aria-current={isSelected ? 'page' : undefined}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onFocus={(e) => {
+          // Apply focus-visible ring via inline style
+          if (e.currentTarget.matches(':focus-visible')) {
+            e.currentTarget.style.outline = '2px solid var(--ds-color-primary)';
+            e.currentTarget.style.outlineOffset = '-2px';
+          }
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.outline = 'none';
+          e.currentTarget.style.outlineOffset = '0';
+        }}
+        onKeyDown={(e) => {
+          if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
+            e.preventDefault();
+            onItemClick(item.key, [item.key], e as unknown as React.MouseEvent<HTMLElement>);
+          }
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          if (!item.disabled) {
+            onItemClick(item.key, [item.key], e as React.MouseEvent<HTMLElement>);
+          }
+        }}
+      >
+        {/* Left accent bar for active top-level items */}
+        {isSelected && !isChild && (
+          <span
+            aria-hidden="true"
+            style={getAccentBarStyle()}
+          />
+        )}
+        {item.icon && (
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              width: 20,
+              height: 20,
+              fontSize: 18,
+              opacity: isSelected ? 1 : 0.7,
+              transition: 'opacity 150ms ease-out',
+            }}
+          >
+            {item.icon}
+          </span>
+        )}
+        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {item.label}
+        </span>
+      </a>
+    </li>
+  );
+}
+
+// ============================================================================
+// SubmenuRow Component
+// ============================================================================
+
+/**
+ * A submenu row with a collapsible <details>/<summary> pattern.
+ * Applies the same hover/focus treatment as regular items on the summary trigger.
+ */
+function SubmenuRow({
+  item,
+  level,
+  onItemClick,
+  selectedKeys,
+}: {
+  item: MenuItemInterface;
+  level: number;
+  onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
+  selectedKeys: string[];
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  // Check if any child is selected (to auto-open the submenu)
+  const hasSelectedChild = item.children?.some((child) => selectedKeys.includes(child.key)) ?? false;
+
+  // Auto-open if a child is selected
+  useEffect(() => {
+    if (hasSelectedChild && detailsRef.current) {
+      detailsRef.current.open = true;
+    }
+  }, [hasSelectedChild]);
+
+  const summaryStyle: CSSProperties = {
+    ...getSummaryStyle(),
+    ...(item.disabled ? getDisabledStyle() : {}),
+    ...(isHovered && !item.disabled
+      ? { background: 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)' }
+      : {}),
+  };
+
+  return (
+    <li key={item.key} style={{ listStyle: 'none', margin: '2px 0' }}>
+      <details ref={detailsRef} open={hasSelectedChild || undefined}>
+        <summary
+          style={summaryStyle}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onFocus={(e) => {
+            if (e.currentTarget.matches(':focus-visible')) {
+              e.currentTarget.style.outline = '2px solid var(--ds-color-primary)';
+              e.currentTarget.style.outlineOffset = '-2px';
+            }
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
+            e.currentTarget.style.outlineOffset = '0';
+          }}
+        >
+          {item.icon && (
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                width: 20,
+                height: 20,
+                fontSize: 18,
+                opacity: 0.7,
+                transition: 'opacity 150ms ease-out',
+              }}
+            >
+              {item.icon}
+            </span>
+          )}
+          <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {item.label}
+          </span>
+          {/* Chevron indicator */}
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 16,
+              height: 16,
+              flexShrink: 0,
+              opacity: 0.4,
+              transition: 'transform 150ms ease-out',
+            }}
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              style={{ display: 'block' }}
+            >
+              <path
+                d="M4.5 3L7.5 6L4.5 9"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </summary>
+        <ul
+          role="group"
+          style={{
+            listStyle: 'none',
+            padding: '2px 0 2px 0',
+            margin: 0,
+          }}
+        >
+          {renderModernMenuItems(item.children || [], onItemClick, selectedKeys, level + 1)}
+        </ul>
+      </details>
+    </li>
+  );
+}
+
+// ============================================================================
+// Render Helper
+// ============================================================================
+
+/**
+ * Renders menu items recursively using the premium Modern styling.
  *
  * @param items - Array of menu item configurations
  * @param onItemClick - Click handler for menu items
  * @param selectedKeys - Currently selected item keys
  * @param level - Current nesting level
- * @returns Rendered DaisyUI menu item nodes
+ * @returns Rendered menu item nodes
  *
  * @internal
  */
-function renderDaisyMenuItems(
+function renderModernMenuItems(
   items: MenuItemInterface[],
   onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void,
   selectedKeys: string[],
   level: number = 0
 ): React.ReactNode {
   return items.map((item) => {
-    // DaisyUI uses the `divider` class to render a horizontal separator
+    // Divider
     if (item.type === 'divider') {
-      return <li key={item.key} className="divider" />;
+      return <li key={item.key} style={getDividerStyle()} aria-hidden="true" />;
     }
 
-    // Groups display a non-interactive heading via DaisyUI's `menu-title` class.
-    // Children are nested inside a <ul> to maintain DaisyUI's menu structure.
+    // Group
     if (item.type === 'group') {
       return (
-        <li key={item.key} className="menu-title">
-          <span>{item.title || item.label}</span>
+        <li key={item.key} role="presentation" style={{ listStyle: 'none' }}>
+          <div style={getGroupTitleStyle()}>{item.title || item.label}</div>
           {item.children && (
-            <ul>
-              {renderDaisyMenuItems(item.children, onItemClick, selectedKeys, level + 1)}
+            <ul role="group" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {renderModernMenuItems(item.children, onItemClick, selectedKeys, level + 1)}
             </ul>
           )}
         </li>
       );
     }
 
-    // Submenus use the native <details>/<summary> pattern which DaisyUI
-    // leverages for collapsible sections. This avoids custom JS state for
-    // open/close and provides built-in keyboard toggling via Enter/Space.
+    // Submenu with children
     if (item.children && item.children.length > 0) {
       return (
-        <li key={item.key}>
-          <details>
-            <summary className={item.disabled ? 'disabled' : ''}>
-              {item.icon}
-              {item.label}
-            </summary>
-            <ul>
-              {renderDaisyMenuItems(item.children, onItemClick, selectedKeys, level + 1)}
-            </ul>
-          </details>
-        </li>
+        <SubmenuRow
+          key={item.key}
+          item={item}
+          level={level}
+          onItemClick={onItemClick}
+          selectedKeys={selectedKeys}
+        />
       );
     }
 
-    // Regular leaf items. DaisyUI uses `active` class for the selected state
-    // and `text-error` for destructive/danger actions (e.g., "Delete").
+    // Regular leaf item
     const isSelected = selectedKeys.includes(item.key);
-    const itemClasses = [
-      item.disabled ? 'disabled' : '',
-      item.danger ? 'text-error' : '',
-      isSelected ? 'active' : '',
-    ].filter(Boolean).join(' ');
-
     return (
-      <li key={item.key}>
-        <a
-          className={itemClasses}
-          onClick={(e) => {
-            e.preventDefault();
-            if (!item.disabled) {
-              onItemClick(item.key, [item.key], e as React.MouseEvent<HTMLElement>);
-            }
-          }}
-          aria-disabled={item.disabled}
-        >
-          {item.icon}
-          {item.label}
-        </a>
-      </li>
+      <MenuItemRow
+        key={item.key}
+        item={item}
+        isSelected={isSelected}
+        level={level}
+        onItemClick={onItemClick}
+      />
     );
   });
+}
+
+// ============================================================================
+// Global CSS injection for :focus-visible and details[open] chevron rotation
+// ============================================================================
+
+const MODERN_MENU_STYLE_ID = 'rottay-menu-modern-styles';
+
+function ensureGlobalStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById(MODERN_MENU_STYLE_ID)) return;
+
+  const style = document.createElement('style');
+  style.id = MODERN_MENU_STYLE_ID;
+  style.textContent = `
+    .rottay-menu--modern a:focus-visible,
+    .rottay-menu--modern summary:focus-visible {
+      outline: 2px solid var(--ds-color-primary) !important;
+      outline-offset: -2px !important;
+    }
+    .rottay-menu--modern details[open] > summary > span:last-child {
+      transform: rotate(90deg);
+    }
+    .rottay-menu--modern summary::-webkit-details-marker,
+    .rottay-menu--modern summary::marker {
+      display: none;
+      content: '';
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 // ============================================================================
@@ -146,21 +567,22 @@ function renderDaisyMenuItems(
 // ============================================================================
 
 /**
- * DaisyUI/Tailwind implementation of the Menu component.
+ * Premium CSS-in-JS implementation of the Menu component.
  *
  * @description
- * Renders the Menu component using DaisyUI classes for styling,
- * providing a lightweight alternative to the Classic engine.
+ * Renders the Menu component using design-system tokens and inline styles
+ * for a Linear/Vercel-quality sidebar navigation experience.
  *
  * @remarks
- * - Uses DaisyUI's menu component classes
- * - Utility-first styling with Tailwind CSS
- * - Supports horizontal and vertical modes
- * - Theme-aware with base color classes
- * - Smaller bundle size than Classic
+ * - Uses DS color tokens (--ds-color-primary, --ds-color-error, --ds-color-text-*)
+ * - Left accent bar on active top-level items
+ * - Subtle hover/focus states with smooth transitions
+ * - Proper hierarchy with indented child items
+ * - Danger and disabled treatments
+ * - Keyboard accessible with focus-visible ring
  *
  * @param props - {@link MenuProps}
- * @returns Rendered DaisyUI Menu component
+ * @returns Rendered ModernMenu component
  *
  * @example
  * ```tsx
@@ -190,6 +612,14 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   } = props;
 
   // ========================================================================
+  // Global Styles
+  // ========================================================================
+
+  useEffect(() => {
+    ensureGlobalStyles();
+  }, []);
+
+  // ========================================================================
   // State Management
   // ========================================================================
 
@@ -209,8 +639,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
    */
   const handleItemClick = useCallback(
     (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => {
-      // Fire click callback first, before selection logic, so consumers
-      // can inspect the raw click even when selection is disabled
+      // Fire click callback first
       const clickInfo: MenuClickInfo = {
         key,
         keyPath,
@@ -223,22 +652,18 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
         let newSelectedKeys: string[];
 
         if (multiple) {
-          // Multiple mode: toggle the clicked key on/off in the selection set
           newSelectedKeys = selectedKeys.includes(key)
             ? selectedKeys.filter((k) => k !== key)
             : [...selectedKeys, key];
         } else {
-          // Single mode: replace entire selection with the clicked key
           newSelectedKeys = [key];
         }
 
-        // Only update internal state when running in uncontrolled mode.
-        // In controlled mode the parent owns the selectedKeys array.
+        // Only update internal state when running in uncontrolled mode
         if (controlledSelectedKeys === undefined) {
           setInternalSelectedKeys(newSelectedKeys);
         }
 
-        // Call onSelect callback
         const selectInfo: MenuSelectInfo = {
           key,
           selectedKeys: newSelectedKeys,
@@ -251,28 +676,22 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   );
 
   // ========================================================================
-  // Styles & Classes
+  // Styles
   // ========================================================================
 
-  /**
-   * DaisyUI menu classes based on props.
-   */
-  // Build DaisyUI class list. `menu-compact` reduces padding/spacing when
-  // the sidebar is collapsed, mimicking antd's inlineCollapsed behavior.
-  // Background color tokens switch between DaisyUI's base shades for theming.
-  const menuClasses = [
-    'menu',
-    mode === 'horizontal' ? 'menu-horizontal' : 'menu-vertical',
-    inlineCollapsed ? 'menu-compact' : '',
-    theme === 'dark' ? 'bg-base-300' : 'bg-base-100',
-    'rounded-box',
-    className,
-  ].filter(Boolean).join(' ');
+  const isHorizontal = mode === 'horizontal';
 
-  /**
-   * Custom styles for additional customization.
-   */
   const menuStyle: CSSProperties = {
+    display: 'flex',
+    flexDirection: isHorizontal ? 'row' : 'column',
+    gap: isHorizontal ? 4 : 2,
+    listStyle: 'none',
+    padding: isHorizontal ? '0 8px' : '8px',
+    margin: 0,
+    background: theme === 'dark' ? 'var(--ds-surface-panel)' : 'var(--ds-surface-card)',
+    borderRadius: RADIUS,
+    fontFamily: 'var(--ds-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif)',
+    ...(inlineCollapsed ? { width: 64, overflow: 'hidden' } : {}),
     ...style,
   };
 
@@ -282,12 +701,12 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
 
   return (
     <ul
-      className={`rottay-menu rottay-menu--modern ${menuClasses}`}
+      className={`rottay-menu rottay-menu--modern ${className}`.trim()}
       style={menuStyle}
       role="menu"
     >
       {items
-        ? renderDaisyMenuItems(items, handleItemClick, selectedKeys)
+        ? renderModernMenuItems(items, handleItemClick, selectedKeys)
         : children}
     </ul>
   );

@@ -1,54 +1,27 @@
 /**
  * @fileoverview Button Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Button component.
- * Part of the Rottay Design System's input primitives collection.
+ * @description Premium-quality button implementation using CSS custom properties
+ * from the modern theme token system. Inspired by Linear, Vercel, and Stripe.
  *
  * @remarks
- * The Modern engine implements buttons using DaisyUI's utility-first approach
- * with Tailwind CSS classes. This provides a lightweight alternative to Classic
- * with smaller bundle size and easier customization via CSS utilities.
+ * The Modern engine implements buttons using pure inline styles driven by
+ * --ds-* CSS custom properties. No DaisyUI btn-* classes are used. This
+ * provides precise control over every interaction state while maintaining
+ * the token-driven theming contract.
  *
- * **DaisyUI Features Utilized:**
- * - Semantic color classes (btn-primary, btn-secondary, btn-error, etc.)
- * - Size modifiers (btn-xs, btn-sm, btn-lg)
- * - Shape modifiers (rounded-full, btn-circle)
- * - State classes (btn-disabled, loading)
- * - Block mode (btn-block, w-full)
+ * **Design principles:**
+ * - Precise, calm, expensive, editorial
+ * - Every transition uses --ds-motion-* tokens
+ * - Focus rings use --ds-focus-ring-* tokens
+ * - Elevation uses --ds-elevation-* tokens
+ * - Border radius uses --ds-radius-* tokens
  *
- * **Prop Mapping:**
- * - `variant="primary"` -> `btn-primary`
- * - `variant="secondary"` -> `btn-secondary`
- * - `variant="danger"` -> `btn-error`
- * - `variant="ghost"` -> `btn-ghost`
- * - `variant="link"` -> `btn-link`
- * - `size="xs"` -> `btn-xs`
- * - `shape="round"` -> `rounded-full`
- *
- * **Enhancements:**
- * - Hover/active/focus state tracking with interactive transforms
- * - Custom SVG spinner (matching Rustic engine quality)
- * - Explicit focus ring style using CSS variables
- * - Smooth transitions with cubic-bezier easing
- *
- * @example Using Modern Engine
- * ```tsx
- * import { Button } from '@rottay/design-system';
- *
- * // Explicit Modern engine
- * <Button engine="modern" variant="primary">
- *   DaisyUI Button
- * </Button>
- *
- * // With shadow and loading
- * <Button
- *   engine="modern"
- *   variant="secondary"
- *   shadow
- *   loading
- * >
- *   Processing...
- * </Button>
- * ```
+ * **Hierarchy:**
+ * - Primary: Solid brand bg, high contrast, elevation on hover
+ * - Secondary: Bordered with transparent bg, subtle fill on hover
+ * - Ghost: No border, minimal hover bg
+ * - Danger: Red-tinted, same interaction model as primary
+ * - Link: Underline on hover, no background
  *
  * @see {@link Button} for the main component
  * @see {@link ClassicButton} for Ant Design implementation
@@ -67,47 +40,112 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 import type { ResponsiveValue } from '../../../layout/shared/types';
 import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
 
-// Translate DS variant tokens to DaisyUI button classes.
-// "outline" combines `btn-outline` with `btn-primary` so the outline color
-// matches the primary theme, rather than defaulting to neutral gray.
-// "text" and "ghost" both map to `btn-ghost` since DaisyUI has no separate
-// text-only class.
-const VARIANT_CLASSES: Record<string, string> = {
-  primary: 'btn-primary',
-  secondary: 'btn-secondary',
-  default: 'btn-neutral',
-  outline: 'btn-outline btn-primary',
-  ghost: 'btn-ghost',
-  text: 'btn-ghost',
-  dashed: 'btn-outline',
-  danger: 'btn-error',
-  link: 'btn-link',
+// ---------------------------------------------------------------------------
+// Variant style mapping (pure inline styles, no DaisyUI)
+// ---------------------------------------------------------------------------
+const VARIANT_STYLES: Record<string, React.CSSProperties> = {
+  primary: {
+    background: 'var(--ds-color-primary)',
+    color: 'var(--ds-color-text-on-primary)',
+    border: '1px solid var(--ds-color-primary)',
+  },
+  secondary: {
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+    border: '1px solid var(--ds-color-border)',
+  },
+  default: {
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+    border: '1px solid var(--ds-color-border)',
+  },
+  outline: {
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+    border: '1px solid var(--ds-color-border)',
+  },
+  ghost: {
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+    border: '1px solid transparent',
+  },
+  text: {
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+    border: '1px solid transparent',
+  },
+  dashed: {
+    background: 'transparent',
+    color: 'var(--ds-color-text-primary)',
+    border: '1px dashed var(--ds-color-border)',
+  },
+  danger: {
+    background: 'var(--ds-color-error)',
+    color: 'var(--ds-color-text-on-primary)',
+    border: '1px solid var(--ds-color-error)',
+  },
+  link: {
+    background: 'transparent',
+    color: 'var(--ds-color-primary)',
+    border: '1px solid transparent',
+  },
 };
 
-// DaisyUI lacks an `xl` size modifier, so xl falls back to lg.
-// `md` is the default button size in DaisyUI and needs no extra class.
-const SIZE_CLASSES: Record<string, string> = {
-  xs: 'btn-xs',
-  sm: 'btn-sm',
-  md: '',
-  lg: 'btn-lg',
-  xl: 'btn-lg',
+// Hover style overrides per variant
+const VARIANT_HOVER_STYLES: Record<string, React.CSSProperties> = {
+  primary: {
+    filter: 'brightness(1.1)',
+  },
+  secondary: {
+    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.04))',
+  },
+  default: {
+    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.04))',
+  },
+  outline: {
+    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.04))',
+  },
+  ghost: {
+    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.05))',
+  },
+  text: {
+    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.05))',
+  },
+  dashed: {
+    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.02))',
+  },
+  danger: {
+    filter: 'brightness(1.1)',
+  },
+  link: {
+    textDecoration: 'underline',
+  },
 };
 
-// Shape modifiers. DaisyUI's `btn-circle` forces equal width/height;
-// `rounded-full` only rounds corners without constraining dimensions.
-const SHAPE_CLASSES: Record<string, string> = {
-  default: '',
-  round: 'rounded-full',
-  circle: 'btn-circle',
+// ---------------------------------------------------------------------------
+// Size style mapping (pure inline styles, no DaisyUI)
+// ---------------------------------------------------------------------------
+const SIZE_STYLES: Record<string, React.CSSProperties> = {
+  xs: { height: 24, padding: '0 8px', fontSize: 12 },
+  sm: { height: 32, padding: '0 12px', fontSize: 13 },
+  md: { height: 36, padding: '0 16px', fontSize: 14 },
+  lg: { height: 44, padding: '0 20px', fontSize: 16 },
+  xl: { height: 52, padding: '0 24px', fontSize: 18 },
 };
 
+// ---------------------------------------------------------------------------
+// Loading spinner
+// ---------------------------------------------------------------------------
 /**
- * Custom SVG loading spinner for Modern engine.
- * Matches Rustic engine quality with size-aware rendering.
+ * Custom SVG loading spinner. Uses currentColor so it inherits the button's
+ * text color. Size-aware: smaller buttons get a smaller spinner.
  */
 const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
-  const spinnerSize = size === 'xs' || size === 'sm' ? 12 : size === 'lg' || size === 'xl' ? 18 : 14;
+  const spinnerSize =
+    size === 'xs' ? 12
+    : size === 'sm' ? 14
+    : size === 'lg' || size === 'xl' ? 18
+    : 16;
 
   return (
     <svg
@@ -116,7 +154,8 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
       viewBox="0 0 24 24"
       fill="none"
       style={{
-        animation: 'rottay-button-spin 1s linear infinite',
+        animation: 'rottay-button-spin 0.8s linear infinite',
+        flexShrink: 0,
       }}
     >
       <circle
@@ -124,18 +163,18 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
         cy="12"
         r="10"
         stroke="currentColor"
-        strokeWidth="3"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeDasharray="31.416"
         strokeDashoffset="10"
-        opacity="0.25"
+        opacity="0.2"
       />
       <circle
         cx="12"
         cy="12"
         r="10"
         stroke="currentColor"
-        strokeWidth="3"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeDasharray="31.416"
         strokeDashoffset="25"
@@ -144,17 +183,19 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
   );
 };
 
+// ---------------------------------------------------------------------------
+// ModernButton
+// ---------------------------------------------------------------------------
 /**
- * Modern (DaisyUI/Tailwind) implementation of the DS Button.
+ * Premium modern button implementation.
  *
- * Composes DaisyUI utility classes for variant, size, and shape, then layers
- * on interactive transforms (hover lift, active press) and a custom focus ring
- * via inline styles. The SVG loading spinner is rendered in place of icons
- * during the loading state.
+ * Uses pure inline styles driven by CSS custom properties. Every transition,
+ * shadow, and focus ring references --ds-* tokens for consistent theming
+ * across tenants.
  *
  * @param props - Standardized ButtonProps from the DS type contract.
  * @param ref   - Forwarded ref attached to the native `<button>` element.
- * @returns A DaisyUI-styled button with interactive state animations.
+ * @returns A premium-styled button with token-driven interaction animations.
  */
 const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
@@ -178,16 +219,16 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     style,
   } = props;
 
-  // Track hover/active/focus in React state because inline styles (used for
-  // transforms and focus rings) override CSS pseudo-classes. This gives us
-  // full control over the interaction animation chain.
   const [isHovered, setIsHovered] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
   const isFullWidth = fullWidth ?? block;
+  const isIconOnly = !children && (icon || prefix || suffix);
 
+  // -------------------------------------------------------------------------
   // Responsive size handling
+  // -------------------------------------------------------------------------
   const reactId = useId();
   const responsiveEntries: ResponsivePropEntry<any>[] = [];
   const sizeIsResponsive = isResponsiveValue(sizeProp);
@@ -218,51 +259,141 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
 
   const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
 
-  // Explicit `danger` prop takes priority over the `variant` prop so
-  // consumers can conditionally toggle destructive styling.
+  // Explicit `danger` prop takes priority over `variant`
   const effectiveVariant = danger ? 'danger' : (variant || 'primary');
 
-  // Build class names
-  // When size is responsive, do NOT emit a DaisyUI size class -- the
-  // injected <style> tag handles sizing via @media queries instead.
+  // -------------------------------------------------------------------------
+  // Class names (no DaisyUI btn-* classes)
+  // -------------------------------------------------------------------------
   const classes = [
-    'btn',
     'rottay-button',
     'rottay-button--modern',
-    VARIANT_CLASSES[effectiveVariant] || VARIANT_CLASSES.primary,
-    !sizeIsResponsive ? SIZE_CLASSES[size || 'md'] : '',
-    SHAPE_CLASSES[shape || 'default'],
-    isFullWidth && 'btn-block w-full',
-    loading && 'btn-disabled',
-    disabled && 'btn-disabled',
-    shadow && 'shadow-lg',
     className,
   ].filter(Boolean).join(' ');
 
-  // Three-layer interaction cascade:
-  // 1. Active (mousedown) -> scale(0.98) for tactile press feedback
-  // 2. Hover -> translateY(-1px) for a subtle lift effect
-  // 3. Default -> identity transform so transitions animate smoothly
-  // Focus adds a 3px ring without removing the native outline.
+  // -------------------------------------------------------------------------
+  // Variant + size + shape inline styles
+  // -------------------------------------------------------------------------
+  const variantStyle = VARIANT_STYLES[effectiveVariant] || VARIANT_STYLES.primary;
+  const sizeStyle = !sizeIsResponsive ? (SIZE_STYLES[size || 'md'] || SIZE_STYLES.md) : {};
+  const hoverOverrides = (isHovered && !disabled && !loading)
+    ? (VARIANT_HOVER_STYLES[effectiveVariant] || {})
+    : {};
+
+  // Shape styles
+  const shapeStyle: React.CSSProperties = {};
+  if (shape === 'circle') {
+    const dim = sizeStyle.height ?? 36;
+    shapeStyle.borderRadius = '50%';
+    shapeStyle.width = dim;
+    shapeStyle.height = dim;
+    shapeStyle.padding = '0';
+  } else if (shape === 'round') {
+    shapeStyle.borderRadius = 'var(--ds-radius-full, 9999px)';
+  } else {
+    shapeStyle.borderRadius = 'var(--ds-radius-md, 8px)';
+  }
+
+  // -------------------------------------------------------------------------
+  // Inline styles - interaction cascade
+  // -------------------------------------------------------------------------
+  const isInert = disabled || loading;
+
+  // Determine if this variant gets an elevation shadow on hover
+  const isElevatedVariant = effectiveVariant === 'primary' || effectiveVariant === 'danger';
+
   const interactiveStyle: React.CSSProperties = {
-    transition: 'transform var(--ds-duration-fast, 0.15s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-duration-fast, 0.2s) ease, filter var(--ds-duration-fast, 0.15s) ease',
+    // Base layout
+    display: isFullWidth ? 'flex' : 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '6px',
+    width: isFullWidth ? '100%' : undefined,
+    cursor: isInert ? (loading ? 'wait' : 'not-allowed') : 'pointer',
+    fontWeight: 500,
+    lineHeight: 1,
+    textDecoration: 'none',
+    whiteSpace: 'nowrap',
+    userSelect: 'none',
+    boxSizing: 'border-box',
+    fontFamily: 'inherit',
+    letterSpacing: '0.01em',
+
+    // Variant base styles
+    ...variantStyle,
+
+    // Size styles (unless responsive)
+    ...sizeStyle,
+
+    // Shape styles
+    ...shapeStyle,
+
+    // Transitions
+    transition: [
+      `transform var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+      `box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+      `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+      `background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+      `border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+      `filter var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+      `text-decoration var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+    ].join(', '),
+
+    // Transform: active press > hover (none) > idle
     transform:
-      isActive && !disabled && !loading
+      isActive && !isInert
         ? 'scale(0.98)'
-        : isHovered && !disabled && !loading
-          ? 'var(--ds-button-hover-transform, translateY(-1px))'
-          : 'translateY(0)',
-    boxShadow:
-      isFocused && !disabled && !loading
-        ? '0 0 0 3px var(--ds-color-primary-200, rgba(59, 130, 246, 0.3))'
         : undefined,
-    outline: isFocused ? 'none' : undefined,
+
+    // Hover shadow for elevated variants
+    boxShadow:
+      isHovered && !isInert && isElevatedVariant
+        ? 'var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))'
+        : shadow
+          ? 'var(--ds-elevation-1, 0 1px 3px 0 rgba(0, 0, 0, 0.1))'
+          : undefined,
+
+    // Focus ring: outline-based (not box-shadow, so it stacks with elevation)
+    outline:
+      isFocused && !isInert
+        ? 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)'
+        : 'none',
+    outlineOffset:
+      isFocused && !isInert
+        ? 'var(--ds-focus-ring-offset, 2px)'
+        : undefined,
+
+    // Hover overrides
+    ...hoverOverrides,
+
+    // Disabled state
+    ...(isInert && !loading ? {
+      opacity: 0.5,
+      pointerEvents: 'none' as const,
+    } : {}),
+
+    // Icon-only: force square aspect ratio
+    ...(isIconOnly && shape !== 'circle' ? {
+      aspectRatio: '1',
+      padding: '0',
+      justifyContent: 'center',
+    } : {}),
+
     ...style,
   };
 
-  // Determine start and end content
+  // -------------------------------------------------------------------------
+  // Content
+  // -------------------------------------------------------------------------
   const startContent = iconPosition === 'start' ? icon : undefined;
   const endContent = iconPosition === 'end' ? icon : undefined;
+
+  // Content opacity when loading (smooth fade)
+  const contentOpacity: React.CSSProperties = loading ? {
+    opacity: 0,
+    position: 'absolute' as const,
+    pointerEvents: 'none' as const,
+  } : {};
 
   return (
     <>
@@ -286,10 +417,23 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         aria-busy={loading}
         {...(responsive ? responsive.attrs : {})}
       >
+        {/* Loading spinner - centered, replaces content */}
         {loading && <LoadingSpinner size={size} />}
-        {!loading && (startContent || prefix)}
-        {children && <span>{children}</span>}
-        {!loading && (endContent || suffix)}
+
+        {/* Content wrapper - hidden (but in DOM) during loading for layout stability */}
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            transition: `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+            ...contentOpacity,
+          }}
+        >
+          {startContent || prefix}
+          {children && <span>{children}</span>}
+          {endContent || suffix}
+        </span>
       </button>
     </>
   );

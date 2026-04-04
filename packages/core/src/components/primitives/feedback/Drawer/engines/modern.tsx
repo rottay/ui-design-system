@@ -2,75 +2,19 @@
 
 /**
  * @fileoverview Drawer Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Drawer component.
- * A lightweight, utility-first alternative to the Classic engine.
+ * @description Premium slide-in drawer panel with backdrop blur, directional
+ * slide animation, and polished header/body/footer layout. Uses DS tokens for
+ * surfaces, elevation, motion, and radii. Mobile-responsive (full-width < 640px).
  *
- * @remarks
- * **Engine Overview:**
- * Modern is the utility-first engine built on DaisyUI and Tailwind CSS.
- * It provides a smaller bundle size compared to Classic while maintaining
- * core drawer functionality.
+ * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
+ * border, and motion tokens with Modal and Sheet modern engines.
  *
- * **Key Features:**
- * - Utility-first styling with Tailwind
- * - Smaller bundle size than Ant Design
- * - DaisyUI component tokens
- * - Custom keyboard and scroll handling
- *
- * **When to Use Modern:**
- * - Projects using Tailwind CSS
- * - When bundle size is a concern
- * - Landing pages and marketing sites
- * - When DaisyUI theme is preferred
- *
- * **Multi-Tenant Theming:**
- * Modern uses DaisyUI's color system with CSS custom properties.
- * Tenant themes can override:
- * - `--b1`: Base background color
- * - `--base-300`: Border color
- * - Other DaisyUI tokens
- *
- * **Size Mapping:**
- * | Size | Width/Height |
- * |------|-------------|
- * | sm | 256px |
- * | md | 378px |
- * | lg | 520px |
- * | xl | 736px |
- * | full | 100% |
- *
- * @example Basic Usage
- * ```tsx
- * import { Drawer } from '@rottay/design-system';
- *
- * <Drawer engine="modern" open={open} onClose={onClose}>
- *   <p>Tailwind-styled drawer</p>
- * </Drawer>
- * ```
- *
- * @example Global Engine Configuration
- * ```tsx
- * import { EngineProvider, Drawer } from '@rottay/design-system';
- *
- * <EngineProvider engine="modern">
- *   <App>
- *     <Drawer open={open} onClose={onClose}>
- *       All drawers use Modern engine
- *     </Drawer>
- *   </App>
- * </EngineProvider>
- * ```
- *
- * @see {@link DrawerProps} - Component props interface
- * @see {@link ClassicDrawer} - Ant Design alternative
- * @see {@link RusticDrawer} - Vanilla alternative
- * @see {@link https://daisyui.com/components/drawer} - DaisyUI Drawer docs
  * @module Drawer/Engines/Modern
  * @category Feedback
  * @package @rottay/design-system
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import type { DrawerProps, DrawerSize } from '../Drawer.types';
 import { DRAWER_DEFAULTS } from '../Drawer.types';
 
@@ -78,20 +22,16 @@ import { DRAWER_DEFAULTS } from '../Drawer.types';
 // Constants
 // ============================================================================
 
-/**
- * Slide-in animation name per placement direction.
- * Keyframes are injected via a `<style>` tag in the render output.
- *
- * @internal
- */
-const SLIDE_ANIMATION: Record<string, string> = {
-  left: 'rottay-drawer-slide-left',
-  right: 'rottay-drawer-slide-right',
-  top: 'rottay-drawer-slide-top',
-  bottom: 'rottay-drawer-slide-bottom',
-};
+/** Shared overlay motion tokens. */
+const MOTION_DURATION = 'var(--ds-motion-normal, 250ms)';
+const MOTION_EASING = 'var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
 
-const SLIDE_KEYFRAMES = `
+/** Keyframe animations for all four placement directions + backdrop fade. */
+const DRAWER_STYLES = `
+@keyframes rottay-drawer-backdrop-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 @keyframes rottay-drawer-slide-left {
   from { transform: translateX(-100%); }
   to   { transform: translateX(0); }
@@ -110,296 +50,304 @@ const SLIDE_KEYFRAMES = `
 }
 `;
 
-/**
- * Size preset mappings for Modern engine.
- * Uses string pixel values for CSS compatibility.
- *
- * @internal
- */
+/** Animation name lookup by placement. */
+const SLIDE_ANIMATION: Record<string, string> = {
+  left: 'rottay-drawer-slide-left',
+  right: 'rottay-drawer-slide-right',
+  top: 'rottay-drawer-slide-top',
+  bottom: 'rottay-drawer-slide-bottom',
+};
+
+/** Premium size presets (default 400px for md). */
 const SIZE_MAP: Record<DrawerSize, string> = {
-  /** Compact drawer for simple actions */
-  sm: '256px',
-  /** Standard drawer for forms (default) */
-  md: '378px',
-  /** Large drawer for complex content */
-  lg: '520px',
-  /** Extra large for multi-section layouts */
-  xl: '736px',
-  /** Full viewport width/height */
+  sm: '320px',
+  md: '400px',
+  lg: '560px',
+  xl: '672px',
   full: '100%',
 };
+
+/**
+ * Border-radius per placement -- rounded on the inward-facing edge only.
+ * The sliding edge gets no radius to sit flush against the viewport.
+ */
+const RADIUS_BY_PLACEMENT: Record<string, string> = {
+  left: '0 var(--ds-radius-lg) var(--ds-radius-lg) 0',
+  right: 'var(--ds-radius-lg) 0 0 var(--ds-radius-lg)',
+  top: '0 0 var(--ds-radius-lg) var(--ds-radius-lg)',
+  bottom: 'var(--ds-radius-lg) var(--ds-radius-lg) 0 0',
+};
+
+// ============================================================================
+// Close Button (shared visual with Modal/Sheet)
+// ============================================================================
+
+function CloseButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Close"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '32px',
+        height: '32px',
+        border: 'none',
+        borderRadius: 'var(--ds-radius-md)',
+        backgroundColor: 'transparent',
+        cursor: 'pointer',
+        color: 'var(--ds-color-text-secondary)',
+        flexShrink: 0,
+        transition: `background-color var(--ds-motion-fast, 150ms) ${MOTION_EASING}`,
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.backgroundColor =
+          'var(--ds-surface-highlight)';
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  );
+}
 
 // ============================================================================
 // Component
 // ============================================================================
 
-/**
- * Modern Engine implementation of the Drawer component.
- *
- * @description
- * Custom drawer implementation using DaisyUI classes and Tailwind utilities.
- * Provides a lightweight alternative to Ant Design with smaller bundle size.
- *
- * @remarks
- * **Implementation Details:**
- * - Uses `useEffect` for keyboard event handling
- * - Implements body scroll lock when drawer is open
- * - Custom CSS for positioning and animations
- * - DaisyUI button classes for close button
- *
- * **CSS Classes Used:**
- * - `drawer`, `drawer-overlay`: Container classes
- * - `btn`, `btn-sm`, `btn-circle`, `btn-ghost`: Close button
- * - `text-lg`, `font-bold`: Typography
- * - `flex`, `items-center`, `justify-between`: Layout
- * - `p-6`, `mb-4`, `mt-6`, `pt-4`: Spacing
- * - `border-t`, `border-base-300`: Borders
- *
- * **Accessibility:**
- * - Close button has `aria-label="Close"`
- * - Escape key handling for keyboard users
- *
- * @param props - {@link DrawerProps}
- * @returns The rendered DaisyUI Drawer or empty fragment when closed
- *
- * @example
- * ```tsx
- * <ModernDrawer
- *   open={isOpen}
- *   onClose={() => setIsOpen(false)}
- *   placement="right"
- *   size="lg"
- *   title="Filter Options"
- * >
- *   <FilterForm />
- * </ModernDrawer>
- * ```
- */
 export default function ModernDrawer(props: DrawerProps): React.ReactElement {
-  // ---------------------------------------------------------------------------
-  // Props Destructuring
-  // ---------------------------------------------------------------------------
-
   const {
-    // Visibility
     open,
-
-    // Layout
     placement = DRAWER_DEFAULTS.placement,
     size = DRAWER_DEFAULTS.size as DrawerSize,
     width,
     height,
-
-    // Content
     title,
     children,
     footer,
     hideFooter,
-
-    // Behavior
     onClose,
     onOpenChange,
     closable = DRAWER_DEFAULTS.closable,
     closeOnOverlayClick = DRAWER_DEFAULTS.closeOnOverlayClick,
     closeOnEscape = DRAWER_DEFAULTS.closeOnEscape,
-
-    // Overlay
     mask = DRAWER_DEFAULTS.mask,
-
-    // Styling
     className = '',
     style,
   } = props;
 
-  // ---------------------------------------------------------------------------
-  // Event Handlers
-  // ---------------------------------------------------------------------------
+  // -- handlers ---------------------------------------------------------------
 
-  /**
-   * Unified close handler.
-   * Calls both onClose and onOpenChange callbacks.
-   */
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     onClose?.();
     onOpenChange?.(false);
-  };
+  }, [onClose, onOpenChange]);
 
-  // ---------------------------------------------------------------------------
-  // Keyboard Handling
-  // ---------------------------------------------------------------------------
+  // -- escape key -------------------------------------------------------------
 
-  /**
-   * Effect: Handle Escape key press to close drawer.
-   * Only active when drawer is open and closeOnEscape is true.
-   */
   useEffect(() => {
     if (!open || !closeOnEscape) return;
-
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        handleClose();
-      }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose();
     };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open, closeOnEscape, handleClose]);
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [open, closeOnEscape]);
+  // -- body scroll lock -------------------------------------------------------
 
-  // ---------------------------------------------------------------------------
-  // Body Scroll Lock
-  // ---------------------------------------------------------------------------
-
-  /**
-   * Effect: Lock body scroll when drawer is open.
-   * Prevents background content from scrolling while drawer is visible.
-   */
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = '';
     };
   }, [open]);
 
-  // ---------------------------------------------------------------------------
-  // Early Return
-  // ---------------------------------------------------------------------------
+  // -- early return -----------------------------------------------------------
 
-  // Don't render anything when closed
   if (!open) return <></>;
 
-  // ---------------------------------------------------------------------------
-  // Size Calculations
-  // ---------------------------------------------------------------------------
+  // -- size calculations ------------------------------------------------------
 
   const drawerSize = size as DrawerSize;
   const isHorizontal = placement === 'left' || placement === 'right';
-  const drawerWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : '100%');
-  const drawerHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100%');
+  const resolvedWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : '100%');
+  const resolvedHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100%');
+  const animationName = SLIDE_ANIMATION[placement as string] || SLIDE_ANIMATION.right;
+  const borderRadius = RADIUS_BY_PLACEMENT[placement as string] || RADIUS_BY_PLACEMENT.right;
+  const zBase = DRAWER_DEFAULTS.zIndex || 1000;
 
-  // ---------------------------------------------------------------------------
-  // Style Generation
-  // ---------------------------------------------------------------------------
+  // -- position styles --------------------------------------------------------
 
-  /**
-   * Generate drawer container styles based on placement.
-   * Positions the drawer on the appropriate edge of the viewport.
-   */
-  const getDrawerStyle = (): React.CSSProperties => {
-    // Base styles shared across all placements
-    const animationName = SLIDE_ANIMATION[placement as string] || SLIDE_ANIMATION.right;
-    const baseStyle: React.CSSProperties = {
+  const getPositionStyles = (): React.CSSProperties => {
+    const base: React.CSSProperties = {
       position: 'fixed',
-      backgroundColor: 'var(--ds-drawer-bg, var(--ds-color-bg-elevated, #ffffff))',
-      boxShadow: 'var(--ds-shadow-drawer, var(--ds-shadow-2xl))',
-      transition: 'transform var(--ds-duration-normal, 0.25s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-      animation: `${animationName} var(--ds-duration-normal, 0.25s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both`,
-      overflowY: 'auto',
+      zIndex: zBase + 1,
+      display: 'flex',
+      flexDirection: 'column',
+      background: 'var(--ds-surface-card)',
+      border: '1px solid var(--ds-color-border-subtle)',
+      boxShadow: 'var(--ds-elevation-3)',
+      borderRadius,
+      animation: `${animationName} ${MOTION_DURATION} ${MOTION_EASING} both`,
+      overflow: 'hidden',
       ...style,
     };
 
-    // Placement-specific positioning
+    // Remove border on the edge that sits flush against the viewport
     switch (placement) {
       case 'left':
         return {
-          ...baseStyle,
+          ...base,
           top: 0,
           left: 0,
-          width: drawerWidth,
+          width: resolvedWidth,
           height: '100vh',
+          maxWidth: '100vw',
+          borderLeft: 'none',
         };
       case 'right':
         return {
-          ...baseStyle,
+          ...base,
           top: 0,
           right: 0,
-          width: drawerWidth,
+          width: resolvedWidth,
           height: '100vh',
+          maxWidth: '100vw',
+          borderRight: 'none',
         };
       case 'top':
         return {
-          ...baseStyle,
+          ...base,
           top: 0,
           left: 0,
           width: '100vw',
-          height: drawerHeight,
+          height: resolvedHeight,
+          maxHeight: '100vh',
+          borderTop: 'none',
         };
       case 'bottom':
         return {
-          ...baseStyle,
+          ...base,
           bottom: 0,
           left: 0,
           width: '100vw',
-          height: drawerHeight,
+          height: resolvedHeight,
+          maxHeight: '100vh',
+          borderBottom: 'none',
         };
       default:
-        return baseStyle;
+        return base;
     }
   };
 
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
+  // -- render -----------------------------------------------------------------
 
   return (
     <>
-      {/* Slide-in keyframes (scoped by unique animation names) */}
-      <style dangerouslySetInnerHTML={{ __html: SLIDE_KEYFRAMES }} />
+      <style dangerouslySetInnerHTML={{ __html: DRAWER_STYLES }} />
 
-      {/* Overlay/Mask */}
+      {/* Backdrop overlay with blur */}
       {mask && (
         <div
-          className="drawer-overlay fixed inset-0 bg-black bg-opacity-50"
+          onClick={closeOnOverlayClick && closable !== false ? handleClose : undefined}
           style={{
-            zIndex: DRAWER_DEFAULTS.zIndex,
+            position: 'fixed',
+            inset: 0,
+            zIndex: zBase,
+            background: 'color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)',
             backdropFilter: 'blur(4px)',
             WebkitBackdropFilter: 'blur(4px)',
-            transition: 'opacity var(--ds-duration-normal, 0.25s) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+            animation: `rottay-drawer-backdrop-fade ${MOTION_DURATION} ${MOTION_EASING}`,
           }}
-          onClick={closeOnOverlayClick ? handleClose : undefined}
         />
       )}
 
-      {/* Drawer Container */}
+      {/* Drawer panel */}
       <div
-        className={`drawer ${className}`}
-        style={{
-          ...getDrawerStyle(),
-          zIndex: (DRAWER_DEFAULTS.zIndex || 1000) + 1,
-        }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={typeof title === 'string' ? title : undefined}
+        className={className}
+        style={getPositionStyles()}
       >
-        {/* Inner content wrapper with padding */}
-        <div className="p-6">
-          {/* Header with title and close button */}
-          {(title || closable) && (
-            <div className="flex items-center justify-between mb-4">
-              {title && <h3 className="text-lg font-bold">{title}</h3>}
-              {closable && (
-                <button
-                  className="btn btn-sm btn-circle btn-ghost"
-                  onClick={handleClose}
-                  aria-label="Close"
+        {/* ---- Header ---- */}
+        {(title || closable) && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              padding: '16px 24px',
+              borderBottom: '1px solid var(--ds-color-border-subtle)',
+              flexShrink: 0,
+            }}
+          >
+            <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+              {title && (
+                <div
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    lineHeight: '24px',
+                    color: 'var(--ds-color-text-primary)',
+                  }}
                 >
-                  ✕
-                </button>
+                  {title}
+                </div>
               )}
             </div>
-          )}
+            {closable && <CloseButton onClick={handleClose} />}
+          </div>
+        )}
 
-          {/* Main content area */}
-          <div className="drawer-content">{children}</div>
-
-          {/* Footer section */}
-          {!hideFooter && footer && (
-            <div className="drawer-footer mt-6 pt-4 border-t border-base-300">
-              {footer}
-            </div>
-          )}
+        {/* ---- Body ---- */}
+        <div
+          style={{
+            flex: '1 1 auto',
+            overflowY: 'auto',
+            padding: '24px',
+          }}
+        >
+          {children}
         </div>
+
+        {/* ---- Footer ---- */}
+        {!hideFooter && footer && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              gap: '8px',
+              padding: '16px 24px',
+              borderTop: '1px solid var(--ds-color-border-subtle)',
+              flexShrink: 0,
+            }}
+          >
+            {footer}
+          </div>
+        )}
       </div>
     </>
   );

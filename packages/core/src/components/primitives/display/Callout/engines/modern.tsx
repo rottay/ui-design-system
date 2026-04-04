@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * @fileoverview Modern engine for the Callout component, powered by DaisyUI/Tailwind.
- * Renders an alert banner using DaisyUI's `alert` classes with semantic
+ * @fileoverview Modern engine for the Callout component, powered by DS token inline styles.
+ * Renders an alert banner using `alert` structural classes with DS token semantic
  * variant colours, a dismissible close button, and an optional action slot.
  *
  * @example
@@ -22,23 +22,23 @@ import type { CalloutProps } from '../Callout.types';
 import { CALLOUT_DEFAULTS, CALLOUT_ICONS } from '../Callout.types';
 
 /**
- * Maps DS variant names to DaisyUI alert modifier classes.
+ * Maps DS variant names to DS token inline styles.
  */
-const VARIANT_CLASSES: Record<string, string> = {
-  info: 'alert-info',
-  warning: 'alert-warning',
-  error: 'alert-error',
-  success: 'alert-success',
+const VARIANT_STYLES: Record<string, React.CSSProperties> = {
+  info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
+  warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
+  error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
+  success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
 };
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the Callout component.
+ * Modern (token-driven) implementation of the Callout component.
  *
- * Leverages DaisyUI's `alert` component for semantic colouring and layout,
- * with a ghost close button and flex-column content area.
+ * Leverages `alert` structural class with DS token inline styles for semantic colouring
+ * and layout, with a ghost close button and flex-column content area.
  *
  * @param props - {@link CalloutProps} controlling variant, content, and behaviour.
- * @returns A DaisyUI-styled alert element, or null when dismissed.
+ * @returns A DS token-styled alert element, or null when dismissed.
  */
 export default function ModernCallout(props: CalloutProps): React.ReactElement | null {
   const {
@@ -64,13 +64,13 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
   };
 
   // Fallback to 'info' for unrecognised variants to avoid unstyled alerts
-  const variantClass = VARIANT_CLASSES[variant] || VARIANT_CLASSES.info;
+  const variantStyle = VARIANT_STYLES[variant] || VARIANT_STYLES.info;
 
   return (
     <div
-      className={`alert ${variantClass} ${className}`}
+      className={`alert ${className}`}
       role="alert"
-      style={style}
+      style={{ ...variantStyle, ...style }}
     >
       {/* Leading icon: custom icon overrides the per-variant default */}
       <span className="text-lg font-bold">
@@ -89,11 +89,11 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
         )}
       </div>
 
-      {/* DaisyUI ghost button creates a subtle, circular close affordance */}
+      {/* Ghost button creates a subtle, circular close affordance */}
       {closable && (
         <button
           type="button"
-          className="btn btn-ghost btn-sm btn-circle"
+          style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
           onClick={handleClose}
           aria-label="Close"
         >

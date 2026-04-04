@@ -1,43 +1,12 @@
 /**
  * @fileoverview Segmented Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Segmented component.
- * A lightweight, utility-first alternative to the Classic engine.
+ * @description DS token inline-styled implementation of the Segmented component.
  *
  * @remarks
- * **Engine Overview:**
- * Modern is the utility-first engine built on DaisyUI and Tailwind CSS.
- * It provides a smaller bundle size compared to Classic while maintaining
- * core segmented control functionality.
- *
- * **Key Features:**
- * - Utility-first styling with Tailwind
- * - Smaller bundle size than Ant Design
- * - DaisyUI component tokens
- * - Join component pattern for grouped buttons
- *
- * **When to Use Modern:**
- * - Projects using Tailwind CSS
- * - When bundle size is a concern
- * - Landing pages and marketing sites
- * - When DaisyUI theme is preferred
- *
- * **Multi-Tenant Theming:**
- * Modern uses DaisyUI's color system with CSS custom properties.
- * Tenant themes can override:
- * - `--btn-color`: Button text color
- * - `--p`: Primary color for active state
- * - Other DaisyUI tokens
- *
- * **CSS Classes Used:**
- * | Class | Purpose |
- * |-------|---------|
- * | `join` | Container for joined buttons |
- * | `join-item` | Individual button in group |
- * | `btn` | Base button styling |
- * | `btn-sm/md/lg` | Size variants |
- * | `btn-active` | Active state |
- * | `btn-primary` | Primary color variant |
- * | `btn-disabled` | Disabled state |
+ * All styling uses DS token CSS custom properties (`--ds-*`). No DaisyUI
+ * or Tailwind classes are used in runtime output. Segments render as an
+ * inline-flex group with connected border-radius and an active primary
+ * indicator.
  *
  * @example Basic Usage
  * ```tsx
@@ -98,13 +67,13 @@ import { SEGMENTED_DEFAULTS } from '../Segmented.types';
  *
  * @internal
  */
-const SIZE_CLASSES = {
+const SIZE_STYLES: Record<string, React.CSSProperties> = {
   /** Compact size for toolbars */
-  small: 'btn-sm',
+  small: { height: 32, padding: '0 12px', fontSize: 13 },
   /** Standard size (default) */
-  middle: 'btn-md',
+  middle: { height: 36, padding: '0 16px', fontSize: 14 },
   /** Large size for prominent actions */
-  large: 'btn-lg',
+  large: { height: 44, padding: '0 20px', fontSize: 16 },
 };
 
 // ============================================================================
@@ -209,8 +178,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     // Style Calculations
     // ---------------------------------------------------------------------------
 
-    /** Resolve size-specific CSS class */
-    const sizeClass = SIZE_CLASSES[size!] || SIZE_CLASSES.middle;
+    /** Resolve size-specific inline styles */
+    const sizeStyle = SIZE_STYLES[size!] || SIZE_STYLES.middle;
 
     // ---------------------------------------------------------------------------
     // Render
@@ -219,8 +188,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     return (
       <div
         ref={ref}
-        className={`join ${block ? 'w-full' : ''} ${className}`}
-        style={style}
+        className={className}
+        style={{ display: 'inline-flex', borderRadius: 'var(--ds-radius-md)', overflow: 'hidden', border: '1px solid var(--ds-color-border)', ...(block ? { width: '100%' } : {}), ...style }}
       >
         {normalizedOptions.map((opt) => {
           const isActive = currentValue === opt.value;
@@ -230,10 +199,21 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
             <button
               key={String(opt.value)}
               type="button"
-              // btn-active + btn-primary together give the selected option a
-              // filled primary appearance. btn-disabled greys out and prevents
-              // pointer events at the DaisyUI level (complements the native disabled attr).
-              className={`join-item btn ${sizeClass} ${isActive ? 'btn-active btn-primary' : ''} ${isDisabled ? 'btn-disabled' : ''} ${opt.className || ''}`}
+              className={opt.className || undefined}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: isDisabled ? 'not-allowed' : 'pointer',
+                border: 'none',
+                borderRadius: 0,
+                fontWeight: isActive ? 600 : 400,
+                ...sizeStyle,
+                ...(isActive
+                  ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
+                  : { background: 'transparent', color: 'var(--ds-color-text-primary)' }),
+                ...(isDisabled ? { opacity: 0.5, pointerEvents: 'none' as const } : {}),
+              }}
               onClick={() => handleClick(opt.value)}
               disabled={isDisabled}
             >

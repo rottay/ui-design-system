@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Affix Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS-based implementation of the Affix component.
+ * @description Tailwind CSS-based implementation of the Affix component with DS token styling.
  * Provides a lightweight sticky solution using Tailwind CSS utilities.
  *
  * @remarks
@@ -133,7 +133,7 @@ function getTargetRect(target: Window | HTMLElement): DOMRect {
  *   zIndex={50}
  *   onChange={(affixed) => setShowShadow(affixed)}
  * >
- *   <header className="bg-base-100">Header</header>
+ *   <header>Header</header>
  * </ModernAffix>
  * ```
  */
@@ -331,8 +331,8 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
               ref.current = node;
             }
           }}
-          className={`transition-all duration-200 ${state.affixed ? 'shadow-md' : ''} ${zIndexClass} ${className}`.trim()}
-          style={state.affixed ? { ...state.fixedStyle, ...style } : style}
+          className={`transition-all duration-200 ${zIndexClass} ${className}`.trim()}
+          style={state.affixed ? { ...state.fixedStyle, boxShadow: 'var(--ds-elevation-1)', ...style } : style}
         >
           {children}
         </div>

@@ -168,33 +168,39 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   return (
     <div
       ref={ref}
-      className={`bg-base-100 rounded-lg p-4 ${containerClass} ${className}`}
-      style={style}
+      className={`rounded-lg p-4 ${containerClass} ${className}`}
+      style={{ background: 'var(--ds-surface-card)', ...style }}
       id={id}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <button className="btn btn-sm btn-ghost" onClick={handlePrevYear}>«</button>
-          {mode === 'month' && <button className="btn btn-sm btn-ghost" onClick={handlePrevMonth}>‹</button>}
+          <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handlePrevYear}>«</button>
+          {mode === 'month' && <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handlePrevMonth}>‹</button>}
         </div>
         <div className="flex items-center gap-2">
           <button
-            className={`btn btn-sm ${mode === 'month' ? 'btn-primary' : 'btn-ghost'}`}
+            style={mode === 'month'
+              ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
+              : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
+            }
             onClick={() => handleModeChange('month')}
           >
             {MONTHS[viewMonth]} {viewYear}
           </button>
           <button
-            className={`btn btn-sm ${mode === 'year' ? 'btn-primary' : 'btn-ghost'}`}
+            style={mode === 'year'
+              ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
+              : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
+            }
             onClick={() => handleModeChange('year')}
           >
             Year
           </button>
         </div>
         <div className="flex items-center gap-2">
-          {mode === 'month' && <button className="btn btn-sm btn-ghost" onClick={handleNextMonth}>›</button>}
-          <button className="btn btn-sm btn-ghost" onClick={handleNextYear}>»</button>
+          {mode === 'month' && <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleNextMonth}>›</button>}
+          <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleNextYear}>»</button>
         </div>
       </div>
 
@@ -203,7 +209,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {DAYS.map((day) => (
-              <div key={day} className="text-center text-sm font-medium text-base-content/60 py-2">
+              <div key={day} className="text-center text-sm font-medium py-2" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {fullscreen ? day : day.charAt(0)}
               </div>
             ))}
@@ -230,10 +236,25 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                   className={`
                     aspect-square flex flex-col items-center justify-center rounded-lg
                     transition-colors relative
-                    ${isDisabled ? 'opacity-30 cursor-not-allowed' : 'hover:bg-base-200 cursor-pointer'}
-                    ${isSelected ? 'bg-primary text-primary-content' : ''}
-                    ${isToday && !isSelected ? 'border border-primary' : ''}
+                    ${isDisabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}
+                    ${isToday && !isSelected ? 'border' : ''}
                   `}
+                  style={{
+                    ...(isSelected
+                      ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-inverse)' }
+                      : {}),
+                    ...(isToday && !isSelected ? { borderColor: 'var(--ds-color-primary)' } : {}),
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isSelected && !isDisabled) {
+                      (e.currentTarget as HTMLElement).style.background = 'var(--ds-surface-inset)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSelected && !isDisabled) {
+                      (e.currentTarget as HTMLElement).style.background = '';
+                    }
+                  }}
                   onClick={() => handleDateClick(day)}
                   disabled={isDisabled}
                 >
@@ -261,9 +282,24 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                 key={month}
                 className={`
                   p-4 rounded-lg text-center transition-colors
-                  ${isSelected ? 'bg-primary text-primary-content' : 'hover:bg-base-200'}
-                  ${isCurrentMonth && !isSelected ? 'border border-primary' : ''}
+                  ${isCurrentMonth && !isSelected ? 'border' : ''}
                 `}
+                style={{
+                  ...(isSelected
+                    ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-inverse)' }
+                    : {}),
+                  ...(isCurrentMonth && !isSelected ? { borderColor: 'var(--ds-color-primary)' } : {}),
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSelected) {
+                    (e.currentTarget as HTMLElement).style.background = 'var(--ds-surface-inset)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    (e.currentTarget as HTMLElement).style.background = '';
+                  }
+                }}
                 onClick={() => handleMonthClick(i)}
               >
                 <span className={fullscreen ? 'text-sm' : 'text-xs'}>{month}</span>

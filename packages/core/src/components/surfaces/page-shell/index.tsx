@@ -68,7 +68,9 @@ export function PageShellSurface({
   return (
     <PatternPageShell
       title={chrome.title}
+      hideHeader={chrome.hideHeader}
       subtitle={chrome.subtitle}
+      headerContent={chrome.headerContent}
       breadcrumbs={chrome.breadcrumbs}
       actions={actions}
       back={chrome.back}

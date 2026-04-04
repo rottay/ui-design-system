@@ -112,17 +112,17 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
     switch (status) {
       case 'loading':
         return (
-          <div className="absolute inset-0 flex items-center justify-center bg-base-100/80">
-            <span className="loading loading-spinner loading-md text-primary" />
+          <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'color-mix(in srgb, var(--ds-surface-card) 80%, transparent)' }}>
+            <span style={{ display: 'inline-block', width: 24, height: 24, border: '2.5px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
           </div>
         );
       case 'expired':
         return (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-base-100/90 gap-2">
-            <span className="text-sm text-base-content/70">QR Code expired</span>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2" style={{ background: 'color-mix(in srgb, var(--ds-surface-card) 90%, transparent)' }}>
+            <span className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>QR Code expired</span>
             {onRefresh && (
               <button
-                className="btn btn-sm btn-primary btn-outline"
+                style={{ background: 'transparent', color: 'var(--ds-color-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-primary)', cursor: 'pointer' }}
                 onClick={onRefresh}
               >
                 Refresh
@@ -132,9 +132,10 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
         );
       case 'scanned':
         return (
-          <div className="absolute inset-0 flex items-center justify-center bg-base-100/80">
+          <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'color-mix(in srgb, var(--ds-surface-card) 80%, transparent)' }}>
             <svg
-              className="w-12 h-12 text-success"
+              className="w-12 h-12"
+              style={{ color: 'var(--ds-color-success)' }}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -153,14 +154,22 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
 
   const containerClasses = [
     'inline-block relative',
-    bordered ? 'border border-base-300 p-3 rounded-lg bg-base-100' : '',
+    bordered ? 'border p-3 rounded-lg' : '',
     className,
   ].filter(Boolean).join(' ');
+
+  const containerInlineStyle: React.CSSProperties = {
+    ...(bordered && {
+      borderColor: 'var(--ds-color-border)',
+      background: 'var(--ds-surface-card)',
+    }),
+    ...style,
+  };
 
   return (
     <div
       className={`rottay-qrcode rottay-qrcode--modern ${containerClasses}`}
-      style={style}
+      style={containerInlineStyle}
       data-status={status}
     >
       <div className="relative" style={{ width: size, height: size }}>
@@ -172,8 +181,8 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
         />
         {icon && status === 'active' && (
           <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-base-100 p-1 rounded"
-            style={{ width: iconSize, height: iconSize }}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-1 rounded"
+            style={{ width: iconSize, height: iconSize, background: 'var(--ds-surface-card)' }}
           >
             <img
               src={icon}

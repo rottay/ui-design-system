@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the CommandPalette pattern.
+ * @fileoverview Modern (token-driven) engine for the CommandPalette pattern.
  * Renders a searchable command list in a custom fixed-position overlay (not a
  * framework modal) with backdrop click-to-close, keyboard navigation, and
- * DaisyUI `kbd` badges for shortcut display. The overlay is conditionally
+ * styled kbd elements for shortcut display. The overlay is conditionally
  * unmounted rather than hidden to avoid stacking invisible listeners.
  *
  * @example
@@ -18,9 +18,10 @@
 
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import type { CommandPaletteProps, CommandItem } from '../CommandPalette.types';
+import { menuSectionTitleStyle } from '../../../shared/modern-styles';
 
 /**
- * Modern (DaisyUI/Tailwind) command palette with full keyboard navigation.
+ * Modern (token-driven) command palette with full keyboard navigation.
  * @param props - CommandPaletteProps controlling open state, items, search, and footer.
  * @returns A fixed overlay with backdrop and a rounded dialog card, or null when closed.
  */
@@ -127,13 +128,14 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
         onClick={() => onOpenChange(false)}
       />
       {/* Dialog */}
-      <div className={`relative bg-base-100 rounded-xl shadow-2xl w-full max-w-lg overflow-hidden ${className}`}>
+      <div className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`} style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)' }}>
         {/* Search */}
-        <div className="border-b border-base-300 p-3">
+        <div className="p-3" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
           <input
             ref={inputRef}
             type="text"
-            className="input input-ghost w-full text-lg focus:outline-none"
+            className="w-full text-lg focus:outline-none"
+            style={{ padding: '8px 0', fontSize: 18, border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={placeholder}
             value={query}
             onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}
@@ -146,7 +148,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
               giving users quick access to previously used commands. */}
           {!query && recentItems && recentItems.length > 0 && (
             <div className="px-3 pb-2">
-              <div className="text-xs uppercase tracking-wider text-base-content/50 mb-1 px-2">Recent</div>
+              <div style={{ ...menuSectionTitleStyle, marginBottom: 4 }}>Recent</div>
               {recentItems.map((item) => {
                 itemIndex++;
                 const idx = itemIndex;
@@ -154,20 +156,21 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                   <div
                     key={item.id}
                     onClick={() => handleSelect(item)}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer ${
-                      activeIndex === idx ? 'bg-base-200' : 'hover:bg-base-200'
-                    } ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}
+                    onMouseEnter={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = 'var(--ds-surface-inset)'; }}
+                    onMouseLeave={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = ''; }}
                   >
                     <div className="flex items-center gap-2">
                       {item.icon}
                       <div>
                         <div className="font-medium text-sm">{item.label}</div>
                         {item.description && (
-                          <div className="text-xs text-base-content/60">{item.description}</div>
+                          <div className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd className="kbd kbd-sm">{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 12, fontFamily: 'monospace' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}
@@ -178,7 +181,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
           {Object.entries(grouped).map(([group, groupItems]) => (
             <div key={group}>
               {group && (
-                <div className="text-xs uppercase tracking-wider text-base-content/50 px-5 pt-3 pb-1">
+                <div style={{ ...menuSectionTitleStyle, paddingLeft: 20, paddingRight: 20, paddingTop: 12, paddingBottom: 4 }}>
                   {group}
                 </div>
               )}
@@ -189,34 +192,35 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                   <div
                     key={item.id}
                     onClick={() => handleSelect(item)}
-                    className={`flex items-center justify-between px-4 py-2 cursor-pointer ${
-                      activeIndex === idx ? 'bg-base-200' : 'hover:bg-base-200'
-                    } ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`flex items-center justify-between px-4 py-2 cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}
+                    onMouseEnter={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = 'var(--ds-surface-inset)'; }}
+                    onMouseLeave={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = ''; }}
                   >
                     <div className="flex items-center gap-2">
                       {item.icon}
                       <div>
                         <div className="font-medium text-sm">{item.label}</div>
                         {item.description && (
-                          <div className="text-xs text-base-content/60">{item.description}</div>
+                          <div className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd className="kbd kbd-sm">{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 12, fontFamily: 'monospace' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="text-center py-8 text-base-content/50 text-sm">
+            <div className="text-center py-8 text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
               {emptyMessage}
             </div>
           )}
         </div>
         {/* Footer */}
         {footer && (
-          <div className="border-t border-base-300 px-4 py-2 text-xs text-base-content/50">
+          <div className="px-4 py-2 text-xs" style={{ borderTop: '1px solid var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>
             {footer}
           </div>
         )}

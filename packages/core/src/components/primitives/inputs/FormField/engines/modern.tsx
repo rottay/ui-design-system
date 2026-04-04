@@ -21,11 +21,11 @@ import React from 'react';
 import type { FormFieldProps } from '../FormField.types';
 import { FORMFIELD_DEFAULTS } from '../FormField.types';
 
-/** Tailwind text size and gap classes keyed by DS size token. */
-const SIZE_CLASSES = {
-  sm: { label: 'text-xs', help: 'text-xs', gap: 'gap-1' },
-  md: { label: 'text-sm', help: 'text-xs', gap: 'gap-1.5' },
-  lg: { label: 'text-base', help: 'text-sm', gap: 'gap-2' },
+/** Inline typography and gap styles keyed by DS size token. */
+const SIZE_STYLES = {
+  sm: { label: { fontSize: 12 }, help: { fontSize: 12 }, gap: 4 },
+  md: { label: { fontSize: 14 }, help: { fontSize: 12 }, gap: 6 },
+  lg: { label: { fontSize: 16 }, help: { fontSize: 14 }, gap: 8 },
 } as const;
 
 /**
@@ -56,7 +56,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
     'data-testid': testId,
   } = props;
 
-  const sizeClasses = SIZE_CLASSES[size];
+  const sizeStyle = SIZE_STYLES[size];
   const isHorizontal = layout === 'horizontal';
 
   // Deterministic IDs derived from `name` for label-input association and aria-describedby
@@ -68,24 +68,36 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
 
   return (
     <div
-      className={`form-control w-full ${isHorizontal ? 'flex flex-row items-start' : `flex flex-col ${sizeClasses.gap}`} ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`}
-      style={style}
+      className={className}
+      style={{
+        display: 'flex',
+        width: '100%',
+        ...(isHorizontal
+          ? { flexDirection: 'row', alignItems: 'flex-start' }
+          : { flexDirection: 'column', gap: sizeStyle.gap }),
+        ...(disabled ? { opacity: 0.5, pointerEvents: 'none' as const } : {}),
+        ...style,
+      }}
       data-testid={testId}
     >
       <label
-        className={`label ${isHorizontal ? 'flex-shrink-0' : ''} ${sizeClasses.label} font-medium`}
         htmlFor={fieldId}
-        style={isHorizontal ? { width: labelWidth, paddingRight: '12px' } : undefined}
+        style={{
+          display: 'block',
+          ...sizeStyle.label,
+          fontWeight: 500,
+          ...(isHorizontal ? { flexShrink: 0, width: labelWidth, paddingRight: 12 } : {}),
+        }}
       >
-        <span className="label-text">
+        <span style={{ fontSize: sizeStyle.label.fontSize, fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>
           {label}
           {required && (
-            <span className="text-error ml-1" aria-hidden="true">*</span>
+            <span aria-hidden="true" style={{ marginLeft: 4, color: 'var(--ds-color-error)' }}>*</span>
           )}
         </span>
       </label>
 
-      <div className={`flex-1 flex flex-col ${sizeClasses.gap}`}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: sizeStyle.gap }}>
         {/* Clone accessibility props onto children so consumers don't have to wire them */}
         {React.Children.map(children, (child) => {
           if (React.isValidElement<{ id?: string; 'aria-describedby'?: string; 'aria-invalid'?: boolean }>(child)) {
@@ -99,13 +111,13 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
         })}
 
         {error && (
-          <p id={errorId} className={`${sizeClasses.help} text-error`} role="alert">
+          <p id={errorId} role="alert" style={{ ...sizeStyle.help, color: 'var(--ds-color-error)' }}>
             {error}
           </p>
         )}
 
         {!error && help && (
-          <p id={helpId} className={`${sizeClasses.help} text-base-content/60`}>
+          <p id={helpId} style={{ ...sizeStyle.help, color: 'var(--ds-color-text-secondary)' }}>
             {help}
           </p>
         )}

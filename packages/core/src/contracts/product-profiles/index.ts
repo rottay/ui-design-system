@@ -28,6 +28,7 @@ export type ProductProfileKey =
   | 'events.organizer'
   | 'recruiting.operator'
   | 'platform.admin'
+  | 'platform.flagship'
   | (string & {});
 
 /**

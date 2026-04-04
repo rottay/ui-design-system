@@ -27,7 +27,7 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import type { EngineName, EngineContextValue, EngineProviderProps } from '../../contracts';
 import { getDefaultEngine, isValidEngine } from './registry';
 import { warnOnceInDev } from '../../_internal/utils/runtime-logger';
@@ -61,6 +61,14 @@ export function EngineProvider({
       setEngineState(getDefaultEngine());
     }
   }, []);
+
+  // Sync engine name to DOM so CSS selectors like [data-engine='modern'] work.
+  useEffect(() => {
+    document.documentElement.setAttribute('data-engine', engine);
+    return () => {
+      document.documentElement.removeAttribute('data-engine');
+    };
+  }, [engine]);
 
   const value = useMemo<EngineContextValue>(() => ({
     engine,

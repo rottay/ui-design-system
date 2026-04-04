@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the UserProfileCard pattern.
- * Renders a DaisyUI card with avatar, online/offline presence indicator, name,
+ * @fileoverview Modern (token-driven) engine for the UserProfileCard pattern.
+ * Renders a DS token card with avatar, online/offline presence indicator, name,
  * role, department badge, status badge, and action buttons. Two layout variants:
  * "full" (centered card) and "compact" (horizontal flex row for lists/sidebars).
  *
@@ -17,40 +17,39 @@
 
 import React from 'react';
 import type { UserProfileCardProps } from '../UserProfileCard.types';
+import { panelCardStyle, pillBadgeSmStyle, spinnerStyle } from '../../../shared/modern-styles';
 
-// DaisyUI avatar presence class. "online" shows a green ring; "offline" shows gray.
-// Note: DaisyUI does not differentiate "away" and "busy" -- both map to "offline"
-// visually, but the status badge below provides the semantic distinction.
-const statusClasses: Record<string, string> = {
-  active: 'online',
-  away: 'offline',
-  busy: 'offline',
-  offline: 'offline',
-};
-
-// DaisyUI badge color class per status, providing a human-readable label.
-const statusBadgeClasses: Record<string, string> = {
-  active: 'badge-success',
-  away: 'badge-warning',
-  busy: 'badge-error',
-  offline: 'badge-ghost',
+// DS token badge styles per status, providing a human-readable label.
+const statusBadgeStyles: Record<string, React.CSSProperties> = {
+  active: { background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' },
+  away: { background: 'color-mix(in srgb, var(--ds-color-warning) 15%, transparent)', color: 'var(--ds-color-warning)' },
+  busy: { background: 'color-mix(in srgb, var(--ds-color-error) 15%, transparent)', color: 'var(--ds-color-error)' },
+  offline: { background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' },
 };
 
 // Tailwind class bundles per size tier, keeping avatar, text, and button scale
 // consistent without per-element overrides.
+/** Button size tokens per tier */
+const btnSizeStyles: Record<string, React.CSSProperties> = {
+  sm: { height: 24, padding: '0 8px', fontSize: 12 },
+  md: { height: 32, padding: '0 12px', fontSize: 13 },
+  lg: { height: 36, padding: '0 16px', fontSize: 14 },
+};
+
 const sizeClasses = {
-  sm: { avatar: 'w-10 h-10', title: 'text-sm', desc: 'text-xs', btn: 'btn-xs' },
-  md: { avatar: 'w-14 h-14', title: 'text-base', desc: 'text-sm', btn: 'btn-sm' },
-  lg: { avatar: 'w-20 h-20', title: 'text-xl', desc: 'text-base', btn: 'btn-md' },
+  sm: { avatar: 'w-10 h-10', title: 'text-sm', desc: 'text-xs' },
+  md: { avatar: 'w-14 h-14', title: 'text-base', desc: 'text-sm' },
+  lg: { avatar: 'w-20 h-20', title: 'text-xl', desc: 'text-base' },
 };
 
 /**
- * Modern engine user profile card built on DaisyUI card/avatar/badge components.
- * Two layout variants: "full" (centered card body) and "compact" (horizontal row).
- * Online presence is shown via DaisyUI's avatar online/offline indicator ring.
+ * Modern engine user profile card built on DS token inline styles and shared
+ * modern-styles helpers. Two layout variants: "full" (centered card body) and
+ * "compact" (horizontal row). Online presence is shown via a positioned dot
+ * indicator.
  *
  * @param props - {@link UserProfileCardProps}
- * @returns A DaisyUI card (full) or a flex container (compact).
+ * @returns A token-styled card (full) or a flex container (compact).
  */
 export default function ModernUserProfileCard(props: UserProfileCardProps) {
   const {
@@ -72,9 +71,9 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
 
   if (loading) {
     return (
-      <div className={`card bg-base-100 shadow-sm ${className ?? ''}`} style={style}>
-        <div className="card-body items-center text-center">
-          <span className="loading loading-spinner loading-md" />
+      <div className={className ?? ''} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+        <div style={{ padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' as const }}>
+          <span style={spinnerStyle(24)} />
         </div>
       </div>
     );
@@ -83,20 +82,21 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
   if (variant === 'compact') {
     return (
       <div
-        className={`flex items-center gap-3 p-3 rounded-lg ds-pattern-user-profile-card ds-engine-modern ${onClick ? 'cursor-pointer hover:bg-base-200' : ''} ${className ?? ''}`}
+        className={`flex items-center gap-3 p-3 rounded-lg ds-pattern-user-profile-card ds-engine-modern ${onClick ? 'cursor-pointer' : ''} ${className ?? ''}`}
         style={style}
         onClick={onClick}
       >
-        <div className={`avatar ${isOnline ? 'online' : 'offline'}`}>
-          <div className={`${s.avatar} rounded-full`}>
+        <div style={{ position: 'relative', display: 'inline-flex' }}>
+          <div className={`${s.avatar} rounded-full`} style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {user.avatar ? (
               <img src={user.avatar} alt={user.name} />
             ) : (
-              <div className="bg-neutral text-neutral-content flex items-center justify-center w-full h-full">
+              <div className="flex items-center justify-center w-full h-full" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>
                 <span className={s.desc}>{user.name.charAt(0).toUpperCase()}</span>
               </div>
             )}
           </div>
+          <span style={{ position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, borderRadius: '50%', border: '2px solid var(--ds-surface-card)', background: isOnline ? 'var(--ds-color-success)' : 'var(--ds-color-text-secondary)' }} />
         </div>
         <div className="flex-1 min-w-0">
           <div className={`font-semibold ${s.title} truncate`}>{user.name}</div>
@@ -109,21 +109,22 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
 
   return (
     <div
-      className={`card bg-base-100 shadow-sm ds-pattern-user-profile-card ds-engine-modern ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className ?? ''}`}
-      style={style}
+      className={`ds-pattern-user-profile-card ds-engine-modern ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className ?? ''}`}
+      style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}
       onClick={onClick}
     >
-      <div className="card-body items-center text-center p-6">
-        <div className={`avatar ${isOnline ? 'online' : 'offline'}`}>
-          <div className={`${s.avatar} rounded-full`}>
+      <div className="items-center text-center" style={{ padding: 24, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ position: 'relative', display: 'inline-flex' }}>
+          <div className={`${s.avatar} rounded-full`} style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {user.avatar ? (
               <img src={user.avatar} alt={user.name} />
             ) : (
-              <div className="bg-neutral text-neutral-content flex items-center justify-center w-full h-full">
+              <div className="flex items-center justify-center w-full h-full" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>
                 <span className="text-lg">{user.name.charAt(0).toUpperCase()}</span>
               </div>
             )}
           </div>
+          <span style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', border: '2px solid var(--ds-surface-card)', background: isOnline ? 'var(--ds-color-success)' : 'var(--ds-color-text-secondary)' }} />
         </div>
 
         <div className="mt-2">
@@ -132,7 +133,7 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
         </div>
 
         {user.department && (
-          <span className="badge badge-info badge-sm mt-1">{user.department}</span>
+          <span className="mt-1" style={{ ...pillBadgeSmStyle, background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' }}>{user.department}</span>
         )}
 
         {user.email && (
@@ -140,29 +141,38 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
         )}
 
         {user.status && (
-          <span className={`badge ${statusBadgeClasses[user.status]} badge-sm mt-1`}>
+          <span className="mt-1" style={{ ...pillBadgeSmStyle, ...statusBadgeStyles[user.status] }}>
             {user.status}
           </span>
         )}
 
         {headerExtra && <div className="mt-2">{headerExtra}</div>}
 
-        {/* Action buttons using DaisyUI btn classes. Variant mapping:
-            primary -> btn-primary, danger -> btn-error, default -> btn-ghost. */}
+        {/* Action buttons using DS token inline styles. Variant mapping:
+            primary -> primary fill, danger -> error fill, default -> ghost. */}
         {actions.length > 0 && (
-          <div className="card-actions mt-3">
+          <div className="mt-3" style={{ display: 'flex', gap: 8 }}>
             {actions.map(action => (
               <button
                 key={action.key}
-                className={`btn ${s.btn} ${
-                  action.variant === 'primary' ? 'btn-primary' :
-                  action.variant === 'danger' ? 'btn-error' :
-                  'btn-ghost'
-                }`}
+                style={{
+                  ...btnSizeStyles[size],
+                  borderRadius: 'var(--ds-radius-md)',
+                  border: 'none',
+                  cursor: action.disabled ? 'not-allowed' : 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  ...(action.variant === 'primary'
+                    ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
+                    : action.variant === 'danger'
+                      ? { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' }
+                      : { background: 'transparent', color: 'var(--ds-color-text-primary)' }),
+                }}
                 disabled={action.disabled}
                 onClick={(e) => { e.stopPropagation(); action.onClick(); }}
               >
-                {action.icon && <span className="mr-1">{action.icon}</span>}
+                {action.icon && <span>{action.icon}</span>}
                 {action.label}
               </button>
             ))}

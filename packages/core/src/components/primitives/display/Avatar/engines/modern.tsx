@@ -95,27 +95,26 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     height: `var(--ds-avatar-${size}-size)`,
   };
 
-  // Map DS variant names to DaisyUI semantic bg classes.
-  // The '-content' suffix classes provide automatic contrast text colours.
-  const variantBgClass = {
-    default: 'bg-neutral',
-    primary: 'bg-primary',
-    secondary: 'bg-secondary',
-    success: 'bg-success',
-    warning: 'bg-warning',
-    error: 'bg-error',
-    gradient: 'bg-gradient-to-br from-primary to-secondary',
-  }[variant] || 'bg-neutral';
+  // Map DS variant names to inline style objects using DS tokens.
+  const variantBgStyle: React.CSSProperties = {
+    default: { background: 'var(--ds-surface-panel)' },
+    primary: { background: 'var(--ds-color-primary)' },
+    secondary: { background: 'var(--ds-color-secondary)' },
+    success: { background: 'var(--ds-color-success)' },
+    warning: { background: 'var(--ds-color-warning)' },
+    error: { background: 'var(--ds-color-error)' },
+    gradient: { background: 'linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary))' },
+  }[variant] || { background: 'var(--ds-surface-panel)' };
 
-  const variantTextClass = {
-    default: 'text-neutral-content',
-    primary: 'text-primary-content',
-    secondary: 'text-secondary-content',
-    success: 'text-success-content',
-    warning: 'text-warning-content',
-    error: 'text-error-content',
-    gradient: 'text-[var(--ds-avatar-gradient-color)]',
-  }[variant] || 'text-neutral-content';
+  const variantTextStyle: React.CSSProperties = {
+    default: { color: 'var(--ds-color-text-inverse)' },
+    primary: { color: 'var(--ds-color-text-inverse)' },
+    secondary: { color: 'var(--ds-color-text-inverse)' },
+    success: { color: 'var(--ds-color-text-inverse)' },
+    warning: { color: 'var(--ds-color-text-inverse)' },
+    error: { color: 'var(--ds-color-text-inverse)' },
+    gradient: { color: 'var(--ds-avatar-gradient-color)' },
+  }[variant] || { color: 'var(--ds-color-text-inverse)' };
 
   // Status indicator uses DS token colours for consistent theming
   const statusTokenColor = status ? {
@@ -128,7 +127,10 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   // DaisyUI 'online' class on the avatar container enables its built-in status dot
   const containerClass = `avatar ${status ? 'online' : ''} ${className}`;
   // Ring utility provides the bordered outline; ring-offset prevents it from touching the avatar
-  const ringClass = bordered ? 'ring ring-primary ring-offset-base-100 ring-offset-2' : '';
+  const ringClass = bordered ? 'ring ring-offset-2' : '';
+  const ringStyle: React.CSSProperties = bordered
+    ? { '--tw-ring-color': 'var(--ds-color-primary)', '--tw-ring-offset-color': 'var(--ds-surface-card)' } as React.CSSProperties
+    : {};
 
   return (
     <div
@@ -138,7 +140,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     >
       <div
         className={`mask ${maskClass} ${ringClass}`}
-        style={{ ...sizeStyle, transition: `var(--ds-avatar-transition)` }}
+        style={{ ...sizeStyle, ...ringStyle, transition: `var(--ds-avatar-transition)` }}
       >
         {src && !imageError ? (
           <img
@@ -149,10 +151,12 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
           />
         ) : (
           <div
-            className={`${variantBgClass} ${variantTextClass} flex items-center justify-center`}
+            className="flex items-center justify-center"
             style={{
               width: '100%',
               height: '100%',
+              ...variantBgStyle,
+              ...variantTextStyle,
               fontSize: `var(--ds-avatar-${size}-font-size)`,
               fontWeight: `var(--ds-avatar-font-weight)` as any,
               // Ensure initials maintain contrast by using explicit token colors

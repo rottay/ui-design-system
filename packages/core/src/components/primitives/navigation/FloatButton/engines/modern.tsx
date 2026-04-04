@@ -2,14 +2,14 @@
 
 /**
  * @fileoverview FloatButton Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the FloatButton component.
+ * @description Token-driven Tailwind CSS implementation of the FloatButton component.
  * Provides utility-first styled floating action buttons.
  *
  * @remarks
- * The Modern engine uses DaisyUI and Tailwind CSS for a lightweight,
+ * The Modern engine uses Tailwind CSS and DS tokens for a lightweight,
  * utility-first implementation including:
  * - Tailwind utility classes for styling
- * - DaisyUI button components
+ * - DS token inline styles via --ds-* CSS custom properties
  * - Minimal JavaScript footprint
  * - Easy customization via Tailwind config
  *
@@ -33,7 +33,7 @@
  * ```
  *
  * @see {@link FloatButtonProps} for prop documentation
- * @see {@link https://daisyui.com/components/button} DaisyUI Button
+ * @see {@link FloatButton} for the main component
  *
  * @module FloatButton/Engines/Modern
  * @category Navigation
@@ -49,21 +49,21 @@ import { FLOAT_BUTTON_DEFAULTS } from '../FloatButton.types';
 // ============================================================================
 
 /**
- * FloatButton component using DaisyUI/Tailwind CSS.
+ * FloatButton component using Tailwind CSS and DS tokens.
  *
  * @description
  * Implements floating action button with Tailwind utility classes
- * and DaisyUI button components for consistent styling.
+ * and DS token inline styles for consistent styling.
  *
  * @remarks
- * - Uses DaisyUI btn classes for base styling
+ * - Uses DS token inline styles for base styling
  * - Tailwind utilities for positioning and effects
- * - Badge support via DaisyUI badge component
+ * - Badge support via badge structural class with DS token colors
  * - Supports both button and anchor rendering
  *
  * @param props - {@link FloatButtonProps}
  * @param ref - Forwarded ref to button/anchor element
- * @returns DaisyUI styled float button element
+ * @returns Token-styled float button element
  */
 export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>(
   (props, ref) => {
@@ -82,11 +82,21 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       children,
     } = props;
 
-    // Compose DaisyUI button classes; btn-ghost + bg-base-100 provides an
-    // elevated default look that contrasts against most page backgrounds
-    const baseClasses = `btn ${
-      shape === 'circle' ? 'btn-circle' : 'rounded-lg'
-    } ${type === 'primary' ? 'btn-primary' : 'btn-ghost bg-base-100'} shadow-lg`;
+    // DS token inline styles for button shape and type variants
+    const baseStyle: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: 'none',
+      cursor: 'pointer',
+      position: 'relative',
+      ...(shape === 'circle'
+        ? { borderRadius: '50%', width: 40, height: 40 }
+        : { borderRadius: 'var(--ds-radius-lg)', padding: '8px 12px' }),
+      ...(type === 'primary'
+        ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
+        : { background: 'transparent', color: 'var(--ds-color-text-primary)' }),
+    };
 
     // Badge rendering: dot takes priority over count to avoid conflicting
     // indicators. Count is capped at 99+ to prevent badge overflow on
@@ -97,10 +107,10 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         {description && <span className="text-xs">{description}</span>}
         {children}
         {badge?.dot && (
-          <span className="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full" style={{ background: 'var(--ds-color-error)' }} />
         )}
         {badge?.count && (
-          <span className="absolute -top-2 -right-2 badge badge-error badge-sm">
+          <span style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 9999, padding: '1px 6px', fontSize: 11, lineHeight: '16px', background: 'var(--ds-color-error)', color: '#fff' }}>
             {badge.count > 99 ? '99+' : badge.count}
           </span>
         )}
@@ -109,13 +119,19 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
 
     // When href is provided, render as <a> for native link semantics and
     // accessibility; otherwise render as <button> for click-only actions
+    const floatStyle: React.CSSProperties = {
+      ...(type !== 'primary' ? { background: 'var(--ds-surface-card)' } : {}),
+      boxShadow: 'var(--ds-elevation-2)',
+      ...style,
+    };
+
     const buttonElement = href ? (
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
         target={target}
-        className={`${baseClasses} ${className}`}
-        style={style}
+        className={className}
+        style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
       >
         {content}
@@ -125,8 +141,8 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         ref={ref}
         type="button"
         onClick={onClick}
-        className={`${baseClasses} ${className}`}
-        style={style}
+        className={className}
+        style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
       >
         {content}
@@ -143,7 +159,7 @@ FloatButton.displayName = 'FloatButton.Modern';
 // ============================================================================
 
 /**
- * FloatButton.Group component using DaisyUI/Tailwind CSS.
+ * FloatButton.Group component using Tailwind CSS and DS tokens.
  *
  * @description
  * Implements expandable button group with Tailwind utilities
@@ -157,7 +173,7 @@ FloatButton.displayName = 'FloatButton.Modern';
  *
  * @param props - {@link FloatButtonGroupProps}
  * @param ref - Forwarded ref to container div
- * @returns DaisyUI styled group container
+ * @returns Token-styled group container
  */
 export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
   (props, ref) => {
@@ -223,9 +239,21 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         <button
           type="button"
           onClick={trigger === 'click' ? handleToggle : undefined}
-          className={`btn ${shape === 'circle' ? 'btn-circle' : 'rounded-lg'} ${
-            type === 'primary' ? 'btn-primary' : 'btn-ghost bg-base-100'
-          } shadow-lg z-10`}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 10,
+            ...(shape === 'circle'
+              ? { borderRadius: '50%', width: 40, height: 40 }
+              : { borderRadius: 'var(--ds-radius-lg)', padding: '8px 12px' }),
+            ...(type === 'primary'
+              ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
+              : { background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)' }),
+            boxShadow: 'var(--ds-elevation-2)',
+          }}
           title={typeof tooltip === 'string' ? tooltip : undefined}
         >
           {isOpen ? (closeIcon ?? '×') : icon}
@@ -250,7 +278,7 @@ Group.displayName = 'FloatButton.Group.Modern';
 // ============================================================================
 
 /**
- * FloatButton.BackTop component using DaisyUI/Tailwind CSS.
+ * FloatButton.BackTop component using Tailwind CSS and DS tokens.
  *
  * @description
  * Implements scroll-to-top button with Tailwind utilities
@@ -264,7 +292,7 @@ Group.displayName = 'FloatButton.Group.Modern';
  *
  * @param props - {@link FloatButtonBackTopProps}
  * @param ref - Forwarded ref to button element
- * @returns DaisyUI styled back-to-top button or null
+ * @returns Token-styled back-to-top button or null
  */
 export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopProps>(
   (props, ref) => {
@@ -321,10 +349,22 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         ref={ref}
         type="button"
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 btn ${
-          shape === 'circle' ? 'btn-circle' : 'rounded-lg'
-        } ${type === 'primary' ? 'btn-primary' : 'btn-ghost bg-base-100'} shadow-lg transition-opacity duration-200 ${className}`}
-        style={style}
+        className={`fixed bottom-6 right-6 transition-opacity duration-200 ${className}`}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: 'none',
+          cursor: 'pointer',
+          ...(shape === 'circle'
+            ? { borderRadius: '50%', width: 40, height: 40 }
+            : { borderRadius: 'var(--ds-radius-lg)', padding: '8px 12px' }),
+          ...(type === 'primary'
+            ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
+            : { background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)' }),
+          boxShadow: 'var(--ds-elevation-2)',
+          ...style,
+        }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
       >
         {icon ?? '↑'}

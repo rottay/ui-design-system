@@ -1,16 +1,16 @@
 /**
  * @fileoverview Notification Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based implementation of the Notification component.
+ * @description Token-driven Tailwind implementation of the Notification component.
  * Provides a lightweight notification experience using utility-first CSS classes.
  *
  * @remarks
- * The Modern engine leverages DaisyUI's toast and alert components to provide:
+ * The Modern engine leverages DS token inline styles and toast structural classes to provide:
  * - Utility-first Tailwind CSS styling
  * - Lightweight bundle size
  * - Easy customization through class overrides
- * - Consistent DaisyUI theming integration
+ * - Consistent DS token theming integration
  *
- * This engine is recommended for applications using Tailwind CSS and DaisyUI,
+ * This engine is recommended for applications using Tailwind CSS,
  * or those prioritizing bundle size over feature richness.
  *
  * Note: Static methods are not supported in Modern. Always use the Provider
@@ -121,14 +121,14 @@ const generateId = () => `modern-notification-${++notificationId}`;
  *
  * @description
  * Provides notification context to child components and manages the
- * notification state. Renders notifications using DaisyUI's toast component.
+ * notification state. Renders notifications using toast structural classes with DS tokens.
  *
  * @remarks
  * Key features:
  * - Context-based notification management
  * - Supports multiple placements simultaneously
  * - Automatic notification stacking and limiting
- * - DaisyUI toast positioning classes
+ * - Toast positioning classes
  *
  * @param props - {@link NotificationProviderProps}
  * @returns Provider component with notification containers
@@ -256,7 +256,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   // Grouping by placement creates separate DOM containers for each position,
   // allowing simultaneous notifications in different corners (e.g., success
   // in topRight while an error shows in bottomRight). Each group renders
-  // its own DaisyUI toast container with appropriate positioning classes.
+  // its own toast container with appropriate positioning classes.
   const groupedNotifications = notifications.reduce<Record<NotificationPlacement, InternalNotification[]>>(
     (acc, notification) => {
       const p = notification.placement || placement;
@@ -268,7 +268,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   );
 
   /**
-   * DaisyUI toast classes for each placement.
+   * Toast positioning classes for each placement.
    */
   const placementClasses: Record<NotificationPlacement, string> = {
     top: 'toast toast-top toast-center',
@@ -280,7 +280,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   };
 
   // Margin-based offsets rather than top/bottom CSS properties because
-  // DaisyUI toast already uses fixed positioning. Margins push the toast
+  // Toast classes already use fixed positioning. Margins push the toast
   // container away from its default edge position.
   const placementStyles: Record<NotificationPlacement, React.CSSProperties> = {
     top: { marginTop: top },
@@ -384,17 +384,17 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
  * NotificationItem component for the Modern engine.
  *
  * @description
- * Renders an individual notification using DaisyUI alert classes.
+ * Renders an individual notification using DS token inline styles.
  * Supports all standard notification features with Tailwind styling.
  *
  * @remarks
- * Uses DaisyUI classes:
- * - `alert` - Base alert styling
- * - `alert-success`, `alert-error`, `alert-info`, `alert-warning` - Type variants
- * - `shadow-lg` - Elevation shadow
+ * Uses DS token alert style mapping:
+ * - `alert` structural class for base styling
+ * - Token-driven backgrounds and colors for type variants (success, error, info, warning)
+ * - `var(--ds-elevation-2)` for elevation shadow
  *
  * @param props - {@link NotificationItemProps}
- * @returns A DaisyUI-styled notification item
+ * @returns A DS token-styled notification item
  *
  * @example
  * ```tsx
@@ -466,14 +466,14 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // ========================================================================
 
   /**
-   * DaisyUI alert classes for each notification type.
+   * DS token alert style mapping for each notification type.
    */
-  const alertClasses: Record<NotificationType, string> = {
-    success: 'alert-success',
-    error: 'alert-error',
-    info: 'alert-info',
-    warning: 'alert-warning',
-    open: '',
+  const alertStyles: Record<NotificationType, React.CSSProperties> = {
+    success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
+    error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
+    info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
+    warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
+    open: {},
   };
 
   // Inline SVGs (h-6 w-6 = 24px) are slightly larger than Message icons
@@ -513,8 +513,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // role="alert" triggers immediate screen reader announcement.
   return (
     <div
-      className={`alert ${alertClasses[type]} shadow-lg min-w-80 ${className}`}
-      style={style}
+      className={`alert min-w-80 ${className}`}
+      style={{ ...alertStyles[type], boxShadow: 'var(--ds-elevation-2)', ...style }}
       onClick={onClick}
       role="alert"
     >
@@ -537,7 +537,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         {/* Close Button */}
         {closable && (
           <button
-            className="btn btn-ghost btn-sm btn-square"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
             onClick={(e) => {
               e.stopPropagation();
               handleClose();

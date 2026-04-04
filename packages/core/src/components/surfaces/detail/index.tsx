@@ -8,6 +8,12 @@
  * @remarks
  * The detail surface keeps page-level chrome standardized while allowing apps
  * to supply field rendering and item-specific tab content.
+ *
+ * When `chrome` is configured (breadcrumbs, back, maxWidth), the surface wraps
+ * the detail panel in a `PageShellSurface` so the user gets a two-tier premium
+ * layout: PageShell provides the page-level chrome (breadcrumbs, title, back
+ * navigation), while DetailPanel renders entity-specific content (tabs,
+ * sidebar, actions, avatar, status).
  */
 
 import { Box, Stack } from '../../primitives';
@@ -24,6 +30,7 @@ import { useSurfaceProfileDefaults } from '../profile-defaults';
 import { SurfaceAccentBar } from '../personality-helpers';
 import type { DetailSurfaceConfig, EntityAdapter } from '../types';
 import { SurfaceEmptyState, SurfaceErrorState } from '../states';
+import { PageShellSurface } from '../page-shell';
 
 export interface DetailSurfaceProps<TRaw, TView> {
   data?: TRaw | null;
@@ -125,11 +132,25 @@ export function DetailSurface<TRaw, TView>({
       </Stack>
     ) : undefined;
 
-  const detailContent = (
+  // Determine whether we have page-level chrome that warrants wrapping
+  // the detail panel in a PageShell for the premium two-tier layout.
+  const hasPageChrome = !!(
+    config.presentation.chrome?.breadcrumbs?.length ||
+    config.presentation.chrome?.back
+  );
+
+  // PageShell expects a plain string title. Priority:
+  // 1. Explicit chrome.pageTitle (cleanest -- always a string)
+  // 2. If title() returns a string, use it directly (safe, no coercion)
+  // 3. Loading state falls back to generic label
+  // 4. Empty string only if title() returns a non-string ReactNode (rare)
+  const derivedTitle = item ? config.presentation.title(item) : undefined;
+  const pageTitle = config.presentation.chrome?.pageTitle
+    ?? (typeof derivedTitle === 'string' ? derivedTitle : (loading ? tSurface('detail.loading') : ''));
+
+  const detailPanel = (
     <Box
       style={{
-        maxWidth: config.presentation.chrome?.maxWidth,
-        margin: config.presentation.chrome?.maxWidth ? '0 auto' : undefined,
         position: profileDefaults.accentPosition !== 'none' ? 'relative' : undefined,
         overflow: profileDefaults.accentPosition !== 'none' ? 'hidden' : undefined,
       }}
@@ -153,7 +174,10 @@ export function DetailSurface<TRaw, TView>({
       >
         <PatternDetailPanel
           data={item as TView}
-          title={item ? config.presentation.title(item) : tSurface('detail.loading')}
+          /* When wrapped in PageShell, the page-level heading shows the title.
+             DetailPanel suppresses its own <h2> to avoid a double heading.
+             The entity header still shows avatar, status, subtitle, and actions. */
+          title={hasPageChrome ? undefined : (item ? config.presentation.title(item) : tSurface('detail.loading'))}
           subtitle={item ? config.presentation.subtitle?.(item) : undefined}
           avatar={item ? config.presentation.avatar?.(item) : undefined}
           status={item ? config.presentation.status?.(item) : undefined}
@@ -162,15 +186,41 @@ export function DetailSurface<TRaw, TView>({
           sidebar={shouldCollapseSidebarOnMobile ? undefined : resolvedSidebar}
           sidebarPosition={config.visual.sidebarPosition}
           sidebarWidth={config.visual.sidebarWidth}
-          onBack={config.presentation.chrome?.back?.onClick}
           headerExtra={item ? config.presentation.headerExtra?.(item) : undefined}
           footer={resolvedFooter}
-          breadcrumbs={config.presentation.chrome?.breadcrumbs}
           activeTab={isControlledTabState ? resolvedActiveTab : undefined}
           onTabChange={config.behavior.onTabChange}
           loading={loading}
+          breadcrumbs={hasPageChrome ? undefined : config.presentation.chrome?.breadcrumbs}
+          onBack={hasPageChrome ? undefined : config.presentation.chrome?.back?.onClick}
         />
       </Box>
+    </Box>
+  );
+
+  // When page chrome is present, wrap the detail panel in a PageShellSurface
+  // so breadcrumbs, back navigation, and the page title sit above the detail
+  // card as a cohesive premium page frame.
+  const detailContent = hasPageChrome ? (
+    <PageShellSurface
+      chrome={{
+        title: pageTitle,
+        breadcrumbs: config.presentation.chrome?.breadcrumbs,
+        back: config.presentation.chrome?.back,
+        maxWidth: config.presentation.chrome?.maxWidth,
+      }}
+      loading={loading}
+    >
+      {detailPanel}
+    </PageShellSurface>
+  ) : (
+    <Box
+      style={{
+        maxWidth: config.presentation.chrome?.maxWidth,
+        margin: config.presentation.chrome?.maxWidth ? '0 auto' : undefined,
+      }}
+    >
+      {detailPanel}
     </Box>
   );
 

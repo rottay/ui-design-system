@@ -10,7 +10,7 @@
  *   onOpenChange={setIsOpen}
  *   title="Revoke access?"
  *   description="All sessions will be terminated."
- *   action={<button className="btn btn-error" onClick={revoke}>Revoke</button>}
+ *   action={<Button variant="danger" onClick={revoke}>Revoke</Button>}
  * />
  * ```
  */
@@ -93,7 +93,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
       >
         <div className="flex gap-3 items-start">
           {/* Error-tinted circle with inline SVG warning triangle */}
-          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-error/10 flex items-center justify-center text-error">
+          <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
               <line x1="12" y1="9" x2="12" y2="13" />
@@ -105,7 +105,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
               <h3 className="font-bold text-lg mb-2">{title}</h3>
             )}
             {description && (
-              <p className="text-sm text-base-content/70">{description}</p>
+              <p className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</p>
             )}
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
         <div className="modal-action">
           <button
             type="button"
-            className="btn btn-ghost"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 36, padding: '0 16px', fontSize: 14, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
             onClick={handleCancel}
           >
             {cancelLabel}

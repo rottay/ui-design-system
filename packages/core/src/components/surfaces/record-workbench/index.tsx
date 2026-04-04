@@ -13,6 +13,7 @@ import { Box } from '../../primitives/layout/Box';
 import { Stack } from '../../primitives/layout/Stack';
 import { Flex } from '../../primitives/layout/Flex';
 import { Text } from '../../primitives/display/Typography';
+import { Button } from '../../primitives/inputs/Button';
 import { Skeleton } from '../../primitives/feedback/Skeleton';
 import { Spinner } from '../../primitives/feedback/Spinner';
 
@@ -182,34 +183,21 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
         {actions && actions.length > 0 && (
           <Flex gap={2}>
             {actions.map((action) => (
-              <button
+              <Button
                 key={action.key}
+                variant={
+                  action.variant === 'primary'
+                    ? 'primary'
+                    : action.variant === 'danger'
+                      ? 'danger'
+                      : 'secondary'
+                }
                 onClick={action.onClick}
                 disabled={action.disabled || loading}
-                style={{
-                  padding: '8px 16px',
-                  border: '1px solid var(--ds-color-border-primary)',
-                  borderRadius: 'var(--ds-radius-md, 8px)',
-                  background: action.variant === 'primary'
-                    ? 'var(--ds-color-primary)'
-                    : action.variant === 'danger'
-                      ? 'transparent'
-                      : 'var(--ds-color-bg-secondary)',
-                  color: action.variant === 'primary'
-                    ? 'var(--ds-color-text-on-primary, #fff)'
-                    : action.variant === 'danger'
-                      ? 'var(--ds-color-error)'
-                      : 'var(--ds-color-text-primary)',
-                  cursor: (action.disabled || loading) ? 'not-allowed' : 'pointer',
-                  opacity: (action.disabled || loading) ? 0.5 : 1,
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  transition: 'background var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
-                }}
+                icon={action.icon}
               >
-                {action.icon && <span style={{ marginRight: '6px' }}>{action.icon}</span>}
                 {action.label}
-              </button>
+              </Button>
             ))}
           </Flex>
         )}
@@ -228,32 +216,28 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
         {tabs.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
-            <button
+            <Button
               key={tab.key}
               id={tabId(tab.key)}
               role="tab"
               aria-selected={isActive}
               aria-controls={panelId(tab.key)}
               tabIndex={isActive ? 0 : -1}
+              variant="ghost"
               onClick={() => handleTabChange(tab.key)}
+              icon={tab.icon}
               style={{
-                padding: '10px 16px',
-                border: 'none',
+                borderRadius: 0,
                 borderBottom: isActive
                   ? '2px solid var(--ds-color-primary)'
                   : '2px solid transparent',
-                background: 'transparent',
                 color: isActive
                   ? 'var(--ds-color-text-primary)'
                   : 'var(--ds-color-text-muted)',
-                cursor: 'pointer',
-                fontSize: '14px',
                 fontWeight: isActive ? 600 : 400,
                 whiteSpace: 'nowrap',
-                transition: 'color var(--ds-duration-fast, 0.15s) var(--ds-ease-out), border-color var(--ds-duration-fast, 0.15s) var(--ds-ease-out)',
               }}
             >
-              {tab.icon && <span style={{ marginRight: '6px' }}>{tab.icon}</span>}
               {tab.label}
               {tab.badge !== undefined && (
                 <span
@@ -269,7 +253,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                   {tab.badge}
                 </span>
               )}
-            </button>
+            </Button>
           );
         })}
       </div>

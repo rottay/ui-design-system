@@ -19,18 +19,18 @@ import React, { useState, useCallback, useId, useRef } from 'react';
 import type { TagInputProps } from '../TagInput.types';
 import { TAGINPUT_DEFAULTS } from '../TagInput.types';
 
-/** DaisyUI size classes for the outer input container. */
-const SIZE_CLASSES = {
-  sm: 'input-sm',
-  md: '',
-  lg: 'input-lg',
+/** Inline size styles for the outer input container. */
+const SIZE_MIN_HEIGHTS: Record<string, number> = {
+  sm: 32,
+  md: 40,
+  lg: 48,
 };
 
-/** DaisyUI size classes for individual tag badges. */
-const BADGE_SIZE_CLASSES = {
-  sm: 'badge-sm',
-  md: '',
-  lg: 'badge-lg',
+/** Inline size styles for individual tag badges. */
+const BADGE_SIZE_STYLES: Record<string, React.CSSProperties> = {
+  sm: { fontSize: 11, padding: '1px 6px', gap: 2 },
+  md: { fontSize: 12, padding: '2px 8px', gap: 4 },
+  lg: { fontSize: 14, padding: '4px 10px', gap: 4 },
 };
 
 /**
@@ -113,20 +113,19 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
   }, [separator, addTag]);
 
   return (
-    <div className={`form-control ${className || ''}`} style={style}>
+    <div className={className || ''} style={{ display: 'flex', flexDirection: 'column', width: '100%', ...style }}>
       {/* Container mimics a DaisyUI input but uses flex-wrap so tags flow naturally */}
       <div
-        className={`flex flex-wrap items-center gap-1 input input-bordered ${SIZE_CLASSES[size]} ${error ? 'input-error' : ''} ${disabled ? 'input-disabled opacity-50' : ''}`}
-        style={{ height: 'auto', minHeight: size === 'sm' ? 32 : size === 'lg' ? 48 : 40, paddingBlock: 4 }}
+        style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4, border: error ? '1px solid var(--ds-color-error)' : '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--ds-color-bg-input)', height: 'auto', minHeight: SIZE_MIN_HEIGHTS[size] || 40, paddingBlock: 4, paddingInline: 8, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
         onClick={() => inputRef.current?.focus()}
       >
         {value.map((tag, index) => (
-          <span key={`${tag}-${index}`} className={`badge badge-primary gap-1 ${BADGE_SIZE_CLASSES[size]}`}>
+          <span key={`${tag}-${index}`} style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 9999, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', ...(BADGE_SIZE_STYLES[size] || BADGE_SIZE_STYLES.md) }}>
             {tag}
             {!disabled && (
               <button
                 type="button"
-                className="btn btn-ghost btn-xs p-0 min-h-0 h-auto"
+                style={{ background: 'transparent', color: 'inherit', height: 'auto', padding: 0, fontSize: 12, border: 'none', cursor: 'pointer', minHeight: 0, lineHeight: 1 }}
                 onClick={(e) => { e.stopPropagation(); removeTag(index); }}
                 aria-label={`Remove ${tag}`}
               >
@@ -147,14 +146,13 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
           placeholder={value.length === 0 ? placeholder : ''}
           disabled={disabled}
           autoFocus={autoFocus}
-          className="flex-1 outline-none bg-transparent min-w-[60px] border-none"
-          style={{ padding: 0 }}
+          style={{ flex: 1, outline: 'none', background: 'transparent', minWidth: 60, border: 'none', padding: 0 }}
         />
       </div>
       {error && errorMessage && (
-        <label className="label">
-          <span className="label-text-alt text-error">{errorMessage}</span>
-        </label>
+        <div style={{ marginTop: 4 }}>
+          <span style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
+        </div>
       )}
     </div>
   );

@@ -212,7 +212,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     return (
       <>
         {title.slice(0, idx)}
-        <span className="text-primary font-semibold">{title.slice(idx, idx + searchValue.length)}</span>
+        <span className="font-semibold" style={{ color: 'var(--ds-color-primary)' }}>{title.slice(idx, idx + searchValue.length)}</span>
         {title.slice(idx + searchValue.length)}
       </>
     );
@@ -221,19 +221,19 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   return (
     <li>
       <div
-        className={`flex items-center py-1 px-2 hover:bg-base-200/50 rounded cursor-pointer transition-all duration-200 ${isSelected ? 'bg-primary/10 text-primary border-l-2 border-primary font-medium' : ''} ${node.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-        style={{ paddingLeft: `${level * 16 + 8}px` }}
+        className={`flex items-center py-1 px-2 rounded cursor-pointer transition-all duration-200 ${isSelected ? 'font-medium' : ''} ${node.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        style={{ paddingLeft: `${level * 16 + 8}px`, ...(isSelected ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', color: 'var(--ds-color-primary)', borderLeft: '2px solid var(--ds-color-primary)' } : {}) }}
         onClick={() => !node.disabled && onSelect(node)}
       >
         {/* Expand/collapse or leaf indicator */}
         {!isLeaf ? (
           <button
             type="button"
-            className="btn btn-ghost btn-xs mr-1"
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', marginRight: 4 }}
             onClick={handleExpand}
           >
             {isLoading ? (
-              <span className="loading loading-spinner loading-xs text-primary" />
+              <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-primary)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
             ) : (
               <span className={`inline-block transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}>&#9654;</span>
             )}
@@ -245,7 +245,13 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         {checkable && (
           <input
             type="checkbox"
-            className="checkbox checkbox-sm checkbox-primary mr-2 transition-all duration-150"
+            className="mr-2 transition-all duration-150"
+            style={{
+              width: 16,
+              height: 16,
+              accentColor: 'var(--ds-color-primary)',
+              cursor: node.disabled || node.disableCheckbox ? 'not-allowed' : 'pointer',
+            }}
             checked={isSelected}
             ref={(el) => { if (el) el.indeterminate = isIndeterminate; }}
             disabled={node.disabled || node.disableCheckbox}
@@ -256,7 +262,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         <span className="flex-1">{renderTitle()}</span>
       </div>
       {hasChildren && isExpanded && (
-        <ul className={treeLine ? 'border-l-2 border-base-300 ml-4' : ''}>
+        <ul className={treeLine ? 'ml-4' : ''} style={treeLine ? { borderLeft: '2px solid var(--ds-color-border)' } : undefined}>
           {node.children!.map((child) => (
             <TreeNode
               key={child.key ?? child.value}
@@ -525,11 +531,11 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       return titles.join(', ');
     };
 
-    const getSizeClass = () => {
+    const getSizeStyle = (): React.CSSProperties => {
       switch (size) {
-        case 'small': return 'input-sm';
-        case 'large': return 'input-lg';
-        default: return 'input-md';
+        case 'small': return { height: 32, fontSize: 13, padding: '4px 10px' };
+        case 'large': return { height: 40, fontSize: 16, padding: '8px 14px' };
+        default: return { height: 36, fontSize: 14, padding: '6px 12px' };
       }
     };
 
@@ -544,16 +550,25 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         style={style}
       >
         <div
-          className={`input input-bordered ${getSizeClass()} flex items-center cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`flex items-center cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          style={{
+            border: '1px solid var(--ds-color-border)',
+            borderRadius: 'var(--ds-radius-md)',
+            background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
+            color: 'var(--ds-color-text-primary)',
+            outline: 'none',
+            boxSizing: 'border-box',
+            ...getSizeStyle(),
+          }}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
         >
-          <span className={`flex-1 truncate ${selectedKeys.size === 0 ? 'text-base-content/50' : ''}`}>
+          <span className="flex-1 truncate" style={selectedKeys.size === 0 ? { color: 'var(--ds-color-text-secondary)' } : undefined}>
             {selectedKeys.size > 0 ? getDisplayValue() : displayPlaceholder}
           </span>
           {allowClear && selectedKeys.size > 0 && !disabled && (
             <button
               type="button"
-              className="btn btn-ghost btn-xs btn-circle"
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
               onClick={handleClear}
             >
               ✕
@@ -565,14 +580,25 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         {isOpen && (
           <>
           <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
-          <div className="absolute z-50 w-full mt-1 bg-base-100 rounded-box shadow-lg max-h-60 overflow-auto border border-base-300" style={{ animation: 'rottay-select-slide-in 0.15s ease-out' }}>
+          <div style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', animation: 'rottay-select-slide-in 0.15s ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
             {/* Search input */}
             {showSearch && (
-              <div className="p-2 border-b border-base-200 sticky top-0 bg-base-100 z-10">
+              <div className="p-2 sticky top-0 z-10" style={{ borderBottom: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-card)' }}>
                 <input
                   ref={searchInputRef}
                   type="text"
-                  className="input input-bordered input-sm w-full focus:input-primary transition-all duration-200"
+                  className="w-full transition-all duration-200"
+                  style={{
+                    border: '1px solid var(--ds-color-border)',
+                    borderRadius: 'var(--ds-radius-md)',
+                    padding: '4px 10px',
+                    fontSize: 13,
+                    height: 32,
+                    background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
+                    color: 'var(--ds-color-text-primary)',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                  }}
                   placeholder={t('treeselect.search_placeholder')}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
@@ -602,7 +628,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                 ))}
               </ul>
             ) : (
-              <div className="p-4 text-center text-base-content/50">
+              <div className="p-4 text-center" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {displayNotFound}
               </div>
             )}

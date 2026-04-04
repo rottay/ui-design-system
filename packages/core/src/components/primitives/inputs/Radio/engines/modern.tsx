@@ -1,48 +1,23 @@
 /**
  * @fileoverview Radio Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Radio component.
- * Part of the Rottay Design System's input primitives collection.
+ * @description Premium radio button with precise, calm styling.
+ * Inspired by Linear/Vercel design language -- crisp circle, smooth dot scale-in.
  *
  * @remarks
- * The Modern engine implements radios using DaisyUI's utility-first approach
- * with Tailwind CSS classes. It provides a lightweight alternative with
- * smaller bundle size.
+ * Uses a hidden native input for accessibility and a custom visual indicator
+ * built with inline styles referencing DS CSS custom properties. No DaisyUI
+ * dependency -- pure CSS tokens for full theme control.
  *
- * **DaisyUI Features Utilized:**
- * - Radio component classes
- * - Size modifiers (radio-xs, radio-sm, radio-lg)
- * - Color modifiers (radio-primary, radio-secondary, etc.)
- * - Form control wrapper for label alignment
- * - Label text and alt-text for descriptions
- *
- * **Prop Mapping:**
- * - `size="xs"` → `radio-xs`
- * - `size="sm"` → `radio-sm`
- * - `size="lg"` → `radio-lg`
- * - `color="primary"` → `radio-primary`
- * - `color="success"` → `radio-success`
- *
- * **Description Support:**
- * Uses DaisyUI's `label-text-alt` class for option descriptions.
- *
- * @example Using Modern Engine
- * ```tsx
- * import { Radio } from '@rottay/design-system';
- *
- * // Explicit Modern engine
- * <Radio
- *   engine="modern"
- *   name="option"
- *   value="a"
- *   label="DaisyUI Radio"
- *   description="Additional info"
- *   color="success"
- * />
- * ```
+ * **Visual Spec:**
+ * - 18x18 circle, 2px border, border-radius 50%
+ * - Selected: outer circle border primary + inner 6px filled dot (primary), smooth scale transition
+ * - Hover: border brightens to `--ds-color-border` / `--ds-color-primary`
+ * - Focus: 2px outline `--ds-color-primary` with offset, `:focus-visible` only
+ * - Disabled: opacity 0.5, cursor not-allowed
+ * - Transitions on border-color and dot transform (150ms ease-out)
+ * - Touch target min 44x44 via padding on the label row
  *
  * @see {@link Radio} for the main component
- * @see {@link ClassicRadio} for Ant Design implementation
- * @see {@link RusticRadio} for vanilla implementation
  * @module ModernRadio
  * @category Inputs
  * @package @rottay/design-system
@@ -50,21 +25,14 @@
 
 'use client';
 
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useCallback } from 'react';
 import type { RadioProps } from '../Radio.types';
 import { RADIO_DEFAULTS } from '../Radio.types';
 
-/**
- * Modern (DaisyUI/Tailwind) implementation of the DS Radio.
- *
- * Uses a native `<input type="radio">` with DaisyUI's `radio` class and modifier
- * classes for size and color. Supports both controlled (`checked` prop) and
- * uncontrolled (`defaultChecked`) modes. An optional `description` is rendered
- * below the label using DaisyUI's `label-text-alt` style.
- *
- * @param props - Standardized RadioProps from the DS type contract.
- * @returns A DaisyUI-styled radio button wrapped in a `form-control` label.
- */
+/* ------------------------------------------------------------------ */
+/*  Component                                                          */
+/* ------------------------------------------------------------------ */
+
 export default function ModernRadio(props: RadioProps): React.ReactElement {
   const {
     size = RADIO_DEFAULTS.size,
@@ -82,51 +50,117 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     style,
   } = props;
 
-  // Stable unique ID for input-label association. The engine prefix
-  // prevents collisions if multiple engines are rendered on the same page.
   const generatedId = useId();
   const inputId = `radio-modern-${generatedId}`;
 
-  // Controlled vs. uncontrolled: when `checked` is undefined, local state
-  // owns the radio value. This mirrors React's standard input pattern.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocusVisible, setIsFocusVisible] = useState(false);
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isControlled) {
       setInternalChecked(e.target.checked);
     }
     onChange?.(e);
+  }, [isControlled, onChange]);
+
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    if (e.target.matches(':focus-visible')) {
+      setIsFocusVisible(true);
+    }
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    setIsFocusVisible(false);
+  }, []);
+
+  /* -- Sizes -------------------------------------------------------- */
+  const sizeMap: Record<string, number> = {
+    xs: 14, sm: 16, md: 18, lg: 20, xl: 24,
   };
-
-  // DaisyUI size classes. `xl` maps to `radio-lg` because DaisyUI
-  // does not provide an xl modifier for radios.
-  const sizeClass = {
-    xs: 'radio-xs',
-    sm: 'radio-sm',
-    md: '',
-    lg: 'radio-lg',
-    xl: 'radio-lg',
-  }[size] || '';
-
-  // DaisyUI color classes map directly to DS color tokens.
-  const colorClass = {
-    default: '',
-    primary: 'radio-primary',
-    secondary: 'radio-secondary',
-    success: 'radio-success',
-    warning: 'radio-warning',
-    error: 'radio-error',
-  }[color] || 'radio-primary';
+  const circleSize = sizeMap[size] ?? 18;
+  const dotSize = Math.max(4, Math.round(circleSize * 0.333)); // ~6px for 18px circle
 
   const displayLabel = label || children;
 
+  /* -- Styles ------------------------------------------------------- */
+  const transitionTiming = '150ms ease-out';
+
+  const circleStyle: React.CSSProperties = {
+    position: 'relative',
+    width: circleSize,
+    height: circleSize,
+    minWidth: circleSize,
+    borderRadius: '50%',
+    border: `2px solid ${isChecked ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)'}`,
+    backgroundColor: 'transparent',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: `border-color ${transitionTiming}, box-shadow ${transitionTiming}`,
+    flexShrink: 0,
+    ...(isHovered && !disabled && !isChecked && {
+      borderColor: 'var(--ds-color-border)',
+    }),
+    ...(isHovered && !disabled && isChecked && {
+      borderColor: 'var(--ds-color-primary-hover)',
+    }),
+    ...(isFocusVisible && !disabled && {
+      outline: '2px solid var(--ds-color-primary)',
+      outlineOffset: '2px',
+    }),
+    ...(disabled && {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    }),
+  };
+
+  const dotStyle: React.CSSProperties = {
+    width: dotSize,
+    height: dotSize,
+    borderRadius: '50%',
+    backgroundColor: 'var(--ds-color-primary)',
+    transform: isChecked ? 'scale(1)' : 'scale(0)',
+    transition: `transform ${transitionTiming}`,
+  };
+
+  const labelRowStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    padding: '4px 0',
+    minHeight: 44,
+    userSelect: 'none',
+    WebkitTapHighlightColor: 'transparent',
+  };
+
+  const labelTextStyle: React.CSSProperties = {
+    fontSize: 14,
+    lineHeight: '20px',
+    color: disabled
+      ? 'var(--ds-color-text-disabled)'
+      : 'var(--ds-color-text-primary)',
+  };
+
+  const descriptionStyle: React.CSSProperties = {
+    fontSize: 12,
+    lineHeight: '16px',
+    color: 'var(--ds-color-text-muted)',
+    marginTop: 1,
+  };
+
   return (
-    <div className={`form-control ${className}`} style={style}>
-      {/* `justify-start` overrides DaisyUI's default space-between so the
-          radio and label stay grouped on the left side. */}
-      <label className="label cursor-pointer gap-2 justify-start">
+    <div className={className} style={style}>
+      <label
+        style={labelRowStyle}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Hidden native input for accessibility + form participation */}
         <input
           id={inputId}
           type="radio"
@@ -135,20 +169,37 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
           checked={isChecked}
           disabled={disabled}
           onChange={handleChange}
-          className={`radio ${sizeClass} ${colorClass}`}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           aria-checked={isChecked}
+          style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            padding: 0,
+            margin: -1,
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            border: 0,
+          }}
         />
-        {/* Label and optional description are stacked vertically.
-            `label-text-alt` provides smaller, muted secondary text. */}
+
+        {/* Custom visual indicator */}
+        <span style={circleStyle}>
+          <span style={dotStyle} />
+        </span>
+
+        {/* Label + optional description */}
         {(displayLabel || description) && (
-          <div className="flex flex-col">
+          <span style={{ display: 'flex', flexDirection: 'column' }}>
             {displayLabel && (
-              <span className="label-text">{displayLabel}</span>
+              <span style={labelTextStyle}>{displayLabel}</span>
             )}
             {description && (
-              <span className="label-text-alt text-gray-500">{description}</span>
+              <span style={descriptionStyle}>{description}</span>
             )}
-          </div>
+          </span>
         )}
       </label>
     </div>

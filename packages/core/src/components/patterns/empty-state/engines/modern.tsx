@@ -21,9 +21,9 @@ import type { EmptyStateProps } from '../EmptyState.types';
 
 /** Tailwind class presets for each size tier -- controls padding, icon, text, and button sizing */
 const sizeClasses = {
-  sm: { wrapper: 'py-6', icon: 'text-3xl', title: 'text-sm', desc: 'text-xs', btn: 'btn-sm' },
-  md: { wrapper: 'py-12', icon: 'text-5xl', title: 'text-lg', desc: 'text-sm', btn: 'btn-md' },
-  lg: { wrapper: 'py-16', icon: 'text-7xl', title: 'text-2xl', desc: 'text-base', btn: 'btn-lg' },
+  sm: { wrapper: 'py-6', icon: 'text-3xl', title: 'text-sm', desc: 'text-xs', btnStyle: { height: 32, padding: '0 12px', fontSize: 13 } as React.CSSProperties },
+  md: { wrapper: 'py-12', icon: 'text-5xl', title: 'text-lg', desc: 'text-sm', btnStyle: { height: 36, padding: '0 16px', fontSize: 14 } as React.CSSProperties },
+  lg: { wrapper: 'py-16', icon: 'text-7xl', title: 'text-2xl', desc: 'text-base', btnStyle: { height: 44, padding: '0 20px', fontSize: 16 } as React.CSSProperties },
 };
 
 /**
@@ -55,14 +55,14 @@ export default function ModernEmptyState(props: EmptyStateProps) {
   if (loading) {
     return (
       <div className={`flex justify-center items-center ${s.wrapper} ${className ?? ''}`} style={style}>
-        <span className="loading loading-spinner loading-md" />
+        <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin 0.6s linear infinite' }} />
       </div>
     );
   }
 
   return (
-    <div className={`hero ${s.wrapper} ds-pattern-empty-state ds-engine-modern ${className ?? ''}`} style={style}>
-      <div className="hero-content text-center">
+    <div className={`${s.wrapper} ds-pattern-empty-state ds-engine-modern ${className ?? ''}`} style={{ ...style, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="text-center">
         <div className="max-w-md">
           {/* Image takes priority, then custom icon, then a built-in SVG empty-box fallback */}
           {image ? (
@@ -83,10 +83,17 @@ export default function ModernEmptyState(props: EmptyStateProps) {
           {/* Action row only mounts when at least one action is provided */}
           {(action || secondaryAction) && (
             <div className="flex justify-center gap-2 mt-6">
-              {/* Primary action uses btn-primary when variant is "primary"; otherwise btn-ghost */}
+              {/* Primary action uses primary DS tokens when variant is "primary"; otherwise ghost */}
               {action && (
                 <button
-                  className={`btn ${action.variant === 'primary' ? 'btn-primary' : 'btn-ghost'} ${s.btn}`}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                    borderRadius: 'var(--ds-radius-md)',
+                    border: action.variant === 'primary' ? '1px solid var(--ds-color-primary)' : '1px solid transparent',
+                    background: action.variant === 'primary' ? 'var(--ds-color-primary)' : 'transparent',
+                    color: action.variant === 'primary' ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-text-primary)',
+                    ...s.btnStyle,
+                  }}
                   onClick={action.onClick}
                 >
                   {action.label}
@@ -94,7 +101,17 @@ export default function ModernEmptyState(props: EmptyStateProps) {
               )}
               {/* Secondary action is always ghost-styled to visually de-emphasize it */}
               {secondaryAction && (
-                <button className={`btn btn-ghost ${s.btn}`} onClick={secondaryAction.onClick}>
+                <button
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                    borderRadius: 'var(--ds-radius-md)',
+                    border: '1px solid transparent',
+                    background: 'transparent',
+                    color: 'var(--ds-color-text-primary)',
+                    ...s.btnStyle,
+                  }}
+                  onClick={secondaryAction.onClick}
+                >
                   {secondaryAction.label}
                 </button>
               )}

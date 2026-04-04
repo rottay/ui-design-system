@@ -97,8 +97,8 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
           onMouseLeave={handleMouseLeave}
         >
           <div
-            className={`card bg-base-100 shadow-xl border border-base-300 p-4 w-72 ${overlayClassName || ''}`}
-            style={overlayStyle}
+            className={overlayClassName || undefined}
+            style={{ background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', padding: 16, width: 288, boxShadow: 'var(--ds-elevation-3)', ...overlayStyle }}
           >
             {content}
           </div>

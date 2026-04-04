@@ -25,8 +25,8 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
       <div ref={ref} className={`flex items-start gap-3 ${className}`} style={style}>
         {avatar && <div className="flex-shrink-0">{avatar}</div>}
         <div className="flex-1 min-w-0">
-          {title && <div className="font-medium text-base-content">{title}</div>}
-          {description && <div className="text-sm text-base-content/60">{description}</div>}
+          {title && <div className="font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>{title}</div>}
+          {description && <div className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</div>}
         </div>
       </div>
     );
@@ -103,10 +103,10 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
           {[1, 2, 3].map((i) => (
             <div key={i} className="py-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-base-300 rounded-full" />
+                <div className="w-10 h-10 rounded-full" style={{ background: 'var(--ds-surface-panel)' }} />
                 <div className="flex-1">
-                  <div className="h-4 bg-base-300 rounded w-1/3 mb-2" />
-                  <div className="h-3 bg-base-300 rounded w-2/3" />
+                  <div className="h-4 rounded w-1/3 mb-2" style={{ background: 'var(--ds-surface-panel)' }} />
+                  <div className="h-3 rounded w-2/3" style={{ background: 'var(--ds-surface-panel)' }} />
                 </div>
               </div>
             </div>
@@ -118,11 +118,17 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     return (
       <div
         ref={ref}
-        className={`${bordered ? 'border border-base-300 rounded-lg' : ''} ${sizeClasses[size]} ${className}`}
-        style={style}
+        className={`${bordered ? 'border rounded-lg' : ''} ${sizeClasses[size]} ${className}`}
+        style={{
+          ...(bordered && { borderColor: 'var(--ds-color-border)' }),
+          ...style,
+        }}
       >
         {header && (
-          <div className={`px-4 py-3 font-medium ${bordered ? 'border-b border-base-300' : ''}`}>
+          <div
+            className={`px-4 py-3 font-medium ${bordered ? 'border-b' : ''}`}
+            style={bordered ? { borderColor: 'var(--ds-color-border)' } : undefined}
+          >
             {header}
           </div>
         )}
@@ -138,13 +144,16 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             <React.Fragment key={index}>
               {child}
               {split && index < React.Children.count(listContent) - 1 && !grid && (
-                <div className="border-b border-base-200" />
+                <div className="border-b" style={{ borderColor: 'var(--ds-color-border)' }} />
               )}
             </React.Fragment>
           ))}
         </ul>
         {footer && (
-          <div className={`px-4 py-3 ${bordered ? 'border-t border-base-300' : ''}`}>
+          <div
+            className={`px-4 py-3 ${bordered ? 'border-t' : ''}`}
+            style={bordered ? { borderColor: 'var(--ds-color-border)' } : undefined}
+          >
             {footer}
           </div>
         )}

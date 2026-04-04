@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * @fileoverview InvoiceTemplate -- Modern engine (DaisyUI / Tailwind).
- * Full invoice document rendered with DaisyUI card, badge, table, and
- * divider components. Optimized for on-screen viewing with responsive
- * table and DaisyUI badge status indicators. Print/export actions are
- * hidden via the "no-print" CSS class for clean output.
+ * @fileoverview InvoiceTemplate -- Modern engine (token-driven).
+ * Full invoice document rendered with DS token card, badge, and table
+ * inline styles. Optimized for on-screen viewing with responsive table
+ * and token-styled status indicators. Print/export actions are hidden
+ * via the "no-print" CSS class for clean output.
  *
  * @example
  * <ModernInvoiceTemplate
@@ -16,19 +16,20 @@
 
 import React from 'react';
 import type { InvoiceTemplateProps } from '../InvoiceTemplate.types';
+import { panelCardStyle, pillBadgeStyle, spinnerStyle } from '../../../shared/modern-styles';
 
-/** Maps invoice status to DaisyUI badge variant classes */
-const statusClasses: Record<string, string> = {
-  draft: 'badge-ghost',
-  sent: 'badge-info',
-  paid: 'badge-success',
-  overdue: 'badge-error',
+/** Maps invoice status to DS token badge styles */
+const statusStyles: Record<string, React.CSSProperties> = {
+  draft: { background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' },
+  sent: { background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' },
+  paid: { background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' },
+  overdue: { background: 'color-mix(in srgb, var(--ds-color-error) 15%, transparent)', color: 'var(--ds-color-error)' },
 };
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the InvoiceTemplate pattern.
- * Renders a card-based invoice with responsive table, DaisyUI badge for
- * status, and Tailwind utility classes for spacing and typography.
+ * Modern (token-driven) implementation of the InvoiceTemplate pattern.
+ * Renders a card-based invoice with responsive table, token-styled badge for
+ * status, and inline styles for spacing and typography.
  *
  * @param props - See {@link InvoiceTemplateProps} for the full prop contract.
  * @returns The rendered invoice template.
@@ -48,26 +49,26 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
   const cur = invoice.currency || '$';
   const formatCurrency = (amount: number) => `${cur}${amount.toFixed(2)}`;
 
-  /* DaisyUI loading spinner centered in the card footprint */
+  /* Loading spinner centered in the card footprint */
   if (loading) {
     return (
       <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span className="loading loading-spinner loading-md" />
+        <span style={spinnerStyle(24)} />
       </div>
     );
   }
 
   return (
     <div
-      className={`card bg-base-100 shadow-sm max-w-3xl mx-auto ds-pattern-invoice-template ds-engine-modern ${className ?? ''}`}
-      style={style}
+      className={`max-w-3xl mx-auto ds-pattern-invoice-template ds-engine-modern ${className ?? ''}`}
+      style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}
     >
-      <div className="card-body p-8">
+      <div style={{ padding: 32 }}>
         {/* Actions */}
         {showActions && (onPrint || onExport) && (
           <div className="flex justify-end gap-2 mb-4 no-print">
-            {onPrint && <button className="btn btn-ghost btn-sm" onClick={onPrint}>Print</button>}
-            {onExport && <button className="btn btn-ghost btn-sm" onClick={onExport}>Export</button>}
+            {onPrint && <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onPrint}>Print</button>}
+            {onExport && <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onExport}>Export</button>}
           </div>
         )}
 
@@ -94,9 +95,9 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
             <p className="text-sm"><strong>Invoice #:</strong> {invoice.number}</p>
             <p className="text-sm"><strong>Date:</strong> {invoice.date}</p>
             {invoice.dueDate && <p className="text-sm"><strong>Due:</strong> {invoice.dueDate}</p>}
-            {/* Status badge -- DaisyUI variant class resolved from statusClasses map */}
+            {/* Status badge -- token-styled from statusStyles map */}
             {invoice.status && (
-              <span className={`badge ${statusClasses[invoice.status]} mt-2`}>
+              <span className="mt-2" style={{ ...pillBadgeStyle, ...statusStyles[invoice.status] }}>
                 {invoice.status.toUpperCase()}
               </span>
             )}
@@ -104,7 +105,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
         </div>
 
         {/* Bill To -- semi-transparent base-200 background separates this from the main content */}
-        <div className="bg-base-200/50 rounded-lg p-4 mb-6">
+        <div className="rounded-lg p-4 mb-6" style={{ background: 'var(--ds-surface-inset)' }}>
           <div className="text-xs font-semibold uppercase opacity-30 mb-1">Bill To</div>
           <div className="font-semibold">{invoice.client.name}</div>
           {invoice.client.address && <div className="text-xs opacity-50">{invoice.client.address}</div>}
@@ -119,7 +120,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
 
         {/* Line Items -- overflow-x-auto ensures horizontal scroll on narrow viewports */}
         <div className="overflow-x-auto mb-6">
-          <table className="table table-sm">
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr>
                 <th className="w-10">#</th>
@@ -144,7 +145,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
         </div>
 
         {/* Totals -- right-aligned fixed-width column (w-72 = 288px) for visual consistency.
-            DaisyUI divider separates the subtotals from the grand total. */}
+            A border-top divider separates the subtotals from the grand total. */}
         <div className="flex justify-end">
           <div className="w-72">
             <div className="flex justify-between py-1 text-sm">
@@ -156,7 +157,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
               <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
               <span>{formatCurrency(invoice.tax)}</span>
             </div>
-            <div className="divider my-1" />
+            <div style={{ borderTop: '1px solid var(--ds-color-border)', margin: '4px 0' }} />
             {/* Grand total -- larger text weight makes this the visual focal point */}
             <div className="flex justify-between py-1 text-lg font-bold">
               <span>Total</span>
@@ -167,7 +168,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
 
         {/* Notes -- whitespace-pre-wrap preserves line breaks from user input */}
         {invoice.notes && (
-          <div className="mt-8 bg-base-200/50 rounded-lg p-4">
+          <div className="mt-8 rounded-lg p-4" style={{ background: 'var(--ds-surface-inset)' }}>
             <div className="text-xs font-semibold uppercase opacity-30 mb-1">Notes</div>
             <p className="text-sm opacity-70 whitespace-pre-wrap">{invoice.notes}</p>
           </div>
