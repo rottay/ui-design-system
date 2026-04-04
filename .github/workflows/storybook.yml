@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-storybook:
-    runs-on: blacksmith-2vcpu-ubuntu-2204
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
