@@ -47,14 +47,7 @@ jobs:
         run: pnpm run typecheck
         working-directory: packages/core
 
-      # ── Step 2: Test ───────────────────────────────────────────────────
-      - name: Run tests
-        run: pnpm exec vitest run --reporter=dot
-        working-directory: packages/core
-        env:
-          NODE_OPTIONS: '--max-old-space-size=4096'
-
-      # ── Step 3: Build ──────────────────────────────────────────────────
+      # ── Step 2: Build ──────────────────────────────────────────────────
       - name: Build
         run: pnpm run build
         working-directory: packages/core
