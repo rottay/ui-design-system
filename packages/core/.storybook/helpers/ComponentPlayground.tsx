@@ -7,8 +7,8 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { ThemeProvider } from '../../src/theming';
-import { EngineProvider } from '../../src/engines';
+import { ThemeProvider } from '../../src/runtime/theming';
+import { EngineProvider } from '../../src/runtime/engines';
 import type { EngineName } from '../types/engine';
 import type { TemplateName } from '../themes/types';
 

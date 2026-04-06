@@ -591,7 +591,7 @@ export function usePdfExport(options?: PdfExportOptions): UsePdfExportReturn {
   // Method 2: Prepare structured PDF data
   // ------------------------------------------------------------------
   const preparePdfData = useCallback(
-    <T>(data: T[], columns: PdfExportColumn[]): PdfTableData => {
+    <T,>(data: T[], columns: PdfExportColumn[]): PdfTableData => {
       const opts = optionsRef.current ?? {};
 
       const headers = columns.map((col) => col.header);
