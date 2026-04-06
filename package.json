@@ -49,6 +49,7 @@
     "verify:core": "pnpm --filter @rottay/design-system run typecheck && pnpm --filter @rottay/design-system exec vitest run && pnpm --filter @rottay/design-system run build && pnpm --filter @rottay/design-system run build-storybook",
     "next:free": "kill-port 3000 && kill-port 6006 && kill-port 6007"
   },
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20"
   },
