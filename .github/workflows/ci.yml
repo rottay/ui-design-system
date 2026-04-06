@@ -53,3 +53,10 @@ jobs:
           name: build-output
           path: packages/core/dist/
           retention-days: 15
+
+      # ── Step 3: Storybook ─────────────────────────────────────────────
+      - name: Build Storybook + enforce bundle budget
+        run: pnpm run build-storybook
+        working-directory: packages/core
+        env:
+          NODE_OPTIONS: --max-old-space-size=5120
