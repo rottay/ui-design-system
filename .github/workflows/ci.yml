@@ -5,44 +5,58 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  workflow_call:
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
-  pull-requests: write
-
 jobs:
   ci:
-    name: Typecheck / Test / Build
+    name: Typecheck / Build / Storybook
     runs-on: self-hosted
     timeout-minutes: 30
+    if: "!(github.event_name == 'pull_request' && github.head_ref == 'changeset-release/main')"
+    permissions:
+      contents: read
+      packages: read
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          cache: 'pnpm'
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@rottay'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # ── Step 1: Typecheck ──────────────────────────────────────────────
+      - name: Validate changeset on PR
+        if: github.event_name == 'pull_request' && github.head_ref != 'changeset-release/main'
+        run: |
+          CHANGED=$(git diff --name-only origin/main...HEAD | grep -v '^\.changeset/' || true)
+          if [ -n "$CHANGED" ]; then
+            CHANGESETS=$(ls .changeset/*.md 2>/dev/null | grep -v README || true)
+            if [ -z "$CHANGESETS" ]; then
+              echo "ERROR: Changes detected but no changeset found."
+              echo "Run: pnpm changeset"
+              exit 1
+            fi
+            echo "Changeset found: $CHANGESETS"
+          fi
+
       - name: Typecheck
         run: pnpm run typecheck
         working-directory: packages/core
 
-      # ── Step 2: Build ──────────────────────────────────────────────────
       - name: Build
         run: pnpm run build
         working-directory: packages/core
@@ -54,9 +68,56 @@ jobs:
           path: packages/core/dist/
           retention-days: 15
 
-      # ── Step 3: Storybook ─────────────────────────────────────────────
-      - name: Build Storybook + enforce bundle budget
+      - name: Build Storybook
         run: pnpm run build-storybook
         working-directory: packages/core
         env:
           NODE_OPTIONS: --max-old-space-size=5120
+
+  publish:
+    name: Version & Publish
+    needs: ci
+    runs-on: self-hosted
+    timeout-minutes: 20
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@rottay'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Version and publish
+        run: |
+          if ls .changeset/*.md 2>/dev/null | grep -v README | grep -q .; then
+            git config user.email "ci@rottay.com"
+            git config user.name "Rottay CI"
+            pnpm changeset:version
+            pnpm run build --filter @rottay/design-system
+            pnpm changeset:publish
+            git add .
+            git commit -m "chore(release): version packages [skip ci]"
+            git push
+          else
+            echo "No pending changesets, skipping publish."
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.NPM_TOKEN }}
