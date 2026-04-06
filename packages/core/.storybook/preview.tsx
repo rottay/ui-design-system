@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react-vite'
-import { ThemeProvider } from '../src/theming';
-import { EngineProvider } from '../src/engines';
-import type { EngineName } from '../src/core/types/engine';
+import { ThemeProvider } from '../src/runtime/theming';
+import { EngineProvider } from '../src/runtime/engines';
+import type { EngineName } from '../src/contracts/engine';
 import React from 'react';
 
 // Import tenant CSS files
