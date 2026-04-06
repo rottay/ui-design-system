@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Box, Text } from '../primitives';
 import { PatternFilterBuilder } from './filter-builder';
 import type { FilterGroup, FilterFieldDefinition } from './filter-builder';
-import { createSurfaceStoryDecorator } from '../surfaces/stories/story-helpers';
+import { createSurfaceStoryDecorator } from '../surfaces/common/story-helpers';
 
 const meta: Meta<typeof PatternFilterBuilder> = {
   title: 'Patterns/FilterBuilder',

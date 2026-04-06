@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { PatternCommentThread } from './comment-thread';
-import { createSurfaceStoryDecorator } from '../surfaces/stories/story-helpers';
+import { createSurfaceStoryDecorator } from '../surfaces/common/story-helpers';
 
 const meta: Meta<typeof PatternCommentThread> = {
   title: 'Patterns/CommentThread',

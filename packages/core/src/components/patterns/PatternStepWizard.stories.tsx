@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Box, Text } from '../primitives';
 import { PatternStepWizard } from './step-wizard';
-import { createSurfaceStoryDecorator } from '../surfaces/stories/story-helpers';
+import { createSurfaceStoryDecorator } from '../surfaces/common/story-helpers';
 
 const meta: Meta<typeof PatternStepWizard> = {
   title: 'Patterns/StepWizard',

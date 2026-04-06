@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { PatternStatsGrid } from './stats-grid';
-import { createSurfaceStoryDecorator } from '../surfaces/stories/story-helpers';
+import { createSurfaceStoryDecorator } from '../surfaces/common/story-helpers';
 
 const meta: Meta<typeof PatternStatsGrid> = {
   title: 'Patterns/StatsGrid',

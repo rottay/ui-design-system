@@ -13,7 +13,7 @@ import { PatternKanbanBoard } from './kanban-board';
 import { PatternLiveFeed } from './live-feed';
 import { PatternTimeline } from './timeline';
 import { PatternTreeView } from './tree-view';
-import { createSurfaceStoryDecorator } from '../surfaces/stories/story-helpers';
+import { createSurfaceStoryDecorator } from '../surfaces/common/story-helpers';
 
 const meta: Meta = {
   title: 'Patterns/Advanced Catalog',

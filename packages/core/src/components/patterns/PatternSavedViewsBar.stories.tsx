@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Box, Text } from '../primitives';
 import { PatternSavedViewsBar } from './saved-views';
 import type { SavedView } from './saved-views';
-import { createSurfaceStoryDecorator } from '../surfaces/stories/story-helpers';
+import { createSurfaceStoryDecorator } from '../surfaces/common/story-helpers';
 
 const meta: Meta<typeof PatternSavedViewsBar> = {
   title: 'Patterns/SavedViewsBar',

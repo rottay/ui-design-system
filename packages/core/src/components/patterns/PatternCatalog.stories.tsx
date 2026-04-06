@@ -6,7 +6,7 @@ import { PatternDataTable } from './data-table';
 import { PatternFormBuilder } from './form-builder';
 import { PatternStatsGrid } from './stats-grid';
 import { BarChart, LineChart } from './charts';
-import { createSurfaceStoryDecorator } from '../surfaces/stories/story-helpers';
+import { createSurfaceStoryDecorator } from '../surfaces/common/story-helpers';
 
 const meta: Meta = {
   title: 'Patterns/Catalog',
