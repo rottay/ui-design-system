@@ -29,6 +29,8 @@ jobs:
       - name: Build Storybook + enforce bundle budget
         run: pnpm run build-storybook
         working-directory: packages/core
+        env:
+          NODE_OPTIONS: --max-old-space-size=5120
 
       # TODO: Add deployment step
       # Options:
