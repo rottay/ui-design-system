@@ -313,7 +313,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     fontWeight: 500,
     lineHeight: 1,
     textDecoration: 'none',
-    whiteSpace: 'nowrap',
+    whiteSpace: isFullWidth ? 'normal' : 'nowrap',
     userSelect: 'none',
     boxSizing: 'border-box',
     fontFamily: 'inherit',
@@ -423,15 +423,31 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         {/* Content wrapper - hidden (but in DOM) during loading for layout stability */}
         <span
           style={{
-            display: 'inline-flex',
+            display: isFullWidth ? 'flex' : 'inline-flex',
             alignItems: 'center',
+            justifyContent: isFullWidth ? 'inherit' : undefined,
             gap: '6px',
+            width: isFullWidth ? '100%' : undefined,
+            minWidth: 0,
+            whiteSpace: isFullWidth ? 'normal' : 'nowrap',
             transition: `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
             ...contentOpacity,
           }}
         >
           {startContent || prefix}
-          {children && <span>{children}</span>}
+          {children && (
+            <span
+              style={{
+                display: isFullWidth ? 'block' : 'inline',
+                flex: isFullWidth ? '1 1 auto' : undefined,
+                width: isFullWidth ? '100%' : undefined,
+                minWidth: 0,
+                whiteSpace: isFullWidth ? 'normal' : 'inherit',
+              }}
+            >
+              {children}
+            </span>
+          )}
           {endContent || suffix}
         </span>
       </button>

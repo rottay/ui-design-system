@@ -928,7 +928,7 @@
 
 [data-tenant] .rottay-menu {
   list-style: none;
-  padding: 8px;
+  padding: var(--ds-sidebar-shell-padding-inline, 14px);
   margin: 0;
 }
 
@@ -938,16 +938,17 @@
 
 [data-tenant] .rottay-menu li {
   list-style: none;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 [data-tenant] .rottay-menu li > a,
 [data-tenant] .rottay-menu li > button {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  border-radius: var(--ds-radius-md);
+  gap: var(--ds-sidebar-item-gap, 10px);
+  min-height: var(--ds-sidebar-item-height, 60px);
+  padding: var(--ds-sidebar-item-padding, 0 18px);
+  border-radius: var(--ds-radius-lg, 12px);
   color: var(--ds-text-secondary);
   background-color: transparent;
   transition: all 0.2s ease;
@@ -956,21 +957,22 @@
   border: none;
   width: 100%;
   text-align: left;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: var(--ds-sidebar-item-font-size, 15.75px);
+  font-weight: 500;
+  line-height: 1.28;
 }
 
 [data-tenant] .rottay-menu li > a:hover,
 [data-tenant] .rottay-menu li > button:hover {
-  background-color: var(--ds-color-neutral-100);
+  background-color: color-mix(in srgb, var(--ds-color-neutral-100) 92%, transparent);
   color: var(--ds-text-primary);
 }
 
 [data-tenant] .rottay-menu li > a.active,
 [data-tenant] .rottay-menu li > button.active {
-  background-color: var(--ds-color-primary-50);
-  color: var(--ds-color-primary-600);
-  font-weight: 500;
+  background-color: color-mix(in srgb, var(--ds-color-primary-50) 78%, transparent);
+  color: var(--ds-color-primary-800);
+  font-weight: 600;
 }
 
 /* Menu Icons */
@@ -978,28 +980,30 @@
 [data-tenant] .rottay-menu li > button > span:first-child {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 20px;
-  font-size: 18px;
+  justify-content: flex-start;
+  width: var(--ds-sidebar-icon-column-size, 22px);
+  font-size: var(--ds-sidebar-icon-size, 17.5px);
 }
 
 /* Submenu (details/summary) */
 [data-tenant] .rottay-menu details {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 [data-tenant] .rottay-menu details > summary {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  border-radius: var(--ds-radius-md);
+  gap: var(--ds-sidebar-item-gap, 10px);
+  min-height: var(--ds-sidebar-item-height, 60px);
+  padding: var(--ds-sidebar-item-padding, 0 18px);
+  border-radius: var(--ds-radius-lg, 12px);
   color: var(--ds-text-secondary);
   background-color: transparent;
   transition: all 0.2s ease;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: var(--ds-sidebar-item-font-size, 15.75px);
+  font-weight: 500;
+  line-height: 1.28;
   list-style: none;
 }
 
@@ -1008,37 +1012,38 @@
 }
 
 [data-tenant] .rottay-menu details > summary:hover {
-  background-color: var(--ds-color-neutral-100);
+  background-color: color-mix(in srgb, var(--ds-color-neutral-100) 92%, transparent);
   color: var(--ds-text-primary);
 }
 
 [data-tenant] .rottay-menu details[open] > summary {
   color: var(--ds-text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 [data-tenant] .rottay-menu details > ul {
-  padding-left: 32px;
-  margin-top: 4px;
-  margin-bottom: 4px;
+  padding-left: var(--ds-sidebar-child-padding-inline, 8px);
+  margin-top: 1px;
+  margin-bottom: 3px;
 }
 
 /* Divider */
 [data-tenant] .rottay-menu .divider {
   height: 1px;
-  background-color: var(--ds-border-color);
-  margin: 8px 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent), transparent);
+  margin: 4px 8px;
+  opacity: 0.82;
   list-style: none;
 }
 
 /* Menu Title (group header) */
 [data-tenant] .rottay-menu .menu-title {
-  padding: 8px 16px;
-  font-size: 12px;
+  padding: 6px 16px 3px;
+  font-size: 10.75px;
   font-weight: 600;
   color: var(--ds-text-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.085em;
   list-style: none;
 }
 

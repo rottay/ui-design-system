@@ -51,19 +51,21 @@ import { MENU_DEFAULTS } from '../Menu.types';
 // ============================================================================
 
 /** Height for top-level menu items */
-const ITEM_HEIGHT_TOP = 44;
+const ITEM_HEIGHT_TOP = 'var(--ds-sidebar-item-height, 62px)';
 /** Height for child/nested menu items */
-const ITEM_HEIGHT_CHILD = 40;
+const ITEM_HEIGHT_CHILD = 'var(--ds-sidebar-item-child-height, 45px)';
 /** Horizontal padding for menu items */
-const ITEM_PADDING_X = 12;
+const ITEM_PADDING_X = 'var(--ds-sidebar-item-padding-inline, 16px)';
+/** Horizontal padding for child menu items */
+const CHILD_ITEM_PADDING_X = 'var(--ds-sidebar-child-padding-inline, 8px)';
 /** Gap between icon and label */
-const ICON_LABEL_GAP = 12;
-/** Left indent for child items (accounts for icon width) */
-const CHILD_INDENT = 40;
+const ICON_LABEL_GAP = 'var(--ds-sidebar-item-gap, 10px)';
+/** Left indent for child items (compact enough for app sidebars and tree menus) */
+const CHILD_INDENT = 'var(--ds-sidebar-child-indent, 0px)';
 /** Width of the active accent bar */
 const ACCENT_BAR_WIDTH = 3;
 /** Border radius token */
-const RADIUS = 'var(--ds-radius-md, 8px)';
+const RADIUS = 'var(--ds-radius-lg, 12px)';
 /** Transition for interactive states */
 const TRANSITION = 'background 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out';
 
@@ -81,12 +83,14 @@ function getItemBaseStyle(level: number): CSSProperties {
     alignItems: 'center',
     gap: ICON_LABEL_GAP,
     height: isChild ? ITEM_HEIGHT_CHILD : ITEM_HEIGHT_TOP,
-    padding: `0 ${ITEM_PADDING_X}px`,
-    paddingLeft: isChild ? CHILD_INDENT : ITEM_PADDING_X,
+    padding: `0 ${isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X}`,
+    paddingLeft: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
     borderRadius: RADIUS,
-    fontSize: isChild ? 14 : 15,
-    fontWeight: 400,
-    lineHeight: 1.4,
+    fontSize: isChild
+      ? 'var(--ds-sidebar-item-font-size-child, 13.9px)'
+      : 'var(--ds-sidebar-item-font-size, 15.75px)',
+    fontWeight: 500,
+    lineHeight: 1.28,
     color: 'var(--ds-color-text-secondary)',
     textDecoration: 'none',
     cursor: 'pointer',
@@ -97,6 +101,7 @@ function getItemBaseStyle(level: number): CSSProperties {
     width: '100%',
     boxSizing: 'border-box' as const,
     textAlign: 'left' as const,
+    justifyContent: 'flex-start',
     outline: 'none',
     userSelect: 'none' as const,
     WebkitTapHighlightColor: 'transparent',
@@ -110,15 +115,15 @@ function getActiveStyle(level: number): CSSProperties {
   if (level > 0) {
     // Children: no accent bar, just bolder text and subtle bg
     return {
-      background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
-      fontWeight: 500,
-      color: 'var(--ds-color-primary)',
+      background: 'color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 7%, transparent)',
+      fontWeight: 600,
+      color: 'var(--ds-sidebar-item-color-active, var(--ds-color-primary))',
     };
   }
   return {
-    background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
-    fontWeight: 500,
-    color: 'var(--ds-color-primary)',
+    background: 'color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 8%, transparent)',
+    fontWeight: 600,
+    color: 'var(--ds-sidebar-item-color-active, var(--ds-color-primary))',
   };
 }
 
@@ -132,10 +137,10 @@ function getAccentBarStyle(): CSSProperties {
     left: 0,
     top: '50%',
     transform: 'translateY(-50%)',
-    width: ACCENT_BAR_WIDTH,
-    height: '60%',
+    width: 2.5,
+    height: '64%',
     borderRadius: ACCENT_BAR_WIDTH,
-    background: 'var(--ds-color-primary)',
+    background: 'var(--ds-color-primary, var(--ds-sidebar-item-color-active))',
     transition: 'opacity 150ms ease-out, height 150ms ease-out',
   };
 }
@@ -169,11 +174,11 @@ function getSummaryStyle(): CSSProperties {
     alignItems: 'center',
     gap: ICON_LABEL_GAP,
     height: ITEM_HEIGHT_TOP,
-    padding: `0 ${ITEM_PADDING_X}px`,
+    padding: `0 ${ITEM_PADDING_X}`,
     borderRadius: RADIUS,
-    fontSize: 15,
-    fontWeight: 400,
-    lineHeight: 1.4,
+    fontSize: 'var(--ds-sidebar-item-font-size, 15.75px)',
+    fontWeight: 500,
+    lineHeight: 1.28,
     color: 'var(--ds-color-text-secondary)',
     cursor: 'pointer',
     position: 'relative',
@@ -191,13 +196,13 @@ function getSummaryStyle(): CSSProperties {
  */
 function getGroupTitleStyle(): CSSProperties {
   return {
-    padding: `16px ${ITEM_PADDING_X}px 6px`,
-    fontSize: 11,
+    padding: `6px ${ITEM_PADDING_X} 3px`,
+    fontSize: 'var(--ds-sidebar-group-font-size, 10.9px)',
     fontWeight: 600,
     textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
+    letterSpacing: '0.085em',
     color: 'var(--ds-color-text-muted)',
-    lineHeight: 1.4,
+    lineHeight: 1.1,
     userSelect: 'none' as const,
   };
 }
@@ -208,8 +213,8 @@ function getGroupTitleStyle(): CSSProperties {
 function getDividerStyle(): CSSProperties {
   return {
     height: 1,
-    margin: '8px 12px',
-    background: 'var(--ds-color-border)',
+    margin: '4px 8px',
+    background: 'linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent), transparent)',
     border: 'none',
     listStyle: 'none',
   };
@@ -278,7 +283,7 @@ function MenuItemRow({
   }
 
   return (
-    <li key={item.key} style={{ listStyle: 'none', margin: '2px 0' }}>
+    <li key={item.key} style={{ listStyle: 'none', margin: '0.5px 0' }}>
       <a
         role="menuitem"
         tabIndex={item.disabled ? -1 : 0}
@@ -323,11 +328,11 @@ function MenuItemRow({
             style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'flex-start',
               flexShrink: 0,
-              width: 20,
-              height: 20,
-              fontSize: 18,
+              width: 'var(--ds-sidebar-icon-column-size, 22px)',
+              height: 'var(--ds-sidebar-icon-column-size, 22px)',
+              fontSize: 'var(--ds-sidebar-icon-size, 17.25px)',
               opacity: isSelected ? 1 : 0.7,
               transition: 'opacity 150ms ease-out',
             }}
@@ -384,7 +389,7 @@ function SubmenuRow({
   };
 
   return (
-    <li key={item.key} style={{ listStyle: 'none', margin: '2px 0' }}>
+    <li key={item.key} style={{ listStyle: 'none', margin: '0.5px 0' }}>
       <details ref={detailsRef} open={hasSelectedChild || undefined}>
         <summary
           style={summaryStyle}
@@ -406,11 +411,11 @@ function SubmenuRow({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
                 flexShrink: 0,
-                width: 20,
-                height: 20,
-                fontSize: 18,
+                width: 'var(--ds-sidebar-icon-column-size, 22px)',
+                height: 'var(--ds-sidebar-icon-column-size, 22px)',
+                fontSize: 'var(--ds-sidebar-icon-size, 17.25px)',
                 opacity: 0.7,
                 transition: 'opacity 150ms ease-out',
               }}
@@ -422,16 +427,16 @@ function SubmenuRow({
             {item.label}
           </span>
           {/* Chevron indicator */}
-          <span
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 16,
-              height: 16,
-              flexShrink: 0,
-              opacity: 0.4,
-              transition: 'transform 150ms ease-out',
+              <span
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 14,
+                  height: 14,
+                  flexShrink: 0,
+                  opacity: 0.4,
+                  transition: 'transform 150ms ease-out',
             }}
           >
             <svg
@@ -455,7 +460,7 @@ function SubmenuRow({
           role="group"
           style={{
             listStyle: 'none',
-            padding: '2px 0 2px 0',
+            padding: '0 0 1px 0',
             margin: 0,
           }}
         >
@@ -686,9 +691,9 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   const menuStyle: CSSProperties = {
     display: 'flex',
     flexDirection: isHorizontal ? 'row' : 'column',
-    gap: isHorizontal ? 4 : 2,
+    gap: isHorizontal ? 4 : 3,
     listStyle: 'none',
-    padding: isHorizontal ? '0 8px' : '8px',
+    padding: isHorizontal ? '0 8px' : '10px 8px',
     margin: 0,
     background: theme === 'dark' ? 'var(--ds-surface-panel)' : 'var(--ds-surface-card)',
     borderRadius: RADIUS,

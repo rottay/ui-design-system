@@ -1467,29 +1467,42 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
      62. SIDEBAR TOKENS
      ============================================ */
 
-  --ds-sidebar-bg: #131316;
-  --ds-sidebar-border: #222226;
+  --ds-sidebar-bg: #0D0D10;
+  --ds-sidebar-border: #18181C;
   --ds-sidebar-text: #ECECEC;
   --ds-sidebar-text-muted: #6B6B72;
-  --ds-sidebar-group-font-size: 11px;
+  --ds-sidebar-width: 296px;
+  --ds-sidebar-collapsed-width: 96px;
+  --ds-sidebar-header-height: 104px;
+  --ds-sidebar-shell-padding-inline: 10px;
+  --ds-sidebar-shell-padding-collapsed: 8px;
+  --ds-sidebar-group-font-size: 10.9px;
   --ds-sidebar-group-font-weight: 600;
   --ds-sidebar-group-color: #6B6B72;
-  --ds-sidebar-group-letter-spacing: 0.04em;
-  --ds-sidebar-group-margin-top: 8px;
-  --ds-sidebar-group-margin-bottom: 4px;
-  --ds-sidebar-group-padding-top: 10px;
-  --ds-sidebar-group-border: 1px solid #2A2A2F;
-  --ds-sidebar-item-font-size: 13px;
-  --ds-sidebar-item-font-weight: 400;
-  --ds-sidebar-item-font-weight-active: 500;
+  --ds-sidebar-group-letter-spacing: 0.085em;
+  --ds-sidebar-group-margin-top: 1px;
+  --ds-sidebar-group-margin-bottom: 1px;
+  --ds-sidebar-group-padding-top: 3px;
+  --ds-sidebar-group-border: 1px solid #1F1F23;
+  --ds-sidebar-item-height: 62px;
+  --ds-sidebar-item-child-height: 45px;
+  --ds-sidebar-item-font-size: 16.35px;
+  --ds-sidebar-item-font-size-child: 14.2px;
+  --ds-sidebar-item-font-weight: 450;
+  --ds-sidebar-item-font-weight-active: 600;
   --ds-sidebar-item-color: #A0A0A5;
   --ds-sidebar-item-color-active: #FFFFFF;
-  --ds-sidebar-item-bg-active: rgba(255, 255, 255, 0.06);
-  --ds-sidebar-item-bg-hover: rgba(255, 255, 255, 0.03);
-  --ds-sidebar-item-indent: 6px;
-  --ds-sidebar-item-padding: 6px 10px;
-  --ds-sidebar-icon-size: 16px;
-  --ds-sidebar-footer-bg: #131316;
+  --ds-sidebar-item-bg-active: rgba(255, 255, 255, 0.07);
+  --ds-sidebar-item-bg-hover: rgba(255, 255, 255, 0.04);
+  --ds-sidebar-item-indent: 8px;
+  --ds-sidebar-item-padding-inline: 13px;
+  --ds-sidebar-item-padding: 0 13px;
+  --ds-sidebar-icon-size: 17.25px;
+  --ds-sidebar-icon-column-size: 20px;
+  --ds-sidebar-item-gap: 9px;
+  --ds-sidebar-child-padding-inline: 6px;
+  --ds-sidebar-child-indent: 0px;
+  --ds-sidebar-footer-bg: #0D0D10;
 
   /* ============================================
      63. LAYOUT TOKENS
@@ -1499,8 +1512,8 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-layout-header-bg: rgba(12, 12, 14, 0.82);
   --ds-layout-header-backdrop: blur(12px);
   --ds-layout-header-border: rgba(255, 255, 255, 0.05);
-  --ds-layout-sider-bg: #131316;
-  --ds-layout-sider-border: #222226;
+  --ds-layout-sider-bg: #0D0D10;
+  --ds-layout-sider-border: #18181C;
 
   /* ============================================
      64. ICON COLORS

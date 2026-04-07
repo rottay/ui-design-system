@@ -292,16 +292,16 @@ function TabButton({
         color: disabled
           ? 'var(--ds-color-text-disabled)'
           : isActive
-            ? 'var(--ds-color-primary)'
+            ? 'var(--ds-color-text-primary)'
             : isInteractive
               ? 'var(--ds-color-text-primary)'
-              : 'var(--ds-color-text-muted)',
+              : 'var(--ds-color-text-secondary)',
         background: isInteractive
-          ? 'var(--ds-color-neutral-50)'
+          ? 'color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent)'
           : 'transparent',
         border: 'none',
         borderBottom: isActive
-          ? '2px solid var(--ds-color-primary)'
+          ? '2px solid var(--ds-color-text-primary)'
           : '2px solid transparent',
         marginBottom: -1,
         cursor: disabled ? 'not-allowed' : 'pointer',
@@ -329,10 +329,10 @@ function TabButton({
             lineHeight: 1.4,
             borderRadius: 'var(--ds-radius-full)',
             background: isActive
-              ? 'var(--ds-color-primary-100)'
-              : 'var(--ds-color-neutral-100)',
+              ? 'color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent)'
+              : 'color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent)',
             color: isActive
-              ? 'var(--ds-color-primary-700)'
+              ? 'var(--ds-color-text-primary)'
               : 'var(--ds-color-text-secondary)',
             minWidth: 18,
           }}
@@ -391,18 +391,18 @@ function Breadcrumbs({
                 href={crumb.href}
                 onClick={crumb.onClick}
                 style={{
-                  color: 'var(--ds-color-text-muted)',
+                  color: 'var(--ds-color-text-secondary)',
                   fontWeight: 500,
                   textDecoration: 'none',
                   transition: `color ${TRANSITION_FAST}`,
                 }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLElement).style.color =
-                    'var(--ds-color-text-secondary)';
+                    'var(--ds-color-text-primary)';
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLElement).style.color =
-                    'var(--ds-color-text-muted)';
+                    'var(--ds-color-text-secondary)';
                 }}
               >
                 {crumb.label}
@@ -411,8 +411,8 @@ function Breadcrumbs({
               <span
                 style={{
                   color: isLast
-                    ? 'var(--ds-color-text-secondary)'
-                    : 'var(--ds-color-text-muted)',
+                    ? 'var(--ds-color-text-primary)'
+                    : 'var(--ds-color-text-secondary)',
                   fontWeight: isLast ? 600 : 500,
                   cursor: isClickable ? 'pointer' : 'default',
                 }}
@@ -657,15 +657,9 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                       lineHeight: 1.5,
                       borderRadius: 'var(--ds-radius-full)',
                       whiteSpace: 'nowrap',
-                      ...(status.color
-                        ? {
-                            backgroundColor: status.color,
-                            color: 'var(--ds-color-text-on-primary)',
-                          }
-                        : {
-                            background: 'var(--ds-color-neutral-100)',
-                            color: 'var(--ds-color-neutral-700)',
-                          }),
+                      background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
+                      color: 'var(--ds-color-text-secondary)',
+                      border: '1px solid var(--ds-color-border-secondary)',
                     }}
                   >
                     {status.label}
@@ -680,7 +674,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                     margin: '4px 0 0',
                     fontSize: 13,
                     lineHeight: 1.4,
-                    color: 'var(--ds-color-text-muted)',
+                    color: 'var(--ds-color-text-secondary)',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
