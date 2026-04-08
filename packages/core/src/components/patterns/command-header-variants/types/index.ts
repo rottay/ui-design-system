@@ -38,6 +38,17 @@ export interface MetricsProps {
 export interface ActivityProps {
   items: ActivityItem[];
   schedule?: ScheduleItem[];
+  /**
+   * Optional URL for the activity-list "View all" CTA. When omitted the
+   * CTA is hidden, which keeps the variant domain-clean and reusable
+   * across apps that don't have a dedicated activity index page.
+   */
+  viewAllHref?: string;
+  /**
+   * Optional label for the activity-list "View all" CTA. Defaults to
+   * `"View all"`. Only rendered when `viewAllHref` is set.
+   */
+  viewAllLabel?: string;
 }
 
 // Variant configuration

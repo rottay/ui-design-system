@@ -30,7 +30,7 @@ const TYPE_CONFIG = {
 
 const ROTATION_INTERVAL = 5000;
 
-export function ActivityTicker({ items, schedule = [] }: ActivityProps) {
+export function ActivityTicker({ items, schedule: _schedule = [], viewAllHref, viewAllLabel = "View all" }: ActivityProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState<"next" | "prev">("next");
@@ -79,12 +79,14 @@ export function ActivityTicker({ items, schedule = [] }: ActivityProps) {
             </Flex>
           </Stack>
         </Flex>
-        <NavLinkAnchor href="/activity" style={{ textDecoration: "none" }}>
-          <Flex align="center" gap={4} className="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
-            <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)" }}>View all</Text>
-            <ExternalLink style={{ width: 10, height: 10, color: "var(--ds-color-primary)" }} />
-          </Flex>
-        </NavLinkAnchor>
+        {viewAllHref ? (
+          <NavLinkAnchor href={viewAllHref} style={{ textDecoration: "none" }}>
+            <Flex align="center" gap={4} className="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
+              <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)" }}>{viewAllLabel}</Text>
+              <ExternalLink style={{ width: 10, height: 10, color: "var(--ds-color-primary)" }} />
+            </Flex>
+          </NavLinkAnchor>
+        ) : null}
       </Flex>
 
       <Box style={{ flex: 1, display: "flex", flexDirection: "column" }}>

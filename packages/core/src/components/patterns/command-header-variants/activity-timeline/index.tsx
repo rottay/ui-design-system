@@ -55,7 +55,7 @@ function ActivityItem({ item, index, isLast }: { item: ActivityProps["items"][0]
   );
 }
 
-export function ActivityTimeline({ items, schedule = [] }: ActivityProps) {
+export function ActivityTimeline({ items, schedule: _schedule = [], viewAllHref, viewAllLabel = "View all" }: ActivityProps) {
   return (
     <Box style={{ height: 415, padding: "16px", background: "var(--ds-color-bg-secondary)", border: "1px solid var(--ds-color-border-secondary)", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" }}>
       <Flex align="center" justify="between" style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid var(--ds-color-border-secondary)", position: "relative" }}>
@@ -74,12 +74,14 @@ export function ActivityTimeline({ items, schedule = [] }: ActivityProps) {
             </Flex>
           </Stack>
         </Flex>
-        <NavLinkAnchor href="/activity" style={{ textDecoration: "none" }}>
-          <Flex align="center" gap={4} className="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
-            <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)" }}>View all</Text>
-            <ExternalLink style={{ width: 12, height: 12, color: "var(--ds-color-primary)" }} />
-          </Flex>
-        </NavLinkAnchor>
+        {viewAllHref ? (
+          <NavLinkAnchor href={viewAllHref} style={{ textDecoration: "none" }}>
+            <Flex align="center" gap={4} className="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
+              <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)" }}>{viewAllLabel}</Text>
+              <ExternalLink style={{ width: 12, height: 12, color: "var(--ds-color-primary)" }} />
+            </Flex>
+          </NavLinkAnchor>
+        ) : null}
       </Flex>
       <Box style={{ flex: 1, overflowY: "auto", minHeight: 0 }} className="activity-scroll">
         <Stack spacing="none" style={{ position: "relative" }}>

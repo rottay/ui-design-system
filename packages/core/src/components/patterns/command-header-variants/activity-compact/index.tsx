@@ -53,7 +53,7 @@ function CompactItem({ item, index }: { item: ActivityProps["items"][0]; index: 
   );
 }
 
-export function ActivityCompact({ items, schedule = [] }: ActivityProps) {
+export function ActivityCompact({ items, schedule: _schedule = [], viewAllHref, viewAllLabel = "View all" }: ActivityProps) {
   return (
     <Box style={{ height: 415, padding: "16px", background: "var(--ds-color-bg-secondary)", border: "1px solid var(--ds-color-border-secondary)", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <Flex align="center" justify="between" style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid var(--ds-color-border-secondary)", position: "relative" }}>
@@ -69,12 +69,14 @@ export function ActivityCompact({ items, schedule = [] }: ActivityProps) {
             <Text size="xs" style={{ color: "var(--ds-color-text-muted)", fontFamily: "monospace", fontSize: 9 }}>{items.length} UPDATES</Text>
           </Stack>
         </Flex>
-        <NavLinkAnchor href="/activity" style={{ textDecoration: "none" }}>
-          <Flex align="center" gap={4} className="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
-            <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)" }}>View all</Text>
-            <ExternalLink style={{ width: 10, height: 10, color: "var(--ds-color-primary)" }} />
-          </Flex>
-        </NavLinkAnchor>
+        {viewAllHref ? (
+          <NavLinkAnchor href={viewAllHref} style={{ textDecoration: "none" }}>
+            <Flex align="center" gap={4} className="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
+              <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)" }}>{viewAllLabel}</Text>
+              <ExternalLink style={{ width: 10, height: 10, color: "var(--ds-color-primary)" }} />
+            </Flex>
+          </NavLinkAnchor>
+        ) : null}
       </Flex>
       <Box style={{ flex: 1, overflowY: "auto", minHeight: 0 }} className="activity-scroll">
         <Stack spacing="sm">

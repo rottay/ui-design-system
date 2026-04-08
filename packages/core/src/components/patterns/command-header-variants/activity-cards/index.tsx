@@ -53,7 +53,7 @@ function ActivityCard({ item, index }: { item: ActivityProps["items"][0]; index:
   );
 }
 
-export function ActivityCards({ items, schedule = [] }: ActivityProps) {
+export function ActivityCards({ items, schedule: _schedule = [], viewAllHref, viewAllLabel = "View all" }: ActivityProps) {
   return (
     <Box style={{ height: 415, padding: "16px", background: "var(--ds-color-bg-secondary)", border: "1px solid var(--ds-color-border-secondary)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column" }}>
       <Flex align="center" justify="between" style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid var(--ds-color-border-secondary)", position: "relative" }}>
@@ -66,12 +66,14 @@ export function ActivityCards({ items, schedule = [] }: ActivityProps) {
           </Box>
           <Text weight="bold" size="sm" style={{ color: "var(--ds-color-text-primary)" }}>Activity</Text>
         </Flex>
-        <NavLinkAnchor href="/activity" style={{ textDecoration: "none" }}>
-          <Flex align="center" gap={3} className="view-all-link" style={{ padding: "4px 8px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
-            <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)", fontSize: 10 }}>View all</Text>
-            <ExternalLink style={{ width: 9, height: 9, color: "var(--ds-color-primary)" }} />
-          </Flex>
-        </NavLinkAnchor>
+        {viewAllHref ? (
+          <NavLinkAnchor href={viewAllHref} style={{ textDecoration: "none" }}>
+            <Flex align="center" gap={3} className="view-all-link" style={{ padding: "4px 8px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
+              <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)", fontSize: 10 }}>{viewAllLabel}</Text>
+              <ExternalLink style={{ width: 9, height: 9, color: "var(--ds-color-primary)" }} />
+            </Flex>
+          </NavLinkAnchor>
+        ) : null}
       </Flex>
       <Box style={{ flex: 1, overflowY: "auto", minHeight: 0 }} className="activity-scroll">
         <Stack spacing="sm">
