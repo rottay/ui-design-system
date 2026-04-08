@@ -197,6 +197,22 @@ export type { WorkbenchHeaderProps, WorkbenchQuickAction, WorkbenchSavedView } f
 export { PatternCockpitHeader } from './cockpit-header';
 export type { CockpitHeaderProps, CockpitBreadcrumb, CockpitStatus } from './cockpit-header';
 
+// BulkSelectToggle -- toggle button for entering/exiting bulk-selection mode
+export { BulkSelectToggle } from './bulk-select-toggle';
+export type { BulkSelectToggleProps } from './bulk-select-toggle';
+
+// StatusFilterPills -- horizontal pill bar for single/multi-select status filters
+export { StatusFilterPills } from './status-filter-pills';
+export type { StatusFilterPillsProps, StatusFilterPillOption, FilterPill } from './status-filter-pills';
+
+// TableCheckboxStyles -- shared CSS animations and hover styles for table flows
+export { TableCheckboxStyles } from './table-checkbox-styles';
+export type { TableCheckboxStylesProps } from './table-checkbox-styles';
+
+// LoadingOverlay -- engine-free loading shell with brand-mark slot
+export { LoadingOverlay } from './loading-overlay';
+export type { LoadingOverlayProps } from './loading-overlay';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
