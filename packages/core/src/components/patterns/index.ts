@@ -213,6 +213,10 @@ export type { TableCheckboxStylesProps } from './table-checkbox-styles';
 export { LoadingOverlay } from './loading-overlay';
 export type { LoadingOverlayProps } from './loading-overlay';
 
+// TableToolbar -- lightweight one-row toolbar with slot-based filters/actions
+export { TableToolbar } from './table-toolbar';
+export type { TableToolbarProps } from './table-toolbar';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
