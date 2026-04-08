@@ -17,9 +17,9 @@
 "use client";
 
 import { useMemo, createContext, useContext, type CSSProperties, type ReactNode } from "react";
-import { Box, Text, Flex } from "../../primitives";
-import { useNavigationLink } from "../../../runtime/navigation";
-import { useDsFocusMode } from "../../../runtime/focus-mode";
+import { Box, Text, Flex } from "@/components/primitives";
+import { useNavigationLink } from "@/runtime/navigation";
+import { useDsFocusMode } from "@/runtime/focus-mode";
 import {
   TrendingUp,
   TrendingDown,
