@@ -30,11 +30,14 @@
  * consumer-supplied; the components know nothing about tenants, users,
  * or any specific entity.
  *
- * Framework note: SurfaceReadField uses a native `<a>` tag instead of
- * Next.js's `<Link>` so the DS package stays framework-agnostic. Apps
- * that want Next.js client-side navigation can wrap the field in their
- * own `<Link>` at the call site, or pass the href and let the browser
- * handle the navigation directly.
+ * Framework note: SurfaceReadField resolves its `href` rendering through
+ * the `useNavigationLink()` hook from `runtime/navigation`. Apps mount a
+ * `NavigationLinkProvider` once at their root layout and pass their
+ * framework's Link primitive (e.g. Next.js's `Link`, Remix's `Link`); the
+ * DS picks it up automatically. When no provider is mounted the field
+ * falls back to a native `<a>` tag, which still works for navigation but
+ * loses framework-specific features like client-side transitions and
+ * prefetching. This keeps the DS package framework-agnostic.
  *
  * @module @rottay/design-system/patterns/surface-primitives
  */
@@ -44,6 +47,7 @@ import { type CSSProperties, type ReactNode } from 'react';
 import { ArrowUpRight, Copy } from 'lucide-react';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../primitives';
+import { useNavigationLink } from '../../../runtime/navigation';
 import {
   type SharedHeaderActionDescriptor,
   resolveSharedHeaderActionIcon,
@@ -274,6 +278,7 @@ export function SurfaceReadField({
   href?: string;
   copyValue?: string;
 }) {
+  const NavLink = useNavigationLink();
   const resolved = renderFieldValue(value, emptyLabel);
   const primitiveValue = typeof resolved.content === 'string' || typeof resolved.content === 'number';
   const valueNode = primitiveValue ? (
@@ -293,16 +298,33 @@ export function SurfaceReadField({
     resolved.content
   );
 
-  const maybeLinkedValue = href && !resolved.empty ? (
-    <a href={href} style={{ color: 'inherit', textDecoration: 'none' }}>
-      <Flex align="center" gap={8} wrap="wrap" style={{ width: 'fit-content' }}>
-        {valueNode}
-        <ArrowUpRight style={{ width: 13, height: 13, color: mutedText }} />
-      </Flex>
-    </a>
-  ) : (
-    valueNode
+  // When an `href` is provided we want client-side routing if the consuming
+  // app supplied a Link adapter via NavigationLinkProvider (e.g. Next.js's
+  // <Link>); otherwise we degrade gracefully to a native <a>. This keeps
+  // the DS framework-agnostic while preserving Next.js-style routing /
+  // prefetching at all SurfaceReadField call sites where the provider is
+  // mounted.
+  const linkInner = (
+    <Flex align="center" gap={8} wrap="wrap" style={{ width: 'fit-content' }}>
+      {valueNode}
+      <ArrowUpRight style={{ width: 13, height: 13, color: mutedText }} />
+    </Flex>
   );
+
+  const maybeLinkedValue =
+    href && !resolved.empty ? (
+      NavLink ? (
+        <NavLink href={href} style={{ color: 'inherit', textDecoration: 'none' }}>
+          {linkInner}
+        </NavLink>
+      ) : (
+        <a href={href} style={{ color: 'inherit', textDecoration: 'none' }}>
+          {linkInner}
+        </a>
+      )
+    ) : (
+      valueNode
+    );
 
   return (
     <Box

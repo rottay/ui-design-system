@@ -15,3 +15,4 @@ export * from './verticals';
 export * from './product-profiles';
 export * from './features';
 export * from './providers';
+export * from './navigation';

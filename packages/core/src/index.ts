@@ -31,6 +31,11 @@ export type { DSError, DSErrorInput, ErrorSubscriber, UseErrorHandlerOptions, Us
 export * from './runtime/providers';
 
 // ============================================
+// NAVIGATION (framework-agnostic Link adapter)
+// ============================================
+export * from './runtime/navigation';
+
+// ============================================
 // HOOKS (promoted from core/hooks/)
 // ============================================
 export * from './hooks';
