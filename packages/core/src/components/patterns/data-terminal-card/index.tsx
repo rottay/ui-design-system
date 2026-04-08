@@ -1,6 +1,5 @@
 /**
  * @fileoverview DataTerminalCard - Premium Dashboard Metric Card
- * @module @rottay/design-system/patterns/data-terminal-card
  *
  * 4 Premium Variants with "alive" feeling animations.
  *

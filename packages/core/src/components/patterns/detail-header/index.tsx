@@ -38,8 +38,6 @@
  * The pattern stays domain-agnostic. All copy is consumer-supplied;
  * the component knows nothing about tenants, users, or any specific
  * entity. Status badge variants follow the same DS Badge vocabulary.
- *
- * @module @rottay/design-system/patterns/detail-header
  */
 
 import { type CSSProperties, type ReactNode } from 'react';

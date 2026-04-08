@@ -10,8 +10,6 @@
  * stays domain-agnostic: it knows nothing about tenants, users, or any
  * specific entity. Consumers wire option labels and selected values from
  * their own state container.
- *
- * @module @rottay/design-system/patterns/status-filter-pills
  */
 
 import type { LucideIcon } from 'lucide-react';

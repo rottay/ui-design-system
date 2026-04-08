@@ -15,8 +15,6 @@
  * filter predicates are consumer-supplied via the ScopeDefinition shape;
  * the rail itself knows nothing about tenants, users, or any specific
  * entity.
- *
- * @module @rottay/design-system/patterns/workspace-scopes
  */
 
 import { Box, Flex, Text } from '../../primitives';

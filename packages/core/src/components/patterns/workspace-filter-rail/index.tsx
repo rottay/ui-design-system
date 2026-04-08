@@ -17,8 +17,6 @@
  * The pattern stays domain-agnostic. Each chip's label and displayValue
  * are consumer-supplied, so the rail knows nothing about tenants, users,
  * or any specific entity.
- *
- * @module @rottay/design-system/patterns/workspace-filter-rail
  */
 
 import { Plus, X } from 'lucide-react';

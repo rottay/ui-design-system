@@ -25,8 +25,6 @@
  * The naming retains the `Shared` prefix for backwards-compatibility with
  * the original app-platform extraction; consumers continue to import the
  * exact same symbol names from `@rottay/design-system`.
- *
- * @module @rottay/design-system/patterns/header-actions
  */
 
 import type { LucideIcon } from 'lucide-react';

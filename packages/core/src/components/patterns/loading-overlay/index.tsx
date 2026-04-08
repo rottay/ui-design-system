@@ -13,8 +13,6 @@
  * The overlay always pulses the logo with a 1.8s ease-in-out animation and
  * renders three trailing dots after the message text. This is the visual
  * vocabulary the pattern owns; the brand identity is the consumer's.
- *
- * @module @rottay/design-system/patterns/loading-overlay
  */
 
 import type { ReactNode } from 'react';

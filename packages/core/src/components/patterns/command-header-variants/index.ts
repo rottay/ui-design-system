@@ -1,6 +1,5 @@
 /**
  * @fileoverview Command Header Variants barrel -- engine-free DS patterns
- * @module @rottay/design-system/patterns/command-header-variants
  *
  * Verbatim extraction (Wave 6.2) of the 8 widget chrome variants that
  * power the dashboard CommandHeader orchestrator. The orchestrator

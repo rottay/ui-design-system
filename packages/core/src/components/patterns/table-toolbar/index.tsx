@@ -21,8 +21,6 @@
  * Use `ListToolbar` (sibling pattern) when you want:
  *   - the full professional two-row treatment with title, count, structured
  *     filter pills, density control, view-mode toggle, and settings dropdown
- *
- * @module @rottay/design-system/patterns/table-toolbar
  */
 
 import { Plus, Search, X } from 'lucide-react';

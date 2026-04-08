@@ -45,8 +45,6 @@
  * the consumer falls back to a native `<a>` tag, which still works for
  * navigation but loses any router-specific features (client-side
  * transitions, prefetching, scroll restoration, etc.).
- *
- * @module @rottay/design-system/runtime/navigation
  */
 
 import { createContext, useContext, type ComponentType, type CSSProperties, type ReactNode } from 'react';

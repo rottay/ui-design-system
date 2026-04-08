@@ -19,10 +19,13 @@
  * - Engines map --ds-* tokens to library-specific classes (.ant-*, .btn, .ds-*)
  * - Consumers can insert custom layers between rottay layers for precise cascade control
  *
- * Usage:
- * @import '@rottay/design-system/tokens/css';
- * or
- * import '@rottay/design-system/tokens/css/index.css';
+ * Usage (consumer-facing):
+ *   @import '@rottay/design-system/styles.css';        // full bundle
+ *   @import '@rottay/design-system/styles/platform';   // per-vertical bundle
+ *
+ * This file is the internal source that the build pipeline compiles into the
+ * `dist/styles.css` and `dist/<vertical>.css` artifacts shipped via those
+ * subpaths. Importing this source file directly is not part of the public API.
  *
  * @version 0.5.0
  */

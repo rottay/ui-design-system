@@ -14,8 +14,6 @@
  * The pattern is intentionally engine-free: it only emits CSS that targets
  * generic `table` markup and DS tokens. Consumers can append additional CSS
  * via the `customStyles` prop without forking the component.
- *
- * @module @rottay/design-system/patterns/table-checkbox-styles
  */
 
 const CHECKBOX_ANIMATION_CSS = `

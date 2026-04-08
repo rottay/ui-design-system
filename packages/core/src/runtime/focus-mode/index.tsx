@@ -48,8 +48,6 @@
  * `useDsFocusMode()` returns `false`, so patterns behave as if focus
  * mode is off (i.e. nothing hides). This keeps DS components usable in
  * apps that have no focus-mode concept at all.
- *
- * @module @rottay/design-system/runtime/focus-mode
  */
 
 import { createContext, useContext, type ReactNode } from 'react';

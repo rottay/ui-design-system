@@ -21,8 +21,6 @@
  * (`{ key, label, kind?, state }`) without knowing about tenants, users,
  * or any specific entity. View descriptions render generic state hints
  * (query, scope, filter count, column count, sort field, density).
- *
- * @module @rottay/design-system/patterns/workspace-views-menu
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

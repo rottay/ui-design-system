@@ -22,8 +22,6 @@
  *
  * Keyboard shortcut: pressing `/` outside an input focuses the command
  * input (matches the original app-platform behavior).
- *
- * @module @rottay/design-system/patterns/workspace-command-bar
  */
 
 import { useEffect, useMemo, useState } from 'react';

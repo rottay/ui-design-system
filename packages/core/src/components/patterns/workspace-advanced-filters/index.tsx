@@ -21,8 +21,6 @@
  * The pattern stays domain-agnostic. The optional `filterVisuals` map lets
  * each consumer keep platform-specific narrative (e.g. tenant or role copy)
  * inside its own workspace-config file rather than baking it into the DS.
- *
- * @module @rottay/design-system/patterns/workspace-advanced-filters
  */
 
 import type { ReactNode } from 'react';

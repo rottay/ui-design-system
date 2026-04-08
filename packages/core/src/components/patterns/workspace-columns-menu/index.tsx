@@ -20,8 +20,6 @@
  * The pattern stays domain-agnostic: it works with any column shape that
  * has `key: string` and `title: string`. Generic over `T` so consumers can
  * pass their full table column definitions without losing type safety.
- *
- * @module @rottay/design-system/patterns/workspace-columns-menu
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

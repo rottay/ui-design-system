@@ -8,7 +8,7 @@
  *
  * @example
  * // Setup básico en app
- * import { I18nProvider } from '@rottay/design-system/i18n';
+ * import { I18nProvider } from '@rottay/design-system';
  *
  * function App() {
  *   return (
@@ -20,7 +20,7 @@
  *
  * @example
  * // Uso en componentes
- * import { useTranslation } from '@rottay/design-system/i18n';
+ * import { useTranslation } from '@rottay/design-system';
  *
  * function MyComponent() {
  *   const { t } = useTranslation('components');

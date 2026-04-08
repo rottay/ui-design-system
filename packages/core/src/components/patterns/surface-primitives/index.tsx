@@ -38,8 +38,6 @@
  * falls back to a native `<a>` tag, which still works for navigation but
  * loses framework-specific features like client-side transitions and
  * prefetching. This keeps the DS package framework-agnostic.
- *
- * @module @rottay/design-system/patterns/surface-primitives
  */
 
 import { type CSSProperties, type ReactNode } from 'react';

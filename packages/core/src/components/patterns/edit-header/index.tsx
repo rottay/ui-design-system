@@ -44,8 +44,6 @@
  *
  * The pattern stays domain-agnostic. All copy is consumer-supplied; the
  * component knows nothing about tenants, users, or any specific entity.
- *
- * @module @rottay/design-system/patterns/edit-header
  */
 
 import { type CSSProperties, type ReactNode } from 'react';

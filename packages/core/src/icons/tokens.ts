@@ -1,11 +1,11 @@
 /**
  * @fileoverview Canonical icon token references used by runtime icon helpers.
  *
- * The public `@rottay/design-system/tokens` entry exposes a much broader token
- * catalog for consumers. Runtime code inside the core package should depend on
- * a tiny canonical source instead of importing that public mirror back into the
- * implementation, otherwise the public API becomes an accidental internal
- * dependency and dead-code cleanup gets much harder.
+ * The package-internal `src/tokens/` module holds a much broader token catalog,
+ * but runtime code inside the core package should depend on a tiny canonical
+ * source instead of importing the broader catalog back into the implementation.
+ * Otherwise the catalog becomes an accidental dependency cycle and dead-code
+ * cleanup gets much harder.
  */
 
 export const ICON_SIZE_TOKENS = {

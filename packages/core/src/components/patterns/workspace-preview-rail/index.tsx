@@ -29,8 +29,6 @@
  *
  * The pattern stays domain-agnostic and is generic over `T extends
  * object`, so any record shape composes via structural subtyping.
- *
- * @module @rottay/design-system/patterns/workspace-preview-rail
  */
 
 import type { ReactNode } from 'react';

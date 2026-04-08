@@ -21,8 +21,6 @@
  *
  * The pattern stays domain-agnostic: it knows nothing about tenants,
  * users, or any specific entity. All copy comes from props.
- *
- * @module @rottay/design-system/patterns/workspace-header
  */
 
 import type { ReactNode } from 'react';

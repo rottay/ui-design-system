@@ -25,8 +25,6 @@
  * The pattern stays domain-agnostic. Section titles, descriptions,
  * summaries, and chip text are all consumer-supplied; the component
  * knows nothing about tenants, users, or any specific entity.
- *
- * @module @rottay/design-system/patterns/premium-form-sections
  */
 
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useState } from 'react';

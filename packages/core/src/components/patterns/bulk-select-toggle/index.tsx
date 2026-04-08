@@ -9,8 +9,6 @@
  * optional selection-count Badge. The pattern stays domain-agnostic: it
  * never references rows, items, or any specific entity. Consumers wire
  * the active state and selected-count from their own state container.
- *
- * @module @rottay/design-system/patterns/bulk-select-toggle
  */
 
 import { MousePointerSquareDashed, X } from 'lucide-react';

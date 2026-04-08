@@ -592,9 +592,11 @@ export interface ThemeProviderProps {
   cssBaseUrl?: string;
   /**
    * When `true`, skips loading individual tenant CSS `<link>` elements.
-   * Use this when importing the bundled CSS via `@rottay/design-system/tokens/css`,
-   * which includes all tenant styles using `html[data-tenant='x']` selectors.
-   * The `TenantProvider` sets the `data-tenant` attribute on the HTML element.
+   * Use this when importing the bundled CSS via the package's `./styles*`
+   * subpath (e.g. `@rottay/design-system/styles.css` or
+   * `@rottay/design-system/styles/platform`), which already includes all
+   * tenant styles via `html[data-tenant='x']` selectors. The
+   * `TenantProvider` sets the `data-tenant` attribute on the HTML element.
    */
   skipCssLoading?: boolean;
 }
