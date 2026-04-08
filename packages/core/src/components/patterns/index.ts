@@ -233,6 +233,15 @@ export type {
   WorkspaceColumnsMenuColumn,
 } from './workspace-columns-menu';
 
+// WorkspaceAdvancedFilters -- premium filter card grid with quick-slice presets
+export { WorkspaceAdvancedFilters } from './workspace-advanced-filters';
+export type {
+  WorkspaceAdvancedFiltersProps,
+  WorkspaceFilterDefinition,
+  WorkspaceFilterPreset,
+  WorkspaceFilterVisual,
+} from './workspace-advanced-filters';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
