@@ -18,7 +18,7 @@ Sistema completo de internacionalización para el Design System Rottay.
 
 ```tsx
 // app/layout.tsx
-import { I18nProvider } from '@rottay/design-system/i18n';
+import { I18nProvider } from '@rottay/design-system';
 
 export default function RootLayout({ children }) {
   return (
@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
 ### Hook useTranslation
 
 ```tsx
-import { useTranslation } from '@rottay/design-system/i18n';
+import { useTranslation } from '@rottay/design-system';
 
 function MyButton() {
   // Sin namespace
@@ -64,7 +64,7 @@ function MyPagination() {
 ### Hook useLocale
 
 ```tsx
-import { useLocale } from '@rottay/design-system/i18n';
+import { useLocale } from '@rottay/design-system';
 
 function LanguageSwitcher() {
   const { locale, setLocale, config } = useLocale();
@@ -86,7 +86,7 @@ function LanguageSwitcher() {
 ### Fecha
 
 ```tsx
-import { formatDate, useLocale } from '@rottay/design-system/i18n';
+import { formatDate, useLocale } from '@rottay/design-system';
 
 function DateDisplay() {
   const { config } = useLocale();
@@ -105,7 +105,7 @@ function DateDisplay() {
 ### Número
 
 ```tsx
-import { formatNumber } from '@rottay/design-system/i18n';
+import { formatNumber } from '@rottay/design-system';
 
 formatNumber(1234567.89, 'es-ES');  // => "1.234.567,89"
 formatNumber(1234567.89, 'en-US');  // => "1,234,567.89"
@@ -114,7 +114,7 @@ formatNumber(1234567.89, 'en-US');  // => "1,234,567.89"
 ### Moneda
 
 ```tsx
-import { formatCurrency } from '@rottay/design-system/i18n';
+import { formatCurrency } from '@rottay/design-system';
 
 formatCurrency(1234.56, 'es-ES', 'EUR');  // => "1.234,56 €"
 formatCurrency(1234.56, 'en-US', 'USD');  // => "$1,234.56"
@@ -123,7 +123,7 @@ formatCurrency(1234.56, 'en-US', 'USD');  // => "$1,234.56"
 ### Tiempo Relativo
 
 ```tsx
-import { formatRelativeTime } from '@rottay/design-system/i18n';
+import { formatRelativeTime } from '@rottay/design-system';
 
 const pastDate = new Date(Date.now() - 5 * 60 * 1000); // 5 minutos atrás
 
@@ -134,7 +134,7 @@ formatRelativeTime(pastDate, 'en-US');  // => "5 minutes ago"
 ### Listas
 
 ```tsx
-import { formatList } from '@rottay/design-system/i18n';
+import { formatList } from '@rottay/design-system';
 
 const items = ['Manzana', 'Naranja', 'Plátano'];
 
@@ -146,7 +146,7 @@ formatList(items, 'es-ES', 'disjunction'); // => "Manzana, Naranja o Plátano"
 ### Tamaño de Archivo
 
 ```tsx
-import { formatFileSize } from '@rottay/design-system/i18n';
+import { formatFileSize } from '@rottay/design-system';
 
 formatFileSize(1536, 'es-ES');        // => "1,50 KB"
 formatFileSize(1048576, 'es-ES');     // => "1,00 MB"
@@ -217,7 +217,7 @@ import type {
   TranslateFunction,
   I18nProviderProps,
   I18nContextValue,
-} from '@rottay/design-system/i18n';
+} from '@rottay/design-system';
 
 const locale: SupportedLocale = 'es'; // 'es' | 'en' | 'pt' | 'fr'
 const namespace: TranslationNamespace = 'components'; // 'common' | 'components' | 'errors' | 'validation'
@@ -235,7 +235,7 @@ const namespace: TranslationNamespace = 'components'; // 'common' | 'components'
 
 ```tsx
 // App.tsx
-import { I18nProvider } from '@rottay/design-system/i18n';
+import { I18nProvider } from '@rottay/design-system';
 
 function App() {
   return (
@@ -252,7 +252,7 @@ function App() {
 }
 
 // MyComponent.tsx
-import { useTranslation, useLocale, formatDate } from '@rottay/design-system/i18n';
+import { useTranslation, useLocale, formatDate } from '@rottay/design-system';
 
 function MyComponent() {
   const { t } = useTranslation('components');

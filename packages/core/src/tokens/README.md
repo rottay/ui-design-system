@@ -2,6 +2,17 @@
 
 Complete CSS tokens system for the Rottay Design System. This system provides foundational design values as CSS custom properties (variables) for consistent styling across the entire application.
 
+> **Public API note.** As of the 2026-04-08 audit, the only public surface of
+> `@rottay/design-system` is the package root, plus the `./server`, `./icons`,
+> and `./styles*` subpaths. There is **no** `@rottay/design-system/tokens`
+> entry point. Earlier versions of this README advertised one — that was
+> aspirational, not real. Token *values* (`colors`, `spacing`,
+> `buttonTokens`, etc.) currently live inside the package as implementation
+> detail; consumers should reach them through CSS variables (preferred) or
+> the `useTokens()` React hook re-exported from the package root. The CSS
+> bundle that ships every `--ds-*` variable is `@rottay/design-system/styles.css`
+> (or a per-vertical bundle like `@rottay/design-system/styles/platform`).
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -96,50 +107,59 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 
 ## 🚀 Usage
 
-### Import CSS Tokens
+### Import the CSS bundle
+
+The full token CSS layer ships as a single bundle. There is no per-category
+subpath in the public API; consumers should import one bundle and rely on
+the CSS cascade.
 
 ```css
-/* Import the complete CSS token system */
-@import '@rottay/design-system/tokens/css/index.css';
+/* Full CSS bundle (all verticals, suitable for dev / Storybook) */
+@import '@rottay/design-system/styles.css';
 ```
-
-### Import Specific CSS Categories
 
 ```css
-/* Import only base tokens */
-@import '@rottay/design-system/tokens/css/base/index.css';
-
-/* Import only component tokens */
-@import '@rottay/design-system/tokens/css/components/index.css';
-
-/* Import only animations */
-@import '@rottay/design-system/tokens/css/animations/index.css';
+/* Per-vertical bundles (smaller, prefer in production apps) */
+@import '@rottay/design-system/styles/platform';   /* Rottay platform */
+@import '@rottay/design-system/styles/bithire';    /* BitHire */
+@import '@rottay/design-system/styles/evnto';      /* Evnto */
+@import '@rottay/design-system/styles/modern';     /* Modern engine only */
 ```
 
-### Import TypeScript Tokens
+The selectors and CSS variables are unchanged across bundles — they only
+differ in which tenant overrides are pre-baked.
 
-The TypeScript layer is the public JS/TS mirror of the CSS token system. It is
-part of the package API, but core runtime components should not import it back
-into their implementation. Runtime code should use canonical local helpers and
-the CSS variables themselves; the TS mirror exists for consumers, tooling and
-type-safe references.
+### Read tokens from React
+
+For typed access from React, use the `useTokens()` hook re-exported from
+the package root.
 
 ```typescript
-// Import all tokens
-import { tokens } from '@rottay/design-system/tokens';
+import { useTokens } from '@rottay/design-system';
 
-// Import specific base tokens
-import { colors, spacing, typography } from '@rottay/design-system/tokens';
-
-// Import component tokens
-import { buttonTokens, avatarTokens } from '@rottay/design-system/tokens';
-
-// Use tokens
-const style = {
-  backgroundColor: colors.primary[500],
-  padding: spacing.named.md,
-};
+function MyComponent() {
+  const tokens = useTokens();
+  return (
+    <div
+      style={{
+        backgroundColor: tokens.colors.primary[500],
+        padding: tokens.spacing.md,
+      }}
+    />
+  );
+}
 ```
+
+`useTokens()` resolves the four-layer merge chain (engine defaults, product
+profile, vertical preset, tenant overrides) so the values it returns reflect
+the active runtime configuration.
+
+> **Internal note.** The `colors`, `spacing`, `buttonTokens`, ... value
+> objects under `src/tokens/ts/` are package-internal. They are not exported
+> from the package root and should not be imported by consumers. If you need
+> a value object outside React (test fixtures, codegen, build tooling),
+> open a request — we will export the specific shape from a real public
+> entry point rather than encouraging deep-import workarounds.
 
 ### Using Tokens in CSS
 
