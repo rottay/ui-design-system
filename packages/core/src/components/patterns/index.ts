@@ -319,6 +319,15 @@ export type {
   SurfaceActionFooterItem,
 } from './surface-primitives';
 
+// DetailHeader -- premium detail-page header with back nav, breadcrumbs, hero, status, tabs
+export { DetailHeader } from './detail-header';
+export type {
+  DetailHeaderProps,
+  DetailHeaderAction,
+  DetailHeaderTab,
+  DetailHeaderArchetype,
+} from './detail-header';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
