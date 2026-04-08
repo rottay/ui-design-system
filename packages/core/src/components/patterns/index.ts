@@ -295,6 +295,30 @@ export type {
   SharedHeaderActionDescriptor,
 } from './header-actions';
 
+// PremiumFormSections -- accordion form section container with tone variants
+export { PremiumFormSections, PremiumFormFactsCard } from './premium-form-sections';
+export type {
+  PremiumFormSectionsProps,
+  PremiumFormSection,
+  PremiumFormSectionsAppearance,
+  PremiumFormSectionTone,
+  PremiumFormFactItem,
+  PremiumFormFactsCardProps,
+} from './premium-form-sections';
+
+// SurfacePrimitives -- generic form-surface building blocks (companion to PremiumFormSections)
+export {
+  SurfaceSummaryStrip,
+  SurfaceFieldGrid,
+  SurfaceReadField,
+  SurfaceActionFooter,
+  SurfacePanel,
+} from './surface-primitives';
+export type {
+  SurfaceSummaryItem,
+  SurfaceActionFooterItem,
+} from './surface-primitives';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
