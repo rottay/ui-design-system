@@ -226,6 +226,13 @@ export type {
   WorkspaceHeaderShortcut,
 } from './workspace-header';
 
+// WorkspaceColumnsMenu -- floating draft+apply column visibility/order panel
+export { WorkspaceColumnsMenu } from './workspace-columns-menu';
+export type {
+  WorkspaceColumnsMenuProps,
+  WorkspaceColumnsMenuColumn,
+} from './workspace-columns-menu';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
