@@ -18,10 +18,16 @@ tenant branding, vertical preset, and product profile.
 
 ```
 Layer 4: App             Config-driven pages composed from surfaces
-Layer 3: Surfaces        34 page-level config objects (presentation/behavior/visual)
-Layer 2: Patterns        33 compositions built from primitives
-Layer 1: Primitives      89 components x 3 engine implementations
+Layer 3: Surfaces        Page-level config objects (presentation/behavior/visual)
+Layer 2: Patterns        Compositions built from primitives
+Layer 1: Primitives      Engine-switched leaf components across 6 categories
 ```
+
+> Counts of individual primitives, patterns, and surfaces are intentionally
+> omitted here. Past iterations of this doc went stale almost immediately.
+> The authoritative source is the on-disk tree under
+> `packages/core/src/components/`. A generated taxonomy reference is on the
+> roadmap (audit 2026-04-08, feature backlog).
 
 Each layer only depends on the layer below it:
 
@@ -287,7 +293,7 @@ so product teams can register custom verticals without waiting for a DS release.
 ### Tier Structure
 
 ```
-Primitives (89 components x 3 engines)
+Primitives (engine-switched leaf components)
   │
   ├─ display/       Avatar, Badge, Calendar, Card, Carousel, Empty,
   │                 Image, Kbd, List, QRCode, Statistic, Table, Tag,
@@ -308,7 +314,7 @@ Primitives (89 components x 3 engines)
   └─ overlay/       Modal, Dropdown, Popover, Sheet, ContextMenu,
                     AlertDialog, ConfirmDialog, HoverCard, Tour, ...
 
-Patterns (33 compositions)
+Patterns (engine-agnostic compositions)
   │
   ├─ data-table         DataTable with sort, filter, bulk actions
   ├─ form-builder       Declarative form from FieldDef[]
@@ -324,9 +330,10 @@ Patterns (33 compositions)
   ├─ notification-center Notification list and preferences
   ├─ step-wizard        Multi-step flows
   ├─ page-shell         Page chrome (title, breadcrumbs, back)
-  └─ ...                (+ 19 more)
+  └─ ...                (see packages/core/src/components/patterns/ for the
+                         full directory listing)
 
-Surfaces (34 page-level configs)
+Surfaces (page-level config objects)
   │
   ├─ list               ListSurface (table or card grid)
   ├─ dashboard          DashboardSurface (stats + charts + activity)
@@ -338,7 +345,8 @@ Surfaces (34 page-level configs)
   ├─ settings           SettingsSurface (grouped preferences)
   ├─ billing            BillingSurface (plans, invoices)
   ├─ onboarding         OnboardingSurface (wizard flows)
-  └─ ...                (+ 24 more)
+  └─ ...                (see packages/core/src/components/surfaces/ for the
+                         full directory listing)
 ```
 
 ---
@@ -597,12 +605,12 @@ packages/core/src/
 │
 └── components/
     ├── primitives/         Tier 1: Engine-switched leaf components
-    │   ├── display/        20 components (Avatar, Card, Table, etc.)
-    │   ├── inputs/         24 components (Button, Input, Select, etc.)
-    │   ├── feedback/       13 components (Alert, Modal, Spinner, etc.)
-    │   ├── layout/         13 components (Box, Flex, Grid, Stack, etc.)
-    │   ├── navigation/     15 components (Tabs, Menu, Breadcrumb, etc.)
-    │   └── overlay/        12 components (Dropdown, Popover, Sheet, etc.)
+    │   ├── display/        Avatar, Badge, Card, Table, Tag, ...
+    │   ├── inputs/         Button, Input, Select, DatePicker, Form, ...
+    │   ├── feedback/       Alert, Modal, Spinner, Toast, Notification, ...
+    │   ├── layout/         Box, Flex, Grid, Stack, Container, ...
+    │   ├── navigation/     Tabs, Menu, Breadcrumb, Pagination, Steps, ...
+    │   └── overlay/        Dropdown, Popover, Sheet, ContextMenu, ...
     │
     ├── patterns/           Tier 2: Compositions (engine-agnostic)
     │   ├── data-table/     Table with sort, filter, bulk actions
@@ -612,8 +620,7 @@ packages/core/src/
     │   ├── charts/         Chart wrappers
     │   ├── detail-panel/   Entity detail view
     │   ├── calendar-view/  Event calendar
-    │   ├── types.ts        Shared pattern types (ColumnDef, etc.)
-    │   └── ...             (33 pattern directories total)
+    │   └── ...             (see the directory for the full listing)
     │
     └── surfaces/           Tier 3: Page-level config objects
         ├── list/           ListSurface
@@ -621,10 +628,13 @@ packages/core/src/
         ├── form/           FormSurface
         ├── detail/         DetailSurface
         ├── chat/           ChatSurface
-        ├── types.ts        Surface config contracts
-        ├── helpers.ts      Permission resolution
-        └── ...             (34 surface directories total)
+        └── ...             (see the directory for the full listing)
 ```
+
+> Per-directory and per-category counts are intentionally omitted. The
+> directory listings under `packages/core/src/components/` are the
+> authoritative source. A generated taxonomy reference is on the audit
+> roadmap.
 
 ---
 
