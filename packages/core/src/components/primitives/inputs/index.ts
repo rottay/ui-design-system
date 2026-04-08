@@ -214,3 +214,7 @@ export type {
   FormFieldSize,
 } from './FormField';
 export { FORMFIELD_DEFAULTS } from './FormField';
+
+// VoiceInputButton
+export { VoiceInputButton } from './VoiceInputButton';
+export type { VoiceInputButtonProps } from './VoiceInputButton';

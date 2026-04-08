@@ -272,6 +272,12 @@ export type {
 } from './ai';
 
 // ============================================================================
+// Voice hooks -- Web Speech API wrapper for voice input / dictation
+// ============================================================================
+export { useVoiceInput } from './voice';
+export type { UseVoiceInputOptions, UseVoiceInputResult } from './voice';
+
+// ============================================================================
 // Notification hooks -- preference matrix management (categories x channels)
 // ============================================================================
 export { useNotificationPreferences } from './notifications';
