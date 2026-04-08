@@ -282,6 +282,19 @@ export type {
   WorkspaceCommandSuggestion,
 } from './workspace-command-bar';
 
+// HeaderActions -- shared semantic action vocabulary used by detail/edit/form headers
+export {
+  inferSharedHeaderActionKind,
+  resolveSharedHeaderActionIcon,
+  resolveSharedHeaderActionTooltip,
+  resolveSharedHeaderActionVariant,
+} from './header-actions';
+export type {
+  SharedHeaderActionKind,
+  SharedHeaderActionVariant,
+  SharedHeaderActionDescriptor,
+} from './header-actions';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
