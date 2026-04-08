@@ -36,6 +36,11 @@ export * from './runtime/providers';
 export * from './runtime/navigation';
 
 // ============================================
+// FOCUS MODE (framework-agnostic focus-state adapter)
+// ============================================
+export * from './runtime/focus-mode';
+
+// ============================================
 // HOOKS (promoted from core/hooks/)
 // ============================================
 export * from './hooks';

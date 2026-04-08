@@ -16,3 +16,4 @@ export * from './product-profiles';
 export * from './features';
 export * from './providers';
 export * from './navigation';
+export * from './focus-mode';
