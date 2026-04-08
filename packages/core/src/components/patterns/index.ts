@@ -217,6 +217,15 @@ export type { LoadingOverlayProps } from './loading-overlay';
 export { TableToolbar } from './table-toolbar';
 export type { TableToolbarProps } from './table-toolbar';
 
+// WorkspaceHeader -- premium hero header for workspace landing pages
+export { WorkspaceHeader } from './workspace-header';
+export type {
+  WorkspaceHeaderProps,
+  WorkspaceHeaderQuickAction,
+  WorkspaceHeaderMetaItem,
+  WorkspaceHeaderShortcut,
+} from './workspace-header';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
