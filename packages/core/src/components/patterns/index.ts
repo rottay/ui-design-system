@@ -242,6 +242,15 @@ export type {
   WorkspaceFilterVisual,
 } from './workspace-advanced-filters';
 
+// WorkspacePreviewRail -- sticky list-side preview rail with snapshot columns
+export { WorkspacePreviewRail } from './workspace-preview-rail';
+export type {
+  WorkspacePreviewRailProps,
+  WorkspacePreviewRailColumn,
+  WorkspacePreviewRailRowAction,
+  WorkspacePreviewRailPreviewConfig,
+} from './workspace-preview-rail';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
