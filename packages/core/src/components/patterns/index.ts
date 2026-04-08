@@ -332,6 +332,10 @@ export type {
 export { EditHeader } from './edit-header';
 export type { EditHeaderProps } from './edit-header';
 
+// FormHeader -- premium create-form header with required icon badge, back nav, action rail
+export { FormHeader } from './form-header';
+export type { FormHeaderProps, FormHeaderAction } from './form-header';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
