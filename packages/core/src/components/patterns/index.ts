@@ -340,6 +340,29 @@ export type { FormHeaderProps, FormHeaderAction } from './form-header';
 export { DataTerminalCard, DataTerminalStat, DataTerminalCardProvider } from './data-terminal-card';
 export type { DataTerminalCardProps } from './data-terminal-card';
 
+// Command Header Variants -- 8 widget chrome variants (4 metrics + 4 activity) + useVariant hook
+export {
+  MetricsRows,
+  MetricsCards,
+  MetricsMinimal,
+  MetricsChart,
+  ActivityTimeline,
+  ActivityCompact,
+  ActivityCards,
+  ActivityTicker,
+  useVariant,
+} from './command-header-variants';
+export type {
+  MetricsVariant,
+  ActivityVariant,
+  KeyMetric,
+  ActivityItem,
+  ScheduleItem,
+  MetricsProps,
+  ActivityProps,
+  VariantConfig,
+} from './command-header-variants';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
