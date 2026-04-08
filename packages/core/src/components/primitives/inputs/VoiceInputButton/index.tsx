@@ -2,10 +2,9 @@
 
 /**
  * @fileoverview VoiceInputButton - Reusable microphone button
- * @module @rottay/design-system/components/primitives/inputs/VoiceInputButton
  *
  * @description
- * Thin wrapper around `useVoiceInput` (from `@rottay/design-system/hooks`)
+ * Thin wrapper around `useVoiceInput` (re-exported from `@rottay/design-system`)
  * that exposes a microphone button with visual states (idle, listening,
  * transcribing, error) and a tooltip for permission errors and live
  * transcript preview.

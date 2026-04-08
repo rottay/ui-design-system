@@ -52,19 +52,22 @@
  * </Anchor>
  * ```
  *
- * @example Direct Import (Alternative)
- * ```tsx
- * import { AnchorLink } from '@rottay/design-system/components/primitives/navigation/Anchor/compound';
+ * The compound link is package-internal: it is consumed via `Anchor.Link`
+ * after `Anchor` is imported from the package root. There is no separate
+ * public import path for the link component on its own — `<Anchor.Link>` is
+ * the only way to render it from a consumer.
  *
- * // Can be used directly, though Anchor.Link is preferred
- * <AnchorLink href="#section" title="Section" />
+ * ```tsx
+ * import { Anchor } from '@rottay/design-system';
+ *
+ * <Anchor>
+ *   <Anchor.Link href="#section" title="Section" />
+ * </Anchor>
  * ```
  *
  * @see {@link AnchorLinkProps} - Link component props
  * @see {@link Anchor} - Parent container component
- * @module Anchor/Compound
  * @category Navigation
- * @package @rottay/design-system
  */
 
 'use client';

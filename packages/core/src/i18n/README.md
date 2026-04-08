@@ -4,12 +4,12 @@ Sistema completo de internacionalización para el Design System Rottay.
 
 ## Características
 
-- ✅ **4 locales soportados**: Español (es), English (en), Português (pt), Français (fr)
+- ✅ **5 locales soportados**: Español (es), English (en), Português (pt), Français (fr), العربية (ar)
 - ✅ **Namespaces organizados**: common, components, errors, validation
 - ✅ **Interpolación de parámetros**: `t('page', { current: 1, total: 10 })`
 - ✅ **Fallback automático**: Si falta traducción en locale actual, usa español
 - ✅ **Traducciones custom por tenant**: Override de traducciones específicas
-- ✅ **RTL-ready**: Soporte preparado para idiomas right-to-left
+- ✅ **RTL**: Soporte right-to-left (`ar` ya viene marcado como `direction: 'rtl'` en `LOCALE_CONFIGS`)
 - ✅ **Formatters Intl**: Fecha, número, moneda, tiempo relativo, listas
 - ✅ **Type-safe**: TypeScript con tipos completos
 - ✅ **Client-side**: Usa 'use client' para Next.js App Router
@@ -194,7 +194,9 @@ locales/
 │   └── ...
 ├── pt/
 │   └── ...
-└── fr/
+├── fr/
+│   └── ...
+└── ar/
     └── ...
 ```
 
@@ -206,6 +208,7 @@ locales/
 | `en` | English | English | ltr | en-US | en-US |
 | `pt` | Português | Português | ltr | pt-BR | pt-BR |
 | `fr` | Français | Français | ltr | fr-FR | fr-FR |
+| `ar` | Árabe | العربية | rtl | ar-SA | ar-SA |
 
 ## TypeScript Types
 
@@ -219,7 +222,7 @@ import type {
   I18nContextValue,
 } from '@rottay/design-system';
 
-const locale: SupportedLocale = 'es'; // 'es' | 'en' | 'pt' | 'fr'
+const locale: SupportedLocale = 'es'; // 'es' | 'en' | 'pt' | 'fr' | 'ar'
 const namespace: TranslationNamespace = 'components'; // 'common' | 'components' | 'errors' | 'validation'
 ```
 

@@ -19,7 +19,7 @@
  *
  * @example Basic Usage
  * ```tsx
- * import { NotificationProvider, useNotification } from '@rottay/design-system/rustic';
+ * import { NotificationProvider, useNotification } from '@rottay/design-system';
  *
  * function App() {
  *   return (

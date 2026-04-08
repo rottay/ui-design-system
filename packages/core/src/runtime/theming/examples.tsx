@@ -1,13 +1,11 @@
 /**
- * @fileoverview ThemeProvider Usage Examples - Rottay Design System
+ * @fileoverview ThemeProvider Usage Examples for the Rottay Design System.
  * @description Practical reference examples demonstrating ThemeProvider
  * configuration scenarios: default usage, custom tenants, dynamic switching,
  * error handling, CDN CSS, runtime branding, theme variants, multi-tenant
  * apps, loading state, and nested providers.
  *
- * @module System/Theming/Examples
  * @category System
- * @package @rottay/design-system
  */
 
 import React, { useState } from 'react';
@@ -15,15 +13,20 @@ import { ThemeProvider } from './ThemeProvider';
 import { useTheme } from './useTheme';
 
 // ─────────────────────────────────────────────────────────────────
-// EXAMPLE 1: Basic Usage - Default Rottay Theme
+// EXAMPLE 1: Basic Usage - Package default tenant
 // ─────────────────────────────────────────────────────────────────
 
 export function Example1_BasicUsage() {
   return (
     <ThemeProvider>
       <div>
-        <h1>My App with Rottay Theme</h1>
-        <p>The default Rottay theme will be loaded automatically.</p>
+        <h1>App on the Package Default Tenant</h1>
+        <p>
+          With no `tenant` prop, ThemeProvider loads the package-shipped
+          DEFAULT_TENANT (currently the Rottay baseline). White-label apps
+          point at their own baseline by passing `tenant=...` and configuring
+          the resolution chain.
+        </p>
       </div>
     </ThemeProvider>
   );
@@ -39,7 +42,12 @@ export function Example2_CustomTenant() {
       <div>
         <h1>ACME Corporation App</h1>
         <p>This app uses the ACME tenant theme.</p>
-        <p>If acme.css fails to load, it will fallback to Rottay.</p>
+        <p>
+          If acme.css fails to load, ThemeProvider walks the configured
+          fallback chain (vertical default, then the package-wide
+          DEFAULT_TENANT, then inline emergency tokens) so the UI keeps
+          rendering.
+        </p>
       </div>
     </ThemeProvider>
   );
@@ -62,13 +70,13 @@ function TenantSwitcher() {
 
       {isFallback && (
         <div style={{ color: 'orange' }}>
-          Using Rottay fallback theme
+          Using fallback theme (the requested tenant could not be loaded)
         </div>
       )}
 
       <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
         <button onClick={() => setTenant && setTenant('rottay')}>
-          Rottay (Default)
+          Rottay (package baseline)
         </button>
         <button onClick={() => setTenant && setTenant('acme')}>
           ACME Corp
@@ -106,7 +114,7 @@ export function Example4_ErrorHandling() {
   };
 
   const handleFallback = (originalTenant: string) => {
-    console.warn(`Falling back from ${originalTenant} to Rottay`);
+    console.warn(`Falling back from ${originalTenant} via the configured chain`);
     setFallbacks((prev) => [...prev, originalTenant]);
   };
 
@@ -139,7 +147,7 @@ export function Example4_ErrorHandling() {
             <ul>
               {fallbacks.map((fb, i) => (
                 <li key={i} style={{ color: 'orange' }}>
-                  {fb} → Rottay
+                  {fb} → fallback chain
                 </li>
               ))}
             </ul>
@@ -272,7 +280,7 @@ export function Example8_MultiTenantApp() {
             value={currentTenant}
             onChange={(e) => setCurrentTenant(e.target.value)}
           >
-            <option value="rottay">Rottay (Default)</option>
+            <option value="rottay">Rottay (package baseline)</option>
             <option value="acme">ACME Corp</option>
             <option value="globex">Globex Inc</option>
             <option value="initech">Initech</option>

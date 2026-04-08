@@ -1,5 +1,5 @@
 /**
- * @fileoverview Accessibility testing helpers for @rottay/design-system.
+ * @fileoverview Accessibility testing helpers (package-internal).
  * @description Provides two levels of a11y checking:
  *
  * 1. **Built-in checks** (`checkAccessibility`) - Zero-dependency ARIA attribute
@@ -9,16 +9,11 @@
  *    a11y audit via axe-core. Requires `vitest-axe` or `jest-axe` as a
  *    devDependency in the consuming project.
  *
- * @example
- * ```tsx
- * import { render } from '@testing-library/react';
- * import { checkAccessibility } from '@rottay/design-system/testing';
- *
- * it('has no basic a11y violations', async () => {
- *   const { container } = render(<MyComponent />);
- *   await checkAccessibility(container);
- * });
- * ```
+ * These helpers live under `_internal/` and are NOT re-exported from the
+ * package root. They are used by the DS's own test suites. There is no
+ * `@rottay/design-system/testing` subpath in `package.json` — if a
+ * consuming app needs to use these helpers, file a request and we will
+ * promote them to a real public entry point with a stable contract.
  */
 
 // ---------------------------------------------------------------------------
