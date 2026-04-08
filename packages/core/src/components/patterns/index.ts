@@ -265,6 +265,15 @@ export type {
   WorkspaceScopeDefinition,
 } from './workspace-scopes';
 
+// WorkspaceViewsMenu -- saved-views dropdown with system/persona/custom groups
+export { WorkspaceViewsMenu } from './workspace-views-menu';
+export type {
+  WorkspaceViewsMenuProps,
+  WorkspaceSavedView,
+  WorkspaceSavedViewKind,
+  WorkspaceSavedViewFilter,
+} from './workspace-views-menu';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
