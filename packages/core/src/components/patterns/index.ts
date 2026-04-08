@@ -328,6 +328,10 @@ export type {
   DetailHeaderArchetype,
 } from './detail-header';
 
+// EditHeader -- premium edit-form header with back nav, save/cancel, status, archetype tones
+export { EditHeader } from './edit-header';
+export type { EditHeaderProps } from './edit-header';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
