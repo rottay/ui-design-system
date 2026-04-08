@@ -1,20 +1,36 @@
 /**
- * @fileoverview ThemeProvider - Rottay Design System
+ * @fileoverview ThemeProvider for the design system.
  * @description Manages theme state, CSS variable injection, and tenant-specific
- * styling with automatic fallback to Rottay theme on load failures.
+ * styling. Loads tenant CSS dynamically and falls back through a multi-step
+ * resolution chain so the DS keeps rendering even when network or CSS lookups
+ * fail.
  *
  * @remarks
  * The ThemeProvider is responsible for:
  * - **Tenant CSS Loading**: Dynamically loads tenant-specific CSS files
  * - **Theme Variants**: Supports light, dark, and custom theme variants
- * - **Fallback System**: Automatically falls back to Rottay if tenant CSS fails
- * - **Emergency Tokens**: Injects inline tokens if even Rottay CSS fails
+ * - **Fallback System**: Walks a vertical-aware fallback chain when a
+ *   tenant CSS file fails to load
+ * - **Emergency Tokens**: Injects an inline last-resort token set if even
+ *   the absolute fallback fails
  * - **Branding Override**: Allows runtime branding color customization
  *
- * The provider implements a robust fallback hierarchy:
- * 1. Requested tenant CSS
- * 2. Rottay (default) tenant CSS
- * 3. Emergency inline Rottay tokens
+ * The fallback hierarchy has three steps:
+ * 1. The CSS for the requested `tenant` slug
+ * 2. The CSS for the active `vertical`'s default tenant (e.g. when the app
+ *    declares `vertical="bithire"` and the requested tenant CSS fails, the
+ *    DS reaches for the BitHire vertical baseline before anything else)
+ * 3. The absolute safety-net tenant defined by `DEFAULT_TENANT` below
+ *
+ * If even step 3 fails, an inline `<style>` element is injected so text,
+ * backgrounds, and core surfaces remain readable.
+ *
+ * `DEFAULT_TENANT` is the system-wide last resort. It defaults to `'rottay'`
+ * because that is the canonical baseline shipped with the package, but the
+ * intent is the *safety-net* role, not "Rottay is the only first-class
+ * tenant". The fallback behavior is configurable via the `vertical` prop;
+ * `DEFAULT_TENANT` only kicks in when the entire vertical-aware path
+ * exhausts itself.
  *
  * @example Basic usage
  * ```tsx
@@ -498,13 +514,15 @@ function applyVarsBatch(vars: Record<string, string>): string[] {
 // ─────────────────────────────────────────────────────────────────
 
 /**
- * Rottay is the base and fallback tenant when no vertical is specified. If any
- * other theme fails to load, the provider attempts the vertical-aware default
- * tenant CSS; if even that fails, emergency inline tokens are injected so the
- * UI is never left without styling.
+ * Absolute last-resort tenant slug.
  *
- * When a `vertical` prop is provided (e.g., 'bithire', 'evnto'), the fallback
- * uses that vertical's default tenant instead of hardcoded 'rottay'.
+ * The fallback chain is: requested tenant CSS → vertical default tenant CSS
+ * → DEFAULT_TENANT CSS → emergency inline tokens. DEFAULT_TENANT only kicks
+ * in when every previous step has failed and there is no vertical-aware
+ * alternative left to try. It defaults to 'rottay' because the package ships
+ * a Rottay baseline; consumers building white-label apps with their own
+ * baseline can register a different tenant via the resolution chain and use
+ * the `vertical` prop to point at it as the default.
  */
 const DEFAULT_TENANT = 'rottay';
 
@@ -514,11 +532,12 @@ const THEME_LOAD_TIMEOUT = 5000;
 /** ID prefix for tenant CSS `<link>` elements so we can find/remove them later. */
 const THEME_LINK_ID_PREFIX = 'tenant-theme-';
 
-// Emergency Rottay tokens inline (if even Rottay CSS fails).
-// WHY hardcoded: these tokens are the absolute last resort. They are a minimal
-// subset of the Rottay token system -- just enough to make text, backgrounds,
-// borders, and spacing render sensibly. The full token set is ~200 variables;
-// we only include the ones that prevent a blank/broken UI.
+// Emergency inline tokens (if even DEFAULT_TENANT CSS fails to load).
+// WHY hardcoded: these tokens are the absolute last resort. They are a
+// minimal subset taken from the package's baseline tenant -- just enough to
+// make text, backgrounds, borders, and spacing render sensibly. The full
+// token set is ~200 variables; we only include the ones that prevent a
+// blank/broken UI.
 const ROTTAY_EMERGENCY_TOKENS = `
   :root {
     --ds-color-primary: #FFFFFF;
@@ -571,13 +590,15 @@ export interface ThemeProviderProps {
   children: ReactNode;
   /** Initial theme variant. Defaults to `'base'`. Supports `'light'`, `'dark'`, `'auto'`. */
   theme?: string;
-  /** Initial tenant slug. Defaults to `'rottay'`. */
+  /** Initial tenant slug. Defaults to {@link DEFAULT_TENANT}. */
   tenant?: string;
   /**
    * Industry vertical hint for fallback resolution.
    * When the requested tenant CSS fails to load, the provider falls back to
-   * the default tenant for this vertical (e.g., 'bithire' falls back to the
-   * bithire tenant instead of rottay). If omitted, falls back to 'rottay'.
+   * the default tenant for this vertical (e.g., a `vertical="bithire"` app
+   * lands on the bithire tenant baseline before reaching the package-wide
+   * {@link DEFAULT_TENANT}). If omitted, only the package-wide default is
+   * tried.
    */
   vertical?: string;
   /** Runtime branding overrides (colors, fonts, semantic colors). Applied as inline CSS variables. */
@@ -586,7 +607,7 @@ export interface ThemeProviderProps {
   tokenOverrides?: TenantTokenOverrides;
   /** Called when tenant CSS loading fails, before fallback kicks in. */
   onError?: (error: Error, tenant: string) => void;
-  /** Called when the provider falls back from the requested tenant to Rottay. */
+  /** Called when the provider falls back from the requested tenant to one of the resolution-chain defaults. */
   onFallback?: (originalTenant: string) => void;
   /** Base URL for tenant CSS files (e.g., `'/themes'` or `'https://cdn.example.com/themes'`). */
   cssBaseUrl?: string;
