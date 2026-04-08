@@ -251,6 +251,20 @@ export type {
   WorkspacePreviewRailPreviewConfig,
 } from './workspace-preview-rail';
 
+// WorkspaceFilterRail -- horizontal active-filter chip row with clear/add CTAs
+export { WorkspaceFilterRail } from './workspace-filter-rail';
+export type {
+  WorkspaceFilterRailProps,
+  WorkspaceActiveFilter,
+} from './workspace-filter-rail';
+
+// WorkspaceScopes -- horizontal scope pill strip with optional counts
+export { WorkspaceScopes } from './workspace-scopes';
+export type {
+  WorkspaceScopesProps,
+  WorkspaceScopeDefinition,
+} from './workspace-scopes';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
