@@ -274,6 +274,14 @@ export type {
   WorkspaceSavedViewFilter,
 } from './workspace-views-menu';
 
+// WorkspaceCommandBar -- premium command/search bar with voice + suggestions
+export { WorkspaceCommandBar } from './workspace-command-bar';
+export type {
+  WorkspaceCommandBarProps,
+  WorkspaceCommandBarConfig,
+  WorkspaceCommandSuggestion,
+} from './workspace-command-bar';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
