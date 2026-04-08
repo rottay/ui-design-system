@@ -336,6 +336,10 @@ export type { EditHeaderProps } from './edit-header';
 export { FormHeader } from './form-header';
 export type { FormHeaderProps, FormHeaderAction } from './form-header';
 
+// DataTerminalCard -- premium 4-variant dashboard metric card (Terminal/HUD/Circuit/Matrix)
+export { DataTerminalCard, DataTerminalStat, DataTerminalCardProvider } from './data-terminal-card';
+export type { DataTerminalCardProps } from './data-terminal-card';
+
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
 export type { BarChartProps } from './charts/bar-chart';
