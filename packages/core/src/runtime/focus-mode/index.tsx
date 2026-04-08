@@ -20,7 +20,7 @@
  *
  * ```tsx
  * import { FocusModeProvider } from '@rottay/design-system';
- * import { useFocusMode } from '@/providers/focus-mode-context';
+ * import { useFocusMode } from '@/contexts/focus-mode';
  *
  * function FocusModeBridge({ children }: { children: ReactNode }) {
  *   const { isFocusMode } = useFocusMode();

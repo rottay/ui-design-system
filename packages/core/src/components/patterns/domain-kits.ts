@@ -1,17 +1,15 @@
 /**
- * @fileoverview Domain-Kit Patterns barrel.
+ * @fileoverview Legacy domain-specific patterns barrel.
  *
  * These patterns are classic-engine-only, domain-specific components that were
- * historically exported from the main patterns barrel. They are NOT part of the
- * canonical pattern API and are separated here for clarity.
+ * historically surfaced alongside the main patterns barrel. They are kept here
+ * for in-repo compatibility only and are not part of the canonical public API.
  *
  * Usage:
- *   import { PatternApprovalInbox } from '@rottay/design-system/patterns/domain-kits';
- *
- * Or, if the package subpath is not wired, import the individual pattern:
  *   import { PatternApprovalInbox } from './approval-inbox';
  *
- * These will move to components/kits/ in a future restructuring.
+ * Prefer the corresponding surface or canonical pattern entrypoint where one
+ * exists; this barrel is a legacy compatibility layer inside the source tree.
  */
 
 // ApprovalInbox (deprecated -- use DecisionInboxSurface)
