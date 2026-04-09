@@ -1,181 +1,63 @@
-# Design System Rottay - TypeScript Types
+# Contracts - Rottay Design System
 
-Sistema completo de tipos TypeScript para el Design System Rottay.
+Public type contracts for the design system. These define the shapes that
+consuming apps, runtime providers, and the brand compiler all agree on.
 
-## Estructura
+## Structure
 
 ```
-/types/
-├── common/              # Tipos comunes compartidos
-│   └── index.ts         # BaseComponentProps, Size, Variant, etc.
-├── engine/              # Tipos del sistema de engines
-│   └── index.ts         # EngineName, EngineAwareProps, etc.
-├── primitives/          # Tipos de componentes primitivos
-│   ├── display/         # Componentes de display
-│   │   ├── avatar.ts
-│   │   ├── badge.ts
-│   │   ├── card.ts
-│   │   ├── image.ts
-│   │   ├── tag.ts
-│   │   ├── tooltip.ts
-│   │   └── index.ts
-│   ├── inputs/          # Componentes de input
-│   │   ├── button.ts
-│   │   ├── checkbox.ts
-│   │   ├── input.ts
-│   │   ├── radio.ts
-│   │   ├── select.ts
-│   │   ├── toggle.ts
-│   │   └── index.ts
-│   ├── feedback/        # Componentes de feedback
-│   │   ├── alert.ts
-│   │   ├── modal.ts
-│   │   ├── toast.ts
-│   │   └── index.ts
-│   ├── navigation/      # Componentes de navegación
-│   │   ├── menu.ts
-│   │   ├── stepper.ts
-│   │   └── index.ts
-│   └── index.ts
-└── index.ts             # Export principal
+contracts/
+  common/           # Shared primitives: Size, Variant, BaseComponentProps, mixins
+  components/       # Backward compat: WithChildrenProps, BaseComponentProps re-export
+  engine/           # EngineName, EngineAwareProps, EngineConfig, EngineCapabilities
+  themes/           # ThemeConfig, ThemeContextValue, BrandTheme, BrandCompiler
+  tenants/          # TenantConfig, TenantBranding, TenantTokenOverrides
+  tokens/           # DesignTokens, PersonalityTokens, SurfaceTokens, MotionTokens
+  product-profiles/ # ProductProfile, ProductProfileKey
+  extensions/       # Universal Extension System (16 categories)
+  index.ts          # Barrel re-exporting all contracts
 ```
 
-## Tipos Comunes (common/)
+## Key Types
 
-### BaseComponentProps
-Props base que todos los componentes heredan:
-- `className?: string` - Clase CSS adicional
-- `style?: CSSProperties` - Estilos inline
-- `id?: string` - ID del elemento
-- `data-testid?: string` - Para testing
+### BrandTheme (canonical premium visual source)
 
-### Tipos de Tamaño
-```typescript
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-```
+The single source of truth for premium visual identity. Merge precedence:
+DS base -> vertical baseline -> BrandTheme -> generated artifacts.
 
-### Tipos de Variante
-```typescript
-type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';
-```
+Categories: palette, typography, surfaces, motion, charts, chrome, engineBridge.
 
-### Tipos de Forma
-```typescript
-type Shape = 'circle' | 'square' | 'rounded';
-```
+### TenantConfig (white-label root)
 
-### Props Mixins
-- `LoadableProps` - Para componentes con estado de loading
-- `DisableableProps` - Para componentes que pueden deshabilitarse
-- `WithChildren` - Para componentes con children
-- `ClickableProps` - Para componentes clickeables
-- `ErrorableProps` - Para componentes con estados de error
-- `LabeledProps` - Para componentes con label
-- `PlaceholderProps` - Para componentes con placeholder
-- `ControlledProps<T>` - Para componentes controlados
-- `ClearableProps` - Para componentes que pueden borrarse
-- `IconProps` - Para componentes con icono
-- `BorderedProps` - Para componentes con borde
-- `ShadowedProps` - Para componentes con sombra
+Flat JSON-serializable tenant configuration. Holds identity (slug, name, plan,
+features, locale, logos) plus an optional `brandTheme` or `brandThemeId`
+reference. Backward-compatible `branding`, `personality`, and `tokenOverrides`
+fields remain for existing consumers.
 
-## Tipos de Engine (engine/)
+### DesignTokens (resolved token graph)
 
-### EngineName
-```typescript
-type EngineName = 'classic' | 'modern' | 'rustic' | 'custom';
-```
-- `classic`: Ant Design (enterprise, feature-rich)
-- `modern`: DaisyUI/Tailwind (lightweight, utility-first)
-- `rustic`: Vanilla HTML/CSS (minimal, accessible)
-- `custom`: Pluggable custom implementations (experimental)
+Full resolved token set consumed by `useTokens()`. Includes colors, spacing,
+typography, borderRadius, shadows, glass, gradients, surface, motion, and
+personality dimensions.
 
-### EngineAwareProps
-```typescript
-interface EngineAwareProps {
-  engine?: EngineName;
-}
-```
+### PersonalityTokens (5 visual dimensions)
 
-Todos los componentes primitivos heredan estas props para soportar múltiples engines.
+Animation, chart, typography, accent, and card personality. These define the
+"feel" of a product (formal, playful, expressive) independently of colors.
 
-## Componentes Primitivos Implementados
+### ComponentExtensions (universal extension system)
 
-### Display
-- **Avatar**: Avatar con status, grupo, badge, fallback
-- **Badge**: Badge con variantes, ribbon, contador
-- **Card**: Card con header, body, footer, cover, meta
-- **Image**: Image con lazy loading, zoom, fallback
-- **Tag**: Tag con close, click, variantes
-- **Tooltip**: Tooltip con posiciones, triggers
+16 independently optional extension categories (slots, columns, actions,
+filters, rendering, selection, sorting, pagination, motion, layout, data,
+drag-and-drop, export, keyboard, lifecycle, accessibility).
 
-### Inputs
-- **Button**: Button con variantes, loading, iconos, grupo
-- **Checkbox**: Checkbox con grupo, indeterminate
-- **Input**: Input con password, textarea, search, grupo
-- **Radio**: Radio con grupo, botones
-- **Select**: Select con búsqueda, múltiple, grupos
-- **Toggle**: Toggle (Switch) con loading, iconos
+## Usage
 
-### Feedback
-- **Alert**: Alert con variantes, close, acciones
-- **Modal**: Modal con header/body/footer, confirm
-- **Toast**: Toast con provider, posiciones, acciones
-
-### Navigation
-- **Menu**: Menu horizontal/vertical/inline, submenus
-- **Stepper**: Stepper horizontal/vertical, acciones
-
-## Uso
+All contracts are re-exported from the package root:
 
 ```typescript
-import type {
-  // Common
-  BaseComponentProps,
-  Size,
-  Variant,
-  
-  // Engine
-  EngineName,
-  EngineAwareProps,
-  
-  // Primitives - Display
-  AvatarProps,
-  BadgeProps,
-  CardProps,
-  
-  // Primitives - Inputs
-  ButtonProps,
-  InputProps,
-  SelectProps,
-  
-  // Primitives - Feedback
-  ModalProps,
-  ToastProps,
-  AlertProps,
-  
-  // Primitives - Navigation
-  MenuProps,
-  StepperProps,
-} from '@rottay/design-system';
-
-// Ejemplo de uso
-const MyButton: React.FC<ButtonProps> = (props) => {
-  // ...
-};
+import type { BrandTheme, TenantConfig, DesignTokens, EngineName } from '@rottay/design-system';
 ```
 
-## Características
-
-- ✅ **JSDoc completo**: Todos los tipos tienen documentación
-- ✅ **Type-safe**: Tipado estricto con TypeScript
-- ✅ **Extensible**: Fácil de extender y customizar
-- ✅ **Engine-aware**: Soporte para múltiples engines
-- ✅ **Composable**: Props mixins reutilizables
-- ✅ **React 18**: Compatible con React 18 types
-
-## Engines Actuales
-
-Los tipos ya están alineados con la estructura real del core:
-- `/packages/core/src/components/**/engines/classic/` - Implementaciones con Ant Design
-- `/packages/core/src/components/**/engines/modern/` - Implementaciones con DaisyUI/Tailwind
-- `/packages/core/src/components/**/engines/rustic/` - Implementaciones vanilla
+Primitive component props (ButtonProps, AvatarProps, etc.) live next to their
+component implementations, not in this directory.

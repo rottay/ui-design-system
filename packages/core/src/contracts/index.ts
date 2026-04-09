@@ -7,7 +7,7 @@
  * This barrel intentionally re-exports system-level contracts only. Primitive
  * component props (Button, Avatar, Modal, etc.) live next to their components
  * to avoid duplicate type hierarchies and drift between runtime code and
- * public APIs. Import those from `contracts/primitives/*` directly.
+ * public APIs.
  *
  * @module Contracts
  * @category Types
