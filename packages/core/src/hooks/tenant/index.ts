@@ -82,15 +82,16 @@ export function useTenant() {
   return context;
 }
 
-// -- Tenant utilities --
-// Co-located here for backwards compatibility: consumers historically imported
-// personality presets and tenant creation helpers from `hooks/tenant`.
+// -- Tenant utilities (compat re-exports) --
+// These are NOT hooks. Their canonical home is `runtime/tenancy/` which is
+// re-exported from the package root. These re-exports exist only for backward
+// compatibility with consumers that imported from `hooks/tenant`.
 
-/** Maps a personality keyword ('formal', 'neutral', etc.) to full PersonalityTokens. */
+/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenancy`). */
 export { resolvePersonalityPreset } from './personality-presets';
 export type { PersonalityPreset } from './personality-presets';
 
-/** Factory for building a complete TenantConfig from minimal input. */
+/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenancy`). */
 export { createTenantConfig } from './create-tenant';
 export type { TenantCreationConfig } from './create-tenant';
 

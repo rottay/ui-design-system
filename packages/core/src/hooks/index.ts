@@ -3,6 +3,22 @@
  * @description Central exports for all React hooks that provide access to the
  * design system's state, configuration, and responsive utilities.
  *
+ * ## Ownership model (frozen decision 4)
+ *
+ * Top-level `hooks/` is reserved for **generic reusable React hooks** that
+ * have zero domain semantics and zero product-specific dependencies.
+ *
+ * Hooks that belong to a specific subsystem live at the owning subsystem
+ * and are re-exported through this barrel or the package root:
+ * - Theme hooks: canonical at `runtime/theming/useTheme.ts`
+ * - Feature hooks: canonical at `runtime/features/useFeatures.ts`
+ * - Product profile hooks: canonical at `runtime/product-profiles/`
+ * - Tenant utilities: canonical at `runtime/tenancy/`
+ *
+ * Compatibility shims in `hooks/theme/`, `hooks/features/`,
+ * `hooks/product-profile/`, and non-hook exports in `hooks/tenant/` exist
+ * for backward compatibility. New code should import from the package root.
+ *
  * @remarks
  * The Rottay Design System provides several categories of hooks:
  *
