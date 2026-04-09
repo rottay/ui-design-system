@@ -17,7 +17,7 @@
 
 import React from 'react';
 import type { UserProfileCardProps } from '../UserProfileCard.types';
-import { panelCardStyle, pillBadgeSmStyle, spinnerStyle } from '../../../shared/modern-styles';
+import { panelCardStyle, pillBadgeSmStyle, spinnerStyle } from '../../_internal/engines/modern/styles';
 
 // DS token badge styles per status, providing a human-readable label.
 const statusBadgeStyles: Record<string, React.CSSProperties> = {

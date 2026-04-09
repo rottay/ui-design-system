@@ -21,7 +21,7 @@
 
 import React from 'react';
 import type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from '../ApprovalWorkflow.types';
-import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle } from '../../../shared/modern-styles';
+import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle } from '../../_internal/engines/modern/styles';
 
 // Inline styles mapped from domain statuses for badge variants.
 // "skipped" uses reduced opacity to visually de-emphasize it,

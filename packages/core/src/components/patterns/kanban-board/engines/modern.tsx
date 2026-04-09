@@ -18,7 +18,7 @@
 
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../KanbanBoard.types';
-import { pillBadgeSmStyle, spinnerStyle } from '../../../shared/modern-styles';
+import { pillBadgeSmStyle, spinnerStyle } from '../../_internal/engines/modern/styles';
 
 /**
  * Modern Kanban board built on Tailwind utility classes with DS token styling.

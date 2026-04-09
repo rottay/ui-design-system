@@ -19,7 +19,7 @@
 
 import React from 'react';
 import type { PricingTableProps, PricingPlan, PricingFeature } from '../PricingTable.types';
-import { pillBadgeSmStyle, spinnerStyle } from '../../../shared/modern-styles';
+import { pillBadgeSmStyle, spinnerStyle } from '../../_internal/engines/modern/styles';
 
 /**
  * Renders a tri-state feature indicator using Unicode characters.

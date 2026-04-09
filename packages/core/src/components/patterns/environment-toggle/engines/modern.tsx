@@ -18,7 +18,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { EnvironmentToggleProps, EnvironmentDef } from '../EnvironmentToggle.types';
-import { popupPanelStyle, pillBadgeSmStyle, inlineActionGroupStyle } from '../../../shared/modern-styles';
+import { popupPanelStyle, pillBadgeSmStyle, inlineActionGroupStyle } from '../../_internal/engines/modern/styles';
 
 /**
  * Modern (token-driven) implementation of the EnvironmentToggle pattern.

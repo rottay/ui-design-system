@@ -18,7 +18,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../LiveFeed.types';
-import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle, spinnerStyle } from '../../../shared/modern-styles';
+import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle, spinnerStyle } from '../../_internal/engines/modern/styles';
 
 /**
  * Modern (token-driven) LiveFeed engine.

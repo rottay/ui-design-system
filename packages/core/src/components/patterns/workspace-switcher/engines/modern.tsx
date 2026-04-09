@@ -18,7 +18,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { WorkspaceSwitcherProps, Workspace } from '../WorkspaceSwitcher.types';
-import { popupPanelStyle, pillBadgeSmStyle, menuSectionTitleStyle } from '../../../shared/modern-styles';
+import { popupPanelStyle, pillBadgeSmStyle, menuSectionTitleStyle } from '../../_internal/engines/modern/styles';
 
 /**
  * Extracts up to two uppercase initials from a workspace or user name.

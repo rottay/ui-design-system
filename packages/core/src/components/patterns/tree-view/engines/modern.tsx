@@ -20,7 +20,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TreeViewProps, TreeNode } from '../TreeView.types';
-import { panelCardStyle } from '../../../shared/modern-styles';
+import { panelCardStyle } from '../../_internal/engines/modern/styles';
 
 /**
  * Recursively filters the tree, keeping any node whose label matches the query

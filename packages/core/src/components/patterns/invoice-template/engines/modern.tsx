@@ -16,7 +16,7 @@
 
 import React from 'react';
 import type { InvoiceTemplateProps } from '../InvoiceTemplate.types';
-import { panelCardStyle, pillBadgeStyle, spinnerStyle } from '../../../shared/modern-styles';
+import { panelCardStyle, pillBadgeStyle, spinnerStyle } from '../../_internal/engines/modern/styles';
 
 /** Maps invoice status to DS token badge styles */
 const statusStyles: Record<string, React.CSSProperties> = {

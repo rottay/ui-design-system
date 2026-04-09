@@ -18,7 +18,7 @@
 
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import type { CommandPaletteProps, CommandItem } from '../CommandPalette.types';
-import { menuSectionTitleStyle } from '../../../shared/modern-styles';
+import { menuSectionTitleStyle } from '../../_internal/engines/modern/styles';
 
 /**
  * Modern (token-driven) command palette with full keyboard navigation.
