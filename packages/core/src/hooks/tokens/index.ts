@@ -29,6 +29,7 @@ import { useProductProfile } from '../product-profile';
 import { useEngineContext } from '../../runtime/engines';
 import { getEngineTokens } from './engine-tokens';
 import { DEFAULT_PERSONALITY } from '../../runtime/personality/defaults';
+import { brandThemeToTokenOverrides, brandThemeToPersonality } from '../../runtime/brand-compiler';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../contracts';
 
 export { getEngineTokens, ENGINE_TOKENS } from './engine-tokens';
@@ -161,94 +162,127 @@ export function useTokens(): DesignTokens {
 
   return useMemo(() => {
     // -- Token Resolution Pipeline --
-    // Structural tokens (borderRadius, shadows, surface, motion) resolve via a
-    // three-layer spread: engine -> product profile -> tenant. Each layer can
-    // provide partial overrides that spread on top of the layer below.
     //
-    // Vertical currently influences the personality layer only, not the lower-level
-    // token buckets like border radius or shadows. That keeps verticals focused
-    // on product mood while preserving the existing token override contract.
+    // Two paths depending on whether the tenant has a BrandTheme:
+    //
+    // BrandTheme path (target model):
+    //   Structural: engine -> vertical.tokenOverrides -> brandTheme.surfaces
+    //   Personality: DEFAULT -> vertical.personality -> brandTheme (motion/charts/chrome)
+    //   Product profile contributes only surfaceDefaults (UX posture), not visual tokens.
+    //
+    // Legacy path (backward compatible):
+    //   Structural: engine -> vertical.tokenOverrides -> profile.tokenOverrides -> tenant.tokenOverrides
+    //   Personality: DEFAULT -> vertical.personality -> profile.personality -> tenant.personality
+
+    const brandTheme = config.brandTheme;
+    const hasBrandTheme = !!brandTheme;
 
     // 1. Engine base tokens -- the visual foundation for classic/modern/rustic
     const engineOverrides = getEngineTokens(engine);
 
-    // 2. Product profile overrides spread on top of engine. The conditional spread
-    // avoids allocating a new object when the profile has no overrides, which is
-    // the common case for generic.default.
-    const productProfileTokenOverrides = profile.tokenOverrides;
-    const productProfileBorderRadius = productProfileTokenOverrides?.borderRadius
-      ? { ...engineOverrides.borderRadius, ...productProfileTokenOverrides.borderRadius }
+    // 2. Vertical structural overrides (new — previously only personality participated).
+    // This closes the asymmetry where vertical influenced personality but not structural tokens.
+    const verticalTokenOverrides = vertical?.tokenOverrides;
+    const verticalBorderRadius = verticalTokenOverrides?.borderRadius
+      ? { ...engineOverrides.borderRadius, ...verticalTokenOverrides.borderRadius }
       : engineOverrides.borderRadius;
-    const productProfileShadows = productProfileTokenOverrides?.shadows
-      ? { ...engineOverrides.shadows, ...productProfileTokenOverrides.shadows }
+    const verticalShadows = verticalTokenOverrides?.shadows
+      ? { ...engineOverrides.shadows, ...verticalTokenOverrides.shadows }
       : engineOverrides.shadows;
-    const productProfileSurface = productProfileTokenOverrides?.surface
-      ? { ...engineOverrides.surface, ...productProfileTokenOverrides.surface }
+    const verticalSurface = verticalTokenOverrides?.surface
+      ? { ...engineOverrides.surface, ...verticalTokenOverrides.surface }
       : engineOverrides.surface;
-    const productProfileMotion = productProfileTokenOverrides?.motion
-      ? { ...engineOverrides.motion, ...productProfileTokenOverrides.motion }
+    const verticalMotion = verticalTokenOverrides?.motion
+      ? { ...engineOverrides.motion, ...verticalTokenOverrides.motion }
       : engineOverrides.motion;
-    const productProfileDensityScale = productProfileTokenOverrides?.densityScale ?? engineOverrides.densityScale;
+    const verticalDensityScale = verticalTokenOverrides?.densityScale ?? engineOverrides.densityScale;
 
-    // 3. Tenant overrides are the highest-priority structural layer. A customer
-    // tenant can sharpen radii or add heavier shadows without forking a profile.
-    const tenantTokenOverrides = config.tokenOverrides;
-    const borderRadius = tenantTokenOverrides?.borderRadius
-      ? { ...productProfileBorderRadius, ...tenantTokenOverrides.borderRadius }
-      : productProfileBorderRadius;
-    const shadows = tenantTokenOverrides?.shadows
-      ? { ...productProfileShadows, ...tenantTokenOverrides.shadows }
-      : productProfileShadows;
-    const surface = tenantTokenOverrides?.surface
-      ? { ...productProfileSurface, ...tenantTokenOverrides.surface }
-      : productProfileSurface;
-    const motion = tenantTokenOverrides?.motion
-      ? { ...productProfileMotion, ...tenantTokenOverrides.motion }
-      : productProfileMotion;
-    const densityScale = tenantTokenOverrides?.densityScale ?? productProfileDensityScale;
+    // 3. Final structural layer — BrandTheme or legacy (profile + tenant)
+    let borderRadius: typeof verticalBorderRadius;
+    let shadows: typeof verticalShadows;
+    let surface: typeof verticalSurface;
+    let motion: typeof verticalMotion;
+    let densityScale: number;
 
-    // 4. Personality tokens use a four-layer merge, one layer deeper than structural
-    // tokens because verticals also participate. Each sub-object (animation, chart, etc.)
-    // is spread independently so a tenant that only customizes `animation` does not
-    // accidentally wipe out the vertical's `chart` personality.
-    //
-    // Merge chain (lowest to highest priority):
-    //   DEFAULT_PERSONALITY -> vertical.personality -> productProfile.personality -> tenant.personality
+    if (hasBrandTheme) {
+      // BrandTheme path: brandTheme.surfaces overrides vertical layer directly.
+      // Product profile tokenOverrides are skipped — only surfaceDefaults survives.
+      const btOverrides = brandThemeToTokenOverrides(brandTheme);
+      borderRadius = btOverrides.borderRadius
+        ? { ...verticalBorderRadius, ...btOverrides.borderRadius }
+        : verticalBorderRadius;
+      shadows = btOverrides.shadows
+        ? { ...verticalShadows, ...btOverrides.shadows }
+        : verticalShadows;
+      surface = btOverrides.surface
+        ? { ...verticalSurface, ...btOverrides.surface }
+        : verticalSurface;
+      motion = btOverrides.motion
+        ? { ...verticalMotion, ...btOverrides.motion }
+        : verticalMotion;
+      densityScale = btOverrides.densityScale ?? verticalDensityScale;
+    } else {
+      // Legacy path: profile -> tenant on top of vertical
+      const productProfileTokenOverrides = profile.tokenOverrides;
+      const ppBorderRadius = productProfileTokenOverrides?.borderRadius
+        ? { ...verticalBorderRadius, ...productProfileTokenOverrides.borderRadius }
+        : verticalBorderRadius;
+      const ppShadows = productProfileTokenOverrides?.shadows
+        ? { ...verticalShadows, ...productProfileTokenOverrides.shadows }
+        : verticalShadows;
+      const ppSurface = productProfileTokenOverrides?.surface
+        ? { ...verticalSurface, ...productProfileTokenOverrides.surface }
+        : verticalSurface;
+      const ppMotion = productProfileTokenOverrides?.motion
+        ? { ...verticalMotion, ...productProfileTokenOverrides.motion }
+        : verticalMotion;
+      const ppDensityScale = productProfileTokenOverrides?.densityScale ?? verticalDensityScale;
+
+      const tenantTokenOverrides = config.tokenOverrides;
+      borderRadius = tenantTokenOverrides?.borderRadius
+        ? { ...ppBorderRadius, ...tenantTokenOverrides.borderRadius }
+        : ppBorderRadius;
+      shadows = tenantTokenOverrides?.shadows
+        ? { ...ppShadows, ...tenantTokenOverrides.shadows }
+        : ppShadows;
+      surface = tenantTokenOverrides?.surface
+        ? { ...ppSurface, ...tenantTokenOverrides.surface }
+        : ppSurface;
+      motion = tenantTokenOverrides?.motion
+        ? { ...ppMotion, ...tenantTokenOverrides.motion }
+        : ppMotion;
+      densityScale = tenantTokenOverrides?.densityScale ?? ppDensityScale;
+    }
+
+    // 4. Personality tokens — BrandTheme or legacy merge.
+    // Each sub-object is spread independently so customizing one dimension
+    // does not wipe out another.
     const verticalPersonality = vertical?.personality;
-    const productPersonality = profile.personality;
-    const tenantPersonality = config.personality;
-    const personality: PersonalityTokens = {
-      animation: {
-        ...DEFAULT_PERSONALITY.animation,
-        ...verticalPersonality?.animation,
-        ...productPersonality?.animation,
-        ...tenantPersonality?.animation,
-      },
-      chart: {
-        ...DEFAULT_PERSONALITY.chart,
-        ...verticalPersonality?.chart,
-        ...productPersonality?.chart,
-        ...tenantPersonality?.chart,
-      },
-      typography: {
-        ...DEFAULT_PERSONALITY.typography,
-        ...verticalPersonality?.typography,
-        ...productPersonality?.typography,
-        ...tenantPersonality?.typography,
-      },
-      accent: {
-        ...DEFAULT_PERSONALITY.accent,
-        ...verticalPersonality?.accent,
-        ...productPersonality?.accent,
-        ...tenantPersonality?.accent,
-      },
-      card: {
-        ...DEFAULT_PERSONALITY.card,
-        ...verticalPersonality?.card,
-        ...productPersonality?.card,
-        ...tenantPersonality?.card,
-      },
-    };
+    let personality: PersonalityTokens;
+
+    if (hasBrandTheme) {
+      // BrandTheme path: DEFAULT -> vertical -> brandTheme
+      // Product profile personality is skipped.
+      const btPersonality = brandThemeToPersonality(brandTheme);
+      personality = {
+        animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...btPersonality.animation },
+        chart: { ...DEFAULT_PERSONALITY.chart, ...verticalPersonality?.chart, ...btPersonality.chart },
+        typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...btPersonality.typography },
+        accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...btPersonality.accent },
+        card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...btPersonality.card },
+      };
+    } else {
+      // Legacy path: DEFAULT -> vertical -> profile -> tenant
+      const productPersonality = profile.personality;
+      const tenantPersonality = config.personality;
+      personality = {
+        animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...productPersonality?.animation, ...tenantPersonality?.animation },
+        chart: { ...DEFAULT_PERSONALITY.chart, ...verticalPersonality?.chart, ...productPersonality?.chart, ...tenantPersonality?.chart },
+        typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...productPersonality?.typography, ...tenantPersonality?.typography },
+        accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...productPersonality?.accent, ...tenantPersonality?.accent },
+        card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...productPersonality?.card, ...tenantPersonality?.card },
+      };
+    }
 
     return {
       colors: {
@@ -334,6 +368,7 @@ export function useTokens(): DesignTokens {
     config.slug,
     config.tokenOverrides,
     config.personality,
+    config.brandTheme,
     config.branding.primaryColor,
     config.branding.secondaryColor,
     config.branding.accentColor,
