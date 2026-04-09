@@ -91,6 +91,7 @@ import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
+import { brandThemeToBranding, brandThemeToTokenOverrides } from '../brand-compiler';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -416,8 +417,16 @@ export function DesignSystemProvider({
               theme={theme}
               tenant={tenantConfig.slug}
               vertical={tenantConfig.vertical ?? resolvedVertical?.key}
-              branding={tenantConfig.branding}
-              tokenOverrides={tenantConfig.tokenOverrides}
+              branding={
+                tenantConfig.brandTheme
+                  ? { ...tenantConfig.branding, ...brandThemeToBranding(tenantConfig.brandTheme) }
+                  : tenantConfig.branding
+              }
+              tokenOverrides={
+                tenantConfig.brandTheme
+                  ? brandThemeToTokenOverrides(tenantConfig.brandTheme)
+                  : tenantConfig.tokenOverrides
+              }
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >
