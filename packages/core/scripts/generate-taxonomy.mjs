@@ -72,7 +72,7 @@ let totalPrimitiveComponents = 0;
   const groups = listDirs(tierDir);
   lines.push('## Structures');
   lines.push('');
-  lines.push('> Page-structure families (headers, toolbars, record panels, metric cards, overlays)');
+  lines.push('> Structural families (headers, toolbars, record panels, metric cards, overlays)');
   lines.push('');
   for (const group of groups) {
     const families = listDirs(join(tierDir, group));
@@ -86,7 +86,11 @@ let totalPrimitiveComponents = 0;
   }
 }
 
-// --- Patterns: groups → families ---
+// --- Patterns: flat list of families ---
+// Patterns are listed flat (each top-level dir = one family). Subdirs
+// inside families (e.g., engines/, hooks/) are implementation details,
+// not sub-groups. If patterns gets regrouped in a future checkpoint,
+// this section should switch to the grouped format used by structures.
 {
   const tierDir = join(COMPONENTS_ROOT, 'patterns');
   const topLevel = listDirs(tierDir);
@@ -94,44 +98,13 @@ let totalPrimitiveComponents = 0;
   lines.push('');
   lines.push('> Engine-agnostic task-level compositions');
   lines.push('');
-  // Check if patterns has groups or is still flat
-  // If a top-level dir contains further dirs, it's a group; otherwise it's a flat family
-  let hasGroups = false;
-  for (const d of topLevel) {
-    const children = listDirs(join(tierDir, d));
-    // Heuristic: if children all have index.ts, it's a group of families
-    if (children.length > 0 && d !== 'charts') { // charts is a single family with sub-charts
-      hasGroups = true;
-      break;
-    }
+  for (const f of topLevel) {
+    lines.push(`- \`${f}/\``);
+    totalFamilies++;
   }
-  if (hasGroups) {
-    // Grouped patterns
-    for (const group of topLevel) {
-      const families = listDirs(join(tierDir, group));
-      if (families.length > 0 && group !== 'charts') {
-        lines.push(`### ${group}/`);
-        lines.push('');
-        for (const f of families) {
-          lines.push(`- \`${group}/${f}/\``);
-          totalFamilies++;
-        }
-        lines.push('');
-      } else {
-        lines.push(`- \`${group}/\``);
-        totalFamilies++;
-      }
-    }
-  } else {
-    // Flat patterns (current state)
-    for (const f of topLevel) {
-      lines.push(`- \`${f}/\``);
-      totalFamilies++;
-    }
-    lines.push('');
-    lines.push(`**Total**: ${topLevel.length} families.`);
-    lines.push('');
-  }
+  lines.push('');
+  lines.push(`**Total**: ${topLevel.length} families.`);
+  lines.push('');
 }
 
 // --- Surfaces: foundation + layout + pages (grouped) ---

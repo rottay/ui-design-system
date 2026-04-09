@@ -22,7 +22,7 @@ Generated on 2026-04-09.
 
 ## Structures
 
-> Page-structure families (headers, toolbars, record panels, metric cards, overlays)
+> Structural families (headers, toolbars, record panels, metric cards, overlays)
 
 ### dashboard/
 
@@ -61,160 +61,52 @@ Generated on 2026-04-09.
 
 > Engine-agnostic task-level compositions
 
-### activity-log/
-
-- `activity-log/engines/`
-
-### approval-inbox/
-
-- `approval-inbox/engines/`
-
-### approval-workflow/
-
-- `approval-workflow/engines/`
-
+- `activity-log/`
+- `approval-inbox/`
+- `approval-workflow/`
 - `assistant/`
 - `bulk-select-toggle/`
-### calendar-view/
-
-- `calendar-view/engines/`
-
+- `calendar-view/`
 - `charts/`
-### cockpit-header/
-
-- `cockpit-header/engines/`
-
-### column-settings/
-
-- `column-settings/engines/`
-
-### command-palette/
-
-- `command-palette/engines/`
-
-### comment-thread/
-
-- `comment-thread/engines/`
-
-### data-table/
-
-- `data-table/engines/`
-
-### detail-panel/
-
-- `detail-panel/engines/`
-
-### empty-state/
-
-- `empty-state/engines/`
-
-### environment-toggle/
-
-- `environment-toggle/engines/`
-
-### file-manager/
-
-- `file-manager/engines/`
-
-### filter-builder/
-
-- `filter-builder/engines/`
-
-### filter-panel/
-
-- `filter-panel/engines/`
-
-### form-builder/
-
-- `form-builder/engines/`
-
+- `cockpit-header/`
+- `column-settings/`
+- `command-palette/`
+- `comment-thread/`
+- `data-table/`
+- `detail-panel/`
+- `empty-state/`
+- `environment-toggle/`
+- `file-manager/`
+- `filter-builder/`
+- `filter-panel/`
+- `form-builder/`
 - `header-actions/`
 - `hooks/`
-### invoice-template/
-
-- `invoice-template/engines/`
-
-### kanban-board/
-
-- `kanban-board/engines/`
-
-### list-toolbar/
-
-- `list-toolbar/engines/`
-
-### live-feed/
-
-- `live-feed/engines/`
-
-### map-view/
-
-- `map-view/engines/`
-
-### moderation-gallery/
-
-- `moderation-gallery/engines/`
-
-### notification-center/
-
-- `notification-center/engines/`
-
-### operational-ledger/
-
-- `operational-ledger/engines/`
-
-### page-shell/
-
-- `page-shell/engines/`
-
-### pricing-table/
-
-- `pricing-table/engines/`
-
-### saved-views/
-
-- `saved-views/engines/`
-
-### shift-matrix/
-
-- `shift-matrix/engines/`
-
-### shortcuts-overlay/
-
-- `shortcuts-overlay/engines/`
-
-### stats-grid/
-
-- `stats-grid/engines/`
-
+- `invoice-template/`
+- `kanban-board/`
+- `list-toolbar/`
+- `live-feed/`
+- `map-view/`
+- `moderation-gallery/`
+- `notification-center/`
+- `operational-ledger/`
+- `page-shell/`
+- `pricing-table/`
+- `saved-views/`
+- `shift-matrix/`
+- `shortcuts-overlay/`
+- `stats-grid/`
 - `status-filter-pills/`
-### step-wizard/
-
-- `step-wizard/engines/`
-
+- `step-wizard/`
 - `table-checkbox-styles/`
-### tenant-preview/
+- `tenant-preview/`
+- `timeline/`
+- `tree-view/`
+- `user-profile-card/`
+- `workbench-header/`
+- `workspace-switcher/`
 
-- `tenant-preview/engines/`
-
-### timeline/
-
-- `timeline/engines/`
-
-### tree-view/
-
-- `tree-view/engines/`
-
-### user-profile-card/
-
-- `user-profile-card/engines/`
-
-### workbench-header/
-
-- `workbench-header/engines/`
-
-### workspace-switcher/
-
-- `workspace-switcher/engines/`
+**Total**: 44 families.
 
 ## Surfaces
 
