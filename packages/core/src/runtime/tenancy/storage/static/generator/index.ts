@@ -10,7 +10,7 @@
  */
 
 import type { TenantConfig } from '../../../../../contracts';
-import { compileBrandTheme, brandThemeToBranding, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
+import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
@@ -574,13 +574,14 @@ export function generateTenantCss(
   const includeDarkSelector = options.includeDarkSelector ?? true;
   const includeSystemDarkSelector = options.includeSystemDarkSelector ?? true;
 
-  // When brandTheme is present, use the brand compiler for palette CSS variables
-  // and derive an effective config with normalized branding/tokenOverrides so
-  // the existing variable-generation functions produce consistent output.
+  // When brandTheme is present, derive effective branding, tokenOverrides, and
+  // personality so all variable-generation functions produce consistent output.
+  // This mirrors the normalization that DesignSystemProvider does at runtime.
   const effectiveConfig: TenantConfig = config.brandTheme
     ? {
         ...config,
         branding: { ...config.branding, ...brandThemeToBranding(config.brandTheme) },
+        personality: config.personality ?? brandThemeToPersonality(config.brandTheme),
         tokenOverrides: config.tokenOverrides
           ? (deepMergeTokenOverrides(brandThemeToTokenOverrides(config.brandTheme), config.tokenOverrides) as TenantConfig['tokenOverrides'])
           : (brandThemeToTokenOverrides(config.brandTheme) as TenantConfig['tokenOverrides']),

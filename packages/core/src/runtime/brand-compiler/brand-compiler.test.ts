@@ -404,4 +404,43 @@ describe('parity: static generator with brandTheme', () => {
     // Tenant override should win
     expect(css).toContain('--ds-density-scale: 1.5');
   });
+
+  it('generateTenantCss derives personality from brandTheme', () => {
+    // A tenant with brandTheme but no legacy personality should still
+    // produce --ds-personality-* CSS variables from brandTheme.motion/charts/chrome.
+    const css = generateTenantCss(bithireConfig, { includeDarkSelector: false });
+    // Animation personality from brandTheme.motion
+    expect(css).toContain('--ds-personality-animation-intensity');
+    expect(css).toContain('--ds-personality-animation-entrance: fade');
+    // Chart personality from brandTheme.charts
+    expect(css).toContain('--ds-personality-chart-line-style: sharp');
+    // Card personality from brandTheme.chrome.card
+    expect(css).toContain('--ds-personality-card-padding-density: compact');
+    // Typography personality from brandTheme.typography
+    expect(css).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
+  });
+
+  it('brandTheme-only tenant produces same personality vars as legacy tenant', () => {
+    // A tenant with no brandTheme but explicit personality should produce
+    // the same variables when values match.
+    const legacyConfig: TenantConfig = {
+      ...bithireConfig,
+      brandTheme: undefined,
+      personality: {
+        animation: { intensity: 0.4, entrance: 'fade', entranceDuration: 150,
+          hoverLift: 0, hoverScale: 1.0, useSpring: false, springTension: 170,
+          springFriction: 26, staggerDelay: 30, staggerMax: 200,
+          pulseSpeed: 'slow', skeletonStyle: 'pulse', countUpEnabled: true },
+        typography: { headingWeightBias: 'heavier', headingLetterSpacing: '-0.01em', labelStyle: 'uppercase' },
+      },
+    };
+    const brandCss = generateTenantCss(bithireConfig, { includeDarkSelector: false });
+    const legacyCss = generateTenantCss(legacyConfig, { includeDarkSelector: false });
+    // Both should contain the same personality animation intensity
+    expect(brandCss).toContain('--ds-personality-animation-intensity: 0.4');
+    expect(legacyCss).toContain('--ds-personality-animation-intensity: 0.4');
+    // Both should contain the same heading letter spacing
+    expect(brandCss).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
+    expect(legacyCss).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
+  });
 });
