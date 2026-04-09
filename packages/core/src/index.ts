@@ -28,7 +28,7 @@ export type { DSError, DSErrorInput, ErrorSubscriber, UseErrorHandlerOptions, Us
 // ============================================
 // PROVIDERS (ResponsiveProvider, etc.)
 // ============================================
-export * from './runtime/providers';
+export * from './runtime/responsive';
 
 // ============================================
 // NAVIGATION (framework-agnostic Link adapter)

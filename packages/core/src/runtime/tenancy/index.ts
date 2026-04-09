@@ -13,17 +13,19 @@
  * 5. **Storage** -- Determines "what is this tenant's config?" via registry, static, or API.
  */
 
-// ── Runtime (Provider, hooks, presets) ──
-// React-layer API: TenantProvider wraps the app, useTenant/useTenantContext
-// read the current tenant, and creation utilities help build new configs.
-export { TenantProvider, useTenantContext, TenantContext } from './TenantProvider';
-export type { TenantProviderProps } from './TenantProvider';
-export { useTenant } from './useTenant';
+// ── Provider (React-layer API) ──
+export { TenantProvider, useTenantContext, TenantContext } from './provider/TenantProvider';
+export type { TenantProviderProps } from './provider/TenantProvider';
+export { useTenant } from './provider/useTenant';
+
+// ── Authoring (tenant creation utilities) ──
+export { createTenantConfig } from './authoring/create-tenant';
+export type { TenantCreationConfig } from './authoring/create-tenant';
+export { useCreateTenant } from './authoring/useCreateTenant';
+
+// ── Presets (personality resolution) ──
 export { resolvePersonalityPreset } from './personality-presets';
 export type { PersonalityPreset } from './personality-presets';
-export { createTenantConfig } from './create-tenant';
-export type { TenantCreationConfig } from './create-tenant';
-export { useCreateTenant } from './useCreateTenant';
 
 // ── Schema & validation ──
 // Pure functions for validating tenant payloads against the DS contract.
@@ -41,10 +43,10 @@ export {
 // Baseline config for when no tenant source is available at all.
 export { DEFAULT_TENANT_CONFIG, getDefaultTenantConfig } from './defaults';
 
-// ── Resolver ──
-// Slug resolution layer: figures out the tenant slug from the execution context
-// (headers on server, subdomain/domain in browser) before the storage layer
-// resolves the full config.
+// ── Resolution ──
+// Slug resolution layer: figures out the tenant slug from the execution
+// context (headers on server, subdomain/domain in browser) before the
+// storage layer resolves the full config.
 export {
   resolveTenant,
   resolveFromSubdomain,
@@ -53,8 +55,8 @@ export {
   configureDomainLookup,
   setServerHeaders,
   clearServerHeaders,
-} from './resolver';
-export type { ResolverOptions } from './resolver';
+} from './resolution';
+export type { ResolverOptions } from './resolution';
 
 // ── Storage ──
 // Config resolution layer: given a slug, returns a full TenantConfig via a
@@ -83,13 +85,14 @@ export {
   DEFAULT_TENANT_SLUG,
 } from './registry';
 
-// Middleware tenant resolution utility
+// Middleware tenant resolution utility (lives alongside the client resolver
+// inside resolution/ since both answer "which tenant am I?")
 export {
   resolveRequestTenant,
   resolveRequestTenantAsync,
   createEdgeConfigDomainLookup,
-} from './resolve-request-tenant';
+} from './resolution/resolve-request-tenant';
 export type {
   TenantResolutionOptions,
   EdgeConfigDomainLookupOptions,
-} from './resolve-request-tenant';
+} from './resolution/resolve-request-tenant';

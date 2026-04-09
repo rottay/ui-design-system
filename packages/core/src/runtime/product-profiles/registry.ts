@@ -1,16 +1,24 @@
 /**
- * @fileoverview Product profile registry with built-in presets.
+ * @fileoverview Product profile registry — first-party Rottay presets
+ * bundled with the DS.
  *
- * Profiles describe product mood and interaction density at a domain level.
- * They do NOT encode per-page behavior -- pages express their own structure
- * through surface configs in the app layer.
+ * @description
+ * Profiles describe product mood and interaction density at a domain
+ * level. They do NOT encode per-page behavior — pages express their own
+ * structure through surface configs in the app layer.
  *
- * Five built-in profiles ship with the DS:
- * - `generic.default`     -- Safe baseline for new products
- * - `events.organizer`    -- Expressive, spacious, media-first (Evnto)
- * - `recruiting.operator` -- Compact, formal, data-dense (BitHire)
- * - `platform.admin`      -- Neutral, comfortable, operational (Platform)
- * - `platform.flagship`   -- Premium flagship for modern engine showcase (Platform)
+ * Five built-in profiles ship with the DS as **first-party defaults**:
+ * - `generic.default`     — Safe baseline for new products
+ * - `events.organizer`    — Expressive, spacious, media-first (Evnto)
+ * - `recruiting.operator` — Compact, formal, data-dense (BitHire)
+ * - `platform.admin`      — Neutral, comfortable, operational (Platform)
+ * - `platform.flagship`   — Premium flagship for modern engine showcase
+ *
+ * Custom product profiles can be registered at runtime via the open-ended
+ * `ProductProfileKey = string & {}` type. The five presets here exist
+ * because Rottay's own apps use them. They are not the only profiles the
+ * DS supports — they are the only ones bundled for zero-latency use in
+ * development, Storybook, and CI.
  */
 
 import type { ProductProfile, ProductProfileKey } from '../../contracts/product-profiles';

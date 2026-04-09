@@ -53,8 +53,8 @@
  */
 
 import React, { createContext, useContext, ReactNode, useEffect, useMemo } from 'react';
-import type { TenantConfig, TenantContextValue } from '../../contracts';
-import type { VerticalPreset } from '../verticals/types';
+import type { TenantConfig, TenantContextValue } from '../../../contracts';
+import type { VerticalPreset } from '../../verticals/types';
 
 const TenantContext = createContext<TenantContextValue | null>(null);
 

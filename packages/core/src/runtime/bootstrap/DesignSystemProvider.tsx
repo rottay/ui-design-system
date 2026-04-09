@@ -79,7 +79,7 @@
 import React, { ReactNode, useState, useEffect, useRef, useMemo, memo } from 'react';
 import { EngineProvider } from '../engines/EngineProvider';
 import { ThemeProvider } from '../theming';
-import { TenantProvider } from '../tenancy/TenantProvider';
+import { TenantProvider } from '../tenancy/provider/TenantProvider';
 import { ProductProfileProvider } from '../product-profiles/ProductProfileProvider';
 import { FeatureProvider } from '../features';
 import { I18nProvider } from '../../i18n';
@@ -89,7 +89,7 @@ import type { VerticalKey, VerticalPreset } from '../verticals/types';
 import { getVerticalPreset } from '../verticals/registry';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenancy/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
-import { ResponsiveProvider } from '../providers/responsive';
+import { ResponsiveProvider } from '../responsive/responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 
 export interface DesignSystemProviderProps {

@@ -27,14 +27,14 @@
  */
 
 import { useCallback, useRef } from 'react';
-import type { TenantConfig } from '../../contracts';
+import type { TenantConfig } from '../../../contracts';
 import {
   createTenantConfig as createConfig,
   type TenantCreationConfig,
 } from './create-tenant';
 import {
   generateTenantCss as generateCss,
-} from './storage/static/generator';
+} from '../storage/static/generator';
 
 const STYLE_TAG_PREFIX = 'ds-tenant-css';
 

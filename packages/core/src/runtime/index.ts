@@ -14,6 +14,6 @@ export * from './personality';
 export * from './verticals';
 export * from './product-profiles';
 export * from './features';
-export * from './providers';
+export * from './responsive';
 export * from './navigation';
 export * from './focus-mode';

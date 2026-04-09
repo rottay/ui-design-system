@@ -77,8 +77,8 @@ export function useTenant() {
 // ── Tenant creation utilities ──
 // Re-exported here for ergonomic imports (`import { useTenant, createTenantConfig }`)
 // without requiring consumers to know the internal file structure.
-export { resolvePersonalityPreset } from './personality-presets';
-export type { PersonalityPreset } from './personality-presets';
-export { createTenantConfig } from './create-tenant';
-export type { TenantCreationConfig } from './create-tenant';
-export { useCreateTenant } from './useCreateTenant';
+export { resolvePersonalityPreset } from '../personality-presets';
+export type { PersonalityPreset } from '../personality-presets';
+export { createTenantConfig } from '../authoring/create-tenant';
+export type { TenantCreationConfig } from '../authoring/create-tenant';
+export { useCreateTenant } from '../authoring/useCreateTenant';

@@ -11,10 +11,10 @@ export {
   resolveRequestTenant,
   resolveRequestTenantAsync,
   createEdgeConfigDomainLookup,
-} from './runtime/tenancy/resolve-request-tenant';
+} from './runtime/tenancy/resolution/resolve-request-tenant';
 export type {
   TenantResolutionOptions,
   EdgeConfigDomainLookupOptions,
-} from './runtime/tenancy/resolve-request-tenant';
+} from './runtime/tenancy/resolution/resolve-request-tenant';
 
 export { toSupportedLocale } from './i18n/toSupportedLocale';
