@@ -118,6 +118,11 @@ export interface TenantConfig {
   vertical?: string;
   /** Pack key used by the custom engine to resolve tenant-specific implementations */
   componentPack?: string;
+
+  /** Embedded brand theme (for DB-backed tenants with full customization) */
+  brandTheme?: import('../themes').BrandTheme;
+  /** Reference to a registered brand theme by ID (for preset-based tenants) */
+  brandThemeId?: string;
 }
 
 export interface TenantContextValue {
