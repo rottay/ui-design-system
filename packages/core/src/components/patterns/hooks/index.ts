@@ -1,25 +1,3 @@
-/**
- * @fileoverview Pattern hooks and utilities barrel. Exports composition hooks
- * (useDataTable, useKanban, useFormBuilder, useFilterPanel), type-safe column
- * builders, and the createRecipeVariant factory for customizing patterns.
- */
-
-// Composition Hooks
-export { useDataTable } from './useDataTable';
-export type { UseDataTableOptions, UseDataTableReturn } from './useDataTable';
-
-export { useKanban } from './useKanban';
-export type { UseKanbanOptions, UseKanbanReturn } from './useKanban';
-
-export { useFormBuilder } from './useFormBuilder';
-export type { UseFormBuilderOptions, UseFormBuilderReturn } from './useFormBuilder';
-
-export { useFilterPanel } from './useFilterPanel';
-export type { UseFilterPanelOptions, UseFilterPanelReturn } from './useFilterPanel';
-
-// Column Builders
-export { column, columns, actionsColumn } from './columns';
-
-// Recipe Variant Factory
-export { createRecipeVariant } from './createRecipeVariant';
-export type { RecipeVariantConfig } from './createRecipeVariant';
+// Compatibility shim. The real source lives in `_internal/hooks/` after the
+// 2026-04-08 audit moved support material out of the patterns/ root.
+export * from '../_internal/hooks';
