@@ -5,8 +5,8 @@
 
 import React, { Suspense, type ReactElement } from 'react';
 import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
-import { DesignSystemProvider } from '../../../runtime/bootstrap';
-import type { EngineName, ProductProfileKey, TenantConfig } from '../../../contracts';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
+import type { EngineName, ProductProfileKey, TenantConfig } from '../../../../contracts';
 
 const SURFACE_TEST_TENANT: TenantConfig = {
   slug: 'surface-test',

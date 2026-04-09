@@ -7,8 +7,8 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { VisualizationSurface } from '../';
-import { AreaChart, LineChart, PatternStatsGrid } from '../../patterns';
-import { Stack, Text } from '../../primitives';
+import { AreaChart, LineChart, PatternStatsGrid } from '../../../patterns';
+import { Stack, Text } from '../../../primitives';
 import { SurfaceStoryProvider } from './story-helpers';
 
 const meta: Meta = {

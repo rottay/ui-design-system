@@ -19,7 +19,7 @@ import {
   SettingsSurface,
   WizardSurface,
 } from '../';
-import { Badge, Box, Button, Card, Stack, Text } from '../../primitives';
+import { Badge, Box, Button, Card, Stack, Text } from '../../../primitives';
 import { createPosterDataUri, createSurfaceStoryDecorator } from './story-helpers';
 
 const meta: Meta = {

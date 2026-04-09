@@ -2,12 +2,12 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 
-import { AuthSurface } from '../auth';
-import { DetailSurface } from '../detail';
-import { FormSurface } from '../form';
-import { ListSurface } from '../list';
-import { MarketingSurface } from '../marketing';
-import { OperationalSurface } from '../operational';
+import { AuthSurface } from '../../auth';
+import { DetailSurface } from '../../detail';
+import { FormSurface } from '../../form';
+import { ListSurface } from '../../list';
+import { MarketingSurface } from '../../marketing';
+import { OperationalSurface } from '../../operational';
 import type {
   AuthSurfaceConfig,
   DetailSurfaceConfig,
@@ -16,9 +16,9 @@ import type {
   ListSurfaceConfig,
   MarketingSurfaceConfig,
   OperationalSurfaceConfig,
-} from '../types';
-import { STABLE_ENGINES, renderWithEngine } from '../../../_internal/testing/helpers/engine-test-utils';
-import { mockMatchMedia } from '../../../_internal/testing/helpers/match-media';
+} from '../../types';
+import { STABLE_ENGINES, renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
+import { mockMatchMedia } from '../../../../_internal/testing/helpers/match-media';
 
 interface CandidateRow {
   id: string;

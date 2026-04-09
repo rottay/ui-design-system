@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { AuthSurface, SearchSurface, SidebarSurface } from '../';
-import { Badge, Box, Stack, Text } from '../../primitives';
+import { Badge, Box, Stack, Text } from '../../../primitives';
 import { StoryViewport, SurfaceStoryProvider } from './story-helpers';
 
 const meta: Meta = {
