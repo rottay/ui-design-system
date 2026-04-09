@@ -39,8 +39,6 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
         server: resolve(__dirname, 'src/server.ts'),
         icons: resolve(__dirname, 'src/icons.ts'),
-        i18n: resolve(__dirname, 'src/i18n.ts'),
-        tokens: resolve(__dirname, 'src/tokens.ts'),
         'components/index': resolve(__dirname, 'src/components/index.ts'),
         'components/patterns/index': resolve(__dirname, 'src/components/patterns/index.ts'),
         'components/primitives/index': resolve(__dirname, 'src/components/primitives/index.ts'),
