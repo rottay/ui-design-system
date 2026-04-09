@@ -1,13 +1,11 @@
 /**
- * @fileoverview Type definitions for the StatsHeader pattern component.
+ * @fileoverview Type definitions for the StatsHeader chrome family.
  *
  * StatsHeader renders operational stat cards with counter animations,
  * sparkline dots, contextual insights, and gradient glow accents.
  * Each card feels like a live metric on an operations dashboard.
  *
- * @module Patterns/StatsHeader/Types
- * @category Patterns
- * @package @rottay/design-system
+ * @category Chrome
  */
 
 import type { ReactNode } from 'react';

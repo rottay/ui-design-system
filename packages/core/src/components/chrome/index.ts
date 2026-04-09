@@ -17,7 +17,7 @@
  * belongs in chrome vs pattern vs surface.
  */
 
-// Straight moves from patterns/ (Checkpoint C, first batch)
+// Moved from patterns/ in Checkpoint C (first batch — folder-only moves)
 export * from './detail-header';
 export * from './edit-header';
 export * from './form-header';
@@ -26,6 +26,19 @@ export * from './loading-overlay';
 export * from './stats-header';
 export * from './data-terminal-card';
 
-// Moved + renamed (identifier renames deferred to Checkpoint D)
+// Moved + folder-renamed in C, identifier-renamed in D (with compat aliases)
 export * from './form-sections';   // was patterns/premium-form-sections
 export * from './record-chrome';   // was patterns/surface-primitives
+
+// Moved + folder-renamed + identifier-renamed in Checkpoint D
+// Each of these keeps compat aliases exporting the old Workspace*/
+// CommandHeader* identifiers for back-compat with current consumers.
+export * from './collection-header';       // was patterns/workspace-header
+export * from './search-command-bar';      // was patterns/workspace-command-bar
+export * from './active-filters-bar';      // was patterns/workspace-filter-rail
+export * from './field-filters-panel';     // was patterns/workspace-advanced-filters
+export * from './column-menu';             // was patterns/workspace-columns-menu
+export * from './saved-views-menu';        // was patterns/workspace-views-menu
+export * from './selection-preview-rail';  // was patterns/workspace-preview-rail
+export * from './scope-switcher';          // was patterns/workspace-scopes
+export * from './dashboard-insight-variants'; // was patterns/command-header-variants

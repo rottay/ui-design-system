@@ -12,27 +12,27 @@
  * one of those sections, then an action footer at the bottom.
  *
  * Exports:
- *   - `SurfaceSummaryStrip` — horizontal/grid summary card with 5
+ *   - `RecordSummaryStrip` — horizontal/grid summary card with 5
  *     visual variants (default, editorial, technical, governance,
  *     metrics)
- *   - `SurfaceFieldGrid` — pure CSS-grid wrapper for read-field layout
+ *   - `RecordFieldGrid` — pure CSS-grid wrapper for read-field layout
  *     with a configurable `gridTemplateColumns` value
- *   - `SurfaceReadField` — a single read-only field card with label,
+ *   - `RecordField` — a single read-only field card with label,
  *     value, optional helper, optional copy-to-clipboard, optional
  *     href, and a monospace mode for IDs / keys
- *   - `SurfaceActionFooter` — a sticky-feel action rail with optional
+ *   - `RecordActionBar` — a sticky-feel action rail with optional
  *     meta slot on the left and either a free-form `actions` ReactNode
  *     slot or a structured `actionItems[]` array using the
  *     `SharedHeaderActionDescriptor` shape from the shared
  *     header-actions helper
- *   - `SurfacePanel` — a generic card-like container shared by detail
+ *   - `RecordPanel` — a generic card-like container shared by detail
  *     pages for grouping unrelated content
  *
  * The family stays domain-agnostic. All labels, values, and helpers
  * are consumer-supplied; the components know nothing about tenants,
  * users, or any specific entity.
  *
- * Framework note: `SurfaceReadField` resolves its `href` rendering
+ * Framework note: `RecordField` resolves its `href` rendering
  * through the `useNavigationLink()` hook from `runtime/navigation`.
  * Apps mount a `NavigationLinkProvider` once at their root layout and
  * pass their framework's Link primitive (e.g. Next.js's `Link`, Remix's
@@ -43,13 +43,14 @@
  * framework-agnostic.
  *
  * @note Historical naming: this folder was called `surface-primitives`
- * before Checkpoint C of the 2026-04-08 audit and the exported
- * identifiers still carry the `Surface…` prefix (`SurfaceSummaryStrip`,
+ * before Checkpoint C of the 2026-04-08 audit and the identifiers
+ * started with the `Surface…` prefix (`SurfaceSummaryStrip`,
  * `SurfaceFieldGrid`, `SurfaceReadField`, `SurfaceActionFooter`,
- * `SurfacePanel`). The identifier rename to the `Record…` prefix
- * (`RecordSummaryStrip`, `RecordFieldGrid`, `RecordField`,
- * `RecordActionBar`, `RecordPanel`) is scheduled for Checkpoint D so
- * app-platform consumers can migrate in a single pass.
+ * `SurfacePanel`). Checkpoint D promoted the canonical names to the
+ * `Record…` prefix and demoted the old names to compat aliases
+ * declared at the bottom of this file. Those aliases stay in place
+ * until all known consumers have migrated (scheduled for removal in
+ * Checkpoint F if no consumers remain).
  */
 
 import { type CSSProperties, type ReactNode } from 'react';
@@ -73,23 +74,23 @@ const secondaryText = 'var(--ds-color-text-secondary)';
 const primaryText = 'var(--ds-color-text-primary)';
 const tertiaryText = 'var(--ds-color-text-tertiary)';
 
-export interface SurfaceSummaryItem {
+export interface RecordSummaryItem {
   label: string;
   value: ReactNode;
   helper?: ReactNode;
   mono?: boolean;
 }
 
-export interface SurfaceActionFooterItem extends SharedHeaderActionDescriptor {
+export interface RecordActionItem extends SharedHeaderActionDescriptor {
   htmlType?: 'button' | 'submit' | 'reset';
 }
 
-export function SurfaceSummaryStrip({
+export function RecordSummaryStrip({
   items,
   variant = 'default',
   style,
 }: {
-  items: SurfaceSummaryItem[];
+  items: RecordSummaryItem[];
   variant?: 'default' | 'editorial' | 'technical' | 'governance' | 'metrics';
   style?: CSSProperties;
 }) {
@@ -208,7 +209,7 @@ export function SurfaceSummaryStrip({
   );
 }
 
-export function SurfaceFieldGrid({
+export function RecordFieldGrid({
   children,
   columns = 'repeat(2, minmax(0, 1fr))',
   style,
@@ -269,7 +270,7 @@ function renderFieldValue(value: ReactNode, emptyLabel: string) {
   };
 }
 
-export function SurfaceReadField({
+export function RecordField({
   label,
   value,
   mono = false,
@@ -312,7 +313,7 @@ export function SurfaceReadField({
   // app supplied a Link adapter via NavigationLinkProvider (e.g. Next.js's
   // <Link>); otherwise we degrade gracefully to a native <a>. This keeps
   // the DS framework-agnostic while preserving Next.js-style routing /
-  // prefetching at all SurfaceReadField call sites where the provider is
+  // prefetching at all RecordField call sites where the provider is
   // mounted.
   const linkInner = (
     <Flex align="center" gap={8} wrap="wrap" style={{ width: 'fit-content' }}>
@@ -390,7 +391,7 @@ export function SurfaceReadField({
   );
 }
 
-export function SurfaceActionFooter({
+export function RecordActionBar({
   meta,
   actions,
   actionItems,
@@ -398,7 +399,7 @@ export function SurfaceActionFooter({
 }: {
   meta?: ReactNode;
   actions?: ReactNode;
-  actionItems?: SurfaceActionFooterItem[];
+  actionItems?: RecordActionItem[];
   style?: CSSProperties;
 }) {
   const resolvedActionItems = actionItems?.filter(Boolean) || [];
@@ -471,7 +472,7 @@ export function SurfaceActionFooter({
   );
 }
 
-export function SurfacePanel({
+export function RecordPanel({
   children,
   style,
 }: {
@@ -493,3 +494,18 @@ export function SurfacePanel({
     </Box>
   );
 }
+
+// Compatibility aliases for pre-Checkpoint-D names. Deprecated —
+// migrate to the canonical Record* names above. Scheduled for removal
+// in Checkpoint F if no consumers remain.
+export {
+  RecordSummaryStrip as SurfaceSummaryStrip,
+  RecordFieldGrid as SurfaceFieldGrid,
+  RecordField as SurfaceReadField,
+  RecordActionBar as SurfaceActionFooter,
+  RecordPanel as SurfacePanel,
+};
+export type {
+  RecordSummaryItem as SurfaceSummaryItem,
+  RecordActionItem as SurfaceActionFooterItem,
+};

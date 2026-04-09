@@ -17,7 +17,7 @@
  * per-section appearance/tone overrides.
  *
  * Companion exports:
- *   - `PremiumFormFactsCard` — a sibling card component that renders
+ *   - `FormFactsCard` — a sibling card component that renders
  *     a vertical list of label/value facts with optional eyebrow +
  *     helper text. Uses the same DS tokens so it composes visually
  *     with the section container.
@@ -27,11 +27,13 @@
  * knows nothing about tenants, users, or any specific entity.
  *
  * @note Historical naming: this folder was called `premium-form-sections`
- * before Checkpoint C of the 2026-04-08 audit and the exported component
- * identifiers still carry the `Premium…` prefix
- * (`PremiumFormSections`, `PremiumFormFactsCard`). The identifier rename
- * to `FormSections` / `FormFactsCard` is scheduled for Checkpoint D so
- * app-platform consumers can migrate in a single pass.
+ * before Checkpoint C of the 2026-04-08 audit and the identifiers
+ * started with the `Premium…` prefix (`PremiumFormSections`,
+ * `PremiumFormFactsCard`). Checkpoint D promoted the canonical names
+ * to `FormSections` / `FormFactsCard` and demoted the old names to
+ * compat aliases declared at the bottom of this file. Those aliases
+ * stay in place until all known consumers have migrated (scheduled
+ * for removal in Checkpoint F if no consumers remain).
  */
 
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useState } from 'react';
@@ -40,10 +42,10 @@ import { ChevronDown } from 'lucide-react';
 
 import { Box, Flex, Stack, Text } from '../../primitives';
 
-export type PremiumFormSectionsAppearance = 'card' | 'soft' | 'divided';
-export type PremiumFormSectionTone = 'default' | 'editorial' | 'technical' | 'governance';
+export type FormSectionsAppearance = 'card' | 'soft' | 'divided';
+export type FormSectionTone = 'default' | 'editorial' | 'technical' | 'governance';
 
-export interface PremiumFormSection {
+export interface FormSectionsEntry {
   key: string;
   title: string;
   description?: string;
@@ -52,35 +54,35 @@ export interface PremiumFormSection {
   optional?: boolean;
   defaultOpen?: boolean;
   extra?: ReactNode;
-  appearance?: PremiumFormSectionsAppearance;
-  tone?: PremiumFormSectionTone;
+  appearance?: FormSectionsAppearance;
+  tone?: FormSectionTone;
   children: ReactNode;
 }
 
-export interface PremiumFormSectionsProps {
-  sections: PremiumFormSection[];
+export interface FormSectionsProps {
+  sections: FormSectionsEntry[];
   accordion?: boolean;
   collapsible?: boolean;
   defaultActiveKeys?: string[];
   activeKeys?: string[];
   onChange?: (keys: string | string[]) => void;
   style?: CSSProperties;
-  appearance?: PremiumFormSectionsAppearance;
-  tone?: PremiumFormSectionTone;
+  appearance?: FormSectionsAppearance;
+  tone?: FormSectionTone;
 }
 
-export interface PremiumFormFactItem {
+export interface FormFactItem {
   label: string;
   value: ReactNode;
   helper?: ReactNode;
   mono?: boolean;
 }
 
-export interface PremiumFormFactsCardProps {
+export interface FormFactsCardProps {
   title: string;
   description?: string;
   eyebrow?: string;
-  items: PremiumFormFactItem[];
+  items: FormFactItem[];
   style?: CSSProperties;
 }
 
@@ -92,7 +94,7 @@ const sectionDivider = 'color-mix(in srgb, var(--ds-color-border-secondary) 78%,
 const sectionShadow = '0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)';
 
 function buildInitialKeys(
-  sections: PremiumFormSection[],
+  sections: FormSectionsEntry[],
   providedKeys?: string[],
   accordion?: boolean,
 ): string[] {
@@ -115,7 +117,7 @@ function buildInitialKeys(
   return sections[0] ? [sections[0].key] : [];
 }
 
-function getToneAccent(tone: PremiumFormSectionTone) {
+function getToneAccent(tone: FormSectionTone) {
   switch (tone) {
     case 'editorial':
       return {
@@ -141,7 +143,7 @@ function getToneAccent(tone: PremiumFormSectionTone) {
   }
 }
 
-function getToneShell(tone: PremiumFormSectionTone) {
+function getToneShell(tone: FormSectionTone) {
   switch (tone) {
     case 'editorial':
       return {
@@ -179,7 +181,7 @@ function getToneShell(tone: PremiumFormSectionTone) {
   }
 }
 
-function getSectionHeaderPattern(tone: PremiumFormSectionTone) {
+function getSectionHeaderPattern(tone: FormSectionTone) {
   switch (tone) {
     case 'editorial':
       return {
@@ -214,10 +216,10 @@ function getSectionHeaderPattern(tone: PremiumFormSectionTone) {
 }
 
 function getSectionShellStyles(
-  resolvedAppearance: PremiumFormSectionsAppearance,
+  resolvedAppearance: FormSectionsAppearance,
   isOpen: boolean,
   index: number,
-  tone: PremiumFormSectionTone,
+  tone: FormSectionTone,
 ): CSSProperties {
   const shell = getToneShell(tone);
 
@@ -259,7 +261,7 @@ function getSectionShellStyles(
   };
 }
 
-export function PremiumFormSections({
+export function FormSections({
   sections,
   accordion = true,
   collapsible = true,
@@ -269,7 +271,7 @@ export function PremiumFormSections({
   style,
   appearance,
   tone,
-}: PremiumFormSectionsProps) {
+}: FormSectionsProps) {
   const [internalKeys, setInternalKeys] = useState<string[]>(
     buildInitialKeys(sections, defaultActiveKeys, accordion),
   );
@@ -501,13 +503,13 @@ export function PremiumFormSections({
   );
 }
 
-export function PremiumFormFactsCard({
+export function FormFactsCard({
   title,
   description,
   eyebrow,
   items,
   style,
-}: PremiumFormFactsCardProps) {
+}: FormFactsCardProps) {
   const visibleItems = useMemo(
     () => items.filter((item) => item.value !== undefined && item.value !== null && item.value !== ''),
     [items],
@@ -646,3 +648,19 @@ function SectionChip({
     </Box>
   );
 }
+
+// Compatibility aliases for pre-Checkpoint-D names. Deprecated —
+// migrate to the canonical Form* names above. Scheduled for removal
+// in Checkpoint F if no consumers remain.
+export {
+  FormSections as PremiumFormSections,
+  FormFactsCard as PremiumFormFactsCard,
+};
+export type {
+  FormSectionsProps as PremiumFormSectionsProps,
+  FormSectionsEntry as PremiumFormSection,
+  FormSectionsAppearance as PremiumFormSectionsAppearance,
+  FormSectionTone as PremiumFormSectionTone,
+  FormFactItem as PremiumFormFactItem,
+  FormFactsCardProps as PremiumFormFactsCardProps,
+};

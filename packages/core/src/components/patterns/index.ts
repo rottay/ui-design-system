@@ -205,71 +205,6 @@ export type { StatusFilterPillsProps, StatusFilterPillOption, FilterPill } from 
 export { TableCheckboxStyles } from './table-checkbox-styles';
 export type { TableCheckboxStylesProps } from './table-checkbox-styles';
 
-// WorkspaceHeader -- premium hero header for workspace landing pages
-export { WorkspaceHeader } from './workspace-header';
-export type {
-  WorkspaceHeaderProps,
-  WorkspaceHeaderQuickAction,
-  WorkspaceHeaderMetaItem,
-  WorkspaceHeaderShortcut,
-} from './workspace-header';
-
-// WorkspaceColumnsMenu -- floating draft+apply column visibility/order panel
-export { WorkspaceColumnsMenu } from './workspace-columns-menu';
-export type {
-  WorkspaceColumnsMenuProps,
-  WorkspaceColumnsMenuColumn,
-} from './workspace-columns-menu';
-
-// WorkspaceAdvancedFilters -- premium filter card grid with quick-slice presets
-export { WorkspaceAdvancedFilters } from './workspace-advanced-filters';
-export type {
-  WorkspaceAdvancedFiltersProps,
-  WorkspaceFilterDefinition,
-  WorkspaceFilterPreset,
-  WorkspaceFilterVisual,
-} from './workspace-advanced-filters';
-
-// WorkspacePreviewRail -- sticky list-side preview rail with snapshot columns
-export { WorkspacePreviewRail } from './workspace-preview-rail';
-export type {
-  WorkspacePreviewRailProps,
-  WorkspacePreviewRailColumn,
-  WorkspacePreviewRailRowAction,
-  WorkspacePreviewRailPreviewConfig,
-} from './workspace-preview-rail';
-
-// WorkspaceFilterRail -- horizontal active-filter chip row with clear/add CTAs
-export { WorkspaceFilterRail } from './workspace-filter-rail';
-export type {
-  WorkspaceFilterRailProps,
-  WorkspaceActiveFilter,
-} from './workspace-filter-rail';
-
-// WorkspaceScopes -- horizontal scope pill strip with optional counts
-export { WorkspaceScopes } from './workspace-scopes';
-export type {
-  WorkspaceScopesProps,
-  WorkspaceScopeDefinition,
-} from './workspace-scopes';
-
-// WorkspaceViewsMenu -- saved-views dropdown with system/persona/custom groups
-export { WorkspaceViewsMenu } from './workspace-views-menu';
-export type {
-  WorkspaceViewsMenuProps,
-  WorkspaceSavedView,
-  WorkspaceSavedViewKind,
-  WorkspaceSavedViewFilter,
-} from './workspace-views-menu';
-
-// WorkspaceCommandBar -- premium command/search bar with voice + suggestions
-export { WorkspaceCommandBar } from './workspace-command-bar';
-export type {
-  WorkspaceCommandBarProps,
-  WorkspaceCommandBarConfig,
-  WorkspaceCommandSuggestion,
-} from './workspace-command-bar';
-
 // HeaderActions -- shared semantic action vocabulary used by detail/edit/form headers
 export {
   inferSharedHeaderActionKind,
@@ -283,15 +218,17 @@ export type {
   SharedHeaderActionDescriptor,
 } from './header-actions';
 
-// NOTE: The following families moved to components/chrome/ in Checkpoint C
-// of the 2026-04-08 audit cleanup. They are re-exported from the package
-// root (`@rottay/design-system`) directly through `src/index.ts`, which
-// lists `./components/chrome` alongside `./components/primitives`,
-// `./components/patterns`, and `./components/surfaces`. They are
-// intentionally no longer listed in THIS patterns barrel so that the
-// root index doesn't see the same identifier twice (which would fail
-// typecheck with TS2308 duplicate-export errors):
+// NOTE: The following families moved to components/chrome/ during
+// Checkpoints C and D of the 2026-04-08 audit cleanup. They are
+// re-exported from the package root (`@rottay/design-system`) directly
+// through `src/index.ts`, which lists `./components/chrome` alongside
+// `./components/primitives`, `./components/patterns`, and
+// `./components/surfaces`. They are intentionally no longer listed in
+// THIS patterns barrel so that the root index doesn't see the same
+// identifier twice (which would fail typecheck with TS2308
+// duplicate-export errors):
 //
+// Moved in C (folder renamed but identifiers unchanged at that point):
 //   - premium-form-sections (now chrome/form-sections)
 //   - surface-primitives    (now chrome/record-chrome)
 //   - detail-header         (now chrome/detail-header)
@@ -302,32 +239,23 @@ export type {
 //   - loading-overlay       (now chrome/loading-overlay)
 //   - table-toolbar         (now chrome/table-toolbar)
 //
-// All identifiers remain unchanged from a consumer's point of view.
-// Identifier renames (PremiumFormSections -> FormSections, Surface* ->
-// Record*, etc.) are scheduled for Checkpoint D.
-
-// Command Header Variants -- 8 widget chrome variants (4 metrics + 4 activity) + useVariant hook
-export {
-  MetricsRows,
-  MetricsCards,
-  MetricsMinimal,
-  MetricsChart,
-  ActivityTimeline,
-  ActivityCompact,
-  ActivityCards,
-  ActivityTicker,
-  useVariant,
-} from './command-header-variants';
-export type {
-  MetricsVariant,
-  ActivityVariant,
-  KeyMetric,
-  ActivityItem,
-  ScheduleItem,
-  MetricsProps,
-  ActivityProps,
-  VariantConfig,
-} from './command-header-variants';
+// Moved in D (folder rename + identifier rename, with compat aliases):
+//   - workspace-header           (now chrome/collection-header)
+//   - workspace-command-bar      (now chrome/search-command-bar)
+//   - workspace-filter-rail      (now chrome/active-filters-bar)
+//   - workspace-advanced-filters (now chrome/field-filters-panel)
+//   - workspace-columns-menu     (now chrome/column-menu)
+//   - workspace-views-menu       (now chrome/saved-views-menu)
+//   - workspace-preview-rail     (now chrome/selection-preview-rail)
+//   - workspace-scopes           (now chrome/scope-switcher)
+//   - command-header-variants    (now chrome/dashboard-insight-variants)
+//
+// All old identifier names (WorkspaceHeader, PremiumFormSections,
+// SurfaceSummaryStrip, etc.) remain reachable from the package root
+// via compat aliases in the new chrome/ files. Consumers should migrate
+// to the canonical new names (CollectionHeader, FormSections,
+// RecordSummaryStrip, ...). The compat aliases will be removed once
+// all known consumers are migrated (see Checkpoint F in the audit).
 
 // === D3 Charts ===
 export { BarChart } from './charts/bar-chart';
