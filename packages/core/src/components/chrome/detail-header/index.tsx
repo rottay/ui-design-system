@@ -51,7 +51,7 @@ import {
   resolveSharedHeaderActionIcon,
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
-} from '../header-actions';
+} from '../../patterns/_internal/header-actions';
 
 export type DetailHeaderArchetype = 'editorial' | 'control' | 'technical' | 'governance';
 

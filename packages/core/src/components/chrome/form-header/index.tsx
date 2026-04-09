@@ -63,7 +63,7 @@ import {
   resolveSharedHeaderActionIcon,
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
-} from '../header-actions';
+} from '../../patterns/_internal/header-actions';
 
 export interface FormHeaderAction {
   label: string;

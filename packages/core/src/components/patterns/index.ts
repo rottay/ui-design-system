@@ -173,10 +173,6 @@ export {
   DEFAULT_OPERATORS_BY_TYPE,
 } from './filter-builder';
 
-// StatsHeader
-export { StatsHeader } from './stats-header';
-export type { StatItem, StatsHeaderProps } from './stats-header';
-
 // ListToolbar
 export { PatternListToolbar, ListToolbar } from './list-toolbar';
 export type { ListToolbarProps, FilterPillConfig, DensityKey, ViewMode } from './list-toolbar';
@@ -208,14 +204,6 @@ export type { StatusFilterPillsProps, StatusFilterPillOption, FilterPill } from 
 // TableCheckboxStyles -- shared CSS animations and hover styles for table flows
 export { TableCheckboxStyles } from './table-checkbox-styles';
 export type { TableCheckboxStylesProps } from './table-checkbox-styles';
-
-// LoadingOverlay -- engine-free loading shell with brand-mark slot
-export { LoadingOverlay } from './loading-overlay';
-export type { LoadingOverlayProps } from './loading-overlay';
-
-// TableToolbar -- lightweight one-row toolbar with slot-based filters/actions
-export { TableToolbar } from './table-toolbar';
-export type { TableToolbarProps } from './table-toolbar';
 
 // WorkspaceHeader -- premium hero header for workspace landing pages
 export { WorkspaceHeader } from './workspace-header';
@@ -295,50 +283,25 @@ export type {
   SharedHeaderActionDescriptor,
 } from './header-actions';
 
-// PremiumFormSections -- accordion form section container with tone variants
-export { PremiumFormSections, PremiumFormFactsCard } from './premium-form-sections';
-export type {
-  PremiumFormSectionsProps,
-  PremiumFormSection,
-  PremiumFormSectionsAppearance,
-  PremiumFormSectionTone,
-  PremiumFormFactItem,
-  PremiumFormFactsCardProps,
-} from './premium-form-sections';
-
-// SurfacePrimitives -- generic form-surface building blocks (companion to PremiumFormSections)
-export {
-  SurfaceSummaryStrip,
-  SurfaceFieldGrid,
-  SurfaceReadField,
-  SurfaceActionFooter,
-  SurfacePanel,
-} from './surface-primitives';
-export type {
-  SurfaceSummaryItem,
-  SurfaceActionFooterItem,
-} from './surface-primitives';
-
-// DetailHeader -- premium detail-page header with back nav, breadcrumbs, hero, status, tabs
-export { DetailHeader } from './detail-header';
-export type {
-  DetailHeaderProps,
-  DetailHeaderAction,
-  DetailHeaderTab,
-  DetailHeaderArchetype,
-} from './detail-header';
-
-// EditHeader -- premium edit-form header with back nav, save/cancel, status, archetype tones
-export { EditHeader } from './edit-header';
-export type { EditHeaderProps } from './edit-header';
-
-// FormHeader -- premium create-form header with required icon badge, back nav, action rail
-export { FormHeader } from './form-header';
-export type { FormHeaderProps, FormHeaderAction } from './form-header';
-
-// DataTerminalCard -- premium 4-variant dashboard metric card (Terminal/HUD/Circuit/Matrix)
-export { DataTerminalCard, DataTerminalStat, DataTerminalCardProvider } from './data-terminal-card';
-export type { DataTerminalCardProps } from './data-terminal-card';
+// NOTE: The following families moved to components/chrome/ in Checkpoint C
+// of the 2026-04-08 audit cleanup and are re-exported from the package root
+// through components/index.ts via the `chrome` barrel. They are intentionally
+// no longer listed in this patterns barrel so the `components/` barrel can
+// aggregate patterns + chrome without duplicate-export conflicts:
+//
+//   - premium-form-sections (now chrome/form-sections)
+//   - surface-primitives    (now chrome/record-chrome)
+//   - detail-header         (now chrome/detail-header)
+//   - edit-header           (now chrome/edit-header)
+//   - form-header           (now chrome/form-header)
+//   - data-terminal-card    (now chrome/data-terminal-card)
+//   - stats-header          (now chrome/stats-header)
+//   - loading-overlay       (now chrome/loading-overlay)
+//   - table-toolbar         (now chrome/table-toolbar)
+//
+// All identifiers remain unchanged from a consumer's point of view. Identifier
+// renames (PremiumFormSections -> FormSections, Surface* -> Record*, etc.)
+// are scheduled for Checkpoint D.
 
 // Command Header Variants -- 8 widget chrome variants (4 metrics + 4 activity) + useVariant hook
 export {

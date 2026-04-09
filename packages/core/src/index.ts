@@ -105,4 +105,5 @@ export * from './motion';
 // ============================================
 export * from './components/primitives';
 export * from './components/patterns';
+export * from './components/chrome';
 export * from './components/surfaces';
