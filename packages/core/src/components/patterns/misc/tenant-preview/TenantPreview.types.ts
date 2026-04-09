@@ -5,7 +5,7 @@
  */
 
 import type { PatternBaseProps } from '../../foundation/types';
-import type { TenantCreationConfig } from '../../../../hooks/tenant/create-tenant';
+import type { TenantCreationConfig } from '../../../../runtime/tenancy/authoring/create-tenant';
 
 /**
  * Identifies which design system component samples are rendered

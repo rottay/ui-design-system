@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 
 // Test the types and creation utilities that power the preview
 import type { TenantPreviewProps, PreviewComponent } from './TenantPreview.types';
-import { createTenantConfig, type TenantCreationConfig } from '../../../../hooks/tenant/create-tenant';
+import { createTenantConfig, type TenantCreationConfig } from '../../../../runtime/tenancy/authoring/create-tenant';
 import { generateTenantCss } from '../../../../runtime/tenancy/storage/static/generator';
 import RusticTenantPreview from './engines/rustic';
 

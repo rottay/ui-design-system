@@ -95,9 +95,13 @@ export type { PersonalityPreset } from './personality-presets';
 export { createTenantConfig } from './create-tenant';
 export type { TenantCreationConfig } from './create-tenant';
 
-/** Hook that wraps createTenantConfig with React state for dynamic tenant creation flows. */
+/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenancy`). */
 export { useCreateTenant } from './useCreateTenant';
 
-/** 2-step tenant branding hook: session-instant + async-full. */
+/**
+ * 2-step tenant branding hook: session-instant + async-full.
+ * This is a canonical hook (NOT a compat shim) — it lives here because
+ * it is a React hook for consuming apps, not runtime infrastructure.
+ */
 export { useTenantBranding } from './branding';
 export type { UseTenantBrandingOptions, UseTenantBrandingReturn, TenantBrandingSession } from './branding';
