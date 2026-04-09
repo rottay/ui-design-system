@@ -57,23 +57,17 @@ export { arePropsEqual, createPropsComparator } from './_internal/utils';
 // ICONS
 // ============================================
 // Icons live behind a dedicated subpath so the root export does not pull
-// the icon catalog into every consumer bundle (and to avoid `export *`
-// across the client boundary).
+// the icon catalog into every consumer bundle.
 //
-// Two real entry points exist for icons:
+// `@rottay/design-system/icons` exports the DS's own curated icon set:
+// BaseIcon, UserIcon, ChevronDownIcon, SearchIcon, and a few more.
+// The set is intentionally small.
 //
-// - `@rottay/design-system/icons` — the DS's own curated icon set
-//   (BaseIcon plus a small set of branded helpers like UserIcon,
-//   ChevronDownIcon, SearchIcon, ...). Use this when you want the icons
-//   the DS itself uses; the set is intentionally small.
+// For the full Ant Design icon catalog, import directly from
+// `@ant-design/icons` — it is a peer dependency of the DS and is always
+// installed in consuming apps.
 //
-// - `@ant-design/icons` — the full Ant Design icon catalog. This is a
-//   peer dependency of the DS (the Classic engine consumes it directly),
-//   so it is always installed in every consuming app and is safe to
-//   import directly when the curated DS set does not have what you need.
-//
-// There is no `import { Icon } from '@rottay/design-system'` — neither
-// catalog is re-exported from the root barrel.
+// Neither catalog is re-exported from this root barrel.
 
 // ============================================
 // TENANCY (schema, registry, resolver, storage, CSS generation)
