@@ -40,7 +40,7 @@ import {
   ColorPicker,
 } from 'antd';
 import type { FormBuilderProps } from '../FormBuilder.types';
-import type { FieldDef } from '../../../types';
+import type { FieldDef } from '../../../foundation/types';
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;

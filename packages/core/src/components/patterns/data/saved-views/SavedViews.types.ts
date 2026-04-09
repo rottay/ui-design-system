@@ -5,7 +5,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * Configuration snapshot stored within a saved view.

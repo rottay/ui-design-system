@@ -4,10 +4,10 @@
  * groups: data, forms, visualization, communication, workflow,
  * navigation, misc.
  *
- * The `_internal/` barrel exports shared infrastructure (types, hooks,
- * header-actions, domain-kits) that patterns consume but that also
- * reaches the public API through compat shims at the patterns root.
- * Those shims are scheduled for cleanup in Checkpoint F.
+ * Shared infrastructure (types, hooks, header-actions, domain-kits)
+ * lives in `foundation/` — publicly exported, no longer hidden behind
+ * an `_internal/` prefix. `_internal/` now contains only truly private
+ * implementation: test helpers, engine-specific styles, and story data.
  */
 
 // === Groups ===
@@ -19,11 +19,8 @@ export * from './workflow';
 export * from './navigation';
 export * from './misc';
 
-// === Shared infrastructure (via compat shims at root) ===
-// These re-export from _internal/ and reach the public API.
-// Checkpoint F will decide whether to promote them to visible
-// namespaces or keep the shim arrangement.
-export * from './types';
-export * from './domain-kits';
-export * from './hooks';
-export * from './header-actions';
+// === Foundation (shared types, hooks, utilities) ===
+export * from './foundation/types';
+export * from './foundation/domain-kits';
+export * from './foundation/hooks';
+export * from './foundation/header-actions';

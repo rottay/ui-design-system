@@ -15,7 +15,7 @@ import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { FormBuilderProps } from './FormBuilder.types';
 
 export type { FormBuilderProps } from './FormBuilder.types';
-export type { FieldDef } from '../../types';
+export type { FieldDef } from '../../foundation/types';
 
 /** Public form-builder entry point resolved through the engine factory. */
 export const PatternFormBuilder = createEngineComponent<FormBuilderProps>(

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Card, Checkbox, Flex, Stack, Text } from '../../../primitives';
-import type { ColumnDef, ResponsiveColumnMode } from '../../types';
+import type { ColumnDef, ResponsiveColumnMode } from '../../foundation/types';
 import { resolveAccessor } from './DataTable.types';
 
 function stringifyMobileValue(value: unknown): string {

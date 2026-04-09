@@ -6,7 +6,7 @@
  * inside individual surfaces.
  */
 
-import type { ColumnDef, FieldDef } from '../../patterns/types';
+import type { ColumnDef, FieldDef } from '../../patterns/foundation/types';
 import type { DetailAction } from '../../patterns/data/detail-panel';
 import type { ButtonVariant } from '../../primitives/inputs/Button';
 import type {

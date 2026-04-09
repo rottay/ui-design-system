@@ -89,11 +89,10 @@ Generated on 2026-04-09.
 - `forms/invoice-template/`
 - `forms/step-wizard/`
 
-### header-actions/
+### foundation/
 
-
-### hooks/
-
+- `foundation/header-actions/`
+- `foundation/hooks/`
 
 ### misc/
 
@@ -205,4 +204,4 @@ Generated on 2026-04-09.
 
 ---
 
-**Summary**: 6 primitive categories (98 components), 99 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (98 components), 101 families across structures/patterns/surfaces.

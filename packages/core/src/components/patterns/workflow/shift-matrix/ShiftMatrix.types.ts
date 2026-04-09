@@ -10,7 +10,7 @@
  * @package @rottay/design-system
  */
 
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * A time slot column in the shift matrix.

@@ -21,5 +21,5 @@ export type {
   FilterDef,
   PaginationConfig,
   BulkAction,
-} from '../../types';
+} from '../../foundation/types';
 export { PatternDataTable } from './PatternDataTable';

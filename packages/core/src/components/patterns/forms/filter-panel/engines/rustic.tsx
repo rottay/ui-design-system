@@ -24,7 +24,7 @@
 
 import React, { useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
-import type { FilterDef } from '../../../types';
+import type { FilterDef } from '../../../foundation/types';
 
 // Shared base style for native inputs. All visual tokens reference --ds-*
 // variables with fallbacks so the component works even with partial themes.

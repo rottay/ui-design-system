@@ -11,7 +11,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * A quick action button rendered in the workbench header.

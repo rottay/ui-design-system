@@ -5,7 +5,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps, FilterDef } from '../../types';
+import type { PatternBaseProps, FilterDef } from '../../foundation/types';
 
 /**
  * Props for the FilterPanel pattern component.
@@ -56,4 +56,4 @@ export interface FilterPanelProps extends PatternBaseProps {
   activeCount?: number;
 }
 
-export type { FilterDef } from '../../types';
+export type { FilterDef } from '../../foundation/types';

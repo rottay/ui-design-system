@@ -7,7 +7,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * Represents a single pricing plan displayed as a column in the table.

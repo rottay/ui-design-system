@@ -5,7 +5,7 @@ import { render, screen, cleanup } from '@testing-library/react';
 import { mockMatchMedia } from '../../../../_internal/testing/helpers/match-media';
 import { DesignSystemProvider } from '../../../../runtime/bootstrap';
 import type { TenantConfig } from '../../../../contracts';
-import type { ColumnDef } from '../../types';
+import type { ColumnDef } from '../../foundation/types';
 import { PatternDataTable } from '.';
 
 interface Row {

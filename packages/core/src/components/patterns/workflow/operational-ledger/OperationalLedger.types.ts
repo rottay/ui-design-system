@@ -10,7 +10,7 @@
  * @package @rottay/design-system
  */
 
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * A single ledger entry representing a credit or debit transaction.

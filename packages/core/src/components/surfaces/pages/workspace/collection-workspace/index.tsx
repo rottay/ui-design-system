@@ -10,7 +10,7 @@
 
 import React, { useMemo } from 'react';
 import type { ReactNode } from 'react';
-import type { ColumnDef } from '../../../../patterns/types';
+import type { ColumnDef } from '../../../../patterns/foundation/types';
 import type { CollectionWorkspaceConfig } from '../../../foundation/contracts/collection';
 import type { DensityKey, ViewMode } from '../../../../patterns/data/list-toolbar/ListToolbar.types';
 import { useCollectionWorkspace } from '../../../foundation/hooks/useCollectionWorkspace';

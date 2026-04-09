@@ -9,7 +9,7 @@
  * @package @rottay/design-system
  */
 
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * A single approval item within a domain group.

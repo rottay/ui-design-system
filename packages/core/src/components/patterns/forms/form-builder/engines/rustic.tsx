@@ -22,7 +22,7 @@
 
 import React, { useState, useCallback, useMemo, type ReactNode, type CSSProperties } from 'react';
 import type { FormBuilderProps } from '../FormBuilder.types';
-import type { FieldDef } from '../../../types';
+import type { FieldDef } from '../../../foundation/types';
 
 // Personality-driven easing and duration: these reference CSS custom properties
 // so tenant themes can tune animation feel without touching component code.

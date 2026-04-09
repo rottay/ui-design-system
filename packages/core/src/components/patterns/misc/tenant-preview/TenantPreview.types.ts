@@ -4,7 +4,7 @@
  * color palette display, and personality info panel.
  */
 
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 import type { TenantCreationConfig } from '../../../../hooks/tenant/create-tenant';
 
 /**

@@ -24,7 +24,7 @@ import React, { useState, useEffect } from 'react';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 import { useTokens } from '../../../../../hooks/tokens';
 import type { StatsGridProps } from '../StatsGrid.types';
-import type { StatDef } from '../../../types';
+import type { StatDef } from '../../../foundation/types';
 import { resolveStatsGridMotion } from '../personality';
 
 /* ---------------------------------------------------------------------------

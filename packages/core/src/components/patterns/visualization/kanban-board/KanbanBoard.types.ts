@@ -7,7 +7,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps, KanbanColumnDef } from '../../types';
+import type { PatternBaseProps, KanbanColumnDef } from '../../foundation/types';
 
 /**
  * Props for the KanbanBoard pattern component.

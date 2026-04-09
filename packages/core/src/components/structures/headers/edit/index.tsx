@@ -62,7 +62,7 @@ import {
   resolveSharedHeaderActionIcon,
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
-} from '../../../patterns/_internal/header-actions';
+} from '../../../patterns/foundation/header-actions';
 
 /* ============================================================================
  * TYPES

@@ -16,7 +16,7 @@ import type {
   FilterDef,
   PaginationConfig,
   BulkAction,
-} from '../../types';
+} from '../../foundation/types';
 
 /**
  * Props for the DataTable pattern component.

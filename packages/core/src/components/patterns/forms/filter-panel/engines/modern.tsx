@@ -31,7 +31,7 @@
 
 import React, { useRef, useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
-import type { FilterDef } from '../../../types';
+import type { FilterDef } from '../../../foundation/types';
 import { Switch } from '../../../../primitives/inputs/Switch';
 import { Checkbox } from '../../../../primitives/inputs/Checkbox';
 

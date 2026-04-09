@@ -7,7 +7,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps, FieldDef } from '../../types';
+import type { PatternBaseProps, FieldDef } from '../../foundation/types';
 
 /**
  * Props for the FormBuilder pattern component.

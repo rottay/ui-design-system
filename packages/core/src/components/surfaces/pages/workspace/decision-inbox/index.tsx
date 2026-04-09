@@ -9,7 +9,7 @@
 
 import React, { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import type { ColumnDef } from '../../../../patterns/types';
+import type { ColumnDef } from '../../../../patterns/foundation/types';
 import type { CollectionWorkspaceConfig } from '../../../foundation/contracts/collection';
 import { useCollectionWorkspace } from '../../../foundation/hooks/useCollectionWorkspace';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';

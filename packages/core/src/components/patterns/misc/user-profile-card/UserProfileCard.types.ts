@@ -5,7 +5,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * Core data model for a user displayed inside the profile card.

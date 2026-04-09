@@ -5,7 +5,7 @@
  * Operational stat cards with counter animations, sparkline dots,
  * contextual insights, and gradient glow accents. Each card feels like
  * a live metric on an operations dashboard. Lives in `components/structures/`
- * because it is a page-structures family — a structural strip consumers
+ * because it is a structures family — a structural strip consumers
  * place above a data table or above dashboard content, not a generic
  * reusable pattern like `charts` or `data-table`.
  *

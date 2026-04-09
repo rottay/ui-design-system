@@ -392,7 +392,7 @@ export interface ListSurfaceBehaviorConfig<TView> {
   /** Called when the set of selected rows changes. */
   onSelectionChange?: (keys: string[], rows: TView[]) => void;
   /** Bulk actions shown when one or more rows are selected. Uses the pattern's BulkAction contract. */
-  bulkActions?: import('../../patterns/types').BulkAction<TView>[];
+  bulkActions?: import('../../patterns/foundation/types').BulkAction<TView>[];
 
   // ---------------------------------------------------------------------------
   // Row interaction

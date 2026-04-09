@@ -24,7 +24,7 @@
 
 import React, { useState, useCallback, useMemo, useRef, useEffect, type ReactNode, type CSSProperties } from 'react';
 import type { FormBuilderProps } from '../FormBuilder.types';
-import type { FieldDef } from '../../../types';
+import type { FieldDef } from '../../../foundation/types';
 
 /* -- DS Primitive imports ------------------------------------------------- */
 import { Input } from '../../../../primitives/inputs/Input';

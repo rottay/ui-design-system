@@ -64,7 +64,7 @@ import {
   resolveSharedHeaderActionIcon,
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
-} from '../../../patterns/_internal/header-actions';
+} from '../../../patterns/foundation/header-actions';
 
 const surfaceBackground = 'var(--ds-surface-card, var(--ds-color-bg-elevated))';
 const fieldBackground = 'color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent)';

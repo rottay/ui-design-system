@@ -5,7 +5,7 @@ import { createEngineComponent } from '../../../../runtime/engines/factory';
 import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
 import { useMediaQuery } from '../../../../hooks/responsive/useMediaQuery';
 import { Box, Button, Flex, Stack, Text } from '../../../primitives';
-import type { ColumnDef, ResponsiveColumnMode } from '../../types';
+import type { ColumnDef, ResponsiveColumnMode } from '../../foundation/types';
 import type { DataTablePatternProps } from './DataTable.types';
 import { resolveRowKey } from './DataTable.types';
 import { DataTableMobileCards } from './DataTableMobileCards';

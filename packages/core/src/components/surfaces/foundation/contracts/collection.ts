@@ -15,7 +15,7 @@ import type {
   FilterDef,
   PaginationConfig,
   SortConfig,
-} from '../../../patterns/types';
+} from '../../../patterns/foundation/types';
 import type { SavedView } from '../../../patterns/data/saved-views/SavedViews.types';
 
 // ---------------------------------------------------------------------------

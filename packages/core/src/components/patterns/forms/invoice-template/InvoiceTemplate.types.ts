@@ -4,7 +4,7 @@
  * and currency), and the top-level props for print/export actions.
  */
 
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * Contact and branding details for the company issuing the invoice.

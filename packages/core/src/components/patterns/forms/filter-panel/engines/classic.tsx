@@ -36,7 +36,7 @@ import {
   Spin,
 } from 'antd';
 import type { FilterPanelProps } from '../FilterPanel.types';
-import type { FilterDef } from '../../../types';
+import type { FilterDef } from '../../../foundation/types';
 
 const { Panel } = Collapse;
 const { Title } = Typography;

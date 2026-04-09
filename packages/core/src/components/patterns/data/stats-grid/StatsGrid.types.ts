@@ -10,7 +10,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps, StatDef } from '../../types';
+import type { PatternBaseProps, StatDef } from '../../foundation/types';
 
 /**
  * Props for the StatsGrid pattern component.

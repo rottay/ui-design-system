@@ -16,7 +16,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /**
  * Union of all comparison operators available for filter rules.

@@ -10,7 +10,7 @@ import { useCollectionWorkspace } from '../../../foundation/hooks/useCollectionW
 import { CollectionWorkspaceSurface } from './index';
 import type { CollectionWorkspaceConfig } from '../../../foundation/contracts/collection';
 import type { CollectionWorkspaceSurfaceProps } from './index';
-import type { ColumnDef } from '../../../../patterns/types';
+import type { ColumnDef } from '../../../../patterns/foundation/types';
 import { renderSurface } from '../common/test-utils';
 
 // ---------------------------------------------------------------------------

@@ -6,7 +6,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { PatternBaseProps } from '../../types';
+import type { PatternBaseProps } from '../../foundation/types';
 
 /** Configuration for a filter pill (segmented control). */
 export interface FilterPillConfig {
