@@ -254,7 +254,7 @@ describe('stale paths', () => {
     expect(existsSync(join(SRC_ROOT, 'features'))).toBe(false);
   });
 
-  it('should not have src/providers/ at top-level (moved to runtime/providers)', () => {
+  it('should not have src/providers/ at top-level (moved to runtime/responsive)', () => {
     expect(existsSync(join(SRC_ROOT, 'providers'))).toBe(false);
   });
 

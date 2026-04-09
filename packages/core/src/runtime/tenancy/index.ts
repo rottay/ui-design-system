@@ -1,16 +1,31 @@
 /**
  * @fileoverview Tenancy system barrel export.
- * @description Single home for all tenant-related functionality including runtime
- * providers, configuration, slug resolution, storage, and CSS generation.
+ * @description Single home for all tenant-related functionality including
+ * runtime providers, authoring tools, personality presets, slug resolution,
+ * config storage, schema validation, and CSS generation.
  *
- * Consumers should import from this module rather than reaching into subdirectories.
+ * Consumers should import from this module rather than reaching into
+ * subdirectories.
  *
- * The tenancy system is structured into five layers:
- * 1. **Runtime** -- React providers and hooks that supply tenant context to components.
- * 2. **Schema** -- Validation functions that ensure TenantConfig payloads are well-formed.
- * 3. **Defaults** -- Safety-net config used when no tenant source is available.
- * 4. **Resolver** -- Determines "which tenant am I?" from headers, subdomains, or domains.
- * 5. **Storage** -- Determines "what is this tenant's config?" via registry, static, or API.
+ * The tenancy system is organized into eight focused areas (each mapping
+ * to a subfolder or a root-level file under `runtime/tenancy/`):
+ *
+ * 1. **Provider** (`provider/`) — React context and hooks that supply
+ *    tenant state to components (`TenantProvider`, `useTenant`).
+ * 2. **Authoring** (`authoring/`) — Utilities for creating new tenant
+ *    configs at runtime (`createTenantConfig`, `useCreateTenant`).
+ * 3. **Presets** (`personality-presets.ts`) — Maps known verticals to
+ *    their personality token baseline (`resolvePersonalityPreset`).
+ * 4. **Schema** (`schema/`) — Pure validation functions that ensure
+ *    `TenantConfig` payloads are well-formed.
+ * 5. **Defaults** (`defaults/`) — Safety-net config used when no tenant
+ *    source is available at all.
+ * 6. **Resolution** (`resolution/`) — Slug resolution: determines
+ *    "which tenant am I?" from headers, subdomains, or custom domains.
+ * 7. **Storage** (`storage/`) — Config resolution: given a slug, returns
+ *    a full `TenantConfig` via a six-level fallback chain.
+ * 8. **Registry** (`registry/`) — First-party tenant configs (rottay,
+ *    bithire, evnto) bundled for zero-latency dev/CI resolution.
  */
 
 // ── Provider (React-layer API) ──

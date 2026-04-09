@@ -25,7 +25,7 @@ const mockResponsive = {
   isTouchDevice: false,
 };
 
-vi.mock('../../../../runtime/providers/responsive', () => ({
+vi.mock('../../../../runtime/responsive', () => ({
   useResponsive: () => mockResponsive,
 }));
 

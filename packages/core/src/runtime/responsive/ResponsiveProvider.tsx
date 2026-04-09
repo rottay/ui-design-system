@@ -52,7 +52,7 @@ import {
   RESPONSIVE_BREAKPOINTS,
   buildRangeQuery,
   buildMinWidthQuery,
-} from '../../../hooks/responsive/breakpoints';
+} from '../../hooks/responsive/breakpoints';
 
 // ---------------------------------------------------------------------------
 // Types

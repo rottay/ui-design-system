@@ -34,7 +34,7 @@
 import { useContext } from 'react';
 import { useMediaQuery } from '../useMediaQuery';
 import { buildMinWidthQuery, RESPONSIVE_BREAKPOINTS } from '../breakpoints';
-import { ResponsiveContext } from '../../../runtime/responsive/responsive';
+import { ResponsiveContext } from '../../../runtime/responsive';
 
 /**
  * Responsive value configuration object

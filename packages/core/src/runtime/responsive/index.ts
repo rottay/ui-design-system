@@ -1,21 +1,19 @@
 /**
- * @fileoverview Providers - Rottay Design System
- * @description Barrel export for all context providers in the design system.
+ * @fileoverview Responsive runtime — breakpoint provider, context, and
+ * hook for viewport-aware rendering across all DS components.
  *
- * @module System/Providers
- * @category System
- * @package @rottay/design-system
+ * @category Runtime
  */
 
 export {
   ResponsiveProvider,
   ResponsiveContext,
   useResponsive,
-} from './responsive';
+} from './ResponsiveProvider';
 export type {
   ResponsiveProviderProps,
   ResponsiveContextValue,
   DeviceClass,
   PointerType,
   Orientation,
-} from './responsive';
+} from './ResponsiveProvider';
