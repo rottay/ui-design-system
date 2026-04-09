@@ -22,7 +22,7 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import type { SortConfig, PaginationConfig, ColumnDef } from '../types';
-import type { DataTablePatternProps } from '../../data-table/DataTable.types';
+import type { DataTablePatternProps } from '../../data/data-table/DataTable.types';
 
 export interface UseDataTableOptions<T> {
   data: T[];

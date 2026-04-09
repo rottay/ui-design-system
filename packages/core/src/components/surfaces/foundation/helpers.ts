@@ -7,7 +7,7 @@
  */
 
 import type { ColumnDef, FieldDef } from '../../patterns/types';
-import type { DetailAction } from '../../patterns/detail-panel';
+import type { DetailAction } from '../../patterns/data/detail-panel';
 import type { ButtonVariant } from '../../primitives/inputs/Button';
 import type {
   EntityAdapter,

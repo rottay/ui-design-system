@@ -40,19 +40,18 @@ const SHIM_MAX_LINES = 5;
 // Each entry: `category/folder-name`. Add a comment explaining why.
 const ALLOWED_EXCEPTIONS = new Set([
   // workspace-switcher was not in the audit's D rename target list.
-  // It is a small utility pattern (horizontal pill strip for switching
-  // between workspaces) that may be renamed to `workspace-picker` or
-  // similar in a future cleanup pass.
-  'patterns/workspace-switcher',
+  // Now lives inside patterns/navigation/ after the TR-E regroup.
+  'patterns/navigation/workspace-switcher',
 ]);
 
 // Known exceptions for the repeated-parent-child rule.
-// These were created by the Taxonomy Reset C grouping + B frozen names.
-// Codex should approve renaming them (e.g., dashboard-insights → insights,
-// record/record → record/fields) before they can be removed from here.
+// These were created by taxonomy grouping. Codex should decide whether
+// to rename them before they can be removed from here.
 const ALLOWED_REPEATED_PARENT = new Set([
   'structures/dashboard/dashboard-insights',
   'structures/record/record',
+  // data-table inside data/ group repeats the prefix
+  'patterns/data/data-table',
 ]);
 
 // Files at category root that are NOT support files even though they are

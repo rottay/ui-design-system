@@ -61,52 +61,17 @@ Generated on 2026-04-09.
 
 > Engine-agnostic task-level compositions
 
-- `activity-log/`
-- `approval-inbox/`
-- `approval-workflow/`
-- `assistant/`
-- `bulk-select-toggle/`
-- `calendar-view/`
-- `charts/`
-- `cockpit-header/`
-- `column-settings/`
-- `command-palette/`
-- `comment-thread/`
-- `data-table/`
-- `detail-panel/`
-- `empty-state/`
-- `environment-toggle/`
-- `file-manager/`
-- `filter-builder/`
-- `filter-panel/`
-- `form-builder/`
+- `communication/`
+- `data/`
+- `forms/`
 - `header-actions/`
 - `hooks/`
-- `invoice-template/`
-- `kanban-board/`
-- `list-toolbar/`
-- `live-feed/`
-- `map-view/`
-- `moderation-gallery/`
-- `notification-center/`
-- `operational-ledger/`
-- `page-shell/`
-- `pricing-table/`
-- `saved-views/`
-- `shift-matrix/`
-- `shortcuts-overlay/`
-- `stats-grid/`
-- `status-filter-pills/`
-- `step-wizard/`
-- `table-checkbox-styles/`
-- `tenant-preview/`
-- `timeline/`
-- `tree-view/`
-- `user-profile-card/`
-- `workbench-header/`
-- `workspace-switcher/`
+- `misc/`
+- `navigation/`
+- `visualization/`
+- `workflow/`
 
-**Total**: 44 families.
+**Total**: 9 families.
 
 ## Surfaces
 
@@ -183,4 +148,4 @@ Generated on 2026-04-09.
 
 ---
 
-**Summary**: 6 primitive categories (98 components), 101 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (98 components), 66 families across structures/patterns/surfaces.

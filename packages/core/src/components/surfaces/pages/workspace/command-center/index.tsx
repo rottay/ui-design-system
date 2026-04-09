@@ -14,10 +14,10 @@ import { Text } from '../../../../primitives/display/Typography';
 import { Card } from '../../../../primitives/display/Card';
 import { Button } from '../../../../primitives/inputs/Button';
 import { Skeleton } from '../../../../primitives/feedback/Skeleton';
-import { PatternStatsGrid } from '../../../../patterns/stats-grid';
+import { PatternStatsGrid } from '../../../../patterns/data/stats-grid';
 import type { StatDef } from '../../../../patterns/types';
-import { PatternActivityLog } from '../../../../patterns/activity-log';
-import type { Activity } from '../../../../patterns/activity-log/ActivityLog.types';
+import { PatternActivityLog } from '../../../../patterns/communication/activity-log';
+import type { Activity } from '../../../../patterns/communication/activity-log/ActivityLog.types';
 
 // ---------------------------------------------------------------------------
 // Types

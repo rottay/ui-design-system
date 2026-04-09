@@ -16,7 +16,7 @@ import type {
   PaginationConfig,
   SortConfig,
 } from '../../../patterns/types';
-import type { SavedView } from '../../../patterns/saved-views/SavedViews.types';
+import type { SavedView } from '../../../patterns/data/saved-views/SavedViews.types';
 
 // ---------------------------------------------------------------------------
 // Controls
