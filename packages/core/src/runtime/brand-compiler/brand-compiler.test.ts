@@ -4,6 +4,7 @@ import {
   brandThemeToTokenOverrides,
   brandThemeToPersonality,
   brandThemeToBranding,
+  deepMergeTokenOverrides,
 } from './index';
 
 const MOCK_BRAND_THEME: BrandTheme = {
@@ -150,5 +151,89 @@ describe('brandTheme precedence', () => {
     const effective = { ...configBranding, ...btBranding };
     expect(effective.primaryColor).toBe('#FF0000'); // brandTheme wins
     expect(effective.companyName).toBe('Acme'); // identity preserved
+  });
+});
+
+describe('deepMergeTokenOverrides', () => {
+  it('deep-merges glass without losing base keys', () => {
+    const base = {
+      glass: { blur: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid white' },
+      gradients: { primary: 'linear-gradient(red, blue)', surface: 'linear-gradient(white, gray)' },
+    };
+    const override = {
+      glass: { blur: '20px' }, // only override blur
+    };
+    const result = deepMergeTokenOverrides(base, override);
+    expect(result.glass?.blur).toBe('20px'); // override wins
+    expect(result.glass?.background).toBe('rgba(0,0,0,0.5)'); // base preserved
+    expect(result.glass?.border).toBe('1px solid white'); // base preserved
+    expect(result.gradients?.primary).toBe('linear-gradient(red, blue)'); // untouched
+  });
+
+  it('deep-merges overlays without wiping namespace', () => {
+    const base = {
+      overlays: { light: 'rgba(255,255,255,0.1)', medium: 'rgba(255,255,255,0.3)', heavy: 'rgba(255,255,255,0.5)' },
+    };
+    const override = {
+      overlays: { heavy: 'rgba(255,255,255,0.9)' },
+    };
+    const result = deepMergeTokenOverrides(base, override);
+    expect(result.overlays?.light).toBe('rgba(255,255,255,0.1)'); // base preserved
+    expect(result.overlays?.heavy).toBe('rgba(255,255,255,0.9)'); // override wins
+  });
+
+  it('returns base when override is undefined', () => {
+    const base = { densityScale: 1.1, glass: { blur: '8px' } };
+    const result = deepMergeTokenOverrides(base, undefined);
+    expect(result).toBe(base); // identity — no allocation
+  });
+
+  it('override densityScale wins over base', () => {
+    const base = { densityScale: 1.1 };
+    const override = { densityScale: 0.9 };
+    const result = deepMergeTokenOverrides(base, override);
+    expect(result.densityScale).toBe(0.9);
+  });
+});
+
+describe('integration: classic engine with brandTheme', () => {
+  it('normalized config gives AntdConfigProvider effective colors', () => {
+    // Simulate what DesignSystemProvider does: normalize config before
+    // passing to TenantProvider. AntdConfigProvider reads config.branding
+    // from TenantProvider context, so it must see brandTheme.palette colors.
+    const tenantConfig = {
+      slug: 'acme',
+      name: 'Acme Corp',
+      engine: 'classic' as const,
+      theme: 'base',
+      plan: 'enterprise' as const,
+      features: [],
+      branding: { companyName: 'Acme Corp', primaryColor: '#000000' },
+      brandTheme: MOCK_BRAND_THEME,
+      tokenOverrides: {
+        glass: { blur: '20px' }, // partial override — should not wipe background/border
+      },
+    };
+
+    // Step 1: Normalize branding (brandTheme palette wins)
+    const btBranding = brandThemeToBranding(tenantConfig.brandTheme);
+    const normalizedBranding = { ...tenantConfig.branding, ...btBranding };
+    expect(normalizedBranding.primaryColor).toBe('#FF0000'); // brandTheme wins
+    expect(normalizedBranding.companyName).toBe('Acme Corp'); // identity stays
+
+    // Step 2: Deep-merge tokenOverrides (brandTheme + tenant partial)
+    const btOverrides = brandThemeToTokenOverrides(tenantConfig.brandTheme);
+    const normalizedOverrides = deepMergeTokenOverrides(btOverrides, tenantConfig.tokenOverrides);
+    // brandTheme glass.blur is overridden by tenant, but other glass keys stay undefined
+    // (brandTheme didn't set glass, so base is empty — tenant's blur is the only value)
+    expect(normalizedOverrides.glass?.blur).toBe('20px');
+
+    // brandTheme surfaces are preserved
+    expect(normalizedOverrides.borderRadius?.sm).toBe('4px');
+    expect(normalizedOverrides.densityScale).toBe(1.1);
+
+    // This is what AntdConfigProvider would read from context:
+    // config.branding.primaryColor === '#FF0000' (from brandTheme, not '#000000')
+    expect(normalizedBranding.primaryColor).not.toBe('#000000');
   });
 });

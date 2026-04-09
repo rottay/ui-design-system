@@ -114,3 +114,27 @@ export function brandThemeToBranding(bt: BrandTheme): Partial<TenantBranding> {
 
   return result;
 }
+
+/**
+ * Deep-merge two TenantTokenOverrides objects.
+ *
+ * Nested objects (glass, gradients, overlays, surface, motion, borderRadius,
+ * shadows) are merged per-key so a tenant override for one glass property
+ * does not wipe out the entire glass namespace from brandTheme.
+ */
+export function deepMergeTokenOverrides(
+  base: Partial<TenantTokenOverrides>,
+  override: Partial<TenantTokenOverrides> | undefined,
+): Partial<TenantTokenOverrides> {
+  if (!override) return base;
+  return {
+    surface: override.surface ? { ...base.surface, ...override.surface } : base.surface,
+    motion: override.motion ? { ...base.motion, ...override.motion } : base.motion,
+    borderRadius: override.borderRadius ? { ...base.borderRadius, ...override.borderRadius } : base.borderRadius,
+    shadows: override.shadows ? { ...base.shadows, ...override.shadows } : base.shadows,
+    densityScale: override.densityScale ?? base.densityScale,
+    glass: override.glass ? { ...base.glass, ...override.glass } : base.glass,
+    gradients: override.gradients ? { ...base.gradients, ...override.gradients } : base.gradients,
+    overlays: override.overlays ? { ...base.overlays, ...override.overlays } : base.overlays,
+  };
+}

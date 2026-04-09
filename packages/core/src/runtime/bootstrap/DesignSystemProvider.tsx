@@ -91,7 +91,7 @@ import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
-import { brandThemeToBranding, brandThemeToTokenOverrides } from '../brand-compiler';
+import { brandThemeToBranding, brandThemeToTokenOverrides, deepMergeTokenOverrides } from '../brand-compiler';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -403,8 +403,26 @@ export function DesignSystemProvider({
   // "which UX preset should we apply within that product space?".
   const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
 
+  // When brandTheme is present, normalize branding and tokenOverrides so
+  // ALL downstream consumers (TenantProvider → AntdConfigProvider, ThemeProvider,
+  // useTokens) see the same effective values. This prevents classic engine
+  // from reading stale config.branding while ThemeProvider uses brandTheme.palette.
+  const normalizedConfig = useMemo(() => {
+    if (!tenantConfig.brandTheme) return tenantConfig;
+    const btBranding = brandThemeToBranding(tenantConfig.brandTheme);
+    const btOverrides = brandThemeToTokenOverrides(tenantConfig.brandTheme);
+    const tenantOverrides = tenantConfig.tokenOverrides;
+    return {
+      ...tenantConfig,
+      branding: { ...tenantConfig.branding, ...btBranding },
+      tokenOverrides: tenantOverrides
+        ? deepMergeTokenOverrides(btOverrides, tenantOverrides)
+        : Object.keys(btOverrides).length > 0 ? btOverrides as typeof tenantConfig.tokenOverrides : tenantConfig.tokenOverrides,
+    };
+  }, [tenantConfig]);
+
   return (
-    <TenantProvider config={tenantConfig} vertical={resolvedVertical}>
+    <TenantProvider config={normalizedConfig} vertical={resolvedVertical}>
       <ProductProfileProvider profile={resolvedProductProfile}>
         <I18nProvider
           locale={locale}
@@ -415,21 +433,10 @@ export function DesignSystemProvider({
           <EngineProvider defaultEngine={engine}>
             <ThemeProvider
               theme={theme}
-              tenant={tenantConfig.slug}
-              vertical={tenantConfig.vertical ?? resolvedVertical?.key}
-              branding={
-                tenantConfig.brandTheme
-                  ? { ...tenantConfig.branding, ...brandThemeToBranding(tenantConfig.brandTheme) }
-                  : tenantConfig.branding
-              }
-              tokenOverrides={
-                tenantConfig.brandTheme
-                  ? {
-                      ...brandThemeToTokenOverrides(tenantConfig.brandTheme),
-                      ...tenantConfig.tokenOverrides,
-                    }
-                  : tenantConfig.tokenOverrides
-              }
+              tenant={normalizedConfig.slug}
+              vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
+              branding={normalizedConfig.branding}
+              tokenOverrides={normalizedConfig.tokenOverrides}
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >
