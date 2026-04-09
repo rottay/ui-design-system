@@ -86,6 +86,7 @@ export interface BrandPalette {
   accentColor?: string;
   darkPrimaryColor?: string;
   darkSecondaryColor?: string;
+  darkAccentColor?: string;
   darkBackgroundColor?: string;
   successColor?: string;
   warningColor?: string;
@@ -130,25 +131,115 @@ export interface BrandMotion {
 }
 
 export interface BrandChrome {
+  /** Card elevation, hover, border, padding personality */
   card?: Partial<CardPersonalityTokens>;
+  /** Accent bars, icon containers, badge shapes, dividers */
   accent?: Partial<AccentPersonalityTokens>;
+  /** Sidebar navigation chrome (bg, text, item sizing, group headers) */
+  sidebar?: BrandSidebarChrome;
+  /** Layout header and sider shell chrome */
+  layout?: BrandLayoutChrome;
+  /** Shell background grid (for premium grid-overlay effects) */
+  shell?: BrandShellChrome;
+  /** Button variant colors and shadows */
+  controls?: BrandControlsChrome;
+  /** Table header styling */
+  table?: BrandTableChrome;
+}
+
+export interface BrandSidebarChrome {
+  bg?: string;
+  border?: string;
+  text?: string;
+  textMuted?: string;
+  width?: string;
+  collapsedWidth?: string;
+  headerHeight?: string;
+  groupFontSize?: string;
+  groupFontWeight?: string | number;
+  groupColor?: string;
+  groupLetterSpacing?: string;
+  itemFontSize?: string;
+  itemFontWeight?: string | number;
+  itemFontWeightActive?: string | number;
+  itemColor?: string;
+  itemColorActive?: string;
+  itemBgActive?: string;
+  itemBgHover?: string;
+  itemPadding?: string;
+  iconSize?: string;
+  footerBg?: string;
+}
+
+export interface BrandLayoutChrome {
+  bg?: string;
+  headerBg?: string;
+  headerBackdrop?: string;
+  headerBorder?: string;
+  siderBg?: string;
+  siderBorder?: string;
+}
+
+export interface BrandShellChrome {
+  gridSize?: string;
+  gridLine?: string;
+  gridOpacity?: number;
+}
+
+export interface BrandControlsChrome {
+  /** Primary button chrome */
+  buttonPrimary?: { bg?: string; bgHover?: string; text?: string; border?: string; shadow?: string };
+  /** Secondary button chrome */
+  buttonSecondary?: { bg?: string; bgHover?: string; text?: string; border?: string };
+  /** Default button chrome */
+  buttonDefault?: { bg?: string; bgHover?: string; text?: string; border?: string };
+  /** Ghost button chrome */
+  buttonGhost?: { bg?: string; bgHover?: string; text?: string };
+  /** Input field chrome */
+  input?: { bg?: string; border?: string; borderFocus?: string; shadowFocus?: string };
+}
+
+export interface BrandTableChrome {
+  headerBg?: string;
+  headerColor?: string;
+  headerFontWeight?: string | number;
+  headerFontSize?: string;
 }
 
 // ── Brand Compiler Contract ─────────────────────────────
 // Runtime theming and static generation must share one compiler.
+// The merge chain is: DS base -> vertical baseline -> BrandTheme -> generated artifacts.
+// The compiler receives the resolved vertical baseline so it can layer BrandTheme on top.
 
-export interface BrandCompilerOptions {
+export interface BrandCompilerInput {
+  /** The brand theme to compile */
+  brandTheme: BrandTheme;
+  /** Tenant slug used for CSS selector scoping (html[data-tenant='slug']) */
   tenantSlug: string;
+  /** Resolved vertical baseline personality (layered before BrandTheme) */
+  verticalPersonality?: Partial<PersonalityTokens>;
+  /** Resolved vertical baseline token overrides (layered before BrandTheme) */
+  verticalTokenOverrides?: TenantTokenOverrides;
+  /** Light or dark base theme */
   baseTheme?: 'light' | 'dark';
 }
 
 export interface CompiledBrand {
-  /** CSS variable map ready for injection */
+  /** CSS variable map ready for injection (light + dark combined) */
   cssVariables: Record<string, string>;
-  /** Full CSS string with tenant selectors */
+  /** Full CSS string with tenant selectors for light, dark, and system-dark */
   cssString: string;
-  /** Resolved personality tokens for runtime merge */
+  /** Resolved personality tokens (vertical baseline merged with BrandTheme) */
   personality: Partial<PersonalityTokens>;
-  /** Resolved structural token overrides for runtime merge */
+  /** Resolved structural token overrides (vertical baseline merged with BrandTheme) */
   tokenOverrides: Partial<TenantTokenOverrides>;
 }
+
+/**
+ * Brand compiler function signature.
+ *
+ * Both runtime (ThemeProvider) and static generation (generateTenantCss)
+ * must use an implementation conforming to this signature so the merge
+ * chain is consistent regardless of execution context.
+ */
+export type CompileBrandTheme = (input: BrandCompilerInput) => CompiledBrand;
