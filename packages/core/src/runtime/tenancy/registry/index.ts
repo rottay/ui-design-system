@@ -16,6 +16,7 @@
  */
 
 import type { TenantConfig, EngineName } from '../../../contracts';
+import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '../../../tokens/ts/brand-themes';
 
 /**
  * First-party tenants that ship with the DS.
@@ -47,6 +48,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       // control the full monochrome dark palette without inline style overrides.
       logo: undefined,
     },
+    brandTheme: rottayBrandTheme,
     // Rottay personality: Professional dark IT/AI SaaS.
     // Controlled animations (no bouncy springs), subtle hover effects,
     // glass tooltips on dark backgrounds, monochrome solid accent bars.
@@ -117,6 +119,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       accentColor: '#7FC15E',
       logo: undefined,
     },
+    brandTheme: bithireBrandTheme,
     // BitHire personality: corporate/LinkedIn-style professionalism.
     // Low animation intensity and fade-only entrances keep the UI quiet and
     // data-focused. Compact padding and uppercase labels match the structured
@@ -187,6 +190,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       accentColor: '#b8a898',
       logo: undefined,
     },
+    brandTheme: evntoBrandTheme,
     // Evnto personality: clean, professional, operator-focused.
     // Subtle animations and fade entrances create a polished feel.
     // Cards use borders (not shadows) for definition on white backgrounds.
