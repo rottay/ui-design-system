@@ -244,9 +244,9 @@ const PATTERN_CASES: PatternSmokeCase[] = [
 describe('pattern smoke coverage', () => {
   beforeAll(async () => {
     await Promise.all([
-      import('../../../components/patterns/detail-panel/engines/classic'),
-      import('../../../components/patterns/detail-panel/engines/modern'),
-      import('../../../components/patterns/detail-panel/engines/rustic'),
+      import('../../../components/patterns/data/detail-panel/engines/classic'),
+      import('../../../components/patterns/data/detail-panel/engines/modern'),
+      import('../../../components/patterns/data/detail-panel/engines/rustic'),
     ]);
   });
 

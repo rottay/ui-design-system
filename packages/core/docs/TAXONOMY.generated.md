@@ -61,17 +61,74 @@ Generated on 2026-04-09.
 
 > Engine-agnostic task-level compositions
 
-- `communication/`
-- `data/`
-- `forms/`
-- `header-actions/`
-- `hooks/`
-- `misc/`
-- `navigation/`
-- `visualization/`
-- `workflow/`
+### communication/
 
-**Total**: 9 families.
+- `communication/activity-log/`
+- `communication/assistant/`
+- `communication/comment-thread/`
+- `communication/live-feed/`
+- `communication/notification-center/`
+
+### data/
+
+- `data/bulk-select-toggle/`
+- `data/column-settings/`
+- `data/data-table/`
+- `data/detail-panel/`
+- `data/list-toolbar/`
+- `data/saved-views/`
+- `data/stats-grid/`
+- `data/status-filter-pills/`
+- `data/table-checkbox-styles/`
+
+### forms/
+
+- `forms/filter-builder/`
+- `forms/filter-panel/`
+- `forms/form-builder/`
+- `forms/invoice-template/`
+- `forms/step-wizard/`
+
+### header-actions/
+
+
+### hooks/
+
+
+### misc/
+
+- `misc/cockpit-header/`
+- `misc/empty-state/`
+- `misc/file-manager/`
+- `misc/page-shell/`
+- `misc/pricing-table/`
+- `misc/tenant-preview/`
+- `misc/user-profile-card/`
+- `misc/workbench-header/`
+
+### navigation/
+
+- `navigation/command-palette/`
+- `navigation/environment-toggle/`
+- `navigation/shortcuts-overlay/`
+- `navigation/workspace-switcher/`
+
+### visualization/
+
+- `visualization/calendar-view/`
+- `visualization/charts/`
+- `visualization/kanban-board/`
+- `visualization/map-view/`
+- `visualization/timeline/`
+- `visualization/tree-view/`
+
+### workflow/
+
+- `workflow/approval-inbox/`
+- `workflow/approval-workflow/`
+- `workflow/moderation-gallery/`
+- `workflow/operational-ledger/`
+- `workflow/shift-matrix/`
 
 ## Surfaces
 
@@ -148,4 +205,4 @@ Generated on 2026-04-09.
 
 ---
 
-**Summary**: 6 primitive categories (98 components), 66 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (98 components), 99 families across structures/patterns/surfaces.

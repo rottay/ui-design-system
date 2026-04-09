@@ -344,22 +344,14 @@ Primitives (engine-switched leaf components)
 
 Patterns (engine-agnostic compositions)
   │
-  ├─ data-table         DataTable with sort, filter, bulk actions
-  ├─ form-builder       Declarative form from FieldDef[]
-  ├─ stats-grid         Metric cards with trends and sparklines
-  ├─ kanban-board       Drag-and-drop columns
-  ├─ calendar-view      Event calendar
-  ├─ detail-panel       Entity detail with tabs
-  ├─ activity-log       Timeline of events
-  ├─ charts             Chart wrappers with personality tokens
-  ├─ file-manager       File browser with upload
-  ├─ command-palette    Search/command overlay
-  ├─ filter-builder     Advanced filter composition
-  ├─ notification-center Notification list and preferences
-  ├─ step-wizard        Multi-step flows
-  ├─ page-shell         Page chrome (title, breadcrumbs, back)
-  └─ ...                (see packages/core/src/components/patterns/ for the
-                         full directory listing)
+  ├─ data/              data-table, detail-panel, list-toolbar, stats-grid, ...
+  ├─ forms/             form-builder, filter-builder, filter-panel, step-wizard, ...
+  ├─ visualization/     charts, calendar-view, map-view, timeline, tree-view, kanban-board
+  ├─ communication/     assistant, comment-thread, notification-center, live-feed, activity-log
+  ├─ workflow/          approval-inbox, approval-workflow, operational-ledger, ...
+  ├─ navigation/        command-palette, shortcuts-overlay, environment-toggle, workspace-switcher
+  ├─ misc/              tenant-preview, user-profile-card, file-manager, pricing-table, ...
+  └─ _internal/         hooks, types, header-actions, common, domain-kits, engines
 
 Surfaces (page-level config objects)
   │
@@ -645,10 +637,14 @@ packages/core/src/
     │   └── feedback/       loading-overlay
     │
     ├── patterns/           Tier 2: Compositions (engine-agnostic)
-    │   ├── data-table/     Table with sort, filter, bulk actions
-    │   ├── form-builder/   Declarative form from FieldDef[]
-    │   ├── charts/         Chart wrappers
-    │   └── ...             (see TAXONOMY.generated.md for the full listing)
+    │   ├── data/           data-table, detail-panel, list-toolbar, stats-grid, ...
+    │   ├── forms/          form-builder, filter-builder, filter-panel, ...
+    │   ├── visualization/  charts, calendar-view, map-view, timeline, ...
+    │   ├── communication/  assistant, comment-thread, notification-center, ...
+    │   ├── workflow/       approval-inbox, approval-workflow, ...
+    │   ├── navigation/     command-palette, shortcuts-overlay, ...
+    │   ├── misc/           tenant-preview, user-profile-card, ...
+    │   └── _internal/      hooks, types, header-actions, engines
     │
     └── surfaces/           Tier 3: Page-level config objects
         ├── foundation/     Types, builders, helpers, hooks, contracts, states

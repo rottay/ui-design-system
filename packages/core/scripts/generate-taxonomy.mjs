@@ -86,25 +86,24 @@ let totalPrimitiveComponents = 0;
   }
 }
 
-// --- Patterns: flat list of families ---
-// Patterns are listed flat (each top-level dir = one family). Subdirs
-// inside families (e.g., engines/, hooks/) are implementation details,
-// not sub-groups. If patterns gets regrouped in a future checkpoint,
-// this section should switch to the grouped format used by structures.
+// --- Patterns: groups → families (same format as structures) ---
 {
   const tierDir = join(COMPONENTS_ROOT, 'patterns');
-  const topLevel = listDirs(tierDir);
+  const groups = listDirs(tierDir);
   lines.push('## Patterns');
   lines.push('');
   lines.push('> Engine-agnostic task-level compositions');
   lines.push('');
-  for (const f of topLevel) {
-    lines.push(`- \`${f}/\``);
-    totalFamilies++;
+  for (const group of groups) {
+    const families = listDirs(join(tierDir, group));
+    lines.push(`### ${group}/`);
+    lines.push('');
+    for (const f of families) {
+      lines.push(`- \`${group}/${f}/\``);
+      totalFamilies++;
+    }
+    lines.push('');
   }
-  lines.push('');
-  lines.push(`**Total**: ${topLevel.length} families.`);
-  lines.push('');
 }
 
 // --- Surfaces: foundation + layout + pages (grouped) ---
