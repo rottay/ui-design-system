@@ -18,6 +18,7 @@
 export * from './base';
 export * from './components';
 export * from './tenants';
+export * from './brand-themes';
 
 // Named imports for combined export
 import { baseTokens } from './base';
