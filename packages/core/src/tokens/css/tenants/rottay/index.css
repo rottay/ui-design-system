@@ -1,5 +1,10 @@
 /**
  * Rottay - Professional Dark-First Theme
+ *
+ * GENERATED SNAPSHOT — the canonical brand source is tokens/ts/brand-themes/rottay.ts.
+ * This CSS supplements the runtime BrandTheme with sidebar, layout, shell, and
+ * controls chrome that the brand compiler does not yet generate.
+ *
  * Variables-only tenant configuration.
  * All component styling is handled by the engine CSS layer.
  *
