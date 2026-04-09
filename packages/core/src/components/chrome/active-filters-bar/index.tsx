@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * @fileoverview ActiveFiltersBar pattern -- horizontal active filter chip
+ * @fileoverview ActiveFiltersBar — chrome-tier horizontal active filter chip
  * row with clear-all and add-filter affordances.
  *
  * @description
- * Engine-free pattern that renders a row of active filter chips. Each chip
+ * Engine-free chrome family that renders a row of active filter chips. Each chip
  * shows a label/value pair with an inline remove button, and the rail also
  * exposes a "Clear all" button plus an optional "+ Add filter" CTA. Returns
  * null when no filters are active, so consumers can mount it
@@ -14,7 +14,7 @@
  * Used as the active-filter row that sits between the toolbar and the
  * table on workspace/list pages.
  *
- * The pattern stays domain-agnostic. Each chip's label and displayValue
+ * The family stays domain-agnostic. Each chip's label and displayValue
  * are consumer-supplied, so the rail knows nothing about tenants, users,
  * or any specific entity.
  */

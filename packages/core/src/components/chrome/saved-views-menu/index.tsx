@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * @fileoverview SavedViewsMenu pattern -- saved-views dropdown for
+ * @fileoverview SavedViewsMenu — chrome-tier saved-views dropdown for
  * workspace landing pages.
  *
  * @description
@@ -17,7 +17,7 @@
  * trigger-button + dropdown panel suited for the workspace command bar
  * cluster, where horizontal real estate is constrained.
  *
- * The pattern stays domain-agnostic: it works with any saved-view shape
+ * The family stays domain-agnostic: it works with any saved-view shape
  * (`{ key, label, kind?, state }`) without knowing about tenants, users,
  * or any specific entity. View descriptions render generic state hints
  * (query, scope, filter count, column count, sort field, density).

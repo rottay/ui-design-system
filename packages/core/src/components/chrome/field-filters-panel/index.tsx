@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * @fileoverview FieldFiltersPanel pattern -- premium filter card grid
+ * @fileoverview FieldFiltersPanel — chrome-tier filter card grid
  * with quick-slice presets and per-card visual metadata.
  *
  * @description
- * Engine-free pattern that renders an advanced filter panel as a responsive
+ * Engine-free chrome family that renders an advanced filter panel as a responsive
  * grid of 230px+ FilterCards. Each card carries a label, optional icon and
  * description, and a control (Select for `select`/`enum`/`date-range`,
  * Input for free-form text). The panel also accepts a list of quick-slice
@@ -18,7 +18,7 @@
  *     options arrays. Use for workspace/list-page filter panels where
  *     each filter maps to one column and the value is a single string.
  *
- * The pattern stays domain-agnostic. The optional `filterVisuals` map lets
+ * The family stays domain-agnostic. The optional `filterVisuals` map lets
  * each consumer keep platform-specific narrative (e.g. tenant or role copy)
  * inside its own workspace-config file rather than baking it into the DS.
  */

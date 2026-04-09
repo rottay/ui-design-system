@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * @fileoverview SelectionPreviewRail pattern -- sticky 380px preview rail
+ * @fileoverview SelectionPreviewRail — chrome-tier sticky 380px preview rail
  * for workspace/list pages with snapshot column rendering, match-reason
  * overlay, and a custom-render slot.
  *
  * @description
- * Engine-free pattern that renders a sticky right-side rail showing a
+ * Engine-free chrome family that renders a sticky right-side rail showing a
  * focused or selected row from a workspace table. Renders one of two
  * branches:
  *
@@ -27,7 +27,7 @@
  * Distinct from the DS DetailPanel pattern (full-page detail container
  * with tabs/sidebar/breadcrumbs/footer): this is a sticky list-side rail.
  *
- * The pattern stays domain-agnostic and is generic over `T extends
+ * The family stays domain-agnostic and is generic over `T extends
  * object`, so any record shape composes via structural subtyping.
  */
 

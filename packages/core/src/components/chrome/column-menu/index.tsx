@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * @fileoverview ColumnMenu pattern -- floating column visibility
+ * @fileoverview ColumnMenu — chrome-tier floating column visibility
  * and ordering panel with a draft + apply UX flow.
  *
  * @description
@@ -17,7 +17,7 @@
  *   - Up/down arrows for reordering (no drag handles)
  *   - Listens to a custom DOM event for external open requests
  *
- * The pattern stays domain-agnostic: it works with any column shape that
+ * The family stays domain-agnostic: it works with any column shape that
  * has `key: string` and `title: string`. Generic over `T` so consumers can
  * pass their full table column definitions without losing type safety.
  */

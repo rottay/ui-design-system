@@ -7,8 +7,8 @@
  *
  * @description
  * Engine-free chrome family for entity-edit pages. Pairs with the
- * `record-chrome` building blocks (`SurfaceFieldGrid`,
- * `SurfaceReadField`) and with `form-sections` (`PremiumFormSections`)
+ * `record-chrome` building blocks (`RecordFieldGrid`,
+ * `RecordField`) and with `form-sections` (`FormSections`)
  * to compose a full edit screen.
  *
  * EditHeader is chrome, not a surface. The heavier DS `FormSurface` is

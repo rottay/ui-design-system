@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * @fileoverview SearchCommandBar pattern -- premium command/search bar
+ * @fileoverview SearchCommandBar — chrome-tier command/search bar
  * with voice input, suggestion chips, and an actions slot.
  *
  * @description
@@ -16,7 +16,7 @@
  * 4.2). When the browser does not support speech recognition, the voice
  * UI is hidden entirely and the bar degrades to a plain search input.
  *
- * The pattern stays domain-agnostic. The `command` prop carries
+ * The family stays domain-agnostic. The `command` prop carries
  * `placeholder`, `value`, `onSearch`, optional `hint` and optional
  * `suggestions` -- nothing about tenants, users, or any specific entity.
  *

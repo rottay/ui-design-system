@@ -8,8 +8,8 @@
  *
  * @description
  * Engine-free chrome family for entity-detail pages. Pairs with the
- * `record-chrome` building blocks (`SurfaceReadField`, `SurfaceFieldGrid`)
- * and with `form-sections` (`PremiumFormSections`) to compose a full
+ * `record-chrome` building blocks (`RecordField`, `RecordFieldGrid`)
+ * and with `form-sections` (`FormSections`) to compose a full
  * detail screen.
  *
  * DetailHeader is chrome, not a surface: it is a structural widget that

@@ -30,9 +30,11 @@ export * from './data-terminal-card';
 export * from './form-sections';   // was patterns/premium-form-sections
 export * from './record-chrome';   // was patterns/surface-primitives
 
-// Moved + folder-renamed + identifier-renamed in Checkpoint D
-// Each of these keeps compat aliases exporting the old Workspace*/
-// CommandHeader* identifiers for back-compat with current consumers.
+// Moved + folder-renamed + identifier-renamed in Checkpoint D.
+// The 8 workspace families keep compat aliases exporting the old
+// Workspace* identifiers. dashboard-insight-variants only had its
+// folder (+ subfolders) renamed — the Metrics*/Activity* component
+// identifiers were already declarative and did not need renaming.
 export * from './collection-header';       // was patterns/workspace-header
 export * from './search-command-bar';      // was patterns/workspace-command-bar
 export * from './active-filters-bar';      // was patterns/workspace-filter-rail

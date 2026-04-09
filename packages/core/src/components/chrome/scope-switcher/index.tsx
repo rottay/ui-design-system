@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * @fileoverview ScopeSwitcher pattern -- horizontal scope pill strip for
+ * @fileoverview ScopeSwitcher — chrome-tier horizontal scope pill strip for
  * switching between predefined data subsets.
  *
  * @description
- * Engine-free pattern that renders a horizontal row of scope pills (e.g.
+ * Engine-free chrome family that renders a horizontal row of scope pills (e.g.
  * "All", "Active", "Archived"). Each pill carries a label and an optional
  * count badge, and the active pill is highlighted with the primary tint.
  * Supports two visual variants: `section` (the default standalone bar) and
  * `inline` (compact, used inside toolbars or table headers).
  *
- * The pattern stays domain-agnostic. Scope keys, labels, counts, and
+ * The family stays domain-agnostic. Scope keys, labels, counts, and
  * filter predicates are consumer-supplied via the ScopeDefinition shape;
  * the rail itself knows nothing about tenants, users, or any specific
  * entity.
