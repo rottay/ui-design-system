@@ -1,17 +1,27 @@
 /**
- * @fileoverview DataTerminalCard - Premium Dashboard Metric Card
+ * @fileoverview DataTerminalCard — chrome-tier dashboard metric card
+ * with four animated visual variants.
  *
- * 4 Premium Variants with "alive" feeling animations.
+ * @description
+ * Engine-free chrome family for dashboard surfaces. Renders a single
+ * metric card with a "Terminal / HUD / Circuit / Matrix" visual theme,
+ * a trend indicator, an optional sparkline, and an optional href that
+ * turns the whole card into a link via the DS navigation adapter.
+ * Consumers compose multiple cards into a dashboard grid or drop a
+ * single card into a widget slot.
  *
- * Engine-free pattern (Wave 6.1). Verbatim extraction from
- * `app-platform/_shared/cards/data-terminal-card/`. The two non-verbatim
- * adjustments versus the original are:
- *   1. `useFocusMode()` from app context → `useDsFocusMode()` from DS
- *      runtime adapter, so the consuming app injects focus state via
- *      `<FocusModeProvider value={isFocusMode}>`.
- *   2. `Link` from `next/link` → `useNavigationLink()` adapter from DS
- *      runtime, so the pattern stays framework-agnostic and falls back
- *      to a native `<a>` when no provider is mounted.
+ * The component is framework-agnostic:
+ *   - Navigation goes through `useNavigationLink()` from the DS runtime
+ *     so consumers in Next.js, Remix, plain React, etc. all work as
+ *     long as they mount the corresponding adapter provider (or fall
+ *     back to the native `<a>` when no provider is mounted).
+ *   - Focus state comes from `useDsFocusMode()` so apps that expose a
+ *     focus-mode experience can mount `<FocusModeProvider>` and have
+ *     the card dim/highlight appropriately.
+ *
+ * Contract cleanup (trend/progress/path shape normalization) is
+ * planned for a later checkpoint; for now the public API is unchanged
+ * from its original extraction shape.
  */
 "use client";
 

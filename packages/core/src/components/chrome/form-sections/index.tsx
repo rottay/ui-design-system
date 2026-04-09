@@ -1,30 +1,37 @@
 'use client';
 
 /**
- * @fileoverview PremiumFormSections pattern -- accordion / collapsible
+ * @fileoverview form-sections — chrome-tier accordion / collapsible
  * form section container with tone and appearance variants.
  *
  * @description
- * Engine-free pattern for organizing form content into rich, themed
- * sections. Supports three appearance variants (`card`, `soft`, `divided`)
- * and four tone variants (`default`, `editorial`, `technical`,
- * `governance`). Each tone ships its own gradient + grid background pattern
- * generators so the section header reads like a premium briefing card
- * rather than a plain form group.
+ * Engine-free chrome family for organizing form content into themed
+ * sections. Supports three appearance variants (`card`, `soft`,
+ * `divided`) and four tone variants (`default`, `editorial`,
+ * `technical`, `governance`). Each tone ships its own gradient + grid
+ * background pattern generators so the section header reads like a
+ * briefing card rather than a plain form group.
  *
  * Sections support: required/optional badges, summary chip slot, extra
- * action slot, controlled or uncontrolled accordion behavior, per-section
- * appearance/tone overrides.
+ * action slot, controlled or uncontrolled accordion behavior,
+ * per-section appearance/tone overrides.
  *
  * Companion exports:
- *   - `PremiumFormFactsCard` -- a sibling card pattern that renders a
- *     vertical list of label/value facts with optional eyebrow + helper
- *     text. Uses the same DS tokens and surface vocabulary so it composes
- *     visually with PremiumFormSections.
+ *   - `PremiumFormFactsCard` — a sibling card component that renders
+ *     a vertical list of label/value facts with optional eyebrow +
+ *     helper text. Uses the same DS tokens so it composes visually
+ *     with the section container.
  *
- * The pattern stays domain-agnostic. Section titles, descriptions,
+ * The family stays domain-agnostic. Section titles, descriptions,
  * summaries, and chip text are all consumer-supplied; the component
  * knows nothing about tenants, users, or any specific entity.
+ *
+ * @note Historical naming: this folder was called `premium-form-sections`
+ * before Checkpoint C of the 2026-04-08 audit and the exported component
+ * identifiers still carry the `Premium…` prefix
+ * (`PremiumFormSections`, `PremiumFormFactsCard`). The identifier rename
+ * to `FormSections` / `FormFactsCard` is scheduled for Checkpoint D so
+ * app-platform consumers can migrate in a single pass.
  */
 
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useState } from 'react';

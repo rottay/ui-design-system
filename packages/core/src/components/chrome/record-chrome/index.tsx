@@ -1,43 +1,55 @@
 'use client';
 
 /**
- * @fileoverview Surface primitives -- a suite of generic form-surface
- * building blocks (summary strip, field grid, read field, action footer,
- * panel) used by detail / edit / form pages.
+ * @fileoverview record-chrome — a suite of generic record-page building
+ * blocks (summary strip, field grid, read field, action footer, panel)
+ * used by detail, edit, and form pages.
  *
  * @description
- * Companion to PremiumFormSections. The two patterns ship together because
- * many consumers compose them: a top-level summary strip, then a stack of
- * PremiumFormSections, then a read-field grid inside one of those
- * sections, then an action footer at the bottom.
+ * Chrome-tier companion to `form-sections`. The two families ship
+ * together because many consumers compose them: a top-level summary
+ * strip, then a stack of form-sections, then a read-field grid inside
+ * one of those sections, then an action footer at the bottom.
  *
  * Exports:
- *   - `SurfaceSummaryStrip` -- horizontal/grid summary card with 5 visual
- *     variants (default, editorial, technical, governance, metrics)
- *   - `SurfaceFieldGrid` -- pure CSS-grid wrapper for read-field layout
+ *   - `SurfaceSummaryStrip` — horizontal/grid summary card with 5
+ *     visual variants (default, editorial, technical, governance,
+ *     metrics)
+ *   - `SurfaceFieldGrid` — pure CSS-grid wrapper for read-field layout
  *     with a configurable `gridTemplateColumns` value
- *   - `SurfaceReadField` -- a single read-only field card with label,
- *     value, optional helper, optional copy-to-clipboard, optional href,
- *     and a monospace mode for IDs / keys
- *   - `SurfaceActionFooter` -- a sticky-feel action rail with optional
+ *   - `SurfaceReadField` — a single read-only field card with label,
+ *     value, optional helper, optional copy-to-clipboard, optional
+ *     href, and a monospace mode for IDs / keys
+ *   - `SurfaceActionFooter` — a sticky-feel action rail with optional
  *     meta slot on the left and either a free-form `actions` ReactNode
  *     slot or a structured `actionItems[]` array using the
- *     `SharedHeaderActionDescriptor` shape from `header-actions`
- *   - `SurfacePanel` -- a generic card-like container shared by detail
+ *     `SharedHeaderActionDescriptor` shape from the shared
+ *     header-actions helper
+ *   - `SurfacePanel` — a generic card-like container shared by detail
  *     pages for grouping unrelated content
  *
- * The pattern stays domain-agnostic. All labels, values, and helpers are
- * consumer-supplied; the components know nothing about tenants, users,
- * or any specific entity.
+ * The family stays domain-agnostic. All labels, values, and helpers
+ * are consumer-supplied; the components know nothing about tenants,
+ * users, or any specific entity.
  *
- * Framework note: SurfaceReadField resolves its `href` rendering through
- * the `useNavigationLink()` hook from `runtime/navigation`. Apps mount a
- * `NavigationLinkProvider` once at their root layout and pass their
- * framework's Link primitive (e.g. Next.js's `Link`, Remix's `Link`); the
- * DS picks it up automatically. When no provider is mounted the field
- * falls back to a native `<a>` tag, which still works for navigation but
- * loses framework-specific features like client-side transitions and
- * prefetching. This keeps the DS package framework-agnostic.
+ * Framework note: `SurfaceReadField` resolves its `href` rendering
+ * through the `useNavigationLink()` hook from `runtime/navigation`.
+ * Apps mount a `NavigationLinkProvider` once at their root layout and
+ * pass their framework's Link primitive (e.g. Next.js's `Link`, Remix's
+ * `Link`); the DS picks it up automatically. When no provider is
+ * mounted the field falls back to a native `<a>` tag, which still
+ * works for navigation but loses framework-specific features like
+ * client-side transitions and prefetching. This keeps the DS package
+ * framework-agnostic.
+ *
+ * @note Historical naming: this folder was called `surface-primitives`
+ * before Checkpoint C of the 2026-04-08 audit and the exported
+ * identifiers still carry the `Surface…` prefix (`SurfaceSummaryStrip`,
+ * `SurfaceFieldGrid`, `SurfaceReadField`, `SurfaceActionFooter`,
+ * `SurfacePanel`). The identifier rename to the `Record…` prefix
+ * (`RecordSummaryStrip`, `RecordFieldGrid`, `RecordField`,
+ * `RecordActionBar`, `RecordPanel`) is scheduled for Checkpoint D so
+ * app-platform consumers can migrate in a single pass.
  */
 
 import { type CSSProperties, type ReactNode } from 'react';

@@ -1,26 +1,29 @@
 'use client';
 
 /**
- * @fileoverview TableToolbar pattern -- lightweight one-row toolbar with
- * search, free-form slots, and a primary action.
+ * @fileoverview TableToolbar — chrome-tier lightweight one-row toolbar
+ * with search, free-form slots, and a primary action.
  *
  * @description
- * Engine-free toolbar pattern that pairs with table and list views. Unlike
- * the heavier `ListToolbar` pattern (two-row, requires title/totalCount/
- * viewMode/density and structured `FilterPillConfig[]`), this pattern is
- * deliberately slot-driven so consumers can drop in any composition of
- * status pills, selects, bulk-action toggles, and export buttons without
- * conforming to a structured filter shape.
+ * Engine-free toolbar chrome that pairs with the `data-table` pattern
+ * and with list views. Unlike the heavier `ListToolbar` pattern
+ * (two-row, requires title/totalCount/viewMode/density and structured
+ * `FilterPillConfig[]`), this family is deliberately slot-driven so
+ * consumers can drop in any composition of status pills, selects,
+ * bulk-action toggles, and export buttons without conforming to a
+ * structured filter shape.
  *
- * Use `TableToolbar` when you want:
+ * Use `TableToolbar` (chrome) when you want:
  *   - a single-row toolbar
  *   - free-form `filters` / `actions` / `leftContent` ReactNode slots
  *   - an optional search input
  *   - a primary action that supports either `href` or `onClick`
  *
- * Use `ListToolbar` (sibling pattern) when you want:
- *   - the full professional two-row treatment with title, count, structured
- *     filter pills, density control, view-mode toggle, and settings dropdown
+ * Use `ListToolbar` (pattern, still in `components/patterns/`) when you
+ * want:
+ *   - the full professional two-row treatment with title, count,
+ *     structured filter pills, density control, view-mode toggle, and
+ *     settings dropdown
  */
 
 import { Plus, Search, X } from 'lucide-react';

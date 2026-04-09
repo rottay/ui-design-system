@@ -1,27 +1,30 @@
 'use client';
 
 /**
- * @fileoverview EditHeader pattern -- premium edit-form header with back
+ * @fileoverview EditHeader — chrome-tier edit-form header with back
  * navigation, breadcrumb trail, hero title cluster, status badge, save/
  * cancel actions, and optional structured action rail.
  *
  * @description
- * Engine-free pattern for premium entity-edit pages. Pairs with the
- * `SurfaceFieldGrid` / `SurfaceReadField` / `PremiumFormSections` body
- * patterns to compose a full edit screen.
+ * Engine-free chrome family for entity-edit pages. Pairs with the
+ * `record-chrome` building blocks (`SurfaceFieldGrid`,
+ * `SurfaceReadField`) and with `form-sections` (`PremiumFormSections`)
+ * to compose a full edit screen.
  *
- * Different from the heavier DS `FormSurface` pattern: FormSurface is a
- * full-page form container with config-driven `FormSurfaceConfig`,
- * presentation/behavior/visual/permissions layers, and an integrated
- * field renderer. EditHeader is just the header chrome -- consumers
- * compose it with their own form body content. Use this when you want
- * premium edit chrome without committing to the FormSurface config
- * pattern.
+ * EditHeader is chrome, not a surface. The heavier DS `FormSurface` is
+ * a full-page config object with `FormSurfaceConfig` + presentation/
+ * behavior/visual/permissions layers and an integrated field renderer.
+ * EditHeader is just the header strip — consumers compose it with their
+ * own form body. Use this when you want a rich edit-page header without
+ * committing to the full surface config contract.
  *
- * Different also from the new sibling DetailHeader (Wave 5.3): DetailHeader
- * is for read-only detail pages with optional tabs and metadata strips.
- * EditHeader is for write/edit pages with Save / Cancel / saving state
- * built into the header action rail.
+ * Sibling chrome families:
+ *   - DetailHeader — read-only detail pages with optional tabs and
+ *     metadata strips
+ *   - FormHeader — create-form pages with required-icon badge and a
+ *     lighter action rail
+ *   - EditHeader (this file) — edit pages with Save / Cancel / saving
+ *     state built into the header action rail
  *
  * Features:
  *   - Back button (uses NavigationLinkProvider Link adapter when
@@ -33,8 +36,8 @@
  *   - Optional icon badge (LucideIcon, displayed in colored box; the
  *     `colorVariant` prop controls the box tone)
  *   - Action rail with Save / Cancel built-ins, optional structured
- *     `actions[]` (using SharedHeaderActionDescriptor from header-actions),
- *     and an `extraActions` ReactNode slot
+ *     `actions[]` (using SharedHeaderActionDescriptor from the shared
+ *     header-actions helper), and an `extraActions` ReactNode slot
  *   - `saving` state on the Save button
  *   - `loading` state for the entire header (renders a centered Spinner
  *     placeholder)
@@ -42,7 +45,7 @@
  *   - 4 archetype variants (control, editorial, technical, governance)
  *     each with their own gradient + grid background pattern
  *
- * The pattern stays domain-agnostic. All copy is consumer-supplied; the
+ * The family stays domain-agnostic. All copy is consumer-supplied; the
  * component knows nothing about tenants, users, or any specific entity.
  */
 

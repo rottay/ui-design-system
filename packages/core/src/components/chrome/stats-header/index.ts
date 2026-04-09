@@ -1,18 +1,21 @@
 'use client';
 
 /**
- * @fileoverview StatsHeader pattern - Rottay Design System
- * @description Engine-aware operational stat cards with counter animations,
- * sparkline dots, contextual insights, and gradient glow accents.
+ * @fileoverview StatsHeader — chrome-tier stat-card strip.
+ * @description Engine-aware operational stat cards with counter
+ * animations, sparkline dots, contextual insights, and gradient glow
+ * accents.
  *
  * @remarks
- * StatsHeader renders 3-5 premium metric cards in a responsive horizontal
- * row. Ideal for operational dashboards above data tables. Each card
- * supports animated counters, change indicators, sparkline dots,
- * progress bars, and contextual insight lines.
+ * StatsHeader renders 3-5 metric cards in a responsive horizontal row
+ * and is meant to sit as page chrome above a data table or dashboard
+ * section. Each card supports animated counters, change indicators,
+ * sparkline dots, progress bars, and contextual insight lines. Lives in
+ * `components/chrome/` alongside the other header and toolbar families.
  *
- * The implementation is engine-agnostic because it composes DS primitives
- * (Box, Flex, Text) which themselves resolve through the engine system.
+ * The implementation is engine-agnostic because it composes DS
+ * primitives (Box, Flex, Text) which themselves resolve through the
+ * engine system.
  */
 
 import { createEngineComponent } from '../../../runtime/engines/factory';

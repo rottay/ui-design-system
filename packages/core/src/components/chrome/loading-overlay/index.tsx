@@ -1,18 +1,20 @@
 'use client';
 
 /**
- * @fileoverview LoadingOverlay pattern -- semi-transparent overlay rendered
- * over content during data fetches.
+ * @fileoverview LoadingOverlay — chrome-tier semi-transparent overlay
+ * rendered over content during data fetches.
  *
  * @description
- * Generic, engine-free loading shell that prevents layout shift by absolutely
- * positioning a blurred overlay above the parent container. Consumers pass
- * their own brand mark via the `logo` slot — the pattern itself ships no
- * brand assets so any vertical can drop in its own animated logo.
+ * Generic, engine-free loading shell that prevents layout shift by
+ * absolutely positioning a blurred overlay above the parent container.
+ * Consumers pass their own brand mark via the `logo` slot — this chrome
+ * family ships no brand assets so any vertical can drop in its own
+ * animated logo.
  *
- * The overlay always pulses the logo with a 1.8s ease-in-out animation and
- * renders three trailing dots after the message text. This is the visual
- * vocabulary the pattern owns; the brand identity is the consumer's.
+ * The overlay always pulses the logo with a 1.8s ease-in-out animation
+ * and renders three trailing dots after the message text. This is the
+ * visual vocabulary the family owns; the brand identity is the
+ * consumer's.
  */
 
 import type { ReactNode } from 'react';

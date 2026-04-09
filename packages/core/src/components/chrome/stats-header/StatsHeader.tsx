@@ -1,17 +1,19 @@
 /**
- * @fileoverview StatsHeader - Pulse Cards implementation
- * @module Patterns/StatsHeader
+ * @fileoverview StatsHeader — chrome-tier "Pulse Cards" implementation.
  *
  * @description
- * Operational stat cards with counter animations, sparkline dots, contextual
- * insights, and gradient glow accents. Each card feels like a live metric
- * on an event operations dashboard.
+ * Operational stat cards with counter animations, sparkline dots,
+ * contextual insights, and gradient glow accents. Each card feels like
+ * a live metric on an operations dashboard. Lives in `components/chrome/`
+ * because it is a page-chrome family — a structural strip consumers
+ * place above a data table or above dashboard content, not a generic
+ * reusable pattern like `charts` or `data-table`.
  *
- * This implementation is engine-agnostic because it uses DS primitives
- * (Box, Flex, Text) which themselves resolve through the engine system.
+ * This implementation is engine-agnostic because it composes DS
+ * primitives (Box, Flex, Text) which themselves resolve through the
+ * engine system.
  *
- * @category Patterns
- * @package @rottay/design-system
+ * @category Chrome
  */
 
 'use client';

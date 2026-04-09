@@ -11,7 +11,8 @@ Internal multi-tenant, multi-engine React component library powering all Rottay 
 ## Features
 
 - **Primitives** -- engine-switched leaf components across 6 categories (display, inputs, feedback, layout, navigation, overlay)
-- **Patterns** -- engine-agnostic compositions (DataTable, FormBuilder, Charts, KanbanBoard, etc.)
+- **Patterns** -- engine-agnostic task-level compositions (DataTable, FormBuilder, Charts, KanbanBoard, etc.)
+- **Chrome** -- page-chrome families that sit between patterns and surfaces (detail/edit/form headers, table toolbars, record panels, metric cards, loading overlays, ...)
 - **Surfaces** -- declarative page-level configs (ListSurface, DashboardSurface, FormSurface, etc.)
 - **Engines** -- Classic (Ant Design), Modern (DaisyUI/Tailwind), Rustic (Vanilla HTML/CSS), and Custom (white-label pack-scoped)
 - **Multi-tenant theming** -- CSS custom properties with 6-level tenant resolution

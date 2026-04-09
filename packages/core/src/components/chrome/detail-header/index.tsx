@@ -1,22 +1,24 @@
 'use client';
 
 /**
- * @fileoverview DetailHeader pattern -- premium detail-page header with
- * back navigation, breadcrumb trail, hero title cluster, status badge,
- * action rail, optional metadata strip, optional tab strip, and
- * optional context-rail slot.
+ * @fileoverview DetailHeader — chrome-tier detail-page header with back
+ * navigation, breadcrumb trail, hero title cluster, status badge, action
+ * rail, optional metadata strip, optional tab strip, and optional
+ * context-rail slot.
  *
  * @description
- * Engine-free pattern for premium entity-detail pages. Pairs with the
- * `SurfaceReadField` / `SurfaceFieldGrid` / `PremiumFormSections` body
- * patterns to compose a full detail screen.
+ * Engine-free chrome family for entity-detail pages. Pairs with the
+ * `record-chrome` building blocks (`SurfaceReadField`, `SurfaceFieldGrid`)
+ * and with `form-sections` (`PremiumFormSections`) to compose a full
+ * detail screen.
  *
- * Different from the heavier DS `DetailSurface` pattern: DetailSurface
- * is a full-page detail container with EntityAdapter + tabs + sidebar +
- * footer + breadcrumbs + a config-driven API. DetailHeader is just the
- * header chrome -- consumers compose it with their own body content.
- * Use this when you want premium header chrome without committing to
- * the EntityAdapter / config pattern.
+ * DetailHeader is chrome, not a surface: it is a structural widget that
+ * wraps the top of a detail page. The heavier DS `DetailSurface` is a
+ * full-page config object (EntityAdapter + tabs + sidebar + footer +
+ * breadcrumbs + a config-driven API). DetailHeader is just the header
+ * strip — consumers compose it with their own body content. Use this
+ * when you want a rich detail-page header without committing to the
+ * full surface config contract.
  *
  * Features:
  *   - Back button (uses NavigationLinkProvider Link adapter when
@@ -26,8 +28,8 @@
  *   - Hero title cluster: optional eyebrow chip, title, optional
  *     status badge, optional subtitle, optional context-rail slot
  *   - Optional avatar (string for URL or initials, or any ReactNode)
- *   - Action rail with structured DetailHeaderAction[] (uses
- *     header-actions semantic vocabulary from DS)
+ *   - Action rail with structured DetailHeaderAction[] (uses the
+ *     shared header-actions semantic vocabulary)
  *   - Optional metadata strip (label/value pairs with optional icon
  *     and monospace mode)
  *   - Optional children slot inside the metadata card
@@ -35,9 +37,9 @@
  *   - 4 archetype variants (control, editorial, technical, governance)
  *     each with their own gradient + grid background pattern
  *
- * The pattern stays domain-agnostic. All copy is consumer-supplied;
- * the component knows nothing about tenants, users, or any specific
- * entity. Status badge variants follow the same DS Badge vocabulary.
+ * The family stays domain-agnostic. All copy is consumer-supplied; the
+ * component knows nothing about tenants, users, or any specific entity.
+ * Status badge variants follow the standard DS Badge vocabulary.
  */
 
 import { type CSSProperties, type ReactNode } from 'react';

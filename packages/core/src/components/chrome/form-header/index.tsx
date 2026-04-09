@@ -1,29 +1,29 @@
 'use client';
 
 /**
- * @fileoverview FormHeader pattern -- premium create-form header with
+ * @fileoverview FormHeader — chrome-tier create-form header with
  * required icon badge, back navigation, breadcrumb trail, hero title
  * cluster, and an action rail.
  *
  * @description
- * Engine-free pattern for premium create-form pages. Sibling to
- * DetailHeader (Wave 5.3) and EditHeader (Wave 5.4):
+ * Engine-free chrome family for create-form pages. Sibling to the
+ * other three header families in `chrome/`:
  *
  *   - DetailHeader: read-only detail pages with optional tabs and
  *     metadata strips
  *   - EditHeader: edit pages with built-in Save / Cancel buttons,
  *     saving state, optional entityId chip, and an optional icon
- *   - FormHeader: create-form pages with a REQUIRED icon badge, a
- *     simpler action rail (one or two actions, or a custom array),
- *     and a `mode` discriminator for create / edit / view contexts
+ *   - FormHeader (this file): create-form pages with a REQUIRED icon
+ *     badge, a simpler action rail (one or two actions, or a custom
+ *     array), and a `mode` discriminator for create / edit / view
+ *     contexts
  *
- * Different from DS FormSurface: FormSurface is a full-page form
- * container with config-driven `FormSurfaceConfig`, presentation/
- * behavior/visual/permissions layers, and an integrated field
- * renderer. FormHeader is just the header chrome -- consumers compose
- * it with their own form body content. Use this when you want premium
- * create-form chrome without committing to the FormSurface config
- * pattern.
+ * FormHeader is chrome, not a surface. The heavier DS `FormSurface` is
+ * a full-page config object with `FormSurfaceConfig` + presentation/
+ * behavior/visual/permissions layers and an integrated field renderer.
+ * FormHeader is just the header strip — consumers compose it with
+ * their own form body. Use this when you want a rich create-form
+ * header without committing to the full surface config contract.
  *
  * Features:
  *   - Required icon badge (LucideIcon, displayed in colored box; the
@@ -37,7 +37,7 @@
  *   - Action rail: a single `action`, or `secondaryAction` + `action`
  *     pair, or a free-form `actions[]` array using
  *     `FormHeaderAction` with the SharedHeaderActionKind vocabulary
- *     from `header-actions`
+ *     from the shared header-actions helper
  *   - `mode` indicator (`'create' | 'edit' | 'view'`) -- carried as
  *     part of the API for consumer routing logic; not currently
  *     rendered visually
@@ -47,7 +47,7 @@
  *     governance) each with their own gradient + grid background
  *     pattern
  *
- * The pattern stays domain-agnostic. All copy is consumer-supplied;
+ * The family stays domain-agnostic. All copy is consumer-supplied;
  * the component knows nothing about tenants, users, or any specific
  * entity.
  */

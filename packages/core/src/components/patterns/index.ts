@@ -284,10 +284,13 @@ export type {
 } from './header-actions';
 
 // NOTE: The following families moved to components/chrome/ in Checkpoint C
-// of the 2026-04-08 audit cleanup and are re-exported from the package root
-// through components/index.ts via the `chrome` barrel. They are intentionally
-// no longer listed in this patterns barrel so the `components/` barrel can
-// aggregate patterns + chrome without duplicate-export conflicts:
+// of the 2026-04-08 audit cleanup. They are re-exported from the package
+// root (`@rottay/design-system`) directly through `src/index.ts`, which
+// lists `./components/chrome` alongside `./components/primitives`,
+// `./components/patterns`, and `./components/surfaces`. They are
+// intentionally no longer listed in THIS patterns barrel so that the
+// root index doesn't see the same identifier twice (which would fail
+// typecheck with TS2308 duplicate-export errors):
 //
 //   - premium-form-sections (now chrome/form-sections)
 //   - surface-primitives    (now chrome/record-chrome)
@@ -299,9 +302,9 @@ export type {
 //   - loading-overlay       (now chrome/loading-overlay)
 //   - table-toolbar         (now chrome/table-toolbar)
 //
-// All identifiers remain unchanged from a consumer's point of view. Identifier
-// renames (PremiumFormSections -> FormSections, Surface* -> Record*, etc.)
-// are scheduled for Checkpoint D.
+// All identifiers remain unchanged from a consumer's point of view.
+// Identifier renames (PremiumFormSections -> FormSections, Surface* ->
+// Record*, etc.) are scheduled for Checkpoint D.
 
 // Command Header Variants -- 8 widget chrome variants (4 metrics + 4 activity) + useVariant hook
 export {
