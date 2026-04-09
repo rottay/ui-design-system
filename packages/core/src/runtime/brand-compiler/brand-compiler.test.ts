@@ -520,4 +520,26 @@ describe('parity: static generator with brandTheme', () => {
     // BrandTheme surfaces win over vertical
     expect(css).toContain('--ds-density-scale: 0.95'); // bithire brand wins over evnto 1.125
   });
+
+  it('vertical baseline applies in legacy path (no brandTheme)', () => {
+    // A tenant with vertical but no brandTheme should still get the
+    // vertical's personality and tokenOverrides in static CSS.
+    const legacyWithVertical: TenantConfig = {
+      slug: 'legacy-vertical',
+      name: 'Legacy Vertical',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Test', primaryColor: '#333333' },
+      vertical: 'evnto', // evnto vertical has bounce, 1.5, spacious, densityScale 1.125
+    };
+    const css = generateTenantCss(legacyWithVertical, { includeDarkSelector: false });
+    // Vertical personality present
+    expect(css).toContain('--ds-personality-animation-entrance: bounce');
+    expect(css).toContain('--ds-personality-animation-intensity: 1.5');
+    expect(css).toContain('--ds-personality-card-padding-density: spacious');
+    // Vertical tokenOverrides present
+    expect(css).toContain('--ds-density-scale: 1.125');
+  });
 });

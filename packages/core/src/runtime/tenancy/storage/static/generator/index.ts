@@ -578,32 +578,51 @@ export function generateTenantCss(
   // Resolve vertical baseline (same as DesignSystemProvider at runtime).
   const vertical = config.vertical ? getVerticalPreset(config.vertical) : undefined;
 
-  // When brandTheme is present, derive effective branding, tokenOverrides, and
-  // personality matching the runtime merge chain:
-  //   vertical baseline -> brandTheme -> tenant overrides
-  // Personality uses per-dimension merge so partial overrides don't wipe
-  // unrelated dimensions.
-  const effectiveConfig: TenantConfig = config.brandTheme
-    ? {
-        ...config,
-        branding: { ...config.branding, ...brandThemeToBranding(config.brandTheme) },
-        personality: mergePartialPersonality(
-          mergePartialPersonality(
-            vertical?.personality ?? {},
-            brandThemeToPersonality(config.brandTheme),
-          ),
-          config.personality ?? {},
+  // Derive effective config matching the runtime merge chain.
+  // Both paths incorporate the vertical baseline so the static generator
+  // and DesignSystemProvider produce the same results.
+  //
+  // BrandTheme path: vertical -> brandTheme -> tenant overrides
+  // Legacy path:     vertical -> tenant (profile is not available here)
+  let effectiveConfig: TenantConfig;
+
+  if (config.brandTheme) {
+    effectiveConfig = {
+      ...config,
+      branding: { ...config.branding, ...brandThemeToBranding(config.brandTheme) },
+      personality: mergePartialPersonality(
+        mergePartialPersonality(
+          vertical?.personality ?? {},
+          brandThemeToPersonality(config.brandTheme),
         ),
-        tokenOverrides: (() => {
-          const verticalOverrides = vertical?.tokenOverrides ?? {};
-          const btOverrides = brandThemeToTokenOverrides(config.brandTheme);
-          const merged = deepMergeTokenOverrides(verticalOverrides, btOverrides);
-          return config.tokenOverrides
-            ? (deepMergeTokenOverrides(merged, config.tokenOverrides) as TenantConfig['tokenOverrides'])
-            : (merged as TenantConfig['tokenOverrides']);
-        })(),
-      }
-    : config;
+        config.personality ?? {},
+      ),
+      tokenOverrides: (() => {
+        const verticalOverrides = vertical?.tokenOverrides ?? {};
+        const btOverrides = brandThemeToTokenOverrides(config.brandTheme!);
+        const merged = deepMergeTokenOverrides(verticalOverrides, btOverrides);
+        return config.tokenOverrides
+          ? (deepMergeTokenOverrides(merged, config.tokenOverrides) as TenantConfig['tokenOverrides'])
+          : (merged as TenantConfig['tokenOverrides']);
+      })(),
+    };
+  } else if (vertical) {
+    // Legacy path with vertical: layer vertical personality and tokenOverrides
+    // before tenant values. Product profile is not available in the static
+    // generator (it's a runtime-only concept resolved by DesignSystemProvider).
+    effectiveConfig = {
+      ...config,
+      personality: mergePartialPersonality(
+        vertical.personality ?? {},
+        config.personality ?? {},
+      ),
+      tokenOverrides: config.tokenOverrides
+        ? (deepMergeTokenOverrides(vertical.tokenOverrides ?? {}, config.tokenOverrides) as TenantConfig['tokenOverrides'])
+        : (vertical.tokenOverrides as TenantConfig['tokenOverrides']),
+    };
+  } else {
+    effectiveConfig = config;
+  }
 
   const declarations = {
     ...brandingVariables(effectiveConfig),
