@@ -39,16 +39,21 @@ Each layer only depends on the layer below it:
   (DataTable, FormBuilder, StatsGrid, KanbanBoard, ...). They are
   engine-agnostic and stay generic — they know nothing about tenants,
   candidates, roles, etc.
-- **Structures** is a middle tier introduced in the 2026-04-08 audit cleanup
-  (Checkpoint C). It hosts structures families that are too specific to
-  live in `patterns/` but too reusable to live in `surfaces/`: detail/edit/
-  form headers, table toolbars, record field grids, loading overlays,
-  dashboard metric cards, and similar widgets. Page-structure families compose
-  patterns and primitives and are normally consumed by surfaces or by
-  app-level screens directly.
-- **Surfaces** are declarative config objects that describe an entire page
-  (ListSurface, DashboardSurface, FormSurface, etc.). Surfaces wire patterns
-  and structures widgets to data and permissions without owning rendering logic.
+- **Structures** is a middle tier introduced in the 2026-04-08 audit
+  cleanup. It hosts structural families organized into 5 groups
+  (`headers/`, `workspace/`, `record/`, `dashboard/`, `feedback/`) that
+  are too specific for `patterns/` but too reusable for `surfaces/`:
+  detail/edit/form headers, command bars, record field grids, metric
+  cards, loading overlays. Structures families compose patterns and
+  primitives and are normally consumed by surfaces or by app-level
+  screens directly.
+- **Surfaces** are declarative config objects that describe an entire
+  page (ListSurface, DashboardSurface, FormSurface, etc.). Surfaces
+  are organized into `foundation/` (types, builders, helpers, hooks),
+  `layout/` (page-shell, header, sidebar), and `pages/` (6 domain
+  groups: data, forms, workspace, operations, admin, experience).
+  They wire patterns and structures to data and permissions without
+  owning rendering logic.
 - **App** is the consuming application layer. Apps pass surface configs and
   domain adapters; the DS handles everything else.
 
@@ -358,18 +363,15 @@ Patterns (engine-agnostic compositions)
 
 Surfaces (page-level config objects)
   │
-  ├─ list               ListSurface (table or card grid)
-  ├─ dashboard          DashboardSurface (stats + charts + activity)
-  ├─ form               FormSurface (create/edit flows)
-  ├─ detail             DetailSurface (entity view with tabs)
-  ├─ chat               ChatSurface (messaging interface)
-  ├─ scheduler          SchedulerSurface (calendar views)
-  ├─ kanban             KanbanSurface (board view)
-  ├─ settings           SettingsSurface (grouped preferences)
-  ├─ billing            BillingSurface (plans, invoices)
-  ├─ onboarding         OnboardingSurface (wizard flows)
-  └─ ...                (see packages/core/src/components/surfaces/ for the
-                         full directory listing)
+  ├─ foundation/        Types, builders, helpers, hooks, contracts, states
+  ├─ layout/            Page shells, headers, sidebars
+  └─ pages/
+      ├─ data/          list, dashboard, detail, compare, report, search, visualization
+      ├─ forms/         form, detail-form, guided-draft-form, wizard
+      ├─ workspace/     collection-workspace, record-workbench, command-center, decision-inbox
+      ├─ operations/    activity, kanban, scheduler, operational
+      ├─ admin/         settings, audit, billing, profile, team, integration, import-export, file-browser
+      └─ experience/    auth, marketing, onboarding, chat, notification, pricing, empty-state, media, editor
 ```
 
 ---
@@ -635,29 +637,28 @@ packages/core/src/
     │   ├── navigation/     Tabs, Menu, Breadcrumb, Pagination, Steps, ...
     │   └── overlay/        Dropdown, Popover, Sheet, ContextMenu, ...
     │
+    ├── structures/         Tier 2.5: Page-structure families
+    │   ├── headers/        collection, detail, edit, form
+    │   ├── workspace/      search-command-bar, active-filters-bar, ...
+    │   ├── record/         record, form-sections
+    │   ├── dashboard/      dashboard-insights, stats-header, data-terminal-card
+    │   └── feedback/       loading-overlay
+    │
     ├── patterns/           Tier 2: Compositions (engine-agnostic)
     │   ├── data-table/     Table with sort, filter, bulk actions
     │   ├── form-builder/   Declarative form from FieldDef[]
-    │   ├── stats-grid/     Metric cards with trends
-    │   ├── kanban-board/   Drag-and-drop board
     │   ├── charts/         Chart wrappers
-    │   ├── detail-panel/   Entity detail view
-    │   ├── calendar-view/  Event calendar
-    │   └── ...             (see the directory for the full listing)
+    │   └── ...             (see TAXONOMY.generated.md for the full listing)
     │
     └── surfaces/           Tier 3: Page-level config objects
-        ├── list/           ListSurface
-        ├── dashboard/      DashboardSurface
-        ├── form/           FormSurface
-        ├── detail/         DetailSurface
-        ├── chat/           ChatSurface
-        └── ...             (see the directory for the full listing)
+        ├── foundation/     Types, builders, helpers, hooks, contracts, states
+        ├── layout/         page-shell, header, sidebar
+        └── pages/          6 domain groups: data, forms, workspace,
+                            operations, admin, experience
 ```
 
-> Per-directory and per-category counts are intentionally omitted. The
-> directory listings under `packages/core/src/components/` are the
-> authoritative source. A generated taxonomy reference is on the audit
-> roadmap.
+> See `docs/TAXONOMY.generated.md` (run `pnpm docs:taxonomy`) for the
+> authoritative, auto-generated inventory of every tier, group, and family.
 
 ---
 

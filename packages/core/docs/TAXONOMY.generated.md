@@ -22,130 +22,273 @@ Generated on 2026-04-09.
 
 ## Structures
 
-> Page-chrome families (headers, toolbars, record panels, metric cards, overlays)
+> Page-structure families (headers, toolbars, record panels, metric cards, overlays)
 
-- `active-filters-bar/`
-- `collection-header/`
-- `column-menu/`
-- `dashboard-insights/`
-- `data-terminal-card/`
-- `detail-header/`
-- `edit-header/`
-- `field-filters-panel/`
-- `form-header/`
-- `form-sections/`
-- `loading-overlay/`
-- `record/`
-- `saved-views-menu/`
-- `scope-switcher/`
-- `search-command-bar/`
-- `selection-preview-rail/`
-- `stats-header/`
-- `table-toolbar/`
+### dashboard/
 
-**Total**: 18 families.
+- `dashboard/dashboard-insights/`
+- `dashboard/data-terminal-card/`
+- `dashboard/stats-header/`
+
+### feedback/
+
+- `feedback/loading-overlay/`
+
+### headers/
+
+- `headers/collection/`
+- `headers/detail/`
+- `headers/edit/`
+- `headers/form/`
+
+### record/
+
+- `record/form-sections/`
+- `record/record/`
+
+### workspace/
+
+- `workspace/active-filters-bar/`
+- `workspace/column-menu/`
+- `workspace/field-filters-panel/`
+- `workspace/saved-views-menu/`
+- `workspace/scope-switcher/`
+- `workspace/search-command-bar/`
+- `workspace/selection-preview-rail/`
+- `workspace/table-toolbar/`
 
 ## Patterns
 
 > Engine-agnostic task-level compositions
 
-- `activity-log/`
-- `approval-inbox/`
-- `approval-workflow/`
+### activity-log/
+
+- `activity-log/engines/`
+
+### approval-inbox/
+
+- `approval-inbox/engines/`
+
+### approval-workflow/
+
+- `approval-workflow/engines/`
+
 - `assistant/`
 - `bulk-select-toggle/`
-- `calendar-view/`
+### calendar-view/
+
+- `calendar-view/engines/`
+
 - `charts/`
-- `cockpit-header/`
-- `column-settings/`
-- `command-palette/`
-- `comment-thread/`
-- `data-table/`
-- `detail-panel/`
-- `empty-state/`
-- `environment-toggle/`
-- `file-manager/`
-- `filter-builder/`
-- `filter-panel/`
-- `form-builder/`
+### cockpit-header/
+
+- `cockpit-header/engines/`
+
+### column-settings/
+
+- `column-settings/engines/`
+
+### command-palette/
+
+- `command-palette/engines/`
+
+### comment-thread/
+
+- `comment-thread/engines/`
+
+### data-table/
+
+- `data-table/engines/`
+
+### detail-panel/
+
+- `detail-panel/engines/`
+
+### empty-state/
+
+- `empty-state/engines/`
+
+### environment-toggle/
+
+- `environment-toggle/engines/`
+
+### file-manager/
+
+- `file-manager/engines/`
+
+### filter-builder/
+
+- `filter-builder/engines/`
+
+### filter-panel/
+
+- `filter-panel/engines/`
+
+### form-builder/
+
+- `form-builder/engines/`
+
 - `header-actions/`
 - `hooks/`
-- `invoice-template/`
-- `kanban-board/`
-- `list-toolbar/`
-- `live-feed/`
-- `map-view/`
-- `moderation-gallery/`
-- `notification-center/`
-- `operational-ledger/`
-- `page-shell/`
-- `pricing-table/`
-- `saved-views/`
-- `shift-matrix/`
-- `shortcuts-overlay/`
-- `stats-grid/`
-- `status-filter-pills/`
-- `step-wizard/`
-- `table-checkbox-styles/`
-- `tenant-preview/`
-- `timeline/`
-- `tree-view/`
-- `user-profile-card/`
-- `workbench-header/`
-- `workspace-switcher/`
+### invoice-template/
 
-**Total**: 44 families.
+- `invoice-template/engines/`
+
+### kanban-board/
+
+- `kanban-board/engines/`
+
+### list-toolbar/
+
+- `list-toolbar/engines/`
+
+### live-feed/
+
+- `live-feed/engines/`
+
+### map-view/
+
+- `map-view/engines/`
+
+### moderation-gallery/
+
+- `moderation-gallery/engines/`
+
+### notification-center/
+
+- `notification-center/engines/`
+
+### operational-ledger/
+
+- `operational-ledger/engines/`
+
+### page-shell/
+
+- `page-shell/engines/`
+
+### pricing-table/
+
+- `pricing-table/engines/`
+
+### saved-views/
+
+- `saved-views/engines/`
+
+### shift-matrix/
+
+- `shift-matrix/engines/`
+
+### shortcuts-overlay/
+
+- `shortcuts-overlay/engines/`
+
+### stats-grid/
+
+- `stats-grid/engines/`
+
+- `status-filter-pills/`
+### step-wizard/
+
+- `step-wizard/engines/`
+
+- `table-checkbox-styles/`
+### tenant-preview/
+
+- `tenant-preview/engines/`
+
+### timeline/
+
+- `timeline/engines/`
+
+### tree-view/
+
+- `tree-view/engines/`
+
+### user-profile-card/
+
+- `user-profile-card/engines/`
+
+### workbench-header/
+
+- `workbench-header/engines/`
+
+### workspace-switcher/
+
+- `workspace-switcher/engines/`
 
 ## Surfaces
 
 > Page-level config objects
 
-- `activity/`
-- `audit/`
-- `auth/`
-- `billing/`
-- `chat/`
-- `collection-workspace/`
-- `command-center/`
-- `compare/`
-- `contracts/`
-- `dashboard/`
-- `decision-inbox/`
-- `detail/`
-- `detail-form/`
-- `editor/`
-- `empty-state/`
-- `file-browser/`
-- `form/`
-- `guided-draft-form/`
-- `header/`
-- `hooks/`
-- `import-export/`
-- `integration/`
-- `kanban/`
-- `list/`
-- `marketing/`
-- `media/`
-- `notification/`
-- `onboarding/`
-- `operational/`
-- `page-shell/`
-- `pricing/`
-- `profile/`
-- `record-workbench/`
-- `report/`
-- `scheduler/`
-- `search/`
-- `settings/`
-- `sidebar/`
-- `states/`
-- `team/`
-- `visualization/`
-- `wizard/`
+### foundation/
 
-**Total**: 42 families.
+- `foundation/common/`
+- `foundation/contracts/`
+- `foundation/hooks/`
+- `foundation/states/`
+
+### layout/
+
+- `layout/header/`
+- `layout/page-shell/`
+- `layout/sidebar/`
+
+### pages/
+
+**admin/**
+
+- `pages/admin/audit/`
+- `pages/admin/billing/`
+- `pages/admin/file-browser/`
+- `pages/admin/import-export/`
+- `pages/admin/integration/`
+- `pages/admin/profile/`
+- `pages/admin/settings/`
+- `pages/admin/team/`
+
+**data/**
+
+- `pages/data/compare/`
+- `pages/data/dashboard/`
+- `pages/data/detail/`
+- `pages/data/list/`
+- `pages/data/report/`
+- `pages/data/search/`
+- `pages/data/visualization/`
+
+**experience/**
+
+- `pages/experience/auth/`
+- `pages/experience/chat/`
+- `pages/experience/editor/`
+- `pages/experience/empty-state/`
+- `pages/experience/marketing/`
+- `pages/experience/media/`
+- `pages/experience/notification/`
+- `pages/experience/onboarding/`
+- `pages/experience/pricing/`
+
+**forms/**
+
+- `pages/forms/detail-form/`
+- `pages/forms/form/`
+- `pages/forms/guided-draft-form/`
+- `pages/forms/wizard/`
+
+**operations/**
+
+- `pages/operations/activity/`
+- `pages/operations/kanban/`
+- `pages/operations/operational/`
+- `pages/operations/scheduler/`
+
+**workspace/**
+
+- `pages/workspace/collection-workspace/`
+- `pages/workspace/command-center/`
+- `pages/workspace/decision-inbox/`
+- `pages/workspace/record-workbench/`
 
 ---
 
-**Summary**: 110 top-level families across 4 tiers
-(98 individual primitive components inside primitives).
+**Summary**: 6 primitive categories (98 components), 101 families across structures/patterns/surfaces.

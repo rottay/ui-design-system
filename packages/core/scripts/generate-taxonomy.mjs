@@ -20,14 +20,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const COMPONENTS_ROOT = resolve(__dirname, '../src/components');
 const OUTPUT_PATH = resolve(__dirname, '../docs/TAXONOMY.generated.md');
 
-const TIERS = [
-  { dir: 'primitives', label: 'Primitives', desc: 'Engine-switched leaf components' },
-  { dir: 'structures', label: 'Structures', desc: 'Page-chrome families (headers, toolbars, record panels, metric cards, overlays)' },
-  { dir: 'patterns', label: 'Patterns', desc: 'Engine-agnostic task-level compositions' },
-  { dir: 'surfaces', label: 'Surfaces', desc: 'Page-level config objects' },
-];
-
-function listFamilies(dir) {
+function listDirs(dir) {
   try {
     return readdirSync(dir, { withFileTypes: true })
       .filter((e) => e.isDirectory() && !e.name.startsWith('_') && !e.name.startsWith('.'))
@@ -48,59 +41,151 @@ const lines = [
   '',
 ];
 
-// Track families (top-level folders per tier) and leaf components
-// (only meaningful for primitives) separately so the grand total
-// does not mix units.
+let totalGroups = 0;
 let totalFamilies = 0;
 let totalPrimitiveComponents = 0;
 
-for (const tier of TIERS) {
-  const tierDir = join(COMPONENTS_ROOT, tier.dir);
-  const families = listFamilies(tierDir);
-
-  // For primitives, list the categories and count their children
-  if (tier.dir === 'primitives') {
-    lines.push(`## ${tier.label}`);
-    lines.push('');
-    lines.push(`> ${tier.desc}`);
-    lines.push('');
-    lines.push(`| Category | Components |`);
-    lines.push(`|---|---|`);
-    for (const cat of families) {
-      const children = listFamilies(join(tierDir, cat));
-      totalPrimitiveComponents += children.length;
-      lines.push(`| \`${cat}/\` | ${children.length} (${children.slice(0, 5).join(', ')}${children.length > 5 ? ', ...' : ''}) |`);
-    }
-    lines.push('');
-    lines.push(`**Total**: ${families.length} categories containing ${totalPrimitiveComponents} primitive components.`);
-    lines.push('');
-    totalFamilies += families.length; // Count categories, not individual components
-    continue;
+// --- Primitives: categories → components ---
+{
+  const tierDir = join(COMPONENTS_ROOT, 'primitives');
+  const categories = listDirs(tierDir);
+  lines.push('## Primitives');
+  lines.push('');
+  lines.push('> Engine-switched leaf components');
+  lines.push('');
+  lines.push('| Category | Components |');
+  lines.push('|---|---|');
+  for (const cat of categories) {
+    const children = listDirs(join(tierDir, cat));
+    totalPrimitiveComponents += children.length;
+    lines.push(`| \`${cat}/\` | ${children.length} (${children.slice(0, 5).join(', ')}${children.length > 5 ? ', ...' : ''}) |`);
   }
+  lines.push('');
+  lines.push(`**Total**: ${categories.length} categories containing ${totalPrimitiveComponents} primitive components.`);
+  lines.push('');
+  totalGroups += categories.length;
+}
 
-  lines.push(`## ${tier.label}`);
+// --- Structures: groups → families ---
+{
+  const tierDir = join(COMPONENTS_ROOT, 'structures');
+  const groups = listDirs(tierDir);
+  lines.push('## Structures');
   lines.push('');
-  lines.push(`> ${tier.desc}`);
+  lines.push('> Page-structure families (headers, toolbars, record panels, metric cards, overlays)');
   lines.push('');
-  if (families.length === 0) {
-    lines.push('(empty)');
-  } else {
+  for (const group of groups) {
+    const families = listDirs(join(tierDir, group));
+    lines.push(`### ${group}/`);
+    lines.push('');
     for (const f of families) {
-      lines.push(`- \`${f}/\``);
+      lines.push(`- \`${group}/${f}/\``);
+      totalFamilies++;
+    }
+    lines.push('');
+  }
+}
+
+// --- Patterns: groups → families ---
+{
+  const tierDir = join(COMPONENTS_ROOT, 'patterns');
+  const topLevel = listDirs(tierDir);
+  lines.push('## Patterns');
+  lines.push('');
+  lines.push('> Engine-agnostic task-level compositions');
+  lines.push('');
+  // Check if patterns has groups or is still flat
+  // If a top-level dir contains further dirs, it's a group; otherwise it's a flat family
+  let hasGroups = false;
+  for (const d of topLevel) {
+    const children = listDirs(join(tierDir, d));
+    // Heuristic: if children all have index.ts, it's a group of families
+    if (children.length > 0 && d !== 'charts') { // charts is a single family with sub-charts
+      hasGroups = true;
+      break;
     }
   }
+  if (hasGroups) {
+    // Grouped patterns
+    for (const group of topLevel) {
+      const families = listDirs(join(tierDir, group));
+      if (families.length > 0 && group !== 'charts') {
+        lines.push(`### ${group}/`);
+        lines.push('');
+        for (const f of families) {
+          lines.push(`- \`${group}/${f}/\``);
+          totalFamilies++;
+        }
+        lines.push('');
+      } else {
+        lines.push(`- \`${group}/\``);
+        totalFamilies++;
+      }
+    }
+  } else {
+    // Flat patterns (current state)
+    for (const f of topLevel) {
+      lines.push(`- \`${f}/\``);
+      totalFamilies++;
+    }
+    lines.push('');
+    lines.push(`**Total**: ${topLevel.length} families.`);
+    lines.push('');
+  }
+}
+
+// --- Surfaces: foundation + layout + pages (grouped) ---
+{
+  const tierDir = join(COMPONENTS_ROOT, 'surfaces');
+  lines.push('## Surfaces');
   lines.push('');
-  lines.push(`**Total**: ${families.length} families.`);
+  lines.push('> Page-level config objects');
   lines.push('');
-  totalFamilies += families.length;
+
+  // Foundation
+  const foundationDir = join(tierDir, 'foundation');
+  const foundationItems = listDirs(foundationDir);
+  lines.push('### foundation/');
+  lines.push('');
+  for (const f of foundationItems) {
+    lines.push(`- \`foundation/${f}/\``);
+  }
+  lines.push('');
+
+  // Layout
+  const layoutDir = join(tierDir, 'layout');
+  const layoutFamilies = listDirs(layoutDir);
+  lines.push('### layout/');
+  lines.push('');
+  for (const f of layoutFamilies) {
+    lines.push(`- \`layout/${f}/\``);
+    totalFamilies++;
+  }
+  lines.push('');
+
+  // Pages
+  const pagesDir = join(tierDir, 'pages');
+  const pageGroups = listDirs(pagesDir);
+  lines.push('### pages/');
+  lines.push('');
+  for (const group of pageGroups) {
+    const families = listDirs(join(pagesDir, group));
+    lines.push(`**${group}/**`);
+    lines.push('');
+    for (const f of families) {
+      lines.push(`- \`pages/${group}/${f}/\``);
+      totalFamilies++;
+    }
+    lines.push('');
+  }
 }
 
 lines.push('---');
 lines.push('');
-lines.push(`**Summary**: ${totalFamilies} top-level families across ${TIERS.length} tiers`);
-lines.push(`(${totalPrimitiveComponents} individual primitive components inside ${TIERS[0].label.toLowerCase()}).`);
+lines.push(`**Summary**: ${totalGroups} primitive categories (${totalPrimitiveComponents} components), ${totalFamilies} families across structures/patterns/surfaces.`);
 lines.push('');
 
 writeFileSync(OUTPUT_PATH, lines.join('\n'), 'utf8');
 console.log(`Taxonomy reference written to ${OUTPUT_PATH}`);
-console.log(`Total: ${totalFamilies} families across ${TIERS.length} tiers.`);
+console.log(`Primitives: ${totalGroups} categories, ${totalPrimitiveComponents} components`);
+console.log(`Families: ${totalFamilies} across structures/patterns/surfaces`);
