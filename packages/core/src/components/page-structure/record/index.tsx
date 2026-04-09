@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * @fileoverview record-chrome — a suite of generic record-page building
- * blocks (summary strip, field grid, read field, action footer, panel)
- * used by detail, edit, and form pages.
+ * @fileoverview record — a suite of generic record-page building blocks
+ * (summary strip, field grid, read field, action footer, panel) used by
+ * detail, edit, and form pages.
  *
  * @description
- * Chrome-tier companion to `form-sections`. The two families ship
+ * Page-structure companion to `form-sections`. The two families ship
  * together because many consumers compose them: a top-level summary
  * strip, then a stack of form-sections, then a read-field grid inside
  * one of those sections, then an action footer at the bottom.

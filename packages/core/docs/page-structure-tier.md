@@ -51,18 +51,18 @@ patterns but are more specific than primitives.
 - **DataTerminalCard** (`data-terminal-card/`) -- 4-variant dashboard metric card
 - **LoadingOverlay** (`loading-overlay/`) -- semi-transparent loading shell
 
-### Dashboard insight variants
+### Dashboard insights
 
-- **MetricsRows / MetricsCards / MetricsMinimal / MetricsChart** (`dashboard-insight-variants/metrics/`)
-- **ActivityTimeline / ActivityCompact / ActivityCards / ActivityTicker** (`dashboard-insight-variants/activity/`)
-- **useVariant** (`dashboard-insight-variants/use-variant/`) -- random variant picker hook
+- **MetricsRows / MetricsCards / MetricsMinimal / MetricsChart** (`dashboard-insights/metrics/`)
+- **ActivityTimeline / ActivityCompact / ActivityCards / ActivityTicker** (`dashboard-insights/activity/`)
+- **useVariant** (`dashboard-insights/use-variant/`) -- random variant picker hook
 
 ## Collection workspace kit (editorial grouping)
 
 The renamed workspace-family components form a coherent kit for
 building collection/list screens. They live in individual page-structure/
 folders and are all available from the package root
-(`@rottay/design-system`) like every other chrome family.
+(`@rottay/design-system`) like every other page-structure family.
 
 An **editorial barrel** exists at `page-structure/_kits/collection-workspace/`
 inside the source tree. It is a source-local convenience that documents
