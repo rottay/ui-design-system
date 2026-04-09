@@ -1,14 +1,14 @@
 /**
- * @fileoverview Collection Workspace Kit — a curated re-export of the
+ * @fileoverview Collection Workspace Kit — editorial grouping of the
  * chrome families that compose a complete collection/list workspace.
  *
  * @description
- * This barrel groups the eight renamed workspace-family chrome components
- * into a single import surface. Consumers building collection screens can
- * import all pieces at once instead of cherry-picking from the flat
- * chrome barrel or from the package root.
+ * This barrel is **source-local only**. It is NOT re-exported from the
+ * chrome barrel, `components/index.ts`, or `src/index.ts`, and it is
+ * NOT part of the published `@rottay/design-system` API. Consumers
+ * should import all eight pieces from the package root like any other
+ * component:
  *
- * @example
  * ```ts
  * import {
  *   CollectionHeader,
@@ -22,11 +22,9 @@
  * } from '@rottay/design-system';
  * ```
  *
- * All eight components are already available from the package root via
- * the chrome barrel. This kit barrel is an editorial convenience — it
- * documents which pieces form one coherent workspace experience so the
- * next contributor composing a list screen knows the full set at a
- * glance.
+ * The purpose of this file is editorial: it documents which eight chrome
+ * families form one coherent workspace experience so the next contributor
+ * composing a list screen knows the full set at a glance.
  */
 
 // Headers

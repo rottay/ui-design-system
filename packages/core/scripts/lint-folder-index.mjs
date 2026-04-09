@@ -62,33 +62,44 @@ function walkDirs(dir) {
   return entries.filter((e) => e.isDirectory() && !e.name.startsWith('_') && !e.name.startsWith('.'));
 }
 
-// Rule 1: Forbidden prefixes
-for (const cat of CATEGORY_ROOTS) {
-  const catDir = join(COMPONENTS_ROOT, cat);
-  try {
-    const dirs = walkDirs(catDir);
-    for (const d of dirs) {
-      const qualifiedPath = `${cat}/${d.name}`;
-      if (ALLOWED_EXCEPTIONS.has(qualifiedPath)) continue;
+// Rule 1: Forbidden prefixes (recursive — checks the entire subtree, not
+// just the first level under each category root)
+function checkForbiddenPrefixes(dir, relPath, cat) {
+  let dirs;
+  try { dirs = walkDirs(dir); } catch { return; }
 
-      for (const prefix of FORBIDDEN_PREFIXES) {
-        if (d.name.startsWith(prefix)) {
-          violations.push({
-            rule: 'forbidden-prefix',
-            path: qualifiedPath,
-            message: `Folder name starts with forbidden prefix "${prefix}". Use a declarative, purpose-describing name instead.`,
-          });
-        }
-      }
-      if (cat !== 'surfaces' && d.name.startsWith(SURFACE_PREFIX_OUTSIDE_SURFACES)) {
+  for (const d of dirs) {
+    const qualifiedPath = relPath ? `${relPath}/${d.name}` : `${cat}/${d.name}`;
+    if (ALLOWED_EXCEPTIONS.has(qualifiedPath)) {
+      // Still recurse into allowed exceptions — the exception covers
+      // the folder itself, not its children.
+      checkForbiddenPrefixes(join(dir, d.name), qualifiedPath, cat);
+      continue;
+    }
+
+    for (const prefix of FORBIDDEN_PREFIXES) {
+      if (d.name.startsWith(prefix)) {
         violations.push({
           rule: 'forbidden-prefix',
           path: qualifiedPath,
-          message: `Folder name starts with "surface-" but is not inside surfaces/. Move it or rename it.`,
+          message: `Folder name starts with forbidden prefix "${prefix}". Use a declarative, purpose-describing name instead.`,
         });
       }
     }
-  } catch { /* category dir might not exist */ }
+    if (cat !== 'surfaces' && d.name.startsWith(SURFACE_PREFIX_OUTSIDE_SURFACES)) {
+      violations.push({
+        rule: 'forbidden-prefix',
+        path: qualifiedPath,
+        message: `Folder name starts with "surface-" but is not inside surfaces/. Move it or rename it.`,
+      });
+    }
+
+    // Recurse into children
+    checkForbiddenPrefixes(join(dir, d.name), qualifiedPath, cat);
+  }
+}
+for (const cat of CATEGORY_ROOTS) {
+  checkForbiddenPrefixes(join(COMPONENTS_ROOT, cat), '', cat);
 }
 
 // Rule 2: Repeated parent-child

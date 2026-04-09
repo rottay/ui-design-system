@@ -18,7 +18,7 @@ Generated on 2026-04-09.
 | `navigation/` | 15 (ActionDock, Affix, Anchor, BackTop, BottomTabBar, ...) |
 | `overlay/` | 12 (AdaptiveOverlay, AlertDialog, ConfirmDialog, ContextMenu, Dropdown, ...) |
 
-**Total**: 6 categories, 98 components.
+**Total**: 6 categories containing 98 primitive components.
 
 ## Chrome
 
@@ -147,4 +147,5 @@ Generated on 2026-04-09.
 
 ---
 
-**Grand total**: 202 component families across 4 tiers.
+**Summary**: 110 top-level families across 4 tiers
+(98 individual primitive components inside primitives).

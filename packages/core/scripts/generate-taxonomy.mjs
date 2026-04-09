@@ -48,7 +48,11 @@ const lines = [
   '',
 ];
 
+// Track families (top-level folders per tier) and leaf components
+// (only meaningful for primitives) separately so the grand total
+// does not mix units.
 let totalFamilies = 0;
+let totalPrimitiveComponents = 0;
 
 for (const tier of TIERS) {
   const tierDir = join(COMPONENTS_ROOT, tier.dir);
@@ -56,7 +60,6 @@ for (const tier of TIERS) {
 
   // For primitives, list the categories and count their children
   if (tier.dir === 'primitives') {
-    let totalPrimitives = 0;
     lines.push(`## ${tier.label}`);
     lines.push('');
     lines.push(`> ${tier.desc}`);
@@ -65,13 +68,13 @@ for (const tier of TIERS) {
     lines.push(`|---|---|`);
     for (const cat of families) {
       const children = listFamilies(join(tierDir, cat));
-      totalPrimitives += children.length;
+      totalPrimitiveComponents += children.length;
       lines.push(`| \`${cat}/\` | ${children.length} (${children.slice(0, 5).join(', ')}${children.length > 5 ? ', ...' : ''}) |`);
     }
     lines.push('');
-    lines.push(`**Total**: ${families.length} categories, ${totalPrimitives} components.`);
+    lines.push(`**Total**: ${families.length} categories containing ${totalPrimitiveComponents} primitive components.`);
     lines.push('');
-    totalFamilies += totalPrimitives;
+    totalFamilies += families.length; // Count categories, not individual components
     continue;
   }
 
@@ -94,7 +97,8 @@ for (const tier of TIERS) {
 
 lines.push('---');
 lines.push('');
-lines.push(`**Grand total**: ${totalFamilies} component families across ${TIERS.length} tiers.`);
+lines.push(`**Summary**: ${totalFamilies} top-level families across ${TIERS.length} tiers`);
+lines.push(`(${totalPrimitiveComponents} individual primitive components inside ${TIERS[0].label.toLowerCase()}).`);
 lines.push('');
 
 writeFileSync(OUTPUT_PATH, lines.join('\n'), 'utf8');

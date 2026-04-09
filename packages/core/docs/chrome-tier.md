@@ -57,14 +57,22 @@ patterns but are more specific than primitives.
 - **ActivityTimeline / ActivityCompact / ActivityCards / ActivityTicker** (`dashboard-insight-variants/activity/`)
 - **useVariant** (`dashboard-insight-variants/use-variant/`) -- random variant picker hook
 
-## Collection workspace kit
+## Collection workspace kit (editorial grouping)
 
 The renamed workspace-family components form a coherent kit for
-building collection/list screens. They are re-exported together from
-`chrome/_kits/collection-workspace/` for consumers who want the
-complete set in one import:
+building collection/list screens. They live in individual chrome/
+folders and are all available from the package root
+(`@rottay/design-system`) like every other chrome family.
+
+An **editorial barrel** exists at `chrome/_kits/collection-workspace/`
+inside the source tree. It is a source-local convenience that documents
+which 8 pieces belong together — it is **not** re-exported from the
+public API and consumers should not import from it. The canonical
+consumer import is the package root:
 
 ```ts
+// All 8 collection workspace pieces come from the root, alongside
+// every other DS component.
 import {
   CollectionHeader,
   SearchCommandBar,
