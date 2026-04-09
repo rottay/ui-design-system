@@ -443,4 +443,29 @@ describe('parity: static generator with brandTheme', () => {
     expect(brandCss).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
     expect(legacyCss).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
   });
+
+  it('partial tenant personality override preserves unrelated brandTheme dimensions', () => {
+    // A tenant overrides only animation.intensity but brandTheme also defines
+    // chart, card, accent, and typography. The per-dimension merge should
+    // preserve all unrelated dimensions in the generated CSS.
+    const configWithPartialOverride: TenantConfig = {
+      ...bithireConfig,
+      personality: {
+        animation: { intensity: 0.9 } as any, // only override intensity
+      },
+    };
+    const css = generateTenantCss(configWithPartialOverride, { includeDarkSelector: false });
+    // Tenant override wins for animation intensity
+    expect(css).toContain('--ds-personality-animation-intensity: 0.9');
+    // BrandTheme chart preserved (not wiped by partial animation override)
+    expect(css).toContain('--ds-personality-chart-line-style: sharp');
+    // BrandTheme card preserved
+    expect(css).toContain('--ds-personality-card-padding-density: compact');
+    // BrandTheme accent preserved
+    expect(css).toContain('--ds-personality-accent-bar-style: solid');
+    // BrandTheme typography preserved
+    expect(css).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
+    // BrandTheme animation.entrance preserved (tenant only overrode intensity)
+    expect(css).toContain('--ds-personality-animation-entrance: fade');
+  });
 });

@@ -146,7 +146,7 @@ export function deepMergeTokenOverrides(
 // ── Helpers for compileBrandTheme ──────────────────────────
 
 /** Merge two partial PersonalityTokens (per-dimension spread). */
-function mergePartialPersonality(
+export function mergePartialPersonality(
   base: Partial<PersonalityTokens> | undefined,
   override: Partial<PersonalityTokens>,
 ): Partial<PersonalityTokens> {

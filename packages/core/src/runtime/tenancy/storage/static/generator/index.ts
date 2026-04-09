@@ -10,7 +10,7 @@
  */
 
 import type { TenantConfig } from '../../../../../contracts';
-import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
+import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
@@ -576,12 +576,17 @@ export function generateTenantCss(
 
   // When brandTheme is present, derive effective branding, tokenOverrides, and
   // personality so all variable-generation functions produce consistent output.
-  // This mirrors the normalization that DesignSystemProvider does at runtime.
+  // Personality uses per-dimension merge (brandTheme -> tenant.personality) to
+  // match the runtime semantics in useTokens — a partial tenant personality
+  // override does not wipe unrelated dimensions from brandTheme.
   const effectiveConfig: TenantConfig = config.brandTheme
     ? {
         ...config,
         branding: { ...config.branding, ...brandThemeToBranding(config.brandTheme) },
-        personality: config.personality ?? brandThemeToPersonality(config.brandTheme),
+        personality: mergePartialPersonality(
+          brandThemeToPersonality(config.brandTheme),
+          config.personality ?? {},
+        ),
         tokenOverrides: config.tokenOverrides
           ? (deepMergeTokenOverrides(brandThemeToTokenOverrides(config.brandTheme), config.tokenOverrides) as TenantConfig['tokenOverrides'])
           : (brandThemeToTokenOverrides(config.brandTheme) as TenantConfig['tokenOverrides']),
