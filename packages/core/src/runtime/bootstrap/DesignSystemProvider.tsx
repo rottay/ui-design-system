@@ -372,42 +372,14 @@ export function DesignSystemProvider({
   // Final resolved config: sync path takes priority
   const tenantConfig = syncTenantConfig ?? asyncTenantConfig;
 
-  if (loading || !tenantConfig) {
-    return <LoadingScreen />;
-  }
-
-  // Vertical can come from the app explicitly or from the resolved tenant
-  // record itself. This keeps platform-managed tenants fully runtime-driven
-  // while still letting apps force a different preset for previews or local experiments.
-  const verticalSource = vertical ?? tenantConfig.vertical ?? undefined;
-  const resolvedVertical: VerticalPreset | undefined =
-    verticalSource == null
-      ? undefined
-      : typeof verticalSource === 'string'
-        ? getVerticalPreset(verticalSource)
-        : verticalSource;
-
-  // Final precedence used by the runtime:
-  // force props -> tenant config -> vertical defaults -> DS fallback.
-  const engine = forceEngine ?? tenantConfig.engine ?? resolvedVertical?.engine ?? 'classic';
-  const theme = forceTheme ?? tenantConfig.theme ?? 'base';
-  const locale = forcedLocale ?? tenantConfig.locale ?? 'en';
-  const fallbackLocale = forcedFallbackLocale ?? tenantConfig.fallbackLocale ?? locale;
-  const customTranslations = mergeLocaleTranslations(
-    tenantConfig.customTranslations,
-    appCustomTranslations
-  );
-
-  // Product profile intentionally resolves after vertical. Vertical answers
-  // "which kind of product is this?", while product profile answers
-  // "which UX preset should we apply within that product space?".
-  const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
-
   // When brandTheme is present, normalize branding and tokenOverrides so
-  // ALL downstream consumers (TenantProvider → AntdConfigProvider, ThemeProvider,
+  // ALL downstream consumers (TenantProvider -> AntdConfigProvider, ThemeProvider,
   // useTokens) see the same effective values. This prevents classic engine
   // from reading stale config.branding while ThemeProvider uses brandTheme.palette.
+  // NOTE: This useMemo MUST run before the early return below to satisfy
+  // React's Rules of Hooks (hooks must execute in the same order every render).
   const normalizedConfig = useMemo(() => {
+    if (!tenantConfig) return tenantConfig;
     if (!tenantConfig.brandTheme) return tenantConfig;
     const btBranding = brandThemeToBranding(tenantConfig.brandTheme);
     const btOverrides = brandThemeToTokenOverrides(tenantConfig.brandTheme);
@@ -420,6 +392,37 @@ export function DesignSystemProvider({
         : Object.keys(btOverrides).length > 0 ? btOverrides as typeof tenantConfig.tokenOverrides : tenantConfig.tokenOverrides,
     };
   }, [tenantConfig]);
+
+  if (loading || !normalizedConfig) {
+    return <LoadingScreen />;
+  }
+
+  // Vertical can come from the app explicitly or from the resolved tenant
+  // record itself. This keeps platform-managed tenants fully runtime-driven
+  // while still letting apps force a different preset for previews or local experiments.
+  const verticalSource = vertical ?? normalizedConfig.vertical ?? undefined;
+  const resolvedVertical: VerticalPreset | undefined =
+    verticalSource == null
+      ? undefined
+      : typeof verticalSource === 'string'
+        ? getVerticalPreset(verticalSource)
+        : verticalSource;
+
+  // Final precedence used by the runtime:
+  // force props -> tenant config -> vertical defaults -> DS fallback.
+  const engine = forceEngine ?? normalizedConfig.engine ?? resolvedVertical?.engine ?? 'classic';
+  const theme = forceTheme ?? normalizedConfig.theme ?? 'base';
+  const locale = forcedLocale ?? normalizedConfig.locale ?? 'en';
+  const fallbackLocale = forcedFallbackLocale ?? normalizedConfig.fallbackLocale ?? locale;
+  const customTranslations = mergeLocaleTranslations(
+    normalizedConfig.customTranslations,
+    appCustomTranslations
+  );
+
+  // Product profile intentionally resolves after vertical. Vertical answers
+  // "which kind of product is this?", while product profile answers
+  // "which UX preset should we apply within that product space?".
+  const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
 
   return (
     <TenantProvider config={normalizedConfig} vertical={resolvedVertical}>
@@ -441,7 +444,7 @@ export function DesignSystemProvider({
               cssBaseUrl={cssBaseUrl}
             >
               <AntdConfigProvider>
-                <FeatureProvider features={tenantConfig.features ?? []}>
+                <FeatureProvider features={normalizedConfig.features ?? []}>
                   <ResponsiveProvider>
                     <SystemCssVariablesBridge />
                     <MemoizedChildren>{children}</MemoizedChildren>
