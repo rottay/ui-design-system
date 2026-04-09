@@ -118,7 +118,7 @@ export interface TenantConfig {
   /** @deprecated Use `brandTheme.motion` / `brandTheme.chrome` instead.
    *  Kept for backward compatibility with existing tenant configs. */
   personality?: Partial<PersonalityTokens>;
-  /** @deprecated Use `brandTheme.surfaces` / `brandTheme.controls` instead.
+  /** @deprecated Use `brandTheme.surfaces` / `brandTheme.chrome.controls` instead.
    *  Kept for backward compatibility with existing tenant configs. */
   tokenOverrides?: TenantTokenOverrides;
   /** Optional tenant-owned copy overrides merged on top of DS locale dictionaries */
