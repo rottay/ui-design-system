@@ -424,7 +424,10 @@ export function DesignSystemProvider({
               }
               tokenOverrides={
                 tenantConfig.brandTheme
-                  ? brandThemeToTokenOverrides(tenantConfig.brandTheme)
+                  ? {
+                      ...brandThemeToTokenOverrides(tenantConfig.brandTheme),
+                      ...tenantConfig.tokenOverrides,
+                    }
                   : tenantConfig.tokenOverrides
               }
               skipCssLoading={skipCssLoading}

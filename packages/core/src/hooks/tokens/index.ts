@@ -205,22 +205,41 @@ export function useTokens(): DesignTokens {
     let densityScale: number;
 
     if (hasBrandTheme) {
-      // BrandTheme path: brandTheme.surfaces overrides vertical layer directly.
+      // BrandTheme path: engine -> vertical -> brandTheme -> tenant overrides.
       // Product profile tokenOverrides are skipped — only surfaceDefaults survives.
+      // Tenant tokenOverrides remain the highest-priority layer so per-tenant
+      // tweaks can still override brandTheme values.
       const btOverrides = brandThemeToTokenOverrides(brandTheme);
-      borderRadius = btOverrides.borderRadius
+      const tenantTokenOverrides = config.tokenOverrides;
+
+      const btBorderRadius = btOverrides.borderRadius
         ? { ...verticalBorderRadius, ...btOverrides.borderRadius }
         : verticalBorderRadius;
-      shadows = btOverrides.shadows
+      const btShadows = btOverrides.shadows
         ? { ...verticalShadows, ...btOverrides.shadows }
         : verticalShadows;
-      surface = btOverrides.surface
+      const btSurface = btOverrides.surface
         ? { ...verticalSurface, ...btOverrides.surface }
         : verticalSurface;
-      motion = btOverrides.motion
+      const btMotion = btOverrides.motion
         ? { ...verticalMotion, ...btOverrides.motion }
         : verticalMotion;
-      densityScale = btOverrides.densityScale ?? verticalDensityScale;
+      const btDensityScale = btOverrides.densityScale ?? verticalDensityScale;
+
+      // Tenant overrides are still last-write-wins on top of brandTheme
+      borderRadius = tenantTokenOverrides?.borderRadius
+        ? { ...btBorderRadius, ...tenantTokenOverrides.borderRadius }
+        : btBorderRadius;
+      shadows = tenantTokenOverrides?.shadows
+        ? { ...btShadows, ...tenantTokenOverrides.shadows }
+        : btShadows;
+      surface = tenantTokenOverrides?.surface
+        ? { ...btSurface, ...tenantTokenOverrides.surface }
+        : btSurface;
+      motion = tenantTokenOverrides?.motion
+        ? { ...btMotion, ...tenantTokenOverrides.motion }
+        : btMotion;
+      densityScale = tenantTokenOverrides?.densityScale ?? btDensityScale;
     } else {
       // Legacy path: profile -> tenant on top of vertical
       const productProfileTokenOverrides = profile.tokenOverrides;
@@ -261,15 +280,17 @@ export function useTokens(): DesignTokens {
     let personality: PersonalityTokens;
 
     if (hasBrandTheme) {
-      // BrandTheme path: DEFAULT -> vertical -> brandTheme
-      // Product profile personality is skipped.
+      // BrandTheme path: DEFAULT -> vertical -> brandTheme -> tenant.personality
+      // Product profile personality is skipped, but tenant personality remains
+      // the highest-priority layer for per-tenant overrides.
       const btPersonality = brandThemeToPersonality(brandTheme);
+      const tenantPersonality = config.personality;
       personality = {
-        animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...btPersonality.animation },
-        chart: { ...DEFAULT_PERSONALITY.chart, ...verticalPersonality?.chart, ...btPersonality.chart },
-        typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...btPersonality.typography },
-        accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...btPersonality.accent },
-        card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...btPersonality.card },
+        animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...btPersonality.animation, ...tenantPersonality?.animation },
+        chart: { ...DEFAULT_PERSONALITY.chart, ...verticalPersonality?.chart, ...btPersonality.chart, ...tenantPersonality?.chart },
+        typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...btPersonality.typography, ...tenantPersonality?.typography },
+        accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...btPersonality.accent, ...tenantPersonality?.accent },
+        card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...btPersonality.card, ...tenantPersonality?.card },
       };
     } else {
       // Legacy path: DEFAULT -> vertical -> profile -> tenant
@@ -284,18 +305,21 @@ export function useTokens(): DesignTokens {
       };
     }
 
+    // Effective branding: brandTheme.palette wins over config.branding for colors.
+    // This ensures useTokens reads the same colors that ThemeProvider renders.
+    const effectivePrimary = brandTheme?.palette?.primaryColor || config.branding.primaryColor;
+    const effectiveSecondary = brandTheme?.palette?.secondaryColor || config.branding.secondaryColor;
+    const effectiveAccent = brandTheme?.palette?.accentColor || config.branding.accentColor;
+
     return {
       colors: {
         // Single-value color tokens remain for backward compatibility with older
         // consumers that read `tokens.colors.primary` directly. The canonical
         // source of truth is now the CSS variable-backed scale objects below.
-        primary: config.branding.primaryColor || 'var(--ds-color-primary)',
+        primary: effectivePrimary || 'var(--ds-color-primary)',
         // Secondary falls back to accent then CSS var so tenants that only set
         // an accent color still get a secondary-slot value in component code.
-        secondary:
-          config.branding.secondaryColor ||
-          config.branding.accentColor ||
-          'var(--ds-color-secondary)',
+        secondary: effectiveSecondary || effectiveAccent || 'var(--ds-color-secondary)',
         success: 'var(--ds-color-success)',
         warning: 'var(--ds-color-warning)',
         error: 'var(--ds-color-error)',
