@@ -20,7 +20,7 @@ Generated on 2026-04-09.
 
 **Total**: 6 categories containing 98 primitive components.
 
-## Page Structure
+## Structures
 
 > Page-chrome families (headers, toolbars, record panels, metric cards, overlays)
 

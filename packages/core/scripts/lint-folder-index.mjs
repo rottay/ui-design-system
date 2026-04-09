@@ -30,7 +30,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const COMPONENTS_ROOT = resolve(__dirname, '../src/components');
 
-const CATEGORY_ROOTS = ['primitives', 'patterns', 'page-structure', 'surfaces'];
+const CATEGORY_ROOTS = ['primitives', 'patterns', 'structures', 'surfaces'];
 const FORBIDDEN_PREFIXES = ['premium-', 'workspace-'];
 const SURFACE_PREFIX_OUTSIDE_SURFACES = 'surface-';
 const SHIM_MAX_LINES = 5;
@@ -44,6 +44,15 @@ const ALLOWED_EXCEPTIONS = new Set([
   // between workspaces) that may be renamed to `workspace-picker` or
   // similar in a future cleanup pass.
   'patterns/workspace-switcher',
+]);
+
+// Known exceptions for the repeated-parent-child rule.
+// These were created by the Taxonomy Reset C grouping + B frozen names.
+// Codex should approve renaming them (e.g., dashboard-insights → insights,
+// record/record → record/fields) before they can be removed from here.
+const ALLOWED_REPEATED_PARENT = new Set([
+  'structures/dashboard/dashboard-insights',
+  'structures/record/record',
 ]);
 
 // Files at category root that are NOT support files even though they are
@@ -108,11 +117,14 @@ function checkRepeatedParent(dir, parentName) {
     const dirs = walkDirs(dir);
     for (const d of dirs) {
       if (d.name.startsWith(parentName + '-') || d.name === parentName) {
-        violations.push({
-          rule: 'repeated-parent-child',
-          path: dir.replace(COMPONENTS_ROOT + '/', '') + '/' + d.name,
-          message: `Subfolder "${d.name}" repeats its parent name "${parentName}". Use a shorter child name (e.g., "${d.name.replace(parentName + '-', '')}" or "detail/" instead of "${parentName}-detail/").`,
-        });
+        const qualifiedPath = dir.replace(COMPONENTS_ROOT + '/', '') + '/' + d.name;
+        if (!ALLOWED_REPEATED_PARENT.has(qualifiedPath)) {
+          violations.push({
+            rule: 'repeated-parent-child',
+            path: qualifiedPath,
+            message: `Subfolder "${d.name}" repeats its parent name "${parentName}". Use a shorter child name (e.g., "${d.name.replace(parentName + '-', '')}" or "detail/" instead of "${parentName}-detail/").`,
+          });
+        }
       }
       // Recurse
       checkRepeatedParent(join(dir, d.name), d.name);

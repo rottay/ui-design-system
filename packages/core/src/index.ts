@@ -105,5 +105,5 @@ export * from './motion';
 // ============================================
 export * from './components/primitives';
 export * from './components/patterns';
-export * from './components/page-structure';
+export * from './components/structures';
 export * from './components/surfaces';

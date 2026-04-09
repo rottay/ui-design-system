@@ -218,10 +218,10 @@ export type {
   SharedHeaderActionDescriptor,
 } from './header-actions';
 
-// NOTE: The following families moved to components/page-structure/ during
+// NOTE: The following families moved to components/structures/ during
 // Checkpoints C and D of the 2026-04-08 audit cleanup. They are
 // re-exported from the package root (`@rottay/design-system`) directly
-// through `src/index.ts`, which lists `./components/page-structure` alongside
+// through `src/index.ts`, which lists `./components/structures` alongside
 // `./components/primitives`, `./components/patterns`, and
 // `./components/surfaces`. They are intentionally no longer listed in
 // THIS patterns barrel so that the root index doesn't see the same
@@ -229,30 +229,30 @@ export type {
 // duplicate-export errors):
 //
 // Moved in C (folder renamed but identifiers unchanged at that point):
-//   - premium-form-sections (now page-structure/form-sections)
-//   - surface-primitives    (now page-structure/record)
-//   - detail-header         (now page-structure/detail-header)
-//   - edit-header           (now page-structure/edit-header)
-//   - form-header           (now page-structure/form-header)
-//   - data-terminal-card    (now page-structure/data-terminal-card)
-//   - stats-header          (now page-structure/stats-header)
-//   - loading-overlay       (now page-structure/loading-overlay)
-//   - table-toolbar         (now page-structure/table-toolbar)
+//   - premium-form-sections (now structures/form-sections)
+//   - surface-primitives    (now structures/record)
+//   - detail-header         (now structures/detail-header)
+//   - edit-header           (now structures/edit-header)
+//   - form-header           (now structures/form-header)
+//   - data-terminal-card    (now structures/data-terminal-card)
+//   - stats-header          (now structures/stats-header)
+//   - loading-overlay       (now structures/loading-overlay)
+//   - table-toolbar         (now structures/table-toolbar)
 //
 // Moved in D (folder rename + identifier rename, with compat aliases):
-//   - workspace-header           (now page-structure/collection-header)
-//   - workspace-command-bar      (now page-structure/search-command-bar)
-//   - workspace-filter-rail      (now page-structure/active-filters-bar)
-//   - workspace-advanced-filters (now page-structure/field-filters-panel)
-//   - workspace-columns-menu     (now page-structure/column-menu)
-//   - workspace-views-menu       (now page-structure/saved-views-menu)
-//   - workspace-preview-rail     (now page-structure/selection-preview-rail)
-//   - workspace-scopes           (now page-structure/scope-switcher)
-//   - command-header-variants    (now page-structure/dashboard-insights)
+//   - workspace-header           (now structures/collection-header)
+//   - workspace-command-bar      (now structures/search-command-bar)
+//   - workspace-filter-rail      (now structures/active-filters-bar)
+//   - workspace-advanced-filters (now structures/field-filters-panel)
+//   - workspace-columns-menu     (now structures/column-menu)
+//   - workspace-views-menu       (now structures/saved-views-menu)
+//   - workspace-preview-rail     (now structures/selection-preview-rail)
+//   - workspace-scopes           (now structures/scope-switcher)
+//   - command-header-variants    (now structures/dashboard-insights)
 //
 // All old identifier names (WorkspaceHeader, PremiumFormSections,
 // SurfaceSummaryStrip, etc.) remain reachable from the package root
-// via compat aliases in the new page-structure/ files. Consumers should migrate
+// via compat aliases in the new structures/ files. Consumers should migrate
 // to the canonical new names (CollectionHeader, FormSections,
 // RecordSummaryStrip, ...). The compat aliases will be removed once
 // all known consumers are migrated (see Checkpoint F in the audit).
