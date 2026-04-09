@@ -5,19 +5,27 @@
  *
  * ## Ownership model (frozen decision 4)
  *
- * Top-level `hooks/` is reserved for **generic reusable React hooks** that
- * have zero domain semantics and zero product-specific dependencies.
+ * This barrel is the **public hook surface** of the design system. It
+ * contains three categories of hooks:
  *
- * Hooks that belong to a specific subsystem live at the owning subsystem
- * and are re-exported through this barrel or the package root:
- * - Theme hooks: canonical at `runtime/theming/useTheme.ts`
- * - Feature hooks: canonical at `runtime/features/useFeatures.ts`
- * - Product profile hooks: canonical at `runtime/product-profiles/`
- * - Tenant utilities: canonical at `runtime/tenancy/`
+ * 1. **Generic reusable hooks** (owned here): a11y, dnd, responsive,
+ *    state, voice, form, search, routing, data, ai, shortcuts,
+ *    commands, notifications. Zero domain semantics.
  *
- * Compatibility shims in `hooks/theme/`, `hooks/features/`,
- * `hooks/product-profile/`, and non-hook exports in `hooks/tenant/` exist
- * for backward compatibility. New code should import from the package root.
+ * 2. **System integration hooks** (owned here, depend on DS context):
+ *    `useTokens` (token pipeline resolution), `useSurfaceQuery` (data
+ *    fetching for surfaces), `useTenantBranding` (2-step branding).
+ *    These are not generic utilities but they are consumer-facing hooks
+ *    that belong in the public hook surface, not inside runtime/.
+ *
+ * 3. **Compatibility re-exports** (canonical source elsewhere):
+ *    - `useTheme` / `useThemeContext`: canonical at `runtime/theming/`
+ *    - `useFeatures` / `useHasFeature`: canonical at `runtime/features/`
+ *    - `useProductProfile`: canonical at `runtime/product-profiles/`
+ *    - `resolvePersonalityPreset` / `createTenantConfig`: canonical at
+ *      `runtime/tenancy/` (non-hook utilities, @deprecated here)
+ *
+ * New code should import from the package root (`@rottay/design-system`).
  *
  * @remarks
  * The Rottay Design System provides several categories of hooks:
