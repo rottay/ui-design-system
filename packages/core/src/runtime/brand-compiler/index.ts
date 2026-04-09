@@ -1,15 +1,19 @@
 /**
- * @fileoverview Brand compiler bridge utilities.
+ * @fileoverview Brand compiler — bridge utilities + compilation.
  *
- * Converts a BrandTheme into the legacy shapes that the existing runtime
- * code (useTokens, ThemeProvider) already consumes. This is the first
- * piece of the brand compiler defined in contracts/themes.
+ * Converts a BrandTheme into the shapes consumed by the runtime
+ * (useTokens, ThemeProvider) and by static CSS generation.
  *
- * Full CSS generation (CompileBrandTheme) will be added in Wave E when
- * runtime and static generation need to share one compilation path.
+ * Bridge functions: brandThemeToTokenOverrides, brandThemeToPersonality,
+ * brandThemeToBranding, deepMergeTokenOverrides.
+ *
+ * Compiler: compileBrandTheme — conforms to the CompileBrandTheme contract
+ * from contracts/themes. Produces personality, tokenOverrides, CSS variables,
+ * and a CSS string from a BrandTheme + vertical baseline.
  */
 
-import type { BrandTheme } from '../../contracts/themes';
+import type { BrandTheme, CompileBrandTheme, CompiledBrand, BrandCompilerInput } from '../../contracts/themes';
+import type { EngineName } from '../../contracts/engine';
 import type { TenantBranding, TenantTokenOverrides } from '../../contracts/tenants';
 import type { PersonalityTokens } from '../../contracts/tokens/personality';
 
@@ -138,3 +142,88 @@ export function deepMergeTokenOverrides(
     overlays: override.overlays ? { ...base.overlays, ...override.overlays } : base.overlays,
   };
 }
+
+// ── Helpers for compileBrandTheme ──────────────────────────
+
+/** Merge two partial PersonalityTokens (per-dimension spread). */
+function mergePartialPersonality(
+  base: Partial<PersonalityTokens> | undefined,
+  override: Partial<PersonalityTokens>,
+): Partial<PersonalityTokens> {
+  if (!base) return override;
+  return {
+    animation: override.animation ? { ...base.animation, ...override.animation } : base.animation,
+    chart: override.chart ? { ...base.chart, ...override.chart } : base.chart,
+    typography: override.typography ? { ...base.typography, ...override.typography } : base.typography,
+    accent: override.accent ? { ...base.accent, ...override.accent } : base.accent,
+    card: override.card ? { ...base.card, ...override.card } : base.card,
+  };
+}
+
+/** Convert BrandTheme palette to a flat CSS variable map. */
+function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
+  const vars: Record<string, string> = {};
+  if (bt.palette) {
+    if (bt.palette.primaryColor) vars['--ds-color-primary'] = bt.palette.primaryColor;
+    if (bt.palette.secondaryColor) vars['--ds-color-secondary'] = bt.palette.secondaryColor;
+    if (bt.palette.accentColor) vars['--ds-color-accent'] = bt.palette.accentColor;
+    if (bt.palette.successColor) vars['--ds-color-success'] = bt.palette.successColor;
+    if (bt.palette.warningColor) vars['--ds-color-warning'] = bt.palette.warningColor;
+    if (bt.palette.errorColor) vars['--ds-color-error'] = bt.palette.errorColor;
+    if (bt.palette.infoColor) vars['--ds-color-info'] = bt.palette.infoColor;
+  }
+  if (bt.typography) {
+    if (bt.typography.fontFamilyBase) vars['--ds-font-family-base'] = bt.typography.fontFamilyBase;
+    if (bt.typography.fontFamilyHeading) vars['--ds-font-family-heading'] = bt.typography.fontFamilyHeading;
+    if (bt.typography.fontFamilyMono) vars['--ds-font-family-mono'] = bt.typography.fontFamilyMono;
+    if (bt.typography.fontFamilyDisplay) vars['--ds-font-family-display'] = bt.typography.fontFamilyDisplay;
+  }
+  return vars;
+}
+
+/** Build a CSS string from variables with tenant selector scoping. */
+function buildCssString(vars: Record<string, string>, tenantSlug: string): string {
+  const entries = Object.entries(vars).filter(([, v]) => v != null);
+  if (entries.length === 0) return '';
+  const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
+  return `html[data-tenant='${tenantSlug}'] {\n${declarations}\n}`;
+}
+
+// ── Brand Compiler ──────────────────────────────────────
+
+/**
+ * Compile a BrandTheme into resolved outputs for runtime and static generation.
+ *
+ * Implements the CompileBrandTheme contract. The merge chain is:
+ *   vertical baseline -> BrandTheme
+ *
+ * Tenant-level overrides (personality, tokenOverrides) are NOT applied here —
+ * they are the highest-priority layer applied by useTokens and
+ * DesignSystemProvider at runtime.
+ */
+export const compileBrandTheme: CompileBrandTheme = (input: BrandCompilerInput): CompiledBrand => {
+  const { brandTheme, tenantSlug, verticalPersonality, verticalTokenOverrides } = input;
+
+  // Merge personality: vertical baseline -> brandTheme
+  const btPersonality = brandThemeToPersonality(brandTheme);
+  const personality = mergePartialPersonality(verticalPersonality, btPersonality);
+
+  // Merge structural: vertical baseline -> brandTheme
+  const btOverrides = brandThemeToTokenOverrides(brandTheme);
+  const tokenOverrides = deepMergeTokenOverrides(
+    verticalTokenOverrides ?? {},
+    btOverrides,
+  );
+
+  // CSS variables from palette + typography
+  const cssVariables = brandThemeToCssVariables(brandTheme);
+
+  // CSS string with tenant selectors
+  const cssString = buildCssString(cssVariables, tenantSlug);
+
+  // Engine bridge passthrough
+  const engineBridge: Partial<Record<EngineName, Record<string, unknown>>> =
+    brandTheme.engineBridge ?? {};
+
+  return { cssVariables, cssString, personality, tokenOverrides, engineBridge };
+};

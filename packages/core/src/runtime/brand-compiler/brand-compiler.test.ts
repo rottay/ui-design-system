@@ -5,7 +5,9 @@ import {
   brandThemeToPersonality,
   brandThemeToBranding,
   deepMergeTokenOverrides,
+  compileBrandTheme,
 } from './index';
+import { bithireBrandTheme } from '../../tokens/ts/brand-themes';
 
 const MOCK_BRAND_THEME: BrandTheme = {
   id: 'test-brand',
@@ -235,5 +237,110 @@ describe('integration: classic engine with brandTheme', () => {
     // This is what AntdConfigProvider would read from context:
     // config.branding.primaryColor === '#FF0000' (from brandTheme, not '#000000')
     expect(normalizedBranding.primaryColor).not.toBe('#000000');
+  });
+});
+
+describe('compileBrandTheme', () => {
+  it('produces personality from brandTheme motion/charts/chrome', () => {
+    const result = compileBrandTheme({
+      brandTheme: MOCK_BRAND_THEME,
+      tenantSlug: 'test',
+    });
+    expect(result.personality.animation?.intensity).toBe(0.8);
+    expect(result.personality.animation?.entrance).toBe('spring');
+    expect(result.personality.chart?.lineStyle).toBe('smooth');
+    expect(result.personality.card?.defaultElevation).toBe('md');
+  });
+
+  it('produces tokenOverrides from brandTheme surfaces', () => {
+    const result = compileBrandTheme({
+      brandTheme: MOCK_BRAND_THEME,
+      tenantSlug: 'test',
+    });
+    expect(result.tokenOverrides.borderRadius?.sm).toBe('4px');
+    expect(result.tokenOverrides.densityScale).toBe(1.1);
+  });
+
+  it('produces CSS variables from palette', () => {
+    const result = compileBrandTheme({
+      brandTheme: MOCK_BRAND_THEME,
+      tenantSlug: 'test',
+    });
+    expect(result.cssVariables['--ds-color-primary']).toBe('#FF0000');
+    expect(result.cssVariables['--ds-color-secondary']).toBe('#00FF00');
+    expect(result.cssVariables['--ds-color-accent']).toBe('#0000FF');
+  });
+
+  it('produces scoped CSS string', () => {
+    const result = compileBrandTheme({
+      brandTheme: MOCK_BRAND_THEME,
+      tenantSlug: 'acme',
+    });
+    expect(result.cssString).toContain("html[data-tenant='acme']");
+    expect(result.cssString).toContain('--ds-color-primary: #FF0000');
+  });
+
+  it('merges vertical baseline before brandTheme', () => {
+    const result = compileBrandTheme({
+      brandTheme: MOCK_BRAND_THEME,
+      tenantSlug: 'test',
+      verticalPersonality: {
+        animation: { intensity: 0.5, entrance: 'fade' } as any,
+      },
+      verticalTokenOverrides: {
+        densityScale: 0.9,
+        borderRadius: { xl: '32px' },
+      },
+    });
+    // brandTheme overrides vertical for keys it defines
+    expect(result.personality.animation?.intensity).toBe(0.8); // brandTheme wins
+    expect(result.personality.animation?.entrance).toBe('spring'); // brandTheme wins
+    // vertical values preserved for keys brandTheme doesn't set
+    expect(result.tokenOverrides.borderRadius?.xl).toBe('16px'); // brandTheme has xl: '16px'
+    // brandTheme densityScale wins over vertical
+    expect(result.tokenOverrides.densityScale).toBe(1.1);
+  });
+
+  it('passes through engineBridge', () => {
+    const bt: BrandTheme = {
+      ...MOCK_BRAND_THEME,
+      engineBridge: { modern: { '--p': 'oklch(0.5 0.2 250)' } },
+    };
+    const result = compileBrandTheme({ brandTheme: bt, tenantSlug: 'test' });
+    expect(result.engineBridge.modern).toEqual({ '--p': 'oklch(0.5 0.2 250)' });
+  });
+});
+
+describe('parity: first-party brand pipeline', () => {
+  it('bithire BrandTheme produces same palette as registry branding', () => {
+    // Demonstrates that the same BrandTheme works for both first-party
+    // (via registry) and DB-backed tenants (via compileBrandTheme).
+    // bithireBrandTheme imported at top of file
+    const branding = brandThemeToBranding(bithireBrandTheme);
+    expect(branding.primaryColor).toBe('#0A66C2');
+    expect(branding.secondaryColor).toBe('#004182');
+    expect(branding.accentColor).toBe('#7FC15E');
+  });
+
+  it('DB-backed tenant uses same pipeline as first-party', () => {
+    // Hypothetical DB tenant with the same BrandTheme as bithire
+    // bithireBrandTheme imported at top of file
+    const dbTenantResult = compileBrandTheme({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: 'db-customer',
+    });
+    const firstPartyResult = compileBrandTheme({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: 'bithire',
+    });
+    // Same personality
+    expect(dbTenantResult.personality).toEqual(firstPartyResult.personality);
+    // Same token overrides
+    expect(dbTenantResult.tokenOverrides).toEqual(firstPartyResult.tokenOverrides);
+    // Same CSS variables (different slug in selector)
+    expect(dbTenantResult.cssVariables).toEqual(firstPartyResult.cssVariables);
+    // Different CSS string (different tenant slug)
+    expect(dbTenantResult.cssString).toContain("html[data-tenant='db-customer']");
+    expect(firstPartyResult.cssString).toContain("html[data-tenant='bithire']");
   });
 });
