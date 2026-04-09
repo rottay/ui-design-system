@@ -28,31 +28,31 @@
  */
 
 // Headers
-export { CollectionHeader } from '../../collection-header';
-export type { CollectionHeaderProps } from '../../collection-header';
+export { CollectionHeader } from '../../headers/collection';
+export type { CollectionHeaderProps } from '../../headers/collection';
 
 // Command and search
-export { SearchCommandBar } from '../../search-command-bar';
-export type { SearchCommandBarProps } from '../../search-command-bar';
+export { SearchCommandBar } from '../../workspace/search-command-bar';
+export type { SearchCommandBarProps } from '../../workspace/search-command-bar';
 
 // Filtering
-export { ActiveFiltersBar } from '../../active-filters-bar';
-export type { ActiveFiltersBarProps } from '../../active-filters-bar';
-export { FieldFiltersPanel } from '../../field-filters-panel';
-export type { FieldFiltersPanelProps } from '../../field-filters-panel';
+export { ActiveFiltersBar } from '../../workspace/active-filters-bar';
+export type { ActiveFiltersBarProps } from '../../workspace/active-filters-bar';
+export { FieldFiltersPanel } from '../../workspace/field-filters-panel';
+export type { FieldFiltersPanelProps } from '../../workspace/field-filters-panel';
 
 // Column management
-export { ColumnMenu } from '../../column-menu';
-export type { ColumnMenuProps } from '../../column-menu';
+export { ColumnMenu } from '../../workspace/column-menu';
+export type { ColumnMenuProps } from '../../workspace/column-menu';
 
 // Saved views
-export { SavedViewsMenu } from '../../saved-views-menu';
-export type { SavedViewsMenuProps } from '../../saved-views-menu';
+export { SavedViewsMenu } from '../../workspace/saved-views-menu';
+export type { SavedViewsMenuProps } from '../../workspace/saved-views-menu';
 
 // Selection
-export { SelectionPreviewRail } from '../../selection-preview-rail';
-export type { SelectionPreviewRailProps } from '../../selection-preview-rail';
+export { SelectionPreviewRail } from '../../workspace/selection-preview-rail';
+export type { SelectionPreviewRailProps } from '../../workspace/selection-preview-rail';
 
 // Scoping
-export { ScopeSwitcher } from '../../scope-switcher';
-export type { ScopeSwitcherProps } from '../../scope-switcher';
+export { ScopeSwitcher } from '../../workspace/scope-switcher';
+export type { ScopeSwitcherProps } from '../../workspace/scope-switcher';
