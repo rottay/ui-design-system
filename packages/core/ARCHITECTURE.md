@@ -19,12 +19,12 @@ tenant branding, vertical preset, and product profile.
 ```
 Layer 4: App             Config-driven pages composed from surfaces
 Layer 3: Surfaces        Page-level config objects (presentation/behavior/visual)
-Layer 2.5: Chrome        Page chrome: headers, toolbars, record panels, overlays
+Layer 2.5: Page Structure        Page chrome: headers, toolbars, record panels, overlays
 Layer 2: Patterns        Engine-agnostic compositions (tables, forms, charts, ...)
 Layer 1: Primitives      Engine-switched leaf components across 6 categories
 ```
 
-> Counts of individual primitives, patterns, chrome pieces, and surfaces
+> Counts of individual primitives, patterns, page-structure pieces, and surfaces
 > are intentionally omitted here. Past iterations of this doc went stale
 > almost immediately. The authoritative source is the on-disk tree under
 > `packages/core/src/components/`. A generated taxonomy reference is on the
@@ -39,16 +39,16 @@ Each layer only depends on the layer below it:
   (DataTable, FormBuilder, StatsGrid, KanbanBoard, ...). They are
   engine-agnostic and stay generic — they know nothing about tenants,
   candidates, roles, etc.
-- **Chrome** is a middle tier introduced in the 2026-04-08 audit cleanup
-  (Checkpoint C). It hosts page-chrome families that are too specific to
+- **Page Structure** is a middle tier introduced in the 2026-04-08 audit cleanup
+  (Checkpoint C). It hosts page-structure families that are too specific to
   live in `patterns/` but too reusable to live in `surfaces/`: detail/edit/
   form headers, table toolbars, record field grids, loading overlays,
-  dashboard metric cards, and similar widgets. Chrome pieces compose
+  dashboard metric cards, and similar widgets. Page-structure families compose
   patterns and primitives and are normally consumed by surfaces or by
   app-level screens directly.
 - **Surfaces** are declarative config objects that describe an entire page
   (ListSurface, DashboardSurface, FormSurface, etc.). Surfaces wire patterns
-  and chrome to data and permissions without owning rendering logic.
+  and page-structure widgets to data and permissions without owning rendering logic.
 - **App** is the consuming application layer. Apps pass surface configs and
   domain adapters; the DS handles everything else.
 
@@ -60,7 +60,7 @@ Each layer only depends on the layer below it:
 > - reusable composition of primitives that solves a generic task (table,
 >   form, chart, kanban) → **pattern**
 > - page-scale structural widget that wraps or accompanies a pattern
->   (header, toolbar, record panel, loading shell, metric card) → **chrome**
+>   (header, toolbar, record panel, loading shell, metric card) → **page-structure**
 > - page-level config object a consumer passes to render a whole screen
 >   → **surface**
 

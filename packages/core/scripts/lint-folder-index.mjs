@@ -30,7 +30,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const COMPONENTS_ROOT = resolve(__dirname, '../src/components');
 
-const CATEGORY_ROOTS = ['primitives', 'patterns', 'chrome', 'surfaces'];
+const CATEGORY_ROOTS = ['primitives', 'patterns', 'page-structure', 'surfaces'];
 const FORBIDDEN_PREFIXES = ['premium-', 'workspace-'];
 const SURFACE_PREFIX_OUTSIDE_SURFACES = 'surface-';
 const SHIM_MAX_LINES = 5;

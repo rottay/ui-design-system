@@ -20,14 +20,14 @@ Generated on 2026-04-09.
 
 **Total**: 6 categories containing 98 primitive components.
 
-## Chrome
+## Page Structure
 
 > Page-chrome families (headers, toolbars, record panels, metric cards, overlays)
 
 - `active-filters-bar/`
 - `collection-header/`
 - `column-menu/`
-- `dashboard-insight-variants/`
+- `dashboard-insights/`
 - `data-terminal-card/`
 - `detail-header/`
 - `edit-header/`
@@ -35,7 +35,7 @@ Generated on 2026-04-09.
 - `form-header/`
 - `form-sections/`
 - `loading-overlay/`
-- `record-chrome/`
+- `record/`
 - `saved-views-menu/`
 - `scope-switcher/`
 - `search-command-bar/`

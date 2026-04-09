@@ -22,7 +22,7 @@ const OUTPUT_PATH = resolve(__dirname, '../docs/TAXONOMY.generated.md');
 
 const TIERS = [
   { dir: 'primitives', label: 'Primitives', desc: 'Engine-switched leaf components' },
-  { dir: 'chrome', label: 'Chrome', desc: 'Page-chrome families (headers, toolbars, record panels, metric cards, overlays)' },
+  { dir: 'page-structure', label: 'Page Structure', desc: 'Page-chrome families (headers, toolbars, record panels, metric cards, overlays)' },
   { dir: 'patterns', label: 'Patterns', desc: 'Engine-agnostic task-level compositions' },
   { dir: 'surfaces', label: 'Surfaces', desc: 'Page-level config objects' },
 ];
