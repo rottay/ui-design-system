@@ -74,6 +74,8 @@ function App() {
 |----------|-------------|
 | [Getting Started](./GETTING_STARTED.md) | Installation, registry setup, first component, separate-repo usage |
 | [Architecture](./ARCHITECTURE.md) | System design, engine flow, token resolution, CSS layers |
+| [Chrome Tier](./docs/chrome-tier.md) | What chrome is, decision guide, family catalog |
+| [Taxonomy Reference](./docs/TAXONOMY.generated.md) | Auto-generated inventory of every tier and family (run `pnpm docs:taxonomy` to refresh) |
 | [Engine Splitting](./ENGINE_SPLITTING.md) | Code-splitting strategy and bundle entry points |
 | [Performance Budget](./PERFORMANCE_BUDGET.md) | CI-enforced size limits and Web Vitals targets |
 

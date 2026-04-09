@@ -89,7 +89,9 @@
     "test:coverage": "COVERAGE=1 vitest run --coverage",
     "test:ci": "COVERAGE=1 vitest run --coverage --reporter=verbose --reporter=json --outputFile.json=./test-results.json",
     "analyze": "node scripts/analyze-bundle.mjs",
-    "analyze:skip-build": "node scripts/analyze-bundle.mjs --skip-build"
+    "analyze:skip-build": "node scripts/analyze-bundle.mjs --skip-build",
+    "lint:folders": "node scripts/lint-folder-index.mjs",
+    "docs:taxonomy": "node scripts/generate-taxonomy.mjs"
   },
   "engines": {
     "node": ">=20"
