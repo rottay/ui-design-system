@@ -468,4 +468,56 @@ describe('parity: static generator with brandTheme', () => {
     // BrandTheme animation.entrance preserved (tenant only overrode intensity)
     expect(css).toContain('--ds-personality-animation-entrance: fade');
   });
+
+  it('vertical baseline layers before brandTheme in static generator', () => {
+    // evnto vertical has: bounce entrance, intensity 1.5, spacious density,
+    // borderRadius sm:10px. The bithire brandTheme overrides most of these.
+    // The generator should resolve vertical -> brandTheme -> tenant.
+    const configWithVertical: TenantConfig = {
+      slug: 'vertical-test',
+      name: 'Vertical Test',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Test' },
+      vertical: 'evnto', // evnto vertical has bounce, intensity 1.5, spacious
+      brandTheme: {
+        id: 'partial-brand',
+        name: 'Partial Brand',
+        // Only override palette — personality comes from vertical
+        palette: { primaryColor: '#FF0000' },
+      },
+    };
+    const css = generateTenantCss(configWithVertical, { includeDarkSelector: false });
+    // Vertical personality should be present (brandTheme has no motion/charts/chrome)
+    expect(css).toContain('--ds-personality-animation-entrance: bounce'); // from evnto vertical
+    expect(css).toContain('--ds-personality-animation-intensity: 1.5'); // from evnto vertical
+    expect(css).toContain('--ds-personality-card-padding-density: spacious'); // from evnto vertical
+    // Vertical tokenOverrides should be present
+    expect(css).toContain('--ds-density-scale: 1.125'); // from evnto vertical
+    // Palette from brandTheme
+    expect(css).toContain('--ds-color-primary-500');
+  });
+
+  it('brandTheme overrides vertical personality where both define values', () => {
+    const configWithBoth: TenantConfig = {
+      slug: 'both-test',
+      name: 'Both Test',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Test' },
+      vertical: 'evnto', // evnto vertical: bounce, intensity 1.5
+      brandTheme: bithireBrandTheme, // bithire: fade, intensity 0.4
+    };
+    const css = generateTenantCss(configWithBoth, { includeDarkSelector: false });
+    // BrandTheme wins over vertical for keys it defines
+    expect(css).toContain('--ds-personality-animation-entrance: fade'); // bithire brand wins
+    expect(css).toContain('--ds-personality-animation-intensity: 0.4'); // bithire brand wins
+    expect(css).toContain('--ds-personality-card-padding-density: compact'); // bithire brand wins
+    // BrandTheme surfaces win over vertical
+    expect(css).toContain('--ds-density-scale: 0.95'); // bithire brand wins over evnto 1.125
+  });
 });

@@ -11,6 +11,7 @@
 
 import type { TenantConfig } from '../../../../../contracts';
 import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
+import { getVerticalPreset } from '../../../../verticals/registry';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
@@ -574,22 +575,33 @@ export function generateTenantCss(
   const includeDarkSelector = options.includeDarkSelector ?? true;
   const includeSystemDarkSelector = options.includeSystemDarkSelector ?? true;
 
+  // Resolve vertical baseline (same as DesignSystemProvider at runtime).
+  const vertical = config.vertical ? getVerticalPreset(config.vertical) : undefined;
+
   // When brandTheme is present, derive effective branding, tokenOverrides, and
-  // personality so all variable-generation functions produce consistent output.
-  // Personality uses per-dimension merge (brandTheme -> tenant.personality) to
-  // match the runtime semantics in useTokens — a partial tenant personality
-  // override does not wipe unrelated dimensions from brandTheme.
+  // personality matching the runtime merge chain:
+  //   vertical baseline -> brandTheme -> tenant overrides
+  // Personality uses per-dimension merge so partial overrides don't wipe
+  // unrelated dimensions.
   const effectiveConfig: TenantConfig = config.brandTheme
     ? {
         ...config,
         branding: { ...config.branding, ...brandThemeToBranding(config.brandTheme) },
         personality: mergePartialPersonality(
-          brandThemeToPersonality(config.brandTheme),
+          mergePartialPersonality(
+            vertical?.personality ?? {},
+            brandThemeToPersonality(config.brandTheme),
+          ),
           config.personality ?? {},
         ),
-        tokenOverrides: config.tokenOverrides
-          ? (deepMergeTokenOverrides(brandThemeToTokenOverrides(config.brandTheme), config.tokenOverrides) as TenantConfig['tokenOverrides'])
-          : (brandThemeToTokenOverrides(config.brandTheme) as TenantConfig['tokenOverrides']),
+        tokenOverrides: (() => {
+          const verticalOverrides = vertical?.tokenOverrides ?? {};
+          const btOverrides = brandThemeToTokenOverrides(config.brandTheme);
+          const merged = deepMergeTokenOverrides(verticalOverrides, btOverrides);
+          return config.tokenOverrides
+            ? (deepMergeTokenOverrides(merged, config.tokenOverrides) as TenantConfig['tokenOverrides'])
+            : (merged as TenantConfig['tokenOverrides']);
+        })(),
       }
     : config;
 
