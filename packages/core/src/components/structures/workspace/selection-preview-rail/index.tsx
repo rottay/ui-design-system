@@ -6,7 +6,7 @@
  * overlay, and a custom-render slot.
  *
  * @description
- * Engine-free chrome family that renders a sticky right-side rail showing a
+ * Engine-free structures family that renders a sticky right-side rail showing a
  * focused or selected row from a workspace table. Renders one of two
  * branches:
  *

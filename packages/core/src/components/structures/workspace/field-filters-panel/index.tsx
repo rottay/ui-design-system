@@ -5,7 +5,7 @@
  * with quick-slice presets and per-card visual metadata.
  *
  * @description
- * Engine-free chrome family that renders an advanced filter panel as a responsive
+ * Engine-free structures family that renders an advanced filter panel as a responsive
  * grid of 230px+ FilterCards. Each card carries a label, optional icon and
  * description, and a control (Select for `select`/`enum`/`date-range`,
  * Input for free-form text). The panel also accepts a list of quick-slice

@@ -6,7 +6,7 @@
  * detail, edit, and form pages.
  *
  * @description
- * Page-structure companion to `form-sections`. The two families ship
+ * Structures companion to `form-sections`. The two families ship
  * together because many consumers compose them: a top-level summary
  * strip, then a stack of form-sections, then a read-field grid inside
  * one of those sections, then an action footer at the bottom.

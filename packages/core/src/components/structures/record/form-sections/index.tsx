@@ -5,7 +5,7 @@
  * form section container with tone and appearance variants.
  *
  * @description
- * Engine-free chrome family for organizing form content into themed
+ * Engine-free structures family for organizing form content into themed
  * sections. Supports three appearance variants (`card`, `soft`,
  * `divided`) and four tone variants (`default`, `editorial`,
  * `technical`, `governance`). Each tone ships its own gradient + grid

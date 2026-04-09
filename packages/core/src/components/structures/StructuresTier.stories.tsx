@@ -1,7 +1,7 @@
 /**
  * @fileoverview Structures tier Storybook landing page.
  *
- * Lists every chrome family with a one-line description and its folder
+ * Lists every structures family with a one-line description and its folder
  * path so new contributors can find the right entry point quickly.
  * This story does not render live components — it is a documentation
  * index page only.
@@ -11,24 +11,29 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 const FAMILIES = [
-  { name: 'CollectionHeader', folder: 'collection-header', desc: 'Hero header for collection/list pages' },
-  { name: 'DetailHeader', folder: 'detail-header', desc: 'Header for entity detail pages' },
-  { name: 'EditHeader', folder: 'edit-header', desc: 'Header for entity edit pages' },
-  { name: 'FormHeader', folder: 'form-header', desc: 'Header for create-form pages' },
-  { name: 'TableToolbar', folder: 'table-toolbar', desc: 'One-row slot-driven toolbar' },
-  { name: 'SearchCommandBar', folder: 'search-command-bar', desc: 'Command/search bar with voice + suggestions' },
-  { name: 'ActiveFiltersBar', folder: 'active-filters-bar', desc: 'Horizontal active-filter chip strip' },
-  { name: 'FieldFiltersPanel', folder: 'field-filters-panel', desc: 'Filter card grid with presets' },
-  { name: 'ColumnMenu', folder: 'column-menu', desc: 'Column visibility/order panel' },
-  { name: 'SavedViewsMenu', folder: 'saved-views-menu', desc: 'Saved-views dropdown' },
-  { name: 'ScopeSwitcher', folder: 'scope-switcher', desc: 'Horizontal scope pill strip' },
-  { name: 'SelectionPreviewRail', folder: 'selection-preview-rail', desc: 'Sticky preview rail for selected items' },
-  { name: 'FormSections / FormFactsCard', folder: 'form-sections', desc: 'Accordion form sections with tone variants' },
-  { name: 'RecordSummaryStrip / RecordFieldGrid / RecordField / RecordActionBar / RecordPanel', folder: 'record', desc: 'Record-page building blocks' },
-  { name: 'StatsHeader', folder: 'stats-header', desc: 'Operational stat card strip with animations' },
-  { name: 'DataTerminalCard', folder: 'data-terminal-card', desc: '4-variant dashboard metric card' },
-  { name: 'LoadingOverlay', folder: 'loading-overlay', desc: 'Semi-transparent loading shell' },
-  { name: 'Metrics/Activity variants', folder: 'dashboard-insights', desc: '8 dashboard insight widget variants + useVariant hook' },
+  // headers/
+  { name: 'CollectionHeader', folder: 'headers/collection', desc: 'Hero header for collection/list pages' },
+  { name: 'DetailHeader', folder: 'headers/detail', desc: 'Header for entity detail pages' },
+  { name: 'EditHeader', folder: 'headers/edit', desc: 'Header for entity edit pages' },
+  { name: 'FormHeader', folder: 'headers/form', desc: 'Header for create-form pages' },
+  // workspace/
+  { name: 'SearchCommandBar', folder: 'workspace/search-command-bar', desc: 'Command/search bar with voice + suggestions' },
+  { name: 'ActiveFiltersBar', folder: 'workspace/active-filters-bar', desc: 'Horizontal active-filter chip strip' },
+  { name: 'FieldFiltersPanel', folder: 'workspace/field-filters-panel', desc: 'Filter card grid with presets' },
+  { name: 'ColumnMenu', folder: 'workspace/column-menu', desc: 'Column visibility/order panel' },
+  { name: 'SavedViewsMenu', folder: 'workspace/saved-views-menu', desc: 'Saved-views dropdown' },
+  { name: 'SelectionPreviewRail', folder: 'workspace/selection-preview-rail', desc: 'Sticky preview rail' },
+  { name: 'ScopeSwitcher', folder: 'workspace/scope-switcher', desc: 'Horizontal scope pill strip' },
+  { name: 'TableToolbar', folder: 'workspace/table-toolbar', desc: 'One-row slot-driven toolbar' },
+  // record/
+  { name: 'Record building blocks', folder: 'record/record', desc: 'SummaryStrip, FieldGrid, Field, ActionBar, Panel' },
+  { name: 'FormSections / FormFactsCard', folder: 'record/form-sections', desc: 'Accordion form sections with tone variants' },
+  // dashboard/
+  { name: 'Metrics/Activity variants', folder: 'dashboard/dashboard-insights', desc: '8 insight widget variants + useVariant' },
+  { name: 'StatsHeader', folder: 'dashboard/stats-header', desc: 'Operational stat card strip' },
+  { name: 'DataTerminalCard', folder: 'dashboard/data-terminal-card', desc: '4-variant dashboard metric card' },
+  // feedback/
+  { name: 'LoadingOverlay', folder: 'feedback/loading-overlay', desc: 'Semi-transparent loading shell' },
 ];
 
 function StructuresTierIndex() {

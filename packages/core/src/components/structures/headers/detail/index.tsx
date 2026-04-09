@@ -7,7 +7,7 @@
  * context-rail slot.
  *
  * @description
- * Engine-free chrome family for entity-detail pages. Pairs with the
+ * Engine-free structures family for entity-detail pages. Pairs with the
  * `record` building blocks (`RecordField`, `RecordFieldGrid`)
  * and with `form-sections` (`FormSections`) to compose a full
  * detail screen.

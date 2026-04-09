@@ -3,7 +3,7 @@
  * with four animated visual variants.
  *
  * @description
- * Engine-free chrome family for dashboard surfaces. Renders a single
+ * Engine-free structures family for dashboard surfaces. Renders a single
  * metric card with a "Terminal / HUD / Circuit / Matrix" visual theme,
  * a trend indicator, an optional sparkline, and an optional href that
  * turns the whole card into a link via the DS navigation adapter.

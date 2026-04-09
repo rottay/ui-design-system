@@ -5,7 +5,7 @@
  * row with clear-all and add-filter affordances.
  *
  * @description
- * Engine-free chrome family that renders a row of active filter chips. Each chip
+ * Engine-free structures family that renders a row of active filter chips. Each chip
  * shows a label/value pair with an inline remove button, and the rail also
  * exposes a "Clear all" button plus an optional "+ Add filter" CTA. Returns
  * null when no filters are active, so consumers can mount it

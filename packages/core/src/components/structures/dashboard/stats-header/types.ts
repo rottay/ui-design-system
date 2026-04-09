@@ -1,5 +1,5 @@
 /**
- * @fileoverview Type definitions for the StatsHeader chrome family.
+ * @fileoverview Type definitions for the StatsHeader structures family.
  *
  * StatsHeader renders operational stat cards with counter animations,
  * sparkline dots, contextual insights, and gradient glow accents.

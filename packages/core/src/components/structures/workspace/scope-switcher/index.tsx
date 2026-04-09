@@ -5,7 +5,7 @@
  * switching between predefined data subsets.
  *
  * @description
- * Engine-free chrome family that renders a horizontal row of scope pills (e.g.
+ * Engine-free structures family that renders a horizontal row of scope pills (e.g.
  * "All", "Active", "Archived"). Each pill carries a label and an optional
  * count badge, and the active pill is highlighted with the primary tint.
  * Supports two visual variants: `section` (the default standalone bar) and

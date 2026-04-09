@@ -9,14 +9,14 @@
  *
  * 1. FORBIDDEN PREFIXES: folders matching `premium-*`, `surface-*`
  *    (outside surfaces/), or `workspace-*` at any depth under
- *    primitives/, patterns/, chrome/, or surfaces/.
+ *    primitives/, patterns/, structures/, or surfaces/.
  *
  * 2. REPEATED PARENT-CHILD: a subfolder whose name starts with its
  *    parent's name (e.g., `form/form-header`, `dashboard/dashboard-*`).
  *
  * 3. PUBLIC-ROOT SUPPORT FILES: `.ts`/`.tsx` files other than `index.ts`
  *    or `index.tsx` sitting directly inside a category root (patterns/,
- *    chrome/, surfaces/). Compat shims are allowed if they are <= 5
+ *    structures/, surfaces/). Compat shims are allowed if they are <= 5
  *    lines (one re-export + comment).
  *
  * Run: `node scripts/lint-folder-index.mjs`

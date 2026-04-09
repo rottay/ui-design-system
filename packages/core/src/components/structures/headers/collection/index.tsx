@@ -6,7 +6,7 @@
  * quick actions cluster, compact meta chips and shortcut hints.
  *
  * @description
- * Engine-free chrome family that pairs with the EntityTableWorkspace family of
+ * Engine-free structures family that pairs with the EntityTableWorkspace family of
  * list/workspace pages. Sits visually above ListToolbar / TableToolbar.
  * The pattern packs four optional clusters around the title:
  *   - eyebrow chip (uppercase pill identifying the workspace)
@@ -16,7 +16,7 @@
  *
  * Visually distinct from `CockpitHeader` (detail-page style: 22px title,
  * plain background, simple actions) and `WorkbenchHeader` (briefing style:
- * exception count, saved view selector). Use this chrome family when you want a
+ * exception count, saved view selector). Use this structures family when you want a
  * 36px hero title, a subtle grid background, and a packed right rail.
  *
  * The family stays domain-agnostic: it knows nothing about tenants,

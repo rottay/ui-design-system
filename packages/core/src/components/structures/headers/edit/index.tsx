@@ -6,7 +6,7 @@
  * cancel actions, and optional structured action rail.
  *
  * @description
- * Engine-free chrome family for entity-edit pages. Pairs with the
+ * Engine-free structures family for entity-edit pages. Pairs with the
  * `record` building blocks (`RecordFieldGrid`,
  * `RecordField`) and with `form-sections` (`FormSections`)
  * to compose a full edit screen.

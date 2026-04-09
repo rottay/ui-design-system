@@ -6,7 +6,7 @@
  * cluster, and an action rail.
  *
  * @description
- * Engine-free chrome family for create-form pages. Sibling to the
+ * Engine-free structures family for create-form pages. Sibling to the
  * other three header families in `chrome/`:
  *
  *   - DetailHeader: read-only detail pages with optional tabs and

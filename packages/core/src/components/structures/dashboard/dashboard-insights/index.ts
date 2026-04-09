@@ -3,7 +3,7 @@
  * 8 widget-chrome variants that power dashboard insight strips.
  *
  * @description
- * Engine-free chrome family. 8 variants grouped into two subfolders
+ * Engine-free structures family. 8 variants grouped into two subfolders
  * (following the audit's no-repeated-parent rule — activity variants
  * live under `activity/` and metrics variants live under `metrics/`
  * instead of being flat `activity-cards/`, `metrics-rows/`, etc):
