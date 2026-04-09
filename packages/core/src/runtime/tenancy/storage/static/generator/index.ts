@@ -10,6 +10,7 @@
  */
 
 import type { TenantConfig } from '../../../../../contracts';
+import { compileBrandTheme, brandThemeToBranding, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
@@ -572,10 +573,24 @@ export function generateTenantCss(
   const selector = buildTenantSelector(config.slug);
   const includeDarkSelector = options.includeDarkSelector ?? true;
   const includeSystemDarkSelector = options.includeSystemDarkSelector ?? true;
+
+  // When brandTheme is present, use the brand compiler for palette CSS variables
+  // and derive an effective config with normalized branding/tokenOverrides so
+  // the existing variable-generation functions produce consistent output.
+  const effectiveConfig: TenantConfig = config.brandTheme
+    ? {
+        ...config,
+        branding: { ...config.branding, ...brandThemeToBranding(config.brandTheme) },
+        tokenOverrides: config.tokenOverrides
+          ? (deepMergeTokenOverrides(brandThemeToTokenOverrides(config.brandTheme), config.tokenOverrides) as TenantConfig['tokenOverrides'])
+          : (brandThemeToTokenOverrides(config.brandTheme) as TenantConfig['tokenOverrides']),
+      }
+    : config;
+
   const declarations = {
-    ...brandingVariables(config),
-    ...tokenOverrideVariables(config),
-    ...personalityVariables(config),
+    ...brandingVariables(effectiveConfig),
+    ...tokenOverrideVariables(effectiveConfig),
+    ...personalityVariables(effectiveConfig),
   };
   // Block 1: light-theme tenant variables (always generated)
   const blocks = [toCssBlock(selector, declarations)];
@@ -586,9 +601,9 @@ export function generateTenantCss(
     // personality variables that are theme-independent.
     const darkDeclarations = {
       ...declarations,
-      ...darkBrandingVariables(config),
-      ...darkSemanticVariables(config),
-      ...darkPersonalityOverrides(config),
+      ...darkBrandingVariables(effectiveConfig),
+      ...darkSemanticVariables(effectiveConfig),
+      ...darkPersonalityOverrides(effectiveConfig),
     };
 
     // Block 2: explicit dark mode -- matches `data-theme='dark'` attribute or `.dark` class.
@@ -615,7 +630,7 @@ export function generateTenantCss(
   }
 
   return [
-    `/* Auto-generated tenant theme for ${config.name} (${config.slug}) */`,
+    `/* Auto-generated tenant theme for ${effectiveConfig.name} (${effectiveConfig.slug}) */`,
     ...blocks,
     '',
   ].join('\n');

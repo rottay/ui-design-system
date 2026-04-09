@@ -49,55 +49,9 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       logo: undefined,
     },
     brandTheme: rottayBrandTheme,
-    // Rottay personality: Professional dark IT/AI SaaS.
-    // Controlled animations (no bouncy springs), subtle hover effects,
-    // glass tooltips on dark backgrounds, monochrome solid accent bars.
-    // Cards have subtle borders for structure on dark bg, minimal lift.
-    personality: {
-      animation: {
-        intensity: 0.7,          // Controlled, not bouncy - professional feel
-        staggerDelay: 40,
-        staggerMax: 300,
-        entrance: 'fade',        // Fade for professional, not spring
-        entranceDuration: 200,
-        hoverLift: 1,            // Subtle lift
-        hoverScale: 1.005,       // Very subtle scale
-        useSpring: false,        // No spring physics - clean, precise transitions
-        springTension: 170,
-        springFriction: 26,
-        pulseSpeed: 'slow',      // Slow pulse for live indicators (enterprise calm)
-        skeletonStyle: 'shimmer', // Shimmer loading on dark bg looks premium
-        countUpEnabled: true,
-      },
-      chart: {
-        animateOnMount: true,
-        mountDuration: 600,
-        lineStyle: 'smooth',     // Smooth curves for data visualization
-        showDots: false,         // Clean, minimal chart aesthetic
-        useGradientFill: false,  // No gradient fill - monochrome
-        tooltipStyle: 'glass',   // Glass tooltip on dark bg = premium
-      },
-      typography: {
-        headingWeightBias: 'normal',
-        headingLetterSpacing: '-0.02em',
-        labelStyle: 'uppercase',  // Uppercase labels - enterprise/dashboard standard
-      },
-      accent: {
-        barPosition: 'none',
-        barThickness: 0,
-        barStyle: 'solid',       // Monochrome solid accent
-        iconContainerShape: 'rounded',
-        badgeShape: 'rounded',
-        dividerStyle: 'solid',
-      },
-      card: {
-        defaultElevation: 'sm',   // Subtle shadow on dark bg
-        hoverElevation: 'lift-one', // Controlled lift, not dramatic
-        showBorder: true,         // Borders needed on dark bg for structure
-        hoverTint: false,         // No tint on dark - use glow instead
-        paddingDensity: 'normal',
-      },
-    },
+    // personality and tokenOverrides removed — brandTheme is the canonical
+    // source. The merge chain (useTokens) derives personality and structural
+    // tokens from brandTheme when it is present.
   },
 
   /**
@@ -120,55 +74,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       logo: undefined,
     },
     brandTheme: bithireBrandTheme,
-    // BitHire personality: corporate/LinkedIn-style professionalism.
-    // Low animation intensity and fade-only entrances keep the UI quiet and
-    // data-focused. Compact padding and uppercase labels match the structured
-    // feel of ATS (Applicant Tracking System) workflows.
-    personality: {
-      animation: {
-        intensity: 0.4,          // Subtle -- recruiters value speed over spectacle
-        staggerDelay: 30,
-        staggerMax: 200,
-        entrance: 'fade',        // WHY fade: minimal distraction in data-heavy screens
-        entranceDuration: 150,
-        hoverLift: 0,            // No lift -- structured/grounded feel
-        hoverScale: 1.0,
-        useSpring: false,        // Standard easing is more business-appropriate
-        springTension: 170,
-        springFriction: 26,
-        pulseSpeed: 'slow',
-        skeletonStyle: 'pulse',
-        countUpEnabled: true,
-      },
-      chart: {
-        animateOnMount: true,
-        mountDuration: 400,      // Fast -- data should appear quickly
-        lineStyle: 'sharp',      // WHY sharp: precision matches recruiting analytics
-        showDots: true,          // Dots aid precision reading of data points
-        useGradientFill: false,
-        tooltipStyle: 'detailed',
-      },
-      typography: {
-        headingWeightBias: 'heavier',
-        headingLetterSpacing: '-0.01em',
-        labelStyle: 'uppercase', // WHY uppercase: formal label treatment
-      },
-      accent: {
-        barPosition: 'left',     // WHY left: vertical accent bars mimic sidebar navigation
-        barThickness: 3,
-        barStyle: 'solid',
-        iconContainerShape: 'circle',
-        badgeShape: 'pill',
-        dividerStyle: 'solid',
-      },
-      card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
-        showBorder: true,        // Borders provide clear structure in dense layouts
-        hoverTint: false,
-        paddingDensity: 'compact', // WHY compact: maximizes content density for tables/lists
-      },
-    },
+    // personality and tokenOverrides removed — brandTheme is the canonical source.
   },
 
   /**
@@ -191,58 +97,8 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       logo: undefined,
     },
     brandTheme: evntoBrandTheme,
-    // Evnto personality: clean, professional, operator-focused.
-    // Subtle animations and fade entrances create a polished feel.
-    // Cards use borders (not shadows) for definition on white backgrounds.
-    personality: {
-      animation: {
-        intensity: 0.6,
-        staggerDelay: 40,
-        staggerMax: 300,
-        entrance: 'fade',
-        entranceDuration: 250,
-        hoverLift: 1,
-        hoverScale: 1.005,
-        useSpring: false,
-        springTension: 170,
-        springFriction: 26,
-        pulseSpeed: 'normal',
-        skeletonStyle: 'shimmer',
-        countUpEnabled: true,
-      },
-      chart: {
-        animateOnMount: true,
-        mountDuration: 600,
-        lineStyle: 'smooth',
-        showDots: false,
-        useGradientFill: false,
-        tooltipStyle: 'glass',
-      },
-      typography: {
-        headingWeightBias: 'heavier',
-        headingLetterSpacing: '-0.02em',
-        labelStyle: 'uppercase',
-      },
-      accent: {
-        barPosition: 'top',
-        barThickness: 0,
-        barStyle: 'solid',
-        iconContainerShape: 'circle',
-        badgeShape: 'pill',
-        dividerStyle: 'solid',
-      },
-      card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
-        showBorder: true,
-        hoverTint: false,
-        paddingDensity: 'normal',
-      },
-    },
-    tokenOverrides: {
-      densityScale: 1.02,
-      borderRadius: { sm: '8px', md: '10px', lg: '14px', xl: '20px' },
-    },
+    // personality and tokenOverrides removed — brandTheme is the canonical source.
+    // evntoBrandTheme.surfaces already contains densityScale: 1.125 and borderRadius.
   },
 };
 

@@ -8,6 +8,8 @@ import {
   compileBrandTheme,
 } from './index';
 import { bithireBrandTheme } from '../../tokens/ts/brand-themes';
+import { generateTenantCss } from '../tenancy/storage/static/generator';
+import type { TenantConfig } from '../../contracts';
 
 const MOCK_BRAND_THEME: BrandTheme = {
   id: 'test-brand',
@@ -342,5 +344,64 @@ describe('parity: first-party brand pipeline', () => {
     // Different CSS string (different tenant slug)
     expect(dbTenantResult.cssString).toContain("html[data-tenant='db-customer']");
     expect(firstPartyResult.cssString).toContain("html[data-tenant='bithire']");
+  });
+});
+
+describe('parity: static generator with brandTheme', () => {
+  const bithireConfig: TenantConfig = {
+    slug: 'bithire',
+    name: 'BitHire',
+    engine: 'classic',
+    theme: 'base',
+    plan: 'enterprise',
+    features: ['*'],
+    branding: {
+      companyName: 'BitHire',
+      primaryColor: '#0A66C2',
+      secondaryColor: '#004182',
+      accentColor: '#7FC15E',
+    },
+    brandTheme: bithireBrandTheme,
+  };
+
+  it('generateTenantCss uses brandTheme palette for color variables', () => {
+    const css = generateTenantCss(bithireConfig, { includeDarkSelector: false });
+    // The generator should produce color scale variables from the brandTheme palette
+    expect(css).toContain("html[data-tenant='bithire']");
+    // Primary color scale from #0A66C2
+    expect(css).toContain('--ds-color-primary-500');
+  });
+
+  it('generateTenantCss uses brandTheme surfaces for token overrides', () => {
+    const css = generateTenantCss(bithireConfig, { includeDarkSelector: false });
+    // densityScale from brandTheme.surfaces (0.95)
+    expect(css).toContain('--ds-density-scale');
+  });
+
+  it('DB-backed tenant with brandTheme produces valid CSS through same generator', () => {
+    const dbTenant: TenantConfig = {
+      slug: 'db-customer',
+      name: 'DB Customer',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'DB Corp' },
+      brandTheme: bithireBrandTheme, // reuse same brand
+    };
+    const css = generateTenantCss(dbTenant, { includeDarkSelector: false });
+    expect(css).toContain("html[data-tenant='db-customer']");
+    expect(css).toContain('--ds-color-primary-500'); // palette from brandTheme
+    expect(css).toContain('--ds-density-scale'); // surfaces from brandTheme
+  });
+
+  it('tenant tokenOverrides layer on top of brandTheme in generator', () => {
+    const configWithOverride: TenantConfig = {
+      ...bithireConfig,
+      tokenOverrides: { densityScale: 1.5 },
+    };
+    const css = generateTenantCss(configWithOverride, { includeDarkSelector: false });
+    // Tenant override should win
+    expect(css).toContain('--ds-density-scale: 1.5');
   });
 });
