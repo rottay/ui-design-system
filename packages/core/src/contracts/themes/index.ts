@@ -233,6 +233,8 @@ export interface CompiledBrand {
   personality: Partial<PersonalityTokens>;
   /** Resolved structural token overrides (vertical baseline merged with BrandTheme) */
   tokenOverrides: Partial<TenantTokenOverrides>;
+  /** Resolved engine-specific values (DaisyUI vars, Ant Design overrides, etc.) */
+  engineBridge: Partial<Record<EngineName, Record<string, unknown>>>;
 }
 
 /**

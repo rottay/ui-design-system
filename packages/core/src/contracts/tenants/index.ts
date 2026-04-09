@@ -84,11 +84,17 @@ export interface TenantTokenOverrides {
   overlays?: TenantOverlayTokens;
 }
 
-// TenantConfig is intentionally a flat object (not deeply nested) so it can be
-// serialized to JSON for the remote storage API and static file loader without
-// custom transformations. Optional fields default to engine/profile values in
-// the resolution pipeline, keeping the minimum viable config just 5 required
-// fields: slug, name, engine, theme (always 'base'), plan, features, branding.
+// TenantConfig is intentionally a flat JSON-serializable object so it can be
+// loaded from the remote storage API and static file loader without custom
+// transformations.
+//
+// Visual merge chain (target model):
+//   DS base -> vertical baseline -> BrandTheme -> generated artifacts
+//
+// The canonical premium source is `brandTheme` (or `brandThemeId` referencing
+// a registered BrandTheme). Legacy fields `branding`, `personality`, and
+// `tokenOverrides` remain for backward compatibility and will be consolidated
+// in Wave C of the system-layers refactor.
 export interface TenantConfig {
   slug: string;
   name: string;
@@ -102,14 +108,18 @@ export interface TenantConfig {
   plan: TenantPlan;
   features: string[];
 
+  /** Tenant identity and visual branding (logos, colors, fonts).
+   *  New tenants should prefer `brandTheme` for rich visual identity.
+   *  `branding` remains required for backward compat; at minimum provide
+   *  `companyName` and optionally logos. Color/font fields here are
+   *  superseded by `brandTheme` when both are present. */
   branding: TenantBranding;
 
-  // personality and tokenOverrides are intentionally Partial so tenants only
-  // need to specify the dimensions they want to customize. The rest is filled
-  // by the four-layer merge chain (defaults -> vertical -> profile -> tenant).
-  /** Visual personality overrides (merged with engine defaults) */
+  /** @deprecated Use `brandTheme.motion` / `brandTheme.chrome` instead.
+   *  Kept for backward compatibility with existing tenant configs. */
   personality?: Partial<PersonalityTokens>;
-  /** Direct token overrides that supersede engine defaults */
+  /** @deprecated Use `brandTheme.surfaces` / `brandTheme.controls` instead.
+   *  Kept for backward compatibility with existing tenant configs. */
   tokenOverrides?: TenantTokenOverrides;
   /** Optional tenant-owned copy overrides merged on top of DS locale dictionaries */
   customTranslations?: Partial<LocaleTranslations>;
@@ -119,7 +129,7 @@ export interface TenantConfig {
   /** Pack key used by the custom engine to resolve tenant-specific implementations */
   componentPack?: string;
 
-  /** Embedded brand theme (for DB-backed tenants with full customization) */
+  /** Embedded brand theme — the canonical premium visual source */
   brandTheme?: import('../themes').BrandTheme;
   /** Reference to a registered brand theme by ID (for preset-based tenants) */
   brandThemeId?: string;
