@@ -322,8 +322,15 @@ describe('H3 contract: bithire', () => {
   });
 
   describe('bithire chrome (gaps)', () => {
-    it.skip('layout — all 6 fields, target I5', () => {});
-    it.skip('shell — all 3 fields, target I5', () => {});
+    it.skip('layout.bg — gap, target I5', () => {});
+    it.skip('layout.headerBg — gap, target I5', () => {});
+    it.skip('layout.headerBackdrop — gap, target I5', () => {});
+    it.skip('layout.headerBorder — gap, target I5', () => {});
+    it.skip('layout.siderBg — gap, target I5', () => {});
+    it.skip('layout.siderBorder — gap, target I5', () => {});
+    it.skip('shell.gridSize — gap, target I5', () => {});
+    it.skip('shell.gridLine — gap, target I5', () => {});
+    it.skip('shell.gridOpacity — gap, target I5', () => {});
   });
 
   describe('bithire cross-cutting (gaps)', () => {
@@ -386,8 +393,15 @@ describe('H3 contract: evnto', () => {
   });
 
   describe('evnto chrome (gaps)', () => {
-    it.skip('layout — all 6 fields, target I6', () => {});
-    it.skip('shell — all 3 fields, target I6', () => {});
+    it.skip('layout.bg — gap, target I6', () => {});
+    it.skip('layout.headerBg — gap, target I6', () => {});
+    it.skip('layout.headerBackdrop — gap, target I6', () => {});
+    it.skip('layout.headerBorder — gap, target I6', () => {});
+    it.skip('layout.siderBg — gap, target I6', () => {});
+    it.skip('layout.siderBorder — gap, target I6', () => {});
+    it.skip('shell.gridSize — gap, target I6', () => {});
+    it.skip('shell.gridLine — gap, target I6', () => {});
+    it.skip('shell.gridOpacity — gap, target I6', () => {});
   });
 
   describe('evnto cross-cutting (gaps)', () => {
