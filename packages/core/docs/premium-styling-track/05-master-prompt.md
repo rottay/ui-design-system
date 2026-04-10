@@ -91,70 +91,82 @@ No visual changes.
 **Verification:** DS typecheck + build. app-platform typecheck.
 Brand-compiler tests pass.
 
-### Wave I3 — Parity Normalization
+### Wave I3 — Shared Parity Foundation
 
-**Goal:** Ensure all three first-party themes express the full minimum
-contract from H3, without changing visual direction yet.
+**Goal:** Add contract fields that are missing from ALL three verticals
+(the shared gaps from H3), without changing per-vertical direction.
 
-**Scope:**
-- Fill missing fields in all three BrandTheme sources with
-  contract-compliant values
-- Surfaces: add borderRadius, shadows, glass/gradient/overlay philosophy
-- Controls: complete buttonDefault, buttonGhost, input where missing
-- Layout + shell: add to bithire and evnto
-- Table: complete evnto table metadata
-- Palette: add semantic colors to rottay and evnto
+**Scope (shared gaps only, per H3 line 48):**
+- Surfaces: add shadows, glass, gradients, overlays philosophy to all three
 - Dark-mode: add authored baseline for all three
 - State semantics: add baseline for all three
 
+Per-vertical gaps (layout, shell, controls, palette, table) are closed
+in I4/I5/I6 alongside the visual overhaul, exactly as mapped in
+`03-premium-contract-parity.md` gap closure table.
+
 **Touches:** brand-themes/*.ts, brand-compiler tests.
 
-**Verification:** DS typecheck + build. Premium parity tests pass for
-all contract categories across all three verticals.
+**Verification:** DS typecheck + build. Tests confirm shared gap fields
+present in all three verticals.
 
 ### Wave I4 — Rottay Overhaul
 
-**Goal:** Push rottay toward the dark AI/security premium direction.
+**Goal:** Push rottay toward the dark AI/security premium direction AND
+close rottay-specific parity gaps from H3.
 
-**Scope:** Apply the H4 rottay brief to the authored source.
+**Scope:**
+- Apply H4 rottay brief to the authored source
+- Close rottay gaps: semantic colors, borderRadius, input treatment
 - Palette: graphite + cobalt/cyan, muted status tones
 - Typography: strong sans + mono
 - Motion: controlled spring
 - Chrome: command-surface sidebar, graphite header, subtle shell
 - Controls: sharper, high-contrast, austere
 
-**Touches:** brand-themes/rottay.ts, possibly tokens/css/artifacts/rottay/.
+**Touches:** brand-themes/rottay.ts (authored source). CSS artifacts
+are regenerated outputs — not edited by hand.
 
-**Verification:** DS build. Regression tests confirm no contract loss.
-Visual review via Storybook.
+**Verification:** DS build. Regression tests confirm full contract
+coverage. Visual review via Storybook.
 
 ### Wave I5 — BitHire Overhaul
 
-**Goal:** Push bithire toward premium recruiting trust.
+**Goal:** Push bithire toward premium recruiting trust AND close
+bithire-specific parity gaps from H3.
 
-**Scope:** Apply the H4 bithire brief.
+**Scope:**
+- Apply H4 bithire brief to the authored source
+- Close bithire gaps: borderRadius, layout (6 fields), shell (3 fields),
+  buttonDefault, buttonGhost, buttonPrimary completeness
 - Palette: blue family, structured neutrals
 - Typography: clean, efficient
 - Motion: low amplitude, reliable
 - Chrome: softer radii, trustworthy tables, better sidebar rhythm
 - Controls: refined, calm
 
-**Touches:** brand-themes/bithire.ts, possibly tokens/css/artifacts/bithire/.
+**Touches:** brand-themes/bithire.ts (authored source). CSS artifacts
+are regenerated outputs — not edited by hand.
 
 **Verification:** Same as I4.
 
 ### Wave I6 — Evnto Overhaul
 
-**Goal:** Push evnto toward premium wallet/fintech.
+**Goal:** Push evnto toward premium wallet/fintech AND close
+evnto-specific parity gaps from H3.
 
-**Scope:** Apply the H4 evnto brief.
+**Scope:**
+- Apply H4 evnto brief to the authored source
+- Close evnto gaps: semantic colors, layout (6 fields), shell (3 fields),
+  buttonDefault, buttonGhost, buttonPrimary completeness, table metadata
 - Palette: white + charcoal, financial green
 - Typography: clean, numeric-friendly
 - Motion: smooth spring, reassuring
 - Chrome: largest radii, card-stack, tactile
 - Controls: soft curves, money-state feedback
 
-**Touches:** brand-themes/evnto.ts, possibly tokens/css/artifacts/evnto/.
+**Touches:** brand-themes/evnto.ts (authored source). CSS artifacts
+are regenerated outputs — not edited by hand.
 
 **Verification:** Same as I4.
 
