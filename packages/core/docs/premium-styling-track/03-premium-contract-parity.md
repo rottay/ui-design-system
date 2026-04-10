@@ -4,25 +4,26 @@ Wave H3 deliverable. Defines the minimum expressive contract every
 first-party vertical must support. World-class means parity of
 expressive power, not identical visuals.
 
-## Current Coverage (measured against minimum contract)
+## Current Coverage (post-I6 — all gaps closed)
 
-Legend: FULL = all minimum fields present, PARTIAL = some fields present,
-MISSING = category absent, count = fields present / fields required.
+All three verticals now have full H3 contract parity.
 
 | Category | Rottay | BitHire | Evnto |
 |----------|:------:|:-------:|:-----:|
-| Palette | PARTIAL (6/10) | FULL (10/10) | PARTIAL (6/10) |
-| Typography | FULL (6/6) | FULL (6/6) | FULL (6/6) |
-| Surfaces | PARTIAL (1/6) | PARTIAL (1/6) | PARTIAL (2/6) |
-| Motion | FULL (13/13) | FULL (13/13) | FULL (13/13) |
-| Charts | FULL (6/6) | FULL (6/6) | FULL (6/6) |
-| Chrome: sidebar | FULL (16/16) | FULL (16/16) | FULL (16/16) |
-| Chrome: layout | FULL (6/6) | MISSING (0/6) | MISSING (0/6) |
-| Chrome: shell | FULL (3/3) | MISSING (0/3) | MISSING (0/3) |
-| Chrome: controls | PARTIAL (4/5) | PARTIAL (2/5) | PARTIAL (2/5) |
-| Chrome: table | FULL (4/4) | FULL (4/4) | PARTIAL (1/4) |
-| Dark-mode | Not authored | Not authored | Not authored |
-| State semantics | Not authored | Not authored | Not authored |
+| Palette | FULL | FULL | FULL |
+| Typography | FULL | FULL | FULL |
+| Surfaces | FULL | FULL | FULL |
+| Motion | FULL | FULL | FULL |
+| Charts | FULL | FULL | FULL |
+| Chrome: sidebar | FULL | FULL | FULL |
+| Chrome: layout | FULL | FULL | FULL |
+| Chrome: shell | FULL | FULL | FULL |
+| Chrome: controls | FULL | FULL | FULL |
+| Chrome: table | FULL | FULL | FULL |
+| Dark-mode | Authored | Authored | Authored |
+| State semantics | Authored | Authored | Authored |
+
+433 green assertions, 0 skipped. Artifacts synced. dist verified.
 
 ### Key Gaps By Vertical
 

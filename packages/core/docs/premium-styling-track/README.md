@@ -36,18 +36,17 @@ Reading order within that pack:
 | H2 | Customization model definition | Approved |
 | H3 | Premium contract parity | Approved |
 | H4 | Vertical style briefs | Approved |
-| H5 | Claude master prompt | In progress |
-| I0-I7 | Implementation | Blocked on H0-H5 |
+| H5 | Claude master prompt | Approved |
 
-### Implementation Waves (blocked until H5 approved)
+### Implementation Waves
 
-| Wave | Scope |
-|------|-------|
-| I0 | Inventory and test net |
-| I1 | Token taxonomy cleanup |
-| I2 | Customization model scaffolding |
-| I3 | Parity test harness |
-| I4 | Rottay overhaul |
-| I5 | BitHire overhaul |
-| I6 | Evnto overhaul |
-| I7 | Final cleanup and guardrails |
+| Wave | Scope | Status |
+|------|-------|--------|
+| I0 | Inventory and test net | Approved |
+| I1 | Token taxonomy cleanup | Approved |
+| I2 | Customization model scaffolding | Approved |
+| I3 | Parity test harness | Approved |
+| I4 | Rottay overhaul | Approved |
+| I5 | BitHire overhaul | Approved |
+| I6 | Evnto overhaul | Approved |
+| I7 | Final cleanup and guardrails | In progress |
