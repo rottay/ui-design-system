@@ -91,24 +91,23 @@ No visual changes.
 **Verification:** DS typecheck + build. app-platform typecheck.
 Brand-compiler tests pass.
 
-### Wave I3 — Shared Parity Foundation
+### Wave I3 — Parity Test Harness
 
-**Goal:** Add contract fields that are missing from ALL three verticals
-(the shared gaps from H3), without changing per-vertical direction.
+**Goal:** Build the test harness that verifies H3 contract parity, so
+I4/I5/I6 can close gaps with a safety net.
 
-**Scope (shared gaps only, per H3 line 48):**
-- Surfaces: add shadows, glass, gradients, overlays philosophy to all three
-- Dark-mode: add authored baseline for all three
-- State semantics: add baseline for all three
+**Scope:**
+- Add per-category presence tests for the full minimum contract
+- Tests should fail for currently missing fields (documenting the gap)
+- Tests should pass once I4/I5/I6 fill the gaps
 
-Per-vertical gaps (layout, shell, controls, palette, table) are closed
-in I4/I5/I6 alongside the visual overhaul, exactly as mapped in
-`03-premium-contract-parity.md` gap closure table.
+All actual gap closure (surfaces philosophy, dark-mode, state semantics,
+layout, shell, controls, palette, table) happens inside I4/I5/I6 per
+the mapping in `03-premium-contract-parity.md` gap closure table.
 
-**Touches:** brand-themes/*.ts, brand-compiler tests.
+**Touches:** brand-compiler tests only. No source changes.
 
-**Verification:** DS typecheck + build. Tests confirm shared gap fields
-present in all three verticals.
+**Verification:** DS typecheck + build. New tests document current gaps.
 
 ### Wave I4 — Rottay Overhaul
 
@@ -117,7 +116,9 @@ close rottay-specific parity gaps from H3.
 
 **Scope:**
 - Apply H4 rottay brief to the authored source
-- Close rottay gaps: semantic colors, borderRadius, input treatment
+- Close rottay-specific gaps: semantic colors, borderRadius, input treatment
+- Close shared gaps for rottay: surfaces philosophy (shadows, glass,
+  gradients, overlays), dark-mode authored chrome, state semantics
 - Palette: graphite + cobalt/cyan, muted status tones
 - Typography: strong sans + mono
 - Motion: controlled spring
@@ -137,8 +138,10 @@ bithire-specific parity gaps from H3.
 
 **Scope:**
 - Apply H4 bithire brief to the authored source
-- Close bithire gaps: borderRadius, layout (6 fields), shell (3 fields),
-  buttonDefault, buttonGhost, buttonPrimary completeness
+- Close bithire-specific gaps: borderRadius, layout (6 fields),
+  shell (3 fields), buttonDefault, buttonGhost, buttonPrimary completeness
+- Close shared gaps for bithire: surfaces philosophy (shadows, glass,
+  gradients, overlays), dark-mode authored chrome, state semantics
 - Palette: blue family, structured neutrals
 - Typography: clean, efficient
 - Motion: low amplitude, reliable
@@ -157,8 +160,11 @@ evnto-specific parity gaps from H3.
 
 **Scope:**
 - Apply H4 evnto brief to the authored source
-- Close evnto gaps: semantic colors, layout (6 fields), shell (3 fields),
-  buttonDefault, buttonGhost, buttonPrimary completeness, table metadata
+- Close evnto-specific gaps: semantic colors, layout (6 fields),
+  shell (3 fields), buttonDefault, buttonGhost, buttonPrimary
+  completeness, table metadata
+- Close shared gaps for evnto: surfaces philosophy (shadows, glass,
+  gradients, overlays), dark-mode authored chrome, state semantics
 - Palette: white + charcoal, financial green
 - Typography: clean, numeric-friendly
 - Motion: smooth spring, reassuring
