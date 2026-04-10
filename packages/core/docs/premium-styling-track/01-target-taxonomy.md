@@ -66,7 +66,12 @@ tokens/
     base/                    # Authored source: foundational token values
     components/              # Authored source: per-component token objects
     brand-themes/            # Authored source: canonical premium (rottay, bithire, evnto)
+      index.ts               #   barrel
+      rottay.ts
+      bithire.ts
+      evnto.ts
     mirrors/                 # Mirror: typed var(--ds-*) catalogs for discovery
+      index.ts               #   barrel
       rottay.ts              #   (renamed from tenants/rottay.ts)
     index.ts                 # Internal aggregator
 
