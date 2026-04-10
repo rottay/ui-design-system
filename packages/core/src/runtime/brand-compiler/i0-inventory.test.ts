@@ -265,9 +265,18 @@ describe('H3 contract: rottay', () => {
     it.skip('infoColor — gap, target I4', () => {});
   });
 
-  describe('rottay cross-cutting (gaps)', () => {
-    it.skip('dark-mode authored chrome — gap, target I4', () => {});
-    it.skip('state-semantics authored — gap, target I4', () => {});
+  describe('rottay dark-mode (gaps)', () => {
+    it.skip('dark-mode: palette dark strategy — gap, target I4', () => {});
+    it.skip('dark-mode: sidebar dark values — gap, target I4', () => {});
+    it.skip('dark-mode: layout dark values — gap, target I4', () => {});
+    it.skip('dark-mode: controls dark values — gap, target I4', () => {});
+    it.skip('dark-mode: table dark values — gap, target I4', () => {});
+  });
+
+  describe('rottay state semantics (gaps)', () => {
+    // success/warning/error/info colors are tracked in palette gaps above
+    it.skip('state: disabled treatment — gap, target I4', () => {});
+    it.skip('state: focus treatment — gap, target I4', () => {});
   });
 });
 
@@ -333,9 +342,18 @@ describe('H3 contract: bithire', () => {
     it.skip('shell.gridOpacity — gap, target I5', () => {});
   });
 
-  describe('bithire cross-cutting (gaps)', () => {
-    it.skip('dark-mode authored chrome — gap, target I5', () => {});
-    it.skip('state-semantics authored — gap, target I5', () => {});
+  describe('bithire dark-mode (gaps)', () => {
+    it.skip('dark-mode: palette dark strategy — gap, target I5', () => {});
+    it.skip('dark-mode: sidebar dark values — gap, target I5', () => {});
+    it.skip('dark-mode: layout dark values — gap, target I5', () => {});
+    it.skip('dark-mode: controls dark values — gap, target I5', () => {});
+    it.skip('dark-mode: table dark values — gap, target I5', () => {});
+  });
+
+  describe('bithire state semantics (gaps)', () => {
+    // success/warning/error/info already present in bithire palette (green tests above)
+    it.skip('state: disabled treatment — gap, target I5', () => {});
+    it.skip('state: focus treatment — gap, target I5', () => {});
   });
 });
 
@@ -404,8 +422,17 @@ describe('H3 contract: evnto', () => {
     it.skip('shell.gridOpacity — gap, target I6', () => {});
   });
 
-  describe('evnto cross-cutting (gaps)', () => {
-    it.skip('dark-mode authored chrome — gap, target I6', () => {});
-    it.skip('state-semantics authored — gap, target I6', () => {});
+  describe('evnto dark-mode (gaps)', () => {
+    it.skip('dark-mode: palette dark strategy — gap, target I6', () => {});
+    it.skip('dark-mode: sidebar dark values — gap, target I6', () => {});
+    it.skip('dark-mode: layout dark values — gap, target I6', () => {});
+    it.skip('dark-mode: controls dark values — gap, target I6', () => {});
+    it.skip('dark-mode: table dark values — gap, target I6', () => {});
+  });
+
+  describe('evnto state semantics (gaps)', () => {
+    // success/warning/error/info colors are tracked in palette gaps above
+    it.skip('state: disabled treatment — gap, target I6', () => {});
+    it.skip('state: focus treatment — gap, target I6', () => {});
   });
 });
