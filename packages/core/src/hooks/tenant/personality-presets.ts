@@ -1,5 +1,5 @@
 /**
- * @deprecated Compatibility re-export. Canonical source: `runtime/tenancy/personality-presets`.
+ * @deprecated Compatibility re-export. Canonical source: `runtime/tenancy/personality/`.
  * Import from `@rottay/design-system` instead.
  */
 export { resolvePersonalityPreset } from '../../runtime/tenancy/personality';

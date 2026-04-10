@@ -14,7 +14,7 @@
  *    tenant state to components (`TenantProvider`, `useTenant`).
  * 2. **Authoring** (`authoring/`) — Utilities for creating new tenant
  *    configs at runtime (`createTenantConfig`, `useCreateTenant`).
- * 3. **Presets** (`personality-presets.ts`) — Maps known verticals to
+ * 3. **Presets** (`personality/`) — Maps known verticals to
  *    their personality token baseline (`resolvePersonalityPreset`).
  * 4. **Schema** (`schema/`) — Pure validation functions that ensure
  *    `TenantConfig` payloads are well-formed.
