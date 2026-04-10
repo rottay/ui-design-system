@@ -11,7 +11,7 @@ the frozen vocabulary from `00-glossary.md`.
 | `components/` | Authored source | Per-component token objects (19 modules) |
 | `brand-themes/` | Authored source | Canonical premium authored sources (rottay, bithire, evnto) |
 | `tenants/` | Mirror | Typed `var(--ds-*)` catalog. Only rottay shipped. NOT authored source. |
-| `index.ts` | Public entrypoint | Aggregates all categories. `tokens.brandThemes` + `tokens.tenantMirrors` + compat `tokens.tenants` |
+| `index.ts` | Authored source | Internal aggregator barrel. Not a public subpath — consumers use the package root. |
 
 ## tokens/css/
 
@@ -27,11 +27,14 @@ the frozen vocabulary from `00-glossary.md`.
 | `tenants/bithire/index.css` | Artifact | Generated snapshot. Canonical source is `brand-themes/bithire.ts` |
 | `tenants/evnto/index.css` | Artifact | Generated snapshot. Canonical source is `brand-themes/evnto.ts` |
 | `tenants/themanagementmiami/index.css` | Legacy tenant | Not first-party premium. Bundled for compat. |
-| `tenants/index.css` | Internal barrel | Imports all tenant CSS (4 tenants) |
-| `rottay.css` | Public entrypoint | Package export `./styles/rottay` |
-| `bithire.css` | Public entrypoint | Package export `./styles/bithire` |
-| `evnto.css` | Public entrypoint | Package export `./styles/evnto` |
-| `index.css` | Public entrypoint | Package export `./styles` (full bundle) |
+| `tenants/index.css` | Artifact | Barrel importing all tenant CSS (4 tenants) |
+| `rottay.css` | Public entrypoint | Source for package export `./styles/rottay` |
+| `platform.css` | Public entrypoint | Source for package export `./styles/platform`. Alias for rottay vertical. |
+| `bithire.css` | Public entrypoint | Source for package export `./styles/bithire` |
+| `evnto.css` | Public entrypoint | Source for package export `./styles/evnto` |
+| `index.css` | Public entrypoint | Source for package export `./styles` (full bundle) |
+| `index-all.css` | Compatibility shim | Alternative full bundle. Overlaps with `index.css` — taxonomy drift. |
+| `base.css` | Authored source | Foundation imports without tenant overrides |
 
 ## Known Issues (from Codex audit 02)
 
