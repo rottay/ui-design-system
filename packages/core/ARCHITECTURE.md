@@ -147,54 +147,40 @@ Pack Registries (Map<string, ComponentRegistry>)
 
 ## 3. Token Resolution Chain
 
-Design tokens flow through a four-layer pipeline. Each layer can provide
-partial overrides that spread on top of the layer below.
+Design tokens flow through a multi-layer pipeline. The chain depends on
+whether the tenant has a `brandTheme` (the canonical premium model) or
+uses the legacy scattered fields.
 
-### Structural Tokens (borderRadius, shadows, surface, motion)
+### BrandTheme Path (preferred)
 
-```
-┌─────────────────────┐
-│  Engine Defaults     │  Classic: 4px radii, layered shadows, 0.9375 density
-│  (lowest priority)   │  Modern:  12px radii, bold shadows, 1.0 density
-│                      │  Rustic:  2px radii, whisper shadows, 1.0 density
-└──────────┬──────────┘
-           │ spread
-┌──────────v──────────┐
-│  Product Profile     │  e.g., events.organizer overrides borderRadius
-│  Token Overrides     │
-└──────────┬──────────┘
-           │ spread
-┌──────────v──────────┐
-│  Tenant Overrides    │  Customer-specific structural tweaks
-│  (highest priority)  │
-└─────────────────────┘
-```
-
-### Personality Tokens (animation, chart, typography, accent, card)
-
-Personality uses a deeper merge chain because verticals also participate:
+When `config.brandTheme` exists, the merge chain is:
 
 ```
-┌─────────────────────┐
-│  DEFAULT_PERSONALITY │  Neutral baseline (low intensity, no spring, no lift)
-│  (lowest priority)   │
-└──────────┬──────────┘
-           │ spread per sub-object
-┌──────────v──────────┐
-│  Vertical Preset     │  e.g., evnto: bounce entrance, spring physics
-│  .personality        │
-└──────────┬──────────┘
-           │ spread per sub-object
-┌──────────v──────────┐
-│  Product Profile     │  UX preset within the vertical space
-│  .personality        │
-└──────────┬──────────┘
-           │ spread per sub-object
-┌──────────v──────────┐
-│  Tenant Config       │  Runtime brand overrides
-│  .personality        │  (highest priority)
-└─────────────────────┘
+Structural:  Engine -> Vertical.tokenOverrides -> BrandTheme.surfaces -> Tenant.tokenOverrides
+Personality: DEFAULT -> Vertical.personality -> BrandTheme (motion/charts/chrome) -> Tenant.personality
+Branding:    BrandTheme.palette -> color scale generation -> CSS variables
 ```
+
+Product profile personality and tokenOverrides are **skipped** — only
+`surfaceDefaults` (UX posture: listView, density, schedulerView) survives.
+
+### Legacy Path (backward compatible)
+
+When `config.brandTheme` is absent, the merge chain is:
+
+```
+Structural:  Engine -> Vertical.tokenOverrides -> Profile.tokenOverrides -> Tenant.tokenOverrides
+Personality: DEFAULT -> Vertical.personality -> Profile.personality -> Tenant.personality
+Branding:    Tenant.branding -> color scale generation -> CSS variables
+```
+
+### Merge Rules
+
+- Each layer provides partial overrides that spread on top of the previous.
+- Personality sub-objects (animation, chart, typography, accent, card) merge
+  independently — overriding `animation` does not wipe `chart`.
+- Tenant overrides are always the highest-priority layer in both paths.
+- The static CSS generator (`generateTenantCss`) follows the same chain.
 
 Each personality sub-object (animation, chart, typography, accent, card) is
 spread independently. A tenant that only customizes `animation` does not
