@@ -284,7 +284,7 @@ describe('H3 contract: rottay', () => {
     // success/warning/error/info: verified in palette section above
     it('disabled: opacity authored', () => expect(rottayBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.4));
     it('disabled: text authored', () => expect(rottayBrandTheme.chrome?.controls?.disabled?.text).toBeTruthy());
-    it('disabled: button vars emitted in generated CSS', () => {
+    it('disabled: all button vars emitted in generated CSS', () => {
       const css = generateTenantCss(
         { slug: 'rottay', name: 'Rottay', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'Rottay' }, brandTheme: rottayBrandTheme },
         { includeDarkSelector: false },
@@ -292,9 +292,10 @@ describe('H3 contract: rottay', () => {
       expect(css).toContain('--ds-button-disabled-opacity: 0.4');
       expect(css).toContain('--ds-button-disabled-bg');
       expect(css).toContain('--ds-button-disabled-color');
-      expect(css).toContain('--ds-button-disabled-border');
+      expect(css).toContain('--ds-button-disabled-border:');
+      expect(css).toContain('--ds-button-disabled-border-color');
     });
-    it('disabled: input vars emitted in generated CSS', () => {
+    it('disabled: all input vars emitted in generated CSS', () => {
       const css = generateTenantCss(
         { slug: 'rottay', name: 'Rottay', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'Rottay' }, brandTheme: rottayBrandTheme },
         { includeDarkSelector: false },
@@ -302,14 +303,19 @@ describe('H3 contract: rottay', () => {
       expect(css).toContain('--ds-input-bg-disabled');
       expect(css).toContain('--ds-input-color-disabled');
       expect(css).toContain('--ds-input-border-disabled');
+      expect(css).toContain('--ds-input-border-color-disabled');
+      expect(css).toContain('--ds-input-disabled-opacity');
     });
-    it('disabled: artifact CSS matches authored values', () => {
+    it('disabled: artifact CSS matches authored values for all consumed names', () => {
       const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/rottay/index.css'), 'utf-8');
       expect(artifact).toContain('--ds-button-disabled-opacity: 0.4');
       expect(artifact).toContain('--ds-button-disabled-bg: #18181B');
       expect(artifact).toContain('--ds-button-disabled-color: #52525B');
+      expect(artifact).toContain('--ds-button-disabled-border-color: #2A2A2F');
       expect(artifact).toContain('--ds-input-bg-disabled: #18181B');
       expect(artifact).toContain('--ds-input-color-disabled: #52525B');
+      expect(artifact).toContain('--ds-input-border-color-disabled: #2A2A2F');
+      expect(artifact).toContain('--ds-input-disabled-opacity: 0.4');
     });
     // focus: expressed through input focus ring
     it('focus: input has borderFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
