@@ -281,10 +281,15 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
       if (c.input.shadowFocus) vars['--ds-input-shadow-focus'] = c.input.shadowFocus;
     }
     if (c.disabled) {
-      if (c.disabled.opacity != null) vars['--ds-control-disabled-opacity'] = String(c.disabled.opacity);
-      if (c.disabled.bg) vars['--ds-control-disabled-bg'] = c.disabled.bg;
-      if (c.disabled.text) vars['--ds-control-disabled-text'] = c.disabled.text;
-      if (c.disabled.border) vars['--ds-control-disabled-border'] = c.disabled.border;
+      // Button disabled (consumed by engines: modern/theme.css, rustic/theme.css, button.ts)
+      if (c.disabled.opacity != null) vars['--ds-button-disabled-opacity'] = String(c.disabled.opacity);
+      if (c.disabled.bg) vars['--ds-button-disabled-bg'] = c.disabled.bg;
+      if (c.disabled.text) vars['--ds-button-disabled-color'] = c.disabled.text;
+      if (c.disabled.border) vars['--ds-button-disabled-border'] = c.disabled.border;
+      // Input disabled (consumed by engines: input.ts)
+      if (c.disabled.bg) vars['--ds-input-bg-disabled'] = c.disabled.bg;
+      if (c.disabled.text) vars['--ds-input-color-disabled'] = c.disabled.text;
+      if (c.disabled.border) vars['--ds-input-border-disabled'] = c.disabled.border;
     }
   }
 
