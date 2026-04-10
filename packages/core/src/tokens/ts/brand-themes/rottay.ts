@@ -5,7 +5,7 @@
  * Spring animations, gradient accents, glass tooltips, medium hover lift.
  *
  * Source data: vertical registry (platform), personality preset (expressive),
- * tenant CSS (tokens/css/tenants/rottay/index.css).
+ * tenant CSS (tokens/css/artifacts/rottay/index.css).
  */
 
 import type { BrandTheme } from '../../../contracts/themes';

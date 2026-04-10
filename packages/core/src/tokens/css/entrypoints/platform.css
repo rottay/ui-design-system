@@ -12,5 +12,5 @@
  * @see ../../../scripts/build-vertical-css.mjs - Dist bundle builder
  * @version 1.0.0
  */
-@import './base.css';
-@import './tenants/rottay/index.css';
+@import '../foundation/base.css';
+@import '../artifacts/rottay/index.css';

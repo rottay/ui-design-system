@@ -87,30 +87,30 @@ describe('first-party artifact integrity', () => {
   const TENANTS = ['rottay', 'bithire', 'evnto'] as const;
 
   it.each(TENANTS)('%s/index.css artifact exists', (tenant) => {
-    expect(existsSync(resolve(CSS_SRC, `tenants/${tenant}/index.css`))).toBe(true);
+    expect(existsSync(resolve(CSS_SRC, `artifacts/${tenant}/index.css`))).toBe(true);
   });
 
   it('rottay artifact is richest (400+ unique --ds-* vars)', () => {
-    const css = readFileSync(resolve(CSS_SRC, 'tenants/rottay/index.css'), 'utf-8');
+    const css = readFileSync(resolve(CSS_SRC, 'artifacts/rottay/index.css'), 'utf-8');
     expect(new Set(css.match(/--ds-[\w-]+/g)).size).toBeGreaterThan(400);
   });
 
   it('bithire artifact has substantial coverage (80+)', () => {
-    const css = readFileSync(resolve(CSS_SRC, 'tenants/bithire/index.css'), 'utf-8');
+    const css = readFileSync(resolve(CSS_SRC, 'artifacts/bithire/index.css'), 'utf-8');
     expect(new Set(css.match(/--ds-[\w-]+/g)).size).toBeGreaterThan(80);
   });
 
   it('evnto artifact has substantial coverage (60+)', () => {
-    const css = readFileSync(resolve(CSS_SRC, 'tenants/evnto/index.css'), 'utf-8');
+    const css = readFileSync(resolve(CSS_SRC, 'artifacts/evnto/index.css'), 'utf-8');
     expect(new Set(css.match(/--ds-[\w-]+/g)).size).toBeGreaterThan(60);
   });
 
   it('legacy tenant (themanagementmiami) exists', () => {
-    expect(existsSync(resolve(CSS_SRC, 'tenants/themanagementmiami/index.css'))).toBe(true);
+    expect(existsSync(resolve(CSS_SRC, 'legacy/themanagementmiami/index.css'))).toBe(true);
   });
 
-  it('public entrypoint source files exist', () => {
-    for (const f of ['index.css', 'rottay.css', 'bithire.css', 'evnto.css', 'platform.css']) {
+  it('public entrypoint source files exist in entrypoints/', () => {
+    for (const f of ['entrypoints/styles.css', 'entrypoints/platform.css', 'entrypoints/bithire.css', 'entrypoints/evnto.css']) {
       expect(existsSync(resolve(CSS_SRC, f)), `${f} must exist`).toBe(true);
     }
   });

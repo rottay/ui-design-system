@@ -31,33 +31,33 @@
    Supplemental semantic aliases and extended scales built on top of the
    canonical DS token family, plus the default theme values in :root.
    ============================================================================= */
-@import './base/index.css' layer(rottay-tokens);
-@import './themes/default.css' layer(rottay-tokens);
+@import '../foundation/base/index.css' layer(rottay-tokens);
+@import '../foundation/themes/default.css' layer(rottay-tokens);
 
 /* =============================================================================
    LAYER 2: COMPONENT TOKENS (rottay-components)
    Component-scoped semantic variables built on top of the canonical theme.
    NOTE: personality.css is excluded here and placed in its own layer below.
    ============================================================================= */
-@import './components/avatar.css' layer(rottay-components);
-@import './components/badge.css' layer(rottay-components);
-@import './components/button.css' layer(rottay-components);
-@import './components/input.css' layer(rottay-components);
-@import './components/card.css' layer(rottay-components);
-@import './components/modal.css' layer(rottay-components);
-@import './components/checkbox.css' layer(rottay-components);
-@import './components/radio.css' layer(rottay-components);
-@import './components/select.css' layer(rottay-components);
-@import './components/tag.css' layer(rottay-components);
-@import './components/toggle.css' layer(rottay-components);
-@import './components/icon.css' layer(rottay-components);
-@import './components/spinner.css' layer(rottay-components);
-@import './components/rate.css' layer(rottay-components);
-@import './components/space.css' layer(rottay-components);
-@import './components/timeline.css' layer(rottay-components);
-@import './components/qrcode.css' layer(rottay-components);
-@import './components/list.css' layer(rottay-components);
-@import './components/collapse.css' layer(rottay-components);
+@import '../components/avatar.css' layer(rottay-components);
+@import '../components/badge.css' layer(rottay-components);
+@import '../components/button.css' layer(rottay-components);
+@import '../components/input.css' layer(rottay-components);
+@import '../components/card.css' layer(rottay-components);
+@import '../components/modal.css' layer(rottay-components);
+@import '../components/checkbox.css' layer(rottay-components);
+@import '../components/radio.css' layer(rottay-components);
+@import '../components/select.css' layer(rottay-components);
+@import '../components/tag.css' layer(rottay-components);
+@import '../components/toggle.css' layer(rottay-components);
+@import '../components/icon.css' layer(rottay-components);
+@import '../components/spinner.css' layer(rottay-components);
+@import '../components/rate.css' layer(rottay-components);
+@import '../components/space.css' layer(rottay-components);
+@import '../components/timeline.css' layer(rottay-components);
+@import '../components/qrcode.css' layer(rottay-components);
+@import '../components/list.css' layer(rottay-components);
+@import '../components/collapse.css' layer(rottay-components);
 
 /* =============================================================================
    LAYER 3: ENGINE THEMES (rottay-engines)
@@ -66,14 +66,17 @@
    - Modern: DaisyUI/Tailwind (.btn, .card, etc.) mappings
    - Rustic: Vanilla CSS (.ds-*) classes
    ============================================================================= */
-@import './engines/index.css' layer(rottay-engines);
+@import '../engines/index.css' layer(rottay-engines);
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)
    First-party tenant variable definitions. These are pure CSS custom property
    overrides (~200-500 lines each, ~1KB total) - no component selectors.
    ============================================================================= */
-@import './tenants/index.css' layer(rottay-tenants);
+@import '../artifacts/rottay/index.css' layer(rottay-tenants);
+@import '../artifacts/bithire/index.css' layer(rottay-tenants);
+@import '../artifacts/evnto/index.css' layer(rottay-tenants);
+@import '../legacy/themanagementmiami/index.css' layer(rottay-tenants);
 
 /* =============================================================================
    LAYER 5: PERSONALITY OVERRIDES (rottay-personality)
@@ -81,13 +84,13 @@
    pushed by SystemCssVariablesBridge. Higher priority than tenants because
    personality is runtime-resolved per-product and must win over static tenants.
    ============================================================================= */
-@import './components/personality.css' layer(rottay-personality);
+@import '../components/personality.css' layer(rottay-personality);
 
 /* =============================================================================
    LAYER 6: RESPONSIVE OVERRIDES (rottay-responsive)
    Media query-based adjustments (web-first design, NOT mobile-first)
    ============================================================================= */
-@import './responsive/index.css' layer(rottay-responsive);
+@import '../foundation/responsive/index.css' layer(rottay-responsive);
 
 /* =============================================================================
    ACCESSIBILITY: TOUCH TARGETS (unlayered)
@@ -128,4 +131,4 @@
    Transitions and keyframe animations are kept outside layers so @keyframes
    definitions are always reachable regardless of layer ordering.
    ============================================================================= */
-@import './animations/index.css';
+@import '../foundation/animations/index.css';

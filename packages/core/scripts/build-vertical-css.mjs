@@ -65,15 +65,15 @@ const modernEnginePath = resolve(dist, 'modern-engine.css');
 const modernEngine = readFile(modernEnginePath);
 
 // Read tenant-free base CSS and resolve its imports
-const baseCssPath = resolve(srcCss, 'base.css');
+const baseCssPath = resolve(srcCss, 'foundation/base.css');
 let baseCss = readFile(baseCssPath);
-baseCss = resolveImports(baseCss, srcCss);
+baseCss = resolveImports(baseCss, dirname(baseCssPath));
 
-// Vertical definitions: name -> tenant CSS file
+// Vertical definitions: name -> tenant CSS artifact file
 const verticals = [
-  { name: 'platform', tenantFile: 'tenants/rottay/index.css' },
-  { name: 'bithire', tenantFile: 'tenants/bithire/index.css' },
-  { name: 'evnto',   tenantFile: 'tenants/evnto/index.css' },
+  { name: 'platform', tenantFile: 'artifacts/rottay/index.css' },
+  { name: 'bithire', tenantFile: 'artifacts/bithire/index.css' },
+  { name: 'evnto',   tenantFile: 'artifacts/evnto/index.css' },
 ];
 
 for (const { name, tenantFile } of verticals) {
@@ -127,9 +127,16 @@ for (const { name, tenantFile } of verticals) {
 // === Emit dist/styles.css (all-tenants development/Storybook bundle) ===
 console.log('Building dist/styles.css ...');
 
-const allTenantsPath = resolve(srcCss, 'tenants/index.css');
-let allTenantsCss = readFile(allTenantsPath);
-allTenantsCss = resolveImports(allTenantsCss, dirname(allTenantsPath));
+// Concatenate all tenant artifact CSS (replaces the removed tenants/index.css barrel)
+const allTenantsCss = [
+  'artifacts/rottay/index.css',
+  'artifacts/bithire/index.css',
+  'artifacts/evnto/index.css',
+  'legacy/themanagementmiami/index.css',
+].map((f) => {
+  const p = resolve(srcCss, f);
+  return readFile(p);
+}).join('\n');
 
 const stylesBundle = [
   `/* @rottay/design-system - full CSS bundle (all tenants) */`,

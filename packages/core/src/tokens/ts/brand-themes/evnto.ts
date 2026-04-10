@@ -5,7 +5,7 @@
  * warm beige/sand accents. Bouncy animations, spacious layout.
  *
  * Source data: vertical registry (evnto), personality preset (playful),
- * tenant CSS (tokens/css/tenants/evnto/index.css).
+ * tenant CSS (tokens/css/artifacts/evnto/index.css).
  */
 
 import type { BrandTheme } from '../../../contracts/themes';

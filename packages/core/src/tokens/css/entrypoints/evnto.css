@@ -10,5 +10,5 @@
  * @see base.css - Tenant-free DS foundation
  * @version 1.0.0
  */
-@import './base.css';
-@import './tenants/evnto/index.css' layer(rottay-tenants);
+@import '../foundation/base.css';
+@import '../artifacts/evnto/index.css' layer(rottay-tenants);

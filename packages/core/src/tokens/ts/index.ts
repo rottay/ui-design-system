@@ -23,12 +23,12 @@
 export * from './base';
 export * from './components';
 export * from './brand-themes';
-export * from './tenants';
+export * from './mirrors';
 
 // Named imports for combined export
 import { baseTokens } from './base';
 import { componentTokens } from './components';
-import { tenantTokens } from './tenants';
+import { tenantTokens } from './mirrors';
 import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './brand-themes';
 
 /** Nested aggregate of all token tiers for discovery and runtime introspection. */

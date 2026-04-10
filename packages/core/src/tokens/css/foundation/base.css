@@ -31,33 +31,33 @@
 @import './themes/default.css' layer(rottay-tokens);
 
 /* Layer 2: Component tokens */
-@import './components/avatar.css' layer(rottay-components);
-@import './components/badge.css' layer(rottay-components);
-@import './components/button.css' layer(rottay-components);
-@import './components/input.css' layer(rottay-components);
-@import './components/card.css' layer(rottay-components);
-@import './components/modal.css' layer(rottay-components);
-@import './components/checkbox.css' layer(rottay-components);
-@import './components/radio.css' layer(rottay-components);
-@import './components/select.css' layer(rottay-components);
-@import './components/tag.css' layer(rottay-components);
-@import './components/toggle.css' layer(rottay-components);
-@import './components/icon.css' layer(rottay-components);
-@import './components/spinner.css' layer(rottay-components);
-@import './components/rate.css' layer(rottay-components);
-@import './components/space.css' layer(rottay-components);
-@import './components/timeline.css' layer(rottay-components);
-@import './components/qrcode.css' layer(rottay-components);
-@import './components/list.css' layer(rottay-components);
-@import './components/collapse.css' layer(rottay-components);
+@import '../components/avatar.css' layer(rottay-components);
+@import '../components/badge.css' layer(rottay-components);
+@import '../components/button.css' layer(rottay-components);
+@import '../components/input.css' layer(rottay-components);
+@import '../components/card.css' layer(rottay-components);
+@import '../components/modal.css' layer(rottay-components);
+@import '../components/checkbox.css' layer(rottay-components);
+@import '../components/radio.css' layer(rottay-components);
+@import '../components/select.css' layer(rottay-components);
+@import '../components/tag.css' layer(rottay-components);
+@import '../components/toggle.css' layer(rottay-components);
+@import '../components/icon.css' layer(rottay-components);
+@import '../components/spinner.css' layer(rottay-components);
+@import '../components/rate.css' layer(rottay-components);
+@import '../components/space.css' layer(rottay-components);
+@import '../components/timeline.css' layer(rottay-components);
+@import '../components/qrcode.css' layer(rottay-components);
+@import '../components/list.css' layer(rottay-components);
+@import '../components/collapse.css' layer(rottay-components);
 
 /* Layer 3: Engine themes */
-@import './engines/index.css' layer(rottay-engines);
+@import '../engines/index.css' layer(rottay-engines);
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
 
 /* Layer 5: Personality overrides */
-@import './components/personality.css' layer(rottay-personality);
+@import '../components/personality.css' layer(rottay-personality);
 
 /* Layer 6: Responsive overrides */
 @import './responsive/index.css' layer(rottay-responsive);

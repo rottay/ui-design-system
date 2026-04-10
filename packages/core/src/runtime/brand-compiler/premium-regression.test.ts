@@ -49,7 +49,7 @@ function expectVarPrefixes(css: string, prefixes: string[]) {
 function readTenantCss(tenant: string): string {
   const cssPath = resolve(
     __dirname,
-    `../../tokens/css/tenants/${tenant}/index.css`
+    `../../tokens/css/artifacts/${tenant}/index.css`
   );
   return readFileSync(cssPath, 'utf-8');
 }
@@ -464,7 +464,7 @@ describe('DesignSystemProvider chrome injection logic', () => {
   // to decide when to pass generatedChromeCss to ThemeProvider.
   // The actual injection is: brandTheme exists AND tenant is NOT bundled.
 
-  it('BUNDLED_TENANT_SLUGS matches CSS bundle (tokens/css/tenants/index.css)', () => {
+  it('BUNDLED_TENANT_SLUGS matches CSS bundle (tokens/css/artifacts/index.css)', () => {
     // Must include all tenants whose CSS is in the bundle
     expect(BUNDLED_TENANT_SLUGS.has('rottay')).toBe(true);
     expect(BUNDLED_TENANT_SLUGS.has('bithire')).toBe(true);

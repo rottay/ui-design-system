@@ -5,7 +5,7 @@
  * formal animations, compact density, data-dense workflows.
  *
  * Source data: vertical registry (bithire), personality preset (formal),
- * tenant CSS (tokens/css/tenants/bithire/index.css).
+ * tenant CSS (tokens/css/artifacts/bithire/index.css).
  */
 
 import type { BrandTheme } from '../../../contracts/themes';
