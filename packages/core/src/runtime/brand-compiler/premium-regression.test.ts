@@ -226,6 +226,8 @@ describe('first-party CSS baseline: sidebar vars', () => {
 describe('first-party CSS baseline: controls vars', () => {
   it('bithire CSS has button chrome', () => {
     const css = readTenantCss('bithire');
+    // First-party CSS uses -text (legacy name). Engines consume -color.
+    // The shared pipeline emits -color (the engine-consumed name).
     expectVarPrefixes(css, [
       '--ds-button-primary-bg',
       '--ds-button-primary-text',
@@ -317,8 +319,8 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
 
   it('bithire generates button variant vars with correct values', () => {
     expect(bithireCss).toContain('--ds-button-primary-bg: #0A66C2');
-    expect(bithireCss).toContain('--ds-button-primary-text: #ffffff');
-    expect(bithireCss).toContain('--ds-button-secondary-text: #0A66C2');
+    expect(bithireCss).toContain('--ds-button-primary-color: #ffffff');
+    expect(bithireCss).toContain('--ds-button-secondary-color: #0A66C2');
     expect(bithireCss).toContain('--ds-button-secondary-border: #0A66C2');
   });
 
@@ -365,5 +367,50 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     expect(css).toContain('--ds-layout-bg: #0C0C0E');
     expect(css).toContain('--ds-shell-grid-size: 28px');
     expect(css).toContain("html[data-tenant='db-premium']");
+  });
+});
+
+// ══════════════════════════════════════════════════════════
+// SECTION 4: Dark mode safety + variable naming correctness
+// ══════════════════════════════════════════════════════════
+
+describe('dark mode: chrome vars NOT in dark block', () => {
+  it('generated dark CSS does not contain light-mode chrome values', () => {
+    const css = generateTenantCss(ROTTAY_CONFIG, { includeDarkSelector: true });
+    // Split into blocks: light block is first, dark blocks follow
+    const darkMatch = css.match(/\[data-theme='dark'\][^{]*\{([^}]+)\}/s);
+    const darkBlock = darkMatch?.[1] ?? '';
+    // Dark block should NOT contain light sidebar/layout chrome
+    expect(darkBlock).not.toContain('--ds-sidebar-bg: #0D0D10');
+    expect(darkBlock).not.toContain('--ds-layout-bg: #0C0C0E');
+    expect(darkBlock).not.toContain('--ds-shell-grid-size: 28px');
+  });
+
+  it('light block contains chrome vars', () => {
+    const css = generateTenantCss(ROTTAY_CONFIG, { includeDarkSelector: true });
+    // First block (before any dark selector) should have chrome
+    const lightBlock = css.split("[data-theme='dark']")[0];
+    expect(lightBlock).toContain('--ds-sidebar-bg: #0D0D10');
+    expect(lightBlock).toContain('--ds-layout-bg: #0C0C0E');
+  });
+});
+
+describe('variable naming: engines consume --ds-button-*-color', () => {
+  it('shared pipeline emits -color not -text for button text vars', () => {
+    const css = generateTenantCss(BITHIRE_CONFIG, { includeDarkSelector: false });
+    // Engines consume --ds-button-primary-color, NOT --ds-button-primary-text
+    expect(css).toContain('--ds-button-primary-color');
+    expect(css).not.toContain('--ds-button-primary-text');
+    expect(css).toContain('--ds-button-secondary-color');
+    expect(css).not.toContain('--ds-button-secondary-text');
+  });
+
+  it('rottay pipeline emits -color for all button variants', () => {
+    const css = generateTenantCss(ROTTAY_CONFIG, { includeDarkSelector: false });
+    expect(css).toContain('--ds-button-primary-color');
+    expect(css).toContain('--ds-button-secondary-color');
+    expect(css).toContain('--ds-button-default-color');
+    expect(css).toContain('--ds-button-ghost-color');
+    expect(css).not.toContain('--ds-button-primary-text');
   });
 });

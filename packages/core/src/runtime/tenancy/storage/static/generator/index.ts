@@ -639,21 +639,25 @@ export function generateTenantCss(
     ? brandThemeToChromeVariables(effectiveConfig.brandTheme)
     : {};
 
-  const declarations = {
+  // Base declarations without chrome (shared across light + dark base)
+  const baseDeclarations = {
     ...brandingVariables(effectiveConfig),
     ...tokenOverrideVariables(effectiveConfig),
     ...personalityVariables(effectiveConfig),
-    ...chromeVars,
   };
+
+  // Chrome vars are light-only — dark chrome requires dark-specific values
+  // from BrandTheme which is future work. Including them in the dark block
+  // would override first-party dark CSS values.
+  const lightDeclarations = { ...baseDeclarations, ...chromeVars };
+
   // Block 1: light-theme tenant variables (always generated)
-  const blocks = [toCssBlock(selector, declarations)];
+  const blocks = [toCssBlock(selector, lightDeclarations)];
 
   if (includeDarkSelector) {
-    // Dark declarations spread light declarations first so any shared variables
-    // get overridden by the dark-specific values. This avoids duplicating the
-    // personality variables that are theme-independent.
+    // Dark declarations use base (no chrome) + dark-specific overrides.
     const darkDeclarations = {
-      ...declarations,
+      ...baseDeclarations,
       ...darkBrandingVariables(effectiveConfig),
       ...darkSemanticVariables(effectiveConfig),
       ...darkPersonalityOverrides(effectiveConfig),

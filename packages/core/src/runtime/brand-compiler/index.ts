@@ -253,26 +253,26 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
     if (c.buttonPrimary) {
       if (c.buttonPrimary.bg) vars['--ds-button-primary-bg'] = c.buttonPrimary.bg;
       if (c.buttonPrimary.bgHover) vars['--ds-button-primary-bg-hover'] = c.buttonPrimary.bgHover;
-      if (c.buttonPrimary.text) vars['--ds-button-primary-text'] = c.buttonPrimary.text;
+      if (c.buttonPrimary.text) vars['--ds-button-primary-color'] = c.buttonPrimary.text;
       if (c.buttonPrimary.border) vars['--ds-button-primary-border'] = c.buttonPrimary.border;
       if (c.buttonPrimary.shadow) vars['--ds-button-primary-shadow'] = c.buttonPrimary.shadow;
     }
     if (c.buttonSecondary) {
       if (c.buttonSecondary.bg) vars['--ds-button-secondary-bg'] = c.buttonSecondary.bg;
       if (c.buttonSecondary.bgHover) vars['--ds-button-secondary-bg-hover'] = c.buttonSecondary.bgHover;
-      if (c.buttonSecondary.text) vars['--ds-button-secondary-text'] = c.buttonSecondary.text;
+      if (c.buttonSecondary.text) vars['--ds-button-secondary-color'] = c.buttonSecondary.text;
       if (c.buttonSecondary.border) vars['--ds-button-secondary-border'] = c.buttonSecondary.border;
     }
     if (c.buttonDefault) {
       if (c.buttonDefault.bg) vars['--ds-button-default-bg'] = c.buttonDefault.bg;
       if (c.buttonDefault.bgHover) vars['--ds-button-default-bg-hover'] = c.buttonDefault.bgHover;
-      if (c.buttonDefault.text) vars['--ds-button-default-text'] = c.buttonDefault.text;
+      if (c.buttonDefault.text) vars['--ds-button-default-color'] = c.buttonDefault.text;
       if (c.buttonDefault.border) vars['--ds-button-default-border'] = c.buttonDefault.border;
     }
     if (c.buttonGhost) {
       if (c.buttonGhost.bg) vars['--ds-button-ghost-bg'] = c.buttonGhost.bg;
       if (c.buttonGhost.bgHover) vars['--ds-button-ghost-bg-hover'] = c.buttonGhost.bgHover;
-      if (c.buttonGhost.text) vars['--ds-button-ghost-text'] = c.buttonGhost.text;
+      if (c.buttonGhost.text) vars['--ds-button-ghost-color'] = c.buttonGhost.text;
     }
     if (c.input) {
       if (c.input.bg) vars['--ds-input-bg'] = c.input.bg;
