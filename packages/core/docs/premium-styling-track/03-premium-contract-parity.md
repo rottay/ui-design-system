@@ -25,32 +25,12 @@ All three verticals now have full H3 contract parity.
 
 433 green assertions, 0 skipped. Artifacts synced. dist verified.
 
-### Key Gaps By Vertical
+### Gap History (all closed)
 
-**Rottay (10 missing fields):**
-- Palette: missing success, warning, error, info
-- Surfaces: missing borderRadius, shadows, glass, gradients, overlays
-- Controls: missing input treatment
-
-**BitHire (17 missing fields):**
-- Surfaces: missing borderRadius, shadows, glass, gradients, overlays
-- Layout: entirely missing (6 fields)
-- Shell: entirely missing (3 fields)
-- Controls: missing buttonDefault, buttonGhost, buttonPrimary.border/shadow
-
-**Evnto (23 missing fields):**
-- Palette: missing success, warning, error, info
-- Surfaces: missing shadows, glass, gradients, overlays
-- Layout: entirely missing (6 fields)
-- Shell: entirely missing (3 fields)
-- Controls: missing buttonDefault, buttonGhost, buttonPrimary.border/shadow
-- Table: missing headerColor, headerFontWeight, headerFontSize
-
-**All three share:** missing surfaces (shadows/glass/gradients/overlays),
-no authored dark-mode chrome, no authored state semantics.
-
-**BitHire and Evnto share:** missing buttonDefault/buttonGhost,
-incomplete buttonPrimary (border/shadow).
+All gaps identified pre-I4 have been closed. See the wave commits for details:
+- Rottay: I4 (palette, surfaces, controls, dark-mode, state semantics)
+- BitHire: I5 (surfaces, layout, shell, controls, dark-mode, state semantics)
+- Evnto: I6 (palette, surfaces, layout, shell, controls, table, dark-mode, state semantics)
 
 ## Required Minimum Contract
 
@@ -152,25 +132,27 @@ Every vertical must provide a coherent story for:
 - Disabled treatment
 - Focus treatment
 
-## Gap Closure Required (Implementation Waves)
+## Gap Closure History (completed)
 
-| Vertical | Gap | Target Wave |
-|----------|-----|-------------|
-| Rottay | Palette: semantic colors (success/warning/error/info) | I4 |
+All gaps were closed in I4-I6. The table below is retained as historical reference.
+
+| Vertical | Gap | Closed In |
+|----------|-----|-----------|
+| Rottay | Palette: semantic colors | I4 |
 | Rottay | Surfaces: borderRadius, shadows, glass, gradients, overlays | I4 |
-| Rottay | Controls: input treatment | I4 |
+| Rottay | Controls: input + disabled treatment | I4 |
 | BitHire | Surfaces: borderRadius, shadows, glass, gradients, overlays | I5 |
 | BitHire | Layout: all 6 fields | I5 |
-| BitHire | Shell: all 3 fields | I5 |
-| BitHire | Controls: buttonDefault, buttonGhost, buttonPrimary completeness | I5 |
+| BitHire | Shell: all 3 fields (intentionally minimal) | I5 |
+| BitHire | Controls: buttonDefault, buttonGhost, disabled | I5 |
 | Evnto | Palette: semantic colors | I6 |
 | Evnto | Surfaces: shadows, glass, gradients, overlays | I6 |
 | Evnto | Layout: all 6 fields | I6 |
-| Evnto | Shell: all 3 fields | I6 |
-| Evnto | Controls: buttonDefault, buttonGhost, buttonPrimary completeness | I6 |
+| Evnto | Shell: all 3 fields (intentionally minimal) | I6 |
+| Evnto | Controls: buttonDefault, buttonGhost, disabled | I6 |
 | Evnto | Table: headerColor, headerFontWeight, headerFontSize | I6 |
 | All three | Dark-mode authored chrome | I4-I6 |
-| All three | State semantics (success/warning/error/info/disabled/focus) | I4-I6 |
+| All three | State semantics (disabled + focus) | I4-I6 |
 
 ## Acceptance Criteria
 
