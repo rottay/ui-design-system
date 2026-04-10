@@ -146,6 +146,7 @@ export const rottayBrandTheme: BrandTheme = {
       buttonDefault: { bg: '#18181B', bgHover: '#222226', text: '#ECECEC', border: '#3A3A40' },
       buttonGhost: { bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', text: '#A0A0A5' },
       input: { bg: '#18181B', border: '#3A3A40', borderFocus: '#3B82F6', shadowFocus: '0 0 0 1px rgba(59, 130, 246, 0.3)' },
+      disabled: { opacity: 0.4, bg: '#18181B', text: '#52525B', border: '#2A2A2F' },
     },
     table: {
       headerBg: '#131316',

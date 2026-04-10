@@ -197,6 +197,8 @@ export interface BrandControlsChrome {
   buttonGhost?: { bg?: string; bgHover?: string; text?: string };
   /** Input field chrome */
   input?: { bg?: string; border?: string; borderFocus?: string; shadowFocus?: string };
+  /** Disabled state treatment (shared across control types) */
+  disabled?: { opacity?: number; bg?: string; text?: string; border?: string };
 }
 
 export interface BrandTableChrome {

@@ -281,7 +281,8 @@ describe('H3 contract: rottay', () => {
 
   describe('rottay state semantics', () => {
     // success/warning/error/info: verified in palette section above
-    it.skip('state: disabled treatment — no authored signal yet, deferred', () => {});
+    it('disabled: opacity authored', () => expect(rottayBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.4));
+    it('disabled: text authored', () => expect(rottayBrandTheme.chrome?.controls?.disabled?.text).toBeTruthy());
     // focus: expressed through input focus ring
     it('focus: input has borderFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
     it('focus: input has shadowFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
