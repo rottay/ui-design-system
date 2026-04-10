@@ -51,11 +51,12 @@ hard to break.
 | Palette | primary, secondary, accent, backgroundMode (light/dark/auto) |
 | Typography | fontFamilyBase, fontFamilyHeading, scale (compact/normal/large) |
 | Shape | radiusScale, buttonStyle (sharp/soft/pill) |
-| Surfaces | elevation (flat/soft/elevated), density (compact/normal/spacious) |
+| Density | density (compact/normal/spacious) — applies globally to spacing, tables, and layout |
+| Surfaces | elevation (flat/soft/elevated) |
 | Navigation | sidebarTone (subtle/strong/inverse) |
 | Motion | level (minimal/normal/expressive) |
 | Media | logo, logoMark, favicon |
-| Data | chartColorFamily, tableDensity (compact/normal/spacious) |
+| Data | chartColorFamily |
 
 ### 3. Tenant Appearance: Advanced
 
@@ -110,10 +111,12 @@ do not wipe earlier layers — they spread on top.
 
 - Major colors (primary, secondary, accent)
 - Font family selection
-- Radius and density presets
-- Surface/elevation presets
+- Radius scale and density
+- Surface elevation preset
 - Logo and media assets
-- Major button/card/sidebar feel presets
+- Button style preset (sharp/soft/pill)
+- Sidebar tone preset (subtle/strong/inverse)
+- Motion level preset (minimal/normal/expressive)
 - Light/dark preference
 - Chart color family
 
@@ -149,11 +152,11 @@ do not wipe earlier layers — they spread on top.
 
 Do not start with one huge JSON editor. Use two sections:
 
-**General section:** Brand, Typography, Shape, Surfaces, Buttons,
-Navigation, Data Display, Motion Level
+**General section:** Palette, Typography, Shape, Density, Surfaces,
+Navigation, Motion, Media, Data
 
-**Advanced section:** Sidebar, Layout, Shell, Controls, Table, Charts,
-States, Dark Mode, Raw Override JSON
+**Advanced section:** Chrome (Sidebar, Layout, Shell, Controls, Table),
+Motion Tuning, Charts, Dark Mode, Raw Token Overrides
 
 ## What This Document Does NOT Define
 
