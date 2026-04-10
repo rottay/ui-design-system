@@ -39,7 +39,7 @@ import type {
   // Navigation component types
   MenuProps,
   StepperProps,
-} from './index';
+} from '../index';
 
 /* ===========================
    EJEMPLO 1: Avatar Component
@@ -315,7 +315,7 @@ const ExampleModal: React.FC<ModalProps> = ({
    EJEMPLO 6: Toast Hook
    =========================== */
 
-import type { ToastMethods, ToastOptions } from '../components/primitives/feedback/Toast/Toast.types';
+import type { ToastMethods, ToastOptions } from '../../components/primitives/feedback/Toast/Toast.types';
 
 // Ejemplo de implementación del hook useToast
 const useToastExample = (): ToastMethods => {
@@ -410,7 +410,7 @@ const ExampleEngineAwareComponent: React.FC<MyComponentProps> = ({
    EJEMPLO 8: Uso de Props Mixins
    =========================== */
 
-import type { LoadableProps, DisableableProps, ClickableProps } from './common';
+import type { LoadableProps, DisableableProps, ClickableProps } from '../common';
 
 interface ActionButtonProps extends BaseComponentProps, LoadableProps, DisableableProps, ClickableProps {
   label: string;

@@ -27,7 +27,7 @@ import type {
   Position,
   Density,
   ColorToken,
-} from './common';
+} from '../common';
 
 // Engine types
 import type {
@@ -40,7 +40,7 @@ import type {
   EngineProviderProps,
   EngineRegistry,
   EngineFallbackConfig,
-} from './engine';
+} from '../engine';
 
 // Display component types
 import type {
@@ -78,7 +78,7 @@ import type {
   TooltipTrigger,
   TooltipProps,
   TooltipState,
-} from './primitives/display';
+} from '../primitives/display';
 
 // Input component types
 import type {
@@ -119,7 +119,7 @@ import type {
   RadioButtonProps,
   ToggleSize,
   ToggleProps,
-} from './primitives/inputs';
+} from '../primitives/inputs';
 
 // Feedback component types
 import type {
@@ -145,7 +145,7 @@ import type {
   AlertTitleProps,
   AlertDescriptionProps,
   AlertIconConfig,
-} from './primitives/feedback';
+} from '../primitives/feedback';
 
 // Navigation component types
 import type {
@@ -165,7 +165,7 @@ import type {
   StepperStepProps,
   StepperActionsProps,
   StepperState,
-} from './primitives/navigation';
+} from '../primitives/navigation';
 
 // Test that types can be used in declarations
 const testEngine: EngineName = 'classic';
