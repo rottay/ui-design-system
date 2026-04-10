@@ -93,3 +93,17 @@ Page-level config objects that describe a whole screen declaratively.
 - Promoting domain-specific components to the DS too early
 - Patterns knowing about page layout (patterns should not know what screen they're in)
 - Structures knowing about business domain (structures should only know about layout roles)
+
+## Premium white-label model (BrandTheme)
+
+The canonical premium visual source of truth is **BrandTheme** (`contracts/themes/`).
+First-party brand sources live in `tokens/ts/brand-themes/`.
+
+Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated artifacts`
+
+- `BrandTheme` owns: palette, typography, surfaces, motion, charts, chrome (sidebar, layout, shell, controls, table), engineBridge
+- `TenantConfig.brandTheme` is the canonical field. Legacy `personality`/`tokenOverrides` fields are deprecated compat.
+- Product profile is **not** part of the visual merge when brandTheme is present — only `surfaceDefaults` survives.
+- First-party tenant CSS files are **generated snapshots**, not the source of truth.
+- Domain-specific tokens (`--ds-ticket-*`, `--ds-event-*`) belong in consuming apps, not DS core.
+- The brand compiler (`runtime/brand-compiler/`) converts BrandTheme to legacy shapes for runtime and static generation.
