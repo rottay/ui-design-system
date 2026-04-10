@@ -444,9 +444,11 @@ describe('H3 contract: bithire', () => {
       expect(darkBlock).toContain('--ds-radius-sm: 6px');
       expect(darkBlock).toContain('--ds-radius-md: 8px');
     });
-    it('dark: shadow scale is authored (not old compound)', () => {
+    it('dark: shadow scale sm/md/lg/xl', () => {
       expect(darkBlock).toContain('--ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2)');
-      expect(darkBlock).not.toContain('0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)');
+      expect(darkBlock).toContain('--ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25)');
+      expect(darkBlock).toContain('--ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3)');
+      expect(darkBlock).toContain('--ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.35)');
     });
     it('no stale 4px radius in either block', () => {
       expect(artifact).not.toContain('--ds-radius-sm: 4px');
@@ -454,13 +456,23 @@ describe('H3 contract: bithire', () => {
   });
 
   describe('bithire surfaces in generated CSS', () => {
-    it('generated output includes full surface scale', () => {
-      const css = generateTenantCss(
-        { slug: 'bithire', name: 'BitHire', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'BitHire', primaryColor: '#0A66C2', secondaryColor: '#004182', accentColor: '#7FC15E' }, brandTheme: bithireBrandTheme },
-        { includeDarkSelector: false },
-      );
+    const css = generateTenantCss(
+      { slug: 'bithire', name: 'BitHire', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'BitHire', primaryColor: '#0A66C2', secondaryColor: '#004182', accentColor: '#7FC15E' }, brandTheme: bithireBrandTheme },
+      { includeDarkSelector: false },
+    );
+    it('radius scale sm/md/lg/xl', () => {
       expect(css).toContain('--ds-radius-sm: 6px');
+      expect(css).toContain('--ds-radius-md: 8px');
+      expect(css).toContain('--ds-radius-lg: 12px');
       expect(css).toContain('--ds-radius-xl: 16px');
+    });
+    it('shadow scale sm/md/lg/xl', () => {
+      expect(css).toContain('--ds-shadow-sm');
+      expect(css).toContain('--ds-shadow-md');
+      expect(css).toContain('--ds-shadow-lg');
+      expect(css).toContain('--ds-shadow-xl');
+    });
+    it('density', () => {
       expect(css).toContain('--ds-density-scale: 0.95');
     });
   });
