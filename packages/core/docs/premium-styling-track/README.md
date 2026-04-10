@@ -10,6 +10,7 @@ Documentation baseline for the premium styling and token taxonomy track.
 4. `01-target-taxonomy.md` -- Target tree, naming rules, current-vs-target comparison
 5. `02-customization-model.md` -- Vertical Theme vs Tenant Appearance General/Advanced
 6. `03-premium-contract-parity.md` -- Minimum expressive contract for all first-party verticals
+7. `04-vertical-style-briefs.md` -- Implementation-grade briefs for rottay, bithire, evnto
 
 ## Canonical Audit Reference
 
@@ -32,7 +33,7 @@ Reading order within that pack:
 | H0 | Documentation baseline | Approved |
 | H1 | Taxonomy truthfulness | Approved |
 | H2 | Customization model definition | Approved |
-| H3 | Premium contract parity | In progress |
-| H4 | Vertical style briefs | Pending |
+| H3 | Premium contract parity | Approved |
+| H4 | Vertical style briefs | In progress |
 | H5 | Claude master prompt | Pending |
 | I0-I7 | Implementation | Blocked on H0-H5 |
