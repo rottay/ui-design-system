@@ -91,7 +91,7 @@ import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
-import { brandThemeToBranding, brandThemeToTokenOverrides, deepMergeTokenOverrides } from '../brand-compiler';
+import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../brand-compiler';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -440,6 +440,11 @@ export function DesignSystemProvider({
               vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
               branding={normalizedConfig.branding}
               tokenOverrides={normalizedConfig.tokenOverrides}
+              chromeVariables={
+                normalizedConfig.brandTheme
+                  ? brandThemeToChromeVariables(normalizedConfig.brandTheme)
+                  : undefined
+              }
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >

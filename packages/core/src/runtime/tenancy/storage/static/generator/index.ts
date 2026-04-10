@@ -10,7 +10,7 @@
  */
 
 import type { TenantConfig } from '../../../../../contracts';
-import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
+import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, brandThemeToChromeVariables, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
 import { getVerticalPreset } from '../../../../verticals/registry';
 import { getProductProfile } from '../../../../product-profiles/registry';
 
@@ -634,10 +634,16 @@ export function generateTenantCss(
     };
   }
 
+  // Chrome variables from BrandTheme (sidebar, layout, shell, controls, table)
+  const chromeVars = effectiveConfig.brandTheme
+    ? brandThemeToChromeVariables(effectiveConfig.brandTheme)
+    : {};
+
   const declarations = {
     ...brandingVariables(effectiveConfig),
     ...tokenOverrideVariables(effectiveConfig),
     ...personalityVariables(effectiveConfig),
+    ...chromeVars,
   };
   // Block 1: light-theme tenant variables (always generated)
   const blocks = [toCssBlock(selector, declarations)];

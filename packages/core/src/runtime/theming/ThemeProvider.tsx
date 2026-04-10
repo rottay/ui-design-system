@@ -605,6 +605,8 @@ export interface ThemeProviderProps {
   branding?: TenantBranding;
   /** Token overrides for glass, gradients, and overlays. Applied as inline CSS variables. */
   tokenOverrides?: TenantTokenOverrides;
+  /** Chrome CSS variables (sidebar, layout, shell, controls, table) from BrandTheme. */
+  chromeVariables?: Record<string, string>;
   /** Called when tenant CSS loading fails, before fallback kicks in. */
   onError?: (error: Error, tenant: string) => void;
   /** Called when the provider falls back from the requested tenant to one of the resolution-chain defaults. */
@@ -629,6 +631,7 @@ export function ThemeProvider({
   vertical,
   branding,
   tokenOverrides,
+  chromeVariables: chromeVarsProp,
   onError,
   onFallback,
   cssBaseUrl = '/themes',
@@ -1064,16 +1067,24 @@ export function ThemeProvider({
       }
     }
 
-    // Cleanup: remove all CSS variables this effect set when branding or
-    // tokenOverrides change, or when the component unmounts. This prevents
-    // stale branding from leaking across tenant switches.
+    // Chrome variables (sidebar, layout, shell, controls, table) from BrandTheme
+    if (chromeVarsProp) {
+      for (const [name, value] of Object.entries(chromeVarsProp)) {
+        if (value != null) {
+          safeSetProperty(name, value);
+        }
+      }
+    }
+
+    // Cleanup: remove all CSS variables this effect set when branding,
+    // tokenOverrides, or chrome change, or when the component unmounts.
     return () => {
       for (const varName of appliedVars) {
         style.removeProperty(varName);
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandingKey, tokenOverridesKey]);
+  }, [brandingKey, tokenOverridesKey, chromeVarsProp]);
 
   /**
    * Theme state needs to materialize into DOM attributes because the CSS token
