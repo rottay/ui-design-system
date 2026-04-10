@@ -222,18 +222,35 @@ const SRC_ROOT = resolve(__dirname, '../src');
   }
 }
 
-// 4d. tokens/ts/mirrors/ must exist (renamed from tenants/ in I1)
+// 4d. tokens/ts/ must use declarative folder names (I1 taxonomy)
+//     Allowed: base, components, brand-themes, mirrors + internal prefixes
 {
-  const mirrorsDir = join(SRC_ROOT, 'tokens/ts/mirrors');
+  const tsDir = join(SRC_ROOT, 'tokens/ts');
   try {
-    statSync(mirrorsDir);
-  } catch {
-    violations.push({
-      rule: 'mirrors-missing',
-      path: 'tokens/ts/mirrors/',
-      message: 'Token reference mirrors directory is missing.',
-    });
-  }
+    const entries = readdirSync(tsDir, { withFileTypes: true });
+    const allowedTs = ['base', 'components', 'brand-themes', 'mirrors'];
+    for (const e of entries) {
+      if (!e.isDirectory()) continue;
+      if (e.name.startsWith('_')) continue;
+      if (!allowedTs.includes(e.name)) {
+        violations.push({
+          rule: 'ts-undeclared-folder',
+          path: `tokens/ts/${e.name}`,
+          message: `Folder "${e.name}" is not a recognized role folder. Expected: ${allowedTs.join(', ')}. If this was "tenants/", it was renamed to "mirrors/" in I1.`,
+        });
+      }
+    }
+    // brand-themes and mirrors must both exist
+    for (const required of ['brand-themes', 'mirrors']) {
+      if (!entries.some((e) => e.isDirectory() && e.name === required)) {
+        violations.push({
+          rule: `${required}-missing`,
+          path: `tokens/ts/${required}/`,
+          message: `Required directory "${required}" is missing.`,
+        });
+      }
+    }
+  } catch { /* dir might not exist */ }
 }
 
 // 4e. tokens/css/ must use declarative folder names (I1 taxonomy)

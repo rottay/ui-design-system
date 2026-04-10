@@ -38,71 +38,42 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 
 ```
 /tokens/
-├── css/                       # CSS custom properties
-│   ├── base/                  # Foundational tokens
-│   │   ├── colors.css         # Color palette
-│   │   ├── spacing.css        # Spacing scale
-│   │   ├── typography.css     # Font system
-│   │   ├── shadows.css        # Shadow scale
-│   │   ├── borders.css        # Border styles
-│   │   ├── z-index.css        # Layering system
-│   │   └── index.css
-│   │
-│   ├── components/            # Component-specific tokens
-│   │   ├── avatar.css
-│   │   ├── button.css
-│   │   ├── input.css
-│   │   ├── card.css
-│   │   ├── modal.css
-│   │   └── index.css
-│   │
-│   ├── responsive/            # Responsive overrides
-│   │   ├── avatar.css
-│   │   ├── button.css
-│   │   └── index.css
-│   │
-│   ├── animations/            # Animation tokens
-│   │   ├── transitions.css
-│   │   ├── keyframes.css
-│   │   └── index.css
-│   │
-│   ├── tenants/               # Tenant customizations
-│   │   ├── rottay/
-│   │   │   ├── colors.css
-│   │   │   ├── components.css
-│   │   │   └── index.css
-│   │   └── index.css
-│   │
-│   └── index.css              # CSS entry point
+├── css/
+│   ├── foundation/            # Authored source: base + themes + animations + responsive
+│   │   ├── base/              # Foundational tokens (colors, spacing, typography, etc.)
+│   │   ├── themes/            # Default theme + dark mode
+│   │   ├── animations/        # Keyframes, transitions, premium motion
+│   │   ├── responsive/        # Breakpoint-specific overrides
+│   │   └── base.css           # Tenant-free foundation import
+│   ├── components/            # Per-component CSS variables
+│   ├── engines/               # Engine-specific bridging (classic/modern/rustic)
+│   ├── artifacts/             # Generated snapshots: per-tenant CSS
+│   │   ├── rottay/index.css
+│   │   ├── bithire/index.css
+│   │   └── evnto/index.css
+│   ├── entrypoints/           # Public package export sources
+│   │   ├── styles.css         # -> ./styles (full bundle)
+│   │   ├── platform.css       # -> ./styles/platform
+│   │   ├── bithire.css        # -> ./styles/bithire
+│   │   └── evnto.css          # -> ./styles/evnto
+│   └── legacy/                # Non-first-party bundled content
+│       └── themanagementmiami/index.css
 │
-├── ts/                        # Public TypeScript mirrors of the CSS variable system
-│   ├── base/                  # Base token exports
-│   │   ├── colors.ts
-│   │   ├── spacing.ts
-│   │   ├── typography.ts
-│   │   ├── shadows.ts
-│   │   ├── borders.ts
-│   │   ├── zIndex.ts
+├── ts/
+│   ├── base/                  # Foundational TS token values
+│   ├── components/            # Per-component token objects
+│   ├── brand-themes/          # CANONICAL authored premium sources
+│   │   ├── rottay.ts
+│   │   ├── bithire.ts
+│   │   ├── evnto.ts
 │   │   └── index.ts
-│   │
-│   ├── components/            # Component token exports
-│   │   ├── avatar.ts
-│   │   ├── button.ts
-│   │   ├── input.ts
-│   │   ├── card.ts
-│   │   ├── modal.ts
-│   │   └── index.ts
-│   │
-│   ├── tenants/               # Tenant-specific exports
+│   ├── mirrors/               # Reference mirrors (typed var(--ds-*) catalogs)
 │   │   ├── rottay.ts
 │   │   └── index.ts
-│   │
-│   └── index.ts               # TypeScript entry point
-│
+│   └── index.ts               # Aggregator
 ├── index.ts                   # Main entry point
-├── README.md
-├── SIZE_MAP_CATALOG.md        # Hardcoded SIZE_MAP documentation
-└── CONFIG_TOKENS_REMOVAL.md   # Cleanup documentation
+├── typography-scale.ts        # Hardcoded Geist-based scale
+└── README.md
 ```
 
 ## 🚀 Usage
@@ -339,7 +310,7 @@ Automatic adjustments for different screen sizes:
 
 ### Tenant Tokens
 
-#### Rottay Tenant (`tenants/rottay/`)
+#### Rottay Tenant (`artifacts/rottay/`)
 Default tenant with Rottay-specific customizations:
 - Brand color overrides
 - Component styling adjustments
@@ -426,7 +397,7 @@ Tokens automatically adjust based on:
 
 1. Create tenant directory:
 ```bash
-mkdir -p src/tokens/css/tenants/my-tenant
+mkdir -p src/tokens/css/artifacts/my-tenant
 ```
 
 2. Create color overrides (`my-tenant/colors.css`):
@@ -451,7 +422,7 @@ html[data-tenant='my-tenant'] {
 @import './components.css';
 ```
 
-5. Import in tenants index (`tenants/index.css`):
+5. Import in tenants index (`artifacts/ (per-tenant CSS)`):
 ```css
 @import './my-tenant/index.css';
 ```
