@@ -105,23 +105,16 @@ const ROTTAY_CONFIG: TenantConfig = {
 // ══════════════════════════════════════════════════════════
 
 describe('shared pipeline: palette baseline', () => {
-  it.each(['bithire', 'evnto'] as const)(
+  it.each(['bithire', 'evnto', 'rottay'] as const)(
     '%s generates full primary color scale',
     (tenant) => {
-      const config = tenant === 'bithire' ? BITHIRE_CONFIG : EVNTO_CONFIG;
+      const config = { bithire: BITHIRE_CONFIG, evnto: EVNTO_CONFIG, rottay: ROTTAY_CONFIG }[tenant];
       const css = generateTenantCss(config, { includeDarkSelector: false });
       for (const step of [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]) {
         expect(css).toContain(`--ds-color-primary-${step}`);
       }
     }
   );
-
-  it('rottay skips palette generation when branding has no primaryColor', () => {
-    const css = generateTenantCss(ROTTAY_CONFIG, { includeDarkSelector: false });
-    // Rottay has no primaryColor in branding (colors come from CSS)
-    // But brandTheme.palette has primaryColor, so it should generate
-    expect(css).toContain('--ds-color-primary-500');
-  });
 });
 
 describe('shared pipeline: personality baseline', () => {
@@ -311,29 +304,33 @@ describe('first-party CSS baseline: shell vars', () => {
 // ══════════════════════════════════════════════════════════
 
 describe('shared pipeline gap: vars NOT yet generated', () => {
+  // Use ROTTAY_CONFIG for layout/shell/sidebar gaps because rottayBrandTheme
+  // actually defines those chrome categories. Bithire is used for controls
+  // since it defines button/input chrome.
+  const rottayCss = generateTenantCss(ROTTAY_CONFIG, { includeDarkSelector: false });
   const bithireCss = generateTenantCss(BITHIRE_CONFIG, { includeDarkSelector: false });
 
-  it('shared pipeline does NOT generate sidebar vars', () => {
-    expect(bithireCss).not.toContain('--ds-sidebar-bg');
-    expect(bithireCss).not.toContain('--ds-sidebar-item-color');
+  it('shared pipeline does NOT generate sidebar vars (rottay)', () => {
+    expect(rottayCss).not.toContain('--ds-sidebar-bg');
+    expect(rottayCss).not.toContain('--ds-sidebar-item-color');
   });
 
-  it('shared pipeline does NOT generate button variant vars', () => {
+  it('shared pipeline does NOT generate button variant vars (bithire)', () => {
     expect(bithireCss).not.toContain('--ds-button-primary-bg:');
     expect(bithireCss).not.toContain('--ds-button-secondary-border');
   });
 
-  it('shared pipeline does NOT generate input vars', () => {
+  it('shared pipeline does NOT generate input vars (bithire)', () => {
     expect(bithireCss).not.toContain('--ds-input-bg:');
     expect(bithireCss).not.toContain('--ds-input-border-focus');
   });
 
-  it('shared pipeline does NOT generate layout vars', () => {
-    expect(bithireCss).not.toContain('--ds-layout-bg');
-    expect(bithireCss).not.toContain('--ds-layout-header-bg');
+  it('shared pipeline does NOT generate layout vars (rottay)', () => {
+    expect(rottayCss).not.toContain('--ds-layout-bg');
+    expect(rottayCss).not.toContain('--ds-layout-header-bg');
   });
 
-  it('shared pipeline does NOT generate shell vars', () => {
-    expect(bithireCss).not.toContain('--ds-shell-grid-size');
+  it('shared pipeline does NOT generate shell vars (rottay)', () => {
+    expect(rottayCss).not.toContain('--ds-shell-grid-size');
   });
 });
