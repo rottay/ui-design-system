@@ -269,8 +269,8 @@ export interface TenantAppearanceAdvanced {
   motion?: Record<string, unknown>;
   charts?: Record<string, unknown>;
   darkMode?: Record<string, unknown>;
-  /** Allowlisted raw --ds-* token overrides (namespace-restricted, validated) */
-  tokenOverrides?: Record<string, string | number>;
+  /** Allowlisted raw token overrides. Keys must start with `--ds-`. */
+  tokenOverrides?: Record<`--ds-${string}`, string | number>;
 }
 
 /** Combined tenant appearance (General + Advanced). */
@@ -281,10 +281,17 @@ export interface TenantAppearance {
 
 // ── Brand Compiler Contract ─────────────────────────────
 // Runtime theming and static generation must share one compiler.
-// The merge chain is:
+//
+// Current merge chain (implemented):
+//   DS base -> vertical baseline -> BrandTheme -> tenant overrides -> artifacts
+//
+// Target merge chain (TenantAppearance declared but not yet wired):
 //   DS base -> vertical baseline -> VerticalTheme -> Tenant Appearance General
-//   -> Tenant Appearance Advanced -> runtime safety normalization -> artifacts.
-// The compiler receives the resolved vertical baseline so it can layer on top.
+//   -> Tenant Appearance Advanced -> runtime safety normalization -> artifacts
+//
+// The compiler currently operates on BrandTheme. When TenantAppearance is
+// wired into the runtime (future wave), the compiler will need to resolve
+// General and Advanced tiers into the same compiled output.
 
 export interface BrandCompilerInput {
   /** The brand theme to compile */

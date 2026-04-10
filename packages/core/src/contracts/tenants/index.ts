@@ -88,9 +88,10 @@ export interface TenantTokenOverrides {
 // loaded from the remote storage API and static file loader without custom
 // transformations.
 //
-// Visual merge chain (target model):
-//   DS base -> vertical baseline -> VerticalTheme -> Tenant Appearance General
-//   -> Tenant Appearance Advanced -> runtime safety normalization -> artifacts
+// Visual merge chain:
+//   Current (implemented): DS base -> vertical -> BrandTheme -> tenant overrides
+//   Target (appearance declared, not yet wired): DS base -> vertical
+//     -> VerticalTheme -> Tenant Appearance General -> Advanced -> artifacts
 //
 // The canonical premium source is `brandTheme` (or `brandThemeId` referencing
 // a registered BrandTheme). Legacy fields `branding`, `personality`, and
