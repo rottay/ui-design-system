@@ -393,39 +393,26 @@ Tokens automatically adjust based on:
 
 ## 🎭 Tenant Customization
 
-### Creating a New Tenant
+### Authoring Flow (canonical)
 
-1. Create tenant directory:
-```bash
-mkdir -p src/tokens/css/artifacts/my-tenant
+New tenant visual identity is authored as a `BrandTheme` object in
+`tokens/ts/brand-themes/`. The CSS in `tokens/css/artifacts/` is a
+**generated output** from that authored source — do not hand-edit
+artifact CSS as the primary authoring path.
+
+```
+1. Author a BrandTheme in tokens/ts/brand-themes/<tenant>.ts
+2. The brand compiler + generator produce CSS artifacts
+3. CSS artifacts in tokens/css/artifacts/<tenant>/ are outputs
 ```
 
-2. Create color overrides (`my-tenant/colors.css`):
-```css
-html[data-tenant='my-tenant'] {
-  --ds-color-primary-500: #YOUR_BRAND_COLOR;
-  --ds-color-secondary-500: #YOUR_ACCENT_COLOR;
-}
-```
+For DB-backed tenants, the same BrandTheme shape is stored in the
+database and compiled at runtime by DesignSystemProvider.
 
-3. Create component overrides (`my-tenant/components.css`):
-```css
-html[data-tenant='my-tenant'] {
-  --ds-button-primary-bg: var(--ds-color-primary-500);
-  --ds-card-radius: var(--ds-radius-2xl);
-}
-```
-
-4. Create tenant index (`my-tenant/index.css`):
-```css
-@import './colors.css';
-@import './components.css';
-```
-
-5. Import in tenants index (`artifacts/ (per-tenant CSS)`):
-```css
-@import './my-tenant/index.css';
-```
+> **Note:** The legacy workflow of hand-authoring CSS directly in
+> `tokens/css/artifacts/` is deprecated. Existing first-party CSS
+> files are generated snapshots that will converge with the shared
+> pipeline as the brand compiler matures (see Wave I4-I6).
 
 ## 🤝 Contributing
 
