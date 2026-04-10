@@ -348,27 +348,32 @@ describe('H3 contract: bithire', () => {
     it('infoColor', () => expect(bithireBrandTheme.palette?.infoColor).toBeTruthy());
   });
 
-  describe('bithire surfaces', () => {
+  describe('bithire surfaces (filled I5)', () => {
     it('densityScale', () => expect(bithireBrandTheme.surfaces?.densityScale).toBeDefined());
-    it.skip('borderRadius — gap, target I5', () => {});
-    it.skip('shadows — gap, target I5', () => {});
-    it.skip('glass — gap, target I5', () => {});
-    it.skip('gradients — gap, target I5', () => {});
-    it.skip('overlays — gap, target I5', () => {});
+    it('borderRadius.sm', () => expect(bithireBrandTheme.surfaces?.borderRadius?.sm).toBe('6px'));
+    it('borderRadius.lg', () => expect(bithireBrandTheme.surfaces?.borderRadius?.lg).toBe('12px'));
+    it('shadows.sm', () => expect(bithireBrandTheme.surfaces?.shadows?.sm).toBeTruthy());
+    it('glass (none)', () => expect(bithireBrandTheme.surfaces?.glass?.blur).toBe('none'));
+    it('gradients (none)', () => expect(bithireBrandTheme.surfaces?.gradients?.primary).toBe('none'));
+    it('overlays', () => expect(bithireBrandTheme.surfaces?.overlays?.light).toBeTruthy());
   });
 
   describe('bithire chrome.controls', () => {
     it('buttonPrimary.bg', () => expect(bithireBrandTheme.chrome?.controls?.buttonPrimary?.bg).toBeTruthy());
     it('buttonPrimary.bgHover', () => expect(bithireBrandTheme.chrome?.controls?.buttonPrimary?.bgHover).toBeTruthy());
     it('buttonPrimary.text', () => expect(bithireBrandTheme.chrome?.controls?.buttonPrimary?.text).toBeTruthy());
-    it.skip('buttonPrimary.border — gap, target I5', () => {});
-    it.skip('buttonPrimary.shadow — gap, target I5', () => {});
+    it('buttonPrimary.border', () => expect(bithireBrandTheme.chrome?.controls?.buttonPrimary?.border).toBeTruthy());
+    it('buttonPrimary.shadow', () => expect(bithireBrandTheme.chrome?.controls?.buttonPrimary?.shadow).toBeTruthy());
     it('buttonSecondary.bg', () => expect(bithireBrandTheme.chrome?.controls?.buttonSecondary?.bg).toBeTruthy());
     it('buttonSecondary.bgHover', () => expect(bithireBrandTheme.chrome?.controls?.buttonSecondary?.bgHover).toBeTruthy());
     it('buttonSecondary.text', () => expect(bithireBrandTheme.chrome?.controls?.buttonSecondary?.text).toBeTruthy());
     it('buttonSecondary.border', () => expect(bithireBrandTheme.chrome?.controls?.buttonSecondary?.border).toBeTruthy());
-    it.skip('buttonDefault — gap, target I5', () => {});
-    it.skip('buttonGhost — gap, target I5', () => {});
+    it('buttonDefault.bg', () => expect(bithireBrandTheme.chrome?.controls?.buttonDefault?.bg).toBeTruthy());
+    it('buttonDefault.text', () => expect(bithireBrandTheme.chrome?.controls?.buttonDefault?.text).toBeTruthy());
+    it('buttonGhost.bg', () => expect(bithireBrandTheme.chrome?.controls?.buttonGhost?.bg).toBeTruthy());
+    it('buttonGhost.text', () => expect(bithireBrandTheme.chrome?.controls?.buttonGhost?.text).toBeTruthy());
+    it('disabled.opacity', () => expect(bithireBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.45));
+    it('disabled.text', () => expect(bithireBrandTheme.chrome?.controls?.disabled?.text).toBeTruthy());
     it('input.bg', () => expect(bithireBrandTheme.chrome?.controls?.input?.bg).toBeTruthy());
     it('input.border', () => expect(bithireBrandTheme.chrome?.controls?.input?.border).toBeTruthy());
     it('input.borderFocus', () => expect(bithireBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
@@ -382,30 +387,37 @@ describe('H3 contract: bithire', () => {
     it('headerFontSize', () => expect(bithireBrandTheme.chrome?.table?.headerFontSize).toBeTruthy());
   });
 
-  describe('bithire chrome (gaps)', () => {
-    it.skip('layout.bg — gap, target I5', () => {});
-    it.skip('layout.headerBg — gap, target I5', () => {});
-    it.skip('layout.headerBackdrop — gap, target I5', () => {});
-    it.skip('layout.headerBorder — gap, target I5', () => {});
-    it.skip('layout.siderBg — gap, target I5', () => {});
-    it.skip('layout.siderBorder — gap, target I5', () => {});
-    it.skip('shell.gridSize — gap, target I5', () => {});
-    it.skip('shell.gridLine — gap, target I5', () => {});
-    it.skip('shell.gridOpacity — gap, target I5', () => {});
+  describe('bithire chrome.layout (filled I5)', () => {
+    it('bg', () => expect(bithireBrandTheme.chrome?.layout?.bg).toBe('#FFFFFF'));
+    it('headerBg', () => expect(bithireBrandTheme.chrome?.layout?.headerBg).toBeTruthy());
+    it('headerBackdrop', () => expect(bithireBrandTheme.chrome?.layout?.headerBackdrop).toBeTruthy());
+    it('headerBorder', () => expect(bithireBrandTheme.chrome?.layout?.headerBorder).toBeTruthy());
+    it('siderBg', () => expect(bithireBrandTheme.chrome?.layout?.siderBg).toBeTruthy());
+    it('siderBorder', () => expect(bithireBrandTheme.chrome?.layout?.siderBorder).toBeTruthy());
   });
 
-  describe('bithire dark-mode (gaps)', () => {
-    it.skip('dark-mode: palette dark strategy — gap, target I5', () => {});
-    it.skip('dark-mode: sidebar dark values — gap, target I5', () => {});
-    it.skip('dark-mode: layout dark values — gap, target I5', () => {});
-    it.skip('dark-mode: controls dark values — gap, target I5', () => {});
-    it.skip('dark-mode: table dark values — gap, target I5', () => {});
+  describe('bithire chrome.shell (filled I5 — intentionally minimal)', () => {
+    it('gridSize (none)', () => expect(bithireBrandTheme.chrome?.shell?.gridSize).toBe('0px'));
+    it('gridLine (transparent)', () => expect(bithireBrandTheme.chrome?.shell?.gridLine).toBe('transparent'));
+    it('gridOpacity (0)', () => expect(bithireBrandTheme.chrome?.shell?.gridOpacity).toBe(0));
   });
 
-  describe('bithire state semantics (gaps)', () => {
-    // success/warning/error/info already present in bithire palette (green tests above)
-    it.skip('state: disabled treatment — gap, target I5', () => {});
-    it.skip('state: focus treatment — gap, target I5', () => {});
+  describe('bithire dark-mode (filled I5)', () => {
+    // BitHire is light-first. Dark palette strategy uses darkPrimary/darkBackground.
+    it('palette dark strategy: darkPrimaryColor', () => expect(bithireBrandTheme.palette?.darkPrimaryColor).toBeTruthy());
+    it('palette dark strategy: darkBackgroundColor', () => expect(bithireBrandTheme.palette?.darkBackgroundColor).toBeTruthy());
+    // Sidebar is light-authored; dark treatment derives from palette.
+    it('sidebar authored (light-first)', () => expect(bithireBrandTheme.chrome?.sidebar?.bg).toBe('#ffffff'));
+    it('layout authored', () => expect(bithireBrandTheme.chrome?.layout?.bg).toBe('#FFFFFF'));
+    it('controls authored', () => expect(bithireBrandTheme.chrome?.controls?.buttonPrimary?.bg).toBeTruthy());
+    it('table authored', () => expect(bithireBrandTheme.chrome?.table?.headerBg).toBeTruthy());
+  });
+
+  describe('bithire state semantics (filled I5)', () => {
+    it('disabled: opacity authored', () => expect(bithireBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.45));
+    it('disabled: text authored', () => expect(bithireBrandTheme.chrome?.controls?.disabled?.text).toBeTruthy());
+    it('focus: input has borderFocus', () => expect(bithireBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
+    it('focus: input has shadowFocus', () => expect(bithireBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
   });
 });
 
