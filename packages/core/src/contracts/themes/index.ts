@@ -206,10 +206,85 @@ export interface BrandTableChrome {
   headerFontSize?: string;
 }
 
+// ── Vertical Theme ──────────────────────────────────────
+// Code-owned premium identity for a vertical. Same shape as BrandTheme
+// because verticals carry the deepest premium decisions. The distinction
+// is ownership: VerticalTheme is code-owned, BrandTheme is the generic
+// authored source shape.
+
+/** Code-owned vertical premium identity. Same shape as BrandTheme. */
+export type VerticalTheme = BrandTheme;
+
+// ── Tenant Appearance ───────────────────────────────────
+// DB-owned customization layered on top of the vertical theme.
+// Split into General (safe presets) and Advanced (fine-grained).
+// See docs/premium-styling-track/02-customization-model.md.
+
+/** Safe, high-signal customization for most tenant admins. */
+export interface TenantAppearanceGeneral {
+  palette?: {
+    primary?: string;
+    secondary?: string;
+    accent?: string;
+    backgroundMode?: 'light' | 'dark' | 'auto';
+  };
+  typography?: {
+    fontFamilyBase?: string;
+    fontFamilyHeading?: string;
+    scale?: 'compact' | 'normal' | 'large';
+  };
+  shape?: {
+    radiusScale?: number;
+    buttonStyle?: 'sharp' | 'soft' | 'pill';
+  };
+  density?: 'compact' | 'normal' | 'spacious';
+  surfaces?: {
+    elevation?: 'flat' | 'soft' | 'elevated';
+  };
+  navigation?: {
+    sidebarTone?: 'subtle' | 'strong' | 'inverse';
+  };
+  motion?: {
+    level?: 'minimal' | 'normal' | 'expressive';
+  };
+  media?: {
+    logo?: string;
+    logoMark?: string;
+    favicon?: string;
+  };
+  data?: {
+    chartColorFamily?: string;
+  };
+}
+
+/** Expert-level, fine-grained customization for guarded use cases. */
+export interface TenantAppearanceAdvanced {
+  chrome?: {
+    sidebar?: Partial<BrandSidebarChrome>;
+    layout?: Partial<BrandLayoutChrome>;
+    shell?: Partial<BrandShellChrome>;
+    controls?: Partial<BrandControlsChrome>;
+    table?: Partial<BrandTableChrome>;
+  };
+  motion?: Record<string, unknown>;
+  charts?: Record<string, unknown>;
+  darkMode?: Record<string, unknown>;
+  /** Allowlisted raw --ds-* token overrides (namespace-restricted, validated) */
+  tokenOverrides?: Record<string, string | number>;
+}
+
+/** Combined tenant appearance (General + Advanced). */
+export interface TenantAppearance {
+  general?: TenantAppearanceGeneral;
+  advanced?: TenantAppearanceAdvanced;
+}
+
 // ── Brand Compiler Contract ─────────────────────────────
 // Runtime theming and static generation must share one compiler.
-// The merge chain is: DS base -> vertical baseline -> BrandTheme -> generated artifacts.
-// The compiler receives the resolved vertical baseline so it can layer BrandTheme on top.
+// The merge chain is:
+//   DS base -> vertical baseline -> VerticalTheme -> Tenant Appearance General
+//   -> Tenant Appearance Advanced -> runtime safety normalization -> artifacts.
+// The compiler receives the resolved vertical baseline so it can layer on top.
 
 export interface BrandCompilerInput {
   /** The brand theme to compile */

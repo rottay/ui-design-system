@@ -89,7 +89,8 @@ export interface TenantTokenOverrides {
 // transformations.
 //
 // Visual merge chain (target model):
-//   DS base -> vertical baseline -> BrandTheme -> generated artifacts
+//   DS base -> vertical baseline -> VerticalTheme -> Tenant Appearance General
+//   -> Tenant Appearance Advanced -> runtime safety normalization -> artifacts
 //
 // The canonical premium source is `brandTheme` (or `brandThemeId` referencing
 // a registered BrandTheme). Legacy fields `branding`, `personality`, and
@@ -133,6 +134,11 @@ export interface TenantConfig {
   brandTheme?: import('../themes').BrandTheme;
   /** Reference to a registered brand theme by ID (for preset-based tenants) */
   brandThemeId?: string;
+
+  /** DB-owned tenant appearance (General + Advanced tiers).
+   *  Layered on top of the vertical theme in the merge chain.
+   *  See docs/premium-styling-track/02-customization-model.md. */
+  appearance?: import('../themes').TenantAppearance;
 }
 
 export interface TenantContextValue {
