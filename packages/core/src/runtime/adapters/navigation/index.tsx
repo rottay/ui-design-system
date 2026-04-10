@@ -29,7 +29,7 @@
  * Usage inside a DS pattern that renders an href:
  *
  * ```tsx
- * import { useNavigationLink } from '../../../runtime/navigation';
+ * import { useNavigationLink } from '../../../runtime/adapters/navigation';
  *
  * function MyPattern({ href }: { href: string }) {
  *   const NavLink = useNavigationLink();

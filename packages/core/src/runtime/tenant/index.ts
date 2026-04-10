@@ -10,11 +10,11 @@
  * The tenancy system is organized into eight focused areas (each mapping
  * to a subfolder or a root-level file under `runtime/tenant/`):
  *
- * 1. **Provider** (`provider/`) — React context and hooks that supply
+ * 1. **Provider** (`context/`) — React context and hooks that supply
  *    tenant state to components (`TenantProvider`, `useTenant`).
  * 2. **Authoring** (`authoring/`) — Utilities for creating new tenant
  *    configs at runtime (`createTenantConfig`, `useCreateTenant`).
- * 3. **Presets** (`personality/`) — Maps known verticals to
+ * 3. **Presets** (`presets/`) — Maps known verticals to
  *    their personality token baseline (`resolvePersonalityPreset`).
  * 4. **Schema** (`schema/`) — Pure validation functions that ensure
  *    `TenantConfig` payloads are well-formed.

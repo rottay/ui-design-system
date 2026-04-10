@@ -87,15 +87,15 @@ export function useTenant() {
 // re-exported from the package root. These re-exports exist only for backward
 // compatibility with consumers that imported from `hooks/tenant`.
 
-/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenancy`). */
+/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenant`). */
 export { resolvePersonalityPreset } from './personality-presets';
 export type { PersonalityPreset } from './personality-presets';
 
-/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenancy`). */
+/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenant`). */
 export { createTenantConfig } from './create-tenant';
 export type { TenantCreationConfig } from './create-tenant';
 
-/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenancy`). */
+/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenant`). */
 export { useCreateTenant } from './useCreateTenant';
 
 /**

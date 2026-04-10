@@ -35,7 +35,7 @@
  * Usage inside a DS pattern that supports hide-on-focus:
  *
  * ```tsx
- * import { useDsFocusMode } from '../../../runtime/focus-mode';
+ * import { useDsFocusMode } from '../../../runtime/adapters/focus-mode';
  *
  * function MyPattern({ hideOnFocus }: { hideOnFocus?: boolean }) {
  *   const isFocusMode = useDsFocusMode();
