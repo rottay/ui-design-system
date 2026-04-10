@@ -77,15 +77,15 @@ export function buildDarkRuntimeScale(baseColor: string): ColorScale {
   const darkBase = '#020617';
   return {
     50: mixColor(baseColor, darkBase, 0.88),
-    100: mixColor(baseColor, darkBase, 0.76),
-    200: mixColor(baseColor, darkBase, 0.60),
-    300: mixColor(baseColor, darkBase, 0.36),
-    400: mixColor(baseColor, '#ffffff', 0.30),
-    500: normalizeHexColor(baseColor),
-    600: baseColor,
-    700: mixColor(baseColor, '#000000', 0.20),
-    800: mixColor(baseColor, '#000000', 0.35),
-    900: mixColor(baseColor, '#000000', 0.50),
+    100: mixColor(baseColor, darkBase, 0.74),
+    200: mixColor(baseColor, darkBase, 0.6),
+    300: mixColor(baseColor, darkBase, 0.42),
+    400: mixColor(baseColor, '#ffffff', 0.22),
+    500: mixColor(baseColor, '#ffffff', 0.12),
+    600: normalizeHexColor(baseColor),
+    700: mixColor(baseColor, '#000000', 0.12),
+    800: mixColor(baseColor, '#000000', 0.26),
+    900: mixColor(baseColor, '#000000', 0.38),
   };
 }
 
@@ -94,5 +94,5 @@ export function getReadableForegroundColor(baseColor: string): string {
   const rgb = hexToRgb(baseColor);
   if (!rgb) return '#ffffff';
   const luminance = rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114;
-  return luminance > 186 ? '#0a0a0a' : '#ffffff';
+  return luminance > 186 ? '#171717' : '#ffffff';
 }

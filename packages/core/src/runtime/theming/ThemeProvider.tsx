@@ -95,6 +95,15 @@ import type { ThemeContextValue, ThemeConfig, TenantBranding, TenantTokenOverrid
 import { getDefaultTenant } from '../tenancy/registry';
 import { errorInDev, warnInDev, warnOnceInDev } from '../../_internal/utils/runtime-logger';
 import { buildDaisyUiColorOverrides } from './hex-to-oklch';
+import {
+  isHexColor,
+  normalizeHexColor,
+  hexToRgb,
+  rgbToHex,
+  mixColor,
+  buildRuntimeScale,
+  getReadableForegroundColor,
+} from '../../compilers/_shared/color-math';
 
 // ─────────────────────────────────────────────────────────────────
 // SHALLOW FINGERPRINT (avoids JSON.stringify on every render)
@@ -145,128 +154,10 @@ function fingerprintTokenOverrides(t: TenantTokenOverrides | undefined): string 
 // COLOR HELPERS
 // ─────────────────────────────────────────────────────────────────
 
-/**
- * Validates that a string is a well-formed 3- or 6-digit hex color.
- *
- * WHY strict validation: runtime white-labeling only works if we update the
- * same CSS variables the components actually consume. The previous implementation
- * wrote `--tenant-*` variables that nothing in the system read, so tenant
- * branding appeared to "work" in config but not on screen. Now we target
- * `--ds-color-*` directly and need clean hex input for the scale generator.
- */
-function isHexColor(value: string): boolean {
-  return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
-}
-
-/**
- * Expands shorthand hex (`#abc`) to full form (`#aabbcc`) for consistent
- * parsing in `hexToRgb()`. Non-hex strings pass through unchanged.
- */
-function normalizeHexColor(value: string): string {
-  if (!isHexColor(value)) {
-    return value;
-  }
-
-  if (value.length === 4) {
-    return `#${value[1]}${value[1]}${value[2]}${value[2]}${value[3]}${value[3]}`;
-  }
-
-  return value;
-}
-
-/** Clamps a color channel to the valid 0-255 range and rounds to integer. */
-function clampChannel(value: number): number {
-  return Math.max(0, Math.min(255, Math.round(value)));
-}
-
-/**
- * Parses a hex color string into its RGB components.
- * Returns `null` for non-hex inputs so callers can skip scale generation
- * and fall back to the raw value for CSS variable inputs.
- */
-function hexToRgb(value: string): { r: number; g: number; b: number } | null {
-  const normalizedValue = normalizeHexColor(value);
-
-  if (!isHexColor(normalizedValue)) {
-    return null;
-  }
-
-  const parsedInt = Number.parseInt(normalizedValue.slice(1), 16);
-  return {
-    r: (parsedInt >> 16) & 255,
-    g: (parsedInt >> 8) & 255,
-    b: parsedInt & 255,
-  };
-}
-
-/** Converts RGB components back to a 6-digit hex string. */
-function rgbToHex(rgb: { r: number; g: number; b: number }): string {
-  return `#${[rgb.r, rgb.g, rgb.b]
-    .map((channel) => clampChannel(channel).toString(16).padStart(2, '0'))
-    .join('')}`;
-}
-
-/**
- * Linearly interpolates between two hex colors by `mixRatio` (0 = base, 1 = mix).
- * If either input is not a valid hex color, returns `baseColor` unchanged.
- * This keeps the runtime safe when CSS variable references are passed through.
- */
-function mixColor(baseColor: string, mixWith: string, mixRatio: number): string {
-  const baseRgb = hexToRgb(baseColor);
-  const mixRgb = hexToRgb(mixWith);
-
-  // If the input is not a hex color we keep it as-is for the 500 slot and skip
-  // generated scales. That keeps the runtime logic safe with CSS variable inputs.
-  if (!baseRgb || !mixRgb) {
-    return baseColor;
-  }
-
-  return rgbToHex({
-    r: baseRgb.r + (mixRgb.r - baseRgb.r) * mixRatio,
-    g: baseRgb.g + (mixRgb.g - baseRgb.g) * mixRatio,
-    b: baseRgb.b + (mixRgb.b - baseRgb.b) * mixRatio,
-  });
-}
-
-/**
- * Generates a 10-step color scale (50-900) from a single base color.
- *
- * WHY runtime scale generation: tenant branding provides a single primary
- * color, but the DS token system expects a full scale (50-900). Pre-computing
- * a palette server-side would add latency and coupling. Generating it here
- * keeps the branding API simple (one color) while the components get a rich
- * palette. Steps 50-400 mix toward white; 600-900 mix toward black.
- */
-function buildRuntimeScale(baseColor: string): Record<50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900, string> {
-  return {
-    50: mixColor(baseColor, '#ffffff', 0.92),
-    100: mixColor(baseColor, '#ffffff', 0.82),
-    200: mixColor(baseColor, '#ffffff', 0.68),
-    300: mixColor(baseColor, '#ffffff', 0.48),
-    400: mixColor(baseColor, '#ffffff', 0.2),
-    500: normalizeHexColor(baseColor),
-    600: mixColor(baseColor, '#000000', 0.12),
-    700: mixColor(baseColor, '#000000', 0.24),
-    800: mixColor(baseColor, '#000000', 0.36),
-    900: mixColor(baseColor, '#000000', 0.48),
-  };
-}
-
-/**
- * Picks a readable foreground color (dark or white) for text placed on top
- * of `baseColor`, using the NTSC luminance formula. The 186 threshold is
- * a standard heuristic that produces good contrast for WCAG AA compliance.
- */
-function getReadableForegroundColor(baseColor: string): string {
-  const rgbColor = hexToRgb(baseColor);
-
-  if (!rgbColor) {
-    return '#ffffff';
-  }
-
-  const luminance = (0.299 * rgbColor.r) + (0.587 * rgbColor.g) + (0.114 * rgbColor.b);
-  return luminance > 186 ? '#171717' : '#ffffff';
-}
+// Color math (isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor,
+// buildRuntimeScale, getReadableForegroundColor) imported from
+// compilers/_shared/color-math.ts — single canonical implementation shared
+// with the static CSS generator.
 
 // ─────────────────────────────────────────────────────────────────
 // WCAG CONTRAST VALIDATION
