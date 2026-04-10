@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * lint-folder-index.mjs — Naming and folder/index enforcement for the DS
- * component tree.
+ * lint-folder-index.mjs — Naming, folder/index, and ownership enforcement
+ * for the DS component tree and key subsystem boundaries.
  *
- * Fails (exit 1) if any of the following violations are found under
- * packages/core/src/components/:
+ * Fails (exit 1) if any of the following violations are found:
  *
  * 1. FORBIDDEN PREFIXES: folders matching `premium-*`, `surface-*`
  *    (outside surfaces/), or `workspace-*` at any depth under
@@ -166,6 +165,61 @@ for (const cat of CATEGORY_ROOTS) {
       });
     }
   } catch { /* category dir might not exist */ }
+}
+
+// ── Rule 4: Owner-boundary enforcement (non-component subsystems) ──
+// These rules ensure the ownership cleanup from Waves G2-G3 stays honest.
+
+const SRC_ROOT = resolve(__dirname, '../src');
+
+// 4a. runtime/tenancy/ must not have root-level .ts leaf files except index.ts
+//     (personality-presets.ts was moved to personality/ in G3)
+{
+  const tenancyDir = join(SRC_ROOT, 'runtime/tenancy');
+  try {
+    const entries = readdirSync(tenancyDir, { withFileTypes: true });
+    for (const e of entries) {
+      if (!e.isFile()) continue;
+      if (!/\.ts$/.test(e.name)) continue;
+      if (e.name === 'index.ts') continue;
+      violations.push({
+        rule: 'tenancy-root-leaf',
+        path: `runtime/tenancy/${e.name}`,
+        message: `Leaf file "${e.name}" should live in an owner folder under runtime/tenancy/.`,
+      });
+    }
+  } catch { /* dir might not exist */ }
+}
+
+// 4b. contracts/ root must only have owner folders, index.ts, and docs
+{
+  const contractsDir = join(SRC_ROOT, 'contracts');
+  try {
+    const entries = readdirSync(contractsDir, { withFileTypes: true });
+    for (const e of entries) {
+      if (e.isDirectory()) continue; // folders are fine (owner folders + _internal)
+      if (e.name === 'index.ts' || e.name === 'README.md') continue;
+      violations.push({
+        rule: 'contracts-root-file',
+        path: `contracts/${e.name}`,
+        message: `File "${e.name}" should not sit in contracts/ root. Move to _internal/ or a subsystem folder.`,
+      });
+    }
+  } catch { /* dir might not exist */ }
+}
+
+// 4c. tokens/ts/brand-themes/ must exist as the canonical authored source
+{
+  const brandThemesDir = join(SRC_ROOT, 'tokens/ts/brand-themes');
+  try {
+    statSync(brandThemesDir);
+  } catch {
+    violations.push({
+      rule: 'brand-themes-missing',
+      path: 'tokens/ts/brand-themes/',
+      message: 'Canonical authored premium source directory is missing.',
+    });
+  }
 }
 
 // Report
