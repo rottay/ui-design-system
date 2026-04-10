@@ -4,15 +4,15 @@
  * Safety net capturing current first-party premium outputs and shared
  * generator coverage BEFORE any structural refactoring.
  *
- * Coverage matrix:
+ * Coverage matrix (post-G1):
  * - palette: SHARED (generated via color scale)
  * - personality: SHARED (animation, chart, card, accent, typography)
  * - density: SHARED (--ds-density-scale)
- * - sidebar: FIRST-PARTY-ONLY (--ds-sidebar-* only in CSS snapshots)
- * - controls: FIRST-PARTY-ONLY (--ds-button-*, --ds-input-* only in CSS)
- * - table: FIRST-PARTY-ONLY (--ds-table-header-* only in CSS)
- * - layout: FIRST-PARTY-ONLY (--ds-layout-* only in CSS)
- * - shell: FIRST-PARTY-ONLY (--ds-shell-* only in CSS)
+ * - sidebar: SHARED (--ds-sidebar-* from BrandTheme.chrome.sidebar)
+ * - controls: SHARED (--ds-button-*, --ds-input-* from BrandTheme.chrome.controls)
+ * - table: SHARED (--ds-table-header-* from BrandTheme.chrome.table)
+ * - layout: SHARED (--ds-layout-* from BrandTheme.chrome.layout)
+ * - shell: SHARED (--ds-shell-* from BrandTheme.chrome.shell)
  *
  * When the shared pipeline is extended in G1, tests in the
  * "currently first-party-only" sections should start passing through
@@ -303,34 +303,67 @@ describe('first-party CSS baseline: shell vars', () => {
 // these categories — so we know what G1 needs to close.
 // ══════════════════════════════════════════════════════════
 
-describe('shared pipeline gap: vars NOT yet generated', () => {
-  // Use ROTTAY_CONFIG for layout/shell/sidebar gaps because rottayBrandTheme
-  // actually defines those chrome categories. Bithire is used for controls
-  // since it defines button/input chrome.
+describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   const rottayCss = generateTenantCss(ROTTAY_CONFIG, { includeDarkSelector: false });
   const bithireCss = generateTenantCss(BITHIRE_CONFIG, { includeDarkSelector: false });
 
-  it('shared pipeline does NOT generate sidebar vars (rottay)', () => {
-    expect(rottayCss).not.toContain('--ds-sidebar-bg');
-    expect(rottayCss).not.toContain('--ds-sidebar-item-color');
+  it('rottay generates sidebar vars with correct values', () => {
+    expect(rottayCss).toContain('--ds-sidebar-bg: #0D0D10');
+    expect(rottayCss).toContain('--ds-sidebar-text: #ECECEC');
+    expect(rottayCss).toContain('--ds-sidebar-width: 296px');
+    expect(rottayCss).toContain('--ds-sidebar-item-color: #A0A0A5');
+    expect(rottayCss).toContain('--ds-sidebar-footer-bg: #0D0D10');
   });
 
-  it('shared pipeline does NOT generate button variant vars (bithire)', () => {
-    expect(bithireCss).not.toContain('--ds-button-primary-bg:');
-    expect(bithireCss).not.toContain('--ds-button-secondary-border');
+  it('bithire generates button variant vars with correct values', () => {
+    expect(bithireCss).toContain('--ds-button-primary-bg: #0A66C2');
+    expect(bithireCss).toContain('--ds-button-primary-text: #ffffff');
+    expect(bithireCss).toContain('--ds-button-secondary-text: #0A66C2');
+    expect(bithireCss).toContain('--ds-button-secondary-border: #0A66C2');
   });
 
-  it('shared pipeline does NOT generate input vars (bithire)', () => {
-    expect(bithireCss).not.toContain('--ds-input-bg:');
-    expect(bithireCss).not.toContain('--ds-input-border-focus');
+  it('bithire generates input vars with correct values', () => {
+    expect(bithireCss).toContain('--ds-input-bg: #ffffff');
+    expect(bithireCss).toContain('--ds-input-border-focus: #0A66C2');
+    expect(bithireCss).toContain('--ds-input-shadow-focus: 0 0 0 1px #0A66C2');
   });
 
-  it('shared pipeline does NOT generate layout vars (rottay)', () => {
-    expect(rottayCss).not.toContain('--ds-layout-bg');
-    expect(rottayCss).not.toContain('--ds-layout-header-bg');
+  it('rottay generates layout vars with correct values', () => {
+    expect(rottayCss).toContain('--ds-layout-bg: #0C0C0E');
+    expect(rottayCss).toContain('--ds-layout-header-bg: rgba(12, 12, 14, 0.82)');
+    expect(rottayCss).toContain('--ds-layout-sider-bg: #0D0D10');
   });
 
-  it('shared pipeline does NOT generate shell vars (rottay)', () => {
-    expect(rottayCss).not.toContain('--ds-shell-grid-size');
+  it('rottay generates shell vars with correct values', () => {
+    expect(rottayCss).toContain('--ds-shell-grid-size: 28px');
+    expect(rottayCss).toContain('--ds-shell-grid-line: rgba(255, 255, 255, 0.03)');
+  });
+
+  it('rottay generates table vars with correct values', () => {
+    expect(rottayCss).toContain('--ds-table-header-bg: #131316');
+    expect(rottayCss).toContain('--ds-table-header-color: #A0A0A5');
+  });
+
+  it('bithire generates table vars with correct values', () => {
+    expect(bithireCss).toContain('--ds-table-header-bg: #f3f2ef');
+    expect(bithireCss).toContain('--ds-table-header-font-weight: 600');
+  });
+
+  it('DB-backed tenant with BrandTheme gets same chrome vars', () => {
+    const dbConfig: TenantConfig = {
+      slug: 'db-premium',
+      name: 'DB Premium',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'enterprise',
+      features: [],
+      branding: { companyName: 'DB Corp' },
+      brandTheme: rottayBrandTheme,
+    };
+    const css = generateTenantCss(dbConfig, { includeDarkSelector: false });
+    expect(css).toContain('--ds-sidebar-bg: #0D0D10');
+    expect(css).toContain('--ds-layout-bg: #0C0C0E');
+    expect(css).toContain('--ds-shell-grid-size: 28px');
+    expect(css).toContain("html[data-tenant='db-premium']");
   });
 });
