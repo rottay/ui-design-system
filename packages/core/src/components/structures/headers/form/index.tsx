@@ -57,7 +57,7 @@ import { type CSSProperties, type ReactNode } from 'react';
 import { ArrowLeft, type LucideIcon } from 'lucide-react';
 
 import { Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
-import { useNavigationLink } from '../../../../runtime/navigation';
+import { useNavigationLink } from '../../../../runtime/adapters/navigation';
 import {
   type SharedHeaderActionKind,
   resolveSharedHeaderActionIcon,

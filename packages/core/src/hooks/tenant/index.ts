@@ -32,7 +32,7 @@
  */
 
 import { useContext } from 'react';
-import { TenantContext } from '../../runtime/tenancy';
+import { TenantContext } from '../../runtime/tenant';
 
 /**
  * Hook to access the current tenant context and configuration.

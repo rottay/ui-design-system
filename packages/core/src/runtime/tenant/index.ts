@@ -29,9 +29,9 @@
  */
 
 // ── Provider (React-layer API) ──
-export { TenantProvider, useTenantContext, TenantContext } from './provider/TenantProvider';
-export type { TenantProviderProps } from './provider/TenantProvider';
-export { useTenant } from './provider/useTenant';
+export { TenantProvider, useTenantContext, TenantContext } from './context/TenantProvider';
+export type { TenantProviderProps } from './context/TenantProvider';
+export { useTenant } from './context/useTenant';
 
 // ── Authoring (tenant creation utilities) ──
 export { createTenantConfig } from './authoring/create-tenant';
@@ -39,8 +39,8 @@ export type { TenantCreationConfig } from './authoring/create-tenant';
 export { useCreateTenant } from './authoring/useCreateTenant';
 
 // ── Presets (personality resolution) ──
-export { resolvePersonalityPreset } from './personality';
-export type { PersonalityPreset } from './personality';
+export { resolvePersonalityPreset } from './presets';
+export type { PersonalityPreset } from './presets';
 
 // ── Schema & validation ──
 // Pure functions for validating tenant payloads against the DS contract.

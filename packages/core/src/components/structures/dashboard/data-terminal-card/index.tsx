@@ -27,8 +27,8 @@
 
 import { useMemo, createContext, useContext, type CSSProperties, type ReactNode } from "react";
 import { Box, Text, Flex } from "@/components/primitives";
-import { useNavigationLink } from "@/runtime/navigation";
-import { useDsFocusMode } from "@/runtime/focus-mode";
+import { useNavigationLink } from "@/runtime/adapters/navigation";
+import { useDsFocusMode } from "@/runtime/adapters/focus-mode";
 import {
   TrendingUp,
   TrendingDown,

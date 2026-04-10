@@ -172,10 +172,10 @@ for (const cat of CATEGORY_ROOTS) {
 
 const SRC_ROOT = resolve(__dirname, '../src');
 
-// 4a. runtime/tenancy/ must not have root-level .ts leaf files except index.ts
+// 4a. runtime/tenant/ must not have root-level .ts leaf files except index.ts
 //     (personality-presets.ts was moved to personality/ in G3)
 {
-  const tenancyDir = join(SRC_ROOT, 'runtime/tenancy');
+  const tenancyDir = join(SRC_ROOT, 'runtime/tenant');
   try {
     const entries = readdirSync(tenancyDir, { withFileTypes: true });
     for (const e of entries) {
@@ -184,8 +184,8 @@ const SRC_ROOT = resolve(__dirname, '../src');
       if (e.name === 'index.ts') continue;
       violations.push({
         rule: 'tenancy-root-leaf',
-        path: `runtime/tenancy/${e.name}`,
-        message: `Leaf file "${e.name}" should live in an owner folder under runtime/tenancy/.`,
+        path: `runtime/tenant/${e.name}`,
+        message: `Leaf file "${e.name}" should live in an owner folder under runtime/tenant/.`,
       });
     }
   } catch { /* dir might not exist */ }

@@ -8,7 +8,7 @@ import {
   compileBrandTheme,
 } from './index';
 import { bithireBrandTheme } from '../../tokens/ts/brand-themes';
-import { generateTenantCss } from '../../runtime/tenancy/storage/static/generator';
+import { generateTenantCss } from '../../runtime/tenant/storage/static/generator';
 import type { TenantConfig } from '../../contracts';
 
 const MOCK_BRAND_THEME: BrandTheme = {

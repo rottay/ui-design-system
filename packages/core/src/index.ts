@@ -33,12 +33,12 @@ export * from './runtime/responsive';
 // ============================================
 // NAVIGATION (framework-agnostic Link adapter)
 // ============================================
-export * from './runtime/navigation';
+export * from './runtime/adapters/navigation';
 
 // ============================================
 // FOCUS MODE (framework-agnostic focus-state adapter)
 // ============================================
-export * from './runtime/focus-mode';
+export * from './runtime/adapters/focus-mode';
 
 // ============================================
 // HOOKS (promoted from core/hooks/)
@@ -72,7 +72,7 @@ export { arePropsEqual, createPropsComparator } from './_internal/utils';
 // ============================================
 // TENANCY (schema, registry, resolver, storage, CSS generation)
 // ============================================
-export * from './runtime/tenancy';
+export * from './runtime/tenant';
 
 // ============================================
 // PRODUCT PROFILES (registry, provider, hooks)

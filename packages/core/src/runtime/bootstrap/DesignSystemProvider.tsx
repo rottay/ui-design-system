@@ -79,7 +79,7 @@
 import React, { ReactNode, useState, useEffect, useRef, useMemo, memo } from 'react';
 import { EngineProvider } from '../engines/EngineProvider';
 import { ThemeProvider } from '../theming';
-import { TenantProvider } from '../tenancy/provider/TenantProvider';
+import { TenantProvider } from '../tenant/context/TenantProvider';
 import { ProductProfileProvider } from '../product-profiles/ProductProfileProvider';
 import { FeatureProvider } from '../features';
 import { I18nProvider } from '../../i18n';
@@ -87,12 +87,12 @@ import type { TenantConfig, EngineName, ProductProfile, ProductProfileKey } from
 import type { LocaleTranslations, SupportedLocale } from '../../i18n/types';
 import type { VerticalKey, VerticalPreset } from '../verticals/types';
 import { getVerticalPreset } from '../verticals/registry';
-import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenancy/storage';
+import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenant/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../../compilers/brand-theme';
-import { isBundledTenant } from '../tenancy/registry';
+import { isBundledTenant } from '../tenant/registry';
 import type { BrandTheme } from '../../contracts/themes';
 
 /** Build a scoped CSS string from BrandTheme chrome for dynamic tenants. */

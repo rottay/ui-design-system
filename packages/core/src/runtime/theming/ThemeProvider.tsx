@@ -92,7 +92,7 @@ import React, {
   ReactNode,
 } from 'react';
 import type { ThemeContextValue, ThemeConfig, TenantBranding, TenantTokenOverrides } from '../../contracts';
-import { getDefaultTenant } from '../tenancy/registry';
+import { getDefaultTenant } from '../tenant/registry';
 import { errorInDev, warnInDev, warnOnceInDev } from '../../_internal/utils/runtime-logger';
 import { buildDaisyUiColorOverrides } from './hex-to-oklch';
 import {

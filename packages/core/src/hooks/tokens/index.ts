@@ -24,7 +24,7 @@
  */
 
 import { useMemo } from 'react';
-import { useTenantContext as useTenant } from '../../runtime/tenancy';
+import { useTenantContext as useTenant } from '../../runtime/tenant';
 import { useProductProfileContext as useProductProfile } from '../../runtime/product-profiles';
 import { useEngineContext } from '../../runtime/engines';
 import { getEngineTokens } from './engine-tokens';

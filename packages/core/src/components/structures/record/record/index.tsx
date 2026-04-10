@@ -33,7 +33,7 @@
  * users, or any specific entity.
  *
  * Framework note: `RecordField` resolves its `href` rendering
- * through the `useNavigationLink()` hook from `runtime/navigation`.
+ * through the `useNavigationLink()` hook from `runtime/adapters/navigation`.
  * Apps mount a `NavigationLinkProvider` once at their root layout and
  * pass their framework's Link primitive (e.g. Next.js's `Link`, Remix's
  * `Link`); the DS picks it up automatically. When no provider is
@@ -58,7 +58,7 @@ import { type CSSProperties, type ReactNode } from 'react';
 import { ArrowUpRight, Copy } from 'lucide-react';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
-import { useNavigationLink } from '../../../../runtime/navigation';
+import { useNavigationLink } from '../../../../runtime/adapters/navigation';
 import {
   type SharedHeaderActionDescriptor,
   resolveSharedHeaderActionIcon,

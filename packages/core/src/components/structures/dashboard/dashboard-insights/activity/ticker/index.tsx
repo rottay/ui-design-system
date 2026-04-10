@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, type CSSProperties, type ReactNode } from "react";
 import { Box, Text, Stack, Flex } from "@/components/primitives";
-import { useNavigationLink } from "@/runtime/navigation";
+import { useNavigationLink } from "@/runtime/adapters/navigation";
 import { Bell, Check, Plus, AlertCircle, Info, ChevronLeft, ChevronRight, ExternalLink, Briefcase, FileText, Users, Star, Zap, RefreshCw } from "lucide-react";
 import type { ActivityProps, ActivityItem } from "../../types";
 

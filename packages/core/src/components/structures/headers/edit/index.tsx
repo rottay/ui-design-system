@@ -56,7 +56,7 @@ import { Save, X } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 import { Box, Button, Flex, Spinner, Stack, Text, Tooltip } from '../../../primitives';
-import { useNavigationLink } from '../../../../runtime/navigation';
+import { useNavigationLink } from '../../../../runtime/adapters/navigation';
 import {
   type SharedHeaderActionDescriptor,
   resolveSharedHeaderActionIcon,

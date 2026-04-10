@@ -18,9 +18,9 @@
 
 import React, { useMemo, useEffect, useRef } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../TenantPreview.types';
-import { createTenantConfig } from '../../../../../runtime/tenancy/authoring/create-tenant';
-import { resolvePersonalityPreset } from '../../../../../runtime/tenancy/personality';
-import { generateTenantCss } from '../../../../../runtime/tenancy/storage/static/generator';
+import { createTenantConfig } from '../../../../../runtime/tenant/authoring/create-tenant';
+import { resolvePersonalityPreset } from '../../../../../runtime/tenant/presets';
+import { generateTenantCss } from '../../../../../runtime/tenant/storage/static/generator';
 
 /** Default set of component samples to display when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];

@@ -11,7 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '../../tokens/ts/brand-themes';
-import { generateTenantCss } from '../../runtime/tenancy/storage/static/generator';
+import { generateTenantCss } from '../../runtime/tenant/storage/static/generator';
 import type { BrandTheme } from '../../contracts/themes';
 
 const DIST = resolve(__dirname, '../../../dist');
