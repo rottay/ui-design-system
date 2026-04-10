@@ -138,18 +138,18 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-line-height-tight: 1.25;
   --ds-line-height-relaxed: 1.75;
 
-  /* Border Radius - LinkedIn (moderately rounded) */
-  --ds-radius-sm: 4px;
+  /* Border Radius - softer than classic enterprise (H4) */
+  --ds-radius-sm: 6px;
   --ds-radius-md: 8px;
   --ds-radius-lg: 12px;
   --ds-radius-xl: 16px;
   --ds-radius-full: 9999px;
 
-  /* Shadows - Visible, professional depth */
-  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --ds-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
-  --ds-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+  /* Shadows - subtle, professional */
+  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
 
   /* Button overrides */
   --ds-button-primary-bg: #0A66C2;
@@ -462,14 +462,14 @@ html[data-tenant='bithire'].dark {
   --ds-line-height-tight: 1.25;
   --ds-line-height-relaxed: 1.75;
 
-  /* Border Radius */
-  --ds-radius-sm: 4px;
+  /* Border Radius - same as light (shape doesn't change with theme) */
+  --ds-radius-sm: 6px;
   --ds-radius-md: 8px;
   --ds-radius-lg: 12px;
   --ds-radius-xl: 16px;
   --ds-radius-full: 9999px;
 
-  /* Shadows - Deeper for dark mode */
+  /* Shadows - deeper for dark mode */
   --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
   --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
   --ds-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.25);
