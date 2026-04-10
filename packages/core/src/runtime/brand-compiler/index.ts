@@ -280,6 +280,12 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
       if (c.input.borderFocus) vars['--ds-input-border-focus'] = c.input.borderFocus;
       if (c.input.shadowFocus) vars['--ds-input-shadow-focus'] = c.input.shadowFocus;
     }
+    if (c.disabled) {
+      if (c.disabled.opacity != null) vars['--ds-control-disabled-opacity'] = String(c.disabled.opacity);
+      if (c.disabled.bg) vars['--ds-control-disabled-bg'] = c.disabled.bg;
+      if (c.disabled.text) vars['--ds-control-disabled-text'] = c.disabled.text;
+      if (c.disabled.border) vars['--ds-control-disabled-border'] = c.disabled.border;
+    }
   }
 
   // Table

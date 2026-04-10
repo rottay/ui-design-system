@@ -11,6 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '../../tokens/ts/brand-themes';
+import { generateTenantCss } from '../tenancy/storage/static/generator';
 import type { BrandTheme } from '../../contracts/themes';
 
 const DIST = resolve(__dirname, '../../../dist');
@@ -283,6 +284,14 @@ describe('H3 contract: rottay', () => {
     // success/warning/error/info: verified in palette section above
     it('disabled: opacity authored', () => expect(rottayBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.4));
     it('disabled: text authored', () => expect(rottayBrandTheme.chrome?.controls?.disabled?.text).toBeTruthy());
+    it('disabled: emitted in generated CSS', () => {
+      const css = generateTenantCss(
+        { slug: 'rottay', name: 'Rottay', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'Rottay' }, brandTheme: rottayBrandTheme },
+        { includeDarkSelector: false },
+      );
+      expect(css).toContain('--ds-control-disabled-opacity: 0.4');
+      expect(css).toContain('--ds-control-disabled-text');
+    });
     // focus: expressed through input focus ring
     it('focus: input has borderFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
     it('focus: input has shadowFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
