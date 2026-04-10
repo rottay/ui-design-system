@@ -12,11 +12,15 @@ Subsystem-boundary `folder/index`. No hidden role ambiguity.
 
 **Mandatory** at subsystem boundaries where the folder is the owner:
 
-- `brand-themes/`
-- `runtime/tenancy/`
-- `contracts/`
-- `tokens/css/tenants/<slug>/`
-- future `entrypoints/`, `artifacts/`, `mirrors/`, `legacy/`
+- `ts/brand-themes/` (authored source owner)
+- `ts/mirrors/` (mirror owner)
+- `css/artifacts/` (generated artifact owner)
+- `css/artifacts/<slug>/` (per-tenant artifact, must have `index.css`)
+- `css/entrypoints/` (public package contract files)
+- `css/legacy/` (non-first-party bundled content)
+- `css/foundation/` (base CSS source grouping)
+- `runtime/tenancy/` (existing)
+- `contracts/` (existing)
 
 **Not mandatory** for small token leaves:
 
@@ -100,8 +104,8 @@ tokens/
 | `css/bithire.css` (root) | Public entrypoint | `css/entrypoints/bithire.css` | Public entrypoint | Grouped |
 | `css/evnto.css` (root) | Public entrypoint | `css/entrypoints/evnto.css` | Public entrypoint | Grouped |
 | `css/index.css` (root) | Public entrypoint | `css/entrypoints/styles.css` | Public entrypoint | Grouped |
-| `css/index-all.css` | Compatibility shim | Removed or merged | -- | Redundant |
-| `css/base.css` (root) | Authored source | `css/foundation/base.css` or removed | -- | Clarify role |
+| `css/index-all.css` | Compatibility shim | Removed | -- | Redundant: `index.css` already serves as full bundle. Delete in I1. |
+| `css/base.css` (root) | Authored source | `css/foundation/base.css` | Authored source | Moves into foundation/ grouping. Internal import, not a public entrypoint. |
 | `css/platform.css` (root) | Public entrypoint | `css/entrypoints/platform.css` | Public entrypoint | Grouped |
 
 ## Compatibility Policy

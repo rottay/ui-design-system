@@ -7,6 +7,7 @@ Documentation baseline for the premium styling and token taxonomy track.
 1. `00-glossary.md` -- Frozen vocabulary and source-of-truth model
 2. `00-current-role-map.md` -- Current tree classified by role
 3. `00-stop-template.md` -- Mandatory STOP format for all waves
+4. `01-target-taxonomy.md` -- Target tree, naming rules, current-vs-target comparison
 
 ## Canonical Audit Reference
 
@@ -26,8 +27,8 @@ Reading order within that pack:
 
 | Wave | Scope | Status |
 |------|-------|--------|
-| H0 | Documentation baseline | In progress |
-| H1 | Taxonomy truthfulness | Pending |
+| H0 | Documentation baseline | Approved |
+| H1 | Taxonomy truthfulness | In progress |
 | H2 | Customization model definition | Pending |
 | H3 | Premium contract parity | Pending |
 | H4 | Vertical style briefs | Pending |
