@@ -22,35 +22,60 @@ const PKG_JSON = JSON.parse(readFileSync(resolve(__dirname, '../../../package.js
 // ══════════════════════════════════════════════════════════
 
 describe('public CSS export surface (from package.json)', () => {
-  // Extract all style subpaths and their dist targets from real exports
-  const styleExports: Array<[string, string]> = [];
+  // Parse every style subpath from the real package.json exports field
+  const styleExports: Array<{ subpath: string; style?: string; import_?: string; default_?: string }> = [];
   for (const [subpath, value] of Object.entries(PKG_JSON.exports ?? {})) {
-    if (!subpath.startsWith('./styles') && subpath !== './dist/*.css') continue;
-    if (subpath === './dist/*.css') continue; // glob, not a specific file
-    const target = typeof value === 'string' ? value : (value as any)?.style ?? (value as any)?.default;
-    if (target && typeof target === 'string') {
-      styleExports.push([subpath, target.replace('./', '')]);
+    if (!subpath.startsWith('./styles')) continue;
+    if (typeof value === 'string') {
+      styleExports.push({ subpath, style: value, default_: value });
+    } else if (value && typeof value === 'object') {
+      styleExports.push({
+        subpath,
+        style: (value as any).style,
+        import_: (value as any).import,
+        default_: (value as any).default,
+      });
     }
   }
 
-  it('package.json has at least 7 style exports', () => {
-    expect(styleExports.length).toBeGreaterThanOrEqual(7);
+  it('package.json has exactly 7 style subpath exports', () => {
+    expect(styleExports.length).toBe(7);
   });
 
+  // Validate every condition key resolves to a real dist file
   it.each(styleExports)(
-    'export %s -> %s exists and is non-empty',
-    (_subpath, distTarget) => {
-      const path = resolve(__dirname, '../../..', distTarget);
-      expect(existsSync(path), `${distTarget} must exist`).toBe(true);
-      const content = readFileSync(path, 'utf-8');
-      expect(content.length).toBeGreaterThan(1000);
+    '$subpath — all condition keys resolve to existing dist file',
+    ({ subpath, style, import_, default_ }) => {
+      const targets = new Set([style, import_, default_].filter(Boolean));
+      expect(targets.size, `${subpath} should have at least one target`).toBeGreaterThan(0);
+      for (const target of targets) {
+        const path = resolve(__dirname, '../../..', target!.replace('./', ''));
+        expect(existsSync(path), `${subpath} -> ${target} must exist`).toBe(true);
+        const content = readFileSync(path, 'utf-8');
+        expect(content.length).toBeGreaterThan(1000);
+      }
     }
   );
 
+  it('./styles and ./styles.css both resolve to dist/styles.css', () => {
+    const styles = styleExports.find(e => e.subpath === './styles');
+    const stylesCss = styleExports.find(e => e.subpath === './styles.css');
+    expect(styles?.style).toBe('./dist/styles.css');
+    expect(stylesCss?.style).toBe('./dist/styles.css');
+  });
+
   it('./styles/rottay and ./styles/platform resolve to same dist file', () => {
-    const rottayTarget = styleExports.find(([s]) => s === './styles/rottay')?.[1];
-    const platformTarget = styleExports.find(([s]) => s === './styles/platform')?.[1];
-    expect(rottayTarget).toBe(platformTarget);
+    const rottay = styleExports.find(e => e.subpath === './styles/rottay');
+    const platform = styleExports.find(e => e.subpath === './styles/platform');
+    expect(rottay?.style).toBe(platform?.style);
+  });
+
+  it('each style export has style + import + default condition keys', () => {
+    for (const exp of styleExports) {
+      expect(exp.style, `${exp.subpath} missing style key`).toBeTruthy();
+      expect(exp.import_, `${exp.subpath} missing import key`).toBeTruthy();
+      expect(exp.default_, `${exp.subpath} missing default key`).toBeTruthy();
+    }
   });
 });
 
@@ -318,7 +343,10 @@ describe('H3 contract: evnto', () => {
 
   describe('evnto surfaces', () => {
     it('densityScale', () => expect(evntoBrandTheme.surfaces?.densityScale).toBeDefined());
-    it('borderRadius', () => expect(evntoBrandTheme.surfaces?.borderRadius).toBeTruthy());
+    it('borderRadius.sm', () => expect(evntoBrandTheme.surfaces?.borderRadius?.sm).toBeTruthy());
+    it('borderRadius.md', () => expect(evntoBrandTheme.surfaces?.borderRadius?.md).toBeTruthy());
+    it('borderRadius.lg', () => expect(evntoBrandTheme.surfaces?.borderRadius?.lg).toBeTruthy());
+    it('borderRadius.xl', () => expect(evntoBrandTheme.surfaces?.borderRadius?.xl).toBeTruthy());
     it.skip('shadows — gap, target I6', () => {});
     it.skip('glass — gap, target I6', () => {});
     it.skip('gradients — gap, target I6', () => {});
