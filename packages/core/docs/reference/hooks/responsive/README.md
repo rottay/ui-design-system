@@ -374,6 +374,6 @@ const { isMobile, isDesktop }: UseBreakpointsResult = useBreakpoints();
 
 ## Related
 
-- [System Hooks](/packages/core/src/system/hooks/README.md)
-- [Theme System](/packages/core/src/system/providers/theme/README.md)
-- [Design Tokens](/packages/core/src/system/tokens/README.md)
+- Hooks: `packages/core/src/hooks/`
+- Theming: `packages/core/src/runtime/theming/`
+- Design Tokens: `packages/core/src/tokens/`

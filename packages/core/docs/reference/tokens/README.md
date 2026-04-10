@@ -71,9 +71,10 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 │   │   ├── rottay.ts
 │   │   └── index.ts
 │   └── index.ts               # Aggregator
+├── compat/
+│   └── typography-scale.ts    # @deprecated Geist-based scale
 ├── index.ts                   # Main entry point
-├── typography-scale.ts        # Hardcoded Geist-based scale
-└── README.md
+└── README.md                  # (moved to docs/reference/tokens/)
 ```
 
 ## 🚀 Usage

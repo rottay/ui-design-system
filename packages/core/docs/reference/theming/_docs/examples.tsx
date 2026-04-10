@@ -1,16 +1,17 @@
 /**
- * @fileoverview ThemeProvider Usage Examples for the Rottay Design System.
- * @description Practical reference examples demonstrating ThemeProvider
- * configuration scenarios: default usage, custom tenants, dynamic switching,
- * error handling, CDN CSS, runtime branding, theme variants, multi-tenant
- * apps, loading state, and nested providers.
+ * @fileoverview ThemeProvider Usage Examples — Reference Only
  *
- * @category System
+ * NOT executable code. Moved out of src/ in R1. These examples show
+ * ThemeProvider configuration patterns for documentation purposes.
+ *
+ * To run these patterns, import from '@rottay/design-system' in your app:
+ *   import { ThemeProvider, useTheme } from '@rottay/design-system';
  */
 
+// @ts-nocheck — reference-only file, not compiled
 import React, { useState } from 'react';
-import { ThemeProvider } from './ThemeProvider';
-import { useTheme } from './useTheme';
+import { ThemeProvider } from '@rottay/design-system';
+import { useTheme } from '@rottay/design-system';
 
 // ─────────────────────────────────────────────────────────────────
 // EXAMPLE 1: Basic Usage - Package default tenant
