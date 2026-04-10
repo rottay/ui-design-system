@@ -109,6 +109,28 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
 export const DEFAULT_TENANT_SLUG = 'rottay';
 
 /**
+ * Tenants whose CSS is bundled in the DS styles output.
+ * This matches tokens/css/tenants/index.css — the actual CSS bundle.
+ * Used to determine whether a tenant needs runtime-generated chrome CSS
+ * (unbundled tenants do, bundled tenants already have it in their CSS file).
+ *
+ * This is intentionally separate from KNOWN_TENANTS: a tenant can have
+ * bundled CSS without having a full TenantConfig in the registry
+ * (e.g. themanagementmiami has CSS but no runtime config).
+ */
+export const BUNDLED_TENANT_SLUGS: ReadonlySet<string> = new Set([
+  'rottay',
+  'bithire',
+  'evnto',
+  'themanagementmiami',
+]);
+
+/** Check if a tenant has pre-bundled CSS in the DS styles output. */
+export function isBundledTenant(slug: string): boolean {
+  return BUNDLED_TENANT_SLUGS.has(slug.toLowerCase());
+}
+
+/**
  * Looks up a first-party tenant by slug.
  *
  * Slugs are case-insensitive -- the registry normalizes to lowercase internally.

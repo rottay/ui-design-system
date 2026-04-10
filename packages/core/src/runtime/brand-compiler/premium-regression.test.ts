@@ -25,7 +25,7 @@ import { resolve } from 'path';
 import type { TenantConfig } from '../../contracts';
 import { generateTenantCss } from '../tenancy/storage/static/generator';
 import { brandThemeToChromeVariables } from './index';
-import { isKnownTenant } from '../tenancy/registry';
+import { isBundledTenant, BUNDLED_TENANT_SLUGS } from '../tenancy/registry';
 import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '../../tokens/ts/brand-themes';
 
 // ── Helpers ─────────────────────────────────────────────
@@ -464,40 +464,45 @@ describe('DesignSystemProvider chrome injection logic', () => {
   // to decide when to pass generatedChromeCss to ThemeProvider.
   // The actual injection is: brandTheme exists AND tenant is NOT bundled.
 
-  it('known bundled tenant (bithire) should NOT get generated chrome CSS', () => {
-    // Bundled tenants have chrome in their CSS files already.
-    // isKnownTenant imported at top of file
-    expect(isKnownTenant('bithire')).toBe(true);
-    expect(isKnownTenant('rottay')).toBe(true);
-    expect(isKnownTenant('evnto')).toBe(true);
+  it('BUNDLED_TENANT_SLUGS matches CSS bundle (tokens/css/tenants/index.css)', () => {
+    // Must include all tenants whose CSS is in the bundle
+    expect(BUNDLED_TENANT_SLUGS.has('rottay')).toBe(true);
+    expect(BUNDLED_TENANT_SLUGS.has('bithire')).toBe(true);
+    expect(BUNDLED_TENANT_SLUGS.has('evnto')).toBe(true);
+    expect(BUNDLED_TENANT_SLUGS.has('themanagementmiami')).toBe(true);
+    expect(BUNDLED_TENANT_SLUGS.size).toBe(4);
   });
 
-  it('unknown DB tenant should get generated chrome CSS', () => {
-    // isKnownTenant imported at top of file
-    expect(isKnownTenant('acme-corp')).toBe(false);
-    expect(isKnownTenant('db-customer')).toBe(false);
-    // For these tenants, DesignSystemProvider generates scoped chrome CSS
-    // regardless of skipCssLoading — they are not in the bundle.
+  it('bundled tenants do NOT get generated chrome CSS', () => {
+    expect(isBundledTenant('bithire')).toBe(true);
+    expect(isBundledTenant('rottay')).toBe(true);
+    expect(isBundledTenant('evnto')).toBe(true);
+    expect(isBundledTenant('themanagementmiami')).toBe(true);
+  });
+
+  it('unknown DB tenants DO get generated chrome CSS', () => {
+    expect(isBundledTenant('acme-corp')).toBe(false);
+    expect(isBundledTenant('db-customer')).toBe(false);
   });
 
   it('the full condition: brandTheme + not-bundled = chrome CSS', () => {
-    // isKnownTenant imported at top of file
     // Simulating the DesignSystemProvider condition:
-    // normalizedConfig.brandTheme && !isKnownTenant(normalizedConfig.slug)
+    // normalizedConfig.brandTheme && !isBundledTenant(normalizedConfig.slug)
 
     // DB tenant with brandTheme -> gets chrome
     const dbWithBrand = { brandTheme: bithireBrandTheme, slug: 'acme-corp' };
-    const shouldGenerate = !!dbWithBrand.brandTheme && !isKnownTenant(dbWithBrand.slug);
-    expect(shouldGenerate).toBe(true);
+    expect(!!dbWithBrand.brandTheme && !isBundledTenant(dbWithBrand.slug)).toBe(true);
 
     // Bundled tenant with brandTheme -> NO chrome (already in CSS)
     const bundledWithBrand = { brandTheme: bithireBrandTheme, slug: 'bithire' };
-    const shouldNotGenerate = !!bundledWithBrand.brandTheme && !isKnownTenant(bundledWithBrand.slug);
-    expect(shouldNotGenerate).toBe(false);
+    expect(!!bundledWithBrand.brandTheme && !isBundledTenant(bundledWithBrand.slug)).toBe(false);
+
+    // themanagementmiami (bundled CSS, no runtime config) -> NO chrome
+    const tmm = { brandTheme: bithireBrandTheme, slug: 'themanagementmiami' };
+    expect(!!tmm.brandTheme && !isBundledTenant(tmm.slug)).toBe(false);
 
     // DB tenant without brandTheme -> NO chrome (nothing to generate)
     const dbNoBrand = { brandTheme: undefined, slug: 'acme-corp' };
-    const noTheme = !!dbNoBrand.brandTheme && !isKnownTenant(dbNoBrand.slug);
-    expect(noTheme).toBe(false);
+    expect(!!dbNoBrand.brandTheme && !isBundledTenant(dbNoBrand.slug)).toBe(false);
   });
 });

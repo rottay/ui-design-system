@@ -92,7 +92,7 @@ import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../brand-compiler';
-import { isKnownTenant } from '../tenancy/registry';
+import { isBundledTenant } from '../tenancy/registry';
 import type { BrandTheme } from '../../contracts/themes';
 
 /** Build a scoped CSS string from BrandTheme chrome for dynamic tenants. */
@@ -452,7 +452,7 @@ export function DesignSystemProvider({
               branding={normalizedConfig.branding}
               tokenOverrides={normalizedConfig.tokenOverrides}
               generatedChromeCss={
-                normalizedConfig.brandTheme && !isKnownTenant(normalizedConfig.slug)
+                normalizedConfig.brandTheme && !isBundledTenant(normalizedConfig.slug)
                   ? buildScopedChromeCss(normalizedConfig.brandTheme, normalizedConfig.slug)
                   : undefined
               }
