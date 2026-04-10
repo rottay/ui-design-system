@@ -189,6 +189,111 @@ function buildCssString(vars: Record<string, string>, tenantSlug: string): strin
   return `html[data-tenant='${tenantSlug}'] {\n${declarations}\n}`;
 }
 
+// ── Chrome Variables ────────────────────────────────────
+
+/**
+ * Map BrandTheme.chrome sub-interfaces to flat CSS variable declarations.
+ *
+ * This is the explicit chrome channel — sidebar, layout, shell, controls,
+ * and table are NOT shoehorned into tokenOverrides or personality.
+ */
+export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, string> {
+  const vars: Record<string, string> = {};
+  const chrome = bt.chrome;
+  if (!chrome) return vars;
+
+  // Sidebar
+  if (chrome.sidebar) {
+    const s = chrome.sidebar;
+    if (s.bg) vars['--ds-sidebar-bg'] = s.bg;
+    if (s.border) vars['--ds-sidebar-border'] = s.border;
+    if (s.text) vars['--ds-sidebar-text'] = s.text;
+    if (s.textMuted) vars['--ds-sidebar-text-muted'] = s.textMuted;
+    if (s.width) vars['--ds-sidebar-width'] = s.width;
+    if (s.collapsedWidth) vars['--ds-sidebar-collapsed-width'] = s.collapsedWidth;
+    if (s.headerHeight) vars['--ds-sidebar-header-height'] = s.headerHeight;
+    if (s.groupFontSize) vars['--ds-sidebar-group-font-size'] = s.groupFontSize;
+    if (s.groupFontWeight != null) vars['--ds-sidebar-group-font-weight'] = String(s.groupFontWeight);
+    if (s.groupColor) vars['--ds-sidebar-group-color'] = s.groupColor;
+    if (s.groupLetterSpacing) vars['--ds-sidebar-group-letter-spacing'] = s.groupLetterSpacing;
+    if (s.itemFontSize) vars['--ds-sidebar-item-font-size'] = s.itemFontSize;
+    if (s.itemFontWeight != null) vars['--ds-sidebar-item-font-weight'] = String(s.itemFontWeight);
+    if (s.itemFontWeightActive != null) vars['--ds-sidebar-item-font-weight-active'] = String(s.itemFontWeightActive);
+    if (s.itemColor) vars['--ds-sidebar-item-color'] = s.itemColor;
+    if (s.itemColorActive) vars['--ds-sidebar-item-color-active'] = s.itemColorActive;
+    if (s.itemBgActive) vars['--ds-sidebar-item-bg-active'] = s.itemBgActive;
+    if (s.itemBgHover) vars['--ds-sidebar-item-bg-hover'] = s.itemBgHover;
+    if (s.itemPadding) vars['--ds-sidebar-item-padding'] = s.itemPadding;
+    if (s.iconSize) vars['--ds-sidebar-icon-size'] = s.iconSize;
+    if (s.footerBg) vars['--ds-sidebar-footer-bg'] = s.footerBg;
+  }
+
+  // Layout
+  if (chrome.layout) {
+    const l = chrome.layout;
+    if (l.bg) vars['--ds-layout-bg'] = l.bg;
+    if (l.headerBg) vars['--ds-layout-header-bg'] = l.headerBg;
+    if (l.headerBackdrop) vars['--ds-layout-header-backdrop'] = l.headerBackdrop;
+    if (l.headerBorder) vars['--ds-layout-header-border'] = l.headerBorder;
+    if (l.siderBg) vars['--ds-layout-sider-bg'] = l.siderBg;
+    if (l.siderBorder) vars['--ds-layout-sider-border'] = l.siderBorder;
+  }
+
+  // Shell
+  if (chrome.shell) {
+    const sh = chrome.shell;
+    if (sh.gridSize) vars['--ds-shell-grid-size'] = sh.gridSize;
+    if (sh.gridLine) vars['--ds-shell-grid-line'] = sh.gridLine;
+    if (sh.gridOpacity != null) vars['--ds-shell-grid-opacity'] = String(sh.gridOpacity);
+  }
+
+  // Controls
+  if (chrome.controls) {
+    const c = chrome.controls;
+    if (c.buttonPrimary) {
+      if (c.buttonPrimary.bg) vars['--ds-button-primary-bg'] = c.buttonPrimary.bg;
+      if (c.buttonPrimary.bgHover) vars['--ds-button-primary-bg-hover'] = c.buttonPrimary.bgHover;
+      if (c.buttonPrimary.text) vars['--ds-button-primary-text'] = c.buttonPrimary.text;
+      if (c.buttonPrimary.border) vars['--ds-button-primary-border'] = c.buttonPrimary.border;
+      if (c.buttonPrimary.shadow) vars['--ds-button-primary-shadow'] = c.buttonPrimary.shadow;
+    }
+    if (c.buttonSecondary) {
+      if (c.buttonSecondary.bg) vars['--ds-button-secondary-bg'] = c.buttonSecondary.bg;
+      if (c.buttonSecondary.bgHover) vars['--ds-button-secondary-bg-hover'] = c.buttonSecondary.bgHover;
+      if (c.buttonSecondary.text) vars['--ds-button-secondary-text'] = c.buttonSecondary.text;
+      if (c.buttonSecondary.border) vars['--ds-button-secondary-border'] = c.buttonSecondary.border;
+    }
+    if (c.buttonDefault) {
+      if (c.buttonDefault.bg) vars['--ds-button-default-bg'] = c.buttonDefault.bg;
+      if (c.buttonDefault.bgHover) vars['--ds-button-default-bg-hover'] = c.buttonDefault.bgHover;
+      if (c.buttonDefault.text) vars['--ds-button-default-text'] = c.buttonDefault.text;
+      if (c.buttonDefault.border) vars['--ds-button-default-border'] = c.buttonDefault.border;
+    }
+    if (c.buttonGhost) {
+      if (c.buttonGhost.bg) vars['--ds-button-ghost-bg'] = c.buttonGhost.bg;
+      if (c.buttonGhost.bgHover) vars['--ds-button-ghost-bg-hover'] = c.buttonGhost.bgHover;
+      if (c.buttonGhost.text) vars['--ds-button-ghost-text'] = c.buttonGhost.text;
+    }
+    if (c.input) {
+      if (c.input.bg) vars['--ds-input-bg'] = c.input.bg;
+      if (c.input.border) vars['--ds-input-border'] = c.input.border;
+      if (c.input.borderFocus) vars['--ds-input-border-focus'] = c.input.borderFocus;
+      if (c.input.shadowFocus) vars['--ds-input-shadow-focus'] = c.input.shadowFocus;
+    }
+  }
+
+  // Table
+  if (chrome.table) {
+    const t = chrome.table;
+    if (t.headerBg) vars['--ds-table-header-bg'] = t.headerBg;
+    if (t.headerColor) vars['--ds-table-header-color'] = t.headerColor;
+    if (t.headerFontWeight != null) vars['--ds-table-header-font-weight'] = String(t.headerFontWeight);
+    if (t.headerFontSize) vars['--ds-table-header-font-size'] = t.headerFontSize;
+  }
+
+  return vars;
+}
+
 // ── Brand Compiler ──────────────────────────────────────
 
 /**
@@ -215,8 +320,10 @@ export const compileBrandTheme: CompileBrandTheme = (input: BrandCompilerInput):
     btOverrides,
   );
 
-  // CSS variables from palette + typography
-  const cssVariables = brandThemeToCssVariables(brandTheme);
+  // CSS variables from palette + typography + chrome
+  const paletteVars = brandThemeToCssVariables(brandTheme);
+  const chromeVars = brandThemeToChromeVariables(brandTheme);
+  const cssVariables = { ...paletteVars, ...chromeVars };
 
   // CSS string with tenant selectors
   const cssString = buildCssString(cssVariables, tenantSlug);
