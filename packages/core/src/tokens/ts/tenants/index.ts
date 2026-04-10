@@ -1,19 +1,23 @@
 /**
- * @fileoverview Barrel for tenant-specific token overrides.
+ * @fileoverview Tenant token reference mirrors.
  *
- * Tenant tokens provide brand-specific CSS variable references that sit on top
- * of the base token layer. Currently only ships the Rottay (default) tenant.
- * Additional tenants (BitHire, Evnto) apply their overrides via CSS class
- * scoping at runtime rather than through this TS layer.
+ * These are NOT authored premium sources — that role belongs to
+ * `tokens/ts/brand-themes/`. This directory contains typed catalogs of
+ * CSS variable references (`var(--ds-*)`) for discovery and component code.
+ *
+ * Currently only ships the Rottay reference mirror. Other tenants apply
+ * their overrides via CSS class scoping at runtime.
+ *
+ * @see tokens/ts/brand-themes/ — the canonical authored premium source
  */
 
-// Individual tenant token exports
+// Individual tenant reference mirrors
 export * from './rottay';
 
 // Named imports for grouped exports
 import { rottayTokens } from './rottay';
 
-// Combined tenant tokens export
+// Combined tenant tokens export (reference mirrors only)
 export const tenantTokens = {
   rottay: rottayTokens,
 } as const;

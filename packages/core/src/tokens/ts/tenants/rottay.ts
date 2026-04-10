@@ -1,5 +1,9 @@
 /**
- * @fileoverview Rottay (default tenant) token mirrors.
+ * @fileoverview Rottay (default tenant) token reference mirror.
+ *
+ * This is a REFERENCE MIRROR — typed `var(--ds-*)` catalog for discovery
+ * and component code. It is NOT the canonical authored premium source.
+ * The authored source is `tokens/ts/brand-themes/rottay.ts`.
  *
  * Mirrors only the CSS custom properties that actually exist in the shipped
  * stylesheets. Organized by semantic role: brand colors, backgrounds, text,
