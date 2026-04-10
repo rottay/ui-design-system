@@ -1,8 +1,12 @@
 /**
- * Rottay first-party brand theme.
+ * Rottay first-party vertical theme.
  *
- * Dark-first, premium SaaS aesthetic. White accents on near-black canvas.
- * Spring animations, gradient accents, glass tooltips, medium hover lift.
+ * Dark-first premium AI/security command center.
+ * Graphite environments, restrained cobalt/cyan accents, crisp off-white type.
+ * Disciplined spring motion, mono pairing for data surfaces.
+ *
+ * H4 brief: dark, sober, technical, premium. Reduce purple/teal SaaS energy.
+ * Strengthen shell and layout as identity. Controls feel tool-like, not app-generic.
  *
  * Source data: vertical registry (platform), personality preset (expressive),
  * tenant CSS (tokens/css/artifacts/rottay/index.css).
@@ -20,7 +24,13 @@ export const rottayBrandTheme: BrandTheme = {
     accentColor: '#14B8A6',
     darkPrimaryColor: '#818CF8',
     darkSecondaryColor: '#A1A1AA',
+    darkAccentColor: '#14B8A6',
     darkBackgroundColor: '#0C0C0E',
+    // Semantic colors: muted and serious, not candy-bright (H4 direction)
+    successColor: '#22C55E',
+    warningColor: '#EAB308',
+    errorColor: '#EF4444',
+    infoColor: '#6366F1',
   },
 
   typography: {
@@ -34,6 +44,22 @@ export const rottayBrandTheme: BrandTheme = {
 
   surfaces: {
     densityScale: 1.0,
+    // Sharp and restrained (H4: slightly sharper corners than other brands)
+    borderRadius: { sm: '4px', md: '6px', lg: '8px', xl: '12px' },
+    shadows: {
+      sm: '0 1px 2px rgba(0, 0, 0, 0.3)',
+      md: '0 4px 12px rgba(0, 0, 0, 0.25)',
+      lg: '0 8px 24px rgba(0, 0, 0, 0.3)',
+      xl: '0 16px 48px rgba(0, 0, 0, 0.35)',
+    },
+    // Rottay: no glass, no gradients, subtle overlays (H4: low-gloss, serious)
+    glass: { blur: 'none', background: 'none', border: 'none' },
+    gradients: { primary: 'none', surface: 'none', mesh: 'none' },
+    overlays: {
+      light: 'rgba(255, 255, 255, 0.03)',
+      medium: 'rgba(255, 255, 255, 0.06)',
+      heavy: 'rgba(255, 255, 255, 0.1)',
+    },
   },
 
   motion: {
@@ -118,6 +144,7 @@ export const rottayBrandTheme: BrandTheme = {
       buttonSecondary: { bg: '#2A2A2F', bgHover: '#3A3A40', text: '#ECECEC', border: '#3A3A40' },
       buttonDefault: { bg: '#18181B', bgHover: '#222226', text: '#ECECEC', border: '#3A3A40' },
       buttonGhost: { bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', text: '#A0A0A5' },
+      input: { bg: '#18181B', border: '#3A3A40', borderFocus: '#6366F1', shadowFocus: '0 0 0 1px rgba(99, 102, 241, 0.3)' },
     },
     table: {
       headerBg: '#131316',
