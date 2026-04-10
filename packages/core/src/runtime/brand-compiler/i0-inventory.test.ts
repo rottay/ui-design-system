@@ -420,22 +420,47 @@ describe('H3 contract: bithire', () => {
     it('focus: input has shadowFocus', () => expect(bithireBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
   });
 
-  describe('bithire surfaces in artifact + generated output', () => {
-    it('artifact has authored radius', () => {
-      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
-      expect(artifact).toContain('--ds-radius-sm: 6px');
+  describe('bithire surfaces in artifact (light + dark)', () => {
+    const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
+    // Split at the actual dark selector (not the :not() pseudo in the light block)
+    const darkSelector = "html[data-tenant='bithire'][data-theme='dark']";
+    const darkIdx = artifact.indexOf(darkSelector);
+    const lightBlock = darkIdx > 0 ? artifact.slice(0, darkIdx) : artifact;
+    const darkBlock = darkIdx > 0 ? artifact.slice(darkIdx) : '';
+
+    it('light: radius scale sm/md/lg/xl', () => {
+      expect(lightBlock).toContain('--ds-radius-sm: 6px');
+      expect(lightBlock).toContain('--ds-radius-md: 8px');
+      expect(lightBlock).toContain('--ds-radius-lg: 12px');
+      expect(lightBlock).toContain('--ds-radius-xl: 16px');
+    });
+    it('light: shadow scale sm/md/lg/xl', () => {
+      expect(lightBlock).toContain('--ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06)');
+      expect(lightBlock).toContain('--ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08)');
+      expect(lightBlock).toContain('--ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1)');
+      expect(lightBlock).toContain('--ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12)');
+    });
+    it('dark: radius scale matches light', () => {
+      expect(darkBlock).toContain('--ds-radius-sm: 6px');
+      expect(darkBlock).toContain('--ds-radius-md: 8px');
+    });
+    it('dark: shadow scale is authored (not old compound)', () => {
+      expect(darkBlock).toContain('--ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2)');
+      expect(darkBlock).not.toContain('0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)');
+    });
+    it('no stale 4px radius in either block', () => {
       expect(artifact).not.toContain('--ds-radius-sm: 4px');
     });
-    it('artifact has authored shadow scale', () => {
-      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
-      expect(artifact).toContain('--ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06)');
-    });
-    it('generated CSS includes surfaces', () => {
+  });
+
+  describe('bithire surfaces in generated CSS', () => {
+    it('generated output includes full surface scale', () => {
       const css = generateTenantCss(
         { slug: 'bithire', name: 'BitHire', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'BitHire', primaryColor: '#0A66C2', secondaryColor: '#004182', accentColor: '#7FC15E' }, brandTheme: bithireBrandTheme },
         { includeDarkSelector: false },
       );
       expect(css).toContain('--ds-radius-sm: 6px');
+      expect(css).toContain('--ds-radius-xl: 16px');
       expect(css).toContain('--ds-density-scale: 0.95');
     });
   });
