@@ -4,23 +4,50 @@ Wave H3 deliverable. Defines the minimum expressive contract every
 first-party vertical must support. World-class means parity of
 expressive power, not identical visuals.
 
-## Current Coverage
+## Current Coverage (measured against minimum contract)
+
+Legend: FULL = all minimum fields present, PARTIAL = some fields present,
+MISSING = category absent, count = fields present / fields required.
 
 | Category | Rottay | BitHire | Evnto |
 |----------|:------:|:-------:|:-----:|
-| Palette | YES | YES | YES |
-| Typography | YES | YES | YES |
-| Surfaces | YES | YES | YES |
-| Motion | YES | YES | YES |
-| Charts | YES | YES | YES |
-| Chrome: sidebar | YES | YES | YES |
-| Chrome: layout | YES | no | no |
-| Chrome: shell | YES | no | no |
-| Chrome: controls | YES | YES | YES |
-| Chrome: table | YES | YES | YES |
+| Palette | PARTIAL (6/10) | FULL (10/10) | PARTIAL (6/10) |
+| Typography | FULL (6/6) | FULL (6/6) | FULL (6/6) |
+| Surfaces | PARTIAL (1/6) | PARTIAL (1/6) | PARTIAL (2/6) |
+| Motion | FULL (13/13) | FULL (13/13) | FULL (13/13) |
+| Charts | FULL (6/6) | FULL (6/6) | FULL (6/6) |
+| Chrome: sidebar | FULL (16/16) | FULL (16/16) | FULL (16/16) |
+| Chrome: layout | FULL (6/6) | MISSING (0/6) | MISSING (0/6) |
+| Chrome: shell | FULL (3/3) | MISSING (0/3) | MISSING (0/3) |
+| Chrome: controls | PARTIAL (4/5) | PARTIAL (2/5) | PARTIAL (2/5) |
+| Chrome: table | FULL (4/4) | FULL (4/4) | PARTIAL (1/4) |
+| Dark-mode | Not authored | Not authored | Not authored |
+| State semantics | Not authored | Not authored | Not authored |
 
-BitHire and Evnto are missing layout and shell in their authored
-BrandTheme sources.
+### Key Gaps By Vertical
+
+**Rottay (10 missing fields):**
+- Palette: missing success, warning, error, info
+- Surfaces: missing borderRadius, shadows, glass, gradients, overlays
+- Controls: missing input treatment
+
+**BitHire (17 missing fields):**
+- Surfaces: missing borderRadius, shadows, glass, gradients, overlays
+- Layout: entirely missing (6 fields)
+- Shell: entirely missing (3 fields)
+- Controls: missing buttonDefault, buttonGhost, buttonPrimary.border/shadow
+
+**Evnto (23 missing fields):**
+- Palette: missing success, warning, error, info
+- Surfaces: missing shadows, glass, gradients, overlays
+- Layout: entirely missing (6 fields)
+- Shell: entirely missing (3 fields)
+- Controls: missing buttonDefault, buttonGhost, buttonPrimary.border/shadow
+- Table: missing headerColor, headerFontWeight, headerFontSize
+
+**All three share:** missing surfaces (shadows/glass/gradients/overlays),
+missing buttonDefault/buttonGhost, no authored dark-mode chrome, no
+authored state semantics.
 
 ## Required Minimum Contract
 
@@ -124,11 +151,23 @@ Every vertical must provide a coherent story for:
 
 ## Gap Closure Required (Implementation Waves)
 
-| Vertical | Missing | Target Wave |
-|----------|---------|-------------|
-| BitHire | chrome.layout, chrome.shell | I5 |
-| Evnto | chrome.layout, chrome.shell | I6 |
+| Vertical | Gap | Target Wave |
+|----------|-----|-------------|
+| Rottay | Palette: semantic colors (success/warning/error/info) | I4 |
+| Rottay | Surfaces: borderRadius, shadows, glass, gradients, overlays | I4 |
+| Rottay | Controls: input treatment | I4 |
+| BitHire | Surfaces: borderRadius, shadows, glass, gradients, overlays | I5 |
+| BitHire | Layout: all 6 fields | I5 |
+| BitHire | Shell: all 3 fields | I5 |
+| BitHire | Controls: buttonDefault, buttonGhost, buttonPrimary completeness | I5 |
+| Evnto | Palette: semantic colors | I6 |
+| Evnto | Surfaces: shadows, glass, gradients, overlays | I6 |
+| Evnto | Layout: all 6 fields | I6 |
+| Evnto | Shell: all 3 fields | I6 |
+| Evnto | Controls: buttonDefault, buttonGhost, buttonPrimary completeness | I6 |
+| Evnto | Table: headerColor, headerFontWeight, headerFontSize | I6 |
 | All three | Dark-mode authored chrome | I4-I6 |
+| All three | State semantics (success/warning/error/info/disabled/focus) | I4-I6 |
 
 ## Acceptance Criteria
 
