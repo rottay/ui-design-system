@@ -9,6 +9,7 @@ Documentation baseline for the premium styling and token taxonomy track.
 3. `00-stop-template.md` -- Mandatory STOP format for all waves
 4. `01-target-taxonomy.md` -- Target tree, naming rules, current-vs-target comparison
 5. `02-customization-model.md` -- Vertical Theme vs Tenant Appearance General/Advanced
+6. `03-premium-contract-parity.md` -- Minimum expressive contract for all first-party verticals
 
 ## Canonical Audit Reference
 
@@ -30,8 +31,8 @@ Reading order within that pack:
 |------|-------|--------|
 | H0 | Documentation baseline | Approved |
 | H1 | Taxonomy truthfulness | Approved |
-| H2 | Customization model definition | In progress |
-| H3 | Premium contract parity | Pending |
+| H2 | Customization model definition | Approved |
+| H3 | Premium contract parity | In progress |
 | H4 | Vertical style briefs | Pending |
 | H5 | Claude master prompt | Pending |
 | I0-I7 | Implementation | Blocked on H0-H5 |
