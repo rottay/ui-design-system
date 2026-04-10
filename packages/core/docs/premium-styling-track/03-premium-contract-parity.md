@@ -46,8 +46,10 @@ MISSING = category absent, count = fields present / fields required.
 - Table: missing headerColor, headerFontWeight, headerFontSize
 
 **All three share:** missing surfaces (shadows/glass/gradients/overlays),
-missing buttonDefault/buttonGhost, no authored dark-mode chrome, no
-authored state semantics.
+no authored dark-mode chrome, no authored state semantics.
+
+**BitHire and Evnto share:** missing buttonDefault/buttonGhost,
+incomplete buttonPrimary (border/shadow).
 
 ## Required Minimum Contract
 
