@@ -21,7 +21,7 @@
 import React, { useMemo, useEffect, useRef } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../TenantPreview.types';
 import { createTenantConfig } from '../../../../../runtime/tenancy/authoring/create-tenant';
-import { resolvePersonalityPreset } from '../../../../../runtime/tenancy/personality-presets';
+import { resolvePersonalityPreset } from '../../../../../runtime/tenancy/personality';
 import { generateTenantCss } from '../../../../../runtime/tenancy/storage/static/generator';
 
 /** Default component samples shown when none specified */

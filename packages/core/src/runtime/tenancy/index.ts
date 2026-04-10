@@ -39,8 +39,8 @@ export type { TenantCreationConfig } from './authoring/create-tenant';
 export { useCreateTenant } from './authoring/useCreateTenant';
 
 // ── Presets (personality resolution) ──
-export { resolvePersonalityPreset } from './personality-presets';
-export type { PersonalityPreset } from './personality-presets';
+export { resolvePersonalityPreset } from './personality';
+export type { PersonalityPreset } from './personality';
 
 // ── Schema & validation ──
 // Pure functions for validating tenant payloads against the DS contract.

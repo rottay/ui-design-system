@@ -9,7 +9,7 @@
  * Unknown preset names degrade to `neutral` rather than throwing.
  */
 
-import type { PersonalityTokens } from '../../contracts/tokens/personality';
+import type { PersonalityTokens } from '../../../contracts/tokens/personality';
 
 /**
  * Named personality keywords that map to full PersonalityTokens objects.

@@ -5,7 +5,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { createTenantConfig, type TenantCreationConfig } from './create-tenant';
-import { resolvePersonalityPreset, type PersonalityPreset } from './personality-presets';
+import { resolvePersonalityPreset, type PersonalityPreset } from '../personality';
 
 describe('resolvePersonalityPreset', () => {
   it('should return complete personality tokens for each preset', () => {

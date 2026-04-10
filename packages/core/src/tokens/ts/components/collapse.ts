@@ -20,7 +20,7 @@ import {
   type CollapseSlot,
   type CollapseTokenOptions,
   type CollapseVariant,
-} from '../../../hooks/components/collapse-token-utils';
+} from './collapse-token-utils';
 
 // =============================================================================
 // TYPE DEFINITIONS

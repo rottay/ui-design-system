@@ -9,7 +9,7 @@
 import type { TenantConfig, EngineName, TenantPlan } from '../../../contracts';
 import type { PersonalityTokens } from '../../../contracts/tokens/personality';
 import type { TenantTokenOverrides } from '../../../contracts/tenants';
-import { resolvePersonalityPreset, type PersonalityPreset } from '../personality-presets';
+import { resolvePersonalityPreset, type PersonalityPreset } from '../personality';
 
 export interface TenantCreationConfig {
   /** Unique slug identifier for the tenant */
