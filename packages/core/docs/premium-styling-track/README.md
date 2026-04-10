@@ -46,7 +46,7 @@ Reading order within that pack:
 | I0 | Inventory and test net |
 | I1 | Token taxonomy cleanup |
 | I2 | Customization model scaffolding |
-| I3 | Parity normalization |
+| I3 | Parity test harness |
 | I4 | Rottay overhaul |
 | I5 | BitHire overhaul |
 | I6 | Evnto overhaul |

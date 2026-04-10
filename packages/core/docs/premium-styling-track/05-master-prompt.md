@@ -93,21 +93,22 @@ Brand-compiler tests pass.
 
 ### Wave I3 — Parity Test Harness
 
-**Goal:** Build the test harness that verifies H3 contract parity, so
-I4/I5/I6 can close gaps with a safety net.
+**Goal:** Build the test harness that will verify H3 contract parity
+once I4/I5/I6 fill the gaps. All tests must pass green.
 
 **Scope:**
 - Add per-category presence tests for the full minimum contract
-- Tests should fail for currently missing fields (documenting the gap)
-- Tests should pass once I4/I5/I6 fill the gaps
+- Tests that check currently-filled fields assert their values (green)
+- Tests that check currently-missing fields are marked `it.skip` with
+  a comment naming the target wave (I4/I5/I6) — green, not failing
+- When I4/I5/I6 fill a gap, the corresponding skip is removed
 
-All actual gap closure (surfaces philosophy, dark-mode, state semantics,
-layout, shell, controls, palette, table) happens inside I4/I5/I6 per
-the mapping in `03-premium-contract-parity.md` gap closure table.
+All actual gap closure happens inside I4/I5/I6 per the mapping in
+`03-premium-contract-parity.md` gap closure table.
 
 **Touches:** brand-compiler tests only. No source changes.
 
-**Verification:** DS typecheck + build. New tests document current gaps.
+**Verification:** DS typecheck + build. All tests green (skips documented).
 
 ### Wave I4 — Rottay Overhaul
 
