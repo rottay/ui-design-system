@@ -596,6 +596,9 @@ describe('H3 contract: evnto', () => {
 
   describe('evnto artifact + generated output (I6 public path)', () => {
     const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/evnto/index.css'), 'utf-8');
+    const darkSelector = "html[data-tenant='evnto'][data-theme='dark']";
+    const darkIdx = artifact.indexOf(darkSelector);
+    const darkBlock = darkIdx > 0 ? artifact.slice(darkIdx) : '';
     it('artifact: radius-sm is 10px', () => {
       expect(artifact).toContain('--ds-radius-sm: 10px');
     });
@@ -617,6 +620,34 @@ describe('H3 contract: evnto', () => {
     it('artifact: disabled vars present', () => {
       expect(artifact).toContain('--ds-button-disabled-opacity: 0.4');
       expect(artifact).toContain('--ds-input-disabled-opacity: 0.4');
+    });
+    it('dark block: radius matches authored', () => {
+      expect(darkBlock).toContain('--ds-radius-sm: 10px');
+      expect(darkBlock).toContain('--ds-radius-xl: 24px');
+    });
+    it('dark block: shadow matches authored', () => {
+      const authored = evntoBrandTheme.surfaces!.shadows!;
+      expect(darkBlock).toContain(`--ds-shadow-sm: ${authored.sm}`);
+    });
+    it('dark block: layout present', () => {
+      expect(darkBlock).toContain('--ds-layout-bg');
+      expect(darkBlock).toContain('--ds-layout-sider-bg');
+    });
+    it('dark block: shell present', () => {
+      expect(darkBlock).toContain('--ds-shell-grid-size: 0px');
+    });
+    it('dark block: controls complete', () => {
+      expect(darkBlock).toContain('--ds-button-default-bg');
+      expect(darkBlock).toContain('--ds-button-ghost-bg');
+      expect(darkBlock).toContain('--ds-button-disabled-opacity: 0.4');
+    });
+    it('dark block: table metadata', () => {
+      expect(darkBlock).toContain('--ds-table-header-color');
+      expect(darkBlock).toContain('--ds-table-header-font-weight: 500');
+    });
+    it('dark block: disabled treatment', () => {
+      expect(darkBlock).toContain('--ds-input-disabled-opacity: 0.4');
+      expect(darkBlock).toContain('--ds-input-border-color-disabled');
     });
     it('generated CSS includes chrome', () => {
       const css = generateTenantCss(

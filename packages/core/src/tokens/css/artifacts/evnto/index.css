@@ -334,14 +334,41 @@ html[data-tenant='evnto'].dark {
   --ds-color-border-secondary: #222018;
   --ds-color-border-focus: #A89880;
 
+  /* Border Radius - same as light (shape doesn't change with theme) */
+  --ds-radius-sm: 10px;
+  --ds-radius-md: 14px;
+  --ds-radius-lg: 18px;
+  --ds-radius-xl: 24px;
+  --ds-radius-full: 9999px;
+
+  /* Shadows - same authored scale as light */
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
+
   /* Button tokens - dark */
   --ds-button-primary-bg: #E8E8E0;
   --ds-button-primary-text: #131210;
   --ds-button-primary-hover-bg: #F0F0E8;
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   --ds-button-secondary-bg: transparent;
   --ds-button-secondary-text: #A8A898;
   --ds-button-secondary-border: #2E2C24;
   --ds-button-secondary-hover-bg: #1C1A16;
+  --ds-button-default-bg: #1C1A16;
+  --ds-button-default-bg-hover: #24221C;
+  --ds-button-default-color: #E8E8E0;
+  --ds-button-default-border: #2E2C24;
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.04);
+  --ds-button-ghost-color: #A8A898;
+  --ds-button-disabled-bg: #1C1A16;
+  --ds-button-disabled-color: #484838;
+  --ds-button-disabled-border: #222018;
+  --ds-button-disabled-border-color: #222018;
+  --ds-button-disabled-opacity: 0.4;
 
   /* Card tokens - dark */
   --ds-card-bg: #1C1A16;
@@ -353,9 +380,30 @@ html[data-tenant='evnto'].dark {
   --ds-input-text: #E8E8E0;
   --ds-input-placeholder: #686858;
   --ds-input-focus-border: #A89880;
+  --ds-input-bg-disabled: #1C1A16;
+  --ds-input-color-disabled: #484838;
+  --ds-input-border-disabled: #222018;
+  --ds-input-border-color-disabled: #222018;
+  --ds-input-disabled-opacity: 0.4;
+
+  /* Layout tokens - dark */
+  --ds-layout-bg: #131210;
+  --ds-layout-header-bg: rgba(19, 18, 16, 0.92);
+  --ds-layout-header-backdrop: blur(10px);
+  --ds-layout-header-border: #2E2C24;
+  --ds-layout-sider-bg: #0E0D0B;
+  --ds-layout-sider-border: #222018;
+
+  /* Shell - minimal (same as light) */
+  --ds-shell-grid-size: 0px;
+  --ds-shell-grid-line: transparent;
+  --ds-shell-grid-opacity: 0;
 
   /* Table tokens - dark */
   --ds-table-header-bg: #1C1A16;
+  --ds-table-header-color: #A8A898;
+  --ds-table-header-font-weight: 500;
+  --ds-table-header-font-size: 0.75rem;
   --ds-table-row-hover: #24221C;
   --ds-table-border: #222018;
 
@@ -365,7 +413,7 @@ html[data-tenant='evnto'].dark {
   --ds-sidebar-active-bg: #1C1A16;
   --ds-sidebar-active-text: #E8E8E0;
 
-  /* Evnto domain tokens - dark variant */
+  /* Domain-owned tokens: should migrate to app-evnto per frozen decision 12. */
   --ds-evnto-accent-primary: #A89880;
   --ds-evnto-accent-secondary: #8A7A68;
   --ds-evnto-highlight: rgba(168, 152, 128, 0.12);
