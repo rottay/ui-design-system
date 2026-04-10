@@ -419,6 +419,40 @@ describe('H3 contract: bithire', () => {
     it('focus: input has borderFocus', () => expect(bithireBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
     it('focus: input has shadowFocus', () => expect(bithireBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
   });
+
+  describe('bithire artifact + generated output (I5 public path)', () => {
+    it('artifact has layout vars', () => {
+      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
+      expect(artifact).toContain('--ds-layout-bg: #FFFFFF');
+      expect(artifact).toContain('--ds-layout-header-bg');
+      expect(artifact).toContain('--ds-layout-sider-bg');
+    });
+    it('artifact has shell vars (minimal)', () => {
+      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
+      expect(artifact).toContain('--ds-shell-grid-size: 0px');
+      expect(artifact).toContain('--ds-shell-grid-opacity: 0');
+    });
+    it('artifact has buttonDefault + buttonGhost', () => {
+      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
+      expect(artifact).toContain('--ds-button-default-bg: #FFFFFF');
+      expect(artifact).toContain('--ds-button-ghost-bg: transparent');
+    });
+    it('artifact has disabled vars', () => {
+      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
+      expect(artifact).toContain('--ds-button-disabled-opacity: 0.45');
+      expect(artifact).toContain('--ds-input-disabled-opacity: 0.45');
+    });
+    it('generated CSS includes chrome vars', () => {
+      const css = generateTenantCss(
+        { slug: 'bithire', name: 'BitHire', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'BitHire', primaryColor: '#0A66C2', secondaryColor: '#004182', accentColor: '#7FC15E' }, brandTheme: bithireBrandTheme },
+        { includeDarkSelector: false },
+      );
+      expect(css).toContain('--ds-layout-bg: #FFFFFF');
+      expect(css).toContain('--ds-shell-grid-size: 0px');
+      expect(css).toContain('--ds-button-default-bg: #FFFFFF');
+      expect(css).toContain('--ds-button-disabled-opacity: 0.45');
+    });
+  });
 });
 
 // ── Evnto ──

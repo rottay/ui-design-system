@@ -159,6 +159,20 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-button-secondary-border: #0A66C2;
   --ds-button-secondary-text: #0A66C2;
   --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --ds-button-default-bg: #FFFFFF;
+  --ds-button-default-bg-hover: #F8F8F8;
+  --ds-button-default-color: rgba(0, 0, 0, 0.85);
+  --ds-button-default-border: rgba(0, 0, 0, 0.15);
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.04);
+  --ds-button-ghost-color: rgba(0, 0, 0, 0.65);
+  --ds-button-disabled-bg: #F8F8F8;
+  --ds-button-disabled-color: rgba(0, 0, 0, 0.3);
+  --ds-button-disabled-border: rgba(0, 0, 0, 0.08);
+  --ds-button-disabled-border-color: rgba(0, 0, 0, 0.08);
+  --ds-button-disabled-opacity: 0.45;
 
   /* Card overrides */
   --ds-card-bg: #ffffff;
@@ -175,6 +189,24 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-input-shadow-focus: 0 0 0 1px #0A66C2;
   --ds-input-color: rgba(0, 0, 0, 0.9);
   --ds-input-color-placeholder: rgba(0, 0, 0, 0.4);
+  --ds-input-bg-disabled: #F8F8F8;
+  --ds-input-color-disabled: rgba(0, 0, 0, 0.3);
+  --ds-input-border-disabled: rgba(0, 0, 0, 0.08);
+  --ds-input-border-color-disabled: rgba(0, 0, 0, 0.08);
+  --ds-input-disabled-opacity: 0.45;
+
+  /* Layout */
+  --ds-layout-bg: #FFFFFF;
+  --ds-layout-header-bg: rgba(255, 255, 255, 0.92);
+  --ds-layout-header-backdrop: blur(8px);
+  --ds-layout-header-border: rgba(0, 0, 0, 0.08);
+  --ds-layout-sider-bg: #FFFFFF;
+  --ds-layout-sider-border: rgba(0, 0, 0, 0.08);
+
+  /* Shell (intentionally minimal) */
+  --ds-shell-grid-size: 0px;
+  --ds-shell-grid-line: transparent;
+  --ds-shell-grid-opacity: 0;
 
   /* Table */
   --ds-table-bg: #ffffff;
