@@ -23,25 +23,37 @@ const CSS_SRC = resolve(__dirname, '../../tokens/css');
 // ══════════════════════════════════════════════════════════
 
 describe('public CSS export surface', () => {
-  const EXPECTED_CSS_OUTPUTS = [
-    'styles.css',
-    'platform.css',
-    'bithire.css',
-    'evnto.css',
-    'modern-engine.css',
-  ];
+  // Every subpath in package.json exports that resolves to a CSS file
+  const EXPORT_TO_DIST: Record<string, string> = {
+    './styles': 'styles.css',
+    './styles.css': 'styles.css',         // alias
+    './styles/platform': 'platform.css',
+    './styles/rottay': 'platform.css',    // alias for platform
+    './styles/bithire': 'bithire.css',
+    './styles/evnto': 'evnto.css',
+    './styles/modern': 'modern-engine.css',
+  };
 
-  it.each(EXPECTED_CSS_OUTPUTS)('dist/%s exists and is non-empty', (file) => {
-    const path = resolve(DIST, file);
-    expect(existsSync(path), `${file} should exist in dist/`).toBe(true);
-    const content = readFileSync(path, 'utf-8');
-    expect(content.length).toBeGreaterThan(1000);
-  });
+  it.each(Object.entries(EXPORT_TO_DIST))(
+    'export %s -> dist/%s exists and is non-empty',
+    (exportPath, distFile) => {
+      const path = resolve(DIST, distFile);
+      expect(existsSync(path), `${distFile} should exist for ${exportPath}`).toBe(true);
+      const content = readFileSync(path, 'utf-8');
+      expect(content.length).toBeGreaterThan(1000);
+    }
+  );
 
   it('styles.css is the largest bundle (full)', () => {
     const styles = readFileSync(resolve(DIST, 'styles.css'), 'utf-8');
     const platform = readFileSync(resolve(DIST, 'platform.css'), 'utf-8');
     expect(styles.length).toBeGreaterThan(platform.length);
+  });
+
+  it('./styles/rottay and ./styles/platform resolve to same file', () => {
+    const rottay = readFileSync(resolve(DIST, 'platform.css'), 'utf-8');
+    // Both exports point to platform.css — verify it's substantial
+    expect(rottay.length).toBeGreaterThan(100000);
   });
 });
 
@@ -121,7 +133,15 @@ function checkMotion(bt: BrandTheme, name: string) {
     it('has entrance', () => expect(bt.motion?.entrance).toBeTruthy());
     it('has entranceDuration', () => expect(bt.motion?.entranceDuration).toBeDefined());
     it('has hoverLift', () => expect(bt.motion?.hoverLift).toBeDefined());
+    it('has hoverScale', () => expect(bt.motion?.hoverScale).toBeDefined());
     it('has useSpring', () => expect(bt.motion?.useSpring).toBeDefined());
+    it('has springTension', () => expect(bt.motion?.springTension).toBeDefined());
+    it('has springFriction', () => expect(bt.motion?.springFriction).toBeDefined());
+    it('has staggerDelay', () => expect(bt.motion?.staggerDelay).toBeDefined());
+    it('has staggerMax', () => expect(bt.motion?.staggerMax).toBeDefined());
+    it('has pulseSpeed', () => expect(bt.motion?.pulseSpeed).toBeTruthy());
+    it('has skeletonStyle', () => expect(bt.motion?.skeletonStyle).toBeTruthy());
+    it('has countUpEnabled', () => expect(bt.motion?.countUpEnabled).toBeDefined());
   });
 }
 
@@ -129,6 +149,8 @@ function checkCharts(bt: BrandTheme, name: string) {
   describe(`${name} charts`, () => {
     it('has lineStyle', () => expect(bt.charts?.lineStyle).toBeTruthy());
     it('has tooltipStyle', () => expect(bt.charts?.tooltipStyle).toBeTruthy());
+    it('has useGradientFill', () => expect(bt.charts?.useGradientFill).toBeDefined());
+    it('has showDots', () => expect(bt.charts?.showDots).toBeDefined());
     it('has animateOnMount', () => expect(bt.charts?.animateOnMount).toBeDefined());
     it('has mountDuration', () => expect(bt.charts?.mountDuration).toBeDefined());
   });
@@ -138,8 +160,19 @@ function checkSidebar(bt: BrandTheme, name: string) {
   describe(`${name} chrome.sidebar`, () => {
     it('has bg', () => expect(bt.chrome?.sidebar?.bg).toBeTruthy());
     it('has text', () => expect(bt.chrome?.sidebar?.text).toBeTruthy());
-    it('has itemColor', () => expect(bt.chrome?.sidebar?.itemColor).toBeTruthy());
+    it('has textMuted', () => expect(bt.chrome?.sidebar?.textMuted).toBeTruthy());
     it('has groupFontSize', () => expect(bt.chrome?.sidebar?.groupFontSize).toBeTruthy());
+    it('has groupFontWeight', () => expect(bt.chrome?.sidebar?.groupFontWeight).toBeDefined());
+    it('has groupColor', () => expect(bt.chrome?.sidebar?.groupColor).toBeTruthy());
+    it('has groupLetterSpacing', () => expect(bt.chrome?.sidebar?.groupLetterSpacing).toBeTruthy());
+    it('has itemFontSize', () => expect(bt.chrome?.sidebar?.itemFontSize).toBeTruthy());
+    it('has itemFontWeight', () => expect(bt.chrome?.sidebar?.itemFontWeight).toBeDefined());
+    it('has itemFontWeightActive', () => expect(bt.chrome?.sidebar?.itemFontWeightActive).toBeDefined());
+    it('has itemColor', () => expect(bt.chrome?.sidebar?.itemColor).toBeTruthy());
+    it('has itemColorActive', () => expect(bt.chrome?.sidebar?.itemColorActive).toBeTruthy());
+    it('has itemBgActive', () => expect(bt.chrome?.sidebar?.itemBgActive).toBeTruthy());
+    it('has itemBgHover', () => expect(bt.chrome?.sidebar?.itemBgHover).toBeTruthy());
+    it('has itemPadding', () => expect(bt.chrome?.sidebar?.itemPadding).toBeTruthy());
     it('has iconSize', () => expect(bt.chrome?.sidebar?.iconSize).toBeTruthy());
   });
 }
@@ -165,16 +198,20 @@ describe('H3 contract: rottay', () => {
   });
 
   describe('rottay chrome.controls', () => {
-    it('has buttonPrimary', () => expect(rottayBrandTheme.chrome?.controls?.buttonPrimary?.bg).toBeTruthy());
-    it('has buttonSecondary', () => expect(rottayBrandTheme.chrome?.controls?.buttonSecondary?.bg).toBeTruthy());
-    it('has buttonDefault', () => expect(rottayBrandTheme.chrome?.controls?.buttonDefault?.bg).toBeTruthy());
-    it('has buttonGhost', () => expect(rottayBrandTheme.chrome?.controls?.buttonGhost?.bg).toBeTruthy());
+    it('has buttonPrimary.bg', () => expect(rottayBrandTheme.chrome?.controls?.buttonPrimary?.bg).toBeTruthy());
+    it('has buttonPrimary.bgHover', () => expect(rottayBrandTheme.chrome?.controls?.buttonPrimary?.bgHover).toBeTruthy());
+    it('has buttonPrimary.text', () => expect(rottayBrandTheme.chrome?.controls?.buttonPrimary?.text).toBeTruthy());
+    it('has buttonPrimary.shadow', () => expect(rottayBrandTheme.chrome?.controls?.buttonPrimary?.shadow).toBeTruthy());
+    it('has buttonSecondary.bg', () => expect(rottayBrandTheme.chrome?.controls?.buttonSecondary?.bg).toBeTruthy());
+    it('has buttonDefault.bg', () => expect(rottayBrandTheme.chrome?.controls?.buttonDefault?.bg).toBeTruthy());
+    it('has buttonGhost.bg', () => expect(rottayBrandTheme.chrome?.controls?.buttonGhost?.bg).toBeTruthy());
   });
 
   describe('rottay chrome.table', () => {
     it('has headerBg', () => expect(rottayBrandTheme.chrome?.table?.headerBg).toBeTruthy());
     it('has headerColor', () => expect(rottayBrandTheme.chrome?.table?.headerColor).toBeTruthy());
     it('has headerFontWeight', () => expect(rottayBrandTheme.chrome?.table?.headerFontWeight).toBeDefined());
+    it('has headerFontSize', () => expect(rottayBrandTheme.chrome?.table?.headerFontSize).toBeTruthy());
   });
 
   // Gaps documented for I4
@@ -215,7 +252,9 @@ describe('H3 contract: bithire', () => {
 
   describe('bithire chrome.table', () => {
     it('has headerBg', () => expect(bithireBrandTheme.chrome?.table?.headerBg).toBeTruthy());
+    it('has headerColor', () => expect(bithireBrandTheme.chrome?.table?.headerColor).toBeTruthy());
     it('has headerFontWeight', () => expect(bithireBrandTheme.chrome?.table?.headerFontWeight).toBeDefined());
+    it('has headerFontSize', () => expect(bithireBrandTheme.chrome?.table?.headerFontSize).toBeTruthy());
   });
 
   // Gaps documented for I5
