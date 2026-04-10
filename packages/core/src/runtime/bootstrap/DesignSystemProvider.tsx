@@ -91,7 +91,7 @@ import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
-import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../brand-compiler';
+import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../../compilers/brand-theme';
 import { isBundledTenant } from '../tenancy/registry';
 import type { BrandTheme } from '../../contracts/themes';
 

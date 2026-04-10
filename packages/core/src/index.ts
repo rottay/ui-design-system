@@ -85,6 +85,11 @@ export * from './runtime/product-profiles';
 export * from './runtime/verticals';
 
 // ============================================
+// COMPILERS (brand-theme bridge, shared color math)
+// ============================================
+export * from './compilers';
+
+// ============================================
 // I18N (locales, provider, hooks)
 // ============================================
 export * from './i18n';

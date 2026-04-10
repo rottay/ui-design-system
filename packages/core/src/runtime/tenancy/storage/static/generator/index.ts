@@ -10,7 +10,8 @@
  */
 
 import type { TenantConfig } from '../../../../../contracts';
-import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, brandThemeToChromeVariables, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
+import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, brandThemeToChromeVariables, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../../compilers/brand-theme';
+import { isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor, buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor } from '../../../../../compilers/_shared/color-math';
 import { getVerticalPreset } from '../../../../verticals/registry';
 import { getProductProfile } from '../../../../product-profiles/registry';
 
@@ -21,117 +22,9 @@ export interface GenerateTenantCssOptions {
   includeSystemDarkSelector?: boolean;
 }
 
-/** Validate that a color is a short or full hex code before attempting scale generation. */
-function isHexColor(value: string): boolean {
-  return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
-}
-
-/** Expand shorthand hex colors so downstream color math can assume six-digit input. */
-function normalizeHexColor(value: string): string {
-  if (!isHexColor(value)) {
-    return value;
-  }
-
-  if (value.length === 4) {
-    return `#${value[1]}${value[1]}${value[2]}${value[2]}${value[3]}${value[3]}`;
-  }
-
-  return value;
-}
-
-/** Convert a hex color into RGB channels for runtime mixing operations. */
-function hexToRgb(value: string): { r: number; g: number; b: number } | null {
-  const normalizedValue = normalizeHexColor(value);
-
-  if (!isHexColor(normalizedValue)) {
-    return null;
-  }
-
-  const parsed = Number.parseInt(normalizedValue.slice(1), 16);
-  return {
-    r: (parsed >> 16) & 255,
-    g: (parsed >> 8) & 255,
-    b: parsed & 255,
-  };
-}
-
-/** Convert clamped RGB channels back into a hex color string. */
-function rgbToHex(rgb: { r: number; g: number; b: number }): string {
-  return `#${[rgb.r, rgb.g, rgb.b]
-    .map((channel) => Math.max(0, Math.min(255, Math.round(channel))).toString(16).padStart(2, '0'))
-    .join('')}`;
-}
-
-/** Mix two colors to build runtime scales without needing a design-time token build step. */
-function mixColor(baseColor: string, mixWith: string, mixRatio: number): string {
-  const baseRgb = hexToRgb(baseColor);
-  const mixRgb = hexToRgb(mixWith);
-
-  if (!baseRgb || !mixRgb) {
-    return baseColor;
-  }
-
-  return rgbToHex({
-    r: baseRgb.r + (mixRgb.r - baseRgb.r) * mixRatio,
-    g: baseRgb.g + (mixRgb.g - baseRgb.g) * mixRatio,
-    b: baseRgb.b + (mixRgb.b - baseRgb.b) * mixRatio,
-  });
-}
-
-/** Generate the light-theme runtime scale for a tenant branding color. */
-// Light scale generation: step 500 IS the base color; steps 50-400 mix toward
-// white (progressively lighter tints) while steps 600-900 mix toward black
-// (progressively darker shades). The asymmetric mix ratios were tuned to match
-// Tailwind's default color palette feel.
-function buildRuntimeScale(baseColor: string): Record<(typeof COLOR_STEPS)[number], string> {
-  return {
-    50: mixColor(baseColor, '#ffffff', 0.92),
-    100: mixColor(baseColor, '#ffffff', 0.82),
-    200: mixColor(baseColor, '#ffffff', 0.68),
-    300: mixColor(baseColor, '#ffffff', 0.48),
-    400: mixColor(baseColor, '#ffffff', 0.2),
-    500: normalizeHexColor(baseColor),
-    600: mixColor(baseColor, '#000000', 0.12),
-    700: mixColor(baseColor, '#000000', 0.24),
-    800: mixColor(baseColor, '#000000', 0.36),
-    900: mixColor(baseColor, '#000000', 0.48),
-  };
-}
-
-/** Generate the dark-theme runtime scale for a tenant branding color. */
-// Dark scale inverts the brightness direction: steps 50-300 mix toward a dark
-// slate (#020617) for background use, steps 400-500 mix toward white for
-// readable surface text, and step 600 becomes the "true" base color. This
-// ensures sufficient contrast on dark backgrounds without manual per-color tuning.
-function buildDarkRuntimeScale(baseColor: string): Record<(typeof COLOR_STEPS)[number], string> {
-  return {
-    50: mixColor(baseColor, '#020617', 0.88),
-    100: mixColor(baseColor, '#020617', 0.74),
-    200: mixColor(baseColor, '#020617', 0.6),
-    300: mixColor(baseColor, '#020617', 0.42),
-    400: mixColor(baseColor, '#ffffff', 0.22),
-    500: mixColor(baseColor, '#ffffff', 0.12),
-    600: normalizeHexColor(baseColor),
-    700: mixColor(baseColor, '#000000', 0.12),
-    800: mixColor(baseColor, '#000000', 0.26),
-    900: mixColor(baseColor, '#000000', 0.38),
-  };
-}
-
-/** Pick a readable foreground color for tenant-generated brand backgrounds. */
-function getReadableForegroundColor(baseColor: string): string {
-  const rgbColor = hexToRgb(baseColor);
-
-  if (!rgbColor) {
-    return '#ffffff';
-  }
-
-  // W3C relative luminance formula (NTSC weighting). The 186 threshold is a
-  // well-known heuristic that approximates WCAG AA contrast requirements for
-  // foreground text on a solid background.
-  const luminance = (0.299 * rgbColor.r) + (0.587 * rgbColor.g) + (0.114 * rgbColor.b);
-  return luminance > 186 ? '#171717' : '#ffffff';
-}
+// Color math (isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor,
+// buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor) imported
+// from compilers/_shared/color-math.ts — single canonical implementation.
 
 /** Convert label-style personality into a CSS `text-transform` value. */
 function labelTransform(style: 'uppercase' | 'sentence' | 'capitalize'): string {

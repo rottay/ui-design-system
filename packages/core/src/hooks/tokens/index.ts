@@ -29,7 +29,7 @@ import { useProductProfileContext as useProductProfile } from '../../runtime/pro
 import { useEngineContext } from '../../runtime/engines';
 import { getEngineTokens } from './engine-tokens';
 import { DEFAULT_PERSONALITY } from '../../runtime/personality/defaults';
-import { brandThemeToTokenOverrides, brandThemeToPersonality } from '../../runtime/brand-compiler';
+import { brandThemeToTokenOverrides, brandThemeToPersonality } from '../../compilers/brand-theme';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../contracts';
 
 export { getEngineTokens, ENGINE_TOKENS } from './engine-tokens';

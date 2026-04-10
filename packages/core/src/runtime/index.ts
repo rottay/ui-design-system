@@ -17,4 +17,3 @@ export * from './features';
 export * from './responsive';
 export * from './navigation';
 export * from './focus-mode';
-export * from './brand-compiler';

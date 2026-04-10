@@ -23,9 +23,9 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import type { TenantConfig } from '../../contracts';
-import { generateTenantCss } from '../tenancy/storage/static/generator';
+import { generateTenantCss } from '../../runtime/tenancy/storage/static/generator';
 import { brandThemeToChromeVariables } from './index';
-import { isBundledTenant, BUNDLED_TENANT_SLUGS } from '../tenancy/registry';
+import { isBundledTenant, BUNDLED_TENANT_SLUGS } from '../../runtime/tenancy/registry';
 import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '../../tokens/ts/brand-themes';
 
 // ── Helpers ─────────────────────────────────────────────
