@@ -441,10 +441,10 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-button-info-border: transparent;
 
   /* Button States */
-  --ds-button-disabled-bg: #1A1A1E;
-  --ds-button-disabled-color: #4A4A4F;
-  --ds-button-disabled-border: #222226;
-  --ds-button-disabled-opacity: 0.5;
+  --ds-button-disabled-bg: #18181B;
+  --ds-button-disabled-color: #52525B;
+  --ds-button-disabled-border: #2A2A2F;
+  --ds-button-disabled-opacity: 0.4;
 
   --ds-button-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.20);
 
@@ -455,16 +455,16 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-input-bg: #131316;
   --ds-input-bg-hover: #1A1A1E;
   --ds-input-bg-focus: #131316;
-  --ds-input-bg-disabled: #101012;
+  --ds-input-bg-disabled: #18181B;
 
   --ds-input-color: #ECECEC;
   --ds-input-color-placeholder: #6B6B72;
-  --ds-input-color-disabled: #4A4A4F;
+  --ds-input-color-disabled: #52525B;
 
   --ds-input-border: #2A2A2F;
   --ds-input-border-hover: #3A3A40;
   --ds-input-border-focus: rgba(255, 255, 255, 0.36);
-  --ds-input-border-disabled: #222226;
+  --ds-input-border-disabled: #2A2A2F;
 
   --ds-input-shadow-focus: 0 0 0 3px rgba(255, 255, 255, 0.10);
 

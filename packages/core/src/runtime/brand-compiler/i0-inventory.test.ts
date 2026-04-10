@@ -303,6 +303,14 @@ describe('H3 contract: rottay', () => {
       expect(css).toContain('--ds-input-color-disabled');
       expect(css).toContain('--ds-input-border-disabled');
     });
+    it('disabled: artifact CSS matches authored values', () => {
+      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/rottay/index.css'), 'utf-8');
+      expect(artifact).toContain('--ds-button-disabled-opacity: 0.4');
+      expect(artifact).toContain('--ds-button-disabled-bg: #18181B');
+      expect(artifact).toContain('--ds-button-disabled-color: #52525B');
+      expect(artifact).toContain('--ds-input-bg-disabled: #18181B');
+      expect(artifact).toContain('--ds-input-color-disabled: #52525B');
+    });
     // focus: expressed through input focus ring
     it('focus: input has borderFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
     it('focus: input has shadowFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
