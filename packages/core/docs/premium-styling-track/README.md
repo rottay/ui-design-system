@@ -11,6 +11,7 @@ Documentation baseline for the premium styling and token taxonomy track.
 5. `02-customization-model.md` -- Vertical Theme vs Tenant Appearance General/Advanced
 6. `03-premium-contract-parity.md` -- Minimum expressive contract for all first-party verticals
 7. `04-vertical-style-briefs.md` -- Implementation-grade briefs for rottay, bithire, evnto
+8. `05-master-prompt.md` -- Final implementation order and wave definitions for I0-I7
 
 ## Canonical Audit Reference
 
@@ -34,6 +35,19 @@ Reading order within that pack:
 | H1 | Taxonomy truthfulness | Approved |
 | H2 | Customization model definition | Approved |
 | H3 | Premium contract parity | Approved |
-| H4 | Vertical style briefs | In progress |
-| H5 | Claude master prompt | Pending |
+| H4 | Vertical style briefs | Approved |
+| H5 | Claude master prompt | In progress |
 | I0-I7 | Implementation | Blocked on H0-H5 |
+
+### Implementation Waves (blocked until H5 approved)
+
+| Wave | Scope |
+|------|-------|
+| I0 | Inventory and test net |
+| I1 | Token taxonomy cleanup |
+| I2 | Customization model scaffolding |
+| I3 | Parity normalization |
+| I4 | Rottay overhaul |
+| I5 | BitHire overhaul |
+| I6 | Evnto overhaul |
+| I7 | Final cleanup and guardrails |
