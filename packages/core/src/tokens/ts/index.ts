@@ -37,6 +37,8 @@ export const tokens = {
   components: componentTokens,
   /** Reference mirrors of CSS variable handles (not authored sources). */
   tenantMirrors: tenantTokens,
+  /** @deprecated Use `tenantMirrors` — kept for backward compatibility. */
+  tenants: tenantTokens,
   /** Canonical authored premium sources. */
   brandThemes: {
     rottay: rottayBrandTheme,
