@@ -9,7 +9,6 @@
 
 ## GitHub Configuration
 
-- **Token**: `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`
 - **Author**: davila23 <daniel.avila@rottay.com>
 
 ## Git Rules
