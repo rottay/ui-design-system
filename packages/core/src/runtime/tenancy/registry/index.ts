@@ -43,7 +43,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     branding: {
       companyName: 'Rottay',
       // Colors intentionally omitted -- defined in CSS tenant tokens
-      // (tokens/css/tenants/rottay/index.css). Runtime color scale generation
+      // (tokens/css/artifacts/rottay/index.css). Runtime color scale generation
       // is skipped when branding colors are undefined, letting the CSS layer
       // control the full monochrome dark palette without inline style overrides.
       logo: undefined,
@@ -110,7 +110,7 @@ export const DEFAULT_TENANT_SLUG = 'rottay';
 
 /**
  * Tenants whose CSS is bundled in the DS styles output.
- * This matches tokens/css/tenants/index.css — the actual CSS bundle.
+ * This matches tokens/css/artifacts/ + legacy/ directories — the actual CSS bundle.
  * Used to determine whether a tenant needs runtime-generated chrome CSS
  * (unbundled tenants do, bundled tenants already have it in their CSS file).
  *

@@ -222,6 +222,57 @@ const SRC_ROOT = resolve(__dirname, '../src');
   }
 }
 
+// 4d. tokens/ts/mirrors/ must exist (renamed from tenants/ in I1)
+{
+  const mirrorsDir = join(SRC_ROOT, 'tokens/ts/mirrors');
+  try {
+    statSync(mirrorsDir);
+  } catch {
+    violations.push({
+      rule: 'mirrors-missing',
+      path: 'tokens/ts/mirrors/',
+      message: 'Token reference mirrors directory is missing.',
+    });
+  }
+}
+
+// 4e. tokens/css/ must use declarative folder names (I1 taxonomy)
+{
+  const cssDir = join(SRC_ROOT, 'tokens/css');
+  try {
+    const entries = readdirSync(cssDir, { withFileTypes: true });
+    for (const e of entries) {
+      if (!e.isDirectory()) continue;
+      // These are the allowed declarative folder names after I1
+      const allowed = ['artifacts', 'legacy', 'foundation', 'entrypoints', 'components', 'engines'];
+      if (!allowed.includes(e.name) && !e.name.startsWith('_')) {
+        violations.push({
+          rule: 'css-undeclared-folder',
+          path: `tokens/css/${e.name}`,
+          message: `Folder "${e.name}" is not a recognized role folder. Expected: ${allowed.join(', ')}.`,
+        });
+      }
+    }
+  } catch { /* dir might not exist */ }
+}
+
+// 4f. tokens/css/ root must not have stale CSS files (entrypoints live in entrypoints/)
+{
+  const cssDir = join(SRC_ROOT, 'tokens/css');
+  try {
+    const entries = readdirSync(cssDir, { withFileTypes: true });
+    for (const e of entries) {
+      if (!e.isFile()) continue;
+      if (!/\.css$/.test(e.name)) continue;
+      violations.push({
+        rule: 'css-root-file',
+        path: `tokens/css/${e.name}`,
+        message: `CSS file "${e.name}" should not sit at tokens/css/ root. Entrypoints go in entrypoints/, foundation in foundation/.`,
+      });
+    }
+  } catch { /* dir might not exist */ }
+}
+
 // Report
 if (violations.length === 0) {
   console.log('lint-folder-index: all checks passed.');

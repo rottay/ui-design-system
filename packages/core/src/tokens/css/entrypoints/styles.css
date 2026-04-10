@@ -1,15 +1,14 @@
 /**
- * Rottay Design System - Base CSS (no tenant-specific imports)
+ * Rottay Design System - Full CSS Bundle (all tenants)
  *
- * Contains everything from index.css EXCEPT tenant overrides.
- * Use this with a per-vertical tenant import for tree-shaken CSS.
+ * Public entrypoint for @rottay/design-system/styles.
+ * Includes foundation + components + engines + all tenant artifacts + legacy.
  *
- * @see ./rottay.css   - Base + rottay tenant only
- * @see ./bithire.css  - Base + bithire tenant only
- * @see ./evnto.css    - Base + evnto tenant only
- * @see ./index.css    - Full bundle (all tenants, backward compat)
+ * @see ./platform.css  - Base + rottay artifact only
+ * @see ./bithire.css   - Base + bithire artifact only
+ * @see ./evnto.css     - Base + evnto artifact only
  *
- * @version 0.6.0
+ * @version 1.0.0
  */
 
 /* =============================================================================
