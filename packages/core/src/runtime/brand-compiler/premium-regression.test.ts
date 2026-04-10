@@ -25,6 +25,7 @@ import { resolve } from 'path';
 import type { TenantConfig } from '../../contracts';
 import { generateTenantCss } from '../tenancy/storage/static/generator';
 import { brandThemeToChromeVariables } from './index';
+import { isKnownTenant } from '../tenancy/registry';
 import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '../../tokens/ts/brand-themes';
 
 // ── Helpers ─────────────────────────────────────────────
@@ -455,5 +456,48 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
     // No brandTheme -> no chrome vars
     const vars = brandThemeToChromeVariables(plainConfig.brandTheme ?? { id: '', name: '' });
     expect(Object.keys(vars).length).toBe(0);
+  });
+});
+
+describe('DesignSystemProvider chrome injection logic', () => {
+  // These tests verify the condition logic used by DesignSystemProvider
+  // to decide when to pass generatedChromeCss to ThemeProvider.
+  // The actual injection is: brandTheme exists AND tenant is NOT bundled.
+
+  it('known bundled tenant (bithire) should NOT get generated chrome CSS', () => {
+    // Bundled tenants have chrome in their CSS files already.
+    // isKnownTenant imported at top of file
+    expect(isKnownTenant('bithire')).toBe(true);
+    expect(isKnownTenant('rottay')).toBe(true);
+    expect(isKnownTenant('evnto')).toBe(true);
+  });
+
+  it('unknown DB tenant should get generated chrome CSS', () => {
+    // isKnownTenant imported at top of file
+    expect(isKnownTenant('acme-corp')).toBe(false);
+    expect(isKnownTenant('db-customer')).toBe(false);
+    // For these tenants, DesignSystemProvider generates scoped chrome CSS
+    // regardless of skipCssLoading — they are not in the bundle.
+  });
+
+  it('the full condition: brandTheme + not-bundled = chrome CSS', () => {
+    // isKnownTenant imported at top of file
+    // Simulating the DesignSystemProvider condition:
+    // normalizedConfig.brandTheme && !isKnownTenant(normalizedConfig.slug)
+
+    // DB tenant with brandTheme -> gets chrome
+    const dbWithBrand = { brandTheme: bithireBrandTheme, slug: 'acme-corp' };
+    const shouldGenerate = !!dbWithBrand.brandTheme && !isKnownTenant(dbWithBrand.slug);
+    expect(shouldGenerate).toBe(true);
+
+    // Bundled tenant with brandTheme -> NO chrome (already in CSS)
+    const bundledWithBrand = { brandTheme: bithireBrandTheme, slug: 'bithire' };
+    const shouldNotGenerate = !!bundledWithBrand.brandTheme && !isKnownTenant(bundledWithBrand.slug);
+    expect(shouldNotGenerate).toBe(false);
+
+    // DB tenant without brandTheme -> NO chrome (nothing to generate)
+    const dbNoBrand = { brandTheme: undefined, slug: 'acme-corp' };
+    const noTheme = !!dbNoBrand.brandTheme && !isKnownTenant(dbNoBrand.slug);
+    expect(noTheme).toBe(false);
   });
 });
