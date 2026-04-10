@@ -8,24 +8,33 @@ the naming discipline that future implementation waves must follow.
 One role per folder. Declarative names. Honest public entrypoints.
 Subsystem-boundary `folder/index`. No hidden role ambiguity.
 
-## Folder/Index Rule
+## Owner Boundary Rule
 
-**Mandatory** at subsystem boundaries where the folder is the owner:
+Each role-group folder must exist as a named boundary with a single clear
+purpose. Per-tenant artifact folders must have an `index.css`. TS owner
+folders must have an `index.ts` barrel. Grouping folders (`foundation/`,
+`entrypoints/`) do not require an index — they are organizational parents
+whose children are the real files.
 
-- `ts/brand-themes/` (authored source owner)
-- `ts/mirrors/` (mirror owner)
-- `css/artifacts/` (generated artifact owner)
-- `css/artifacts/<slug>/` (per-tenant artifact, must have `index.css`)
-- `css/entrypoints/` (public package contract files)
-- `css/legacy/` (non-first-party bundled content)
-- `css/foundation/` (base CSS source grouping)
-- `runtime/tenancy/` (existing)
-- `contracts/` (existing)
+**Named owner boundaries (must exist as folders):**
 
-**Not mandatory** for small token leaves:
+- `ts/brand-themes/` — authored source owner, has `index.ts`
+- `ts/mirrors/` — mirror owner, has `index.ts`
+- `css/artifacts/<slug>/` — per-tenant artifact, has `index.css`
+- `css/legacy/<slug>/` — legacy tenant, has `index.css`
+- `runtime/tenancy/` — existing, has `index.ts`
+- `contracts/` — existing, has `index.ts`
+
+**Grouping folders (organizational, no index required):**
+
+- `css/foundation/` — groups base CSS source subdirectories
+- `css/entrypoints/` — groups public CSS files (each file is the entrypoint)
+- `css/artifacts/` — groups per-tenant artifact folders
+
+**Not required** for small token leaves:
 
 - `colors.ts`, `spacing.ts`, `button.ts`, `shadows.ts`
-- The rule is a boundary rule, not a universal wrapper.
+- This is a boundary discipline, not a universal wrapper.
 
 ## Declarative Naming Rules
 
@@ -100,6 +109,10 @@ tokens/
 | `css/tenants/bithire/` | Artifact | `css/artifacts/bithire/` | Artifact | Declarative name |
 | `css/tenants/evnto/` | Artifact | `css/artifacts/evnto/` | Artifact | Declarative name |
 | `css/tenants/themanagementmiami/` | Legacy tenant | `css/legacy/themanagementmiami/` | Legacy tenant | Isolated |
+| `css/tenants/index.css` | Artifact | Removed | -- | Barrel importing tenant CSS. Replaced by entrypoints importing from artifacts/ directly. |
+| `css/tenants/rottay.css` (wrapper) | Compatibility shim | Removed | -- | Single-import wrapper. Redundant once entrypoints/ exists. |
+| `css/tenants/bithire.css` (wrapper) | Compatibility shim | Removed | -- | Same. |
+| `css/tenants/evnto.css` (wrapper) | Compatibility shim | Removed | -- | Same. |
 | `css/rottay.css` (root) | Public entrypoint | `css/entrypoints/platform.css` | Public entrypoint | Grouped + renamed |
 | `css/bithire.css` (root) | Public entrypoint | `css/entrypoints/bithire.css` | Public entrypoint | Grouped |
 | `css/evnto.css` (root) | Public entrypoint | `css/entrypoints/evnto.css` | Public entrypoint | Grouped |
