@@ -25,5 +25,5 @@
 // TypeScript token definitions (canonical source)
 export * from './ts';
 
-/** Geist-based typography scale with hardcoded rem values for direct style application. */
-export { typographyScale } from './typography-scale';
+/** @deprecated Geist-based typography scale. Moved to tokens/compat/. */
+export { typographyScale } from './compat/typography-scale';

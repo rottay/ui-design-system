@@ -12,8 +12,8 @@
 // Types
 export type * from './types';
 
-// Motion components
-export * from './motion';
+// Motion primitives (entrance animations, interactive effects)
+export * from './primitives';
 
 // Visual effects
 export * from './effects';
