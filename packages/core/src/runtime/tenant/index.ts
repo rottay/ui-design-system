@@ -8,7 +8,7 @@
  * subdirectories.
  *
  * The tenancy system is organized into eight focused areas (each mapping
- * to a subfolder or a root-level file under `runtime/tenancy/`):
+ * to a subfolder or a root-level file under `runtime/tenant/`):
  *
  * 1. **Provider** (`provider/`) — React context and hooks that supply
  *    tenant state to components (`TenantProvider`, `useTenant`).

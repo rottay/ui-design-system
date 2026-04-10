@@ -74,11 +74,6 @@ export function useTenant() {
   return context;
 }
 
-// ── Tenant creation utilities ──
-// Re-exported here for ergonomic imports (`import { useTenant, createTenantConfig }`)
-// without requiring consumers to know the internal file structure.
-export { resolvePersonalityPreset } from '../presets';
-export type { PersonalityPreset } from '../presets';
-export { createTenantConfig } from '../authoring/create-tenant';
-export type { TenantCreationConfig } from '../authoring/create-tenant';
-export { useCreateTenant } from '../authoring/useCreateTenant';
+// Authoring utilities (createTenantConfig, useCreateTenant, resolvePersonalityPreset)
+// are exported from the tenant barrel (runtime/tenant/index.ts), not from this
+// context hook file. This keeps the context layer focused on React context only.

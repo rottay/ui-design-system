@@ -83,7 +83,7 @@ export function useTenant() {
 }
 
 // -- Tenant utilities (compat re-exports) --
-// These are NOT hooks. Their canonical home is `runtime/tenancy/` which is
+// These are NOT hooks. Their canonical home is `runtime/tenant/` which is
 // re-exported from the package root. These re-exports exist only for backward
 // compatibility with consumers that imported from `hooks/tenant`.
 

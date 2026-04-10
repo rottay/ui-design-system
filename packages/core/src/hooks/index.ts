@@ -23,7 +23,7 @@
  *    - `useFeatures` / `useHasFeature`: canonical at `runtime/features/`
  *    - `useProductProfile`: canonical at `runtime/product-profiles/`
  *    - `resolvePersonalityPreset` / `createTenantConfig`: canonical at
- *      `runtime/tenancy/` (non-hook utilities, @deprecated here)
+ *      `runtime/tenant/` (non-hook utilities, @deprecated here)
  *
  * New code should import from the package root (`@rottay/design-system`).
  *

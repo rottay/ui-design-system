@@ -17,7 +17,7 @@
  *
  * Personality values are sourced from:
  * - Product profiles: `runtime/product-profiles/registry.ts`
- * - Tenant configs: `runtime/tenancy/registry/`
+ * - Tenant configs: `runtime/tenant/registry/`
  *
  * The vertical personality represents the "industry baseline" that sits
  * between `DEFAULT_PERSONALITY` and the product profile in the merge
