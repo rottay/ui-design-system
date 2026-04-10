@@ -19,18 +19,19 @@ export const rottayBrandTheme: BrandTheme = {
   name: 'Rottay',
 
   palette: {
-    primaryColor: '#6366F1',
-    secondaryColor: '#A1A1AA',
-    accentColor: '#14B8A6',
-    darkPrimaryColor: '#818CF8',
-    darkSecondaryColor: '#A1A1AA',
-    darkAccentColor: '#14B8A6',
+    // H4: reduce purple/teal SaaS energy. Restrained cobalt + icy cyan.
+    primaryColor: '#3B82F6',       // restrained cobalt (was indigo #6366F1)
+    secondaryColor: '#71717A',     // steel/graphite neutral (was zinc #A1A1AA)
+    accentColor: '#06B6D4',        // icy cyan, used sparingly (was teal #14B8A6)
+    darkPrimaryColor: '#60A5FA',   // lighter cobalt for dark surfaces
+    darkSecondaryColor: '#A1A1AA', // steel on dark
+    darkAccentColor: '#22D3EE',    // brighter cyan for dark contrast
     darkBackgroundColor: '#0C0C0E',
-    // Semantic colors: muted and serious, not candy-bright (H4 direction)
-    successColor: '#22C55E',
-    warningColor: '#EAB308',
-    errorColor: '#EF4444',
-    infoColor: '#6366F1',
+    // Semantic: serious and muted, not candy-bright
+    successColor: '#16A34A',       // darker green (serious)
+    warningColor: '#CA8A04',       // amber (not bright yellow)
+    errorColor: '#DC2626',         // deep red
+    infoColor: '#3B82F6',          // matches primary cobalt
   },
 
   typography: {
@@ -144,7 +145,7 @@ export const rottayBrandTheme: BrandTheme = {
       buttonSecondary: { bg: '#2A2A2F', bgHover: '#3A3A40', text: '#ECECEC', border: '#3A3A40' },
       buttonDefault: { bg: '#18181B', bgHover: '#222226', text: '#ECECEC', border: '#3A3A40' },
       buttonGhost: { bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', text: '#A0A0A5' },
-      input: { bg: '#18181B', border: '#3A3A40', borderFocus: '#6366F1', shadowFocus: '0 0 0 1px rgba(99, 102, 241, 0.3)' },
+      input: { bg: '#18181B', border: '#3A3A40', borderFocus: '#3B82F6', shadowFocus: '0 0 0 1px rgba(59, 130, 246, 0.3)' },
     },
     table: {
       headerBg: '#131316',

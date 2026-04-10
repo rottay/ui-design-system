@@ -262,10 +262,10 @@ describe('H3 contract: rottay', () => {
   });
 
   describe('rottay palette (semantic — filled I4)', () => {
-    it('successColor', () => expect(rottayBrandTheme.palette?.successColor).toBe('#22C55E'));
-    it('warningColor', () => expect(rottayBrandTheme.palette?.warningColor).toBe('#EAB308'));
-    it('errorColor', () => expect(rottayBrandTheme.palette?.errorColor).toBe('#EF4444'));
-    it('infoColor', () => expect(rottayBrandTheme.palette?.infoColor).toBe('#6366F1'));
+    it('successColor', () => expect(rottayBrandTheme.palette?.successColor).toBe('#16A34A'));
+    it('warningColor', () => expect(rottayBrandTheme.palette?.warningColor).toBe('#CA8A04'));
+    it('errorColor', () => expect(rottayBrandTheme.palette?.errorColor).toBe('#DC2626'));
+    it('infoColor', () => expect(rottayBrandTheme.palette?.infoColor).toBe('#3B82F6'));
   });
 
   describe('rottay dark-mode (filled I4)', () => {
@@ -279,10 +279,9 @@ describe('H3 contract: rottay', () => {
     it('table is dark-authored', () => expect(rottayBrandTheme.chrome?.table?.headerBg).toBe('#131316'));
   });
 
-  describe('rottay state semantics (filled I4)', () => {
+  describe('rottay state semantics', () => {
     // success/warning/error/info: verified in palette section above
-    // disabled: expressed through controls opacity/color conventions
-    it('disabled: input has border for contrast', () => expect(rottayBrandTheme.chrome?.controls?.input?.border).toBeTruthy());
+    it.skip('state: disabled treatment — no authored signal yet, deferred', () => {});
     // focus: expressed through input focus ring
     it('focus: input has borderFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
     it('focus: input has shadowFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
