@@ -2011,9 +2011,10 @@ html[data-tenant='rottay'].light {
 
   /* Button States */
   --ds-button-disabled-bg: #F4F4F3;
-  --ds-button-disabled-color: #C4C4C2;
-  --ds-button-disabled-border: #EDEDEC;
-  --ds-button-disabled-opacity: 0.5;
+  --ds-button-disabled-color: #A1A1AA;
+  --ds-button-disabled-border: #E5E5E3;
+  --ds-button-disabled-border-color: #E5E5E3;
+  --ds-button-disabled-opacity: 0.4;
 
   --ds-button-focus-ring: 0 0 0 2px rgba(10, 10, 10, 0.12);
 
@@ -2028,12 +2029,14 @@ html[data-tenant='rottay'].light {
 
   --ds-input-color: #1A1A1A;
   --ds-input-color-placeholder: #9C9C9C;
-  --ds-input-color-disabled: #C4C4C2;
+  --ds-input-color-disabled: #A1A1AA;
 
   --ds-input-border: #E5E5E3;
   --ds-input-border-hover: #D4D4D2;
   --ds-input-border-focus: rgba(10, 10, 10, 0.40);
-  --ds-input-border-disabled: #EDEDEC;
+  --ds-input-border-disabled: #E5E5E3;
+  --ds-input-border-color-disabled: #E5E5E3;
+  --ds-input-disabled-opacity: 0.4;
 
   --ds-input-shadow-focus: 0 0 0 3px rgba(10, 10, 10, 0.08);
 

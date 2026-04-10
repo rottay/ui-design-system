@@ -306,7 +306,7 @@ describe('H3 contract: rottay', () => {
       expect(css).toContain('--ds-input-border-color-disabled');
       expect(css).toContain('--ds-input-disabled-opacity');
     });
-    it('disabled: artifact CSS matches authored values for all consumed names', () => {
+    it('disabled: artifact dark block matches authored values', () => {
       const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/rottay/index.css'), 'utf-8');
       expect(artifact).toContain('--ds-button-disabled-opacity: 0.4');
       expect(artifact).toContain('--ds-button-disabled-bg: #18181B');
@@ -316,6 +316,15 @@ describe('H3 contract: rottay', () => {
       expect(artifact).toContain('--ds-input-color-disabled: #52525B');
       expect(artifact).toContain('--ds-input-border-color-disabled: #2A2A2F');
       expect(artifact).toContain('--ds-input-disabled-opacity: 0.4');
+    });
+    it('disabled: artifact light block also synced (no stale values)', () => {
+      const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/rottay/index.css'), 'utf-8');
+      // Light block has different bg values but same opacity and aliases
+      expect(artifact).not.toContain('--ds-button-disabled-opacity: 0.5');
+      expect(artifact).not.toContain('--ds-button-disabled-color: #C4C4C2');
+      // Light block should have the aligned border-color alias
+      expect(artifact).toContain('--ds-button-disabled-border-color: #E5E5E3');
+      expect(artifact).toContain('--ds-input-border-color-disabled: #E5E5E3');
     });
     // focus: expressed through input focus ring
     it('focus: input has borderFocus', () => expect(rottayBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
