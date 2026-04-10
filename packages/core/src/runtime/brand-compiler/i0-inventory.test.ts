@@ -434,21 +434,24 @@ describe('H3 contract: bithire', () => {
       expect(lightBlock).toContain('--ds-radius-lg: 12px');
       expect(lightBlock).toContain('--ds-radius-xl: 16px');
     });
-    it('light: shadow scale sm/md/lg/xl', () => {
-      expect(lightBlock).toContain('--ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06)');
-      expect(lightBlock).toContain('--ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08)');
-      expect(lightBlock).toContain('--ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1)');
-      expect(lightBlock).toContain('--ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12)');
+    it('light: shadow scale matches authored source', () => {
+      const authored = bithireBrandTheme.surfaces!.shadows!;
+      expect(lightBlock).toContain(`--ds-shadow-sm: ${authored.sm}`);
+      expect(lightBlock).toContain(`--ds-shadow-md: ${authored.md}`);
+      expect(lightBlock).toContain(`--ds-shadow-lg: ${authored.lg}`);
+      expect(lightBlock).toContain(`--ds-shadow-xl: ${authored.xl}`);
     });
     it('dark: radius scale matches light', () => {
       expect(darkBlock).toContain('--ds-radius-sm: 6px');
       expect(darkBlock).toContain('--ds-radius-md: 8px');
     });
-    it('dark: shadow scale sm/md/lg/xl', () => {
-      expect(darkBlock).toContain('--ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2)');
-      expect(darkBlock).toContain('--ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25)');
-      expect(darkBlock).toContain('--ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3)');
-      expect(darkBlock).toContain('--ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.35)');
+    it('dark: shadow scale matches authored source (same as light)', () => {
+      // BrandTheme has one shadow scale — dark uses the same values
+      const authored = bithireBrandTheme.surfaces!.shadows!;
+      expect(darkBlock).toContain(`--ds-shadow-sm: ${authored.sm}`);
+      expect(darkBlock).toContain(`--ds-shadow-md: ${authored.md}`);
+      expect(darkBlock).toContain(`--ds-shadow-lg: ${authored.lg}`);
+      expect(darkBlock).toContain(`--ds-shadow-xl: ${authored.xl}`);
     });
     it('no stale 4px radius in either block', () => {
       expect(artifact).not.toContain('--ds-radius-sm: 4px');
