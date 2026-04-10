@@ -12,6 +12,7 @@
 import type { TenantConfig } from '../../../../../contracts';
 import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../brand-compiler';
 import { getVerticalPreset } from '../../../../verticals/registry';
+import { getProductProfile } from '../../../../product-profiles/registry';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
@@ -583,7 +584,9 @@ export function generateTenantCss(
   // and DesignSystemProvider produce the same results.
   //
   // BrandTheme path: vertical -> brandTheme -> tenant overrides
-  // Legacy path:     vertical -> tenant (profile is not available here)
+  //   (profile skipped — brandTheme replaces its visual role)
+  // Legacy path:     vertical -> profile -> tenant
+  //   (profile resolved from vertical.defaultProductProfile, matching runtime)
   let effectiveConfig: TenantConfig;
 
   if (config.brandTheme) {
@@ -606,22 +609,29 @@ export function generateTenantCss(
           : (merged as TenantConfig['tokenOverrides']);
       })(),
     };
-  } else if (vertical) {
-    // Legacy path with vertical: layer vertical personality and tokenOverrides
-    // before tenant values. Product profile is not available in the static
-    // generator (it's a runtime-only concept resolved by DesignSystemProvider).
+  } else {
+    // Legacy path: vertical -> profile -> tenant
+    // Resolve product profile from vertical's default (same as runtime in
+    // DesignSystemProvider line 404: productProfile ?? vertical.defaultProductProfile).
+    const profile = getProductProfile(vertical?.defaultProductProfile);
+    const verticalPers = vertical?.personality ?? {};
+    const profilePers = profile.personality ?? {};
+    const verticalOvr = vertical?.tokenOverrides ?? {};
+    const profileOvr = profile.tokenOverrides ?? {};
+
     effectiveConfig = {
       ...config,
       personality: mergePartialPersonality(
-        vertical.personality ?? {},
+        mergePartialPersonality(verticalPers, profilePers),
         config.personality ?? {},
       ),
-      tokenOverrides: config.tokenOverrides
-        ? (deepMergeTokenOverrides(vertical.tokenOverrides ?? {}, config.tokenOverrides) as TenantConfig['tokenOverrides'])
-        : (vertical.tokenOverrides as TenantConfig['tokenOverrides']),
+      tokenOverrides: (() => {
+        const merged = deepMergeTokenOverrides(verticalOvr, profileOvr);
+        return config.tokenOverrides
+          ? (deepMergeTokenOverrides(merged, config.tokenOverrides) as TenantConfig['tokenOverrides'])
+          : (Object.keys(merged).length > 0 ? merged as TenantConfig['tokenOverrides'] : config.tokenOverrides);
+      })(),
     };
-  } else {
-    effectiveConfig = config;
   }
 
   const declarations = {

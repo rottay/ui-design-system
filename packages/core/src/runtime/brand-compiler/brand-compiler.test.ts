@@ -521,9 +521,11 @@ describe('parity: static generator with brandTheme', () => {
     expect(css).toContain('--ds-density-scale: 0.95'); // bithire brand wins over evnto 1.125
   });
 
-  it('vertical baseline applies in legacy path (no brandTheme)', () => {
-    // A tenant with vertical but no brandTheme should still get the
-    // vertical's personality and tokenOverrides in static CSS.
+  it('legacy path resolves vertical + profile (no brandTheme)', () => {
+    // evnto vertical has: bounce, intensity 1.5, densityScale 1.125
+    // evnto vertical.defaultProductProfile = 'events.organizer'
+    // events.organizer profile has: slideUp, intensity 1.05, densityScale 1.05
+    // In the legacy merge chain (vertical -> profile -> tenant), profile wins.
     const legacyWithVertical: TenantConfig = {
       slug: 'legacy-vertical',
       name: 'Legacy Vertical',
@@ -532,14 +534,37 @@ describe('parity: static generator with brandTheme', () => {
       plan: 'pro',
       features: [],
       branding: { companyName: 'Test', primaryColor: '#333333' },
-      vertical: 'evnto', // evnto vertical has bounce, 1.5, spacious, densityScale 1.125
+      vertical: 'evnto',
     };
     const css = generateTenantCss(legacyWithVertical, { includeDarkSelector: false });
-    // Vertical personality present
-    expect(css).toContain('--ds-personality-animation-entrance: bounce');
-    expect(css).toContain('--ds-personality-animation-intensity: 1.5');
-    expect(css).toContain('--ds-personality-card-padding-density: spacious');
-    // Vertical tokenOverrides present
-    expect(css).toContain('--ds-density-scale: 1.125');
+    // Profile personality wins over vertical (events.organizer overrides evnto)
+    expect(css).toContain('--ds-personality-animation-entrance: slideUp'); // profile wins
+    expect(css).toContain('--ds-personality-animation-intensity: 1.05'); // profile wins
+    expect(css).toContain('--ds-personality-card-padding-density: spacious'); // both have spacious
+    // Profile tokenOverrides win over vertical
+    expect(css).toContain('--ds-density-scale: 1.05'); // profile wins over vertical 1.125
+    // Profile borderRadius applied
+    expect(css).toContain('--ds-radius-sm: 10px'); // from events.organizer
+  });
+
+  it('tenant overrides win over profile in legacy path', () => {
+    const legacyWithOverride: TenantConfig = {
+      slug: 'legacy-override',
+      name: 'Legacy Override',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Test', primaryColor: '#333333' },
+      vertical: 'evnto',
+      personality: {
+        animation: { intensity: 0.1 } as any, // tenant override
+      },
+    };
+    const css = generateTenantCss(legacyWithOverride, { includeDarkSelector: false });
+    // Tenant wins for intensity
+    expect(css).toContain('--ds-personality-animation-intensity: 0.1');
+    // Profile still wins for entrance (tenant didn't override it)
+    expect(css).toContain('--ds-personality-animation-entrance: slideUp');
   });
 });
