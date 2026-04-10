@@ -24,6 +24,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import type { TenantConfig } from '../../contracts';
 import { generateTenantCss } from '../tenancy/storage/static/generator';
+import { brandThemeToChromeVariables } from './index';
 import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '../../tokens/ts/brand-themes';
 
 // ── Helpers ─────────────────────────────────────────────
@@ -412,5 +413,47 @@ describe('variable naming: engines consume --ds-button-*-color', () => {
     expect(css).toContain('--ds-button-default-color');
     expect(css).toContain('--ds-button-ghost-color');
     expect(css).not.toContain('--ds-button-primary-text');
+  });
+});
+
+describe('dynamic tenant runtime chrome: scoped <style> path', () => {
+  it('brandThemeToChromeVariables produces vars for scoped injection', () => {
+    // This is what DesignSystemProvider uses to build the <style> tag
+    // for dynamic tenants (skipCssLoading=false)
+    const vars = brandThemeToChromeVariables(rottayBrandTheme);
+    expect(vars['--ds-sidebar-bg']).toBe('#0D0D10');
+    expect(vars['--ds-layout-bg']).toBe('#0C0C0E');
+    expect(vars['--ds-button-primary-color']).toBe('#0C0C0E');
+    expect(vars['--ds-shell-grid-size']).toBe('28px');
+    expect(vars['--ds-table-header-bg']).toBe('#131316');
+  });
+
+  it('scoped CSS string uses tenant selector (dark-mode safe)', () => {
+    const vars = brandThemeToChromeVariables(bithireBrandTheme);
+    const entries = Object.entries(vars).filter(([, v]) => v != null);
+    const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
+    const scopedCss = `html[data-tenant='db-customer'] {\n${declarations}\n}`;
+
+    // Scoped selector — will NOT override dark-mode tenant CSS
+    expect(scopedCss).toContain("html[data-tenant='db-customer']");
+    expect(scopedCss).toContain('--ds-button-primary-bg: #0A66C2');
+    expect(scopedCss).toContain('--ds-sidebar-bg: #ffffff');
+    // NOT inline on :root — proper specificity
+    expect(scopedCss).not.toContain(':root');
+  });
+
+  it('dynamic tenant without brandTheme produces no chrome CSS', () => {
+    const plainConfig: TenantConfig = {
+      slug: 'plain',
+      name: 'Plain',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Plain Corp', primaryColor: '#333' },
+    };
+    // No brandTheme -> no chrome vars
+    const vars = brandThemeToChromeVariables(plainConfig.brandTheme ?? { id: '', name: '' });
+    expect(Object.keys(vars).length).toBe(0);
   });
 });

@@ -605,6 +605,14 @@ export interface ThemeProviderProps {
   branding?: TenantBranding;
   /** Token overrides for glass, gradients, and overlays. Applied as inline CSS variables. */
   tokenOverrides?: TenantTokenOverrides;
+  /**
+   * Scoped CSS string for chrome variables (sidebar/layout/shell/controls/table).
+   * Injected as a `<style>` tag with `html[data-tenant='x']` selector, so it
+   * has the same specificity as bundled CSS and can be properly overridden by
+   * dark-mode selectors. Used for dynamic/DB-backed tenants with `brandTheme`.
+   * Bundled tenants (`skipCssLoading=true`) get chrome from their CSS file.
+   */
+  generatedChromeCss?: string;
   /** Called when tenant CSS loading fails, before fallback kicks in. */
   onError?: (error: Error, tenant: string) => void;
   /** Called when the provider falls back from the requested tenant to one of the resolution-chain defaults. */
@@ -629,6 +637,7 @@ export function ThemeProvider({
   vertical,
   branding,
   tokenOverrides,
+  generatedChromeCss,
   onError,
   onFallback,
   cssBaseUrl = '/themes',
@@ -1080,6 +1089,26 @@ export function ThemeProvider({
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brandingKey, tokenOverridesKey]);
+
+  // Chrome CSS injection for dynamic/DB-backed tenants with BrandTheme.
+  // Uses a scoped <style> tag with html[data-tenant='x'] selector so dark-mode
+  // selectors can override it properly (unlike inline styles).
+  const chromeCssId = `ds-chrome-${tenant}`;
+  useEffect(() => {
+    if (!generatedChromeCss) {
+      // Remove any previous chrome style tag
+      document.getElementById(chromeCssId)?.remove();
+      return;
+    }
+    let styleEl = document.getElementById(chromeCssId) as HTMLStyleElement | null;
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = chromeCssId;
+      document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = generatedChromeCss;
+    return () => { styleEl?.remove(); };
+  }, [generatedChromeCss, chromeCssId]);
 
   /**
    * Theme state needs to materialize into DOM attributes because the CSS token

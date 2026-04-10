@@ -91,7 +91,17 @@ import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
-import { brandThemeToBranding, brandThemeToTokenOverrides, deepMergeTokenOverrides } from '../brand-compiler';
+import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../brand-compiler';
+import type { BrandTheme } from '../../contracts/themes';
+
+/** Build a scoped CSS string from BrandTheme chrome for dynamic tenants. */
+function buildScopedChromeCss(bt: BrandTheme, slug: string): string | undefined {
+  const vars = brandThemeToChromeVariables(bt);
+  const entries = Object.entries(vars).filter(([, v]) => v != null);
+  if (entries.length === 0) return undefined;
+  const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
+  return `html[data-tenant='${slug}'] {\n${declarations}\n}`;
+}
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -440,6 +450,11 @@ export function DesignSystemProvider({
               vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
               branding={normalizedConfig.branding}
               tokenOverrides={normalizedConfig.tokenOverrides}
+              generatedChromeCss={
+                normalizedConfig.brandTheme && !skipCssLoading
+                  ? buildScopedChromeCss(normalizedConfig.brandTheme, normalizedConfig.slug)
+                  : undefined
+              }
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >
