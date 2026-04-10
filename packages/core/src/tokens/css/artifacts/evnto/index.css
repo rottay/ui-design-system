@@ -121,18 +121,18 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --ds-font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, monospace;
 
-  /* Border Radius - Slightly rounded */
-  --ds-radius-sm: 4px;
-  --ds-radius-md: 6px;
-  --ds-radius-lg: 8px;
-  --ds-radius-xl: 12px;
+  /* Border Radius - largest of the three brands (H4) */
+  --ds-radius-sm: 10px;
+  --ds-radius-md: 14px;
+  --ds-radius-lg: 18px;
+  --ds-radius-xl: 24px;
   --ds-radius-full: 9999px;
 
-  /* Shadows - Subtle for light theme */
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --ds-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --ds-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
-  --ds-shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
+  /* Shadows - soft, tactile (H4 wallet feel) */
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
 
   /* Button overrides */
   --ds-button-primary-bg: #171717;
@@ -142,6 +142,20 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-button-secondary-border: rgba(0, 0, 0, 0.15);
   --ds-button-secondary-text: #171717;
   --ds-button-secondary-bg-hover: rgba(0, 0, 0, 0.04);
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --ds-button-default-bg: #FFFFFF;
+  --ds-button-default-bg-hover: #FAFAFA;
+  --ds-button-default-color: #171717;
+  --ds-button-default-border: rgba(0, 0, 0, 0.1);
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.03);
+  --ds-button-ghost-color: #525252;
+  --ds-button-disabled-bg: #FAFAFA;
+  --ds-button-disabled-color: rgba(0, 0, 0, 0.25);
+  --ds-button-disabled-border: rgba(0, 0, 0, 0.06);
+  --ds-button-disabled-border-color: rgba(0, 0, 0, 0.06);
+  --ds-button-disabled-opacity: 0.4;
 
   /* Card overrides */
   --ds-card-bg: #ffffff;
@@ -154,6 +168,30 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-input-border: rgba(0, 0, 0, 0.12);
   --ds-input-border-focus: #171717;
   --ds-input-shadow-focus: 0 0 0 1px rgba(23, 23, 23, 0.2);
+  --ds-input-bg-disabled: #FAFAFA;
+  --ds-input-color-disabled: rgba(0, 0, 0, 0.25);
+  --ds-input-border-disabled: rgba(0, 0, 0, 0.06);
+  --ds-input-border-color-disabled: rgba(0, 0, 0, 0.06);
+  --ds-input-disabled-opacity: 0.4;
+
+  /* Layout */
+  --ds-layout-bg: #FFFFFF;
+  --ds-layout-header-bg: rgba(255, 255, 255, 0.95);
+  --ds-layout-header-backdrop: blur(10px);
+  --ds-layout-header-border: rgba(0, 0, 0, 0.06);
+  --ds-layout-sider-bg: #FAFAFA;
+  --ds-layout-sider-border: rgba(0, 0, 0, 0.06);
+
+  /* Shell (intentionally minimal — clean wallet feel) */
+  --ds-shell-grid-size: 0px;
+  --ds-shell-grid-line: transparent;
+  --ds-shell-grid-opacity: 0;
+
+  /* Table */
+  --ds-table-header-bg: rgba(0, 0, 0, 0.02);
+  --ds-table-header-color: #737373;
+  --ds-table-header-font-weight: 500;
+  --ds-table-header-font-size: 0.75rem;
 
   /* Link colors */
   --ds-color-link: #171717;

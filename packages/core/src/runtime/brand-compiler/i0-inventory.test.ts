@@ -524,73 +524,110 @@ describe('H3 contract: evnto', () => {
   checkCharts(evntoBrandTheme, 'evnto');
   checkSidebar(evntoBrandTheme, 'evnto');
 
-  describe('evnto surfaces', () => {
-    it('densityScale', () => expect(evntoBrandTheme.surfaces?.densityScale).toBeDefined());
-    it('borderRadius.sm', () => expect(evntoBrandTheme.surfaces?.borderRadius?.sm).toBeTruthy());
-    it('borderRadius.md', () => expect(evntoBrandTheme.surfaces?.borderRadius?.md).toBeTruthy());
-    it('borderRadius.lg', () => expect(evntoBrandTheme.surfaces?.borderRadius?.lg).toBeTruthy());
-    it('borderRadius.xl', () => expect(evntoBrandTheme.surfaces?.borderRadius?.xl).toBeTruthy());
-    it.skip('shadows — gap, target I6', () => {});
-    it.skip('glass — gap, target I6', () => {});
-    it.skip('gradients — gap, target I6', () => {});
-    it.skip('overlays — gap, target I6', () => {});
+  describe('evnto surfaces (filled I6)', () => {
+    it('densityScale', () => expect(evntoBrandTheme.surfaces?.densityScale).toBe(1.125));
+    it('borderRadius.sm', () => expect(evntoBrandTheme.surfaces?.borderRadius?.sm).toBe('10px'));
+    it('borderRadius.md', () => expect(evntoBrandTheme.surfaces?.borderRadius?.md).toBe('14px'));
+    it('borderRadius.lg', () => expect(evntoBrandTheme.surfaces?.borderRadius?.lg).toBe('18px'));
+    it('borderRadius.xl', () => expect(evntoBrandTheme.surfaces?.borderRadius?.xl).toBe('24px'));
+    it('shadows.sm', () => expect(evntoBrandTheme.surfaces?.shadows?.sm).toBeTruthy());
+    it('glass (none)', () => expect(evntoBrandTheme.surfaces?.glass?.blur).toBe('none'));
+    it('gradients (none)', () => expect(evntoBrandTheme.surfaces?.gradients?.primary).toBe('none'));
+    it('overlays', () => expect(evntoBrandTheme.surfaces?.overlays?.light).toBeTruthy());
   });
 
-  describe('evnto chrome.controls', () => {
+  describe('evnto chrome.controls (filled I6)', () => {
     it('buttonPrimary.bg', () => expect(evntoBrandTheme.chrome?.controls?.buttonPrimary?.bg).toBeTruthy());
-    it('buttonPrimary.bgHover', () => expect(evntoBrandTheme.chrome?.controls?.buttonPrimary?.bgHover).toBeTruthy());
-    it('buttonPrimary.text', () => expect(evntoBrandTheme.chrome?.controls?.buttonPrimary?.text).toBeTruthy());
-    it.skip('buttonPrimary.border — gap, target I6', () => {});
-    it.skip('buttonPrimary.shadow — gap, target I6', () => {});
+    it('buttonPrimary.border', () => expect(evntoBrandTheme.chrome?.controls?.buttonPrimary?.border).toBeTruthy());
+    it('buttonPrimary.shadow', () => expect(evntoBrandTheme.chrome?.controls?.buttonPrimary?.shadow).toBeTruthy());
     it('buttonSecondary.bg', () => expect(evntoBrandTheme.chrome?.controls?.buttonSecondary?.bg).toBeTruthy());
-    it('buttonSecondary.bgHover', () => expect(evntoBrandTheme.chrome?.controls?.buttonSecondary?.bgHover).toBeTruthy());
-    it('buttonSecondary.text', () => expect(evntoBrandTheme.chrome?.controls?.buttonSecondary?.text).toBeTruthy());
-    it('buttonSecondary.border', () => expect(evntoBrandTheme.chrome?.controls?.buttonSecondary?.border).toBeTruthy());
-    it.skip('buttonDefault — gap, target I6', () => {});
-    it.skip('buttonGhost — gap, target I6', () => {});
+    it('buttonDefault.bg', () => expect(evntoBrandTheme.chrome?.controls?.buttonDefault?.bg).toBeTruthy());
+    it('buttonDefault.text', () => expect(evntoBrandTheme.chrome?.controls?.buttonDefault?.text).toBeTruthy());
+    it('buttonGhost.bg', () => expect(evntoBrandTheme.chrome?.controls?.buttonGhost?.bg).toBeTruthy());
+    it('buttonGhost.text', () => expect(evntoBrandTheme.chrome?.controls?.buttonGhost?.text).toBeTruthy());
     it('input.bg', () => expect(evntoBrandTheme.chrome?.controls?.input?.bg).toBeTruthy());
-    it('input.border', () => expect(evntoBrandTheme.chrome?.controls?.input?.border).toBeTruthy());
-    it('input.borderFocus', () => expect(evntoBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
-    it('input.shadowFocus', () => expect(evntoBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
+    it('disabled.opacity', () => expect(evntoBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.4));
+    it('disabled.text', () => expect(evntoBrandTheme.chrome?.controls?.disabled?.text).toBeTruthy());
   });
 
-  describe('evnto chrome.table', () => {
+  describe('evnto chrome.table (filled I6)', () => {
     it('headerBg', () => expect(evntoBrandTheme.chrome?.table?.headerBg).toBeTruthy());
-    it.skip('headerColor — gap, target I6', () => {});
-    it.skip('headerFontWeight — gap, target I6', () => {});
-    it.skip('headerFontSize — gap, target I6', () => {});
+    it('headerColor', () => expect(evntoBrandTheme.chrome?.table?.headerColor).toBe('#737373'));
+    it('headerFontWeight', () => expect(evntoBrandTheme.chrome?.table?.headerFontWeight).toBe(500));
+    it('headerFontSize', () => expect(evntoBrandTheme.chrome?.table?.headerFontSize).toBe('0.75rem'));
   });
 
-  describe('evnto palette (gaps)', () => {
-    it.skip('successColor — gap, target I6', () => {});
-    it.skip('warningColor — gap, target I6', () => {});
-    it.skip('errorColor — gap, target I6', () => {});
-    it.skip('infoColor — gap, target I6', () => {});
+  describe('evnto palette (semantic — filled I6)', () => {
+    it('successColor', () => expect(evntoBrandTheme.palette?.successColor).toBe('#16A34A'));
+    it('warningColor', () => expect(evntoBrandTheme.palette?.warningColor).toBe('#EAB308'));
+    it('errorColor', () => expect(evntoBrandTheme.palette?.errorColor).toBe('#DC2626'));
+    it('infoColor', () => expect(evntoBrandTheme.palette?.infoColor).toBe('#0EA5E9'));
   });
 
-  describe('evnto chrome (gaps)', () => {
-    it.skip('layout.bg — gap, target I6', () => {});
-    it.skip('layout.headerBg — gap, target I6', () => {});
-    it.skip('layout.headerBackdrop — gap, target I6', () => {});
-    it.skip('layout.headerBorder — gap, target I6', () => {});
-    it.skip('layout.siderBg — gap, target I6', () => {});
-    it.skip('layout.siderBorder — gap, target I6', () => {});
-    it.skip('shell.gridSize — gap, target I6', () => {});
-    it.skip('shell.gridLine — gap, target I6', () => {});
-    it.skip('shell.gridOpacity — gap, target I6', () => {});
+  describe('evnto chrome.layout (filled I6)', () => {
+    it('bg', () => expect(evntoBrandTheme.chrome?.layout?.bg).toBe('#FFFFFF'));
+    it('headerBg', () => expect(evntoBrandTheme.chrome?.layout?.headerBg).toBeTruthy());
+    it('headerBackdrop', () => expect(evntoBrandTheme.chrome?.layout?.headerBackdrop).toBeTruthy());
+    it('headerBorder', () => expect(evntoBrandTheme.chrome?.layout?.headerBorder).toBeTruthy());
+    it('siderBg', () => expect(evntoBrandTheme.chrome?.layout?.siderBg).toBeTruthy());
+    it('siderBorder', () => expect(evntoBrandTheme.chrome?.layout?.siderBorder).toBeTruthy());
   });
 
-  describe('evnto dark-mode (gaps)', () => {
-    it.skip('dark-mode: palette dark strategy — gap, target I6', () => {});
-    it.skip('dark-mode: sidebar dark values — gap, target I6', () => {});
-    it.skip('dark-mode: layout dark values — gap, target I6', () => {});
-    it.skip('dark-mode: controls dark values — gap, target I6', () => {});
-    it.skip('dark-mode: table dark values — gap, target I6', () => {});
+  describe('evnto chrome.shell (filled I6 — intentionally minimal)', () => {
+    it('gridSize (none)', () => expect(evntoBrandTheme.chrome?.shell?.gridSize).toBe('0px'));
+    it('gridLine (transparent)', () => expect(evntoBrandTheme.chrome?.shell?.gridLine).toBe('transparent'));
+    it('gridOpacity (0)', () => expect(evntoBrandTheme.chrome?.shell?.gridOpacity).toBe(0));
   });
 
-  describe('evnto state semantics (gaps)', () => {
-    // success/warning/error/info colors are tracked in palette gaps above
-    it.skip('state: disabled treatment — gap, target I6', () => {});
-    it.skip('state: focus treatment — gap, target I6', () => {});
+  describe('evnto dark-mode (filled I6)', () => {
+    it('palette: darkPrimaryColor', () => expect(evntoBrandTheme.palette?.darkPrimaryColor).toBeTruthy());
+    it('palette: darkBackgroundColor', () => expect(evntoBrandTheme.palette?.darkBackgroundColor).toBeTruthy());
+    it('sidebar authored (light-first)', () => expect(evntoBrandTheme.chrome?.sidebar?.bg).toBe('#fafafa'));
+    it('layout authored', () => expect(evntoBrandTheme.chrome?.layout?.bg).toBe('#FFFFFF'));
+    it('controls authored', () => expect(evntoBrandTheme.chrome?.controls?.buttonPrimary?.bg).toBeTruthy());
+    it('table authored', () => expect(evntoBrandTheme.chrome?.table?.headerBg).toBeTruthy());
+  });
+
+  describe('evnto state semantics (filled I6)', () => {
+    it('disabled: opacity', () => expect(evntoBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.4));
+    it('focus: borderFocus', () => expect(evntoBrandTheme.chrome?.controls?.input?.borderFocus).toBeTruthy());
+    it('focus: shadowFocus', () => expect(evntoBrandTheme.chrome?.controls?.input?.shadowFocus).toBeTruthy());
+  });
+
+  describe('evnto artifact + generated output (I6 public path)', () => {
+    const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/evnto/index.css'), 'utf-8');
+    it('artifact: radius-sm is 10px', () => {
+      expect(artifact).toContain('--ds-radius-sm: 10px');
+    });
+    it('artifact: shadow matches authored', () => {
+      const authored = evntoBrandTheme.surfaces!.shadows!;
+      expect(artifact).toContain(`--ds-shadow-sm: ${authored.sm}`);
+    });
+    it('artifact: layout vars present', () => {
+      expect(artifact).toContain('--ds-layout-bg: #FFFFFF');
+      expect(artifact).toContain('--ds-layout-sider-bg: #FAFAFA');
+    });
+    it('artifact: shell vars present (minimal)', () => {
+      expect(artifact).toContain('--ds-shell-grid-size: 0px');
+    });
+    it('artifact: table header complete', () => {
+      expect(artifact).toContain('--ds-table-header-color: #737373');
+      expect(artifact).toContain('--ds-table-header-font-weight: 500');
+    });
+    it('artifact: disabled vars present', () => {
+      expect(artifact).toContain('--ds-button-disabled-opacity: 0.4');
+      expect(artifact).toContain('--ds-input-disabled-opacity: 0.4');
+    });
+    it('generated CSS includes chrome', () => {
+      const css = generateTenantCss(
+        { slug: 'evnto', name: 'Evnto', engine: 'classic', theme: 'base', plan: 'enterprise', features: ['*'], branding: { companyName: 'Evnto', primaryColor: '#171717', secondaryColor: '#B8A898', accentColor: '#06b6d4' }, vertical: 'evnto', brandTheme: evntoBrandTheme },
+        { includeDarkSelector: false },
+      );
+      expect(css).toContain('--ds-layout-bg: #FFFFFF');
+      expect(css).toContain('--ds-shell-grid-size: 0px');
+      expect(css).toContain('--ds-button-default-bg: #FFFFFF');
+      expect(css).toContain('--ds-button-disabled-opacity: 0.4');
+      expect(css).toContain('--ds-radius-sm: 10px');
+    });
   });
 });
