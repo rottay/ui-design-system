@@ -337,7 +337,7 @@ describe('no duplicate personality defaults', () => {
     ).toBe(false);
   });
 
-  it('personality defaults should only exist in runtime/tenant/presets/', () => {
+  it('personality defaults should only exist in runtime/personality/', () => {
     expect(
       existsSync(join(SRC_ROOT, 'runtime', 'personality', 'defaults.ts'))
     ).toBe(true);

@@ -173,7 +173,7 @@ for (const cat of CATEGORY_ROOTS) {
 const SRC_ROOT = resolve(__dirname, '../src');
 
 // 4a. runtime/tenant/ must not have root-level .ts leaf files except index.ts
-//     (personality-presets.ts was moved to personality/ in G3)
+//     (personality-presets.ts was moved to presets/ in G3 (now runtime/tenant/presets/))
 {
   const tenancyDir = join(SRC_ROOT, 'runtime/tenant');
   try {
