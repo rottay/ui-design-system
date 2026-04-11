@@ -7,7 +7,9 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": [
-    "*.css"
+    "*.css",
+    "styles/**/*.css",
+    "dist/**/*.css"
   ],
   "exports": {
     ".": {
@@ -26,39 +28,39 @@
       "require": "./dist/icons.cjs"
     },
     "./styles": {
-      "style": "./dist/styles.css",
-      "import": "./dist/styles.css",
-      "default": "./dist/styles.css"
+      "style": "./styles/index.css",
+      "import": "./styles/index.css",
+      "default": "./styles/index.css"
     },
     "./styles.css": {
-      "style": "./dist/styles.css",
-      "import": "./dist/styles.css",
-      "default": "./dist/styles.css"
+      "style": "./styles/index.css",
+      "import": "./styles/index.css",
+      "default": "./styles/index.css"
     },
     "./styles/platform": {
-      "style": "./dist/platform.css",
-      "import": "./dist/platform.css",
-      "default": "./dist/platform.css"
+      "style": "./styles/platform.css",
+      "import": "./styles/platform.css",
+      "default": "./styles/platform.css"
     },
     "./styles/bithire": {
-      "style": "./dist/bithire.css",
-      "import": "./dist/bithire.css",
-      "default": "./dist/bithire.css"
+      "style": "./styles/bithire.css",
+      "import": "./styles/bithire.css",
+      "default": "./styles/bithire.css"
     },
     "./styles/evnto": {
-      "style": "./dist/evnto.css",
-      "import": "./dist/evnto.css",
-      "default": "./dist/evnto.css"
+      "style": "./styles/evnto.css",
+      "import": "./styles/evnto.css",
+      "default": "./styles/evnto.css"
     },
     "./styles/rottay": {
-      "style": "./dist/platform.css",
-      "import": "./dist/platform.css",
-      "default": "./dist/platform.css"
+      "style": "./styles/rottay.css",
+      "import": "./styles/rottay.css",
+      "default": "./styles/rottay.css"
     },
     "./styles/modern": {
-      "style": "./dist/modern-engine.css",
-      "import": "./dist/modern-engine.css",
-      "default": "./dist/modern-engine.css"
+      "style": "./styles/modern.css",
+      "import": "./styles/modern.css",
+      "default": "./styles/modern.css"
     },
     "./dist/*.css": "./dist/*.css"
   },
@@ -71,6 +73,7 @@
     "dist/platform.css",
     "dist/bithire.css",
     "dist/evnto.css",
+    "styles/**/*.css",
     "!dist/**/*.d.ts.map",
     "README.md"
   ],
@@ -92,6 +95,7 @@
     "analyze:skip-build": "node scripts/analyze-bundle.mjs --skip-build",
     "lint:folders": "node scripts/lint-folder-index.mjs",
     "lint:integration": "node scripts/audit-integration.mjs",
+    "lint:vertical": "node scripts/audit-vertical-compliance.mjs",
     "docs:taxonomy": "node scripts/generate-taxonomy.mjs"
   },
   "engines": {
