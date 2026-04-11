@@ -17,8 +17,8 @@
  * @version 0.4.0
  */
 
-/* Component-specific styles (legacy) */
-@import '../runtime/bridges/collapse.css';
+/* Collapse bridge imported in foundation/base.css, not here.
+   Engine themes map --ds-* tokens to library-specific classes. */
 
 /* Engine-specific themes */
 @import './classic/theme.css';
