@@ -3,10 +3,16 @@
 /**
  * audit-vertical-compliance.mjs
  *
- * Checks that apps follow the vertical/ architecture conventions:
+ * World-class architecture compliance checks:
  *   Rule 1: vertical/manifest.ts must exist if vertical/ dir exists
- *   Rule 2: No new shell imports from _shared outside _shared and vertical/
+ *   Rule 2: No shell imports from old locations outside compat layers
  *   Rule 3: Route page files should import from @/features/ not @/surfaces/
+ *   Rule 4: No new shell/page-chrome/workspace code in _shared
+ *   Rule 5: Recipes must have at least one runtime consumer
+ *   Rule 6: No hardcoded shell geometry outside vertical/
+ *   Rule 7: Permanent roots only (app, vertical, features, core, ui, styles)
+ *
+ * Source of truth: world-class-app-architecture/00-final-decision.md
  *
  * Usage:
  *   node scripts/audit-vertical-compliance.mjs --app-dir /path/to/app/src
@@ -209,6 +215,31 @@ for (const file of allTsFiles) {
       file,
       message: 'Hardcoded shell geometry (sidebarWidth/headerHeight) outside vertical/ — use PLATFORM_PROFILE or SHELL_DEFAULTS',
     });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rule 7: Only permanent roots allowed (app, vertical, features, core, ui, styles)
+// Transitional roots (surfaces, actions, components, constants, hooks, providers,
+// stores, types, contexts, config) are flagged for awareness but not as hard errors.
+// ---------------------------------------------------------------------------
+const PERMANENT_ROOTS = new Set(['app', 'vertical', 'features', 'core', 'ui', 'styles']);
+const TRANSITIONAL_ROOTS = new Set([
+  'surfaces', 'actions', 'components', 'constants', 'hooks', 'providers',
+  'stores', 'types', 'contexts', 'config', 'database', 'platform', 'lib',
+]);
+if (existsSync(srcDir)) {
+  for (const entry of readdirSync(srcDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const name = entry.name;
+    if (name.startsWith('.') || name === 'node_modules' || name === 'content') continue;
+    if (!PERMANENT_ROOTS.has(name) && !TRANSITIONAL_ROOTS.has(name)) {
+      violations.push({
+        rule: 7,
+        file: join(srcDir, name),
+        message: `Unknown root directory "${name}" — only permanent roots (${[...PERMANENT_ROOTS].join(', ')}) are allowed`,
+      });
+    }
   }
 }
 
