@@ -519,6 +519,12 @@ export interface ThemeProviderProps {
    * `TenantProvider` sets the `data-tenant` attribute on the HTML element.
    */
   skipCssLoading?: boolean;
+  /**
+   * CSS custom property overrides derived from TenantAppearance (General + Advanced).
+   * Applied as inline style on the root element, layered on top of BrandTheme/tokenOverrides.
+   * Produced by `appearanceToVariables()` in `compilers/appearance`.
+   */
+  appearanceVars?: Record<string, string>;
 }
 
 export function ThemeProvider({
@@ -528,6 +534,7 @@ export function ThemeProvider({
   vertical,
   branding,
   tokenOverrides,
+  appearanceVars,
   generatedChromeCss,
   onError,
   onFallback,
@@ -792,12 +799,14 @@ export function ThemeProvider({
   // full-object walk + allocation that JSON.stringify performs.
   const brandingKey = fingerprintBranding(branding);
   const tokenOverridesKey = fingerprintTokenOverrides(tokenOverrides);
+  const appearanceKey = appearanceVars ? Object.entries(appearanceVars).map(([k, v]) => `${k}=${v}`).join('|') : '';
   const lastBrandingRef = useRef<string>('');
 
   useEffect(() => {
     // Skip if branding hasn't actually changed (prevents Fast Refresh loops)
-    if (lastBrandingRef.current === brandingKey + tokenOverridesKey) return;
-    lastBrandingRef.current = brandingKey + tokenOverridesKey;
+    const fullKey = brandingKey + tokenOverridesKey + appearanceKey;
+    if (lastBrandingRef.current === fullKey) return;
+    lastBrandingRef.current = fullKey;
 
     const style = document.documentElement.style;
     // Track every CSS variable we set so we can clean them up on unmount or
@@ -964,6 +973,15 @@ export function ThemeProvider({
       }
     }
 
+    // ── Tenant Appearance overrides (General + Advanced) ────────
+    // Applied AFTER branding/tokenOverrides so appearance wins when both
+    // are present. This is the final layer before chrome CSS injection.
+    if (appearanceVars) {
+      for (const [name, value] of Object.entries(appearanceVars)) {
+        safeSetProperty(name, value);
+      }
+    }
+
     // Chrome variables (sidebar, layout, shell, controls, table) are NOT
     // injected inline here. They flow through:
     // - Bundled CSS: already in the tenant CSS file with proper light/dark scoping
@@ -979,7 +997,7 @@ export function ThemeProvider({
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandingKey, tokenOverridesKey]);
+  }, [brandingKey, tokenOverridesKey, appearanceKey]);
 
   // Chrome CSS injection for dynamic/DB-backed tenants with BrandTheme.
   // Uses a scoped <style> tag with html[data-tenant='x'] selector so dark-mode

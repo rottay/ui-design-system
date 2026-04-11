@@ -92,6 +92,7 @@ import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../../compilers/brand-theme';
+import { appearanceToVariables } from '../../compilers/appearance';
 import { isBundledTenant } from '../tenant/registry';
 import type { BrandTheme } from '../../contracts/themes';
 import { CommandRegistryProvider } from '../../hooks/commands';
@@ -405,6 +406,14 @@ export function DesignSystemProvider({
     };
   }, [tenantConfig]);
 
+  // Resolve TenantAppearance (General + Advanced) into CSS custom properties.
+  // These are layered ON TOP of brandTheme/tokenOverrides in the merge chain.
+  const appearanceCssVars = useMemo(() => {
+    if (!tenantConfig?.appearance) return undefined;
+    const vars = appearanceToVariables(tenantConfig.appearance);
+    return Object.keys(vars).length > 0 ? vars : undefined;
+  }, [tenantConfig?.appearance]);
+
   if (loading || !normalizedConfig) {
     return <LoadingScreen />;
   }
@@ -452,6 +461,7 @@ export function DesignSystemProvider({
               vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
               branding={normalizedConfig.branding}
               tokenOverrides={normalizedConfig.tokenOverrides}
+              appearanceVars={appearanceCssVars}
               generatedChromeCss={
                 normalizedConfig.brandTheme && !isBundledTenant(normalizedConfig.slug)
                   ? buildScopedChromeCss(normalizedConfig.brandTheme, normalizedConfig.slug)
