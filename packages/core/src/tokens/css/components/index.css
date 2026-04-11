@@ -23,5 +23,3 @@
 @import './timeline.css';
 @import './qrcode.css';
 @import './list.css';
-@import './collapse.css';
-/* personality.css is imported separately in the main index.css under @layer rottay-personality */

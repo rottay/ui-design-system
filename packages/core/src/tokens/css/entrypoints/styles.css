@@ -83,7 +83,7 @@
    pushed by SystemCssVariablesBridge. Higher priority than tenants because
    personality is runtime-resolved per-product and must win over static tenants.
    ============================================================================= */
-@import '../components/personality.css' layer(rottay-personality);
+@import '../runtime/personality.css' layer(rottay-personality);
 
 /* =============================================================================
    LAYER 6: RESPONSIVE OVERRIDES (rottay-responsive)

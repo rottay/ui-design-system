@@ -261,7 +261,7 @@ const SRC_ROOT = resolve(__dirname, '../src');
     for (const e of entries) {
       if (!e.isDirectory()) continue;
       // These are the allowed declarative folder names after I1
-      const allowed = ['artifacts', 'legacy', 'foundation', 'entrypoints', 'components', 'engines'];
+      const allowed = ['artifacts', 'legacy', 'foundation', 'entrypoints', 'components', 'engines', 'runtime'];
       if (!allowed.includes(e.name) && !e.name.startsWith('_')) {
         violations.push({
           rule: 'css-undeclared-folder',

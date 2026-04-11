@@ -18,7 +18,7 @@
  */
 
 /* Component-specific styles (legacy) */
-@import './collapse.css';
+@import '../runtime/bridges/collapse.css';
 
 /* Engine-specific themes */
 @import './classic/theme.css';
