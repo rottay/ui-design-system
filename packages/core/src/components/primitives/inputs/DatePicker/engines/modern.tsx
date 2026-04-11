@@ -47,9 +47,9 @@ import {
 
 // DS size tokens mapped to inline style dimensions.
 const sizeStyleMap: Record<string, React.CSSProperties> = {
-  small: { height: 32, fontSize: 13, padding: '4px 10px' },
-  default: { height: 36, fontSize: 14, padding: '6px 12px' },
-  large: { height: 40, fontSize: 16, padding: '8px 14px' },
+  small: { height: 'var(--ds-input-sm-height, 2rem)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' },
+  default: { height: 'var(--ds-input-md-height, 2.5rem)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' },
+  large: { height: 'var(--ds-input-lg-height, 2.75rem)', fontSize: 'var(--ds-input-lg-font-size, 16px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
 };
 
 // ---------------------------------------------------------------------------
@@ -117,12 +117,13 @@ function usePopoverPosition(
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
       // Fixed positioning uses viewport-relative coordinates (no scrollY/scrollX)
-      // 4px gap between trigger and dropdown for visual separation
-      let top = rect.bottom + 4;
+      // Gap between trigger and dropdown for visual separation
+      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
+      let top = rect.bottom + gap;
       let left = rect.left;
 
       if (placement.includes('top')) {
-        top = rect.top - 4;
+        top = rect.top - gap;
       }
       if (placement.includes('Right')) {
         left = rect.right;
@@ -317,7 +318,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     padding: 12,
     background: 'var(--ds-color-bg-elevated)',
     borderRadius: 12,
-    boxShadow: '0 10px 25px -5px rgba(0,0,0,.15), 0 4px 10px -5px rgba(0,0,0,.1)',
+    boxShadow: 'var(--ds-elevation-4, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1))',
     border: '1px solid var(--ds-color-border)',
     width: 288,
     fontFamily: 'inherit',

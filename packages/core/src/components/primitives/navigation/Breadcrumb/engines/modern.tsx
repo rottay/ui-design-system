@@ -161,7 +161,14 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // render as <a> for navigation, items without render as <span> to indicate
   // the current (non-clickable) page in the trail
   return (
-    <div className={`breadcrumbs text-sm ${className}`} style={style}>
+    <div
+      className={`breadcrumbs text-sm ${className}`}
+      style={{
+        fontSize: 'var(--ds-font-size-sm, 14px)',
+        color: 'var(--ds-color-text-secondary)',
+        ...style,
+      }}
+    >
       <ul>
         {displayItems.map((item) => (
           <li key={item.key}>

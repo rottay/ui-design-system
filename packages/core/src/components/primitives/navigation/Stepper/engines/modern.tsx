@@ -79,6 +79,25 @@ function getStepClass(status: StepStatus): string {
 }
 
 /**
+ * Returns an inline style object with DS token color overrides for the step.
+ * DaisyUI structural classes are kept for layout, but the accent color is
+ * driven by DS tokens to support tenant-aware theming.
+ * @internal
+ */
+function getStepTokenStyle(status: StepStatus): React.CSSProperties {
+  switch (status) {
+    case 'finish':
+    case 'process':
+      return { '--step-color': 'var(--ds-color-primary)', accentColor: 'var(--ds-color-primary)' } as React.CSSProperties;
+    case 'error':
+      return { '--step-color': 'var(--ds-color-error)', accentColor: 'var(--ds-color-error)' } as React.CSSProperties;
+    case 'wait':
+    default:
+      return {};
+  }
+}
+
+/**
  * Computes the status for a step based on its position.
  * @param index - Step index
  * @param current - Current active step
@@ -115,6 +134,7 @@ function renderDaisySteps(
     // This lets consumers override specific steps while inheriting defaults elsewhere.
     const status = item.status || (globalStatus && index === current ? globalStatus : computeStatus(index, current));
     const stepClass = getStepClass(status);
+    const tokenStyle = getStepTokenStyle(status);
 
     return (
       <li
@@ -128,6 +148,7 @@ function renderDaisySteps(
         style={{
           cursor: clickable && !item.disabled ? 'pointer' : 'default',
           opacity: item.disabled ? 0.5 : 1,
+          ...tokenStyle,
         }}
         // DaisyUI's `data-content` attribute renders text/numbers inside the
         // step circle indicator. When a custom icon is provided, we skip it

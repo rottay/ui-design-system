@@ -91,6 +91,19 @@ const STATUS_CLASSES: Record<ProgressStatus, string> = {
   active: 'progress-primary',
 };
 
+/**
+ * Maps progress status to DS color token references.
+ * Inline styles ensure tenant-aware theming takes precedence
+ * over DaisyUI's built-in color classes.
+ * @internal
+ */
+const STATUS_TOKEN_COLORS: Record<ProgressStatus, string> = {
+  normal: 'var(--ds-color-primary)',
+  success: 'var(--ds-color-success)',
+  error: 'var(--ds-color-error)',
+  active: 'var(--ds-color-primary)',
+};
+
 // ============================================================================
 // Component
 // ============================================================================
@@ -154,9 +167,11 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
   // customization compared to Rustic's SVG approach.
   if (type === 'circle') {
     const circleStyle: React.CSSProperties = {
+      '--value': percent,
+      '--size': 'var(--ds-progress-circle-size, 6rem)',
+      color: strokeColor || STATUS_TOKEN_COLORS[status!],
       ...style,
-      ...(strokeColor ? { '--value': percent, '--size': '6rem', color: strokeColor } as React.CSSProperties : {}),
-    };
+    } as React.CSSProperties;
 
     // role="progressbar" provides semantic accessibility information.
     // DaisyUI radial-progress renders as a styled div with conic-gradient,
@@ -178,8 +193,8 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   const progressStyle: React.CSSProperties = {
+    accentColor: strokeColor || STATUS_TOKEN_COLORS[status!],
     ...style,
-    ...(strokeColor ? { backgroundColor: strokeColor } as React.CSSProperties : {}),
   };
 
   return (

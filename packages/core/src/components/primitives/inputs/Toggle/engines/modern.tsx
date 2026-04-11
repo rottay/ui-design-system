@@ -19,13 +19,13 @@ import React, { useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../Toggle.types';
 import { TOGGLE_DEFAULTS } from '../Toggle.types';
 
-/** Toggle track dimensions per size. */
-const SIZE_DIMS: Record<string, { trackW: number; trackH: number; thumbSize: number }> = {
-  xs: { trackW: 28, trackH: 16, thumbSize: 12 },
-  sm: { trackW: 32, trackH: 18, thumbSize: 14 },
-  md: { trackW: 36, trackH: 20, thumbSize: 16 },
-  lg: { trackW: 44, trackH: 24, thumbSize: 20 },
-  xl: { trackW: 44, trackH: 24, thumbSize: 20 },
+/** Toggle track dimensions per size, driven by DS tokens with px fallbacks. */
+const SIZE_DIMS: Record<string, { trackW: string; trackH: string; thumbSize: string }> = {
+  xs: { trackW: 'var(--ds-toggle-xs-width, 28px)', trackH: 'var(--ds-toggle-xs-height, 16px)', thumbSize: 'var(--ds-toggle-xs-dot, 12px)' },
+  sm: { trackW: 'var(--ds-toggle-sm-width, 32px)', trackH: 'var(--ds-toggle-sm-height, 18px)', thumbSize: 'var(--ds-toggle-sm-dot, 14px)' },
+  md: { trackW: 'var(--ds-toggle-md-width, 36px)', trackH: 'var(--ds-toggle-md-height, 20px)', thumbSize: 'var(--ds-toggle-md-dot, 16px)' },
+  lg: { trackW: 'var(--ds-toggle-lg-width, 44px)', trackH: 'var(--ds-toggle-lg-height, 24px)', thumbSize: 'var(--ds-toggle-lg-dot, 20px)' },
+  xl: { trackW: 'var(--ds-toggle-xl-width, 44px)', trackH: 'var(--ds-toggle-xl-height, 24px)', thumbSize: 'var(--ds-toggle-xl-dot, 20px)' },
 };
 
 /** DS token color for checked track per color prop. */
@@ -88,10 +88,12 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
 
   // Error state overrides the color class to ensure the toggle is visually marked
   const dims = SIZE_DIMS[size] || SIZE_DIMS.md;
-  const thumbInset = (dims.trackH - dims.thumbSize) / 2;
-  const thumbTravel = dims.trackW - dims.thumbSize - thumbInset * 2;
   const trackColor = error ? 'var(--ds-color-error)' : (isChecked ? (COLOR_TOKENS[color] || COLOR_TOKENS.default) : 'var(--ds-color-border-secondary)');
 
+  // Use CSS calc() for thumb positioning so dimensions stay token-driven.
+  // thumbInset = (trackH - thumbSize) / 2
+  // thumbTravel = trackW - thumbSize - thumbInset * 2 = trackW - thumbSize - (trackH - thumbSize)
+  //             = trackW - trackH
   const trackStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-block',
@@ -106,13 +108,13 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
 
   const thumbStyle: React.CSSProperties = {
     position: 'absolute',
-    top: thumbInset,
-    left: thumbInset,
+    top: `calc((${dims.trackH} - ${dims.thumbSize}) / 2)`,
+    left: `calc((${dims.trackH} - ${dims.thumbSize}) / 2)`,
     width: dims.thumbSize,
     height: dims.thumbSize,
     borderRadius: '50%',
     background: 'var(--ds-surface-control, var(--ds-color-text-on-primary))',
-    transform: isChecked ? `translateX(${thumbTravel}px)` : 'translateX(0)',
+    transform: isChecked ? `translateX(calc(${dims.trackW} - ${dims.trackH}))` : 'translateX(0)',
     transition: 'transform 200ms ease-out',
     boxShadow: 'var(--ds-elevation-1)',
   };

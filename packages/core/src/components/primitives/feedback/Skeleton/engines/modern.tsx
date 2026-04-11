@@ -156,14 +156,20 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   // Shape variants render a single div with the DaisyUI skeleton class
-  // and a dynamic border-radius to achieve the desired geometry
+  // and a dynamic border-radius to achieve the desired geometry.
+  // DS tokens for background and radius ensure tenant-aware theming.
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
       <div
         className={`skeleton ${className}`}
         style={{
           ...getSkeletonStyle(),
-          borderRadius: variant === 'circular' ? '50%' : variant === 'rounded' ? '0.5rem' : '0',
+          background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))',
+          borderRadius: variant === 'circular'
+            ? '50%'
+            : variant === 'rounded'
+              ? 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))'
+              : '0',
         }}
       />
     );
@@ -182,7 +188,8 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
           style={{
             width: avatarSize,
             height: avatarSize,
-            borderRadius: avatarShape === 'circle' ? '50%' : '0.5rem',
+            background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))',
+            borderRadius: avatarShape === 'circle' ? '50%' : 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))',
             flexShrink: 0,
           }}
         />
@@ -191,7 +198,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
       {/* Content section with title and paragraph lines */}
       <div className="flex-1 space-y-2">
         {/* Title line is 60% width to visually distinguish it from body text */}
-        {title && <div className="skeleton" style={{ height: '1.25rem', width: '60%' }} />}
+        {title && <div className="skeleton" style={{ height: '1.25rem', width: '60%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))' }} />}
 
         {/* Last paragraph line is 80% width to simulate a natural text ending,
             preventing the skeleton from looking like a uniform block */}
@@ -202,7 +209,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
             <div
               key={i}
               className="skeleton"
-              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%' }}
+              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))' }}
             />
           ))}
       </div>

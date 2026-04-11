@@ -1336,6 +1336,25 @@
   background-color: var(--ds-collapse-content-bg);
 }
 
+/* Bridge: .rottay-collapse (modern engine) */
+[data-tenant] .rottay-collapse {
+  background-color: var(--ds-collapse-bg);
+  border-radius: var(--ds-collapse-radius);
+}
+
+[data-tenant] .rottay-collapse .rottay-collapse-content {
+  background-color: var(--ds-collapse-content-bg);
+  color: var(--ds-text-primary);
+}
+
+[data-tenant] .rottay-collapse--ghost {
+  background-color: transparent;
+}
+
+[data-tenant] .rottay-collapse--borderless {
+  border: none;
+}
+
 /* =============================================================================
    DRAWER - .drawer
    ============================================================================= */
@@ -1948,6 +1967,20 @@
   margin-right: var(--ds-tree-checkbox-margin);
 }
 
+/* Bridge: .rottay-tree (modern engine) */
+[data-tenant] .rottay-tree {
+  background-color: var(--ds-tree-bg);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-node {
+  color: var(--ds-tree-node-color);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-node:hover {
+  background-color: var(--ds-tree-node-bg-hover);
+}
+
 /* =============================================================================
    DESCRIPTIONS - Info panels with label/value pairs
    ============================================================================= */
@@ -2102,6 +2135,20 @@
   color: var(--ds-empty-description-color);
 }
 
+/* Bridge: .rottay-empty (modern engine) */
+[data-tenant] .rottay-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--ds-text-secondary);
+}
+
+[data-tenant] .rottay-empty__footer {
+  margin-top: 0.5rem;
+}
+
 /* =============================================================================
    LIST
    ============================================================================= */
@@ -2226,6 +2273,17 @@
   background-color: var(--ds-qrcode-icon-bg);
   padding: var(--ds-qrcode-icon-padding);
   border-radius: var(--ds-qrcode-icon-radius);
+}
+
+/* Bridge: .rottay-qrcode (modern engine) */
+[data-tenant] .rottay-qrcode {
+  border-radius: var(--ds-radius-md, 8px);
+  border-color: var(--ds-border-color);
+  background-color: var(--ds-surface-card);
+}
+
+[data-tenant] .rottay-qrcode[data-status="expired"] {
+  opacity: 0.6;
 }
 
 /* =============================================================================

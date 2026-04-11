@@ -39,13 +39,14 @@ import { SPINNER_DEFAULTS } from '../Spinner.types';
 // ============================================================================
 
 /**
- * Maps Rottay size variants to pixel dimensions and border widths.
+ * Maps Rottay size variants to DS token dimensions and border widths.
+ * Dimension uses --ds-spinner-*-size tokens with pixel fallbacks.
  */
-const SIZE_MAP: Record<string, { dimension: number; borderWidth: number }> = {
-  sm: { dimension: 16, borderWidth: 2 },
-  md: { dimension: 24, borderWidth: 2 },
-  lg: { dimension: 32, borderWidth: 3 },
-  xl: { dimension: 40, borderWidth: 3 },
+const SIZE_MAP: Record<string, { dimension: string; borderWidth: number }> = {
+  sm: { dimension: 'var(--ds-spinner-sm-size, 16px)', borderWidth: 2 },
+  md: { dimension: 'var(--ds-spinner-md-size, 24px)', borderWidth: 2 },
+  lg: { dimension: 'var(--ds-spinner-lg-size, 32px)', borderWidth: 3 },
+  xl: { dimension: 'var(--ds-spinner-xl-size, 40px)', borderWidth: 3 },
 };
 
 /** Keyframes injected once per render tree via <style> tag */

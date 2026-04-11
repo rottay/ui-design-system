@@ -55,14 +55,19 @@ import type { ResponsiveValue } from '../../../layout/shared/types';
  * "xs" maps to text-base, not text-xs) so headings always appear visually
  * distinct from body text at the same nominal size value.
  */
-const HEADING_SIZE_CLASSES: Record<string, string> = {
-  xs: 'text-base',
-  sm: 'text-lg',
-  md: 'text-xl',
-  lg: 'text-2xl',
-  xl: 'text-3xl',
-  '2xl': 'text-4xl',
-  '3xl': 'text-5xl',
+/**
+ * Heading sizes mapped to DS font-size tokens via inline styles.
+ * Each entry returns the CSS custom property with a Tailwind-equivalent fallback.
+ * The one-step-up offset (xs -> base, sm -> lg, etc.) is preserved.
+ */
+const HEADING_SIZE_STYLES: Record<string, string> = {
+  xs: 'var(--ds-font-size-base, 0.9375rem)',
+  sm: 'var(--ds-font-size-lg, 1rem)',
+  md: 'var(--ds-font-size-xl, 1.125rem)',
+  lg: 'var(--ds-font-size-2xl, 1.25rem)',
+  xl: 'var(--ds-font-size-3xl, 1.5rem)',
+  '2xl': 'var(--ds-font-size-4xl, 2rem)',
+  '3xl': 'var(--ds-font-size-5xl, 2.5rem)',
 };
 
 /**
@@ -110,17 +115,17 @@ const HEADING_LEVEL_WEIGHTS: Record<string, string> = {
 };
 
 /**
- * Text sizes map 1:1 to Tailwind's type scale so consumers get
- * predictable results without needing to know the underlying utility names.
+ * Text sizes mapped to DS font-size tokens via inline styles.
+ * Each entry returns the CSS custom property with a Tailwind-equivalent fallback.
  */
-const TEXT_SIZE_CLASSES: Record<string, string> = {
-  xs: 'text-xs',
-  sm: 'text-sm',
-  md: 'text-base',
-  lg: 'text-lg',
-  xl: 'text-xl',
-  '2xl': 'text-2xl',
-  '3xl': 'text-3xl',
+const TEXT_SIZE_STYLES: Record<string, string> = {
+  xs: 'var(--ds-font-size-xs, 0.75rem)',
+  sm: 'var(--ds-font-size-sm, 0.875rem)',
+  md: 'var(--ds-font-size-base, 0.9375rem)',
+  lg: 'var(--ds-font-size-lg, 1rem)',
+  xl: 'var(--ds-font-size-xl, 1.125rem)',
+  '2xl': 'var(--ds-font-size-2xl, 1.25rem)',
+  '3xl': 'var(--ds-font-size-3xl, 1.5rem)',
 };
 
 /**
@@ -243,10 +248,9 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     // Class list is assembled as an array and filtered to avoid
     // stray spaces from falsy entries (e.g. when size is undefined).
-    // When size is responsive, do NOT emit a Tailwind size class -- the
-    // injected <style> tag handles sizing via @media queries instead.
+    // Heading size is now applied via inline fontSize (DS token), not
+    // a Tailwind text-* class.
     const classes = [
-      !sizeIsResponsive && scalarSize ? HEADING_SIZE_CLASSES[scalarSize] : '',
       resolvedWeightClass,
       ALIGN_CLASSES[align],
       truncate ? 'truncate' : '',
@@ -258,12 +262,13 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
 
-    // Apply premium typographic refinements: negative letter-spacing
-    // and tighter line-height for larger heading sizes. These inline
-    // styles complement the Tailwind size class and give headings
-    // the editorial feel of Linear/Vercel/Stripe typography.
+    // Apply premium typographic refinements: font-size from DS tokens,
+    // negative letter-spacing, and tighter line-height for larger heading
+    // sizes. These inline styles give headings the editorial feel of
+    // Linear/Vercel/Stripe typography.
     const typographyStyle: React.CSSProperties = {};
     if (scalarSize && !sizeIsResponsive) {
+      typographyStyle.fontSize = HEADING_SIZE_STYLES[scalarSize] || HEADING_SIZE_STYLES.md;
       const ls = HEADING_LETTER_SPACING[scalarSize];
       if (ls && ls !== '0') {
         typographyStyle.letterSpacing = ls;
@@ -358,10 +363,9 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
 
     // Text decorations and style modifiers are each a single Tailwind class,
     // keeping the compiled output minimal compared to inline style equivalents.
-    // When size is responsive, do NOT emit a Tailwind size class -- the
-    // injected <style> tag handles sizing via @media queries instead.
+    // Text size is now applied via inline fontSize (DS token), not a Tailwind
+    // text-* class.
     const classes = [
-      !sizeIsResponsive ? TEXT_SIZE_CLASSES[size] : '',
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
       underline ? 'underline' : '',
@@ -377,6 +381,11 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
 
     const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
 
+    // Apply DS token-based font-size for non-responsive sizes
+    const textSizeStyle: React.CSSProperties = !sizeIsResponsive
+      ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
+      : {};
+
     return (
       <>
         {responsive && responsive.css && (
@@ -385,7 +394,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
         <Component
           ref={ref as any}
           className={classes}
-          style={{ ...colorStyle, ...style }}
+          style={{ ...textSizeStyle, ...colorStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >
@@ -430,8 +439,8 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     // Paragraphs include "leading-relaxed" and "mb-4" by default because
     // body text needs generous line-height and vertical rhythm to remain
     // readable at longer lengths. These can be overridden via className.
+    // Paragraph size is now applied via inline fontSize (DS token).
     const classes = [
-      TEXT_SIZE_CLASSES[size],
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
       'leading-relaxed',
@@ -444,9 +453,12 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       .join(' ');
 
     const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
+    const paragraphSizeStyle: React.CSSProperties = {
+      fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
+    };
 
     return (
-      <p ref={ref} className={classes} style={{ ...colorStyle, ...style }} {...props}>
+      <p ref={ref} className={classes} style={{ ...paragraphSizeStyle, ...colorStyle, ...style }} {...props}>
         {children}
       </p>
     );
@@ -495,8 +507,8 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
     // Disabled links use pointer-events-none + reduced opacity so they
     // cannot be clicked or focused, matching native disabled behavior.
     // The "transition-colors" class is always present for smooth color shifts.
+    // Link size is now applied via inline fontSize (DS token).
     const classes = [
-      TEXT_SIZE_CLASSES[size],
       weight ? WEIGHT_CLASSES[weight] : '',
       strong ? 'font-semibold' : '',
       underline ? 'underline' : '',
@@ -510,6 +522,9 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       .join(' ');
 
     const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
+    const linkSizeStyle: React.CSSProperties = {
+      fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
+    };
 
     return (
       /* Disabled links have href removed entirely so they are not
@@ -521,7 +536,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
         rel={computedRel}
         onClick={disabled ? undefined : onClick}
         className={classes}
-        style={{ ...colorStyle, ...style }}
+        style={{ ...linkSizeStyle, ...colorStyle, ...style }}
         aria-disabled={disabled}
         {...props}
       >

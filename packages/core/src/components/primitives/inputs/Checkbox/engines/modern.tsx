@@ -88,6 +88,19 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
 };
 
 /* ------------------------------------------------------------------ */
+/*  Size tokens                                                        */
+/* ------------------------------------------------------------------ */
+
+/** DS token references for checkbox box dimensions (CSS custom properties with px fallbacks). */
+const CHECKBOX_SIZE_TOKEN_MAP: Record<string, string> = {
+  xs: 'var(--ds-checkbox-size-xs, 14px)',
+  sm: 'var(--ds-checkbox-size-sm, 16px)',
+  md: 'var(--ds-checkbox-size-md, 18px)',
+  lg: 'var(--ds-checkbox-size-lg, 20px)',
+  xl: 'var(--ds-checkbox-size-xl, 24px)',
+};
+
+/* ------------------------------------------------------------------ */
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -145,7 +158,10 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   }, []);
 
   /* -- Sizes -------------------------------------------------------- */
-  const boxSize = SIZE_MAP_NUMERIC[size] ?? 18;
+  // Numeric fallback for SVG icon sizing (cannot use CSS vars in SVG attributes)
+  const boxSizeNumeric = SIZE_MAP_NUMERIC[size] ?? 18;
+  // DS token reference for CSS box dimensions
+  const boxSizeToken = CHECKBOX_SIZE_TOKEN_MAP[size] || CHECKBOX_SIZE_TOKEN_MAP.md;
 
   /* -- Active visual state ------------------------------------------ */
   const active = isChecked || indeterminate;
@@ -157,9 +173,9 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
 
   const boxStyle: React.CSSProperties = {
     position: 'relative',
-    width: boxSize,
-    height: boxSize,
-    minWidth: boxSize,
+    width: boxSizeToken,
+    height: boxSizeToken,
+    minWidth: boxSizeToken,
     borderRadius: 'var(--ds-radius-sm)',
     border: `2px solid ${active ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)'}`,
     backgroundColor: active ? 'var(--ds-color-primary)' : 'transparent',
@@ -242,8 +258,8 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
         <span style={boxStyle}>
           {active && (
             indeterminate
-              ? <IndeterminateIcon size={boxSize} />
-              : <CheckIcon size={boxSize} />
+              ? <IndeterminateIcon size={boxSizeNumeric} />
+              : <CheckIcon size={boxSizeNumeric} />
           )}
         </span>
 

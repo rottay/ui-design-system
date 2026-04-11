@@ -90,6 +90,11 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
         className="modal-box max-w-sm"
         role="alertdialog"
         aria-modal="true"
+        style={{
+          background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
+          borderRadius: 'var(--ds-modal-radius, var(--ds-radius-lg))',
+          padding: 'var(--ds-modal-padding, 1.5rem)',
+        }}
       >
         <div className="flex gap-3 items-start">
           {/* Error-tinted circle with inline SVG warning triangle */}
@@ -113,7 +118,16 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
         <div className="modal-action">
           <button
             type="button"
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 36, padding: '0 16px', fontSize: 14, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+            style={{
+              background: 'transparent',
+              color: 'var(--ds-color-text-primary)',
+              height: 'var(--ds-control-height-sm, 36px)',
+              padding: '0 var(--ds-spacing-md, 16px)',
+              fontSize: 'var(--ds-font-size-sm, 14px)',
+              borderRadius: 'var(--ds-radius-md)',
+              border: 'none',
+              cursor: 'pointer',
+            }}
             onClick={handleCancel}
           >
             {cancelLabel}

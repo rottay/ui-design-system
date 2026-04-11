@@ -202,12 +202,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
           {/* Handles */}
           <div
-            className="absolute w-4 h-4 rounded-full border-2 border-white shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { background: 'var(--ds-color-primary)', left: '50%', bottom: `${startPercent}%` } : { background: 'var(--ds-color-primary)', top: '50%', left: `${startPercent}%` }}
+            className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={vertical ? { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', left: '50%', bottom: `${startPercent}%` } : { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', top: '50%', left: `${startPercent}%` }}
           />
           <div
-            className="absolute w-4 h-4 rounded-full border-2 border-white shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { background: 'var(--ds-color-primary)', left: '50%', bottom: `${endPercent}%` } : { background: 'var(--ds-color-primary)', top: '50%', left: `${endPercent}%` }}
+            className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={vertical ? { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', left: '50%', bottom: `${endPercent}%` } : { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', top: '50%', left: `${endPercent}%` }}
           />
 
           {/* Marks -- positioned absolutely; supports both string and {label,style} shapes */}

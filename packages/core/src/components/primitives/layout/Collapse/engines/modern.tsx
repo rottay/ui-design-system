@@ -222,7 +222,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
         <style dangerouslySetInnerHTML={{ __html: COLLAPSE_STYLES }} />
         <div
           ref={ref}
-          className={className || undefined}
+          className={`rottay-collapse${ghost ? ' rottay-collapse--ghost' : ''}${!bordered ? ' rottay-collapse--borderless' : ''} ${className}`.trim() || undefined}
           style={{
             display: 'flex',
             flexDirection: 'column',

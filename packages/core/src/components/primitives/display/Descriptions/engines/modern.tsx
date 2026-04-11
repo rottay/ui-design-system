@@ -71,7 +71,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
     return (
       <div
         ref={ref}
-        className={`${className}`}
+        className={`rottay-descriptions${layout === 'vertical' ? ' rottay-descriptions-vertical' : ''}${!bordered ? ' rottay-descriptions-borderless' : ''} ${className}`}
         style={style}
         data-engine="modern"
       >

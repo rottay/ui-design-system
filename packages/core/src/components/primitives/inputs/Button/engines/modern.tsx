@@ -126,11 +126,11 @@ const VARIANT_HOVER_STYLES: Record<string, React.CSSProperties> = {
 // Size style mapping (pure inline styles, no DaisyUI)
 // ---------------------------------------------------------------------------
 const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  xs: { height: 24, padding: '0 8px', fontSize: 12 },
-  sm: { height: 32, padding: '0 12px', fontSize: 13 },
-  md: { height: 36, padding: '0 16px', fontSize: 14 },
-  lg: { height: 44, padding: '0 20px', fontSize: 16 },
-  xl: { height: 52, padding: '0 24px', fontSize: 18 },
+  xs: { height: 'var(--ds-button-xs-height, 1.5rem)', padding: '0 var(--ds-button-xs-padding-x, 0.5rem)', fontSize: 'var(--ds-button-xs-font-size, 0.75rem)' },
+  sm: { height: 'var(--ds-button-sm-height, 2rem)', padding: '0 var(--ds-button-sm-padding-x, 0.75rem)', fontSize: 'var(--ds-button-sm-font-size, 0.8125rem)' },
+  md: { height: 'var(--ds-button-md-height, 2.5rem)', padding: '0 var(--ds-button-md-padding-x, 1rem)', fontSize: 'var(--ds-button-md-font-size, 0.875rem)' },
+  lg: { height: 'var(--ds-button-lg-height, 2.75rem)', padding: '0 var(--ds-button-lg-padding-x, 1.25rem)', fontSize: 'var(--ds-button-lg-font-size, 0.9375rem)' },
+  xl: { height: 'var(--ds-button-xl-height, 3rem)', padding: '0 var(--ds-button-xl-padding-x, 1.5rem)', fontSize: 'var(--ds-button-xl-font-size, 1rem)' },
 };
 
 // ---------------------------------------------------------------------------

@@ -15,11 +15,11 @@ import React from 'react';
 import type { KbdProps } from '../Kbd.types';
 import { KBD_DEFAULTS } from '../Kbd.types';
 
-/** Maps size tokens to inline style dimensions. */
+/** Maps size tokens to inline style dimensions using DS token references. */
 const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  sm: { padding: '1px 4px', fontSize: 11, minHeight: 20 },
-  md: { padding: '2px 6px', fontSize: 12, minHeight: 24 },
-  lg: { padding: '3px 8px', fontSize: 14, minHeight: 28 },
+  sm: { padding: 'var(--ds-kbd-sm-padding, 1px 4px)', fontSize: 'var(--ds-font-size-xs, 0.6875rem)', minHeight: 'var(--ds-kbd-sm-min-height, 20px)' },
+  md: { padding: 'var(--ds-kbd-md-padding, 2px 6px)', fontSize: 'var(--ds-font-size-xs, 0.75rem)', minHeight: 'var(--ds-kbd-md-min-height, 24px)' },
+  lg: { padding: 'var(--ds-kbd-lg-padding, 3px 8px)', fontSize: 'var(--ds-font-size-sm, 0.875rem)', minHeight: 'var(--ds-kbd-lg-min-height, 28px)' },
 };
 
 /**

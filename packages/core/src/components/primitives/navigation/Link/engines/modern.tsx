@@ -76,6 +76,20 @@ const typeClassMap: Record<string, string> = {
   danger: 'link-error',
 };
 
+/**
+ * Maps semantic link types to DS color token references.
+ * These inline styles ensure tenant-aware theming takes precedence
+ * over DaisyUI's built-in color classes.
+ */
+const typeColorMap: Record<string, string> = {
+  default: 'var(--ds-color-info, var(--ds-color-primary))',
+  primary: 'var(--ds-color-primary)',
+  secondary: 'var(--ds-color-secondary)',
+  success: 'var(--ds-color-success)',
+  warning: 'var(--ds-color-warning)',
+  danger: 'var(--ds-color-error)',
+};
+
 // ============================================================================
 // Modern Link Component
 // ============================================================================
@@ -178,7 +192,7 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
       className={linkClasses}
       onClick={handleClick}
       aria-disabled={disabled}
-      style={style}
+      style={{ color: typeColorMap[type], ...style }}
       {...externalProps}
       {...rest}
     >

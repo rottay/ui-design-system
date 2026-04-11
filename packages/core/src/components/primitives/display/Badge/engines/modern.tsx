@@ -125,11 +125,11 @@ interface SizeSpec {
 }
 
 const SIZE_SPECS: Record<string, SizeSpec> = {
-  xs: { height: '20px', fontSize: '11px', paddingX: '6px', lineHeight: '1' },
-  sm: { height: '24px', fontSize: '12px', paddingX: '8px', lineHeight: '1' },
-  md: { height: '28px', fontSize: '12px', paddingX: '10px', lineHeight: '1' },
-  lg: { height: '32px', fontSize: '13px', paddingX: '12px', lineHeight: '1' },
-  xl: { height: '32px', fontSize: '13px', paddingX: '12px', lineHeight: '1' },
+  xs: { height: 'var(--ds-badge-xs-height, 20px)', fontSize: 'var(--ds-badge-xs-font-size, 11px)', paddingX: 'var(--ds-badge-xs-padding-x, 6px)', lineHeight: '1' },
+  sm: { height: 'var(--ds-badge-sm-height, 24px)', fontSize: 'var(--ds-badge-sm-font-size, 12px)', paddingX: 'var(--ds-badge-sm-padding-x, 8px)', lineHeight: '1' },
+  md: { height: 'var(--ds-badge-md-height, 28px)', fontSize: 'var(--ds-badge-md-font-size, 12px)', paddingX: 'var(--ds-badge-md-padding-x, 10px)', lineHeight: '1' },
+  lg: { height: 'var(--ds-badge-lg-height, 32px)', fontSize: 'var(--ds-badge-lg-font-size, 13px)', paddingX: 'var(--ds-badge-lg-padding-x, 12px)', lineHeight: '1' },
+  xl: { height: 'var(--ds-badge-xl-height, 32px)', fontSize: 'var(--ds-badge-xl-font-size, 13px)', paddingX: 'var(--ds-badge-xl-padding-x, 12px)', lineHeight: '1' },
 };
 
 // ---------------------------------------------------------------------------
