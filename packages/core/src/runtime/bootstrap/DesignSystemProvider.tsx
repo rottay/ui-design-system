@@ -435,7 +435,8 @@ export function DesignSystemProvider({
   // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
   // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
   const appearanceBackgroundMode = normalizedConfig.appearance?.general?.palette?.backgroundMode;
-  const explicitTenantTheme = normalizedConfig.theme && normalizedConfig.theme !== 'base'
+  const VALID_THEME_MODES = new Set(['light', 'dark', 'auto']);
+  const explicitTenantTheme = normalizedConfig.theme && VALID_THEME_MODES.has(normalizedConfig.theme)
     ? normalizedConfig.theme
     : undefined;
   const theme = forceTheme ?? explicitTenantTheme ?? appearanceBackgroundMode ?? normalizedConfig.theme ?? 'base';
