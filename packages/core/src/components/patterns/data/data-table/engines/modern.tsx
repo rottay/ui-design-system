@@ -914,7 +914,7 @@ export default function ModernDataTable<T extends object>(
                     <React.Fragment key={key}>
                       <tr
                         data-row-index={index}
-                        tabIndex={activeRowIndex === index ? 0 : -1}
+                        tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
                         role="row"
                         onClick={onRowClick ? () => onRowClick(row, index) : undefined}
                         onKeyDown={(e) => handleRowKeyDown(e, row, index)}
