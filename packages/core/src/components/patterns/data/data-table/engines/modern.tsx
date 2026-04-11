@@ -25,7 +25,7 @@
  * />
  */
 
-import React, { useMemo, useState, useCallback, useRef } from 'react';
+import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 import { Checkbox } from '../../../../primitives/inputs/Checkbox';
@@ -117,6 +117,10 @@ export default function ModernDataTable<T extends object>(
   const [dragSourceKey, setDragSourceKey] = useState<string | null>(null);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
   const reorderRef = useRef<{ sourceKey: string; startX: number } | null>(null);
+
+  // --- Keyboard row navigation state ---
+  const [activeRowIndex, setActiveRowIndex] = useState<number>(-1);
+  const tbodyRef = useRef<HTMLTableSectionElement | null>(null);
 
   // ---------------------------------------------------------------------------
   // Derived values
@@ -347,6 +351,73 @@ export default function ModernDataTable<T extends object>(
   };
 
   // ---------------------------------------------------------------------------
+  // Keyboard navigation: header sort via Enter/Space
+  // ---------------------------------------------------------------------------
+
+  const handleHeaderKeyDown = useCallback(
+    (e: React.KeyboardEvent, colKey: string) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleSort(colKey);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sorting, onSortChange]
+  );
+
+  // ---------------------------------------------------------------------------
+  // Keyboard navigation: row arrow keys (roving tabindex)
+  // ---------------------------------------------------------------------------
+
+  const handleRowKeyDown = useCallback(
+    (e: React.KeyboardEvent, row: T, index: number) => {
+      let nextIndex: number | null = null;
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          nextIndex = Math.min(index + 1, data.length - 1);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          nextIndex = Math.max(index - 1, 0);
+          break;
+        case 'Home':
+          e.preventDefault();
+          nextIndex = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          nextIndex = data.length - 1;
+          break;
+        case 'Enter':
+          if (onRowClick) {
+            e.preventDefault();
+            onRowClick(row, index);
+          }
+          return;
+        default:
+          return;
+      }
+
+      if (nextIndex !== null && nextIndex !== index) {
+        setActiveRowIndex(nextIndex);
+      }
+    },
+    [data.length, onRowClick]
+  );
+
+  // Focus the active row element when activeRowIndex changes
+  useEffect(() => {
+    if (activeRowIndex < 0 || !tbodyRef.current) return;
+    const rows = tbodyRef.current.querySelectorAll<HTMLTableRowElement>('tr[data-row-index]');
+    const targetRow = rows[activeRowIndex];
+    if (targetRow) {
+      targetRow.focus();
+    }
+  }, [activeRowIndex]);
+
+  // ---------------------------------------------------------------------------
   // Style / class derivation
   // ---------------------------------------------------------------------------
 
@@ -375,7 +446,7 @@ export default function ModernDataTable<T extends object>(
       className={`ds-pattern-data-table ds-engine-modern ds-table-density-${density} ${className ?? ''}`}
       style={{ width: '100%', ...style }}
     >
-      {/* Premium polish styles for resize handles, row hover, etc. */}
+      {/* Premium polish styles for resize handles, row hover, keyboard nav, etc. */}
       <style>{`
         .ds-engine-modern .ds-resize-handle:hover .ds-resize-handle__bar,
         .ds-engine-modern .ds-resize-handle:focus-visible .ds-resize-handle__bar {
@@ -389,6 +460,16 @@ export default function ModernDataTable<T extends object>(
         }
         .ds-engine-modern th[data-col-key]:hover {
           background-color: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+        }
+        .ds-engine-modern th[data-col-key][data-sortable="true"]:focus-visible {
+          outline: 2px solid var(--ds-color-primary);
+          outline-offset: -2px;
+          border-radius: 2px;
+        }
+        .ds-engine-modern tr[data-row-index]:focus-visible {
+          outline: none;
+          box-shadow: inset 3px 0 0 0 var(--ds-color-primary);
+          background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent) !important;
         }
       `}</style>
       {header}
@@ -542,6 +623,8 @@ export default function ModernDataTable<T extends object>(
           ) : (
             <table
               className={tableClasses}
+              role="grid"
+              aria-label="Data table"
               style={{
                 width: '100%',
                 borderCollapse: 'collapse',
@@ -572,7 +655,7 @@ export default function ModernDataTable<T extends object>(
                       style={{
                         padding: densityPadding,
                         width: 48,
-                        color: 'var(--ds-color-text-secondary)',
+                        color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                         fontWeight: 500,
                         fontSize: 12,
                         letterSpacing: '0.05em',
@@ -603,13 +686,24 @@ export default function ModernDataTable<T extends object>(
                     return (
                       <th
                         key={col.key}
+                        role="columnheader"
+                        aria-sort={
+                          col.sortable
+                            ? sorting?.key === col.key
+                              ? sorting.direction === 'asc'
+                                ? 'ascending'
+                                : 'descending'
+                              : 'none'
+                            : undefined
+                        }
+                        tabIndex={col.sortable ? 0 : undefined}
                         style={{
                           width: resolvedWidth,
                           minWidth: col.minWidth,
                           maxWidth: col.maxWidth,
                           textAlign: col.align,
                           padding: densityPadding,
-                          color: 'var(--ds-color-text-secondary)',
+                          color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                           fontWeight: 500,
                           fontSize: 11,
                           letterSpacing: '0.05em',
@@ -623,13 +717,15 @@ export default function ModernDataTable<T extends object>(
                             : dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key
                               ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)'
                               : undefined,
-                          userSelect: reorderable || resizable ? 'none' : undefined,
+                          userSelect: col.sortable || reorderable || resizable ? 'none' : undefined,
                           opacity: dragSourceKey === col.key ? 0.45 : 1,
                           transition: `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out), background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
                           cursor: col.sortable ? 'pointer' : undefined,
                         }}
                         data-col-key={col.key}
+                        data-sortable={col.sortable ? 'true' : undefined}
                         onClick={col.sortable ? () => handleSort(col.key) : undefined}
+                        onKeyDown={col.sortable ? (e) => handleHeaderKeyDown(e, col.key) : undefined}
                       >
                         <span
                           style={{
@@ -795,7 +891,7 @@ export default function ModernDataTable<T extends object>(
                         right: 0,
                         zIndex: 2,
                         backgroundColor: 'var(--ds-surface-inset, var(--ds-surface-panel))',
-                        color: 'var(--ds-color-text-secondary)',
+                        color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                         fontWeight: 500,
                         fontSize: 12,
                         letterSpacing: '0.05em',
@@ -807,7 +903,7 @@ export default function ModernDataTable<T extends object>(
                   )}
                 </tr>
               </thead>
-              <tbody>
+              <tbody ref={tbodyRef}>
                 {data.map((row, index) => {
                   const key = getRowKey(row, index);
                   const isExpanded = expandedKeys.has(key);
@@ -817,12 +913,19 @@ export default function ModernDataTable<T extends object>(
                   return (
                     <React.Fragment key={key}>
                       <tr
+                        data-row-index={index}
+                        tabIndex={activeRowIndex === index ? 0 : -1}
+                        role="row"
                         onClick={onRowClick ? () => onRowClick(row, index) : undefined}
+                        onKeyDown={(e) => handleRowKeyDown(e, row, index)}
+                        onFocus={() => setActiveRowIndex(index)}
                         style={{
                           cursor: onRowClick ? 'pointer' : undefined,
                           backgroundColor: isSelected
                             ? 'color-mix(in srgb, var(--ds-color-primary) 9%, transparent)'
-                            : 'transparent',
+                            : striped && index % 2 === 1
+                              ? 'color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent)'
+                              : 'transparent',
                           transition: `background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
                           borderBottom: !isLastRow
                             ? '1px solid var(--ds-color-border-subtle)'
@@ -837,7 +940,9 @@ export default function ModernDataTable<T extends object>(
                         onMouseLeave={(e) => {
                           (e.currentTarget as HTMLElement).style.backgroundColor = isSelected
                             ? 'color-mix(in srgb, var(--ds-color-primary) 9%, transparent)'
-                            : 'transparent';
+                            : striped && index % 2 === 1
+                              ? 'color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent)'
+                              : 'transparent';
                         }}
                       >
                         {/* Selection checkbox */}
