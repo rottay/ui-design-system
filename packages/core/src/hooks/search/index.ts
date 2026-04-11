@@ -42,6 +42,7 @@
  * });
  * ```
  *
+ * @status active (designed for CommandPalette search)
  * @module System/Hooks/Search
  * @category System
  * @package @rottay/design-system

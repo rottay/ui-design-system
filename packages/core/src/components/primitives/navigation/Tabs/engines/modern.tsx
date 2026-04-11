@@ -43,9 +43,9 @@ const TRANSITION_FAST = [
 ].join(', ');
 
 const SIZE_CONFIG: Record<string, { height: string; fontSize: string; padding: string; iconSize: string; badgeFontSize: string }> = {
-  sm: { height: '32px', fontSize: '12px', padding: '8px 12px', iconSize: '14px', badgeFontSize: '10px' },
-  md: { height: '36px', fontSize: '13px', padding: '8px 16px', iconSize: '16px', badgeFontSize: '11px' },
-  lg: { height: '40px', fontSize: '14px', padding: '8px 16px', iconSize: '18px', badgeFontSize: '11px' },
+  sm: { height: 'var(--ds-tabs-sm-height, 32px)', fontSize: 'var(--ds-font-size-xs, 12px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', iconSize: 'var(--ds-tabs-sm-icon-size, 14px)', badgeFontSize: 'var(--ds-font-size-2xs, 10px)' },
+  md: { height: 'var(--ds-tabs-md-height, 36px)', fontSize: 'var(--ds-font-size-sm, 13px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-md-icon-size, 16px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
+  lg: { height: 'var(--ds-tabs-lg-height, 40px)', fontSize: 'var(--ds-font-size-base, 14px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-lg-icon-size, 18px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
 };
 
 // ============================================================================
@@ -107,7 +107,7 @@ function getTabItemStyle(
       return {
         ...base,
         borderRadius: 0,
-        paddingBottom: '10px',
+        paddingBottom: 'var(--ds-tabs-line-padding-bottom, 10px)',
         marginBottom: '-1px',
         color: isDisabled
           ? 'var(--ds-color-text-tertiary)'
@@ -256,9 +256,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
 
   if (sizeIsResponsive) {
     const TABS_SIZE_STYLES: Record<string, { padding: string; fontSize: string }> = {
-      sm: { padding: '8px 12px', fontSize: '12px' },
-      md: { padding: '8px 16px', fontSize: '13px' },
-      lg: { padding: '8px 16px', fontSize: '14px' },
+      sm: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', fontSize: 'var(--ds-font-size-xs, 12px)' },
+      md: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-sm, 13px)' },
+      lg: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-base, 14px)' },
     };
     responsiveEntries.push({
       cssProperty: 'padding',
@@ -511,7 +511,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
           tabIndex={0}
           style={{
-            padding: '16px 0 0 0',
+            padding: 'var(--ds-spacing-4, 16px) 0 0 0',
             outline: 'none',
             animation: 'rottay-tabs-fade-in var(--ds-motion-fast) var(--ds-motion-ease-out)',
           }}

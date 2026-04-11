@@ -12,6 +12,7 @@
 import type { TenantConfig } from '../../../../../contracts';
 import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, brandThemeToChromeVariables, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../../compilers/brand-theme';
 import { isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor, buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor } from '../../../../../compilers/_shared/color-math';
+import { appearanceToVariables } from '../../../../../compilers/appearance';
 import { getVerticalPreset } from '../../../../verticals/registry';
 import { getProductProfile } from '../../../../product-profiles/registry';
 
@@ -532,6 +533,13 @@ export function generateTenantCss(
     ? brandThemeToChromeVariables(effectiveConfig.brandTheme)
     : {};
 
+  // Appearance variables from TenantAppearance (General + Advanced tiers).
+  // Layered AFTER chrome vars so appearance overrides win when both are
+  // present — matching the runtime merge order in ThemeProvider.
+  const appearanceVars = effectiveConfig.appearance
+    ? appearanceToVariables(effectiveConfig.appearance)
+    : {};
+
   // Base declarations without chrome (shared across light + dark base)
   const baseDeclarations = {
     ...brandingVariables(effectiveConfig),
@@ -542,18 +550,22 @@ export function generateTenantCss(
   // Chrome vars are light-only — dark chrome requires dark-specific values
   // from BrandTheme which is future work. Including them in the dark block
   // would override first-party dark CSS values.
-  const lightDeclarations = { ...baseDeclarations, ...chromeVars };
+  // Appearance vars layer on top of chrome (highest priority in light mode).
+  const lightDeclarations = { ...baseDeclarations, ...chromeVars, ...appearanceVars };
 
   // Block 1: light-theme tenant variables (always generated)
   const blocks = [toCssBlock(selector, lightDeclarations)];
 
   if (includeDarkSelector) {
     // Dark declarations use base (no chrome) + dark-specific overrides.
+    // Appearance vars are included because in the runtime they are set as
+    // inline styles on the root element and persist across theme switches.
     const darkDeclarations = {
       ...baseDeclarations,
       ...darkBrandingVariables(effectiveConfig),
       ...darkSemanticVariables(effectiveConfig),
       ...darkPersonalityOverrides(effectiveConfig),
+      ...appearanceVars,
     };
 
     // Block 2: explicit dark mode -- matches `data-theme='dark'` attribute or `.dark` class.

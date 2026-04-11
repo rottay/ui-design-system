@@ -24,6 +24,7 @@
  * }
  * ```
  *
+ * @status active (useCollapseTokens consumed by Collapse)
  * @module System/Hooks/Components
  * @category System
  * @package @rottay/design-system
@@ -31,7 +32,7 @@
 
 // Collapse tokens hook -- the first component-level token hook.
 // Each hook translates component props into CSS custom properties that
-// engines (Titan, Hermes, Apollo) consume for styling, keeping the
+// engines (classic, modern, rustic) consume for styling, keeping the
 // engine layer thin and the token logic centralized.
 export { useCollapseTokens, type UseCollapseTokensOptions, type UseCollapseTokensResult } from './useCollapseTokens';
 

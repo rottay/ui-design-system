@@ -2,6 +2,22 @@
 
 This plan is ordered by product leverage, not by internal elegance.
 
+## Completion Status
+
+| Wave | Name | Status |
+|------|------|--------|
+| G0 | Tenant Model Decision | COMPLETE |
+| G1 | True File-First Entry Points | COMPLETE |
+| G2 | DB Tenant Core Contract v1 | COMPLETE |
+| G3 | Static / Preview / Runtime Parity | COMPLETE |
+| G4 | Modern Display Alignment | COMPLETE |
+| G5 | Modern Inputs Closure | COMPLETE |
+| G6 | Navigation / Overlay / Accessibility | COMPLETE |
+| G7 | Rotate Host Tokenization | COMPLETE |
+| G8 | Hook Story Decision | COMPLETE |
+| G9 | Docs / Tests / Guardrails Truth Pass | COMPLETE |
+| G10 | Non-Functional Hardening | PENDING |
+
 ## Wave G0 - Tenant Model Decision
 
 Goal:

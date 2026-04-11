@@ -33,6 +33,7 @@
  * ]);
  * ```
  *
+ * @status active (wired to CommandRegistryProvider)
  * @module System/Hooks/Shortcuts
  * @category System
  * @package @rottay/design-system

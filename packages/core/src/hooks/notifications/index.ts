@@ -86,6 +86,7 @@
  * }
  * ```
  *
+ * @status app-facing
  * @module System/Hooks/Notifications
  * @category System
  * @package @rottay/design-system

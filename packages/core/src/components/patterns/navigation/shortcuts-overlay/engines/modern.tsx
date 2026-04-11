@@ -52,6 +52,16 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
     }
   }, [open]);
 
+  /* Close overlay on Escape key */
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onOpenChange(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open, onOpenChange]);
+
   /* Filter shortcuts by query matching description, key combo, or category */
   const filtered = useMemo(() => {
     if (!query) return shortcuts;
@@ -87,21 +97,19 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
   return (
     /* Fixed overlay with 10vh top offset so the dialog sits comfortably below
          the page header rather than dead-center, which feels more natural for reference panels */
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]" style={style}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]" style={style} role="dialog" aria-modal="true" aria-label={title}>
       {/* Semi-transparent backdrop closes the dialog on click */}
-      <div className="absolute inset-0 bg-black/50" onClick={handleClose} />
+      <div className="absolute inset-0" style={{ background: 'var(--ds-overlay-backdrop, rgba(0, 0, 0, 0.5))' }} onClick={handleClose} />
       {/* Dialog card -- max-w-lg prevents overly wide layouts on ultrawide screens */}
       <div
         className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`}
         style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-3)' }}
-        role="dialog"
-        aria-label={title}
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b px-5 py-3" style={{ borderColor: 'var(--ds-color-border)' }}>
           <h2 className="text-base font-semibold">{title}</h2>
           <button
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, width: 32, padding: 0, fontSize: 13, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-control-sm-size, 32px)', width: 'var(--ds-control-sm-size, 32px)', padding: 0, fontSize: 'var(--ds-font-size-xs, 13px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClose}
             aria-label="Close"
           >
@@ -114,7 +122,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
             ref={inputRef}
             type="text"
             className="w-full focus:outline-none"
-            style={{ padding: '6px 0', fontSize: 13, border: 'none', background: 'transparent', color: 'inherit' }}
+            style={{ padding: 'var(--ds-spacing-1-5, 6px) 0', fontSize: 'var(--ds-font-size-sm, 13px)', border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -139,7 +147,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
                   {/* formatShortcutKey splits "ctrl+shift+s" into ["Ctrl", "Shift", "S"] */}
                   <div className="flex items-center gap-1">
                     {formatShortcutKey(item.key).map((segment, i) => (
-                      <kbd key={i} style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 12, fontFamily: 'monospace' }}>
+                      <kbd key={i} style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>
                         {segment}
                       </kbd>
                     ))}

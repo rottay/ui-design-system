@@ -25,6 +25,7 @@
  * const { state, set, undo, redo, canUndo } = useUndoRedo(initialFormData, { maxHistory: 50 });
  * ```
  *
+ * @status app-facing
  * @module System/Hooks/State
  * @category System
  * @package @rottay/design-system

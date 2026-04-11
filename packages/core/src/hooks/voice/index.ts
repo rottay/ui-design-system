@@ -16,6 +16,8 @@
  * relocated to the design system as part of Wave 4.2 of the canonical
  * execution plan (correcting the Wave 1 misclassification — voice
  * input has zero domain semantics, only a browser API dependency).
+ *
+ * @status app-facing (narrowed: Web Speech API wrapper)
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';

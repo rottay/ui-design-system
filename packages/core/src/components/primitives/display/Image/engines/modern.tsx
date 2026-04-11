@@ -196,14 +196,14 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
       {/* Hover Overlay */}
       {hoverOverlay && isHovered && (
-        <div className={`absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity duration-200 ${radiusClass}`}>
+        <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${radiusClass}`} style={{ background: 'var(--ds-image-hover-overlay, rgba(0, 0, 0, 0.4))' }}>
           {hoverOverlay}
         </div>
       )}
 
       {/* Zoom indicator for zoomable images */}
       {zoomable && isHovered && (
-        <div className="absolute bottom-2 right-2 p-1.5 bg-black/50 rounded-full text-white">
+        <div className="absolute bottom-2 right-2 p-1.5 rounded-full" style={{ background: 'var(--ds-image-zoom-indicator-bg, rgba(0, 0, 0, 0.5))', color: 'var(--ds-image-zoom-indicator-color, #fff)' }}>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
           </svg>

@@ -22,6 +22,7 @@
  * const { status, trigger } = useAutoSave({ data: formData, onSave: submitToServer });
  * ```
  *
+ * @status app-facing
  * @module System/Hooks/Form
  * @category System
  * @package @rottay/design-system

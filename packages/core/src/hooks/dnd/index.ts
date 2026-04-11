@@ -41,6 +41,7 @@
  * }
  * ```
  *
+ * @status app-facing (narrowed: leaf HTML5 DnD hook)
  * @module System/Hooks/DnD
  * @category System
  * @package @rottay/design-system

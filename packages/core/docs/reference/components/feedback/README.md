@@ -11,9 +11,9 @@ The Feedback primitives provide three essential components for user feedback:
 3. **Progress** - Visualize operation progress
 
 All components support three rendering engines:
-- **Titan** (Ant Design) - Enterprise-grade components
-- **Hermes** (DaisyUI) - Lightweight Tailwind-based components
-- **Apollo** (Pure CSS) - Zero-dependency implementations
+- **Classic** (Ant Design) - Enterprise-grade components
+- **Modern** (DaisyUI) - Lightweight Tailwind-based components
+- **Rustic** (Pure CSS) - Zero-dependency implementations
 
 ## Installation
 
@@ -97,7 +97,7 @@ Loading indicator with customizable size and appearance.
 // Small spinner
 <Spinner size="sm" />
 
-// Custom color (Apollo engine only)
+// Custom color (Rustic engine only)
 <Spinner color="#ff4d4f" size="md" />
 ```
 
@@ -106,7 +106,7 @@ Loading indicator with customizable size and appearance.
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Spinner size |
-| `color` | `string` | `'#1890ff'` | Spinner color (Apollo only) |
+| `color` | `string` | `'#1890ff'` | Spinner color (Rustic only) |
 | `label` | `string` | - | Optional loading text |
 
 #### Size Reference

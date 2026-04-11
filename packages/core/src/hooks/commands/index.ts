@@ -51,6 +51,7 @@
  * const filtered = search(query);
  * ```
  *
+ * @status active (wired to CommandPalette + DSP)
  * @module System/Hooks/Commands
  * @category System
  * @package @rottay/design-system

@@ -121,10 +121,11 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   let itemIndex = -1;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" style={style}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0"
+        style={{ background: 'var(--ds-overlay-backdrop, rgba(0, 0, 0, 0.5))' }}
         onClick={() => onOpenChange(false)}
       />
       {/* Dialog */}
@@ -135,7 +136,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             ref={inputRef}
             type="text"
             className="w-full text-lg focus:outline-none"
-            style={{ padding: '8px 0', fontSize: 18, border: 'none', background: 'transparent', color: 'inherit' }}
+            style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 18px)', border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={placeholder}
             value={query}
             onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}
@@ -170,7 +171,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 12, fontFamily: 'monospace' }}>{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}
@@ -206,7 +207,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 12, fontFamily: 'monospace' }}>{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}

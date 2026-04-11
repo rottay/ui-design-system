@@ -46,6 +46,7 @@
  * });
  * ```
  *
+ * @status app-facing
  * @module System/Hooks/Routing
  * @category System
  * @package @rottay/design-system

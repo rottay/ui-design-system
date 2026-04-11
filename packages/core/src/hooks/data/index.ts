@@ -28,6 +28,7 @@
  * <ListSurface data={data} loading={loading} config={config} />
  * ```
  *
+ * @status app-facing
  * @module System/Hooks/Data
  * @category App-Facing
  * @package @rottay/design-system

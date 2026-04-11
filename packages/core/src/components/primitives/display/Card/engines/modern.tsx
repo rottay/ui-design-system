@@ -47,7 +47,7 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 // Constants
 // ============================================================================
 
-const BODY_PADDING = '20px';
+const BODY_PADDING = 'var(--ds-card-body-padding, 20px)';
 
 const TRANSITION = [
   'box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
@@ -262,8 +262,8 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   const headerSeparator: React.CSSProperties = divider
     ? {
         borderBottom: '1px solid var(--ds-color-border)',
-        paddingBottom: '16px',
-        marginBottom: '16px',
+        paddingBottom: 'var(--ds-spacing-4, 16px)',
+        marginBottom: 'var(--ds-spacing-4, 16px)',
       }
     : {};
 
@@ -285,7 +285,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
           {/* Placeholder cover */}
           {cover && (
             <div style={{
-              height: '192px',
+              height: 'var(--ds-card-cover-height, 192px)',
               backgroundColor: 'var(--ds-surface-inset)',
               opacity: 0.6,
             }} />
@@ -293,31 +293,31 @@ export default function ModernCard(props: CardProps): React.ReactElement {
           <div style={{
             padding: paddingValue || BODY_PADDING,
             position: 'relative',
-            minHeight: '120px',
+            minHeight: 'var(--ds-card-skeleton-min-height, 120px)',
           }}>
             {/* Skeleton bars */}
-            <div style={{ opacity: 0.4, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ opacity: 0.4, display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-3, 12px)' }}>
               <div style={{
-                height: '12px',
+                height: 'var(--ds-skeleton-bar-height, 12px)',
                 backgroundColor: 'var(--ds-surface-inset)',
                 borderRadius: 'var(--ds-radius-sm, 6px)',
                 width: '60%',
               }} />
               <div style={{
-                height: '12px',
+                height: 'var(--ds-skeleton-bar-height, 12px)',
                 backgroundColor: 'var(--ds-surface-inset)',
                 borderRadius: 'var(--ds-radius-sm, 6px)',
                 width: '40%',
               }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)', marginTop: 'var(--ds-spacing-1, 4px)' }}>
                 <div style={{
-                  height: '10px',
+                  height: 'var(--ds-skeleton-bar-height-sm, 10px)',
                   backgroundColor: 'var(--ds-surface-inset)',
                   borderRadius: 'var(--ds-radius-sm, 6px)',
                   width: '100%',
                 }} />
                 <div style={{
-                  height: '10px',
+                  height: 'var(--ds-skeleton-bar-height-sm, 10px)',
                   backgroundColor: 'var(--ds-surface-inset)',
                   borderRadius: 'var(--ds-radius-sm, 6px)',
                   width: '85%',
@@ -393,28 +393,28 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               <div style={{ minWidth: 0, flex: 1 }}>
                 {title && (
                   <div style={{
-                    fontSize: '15px',
+                    fontSize: 'var(--ds-card-title-font-size, 15px)',
                     fontWeight: 600,
                     lineHeight: 1.4,
                     color: 'var(--ds-color-text-primary)',
-                    letterSpacing: '-0.01em',
+                    letterSpacing: 'var(--ds-card-title-letter-spacing, -0.01em)',
                   }}>
                     {title}
                   </div>
                 )}
                 {description && (
                   <div style={{
-                    fontSize: '13px',
+                    fontSize: 'var(--ds-card-description-font-size, 13px)',
                     lineHeight: 1.5,
                     color: 'var(--ds-color-text-secondary)',
-                    marginTop: title ? '2px' : undefined,
+                    marginTop: title ? 'var(--ds-spacing-0-5, 2px)' : undefined,
                   }}>
                     {description}
                   </div>
                 )}
               </div>
               {extra && (
-                <div style={{ flexShrink: 0, marginLeft: '16px' }}>
+                <div style={{ flexShrink: 0, marginLeft: 'var(--ds-spacing-4, 16px)' }}>
                   {extra}
                 </div>
               )}
@@ -430,9 +430,9 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'center',
-              gap: '8px',
-              marginTop: '16px',
-              paddingTop: '16px',
+              gap: 'var(--ds-spacing-2, 8px)',
+              marginTop: 'var(--ds-spacing-4, 16px)',
+              paddingTop: 'var(--ds-spacing-4, 16px)',
               borderTop: '1px solid var(--ds-color-border)',
             }}>
               {actions.map((action, index) => (

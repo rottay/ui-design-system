@@ -57,6 +57,7 @@
  * }
  * ```
  *
+ * @status app-facing (narrowed: provider-agnostic streaming)
  * @module System/Hooks/AI
  * @category System
  * @package @rottay/design-system
