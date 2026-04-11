@@ -1044,6 +1044,7 @@ export function ThemeProvider({
       rootElement.classList.toggle('dark', resolvedTheme === 'dark');
       rootElement.style.colorScheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
+      // Dev-only: verbose for debugging tenant/theme issues
       if (process.env.NODE_ENV === 'development') {
         const cs = getComputedStyle(rootElement);
         console.log('[DS:Theme] applied', {

@@ -63,6 +63,10 @@
   --ds-qrcode-status-loading-opacity: 0.5;
   --ds-qrcode-status-loading-bg: var(--ds-color-neutral-100, #f3f4f6);
 
+  /* Loading state - short aliases used by engine bridges */
+  --ds-qrcode-loading-opacity: var(--ds-qrcode-status-loading-opacity);
+  --ds-qrcode-loading-bg: var(--ds-qrcode-status-loading-bg);
+
   /* Expired state */
   --ds-qrcode-status-expired-opacity: 0.3;
   --ds-qrcode-status-expired-overlay-bg: rgba(0, 0, 0, 0.5);

@@ -283,7 +283,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   // Shape styles
   const shapeStyle: React.CSSProperties = {};
   if (shape === 'circle') {
-    const dim = sizeStyle.height ?? 36;
+    const dim = sizeStyle.height ?? 'var(--ds-button-md-height, 36px)';
     shapeStyle.borderRadius = '50%';
     shapeStyle.width = dim;
     shapeStyle.height = dim;
@@ -291,7 +291,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   } else if (shape === 'round') {
     shapeStyle.borderRadius = 'var(--ds-radius-full, 9999px)';
   } else {
-    shapeStyle.borderRadius = 'var(--ds-radius-md, 8px)';
+    shapeStyle.borderRadius = 'var(--ds-radius-button, var(--ds-radius-md, 8px))';
   }
 
   // -------------------------------------------------------------------------
@@ -307,7 +307,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     display: isFullWidth ? 'flex' : 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '6px',
+    gap: 'var(--ds-spacing-2, 6px)',
     width: isFullWidth ? '100%' : undefined,
     cursor: isInert ? (loading ? 'wait' : 'not-allowed') : 'pointer',
     fontWeight: 500,
@@ -426,7 +426,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
             display: isFullWidth ? 'flex' : 'inline-flex',
             alignItems: 'center',
             justifyContent: isFullWidth ? 'inherit' : undefined,
-            gap: '6px',
+            gap: 'var(--ds-spacing-2, 6px)',
             width: isFullWidth ? '100%' : undefined,
             minWidth: 0,
             whiteSpace: isFullWidth ? 'normal' : 'nowrap',

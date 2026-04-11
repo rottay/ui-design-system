@@ -38,7 +38,10 @@ import { resolvePersonalityCssVariables } from '../personality/primitives';
  */
 export function SystemCssVariablesBridge(): null {
   const tokens = useTokens();
-  const tokensKey = JSON.stringify(tokens);
+  // Shallow fingerprint instead of JSON.stringify(tokens) for performance.
+  // The bridge only feeds tokens into resolvePersonalityCssVariables which reads
+  // tokens.personality and tokens.colors, so we fingerprint just those fields.
+  const tokensKey = `${tokens.colors.primary}|${tokens.personality.animation.entrance}|${tokens.personality.card.defaultElevation}|${tokens.personality.typography.headingWeightBias}|${tokens.personality.accent.barPosition}`;
   const lastKeyRef = useRef<string>('');
 
   useEffect(() => {

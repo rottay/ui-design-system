@@ -1,0 +1,62 @@
+/**
+ * Tree Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Tree component.
+ * Includes node styling, indentation, lines, icons, and switchers.
+ *
+ * Naming Convention: --ds-tree-{slot}-{property}
+ *
+ * Slots:
+ * - (root): Main tree container
+ * - node: Individual tree node
+ * - icon: Node icon
+ * - switcher: Expand/collapse toggle
+ * - indent: Indentation unit
+ * - line: Connector lines
+ * - checkbox: Checkbox in checkable mode
+ */
+
+:root {
+  /* ========================================================================
+     ROOT - Main Container
+     ======================================================================== */
+  --ds-tree-bg: transparent;
+
+  /* ========================================================================
+     NODE - Individual tree node
+     ======================================================================== */
+  --ds-tree-node-padding: 4px 8px;
+  --ds-tree-node-bg: transparent;
+  --ds-tree-node-bg-hover: #f5f5f5;
+  --ds-tree-node-bg-selected: #f5f5f5;
+  --ds-tree-node-color: #525252;
+  --ds-tree-node-color-selected: #171717;
+  --ds-tree-node-color-disabled: var(--ds-color-neutral-400, #a3a3a3);
+
+  /* ========================================================================
+     ICON - Node icon
+     ======================================================================== */
+  --ds-tree-icon-size: 16px;
+  --ds-tree-icon-color: var(--ds-color-neutral-500, #737373);
+
+  /* ========================================================================
+     SWITCHER - Expand/collapse toggle
+     ======================================================================== */
+  --ds-tree-switcher-size: 24px;
+
+  /* ========================================================================
+     INDENT - Indentation per nesting level
+     ======================================================================== */
+  --ds-tree-indent: 24px;
+
+  /* ========================================================================
+     LINE - Connector lines between nodes
+     ======================================================================== */
+  --ds-tree-line-color: var(--ds-color-neutral-200, #e5e5e5);
+  --ds-tree-line-width: 1px;
+
+  /* ========================================================================
+     CHECKBOX - Checkable mode spacing
+     ======================================================================== */
+  --ds-tree-checkbox-margin: 8px;
+}

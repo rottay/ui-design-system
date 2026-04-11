@@ -11,9 +11,8 @@
  * 1. **Core-integrated hooks** (used by DS components internally):
  *    `useTokens`/`useColorTokens`/etc. (token pipeline), `useBreakpoints`/
  *    `useMediaQuery`/`useResponsiveValue` (responsive), `useCollapseTokens`
- *    (component tokens), `useVoiceInput` (VoiceInputButton primitive).
- *    These hooks are real infrastructure consumed by DS primitives, patterns,
- *    and structures.
+ *    (component tokens). These hooks are real infrastructure consumed by DS
+ *    primitives, patterns, and structures.
  *
  * 2. **App-facing utilities** (exported for app consumption, zero DS-internal
  *    consumers): a11y, dnd, state, form, search, routing, data, ai,
@@ -133,7 +132,9 @@
 // ============================================================================
 // Engine hooks
 // ============================================================================
-// Exported from src/engines/, not re-exported here to avoid circular imports.
+// Exported from src/runtime/engines/EngineProvider.tsx via the package root
+// barrel (src/index.ts). Not re-exported here to avoid circular imports
+// between hooks/ and runtime/.
 // Consumers use: import { useEngine } from '@rottay/design-system';
 
 // ============================================================================

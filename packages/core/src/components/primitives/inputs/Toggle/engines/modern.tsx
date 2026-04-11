@@ -102,7 +102,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     borderRadius: dims.trackH,
     background: trackColor,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    transition: 'background 200ms ease-out',
+    transition: 'background var(--ds-motion-base, 200ms) var(--ds-motion-ease-out, ease-out)',
     flexShrink: 0,
   };
 
@@ -115,7 +115,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     borderRadius: '50%',
     background: 'var(--ds-surface-control, var(--ds-color-text-on-primary))',
     transform: isChecked ? `translateX(calc(${dims.trackW} - ${dims.trackH}))` : 'translateX(0)',
-    transition: 'transform 200ms ease-out',
+    transition: 'transform var(--ds-motion-base, 200ms) var(--ds-motion-ease-out, ease-out)',
     boxShadow: 'var(--ds-elevation-1)',
   };
 
@@ -148,12 +148,12 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
         {(displayLabel || description) && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {displayLabel && (
-              <span style={{ fontSize: 14, fontWeight: 500, color: error ? 'var(--ds-color-error)' : 'var(--ds-color-text-primary)' }}>
+              <span style={{ fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 500, color: error ? 'var(--ds-color-error)' : 'var(--ds-color-text-primary)' }}>
                 {displayLabel}
               </span>
             )}
             {description && (
-              <span style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
+              <span style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
                 {description}
               </span>
             )}

@@ -1311,35 +1311,22 @@
 }
 
 /* =============================================================================
-   COLLAPSE / ACCORDION - .collapse
+   COLLAPSE / ACCORDION
    ============================================================================= */
 
-[data-tenant] .collapse {
-  background-color: var(--ds-collapse-bg);
+/* Bridge: .rottay-collapse (modern engine) */
+[data-tenant] .rottay-collapse {
   border-color: var(--ds-collapse-border);
   border-radius: var(--ds-collapse-radius);
 }
 
-[data-tenant] .collapse-title {
-  padding: var(--ds-collapse-header-padding);
+[data-tenant] .rottay-collapse .rottay-collapse-header {
   background-color: var(--ds-collapse-header-bg);
-  font-weight: var(--ds-collapse-header-font-weight);
   color: var(--ds-collapse-header-color);
 }
 
-[data-tenant] .collapse-title:hover {
+[data-tenant] .rottay-collapse .rottay-collapse-header:hover {
   background-color: var(--ds-collapse-header-bg-hover);
-}
-
-[data-tenant] .collapse-content {
-  padding: var(--ds-collapse-content-padding);
-  background-color: var(--ds-collapse-content-bg);
-}
-
-/* Bridge: .rottay-collapse (modern engine) */
-[data-tenant] .rottay-collapse {
-  background-color: var(--ds-collapse-bg);
-  border-radius: var(--ds-collapse-radius);
 }
 
 [data-tenant] .rottay-collapse .rottay-collapse-content {
@@ -1919,66 +1906,52 @@
    TREE
    ============================================================================= */
 
-[data-tenant] .tree {
-  background-color: var(--ds-tree-bg);
-}
-
-[data-tenant] .tree-node {
-  padding: var(--ds-tree-node-padding);
-  background-color: var(--ds-tree-node-bg);
-  color: var(--ds-tree-node-color);
-  transition: var(--ds-transition-fast);
-}
-
-[data-tenant] .tree-node:hover {
-  background-color: var(--ds-tree-node-bg-hover);
-}
-
-[data-tenant] .tree-node.selected {
-  background-color: var(--ds-tree-node-bg-selected);
-  color: var(--ds-tree-node-color-selected);
-}
-
-[data-tenant] .tree-node.disabled {
-  color: var(--ds-tree-node-color-disabled);
-}
-
-[data-tenant] .tree-icon {
-  width: var(--ds-tree-icon-size);
-  height: var(--ds-tree-icon-size);
-  color: var(--ds-tree-icon-color);
-}
-
-[data-tenant] .tree-switcher {
-  width: var(--ds-tree-switcher-size);
-  height: var(--ds-tree-switcher-size);
-}
-
-[data-tenant] .tree-indent {
-  width: var(--ds-tree-indent);
-}
-
-[data-tenant] .tree-line {
-  border-color: var(--ds-tree-line-color);
-  border-width: var(--ds-tree-line-width);
-}
-
-[data-tenant] .tree-checkbox {
-  margin-right: var(--ds-tree-checkbox-margin);
-}
-
 /* Bridge: .rottay-tree (modern engine) */
 [data-tenant] .rottay-tree {
   background-color: var(--ds-tree-bg);
 }
 
 [data-tenant] .rottay-tree .rottay-tree-node {
+  padding: var(--ds-tree-node-padding);
   color: var(--ds-tree-node-color);
   transition: var(--ds-transition-fast);
 }
 
 [data-tenant] .rottay-tree .rottay-tree-node:hover {
   background-color: var(--ds-tree-node-bg-hover);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-node--selected {
+  background-color: var(--ds-tree-node-bg-selected);
+  color: var(--ds-tree-node-color-selected);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-node--disabled {
+  color: var(--ds-tree-node-color-disabled);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-icon {
+  width: var(--ds-tree-icon-size);
+  height: var(--ds-tree-icon-size);
+  color: var(--ds-tree-icon-color);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-switcher {
+  width: var(--ds-tree-switcher-size);
+  height: var(--ds-tree-switcher-size);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-indent {
+  width: var(--ds-tree-indent);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-line {
+  border-color: var(--ds-tree-line-color);
+  border-width: var(--ds-tree-line-width);
+}
+
+[data-tenant] .rottay-tree .rottay-tree-checkbox {
+  margin-right: var(--ds-tree-checkbox-margin);
 }
 
 /* =============================================================================
@@ -2113,36 +2086,28 @@
    EMPTY
    ============================================================================= */
 
-[data-tenant] .empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-}
-
-[data-tenant] .empty-icon {
-  font-size: var(--ds-empty-icon-size);
-  color: var(--ds-empty-icon-color);
-}
-
-[data-tenant] .empty-title {
-  color: var(--ds-empty-title-color);
-  margin-top: 1rem;
-}
-
-[data-tenant] .empty-description {
-  color: var(--ds-empty-description-color);
-}
-
 /* Bridge: .rottay-empty (modern engine) */
 [data-tenant] .rottay-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: var(--ds-empty-padding);
   color: var(--ds-text-secondary);
+}
+
+[data-tenant] .rottay-empty .rottay-empty-icon {
+  font-size: var(--ds-empty-icon-size);
+  color: var(--ds-empty-icon-color);
+}
+
+[data-tenant] .rottay-empty .rottay-empty-title {
+  color: var(--ds-empty-title-color);
+  margin-top: var(--ds-empty-title-margin-top);
+}
+
+[data-tenant] .rottay-empty .rottay-empty-description {
+  color: var(--ds-empty-description-color);
 }
 
 [data-tenant] .rottay-empty__footer {
@@ -2210,80 +2175,24 @@
    QRCODE
    ============================================================================= */
 
-[data-tenant] .qrcode {
-  border-radius: var(--ds-qrcode-radius);
-  border-color: var(--ds-qrcode-border);
-  background-color: var(--ds-qrcode-bg);
+/* Bridge: .rottay-qrcode (modern engine) */
+[data-tenant] .rottay-qrcode {
+  border-radius: var(--ds-qrcode-border-radius);
+  border-color: var(--ds-qrcode-border-color);
+  background-color: var(--ds-qrcode-background-color);
 }
 
-[data-tenant] .qrcode-xs {
-  width: var(--ds-qrcode-xs-size);
-  height: var(--ds-qrcode-xs-size);
-}
-
-[data-tenant] .qrcode-sm {
-  width: var(--ds-qrcode-sm-size);
-  height: var(--ds-qrcode-sm-size);
-}
-
-[data-tenant] .qrcode-md {
-  width: var(--ds-qrcode-md-size);
-  height: var(--ds-qrcode-md-size);
-}
-
-[data-tenant] .qrcode-lg {
-  width: var(--ds-qrcode-lg-size);
-  height: var(--ds-qrcode-lg-size);
-}
-
-[data-tenant] .qrcode-xl {
-  width: var(--ds-qrcode-xl-size);
-  height: var(--ds-qrcode-xl-size);
-}
-
-[data-tenant] .qrcode-loading {
+[data-tenant] .rottay-qrcode[data-status="loading"] {
   opacity: var(--ds-qrcode-loading-opacity);
   background-color: var(--ds-qrcode-loading-bg);
 }
 
-[data-tenant] .qrcode-expired {
-  opacity: var(--ds-qrcode-expired-opacity);
-}
-
-[data-tenant] .qrcode-expired-overlay {
-  background-color: var(--ds-qrcode-expired-overlay);
-}
-
-[data-tenant] .qrcode-scanned-overlay {
-  background-color: var(--ds-qrcode-scanned-overlay);
-}
-
-[data-tenant] .qrcode-scanned-icon {
-  color: var(--ds-qrcode-scanned-icon);
-}
-
-[data-tenant] .qrcode-refresh {
-  width: var(--ds-qrcode-refresh-size);
-  height: var(--ds-qrcode-refresh-size);
-  background-color: var(--ds-qrcode-refresh-bg);
-  color: var(--ds-qrcode-refresh-color);
-}
-
-[data-tenant] .qrcode-icon {
-  background-color: var(--ds-qrcode-icon-bg);
-  padding: var(--ds-qrcode-icon-padding);
-  border-radius: var(--ds-qrcode-icon-radius);
-}
-
-/* Bridge: .rottay-qrcode (modern engine) */
-[data-tenant] .rottay-qrcode {
-  border-radius: var(--ds-radius-md, 8px);
-  border-color: var(--ds-border-color);
-  background-color: var(--ds-surface-card);
-}
-
 [data-tenant] .rottay-qrcode[data-status="expired"] {
-  opacity: 0.6;
+  opacity: var(--ds-qrcode-status-expired-opacity);
+}
+
+[data-tenant] .rottay-qrcode[data-status="scanned"] {
+  opacity: var(--ds-qrcode-status-scanned-opacity);
 }
 
 /* =============================================================================

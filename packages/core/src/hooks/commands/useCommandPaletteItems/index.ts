@@ -31,6 +31,7 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { useCommands } from '..';
+// CommandItem is re-exported from the pattern barrel, so this path is stable.
 import type { CommandItem } from '../../../components/patterns/navigation/command-palette/CommandPalette.types';
 
 /**

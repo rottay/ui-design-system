@@ -204,9 +204,10 @@ export function useTokens(): DesignTokens {
     let motion: typeof verticalMotion;
     let densityScale: number;
 
-    // Appearance General contributes a density scale factor that multiplies
-    // the resolved densityScale. This allows appearance to adjust density
-    // without overwriting the entire token set.
+    // Appearance density factor (General tier): multiplies the final densityScale
+    // AFTER BrandTheme/legacy resolution. This means a BrandTheme with densityScale=0.9
+    // and appearance density='compact' (0.85) produces effective scale of 0.9 * 0.85 = 0.765.
+    // The factor is multiplicative, not an override.
     const appearance = config.appearance;
     const appearanceDensityFactor = appearance?.general?.density === 'compact' ? 0.85
       : appearance?.general?.density === 'spacious' ? 1.15
@@ -392,6 +393,11 @@ export function useTokens(): DesignTokens {
   // the specific sub-objects that participate in the resolution pipeline. This
   // avoids re-resolving on every render while still reacting to tenant switches,
   // engine changes, and profile swaps.
+  //
+  // appearance dep: useTokens only reads appearance.general.density (for the
+  // multiplicative density factor), so we track that scalar instead of the
+  // whole appearance object to avoid stale memos when the object ref stays
+  // the same but the density field changes.
   }, [
     engine,
     config.slug,
@@ -401,7 +407,7 @@ export function useTokens(): DesignTokens {
     config.branding.primaryColor,
     config.branding.secondaryColor,
     config.branding.accentColor,
-    config.appearance,
+    config.appearance?.general?.density,
     profile,
     vertical,
   ]);

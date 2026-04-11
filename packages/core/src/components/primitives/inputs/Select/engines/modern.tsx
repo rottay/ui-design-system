@@ -171,7 +171,7 @@ function buildTriggerStyle(
 
 const DROPDOWN_STYLE: React.CSSProperties = {
   position: 'absolute',
-  top: 'calc(100% + 4px)',
+  top: 'calc(100% + var(--ds-spacing-1, 4px))',
   left: 0,
   right: 0,
   zIndex: 50,
@@ -280,7 +280,7 @@ const KEYFRAME_CSS = `
 @keyframes rottay-select-appear {
   from {
     opacity: 0;
-    transform: scale(0.98) translateY(-2px);
+    transform: scale(var(--ds-motion-scale-in, 0.98)) translateY(var(--ds-motion-offset-in, -2px));
   }
   to {
     opacity: 1;
@@ -651,17 +651,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       const hiddenCount = selectedOptions.length - visibleTags.length;
 
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ds-spacing-1, 4px)', alignItems: 'center' }}>
           {visibleTags.map((opt) => (
             <span
               key={opt.value}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '4px',
-                padding: '1px 6px',
-                fontSize: '12px',
-                lineHeight: '20px',
+                gap: 'var(--ds-spacing-1, 4px)',
+                padding: '1px var(--ds-spacing-2, 6px)',
+                fontSize: 'var(--ds-font-size-xs, 12px)',
+                lineHeight: 'var(--ds-line-height-xs, 20px)',
                 borderRadius: 'var(--ds-radius-sm, 6px)',
                 backgroundColor: 'var(--ds-surface-canvas)',
                 color: 'var(--ds-color-text-primary)',
@@ -707,9 +707,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',
-              padding: '1px 6px',
-              fontSize: '12px',
-              lineHeight: '20px',
+              padding: '1px var(--ds-spacing-2, 6px)',
+              fontSize: 'var(--ds-font-size-xs, 12px)',
+              lineHeight: 'var(--ds-line-height-xs, 20px)',
               borderRadius: 'var(--ds-radius-sm, 6px)',
               backgroundColor: 'var(--ds-surface-canvas)',
               color: 'var(--ds-color-text-muted)',

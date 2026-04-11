@@ -173,8 +173,8 @@ function ClearButton({ onClick, visible }: { onClick: () => void; visible: boole
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '20px',
-        height: '20px',
+        width: 'var(--ds-icon-size-sm, 20px)',
+        height: 'var(--ds-icon-size-sm, 20px)',
         padding: 0,
         border: 'none',
         borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -399,17 +399,17 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   // Count / error message styles
   const countStyle: React.CSSProperties = {
-    fontSize: '12px',
-    lineHeight: '16px',
-    marginTop: '4px',
+    fontSize: 'var(--ds-font-size-xs, 12px)',
+    lineHeight: 'var(--ds-line-height-xs, 16px)',
+    marginTop: 'var(--ds-spacing-1, 4px)',
     textAlign: 'right' as const,
     color: hasError ? 'var(--ds-color-error)' : 'var(--ds-color-text-muted)',
   };
 
   const errorMessageStyle: React.CSSProperties = {
-    fontSize: '12px',
-    lineHeight: '16px',
-    marginTop: '4px',
+    fontSize: 'var(--ds-font-size-xs, 12px)',
+    lineHeight: 'var(--ds-line-height-xs, 16px)',
+    marginTop: 'var(--ds-spacing-1, 4px)',
     color: 'var(--ds-color-error)',
     display: 'block',
   };

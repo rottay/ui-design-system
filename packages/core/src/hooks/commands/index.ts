@@ -581,3 +581,9 @@ export function useExecuteCommand(): (commandId: string) => Promise<void> {
     [ctx],
   );
 }
+
+// ============================================================================
+// Re-export useCommandPaletteItems
+// ============================================================================
+
+export { useCommandPaletteItems, type UseCommandPaletteItemsReturn } from './useCommandPaletteItems';

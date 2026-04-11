@@ -1,0 +1,42 @@
+/**
+ * Empty Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Empty state component.
+ * Includes icon sizing, colors, spacing, and typography.
+ *
+ * Naming Convention: --ds-empty-{slot}-{property}
+ *
+ * Slots:
+ * - (root): Main empty container
+ * - icon: Illustration/icon area
+ * - title: Heading text
+ * - description: Secondary text
+ */
+
+:root {
+  /* ========================================================================
+     ROOT - Main Container
+     ======================================================================== */
+  --ds-empty-padding: 2rem;
+
+  /* ========================================================================
+     ICON - Illustration/icon area
+     ======================================================================== */
+  --ds-empty-icon-size: 48px;
+  --ds-empty-icon-color: #d4d4d4;
+
+  /* ========================================================================
+     TITLE - Heading text
+     ======================================================================== */
+  --ds-empty-title-color: #525252;
+  --ds-empty-title-margin-top: 1rem;
+  --ds-empty-title-font-size: var(--ds-font-size-base, 14px);
+  --ds-empty-title-font-weight: var(--ds-font-weight-medium, 500);
+
+  /* ========================================================================
+     DESCRIPTION - Secondary text
+     ======================================================================== */
+  --ds-empty-description-color: #a3a3a3;
+  --ds-empty-description-font-size: var(--ds-font-size-sm, 12px);
+  --ds-empty-description-margin-top: 0.25rem;
+}

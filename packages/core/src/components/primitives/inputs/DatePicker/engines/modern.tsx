@@ -167,7 +167,7 @@ const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
   <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-2, 8px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', borderTop: '1px solid var(--ds-color-border)' }}>
     <ClockIcon />
     <select
-      style={{ padding: '2px var(--ds-spacing-2, 8px)', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md, 6px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', height: 28, background: 'var(--ds-color-bg-elevated)', color: 'var(--ds-color-text-primary)' }}
+      style={{ padding: '2px var(--ds-spacing-2, 8px)', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md, 6px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', height: 'var(--ds-input-sm-height, 28px)', background: 'var(--ds-color-bg-elevated)', color: 'var(--ds-color-text-primary)' }}
       value={hours}
       onChange={(e) => onHoursChange(Number(e.target.value))}
       aria-label="Hour"
@@ -178,7 +178,7 @@ const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
     </select>
     <span style={{ fontWeight: 700, color: 'var(--ds-color-text-primary)' }}>:</span>
     <select
-      style={{ padding: '2px var(--ds-spacing-2, 8px)', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md, 6px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', height: 28, background: 'var(--ds-color-bg-elevated)', color: 'var(--ds-color-text-primary)' }}
+      style={{ padding: '2px var(--ds-spacing-2, 8px)', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md, 6px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', height: 'var(--ds-input-sm-height, 28px)', background: 'var(--ds-color-bg-elevated)', color: 'var(--ds-color-text-primary)' }}
       value={minutes}
       onChange={(e) => onMinutesChange(Number(e.target.value))}
       aria-label="Minute"
@@ -901,7 +901,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
           {allowClear && displayText && !disabled && (
             <button
               type="button"
-              style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              style={{ position: 'absolute', right: 'var(--ds-spacing-4, 28px)', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={handleClear}
               tabIndex={-1}
               aria-label={t('datepicker.clear_date')}
@@ -910,7 +910,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             </button>
           )}
           <span
-            style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ds-color-text-muted)', display: 'flex' }}
+            style={{ position: 'absolute', right: 'var(--ds-spacing-2, 10px)', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ds-color-text-muted)', display: 'flex' }}
             aria-hidden="true"
           >
             <CalendarIcon />

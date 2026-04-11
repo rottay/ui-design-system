@@ -262,6 +262,10 @@ function mergeTenantConfig(
      * - registry tenant provides the base partial
      * - app override can replace that partial
      * - token resolution later merges defaults + product profile + tenant
+     *
+     * Personality is now part of the BrandTheme -> useTokens() pipeline, but
+     * the shallow merge here is still correct for the TenantConfig.personality
+     * compat field.
      */
     personality: tenantOverrides.personality ?? baseTenantConfig.personality,
     /**

@@ -106,13 +106,13 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
           border: `${sizeConfig.borderWidth}px solid var(--ds-color-border)`,
           borderTopColor: 'var(--ds-color-primary)',
           borderRadius: '50%',
-          animation: 'rottay-ds-spin 0.6s linear infinite',
+          animation: `rottay-ds-spin var(--ds-motion-slow, 0.6s) linear infinite`,
         }}
         role="status"
         aria-label={label || 'Loading'}
       />
       {label && (
-        <span style={{ fontSize: 14, color: 'var(--ds-color-text-secondary)' }}>{label}</span>
+        <span style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-secondary)' }}>{label}</span>
       )}
     </div>
   );

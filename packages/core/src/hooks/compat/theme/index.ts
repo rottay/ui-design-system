@@ -8,7 +8,7 @@
  * was moved from `hooks/theme/` to `hooks/compat/theme/` in R4. New code
  * should import from `@rottay/design-system` directly.
  *
- * @deprecated Import `useTheme` / `useThemeContext` from `@rottay/design-system` directly.
+ * @deprecated Import directly: import { useTheme } from '@rottay/design-system';
  *
  * @example Preferred import (new code)
  * ```tsx

@@ -85,6 +85,10 @@ export interface CreateEngineComponentOptions {
  * `componentPack` from TenantProvider context and resolves components from
  * the pack-scoped registry. This enables different tenants to use different
  * component packs in the same runtime without cross-contamination.
+ *
+ * The factory uses `any` for component props and ref types because the
+ * generic P is erased at the lazy() boundary. This is a known TypeScript
+ * limitation with lazy + forwardRef + generic components.
  */
 export function createEngineComponent<P extends object>(
   displayName: string,

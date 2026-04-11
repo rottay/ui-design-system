@@ -272,7 +272,7 @@ export interface TenantAppearanceGeneral {
  */
 export interface TenantAppearanceAdvanced {
   chrome?: {
-    sidebar?: Partial<BrandSidebarChrome>;
+    sidebar?: Pick<BrandSidebarChrome, 'bg' | 'border' | 'text' | 'textMuted' | 'itemColorActive' | 'itemBgActive' | 'itemBgHover'>;
     layout?: Partial<BrandLayoutChrome>;
     /** Only buttonPrimary.bg and buttonPrimary.text are compiled today. */
     controls?: {
