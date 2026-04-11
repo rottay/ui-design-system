@@ -1,3 +1,5 @@
+> Historical snapshot from an earlier audit. For current scores see quality-reset-audit/.
+
 # Galactic Integration Rubric
 
 Scope: `ui-design-system/packages/core`, `app-platform`, `app-evnto`, `app-bithire`.

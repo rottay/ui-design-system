@@ -191,6 +191,64 @@ for (const file of contractFiles) {
 }
 
 // ============================================================================
+// Rule 5: Token surface consumption ratio
+// ============================================================================
+// For component token CSS files, count defined --ds-{name}-* vars.
+// For the corresponding modern engine file, count references.
+// Flag if a component has >15 defined tokens but the modern engine references <3.
+
+const COMPONENT_TOKEN_DIR = join(SRC_ROOT, 'tokens', 'css', 'components');
+const componentTokenFiles = walkFiles(COMPONENT_TOKEN_DIR, /\.css$/).filter(
+  (f) => !f.endsWith('index.css')
+);
+
+for (const tokenFile of componentTokenFiles) {
+  const tokenContent = readSafe(tokenFile);
+  if (!tokenContent) continue;
+
+  // Derive the component name from the CSS filename (e.g. button.css -> button)
+  const baseName = tokenFile.split('/').pop().replace('.css', '');
+  const tokenPrefix = `--ds-${baseName}-`;
+
+  // Count defined vars (lines that declare --ds-{name}-* inside :root)
+  const definedMatches = tokenContent.match(new RegExp(tokenPrefix, 'g'));
+  const definedCount = definedMatches ? definedMatches.length : 0;
+
+  if (definedCount <= 15) continue;
+
+  // Find the corresponding modern engine file.
+  // Component names are PascalCase in the file system; try common mappings.
+  const pascalName = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+
+  // Search across all primitive categories for the modern engine
+  const primitiveDirs = ['display', 'inputs', 'feedback', 'layout', 'navigation', 'overlay'];
+  let modernContent = '';
+  let modernPath = '';
+  for (const category of primitiveDirs) {
+    const candidate = join(SRC_ROOT, 'components', 'primitives', category, pascalName, 'engines', 'modern.tsx');
+    const content = readSafe(candidate);
+    if (content) {
+      modernContent = content;
+      modernPath = candidate;
+      break;
+    }
+  }
+
+  if (!modernContent) continue; // No modern engine found -- skip silently
+
+  const refMatches = modernContent.match(new RegExp(tokenPrefix, 'g'));
+  const refCount = refMatches ? refMatches.length : 0;
+
+  if (refCount < 3) {
+    violations.push({
+      rule: 'token-consumption-ratio',
+      path: relPath(modernPath),
+      message: `Component "${baseName}" defines ${definedCount} ${tokenPrefix}* tokens but the modern engine only references ${refCount}. Expected >= 3 references.`,
+    });
+  }
+}
+
+// ============================================================================
 // Report
 // ============================================================================
 

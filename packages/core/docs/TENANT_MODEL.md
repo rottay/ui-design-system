@@ -96,3 +96,5 @@ DS base
 - `audit-integration.mjs` Rule 4 catches stale "not yet wired" comments in contracts.
 - `lint-folder-index.mjs` enforces taxonomy.
 - Provider-level tests in `compilers/appearance/tests/` prove appearance propagation.
+
+Last verified: 2026-04-11

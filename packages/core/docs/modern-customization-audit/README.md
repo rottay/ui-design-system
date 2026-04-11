@@ -1,3 +1,5 @@
+> Status: Complete. Waves M1-M10, F1-F7, A0-A9 all landed.
+
 # Modern Customization Audit
 
 Audit scope: `packages/core`, Modern engine, primitive path from contract to rendered UI.
