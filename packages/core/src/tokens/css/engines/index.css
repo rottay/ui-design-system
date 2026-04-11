@@ -10,13 +10,15 @@
  * 3. Tenant CSS can override token values via [data-tenant] selectors
  *
  * Usage:
- * @import '@rottay/design-system/tokens/css/engines';
+ *   This file is internal to the package. It is bundled into the public
+ *   `@rottay/design-system/styles*` artifacts at build time. Consumers
+ *   should not import it directly.
  *
  * @version 0.4.0
  */
 
-/* Component-specific styles (legacy) */
-@import './collapse.css';
+/* Collapse bridge imported in foundation/base.css, not here.
+   Engine themes map --ds-* tokens to library-specific classes. */
 
 /* Engine-specific themes */
 @import './classic/theme.css';

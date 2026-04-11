@@ -3,6 +3,32 @@
  * @description Central exports for all React hooks that provide access to the
  * design system's state, configuration, and responsive utilities.
  *
+ * ## Ownership model (frozen decision 4, updated Wave X3)
+ *
+ * This barrel is the **public hook surface** of the design system. It
+ * contains three categories of hooks:
+ *
+ * 1. **Core-integrated hooks** (used by DS components internally):
+ *    `useTokens`/`useColorTokens`/etc. (token pipeline), `useBreakpoints`/
+ *    `useMediaQuery`/`useResponsiveValue` (responsive), `useCollapseTokens`
+ *    (component tokens), `useVoiceInput` (VoiceInputButton primitive).
+ *    These hooks are real infrastructure consumed by DS primitives, patterns,
+ *    and structures.
+ *
+ * 2. **App-facing utilities** (exported for app consumption, zero DS-internal
+ *    consumers): a11y, dnd, state, form, search, routing, data, ai,
+ *    commands, notifications. These are domain-agnostic utilities that apps
+ *    wire into their own state management. Surfaces receive data as props,
+ *    they do NOT call data hooks internally.
+ *
+ * 3. **Compatibility re-exports** (in `hooks/compat/`, canonical source elsewhere):
+ *    - `compat/theme/`: canonical at `runtime/theming/`
+ *    - `compat/features/`: canonical at `runtime/features/`
+ *    - `compat/product-profile/`: canonical at `runtime/product-profiles/`
+ *    - `compat/tenant/`: non-hook utilities, canonical at `runtime/tenant/`
+ *
+ * New code should import from the package root (`@rottay/design-system`).
+ *
  * @remarks
  * The Rottay Design System provides several categories of hooks:
  *
@@ -115,8 +141,8 @@
 // ============================================================================
 export { useTheme, useThemeContext } from '../runtime/theming/useTheme';
 
-// Tenant hooks -- exported from src/tenancy/, not re-exported here (avoids circular deps)
-// Product profile hooks -- exported from src/product-profiles/, same reason
+// Tenant hooks -- exported from runtime/tenant/, not re-exported here (avoids circular deps)
+// Product profile hooks -- exported from runtime/product-profiles/, same reason
 
 // ============================================================================
 // Token hooks -- access resolved design tokens from the nearest TokenProvider
@@ -244,6 +270,8 @@ export {
   useCommands,
   useExecuteCommand,
 } from './commands';
+export { useCommandPaletteItems } from './commands/useCommandPaletteItems';
+export type { UseCommandPaletteItemsReturn } from './commands/useCommandPaletteItems';
 export type {
   Command,
   UseCommandsReturn,

@@ -18,7 +18,7 @@
  *
  * @example Basic Usage
  * ```tsx
- * import { NotificationProvider, useNotification } from '@rottay/design-system/modern';
+ * import { NotificationProvider, useNotification } from '@rottay/design-system';
  *
  * function App() {
  *   return (

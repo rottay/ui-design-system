@@ -111,7 +111,7 @@ describe('Whitelabel Field Coverage', () => {
     const tenants = ['rottay', 'bithire', 'evnto'];
 
     for (const tenant of tenants) {
-      const css = readSource(`tokens/css/tenants/${tenant}/index.css`);
+      const css = readSource(`tokens/css/artifacts/${tenant}/index.css`);
 
       for (const varName of tokenVars) {
         it(`${tenant} CSS should declare ${varName}`, () => {
@@ -126,7 +126,7 @@ describe('Whitelabel Field Coverage', () => {
 
     for (const tenant of tenants) {
       it(`${tenant} CSS should not contain .ant- selectors outside comments`, () => {
-        const css = readSource(`tokens/css/tenants/${tenant}/index.css`);
+        const css = readSource(`tokens/css/artifacts/${tenant}/index.css`);
         // Strip CSS comments before checking for .ant- selectors
         const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
         const antSelectors = withoutComments.match(/\.ant-/g);

@@ -10,10 +10,11 @@ Internal multi-tenant, multi-engine React component library powering all Rottay 
 
 ## Features
 
-- **89 primitives** across 6 categories (display, inputs, feedback, layout, navigation, overlay)
-- **33 patterns** -- engine-agnostic compositions (DataTable, FormBuilder, Charts, KanbanBoard, etc.)
-- **35 surfaces** -- declarative page-level configs (ListSurface, DashboardSurface, FormSurface, etc.)
-- **3 rendering engines** -- Classic (Ant Design), Modern (DaisyUI/Tailwind), Rustic (Vanilla HTML/CSS)
+- **Primitives** -- engine-switched leaf components across 6 categories (display, inputs, feedback, layout, navigation, overlay)
+- **Patterns** -- engine-agnostic task-level compositions (DataTable, FormBuilder, Charts, KanbanBoard, etc.)
+- **Structures** -- structures families that sit between patterns and surfaces (detail/edit/form headers, table toolbars, record panels, metric cards, loading overlays, ...)
+- **Surfaces** -- declarative page-level configs (ListSurface, DashboardSurface, FormSurface, etc.)
+- **Engines** -- Classic (Ant Design), Modern (DaisyUI/Tailwind), Rustic (Vanilla HTML/CSS), and Custom (white-label pack-scoped)
 - **Multi-tenant theming** -- CSS custom properties with 6-level tenant resolution
 - **Personality system** -- per-vertical animation, typography, chart, and card tuning
 - **i18n** -- 5 locales (en, es, pt, fr, ar) with RTL support
@@ -73,6 +74,8 @@ function App() {
 |----------|-------------|
 | [Getting Started](./GETTING_STARTED.md) | Installation, registry setup, first component, separate-repo usage |
 | [Architecture](./ARCHITECTURE.md) | System design, engine flow, token resolution, CSS layers |
+| [Structures](./docs/structures-tier.md) | What structures is, decision guide, family catalog |
+| [Taxonomy Reference](./docs/TAXONOMY.generated.md) | Auto-generated inventory of every tier and family (run `pnpm docs:taxonomy` to refresh) |
 | [Engine Splitting](./ENGINE_SPLITTING.md) | Code-splitting strategy and bundle entry points |
 | [Performance Budget](./PERFORMANCE_BUDGET.md) | CI-enforced size limits and Web Vitals targets |
 

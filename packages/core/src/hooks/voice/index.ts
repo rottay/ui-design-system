@@ -2,7 +2,6 @@
 
 /**
  * @fileoverview useVoiceInput Hook - Web Speech API wrapper
- * @module @rottay/design-system/hooks/voice
  *
  * @description
  * Reusable React hook that wraps the browser's Web Speech API

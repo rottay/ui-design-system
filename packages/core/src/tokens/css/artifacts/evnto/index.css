@@ -1,0 +1,420 @@
+/**
+ * Evnto Theme - Light Minimal Design
+ *
+ * GENERATED SNAPSHOT — the canonical brand source is tokens/ts/brand-themes/evnto.ts.
+ * This CSS supplements the runtime BrandTheme with sidebar, layout, shell, and
+ * controls chrome that the brand compiler does not yet generate.
+ *
+ * White backgrounds, black text, grey and beige accents
+ *
+ * Design Philosophy: Light-first, clean, modern
+ * Primary: White backgrounds with black text
+ * Accents: Warm beige/sand tones for highlights
+ *
+ * VARIABLES-ONLY: No component selector overrides.
+ * All styling flows through --ds-* CSS custom properties.
+ */
+
+/* ============================================
+   EVNTO BRAND COLORS (Light Mode Default)
+   ============================================ */
+html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
+  /* ============================================
+     DaisyUI 5 color bridge (oklch format)
+     Maps Evnto brand (minimal light theme) to DaisyUI 5's
+     --color-* system so btn, card, badge, table, etc.
+     render in the Evnto palette instead of DaisyUI defaults.
+     ============================================ */
+  --color-primary: oklch(15% 0.005 250);              /* #171717 near-black */
+  --color-primary-content: oklch(100% 0 0);           /* #FFFFFF white */
+  --color-secondary: oklch(60% 0.03 60);              /* #B8A898 warm beige */
+  --color-secondary-content: oklch(15% 0.005 250);    /* #171717 */
+  --color-accent: oklch(60% 0.03 60);                 /* #B8A898 sand */
+  --color-accent-content: oklch(15% 0.005 250);       /* #171717 */
+  --color-neutral: oklch(42% 0.005 250);              /* #525252 medium gray */
+  --color-neutral-content: oklch(98% 0 0);            /* #FAFAFA */
+  --color-base-100: oklch(100% 0 0);                  /* #FFFFFF canvas */
+  --color-base-200: oklch(98% 0 0);                   /* #FAFAFA secondary bg */
+  --color-base-300: oklch(96% 0 0);                   /* #F5F5F5 tertiary bg */
+  --color-base-content: oklch(12% 0.005 250);         /* #111111 text */
+  --color-success: oklch(45% 0.1 155);                /* #15803D */
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(48% 0.1 75);                 /* #A16207 */
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(42% 0.15 25);                  /* #B91C1C */
+  --color-error-content: oklch(100% 0 0);
+  --color-info: oklch(40% 0.02 250);                  /* #475569 slate */
+  --color-info-content: oklch(100% 0 0);
+  --rounded-box: 8px;
+  --rounded-btn: 6px;
+  --rounded-badge: 6px;
+  --animation-btn: 0.18s;
+  --animation-input: 0.18s;
+
+  /* Primary - Black to White scale (inverted for light theme) */
+  --ds-color-primary-50: #171717;
+  --ds-color-primary-100: #262626;
+  --ds-color-primary-200: #404040;
+  --ds-color-primary-300: #525252;
+  --ds-color-primary-400: #737373;
+  --ds-color-primary-500: #a3a3a3;
+  --ds-color-primary-600: #d4d4d4;
+  --ds-color-primary-700: #e5e5e5;
+  --ds-color-primary-800: #f5f5f5;
+  --ds-color-primary-900: #fafafa;
+
+  /* Primary main color - Black */
+  --ds-color-primary: #171717;
+  --ds-color-primary-hover: #262626;
+
+  /* Secondary - Warm Beige/Sand */
+  --ds-color-secondary-50: #fdfcfb;
+  --ds-color-secondary-100: #f9f7f4;
+  --ds-color-secondary-200: #f3efe8;
+  --ds-color-secondary-300: #e8e2d9;
+  --ds-color-secondary-400: #d4ccc0;
+  --ds-color-secondary-500: #b8a898;
+  --ds-color-secondary-600: #9a8a7a;
+  --ds-color-secondary-700: #7a6a5a;
+  --ds-color-secondary-800: #5a4a3a;
+  --ds-color-secondary-900: #3a2a1a;
+
+  /* Accent - Sand/Beige for highlights */
+  --ds-color-accent: #b8a898;
+  --ds-color-accent-hover: #9a8a7a;
+
+  /* Neutral - Light grays */
+  --ds-color-neutral-50: #fafafa;
+  --ds-color-neutral-100: #f5f5f5;
+  --ds-color-neutral-200: #e5e5e5;
+  --ds-color-neutral-300: #d4d4d4;
+  --ds-color-neutral-400: #a3a3a3;
+  --ds-color-neutral-500: #737373;
+  --ds-color-neutral-600: #525252;
+  --ds-color-neutral-700: #404040;
+  --ds-color-neutral-800: #262626;
+  --ds-color-neutral-900: #171717;
+
+  /* Backgrounds - Light theme */
+  --ds-color-bg-primary: #ffffff;
+  --ds-color-bg-secondary: #fafafa;
+  --ds-color-bg-tertiary: #f5f5f5;
+  --ds-color-bg-elevated: #ffffff;
+  --ds-color-bg-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Text - Dark on light (high contrast for readability) */
+  --ds-color-text-primary: #111111;
+  --ds-color-text-secondary: #3d3d3d;
+  --ds-color-text-tertiary: #5c5c5c;
+  --ds-color-text-muted: #737373;
+  --ds-color-text-disabled: #b3b3b3;
+  --ds-color-text-on-primary: #ffffff;
+
+  /* Borders - Subtle on light */
+  --ds-color-border: rgba(0, 0, 0, 0.08);
+  --ds-color-border-primary: rgba(0, 0, 0, 0.08);
+  --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
+  --ds-color-border-focus: #171717;
+
+  /* Typography - Inter */
+  --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ds-font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, monospace;
+
+  /* Border Radius - largest of the three brands (H4) */
+  --ds-radius-sm: 10px;
+  --ds-radius-md: 14px;
+  --ds-radius-lg: 18px;
+  --ds-radius-xl: 24px;
+  --ds-radius-full: 9999px;
+
+  /* Shadows - soft, tactile (H4 wallet feel) */
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
+
+  /* Button overrides */
+  --ds-button-primary-bg: #171717;
+  --ds-button-primary-bg-hover: #262626;
+  --ds-button-primary-text: #ffffff;
+  --ds-button-secondary-bg: transparent;
+  --ds-button-secondary-border: rgba(0, 0, 0, 0.15);
+  --ds-button-secondary-text: #171717;
+  --ds-button-secondary-bg-hover: rgba(0, 0, 0, 0.04);
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --ds-button-default-bg: #FFFFFF;
+  --ds-button-default-bg-hover: #FAFAFA;
+  --ds-button-default-color: #171717;
+  --ds-button-default-border: rgba(0, 0, 0, 0.1);
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.03);
+  --ds-button-ghost-color: #525252;
+  --ds-button-disabled-bg: #FAFAFA;
+  --ds-button-disabled-color: rgba(0, 0, 0, 0.25);
+  --ds-button-disabled-border: rgba(0, 0, 0, 0.06);
+  --ds-button-disabled-border-color: rgba(0, 0, 0, 0.06);
+  --ds-button-disabled-opacity: 0.4;
+
+  /* Card overrides */
+  --ds-card-bg: #ffffff;
+  --ds-card-border: rgba(0, 0, 0, 0.08);
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Input overrides */
+  --ds-input-bg: #ffffff;
+  --ds-input-border: rgba(0, 0, 0, 0.12);
+  --ds-input-border-focus: #171717;
+  --ds-input-shadow-focus: 0 0 0 1px rgba(23, 23, 23, 0.2);
+  --ds-input-bg-disabled: #FAFAFA;
+  --ds-input-color-disabled: rgba(0, 0, 0, 0.25);
+  --ds-input-border-disabled: rgba(0, 0, 0, 0.06);
+  --ds-input-border-color-disabled: rgba(0, 0, 0, 0.06);
+  --ds-input-disabled-opacity: 0.4;
+
+  /* Layout */
+  --ds-layout-bg: #FFFFFF;
+  --ds-layout-header-bg: rgba(255, 255, 255, 0.95);
+  --ds-layout-header-backdrop: blur(10px);
+  --ds-layout-header-border: rgba(0, 0, 0, 0.06);
+  --ds-layout-sider-bg: #FAFAFA;
+  --ds-layout-sider-border: rgba(0, 0, 0, 0.06);
+
+  /* Shell (intentionally minimal — clean wallet feel) */
+  --ds-shell-grid-size: 0px;
+  --ds-shell-grid-line: transparent;
+
+
+  /* Table */
+  --ds-table-header-bg: rgba(0, 0, 0, 0.02);
+  --ds-table-header-color: #737373;
+  --ds-table-header-font-weight: 500;
+  --ds-table-header-font-size: 0.75rem;
+
+  /* Link colors */
+  --ds-color-link: #171717;
+  --ds-color-link-hover: #525252;
+  --ds-color-link-visited: #737373;
+
+  /* Status colors - Neutral tones, avoid bright blue/red */
+  --ds-color-success: #15803d;
+  --ds-color-success-bg: #f0fdf4;
+  --ds-color-warning: #a16207;
+  --ds-color-warning-bg: #fefce8;
+  --ds-color-error: #b91c1c;
+  --ds-color-error-bg: #fef2f2;
+  --ds-color-info: #475569;
+  --ds-color-info-bg: #f8fafc;
+
+  /* ============================================
+     SIDEBAR NAVIGATION
+     Light, minimal style
+     ============================================ */
+
+  /* Group Headers */
+  --ds-sidebar-group-font-size: 11px;
+  --ds-sidebar-group-font-weight: 600;
+  --ds-sidebar-group-color: #737373;
+  --ds-sidebar-group-letter-spacing: 0.04em;
+  --ds-sidebar-group-margin-top: 12px;
+  --ds-sidebar-group-margin-bottom: 4px;
+  --ds-sidebar-group-padding-top: 12px;
+  --ds-sidebar-group-border: 1px solid rgba(0, 0, 0, 0.06);
+
+  /* Nav Items */
+  --ds-sidebar-item-font-size: 14px;
+  --ds-sidebar-item-font-weight: 400;
+  --ds-sidebar-item-font-weight-active: 500;
+  --ds-sidebar-item-color: #3d3d3d;
+  --ds-sidebar-item-color-active: #171717;
+  --ds-sidebar-item-bg-active: rgba(0, 0, 0, 0.06);
+  --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.03);
+  --ds-sidebar-item-indent: 8px;
+  --ds-sidebar-item-padding: 8px 12px;
+  --ds-sidebar-icon-size: 18px;
+
+  /* Sidebar specific */
+  --ds-sidebar-bg: #fafafa;
+  --ds-sidebar-text: #171717;
+  --ds-sidebar-text-muted: #525252;
+
+  /* ============================================
+     EVNTO SPECIFIC - Beige Accent Colors
+     ============================================ */
+
+  /* Highlight accents with beige */
+  --ds-accent-primary: #b8a898;
+  --ds-accent-secondary: #9a8a7a;
+  --ds-accent-light: #f3efe8;
+
+  /* Special states */
+  --ds-highlight-bg: rgba(184, 168, 152, 0.08);
+  --ds-highlight-border: rgba(184, 168, 152, 0.25);
+
+  /* Domain-owned tokens: these should migrate to app-evnto.
+     They are not part of the DS brand system per frozen decision 12.
+     Kept here temporarily for backward compat. */
+  --ds-ticket-available: #f0fdf4;
+  --ds-ticket-available-text: #16a34a;
+  --ds-ticket-sold: #fef2f2;
+  --ds-ticket-sold-text: #dc2626;
+  --ds-ticket-pending: #fefce8;
+  --ds-ticket-pending-text: #ca8a04;
+  --ds-ticket-reserved: #eff6ff;
+  --ds-ticket-reserved-text: #2563eb;
+
+  --ds-event-draft: rgba(0, 0, 0, 0.04);
+  --ds-event-draft-text: #737373;
+  --ds-event-published: #f0fdf4;
+  --ds-event-published-text: #16a34a;
+  --ds-event-live: #eff6ff;
+  --ds-event-live-text: #2563eb;
+  --ds-event-ended: rgba(0, 0, 0, 0.04);
+  --ds-event-ended-text: #a3a3a3;
+  --ds-event-cancelled: #fef2f2;
+  --ds-event-cancelled-text: #dc2626;
+}
+
+/* ============================================
+   EVNTO BRAND COLORS (Dark Mode)
+   Warm dark aesthetic - maintains beige hue family
+   ============================================ */
+
+/* Dark mode for Evnto - warm dark aesthetic */
+html[data-tenant='evnto'][data-theme='dark'],
+html[data-tenant='evnto'].dark {
+  color-scheme: dark;
+
+  /* DaisyUI 5 color contract (oklch) - dark variant */
+  --color-primary: oklch(92% 0.005 60);
+  --color-primary-content: oklch(12% 0.005 60);
+  --color-secondary: oklch(55% 0.03 60);
+  --color-secondary-content: oklch(95% 0.005 60);
+  --color-accent: oklch(55% 0.03 60);
+  --color-accent-content: oklch(95% 0.005 60);
+  --color-neutral: oklch(22% 0.005 60);
+  --color-neutral-content: oklch(85% 0.005 60);
+  --color-base-100: oklch(11% 0.005 60);
+  --color-base-200: oklch(15% 0.008 60);
+  --color-base-300: oklch(20% 0.01 60);
+  --color-base-content: oklch(90% 0.005 60);
+  --color-info: oklch(62% 0.15 250);
+  --color-info-content: oklch(98% 0.005 250);
+  --color-success: oklch(62% 0.15 150);
+  --color-success-content: oklch(98% 0.005 150);
+  --color-warning: oklch(72% 0.15 85);
+  --color-warning-content: oklch(15% 0.05 85);
+  --color-error: oklch(58% 0.2 25);
+  --color-error-content: oklch(98% 0.005 25);
+
+  /* DaisyUI 5 structural tokens */
+  --rounded-box: 14px;
+  --rounded-btn: 10px;
+  --rounded-badge: 9999px;
+  --animation-btn: 0.15s;
+  --animation-input: 0.15s;
+
+  /* DS semantic tokens - dark variant */
+  --ds-color-primary: #E8E8E0;
+  --ds-color-primary-hover: #F0F0E8;
+  --ds-color-secondary: #A89880;
+  --ds-color-secondary-hover: #B8A890;
+  --ds-color-accent: #A89880;
+  --ds-color-bg-primary: #131210;
+  --ds-color-bg-secondary: #1C1A16;
+  --ds-color-bg-tertiary: #24221C;
+  --ds-color-bg-elevated: #2A2820;
+  --ds-color-text-primary: #E8E8E0;
+  --ds-color-text-secondary: #A8A898;
+  --ds-color-text-muted: #686858;
+  --ds-color-text-disabled: #484838;
+  --ds-color-border-primary: #2E2C24;
+  --ds-color-border-secondary: #222018;
+  --ds-color-border-focus: #A89880;
+
+  /* Border Radius - same as light (shape doesn't change with theme) */
+  --ds-radius-sm: 10px;
+  --ds-radius-md: 14px;
+  --ds-radius-lg: 18px;
+  --ds-radius-xl: 24px;
+  --ds-radius-full: 9999px;
+
+  /* Shadows - same authored scale as light */
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
+
+  /* Button tokens - dark */
+  --ds-button-primary-bg: #E8E8E0;
+  --ds-button-primary-text: #131210;
+  --ds-button-primary-hover-bg: #F0F0E8;
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --ds-button-secondary-bg: transparent;
+  --ds-button-secondary-text: #A8A898;
+  --ds-button-secondary-border: #2E2C24;
+  --ds-button-secondary-hover-bg: #1C1A16;
+  --ds-button-default-bg: #1C1A16;
+  --ds-button-default-bg-hover: #24221C;
+  --ds-button-default-color: #E8E8E0;
+  --ds-button-default-border: #2E2C24;
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.04);
+  --ds-button-ghost-color: #A8A898;
+  --ds-button-disabled-bg: #1C1A16;
+  --ds-button-disabled-color: #484838;
+  --ds-button-disabled-border: #222018;
+  --ds-button-disabled-border-color: #222018;
+  --ds-button-disabled-opacity: 0.4;
+
+  /* Card tokens - dark */
+  --ds-card-bg: #1C1A16;
+  --ds-card-border: #2E2C24;
+
+  /* Input tokens - dark */
+  --ds-input-bg: #131210;
+  --ds-input-border: #2E2C24;
+  --ds-input-text: #E8E8E0;
+  --ds-input-placeholder: #686858;
+  --ds-input-focus-border: #A89880;
+  --ds-input-bg-disabled: #1C1A16;
+  --ds-input-color-disabled: #484838;
+  --ds-input-border-disabled: #222018;
+  --ds-input-border-color-disabled: #222018;
+  --ds-input-disabled-opacity: 0.4;
+
+  /* Layout tokens - dark */
+  --ds-layout-bg: #131210;
+  --ds-layout-header-bg: rgba(19, 18, 16, 0.92);
+  --ds-layout-header-backdrop: blur(10px);
+  --ds-layout-header-border: #2E2C24;
+  --ds-layout-sider-bg: #0E0D0B;
+  --ds-layout-sider-border: #222018;
+
+  /* Shell - minimal (same as light) */
+  --ds-shell-grid-size: 0px;
+  --ds-shell-grid-line: transparent;
+
+
+  /* Table tokens - dark */
+  --ds-table-header-bg: #1C1A16;
+  --ds-table-header-color: #A8A898;
+  --ds-table-header-font-weight: 500;
+  --ds-table-header-font-size: 0.75rem;
+  --ds-table-row-hover: #24221C;
+  --ds-table-border: #222018;
+
+  /* Sidebar tokens - dark */
+  --ds-sidebar-bg: #0E0D0B;
+  --ds-sidebar-text: #A8A898;
+  --ds-sidebar-active-bg: #1C1A16;
+  --ds-sidebar-active-text: #E8E8E0;
+
+  /* Domain-owned tokens: should migrate to app-evnto per frozen decision 12. */
+  --ds-evnto-accent-primary: #A89880;
+  --ds-evnto-accent-secondary: #8A7A68;
+  --ds-evnto-highlight: rgba(168, 152, 128, 0.12);
+}

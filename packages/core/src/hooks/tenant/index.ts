@@ -32,7 +32,7 @@
  */
 
 import { useContext } from 'react';
-import { TenantContext } from '../../runtime/tenancy';
+import { TenantContext } from '../../runtime/tenant';
 
 /**
  * Hook to access the current tenant context and configuration.
@@ -82,21 +82,14 @@ export function useTenant() {
   return context;
 }
 
-// -- Tenant utilities --
-// Co-located here for backwards compatibility: consumers historically imported
-// personality presets and tenant creation helpers from `hooks/tenant`.
+// Non-hook compat utilities (resolvePersonalityPreset, createTenantConfig,
+// useCreateTenant) live in hooks/compat/tenant/. This barrel is canonical
+// hooks only: useTenant + useTenantBranding.
 
-/** Maps a personality keyword ('formal', 'neutral', etc.) to full PersonalityTokens. */
-export { resolvePersonalityPreset } from './personality-presets';
-export type { PersonalityPreset } from './personality-presets';
-
-/** Factory for building a complete TenantConfig from minimal input. */
-export { createTenantConfig } from './create-tenant';
-export type { TenantCreationConfig } from './create-tenant';
-
-/** Hook that wraps createTenantConfig with React state for dynamic tenant creation flows. */
-export { useCreateTenant } from './useCreateTenant';
-
-/** 2-step tenant branding hook: session-instant + async-full. */
+/**
+ * 2-step tenant branding hook: session-instant + async-full.
+ * This is a canonical hook (NOT a compat shim) — it lives here because
+ * it is a React hook for consuming apps, not runtime infrastructure.
+ */
 export { useTenantBranding } from './branding';
 export type { UseTenantBrandingOptions, UseTenantBrandingReturn, TenantBrandingSession } from './branding';

@@ -39,16 +39,9 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
         server: resolve(__dirname, 'src/server.ts'),
         icons: resolve(__dirname, 'src/icons.ts'),
-        i18n: resolve(__dirname, 'src/i18n.ts'),
-        tokens: resolve(__dirname, 'src/tokens.ts'),
-        'components/index': resolve(__dirname, 'src/components/index.ts'),
-        'components/patterns/index': resolve(__dirname, 'src/components/patterns/index.ts'),
-        'components/primitives/index': resolve(__dirname, 'src/components/primitives/index.ts'),
-        'components/surfaces/index': resolve(__dirname, 'src/components/surfaces/index.ts'),
-        'components/patterns/data-table/index': resolve(
-          __dirname,
-          'src/components/patterns/data-table/index.ts'
-        ),
+        // Only real package.json exports are listed as entries.
+        // Component code is included via the root barrel and
+        // preserveModules handles per-file output automatically.
       },
       name: 'DesignSystem',
     },

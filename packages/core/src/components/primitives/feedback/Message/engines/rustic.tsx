@@ -19,8 +19,6 @@
  * @example Provider and Hook Usage
  * ```tsx
  * import { MessageProvider, useMessage } from '@rottay/design-system';
- * // Or import from Rustic engine directly:
- * // import { MessageProvider, useMessage } from '@rottay/design-system/engines/rustic';
  *
  * function App() {
  *   return (

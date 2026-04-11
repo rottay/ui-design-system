@@ -79,7 +79,7 @@
 import React, { ReactNode, useState, useEffect, useRef, useMemo, memo } from 'react';
 import { EngineProvider } from '../engines/EngineProvider';
 import { ThemeProvider } from '../theming';
-import { TenantProvider } from '../tenancy/TenantProvider';
+import { TenantProvider } from '../tenant/context/TenantProvider';
 import { ProductProfileProvider } from '../product-profiles/ProductProfileProvider';
 import { FeatureProvider } from '../features';
 import { I18nProvider } from '../../i18n';
@@ -87,10 +87,23 @@ import type { TenantConfig, EngineName, ProductProfile, ProductProfileKey } from
 import type { LocaleTranslations, SupportedLocale } from '../../i18n/types';
 import type { VerticalKey, VerticalPreset } from '../verticals/types';
 import { getVerticalPreset } from '../verticals/registry';
-import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenancy/storage';
+import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenant/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
-import { ResponsiveProvider } from '../providers/responsive';
+import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
+import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../../compilers/brand-theme';
+import { isBundledTenant } from '../tenant/registry';
+import type { BrandTheme } from '../../contracts/themes';
+import { CommandRegistryProvider } from '../../hooks/commands';
+
+/** Build a scoped CSS string from BrandTheme chrome for dynamic tenants. */
+function buildScopedChromeCss(bt: BrandTheme, slug: string): string | undefined {
+  const vars = brandThemeToChromeVariables(bt);
+  const entries = Object.entries(vars).filter(([, v]) => v != null);
+  if (entries.length === 0) return undefined;
+  const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
+  return `html[data-tenant='${slug}'] {\n${declarations}\n}`;
+}
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -371,14 +384,35 @@ export function DesignSystemProvider({
   // Final resolved config: sync path takes priority
   const tenantConfig = syncTenantConfig ?? asyncTenantConfig;
 
-  if (loading || !tenantConfig) {
+  // When brandTheme is present, normalize branding and tokenOverrides so
+  // ALL downstream consumers (TenantProvider -> AntdConfigProvider, ThemeProvider,
+  // useTokens) see the same effective values. This prevents classic engine
+  // from reading stale config.branding while ThemeProvider uses brandTheme.palette.
+  // NOTE: This useMemo MUST run before the early return below to satisfy
+  // React's Rules of Hooks (hooks must execute in the same order every render).
+  const normalizedConfig = useMemo(() => {
+    if (!tenantConfig) return tenantConfig;
+    if (!tenantConfig.brandTheme) return tenantConfig;
+    const btBranding = brandThemeToBranding(tenantConfig.brandTheme);
+    const btOverrides = brandThemeToTokenOverrides(tenantConfig.brandTheme);
+    const tenantOverrides = tenantConfig.tokenOverrides;
+    return {
+      ...tenantConfig,
+      branding: { ...tenantConfig.branding, ...btBranding },
+      tokenOverrides: tenantOverrides
+        ? deepMergeTokenOverrides(btOverrides, tenantOverrides)
+        : Object.keys(btOverrides).length > 0 ? btOverrides as typeof tenantConfig.tokenOverrides : tenantConfig.tokenOverrides,
+    };
+  }, [tenantConfig]);
+
+  if (loading || !normalizedConfig) {
     return <LoadingScreen />;
   }
 
   // Vertical can come from the app explicitly or from the resolved tenant
   // record itself. This keeps platform-managed tenants fully runtime-driven
   // while still letting apps force a different preset for previews or local experiments.
-  const verticalSource = vertical ?? tenantConfig.vertical ?? undefined;
+  const verticalSource = vertical ?? normalizedConfig.vertical ?? undefined;
   const resolvedVertical: VerticalPreset | undefined =
     verticalSource == null
       ? undefined
@@ -388,12 +422,12 @@ export function DesignSystemProvider({
 
   // Final precedence used by the runtime:
   // force props -> tenant config -> vertical defaults -> DS fallback.
-  const engine = forceEngine ?? tenantConfig.engine ?? resolvedVertical?.engine ?? 'classic';
-  const theme = forceTheme ?? tenantConfig.theme ?? 'base';
-  const locale = forcedLocale ?? tenantConfig.locale ?? 'en';
-  const fallbackLocale = forcedFallbackLocale ?? tenantConfig.fallbackLocale ?? locale;
+  const engine = forceEngine ?? normalizedConfig.engine ?? resolvedVertical?.engine ?? 'classic';
+  const theme = forceTheme ?? normalizedConfig.theme ?? 'base';
+  const locale = forcedLocale ?? normalizedConfig.locale ?? 'en';
+  const fallbackLocale = forcedFallbackLocale ?? normalizedConfig.fallbackLocale ?? locale;
   const customTranslations = mergeLocaleTranslations(
-    tenantConfig.customTranslations,
+    normalizedConfig.customTranslations,
     appCustomTranslations
   );
 
@@ -403,7 +437,7 @@ export function DesignSystemProvider({
   const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
 
   return (
-    <TenantProvider config={tenantConfig} vertical={resolvedVertical}>
+    <TenantProvider config={normalizedConfig} vertical={resolvedVertical}>
       <ProductProfileProvider profile={resolvedProductProfile}>
         <I18nProvider
           locale={locale}
@@ -414,21 +448,28 @@ export function DesignSystemProvider({
           <EngineProvider defaultEngine={engine}>
             <ThemeProvider
               theme={theme}
-              tenant={tenantConfig.slug}
-              vertical={tenantConfig.vertical ?? resolvedVertical?.key}
-              branding={tenantConfig.branding}
-              tokenOverrides={tenantConfig.tokenOverrides}
+              tenant={normalizedConfig.slug}
+              vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
+              branding={normalizedConfig.branding}
+              tokenOverrides={normalizedConfig.tokenOverrides}
+              generatedChromeCss={
+                normalizedConfig.brandTheme && !isBundledTenant(normalizedConfig.slug)
+                  ? buildScopedChromeCss(normalizedConfig.brandTheme, normalizedConfig.slug)
+                  : undefined
+              }
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >
-              <AntdConfigProvider>
-                <FeatureProvider features={tenantConfig.features ?? []}>
-                  <ResponsiveProvider>
-                    <SystemCssVariablesBridge />
-                    <MemoizedChildren>{children}</MemoizedChildren>
-                  </ResponsiveProvider>
-                </FeatureProvider>
-              </AntdConfigProvider>
+              <FeatureProvider features={normalizedConfig.features ?? []}>
+                <ResponsiveProvider>
+                  <CommandRegistryProvider>
+                    <AntdConfigProvider>
+                      <SystemCssVariablesBridge />
+                      <MemoizedChildren>{children}</MemoizedChildren>
+                    </AntdConfigProvider>
+                  </CommandRegistryProvider>
+                </ResponsiveProvider>
+              </FeatureProvider>
             </ThemeProvider>
           </EngineProvider>
         </I18nProvider>

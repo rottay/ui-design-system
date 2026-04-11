@@ -221,6 +221,7 @@ html[data-tenant] .ant-input:disabled {
   background: var(--ds-input-bg-disabled);
   border-color: var(--ds-input-border-disabled);
   color: var(--ds-input-color-disabled);
+  opacity: var(--ds-input-disabled-opacity);
   cursor: not-allowed;
 }
 
@@ -995,9 +996,16 @@ html[data-tenant] .ant-menu {
 }
 
 html[data-tenant] .ant-menu-item {
-  padding: var(--ds-menu-item-padding);
+  padding: var(--ds-sidebar-item-padding, var(--ds-menu-item-padding));
   color: var(--ds-menu-item-color);
+  font-weight: var(--ds-sidebar-item-font-weight, normal);
   transition: var(--ds-transition-fast);
+}
+
+html[data-tenant] .ant-menu-item-group-title {
+  font-weight: var(--ds-sidebar-group-font-weight, 600);
+  color: var(--ds-sidebar-group-color, var(--ds-color-text-muted));
+  letter-spacing: var(--ds-sidebar-group-letter-spacing, normal);
 }
 
 html[data-tenant] .ant-menu-item:hover {
@@ -1008,6 +1016,7 @@ html[data-tenant] .ant-menu-item:hover {
 html[data-tenant] .ant-menu-item-selected {
   background: var(--ds-menu-item-bg-active) !important;
   color: var(--ds-menu-item-color-active) !important;
+  font-weight: var(--ds-sidebar-item-font-weight-active, var(--ds-sidebar-item-font-weight, 600));
 }
 
 html[data-tenant] .ant-menu-item-selected::after {
@@ -2107,6 +2116,7 @@ html[data-tenant] .ant-steps.ds-stepper .ant-steps-item-finish .ant-steps-item-t
 
 html[data-tenant] .ant-layout {
   min-height: 100vh;
+  background: var(--ds-layout-bg, var(--ds-color-bg-primary));
 }
 
 html[data-tenant] .ant-layout-header {
@@ -2115,11 +2125,28 @@ html[data-tenant] .ant-layout-header {
   height: var(--ds-layout-header-height);
   padding: var(--ds-layout-header-padding);
   line-height: var(--ds-layout-header-height);
+  backdrop-filter: var(--ds-layout-header-backdrop, none);
+  border-bottom: 1px solid var(--ds-layout-header-border, transparent);
 }
 
 html[data-tenant] .ant-layout-sider {
   background: var(--ds-layout-sider-bg);
   color: var(--ds-layout-sider-color);
+  padding: var(--ds-sidebar-shell-padding-inline, 0);
+  width: var(--ds-sidebar-width, 200px);
+  min-width: var(--ds-sidebar-width, 200px);
+  max-width: var(--ds-sidebar-width, 200px);
+  border-right: 1px solid var(--ds-layout-sider-border, transparent);
+}
+
+html[data-tenant] .ant-layout-sider-collapsed {
+  width: var(--ds-sidebar-collapsed-width, 80px) !important;
+  min-width: var(--ds-sidebar-collapsed-width, 80px) !important;
+  max-width: var(--ds-sidebar-collapsed-width, 80px) !important;
+}
+
+html[data-tenant] .ant-layout-sider .ant-layout-sider-children > :first-child {
+  height: var(--ds-sidebar-header-height, auto);
 }
 
 html[data-tenant] .ant-layout-sider-light {

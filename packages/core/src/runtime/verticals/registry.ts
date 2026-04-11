@@ -1,16 +1,27 @@
 /**
- * @fileoverview Built-in vertical preset registry.
+ * @fileoverview Built-in vertical preset registry — first-party Rottay
+ * presets bundled with the DS.
  *
- * Contains preset definitions derived from existing product profiles and
- * tenant configurations. Each vertical captures the full personality,
- * engine preference, and surface defaults for a Rottay product domain.
+ * @description
+ * Contains preset definitions for the three first-party Rottay products
+ * (`evnto`, `bithire`, `platform`). Each vertical captures the full
+ * personality, engine preference, and surface defaults for a product
+ * domain.
+ *
+ * These are **bundled defaults**, not the only verticals the DS supports.
+ * Custom verticals can be registered at runtime via the open-ended
+ * `VerticalKey = string & {}` type so product teams can introduce new
+ * verticals without waiting for a DS release. The three presets here
+ * exist because Rottay's own apps use them and they serve as documented
+ * baselines for testing, Storybook, and CI.
  *
  * Personality values are sourced from:
- * - Product profiles: src/product-profiles/registry.ts
- * - Tenant configs: src/tenancy/registry/index.ts
+ * - Product profiles: `runtime/product-profiles/registry.ts`
+ * - Tenant configs: `runtime/tenant/registry/`
  *
  * The vertical personality represents the "industry baseline" that sits
- * between DEFAULT_PERSONALITY and the product profile in the merge chain.
+ * between `DEFAULT_PERSONALITY` and the product profile in the merge
+ * chain.
  */
 
 import type { VerticalKey, VerticalPreset } from './types';

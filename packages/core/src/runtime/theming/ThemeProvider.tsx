@@ -1,20 +1,36 @@
 /**
- * @fileoverview ThemeProvider - Rottay Design System
+ * @fileoverview ThemeProvider for the design system.
  * @description Manages theme state, CSS variable injection, and tenant-specific
- * styling with automatic fallback to Rottay theme on load failures.
+ * styling. Loads tenant CSS dynamically and falls back through a multi-step
+ * resolution chain so the DS keeps rendering even when network or CSS lookups
+ * fail.
  *
  * @remarks
  * The ThemeProvider is responsible for:
  * - **Tenant CSS Loading**: Dynamically loads tenant-specific CSS files
  * - **Theme Variants**: Supports light, dark, and custom theme variants
- * - **Fallback System**: Automatically falls back to Rottay if tenant CSS fails
- * - **Emergency Tokens**: Injects inline tokens if even Rottay CSS fails
+ * - **Fallback System**: Walks a vertical-aware fallback chain when a
+ *   tenant CSS file fails to load
+ * - **Emergency Tokens**: Injects an inline last-resort token set if even
+ *   the absolute fallback fails
  * - **Branding Override**: Allows runtime branding color customization
  *
- * The provider implements a robust fallback hierarchy:
- * 1. Requested tenant CSS
- * 2. Rottay (default) tenant CSS
- * 3. Emergency inline Rottay tokens
+ * The fallback hierarchy has three steps:
+ * 1. The CSS for the requested `tenant` slug
+ * 2. The CSS for the active `vertical`'s default tenant (e.g. when the app
+ *    declares `vertical="bithire"` and the requested tenant CSS fails, the
+ *    DS reaches for the BitHire vertical baseline before anything else)
+ * 3. The absolute safety-net tenant defined by `DEFAULT_TENANT` below
+ *
+ * If even step 3 fails, an inline `<style>` element is injected so text,
+ * backgrounds, and core surfaces remain readable.
+ *
+ * `DEFAULT_TENANT` is the system-wide last resort. It defaults to `'rottay'`
+ * because that is the canonical baseline shipped with the package, but the
+ * intent is the *safety-net* role, not "Rottay is the only first-class
+ * tenant". The fallback behavior is configurable via the `vertical` prop;
+ * `DEFAULT_TENANT` only kicks in when the entire vertical-aware path
+ * exhausts itself.
  *
  * @example Basic usage
  * ```tsx
@@ -76,9 +92,18 @@ import React, {
   ReactNode,
 } from 'react';
 import type { ThemeContextValue, ThemeConfig, TenantBranding, TenantTokenOverrides } from '../../contracts';
-import { getDefaultTenant } from '../tenancy/registry';
+import { getDefaultTenant } from '../tenant/registry';
 import { errorInDev, warnInDev, warnOnceInDev } from '../../_internal/utils/runtime-logger';
 import { buildDaisyUiColorOverrides } from './hex-to-oklch';
+import {
+  isHexColor,
+  normalizeHexColor,
+  hexToRgb,
+  rgbToHex,
+  mixColor,
+  buildRuntimeScale,
+  getReadableForegroundColor,
+} from '../../compilers/_shared/color-math';
 
 // ─────────────────────────────────────────────────────────────────
 // SHALLOW FINGERPRINT (avoids JSON.stringify on every render)
@@ -129,128 +154,10 @@ function fingerprintTokenOverrides(t: TenantTokenOverrides | undefined): string 
 // COLOR HELPERS
 // ─────────────────────────────────────────────────────────────────
 
-/**
- * Validates that a string is a well-formed 3- or 6-digit hex color.
- *
- * WHY strict validation: runtime white-labeling only works if we update the
- * same CSS variables the components actually consume. The previous implementation
- * wrote `--tenant-*` variables that nothing in the system read, so tenant
- * branding appeared to "work" in config but not on screen. Now we target
- * `--ds-color-*` directly and need clean hex input for the scale generator.
- */
-function isHexColor(value: string): boolean {
-  return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
-}
-
-/**
- * Expands shorthand hex (`#abc`) to full form (`#aabbcc`) for consistent
- * parsing in `hexToRgb()`. Non-hex strings pass through unchanged.
- */
-function normalizeHexColor(value: string): string {
-  if (!isHexColor(value)) {
-    return value;
-  }
-
-  if (value.length === 4) {
-    return `#${value[1]}${value[1]}${value[2]}${value[2]}${value[3]}${value[3]}`;
-  }
-
-  return value;
-}
-
-/** Clamps a color channel to the valid 0-255 range and rounds to integer. */
-function clampChannel(value: number): number {
-  return Math.max(0, Math.min(255, Math.round(value)));
-}
-
-/**
- * Parses a hex color string into its RGB components.
- * Returns `null` for non-hex inputs so callers can skip scale generation
- * and fall back to the raw value for CSS variable inputs.
- */
-function hexToRgb(value: string): { r: number; g: number; b: number } | null {
-  const normalizedValue = normalizeHexColor(value);
-
-  if (!isHexColor(normalizedValue)) {
-    return null;
-  }
-
-  const parsedInt = Number.parseInt(normalizedValue.slice(1), 16);
-  return {
-    r: (parsedInt >> 16) & 255,
-    g: (parsedInt >> 8) & 255,
-    b: parsedInt & 255,
-  };
-}
-
-/** Converts RGB components back to a 6-digit hex string. */
-function rgbToHex(rgb: { r: number; g: number; b: number }): string {
-  return `#${[rgb.r, rgb.g, rgb.b]
-    .map((channel) => clampChannel(channel).toString(16).padStart(2, '0'))
-    .join('')}`;
-}
-
-/**
- * Linearly interpolates between two hex colors by `mixRatio` (0 = base, 1 = mix).
- * If either input is not a valid hex color, returns `baseColor` unchanged.
- * This keeps the runtime safe when CSS variable references are passed through.
- */
-function mixColor(baseColor: string, mixWith: string, mixRatio: number): string {
-  const baseRgb = hexToRgb(baseColor);
-  const mixRgb = hexToRgb(mixWith);
-
-  // If the input is not a hex color we keep it as-is for the 500 slot and skip
-  // generated scales. That keeps the runtime logic safe with CSS variable inputs.
-  if (!baseRgb || !mixRgb) {
-    return baseColor;
-  }
-
-  return rgbToHex({
-    r: baseRgb.r + (mixRgb.r - baseRgb.r) * mixRatio,
-    g: baseRgb.g + (mixRgb.g - baseRgb.g) * mixRatio,
-    b: baseRgb.b + (mixRgb.b - baseRgb.b) * mixRatio,
-  });
-}
-
-/**
- * Generates a 10-step color scale (50-900) from a single base color.
- *
- * WHY runtime scale generation: tenant branding provides a single primary
- * color, but the DS token system expects a full scale (50-900). Pre-computing
- * a palette server-side would add latency and coupling. Generating it here
- * keeps the branding API simple (one color) while the components get a rich
- * palette. Steps 50-400 mix toward white; 600-900 mix toward black.
- */
-function buildRuntimeScale(baseColor: string): Record<50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900, string> {
-  return {
-    50: mixColor(baseColor, '#ffffff', 0.92),
-    100: mixColor(baseColor, '#ffffff', 0.82),
-    200: mixColor(baseColor, '#ffffff', 0.68),
-    300: mixColor(baseColor, '#ffffff', 0.48),
-    400: mixColor(baseColor, '#ffffff', 0.2),
-    500: normalizeHexColor(baseColor),
-    600: mixColor(baseColor, '#000000', 0.12),
-    700: mixColor(baseColor, '#000000', 0.24),
-    800: mixColor(baseColor, '#000000', 0.36),
-    900: mixColor(baseColor, '#000000', 0.48),
-  };
-}
-
-/**
- * Picks a readable foreground color (dark or white) for text placed on top
- * of `baseColor`, using the NTSC luminance formula. The 186 threshold is
- * a standard heuristic that produces good contrast for WCAG AA compliance.
- */
-function getReadableForegroundColor(baseColor: string): string {
-  const rgbColor = hexToRgb(baseColor);
-
-  if (!rgbColor) {
-    return '#ffffff';
-  }
-
-  const luminance = (0.299 * rgbColor.r) + (0.587 * rgbColor.g) + (0.114 * rgbColor.b);
-  return luminance > 186 ? '#171717' : '#ffffff';
-}
+// Color math (isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor,
+// buildRuntimeScale, getReadableForegroundColor) imported from
+// compilers/_shared/color-math.ts — single canonical implementation shared
+// with the static CSS generator.
 
 // ─────────────────────────────────────────────────────────────────
 // WCAG CONTRAST VALIDATION
@@ -498,13 +405,15 @@ function applyVarsBatch(vars: Record<string, string>): string[] {
 // ─────────────────────────────────────────────────────────────────
 
 /**
- * Rottay is the base and fallback tenant when no vertical is specified. If any
- * other theme fails to load, the provider attempts the vertical-aware default
- * tenant CSS; if even that fails, emergency inline tokens are injected so the
- * UI is never left without styling.
+ * Absolute last-resort tenant slug.
  *
- * When a `vertical` prop is provided (e.g., 'bithire', 'evnto'), the fallback
- * uses that vertical's default tenant instead of hardcoded 'rottay'.
+ * The fallback chain is: requested tenant CSS → vertical default tenant CSS
+ * → DEFAULT_TENANT CSS → emergency inline tokens. DEFAULT_TENANT only kicks
+ * in when every previous step has failed and there is no vertical-aware
+ * alternative left to try. It defaults to 'rottay' because the package ships
+ * a Rottay baseline; consumers building white-label apps with their own
+ * baseline can register a different tenant via the resolution chain and use
+ * the `vertical` prop to point at it as the default.
  */
 const DEFAULT_TENANT = 'rottay';
 
@@ -514,11 +423,12 @@ const THEME_LOAD_TIMEOUT = 5000;
 /** ID prefix for tenant CSS `<link>` elements so we can find/remove them later. */
 const THEME_LINK_ID_PREFIX = 'tenant-theme-';
 
-// Emergency Rottay tokens inline (if even Rottay CSS fails).
-// WHY hardcoded: these tokens are the absolute last resort. They are a minimal
-// subset of the Rottay token system -- just enough to make text, backgrounds,
-// borders, and spacing render sensibly. The full token set is ~200 variables;
-// we only include the ones that prevent a blank/broken UI.
+// Emergency inline tokens (if even DEFAULT_TENANT CSS fails to load).
+// WHY hardcoded: these tokens are the absolute last resort. They are a
+// minimal subset taken from the package's baseline tenant -- just enough to
+// make text, backgrounds, borders, and spacing render sensibly. The full
+// token set is ~200 variables; we only include the ones that prevent a
+// blank/broken UI.
 const ROTTAY_EMERGENCY_TOKENS = `
   :root {
     --ds-color-primary: #FFFFFF;
@@ -571,30 +481,42 @@ export interface ThemeProviderProps {
   children: ReactNode;
   /** Initial theme variant. Defaults to `'base'`. Supports `'light'`, `'dark'`, `'auto'`. */
   theme?: string;
-  /** Initial tenant slug. Defaults to `'rottay'`. */
+  /** Initial tenant slug. Defaults to {@link DEFAULT_TENANT}. */
   tenant?: string;
   /**
    * Industry vertical hint for fallback resolution.
    * When the requested tenant CSS fails to load, the provider falls back to
-   * the default tenant for this vertical (e.g., 'bithire' falls back to the
-   * bithire tenant instead of rottay). If omitted, falls back to 'rottay'.
+   * the default tenant for this vertical (e.g., a `vertical="bithire"` app
+   * lands on the bithire tenant baseline before reaching the package-wide
+   * {@link DEFAULT_TENANT}). If omitted, only the package-wide default is
+   * tried.
    */
   vertical?: string;
   /** Runtime branding overrides (colors, fonts, semantic colors). Applied as inline CSS variables. */
   branding?: TenantBranding;
   /** Token overrides for glass, gradients, and overlays. Applied as inline CSS variables. */
   tokenOverrides?: TenantTokenOverrides;
+  /**
+   * Scoped CSS string for chrome variables (sidebar/layout/shell/controls/table).
+   * Injected as a `<style>` tag with `html[data-tenant='x']` selector, so it
+   * has the same specificity as bundled CSS and can be properly overridden by
+   * dark-mode selectors. Used for dynamic/DB-backed tenants with `brandTheme`.
+   * Bundled tenants (`skipCssLoading=true`) get chrome from their CSS file.
+   */
+  generatedChromeCss?: string;
   /** Called when tenant CSS loading fails, before fallback kicks in. */
   onError?: (error: Error, tenant: string) => void;
-  /** Called when the provider falls back from the requested tenant to Rottay. */
+  /** Called when the provider falls back from the requested tenant to one of the resolution-chain defaults. */
   onFallback?: (originalTenant: string) => void;
   /** Base URL for tenant CSS files (e.g., `'/themes'` or `'https://cdn.example.com/themes'`). */
   cssBaseUrl?: string;
   /**
    * When `true`, skips loading individual tenant CSS `<link>` elements.
-   * Use this when importing the bundled CSS via `@rottay/design-system/tokens/css`,
-   * which includes all tenant styles using `html[data-tenant='x']` selectors.
-   * The `TenantProvider` sets the `data-tenant` attribute on the HTML element.
+   * Use this when importing the bundled CSS via the package's `./styles*`
+   * subpath (e.g. `@rottay/design-system/styles.css` or
+   * `@rottay/design-system/styles/platform`), which already includes all
+   * tenant styles via `html[data-tenant='x']` selectors. The
+   * `TenantProvider` sets the `data-tenant` attribute on the HTML element.
    */
   skipCssLoading?: boolean;
 }
@@ -606,6 +528,7 @@ export function ThemeProvider({
   vertical,
   branding,
   tokenOverrides,
+  generatedChromeCss,
   onError,
   onFallback,
   cssBaseUrl = '/themes',
@@ -1041,9 +964,15 @@ export function ThemeProvider({
       }
     }
 
+    // Chrome variables (sidebar, layout, shell, controls, table) are NOT
+    // injected inline here. They flow through:
+    // - Bundled CSS: already in the tenant CSS file with proper light/dark scoping
+    // - Dynamic tenants: generated by generateTenantCss() and loaded as <link>
+    // Injecting them inline would override dark-mode tenant CSS values since
+    // inline styles have higher specificity than [data-theme='dark'] selectors.
+
     // Cleanup: remove all CSS variables this effect set when branding or
-    // tokenOverrides change, or when the component unmounts. This prevents
-    // stale branding from leaking across tenant switches.
+    // tokenOverrides change, or when the component unmounts.
     return () => {
       for (const varName of appliedVars) {
         style.removeProperty(varName);
@@ -1051,6 +980,26 @@ export function ThemeProvider({
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brandingKey, tokenOverridesKey]);
+
+  // Chrome CSS injection for dynamic/DB-backed tenants with BrandTheme.
+  // Uses a scoped <style> tag with html[data-tenant='x'] selector so dark-mode
+  // selectors can override it properly (unlike inline styles).
+  const chromeCssId = `ds-chrome-${tenant}`;
+  useEffect(() => {
+    if (!generatedChromeCss) {
+      // Remove any previous chrome style tag
+      document.getElementById(chromeCssId)?.remove();
+      return;
+    }
+    let styleEl = document.getElementById(chromeCssId) as HTMLStyleElement | null;
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = chromeCssId;
+      document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = generatedChromeCss;
+    return () => { styleEl?.remove(); };
+  }, [generatedChromeCss, chromeCssId]);
 
   /**
    * Theme state needs to materialize into DOM attributes because the CSS token

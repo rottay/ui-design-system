@@ -28,17 +28,17 @@ export type { DSError, DSErrorInput, ErrorSubscriber, UseErrorHandlerOptions, Us
 // ============================================
 // PROVIDERS (ResponsiveProvider, etc.)
 // ============================================
-export * from './runtime/providers';
+export * from './runtime/responsive';
 
 // ============================================
 // NAVIGATION (framework-agnostic Link adapter)
 // ============================================
-export * from './runtime/navigation';
+export * from './runtime/adapters/navigation';
 
 // ============================================
 // FOCUS MODE (framework-agnostic focus-state adapter)
 // ============================================
-export * from './runtime/focus-mode';
+export * from './runtime/adapters/focus-mode';
 
 // ============================================
 // HOOKS (promoted from core/hooks/)
@@ -54,15 +54,25 @@ export { warnInDev, warnOnceInDev, errorInDev } from './_internal/utils';
 export { arePropsEqual, createPropsComparator } from './_internal/utils';
 
 // ============================================
-// ICONS (promoted from shared/icons/)
+// ICONS
 // ============================================
-// Icons re-exported via separate entry point (not root to avoid 'export *' in client boundary)
-// Apps should import directly from '@ant-design/icons'
+// Icons live behind a dedicated subpath so the root export does not pull
+// the icon catalog into every consumer bundle.
+//
+// `@rottay/design-system/icons` exports the DS's own curated icon set:
+// BaseIcon, UserIcon, ChevronDownIcon, SearchIcon, and a few more.
+// The set is intentionally small.
+//
+// For the full Ant Design icon catalog, import directly from
+// `@ant-design/icons` — it is a peer dependency of the DS and is always
+// installed in consuming apps.
+//
+// Neither catalog is re-exported from this root barrel.
 
 // ============================================
 // TENANCY (schema, registry, resolver, storage, CSS generation)
 // ============================================
-export * from './runtime/tenancy';
+export * from './runtime/tenant';
 
 // ============================================
 // PRODUCT PROFILES (registry, provider, hooks)
@@ -73,6 +83,11 @@ export * from './runtime/product-profiles';
 // VERTICALS (presets, registry, types)
 // ============================================
 export * from './runtime/verticals';
+
+// ============================================
+// COMPILERS (brand-theme bridge, shared color math)
+// ============================================
+export * from './compilers';
 
 // ============================================
 // I18N (locales, provider, hooks)
@@ -89,4 +104,5 @@ export * from './motion';
 // ============================================
 export * from './components/primitives';
 export * from './components/patterns';
+export * from './components/structures';
 export * from './components/surfaces';

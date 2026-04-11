@@ -234,11 +234,11 @@ describe('stale paths', () => {
     expect(existsSync(join(SRC_ROOT, 'theming'))).toBe(false);
   });
 
-  it('should not have src/tenancy/ at top-level (moved to runtime/tenancy)', () => {
+  it('should not have src/tenancy/ at top-level (moved to runtime/tenant)', () => {
     expect(existsSync(join(SRC_ROOT, 'tenancy'))).toBe(false);
   });
 
-  it('should not have src/personality/ at top-level (moved to runtime/personality)', () => {
+  it('should not have src/personality/ at top-level (moved to runtime/tenant/presets)', () => {
     expect(existsSync(join(SRC_ROOT, 'personality'))).toBe(false);
   });
 
@@ -254,7 +254,7 @@ describe('stale paths', () => {
     expect(existsSync(join(SRC_ROOT, 'features'))).toBe(false);
   });
 
-  it('should not have src/providers/ at top-level (moved to runtime/providers)', () => {
+  it('should not have src/providers/ at top-level (moved to runtime/responsive)', () => {
     expect(existsSync(join(SRC_ROOT, 'providers'))).toBe(false);
   });
 

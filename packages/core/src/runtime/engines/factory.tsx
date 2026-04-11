@@ -47,7 +47,7 @@ import { useEngineContext } from './EngineProvider';
 import { createCustomWrapper } from './custom';
 import { EngineErrorBoundary } from './boundary';
 import type { EngineName } from '../../contracts';
-import { TenantContext } from '../tenancy/TenantProvider';
+import { TenantContext } from '../tenant/context/TenantProvider';
 
 /**
  * Configuration object containing dynamic import functions for each engine.

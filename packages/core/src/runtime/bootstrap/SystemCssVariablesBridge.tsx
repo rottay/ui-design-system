@@ -40,11 +40,6 @@ export function SystemCssVariablesBridge(): null {
   const tokens = useTokens();
   const tokensKey = JSON.stringify(tokens);
   const lastKeyRef = useRef<string>('');
-  const bridgeRenderRef = useRef(0);
-  bridgeRenderRef.current++;
-  if (bridgeRenderRef.current <= 5 || bridgeRenderRef.current % 50 === 0) {
-    console.log(`[Bridge] render #${bridgeRenderRef.current}`, { tokensChanged: lastKeyRef.current !== tokensKey });
-  }
 
   useEffect(() => {
     // Skip if tokens haven't actually changed (prevents Fast Refresh loops)

@@ -18,22 +18,56 @@ tenant branding, vertical preset, and product profile.
 
 ```
 Layer 4: App             Config-driven pages composed from surfaces
-Layer 3: Surfaces        34 page-level config objects (presentation/behavior/visual)
-Layer 2: Patterns        33 compositions built from primitives
-Layer 1: Primitives      89 components x 3 engine implementations
+Layer 3: Surfaces        Page-level config objects (presentation/behavior/visual)
+Layer 2.5: Structures        Page chrome: headers, toolbars, record panels, overlays
+Layer 2: Patterns        Engine-agnostic compositions (tables, forms, charts, ...)
+Layer 1: Primitives      Engine-switched leaf components across 6 categories
 ```
+
+> Counts of individual primitives, patterns, structures pieces, and surfaces
+> are intentionally omitted here. Past iterations of this doc went stale
+> almost immediately. The authoritative source is the on-disk tree under
+> `packages/core/src/components/`. A generated taxonomy reference is on the
+> roadmap (audit 2026-04-08, feature backlog).
 
 Each layer only depends on the layer below it:
 
-- **Primitives** are engine-switched leaf components (Button, Input, Card, etc.).
-  Each primitive has three implementations: Classic, Modern, Rustic.
-- **Patterns** compose primitives into reusable UI patterns (DataTable,
-  FormBuilder, StatsGrid, etc.). They are engine-agnostic.
-- **Surfaces** are declarative config objects that describe an entire page
-  (ListSurface, DashboardSurface, FormSurface, etc.). Surfaces wire patterns
-  to data and permissions without owning rendering logic.
+- **Primitives** are engine-switched leaf components (Button, Input, Card,
+  etc.). Each primitive has four engine implementations (Classic, Modern,
+  Rustic, Custom).
+- **Patterns** compose primitives into reusable, task-level UI compositions
+  (DataTable, FormBuilder, StatsGrid, KanbanBoard, ...). They are
+  engine-agnostic and stay generic — they know nothing about tenants,
+  candidates, roles, etc.
+- **Structures** is a middle tier introduced in the 2026-04-08 audit
+  cleanup. It hosts structural families organized into 5 groups
+  (`headers/`, `workspace/`, `record/`, `dashboard/`, `feedback/`) that
+  are too specific for `patterns/` but too reusable for `surfaces/`:
+  detail/edit/form headers, command bars, record field grids, metric
+  cards, loading overlays. Structures families compose patterns and
+  primitives and are normally consumed by surfaces or by app-level
+  screens directly.
+- **Surfaces** are declarative config objects that describe an entire
+  page (ListSurface, DashboardSurface, FormSurface, etc.). Surfaces
+  are organized into `foundation/` (types, builders, helpers, hooks),
+  `layout/` (page-shell, header, sidebar), and `pages/` (6 domain
+  groups: data, forms, workspace, operations, admin, experience).
+  They wire patterns and structures to data and permissions without
+  owning rendering logic.
 - **App** is the consuming application layer. Apps pass surface configs and
   domain adapters; the DS handles everything else.
+
+> **Where does X belong?** If another Rottay app could reuse the piece
+> without knowing what a tenant, candidate, role, company, interview, or
+> event is, it lives in the DS. Inside the DS, use this rule of thumb:
+>
+> - leaf component with an engine switch → **primitive**
+> - reusable composition of primitives that solves a generic task (table,
+>   form, chart, kanban) → **pattern**
+> - page-scale structural widget that wraps or accompanies a pattern
+>   (header, toolbar, record panel, loading shell, metric card) → **structures**
+> - page-level config object a consumer passes to render a whole screen
+>   → **surface**
 
 ---
 
@@ -113,54 +147,40 @@ Pack Registries (Map<string, ComponentRegistry>)
 
 ## 3. Token Resolution Chain
 
-Design tokens flow through a four-layer pipeline. Each layer can provide
-partial overrides that spread on top of the layer below.
+Design tokens flow through a multi-layer pipeline. The chain depends on
+whether the tenant has a `brandTheme` (the canonical premium model) or
+uses the legacy scattered fields.
 
-### Structural Tokens (borderRadius, shadows, surface, motion)
+### BrandTheme Path (preferred)
 
-```
-┌─────────────────────┐
-│  Engine Defaults     │  Classic: 4px radii, layered shadows, 0.9375 density
-│  (lowest priority)   │  Modern:  12px radii, bold shadows, 1.0 density
-│                      │  Rustic:  2px radii, whisper shadows, 1.0 density
-└──────────┬──────────┘
-           │ spread
-┌──────────v──────────┐
-│  Product Profile     │  e.g., events.organizer overrides borderRadius
-│  Token Overrides     │
-└──────────┬──────────┘
-           │ spread
-┌──────────v──────────┐
-│  Tenant Overrides    │  Customer-specific structural tweaks
-│  (highest priority)  │
-└─────────────────────┘
-```
-
-### Personality Tokens (animation, chart, typography, accent, card)
-
-Personality uses a deeper merge chain because verticals also participate:
+When `config.brandTheme` exists, the merge chain is:
 
 ```
-┌─────────────────────┐
-│  DEFAULT_PERSONALITY │  Neutral baseline (low intensity, no spring, no lift)
-│  (lowest priority)   │
-└──────────┬──────────┘
-           │ spread per sub-object
-┌──────────v──────────┐
-│  Vertical Preset     │  e.g., evnto: bounce entrance, spring physics
-│  .personality        │
-└──────────┬──────────┘
-           │ spread per sub-object
-┌──────────v──────────┐
-│  Product Profile     │  UX preset within the vertical space
-│  .personality        │
-└──────────┬──────────┘
-           │ spread per sub-object
-┌──────────v──────────┐
-│  Tenant Config       │  Runtime brand overrides
-│  .personality        │  (highest priority)
-└─────────────────────┘
+Structural:  Engine -> Vertical.tokenOverrides -> BrandTheme.surfaces -> Tenant.tokenOverrides
+Personality: DEFAULT -> Vertical.personality -> BrandTheme (motion/charts/chrome) -> Tenant.personality
+Branding:    BrandTheme.palette -> color scale generation -> CSS variables
 ```
+
+Product profile personality and tokenOverrides are **skipped** — only
+`surfaceDefaults` (UX posture: listView, density, schedulerView) survives.
+
+### Legacy Path (backward compatible)
+
+When `config.brandTheme` is absent, the merge chain is:
+
+```
+Structural:  Engine -> Vertical.tokenOverrides -> Profile.tokenOverrides -> Tenant.tokenOverrides
+Personality: DEFAULT -> Vertical.personality -> Profile.personality -> Tenant.personality
+Branding:    Tenant.branding -> color scale generation -> CSS variables
+```
+
+### Merge Rules
+
+- Each layer provides partial overrides that spread on top of the previous.
+- Personality sub-objects (animation, chart, typography, accent, card) merge
+  independently — overriding `animation` does not wipe `chart`.
+- Tenant overrides are always the highest-priority layer in both paths.
+- The static CSS generator (`generateTenantCss`) follows the same chain.
 
 Each personality sub-object (animation, chart, typography, accent, card) is
 spread independently. A tenant that only customizes `animation` does not
@@ -287,7 +307,7 @@ so product teams can register custom verticals without waiting for a DS release.
 ### Tier Structure
 
 ```
-Primitives (89 components x 3 engines)
+Primitives (engine-switched leaf components)
   │
   ├─ display/       Avatar, Badge, Calendar, Card, Carousel, Empty,
   │                 Image, Kbd, List, QRCode, Statistic, Table, Tag,
@@ -308,37 +328,28 @@ Primitives (89 components x 3 engines)
   └─ overlay/       Modal, Dropdown, Popover, Sheet, ContextMenu,
                     AlertDialog, ConfirmDialog, HoverCard, Tour, ...
 
-Patterns (33 compositions)
+Patterns (engine-agnostic compositions)
   │
-  ├─ data-table         DataTable with sort, filter, bulk actions
-  ├─ form-builder       Declarative form from FieldDef[]
-  ├─ stats-grid         Metric cards with trends and sparklines
-  ├─ kanban-board       Drag-and-drop columns
-  ├─ calendar-view      Event calendar
-  ├─ detail-panel       Entity detail with tabs
-  ├─ activity-log       Timeline of events
-  ├─ charts             Chart wrappers with personality tokens
-  ├─ file-manager       File browser with upload
-  ├─ command-palette    Search/command overlay
-  ├─ filter-builder     Advanced filter composition
-  ├─ notification-center Notification list and preferences
-  ├─ step-wizard        Multi-step flows
-  ├─ page-shell         Page chrome (title, breadcrumbs, back)
-  └─ ...                (+ 19 more)
+  ├─ data/              data-table, detail-panel, list-toolbar, stats-grid, ...
+  ├─ forms/             form-builder, filter-builder, filter-panel, step-wizard, ...
+  ├─ visualization/     charts, calendar-view, map-view, timeline, tree-view, kanban-board
+  ├─ communication/     assistant, comment-thread, notification-center, live-feed, activity-log
+  ├─ workflow/          approval-inbox, approval-workflow, operational-ledger, ...
+  ├─ navigation/        command-palette, shortcuts-overlay, environment-toggle, workspace-switcher
+  ├─ misc/              tenant-preview, user-profile-card, file-manager, pricing-table, ...
+  └─ _internal/         hooks, types, header-actions, common, domain-kits, engines
 
-Surfaces (34 page-level configs)
+Surfaces (page-level config objects)
   │
-  ├─ list               ListSurface (table or card grid)
-  ├─ dashboard          DashboardSurface (stats + charts + activity)
-  ├─ form               FormSurface (create/edit flows)
-  ├─ detail             DetailSurface (entity view with tabs)
-  ├─ chat               ChatSurface (messaging interface)
-  ├─ scheduler          SchedulerSurface (calendar views)
-  ├─ kanban             KanbanSurface (board view)
-  ├─ settings           SettingsSurface (grouped preferences)
-  ├─ billing            BillingSurface (plans, invoices)
-  ├─ onboarding         OnboardingSurface (wizard flows)
-  └─ ...                (+ 24 more)
+  ├─ foundation/        Types, builders, helpers, hooks, contracts, states
+  ├─ layout/            Page shells, headers, sidebars
+  └─ pages/
+      ├─ data/          list, dashboard, detail, compare, report, search, visualization
+      ├─ forms/         form, detail-form, guided-draft-form, wizard
+      ├─ workspace/     collection-workspace, record-workbench, command-center, decision-inbox
+      ├─ operations/    activity, kanban, scheduler, operational
+      ├─ admin/         settings, audit, billing, profile, team, integration, import-export, file-browser
+      └─ experience/    auth, marketing, onboarding, chat, notification, pricing, empty-state, media, editor
 ```
 
 ---
@@ -597,34 +608,39 @@ packages/core/src/
 │
 └── components/
     ├── primitives/         Tier 1: Engine-switched leaf components
-    │   ├── display/        20 components (Avatar, Card, Table, etc.)
-    │   ├── inputs/         24 components (Button, Input, Select, etc.)
-    │   ├── feedback/       13 components (Alert, Modal, Spinner, etc.)
-    │   ├── layout/         13 components (Box, Flex, Grid, Stack, etc.)
-    │   ├── navigation/     15 components (Tabs, Menu, Breadcrumb, etc.)
-    │   └── overlay/        12 components (Dropdown, Popover, Sheet, etc.)
+    │   ├── display/        Avatar, Badge, Card, Table, Tag, ...
+    │   ├── inputs/         Button, Input, Select, DatePicker, Form, ...
+    │   ├── feedback/       Alert, Modal, Spinner, Toast, Notification, ...
+    │   ├── layout/         Box, Flex, Grid, Stack, Container, ...
+    │   ├── navigation/     Tabs, Menu, Breadcrumb, Pagination, Steps, ...
+    │   └── overlay/        Dropdown, Popover, Sheet, ContextMenu, ...
+    │
+    ├── structures/         Tier 2.5: Structural families
+    │   ├── headers/        collection, detail, edit, form
+    │   ├── workspace/      search-command-bar, active-filters-bar, ...
+    │   ├── record/         record, form-sections
+    │   ├── dashboard/      dashboard-insights, stats-header, data-terminal-card
+    │   └── feedback/       loading-overlay
     │
     ├── patterns/           Tier 2: Compositions (engine-agnostic)
-    │   ├── data-table/     Table with sort, filter, bulk actions
-    │   ├── form-builder/   Declarative form from FieldDef[]
-    │   ├── stats-grid/     Metric cards with trends
-    │   ├── kanban-board/   Drag-and-drop board
-    │   ├── charts/         Chart wrappers
-    │   ├── detail-panel/   Entity detail view
-    │   ├── calendar-view/  Event calendar
-    │   ├── types.ts        Shared pattern types (ColumnDef, etc.)
-    │   └── ...             (33 pattern directories total)
+    │   ├── data/           data-table, detail-panel, list-toolbar, stats-grid, ...
+    │   ├── forms/          form-builder, filter-builder, filter-panel, ...
+    │   ├── visualization/  charts, calendar-view, map-view, timeline, ...
+    │   ├── communication/  assistant, comment-thread, notification-center, ...
+    │   ├── workflow/       approval-inbox, approval-workflow, ...
+    │   ├── navigation/     command-palette, shortcuts-overlay, ...
+    │   ├── misc/           tenant-preview, user-profile-card, ...
+    │   └── _internal/      hooks, types, header-actions, engines
     │
     └── surfaces/           Tier 3: Page-level config objects
-        ├── list/           ListSurface
-        ├── dashboard/      DashboardSurface
-        ├── form/           FormSurface
-        ├── detail/         DetailSurface
-        ├── chat/           ChatSurface
-        ├── types.ts        Surface config contracts
-        ├── helpers.ts      Permission resolution
-        └── ...             (34 surface directories total)
+        ├── foundation/     Types, builders, helpers, hooks, contracts, states
+        ├── layout/         page-shell, header, sidebar
+        └── pages/          6 domain groups: data, forms, workspace,
+                            operations, admin, experience
 ```
+
+> See `docs/TAXONOMY.generated.md` (run `pnpm docs:taxonomy`) for the
+> authoritative, auto-generated inventory of every tier, group, and family.
 
 ---
 

@@ -18,8 +18,6 @@
  * @example Provider and Hook Usage
  * ```tsx
  * import { MessageProvider, useMessage } from '@rottay/design-system';
- * // Or import from Modern engine directly:
- * // import { MessageProvider, useMessage } from '@rottay/design-system/engines/modern';
  *
  * function App() {
  *   return (
