@@ -16,9 +16,9 @@ import type { TimePickerProps, TimeRangePickerProps } from '../TimePicker.types'
 
 /** Maps DS size values to inline style dimensions. */
 const sizeStyleMap: Record<string, React.CSSProperties> = {
-  small: { height: 32, fontSize: 13, padding: '4px 10px' },
-  default: { height: 36, fontSize: 14, padding: '6px 12px' },
-  large: { height: 40, fontSize: 16, padding: '8px 14px' },
+  small: { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' },
+  default: { height: 'var(--ds-input-md-height, 36px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' },
+  large: { height: 'var(--ds-input-lg-height, 40px)', fontSize: 'var(--ds-input-lg-font-size, 16px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
 };
 
 /** Pads a number to 2 digits. */
@@ -86,18 +86,18 @@ const TimePanel: React.FC<TimePanelProps> = ({
 
   const panelStyle: React.CSSProperties = {
     background: 'var(--ds-color-bg-elevated)',
-    borderRadius: 12,
-    boxShadow: '0 10px 25px -5px rgba(0,0,0,.15), 0 4px 10px -5px rgba(0,0,0,.1)',
+    borderRadius: 'var(--ds-radius-lg, 12px)',
+    boxShadow: 'var(--ds-elevation-3, 0 10px 25px -5px rgba(0,0,0,.15), 0 4px 10px -5px rgba(0,0,0,.1))',
     border: '1px solid var(--ds-color-border)',
     fontFamily: 'inherit',
-    animation: 'rottay-select-slide-in 0.15s ease-out',
+    animation: 'rottay-select-slide-in var(--ds-motion-duration-fast, 0.15s) ease-out',
     overflow: 'hidden',
   };
 
   const colStyle: React.CSSProperties = {
     overflowY: 'auto',
-    height: 200,
-    padding: '4px 2px',
+    height: 'var(--ds-time-column-height, 200px)',
+    padding: 'var(--ds-spacing-1, 4px) 2px',
   };
 
   const dividerStyle: React.CSSProperties = {
@@ -109,35 +109,35 @@ const TimePanel: React.FC<TimePanelProps> = ({
   const headerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    padding: '8px 12px 4px',
-    gap: 8,
+    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px)',
+    gap: 'var(--ds-spacing-2, 8px)',
     borderBottom: '1px solid var(--ds-color-border)',
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: 11,
+    fontSize: 'var(--ds-font-size-2xs, 11px)',
     fontWeight: 600,
     color: 'var(--ds-color-text-muted)',
     textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
+    letterSpacing: 'var(--ds-letter-spacing-wide, 0.05em)',
     textAlign: 'center' as const,
     flex: 1,
   };
 
   const getItemStyle = (isActive: boolean): React.CSSProperties => ({
     width: 44,
-    height: 32,
+    height: 'var(--ds-input-sm-height, 32px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 13,
-    borderRadius: 6,
+    fontSize: 'var(--ds-input-sm-font-size, 13px)',
+    borderRadius: 'var(--ds-radius-md, 6px)',
     cursor: 'pointer',
     border: 'none',
     fontWeight: isActive ? 600 : 400,
     background: isActive ? 'var(--ds-color-primary)' : 'transparent',
     color: isActive ? 'var(--ds-color-white)' : 'var(--ds-color-text-primary)',
-    transition: 'all 0.1s',
+    transition: 'all var(--ds-motion-duration-fast, 0.1s)',
     margin: '1px auto',
     outline: 'none',
   });
@@ -160,7 +160,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
       </div>
 
       {/* Scrollable columns */}
-      <div style={{ display: 'flex', padding: '4px 4px' }}>
+      <div style={{ display: 'flex', padding: 'var(--ds-spacing-1, 4px)' }}>
         {/* Hours column */}
         <div ref={hoursRef} style={colStyle}>
           {Array.from({ length: 24 }, (_, i) => (
@@ -231,20 +231,20 @@ const TimePanel: React.FC<TimePanelProps> = ({
 
       {/* Now button */}
       {showNow && (
-        <div style={{ borderTop: '1px solid var(--ds-color-border)', padding: '6px 8px' }}>
+        <div style={{ borderTop: '1px solid var(--ds-color-border)', padding: 'var(--ds-spacing-1-5, 6px) var(--ds-spacing-2, 8px)' }}>
           <button
             type="button"
             style={{
               width: '100%',
-              padding: '4px 12px',
-              fontSize: 12,
+              padding: '4px var(--ds-spacing-3, 12px)',
+              fontSize: 'var(--ds-font-size-xs, 12px)',
               fontWeight: 500,
-              borderRadius: 6,
+              borderRadius: 'var(--ds-radius-md, 6px)',
               border: 'none',
               background: 'var(--ds-color-primary)',
               color: 'var(--ds-color-white)',
               cursor: 'pointer',
-              transition: 'opacity 0.15s',
+              transition: 'opacity var(--ds-motion-duration-fast, 0.15s)',
             }}
             onClick={onNowClick}
           >
@@ -323,7 +323,8 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     if (!isOpen || !triggerRef.current) return;
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
-      setPos({ top: rect.bottom + 4, left: rect.left });
+      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
+      setPos({ top: rect.bottom + gap, left: rect.left });
     };
     update();
     window.addEventListener('scroll', update, true);
@@ -427,7 +428,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
         {allowClear && displayText && !disabled && (
           <button
             type="button"
-            style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 4, borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClear}
             tabIndex={-1}
           >
@@ -535,7 +536,8 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     if (!isOpen || !triggerRef.current) return;
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
-      setPos({ top: rect.bottom + 4, left: rect.left });
+      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
+      setPos({ top: rect.bottom + gap, left: rect.left });
     };
     update();
     window.addEventListener('scroll', update, true);

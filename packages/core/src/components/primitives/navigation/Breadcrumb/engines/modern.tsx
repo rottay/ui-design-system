@@ -166,18 +166,28 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
       style={{
         fontSize: 'var(--ds-font-size-sm, 14px)',
         color: 'var(--ds-color-text-secondary)',
+        // Override DaisyUI's ::before separator color via CSS custom property.
+        // DaisyUI breadcrumbs use ::before pseudo-elements styled with the
+        // current text color; this CSS variable lets tenants control it.
+        '--bc-color': 'var(--ds-breadcrumb-separator-color, var(--ds-color-text-tertiary, currentColor))',
         ...style,
-      }}
+      } as React.CSSProperties}
     >
       <ul>
         {displayItems.map((item) => (
           <li key={item.key}>
             {item.href ? (
-              <a href={item.href} onClick={item.onClick}>
+              <a
+                href={item.href}
+                onClick={item.onClick}
+                style={{
+                  color: 'var(--ds-breadcrumb-link-color, var(--ds-color-primary))',
+                }}
+              >
                 {item.icon} {item.label}
               </a>
             ) : (
-              <span>
+              <span style={{ color: 'var(--ds-color-text-primary)' }}>
                 {item.icon} {item.label}
               </span>
             )}

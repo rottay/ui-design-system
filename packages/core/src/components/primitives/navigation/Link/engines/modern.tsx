@@ -192,7 +192,14 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
       className={linkClasses}
       onClick={handleClick}
       aria-disabled={disabled}
-      style={{ color: typeColorMap[type], ...style }}
+      style={{
+        color: typeColorMap[type],
+        textDecoration: underline
+          ? 'var(--ds-link-text-decoration, underline)'
+          : 'none',
+        textUnderlineOffset: 'var(--ds-link-underline-offset, 2px)',
+        ...style,
+      }}
       {...externalProps}
       {...rest}
     >

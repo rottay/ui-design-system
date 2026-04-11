@@ -326,17 +326,21 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           className={`
             relative inline-flex items-center justify-center
             transition-all duration-200
-            ${isFilled || isHalfFilled ? 'text-warning' : 'text-base-300'}
             ${isInteractive ? 'cursor-pointer hover:scale-110' : disabled ? 'cursor-not-allowed opacity-50' : 'cursor-default'}
-            ${isFocused ? 'ring-2 ring-warning ring-offset-2' : ''}
+            ${isFocused ? 'ring-2 ring-offset-2' : ''}
           `}
           style={{
             width: `${sizeValue}px`,
             height: `${sizeValue}px`,
             color: isFilled || isHalfFilled
-              ? activeColor || undefined
-              : inactiveColor || undefined,
-          }}
+              ? activeColor || 'var(--ds-rate-active-color, var(--ds-color-warning, #facc15))'
+              : inactiveColor || 'var(--ds-rate-inactive-color, var(--ds-color-neutral-200, #d1d5db))',
+            // DS token override for the focus ring color; Tailwind's
+            // ring-warning is replaced by an inline value so tenants
+            // can control focus appearance.
+            '--tw-ring-color': 'var(--ds-rate-focus-ring-color, var(--ds-color-warning, #facc15))',
+            transitionDuration: 'var(--ds-motion-duration-fast, 200ms)',
+          } as React.CSSProperties}
           title={tooltips?.[index]}
           onMouseEnter={() => handleHover(starIndex)}
           onMouseLeave={() => handleHover(null)}
@@ -378,7 +382,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
               {/* Background (inactive) star */}
               <span
                 className="absolute inset-0"
-                style={{ color: inactiveColor || 'inherit' }}
+                style={{ color: inactiveColor || 'var(--ds-rate-inactive-color, var(--ds-color-neutral-200, #d1d5db))' }}
               >
                 {renderCharacter(index)}
               </span>
@@ -387,7 +391,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
                 className="absolute inset-0 overflow-hidden"
                 style={{
                   width: '50%',
-                  color: activeColor || 'inherit',
+                  color: activeColor || 'var(--ds-rate-active-color, var(--ds-color-warning, #facc15))',
                 }}
               >
                 {renderCharacter(index)}

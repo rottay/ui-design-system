@@ -313,9 +313,9 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
     const getSizeStyle = (): React.CSSProperties => {
       switch (size) {
-        case 'small': return { height: 32, fontSize: 13, padding: '4px 10px' };
-        case 'large': return { height: 40, fontSize: 16, padding: '8px 14px' };
-        default: return { height: 36, fontSize: 14, padding: '6px 12px' };
+        case 'small': return { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' };
+        case 'large': return { height: 'var(--ds-input-lg-height, 40px)', fontSize: 'var(--ds-input-lg-font-size, 16px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' };
+        default: return { height: 'var(--ds-input-md-height, 36px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' };
       }
     };
 
@@ -350,36 +350,37 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           {allowClear && selectedPath.length > 0 && !disabled && (
             <button
               type="button"
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={handleClear}
             >
               ✕
             </button>
           )}
-          <span className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>&#9660;</span>
+          <span style={{ transition: 'transform var(--ds-motion-duration-fast, 0.2s)' }} className={`${isOpen ? 'rotate-180' : ''}`}>&#9660;</span>
         </div>
 
         {isOpen && (
           <>
             <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes rottay-cascader-panel-in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}` }} />
-            <div style={{ position: 'absolute', zIndex: 50, marginTop: 4, borderRadius: 'var(--ds-radius-lg)', animation: 'rottay-select-slide-in 0.15s ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
+            <div style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', animation: 'rottay-select-slide-in var(--ds-motion-duration-fast, 0.15s) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
             {/* Search input */}
             {showSearch && (
               <div className="p-2" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
                 <input
                   ref={searchInputRef}
                   type="text"
-                  className="w-full transition-all duration-200"
+                  className="w-full"
                   style={{
                     border: '1px solid var(--ds-color-border)',
                     borderRadius: 'var(--ds-radius-md)',
-                    padding: '4px 10px',
-                    fontSize: 13,
-                    height: 32,
+                    padding: '4px var(--ds-input-sm-padding-x, 10px)',
+                    fontSize: 'var(--ds-input-sm-font-size, 13px)',
+                    height: 'var(--ds-input-sm-height, 32px)',
                     background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
                     color: 'var(--ds-color-text-primary)',
                     outline: 'none',
                     boxSizing: 'border-box',
+                    transition: 'all var(--ds-motion-duration-fast, 0.2s)',
                   }}
                   placeholder="Search..."
                   value={searchValue}
@@ -392,7 +393,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             {isSearchMode ? (
               <>
                 {/* Flat search results */}
-                <ul style={{ listStyle: 'none', margin: 0, padding: 4, width: 256, maxHeight: 240, overflowY: 'auto' }}>
+                <ul style={{ listStyle: 'none', margin: 0, padding: 'var(--ds-spacing-1, 4px)', width: 256, maxHeight: 240, overflowY: 'auto' }}>
                   {filteredFlatOptions.length > 0 ? (
                     filteredFlatOptions.map((fo, idx) => (
                       <li key={idx}>
@@ -420,12 +421,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                       style={{
                         listStyle: 'none',
                         margin: 0,
-                        padding: 4,
+                        padding: 'var(--ds-spacing-1, 4px)',
                         width: 192,
                         maxHeight: 240,
                         overflowY: 'auto',
                         borderRight: colIndex < activeColumns.length - 1 ? '1px solid var(--ds-color-border)' : undefined,
-                        ...(colIndex > 0 ? { animation: 'rottay-cascader-panel-in 0.2s ease-out' } : {}),
+                        ...(colIndex > 0 ? { animation: 'rottay-cascader-panel-in var(--ds-motion-duration-fast, 0.2s) ease-out' } : {}),
                       }}
                     >
                       {column.length > 0 ? (
@@ -439,15 +440,15 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                             <li key={String(optValue)}>
                               <button
                                 type="button"
-                                className={`flex justify-between transition-all duration-150 ${option.disabled ? 'disabled' : ''} ${isSelected ? 'active font-medium' : ''}`}
-                                style={isSelected ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', borderLeft: '2px solid var(--ds-color-primary)' } : undefined}
+                                className={`flex justify-between ${option.disabled ? 'disabled' : ''} ${isSelected ? 'active font-medium' : ''}`}
+                                style={{ transition: 'all var(--ds-motion-duration-fast, 0.15s)', ...(isSelected ? { background: 'var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))', borderLeft: '2px solid var(--ds-color-primary)' } : undefined) }}
                                 disabled={option.disabled}
                                 onClick={() => handleOptionClick(option, colIndex)}
                                 onMouseEnter={() => handleOptionHover(option, colIndex)}
                               >
                                 <span className="truncate">{optLabel}</span>
                                 {isLoading ? (
-                                  <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-primary)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
+                                  <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border, #ccc)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
                                     <span>›</span>

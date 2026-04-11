@@ -64,6 +64,38 @@ const getStepClass = (status: StepStatus): string => {
 };
 
 /**
+ * Returns inline style overrides for the step element so DS tokens
+ * control the visual appearance instead of DaisyUI's built-in colors.
+ * Keeps DaisyUI structural classes for layout only.
+ * @internal
+ */
+const getStepTokenStyle = (status: StepStatus): React.CSSProperties => {
+  const base: React.CSSProperties = {
+    '--step-neutral': 'var(--ds-steps-connector-color, var(--ds-color-border-secondary, #e5e7eb))',
+  } as React.CSSProperties;
+
+  switch (status) {
+    case 'finish':
+    case 'process':
+      return {
+        ...base,
+        '--step-color': 'var(--ds-color-primary)',
+        accentColor: 'var(--ds-color-primary)',
+        '--step-neutral': 'var(--ds-color-primary)',
+      } as React.CSSProperties;
+    case 'error':
+      return {
+        ...base,
+        '--step-color': 'var(--ds-color-error)',
+        accentColor: 'var(--ds-color-error)',
+      } as React.CSSProperties;
+    case 'wait':
+    default:
+      return base;
+  }
+};
+
+/**
  * Calculates the effective status for a step based on its position.
  *
  * @param index - Step index
@@ -181,6 +213,7 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
       >
         {computedSteps.map((step, index) => {
           const isClickable = !step.disabled && onChange;
+          const tokenStyle = getStepTokenStyle(step.effectiveStatus);
           return (
             <li
               key={index}
@@ -189,16 +222,17 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
               // In progressDot mode, replace the default number/icon with a
               // simple filled circle via DaisyUI's data-content attribute
               data-content={progressDot ? '●' : undefined}
+              style={tokenStyle}
             >
               <div className="flex flex-col items-start">
                 {/* Custom icon if provided and not in progressDot mode */}
                 {step.icon && !progressDot && <span className="mb-1">{step.icon}</span>}
 
                 {/* Step title */}
-                <span className="font-medium">{step.title}</span>
+                <span className="font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>{step.title}</span>
 
                 {/* Optional subtitle */}
-                {step.subTitle && <span className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.subTitle}</span>}
+                {step.subTitle && <span className="text-xs" style={{ color: 'var(--ds-color-text-tertiary)' }}>{step.subTitle}</span>}
 
                 {/* Optional description */}
                 {step.description && <span className="text-sm mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</span>}

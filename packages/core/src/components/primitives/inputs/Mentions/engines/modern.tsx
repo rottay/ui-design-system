@@ -243,7 +243,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
-          style={{ width: '100%', border: `1px solid ${getStatusBorderColor()}`, borderRadius: 'var(--ds-radius-md)', padding: '8px 12px', fontSize: 14, background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', fontFamily: 'inherit', ...(autoSize ? { resize: 'none' as const } : undefined) }}
+          style={{ width: '100%', border: `1px solid ${getStatusBorderColor()}`, borderRadius: 'var(--ds-radius-md)', padding: 'var(--ds-input-md-padding-y, 8px) var(--ds-input-md-padding-x, 12px)', fontSize: 'var(--ds-input-md-font-size, 14px)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', fontFamily: 'inherit', ...(autoSize ? { resize: 'none' as const } : undefined) }}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -260,7 +260,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         {isOpen && (
           <ul
             className={popupClassName || undefined}
-            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 4, maxHeight: 192, overflowY: 'auto', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', ...(placement === 'top' ? { bottom: '100%', marginBottom: 4 } : { top: '100%', marginTop: 4 }) }}
+            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 'var(--ds-dropdown-padding, 4px)', maxHeight: 'var(--ds-dropdown-max-height, 192px)', overflowY: 'auto', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', ...(placement === 'top' ? { bottom: '100%', marginBottom: 'var(--ds-spacing-1, 4px)' } : { top: '100%', marginTop: 'var(--ds-spacing-1, 4px)' }) }}
             role="listbox"
             aria-label="Mention suggestions"
           >

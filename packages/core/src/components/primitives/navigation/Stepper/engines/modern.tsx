@@ -85,15 +85,32 @@ function getStepClass(status: StepStatus): string {
  * @internal
  */
 function getStepTokenStyle(status: StepStatus): React.CSSProperties {
+  const base: React.CSSProperties = {
+    // Override DaisyUI connector-line color via the CSS custom property
+    // it exposes on step elements. The fallback ensures a neutral line
+    // when no DS token is set.
+    '--step-neutral': 'var(--ds-stepper-connector-color, var(--ds-color-border-secondary, #e5e7eb))',
+  } as React.CSSProperties;
+
   switch (status) {
     case 'finish':
     case 'process':
-      return { '--step-color': 'var(--ds-color-primary)', accentColor: 'var(--ds-color-primary)' } as React.CSSProperties;
+      return {
+        ...base,
+        '--step-color': 'var(--ds-color-primary)',
+        accentColor: 'var(--ds-color-primary)',
+        // Override the connector line for reached steps
+        '--step-neutral': 'var(--ds-color-primary)',
+      } as React.CSSProperties;
     case 'error':
-      return { '--step-color': 'var(--ds-color-error)', accentColor: 'var(--ds-color-error)' } as React.CSSProperties;
+      return {
+        ...base,
+        '--step-color': 'var(--ds-color-error)',
+        accentColor: 'var(--ds-color-error)',
+      } as React.CSSProperties;
     case 'wait':
     default:
-      return {};
+      return base;
   }
 }
 
@@ -156,9 +173,9 @@ function renderDaisySteps(
         data-content={item.icon ? undefined : (index + 1).toString()}
       >
         <div className="step-content">
-          <span className="font-medium">{item.title}</span>
+          <span className="font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>{item.title}</span>
           {item.description && (
-            <span className="text-sm opacity-60">{item.description}</span>
+            <span className="text-sm" style={{ color: 'var(--ds-color-text-tertiary)', opacity: 0.8 }}>{item.description}</span>
           )}
         </div>
       </li>

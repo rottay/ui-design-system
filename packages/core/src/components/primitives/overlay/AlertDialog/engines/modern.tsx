@@ -85,7 +85,13 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
       style={style}
       data-testid={dataTestId}
     >
-      <div className="modal-backdrop" onClick={handleBackdropClick} />
+      <div
+        className="modal-backdrop"
+        onClick={handleBackdropClick}
+        style={{
+          background: 'var(--ds-overlay-bg, rgba(0, 0, 0, 0.45))',
+        }}
+      />
       <div
         className="modal-box max-w-sm"
         role="alertdialog"

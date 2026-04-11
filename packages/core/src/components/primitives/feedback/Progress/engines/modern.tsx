@@ -194,8 +194,14 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
 
   const progressStyle: React.CSSProperties = {
     accentColor: strokeColor || STATUS_TOKEN_COLORS[status!],
+    // Override the DaisyUI track background with a DS token so tenants
+    // can control the unfilled portion of the progress bar.
+    '--progress-bg': 'var(--ds-progress-track-bg, var(--ds-color-neutral-100, #f3f4f6))',
+    background: 'var(--ds-progress-track-bg, var(--ds-color-neutral-100, #f3f4f6))',
+    borderRadius: 'var(--ds-progress-radius, var(--ds-radius-full, 9999px))',
+    height: 'var(--ds-progress-height, 0.5rem)',
     ...style,
-  };
+  } as React.CSSProperties;
 
   return (
     <div className="w-full">
@@ -212,7 +218,7 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
 
       {/* Percentage info display */}
       {showInfo && (
-        <div className="text-sm text-center mt-1">{percent}%</div>
+        <div className="text-sm text-center mt-1" style={{ color: 'var(--ds-color-text-secondary)', fontSize: 'var(--ds-font-size-sm, 14px)' }}>{percent}%</div>
       )}
     </div>
   );

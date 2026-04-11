@@ -221,21 +221,21 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   return (
     <li>
       <div
-        className={`flex items-center py-1 px-2 rounded cursor-pointer transition-all duration-200 ${isSelected ? 'font-medium' : ''} ${node.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-        style={{ paddingLeft: `${level * 16 + 8}px`, ...(isSelected ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', color: 'var(--ds-color-primary)', borderLeft: '2px solid var(--ds-color-primary)' } : {}) }}
+        className={`flex items-center py-1 px-2 rounded cursor-pointer ${isSelected ? 'font-medium' : ''} ${node.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        style={{ paddingLeft: `${level * 16 + 8}px`, transition: 'all var(--ds-motion-duration-fast, 0.2s)', ...(isSelected ? { background: 'var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))', color: 'var(--ds-color-primary)', borderLeft: '2px solid var(--ds-color-border-selected, var(--ds-color-primary))' } : {}) }}
         onClick={() => !node.disabled && onSelect(node)}
       >
         {/* Expand/collapse or leaf indicator */}
         {!isLeaf ? (
           <button
             type="button"
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', marginRight: 4 }}
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)', borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', marginRight: 'var(--ds-spacing-1, 4px)' }}
             onClick={handleExpand}
           >
             {isLoading ? (
-              <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-primary)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
+              <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border, #ccc)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
             ) : (
-              <span className={`inline-block transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}>&#9654;</span>
+              <span style={{ transition: 'transform var(--ds-motion-duration-fast, 0.2s)' }} className={`inline-block ${isExpanded ? 'rotate-90' : ''}`}>&#9654;</span>
             )}
           </button>
         ) : (
@@ -245,12 +245,13 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         {checkable && (
           <input
             type="checkbox"
-            className="mr-2 transition-all duration-150"
+            className="mr-2"
             style={{
               width: 16,
               height: 16,
               accentColor: 'var(--ds-color-primary)',
               cursor: node.disabled || node.disableCheckbox ? 'not-allowed' : 'pointer',
+              transition: 'all var(--ds-motion-duration-fast, 0.15s)',
             }}
             checked={isSelected}
             ref={(el) => { if (el) el.indeterminate = isIndeterminate; }}
@@ -262,7 +263,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         <span className="flex-1">{renderTitle()}</span>
       </div>
       {hasChildren && isExpanded && (
-        <ul className={treeLine ? 'ml-4' : ''} style={treeLine ? { borderLeft: '2px solid var(--ds-color-border)' } : undefined}>
+        <ul className={treeLine ? 'ml-4' : ''} style={treeLine ? { borderLeft: '2px solid var(--ds-color-border-subtle, var(--ds-color-border))' } : undefined}>
           {node.children!.map((child) => (
             <TreeNode
               key={child.key ?? child.value}
@@ -533,9 +534,9 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
 
     const getSizeStyle = (): React.CSSProperties => {
       switch (size) {
-        case 'small': return { height: 32, fontSize: 13, padding: '4px 10px' };
-        case 'large': return { height: 40, fontSize: 16, padding: '8px 14px' };
-        default: return { height: 36, fontSize: 14, padding: '6px 12px' };
+        case 'small': return { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' };
+        case 'large': return { height: 'var(--ds-input-lg-height, 40px)', fontSize: 'var(--ds-input-lg-font-size, 16px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' };
+        default: return { height: 'var(--ds-input-md-height, 36px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' };
       }
     };
 
@@ -568,36 +569,37 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           {allowClear && selectedKeys.size > 0 && !disabled && (
             <button
               type="button"
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={handleClear}
             >
               ✕
             </button>
           )}
-          <span className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>&#9660;</span>
+          <span style={{ transition: 'transform var(--ds-motion-duration-fast, 0.2s)' }} className={`${isOpen ? 'rotate-180' : ''}`}>&#9660;</span>
         </div>
 
         {isOpen && (
           <>
           <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
-          <div style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', animation: 'rottay-select-slide-in 0.15s ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
+          <div style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', animation: 'rottay-select-slide-in var(--ds-motion-duration-fast, 0.15s) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
             {/* Search input */}
             {showSearch && (
               <div className="p-2 sticky top-0 z-10" style={{ borderBottom: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-card)' }}>
                 <input
                   ref={searchInputRef}
                   type="text"
-                  className="w-full transition-all duration-200"
+                  className="w-full"
                   style={{
                     border: '1px solid var(--ds-color-border)',
                     borderRadius: 'var(--ds-radius-md)',
-                    padding: '4px 10px',
-                    fontSize: 13,
-                    height: 32,
+                    padding: '4px var(--ds-input-sm-padding-x, 10px)',
+                    fontSize: 'var(--ds-input-sm-font-size, 13px)',
+                    height: 'var(--ds-input-sm-height, 32px)',
                     background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
                     color: 'var(--ds-color-text-primary)',
                     outline: 'none',
                     boxSizing: 'border-box',
+                    transition: 'all var(--ds-motion-duration-fast, 0.2s)',
                   }}
                   placeholder={t('treeselect.search_placeholder')}
                   value={searchValue}

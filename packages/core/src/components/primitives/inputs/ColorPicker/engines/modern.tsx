@@ -191,7 +191,8 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
               type="color"
               value={currentValue}
               onChange={(e) => handleChange(e.target.value)}
-              className="w-full h-40 cursor-pointer border-0"
+              className="w-full cursor-pointer border-0"
+              style={{ height: 'var(--ds-color-picker-height, 10rem)' }}
               disabled={disabled}
             />
 
@@ -205,9 +206,9 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                 style={{
                   border: '1px solid var(--ds-color-border)',
                   borderRadius: 'var(--ds-radius-md)',
-                  padding: '4px 10px',
-                  fontSize: 13,
-                  height: 32,
+                  padding: '4px var(--ds-input-sm-padding-x, 10px)',
+                  fontSize: 'var(--ds-input-sm-font-size, 13px)',
+                  height: 'var(--ds-input-sm-height, 32px)',
                   background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
                   color: 'var(--ds-color-text-primary)',
                   outline: 'none',
@@ -248,7 +249,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
               <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--ds-color-border)' }}>
                 <button
                   type="button"
-                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-input-sm-height, 32px)', padding: '0 var(--ds-input-sm-padding-x, 12px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
                   onClick={handleClear}
                   disabled={disabled}
                 >
