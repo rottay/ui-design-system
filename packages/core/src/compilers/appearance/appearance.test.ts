@@ -1,5 +1,8 @@
 /**
- * M7 regression test — proves TenantAppearance compilation produces real CSS variables.
+ * Regression tests for TenantAppearance compilation.
+ *
+ * Proves that declared appearance fields produce real CSS variables that
+ * the runtime can inject — no inert declarations.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -14,69 +17,109 @@ import type {
 } from '../../contracts/themes';
 
 describe('appearanceGeneralToVariables', () => {
-  it('maps palette.primary to --ds-color-primary', () => {
-    const general: TenantAppearanceGeneral = {
-      palette: { primary: '#FF5500' },
-    };
-    const vars = appearanceGeneralToVariables(general);
+  it('palette.primary produces --ds-color-primary', () => {
+    const vars = appearanceGeneralToVariables({ palette: { primary: '#FF5500' } });
     expect(vars['--ds-color-primary']).toBe('#FF5500');
   });
 
-  it('maps typography.fontFamilyBase to --ds-font-family-base', () => {
-    const general: TenantAppearanceGeneral = {
+  it('palette.secondary + accent produce their respective vars', () => {
+    const vars = appearanceGeneralToVariables({
+      palette: { secondary: '#00AA00', accent: '#FFAA00' },
+    });
+    expect(vars['--ds-color-secondary']).toBe('#00AA00');
+    expect(vars['--ds-color-accent']).toBe('#FFAA00');
+  });
+
+  it('typography.fontFamilyBase produces --ds-font-family-base', () => {
+    const vars = appearanceGeneralToVariables({
       typography: { fontFamilyBase: 'Inter, sans-serif' },
-    };
-    const vars = appearanceGeneralToVariables(general);
+    });
     expect(vars['--ds-font-family-base']).toBe('Inter, sans-serif');
   });
 
-  it('maps density compact to a scale factor < 1', () => {
-    const general: TenantAppearanceGeneral = { density: 'compact' };
-    const vars = appearanceGeneralToVariables(general);
-    expect(vars['--ds-density-scale']).toBe('0.85');
+  it('density does NOT emit a CSS var (handled by useTokens JS factor)', () => {
+    const vars = appearanceGeneralToVariables({ density: 'compact' });
+    expect(vars['--ds-density-scale']).toBeUndefined();
   });
 
-  it('maps shape.buttonStyle pill to 9999px radius', () => {
-    const general: TenantAppearanceGeneral = {
-      shape: { buttonStyle: 'pill' },
-    };
-    const vars = appearanceGeneralToVariables(general);
+  it('typography.scale does NOT emit a CSS var (handled by useTokens JS factor)', () => {
+    const vars = appearanceGeneralToVariables({
+      typography: { scale: 'large' },
+    });
+    expect(vars['--ds-type-scale']).toBeUndefined();
+  });
+
+  it('shape.buttonStyle pill produces --ds-radius-button 9999px', () => {
+    const vars = appearanceGeneralToVariables({ shape: { buttonStyle: 'pill' } });
     expect(vars['--ds-radius-button']).toBe('9999px');
   });
 
-  it('maps surfaces.elevation flat to zero shadows', () => {
-    const general: TenantAppearanceGeneral = {
-      surfaces: { elevation: 'flat' },
-    };
-    const vars = appearanceGeneralToVariables(general);
+  it('shape.buttonStyle sharp produces --ds-radius-button 2px', () => {
+    const vars = appearanceGeneralToVariables({ shape: { buttonStyle: 'sharp' } });
+    expect(vars['--ds-radius-button']).toBe('2px');
+  });
+
+  it('surfaces.elevation flat zeroes out elevation vars', () => {
+    const vars = appearanceGeneralToVariables({ surfaces: { elevation: 'flat' } });
     expect(vars['--ds-elevation-1']).toBe('none');
     expect(vars['--ds-elevation-2']).toBe('none');
   });
 
-  it('returns empty for default/unset values', () => {
-    const general: TenantAppearanceGeneral = { density: 'normal' };
-    const vars = appearanceGeneralToVariables(general);
-    expect(vars['--ds-density-scale']).toBeUndefined();
+  it('surfaces.elevation soft produces no overrides (uses DS defaults)', () => {
+    const vars = appearanceGeneralToVariables({ surfaces: { elevation: 'soft' } });
+    expect(vars['--ds-elevation-1']).toBeUndefined();
+  });
+
+  it('navigation.sidebarTone subtle produces sidebar vars with secondary bg', () => {
+    const vars = appearanceGeneralToVariables({ navigation: { sidebarTone: 'subtle' } });
+    expect(vars['--ds-sidebar-bg']).toBe('var(--ds-color-bg-secondary)');
+    expect(vars['--ds-sidebar-text']).toBe('var(--ds-color-text-primary)');
+    expect(vars['--ds-sidebar-item-color-active']).toBe('var(--ds-color-primary)');
+  });
+
+  it('navigation.sidebarTone strong produces sidebar vars with primary-900 bg', () => {
+    const vars = appearanceGeneralToVariables({ navigation: { sidebarTone: 'strong' } });
+    expect(vars['--ds-sidebar-bg']).toBe('var(--ds-color-primary-900)');
+    expect(vars['--ds-sidebar-text']).toBe('var(--ds-color-white)');
+  });
+
+  it('navigation.sidebarTone inverse produces sidebar vars with neutral-900 bg', () => {
+    const vars = appearanceGeneralToVariables({ navigation: { sidebarTone: 'inverse' } });
+    expect(vars['--ds-sidebar-bg']).toBe('var(--ds-color-neutral-900)');
+    expect(vars['--ds-sidebar-text']).toBe('var(--ds-color-neutral-100)');
+  });
+
+  it('media.logo produces a url() CSS value', () => {
+    const vars = appearanceGeneralToVariables({ media: { logo: 'https://example.com/logo.svg' } });
+    expect(vars['--ds-tenant-logo']).toBe('url(https://example.com/logo.svg)');
+  });
+
+  it('returns empty for unset/default values', () => {
+    const vars = appearanceGeneralToVariables({ density: 'normal' });
+    expect(Object.keys(vars)).toHaveLength(0);
   });
 });
 
 describe('appearanceAdvancedToVariables', () => {
-  it('maps chrome.sidebar.bg to --ds-sidebar-bg', () => {
-    const advanced: TenantAppearanceAdvanced = {
-      chrome: { sidebar: { bg: '#1a1a2e' } },
-    };
-    const vars = appearanceAdvancedToVariables(advanced);
+  it('chrome.sidebar.bg produces --ds-sidebar-bg', () => {
+    const vars = appearanceAdvancedToVariables({ chrome: { sidebar: { bg: '#1a1a2e' } } });
     expect(vars['--ds-sidebar-bg']).toBe('#1a1a2e');
   });
 
-  it('maps raw tokenOverrides with --ds- prefix', () => {
-    const advanced: TenantAppearanceAdvanced = {
+  it('chrome.controls.buttonPrimary.bg produces --ds-button-primary-bg', () => {
+    const vars = appearanceAdvancedToVariables({
+      chrome: { controls: { buttonPrimary: { bg: '#0066FF' } } },
+    });
+    expect(vars['--ds-button-primary-bg']).toBe('#0066FF');
+  });
+
+  it('tokenOverrides with --ds- prefix are passed through', () => {
+    const vars = appearanceAdvancedToVariables({
       tokenOverrides: {
         '--ds-color-success': '#00FF00',
         '--ds-radius-md': '12px',
       },
-    };
-    const vars = appearanceAdvancedToVariables(advanced);
+    });
     expect(vars['--ds-color-success']).toBe('#00FF00');
     expect(vars['--ds-radius-md']).toBe('12px');
   });
@@ -88,12 +131,22 @@ describe('appearanceToVariables', () => {
       general: { palette: { primary: '#FF0000' } },
       advanced: { tokenOverrides: { '--ds-color-primary': '#0000FF' } },
     });
-    // Advanced wins (applied second)
     expect(vars['--ds-color-primary']).toBe('#0000FF');
   });
 
   it('returns empty for undefined appearance tiers', () => {
     const vars = appearanceToVariables({});
     expect(Object.keys(vars)).toHaveLength(0);
+  });
+
+  it('sidebarTone from general + chrome.sidebar from advanced merge correctly', () => {
+    const vars = appearanceToVariables({
+      general: { navigation: { sidebarTone: 'subtle' } },
+      advanced: { chrome: { sidebar: { bg: '#custom' } } },
+    });
+    // Advanced wins for bg (both set it)
+    expect(vars['--ds-sidebar-bg']).toBe('#custom');
+    // General's other sidebar vars survive
+    expect(vars['--ds-sidebar-text']).toBe('var(--ds-color-text-primary)');
   });
 });

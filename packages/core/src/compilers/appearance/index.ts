@@ -21,19 +21,10 @@ import type {
 
 // ── General tier ──────────────────────────────────────────
 
-/** Density presets that map to a --ds-density-scale factor. */
-const DENSITY_SCALE: Record<string, number> = {
-  compact: 0.85,
-  normal: 1,
-  spacious: 1.15,
-};
-
-/** Typography scale presets map to a --ds-type-scale factor. */
-const TYPE_SCALE: Record<string, number> = {
-  compact: 0.92,
-  normal: 1,
-  large: 1.08,
-};
+// Density and type-scale are resolved inside useTokens() (hooks/tokens/index.ts)
+// as numeric factors that multiply the spacing array and font sizes. They are NOT
+// emitted as CSS variables because that would require every consumer to use calc(),
+// which is a paradigm shift not justified by the current audience.
 
 /** Button shape presets map to a --ds-radius-button value. */
 const BUTTON_STYLE_RADIUS: Record<string, string> = {
@@ -75,33 +66,56 @@ export function appearanceGeneralToVariables(
     // backgroundMode is consumed by ThemeProvider, not a CSS variable
   }
 
-  // Typography
+  // Typography — font families are CSS vars, scale is handled in useTokens()
   if (general.typography) {
     const t = general.typography;
     if (t.fontFamilyBase) vars['--ds-font-family-base'] = t.fontFamilyBase;
     if (t.fontFamilyHeading) vars['--ds-font-family-heading'] = t.fontFamilyHeading;
-    if (t.scale) {
-      const factor = TYPE_SCALE[t.scale] ?? 1;
-      if (factor !== 1) vars['--ds-type-scale'] = String(factor);
-    }
+    // typography.scale is consumed by useTokens() as a JS factor, not a CSS var.
   }
 
-  // Shape
+  // Shape — buttonStyle maps to a real CSS var consumed by engines
   if (general.shape) {
     const s = general.shape;
-    if (s.radiusScale != null && s.radiusScale !== 1) {
-      vars['--ds-radius-scale'] = String(s.radiusScale);
-    }
+    // radiusScale is consumed by useTokens() as a JS factor, not a CSS var.
     if (s.buttonStyle) {
       const r = BUTTON_STYLE_RADIUS[s.buttonStyle];
       if (r) vars['--ds-radius-button'] = r;
     }
   }
 
-  // Density
-  if (general.density) {
-    const factor = DENSITY_SCALE[general.density] ?? 1;
-    if (factor !== 1) vars['--ds-density-scale'] = String(factor);
+  // Density is consumed by useTokens() as a JS factor that multiplies the
+  // spacing array. It is NOT emitted as a CSS variable.
+
+  // Navigation — sidebarTone maps to real sidebar chrome variables
+  if (general.navigation?.sidebarTone) {
+    const tone = general.navigation.sidebarTone;
+    switch (tone) {
+      case 'subtle':
+        vars['--ds-sidebar-bg'] = 'var(--ds-color-bg-secondary)';
+        vars['--ds-sidebar-text'] = 'var(--ds-color-text-primary)';
+        vars['--ds-sidebar-text-muted'] = 'var(--ds-color-text-muted)';
+        vars['--ds-sidebar-item-bg-hover'] = 'var(--ds-color-bg-hover)';
+        vars['--ds-sidebar-item-bg-active'] = 'var(--ds-color-primary-100)';
+        vars['--ds-sidebar-item-color-active'] = 'var(--ds-color-primary)';
+        break;
+      case 'strong':
+        vars['--ds-sidebar-bg'] = 'var(--ds-color-primary-900)';
+        vars['--ds-sidebar-text'] = 'var(--ds-color-white)';
+        vars['--ds-sidebar-text-muted'] = 'var(--ds-color-neutral-400)';
+        vars['--ds-sidebar-item-bg-hover'] = 'var(--ds-color-primary-800)';
+        vars['--ds-sidebar-item-bg-active'] = 'var(--ds-color-primary-700)';
+        vars['--ds-sidebar-item-color-active'] = 'var(--ds-color-white)';
+        break;
+      case 'inverse':
+        vars['--ds-sidebar-bg'] = 'var(--ds-color-neutral-900)';
+        vars['--ds-sidebar-text'] = 'var(--ds-color-neutral-100)';
+        vars['--ds-sidebar-text-muted'] = 'var(--ds-color-neutral-500)';
+        vars['--ds-sidebar-item-bg-hover'] = 'var(--ds-color-neutral-800)';
+        vars['--ds-sidebar-item-bg-active'] = 'var(--ds-color-neutral-700)';
+        vars['--ds-sidebar-item-color-active'] = 'var(--ds-color-white)';
+        break;
+    }
   }
 
   // Surfaces / elevation

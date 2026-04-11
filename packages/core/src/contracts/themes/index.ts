@@ -254,9 +254,8 @@ export interface TenantAppearanceGeneral {
     logoMark?: string;
     favicon?: string;
   };
-  data?: {
-    chartColorFamily?: string;
-  };
+  // data.chartColorFamily was removed — no chart color family system exists
+  // in the DS today. Re-add when a real chart palette consumer is implemented.
 }
 
 /** Expert-level, fine-grained customization for guarded use cases. */

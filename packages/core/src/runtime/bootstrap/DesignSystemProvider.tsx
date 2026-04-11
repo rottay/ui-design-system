@@ -430,9 +430,11 @@ export function DesignSystemProvider({
         : verticalSource;
 
   // Final precedence used by the runtime:
-  // force props -> tenant config -> vertical defaults -> DS fallback.
+  // force props -> tenant config -> appearance.backgroundMode -> vertical defaults -> DS fallback.
   const engine = forceEngine ?? normalizedConfig.engine ?? resolvedVertical?.engine ?? 'classic';
-  const theme = forceTheme ?? normalizedConfig.theme ?? 'base';
+  // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'
+  const appearanceBackgroundMode = normalizedConfig.appearance?.general?.palette?.backgroundMode;
+  const theme = forceTheme ?? normalizedConfig.theme ?? appearanceBackgroundMode ?? 'base';
   const locale = forcedLocale ?? normalizedConfig.locale ?? 'en';
   const fallbackLocale = forcedFallbackLocale ?? normalizedConfig.fallbackLocale ?? locale;
   const customTranslations = mergeLocaleTranslations(

@@ -197,18 +197,23 @@ export function useTokens(): DesignTokens {
       : engineOverrides.motion;
     const verticalDensityScale = verticalTokenOverrides?.densityScale ?? engineOverrides.densityScale;
 
-    // 3. Final structural layer — BrandTheme or legacy (profile + tenant)
+    // 3. Final structural layer — BrandTheme -> Appearance -> tenant overrides
     let borderRadius: typeof verticalBorderRadius;
     let shadows: typeof verticalShadows;
     let surface: typeof verticalSurface;
     let motion: typeof verticalMotion;
     let densityScale: number;
 
+    // Appearance General contributes a density scale factor that multiplies
+    // the resolved densityScale. This allows appearance to adjust density
+    // without overwriting the entire token set.
+    const appearance = config.appearance;
+    const appearanceDensityFactor = appearance?.general?.density === 'compact' ? 0.85
+      : appearance?.general?.density === 'spacious' ? 1.15
+      : 1;
+
     if (hasBrandTheme) {
-      // BrandTheme path: engine -> vertical -> brandTheme -> tenant overrides.
-      // Product profile tokenOverrides are skipped — only surfaceDefaults survives.
-      // Tenant tokenOverrides remain the highest-priority layer so per-tenant
-      // tweaks can still override brandTheme values.
+      // BrandTheme path: engine -> vertical -> brandTheme -> appearance -> tenant overrides.
       const btOverrides = brandThemeToTokenOverrides(brandTheme);
       const tenantTokenOverrides = config.tokenOverrides;
 
@@ -239,7 +244,7 @@ export function useTokens(): DesignTokens {
       motion = tenantTokenOverrides?.motion
         ? { ...btMotion, ...tenantTokenOverrides.motion }
         : btMotion;
-      densityScale = tenantTokenOverrides?.densityScale ?? btDensityScale;
+      densityScale = (tenantTokenOverrides?.densityScale ?? btDensityScale) * appearanceDensityFactor;
     } else {
       // Legacy path: profile -> tenant on top of vertical
       const productProfileTokenOverrides = profile.tokenOverrides;
@@ -270,7 +275,7 @@ export function useTokens(): DesignTokens {
       motion = tenantTokenOverrides?.motion
         ? { ...ppMotion, ...tenantTokenOverrides.motion }
         : ppMotion;
-      densityScale = tenantTokenOverrides?.densityScale ?? ppDensityScale;
+      densityScale = (tenantTokenOverrides?.densityScale ?? ppDensityScale) * appearanceDensityFactor;
     }
 
     // 4. Personality tokens — BrandTheme or legacy merge.
@@ -396,6 +401,7 @@ export function useTokens(): DesignTokens {
     config.branding.primaryColor,
     config.branding.secondaryColor,
     config.branding.accentColor,
+    config.appearance,
     profile,
     vertical,
   ]);
