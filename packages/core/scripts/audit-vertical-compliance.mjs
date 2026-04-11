@@ -172,6 +172,31 @@ if (existsSync(join(srcDir, 'vertical', 'recipes'))) {
 }
 
 // ---------------------------------------------------------------------------
+// Rule 6: Detect inline shell geometry bypasses outside vertical/shell
+// ---------------------------------------------------------------------------
+const SHELL_GEOMETRY_RE = /(?:sidebarWidth|sidebarCollapsedWidth|headerHeight)\s*[:=]\s*\d+/;
+const FIXED_SIDEBAR_RE = /position\s*:\s*['"]?fixed['"]?.*(?:left|right)\s*:\s*0/;
+for (const file of allTsFiles) {
+  const rel = relative(srcDir, file);
+  // Allow vertical/shell, vertical/profile, _shared compat, and DS imports
+  if (
+    rel.startsWith('vertical/') ||
+    rel.startsWith('components/_shared/layouts') ||
+    rel.startsWith('components/layout') ||
+    rel.includes('node_modules')
+  ) continue;
+  const content = readFileSync(file, 'utf8');
+  // Check for hardcoded shell metrics outside the vertical layer
+  if (SHELL_GEOMETRY_RE.test(content)) {
+    violations.push({
+      rule: 6,
+      file,
+      message: 'Hardcoded shell geometry (sidebarWidth/headerHeight) outside vertical/ — use PLATFORM_PROFILE or SHELL_DEFAULTS',
+    });
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 if (violations.length === 0) {
