@@ -194,12 +194,13 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
 
   const progressStyle: React.CSSProperties = {
     accentColor: strokeColor || STATUS_TOKEN_COLORS[status!],
-    // Override the DaisyUI track background with a DS token so tenants
-    // can control the unfilled portion of the progress bar.
-    '--progress-bg': 'var(--ds-progress-track-bg, var(--ds-color-neutral-100, #f3f4f6))',
-    background: 'var(--ds-progress-track-bg, var(--ds-color-neutral-100, #f3f4f6))',
-    borderRadius: 'var(--ds-progress-radius, var(--ds-radius-full, 9999px))',
-    height: 'var(--ds-progress-height, 0.5rem)',
+    // Align with modern/theme.css bridge (lines 728-731) which reads
+    // --ds-progress-bg, --ds-progress-radius, --ds-progress-height.
+    // The inline style reinforces the same tokens for cases where the
+    // CSS bridge doesn't reach (e.g., missing [data-tenant] attribute).
+    background: 'var(--ds-progress-bg)',
+    borderRadius: 'var(--ds-progress-radius)',
+    height: 'var(--ds-progress-height)',
     ...style,
   } as React.CSSProperties;
 
