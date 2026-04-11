@@ -46,14 +46,14 @@ export interface ShellHeaderSlots {
 // ---------------------------------------------------------------------------
 
 export interface ShellGeometry {
-  /** Sidebar expanded width. @default 'var(--ds-shell-sidebar-width, 296px)' */
-  sidebarWidth?: number | string;
-  /** Sidebar collapsed width. @default 'var(--ds-shell-sidebar-collapsed-width, 96px)' */
-  sidebarCollapsedWidth?: number | string;
-  /** Header height. @default 'var(--ds-shell-header-height, 64px)' */
-  headerHeight?: number | string;
-  /** Logo area height inside sidebar. @default 104 */
-  sidebarHeaderHeight?: number | string;
+  /** Sidebar expanded width in px. @default 296 */
+  sidebarWidth?: number;
+  /** Sidebar collapsed width in px. @default 96 */
+  sidebarCollapsedWidth?: number;
+  /** Header height in px. @default 64 */
+  headerHeight?: number;
+  /** Logo area height inside sidebar in px. @default 104 */
+  sidebarHeaderHeight?: number;
   /** Collapse transition. @default '220ms cubic-bezier(0.16, 1, 0.3, 1)' */
   collapseTransition?: string;
 }

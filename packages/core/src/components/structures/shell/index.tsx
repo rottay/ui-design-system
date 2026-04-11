@@ -4,10 +4,10 @@
  * @fileoverview AppShell — DS-owned application shell structure.
  *
  * Provides sidebar + header + content layout with:
- * - Controlled/uncontrolled collapse
+ * - Controlled/uncontrolled collapse (desktop only)
+ * - Separate mobile drawer state (never inherits desktop collapsed)
  * - DS token-driven geometry and styling
  * - Slot-based composition (app provides content, DS owns chrome)
- * - Mobile overlay sidebar with backdrop
  *
  * @example
  * ```tsx
@@ -23,7 +23,7 @@
  */
 
 import React, { useState, useCallback, useEffect, createContext, useContext } from 'react';
-import type { AppShellProps, ShellGeometry } from './types';
+import type { AppShellProps } from './types';
 import { SHELL_DEFAULTS } from './types';
 
 // Re-export types for barrel consumers
@@ -55,17 +55,6 @@ export function useShellContext(): ShellContextValue | null {
 }
 
 // ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function toPixels(value: number | string | undefined, fallback: number): number {
-  if (value === undefined) return fallback;
-  if (typeof value === 'number') return value;
-  const parsed = parseInt(value, 10);
-  return isNaN(parsed) ? fallback : parsed;
-}
-
-// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
@@ -82,7 +71,7 @@ export function AppShell({
   className = '',
   style,
 }: AppShellProps) {
-  // -- Collapse state (controlled/uncontrolled) -----------------------------
+  // -- Desktop collapse state (controlled/uncontrolled) ---------------------
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
   const collapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
 
@@ -98,29 +87,32 @@ export function AppShell({
 
   const toggleCollapse = useCallback(() => setCollapsed(!collapsed), [collapsed, setCollapsed]);
 
-  // -- Mobile overlay -------------------------------------------------------
+  // -- Mobile drawer state (independent of desktop collapsed) ---------------
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mq = window.matchMedia('(max-width: 768px)');
-    const handler = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile(e.matches);
+    const handler = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsMobile(e.matches);
+      if (e.matches) setMobileOpen(false); // close drawer on resize to mobile
+    };
     handler(mq);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  // Close mobile sidebar on route changes (children change)
+  // Close mobile drawer on route changes (children change)
   useEffect(() => {
     if (isMobile) setMobileOpen(false);
   }, [children, isMobile]);
 
-  // -- Geometry -------------------------------------------------------------
-  const sidebarWidth = toPixels(geometry?.sidebarWidth, SHELL_DEFAULTS.sidebarWidth);
-  const sidebarCollapsedWidth = toPixels(geometry?.sidebarCollapsedWidth, SHELL_DEFAULTS.sidebarCollapsedWidth);
-  const headerHeight = toPixels(geometry?.headerHeight, SHELL_DEFAULTS.headerHeight);
-  const sidebarHeaderHeight = toPixels(geometry?.sidebarHeaderHeight, SHELL_DEFAULTS.sidebarHeaderHeight);
+  // -- Geometry (numbers only, no string/CSS var parsing) -------------------
+  const sidebarWidth = geometry?.sidebarWidth ?? SHELL_DEFAULTS.sidebarWidth;
+  const sidebarCollapsedWidth = geometry?.sidebarCollapsedWidth ?? SHELL_DEFAULTS.sidebarCollapsedWidth;
+  const headerHeight = geometry?.headerHeight ?? SHELL_DEFAULTS.headerHeight;
+  const sidebarHeaderHeight = geometry?.sidebarHeaderHeight ?? SHELL_DEFAULTS.sidebarHeaderHeight;
   const transition = geometry?.collapseTransition ?? SHELL_DEFAULTS.collapseTransition;
 
   const activeSidebarWidth = sidebar ? (collapsed ? sidebarCollapsedWidth : sidebarWidth) : 0;
@@ -134,6 +126,56 @@ export function AppShell({
     toggleCollapse,
   };
 
+  // -- Shared sidebar content renderer --------------------------------------
+  const renderSidebarContent = (isDrawer: boolean) => (
+    <>
+      {sidebar?.logo && (
+        <div
+          style={{
+            height: sidebarHeaderHeight,
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: (!isDrawer && collapsed) ? 'center' : 'flex-start',
+            padding: (!isDrawer && collapsed) ? '0' : '0 var(--ds-spacing-5, 18px)',
+            borderBottom: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
+            overflow: 'hidden',
+          }}
+        >
+          {sidebar.logo}
+        </div>
+      )}
+      {sidebar?.nav && (
+        <div
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            padding: (!isDrawer && collapsed)
+              ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
+              : 'var(--ds-spacing-3, 10px) var(--ds-spacing-3, 10px) var(--ds-spacing-3, 12px)',
+          }}
+        >
+          {sidebar.nav}
+        </div>
+      )}
+      {sidebar?.footer && (
+        <div
+          style={{
+            flexShrink: 0,
+            padding: (!isDrawer && collapsed)
+              ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
+              : 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 10px) var(--ds-spacing-3, 14px)',
+            borderTop: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
+            background: 'var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))',
+          }}
+        >
+          {sidebar.footer}
+        </div>
+      )}
+    </>
+  );
+
   // -- Render ---------------------------------------------------------------
   return (
     <ShellContext.Provider value={contextValue}>
@@ -146,7 +188,7 @@ export function AppShell({
           ...style,
         }}
       >
-        {/* ---- Sidebar (desktop) ---- */}
+        {/* ---- Desktop sidebar ---- */}
         {sidebar && !isMobile && (
           <aside
             style={{
@@ -164,64 +206,16 @@ export function AppShell({
               borderRight: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
             }}
           >
-            {/* Logo area */}
-            {sidebar.logo && (
-              <div
-                style={{
-                  height: sidebarHeaderHeight,
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: collapsed ? 'center' : 'flex-start',
-                  padding: collapsed ? '0' : '0 var(--ds-spacing-5, 18px)',
-                  borderBottom: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-                  overflow: 'hidden',
-                }}
-              >
-                {sidebar.logo}
-              </div>
-            )}
-
-            {/* Navigation (scrollable) */}
-            {sidebar.nav && (
-              <div
-                style={{
-                  flex: 1,
-                  overflowY: 'auto',
-                  overflowX: 'hidden',
-                  padding: collapsed
-                    ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
-                    : 'var(--ds-spacing-3, 10px) var(--ds-spacing-3, 10px) var(--ds-spacing-3, 12px)',
-                }}
-              >
-                {sidebar.nav}
-              </div>
-            )}
-
-            {/* User footer */}
-            {sidebar.footer && (
-              <div
-                style={{
-                  flexShrink: 0,
-                  padding: collapsed
-                    ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
-                    : 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 10px) var(--ds-spacing-3, 14px)',
-                  borderTop: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-                  background: 'var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))',
-                }}
-              >
-                {sidebar.footer}
-              </div>
-            )}
+            {renderSidebarContent(false)}
           </aside>
         )}
 
-        {/* ---- Mobile sidebar overlay ---- */}
+        {/* ---- Mobile drawer (always expanded, independent of collapsed) ---- */}
         {sidebar && isMobile && mobileOpen && (
           <>
-            {/* Backdrop */}
             <div
               onClick={() => setMobileOpen(false)}
+              role="presentation"
               style={{
                 position: 'fixed',
                 inset: 0,
@@ -229,14 +223,13 @@ export function AppShell({
                 background: 'var(--ds-overlay-backdrop, rgba(0, 0, 0, 0.5))',
               }}
             />
-            {/* Off-canvas sidebar */}
             <aside
               style={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 bottom: 0,
-                width: sidebarWidth,
+                width: sidebarWidth, // always full width, never collapsed
                 zIndex: 200,
                 display: 'flex',
                 flexDirection: 'column',
@@ -246,37 +239,7 @@ export function AppShell({
                 boxShadow: 'var(--ds-elevation-3)',
               }}
             >
-              {sidebar.logo && (
-                <div
-                  style={{
-                    height: sidebarHeaderHeight,
-                    flexShrink: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0 var(--ds-spacing-5, 18px)',
-                    borderBottom: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-                  }}
-                >
-                  {sidebar.logo}
-                </div>
-              )}
-              {sidebar.nav && (
-                <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: 'var(--ds-spacing-3, 10px)' }}>
-                  {sidebar.nav}
-                </div>
-              )}
-              {sidebar.footer && (
-                <div
-                  style={{
-                    flexShrink: 0,
-                    padding: 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 10px) var(--ds-spacing-3, 14px)',
-                    borderTop: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-                    background: 'var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))',
-                  }}
-                >
-                  {sidebar.footer}
-                </div>
-              )}
+              {renderSidebarContent(true)}
             </aside>
           </>
         )}
@@ -314,6 +277,7 @@ export function AppShell({
               {/* Mobile hamburger */}
               {isMobile && sidebar && (
                 <button
+                  type="button"
                   onClick={() => setMobileOpen(true)}
                   aria-label="Open navigation"
                   style={{
