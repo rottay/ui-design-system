@@ -94,17 +94,24 @@ brandTheme / tokenOverrides
         -> Modern primitive markup
 ```
 
-## The Largest Runtime Gap
+## TenantAppearance Runtime Status (Updated M6-F7)
 
-`TenantAppearance` is not part of the implemented merge chain yet.
+`TenantAppearance` is now part of the implemented merge chain.
 
-Today:
+- `DesignSystemProvider` resolves `config.appearance` via `compilers/appearance/`
+- `ThemeProvider` injects appearance CSS vars inline (after branding/tokenOverrides)
+- `useTokens()` reads `appearance.general.density` as a JS factor on spacing
+- `backgroundMode` feeds theme resolution (wins over default `'base'`, loses to explicit `light`/`dark`/`auto`)
+- Provider-level behavioral tests prove end-to-end flow
 
-- `brandTheme` is the canonical premium source
-- `branding`, `personality`, and `tokenOverrides` remain the backward-compatible override path
-- `appearance.general` and `appearance.advanced` are contract-level declarations only
+Live General fields: `palette.*`, `backgroundMode`, `typography.fontFamilyBase/Heading`,
+`shape.buttonStyle`, `density`, `surfaces.elevation`, `navigation.sidebarTone`.
 
-Repo-wide audit did not find runtime consumers of `config.appearance`.
+Live Advanced fields: `chrome.sidebar`, `chrome.layout`,
+`chrome.controls.buttonPrimary.{bg,text}`, `tokenOverrides`.
+
+Fields removed from contract (no consumer): `typography.scale`, `shape.radiusScale`,
+`motion.level`, `media.*`, `data.chartColorFamily`, `advanced.shell/table/motion/charts/darkMode`.
 
 ## Why This Matters For The Modern Audit
 

@@ -172,6 +172,25 @@ for (const file of runtimeFiles) {
 }
 
 // ============================================================================
+// Rule 4: Stale "not yet wired" comments in contracts
+// ============================================================================
+
+const contractFiles = walkFiles(join(SRC_ROOT, 'contracts'), /\.ts$/);
+for (const file of contractFiles) {
+  const content = readSafe(file);
+  const lines = content.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    if (/not yet wired|not yet implemented|declaration[- ]only/i.test(lines[i])) {
+      violations.push({
+        rule: 'stale-contract-comment',
+        path: `${relPath(file)}:${i + 1}`,
+        message: `Stale comment found: "${lines[i].trim()}". Update to reflect current implementation status.`,
+      });
+    }
+  }
+}
+
+// ============================================================================
 // Report
 // ============================================================================
 

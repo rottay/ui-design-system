@@ -88,17 +88,17 @@ export interface TenantTokenOverrides {
 // loaded from the remote storage API and static file loader without custom
 // transformations.
 //
-// Visual merge chain:
-//   Current (implemented):
-//     DS base -> vertical baseline -> BrandTheme -> tenant overrides -> artifacts
-//   Target (TenantAppearance declared but not yet wired):
-//     DS base -> vertical baseline -> VerticalTheme -> Tenant Appearance General
-//     -> Tenant Appearance Advanced -> runtime safety normalization -> artifacts
+// Visual merge chain (implemented):
+//   DS base -> vertical baseline -> BrandTheme -> branding/tokenOverrides
+//   -> Appearance General -> Appearance Advanced -> runtime
+//
+// TenantAppearance is wired: DesignSystemProvider resolves config.appearance
+// via compilers/appearance, ThemeProvider injects vars inline, useTokens()
+// reads density from appearance.general.
 //
 // The canonical premium source is `brandTheme` (or `brandThemeId` referencing
 // a registered BrandTheme). Legacy fields `branding`, `personality`, and
-// `tokenOverrides` remain for backward compatibility and will be consolidated
-// in Wave C of the system-layers refactor.
+// `tokenOverrides` remain for backward compatibility.
 export interface TenantConfig {
   slug: string;
   name: string;

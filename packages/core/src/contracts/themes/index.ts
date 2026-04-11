@@ -292,16 +292,14 @@ export interface TenantAppearance {
 // ── Brand Compiler Contract ─────────────────────────────
 // Runtime theming and static generation must share one compiler.
 //
-// Current merge chain (implemented):
-//   DS base -> vertical baseline -> BrandTheme -> tenant overrides -> artifacts
+// Implemented merge chain:
+//   DS base -> vertical baseline -> BrandTheme -> branding/tokenOverrides
+//   -> Appearance General -> Appearance Advanced -> runtime
 //
-// Target merge chain (TenantAppearance declared but not yet wired):
-//   DS base -> vertical baseline -> VerticalTheme -> Tenant Appearance General
-//   -> Tenant Appearance Advanced -> runtime safety normalization -> artifacts
-//
-// The compiler currently operates on BrandTheme. When TenantAppearance is
-// wired into the runtime (future wave), the compiler will need to resolve
-// General and Advanced tiers into the same compiled output.
+// The brand-theme compiler operates on BrandTheme. The appearance compiler
+// (compilers/appearance/) resolves General and Advanced tiers into CSS
+// custom property overrides injected by ThemeProvider. useTokens() reads
+// density from appearance.general.
 
 export interface BrandCompilerInput {
   /** The brand theme to compile */

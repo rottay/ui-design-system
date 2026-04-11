@@ -176,20 +176,22 @@ Prove customization with tests, not docs.
   - one overlay primitive
 - Tests fail when a declared token/prop stops affecting rendered output.
 
-## Recommended Order
+## Wave Status
 
-1. `M1`
-2. `M2`
-3. `M3`
-4. `M4`
-5. `M5`
-6. `M6`
-7. `M7`
+| Wave | Status | Commit |
+|------|--------|--------|
+| M1 | Done | Foundation tokenization (Box/Stack/Grid/Container/Divider) |
+| M2 | Done | Bridge reconnect (Descriptions/Collapse/Tree/Empty/QRCode) |
+| M3 | Done | Scalar contract parity (Badge/Typography/Kbd/Button/Toggle/Checkbox/Spinner) |
+| M4 | Done | Input internals (Slider/Upload/DatePicker/Transfer/AutoComplete) |
+| M5 | Done | Nav/feedback/overlay parity (Link/Breadcrumb/Stepper/Progress/Skeleton/AlertDialog) |
+| M6 | Done | TenantAppearance runtime wiring |
+| M7 | Done | Regression harness (25 tests) |
+| F1-F7 | Done | Codex audit fixes (merge chain, backgroundMode, contract narrowing, provider tests) |
+| M8 | Done | Inputs closure (Cascader/Mentions/TreeSelect/ColorPicker/TimePicker) |
+| M9 | Done | Daisy detox (remaining DaisyUI visual overrides) |
+| M10 | Done | Docs + guardrails |
 
-Reason:
+## Original Recommended Order
 
-- `M1` and `M2` fix structural blockers that otherwise keep breaking higher-level work.
-- `M3` and `M4` produce the fastest visible customization gains.
-- `M5` closes the remaining user-facing bypasses.
-- `M6` only makes sense once the Modern renderer can actually honor the richer model.
-- `M7` prevents the repo from drifting back.
+1-7 executed as planned. F1-F7 were Codex audit fixes. M8-M10 closed remaining gaps.
