@@ -110,6 +110,68 @@ if (existsSync(dashboardDir)) {
 }
 
 // ---------------------------------------------------------------------------
+// Rule 4: No new shell/page-chrome/workspace code in _shared
+// ---------------------------------------------------------------------------
+const sharedDir = join(srcDir, 'components', '_shared');
+if (existsSync(sharedDir)) {
+  const SHELL_PATTERNS = /\b(AppShell|AppLayout|ShellSidebar|ShellHeader|PageChrome|WorkspaceShell)\b/;
+  const sharedFiles = walk(sharedDir, isTsFile);
+  for (const file of sharedFiles) {
+    const rel = relative(srcDir, file);
+    // Skip known compat re-export files (they are thin shims)
+    const content = readFileSync(file, 'utf8');
+    const isCompatReExport = content.includes('@/vertical/') && content.split('\n').length < 20;
+    if (isCompatReExport) continue;
+    // Skip barrel re-export files
+    if (rel.endsWith('index.ts') && !content.includes('function ') && !content.includes('const ')) continue;
+    // Check if file defines new shell/workspace abstractions
+    if (SHELL_PATTERNS.test(content) && !rel.includes('layouts/app-layout')) {
+      violations.push({
+        rule: 4,
+        file,
+        message: 'New shell/page-chrome/workspace code in _shared — should be in vertical/ or DS',
+      });
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rule 5: Recipes should have at least one consumer outside vertical/recipes/
+// ---------------------------------------------------------------------------
+if (existsSync(join(srcDir, 'vertical', 'recipes'))) {
+  const recipeFiles = walk(join(srcDir, 'vertical', 'recipes'), isTsFile);
+  for (const recipeFile of recipeFiles) {
+    const recipeName = relative(srcDir, recipeFile);
+    if (recipeName.endsWith('index.ts')) continue;
+    const content = readFileSync(recipeFile, 'utf8');
+    // Extract exported const names
+    const exportMatches = content.matchAll(/export\s+const\s+(\w+)/g);
+    for (const match of exportMatches) {
+      const constName = match[1];
+      // Search for this name in files outside vertical/recipes/
+      let found = false;
+      for (const file of allTsFiles) {
+        const rel = relative(srcDir, file);
+        if (rel.startsWith('vertical/recipes')) continue;
+        if (rel.startsWith('vertical/index.ts')) continue; // barrel
+        const fileContent = readFileSync(file, 'utf8');
+        if (fileContent.includes(constName)) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        violations.push({
+          rule: 5,
+          file: recipeFile,
+          message: `Recipe "${constName}" has no consumer outside vertical/recipes/`,
+        });
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 if (violations.length === 0) {
