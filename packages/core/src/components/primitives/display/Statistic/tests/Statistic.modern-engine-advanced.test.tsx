@@ -16,7 +16,9 @@ describe('Statistic modern advanced engine coverage', () => {
   it('covers loading, formatter, invalid values, prefixes, suffixes, and fallback value colors', () => {
     const { rerender, container } = render(<Statistic title="Revenue" loading />);
 
-    expect(container.querySelector('.animate-pulse')).toBeTruthy();
+    expect(container.firstElementChild).toHaveStyle({
+      animationDuration: 'var(--ds-skeleton-animation-duration, 2s)',
+    });
 
     rerender(
       <Statistic
@@ -32,6 +34,8 @@ describe('Statistic modern advanced engine coverage', () => {
     expect(screen.getByText('not-a-number')).toBeInTheDocument();
     expect(screen.getByText('$')).toBeInTheDocument();
     expect(screen.getByText('USD')).toBeInTheDocument();
+    expect(container.querySelector('.stat-title')).toHaveTextContent('Revenue');
+    expect(container.querySelector('.stat-value')).toHaveTextContent('$not-a-numberUSD');
 
     rerender(
       <Statistic
@@ -44,6 +48,8 @@ describe('Statistic modern advanced engine coverage', () => {
     );
 
     expect(screen.getByText('≈42.378')).toBeInTheDocument();
+    expect(container.querySelector('.stat-title')).toHaveTextContent('Orders');
+    expect(container.querySelector('.stat-value')).toHaveTextContent('≈42.378');
   });
 
   it('covers countdown updates, completion, numeric targets, and reset-on-rerender branches', async () => {
@@ -67,6 +73,8 @@ describe('Statistic modern advanced engine coverage', () => {
 
     expect(screen.getByText('Launch')).toBeInTheDocument();
     expect(screen.getByText(/T-/)).toBeInTheDocument();
+    expect(document.querySelector('.stat-title')).toHaveTextContent('Launch');
+    expect(document.querySelector('.stat-value')).toHaveTextContent(/T-/);
 
     await act(async () => {
       vi.advanceTimersByTime(2100);

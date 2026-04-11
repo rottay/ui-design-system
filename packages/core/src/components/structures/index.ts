@@ -12,6 +12,7 @@
  *                   panels, form sections
  * - `dashboard/`  — dashboard insight variants, stats headers, metric cards
  * - `feedback/`   — loading overlays
+ * - `shell/`      — application shell (sidebar + header + content)
  *
  * The tier is editorial structure for the source tree, not part of the
  * published API surface. Every identifier below is re-exported by the
@@ -25,3 +26,11 @@ export * from './workspace';
 export * from './record';
 export * from './dashboard';
 export * from './feedback';
+export { AppShell, useShellContext, SHELL_DEFAULTS } from './shell';
+export type {
+  AppShellProps,
+  ShellSidebarSlots,
+  ShellHeaderSlots,
+  ShellGeometry,
+  ShellContextValue,
+} from './shell';

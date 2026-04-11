@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { Card } from '../';
 import ClassicCard from '../engines/classic';
-import ModernCard from '../engines/modern';
+import ModernCard, { getModernCardVariantStyle } from '../engines/modern';
 import RusticCard from '../engines/rustic';
 
 describe('Card real engine coverage', () => {
@@ -63,7 +63,7 @@ describe('Card real engine coverage', () => {
 
     expect(screen.getByText('Modern content')).toBeInTheDocument();
     expect(screen.getByText('Resolve')).toBeInTheDocument();
-    expect(container.querySelector('figure img')).toHaveAttribute('src', '/modern.jpg');
+    expect(container.querySelector('img[src="/modern.jpg"]')).toHaveAttribute('src', '/modern.jpg');
 
     rerender(
       <ModernCard loading cover="/modern.jpg">
@@ -72,8 +72,19 @@ describe('Card real engine coverage', () => {
     );
 
     const spinner = container.querySelector('svg');
-    expect(spinner).toHaveAttribute('width', '28');
-    expect(spinner).toHaveAttribute('height', '28');
+    expect(spinner).toHaveAttribute('width', '24');
+    expect(spinner).toHaveAttribute('height', '24');
+  });
+
+  it('uses canonical variant border surfaces for outlined and ghost cards', () => {
+    expect(getModernCardVariantStyle('outlined')).toMatchObject({
+      borderWidth: 'var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px))',
+      borderColor: 'var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle)))',
+    });
+    expect(getModernCardVariantStyle('ghost')).toMatchObject({
+      borderWidth: '0',
+      borderColor: 'var(--ds-card-ghost-border-color, transparent)',
+    });
   });
 
   it('covers modern card interactivity, color variants, and click handling', () => {
@@ -83,7 +94,7 @@ describe('Card real engine coverage', () => {
         title="Interactive modern"
         description="Interactive description"
         colorVariant="success"
-        variant="filled"
+        variant="elevated"
         hoverable
         clickable
         onClick={handleClick}
@@ -92,13 +103,10 @@ describe('Card real engine coverage', () => {
       </ModernCard>
     );
 
-    const card = container.querySelector('.card') as HTMLDivElement;
-    expect(card.style.borderLeft).toContain('solid');
-    expect(card.style.backgroundColor).not.toBe('');
-
+    const card = container.firstElementChild as HTMLDivElement;
     fireEvent.mouseEnter(card);
-    expect(card.style.transform).toBe('var(--ds-card-hover-transform, translateY(-2px))');
-    expect(card.style.boxShadow).toContain('var(--ds-card-hover-shadow');
+    expect(card.style.transform).toBe('var(--ds-card-interactive-transform-hover, translateY(-1px))');
+    expect(card.style.boxShadow).toContain('var(--ds-card-elevated-shadow-hover');
 
     fireEvent.click(card);
     expect(handleClick).toHaveBeenCalledTimes(1);

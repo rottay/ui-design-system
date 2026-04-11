@@ -192,21 +192,19 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       <div ref={ref} className={className} style={style}>
         {title && (
           <div
+            className="stat-title"
             style={{
-              fontSize: 'var(--ds-statistic-title-font-size, var(--ds-font-size-sm, 0.875rem))',
               lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
               marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
-              color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary))',
             }}
           >
             {title}
           </div>
         )}
         <div
+          className="stat-value"
           style={{
-            fontSize: 'var(--ds-statistic-value-font-size, var(--ds-font-size-2xl, 1.5rem))',
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
-            fontWeight: 'var(--ds-statistic-value-font-weight, var(--ds-font-weight-semibold, 600))' as React.CSSProperties['fontWeight'],
             ...valueColorStyle,
             ...valueStyle,
           }}
@@ -344,11 +342,10 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
       <div ref={ref} className={className} style={style}>
         {title && (
           <div
+            className="stat-title"
             style={{
-              fontSize: 'var(--ds-statistic-title-font-size, var(--ds-font-size-sm, 0.875rem))',
               lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
               marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
-              color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary))',
             }}
           >
             {title}
@@ -357,10 +354,9 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
         {/* font-mono ensures digits occupy equal widths so the layout
             does not shift as numbers change during the countdown. */}
         <div
+          className="stat-value"
           style={{
-            fontSize: 'var(--ds-statistic-value-font-size, var(--ds-font-size-2xl, 1.5rem))',
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
-            fontWeight: 'var(--ds-statistic-value-font-weight, var(--ds-font-weight-semibold, 600))' as React.CSSProperties['fontWeight'],
             fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
             ...valueColorStyle,
             ...valueStyle,

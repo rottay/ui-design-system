@@ -97,7 +97,9 @@ const CardSpinner: React.FC = () => (
 
 interface VariantStyle {
   backgroundColor: string;
-  border: string;
+  borderWidth: string;
+  borderStyle: 'solid';
+  borderColor: string;
   boxShadow: string;
 }
 
@@ -110,25 +112,37 @@ interface VariantHoverStyle {
 const VARIANT_STYLES: Record<string, VariantStyle> = {
   elevated: {
     backgroundColor: 'var(--ds-card-elevated-bg, var(--ds-surface-card))',
-    border: 'var(--ds-card-elevated-border-width, 1px) solid var(--ds-card-elevated-border-color, transparent)',
+    borderWidth: 'var(--ds-card-elevated-border-width, 0)',
+    borderStyle: 'solid',
+    borderColor: 'transparent',
     boxShadow: 'var(--ds-card-elevated-shadow, var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03)))',
   },
   outlined: {
     backgroundColor: 'var(--ds-card-bordered-bg, var(--ds-surface-card))',
-    border: 'var(--ds-card-border-width, 1px) solid var(--ds-card-border-color, var(--ds-color-border-subtle))',
+    borderWidth: 'var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px))',
+    borderStyle: 'solid',
+    borderColor: 'var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle)))',
     boxShadow: 'var(--ds-card-bordered-shadow, none)',
   },
   filled: {
     backgroundColor: 'var(--ds-card-flat-bg, var(--ds-surface-panel))',
-    border: 'var(--ds-card-flat-border-width, 1px) solid var(--ds-card-flat-border-color, transparent)',
+    borderWidth: 'var(--ds-card-flat-border-width, 0)',
+    borderStyle: 'solid',
+    borderColor: 'transparent',
     boxShadow: 'var(--ds-card-flat-shadow, none)',
   },
   ghost: {
     backgroundColor: 'var(--ds-card-ghost-bg, transparent)',
-    border: 'var(--ds-card-ghost-border-width, 1px) solid var(--ds-card-ghost-border-color, transparent)',
+    borderWidth: '0',
+    borderStyle: 'solid',
+    borderColor: 'var(--ds-card-ghost-border-color, transparent)',
     boxShadow: 'var(--ds-card-ghost-shadow, none)',
   },
 };
+
+export function getModernCardVariantStyle(variant: string): VariantStyle {
+  return VARIANT_STYLES[variant] || VARIANT_STYLES.elevated;
+}
 
 function getHoverStyle(variant: string): VariantHoverStyle {
   switch (variant) {
@@ -218,7 +232,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   );
 
   const isInteractive = hoverable || clickable;
-  const variantStyle = VARIANT_STYLES[variant] || VARIANT_STYLES.elevated;
+  const variantStyle = getModernCardVariantStyle(variant);
   const hoverStyle = isHovered && isInteractive ? getHoverStyle(variant) : {};
 
   // Get color variant styles
@@ -227,16 +241,16 @@ export default function ModernCard(props: CardProps): React.ReactElement {
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
   const radiusValue = RADIUS_MAP[radius] || 'var(--ds-radius-lg, 12px)';
+  const borderColor = hoverStyle.borderColor || variantStyle.borderColor;
 
   const cardStyle: React.CSSProperties = {
     position: 'relative',
     borderRadius: radiusValue,
     backgroundColor: variantStyle.backgroundColor,
-    border: variantStyle.border,
+    border: `${variantStyle.borderWidth} ${variantStyle.borderStyle} ${borderColor}`,
     boxShadow: isFocused && onClick
       ? `${hoverStyle.boxShadow || variantStyle.boxShadow}, 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color)`
       : hoverStyle.boxShadow || variantStyle.boxShadow,
-    borderColor: hoverStyle.borderColor || undefined,
     transform: hoverStyle.transform || 'translateY(0)',
     transition: TRANSITION,
     cursor: clickable || onClick ? 'pointer' : undefined,
