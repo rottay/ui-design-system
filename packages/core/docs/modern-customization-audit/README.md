@@ -6,9 +6,9 @@ This folder answers one question: if we keep adding more premium styling knobs, 
 
 ## Executive Summary
 
-1. The implemented premium source of truth today is `brandTheme`, not `appearance.general` / `appearance.advanced`.
-2. Modern already has strong `--ds-*` coverage in several shells, especially core inputs and some display primitives.
-3. Modern still has major bypasses in the foundation layer (`Box`, `Stack`, `Grid`, `Container`, `Divider`), so tenant styling does not fully reach the primitives everything else composes.
+1. `brandTheme` is the richest premium source for bundled verticals. `appearance.general` is the primary DB contract for runtime tenants. Both are wired into runtime.
+2. Modern has strong `--ds-*` coverage across foundation, inputs, display, and navigation primitives after M1-M9 + A4-A6 waves.
+3. Foundation layer tokenization is complete (M1): Box/Stack/Grid/Container/Divider all resolve through CSS custom properties.
 4. `modern/theme.css` contains bridge selectors that several Modern primitives never emit, leaving part of the theme layer effectively dead.
 5. Inputs are the healthiest category overall, but many still ignore adjacent token maps, hardcode geometry/motion, or delegate key states to DaisyUI/native widgets.
 6. Navigation, feedback, and overlay primitives rarely read `personality` or chrome in a first-class way. They mostly consume raw CSS vars or library defaults.
@@ -30,13 +30,7 @@ This folder answers one question: if we keep adding more premium styling knobs, 
 
 ## High-Priority Conclusions
 
-- `TenantAppearance` is declared and partially wired via `BrandTheme` runtime resolution; the legacy `appearance.general` / `appearance.advanced` paths remain unwired.
-- The foundation layer is the biggest styling blocker because fixed Tailwind maps bypass tenant customization before higher-level primitives even render.
-- Several Modern primitives look tokenized at first glance, but only their shell is tokenized; scalar size, density, popup motion, row styling, or interaction geometry still live in local maps.
-- A future "100% customizable Modern" track should start with:
-  1. foundation primitives
-  2. dead bridge reconnection
-  3. input contract parity
-  4. navigation / feedback / overlay parity
-  5. `appearance.general` / `appearance.advanced` runtime wiring
-  6. regression guardrails proving that a token override changes real rendered output
+- `TenantAppearance` is wired into runtime: DSP resolves `config.appearance`, ThemeProvider injects vars, useTokens reads density. Static generator also supports appearance (A3).
+- Foundation tokenization was completed in M1: Box/Stack/Grid/Container/Divider now use `var(--ds-spacing-*)`, `var(--ds-radius-*)`, `var(--ds-elevation-*)`.
+- Most high-value Modern primitives are now token-governed (M1-M9, A4-A6). Remaining gaps are in lower-priority primitives.
+- Completed tracks: M1-M10 (Modern customization), F1-F7 (Codex fixes), A0-A9 (10/10 program). See `04-wave-plan.md` for status.

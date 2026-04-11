@@ -96,9 +96,9 @@ export interface TenantTokenOverrides {
 // via compilers/appearance, ThemeProvider injects vars inline, useTokens()
 // reads density from appearance.general.
 //
-// The canonical premium source is `brandTheme` (or `brandThemeId` referencing
-// a registered BrandTheme). Legacy fields `branding`, `personality`, and
-// `tokenOverrides` remain for backward compatibility.
+// The canonical premium source is `brandTheme` (embedded in TenantConfig).
+// Legacy fields `branding`, `personality`, and `tokenOverrides` remain
+// for backward compatibility.
 export interface TenantConfig {
   slug: string;
   name: string;

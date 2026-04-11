@@ -17,15 +17,15 @@ DS base
 
 ### Evidence
 
-- `TenantConfig` declares the current implemented chain as:
-  `DS base -> vertical baseline -> BrandTheme -> tenant overrides -> artifacts`
-  in `src/contracts/tenants/index.ts:91-101`.
-- The same file also says the target `TenantAppearance` model is "declared but not yet wired"
-  in `src/contracts/tenants/index.ts:94-100`.
-- `TenantAppearanceGeneral` / `TenantAppearanceAdvanced` exist as contracts in
-  `src/contracts/themes/index.ts:220-281`.
-- That same contract file explicitly says the compiler still operates on `BrandTheme`
-  and that `TenantAppearance` is future work in `src/contracts/themes/index.ts:287-296`.
+- `TenantConfig` declares the implemented merge chain as:
+  `DS base -> vertical baseline -> BrandTheme -> branding/tokenOverrides -> Appearance General -> Appearance Advanced -> runtime`
+  in `src/contracts/tenants/index.ts:91-97`.
+- `TenantAppearance` is wired: DesignSystemProvider resolves `config.appearance`,
+  ThemeProvider injects vars, useTokens reads density from `appearance.general`.
+- `TenantAppearanceGeneral` / `TenantAppearanceAdvanced` are defined in
+  `src/contracts/themes/index.ts` and compiled by `src/compilers/appearance/index.ts`.
+- The brand-theme compiler operates on `BrandTheme`; the appearance compiler
+  operates on `TenantAppearance`. Both feed into the same runtime pipeline.
 
 ## What `DesignSystemProvider` Actually Does
 
