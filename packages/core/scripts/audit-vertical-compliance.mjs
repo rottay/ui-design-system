@@ -68,23 +68,39 @@ function walk(dir, filter) {
 const isTsFile = (n) => /\.(ts|tsx)$/.test(n) && !n.endsWith('.d.ts');
 
 // ---------------------------------------------------------------------------
-// Rule 2: No shell imports from _shared outside _shared and vertical/
+// Rule 2: No shell imports from old locations outside _shared and vertical/
+// Covers all known shell paths across apps:
+//   - @/components/_shared/layouts/app-layout (platform)
+//   - @/components/_shared/layout (evnto)
+//   - @/components/layout (bithire)
 // ---------------------------------------------------------------------------
-const sharedImportRe =
-  /from\s+['"]@\/components\/_shared\/layout(?:s)?\/app-layout['"]/;
+const shellImportPatterns = [
+  /from\s+['"]@\/components\/_shared\/layout(?:s)?\/app-layout/,
+  /from\s+['"]@\/components\/_shared\/layout(?:\/|['"])/,
+  /from\s+['"]@\/components\/layout(?:\/|['"])/,
+];
 
 const allTsFiles = walk(srcDir, isTsFile);
 for (const file of allTsFiles) {
   const rel = relative(srcDir, file);
-  // Allow compat re-exports inside _shared/ and vertical/
-  if (rel.startsWith('components/_shared') || rel.startsWith('vertical')) continue;
+  // Allow compat re-exports inside _shared/, components/layout/, and vertical/
+  if (
+    rel.startsWith('components/_shared') ||
+    rel.startsWith('components/layout') ||
+    rel.startsWith('vertical')
+  ) continue;
+  // Allow providers/ (they may legitimately import shell for wrapping)
+  if (rel.startsWith('providers')) continue;
   const content = readFileSync(file, 'utf8');
-  if (sharedImportRe.test(content)) {
-    violations.push({
-      rule: 2,
-      file,
-      message: 'Imports shell from _shared instead of @/vertical/shell',
-    });
+  for (const re of shellImportPatterns) {
+    if (re.test(content)) {
+      violations.push({
+        rule: 2,
+        file,
+        message: 'Imports shell from old location instead of @/vertical/shell',
+      });
+      break;
+    }
   }
 }
 
