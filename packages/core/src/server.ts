@@ -12,6 +12,13 @@ export {
   resolveRequestTenantAsync,
   createEdgeConfigDomainLookup,
 } from './runtime/tenant/resolution/resolve-request-tenant';
+export {
+  isKnownTenant,
+  isBundledTenant,
+  getKnownTenantConfig,
+  getKnownTenantSlugs,
+  DEFAULT_TENANT_SLUG,
+} from './runtime/tenant/registry';
 export type {
   TenantResolutionOptions,
   EdgeConfigDomainLookupOptions,

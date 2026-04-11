@@ -85,7 +85,7 @@ export const rottayBrandTheme: BrandTheme = {
     lineStyle: 'smooth',
     showDots: false,
     useGradientFill: true,
-    tooltipStyle: 'glass',
+    tooltipStyle: 'minimal',
   },
 
   chrome: {
@@ -136,6 +136,8 @@ export const rottayBrandTheme: BrandTheme = {
       siderBorder: '#18181C',
     },
     shell: {
+      // Grid overlay removed from structures in R1-P2/P3 (decorative noise).
+      // Values retained for backward compat but no longer consumed by any structure.
       gridSize: '28px',
       gridLine: 'rgba(255, 255, 255, 0.03)',
       gridOpacity: 0.9,

@@ -17,7 +17,7 @@
  * Visually distinct from `CockpitHeader` (detail-page style: 22px title,
  * plain background, simple actions) and `WorkbenchHeader` (briefing style:
  * exception count, saved view selector). Use this structures family when you want a
- * 36px hero title, a subtle grid background, and a packed right rail.
+ * 36px hero title, a flat card background, and a packed right rail.
  *
  * The family stays domain-agnostic: it knows nothing about tenants,
  * users, or any specific entity. All copy comes from props.
@@ -77,16 +77,16 @@ export function CollectionHeader({
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        minHeight: 22,
-        padding: '0 9px',
+        minHeight: 'var(--ds-spacing-6, 22px)',
+        padding: '0 var(--ds-spacing-2, 9px)',
         borderRadius: 999,
-        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-        background: 'color-mix(in srgb, var(--ds-color-bg-primary) 56%, transparent)',
-        fontSize: 9,
+        border: '1px solid var(--ds-color-border-subtle)',
+        background: 'var(--ds-surface-panel)',
+        fontSize: 'var(--ds-font-size-xs, 9px)',
         fontWeight: 700,
         textTransform: 'uppercase' as const,
         letterSpacing: '0.13em',
-        color: 'color-mix(in srgb, var(--ds-color-text-muted) 90%, white 10%)',
+        color: 'var(--ds-color-text-muted)',
         lineHeight: 1,
       }}
     >
@@ -99,52 +99,25 @@ export function CollectionHeader({
       style={{
         position: 'relative',
         overflow: 'hidden',
-        padding: '18px 18px 14px',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%))',
-        borderBottom: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
+        padding: 'var(--ds-spacing-5, 18px) var(--ds-spacing-5, 18px) var(--ds-spacing-3, 14px)',
+        background: 'var(--ds-surface-card)',
+        borderBottom: '1px solid var(--ds-color-border-subtle)',
       }}
     >
-      <Box
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          backgroundImage: `
-            linear-gradient(color-mix(in srgb, var(--ds-color-primary) 5%, transparent) 1px, transparent 1px),
-            linear-gradient(90deg, color-mix(in srgb, var(--ds-color-primary) 5%, transparent) 1px, transparent 1px)
-          `,
-          backgroundSize: '34px 34px',
-          opacity: 0.34,
-        }}
-      />
-
-      <Box
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          background:
-            'linear-gradient(180deg, color-mix(in srgb, white 2%, transparent), transparent 46%, color-mix(in srgb, black 4%, transparent))',
-        }}
-      />
-
       <Flex
         align="start"
         justify="between"
         gap={18}
         wrap="wrap"
-        style={{ position: 'relative', zIndex: 1 }}
+        style={{ position: 'relative' }}
       >
         <Box style={{ minWidth: 0, flex: '1 1 560px', maxWidth: 820 }}>
           <Box
             as="h2"
             style={{
               fontFamily: 'var(--ds-font-family-heading)',
-              fontSize: 36,
-              fontWeight: 780,
+              fontSize: 'var(--ds-font-size-4xl, 36px)',
+              fontWeight: 'var(--ds-font-weight-bold, 780)' as any,
               letterSpacing: '-0.05em',
               color: 'var(--ds-color-text-primary)',
               margin: 0,
@@ -157,9 +130,9 @@ export function CollectionHeader({
           </Box>
           <Text
             style={{
-              fontSize: 12,
-              color: 'color-mix(in srgb, var(--ds-color-text-secondary) 86%, white 14%)',
-              marginTop: 7,
+              fontSize: 'var(--ds-font-size-sm, 12px)',
+              color: 'var(--ds-color-text-secondary)',
+              marginTop: 'var(--ds-spacing-2, 7px)',
               lineHeight: 1.5,
               maxWidth: 560,
               textWrap: 'pretty',
@@ -167,17 +140,6 @@ export function CollectionHeader({
           >
             {subtitle}
           </Text>
-          <Box
-            aria-hidden
-            style={{
-              marginTop: 10,
-              width: 88,
-              height: 2,
-              borderRadius: 999,
-              background:
-                'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-primary) 42%, white 8%), color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 68%, transparent)',
-            }}
-          />
         </Box>
 
         {quickActions && quickActions.length > 0 && (
@@ -192,7 +154,7 @@ export function CollectionHeader({
             {eyebrowChip && (
               <Box
                 style={{
-                  marginBottom: 10,
+                  marginBottom: 'var(--ds-spacing-3, 10px)',
                   display: 'flex',
                   justifyContent: 'flex-end',
                 }}
@@ -204,13 +166,11 @@ export function CollectionHeader({
               style={{
                 display: 'inline-flex',
                 justifyContent: 'flex-end',
-                padding: 2,
-                borderRadius: 15,
-                border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-                background:
-                  'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 90%, white 10%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))',
-                boxShadow:
-                  'inset 0 1px 0 color-mix(in srgb, white 6%, transparent), 0 10px 28px color-mix(in srgb, black 8%, transparent)',
+                padding: 'var(--ds-spacing-1, 2px)',
+                borderRadius: 'var(--ds-radius-md, 15px)',
+                border: '1px solid var(--ds-color-border-subtle)',
+                background: 'var(--ds-surface-panel)',
+                boxShadow: 'var(--ds-elevation-1)',
               }}
             >
               <Flex align="center" gap={8} wrap="wrap" justify="end">
@@ -227,11 +187,11 @@ export function CollectionHeader({
                     }
                     onClick={action.onClick}
                     style={{
-                      minHeight: 32,
-                      paddingInline: action.variant === 'primary' ? 14 : 11,
+                      minHeight: 'var(--ds-spacing-8, 32px)',
+                      paddingInline: action.variant === 'primary' ? 'var(--ds-spacing-3, 14px)' : 'var(--ds-spacing-3, 11px)',
                       borderRadius: '999px',
                       boxShadow: action.variant === 'primary' ? 'var(--ds-elevation-1)' : 'none',
-                      fontSize: 11,
+                      fontSize: 'var(--ds-font-size-xs, 11px)',
                     }}
                   >
                     {action.icon && (
@@ -239,7 +199,7 @@ export function CollectionHeader({
                         as="span"
                         style={{
                           display: 'inline-flex',
-                          marginRight: 6,
+                          marginRight: 'var(--ds-spacing-1, 6px)',
                         }}
                       >
                         {action.icon}
@@ -254,9 +214,9 @@ export function CollectionHeader({
             {(compactMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
               <Box
                 style={{
-                  marginTop: 12,
+                  marginTop: 'var(--ds-spacing-3, 12px)',
                   display: 'grid',
-                  gap: 6,
+                  gap: 'var(--ds-spacing-1, 6px)',
                   justifyItems: 'end',
                 }}
               >
@@ -277,8 +237,8 @@ export function CollectionHeader({
                                 color: 'var(--ds-color-success)',
                               }
                             : {
-                                border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-                                background: 'color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent)',
+                                border: '1px solid var(--ds-color-border-subtle)',
+                                background: 'var(--ds-surface-panel)',
                                 color: 'var(--ds-color-text-secondary)',
                               };
 
@@ -289,10 +249,10 @@ export function CollectionHeader({
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: 4,
-                            minHeight: 22,
-                            padding: '0 8px',
+                            minHeight: 'var(--ds-spacing-6, 22px)',
+                            padding: '0 var(--ds-spacing-2, 8px)',
                             borderRadius: 999,
-                            fontSize: 10,
+                            fontSize: 'var(--ds-font-size-xs, 10px)',
                             fontWeight: 700,
                             letterSpacing: '0.02em',
                             ...toneStyles,
@@ -311,14 +271,14 @@ export function CollectionHeader({
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: 6,
-                        minHeight: 20,
-                        padding: '0 8px',
+                        gap: 'var(--ds-spacing-1, 6px)',
+                        minHeight: 'var(--ds-spacing-5, 20px)',
+                        padding: '0 var(--ds-spacing-2, 8px)',
                         borderRadius: 999,
-                        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-                        background: 'color-mix(in srgb, var(--ds-color-bg-primary) 48%, transparent)',
+                        border: '1px solid var(--ds-color-border-subtle)',
+                        background: 'var(--ds-surface-panel)',
                         color: 'var(--ds-color-text-muted)',
-                        fontSize: 8,
+                        fontSize: 'var(--ds-font-size-xs, 8px)',
                         fontWeight: 700,
                         letterSpacing: '0.08em',
                         textTransform: 'uppercase' as const,
@@ -333,13 +293,13 @@ export function CollectionHeader({
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
-                          minHeight: 20,
-                          padding: '0 8px',
+                          minHeight: 'var(--ds-spacing-5, 20px)',
+                          padding: '0 var(--ds-spacing-2, 8px)',
                           borderRadius: 999,
-                          border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-                          background: 'color-mix(in srgb, var(--ds-color-bg-primary) 48%, transparent)',
+                          border: '1px solid var(--ds-color-border-subtle)',
+                          background: 'var(--ds-surface-panel)',
                           color: 'var(--ds-color-text-muted)',
-                          fontSize: 9,
+                          fontSize: 'var(--ds-font-size-xs, 9px)',
                           fontWeight: 700,
                           letterSpacing: '0.03em',
                           lineHeight: 1,

@@ -131,9 +131,8 @@ function CommandSuggestionChip({
         minHeight: 30,
         padding: '0 11px',
         borderRadius: 999,
-        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 88%, white 12%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))',
+        border: '1px solid var(--ds-color-border-subtle)',
+        background: 'var(--ds-surface-panel)',
         color: 'var(--ds-color-text-secondary)',
         cursor: 'pointer',
         fontSize: 12,
@@ -351,36 +350,11 @@ export function SearchCommandBar({
         overflow: 'visible',
         zIndex: 30,
         padding: '10px 16px 12px',
-        borderBottom: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%))',
+        borderBottom: '1px solid var(--ds-color-border-subtle)',
+        background: 'var(--ds-surface-card)',
       }}
     >
-      <Box
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          overflow: 'hidden',
-          pointerEvents: 'none',
-          backgroundImage: `
-            linear-gradient(color-mix(in srgb, var(--ds-color-primary) 4%, transparent) 1px, transparent 1px),
-            linear-gradient(90deg, color-mix(in srgb, var(--ds-color-primary) 4%, transparent) 1px, transparent 1px)
-          `,
-          backgroundSize: '34px 34px',
-          opacity: 0.1,
-        }}
-      />
-      <Box
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          background:
-            'linear-gradient(90deg, transparent, color-mix(in srgb, white 3%, transparent) 52%, transparent 82%)',
-        }}
-      />
+      {/* TODO: R1-deferred: extract keyframe animations to CSS layer */}
       <style>
         {`
           @keyframes workspaceCommandPulse {
@@ -412,18 +386,12 @@ export function SearchCommandBar({
                 borderRadius: 15,
                 border:
                   voiceStatus === 'error'
-                    ? '1px solid color-mix(in srgb, var(--ds-color-error) 28%, transparent)'
+                    ? '1px solid var(--ds-color-error)'
                     : isVoiceActive
-                      ? '1px solid color-mix(in srgb, var(--ds-color-primary) 28%, transparent)'
-                      : '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-                background:
-                  'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, white 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))',
-                boxShadow:
-                  voiceStatus === 'error'
-                    ? '0 12px 34px color-mix(in srgb, var(--ds-color-error) 10%, transparent)'
-                    : isVoiceActive
-                      ? '0 14px 38px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)'
-                      : '0 12px 30px color-mix(in srgb, black 8%, transparent)',
+                      ? '1px solid var(--ds-color-primary)'
+                      : '1px solid var(--ds-color-border-subtle)',
+                background: 'var(--ds-surface-panel)',
+                boxShadow: 'var(--ds-elevation-1)',
               }}
             >
               <Box
@@ -451,15 +419,15 @@ export function SearchCommandBar({
                   paddingRight: inputRightPadding,
                   fontSize: 14,
                   letterSpacing: '-0.01em',
-                  background: 'color-mix(in srgb, var(--ds-color-bg-primary) 70%, var(--ds-surface-card))',
+                  background: 'var(--ds-surface-panel)',
                   border:
                     voiceStatus === 'error'
-                      ? '1px solid color-mix(in srgb, var(--ds-color-error) 24%, transparent)'
+                      ? '1px solid var(--ds-color-error)'
                       : isVoiceActive
-                        ? '1px solid color-mix(in srgb, var(--ds-color-primary) 28%, transparent)'
-                        : '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 86%, transparent)',
+                        ? '1px solid var(--ds-color-primary)'
+                        : '1px solid var(--ds-color-border-subtle)',
                   borderRadius: 'var(--ds-radius-xl, 16px)',
-                  boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 5%, transparent)',
+                  boxShadow: 'none',
                 }}
               />
 
@@ -491,8 +459,8 @@ export function SearchCommandBar({
                         minWidth: 28,
                         padding: 0,
                         borderRadius: 999,
-                        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent)',
-                        background: 'color-mix(in srgb, var(--ds-surface-card) 82%, var(--ds-color-bg-primary) 18%)',
+                        border: '1px solid var(--ds-color-border-subtle)',
+                        background: 'var(--ds-surface-panel)',
                         color: 'var(--ds-color-text-secondary)',
                         cursor: 'pointer',
                         flexShrink: 0,
@@ -512,15 +480,15 @@ export function SearchCommandBar({
                         padding: '0 8px',
                         borderRadius: 999,
                         border: voiceStatus === 'error'
-                          ? '1px solid color-mix(in srgb, var(--ds-color-error) 24%, transparent)'
+                          ? '1px solid var(--ds-color-error)'
                           : needsVoicePermission
-                            ? '1px solid color-mix(in srgb, var(--ds-color-warning) 24%, transparent)'
-                            : '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent)',
+                            ? '1px solid var(--ds-color-warning)'
+                            : '1px solid var(--ds-color-border-subtle)',
                         background: voiceStatus === 'error'
                           ? 'color-mix(in srgb, var(--ds-color-error) 8%, transparent)'
                           : needsVoicePermission
                             ? 'color-mix(in srgb, var(--ds-color-warning) 8%, transparent)'
-                            : 'color-mix(in srgb, var(--ds-surface-card) 76%, var(--ds-color-bg-primary) 24%)',
+                            : 'var(--ds-surface-panel)',
                         color: voiceStatus === 'error'
                           ? 'var(--ds-color-error)'
                           : needsVoicePermission
@@ -576,15 +544,15 @@ export function SearchCommandBar({
                       padding: 0,
                       borderRadius: 999,
                       border: voiceStatus === 'error'
-                        ? '1px solid color-mix(in srgb, var(--ds-color-error) 36%, transparent)'
+                        ? '1px solid var(--ds-color-error)'
                         : isVoiceActive
-                          ? '1px solid color-mix(in srgb, var(--ds-color-primary) 44%, transparent)'
-                          : '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent)',
+                          ? '1px solid var(--ds-color-primary)'
+                          : '1px solid var(--ds-color-border-subtle)',
                       background: voiceStatus === 'error'
                         ? 'color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card))'
                         : isVoiceActive
                           ? 'color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card))'
-                          : 'color-mix(in srgb, var(--ds-surface-card) 85%, var(--ds-color-bg-primary) 15%)',
+                          : 'var(--ds-surface-panel)',
                       color: voiceStatus === 'error'
                         ? 'var(--ds-color-error)'
                         : isVoiceActive
@@ -611,11 +579,10 @@ export function SearchCommandBar({
                     padding: 18,
                     borderRadius: 18,
                     border: isVoicePermissionBlocked
-                      ? '1px solid color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary))'
-                      : '1px solid color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary))',
-                    background:
-                      'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, white 2%), color-mix(in srgb, var(--ds-color-bg-primary) 20%, var(--ds-surface-card)))',
-                    boxShadow: '0 28px 60px color-mix(in srgb, black 22%, transparent)',
+                      ? '1px solid var(--ds-color-error)'
+                      : '1px solid var(--ds-color-warning)',
+                    background: 'var(--ds-surface-card)',
+                    boxShadow: 'var(--ds-elevation-2)',
                   }}
                 >
                   <Flex align="start" justify="between" gap={10}>
@@ -651,7 +618,7 @@ export function SearchCommandBar({
                         width: 28,
                         height: 28,
                         borderRadius: 999,
-                        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent)',
+                        border: '1px solid var(--ds-color-border-subtle)',
                         background: 'transparent',
                         color: 'var(--ds-color-text-secondary)',
                         cursor: 'pointer',
@@ -727,7 +694,7 @@ export function SearchCommandBar({
                           minWidth: 96,
                           padding: '0 14px',
                           borderRadius: 999,
-                          border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent)',
+                          border: '1px solid var(--ds-color-border-subtle)',
                           background: 'transparent',
                           color: 'var(--ds-color-text-secondary)',
                           cursor: 'pointer',
@@ -758,7 +725,7 @@ export function SearchCommandBar({
                           minWidth: 156,
                           padding: '0 16px',
                           borderRadius: 999,
-                          border: '1px solid color-mix(in srgb, var(--ds-color-primary) 26%, transparent)',
+                          border: '1px solid var(--ds-color-primary)',
                           background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
                           color: 'var(--ds-color-primary)',
                           cursor: 'pointer',
@@ -821,7 +788,7 @@ export function SearchCommandBar({
                     justifyContent: 'flex-end',
                     minHeight: 44,
                     padding: '6px 0 6px 18px',
-                    borderLeft: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent)',
+                    borderLeft: '1px solid var(--ds-color-border-subtle)',
                   }}
                 >
                   <Text
@@ -855,7 +822,7 @@ export function SearchCommandBar({
                     alignItems: 'center',
                     minHeight: 44,
                     padding: '6px 0 6px 18px',
-                    borderLeft: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent)',
+                    borderLeft: '1px solid var(--ds-color-border-subtle)',
                   }}
                 >
                   {actionsSlot}

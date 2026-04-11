@@ -18,12 +18,15 @@
  * - Loading skeleton with animate-pulse
  *
  * **Token Mappings:**
- * - `var(--ds-color-text-primary)` - Default value color
- * - `var(--ds-color-success)` - Positive value color
- * - `var(--ds-color-error)` - Negative value color
- * - `var(--ds-color-warning)` - Warning value color
- * - `var(--ds-font-size-2xl)` / `var(--ds-font-weight-semibold)` - Value styling
- * - `var(--ds-font-size-sm)` / `var(--ds-color-text-secondary)` - Title styling
+ * - `var(--ds-statistic-value-color)` - Default value color (falls back to --ds-color-text-primary)
+ * - `var(--ds-statistic-positive-color)` - Positive value color (falls back to --ds-color-success)
+ * - `var(--ds-statistic-negative-color)` - Negative value color (falls back to --ds-color-error)
+ * - `var(--ds-statistic-warning-color)` - Warning value color (falls back to --ds-color-warning)
+ * - `var(--ds-statistic-value-font-size)` / `var(--ds-statistic-value-font-weight)` - Value styling
+ * - `var(--ds-statistic-title-font-size)` / `var(--ds-statistic-title-color)` - Title styling
+ * - `var(--ds-statistic-title-margin-bottom)` - Title bottom margin
+ * - `var(--ds-statistic-prefix-color)` / `var(--ds-statistic-suffix-color)` - Prefix/suffix color
+ * - `var(--ds-statistic-loading-bg)` - Loading skeleton background
  * - `var(--ds-spacing-*)` - All spacing/margins
  * - `var(--ds-radius-sm)` - Loading skeleton radius
  * - `var(--ds-font-family-mono)` - Countdown monospace digits
@@ -97,10 +100,10 @@ function formatNumber(
  * Maps valueType to DS token color values for inline styles.
  */
 const VALUE_TYPE_STYLE_MAP: Record<string, React.CSSProperties> = {
-  default: { color: 'var(--ds-color-text-primary)' },
-  positive: { color: 'var(--ds-color-success)' },
-  negative: { color: 'var(--ds-color-error)' },
-  warning: { color: 'var(--ds-color-warning)' },
+  default: { color: 'var(--ds-statistic-value-color, var(--ds-color-text-primary))' },
+  positive: { color: 'var(--ds-statistic-positive-color, var(--ds-color-success))' },
+  negative: { color: 'var(--ds-statistic-negative-color, var(--ds-color-error))' },
+  warning: { color: 'var(--ds-statistic-warning-color, var(--ds-color-warning))' },
 };
 
 /**
@@ -170,7 +173,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
               width: 'var(--ds-spacing-16, 4rem)',
               borderRadius: 'var(--ds-radius-sm, 4px)',
               marginBottom: 'var(--ds-spacing-2, 0.5rem)',
-              background: 'var(--ds-surface-panel)',
+              background: 'var(--ds-statistic-loading-bg, var(--ds-surface-panel))',
             }}
           />
           <div
@@ -178,7 +181,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
               height: 'var(--ds-spacing-8, 2rem)',
               width: 'var(--ds-spacing-24, 6rem)',
               borderRadius: 'var(--ds-radius-sm, 4px)',
-              background: 'var(--ds-surface-panel)',
+              background: 'var(--ds-statistic-loading-bg, var(--ds-surface-panel))',
             }}
           />
         </div>
@@ -190,10 +193,10 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
         {title && (
           <div
             style={{
-              fontSize: 'var(--ds-font-size-sm, 0.875rem)',
+              fontSize: 'var(--ds-statistic-title-font-size, var(--ds-font-size-sm, 0.875rem))',
               lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
-              marginBottom: 'var(--ds-spacing-1, 0.25rem)',
-              color: 'var(--ds-color-text-secondary)',
+              marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
+              color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary))',
             }}
           >
             {title}
@@ -201,15 +204,15 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
         )}
         <div
           style={{
-            fontSize: 'var(--ds-font-size-2xl, 1.5rem)',
+            fontSize: 'var(--ds-statistic-value-font-size, var(--ds-font-size-2xl, 1.5rem))',
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
-            fontWeight: 'var(--ds-font-weight-semibold, 600)' as React.CSSProperties['fontWeight'],
+            fontWeight: 'var(--ds-statistic-value-font-weight, var(--ds-font-weight-semibold, 600))' as React.CSSProperties['fontWeight'],
             ...valueColorStyle,
             ...valueStyle,
           }}
         >
           {prefix && (
-            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
               {prefix}
             </span>
           )}
@@ -225,7 +228,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
             <span>{displayValue}</span>
           )}
           {suffix && (
-            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
               {suffix}
             </span>
           )}
@@ -342,10 +345,10 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
         {title && (
           <div
             style={{
-              fontSize: 'var(--ds-font-size-sm, 0.875rem)',
+              fontSize: 'var(--ds-statistic-title-font-size, var(--ds-font-size-sm, 0.875rem))',
               lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
-              marginBottom: 'var(--ds-spacing-1, 0.25rem)',
-              color: 'var(--ds-color-text-secondary)',
+              marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
+              color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary))',
             }}
           >
             {title}
@@ -355,22 +358,22 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
             does not shift as numbers change during the countdown. */}
         <div
           style={{
-            fontSize: 'var(--ds-font-size-2xl, 1.5rem)',
+            fontSize: 'var(--ds-statistic-value-font-size, var(--ds-font-size-2xl, 1.5rem))',
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
-            fontWeight: 'var(--ds-font-weight-semibold, 600)' as React.CSSProperties['fontWeight'],
+            fontWeight: 'var(--ds-statistic-value-font-weight, var(--ds-font-weight-semibold, 600))' as React.CSSProperties['fontWeight'],
             fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
             ...valueColorStyle,
             ...valueStyle,
           }}
         >
           {prefix && (
-            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
               {prefix}
             </span>
           )}
           <span>{formatTime(timeLeft, format)}</span>
           {suffix && (
-            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
               {suffix}
             </span>
           )}

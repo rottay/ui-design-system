@@ -1,0 +1,40 @@
+/**
+ * Statistic Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Statistic component.
+ * Includes title, value, semantic color variants, prefix/suffix, and loading state.
+ */
+
+:root {
+  /* ========================================================================
+     TITLE - Label above the statistic value
+     ======================================================================== */
+  --ds-statistic-title-font-size: var(--ds-font-size-sm, 0.875rem);
+  --ds-statistic-title-color: var(--ds-color-text-secondary);
+  --ds-statistic-title-margin-bottom: var(--ds-spacing-1, 0.25rem);
+
+  /* ========================================================================
+     VALUE - Main statistic number
+     ======================================================================== */
+  --ds-statistic-value-font-size: var(--ds-font-size-2xl, 1.5rem);
+  --ds-statistic-value-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-statistic-value-color: var(--ds-color-text-primary);
+
+  /* ========================================================================
+     SEMANTIC COLORS - Value type color variants
+     ======================================================================== */
+  --ds-statistic-positive-color: var(--ds-color-success);
+  --ds-statistic-negative-color: var(--ds-color-error);
+  --ds-statistic-warning-color: var(--ds-color-warning);
+
+  /* ========================================================================
+     PREFIX & SUFFIX - Decorators around the value
+     ======================================================================== */
+  --ds-statistic-prefix-color: inherit;
+  --ds-statistic-suffix-color: inherit;
+
+  /* ========================================================================
+     LOADING STATE - Skeleton placeholder appearance
+     ======================================================================== */
+  --ds-statistic-loading-bg: var(--ds-surface-panel);
+}

@@ -264,15 +264,15 @@ export const STATISTIC_DEFAULTS = {
  * These CSS variables should be defined in your theme stylesheet:
  * ```css
  * :root {
- *   --statistic-title-color: var(--ds-color-text-secondary);
- *   --statistic-title-font-size: 14px;
- *   --statistic-value-color: var(--ds-color-text-primary);
- *   --statistic-value-font-size: 24px;
- *   --statistic-value-font-weight: 600;
- *   --statistic-positive-color: var(--ds-color-success);
- *   --statistic-negative-color: var(--ds-color-error);
- *   --statistic-warning-color: var(--ds-color-warning);
- *   --statistic-loading-bg: var(--ds-color-bg-skeleton);
+ *   --ds-statistic-title-color: var(--ds-color-text-secondary);
+ *   --ds-statistic-title-font-size: 14px;
+ *   --ds-statistic-value-color: var(--ds-color-text-primary);
+ *   --ds-statistic-value-font-size: 24px;
+ *   --ds-statistic-value-font-weight: 600;
+ *   --ds-statistic-positive-color: var(--ds-color-success);
+ *   --ds-statistic-negative-color: var(--ds-color-error);
+ *   --ds-statistic-warning-color: var(--ds-color-warning);
+ *   --ds-statistic-loading-bg: var(--ds-color-bg-skeleton);
  * }
  * ```
  *
@@ -288,29 +288,38 @@ export const STATISTIC_DEFAULTS = {
  */
 export const CSS_VARS = {
   /** CSS variable for the title/label text color above the value. */
-  titleColor: '--statistic-title-color',
+  titleColor: '--ds-statistic-title-color',
 
   /** CSS variable for the title/label font size. */
-  titleFontSize: '--statistic-title-font-size',
+  titleFontSize: '--ds-statistic-title-font-size',
+
+  /** CSS variable for the title/label margin bottom. */
+  titleMarginBottom: '--ds-statistic-title-margin-bottom',
 
   /** CSS variable for the main statistic value text color. */
-  valueColor: '--statistic-value-color',
+  valueColor: '--ds-statistic-value-color',
 
   /** CSS variable for the main statistic value font size. */
-  valueFontSize: '--statistic-value-font-size',
+  valueFontSize: '--ds-statistic-value-font-size',
 
   /** CSS variable for the main statistic value font weight. */
-  valueFontWeight: '--statistic-value-font-weight',
+  valueFontWeight: '--ds-statistic-value-font-weight',
 
   /** CSS variable for positive/increase trend color (typically green). */
-  positiveColor: '--statistic-positive-color',
+  positiveColor: '--ds-statistic-positive-color',
 
   /** CSS variable for negative/decrease trend color (typically red). */
-  negativeColor: '--statistic-negative-color',
+  negativeColor: '--ds-statistic-negative-color',
 
   /** CSS variable for warning/caution trend color (typically yellow/orange). */
-  warningColor: '--statistic-warning-color',
+  warningColor: '--ds-statistic-warning-color',
+
+  /** CSS variable for the prefix decorator color. */
+  prefixColor: '--ds-statistic-prefix-color',
+
+  /** CSS variable for the suffix decorator color. */
+  suffixColor: '--ds-statistic-suffix-color',
 
   /** CSS variable for the skeleton loading placeholder background color. */
-  loadingBg: '--statistic-loading-bg',
+  loadingBg: '--ds-statistic-loading-bg',
 } as const;

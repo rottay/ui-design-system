@@ -109,24 +109,24 @@ interface VariantHoverStyle {
 
 const VARIANT_STYLES: Record<string, VariantStyle> = {
   elevated: {
-    backgroundColor: 'var(--ds-surface-card)',
-    border: '1px solid transparent',
-    boxShadow: 'var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03))',
+    backgroundColor: 'var(--ds-card-elevated-bg, var(--ds-surface-card))',
+    border: 'var(--ds-card-elevated-border-width, 1px) solid var(--ds-card-elevated-border-color, transparent)',
+    boxShadow: 'var(--ds-card-elevated-shadow, var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03)))',
   },
   outlined: {
-    backgroundColor: 'var(--ds-surface-card)',
-    border: '1px solid var(--ds-color-border-subtle)',
-    boxShadow: 'none',
+    backgroundColor: 'var(--ds-card-bordered-bg, var(--ds-surface-card))',
+    border: 'var(--ds-card-border-width, 1px) solid var(--ds-card-border-color, var(--ds-color-border-subtle))',
+    boxShadow: 'var(--ds-card-bordered-shadow, none)',
   },
   filled: {
-    backgroundColor: 'var(--ds-surface-panel)',
-    border: '1px solid transparent',
-    boxShadow: 'none',
+    backgroundColor: 'var(--ds-card-flat-bg, var(--ds-surface-panel))',
+    border: 'var(--ds-card-flat-border-width, 1px) solid var(--ds-card-flat-border-color, transparent)',
+    boxShadow: 'var(--ds-card-flat-shadow, none)',
   },
   ghost: {
-    backgroundColor: 'transparent',
-    border: '1px solid transparent',
-    boxShadow: 'none',
+    backgroundColor: 'var(--ds-card-ghost-bg, transparent)',
+    border: 'var(--ds-card-ghost-border-width, 1px) solid var(--ds-card-ghost-border-color, transparent)',
+    boxShadow: 'var(--ds-card-ghost-shadow, none)',
   },
 };
 
@@ -134,12 +134,12 @@ function getHoverStyle(variant: string): VariantHoverStyle {
   switch (variant) {
     case 'elevated':
       return {
-        boxShadow: 'var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03))',
-        transform: 'translateY(-1px)',
+        boxShadow: 'var(--ds-card-elevated-shadow-hover, var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03)))',
+        transform: 'var(--ds-card-interactive-transform-hover, translateY(-1px))',
       };
     case 'outlined':
       return {
-        borderColor: 'var(--ds-color-border-secondary)',
+        borderColor: 'var(--ds-card-border-color-hover, var(--ds-color-border-secondary))',
       };
     default:
       return {};
