@@ -13,4 +13,4 @@
 // Re-export from the canonical location. This barrel exists because early
 // consumers imported from `hooks/features` -- removing it would be a
 // breaking change. New code should import directly from `features/`.
-export { useFeatures, useHasFeature, useFeatureContext } from '../../runtime/features/useFeatures';
+export { useFeatures, useHasFeature, useFeatureContext } from '../../../runtime/features/useFeatures';

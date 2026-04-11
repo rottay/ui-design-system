@@ -82,21 +82,15 @@ export function useTenant() {
   return context;
 }
 
-// -- Tenant utilities (compat re-exports) --
-// These are NOT hooks. Their canonical home is `runtime/tenant/` which is
-// re-exported from the package root. These re-exports exist only for backward
-// compatibility with consumers that imported from `hooks/tenant`.
-
-/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenant`). */
-export { resolvePersonalityPreset } from './personality-presets';
-export type { PersonalityPreset } from './personality-presets';
-
-/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenant`). */
-export { createTenantConfig } from './create-tenant';
-export type { TenantCreationConfig } from './create-tenant';
-
-/** @deprecated Import from `@rottay/design-system` instead (canonical: `runtime/tenant`). */
-export { useCreateTenant } from './useCreateTenant';
+// -- Tenant utilities (compat re-exports, moved to hooks/compat/tenant/) --
+/** @deprecated Import from `@rottay/design-system` instead. */
+export { resolvePersonalityPreset } from '../compat/tenant/personality-presets';
+export type { PersonalityPreset } from '../compat/tenant/personality-presets';
+/** @deprecated Import from `@rottay/design-system` instead. */
+export { createTenantConfig } from '../compat/tenant/create-tenant';
+export type { TenantCreationConfig } from '../compat/tenant/create-tenant';
+/** @deprecated Import from `@rottay/design-system` instead. */
+export { useCreateTenant } from '../compat/tenant/useCreateTenant';
 
 /**
  * 2-step tenant branding hook: session-instant + async-full.

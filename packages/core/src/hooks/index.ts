@@ -18,12 +18,11 @@
  *    These are not generic utilities but they are consumer-facing hooks
  *    that belong in the public hook surface, not inside runtime/.
  *
- * 3. **Compatibility re-exports** (canonical source elsewhere):
- *    - `useTheme` / `useThemeContext`: canonical at `runtime/theming/`
- *    - `useFeatures` / `useHasFeature`: canonical at `runtime/features/`
- *    - `useProductProfile`: canonical at `runtime/product-profiles/`
- *    - `resolvePersonalityPreset` / `createTenantConfig`: canonical at
- *      `runtime/tenant/` (non-hook utilities, @deprecated here)
+ * 3. **Compatibility re-exports** (in `hooks/compat/`, canonical source elsewhere):
+ *    - `compat/theme/`: canonical at `runtime/theming/`
+ *    - `compat/features/`: canonical at `runtime/features/`
+ *    - `compat/product-profile/`: canonical at `runtime/product-profiles/`
+ *    - `compat/tenant/`: non-hook utilities, canonical at `runtime/tenant/`
  *
  * New code should import from the package root (`@rottay/design-system`).
  *

@@ -12,4 +12,4 @@
  */
 
 // Canonical source: runtime/product-profiles/ProductProfileProvider.tsx
-export { useProductProfileContext as useProductProfile } from '../../runtime/product-profiles';
+export { useProductProfileContext as useProductProfile } from '../../../runtime/product-profiles';
