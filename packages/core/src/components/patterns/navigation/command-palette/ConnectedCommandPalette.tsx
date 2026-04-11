@@ -25,8 +25,21 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { PatternCommandPalette } from './index';
+import { createEngineComponent } from '../../../../runtime/engines/factory';
+import type { CommandPaletteProps } from './CommandPalette.types';
 import { useCommandPaletteItems } from '../../../../hooks/commands/useCommandPaletteItems';
+
+// Import the engine factory directly instead of through the barrel (index.ts)
+// to avoid a circular dependency: index.ts re-exports ConnectedCommandPalette,
+// so importing PatternCommandPalette from index.ts would create a cycle.
+const PatternCommandPalette = createEngineComponent<CommandPaletteProps>(
+  'PatternCommandPalette',
+  {
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
+  }
+);
 
 export interface ConnectedCommandPaletteProps {
   /** Placeholder text for the search input. */

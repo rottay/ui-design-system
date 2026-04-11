@@ -172,10 +172,14 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             value={query}
             onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}
             onKeyDown={handleKeyDown}
+            role="combobox"
+            aria-expanded="true"
+            aria-controls="command-palette-listbox"
+            aria-activedescendant={activeIndex >= 0 ? `command-palette-option-${activeIndex}` : undefined}
           />
         </div>
         {/* Results */}
-        <div className="overflow-y-auto py-2" style={{ maxHeight }}>
+        <div className="overflow-y-auto py-2" style={{ maxHeight }} role="listbox" id="command-palette-listbox">
           {/* Show the "Recent" section only when there is no active query,
               giving users quick access to previously used commands. */}
           {!query && recentItems && recentItems.length > 0 && (
@@ -187,6 +191,10 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                 return (
                   <div
                     key={item.id}
+                    id={`command-palette-option-${idx}`}
+                    role="option"
+                    aria-selected={activeIndex === idx}
+                    aria-disabled={item.disabled || undefined}
                     onClick={() => handleSelect(item)}
                     className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                     style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}
@@ -223,6 +231,10 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                 return (
                   <div
                     key={item.id}
+                    id={`command-palette-option-${idx}`}
+                    role="option"
+                    aria-selected={activeIndex === idx}
+                    aria-disabled={item.disabled || undefined}
                     onClick={() => handleSelect(item)}
                     className={`flex items-center justify-between px-4 py-2 cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                     style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}

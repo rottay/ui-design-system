@@ -37,7 +37,7 @@ Decisions to freeze:
 - `appearance.general` is the primary DB customization contract
 - `appearance.advanced` is optional and bounded
 - `brandTheme` remains the richest premium source for first-party bundled verticals
-- `brandThemeId` must either be implemented end to end or removed/narrowed
+- `brandThemeId` removed from TenantConfig (A0 — no runtime consumer existed)
 
 Exit criteria:
 

@@ -159,7 +159,11 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     // Loading skeleton with Tailwind animate-pulse
     if (loading) {
       return (
-        <div ref={ref} className={`animate-pulse ${className}`} style={style}>
+        <div ref={ref} className={className} style={{
+          ...style,
+          animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          animationDuration: 'var(--ds-skeleton-animation-duration, 2s)',
+        }}>
           <div
             style={{
               height: 'var(--ds-spacing-4, 1rem)',
