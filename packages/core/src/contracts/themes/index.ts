@@ -274,7 +274,9 @@ export interface TenantAppearanceAdvanced {
   chrome?: {
     sidebar?: Partial<BrandSidebarChrome>;
     layout?: Partial<BrandLayoutChrome>;
-    controls?: Partial<BrandControlsChrome>;
+    /** Only buttonPrimary.bg and buttonPrimary.text are compiled today.
+     *  Full BrandControlsChrome support requires expanding the appearance compiler. */
+    controls?: Pick<Partial<BrandControlsChrome>, 'buttonPrimary'>;
   };
   /** Allowlisted raw token overrides. Keys must start with `--ds-`. */
   tokenOverrides?: Record<`--ds-${string}`, string | number>;

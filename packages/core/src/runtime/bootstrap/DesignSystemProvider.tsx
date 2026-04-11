@@ -430,11 +430,15 @@ export function DesignSystemProvider({
         : verticalSource;
 
   // Final precedence used by the runtime:
-  // force props -> tenant config -> appearance.backgroundMode -> vertical defaults -> DS fallback.
+  // force props -> explicit tenant theme (light/dark/auto) -> appearance.backgroundMode -> DS fallback.
   const engine = forceEngine ?? normalizedConfig.engine ?? resolvedVertical?.engine ?? 'classic';
-  // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'
+  // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
+  // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
   const appearanceBackgroundMode = normalizedConfig.appearance?.general?.palette?.backgroundMode;
-  const theme = forceTheme ?? normalizedConfig.theme ?? appearanceBackgroundMode ?? 'base';
+  const explicitTenantTheme = normalizedConfig.theme && normalizedConfig.theme !== 'base'
+    ? normalizedConfig.theme
+    : undefined;
+  const theme = forceTheme ?? explicitTenantTheme ?? appearanceBackgroundMode ?? normalizedConfig.theme ?? 'base';
   const locale = forcedLocale ?? normalizedConfig.locale ?? 'en';
   const fallbackLocale = forcedFallbackLocale ?? normalizedConfig.fallbackLocale ?? locale;
   const customTranslations = mergeLocaleTranslations(
