@@ -66,26 +66,20 @@ export function appearanceGeneralToVariables(
     // backgroundMode is consumed by ThemeProvider, not a CSS variable
   }
 
-  // Typography — font families are CSS vars, scale is handled in useTokens()
+  // Typography — font families are real CSS vars consumed by engines
   if (general.typography) {
     const t = general.typography;
     if (t.fontFamilyBase) vars['--ds-font-family-base'] = t.fontFamilyBase;
     if (t.fontFamilyHeading) vars['--ds-font-family-heading'] = t.fontFamilyHeading;
-    // typography.scale is consumed by useTokens() as a JS factor, not a CSS var.
   }
 
   // Shape — buttonStyle maps to a real CSS var consumed by engines
-  if (general.shape) {
-    const s = general.shape;
-    // radiusScale is consumed by useTokens() as a JS factor, not a CSS var.
-    if (s.buttonStyle) {
-      const r = BUTTON_STYLE_RADIUS[s.buttonStyle];
-      if (r) vars['--ds-radius-button'] = r;
-    }
+  if (general.shape?.buttonStyle) {
+    const r = BUTTON_STYLE_RADIUS[general.shape.buttonStyle];
+    if (r) vars['--ds-radius-button'] = r;
   }
 
-  // Density is consumed by useTokens() as a JS factor that multiplies the
-  // spacing array. It is NOT emitted as a CSS variable.
+  // Density is consumed by useTokens() as a JS factor, not a CSS variable.
 
   // Navigation — sidebarTone maps to real sidebar chrome variables
   if (general.navigation?.sidebarTone) {
@@ -124,13 +118,8 @@ export function appearanceGeneralToVariables(
     if (preset) Object.assign(vars, preset);
   }
 
-  // Media
-  if (general.media) {
-    const m = general.media;
-    if (m.logo) vars['--ds-tenant-logo'] = `url(${m.logo})`;
-    if (m.logoMark) vars['--ds-tenant-logo-mark'] = `url(${m.logoMark})`;
-    if (m.favicon) vars['--ds-tenant-favicon'] = `url(${m.favicon})`;
-  }
+  // media (logo/logoMark/favicon) removed from contract — no CSS reader exists.
+  // Re-add when sidebar/header components consume --ds-tenant-logo vars.
 
   return vars;
 }

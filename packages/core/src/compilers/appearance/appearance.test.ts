@@ -42,13 +42,6 @@ describe('appearanceGeneralToVariables', () => {
     expect(vars['--ds-density-scale']).toBeUndefined();
   });
 
-  it('typography.scale does NOT emit a CSS var (handled by useTokens JS factor)', () => {
-    const vars = appearanceGeneralToVariables({
-      typography: { scale: 'large' },
-    });
-    expect(vars['--ds-type-scale']).toBeUndefined();
-  });
-
   it('shape.buttonStyle pill produces --ds-radius-button 9999px', () => {
     const vars = appearanceGeneralToVariables({ shape: { buttonStyle: 'pill' } });
     expect(vars['--ds-radius-button']).toBe('9999px');
@@ -87,11 +80,6 @@ describe('appearanceGeneralToVariables', () => {
     const vars = appearanceGeneralToVariables({ navigation: { sidebarTone: 'inverse' } });
     expect(vars['--ds-sidebar-bg']).toBe('var(--ds-color-neutral-900)');
     expect(vars['--ds-sidebar-text']).toBe('var(--ds-color-neutral-100)');
-  });
-
-  it('media.logo produces a url() CSS value', () => {
-    const vars = appearanceGeneralToVariables({ media: { logo: 'https://example.com/logo.svg' } });
-    expect(vars['--ds-tenant-logo']).toBe('url(https://example.com/logo.svg)');
   });
 
   it('returns empty for unset/default values', () => {

@@ -222,23 +222,34 @@ export type VerticalTheme = BrandTheme;
 // Split into General (safe presets) and Advanced (fine-grained).
 // See docs/premium-styling-track/02-customization-model.md.
 
-/** Safe, high-signal customization for most tenant admins. */
+/**
+ * Safe, high-signal customization for most tenant admins.
+ *
+ * Every field in this interface has a real runtime consumer. Fields that
+ * were declared but never wired have been removed or narrowed:
+ * - typography.scale: removed (needs calc() adoption across all primitives)
+ * - shape.radiusScale: removed (same reason)
+ * - motion.level: removed (no consumer — re-add with personality integration)
+ * - media (logo/logoMark/favicon): removed (no CSS reader — re-add when
+ *   sidebar/header components consume --ds-tenant-logo vars)
+ * - data.chartColorFamily: removed (no chart palette system)
+ */
 export interface TenantAppearanceGeneral {
   palette?: {
     primary?: string;
     secondary?: string;
     accent?: string;
+    /** Feeds ThemeProvider theme resolution (not a CSS variable). */
     backgroundMode?: 'light' | 'dark' | 'auto';
   };
   typography?: {
     fontFamilyBase?: string;
     fontFamilyHeading?: string;
-    scale?: 'compact' | 'normal' | 'large';
   };
   shape?: {
-    radiusScale?: number;
     buttonStyle?: 'sharp' | 'soft' | 'pill';
   };
+  /** Multiplies the spacing array in useTokens(). Not a CSS variable. */
   density?: 'compact' | 'normal' | 'spacious';
   surfaces?: {
     elevation?: 'flat' | 'soft' | 'elevated';
@@ -246,30 +257,25 @@ export interface TenantAppearanceGeneral {
   navigation?: {
     sidebarTone?: 'subtle' | 'strong' | 'inverse';
   };
-  motion?: {
-    level?: 'minimal' | 'normal' | 'expressive';
-  };
-  media?: {
-    logo?: string;
-    logoMark?: string;
-    favicon?: string;
-  };
-  // data.chartColorFamily was removed — no chart color family system exists
-  // in the DS today. Re-add when a real chart palette consumer is implemented.
 }
 
-/** Expert-level, fine-grained customization for guarded use cases. */
+/**
+ * Expert-level, fine-grained customization for guarded use cases.
+ *
+ * Every field has a real compiler path. Fields that were declared but
+ * never compiled have been removed:
+ * - chrome.shell: removed (no compiler maps shell chrome from appearance)
+ * - chrome.table: removed (no compiler maps table chrome from appearance)
+ * - motion: removed (no compiler — re-add with personality system)
+ * - charts: removed (no chart palette system)
+ * - darkMode: removed (no dark-mode overlay compiler)
+ */
 export interface TenantAppearanceAdvanced {
   chrome?: {
     sidebar?: Partial<BrandSidebarChrome>;
     layout?: Partial<BrandLayoutChrome>;
-    shell?: Partial<BrandShellChrome>;
     controls?: Partial<BrandControlsChrome>;
-    table?: Partial<BrandTableChrome>;
   };
-  motion?: Record<string, unknown>;
-  charts?: Record<string, unknown>;
-  darkMode?: Record<string, unknown>;
   /** Allowlisted raw token overrides. Keys must start with `--ds-`. */
   tokenOverrides?: Record<`--ds-${string}`, string | number>;
 }
