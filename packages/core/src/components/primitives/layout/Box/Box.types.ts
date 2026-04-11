@@ -462,43 +462,47 @@ export const BOX_DEFAULTS: Partial<BoxProps> = {
 };
 
 /**
- * Spacing value mapping (matches design tokens)
+ * Spacing value mapping — resolves through DS CSS custom properties so
+ * tenant overrides (via brandTheme.surfaces or tokenOverrides) can adjust
+ * the entire spacing scale at once. The numeric --ds-spacing-N tokens are
+ * the canonical source; hardcoded rem fallbacks ensure rendering before
+ * CSS loads.
  */
 export const SPACING_MAP: Record<BoxSpacing, string> = {
   none: '0',
-  xs: '0.25rem',   // 4px
-  sm: '0.5rem',    // 8px
-  md: '1rem',      // 16px
-  lg: '1.5rem',    // 24px
-  xl: '2rem',      // 32px
-  '2xl': '2.5rem', // 40px
-  '3xl': '3rem',   // 48px
-  '4xl': '4rem',   // 64px
+  xs: 'var(--ds-spacing-1, 0.25rem)',     // 4px
+  sm: 'var(--ds-spacing-2, 0.5rem)',      // 8px
+  md: 'var(--ds-spacing-4, 1rem)',        // 16px
+  lg: 'var(--ds-spacing-6, 1.5rem)',      // 24px
+  xl: 'var(--ds-spacing-8, 2rem)',        // 32px
+  '2xl': 'var(--ds-spacing-10, 2.5rem)',  // 40px
+  '3xl': 'var(--ds-spacing-12, 3rem)',    // 48px
+  '4xl': 'var(--ds-spacing-16, 4rem)',    // 64px
 };
 
 /**
- * Border radius value mapping
+ * Border radius value mapping — resolves through DS CSS custom properties.
  */
 export const RADIUS_MAP: Record<BoxBorderRadius, string> = {
   none: '0',
-  xs: '0.125rem',   // 2px
-  sm: '0.25rem',    // 4px
-  md: '0.375rem',   // 6px
-  lg: '0.5rem',     // 8px
-  xl: '0.75rem',    // 12px
-  '2xl': '1rem',    // 16px
-  full: '9999px',
+  xs: 'var(--ds-radius-xs, 0.1875rem)',   // 3px
+  sm: 'var(--ds-radius-sm, 0.375rem)',    // 6px
+  md: 'var(--ds-radius-md, 0.5rem)',      // 8px
+  lg: 'var(--ds-radius-lg, 0.75rem)',     // 12px
+  xl: 'var(--ds-radius-xl, 1rem)',        // 16px
+  '2xl': 'var(--ds-radius-2xl, 1.25rem)', // 20px
+  full: 'var(--ds-radius-full, 9999px)',
 };
 
 /**
- * Shadow value mapping
+ * Shadow value mapping — resolves through DS CSS custom properties.
  */
 export const SHADOW_MAP: Record<BoxShadow, string> = {
   none: 'none',
-  xs: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-  sm: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
-  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
-  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
-  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+  xs: 'var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))',
+  sm: 'var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1))',
+  md: 'var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))',
+  lg: 'var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1))',
+  xl: 'var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))',
   '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
 };

@@ -11,7 +11,7 @@
 
 import React, { forwardRef, useId, type ElementType, type Ref } from 'react';
 import type { StackProps, StackSpacingPreset, StackAlign, StackJustify, StackDirection } from '../Stack.types';
-import { STACK_DEFAULTS } from '../Stack.types';
+import { STACK_DEFAULTS, SPACING_MAP } from '../Stack.types';
 import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
 import {
   scalarOrDefault,
@@ -19,19 +19,6 @@ import {
   renderStackChildren,
   buildStackStyles,
 } from '../../shared/responsive-helpers.js';
-
-/** Maps spacing presets to Tailwind gap utility classes. */
-const GAP_CLASS_MAP: Record<StackSpacingPreset, string> = {
-  none: 'gap-0',
-  xs: 'gap-1',
-  sm: 'gap-2',
-  md: 'gap-4',
-  lg: 'gap-6',
-  xl: 'gap-8',
-  '2xl': 'gap-10',
-  '3xl': 'gap-12',
-  '4xl': 'gap-16',
-};
 
 const ALIGN_CLASS_MAP: Record<StackAlign, string> = {
   start: 'items-start',
@@ -77,13 +64,8 @@ function buildTailwindClasses(props: StackProps): string[] {
     }
   }
 
-  // Spacing - only preset strings to Tailwind classes
-  const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
-  if (!isResponsiveValue(spacingValue)) {
-    if (typeof spacingValue === 'string' && spacingValue in GAP_CLASS_MAP) {
-      classes.push(GAP_CLASS_MAP[spacingValue as StackSpacingPreset]);
-    }
-  }
+  // Spacing — resolved via inline style in buildStackInlineStyles below.
+  // Gap is no longer a Tailwind class so DS tokens flow through.
 
   if (!isResponsiveValue(align)) {
     const scalarAlign = scalarOrDefault<StackAlign>(align, 'stretch');
@@ -126,11 +108,18 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
 
   const scalarDirection = scalarOrDefault<StackDirection>(direction, 'vertical');
 
-  // Determine whether inline styles or Tailwind classes should drive the gap
+  // Gap is always resolved via inline style using DS CSS custom properties.
+  // This ensures tenant token overrides (--ds-spacing-*) flow through.
   const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
-  const needsInlineGap = !isResponsiveValue(spacingValue) && typeof spacingValue === 'number';
-
-  const computedStyle = needsInlineGap ? buildStackStyles(props) : props.style;
+  const baseStyle = buildStackStyles(props);
+  if (!isResponsiveValue(spacingValue)) {
+    if (typeof spacingValue === 'string' && spacingValue in SPACING_MAP) {
+      baseStyle.gap = SPACING_MAP[spacingValue as StackSpacingPreset];
+    } else if (typeof spacingValue === 'number') {
+      baseStyle.gap = spacingValue;
+    }
+  }
+  const computedStyle = baseStyle;
   const tailwindClasses = buildTailwindClasses(props);
   const renderedChildren = renderStackChildren(children, divider, scalarDirection);
 
@@ -147,7 +136,7 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const classNames = [
     'rottay-stack',
     'rottay-stack--modern',
-    ...(needsInlineGap ? [] : tailwindClasses),
+    ...tailwindClasses,
     className,
   ].filter(Boolean).join(' ');
 

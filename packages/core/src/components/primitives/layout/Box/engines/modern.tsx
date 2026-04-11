@@ -18,8 +18,51 @@ import { scalarOrUndefined, collectBoxResponsiveEntries } from '../../shared/res
 
 // Inline style builder for properties that cannot be expressed as static
 // Tailwind classes (dimensions, colors, transforms, etc.).
+function resolveSpacing(value: BoxSpacing | undefined): string | undefined {
+  if (!value || value === 'none') return undefined;
+  return SPACING_MAP[value];
+}
+
 function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
+
+  // Spacing — resolved via DS CSS custom properties (tenant-overrideable)
+  const padding = scalarOrUndefined(props.padding) || scalarOrUndefined(props.p);
+  if (padding && padding !== 'none') style.padding = SPACING_MAP[padding];
+  const pxVal = scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
+  const pyVal = scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
+  if (pxVal && pxVal !== 'none') { style.paddingLeft = SPACING_MAP[pxVal]; style.paddingRight = SPACING_MAP[pxVal]; }
+  if (pyVal && pyVal !== 'none') { style.paddingTop = SPACING_MAP[pyVal]; style.paddingBottom = SPACING_MAP[pyVal]; }
+  const ptVal = scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
+  if (ptVal && ptVal !== 'none') style.paddingTop = SPACING_MAP[ptVal];
+  const prVal = scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
+  if (prVal && prVal !== 'none') style.paddingRight = SPACING_MAP[prVal];
+  const pbVal = scalarOrUndefined(props.paddingBottom) || scalarOrUndefined(props.pb);
+  if (pbVal && pbVal !== 'none') style.paddingBottom = SPACING_MAP[pbVal];
+  const plVal = scalarOrUndefined(props.paddingLeft) || scalarOrUndefined(props.pl);
+  if (plVal && plVal !== 'none') style.paddingLeft = SPACING_MAP[plVal];
+
+  const margin = scalarOrUndefined(props.margin) || scalarOrUndefined(props.m);
+  if (margin && margin !== 'none') style.margin = SPACING_MAP[margin];
+  const mxVal = scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
+  const myVal = scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
+  if (mxVal && mxVal !== 'none') { style.marginLeft = SPACING_MAP[mxVal]; style.marginRight = SPACING_MAP[mxVal]; }
+  if (myVal && myVal !== 'none') { style.marginTop = SPACING_MAP[myVal]; style.marginBottom = SPACING_MAP[myVal]; }
+  const mtVal = scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
+  if (mtVal && mtVal !== 'none') style.marginTop = SPACING_MAP[mtVal];
+  const mrVal = scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
+  if (mrVal && mrVal !== 'none') style.marginRight = SPACING_MAP[mrVal];
+  const mbVal = scalarOrUndefined(props.marginBottom) || scalarOrUndefined(props.mb);
+  if (mbVal && mbVal !== 'none') style.marginBottom = SPACING_MAP[mbVal];
+  const mlVal = scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
+  if (mlVal && mlVal !== 'none') style.marginLeft = SPACING_MAP[mlVal];
+
+  // Border radius — resolved via DS CSS custom properties
+  const radiusValue = props.borderRadius || props.rounded;
+  if (radiusValue && radiusValue !== 'none') style.borderRadius = RADIUS_MAP[radiusValue];
+
+  // Shadow — resolved via DS CSS custom properties
+  if (props.shadow && props.shadow !== 'none') style.boxShadow = SHADOW_MAP[props.shadow];
 
   // Dimensions - only inline when NOT responsive
   const widthValue = scalarOrUndefined(props.width) || scalarOrUndefined(props.w);
@@ -152,121 +195,17 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   return style;
 }
 
-/**
- * Maps spacing values to Tailwind classes
- */
-const SPACING_CLASS_MAP: Record<BoxSpacing, string> = {
-  none: '0',
-  xs: '1',    // 0.25rem
-  sm: '2',    // 0.5rem
-  md: '4',    // 1rem
-  lg: '6',    // 1.5rem
-  xl: '8',    // 2rem
-  '2xl': '10', // 2.5rem
-  '3xl': '12', // 3rem
-  '4xl': '16', // 4rem
-};
-
-/**
- * Maps border radius to Tailwind classes
- */
-const ROUNDED_CLASS_MAP: Record<BoxBorderRadius, string> = {
-  none: 'rounded-none',
-  xs: 'rounded-sm',
-  sm: 'rounded',
-  md: 'rounded-md',
-  lg: 'rounded-lg',
-  xl: 'rounded-xl',
-  '2xl': 'rounded-2xl',
-  full: 'rounded-full',
-};
-
-/**
- * Maps shadow values to Tailwind classes
- */
-const SHADOW_CLASS_MAP: Record<BoxShadow, string> = {
-  none: 'shadow-none',
-  xs: 'shadow-xs',
-  sm: 'shadow-sm',
-  md: 'shadow',
-  lg: 'shadow-lg',
-  xl: 'shadow-xl',
-  '2xl': 'shadow-2xl',
-};
+// Spacing, radius, and shadow are now resolved via inline styles using
+// DS CSS custom properties (SPACING_MAP, RADIUS_MAP, SHADOW_MAP from types).
+// This replaces the old Tailwind class maps so tenant overrides flow through.
 
 function buildTailwindClasses(props: BoxProps): string[] {
   const classes: string[] = [];
 
-  // Only use Tailwind classes for scalar (non-responsive) props
-  const padding = scalarOrUndefined(props.padding) || scalarOrUndefined(props.p);
-  if (padding && padding !== 'none') {
-    classes.push(`p-${SPACING_CLASS_MAP[padding]}`);
-  }
-  const pxVal = scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
-  if (pxVal && pxVal !== 'none') {
-    classes.push(`px-${SPACING_CLASS_MAP[pxVal]}`);
-  }
-  const pyVal = scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
-  if (pyVal && pyVal !== 'none') {
-    classes.push(`py-${SPACING_CLASS_MAP[pyVal]}`);
-  }
-  const ptVal = scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
-  if (ptVal && ptVal !== 'none') {
-    classes.push(`pt-${SPACING_CLASS_MAP[ptVal]}`);
-  }
-  const prVal = scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
-  if (prVal && prVal !== 'none') {
-    classes.push(`pr-${SPACING_CLASS_MAP[prVal]}`);
-  }
-  const pbVal = scalarOrUndefined(props.paddingBottom) || scalarOrUndefined(props.pb);
-  if (pbVal && pbVal !== 'none') {
-    classes.push(`pb-${SPACING_CLASS_MAP[pbVal]}`);
-  }
-  const plVal = scalarOrUndefined(props.paddingLeft) || scalarOrUndefined(props.pl);
-  if (plVal && plVal !== 'none') {
-    classes.push(`pl-${SPACING_CLASS_MAP[plVal]}`);
-  }
-
-  // Margin
-  const margin = scalarOrUndefined(props.margin) || scalarOrUndefined(props.m);
-  if (margin && margin !== 'none') {
-    classes.push(`m-${SPACING_CLASS_MAP[margin]}`);
-  }
-  const mxVal = scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
-  if (mxVal && mxVal !== 'none') {
-    classes.push(`mx-${SPACING_CLASS_MAP[mxVal]}`);
-  }
-  const myVal = scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
-  if (myVal && myVal !== 'none') {
-    classes.push(`my-${SPACING_CLASS_MAP[myVal]}`);
-  }
-  const mtVal = scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
-  if (mtVal && mtVal !== 'none') {
-    classes.push(`mt-${SPACING_CLASS_MAP[mtVal]}`);
-  }
-  const mrVal = scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
-  if (mrVal && mrVal !== 'none') {
-    classes.push(`mr-${SPACING_CLASS_MAP[mrVal]}`);
-  }
-  const mbVal = scalarOrUndefined(props.marginBottom) || scalarOrUndefined(props.mb);
-  if (mbVal && mbVal !== 'none') {
-    classes.push(`mb-${SPACING_CLASS_MAP[mbVal]}`);
-  }
-  const mlVal = scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
-  if (mlVal && mlVal !== 'none') {
-    classes.push(`ml-${SPACING_CLASS_MAP[mlVal]}`);
-  }
-
-  // Border radius
-  const radiusValue = props.borderRadius || props.rounded;
-  if (radiusValue && radiusValue !== 'none') {
-    classes.push(ROUNDED_CLASS_MAP[radiusValue]);
-  }
-
-  // Shadow
-  if (props.shadow && props.shadow !== 'none') {
-    classes.push(SHADOW_CLASS_MAP[props.shadow]);
-  }
+  // Spacing, radius, and shadow are now handled as inline styles via
+  // buildBoxStyles using DS CSS custom properties. This ensures tenant
+  // overrides flow through the --ds-spacing-*, --ds-radius-*, and
+  // --ds-elevation-* token system.
 
   // Display - only scalar
   const display = scalarOrUndefined(props.display);

@@ -406,18 +406,19 @@ export const GRID_ITEM_DEFAULTS: Partial<GridItemProps> = {
 };
 
 /**
- * Gap value mapping (matches design tokens)
+ * Gap value mapping — resolves through DS CSS custom properties so
+ * tenant overrides can adjust the spacing scale.
  */
 export const GAP_MAP: Record<GridGap, string> = {
   none: '0',
-  xs: '0.25rem',   // 4px
-  sm: '0.5rem',    // 8px
-  md: '1rem',      // 16px
-  lg: '1.5rem',    // 24px
-  xl: '2rem',      // 32px
-  '2xl': '2.5rem', // 40px
-  '3xl': '3rem',   // 48px
-  '4xl': '4rem',   // 64px
+  xs: 'var(--ds-spacing-1, 0.25rem)',     // 4px
+  sm: 'var(--ds-spacing-2, 0.5rem)',      // 8px
+  md: 'var(--ds-spacing-4, 1rem)',        // 16px
+  lg: 'var(--ds-spacing-6, 1.5rem)',      // 24px
+  xl: 'var(--ds-spacing-8, 2rem)',        // 32px
+  '2xl': 'var(--ds-spacing-10, 2.5rem)',  // 40px
+  '3xl': 'var(--ds-spacing-12, 3rem)',    // 48px
+  '4xl': 'var(--ds-spacing-16, 4rem)',    // 64px
 };
 
 /**

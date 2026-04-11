@@ -65,20 +65,20 @@ export const CONTAINER_DEFAULTS: Partial<ContainerProps> = {
   maxWidth: 'lg',
 };
 
-/** Max width values in pixels */
+/** Max width values — resolves through DS CSS custom properties */
 export const CONTAINER_MAX_WIDTHS: Record<ContainerMaxWidth, string> = {
-  sm: '640px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
+  sm: 'var(--ds-container-sm, 640px)',
+  md: 'var(--ds-container-md, 768px)',
+  lg: 'var(--ds-container-lg, 1024px)',
+  xl: 'var(--ds-container-xl, 1280px)',
+  '2xl': 'var(--ds-container-2xl, 1536px)',
   full: '100%',
 };
 
-/** Padding values in pixels */
+/** Padding values — resolves through DS CSS custom properties */
 export const CONTAINER_PADDINGS: Record<ContainerPadding, string> = {
   none: '0',
-  sm: '8px',
-  md: '16px',
-  lg: '24px',
+  sm: 'var(--ds-spacing-2, 8px)',
+  md: 'var(--ds-spacing-4, 16px)',
+  lg: 'var(--ds-spacing-6, 24px)',
 };

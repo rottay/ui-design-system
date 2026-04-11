@@ -90,7 +90,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       flexDirection: isHorizontal ? 'row' : 'column',
       width: isHorizontal ? '100%' : 'auto',
       height: isHorizontal ? 'auto' : '100%',
-      gap: '1rem',
+      gap: 'var(--ds-spacing-4, 1rem)',
       margin: isHorizontal
         ? `${spacingValue} 0`
         : `0 ${spacingValue}`,

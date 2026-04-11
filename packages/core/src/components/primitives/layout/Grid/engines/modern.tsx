@@ -152,26 +152,8 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
   return computedStyle;
 };
 
-/**
- * Maps semantic gap tokens to Tailwind gap utility classes.
- * Returns empty string for numeric gaps (handled via inline styles instead)
- * because Tailwind's spacing scale may not match the exact pixel value.
- */
-function getGapClass(gap: GridProps['gap']): string {
-  if (!gap || typeof gap === 'number') return '';
-  const gapClasses: Record<string, string> = {
-    none: 'gap-0',
-    xs: 'gap-1',
-    sm: 'gap-2',
-    md: 'gap-4',
-    lg: 'gap-6',
-    xl: 'gap-8',
-    '2xl': 'gap-10',
-    '3xl': 'gap-12',
-    '4xl': 'gap-16',
-  };
-  return gapClasses[gap] || '';
-}
+// Gap is now resolved via inline style using DS CSS custom properties.
+// This ensures tenant overrides (--ds-spacing-*) flow through.
 
 /**
  * Maps column count to a Tailwind grid-cols utility class.
@@ -238,12 +220,16 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
         )
       : null;
 
+    // Gap resolved via inline style using DS CSS custom properties
+    if (gap && typeof gap === 'string' && gap in GAP_MAP) {
+      computedStyle.gap = GAP_MAP[gap as keyof typeof GAP_MAP];
+    }
+
     // Compose Tailwind classes only for props with clean utility mappings;
     // skip column class when responsive or custom template is active
     const tailwindClasses = [
       'grid',
       !hasResponsiveColumns && !props.templateColumns ? getColumnsClass(columns) : '',
-      getGapClass(gap),
     ].filter(Boolean).join(' ');
 
     const ElementType = Component as ElementType;

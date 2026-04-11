@@ -21,25 +21,7 @@
 
 import React from 'react';
 import type { ContainerProps } from '../Container.types';
-import { CONTAINER_DEFAULTS } from '../Container.types';
-
-/** Maps named maxWidth presets to Tailwind responsive screen classes */
-const MAX_WIDTH_CLASSES: Record<string, string> = {
-  sm: 'max-w-screen-sm',
-  md: 'max-w-screen-md',
-  lg: 'max-w-screen-lg',
-  xl: 'max-w-screen-xl',
-  '2xl': 'max-w-screen-2xl',
-  full: 'max-w-full',
-};
-
-/** Maps named padding presets to Tailwind padding classes */
-const PADDING_CLASSES: Record<string, string> = {
-  none: 'p-0',
-  sm: 'p-2',
-  md: 'p-4',
-  lg: 'p-6',
-};
+import { CONTAINER_DEFAULTS, CONTAINER_MAX_WIDTHS, CONTAINER_PADDINGS } from '../Container.types';
 
 /**
  * Modern (Tailwind) Container component.
@@ -65,29 +47,23 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
       ...rest
     } = props;
 
-    // Start with base layout classes applied to every container
+    // Base layout classes (structural only, not spacing/sizing)
     const classes: string[] = ['w-full', 'box-border'];
+    if (center) classes.push('mx-auto');
 
-    // Only apply a max-width class when not fluid and the value is a named preset
-    if (!fluid && typeof maxWidth === 'string') {
-      classes.push(MAX_WIDTH_CLASSES[maxWidth] || MAX_WIDTH_CLASSES.lg);
-    }
-
-    if (center) {
-      classes.push('mx-auto');
-    }
-
-    if (typeof padding === 'string') {
-      classes.push(PADDING_CLASSES[padding] || PADDING_CLASSES.md);
-    }
-
-    // Numeric values cannot be expressed as Tailwind classes, so they are
-    // applied as inline styles alongside any user-provided style overrides
+    // Max-width and padding resolved via DS CSS custom properties.
+    // This ensures tenant overrides flow through --ds-container-* and --ds-spacing-*.
     const customStyle: React.CSSProperties = { ...style };
-    if (typeof maxWidth === 'number') {
-      customStyle.maxWidth = `${maxWidth}px`;
+    if (!fluid) {
+      if (typeof maxWidth === 'string') {
+        customStyle.maxWidth = CONTAINER_MAX_WIDTHS[maxWidth] || CONTAINER_MAX_WIDTHS.lg;
+      } else if (typeof maxWidth === 'number') {
+        customStyle.maxWidth = `${maxWidth}px`;
+      }
     }
-    if (typeof padding === 'number') {
+    if (typeof padding === 'string') {
+      customStyle.padding = CONTAINER_PADDINGS[padding] || CONTAINER_PADDINGS.md;
+    } else if (typeof padding === 'number') {
       customStyle.padding = `${padding}px`;
     }
 

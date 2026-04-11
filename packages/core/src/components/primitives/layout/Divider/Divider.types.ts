@@ -158,15 +158,15 @@ export const DIVIDER_DEFAULTS: Partial<DividerProps> = {
 };
 
 /**
- * Mapping of spacing presets to CSS values.
+ * Mapping of spacing presets — resolves through DS CSS custom properties.
  */
 export const SPACING_MAP: Record<DividerSpacing, string> = {
   none: '0',
-  xs: '0.25rem',
-  sm: '0.5rem',
-  md: '1rem',
-  lg: '1.5rem',
-  xl: '2rem',
+  xs: 'var(--ds-spacing-1, 0.25rem)',
+  sm: 'var(--ds-spacing-2, 0.5rem)',
+  md: 'var(--ds-spacing-4, 1rem)',
+  lg: 'var(--ds-spacing-6, 1.5rem)',
+  xl: 'var(--ds-spacing-8, 2rem)',
 };
 
 /**
