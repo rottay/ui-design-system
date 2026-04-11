@@ -38,5 +38,8 @@ export * from './tokens';
 // Extension types (Universal Extension System)
 export * from './extensions';
 
+// Vertical manifest types
+export * from './verticals';
+
 // Primitive props are intentionally not re-exported from here. The component
 // folder remains the canonical owner for those contracts.
