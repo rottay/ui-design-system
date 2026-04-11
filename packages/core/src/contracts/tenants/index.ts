@@ -133,10 +133,10 @@ export interface TenantConfig {
   /** Pack key used by the custom engine to resolve tenant-specific implementations */
   componentPack?: string;
 
-  /** Embedded brand theme — the canonical premium visual source */
+  /** Embedded brand theme — the canonical premium visual source.
+   *  Used by bundled first-party verticals (file-first model).
+   *  DB tenants use appearance.general/advanced instead. */
   brandTheme?: import('../themes').BrandTheme;
-  /** Reference to a registered brand theme by ID (for preset-based tenants) */
-  brandThemeId?: string;
 
   /** DB-owned tenant appearance (General + Advanced tiers).
    *  Layered on top of the vertical theme in the merge chain.
