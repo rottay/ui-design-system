@@ -138,8 +138,8 @@
 // ============================================================================
 export { useTheme, useThemeContext } from '../runtime/theming/useTheme';
 
-// Tenant hooks -- exported from src/tenancy/, not re-exported here (avoids circular deps)
-// Product profile hooks -- exported from src/product-profiles/, same reason
+// Tenant hooks -- exported from runtime/tenant/, not re-exported here (avoids circular deps)
+// Product profile hooks -- exported from runtime/product-profiles/, same reason
 
 // ============================================================================
 // Token hooks -- access resolved design tokens from the nearest TokenProvider

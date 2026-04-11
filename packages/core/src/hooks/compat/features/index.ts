@@ -4,7 +4,7 @@
  * `features/useFeatures`. Kept for backward compatibility while consumers
  * migrate to `import { useFeatures } from '@rottay/design-system'`.
  *
- * @deprecated Import from `features/` directly instead.
+ * @deprecated Import from `@rottay/design-system` directly. Moved to hooks/compat/ in R4.
  *
  * @module System/Hooks/Features
  * @category System

@@ -82,15 +82,9 @@ export function useTenant() {
   return context;
 }
 
-// -- Tenant utilities (compat re-exports, moved to hooks/compat/tenant/) --
-/** @deprecated Import from `@rottay/design-system` instead. */
-export { resolvePersonalityPreset } from '../compat/tenant/personality-presets';
-export type { PersonalityPreset } from '../compat/tenant/personality-presets';
-/** @deprecated Import from `@rottay/design-system` instead. */
-export { createTenantConfig } from '../compat/tenant/create-tenant';
-export type { TenantCreationConfig } from '../compat/tenant/create-tenant';
-/** @deprecated Import from `@rottay/design-system` instead. */
-export { useCreateTenant } from '../compat/tenant/useCreateTenant';
+// Non-hook compat utilities (resolvePersonalityPreset, createTenantConfig,
+// useCreateTenant) live in hooks/compat/tenant/. This barrel is canonical
+// hooks only: useTenant + useTenantBranding.
 
 /**
  * 2-step tenant branding hook: session-instant + async-full.

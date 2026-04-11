@@ -4,10 +4,9 @@
  * `theming/useTheme`. Kept for backward compatibility while consumers
  * migrate to `import { useTheme } from '@rottay/design-system'`.
  *
- * The canonical source lives in `src/theming/useTheme.ts`. This shim exists
- * because older consumers imported theme hooks via `hooks/theme` and removing
- * this path would be a breaking change. New code should import directly from
- * the top-level `@rottay/design-system` package.
+ * The canonical source lives in `runtime/theming/useTheme.ts`. This shim
+ * was moved from `hooks/theme/` to `hooks/compat/theme/` in R4. New code
+ * should import from `@rottay/design-system` directly.
  *
  * @deprecated Import `useTheme` / `useThemeContext` from `@rottay/design-system` directly.
  *

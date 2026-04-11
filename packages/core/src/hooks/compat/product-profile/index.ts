@@ -4,7 +4,7 @@
  * location at `runtime/product-profiles/`. Kept for backward compatibility
  * while consumers migrate to `import { useProductProfile } from '@rottay/design-system'`.
  *
- * @deprecated Import `useProductProfile` from `@rottay/design-system` directly.
+ * @deprecated Import `useProductProfile` from `@rottay/design-system` directly. Moved to hooks/compat/ in R4.
  *
  * @module System/Hooks/ProductProfile
  * @category System
