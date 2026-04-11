@@ -60,4 +60,4 @@ Reading order within that pack:
 | R3 | Tenancy split, adapter move | Approved |
 | R4 | Hooks public vs compat split | Approved |
 | R5 | Tokens runtime CSS cleanup | Approved |
-| R6 | Final polish + closeout | In progress |
+| R6 | Final polish + closeout | Approved |
