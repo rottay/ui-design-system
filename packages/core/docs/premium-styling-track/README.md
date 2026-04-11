@@ -49,4 +49,15 @@ Reading order within that pack:
 | I4 | Rottay overhaul | Approved |
 | I5 | BitHire overhaul | Approved |
 | I6 | Evnto overhaul | Approved |
-| I7 | Final cleanup and guardrails | In progress |
+| I7 | Final cleanup and guardrails | Approved |
+
+### Restructuring Waves
+
+| Wave | Scope | Status |
+|------|-------|--------|
+| R1 | Docs out of src, motion rename, typography-scale compat | Approved |
+| R2 | Shared color-math, compilers/ extraction | Approved |
+| R3 | Tenancy split, adapter move | Approved |
+| R4 | Hooks public vs compat split | Approved |
+| R5 | Tokens runtime CSS cleanup | Approved |
+| R6 | Final polish + closeout | In progress |
