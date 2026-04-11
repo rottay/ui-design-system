@@ -29,6 +29,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { AudioLines, ExternalLink, LoaderCircle, Mic, X } from 'lucide-react';
 
 import { useVoiceInput } from '../../../../hooks/voice';
+import { useRegisterCommands } from '../../../../hooks/commands';
+import { ConnectedCommandPalette } from '../../../patterns/navigation/command-palette/ConnectedCommandPalette';
 import { Box, Flex, Input, Text } from '../../../primitives';
 
 /** A single suggestion chip rendered in the "Smart refine" cluster. */
@@ -50,10 +52,31 @@ export interface SearchCommandBarConfig {
   recentQueries?: SearchCommandSuggestion[];
 }
 
+/** A command definition for the built-in command palette. */
+export interface SearchCommandBarCommand {
+  id: string;
+  label: string;
+  description?: string;
+  category?: string;
+  icon?: React.ReactNode;
+  shortcut?: string;
+  action: () => void | Promise<void>;
+}
+
 export interface SearchCommandBarProps {
   command: SearchCommandBarConfig;
   /** Optional right-rail slot for utility buttons (views/columns/etc.). */
   actionsSlot?: React.ReactNode;
+  /**
+   * Commands to register in the global registry. When provided, these are
+   * auto-registered on mount and available in the Cmd+K palette.
+   */
+  commands?: SearchCommandBarCommand[];
+  /**
+   * Whether to render the built-in ConnectedCommandPalette (Cmd+K palette).
+   * @default true when commands are provided, false otherwise
+   */
+  showCommandPalette?: boolean;
 }
 
 // -- Inline SVG icons (private to the pattern) ---------------------------------
@@ -128,7 +151,13 @@ function CommandSuggestionChip({
 export function SearchCommandBar({
   command,
   actionsSlot,
+  commands: commandsProp,
+  showCommandPalette,
 }: SearchCommandBarProps) {
+  // Register commands in the global registry when provided
+  useRegisterCommands(commandsProp ?? []);
+
+  const renderPalette = showCommandPalette ?? (commandsProp && commandsProp.length > 0);
   const {
     isSupported: voiceSupported,
     status: voiceStatus,
@@ -314,6 +343,8 @@ export function SearchCommandBar({
   };
 
   return (
+    <>
+    {renderPalette && <ConnectedCommandPalette />}
     <Box
       style={{
         position: 'relative',
@@ -835,6 +866,7 @@ export function SearchCommandBar({
         </Box>
       </Box>
     </Box>
+    </>
   );
 }
 

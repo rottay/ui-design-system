@@ -47,10 +47,16 @@ export default function RusticPageShell(props: PageShellProps) {
     style,
   } = props;
 
+  // Shell-grid: subtle background grid driven by premium chrome tokens.
+  // --ds-shell-grid-size defaults to 0px (no grid) for tenants that don't set it.
+  const gridBg = 'repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px))';
+
   /* Optional maxWidth constrains and centers the shell for readable content widths */
   const containerStyle: CSSProperties = {
     maxWidth: maxWidth ?? undefined,
     margin: maxWidth ? '0 auto' : undefined,
+    backgroundImage: gridBg,
+    backgroundSize: `var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px)`,
     ...style,
   };
 

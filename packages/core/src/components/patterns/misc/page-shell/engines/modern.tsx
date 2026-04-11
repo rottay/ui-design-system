@@ -345,12 +345,18 @@ export default function ModernPageShell(props: PageShellProps) {
   /* Default to the first tab when no activeTab is explicitly set */
   const activeTabKey = activeTab ?? tabs?.[0]?.key;
 
+  // Shell-grid: subtle background grid driven by premium chrome tokens.
+  // --ds-shell-grid-size defaults to 0px (no grid) for tenants that don't set it.
+  const gridBg = 'repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px))';
+
   return (
     <div
       className={`ds-pattern-page-shell ds-engine-modern ${className ?? ''}`}
       style={{
         maxWidth: maxWidth ?? undefined,
         margin: maxWidth ? '0 auto' : undefined,
+        backgroundImage: gridBg,
+        backgroundSize: `var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px)`,
         ...style,
       }}
     >

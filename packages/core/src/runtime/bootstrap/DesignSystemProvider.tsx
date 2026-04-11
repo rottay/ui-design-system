@@ -94,6 +94,7 @@ import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../../compilers/brand-theme';
 import { isBundledTenant } from '../tenant/registry';
 import type { BrandTheme } from '../../contracts/themes';
+import { CommandRegistryProvider } from '../../hooks/commands';
 
 /** Build a scoped CSS string from BrandTheme chrome for dynamic tenants. */
 function buildScopedChromeCss(bt: BrandTheme, slug: string): string | undefined {
@@ -459,14 +460,16 @@ export function DesignSystemProvider({
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >
-              <AntdConfigProvider>
-                <FeatureProvider features={normalizedConfig.features ?? []}>
-                  <ResponsiveProvider>
-                    <SystemCssVariablesBridge />
-                    <MemoizedChildren>{children}</MemoizedChildren>
-                  </ResponsiveProvider>
-                </FeatureProvider>
-              </AntdConfigProvider>
+              <FeatureProvider features={normalizedConfig.features ?? []}>
+                <ResponsiveProvider>
+                  <CommandRegistryProvider>
+                    <AntdConfigProvider>
+                      <SystemCssVariablesBridge />
+                      <MemoizedChildren>{children}</MemoizedChildren>
+                    </AntdConfigProvider>
+                  </CommandRegistryProvider>
+                </ResponsiveProvider>
+              </FeatureProvider>
             </ThemeProvider>
           </EngineProvider>
         </I18nProvider>

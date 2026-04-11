@@ -26,9 +26,8 @@
  *     the corresponding provider (or fall back to a native `<a>` when
  *     none is mounted).
  *
- * Each metrics variant keeps its own local `useCountUp` helper inlined;
- * extracting a shared motion helper is on the audit's future work
- * backlog (Feature 6).
+ * All metrics variants use the canonical `useSmoothCounter` from
+ * `@/motion/hooks` for counter animations (consolidated in Wave X3).
  */
 
 // Types

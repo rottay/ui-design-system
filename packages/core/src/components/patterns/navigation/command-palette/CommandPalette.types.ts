@@ -6,6 +6,17 @@
  *
  * The command palette follows the Cmd+K / Ctrl+K pattern popularized by
  * VS Code, Slack, and Linear.
+ *
+ * ## Registry integration
+ *
+ * The palette is a **presentational pattern** — it receives items as props.
+ * To connect it to the command registry, use the `useCommandPaletteItems()`
+ * bridge hook exported from `@rottay/design-system`:
+ *
+ * ```tsx
+ * const { items, onSearch } = useCommandPaletteItems();
+ * <PatternCommandPalette items={items} onSearch={onSearch} ... />
+ * ```
  */
 
 import type { ReactNode } from 'react';

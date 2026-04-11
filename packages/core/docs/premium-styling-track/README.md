@@ -61,3 +61,11 @@ Reading order within that pack:
 | R4 | Hooks public vs compat split | Approved |
 | R5 | Tokens runtime CSS cleanup | Approved |
 | R6 | Final polish + closeout | Approved |
+
+### Integration Waves
+
+| Wave | Scope | Status |
+|------|-------|--------|
+| X1 | Bridge cleanup, input disabled opacity, command registry | Done |
+| X2 | Shell-grid wiring, sidebar/layout token consumers | Done |
+| X3 | Motion dedup, hooks classification, audit-integration script | Done |

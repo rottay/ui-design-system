@@ -2,37 +2,34 @@
 
 /**
  * @fileoverview Data Hooks - Rottay Design System
- * @description React hooks for data fetching, pagination, filtering, and sorting.
- * Designed to integrate with Surface components (ListSurface, TableSurface, etc.).
+ * @description App-facing React hooks for data fetching, pagination, filtering,
+ * sorting, and export. These are **not** consumed by DS components internally —
+ * Surfaces receive data as props and delegate fetching to the app layer.
+ *
+ * ## Ownership: app-facing utilities
+ *
+ * These hooks provide domain-agnostic data plumbing that apps wire into their
+ * own state management. They are exported from `@rottay/design-system` for
+ * convenience, but no Surface, Pattern, or Structure calls them internally.
+ * The DS owns the visual contract; apps own the data pipeline.
  *
  * @remarks
- * The `useSurfaceQuery` hook provides a complete data-fetching solution with
- * built-in state management for pagination, sorting, filtering, and search.
- * It produces ready-made props that can be spread directly onto Surface components.
+ * `useSurfaceQuery` produces a `surfaceProps` object compatible with Surface
+ * component prop shapes (pagination, sorting, filtering). Apps use it to
+ * fetch data and then pass the results to a Surface via props.
  *
- * @example Basic Usage
+ * @example
  * ```tsx
- * import { useSurfaceQuery } from '@rottay/design-system';
- *
- * const { data, loading, surfaceProps, setPage } = useSurfaceQuery({
- *   queryFn: async (params) => {
- *     const res = await fetch(`/api/users?page=${params.page}&size=${params.pageSize}`);
- *     return res.json();
- *   },
- * });
- * ```
- *
- * @example With ListSurface
- * ```tsx
- * const { surfaceProps } = useSurfaceQuery({
+ * // App code — the app owns the fetch, the Surface owns the render
+ * const { data, loading, surfaceProps } = useSurfaceQuery({
  *   queryFn: fetchUsers,
  * });
  *
- * <ListSurface {...surfaceProps} renderItem={(user) => <UserCard user={user} />} />
+ * <ListSurface data={data} loading={loading} config={config} />
  * ```
  *
  * @module System/Hooks/Data
- * @category System
+ * @category App-Facing
  * @package @rottay/design-system
  */
 

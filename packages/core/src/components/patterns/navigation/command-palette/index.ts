@@ -14,6 +14,8 @@ import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { CommandPaletteProps } from './CommandPalette.types';
 
 export type { CommandPaletteProps, CommandItem } from './CommandPalette.types';
+export { ConnectedCommandPalette } from './ConnectedCommandPalette';
+export type { ConnectedCommandPaletteProps } from './ConnectedCommandPalette';
 
 /** Public command-palette entry point resolved through the engine factory. */
 export const PatternCommandPalette = createEngineComponent<CommandPaletteProps>(

@@ -185,7 +185,7 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   /* Shell (intentionally minimal — clean wallet feel) */
   --ds-shell-grid-size: 0px;
   --ds-shell-grid-line: transparent;
-  --ds-shell-grid-opacity: 0;
+
 
   /* Table */
   --ds-table-header-bg: rgba(0, 0, 0, 0.02);
@@ -397,7 +397,7 @@ html[data-tenant='evnto'].dark {
   /* Shell - minimal (same as light) */
   --ds-shell-grid-size: 0px;
   --ds-shell-grid-line: transparent;
-  --ds-shell-grid-opacity: 0;
+
 
   /* Table tokens - dark */
   --ds-table-header-bg: #1C1A16;

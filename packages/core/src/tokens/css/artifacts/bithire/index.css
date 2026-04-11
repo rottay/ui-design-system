@@ -206,7 +206,7 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   /* Shell (intentionally minimal) */
   --ds-shell-grid-size: 0px;
   --ds-shell-grid-line: transparent;
-  --ds-shell-grid-opacity: 0;
+
 
   /* Table */
   --ds-table-bg: #ffffff;

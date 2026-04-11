@@ -244,7 +244,11 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
     const sh = chrome.shell;
     if (sh.gridSize) vars['--ds-shell-grid-size'] = sh.gridSize;
     if (sh.gridLine) vars['--ds-shell-grid-line'] = sh.gridLine;
-    if (sh.gridOpacity != null) vars['--ds-shell-grid-opacity'] = String(sh.gridOpacity);
+    // gridOpacity is intentionally NOT emitted as a separate CSS variable.
+    // The opacity is baked into the gridLine color's alpha channel (e.g.
+    // rgba(255,255,255,0.03)). A separate --ds-shell-grid-opacity var had
+    // no real consumer — the page-shell background uses the grid line color
+    // directly via repeating-linear-gradient.
   }
 
   // Controls

@@ -23,7 +23,7 @@ import {
   StaggerChildren,
   TextReveal,
 } from '..';
-import { renderSurface } from '../../components/surfaces/common/test-utils';
+import { renderSurface } from '../../components/surfaces/foundation/common/test-utils';
 
 class IntersectionObserverMock {
   constructor(private readonly callback: IntersectionObserverCallback) {}

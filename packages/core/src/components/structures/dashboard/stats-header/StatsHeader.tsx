@@ -18,12 +18,13 @@
 
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import type { CSSProperties } from 'react';
 
 import { Box, Flex } from '../../../primitives/layout';
 import { Text } from '../../../primitives/display';
 import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
+import { useSmoothCounter, useReducedMotion } from '../../../../motion/hooks';
 
 import type { StatItem, StatsHeaderProps, AccentColor } from './types';
 
@@ -59,91 +60,13 @@ const CHANGE_COLORS: Record<'increase' | 'decrease' | 'neutral', string> = {
 };
 
 // ============================================================================
-// REDUCED MOTION DETECTION
+// useCountUp (canonical: delegates to useSmoothCounter from motion/hooks)
 // ============================================================================
 
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReduced(mq.matches);
-
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  return reduced;
-}
-
-// ============================================================================
-// useCountUp HOOK
-// ============================================================================
-
-/**
- * Animates a numeric value counting up from 0 to `target` over `duration` ms.
- * Uses cubic-bezier(0.16, 1, 0.3, 1) easing (approximated).
- * Respects prefers-reduced-motion by returning `target` immediately.
- */
 function useCountUp(target: number, duration: number = 600): number {
-  const reducedMotion = usePrefersReducedMotion();
-  const [displayValue, setDisplayValue] = useState(reducedMotion ? target : 0);
-  const rafRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number | null>(null);
-  const prevTargetRef = useRef(target);
-
-  // Cubic bezier approximation for (0.16, 1, 0.3, 1) - exponential deceleration
-  const ease = useCallback((t: number): number => {
-    return 1 - Math.pow(1 - t, 4);
-  }, []);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setDisplayValue(target);
-      return;
-    }
-
-    // Re-animate from 0 when target changes
-    const from = 0;
-    prevTargetRef.current = target;
-
-    if (target === 0) {
-      setDisplayValue(0);
-      return;
-    }
-
-    startTimeRef.current = null;
-
-    const animate = (timestamp: number) => {
-      if (startTimeRef.current === null) {
-        startTimeRef.current = timestamp;
-      }
-
-      const elapsed = timestamp - startTimeRef.current;
-      const progress = Math.min(elapsed / duration, 1);
-      const easedProgress = ease(progress);
-
-      const current = Math.round(from + (target - from) * easedProgress);
-      setDisplayValue(current);
-
-      if (progress < 1) {
-        rafRef.current = requestAnimationFrame(animate);
-      } else {
-        setDisplayValue(target);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [target, duration, reducedMotion, ease]);
-
-  return displayValue;
+  const reducedMotion = useReducedMotion();
+  const animated = useSmoothCounter(0, target, reducedMotion ? 0 : duration);
+  return reducedMotion ? target : Math.round(animated);
 }
 
 // ============================================================================
@@ -250,7 +173,7 @@ function SparklineDots({
   accent: AccentColor;
   hovered: boolean;
 }) {
-  const reducedMotion = usePrefersReducedMotion();
+  const reducedMotion = useReducedMotion();
   const maxVal = Math.max(...dots, 1);
 
   return (

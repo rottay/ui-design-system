@@ -385,6 +385,7 @@
   background-color: var(--ds-input-bg-disabled);
   border-color: var(--ds-input-border-disabled);
   color: var(--ds-input-color-disabled);
+  opacity: var(--ds-input-disabled-opacity);
   cursor: not-allowed;
 }
 
@@ -4338,7 +4339,7 @@
 [data-tenant] .select:disabled {
   background-color: var(--ds-color-neutral-100);
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: var(--ds-input-disabled-opacity);
 }
 
 /* Select sizes */

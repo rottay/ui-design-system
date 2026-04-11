@@ -1593,7 +1593,7 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
 
   --ds-shell-grid-size: 28px;
   --ds-shell-grid-line: rgba(255, 255, 255, 0.03);
-  --ds-shell-grid-opacity: 0.9;
+
 }
 
 /* ============================================
@@ -3099,5 +3099,5 @@ html[data-tenant='rottay'].light {
 
   --ds-shell-grid-size: 28px;
   --ds-shell-grid-line: rgba(0, 0, 0, 0.03);
-  --ds-shell-grid-opacity: 0.9;
+
 }

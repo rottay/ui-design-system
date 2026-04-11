@@ -91,6 +91,7 @@
     "analyze": "node scripts/analyze-bundle.mjs",
     "analyze:skip-build": "node scripts/analyze-bundle.mjs --skip-build",
     "lint:folders": "node scripts/lint-folder-index.mjs",
+    "lint:integration": "node scripts/audit-integration.mjs",
     "docs:taxonomy": "node scripts/generate-taxonomy.mjs"
   },
   "engines": {

@@ -1,28 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Text, Stack, Flex } from "@/components/primitives";
 import { Activity, TrendingUp, TrendingDown, ChevronRight } from "lucide-react";
+import { useSmoothCounter } from "@/motion/hooks";
 import type { MetricsProps, KeyMetric } from "../../types";
-
-function useCountUp(end: number, duration: number = 1200, delay: number = 0) {
-  const [count, setCount] = useState(0);
-  const [hasStarted, setHasStarted] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setHasStarted(true), delay); return () => clearTimeout(t); }, [delay]);
-  useEffect(() => {
-    if (!hasStarted) return;
-    let startTime: number; let af: number;
-    const animate = (ts: number) => { if (!startTime) startTime = ts; const p = Math.min((ts - startTime) / duration, 1); setCount(Math.floor((1 - Math.pow(1 - p, 4)) * end)); if (p < 1) af = requestAnimationFrame(animate); };
-    af = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(af);
-  }, [end, duration, hasStarted]);
-  return count;
-}
 
 function MetricRow({ metric, index, maxValue }: { metric: MetricsProps["metrics"][0]; index: number; maxValue: number }) {
   const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, "")) || 0;
   const suffix = metric.value.replace(/[0-9.-]/g, "");
-  const animatedValue = useCountUp(numericValue, 1000, index * 150);
+  const animatedValue = Math.floor(useSmoothCounter(0, numericValue, 1000, index * 150));
   const [isHovered, setIsHovered] = useState(false);
   const percentage = Math.min((numericValue / maxValue) * 100, 100);
 

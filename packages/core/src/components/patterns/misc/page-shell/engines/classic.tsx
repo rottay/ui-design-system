@@ -66,8 +66,20 @@ export default function ClassicPageShell(props: PageShellProps) {
     ...style,
   };
 
+  // Shell-grid: subtle background grid driven by premium chrome tokens.
+  // --ds-shell-grid-size defaults to 0px (no grid) for tenants that don't set it.
+  const gridBg = 'repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px))';
+
   return (
-    <div className={`ds-pattern-page-shell ds-engine-classic ${className ?? ''}`} style={containerStyle}>
+    <div
+      className={`ds-pattern-page-shell ds-engine-classic ${className ?? ''}`}
+      style={{
+        ...containerStyle,
+        backgroundImage: gridBg,
+        backgroundSize: `var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px)`,
+        opacity: undefined, // container opacity stays at 1; grid opacity is visual only
+      }}
+    >
       {/* Breadcrumb navigation -- supports both href links and onClick handlers.
            When onClick is provided alongside href, we prevent default to use the handler. */}
       {breadcrumbs && breadcrumbs.length > 0 && (

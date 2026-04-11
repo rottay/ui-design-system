@@ -267,6 +267,7 @@
   background-color: var(--ds-input-bg-disabled);
   border-color: var(--ds-input-border-disabled);
   color: var(--ds-input-color-disabled);
+  opacity: var(--ds-input-disabled-opacity);
   cursor: not-allowed;
 }
 

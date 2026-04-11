@@ -3,20 +3,23 @@
  * @description Central exports for all React hooks that provide access to the
  * design system's state, configuration, and responsive utilities.
  *
- * ## Ownership model (frozen decision 4)
+ * ## Ownership model (frozen decision 4, updated Wave X3)
  *
  * This barrel is the **public hook surface** of the design system. It
  * contains three categories of hooks:
  *
- * 1. **Generic reusable hooks** (owned here): a11y, dnd, responsive,
- *    state, voice, form, search, routing, data, ai, shortcuts,
- *    commands, notifications. Zero domain semantics.
+ * 1. **Core-integrated hooks** (used by DS components internally):
+ *    `useTokens`/`useColorTokens`/etc. (token pipeline), `useBreakpoints`/
+ *    `useMediaQuery`/`useResponsiveValue` (responsive), `useCollapseTokens`
+ *    (component tokens), `useVoiceInput` (VoiceInputButton primitive).
+ *    These hooks are real infrastructure consumed by DS primitives, patterns,
+ *    and structures.
  *
- * 2. **System integration hooks** (owned here, depend on DS context):
- *    `useTokens` (token pipeline resolution), `useSurfaceQuery` (data
- *    fetching for surfaces), `useTenantBranding` (2-step branding).
- *    These are not generic utilities but they are consumer-facing hooks
- *    that belong in the public hook surface, not inside runtime/.
+ * 2. **App-facing utilities** (exported for app consumption, zero DS-internal
+ *    consumers): a11y, dnd, state, form, search, routing, data, ai,
+ *    commands, notifications. These are domain-agnostic utilities that apps
+ *    wire into their own state management. Surfaces receive data as props,
+ *    they do NOT call data hooks internally.
  *
  * 3. **Compatibility re-exports** (in `hooks/compat/`, canonical source elsewhere):
  *    - `compat/theme/`: canonical at `runtime/theming/`
@@ -267,6 +270,8 @@ export {
   useCommands,
   useExecuteCommand,
 } from './commands';
+export { useCommandPaletteItems } from './commands/useCommandPaletteItems';
+export type { UseCommandPaletteItemsReturn } from './commands/useCommandPaletteItems';
 export type {
   Command,
   UseCommandsReturn,

@@ -490,7 +490,7 @@ describe('H3 contract: bithire', () => {
     it('artifact has shell vars (minimal)', () => {
       const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
       expect(artifact).toContain('--ds-shell-grid-size: 0px');
-      expect(artifact).toContain('--ds-shell-grid-opacity: 0');
+      // gridOpacity removed from CSS — alpha baked into gridLine color
     });
     it('artifact has buttonDefault + buttonGhost', () => {
       const artifact = readFileSync(resolve(__dirname, '../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
