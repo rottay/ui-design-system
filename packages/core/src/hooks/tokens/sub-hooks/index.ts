@@ -15,12 +15,12 @@
  */
 
 import { useMemo } from 'react';
-import { useTokens } from './index';
+import { useTokens } from '../index';
 import type {
   DesignTokens,
   MotionTokens,
   PersonalityTokens,
-} from '../../contracts';
+} from '../../../contracts';
 
 // ---------------------------------------------------------------------------
 // Slice types

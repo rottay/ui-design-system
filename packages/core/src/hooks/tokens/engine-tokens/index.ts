@@ -9,7 +9,7 @@
  * @package @rottay/design-system
  */
 
-import type { SurfaceTokens, MotionTokens } from '../../contracts';
+import type { SurfaceTokens, MotionTokens } from '../../../contracts';
 
 /**
  * Token overrides that differentiate one engine from another.

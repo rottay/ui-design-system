@@ -22,8 +22,8 @@
  */
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import type { TenantConfig } from '../../../contracts';
-import type { VerticalKey } from '../../../runtime/verticals/types';
+import type { TenantConfig } from '../../../../contracts';
+import type { VerticalKey } from '../../../../runtime/verticals/types';
 
 /** Minimal session shape needed by the hook. Apps cast their session to this. */
 export interface TenantBrandingSession {

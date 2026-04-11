@@ -30,8 +30,8 @@
  */
 
 import { useState, useMemo, useCallback } from 'react';
-import { useCommands } from '.';
-import type { CommandItem } from '../../components/patterns/navigation/command-palette/CommandPalette.types';
+import { useCommands } from '..';
+import type { CommandItem } from '../../../components/patterns/navigation/command-palette/CommandPalette.types';
 
 /**
  * Return type for `useCommandPaletteItems`.
