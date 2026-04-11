@@ -128,6 +128,7 @@ function buildConfigFromResponse(
     branding: (data.branding as TenantConfig['branding']) || {},
     personality: (data.personality as TenantConfig['personality']) || undefined,
     tokenOverrides: (data.tokenOverrides as TenantConfig['tokenOverrides']) || undefined,
+    appearance: (data.appearance as TenantConfig['appearance']) || undefined,
   };
 }
 
