@@ -77,7 +77,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       >
         {/* Header section with title and extra content */}
         {(title || extra) && (
-          <div className="flex justify-between items-center mb-4">
+          <div className="rottay-descriptions-title flex justify-between items-center mb-4">
             {title && (
               <h3 className="text-lg font-semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
                 {title}
@@ -102,24 +102,25 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
                 return (
                   <div
-                    className={
+                    className={`rottay-descriptions-row${
                       bordered
-                        ? 'border-b pb-2 last:border-b-0'
+                        ? ' border-b pb-2 last:border-b-0'
                         : ''
-                    }
+                    }`}
                     style={{
                       gridColumn: `span ${span}`,
                       ...(bordered && { borderColor: 'var(--ds-color-border)' }),
                     }}
                   >
                     <div
-                      className="text-sm mb-1"
+                      className="rottay-descriptions-label text-sm mb-1"
                       style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
                     </div>
                     <div
+                      className="rottay-descriptions-content"
                       style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
@@ -136,16 +137,16 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                 const itemProps = child.props as DescriptionsItemProps;
 
                 return (
-                  <div className="flex p-3">
+                  <div className="rottay-descriptions-row flex p-3">
                     <div
-                      className="w-1/3"
+                      className="rottay-descriptions-label w-1/3"
                       style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
                     </div>
                     <div
-                      className="flex-1"
+                      className="rottay-descriptions-content flex-1"
                       style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}

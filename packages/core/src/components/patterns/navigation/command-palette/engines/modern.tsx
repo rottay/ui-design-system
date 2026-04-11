@@ -44,6 +44,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<Element | null>(null);
 
   // Case-insensitive substring match on both label and description so
   // users can search by intent ("delete") not just the exact command name.
@@ -72,14 +74,21 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   // Reset the keyboard cursor to the first item whenever the query changes.
   useEffect(() => { setActiveIndex(0); }, [query]);
 
-  // Reset search and auto-focus the input when the palette opens.
-  // The 50ms delay is needed because the DOM element must be mounted
-  // before focus() can succeed (no framework modal transition here,
-  // but React render cycle still requires a microtask).
+  // Store the element that had focus before the palette opened so we
+  // can return focus when it closes. Reset search and auto-focus the
+  // input. The 50ms delay is needed because the DOM element must be
+  // mounted before focus() can succeed.
   useEffect(() => {
     if (open) {
+      triggerRef.current = document.activeElement;
       setQuery('');
       setTimeout(() => inputRef.current?.focus(), 50);
+    } else {
+      // Return focus to the element that opened the palette
+      if (triggerRef.current && triggerRef.current instanceof HTMLElement) {
+        triggerRef.current.focus();
+      }
+      triggerRef.current = null;
     }
   }, [open]);
 
@@ -112,6 +121,28 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     }
   };
 
+  // Focus trap: cycle Tab/Shift+Tab within the dialog when open.
+  const handleFocusTrap = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab' || !dialogRef.current) return;
+    const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+      'input, button, [tabindex]:not([tabindex="-1"]), a[href]'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }, []);
+
   // Early return avoids rendering the backdrop/portal when closed, which
   // is cheaper than CSS visibility toggling for a rarely-open overlay.
   if (!open) return null;
@@ -121,7 +152,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   let itemIndex = -1;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
+    <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
       {/* Backdrop */}
       <div
         className="absolute inset-0"

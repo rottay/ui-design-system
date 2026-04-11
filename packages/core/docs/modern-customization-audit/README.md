@@ -30,7 +30,7 @@ This folder answers one question: if we keep adding more premium styling knobs, 
 
 ## High-Priority Conclusions
 
-- `TenantAppearance` is declared but not wired into runtime resolution.
+- `TenantAppearance` is declared and partially wired via `BrandTheme` runtime resolution; the legacy `appearance.general` / `appearance.advanced` paths remain unwired.
 - The foundation layer is the biggest styling blocker because fixed Tailwind maps bypass tenant customization before higher-level primitives even render.
 - Several Modern primitives look tokenized at first glance, but only their shell is tokenized; scalar size, density, popup motion, row styling, or interaction geometry still live in local maps.
 - A future "100% customizable Modern" track should start with:

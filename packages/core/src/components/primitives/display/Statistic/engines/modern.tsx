@@ -17,17 +17,20 @@
  * - Interval-based countdown updates
  * - Loading skeleton with animate-pulse
  *
- * **Class Mappings:**
+ * **Token Mappings:**
  * - `var(--ds-color-text-primary)` - Default value color
- * - `text-success` - Positive value color
- * - `text-error` - Negative value color
- * - `text-warning` - Warning value color
- * - `text-2xl font-semibold` - Value styling
- * - `text-sm` + `var(--ds-color-text-secondary)` - Title styling
+ * - `var(--ds-color-success)` - Positive value color
+ * - `var(--ds-color-error)` - Negative value color
+ * - `var(--ds-color-warning)` - Warning value color
+ * - `var(--ds-font-size-2xl)` / `var(--ds-font-weight-semibold)` - Value styling
+ * - `var(--ds-font-size-sm)` / `var(--ds-color-text-secondary)` - Title styling
+ * - `var(--ds-spacing-*)` - All spacing/margins
+ * - `var(--ds-radius-sm)` - Loading skeleton radius
+ * - `var(--ds-font-family-mono)` - Countdown monospace digits
  *
  * **Advantages:**
- * - Lightweight CSS-only styling
- * - Automatic theme adaptation
+ * - Fully token-governed (no hardcoded px/font-size/spacing)
+ * - Automatic theme adaptation via --ds-* CSS custom properties
  * - DS token semantic colors
  * - Responsive-friendly
  *
@@ -157,8 +160,23 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     if (loading) {
       return (
         <div ref={ref} className={`animate-pulse ${className}`} style={style}>
-          <div className="h-4 rounded w-16 mb-2" style={{ background: 'var(--ds-surface-panel)' }} />
-          <div className="h-8 rounded w-24" style={{ background: 'var(--ds-surface-panel)' }} />
+          <div
+            style={{
+              height: 'var(--ds-spacing-4, 1rem)',
+              width: 'var(--ds-spacing-16, 4rem)',
+              borderRadius: 'var(--ds-radius-sm, 4px)',
+              marginBottom: 'var(--ds-spacing-2, 0.5rem)',
+              background: 'var(--ds-surface-panel)',
+            }}
+          />
+          <div
+            style={{
+              height: 'var(--ds-spacing-8, 2rem)',
+              width: 'var(--ds-spacing-24, 6rem)',
+              borderRadius: 'var(--ds-radius-sm, 4px)',
+              background: 'var(--ds-surface-panel)',
+            }}
+          />
         </div>
       );
     }
@@ -166,15 +184,31 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     return (
       <div ref={ref} className={className} style={style}>
         {title && (
-          <div className="text-sm mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <div
+            style={{
+              fontSize: 'var(--ds-font-size-sm, 0.875rem)',
+              lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
+              marginBottom: 'var(--ds-spacing-1, 0.25rem)',
+              color: 'var(--ds-color-text-secondary)',
+            }}
+          >
             {title}
           </div>
         )}
         <div
-          className="text-2xl font-semibold"
-          style={{ ...valueColorStyle, ...valueStyle }}
+          style={{
+            fontSize: 'var(--ds-font-size-2xl, 1.5rem)',
+            lineHeight: 'var(--ds-line-height-2xl, 2rem)',
+            fontWeight: 'var(--ds-font-weight-semibold, 600)' as React.CSSProperties['fontWeight'],
+            ...valueColorStyle,
+            ...valueStyle,
+          }}
         >
-          {prefix && <span className="mr-1">{prefix}</span>}
+          {prefix && (
+            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
+              {prefix}
+            </span>
+          )}
           {shouldAnimateValue ? (
             <CountUp
               from={countFrom}
@@ -186,7 +220,11 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           ) : (
             <span>{displayValue}</span>
           )}
-          {suffix && <span className="ml-1">{suffix}</span>}
+          {suffix && (
+            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
+              {suffix}
+            </span>
+          )}
         </div>
       </div>
     );
@@ -298,19 +336,40 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     return (
       <div ref={ref} className={className} style={style}>
         {title && (
-          <div className="text-sm mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <div
+            style={{
+              fontSize: 'var(--ds-font-size-sm, 0.875rem)',
+              lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
+              marginBottom: 'var(--ds-spacing-1, 0.25rem)',
+              color: 'var(--ds-color-text-secondary)',
+            }}
+          >
             {title}
           </div>
         )}
         {/* font-mono ensures digits occupy equal widths so the layout
             does not shift as numbers change during the countdown. */}
         <div
-          className="text-2xl font-semibold font-mono"
-          style={{ ...valueColorStyle, ...valueStyle }}
+          style={{
+            fontSize: 'var(--ds-font-size-2xl, 1.5rem)',
+            lineHeight: 'var(--ds-line-height-2xl, 2rem)',
+            fontWeight: 'var(--ds-font-weight-semibold, 600)' as React.CSSProperties['fontWeight'],
+            fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
+            ...valueColorStyle,
+            ...valueStyle,
+          }}
         >
-          {prefix && <span className="mr-1">{prefix}</span>}
+          {prefix && (
+            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
+              {prefix}
+            </span>
+          )}
           <span>{formatTime(timeLeft, format)}</span>
-          {suffix && <span className="ml-1">{suffix}</span>}
+          {suffix && (
+            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
+              {suffix}
+            </span>
+          )}
         </div>
       </div>
     );

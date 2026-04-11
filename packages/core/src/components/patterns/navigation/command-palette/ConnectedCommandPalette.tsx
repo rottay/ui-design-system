@@ -25,7 +25,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { PatternCommandPalette } from '.';
+import { PatternCommandPalette } from './index';
 import { useCommandPaletteItems } from '../../../../hooks/commands/useCommandPaletteItems';
 
 export interface ConnectedCommandPaletteProps {

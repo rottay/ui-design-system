@@ -30,8 +30,8 @@ Categories: palette, typography, surfaces, motion, charts, chrome, engineBridge.
 ### TenantConfig (white-label root)
 
 Flat JSON-serializable tenant configuration. Holds identity (slug, name, plan,
-features, locale, logos) plus an optional `brandTheme` or `brandThemeId`
-reference. Backward-compatible `branding`, `personality`, and `tokenOverrides`
+features, locale, logos) plus an optional inline `brandTheme` object.
+Backward-compatible `branding`, `personality`, and `tokenOverrides`
 fields remain for existing consumers.
 
 ### DesignTokens (resolved token graph)
