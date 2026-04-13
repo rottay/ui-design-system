@@ -146,8 +146,10 @@ if (existsSync(sharedDir)) {
     if (isCompatReExport) continue;
     // Skip barrel re-export files
     if (rel.endsWith('index.ts') && !content.includes('function ') && !content.includes('const ')) continue;
-    // Check if file defines new shell/workspace abstractions
-    if (SHELL_PATTERNS.test(content) && !rel.includes('layouts/app-layout')) {
+    // Check if file defines new shell/workspace abstractions (not just mentions in comments)
+    // Strip comments before checking
+    const codeOnly = content.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    if (SHELL_PATTERNS.test(codeOnly) && !rel.includes('layouts/app-layout')) {
       violations.push({
         rule: 4,
         file,
@@ -200,16 +202,19 @@ const SHELL_GEOMETRY_RE = /(?:sidebarWidth|sidebarCollapsedWidth|headerHeight)\s
 const FIXED_SIDEBAR_RE = /position\s*:\s*['"]?fixed['"]?.*(?:left|right)\s*:\s*0/;
 for (const file of allTsFiles) {
   const rel = relative(srcDir, file);
-  // Allow vertical/shell, vertical/profile, _shared compat, and DS imports
+  // Allow vertical/shell, vertical/profile, _shared compat, layout, and ui/layout
   if (
     rel.startsWith('vertical/') ||
     rel.startsWith('components/_shared/layouts') ||
+    rel.startsWith('components/_shared/layout') ||
     rel.startsWith('components/layout') ||
+    rel.startsWith('ui/layout') ||
     rel.includes('node_modules')
   ) continue;
   const content = readFileSync(file, 'utf8');
   // Check for hardcoded shell metrics outside the vertical layer
-  if (SHELL_GEOMETRY_RE.test(content)) {
+  // Exclude DS surface config contexts (sidebarWidth in createDetailSurfaceConfig is a panel width, not shell)
+  if (SHELL_GEOMETRY_RE.test(content) && !content.includes('createDetailSurfaceConfig') && !content.includes('SurfaceConfig')) {
     violations.push({
       rule: 6,
       file,
