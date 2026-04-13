@@ -244,6 +244,25 @@ if (existsSync(srcDir)) {
 }
 
 // ---------------------------------------------------------------------------
+// Rule 8: Feature barrels must not fall back to @/surfaces/*
+// ---------------------------------------------------------------------------
+const featuresDir = join(srcDir, 'features');
+if (existsSync(featuresDir)) {
+  const featureBarrels = walk(featuresDir, (n) => n === 'index.ts');
+  const surfaceFallbackRe = /from\s+['"]@\/surfaces\//;
+  for (const file of featureBarrels) {
+    const content = readFileSync(file, 'utf8');
+    if (surfaceFallbackRe.test(content)) {
+      violations.push({
+        rule: 8,
+        file,
+        message: 'Feature barrel re-exports from @/surfaces/ — feature should own its screens physically',
+      });
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 if (violations.length === 0) {
