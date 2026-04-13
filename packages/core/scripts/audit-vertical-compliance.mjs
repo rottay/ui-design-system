@@ -11,6 +11,7 @@
  *   Rule 5: Recipes must have at least one runtime consumer
  *   Rule 6: No hardcoded shell geometry outside vertical/
  *   Rule 7: Permanent roots only (app, vertical, features, core, ui, styles)
+ *   Rule 9: Permanent roots may only import explicit components/ exceptions
  *
  * Source of truth: world-class-app-architecture/00-final-decision.md
  *
@@ -19,7 +20,7 @@
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { basename, join, relative, resolve } from 'node:path';
 
 const args = process.argv.slice(2);
 const appDirIdx = args.indexOf('--app-dir');
@@ -28,6 +29,7 @@ if (appDirIdx === -1 || !args[appDirIdx + 1]) {
   process.exit(2);
 }
 const srcDir = resolve(args[appDirIdx + 1]);
+const appName = basename(resolve(srcDir, '..'));
 
 if (!existsSync(srcDir)) {
   console.error(`Directory not found: ${srcDir}`);
@@ -74,8 +76,8 @@ function walk(dir, filter) {
 const isTsFile = (n) => /\.(ts|tsx)$/.test(n) && !n.endsWith('.d.ts');
 
 // ---------------------------------------------------------------------------
-// Rule 2: No shell imports from old locations outside _shared and vertical/
-// Covers all known shell paths across apps:
+// Rule 2: No shell imports from legacy locations outside _shared and vertical/
+// Covers the known legacy shell import paths across apps:
 //   - @/components/_shared/layouts/app-layout (platform)
 //   - @/components/_shared/layout (evnto)
 //   - @/components/layout (bithire)
@@ -89,10 +91,9 @@ const shellImportPatterns = [
 const allTsFiles = walk(srcDir, isTsFile);
 for (const file of allTsFiles) {
   const rel = relative(srcDir, file);
-  // Allow compat re-exports inside _shared/, components/layout/, and vertical/
+  // Allow compat re-exports inside _shared/ and vertical/
   if (
     rel.startsWith('components/_shared') ||
-    rel.startsWith('components/layout') ||
     rel.startsWith('vertical')
   ) continue;
   // Allow providers/ (they may legitimately import shell for wrapping)
@@ -207,7 +208,6 @@ for (const file of allTsFiles) {
     rel.startsWith('vertical/') ||
     rel.startsWith('components/_shared/layouts') ||
     rel.startsWith('components/_shared/layout') ||
-    rel.startsWith('components/layout') ||
     rel.startsWith('ui/layout') ||
     rel.includes('node_modules')
   ) continue;
@@ -263,6 +263,46 @@ if (existsSync(featuresDir)) {
         file,
         message: 'Feature barrel re-exports from @/surfaces/ — feature should own its screens physically',
       });
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rule 9: Permanent roots may only import explicit components/ exceptions
+// ---------------------------------------------------------------------------
+const permanentRootPrefixes = ['app/', 'vertical/', 'features/', 'core/', 'ui/'];
+const componentImportRe = /(?:from\s+['"]|import\(\s*['"])(@\/components\/[^'"]+)/g;
+const marketingComponentRe = /^@\/components\/(landing|showroom|showcase|marketing)(\/|$)/;
+
+function isInPermanentRoot(relPath) {
+  return permanentRootPrefixes.some((prefix) => relPath.startsWith(prefix));
+}
+
+function isAllowedComponentImport(relPath, importPath) {
+  if (relPath.startsWith('app/') && marketingComponentRe.test(importPath)) {
+    return true;
+  }
+
+  if (relPath.startsWith('features/showcase-marketing/') && marketingComponentRe.test(importPath)) {
+    return true;
+  }
+
+  return false;
+}
+
+for (const file of allTsFiles) {
+  const rel = relative(srcDir, file);
+  if (!isInPermanentRoot(rel)) continue;
+  const content = readFileSync(file, 'utf8');
+  for (const match of content.matchAll(componentImportRe)) {
+    const importPath = match[1];
+    if (!isAllowedComponentImport(rel, importPath)) {
+      violations.push({
+        rule: 9,
+        file,
+        message: `Permanent roots may not import "${importPath}" from components/ unless it is an explicit allowlisted exception`,
+      });
+      break;
     }
   }
 }
