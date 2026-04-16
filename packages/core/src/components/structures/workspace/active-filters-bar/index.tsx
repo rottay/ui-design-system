@@ -42,6 +42,8 @@ export interface ActiveFiltersBarProps {
   onRemoveFilter: (filterKey: string) => void;
   onClearAll: () => void;
   onAddFilter?: () => void;
+  /** When embedded, the rail becomes visually transparent to a parent shell. */
+  surfaceVariant?: 'default' | 'embedded';
 }
 
 export function ActiveFiltersBar({
@@ -49,16 +51,22 @@ export function ActiveFiltersBar({
   onRemoveFilter,
   onClearAll,
   onAddFilter,
+  surfaceVariant = 'default',
 }: ActiveFiltersBarProps) {
   if (!activeFilters.length) return null;
+
+  const embedded = surfaceVariant === 'embedded';
 
   return (
     <Box
       style={{
-        padding: '10px 16px 12px',
-        borderBottom: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))',
+        padding: embedded ? '6px 16px 10px' : '10px 16px 12px',
+        borderBottom: embedded
+          ? 'none'
+          : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
+        background: embedded
+          ? 'transparent'
+          : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))',
       }}
     >
       <Flex

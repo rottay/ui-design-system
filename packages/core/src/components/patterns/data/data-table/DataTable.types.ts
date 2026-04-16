@@ -93,6 +93,13 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   actions?: (row: T, index: number) => ReactNode;
 
   /**
+   * Optional width override for the trailing actions column.
+   * Useful when a workspace intentionally exposes only one or two compact
+   * icon actions and wants to reclaim horizontal space.
+   */
+  actionsColumnWidth?: number | string;
+
+  /**
    * Bulk action definitions shown when one or more rows are selected.
    * Each action receives the full array of selected row objects when executed.
    */

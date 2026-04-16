@@ -211,6 +211,12 @@ export interface SelectProps<T = string | number> extends EngineAwareProps {
    * @example `[',', ' ', ';']`
    */
   tokenSeparators?: string[];
+  /**
+   * Forces the modern engine to use the custom dropdown even for simple,
+   * non-searchable single selects. Useful in premium dark workspaces where
+   * the native menu would break visual consistency.
+   */
+  forceCustomDropdown?: boolean;
 }
 
 /**

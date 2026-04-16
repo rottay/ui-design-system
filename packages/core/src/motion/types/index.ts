@@ -279,13 +279,43 @@ export interface AuroraProps {
 }
 
 /** Animated floating particle field rendered behind content. */
-export interface ParticlesProps {
-  /** Number of particles to render. */
+export interface ParticleFieldFocalArea {
+  /** Normalized x coordinate (0-1) for the focal point. */
+  x: number;
+  /** Normalized y coordinate (0-1) for the focal point. */
+  y: number;
+  /** Normalized radius (0-1) for the focal area. */
+  radius: number;
+  /** Optional multiplier for emphasis. */
+  strength?: number;
+}
+
+/** Rich animated point cloud / particle field rendered behind content. */
+export interface ParticleFieldProps {
+  /** Explicit particle count override. */
   count?: number;
   /** Particle fill color (CSS color value). */
   color?: string;
-  /** Particle movement speed multiplier. */
+  /** Particle movement speed multiplier or explicit numeric drift. */
   speed?: number;
+  /** Visual density preset. */
+  density?: 'low' | 'medium' | 'high';
+  /** Global visual intensity preset. */
+  intensity?: 'low' | 'medium' | 'high';
+  /** Mood preset affecting drift, clustering and contrast. */
+  mood?: 'calm' | 'active' | 'focus';
+  /** Spatial pattern used to distribute the field. */
+  pattern?: 'ambient' | 'orbital';
+  /** Particle geometry. */
+  shape?: 'square' | 'round';
+  /** Minimum/maximum particle size in CSS pixels. */
+  sizeRange?: [number, number];
+  /** Base opacity for the entire field. */
+  opacity?: number;
+  /** Optional blend mode for the field. */
+  blendMode?: CSSProperties['mixBlendMode'];
+  /** Optional emphasis points that brighten nearby particles. */
+  focalAreas?: ParticleFieldFocalArea[];
   /** Content rendered above the particle layer. */
   children?: ReactNode;
   /** Additional CSS class name. */
@@ -293,6 +323,9 @@ export interface ParticlesProps {
   /** Inline styles. */
   style?: CSSProperties;
 }
+
+/** Backward-compatible alias for the original particle effect props. */
+export type ParticlesProps = ParticleFieldProps;
 
 /** SVG noise texture overlay for subtle grain effects. */
 export interface NoiseTextureProps {

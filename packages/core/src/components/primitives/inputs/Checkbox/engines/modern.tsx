@@ -167,6 +167,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   const active = isChecked || indeterminate;
 
   const displayLabel = label || children;
+  const isStandaloneIndicator = !displayLabel;
 
   /* -- Styles ------------------------------------------------------- */
   const transitionTiming = '150ms ease-out';
@@ -176,9 +177,19 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     width: boxSizeToken,
     height: boxSizeToken,
     minWidth: boxSizeToken,
-    borderRadius: 'var(--ds-radius-sm)',
-    border: `2px solid ${active ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)'}`,
-    backgroundColor: active ? 'var(--ds-color-primary)' : 'transparent',
+    borderRadius: isStandaloneIndicator ? '999px' : 'var(--ds-radius-sm)',
+    border: `2px solid ${
+      active
+        ? 'var(--ds-color-primary)'
+        : isStandaloneIndicator
+          ? 'color-mix(in srgb, var(--ds-color-border) 88%, var(--ds-surface-panel) 12%)'
+          : 'var(--ds-color-border-secondary)'
+    }`,
+    backgroundColor: active
+      ? 'var(--ds-color-primary)'
+      : isStandaloneIndicator
+        ? 'color-mix(in srgb, var(--ds-surface-panel) 76%, var(--ds-color-text-primary) 24%)'
+        : 'transparent',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -186,7 +197,10 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     flexShrink: 0,
     transform: active ? 'scale(1)' : 'scale(1)',
     ...(isHovered && !disabled && !active && {
-      borderColor: 'var(--ds-color-border)',
+      borderColor: isStandaloneIndicator ? 'var(--ds-color-text-secondary)' : 'var(--ds-color-border)',
+      backgroundColor: isStandaloneIndicator
+        ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%)'
+        : undefined,
     }),
     ...(isHovered && !disabled && active && {
       borderColor: 'var(--ds-color-primary-hover)',
@@ -205,12 +219,13 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   const labelRowStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: 8,
+    gap: displayLabel ? 8 : 0,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    padding: '4px 0',
-    minHeight: 44,
+    padding: displayLabel ? '4px 0' : 0,
+    minHeight: displayLabel ? 44 : boxSizeNumeric,
     userSelect: 'none',
     WebkitTapHighlightColor: 'transparent',
+    lineHeight: 1,
   };
 
   const labelTextStyle: React.CSSProperties = {

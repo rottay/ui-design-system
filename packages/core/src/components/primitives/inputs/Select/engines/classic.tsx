@@ -171,6 +171,7 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
     // Aliases
     allowClear,
     showSearch,
+    forceCustomDropdown: _forceCustomDropdown,
     ...rest
   } = props;
 

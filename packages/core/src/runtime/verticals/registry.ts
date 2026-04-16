@@ -41,23 +41,23 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
    * Evnto - Event management platform
    *
    * Derived from: events.organizer product profile + evnto tenant personality
-   * Personality: playful, bounce entrance, spring physics, spacious layout
+   * Personality: expressive, slideUp entrance, spring physics, comfortable layout
    */
   evnto: {
     key: 'evnto',
     label: 'Evnto',
-    description: 'Event management vertical with expressive animations, spacious layout, and media-first presentation.',
+    description: 'Event management vertical with expressive animations, comfortable layout, and live-status presentation.',
     engine: 'modern',
-    density: 'spacious',
+    density: 'comfortable',
     personality: {
       animation: {
-        intensity: 1.5,
-        staggerDelay: 80,
-        staggerMax: 600,
-        entrance: 'bounce',
-        entranceDuration: 500,
-        hoverLift: 4,
-        hoverScale: 1.03,
+        intensity: 1.2,
+        staggerDelay: 65,
+        staggerMax: 450,
+        entrance: 'slideUp',
+        entranceDuration: 350,
+        hoverLift: 3,
+        hoverScale: 1.02,
         useSpring: true,
         springTension: 200,
         springFriction: 18,
@@ -67,11 +67,11 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
       },
       chart: {
         animateOnMount: true,
-        mountDuration: 1200,
+        mountDuration: 1000,
         lineStyle: 'smooth',
         showDots: true,
         useGradientFill: true,
-        tooltipStyle: 'detailed',
+        tooltipStyle: 'glass',
       },
       typography: {
         headingWeightBias: 'heavier',
@@ -81,7 +81,7 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
       accent: {
         barPosition: 'top',
         barThickness: 4,
-        barStyle: 'animated',
+        barStyle: 'gradient',
         iconContainerShape: 'circle',
         badgeShape: 'pill',
         dividerStyle: 'dashed',
@@ -95,7 +95,7 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
       },
     },
     tokenOverrides: {
-      densityScale: 1.125,
+      densityScale: 1.05,
       borderRadius: {
         sm: '10px',
         md: '14px',
@@ -106,8 +106,8 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
     defaultProductProfile: 'events.organizer',
     features: ['events', 'ticketing', 'check-in', 'analytics'],
     surfaceDefaults: {
-      listView: 'cards',
-      density: 'spacious',
+      listView: 'table',
+      density: 'comfortable',
       schedulerView: 'week',
     },
     suggestedPalette: {
@@ -121,22 +121,22 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
    * BitHire - Tech recruitment platform
    *
    * Derived from: recruiting.operator product profile + bithire tenant personality
-   * Personality: formal, fade entrance, no spring, compact data-dense layout
+   * Personality: editorial, fade entrance, no spring, comfortable people-first layout
    */
   bithire: {
     key: 'bithire',
     label: 'BitHire',
-    description: 'Recruiting vertical with formal aesthetics, compact density, and information-dense workflows.',
+    description: 'Recruiting vertical with editorial aesthetics, comfortable density, and people-first workflows.',
     engine: 'classic',
-    density: 'compact',
+    density: 'comfortable',
     personality: {
       animation: {
         intensity: 0.4,
         staggerDelay: 30,
         staggerMax: 200,
         entrance: 'fade',
-        entranceDuration: 150,
-        hoverLift: 0,
+        entranceDuration: 200,
+        hoverLift: 1,
         hoverScale: 1.0,
         useSpring: false,
         springTension: 170,
@@ -147,7 +147,7 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
       },
       chart: {
         animateOnMount: true,
-        mountDuration: 400,
+        mountDuration: 500,
         lineStyle: 'sharp',
         showDots: true,
         useGradientFill: false,
@@ -156,7 +156,7 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
       typography: {
         headingWeightBias: 'heavier',
         headingLetterSpacing: '-0.01em',
-        labelStyle: 'uppercase',
+        labelStyle: 'sentence',
       },
       accent: {
         barPosition: 'left',
@@ -171,17 +171,17 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
         hoverElevation: 'lift-one',
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'compact',
+        paddingDensity: 'normal',
       },
     },
     tokenOverrides: {
-      densityScale: 0.95,
+      densityScale: 0.98,
     },
     defaultProductProfile: 'recruiting.operator',
     features: ['recruiting', 'candidates', 'interviews', 'offers'],
     surfaceDefaults: {
       listView: 'table',
-      density: 'compact',
+      density: 'comfortable',
       schedulerView: 'week',
     },
     suggestedPalette: {
@@ -195,15 +195,15 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
    * Platform - Admin portal
    *
    * Derived from: platform.admin product profile + rottay tenant personality
-   * Personality: neutral, fade entrance, balanced animations, comfortable density
+   * Personality: neutral, fade entrance, precise animations, compact density
    * Engine: modern is the flagship target; classic remains a supported engine path
    */
   platform: {
     key: 'platform',
     label: 'Platform',
-    description: 'Admin vertical with neutral aesthetics, comfortable density, and operational dashboard defaults.',
+    description: 'Admin vertical with sharp aesthetics, compact density, and operational dashboard defaults.',
     engine: 'modern',
-    density: 'comfortable',
+    density: 'compact',
     personality: {
       animation: {
         intensity: 0.4,
@@ -246,14 +246,14 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
         hoverElevation: 'lift-one',
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'normal',
+        paddingDensity: 'compact',
       },
     },
     defaultProductProfile: 'platform.admin',
     features: ['admin', 'settings', 'users', 'billing'],
     surfaceDefaults: {
       listView: 'table',
-      density: 'comfortable',
+      density: 'compact',
       schedulerView: 'month',
     },
     suggestedPalette: {

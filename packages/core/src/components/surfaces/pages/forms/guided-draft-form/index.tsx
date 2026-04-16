@@ -24,6 +24,7 @@ import { PatternStepWizard } from '../../../../patterns/forms/step-wizard';
 import type { WizardStep } from '../../../../patterns/forms/step-wizard';
 import { FadeIn } from '../../../../../motion';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import { useAdaptivePosture } from '../../../foundation/hooks/useAdaptivePosture';
 import { useSurfaceProfileDefaults } from '../../../foundation/profile-defaults';
 import {
   resolveStackSpacing,
@@ -117,6 +118,19 @@ export interface GuidedDraftFormSurfaceProps {
   /** Header/footer slots. */
   headerSlot?: ReactNode;
   footerSlot?: ReactNode;
+
+  /**
+   * Adaptive posture config — overrides default breakpoint behavior.
+   *
+   * @example
+   * ```ts
+   * adaptive={{
+   *   desktop: { formLayout: 'sidebar-nav', actionBar: 'inline' },
+   *   phone: { formLayout: 'stacked', actionBar: 'sticky-bottom', compactHeader: true },
+   * }}
+   * ```
+   */
+  adaptive?: import('../../../foundation/contracts/adaptive').AdaptiveConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -483,6 +497,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     secondaryActions,
     headerSlot,
     footerSlot,
+    adaptive,
   } = props;
 
   const profileDefaults = useSurfaceProfileDefaults();
@@ -490,8 +505,19 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
 
-  // Responsive layout: desktop sidebar | tablet pills | mobile dropdown
-  const sectionNavLayout: SectionNavLayout = isMobile
+  // Adaptive posture resolution
+  const posture = useAdaptivePosture(adaptive);
+
+  // Responsive layout: adaptive override -> breakpoint defaults
+  const formLayoutMap: Record<string, SectionNavLayout> = {
+    'stacked': 'dropdown',
+    'dropdown-nav': 'dropdown',
+    'pill-nav': 'pills',
+    'sidebar-nav': 'sidebar',
+  };
+  const sectionNavLayout: SectionNavLayout = posture.formLayout
+    ? (formLayoutMap[posture.formLayout] ?? 'sidebar')
+    : isMobile
     ? 'dropdown'
     : isTablet
       ? 'pills'

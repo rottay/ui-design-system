@@ -4,5 +4,6 @@
  */
 
 export * from './page-shell';
+export * from './workspace-shell';
 export * from './header';
 export * from './sidebar';

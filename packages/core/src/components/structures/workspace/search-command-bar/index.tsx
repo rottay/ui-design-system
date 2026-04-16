@@ -67,6 +67,12 @@ export interface SearchCommandBarProps {
   command: SearchCommandBarConfig;
   /** Optional right-rail slot for utility buttons (views/columns/etc.). */
   actionsSlot?: React.ReactNode;
+  /** Optional compact rail rendered above the search input. */
+  topRailSlot?: React.ReactNode;
+  /** Surface style when the command bar lives inside a larger shell. */
+  surfaceVariant?: 'default' | 'embedded';
+  /** Shared layout language with the surrounding workspace header/shell. */
+  layoutVariant?: 'default' | 'editorial-tech';
   /**
    * Commands to register in the global registry. When provided, these are
    * auto-registered on mount and available in the Cmd+K palette.
@@ -150,9 +156,14 @@ function CommandSuggestionChip({
 export function SearchCommandBar({
   command,
   actionsSlot,
+  topRailSlot,
+  surfaceVariant = 'default',
+  layoutVariant = 'default',
   commands: commandsProp,
   showCommandPalette,
 }: SearchCommandBarProps) {
+  const embedded = surfaceVariant === 'embedded';
+  const editorialTech = layoutVariant === 'editorial-tech';
   // Register commands in the global registry when provided
   useRegisterCommands(commandsProp ?? []);
 
@@ -349,9 +360,15 @@ export function SearchCommandBar({
         position: 'relative',
         overflow: 'visible',
         zIndex: 30,
-        padding: '10px 16px 12px',
-        borderBottom: '1px solid var(--ds-color-border-subtle)',
-        background: 'var(--ds-surface-card)',
+        padding: embedded
+          ? editorialTech
+            ? topRailSlot
+              ? '0 20px 10px'
+              : '2px 20px 10px'
+            : '8px 16px 8px'
+          : '10px 16px 12px',
+        borderBottom: embedded ? 'none' : '1px solid var(--ds-color-border-subtle)',
+        background: embedded ? 'transparent' : 'var(--ds-surface-card)',
       }}
     >
       {/* TODO: R1-deferred: extract keyframe animations to CSS layer */}
@@ -370,6 +387,19 @@ export function SearchCommandBar({
       </style>
 
       <Box style={{ position: 'relative', zIndex: 1 }}>
+        {topRailSlot && (
+          <Box
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              minHeight: editorialTech ? 24 : 22,
+              marginBottom: editorialTech ? 8 : 6,
+            }}
+          >
+            {topRailSlot}
+          </Box>
+        )}
         <Box
           style={{
             display: 'flex',
@@ -382,16 +412,26 @@ export function SearchCommandBar({
             <Box
               style={{
                 position: 'relative',
-                padding: 6,
-                borderRadius: 15,
+                padding: editorialTech ? 5 : 6,
+                borderRadius: editorialTech ? 18 : 15,
                 border:
                   voiceStatus === 'error'
                     ? '1px solid var(--ds-color-error)'
                     : isVoiceActive
                       ? '1px solid var(--ds-color-primary)'
-                      : '1px solid var(--ds-color-border-subtle)',
-                background: 'var(--ds-surface-panel)',
-                boxShadow: 'var(--ds-elevation-1)',
+                      : editorialTech && embedded
+                        ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)'
+                        : '1px solid var(--ds-color-border-subtle)',
+                background: embedded
+                  ? editorialTech
+                    ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-panel) 68%, transparent) 100%)'
+                    : 'color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)'
+                  : 'var(--ds-surface-panel)',
+                boxShadow: embedded
+                  ? editorialTech
+                    ? '0 10px 28px color-mix(in srgb, #000 18%, transparent), inset 0 1px 0 color-mix(in srgb, white 4%, transparent)'
+                    : '0 12px 28px color-mix(in srgb, #000 14%, transparent), inset 0 1px 0 color-mix(in srgb, white 3%, transparent)'
+                  : 'var(--ds-elevation-1)',
               }}
             >
               <Box
@@ -414,19 +454,25 @@ export function SearchCommandBar({
                 value={displayValue}
                 onChange={handleInputChange}
                 style={{
-                  height: 42,
+                  height: editorialTech ? 44 : 42,
                   paddingLeft: 46,
                   paddingRight: inputRightPadding,
                   fontSize: 14,
                   letterSpacing: '-0.01em',
-                  background: 'var(--ds-surface-panel)',
+                  background: embedded
+                    ? editorialTech
+                      ? 'color-mix(in srgb, var(--ds-surface-panel) 78%, transparent)'
+                      : 'color-mix(in srgb, var(--ds-surface-panel) 84%, transparent)'
+                    : 'var(--ds-surface-panel)',
                   border:
                     voiceStatus === 'error'
                       ? '1px solid var(--ds-color-error)'
                       : isVoiceActive
                         ? '1px solid var(--ds-color-primary)'
-                        : '1px solid var(--ds-color-border-subtle)',
-                  borderRadius: 'var(--ds-radius-xl, 16px)',
+                        : editorialTech && embedded
+                          ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent)'
+                          : '1px solid var(--ds-color-border-subtle)',
+                  borderRadius: editorialTech ? '18px' : 'var(--ds-radius-xl, 16px)',
                   boxShadow: 'none',
                 }}
               />
@@ -787,8 +833,10 @@ export function SearchCommandBar({
                     flexWrap: 'wrap',
                     justifyContent: 'flex-end',
                     minHeight: 44,
-                    padding: '6px 0 6px 18px',
-                    borderLeft: '1px solid var(--ds-color-border-subtle)',
+                    padding: editorialTech ? '6px 0 6px 16px' : '6px 0 6px 18px',
+                    borderLeft: editorialTech
+                      ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)'
+                      : '1px solid var(--ds-color-border-subtle)',
                   }}
                 >
                   <Text
@@ -821,8 +869,10 @@ export function SearchCommandBar({
                     display: 'inline-flex',
                     alignItems: 'center',
                     minHeight: 44,
-                    padding: '6px 0 6px 18px',
-                    borderLeft: '1px solid var(--ds-color-border-subtle)',
+                    padding: editorialTech ? '6px 0 6px 16px' : '6px 0 6px 18px',
+                    borderLeft: editorialTech
+                      ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)'
+                      : '1px solid var(--ds-color-border-subtle)',
                   }}
                 >
                   {actionsSlot}
@@ -832,6 +882,16 @@ export function SearchCommandBar({
           )}
         </Box>
       </Box>
+      {embedded && editorialTech && (
+        <Box
+          style={{
+            marginTop: 10,
+            height: 1,
+            background:
+              'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%)',
+          }}
+        />
+      )}
     </Box>
     </>
   );

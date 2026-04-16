@@ -37,6 +37,24 @@ const DENSITY_PADDING_MAP = {
   spacious: 'var(--ds-table-padding-spacious, 16px 16px)',
 } as const;
 
+const LEADING_DATA_COLUMN_PADDING_MAP = {
+  compact: '6px 12px 6px 2px',
+  comfortable: '12px 16px 12px 3px',
+  spacious: '16px 16px 16px 4px',
+} as const;
+
+const SELECTION_CELL_PADDING_MAP = {
+  compact: '0 0 0 6px',
+  comfortable: '0 0 0 7px',
+  spacious: '0 0 0 8px',
+} as const;
+
+const ACTION_CELL_PADDING_MAP = {
+  compact: '0 8px',
+  comfortable: '0 10px',
+  spacious: '0 12px',
+} as const;
+
 /**
  * DS-token-styled data table that renders native HTML table elements with
  * inline styles referencing design system CSS custom properties. Manages
@@ -56,6 +74,7 @@ export default function ModernDataTable<T extends object>(
     rowKey,
     toolbar,
     actions,
+    actionsColumnWidth,
     bulkActions,
     emptyState,
     expandedRow,
@@ -130,6 +149,12 @@ export default function ModernDataTable<T extends object>(
     (row: T, index: number) => resolveRowKey(row, rowKey, index),
     [rowKey]
   );
+
+  const selectionCellPadding = SELECTION_CELL_PADDING_MAP[density] ?? SELECTION_CELL_PADDING_MAP.comfortable;
+  const leadingDataColumnPadding = LEADING_DATA_COLUMN_PADDING_MAP[density] ?? LEADING_DATA_COLUMN_PADDING_MAP.comfortable;
+  const actionCellPadding = ACTION_CELL_PADDING_MAP[density] ?? ACTION_CELL_PADDING_MAP.comfortable;
+  const resolvedSelectionColumnWidth = 22;
+  const resolvedActionsColumnWidth = actionsColumnWidth ?? 120;
 
   // --- Process columns: visibility filter -> reorder sort ---
   const processedColumns = useMemo(() => {
@@ -653,13 +678,18 @@ export default function ModernDataTable<T extends object>(
                   {selectable && (
                     <th
                       style={{
-                        padding: densityPadding,
-                        width: 48,
+                        padding: selectionCellPadding,
+                        width: resolvedSelectionColumnWidth,
+                        minWidth: resolvedSelectionColumnWidth,
+                        maxWidth: resolvedSelectionColumnWidth,
+                        boxSizing: 'border-box',
                         color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                         fontWeight: 500,
                         fontSize: 12,
                         letterSpacing: '0.05em',
                         textTransform: 'uppercase' as const,
+                        verticalAlign: 'middle',
+                        textAlign: 'left',
                       }}
                     >
                       <Checkbox
@@ -678,10 +708,11 @@ export default function ModernDataTable<T extends object>(
                       }}
                     />
                   )}
-                  {visibleColumns.map((col) => {
+                  {visibleColumns.map((col, columnIndex) => {
                     const pinSide = getPinSide(col.key, col.pin);
                     const pinnedStyle = getPinnedStyle(pinSide);
                     const resolvedWidth = columnWidths?.[col.key] ?? col.width;
+                    const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
 
                     return (
                       <th
@@ -702,7 +733,7 @@ export default function ModernDataTable<T extends object>(
                           minWidth: col.minWidth,
                           maxWidth: col.maxWidth,
                           textAlign: col.align,
-                          padding: densityPadding,
+                          padding: isLeadingDataColumn && selectable ? leadingDataColumnPadding : densityPadding,
                           color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                           fontWeight: 500,
                           fontSize: 11,
@@ -884,9 +915,10 @@ export default function ModernDataTable<T extends object>(
                   {actions && (
                     <th
                       style={{
-                        width: 120,
+                        width: resolvedActionsColumnWidth,
+                        minWidth: resolvedActionsColumnWidth,
                         textAlign: 'right',
-                        padding: densityPadding,
+                        padding: actionCellPadding,
                         position: 'sticky',
                         right: 0,
                         zIndex: 2,
@@ -948,7 +980,15 @@ export default function ModernDataTable<T extends object>(
                         {/* Selection checkbox */}
                         {selectable && (
                           <td
-                            style={{ padding: densityPadding }}
+                            style={{
+                              padding: selectionCellPadding,
+                              width: resolvedSelectionColumnWidth,
+                              minWidth: resolvedSelectionColumnWidth,
+                              maxWidth: resolvedSelectionColumnWidth,
+                              boxSizing: 'border-box',
+                              verticalAlign: 'middle',
+                              textAlign: 'left',
+                            }}
                             onClick={(e) => e.stopPropagation()}
                           >
                             <Checkbox
@@ -990,10 +1030,11 @@ export default function ModernDataTable<T extends object>(
                           </td>
                         )}
                         {/* Data cells */}
-                        {visibleColumns.map((col) => {
+                        {visibleColumns.map((col, columnIndex) => {
                           const pinSide = getPinSide(col.key, col.pin);
                           const pinnedStyle = getPinnedStyle(pinSide);
                           const resolvedWidth = columnWidths?.[col.key] ?? col.width;
+                          const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
 
                           return (
                             <td
@@ -1001,7 +1042,7 @@ export default function ModernDataTable<T extends object>(
                               style={{
                                 textAlign: col.align,
                                 width: resolvedWidth,
-                                padding: densityPadding,
+                                padding: isLeadingDataColumn && selectable ? leadingDataColumnPadding : densityPadding,
                                 position: pinnedStyle.position as any,
                                 left: pinnedStyle.left as any,
                                 right: pinnedStyle.right as any,
@@ -1028,12 +1069,14 @@ export default function ModernDataTable<T extends object>(
                           <td
                             style={{
                               textAlign: 'right',
-                              width: 120,
-                              padding: densityPadding,
+                              width: resolvedActionsColumnWidth,
+                              minWidth: resolvedActionsColumnWidth,
+                              padding: actionCellPadding,
                               position: 'sticky',
                               right: 0,
                               zIndex: 2,
                               backgroundColor: 'var(--ds-surface-card)',
+                              whiteSpace: 'nowrap',
                             }}
                             onClick={(e) => e.stopPropagation()}
                           >

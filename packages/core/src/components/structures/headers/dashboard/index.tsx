@@ -1,0 +1,300 @@
+'use client';
+
+/**
+ * @fileoverview DashboardHeader -- structures-tier dashboard/overview page header.
+ *
+ * @description
+ * Engine-free header for operational cockpit pages: dashboards, analytics views,
+ * real-time monitors, event-day command centers. Unlike CollectionHeader (hero
+ * title + action cluster) or DetailHeader (entity breadcrumbs + tabs), DashboardHeader
+ * provides metric/status slots alongside the title for at-a-glance KPIs.
+ *
+ * Features:
+ *   - Title + subtitle
+ *   - Metric cards row (compact KPI chips)
+ *   - Status indicator (live/connected/syncing)
+ *   - Utility actions (right side)
+ *   - Search slot
+ *   - Compact mode for phone breakpoints
+ *   - Optional time range selector slot
+ *
+ * Domain-agnostic: all copy and data come from props.
+ */
+
+import { type ReactNode } from 'react';
+import { Box, Button, Flex, Text } from '../../../primitives';
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+export interface DashboardMetric {
+  key: string;
+  label: string;
+  value: string | number;
+  change?: {
+    value: string;
+    direction: 'up' | 'down' | 'flat';
+  };
+  icon?: ReactNode;
+}
+
+export interface DashboardAction {
+  key: string;
+  label: string;
+  icon?: ReactNode;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'default';
+}
+
+export type DashboardStatusState = 'live' | 'connected' | 'syncing' | 'offline' | 'warning';
+
+export interface DashboardHeaderProps {
+  /** Page title. */
+  title: string;
+  /** Subtitle or context line. */
+  subtitle?: string;
+  /** Compact KPI metrics displayed alongside the title. */
+  metrics?: DashboardMetric[];
+  /** Status indicator (live/connected/syncing/offline). */
+  status?: {
+    state: DashboardStatusState;
+    label?: string;
+  };
+  /** Utility actions (right side). */
+  actions?: DashboardAction[];
+  /** Search slot rendered in the header. */
+  searchSlot?: ReactNode;
+  /** Time range selector slot. */
+  timeRangeSlot?: ReactNode;
+  /** When true, renders a compact single-row header (for phone breakpoints). */
+  compact?: boolean;
+  /** Optional icon next to the title. */
+  icon?: ReactNode;
+}
+
+// ---------------------------------------------------------------------------
+// Status indicator
+// ---------------------------------------------------------------------------
+
+const STATUS_COLORS: Record<DashboardStatusState, string> = {
+  live: 'var(--ds-color-success)',
+  connected: 'var(--ds-color-success)',
+  syncing: 'var(--ds-color-warning)',
+  offline: 'var(--ds-color-error)',
+  warning: 'var(--ds-color-warning)',
+};
+
+function StatusDot({ state, label }: { state: DashboardStatusState; label?: string }) {
+  const color = STATUS_COLORS[state];
+  return (
+    <Flex
+      align="center"
+      gap={2}
+      style={{
+        padding: '2px 10px',
+        borderRadius: 'var(--ds-radius-full, 9999px)',
+        background: `color-mix(in srgb, ${color} 12%, transparent)`,
+      }}
+    >
+      <Box
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: '50%',
+          background: color,
+          flexShrink: 0,
+          animation: state === 'live' || state === 'syncing' ? 'pulse 2s infinite' : undefined,
+        }}
+      />
+      <Text size="xs" style={{ color, whiteSpace: 'nowrap', fontWeight: 500 }}>
+        {label ?? state.charAt(0).toUpperCase() + state.slice(1)}
+      </Text>
+    </Flex>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Metric chip
+// ---------------------------------------------------------------------------
+
+function MetricChip({ metric }: { metric: DashboardMetric }) {
+  const changeColor = metric.change
+    ? metric.change.direction === 'up'
+      ? 'var(--ds-color-success)'
+      : metric.change.direction === 'down'
+        ? 'var(--ds-color-error)'
+        : 'var(--ds-color-text-muted)'
+    : undefined;
+
+  return (
+    <Flex
+      align="center"
+      gap={2}
+      style={{
+        padding: '6px 12px',
+        borderRadius: 'var(--ds-radius-md, 6px)',
+        background: 'var(--ds-color-bg-secondary)',
+        border: '1px solid var(--ds-color-border-secondary)',
+      }}
+    >
+      {metric.icon && (
+        <Box style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>
+          {metric.icon}
+        </Box>
+      )}
+      <Box>
+        <Text size="xs" color="muted" style={{ lineHeight: 1.2 }}>
+          {metric.label}
+        </Text>
+        <Flex align="baseline" gap={1}>
+          <Text size="sm" weight="semibold" style={{ lineHeight: 1.2 }}>
+            {metric.value}
+          </Text>
+          {metric.change && (
+            <Text size="xs" style={{ color: changeColor, lineHeight: 1.2 }}>
+              {metric.change.direction === 'up' ? '+' : metric.change.direction === 'down' ? '-' : ''}
+              {metric.change.value}
+            </Text>
+          )}
+        </Flex>
+      </Box>
+    </Flex>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// DashboardHeader
+// ---------------------------------------------------------------------------
+
+export function DashboardHeader({
+  title,
+  subtitle,
+  metrics,
+  status,
+  actions,
+  searchSlot,
+  timeRangeSlot,
+  compact,
+  icon,
+}: DashboardHeaderProps) {
+  // ---------- Compact mode (phone) ----------
+  if (compact) {
+    return (
+      <Box
+        as="header"
+        role="banner"
+        aria-label={title}
+        style={{
+          padding: 'var(--ds-spacing-sm, 12px) var(--ds-spacing-md, 16px)',
+          borderBottom: '1px solid var(--ds-color-border-secondary)',
+        }}
+      >
+        <Flex justify="between" align="center" gap={3}>
+          <Flex align="center" gap={2} style={{ flex: 1, minWidth: 0 }}>
+            {icon && <Box aria-hidden="true" style={{ flexShrink: 0, color: 'var(--ds-color-text-muted)' }}>{icon}</Box>}
+            <Text size="md" weight="semibold" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {title}
+            </Text>
+            {status && <StatusDot state={status.state} label={status.label} />}
+          </Flex>
+          {actions && actions.length > 0 && (
+            <Box
+              role="toolbar"
+              aria-label="Actions"
+              style={{ display: 'flex', gap: 4 }}
+            >
+              {actions.slice(0, 2).map((action) => (
+                <Button
+                  key={action.key}
+                  variant={action.variant === 'primary' ? 'primary' : 'ghost'}
+                  size="sm"
+                  onClick={action.onClick}
+                  aria-label={action.label}
+                >
+                  {action.icon ?? action.label}
+                </Button>
+              ))}
+            </Box>
+          )}
+        </Flex>
+        {/* Scrollable metric chips in compact */}
+        {metrics && metrics.length > 0 && (
+          <Box
+            role="group"
+            aria-label="Key metrics"
+            style={{
+              display: 'flex',
+              gap: 8,
+              marginTop: 8,
+              overflowX: 'auto',
+              WebkitOverflowScrolling: 'touch',
+              paddingBottom: 2,
+            }}
+          >
+            {metrics.map((m) => (
+              <MetricChip key={m.key} metric={m} />
+            ))}
+          </Box>
+        )}
+      </Box>
+    );
+  }
+
+  // ---------- Full mode (desktop / tablet) ----------
+  return (
+    <Box
+      as="header"
+      role="banner"
+      aria-label={title}
+      style={{
+        padding: 'var(--ds-spacing-md, 16px) var(--ds-spacing-lg, 24px)',
+        background: 'var(--ds-color-bg-primary)',
+        borderBottom: '1px solid var(--ds-color-border-secondary)',
+      }}
+    >
+      {/* Row 1: title + status + actions */}
+      <Flex justify="between" align="center" gap={4} style={{ marginBottom: metrics || searchSlot || timeRangeSlot ? 12 : 0 }}>
+        <Box style={{ flex: 1, minWidth: 0 }}>
+          <Flex align="center" gap={3}>
+            {icon && <Box aria-hidden="true" style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>{icon}</Box>}
+            <Box>
+              <Flex align="center" gap={2}>
+                <Text size="xl" weight="semibold">{title}</Text>
+                {status && <StatusDot state={status.state} label={status.label} />}
+              </Flex>
+              {subtitle && (
+                <Text size="sm" color="muted" style={{ marginTop: 2 }}>{subtitle}</Text>
+              )}
+            </Box>
+          </Flex>
+        </Box>
+
+        <Flex align="center" gap={3}>
+          {timeRangeSlot}
+          {searchSlot}
+          {actions && actions.map((action) => (
+            <Button
+              key={action.key}
+              variant={action.variant === 'primary' ? 'primary' : action.variant === 'secondary' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={action.onClick}
+              icon={action.icon}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </Flex>
+      </Flex>
+
+      {/* Row 2: metric chips */}
+      {metrics && metrics.length > 0 && (
+        <Box role="group" aria-label="Key metrics" style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          {metrics.map((m) => (
+            <MetricChip key={m.key} metric={m} />
+          ))}
+        </Box>
+      )}
+    </Box>
+  );
+}

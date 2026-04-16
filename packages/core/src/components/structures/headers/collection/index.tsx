@@ -53,25 +53,48 @@ export interface CollectionHeaderProps {
   eyebrow: string;
   /** Hero title (36px). */
   title: string;
+  /** Typography treatment for the hero title. */
+  titleTreatment?: 'default' | 'display' | 'dotted';
   /** Subtitle rendered below the title. */
   subtitle: string;
+  /** Tone/treatment for the subtitle copy. */
+  subtitleTreatment?: 'default' | 'mono-technical';
+  /** Overall composition variant for premium workspace headers. */
+  layoutVariant?: 'default' | 'editorial-tech';
   /** Compact tone-coded chips rendered below the action cluster. */
   metaItems?: CollectionHeaderMetaItem[];
+  /** Placement for meta items relative to the action rail. */
+  metaItemsPlacement?: 'below' | 'inline-start' | 'eyebrow-end';
   /** Compact pill hints rendered after the meta items. */
   shortcuts?: CollectionHeaderShortcut[];
   /** Right-side action buttons rendered in a raised pill cluster. */
   quickActions?: CollectionHeaderQuickAction[];
+  /** When embedded, the header becomes visually transparent to a parent shell. */
+  surfaceVariant?: 'default' | 'embedded';
 }
 
 export function CollectionHeader({
   eyebrow,
   title,
+  titleTreatment = 'default',
   subtitle,
+  subtitleTreatment = 'default',
+  layoutVariant = 'default',
   metaItems,
+  metaItemsPlacement = 'below',
   shortcuts,
   quickActions,
+  surfaceVariant = 'default',
 }: CollectionHeaderProps) {
+  const embedded = surfaceVariant === 'embedded';
+  const useDisplayTitle = titleTreatment === 'display';
+  const useDottedTitle = titleTreatment === 'dotted';
+  const useMonoSubtitle = subtitleTreatment === 'mono-technical';
+  const editorialTech = layoutVariant === 'editorial-tech';
   const compactMetaItems = metaItems ?? [];
+  const inlineMetaItems = metaItemsPlacement === 'inline-start' ? compactMetaItems : [];
+  const eyebrowMetaItems = metaItemsPlacement === 'eyebrow-end' ? compactMetaItems : [];
+  const belowMetaItems = metaItemsPlacement === 'below' ? compactMetaItems : [];
   const eyebrowChip = eyebrow ? (
     <Text
       style={{
@@ -81,7 +104,9 @@ export function CollectionHeader({
         padding: '0 var(--ds-spacing-2, 9px)',
         borderRadius: 999,
         border: '1px solid var(--ds-color-border-subtle)',
-        background: 'var(--ds-surface-panel)',
+        background: embedded
+          ? 'color-mix(in srgb, var(--ds-surface-panel) 72%, transparent)'
+          : 'var(--ds-surface-panel)',
         fontSize: 'var(--ds-font-size-xs, 9px)',
         fontWeight: 700,
         textTransform: 'uppercase' as const,
@@ -94,52 +119,240 @@ export function CollectionHeader({
     </Text>
   ) : null;
 
+  const renderMetaItem = (item: CollectionHeaderMetaItem) => {
+    const toneStyles =
+      item.tone === 'primary'
+        ? {
+            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)',
+            background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
+            color: 'var(--ds-color-primary)',
+          }
+        : item.tone === 'success'
+          ? {
+              border: '1px solid color-mix(in srgb, var(--ds-color-success) 18%, transparent)',
+              background: 'color-mix(in srgb, var(--ds-color-success) 8%, transparent)',
+              color: 'var(--ds-color-success)',
+            }
+          : {
+              border: '1px solid var(--ds-color-border-subtle)',
+              background: 'var(--ds-surface-panel)',
+              color: 'var(--ds-color-text-secondary)',
+            };
+
+    return (
+      <Box
+        key={item.key}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4,
+          minHeight: 'var(--ds-spacing-6, 22px)',
+          padding: '0 var(--ds-spacing-2, 8px)',
+          borderRadius: 999,
+          fontSize: 'var(--ds-font-size-xs, 10px)',
+          fontWeight: 700,
+          letterSpacing: '0.02em',
+          whiteSpace: 'nowrap',
+          ...toneStyles,
+        }}
+      >
+        {item.label}
+      </Box>
+    );
+  };
+
   return (
     <Box
       style={{
         position: 'relative',
         overflow: 'hidden',
-        padding: 'var(--ds-spacing-5, 18px) var(--ds-spacing-5, 18px) var(--ds-spacing-3, 14px)',
-        background: 'var(--ds-surface-card)',
-        borderBottom: '1px solid var(--ds-color-border-subtle)',
+        padding: embedded
+          ? editorialTech
+            ? 'var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px) var(--ds-spacing-1, 4px)'
+            : 'var(--ds-spacing-5, 18px) var(--ds-spacing-5, 18px) var(--ds-spacing-2, 10px)'
+          : editorialTech
+            ? 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)'
+            : 'var(--ds-spacing-5, 18px) var(--ds-spacing-5, 18px) var(--ds-spacing-3, 14px)',
+        background: embedded ? 'transparent' : 'var(--ds-surface-card)',
+        borderBottom: embedded ? 'none' : '1px solid var(--ds-color-border-subtle)',
       }}
     >
       <Flex
         align="start"
         justify="between"
-        gap={18}
+        gap={editorialTech ? 24 : 18}
         wrap="wrap"
         style={{ position: 'relative' }}
       >
-        <Box style={{ minWidth: 0, flex: '1 1 560px', maxWidth: 820 }}>
+        <Box
+          style={{
+            minWidth: 0,
+            flex: '1 1 560px',
+            maxWidth: editorialTech ? 840 : 820,
+            display: 'grid',
+            gap: editorialTech ? 0 : undefined,
+          }}
+        >
           <Box
             as="h2"
             style={{
-              fontFamily: 'var(--ds-font-family-heading)',
-              fontSize: 'var(--ds-font-size-4xl, 36px)',
-              fontWeight: 'var(--ds-font-weight-bold, 780)' as any,
-              letterSpacing: '-0.05em',
-              color: 'var(--ds-color-text-primary)',
+              fontFamily: useDisplayTitle
+                ? 'var(--ds-font-family-display, var(--ds-font-family-heading))'
+                : 'var(--ds-font-family-heading)',
+              fontSize: useDisplayTitle
+                ? 'clamp(42px, 5.4vw, 58px)'
+                : useDottedTitle
+                  ? editorialTech
+                    ? 'clamp(40px, 5.2vw, 54px)'
+                    : 'clamp(38px, 4.8vw, 52px)'
+                : 'var(--ds-font-size-4xl, 36px)',
+              fontWeight: useDisplayTitle
+                ? ('var(--ds-font-weight-semibold, 680)' as any)
+                : useDottedTitle
+                  ? (editorialTech
+                      ? 'var(--ds-font-weight-semibold, 700)'
+                      : 'var(--ds-font-weight-extrabold, 820)') as any
+                : ('var(--ds-font-weight-bold, 780)' as any),
+              letterSpacing: useDisplayTitle
+                ? '0.015em'
+                : useDottedTitle
+                  ? editorialTech
+                    ? '-0.052em'
+                    : '-0.04em'
+                  : '-0.05em',
+              color: useDottedTitle ? 'transparent' : 'var(--ds-color-text-primary)',
               margin: 0,
               marginTop: 0,
-              lineHeight: 0.92,
+              lineHeight: useDisplayTitle ? 0.9 : useDottedTitle ? (editorialTech ? 0.84 : 0.88) : 0.92,
               textWrap: 'balance',
+              display: 'block',
+              width: 'fit-content',
+              textRendering: 'optimizeLegibility',
+              textShadow: useDisplayTitle
+                ? '0 0 24px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)'
+                : undefined,
+              textTransform: (useDisplayTitle || useDottedTitle) ? ('uppercase' as const) : undefined,
+              backgroundImage: useDottedTitle
+                ? [
+                    editorialTech
+                      ? 'radial-gradient(circle at 1.35px 1.35px, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0 0.56px, transparent 0.72px)'
+                      : 'radial-gradient(circle, color-mix(in srgb, var(--ds-color-text-primary) 96%, white 4%) 0 1px, transparent 1.2px)',
+                    editorialTech
+                      ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 84%, white 16%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, white 10%) 54%, color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent) 100%)'
+                      : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, transparent) 100%)',
+                  ].join(', ')
+                : undefined,
+              backgroundSize: useDottedTitle
+                ? editorialTech
+                  ? '5.2px 5.2px, 100% 100%'
+                  : '6px 6px, 100% 100%'
+                : undefined,
+              backgroundPosition: useDottedTitle ? '0 0, 0 0' : undefined,
+              WebkitBackgroundClip: useDottedTitle ? ('text, text' as any) : undefined,
+              backgroundClip: useDottedTitle ? ('text, text' as any) : undefined,
+              WebkitTextFillColor: useDottedTitle ? 'transparent' : undefined,
+              WebkitTextStroke: useDottedTitle
+                ? editorialTech
+                  ? '0.32px color-mix(in srgb, var(--ds-color-text-primary) 18%, transparent)'
+                  : '1px color-mix(in srgb, var(--ds-color-text-primary) 24%, transparent)'
+                : undefined,
+              filter: useDottedTitle
+                ? editorialTech
+                  ? 'drop-shadow(0 0 8px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))'
+                  : 'drop-shadow(0 0 18px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent))'
+                : undefined,
             }}
           >
             {title}
           </Box>
-          <Text
-            style={{
-              fontSize: 'var(--ds-font-size-sm, 12px)',
-              color: 'var(--ds-color-text-secondary)',
-              marginTop: 'var(--ds-spacing-2, 7px)',
-              lineHeight: 1.5,
-              maxWidth: 560,
-              textWrap: 'pretty',
-            }}
-          >
-            {subtitle}
-          </Text>
+          {editorialTech ? (
+            <Flex
+              align="start"
+              gap={12}
+              style={{
+                marginTop: 'var(--ds-spacing-2, 10px)',
+                maxWidth: 760,
+              }}
+            >
+              <Box
+                style={{
+                  flexShrink: 0,
+                  width: 28,
+                  height: 1,
+                  marginTop: 9,
+                  background:
+                    'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 100%)',
+                }}
+              />
+              <Text
+                style={{
+                  display: 'block',
+                  fontSize: useDisplayTitle
+                    ? 'var(--ds-font-size-xs, 11px)'
+                    : useDottedTitle
+                      ? '10px'
+                      : 'var(--ds-font-size-sm, 12px)',
+                  color: 'color-mix(in srgb, var(--ds-color-text-secondary) 68%, white 32%)',
+                  lineHeight: 1.56,
+                  textWrap: 'pretty',
+                  fontFamily: useMonoSubtitle
+                    ? 'var(--ds-font-family-mono, var(--ds-font-family-base))'
+                    : undefined,
+                  letterSpacing: useMonoSubtitle ? '0.135em' : useDottedTitle ? '0.08em' : undefined,
+                  textTransform: (useDisplayTitle || useDottedTitle || useMonoSubtitle) ? ('uppercase' as const) : undefined,
+                  opacity: 0.92,
+                  maxWidth: 680,
+                }}
+              >
+                {subtitle}
+              </Text>
+            </Flex>
+          ) : (
+            <Text
+              style={{
+                display: 'block',
+                fontSize: useDisplayTitle
+                  ? 'var(--ds-font-size-xs, 11px)'
+                  : useDottedTitle
+                    ? 'var(--ds-font-size-xs, 10px)'
+                    : 'var(--ds-font-size-sm, 12px)',
+                color: 'var(--ds-color-text-secondary)',
+                marginTop: useDisplayTitle
+                  ? 'var(--ds-spacing-2, 10px)'
+                  : useDottedTitle
+                    ? 'var(--ds-spacing-2, 8px)'
+                    : 'var(--ds-spacing-2, 7px)',
+                lineHeight: useDisplayTitle ? 1.65 : useDottedTitle ? 1.55 : 1.5,
+                textWrap: 'pretty',
+                fontFamily: useMonoSubtitle
+                  ? 'var(--ds-font-family-mono, var(--ds-font-family-base))'
+                  : undefined,
+                letterSpacing: useDisplayTitle
+                  ? '0.03em'
+                  : useMonoSubtitle
+                    ? '0.09em'
+                    : useDottedTitle
+                      ? '0.08em'
+                      : undefined,
+                textTransform: (useDisplayTitle || useDottedTitle || useMonoSubtitle) ? ('uppercase' as const) : undefined,
+                opacity: (useDisplayTitle || useDottedTitle) ? 0.88 : undefined,
+                maxWidth: 560,
+              }}
+            >
+              {subtitle}
+            </Text>
+          )}
+          {editorialTech && (
+            <Box
+              style={{
+                marginTop: 'var(--ds-spacing-3, 12px)',
+                height: 1,
+                width: 'min(100%, 720px)',
+                background:
+                  'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%)',
+              }}
+            />
+          )}
         </Box>
 
         {quickActions && quickActions.length > 0 && (
@@ -149,30 +362,60 @@ export function CollectionHeader({
               flex: '0 0 auto',
               width: 'auto',
               maxWidth: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
             }}
           >
-            {eyebrowChip && (
-              <Box
+            {(eyebrowChip || eyebrowMetaItems.length > 0) && (
+              <Flex
+                align="center"
+                gap={8}
+                wrap="wrap"
+                justify="end"
                 style={{
-                  marginBottom: 'var(--ds-spacing-3, 10px)',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
+                  marginBottom: editorialTech ? 'var(--ds-spacing-2, 8px)' : 'var(--ds-spacing-3, 10px)',
                 }}
               >
+                {eyebrowMetaItems.map(renderMetaItem)}
                 {eyebrowChip}
-              </Box>
+              </Flex>
             )}
             <Box
               style={{
                 display: 'inline-flex',
+                alignItems: 'center',
                 justifyContent: 'flex-end',
+                gap: editorialTech ? 6 : 8,
                 padding: 'var(--ds-spacing-1, 2px)',
-                borderRadius: 'var(--ds-radius-md, 15px)',
-                border: '1px solid var(--ds-color-border-subtle)',
-                background: 'var(--ds-surface-panel)',
-                boxShadow: 'var(--ds-elevation-1)',
-              }}
-            >
+              borderRadius: 'var(--ds-radius-md, 15px)',
+              border: '1px solid var(--ds-color-border-subtle)',
+              background: embedded
+                ? editorialTech
+                  ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, transparent)'
+                  : 'color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)'
+                : 'var(--ds-surface-panel)',
+              boxShadow: embedded
+                ? editorialTech
+                  ? '0 8px 18px color-mix(in srgb, #000 12%, transparent), inset 0 1px 0 color-mix(in srgb, white 3%, transparent)'
+                  : '0 10px 24px color-mix(in srgb, #000 16%, transparent), inset 0 1px 0 color-mix(in srgb, white 4%, transparent)'
+                : 'var(--ds-elevation-1)',
+              alignSelf: 'flex-end',
+            }}
+          >
+              {inlineMetaItems.length > 0 && (
+                <Flex
+                  align="center"
+                  gap={6}
+                  wrap="wrap"
+                  justify="end"
+                  style={{
+                    paddingLeft: 'var(--ds-spacing-2, 8px)',
+                  }}
+                >
+                  {inlineMetaItems.map(renderMetaItem)}
+                </Flex>
+              )}
               <Flex align="center" gap={8} wrap="wrap" justify="end">
                 {quickActions.map((action) => (
                   <Button
@@ -211,7 +454,7 @@ export function CollectionHeader({
               </Flex>
             </Box>
 
-            {(compactMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
+            {(belowMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
               <Box
                 style={{
                   marginTop: 'var(--ds-spacing-3, 12px)',
@@ -220,48 +463,9 @@ export function CollectionHeader({
                   justifyItems: 'end',
                 }}
               >
-                {compactMetaItems.length > 0 && (
+                {belowMetaItems.length > 0 && (
                   <Flex align="center" gap={8} wrap="wrap" justify="end">
-                    {compactMetaItems.map((item) => {
-                      const toneStyles =
-                        item.tone === 'primary'
-                          ? {
-                              border: '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)',
-                              background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
-                              color: 'var(--ds-color-primary)',
-                            }
-                          : item.tone === 'success'
-                            ? {
-                                border: '1px solid color-mix(in srgb, var(--ds-color-success) 18%, transparent)',
-                                background: 'color-mix(in srgb, var(--ds-color-success) 8%, transparent)',
-                                color: 'var(--ds-color-success)',
-                              }
-                            : {
-                                border: '1px solid var(--ds-color-border-subtle)',
-                                background: 'var(--ds-surface-panel)',
-                                color: 'var(--ds-color-text-secondary)',
-                              };
-
-                      return (
-                        <Box
-                          key={item.key}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4,
-                            minHeight: 'var(--ds-spacing-6, 22px)',
-                            padding: '0 var(--ds-spacing-2, 8px)',
-                            borderRadius: 999,
-                            fontSize: 'var(--ds-font-size-xs, 10px)',
-                            fontWeight: 700,
-                            letterSpacing: '0.02em',
-                            ...toneStyles,
-                          }}
-                        >
-                          {item.label}
-                        </Box>
-                      );
-                    })}
+                    {belowMetaItems.map(renderMetaItem)}
                   </Flex>
                 )}
 
@@ -276,7 +480,9 @@ export function CollectionHeader({
                         padding: '0 var(--ds-spacing-2, 8px)',
                         borderRadius: 999,
                         border: '1px solid var(--ds-color-border-subtle)',
-                        background: 'var(--ds-surface-panel)',
+                        background: embedded
+                          ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, transparent)'
+                          : 'var(--ds-surface-panel)',
                         color: 'var(--ds-color-text-muted)',
                         fontSize: 'var(--ds-font-size-xs, 8px)',
                         fontWeight: 700,
@@ -297,7 +503,9 @@ export function CollectionHeader({
                           padding: '0 var(--ds-spacing-2, 8px)',
                           borderRadius: 999,
                           border: '1px solid var(--ds-color-border-subtle)',
-                          background: 'var(--ds-surface-panel)',
+                          background: embedded
+                            ? 'color-mix(in srgb, var(--ds-surface-panel) 66%, transparent)'
+                            : 'var(--ds-surface-panel)',
                           color: 'var(--ds-color-text-muted)',
                           fontSize: 'var(--ds-font-size-xs, 9px)',
                           fontWeight: 700,

@@ -34,6 +34,7 @@ import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../../foundation/types';
 import { Switch } from '../../../../primitives/inputs/Switch';
 import { Checkbox } from '../../../../primitives/inputs/Checkbox';
+import { Select } from '../../../../primitives/inputs/Select';
 
 /* ---------------------------------------------------------------------------
  * Shared inline-style constants
@@ -74,6 +75,14 @@ const labelStyle: React.CSSProperties = {
   lineHeight: '16px',
 };
 
+const inlineLabelStyle: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 600,
+  color: 'var(--ds-color-text-muted)',
+  whiteSpace: 'nowrap',
+  flexShrink: 0,
+};
+
 /* ---------------------------------------------------------------------------
  * Filter controls
  * ----------------------------------------------------------------------- */
@@ -102,27 +111,16 @@ function renderFilterControl(
       );
     case 'select':
       return (
-        <select
-          style={{
-            ...baseInputStyle,
-            appearance: 'none' as const,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'right 8px center',
-            paddingRight: 28,
-          }}
-          value={(value as string) ?? ''}
-          onChange={(e) => onChange(filter.key, e.target.value || undefined)}
-          onFocus={focusHandler}
-          onBlur={blurHandler}
-        >
-          <option value="">{filter.placeholder ?? 'Select...'}</option>
-          {filter.options?.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
+        <Select
+          size="sm"
+          forceCustomDropdown
+          placeholder={filter.placeholder ?? 'Select...'}
+          value={(value as string) ?? undefined}
+          onChange={(val) => onChange(filter.key, val || undefined)}
+          options={filter.options?.map((o) => ({ value: o.value, label: o.label })) ?? []}
+          allowClear
+          style={{ width: '100%' }}
+        />
       );
     case 'multi-select':
       return (
@@ -313,8 +311,11 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
           ? {
               display: 'flex',
               flexWrap: 'wrap',
-              gap: 12,
-              alignItems: 'flex-end',
+              gap: 10,
+              alignItems: 'center',
+              position: 'relative',
+              zIndex: 1,
+              overflow: 'visible',
             }
           : {
               display: 'flex',
@@ -327,11 +328,23 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
         <div
           key={filter.key}
           style={
-            isInline ? { flex: '1 1 180px', minWidth: 0 } : undefined
+            isInline
+              ? {
+                  flex: '1 1 268px',
+                  minWidth: 196,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  position: 'relative',
+                  zIndex: 1,
+                }
+              : undefined
           }
         >
-          <span style={labelStyle}>{filter.label}</span>
-          {renderFilterControl(filter, values[filter.key], handleChange)}
+          <span style={isInline ? inlineLabelStyle : labelStyle}>{filter.label}</span>
+          <div style={isInline ? { flex: 1, minWidth: 0 } : undefined}>
+            {renderFilterControl(filter, values[filter.key], handleChange)}
+          </div>
         </div>
       ))}
     </div>

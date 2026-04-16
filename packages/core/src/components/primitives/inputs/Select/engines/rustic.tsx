@@ -104,6 +104,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     optionGroups,
     virtual,
     tokenSeparators,
+    forceCustomDropdown: _forceCustomDropdown,
   } = props;
 
   // Responsive size handling

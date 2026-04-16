@@ -38,6 +38,7 @@ export type {
   CollectionBehaviorConfig,
   CollectionPresentationConfig,
   WorkspaceSearchConfig,
+  WorkspaceScopesConfig,
   WorkspaceSavedViewsConfig,
   WorkspaceColumnSettingsConfig,
   WorkspaceDensityConfig,
@@ -45,9 +46,29 @@ export type {
   WorkspaceViewModeConfig,
   WorkspaceSelectionConfig,
   WorkspacePreviewRailConfig,
+  WorkspaceFocusConfig,
   WorkspaceResponsiveConfig,
+  WorkspaceActiveFiltersConfig,
+  SmartSelectionSet,
+  WorkspaceShellPresentationConfig,
 } from './foundation/contracts/collection';
 export { useCollectionWorkspace } from './foundation/hooks/useCollectionWorkspace';
+
+// Foundation: adaptive posture contract + hook
+export type {
+  AdaptiveConfig,
+  SurfacePosture,
+  CollectionPosture,
+  FormSectionLayout,
+  PanePosture,
+  ActionBarPosture,
+  FilterPosture,
+  NavPosture,
+  Breakpoint,
+} from './foundation/contracts/adaptive';
+export { resolvePosture, toBreakpoint } from './foundation/contracts/adaptive';
+export { useAdaptivePosture } from './foundation/hooks/useAdaptivePosture';
+export type { UseAdaptivePostureResult } from './foundation/hooks/useAdaptivePosture';
 
 // -- Layout: page shells, headers, sidebars --
 export * from './layout';

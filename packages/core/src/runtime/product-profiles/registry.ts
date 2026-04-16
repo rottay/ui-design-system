@@ -93,7 +93,7 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
   'events.organizer': {
     key: 'events.organizer',
     label: 'Events Organizer',
-    description: 'A more expressive profile for event operations, discovery, and media-first collections.',
+    description: 'An expressive profile for event operations, discovery, and live-status collections.',
     personality: {
       animation: {
         intensity: 1.05,
@@ -153,15 +153,15 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
       },
     },
     surfaceDefaults: {
-      listView: 'cards',
-      density: 'spacious',
+      listView: 'table',
+      density: 'comfortable',
       schedulerView: 'week',
     },
   },
   'recruiting.operator': {
     key: 'recruiting.operator',
     label: 'Recruiting Operator',
-    description: 'Compact, controlled, and information-dense profile for recruiting workflows.',
+    description: 'Professional, people-first profile for recruiting workflows with comfortable density.',
     personality: {
       animation: {
         intensity: 0.35,
@@ -189,37 +189,37 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
       typography: {
         headingWeightBias: 'heavier',
         headingLetterSpacing: '-0.01em',
-        labelStyle: 'uppercase',
+        labelStyle: 'sentence',
       },
       accent: {
         barPosition: 'left',
         barThickness: 3,
         barStyle: 'solid',
-        iconContainerShape: 'square',
+        iconContainerShape: 'circle',
         badgeShape: 'pill',
         dividerStyle: 'solid',
       },
       card: {
         defaultElevation: 'sm',
-        hoverElevation: 'none',
+        hoverElevation: 'lift-one',
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'compact',
+        paddingDensity: 'normal',
       },
     },
     tokenOverrides: {
-      densityScale: 0.95,
+      densityScale: 0.98,
     },
     surfaceDefaults: {
       listView: 'table',
-      density: 'compact',
+      density: 'comfortable',
       schedulerView: 'week',
     },
   },
   'platform.admin': {
     key: 'platform.admin',
     label: 'Platform Admin',
-    description: 'Neutral admin profile tuned for breadth, tooling, and operational dashboards.',
+    description: 'Compact admin profile tuned for breadth, tooling, and operational dashboards.',
     personality: {
       animation: {
         intensity: 0.25,
@@ -262,12 +262,12 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
         hoverElevation: 'lift-one',
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'normal',
+        paddingDensity: 'compact',
       },
     },
     surfaceDefaults: {
       listView: 'table',
-      density: 'comfortable',
+      density: 'compact',
       schedulerView: 'month',
     },
   },
@@ -325,11 +325,11 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
         hoverElevation: 'lift-one',
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'normal',
+        paddingDensity: 'compact',
       },
     },
     tokenOverrides: {
-      densityScale: 1.0,
+      densityScale: 0.95,
       borderRadius: {
         sm: '6px',
         md: '8px',
@@ -339,7 +339,7 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
     },
     surfaceDefaults: {
       listView: 'table',
-      density: 'comfortable',
+      density: 'compact',
       schedulerView: 'month',
     },
   },

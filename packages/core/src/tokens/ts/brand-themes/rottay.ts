@@ -38,6 +38,7 @@ export const rottayBrandTheme: BrandTheme = {
     fontFamilyBase: 'var(--font-geist-sans)',
     fontFamilyHeading: 'var(--font-geist-sans)',
     fontFamilyMono: 'var(--font-geist-mono)',
+    fontFamilyDisplay: 'var(--font-geist-sans)',
     headingWeightBias: 'normal',
     headingLetterSpacing: '-0.025em',
     labelStyle: 'sentence',

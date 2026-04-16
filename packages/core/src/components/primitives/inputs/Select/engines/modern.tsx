@@ -29,6 +29,7 @@ import React, {
   useImperativeHandle,
   useId,
 } from 'react';
+import { createPortal } from 'react-dom';
 import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -174,11 +175,14 @@ const DROPDOWN_STYLE: React.CSSProperties = {
   top: 'calc(100% + var(--ds-spacing-1, 4px))',
   left: 0,
   right: 0,
-  zIndex: 50,
-  backgroundColor: 'var(--ds-surface-card)',
-  border: '1px solid var(--ds-color-border)',
-  borderRadius: 'var(--ds-radius-lg, 10px)',
-  boxShadow: 'var(--ds-elevation-3, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1))',
+  zIndex: 180,
+  background:
+    'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-color-bg-primary) 22%, var(--ds-surface-card)))',
+  border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)',
+  borderRadius: 14,
+  boxShadow: '0 20px 48px color-mix(in srgb, black 22%, transparent)',
+  backdropFilter: 'blur(16px)',
+  WebkitBackdropFilter: 'blur(16px)',
   padding: '4px',
   overflow: 'hidden',
   transformOrigin: 'top center',
@@ -337,6 +341,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     optionGroups,
     virtual,
     tokenSeparators,
+    forceCustomDropdown = false,
     ...rest
   } = props;
 
@@ -403,6 +408,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const nativeSelectRef = useRef<HTMLSelectElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
 
   useImperativeHandle(ref, () => {
     return nativeSelectRef.current ?? inputRef.current ?? containerRef.current ?? document.createElement('div');
@@ -628,10 +634,45 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     }
   }, [isOpen]);
 
+  const updateDropdownPosition = useCallback(() => {
+    if (!containerRef.current || typeof window === 'undefined') return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const gutter = 12;
+    const width = Math.min(Math.max(rect.width, 240), window.innerWidth - gutter * 2);
+    const left = Math.min(Math.max(gutter, rect.left), window.innerWidth - width - gutter);
+
+    setDropdownPosition({
+      top: rect.bottom + 6,
+      left,
+      width,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    updateDropdownPosition();
+
+    const handleViewportChange = () => updateDropdownPosition();
+    window.addEventListener('resize', handleViewportChange);
+    window.addEventListener('scroll', handleViewportChange, true);
+
+    return () => {
+      window.removeEventListener('resize', handleViewportChange);
+      window.removeEventListener('scroll', handleViewportChange, true);
+    };
+  }, [isOpen, updateDropdownPosition]);
+
   // Click outside handler
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+
+      if (containerRef.current?.contains(target)) return;
+      if (dropdownRef.current?.contains(target)) return;
+
+      if (containerRef.current) {
         setIsOpen(false);
       }
     };
@@ -728,7 +769,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   /*  Native <select> fallback for simple cases                        */
   /* ---------------------------------------------------------------- */
 
-  if (!isSearchable && !multiple && !optionGroups && !virtual) {
+  if (!forceCustomDropdown && !isSearchable && !multiple && !optionGroups && !virtual) {
     const handleNativeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedValue = e.target.value;
       const selectedOption = allOptions.find((o) => String(o.value) === selectedValue);
@@ -756,6 +797,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       optionGroups: _optionGroups,
       virtual: _virtual,
       tokenSeparators: _tokenSeparators,
+      forceCustomDropdown: _forceCustomDropdown,
       ...htmlProps
     } = rest as any;
 
@@ -890,19 +932,21 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    padding: '8px 12px',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
+    padding: '10px 12px',
+    borderRadius: 8,
     cursor: 'pointer',
     fontSize: '14px',
     lineHeight: '20px',
     color: 'var(--ds-color-text-primary)',
-    transition: 'background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+    transition:
+      'background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
     userSelect: 'none',
-    border: 'none',
-    backgroundColor: 'transparent',
+    border: '1px solid transparent',
+    background: 'transparent',
     width: '100%',
     textAlign: 'left',
     fontFamily: 'inherit',
+    boxSizing: 'border-box',
   };
 
   // Group header style
@@ -941,11 +985,19 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         aria-selected={isSelected}
         style={{
           ...optionBaseStyle,
+          ...(idx > 0 && item.type === 'option'
+            ? { boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-border-subtle) 68%, transparent)' }
+            : {}),
           ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
-          ...(isFocusedItem && !isSelected ? { backgroundColor: 'var(--ds-surface-highlight, var(--ds-surface-canvas))' } : {}),
+          ...(isFocusedItem && !isSelected ? {
+            background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
+          } : {}),
           ...(isSelected ? {
-            backgroundColor: 'var(--ds-surface-highlight, var(--ds-surface-canvas))',
+            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 14%, transparent)',
+            background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
             fontWeight: 500,
+            boxShadow: 'inset 2px 0 0 var(--ds-color-primary)',
           } : {}),
         }}
         onClick={(e) => {
@@ -961,8 +1013,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '16px',
-            height: '16px',
+            width: '14px',
+            height: '14px',
             borderRadius: '4px',
             border: isSelected
               ? '1px solid var(--ds-color-primary)'
@@ -1094,12 +1146,18 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       )}
 
       {/* Dropdown */}
-      {isOpen && (
+      {isOpen && typeof document !== 'undefined' && createPortal(
         <div
           ref={dropdownRef}
           role="listbox"
           style={{
             ...DROPDOWN_STYLE,
+            position: 'fixed',
+            top: dropdownPosition.top,
+            left: dropdownPosition.left,
+            right: 'auto',
+            width: dropdownPosition.width || undefined,
+            zIndex: 2400,
             animation: 'rottay-select-appear var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
           }}
         >
@@ -1131,7 +1189,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 maxHeight: 'var(--ds-select-max-height, 240px)',
                 overflowY: 'auto' as const,
               }),
-              padding: isSearchable ? '4px 0 0 0' : '0',
+              padding: isSearchable ? '6px 0 0 0' : '0',
             }}
             onScroll={virtualEnabled ? handleDropdownScroll : undefined}
           >
@@ -1174,9 +1232,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             height: `${itemHeight}px`,
                             boxSizing: 'border-box',
                             ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
-                            ...(isFocusedItem && !isSelected ? { backgroundColor: 'var(--ds-surface-highlight, var(--ds-surface-canvas))' } : {}),
+                            ...(isFocusedItem && !isSelected ? {
+                              border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
+                              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-color-bg-primary) 20%, var(--ds-surface-card)))',
+                              transform: 'translateY(-1px)',
+                            } : {}),
                             ...(isSelected ? {
-                              backgroundColor: 'var(--ds-surface-highlight, var(--ds-surface-canvas))',
+                              border: '1px solid color-mix(in srgb, var(--ds-color-primary) 18%, transparent)',
+                              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))',
                               fontWeight: 500,
                             } : {}),
                           }}
@@ -1233,7 +1296,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               )
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
