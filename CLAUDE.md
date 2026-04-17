@@ -5,6 +5,27 @@
 - **Catálogo Central**: `/docs-engineering/README.md`
 - **Component Reference**: `/docs-engineering/engineering/design-system/`
 
+### Documentation Update Rule (CRITICAL)
+
+When modifying any of the following in this package, **ALWAYS** update the corresponding doc in `docs-engineering/engineering/design-system/`:
+
+| Change Type | Update Location |
+|-------------|-----------------|
+| Add/remove/rename primitive | `components/primitives/{category}/README.md` |
+| Add/remove/rename pattern | `components/patterns/{group}/README.md` |
+| Add/remove/rename structure | `components/structures/{group}/README.md` |
+| Add/remove/rename surface | `components/surfaces/pages/README.md` |
+| Add/remove/rename hook | `foundations/hooks/README.md` |
+| Add/remove motion primitive/effect | `foundations/motion/README.md` |
+| Change token structure | `foundations/tokens/README.md` |
+| Change engine behavior | `runtime/engines/README.md` |
+| Change tenant/branding model | `runtime/tenancy/README.md` |
+| Change contract types | `foundations/contracts/README.md` |
+
+Update the hub `README.md` inventory counts when component totals change.
+
+**If you change code that affects the component catalog, the docs MUST be updated in the same session.**
+
 ---
 
 ## GitHub Configuration
