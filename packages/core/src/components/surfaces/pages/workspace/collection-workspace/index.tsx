@@ -47,6 +47,8 @@ import { Flex } from '../../../../primitives/layout/Flex';
 import { Text } from '../../../../primitives/display/Typography';
 import { Button } from '../../../../primitives/inputs/Button';
 import { WorkspaceShell } from '../../../layout/workspace-shell';
+import { CollectionRenderDispatch } from './render-dispatch';
+import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -81,6 +83,8 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
   footerSlot?: ReactNode;
   mobileCard?: (row: T, index: number) => ReactNode;
   defaultViewMode?: 'table' | 'cards';
+  /** Per-mode render configurations (grid, kanban, gallery, calendar, cards) */
+  viewModes?: CollectionViewModeConfigs<T>;
   primaryAction?: { label: string; onClick: () => void; icon?: ReactNode };
   icon?: ReactNode;
   adaptive?: AdaptiveConfig;
@@ -209,6 +213,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     footerSlot,
     mobileCard,
     defaultViewMode = 'table',
+    viewModes,
     primaryAction,
     icon,
     controls,
@@ -1031,70 +1036,54 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       <Box style={{ padding: '4px 16px 16px' }}>
         <Flex gap={4}>
           <Box style={{ flex: 1, minWidth: 0 }}>
-            {error ? (
-              <Box padding="lg">{error}</Box>
-            ) : effectiveViewMode === 'cards' && mobileCard ? (
-              <Box style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                gap: '16px',
-              }}>
-                {data.map((item, i) => (
-                  <Box
-                    key={resolveKey(item, rowKey)}
-                    onClick={() => handleRowClick(item, i)}
-                    style={{ cursor: focusEnabled || onRowClick || behavior?.onRowClick ? 'pointer' : undefined }}
-                  >
-                    {mobileCard(item, i)}
-                  </Box>
-                ))}
-              </Box>
-            ) : (
-              <PatternDataTable<T>
-                data={data}
-                columns={columns}
-                rowKey={rowKey}
-                loading={loading}
-                emptyState={emptyState}
-                actions={actions}
-                actionsColumnWidth={actionsColumnWidth}
-                onRowClick={handleRowClick}
-                onRowDoubleClick={behavior?.onRowDoubleClick}
-                expandedRow={behavior?.expandedRow}
-                renderRow={focusEnabled ? renderRow : undefined}
-                selectable={selectionEnabled}
-                selectedKeys={selectionEnabled ? workspace.selectedKeys : undefined}
-                onSelectionChange={selectionEnabled ? workspace.setSelection : undefined}
-                bulkActions={behavior?.bulkActions}
-                sorting={behavior?.sorting}
-                onSortChange={behavior?.onSortChange}
-                pagination={behavior?.pagination}
-                compact={compact}
-                density={density}
-                striped={presentation?.striped}
-                bordered={presentation?.bordered}
-                hoverable={presentation?.hoverable ?? true}
-                stickyHeader={presentation?.stickyHeader}
-                columnVisibility={controls?.columnSettings?.enabled}
-                visibleColumns={controls?.columnSettings?.visibleColumns}
-                onVisibleColumnsChange={controls?.columnSettings?.onVisibleColumnsChange}
-                lockedColumns={controls?.columnSettings?.lockedColumns}
-                reorderable={!!controls?.columnSettings?.onColumnOrderChange}
-                columnOrder={controls?.columnSettings?.columnOrder}
-                onColumnReorder={controls?.columnSettings?.onColumnOrderChange}
-                pinnedColumns={controls?.columnSettings?.pinnedColumns ? {
-                  left: controls.columnSettings.pinnedColumns.left ?? [],
-                  right: controls.columnSettings.pinnedColumns.right ?? [],
-                } : undefined}
-                onPinChange={controls?.columnSettings?.onPinnedColumnsChange ? (pinned) => {
-                  controls.columnSettings!.onPinnedColumnsChange!(pinned);
-                } : undefined}
-                resizable={presentation?.resizable}
-                columnWidths={controls?.columnSettings?.columnWidths}
-                onColumnResize={controls?.columnSettings?.onColumnResize}
-                mobileCard={mobileCard}
-              />
-            )}
+            <CollectionRenderDispatch<T>
+              viewMode={effectiveViewMode}
+              viewModes={viewModes}
+              data={data}
+              columns={columns}
+              rowKey={rowKey}
+              loading={loading}
+              emptyState={emptyState}
+              error={error}
+              actions={actions}
+              actionsColumnWidth={actionsColumnWidth}
+              onRowClick={handleRowClick}
+              onRowDoubleClick={behavior?.onRowDoubleClick}
+              expandedRow={behavior?.expandedRow}
+              renderRow={focusEnabled ? renderRow : undefined}
+              selectable={selectionEnabled}
+              selectedKeys={selectionEnabled ? workspace.selectedKeys : undefined}
+              onSelectionChange={selectionEnabled ? workspace.setSelection : undefined}
+              bulkActions={behavior?.bulkActions}
+              sorting={behavior?.sorting}
+              onSortChange={behavior?.onSortChange}
+              pagination={behavior?.pagination}
+              compact={compact}
+              density={density}
+              striped={presentation?.striped}
+              bordered={presentation?.bordered}
+              hoverable={presentation?.hoverable ?? true}
+              stickyHeader={presentation?.stickyHeader}
+              columnVisibility={controls?.columnSettings?.enabled}
+              visibleColumns={controls?.columnSettings?.visibleColumns}
+              onVisibleColumnsChange={controls?.columnSettings?.onVisibleColumnsChange}
+              lockedColumns={controls?.columnSettings?.lockedColumns}
+              reorderable={!!controls?.columnSettings?.onColumnOrderChange}
+              columnOrder={controls?.columnSettings?.columnOrder}
+              onColumnReorder={controls?.columnSettings?.onColumnOrderChange}
+              pinnedColumns={controls?.columnSettings?.pinnedColumns ? {
+                left: controls.columnSettings.pinnedColumns.left ?? [],
+                right: controls.columnSettings.pinnedColumns.right ?? [],
+              } : undefined}
+              onPinChange={controls?.columnSettings?.onPinnedColumnsChange ? (pinned) => {
+                controls.columnSettings!.onPinnedColumnsChange!(pinned);
+              } : undefined}
+              resizable={presentation?.resizable}
+              columnWidths={controls?.columnSettings?.columnWidths}
+              onColumnResize={controls?.columnSettings?.onColumnResize}
+              mobileCard={mobileCard}
+              focusEnabled={focusEnabled}
+            />
           </Box>
 
           {/* Preview rail */}
