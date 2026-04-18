@@ -145,6 +145,34 @@ Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated art
 - The brand compiler (`compilers/brand-theme/`) converts BrandTheme to CSS vars and personality tokens.
 - BrandTheme `.ts` files MUST stay in sync with CSS artifacts. If you edit one, update the other.
 
+## Chart System (19 types)
+
+All charts are D3-backed, engine-agnostic, token-aware, personality-driven, and accessible.
+
+### Families:
+- Basic: BarChart (simple/grouped/stacked), LineChart, AreaChart, PieChart (donut mode), ScatterChart (bubble, trend line)
+- Statistical: RadarChart, GaugeChart (arc, segments, needle), Histogram (d3.bin, density, cumulative)
+- Flow: FunnelChart, WaterfallChart (increase/decrease/total), SankeyChart (custom layout)
+- Temporal: GanttChart, Sparkline (inline SVG, area fill, end dot), CalendarHeatMap (daily activity grid)
+- Spatial: HeatMap
+- Hierarchical: TreeMap
+- Relational: NetworkGraph
+- KPI: BulletChart (target vs actual, range bands)
+
+### Hooks:
+- useChartTheme: resolves DS CSS vars to hex for D3 color math
+- useChartPersonality: personality tokens (animation, lineStyle, colorScheme)
+- useChartDimensions: responsive container measurement
+- useChartCompact: compact mode for mobile
+
+### Theming:
+- Charts use var(--ds-color-*) CSS variables natively in SVG fill/stroke
+- useChartTheme resolves to hex when needed (Canvas, interpolation)
+- BrandTheme.charts controls personality (animateOnMount, lineStyle, showDots, etc.)
+- 5 color palettes: default, pastel, vibrant, monochrome, accessible (Wong 2011)
+
+---
+
 ## Waves 2-6 Feature Inventory (2026-04-17)
 
 Features implemented across Waves 2 through 6 of the DS execution plan.
