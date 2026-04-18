@@ -20,7 +20,9 @@ export type {
   FilterFieldDefinition,
   FilterFieldType,
   FilterOperator,
+  BuiltInFilterOperator,
   OperatorDefinition,
+  CustomOperatorDefinition,
 } from './FilterBuilder.types';
 
 export {
@@ -28,6 +30,9 @@ export {
   isFilterRule,
   generateFilterId,
   getOperatorsForField,
+  getOperatorsForFieldWithCustom,
+  toOperatorDefinition,
+  mergeOperatorsByType,
   OPERATOR_DEFINITIONS,
   DEFAULT_OPERATORS_BY_TYPE,
 } from './FilterBuilder.types';

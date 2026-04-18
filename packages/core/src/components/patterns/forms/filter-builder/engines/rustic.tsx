@@ -27,12 +27,15 @@ import type {
   FilterRule,
   FilterFieldDefinition,
   FilterOperator,
+  OperatorDefinition,
+  CustomOperatorDefinition,
 } from '../FilterBuilder.types';
 import {
   isFilterGroup,
-  getOperatorsForField,
+  getOperatorsForFieldWithCustom,
   generateFilterId,
   OPERATOR_DEFINITIONS,
+  toOperatorDefinition,
 } from '../FilterBuilder.types';
 
 /**
@@ -58,7 +61,30 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     loading,
     className,
     style,
+    customOperators,
+    showAddFilter,
+    addFilterLabel = 'Add filter',
   } = props;
+
+  // Build a merged operator definitions list (built-in + custom) once.
+  const allOperatorDefs: OperatorDefinition[] = React.useMemo(() => {
+    if (!customOperators?.length) return OPERATOR_DEFINITIONS;
+    return [...OPERATOR_DEFINITIONS, ...customOperators.map(toOperatorDefinition)];
+  }, [customOperators]);
+
+  // Lookup map for custom operators that provide a custom value renderer.
+  const customRenderMap = React.useMemo(() => {
+    const map = new Map<string, NonNullable<CustomOperatorDefinition['renderValue']>>();
+    if (customOperators) {
+      for (const co of customOperators) {
+        if (co.renderValue) map.set(co.key, co.renderValue);
+      }
+    }
+    return map;
+  }, [customOperators]);
+
+  // State for the "Add Filter" field selector dropdown.
+  const [addFilterOpen, setAddFilterOpen] = React.useState(false);
 
   // Recursive immutable update: returns a new tree with only the target
   // group mutated, preserving referential identity of all other nodes.
@@ -120,10 +146,12 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
   );
 
   const handleAddRule = useCallback(
-    (groupId: string) => {
-      const defaultField = fields[0];
+    (groupId: string, fieldKey?: string) => {
+      const defaultField = fieldKey
+        ? fields.find((f) => f.key === fieldKey) ?? fields[0]
+        : fields[0];
       if (!defaultField) return;
-      const ops = getOperatorsForField(defaultField);
+      const ops = getOperatorsForFieldWithCustom(defaultField, customOperators);
       const newRule: FilterRule = {
         id: generateFilterId(),
         field: defaultField.key,
@@ -137,7 +165,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [fields, value, onChange, updateGroup]
+    [fields, value, onChange, updateGroup, customOperators]
   );
 
   const handleAddGroup = useCallback(
@@ -183,7 +211,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     (ruleId: string, fieldKey: string) => {
       const fieldDef = fields.find((f) => f.key === fieldKey);
       if (!fieldDef) return;
-      const ops = getOperatorsForField(fieldDef);
+      const ops = getOperatorsForFieldWithCustom(fieldDef, customOperators);
       onChange(
         updateRule(value, ruleId, (rule) => ({
           ...rule,
@@ -193,14 +221,14 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [fields, value, onChange, updateRule]
+    [fields, value, onChange, updateRule, customOperators]
   );
 
   // Clear value when switching to a unary operator (isEmpty/isNotEmpty)
   // so stale values don't leak into the consumer's query.
   const handleOperatorChange = useCallback(
     (ruleId: string, operator: FilterOperator) => {
-      const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === operator);
+      const opDef = allOperatorDefs.find((o) => o.key === operator);
       onChange(
         updateRule(value, ruleId, (rule) => ({
           ...rule,
@@ -209,7 +237,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [value, onChange, updateRule]
+    [value, onChange, updateRule, allOperatorDefs]
   );
 
   const handleValueChange = useCallback(
@@ -262,10 +290,21 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
 
   // Renders the value input matching the field type. Native HTML form elements
   // are used (no UI library) so the rustic engine has zero external dependencies.
+  // Custom operators with a renderValue function get priority.
   const renderValueInput = (rule: FilterRule, fieldDef: FilterFieldDefinition) => {
-    const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === rule.operator);
+    const opDef = allOperatorDefs.find((o) => o.key === rule.operator);
     // Unary operators (isEmpty/isNotEmpty) need no value input.
     if (!opDef?.requiresValue) return null;
+
+    // Custom operator with a custom value renderer takes priority.
+    const customRenderer = customRenderMap.get(rule.operator);
+    if (customRenderer) {
+      return customRenderer(
+        rule.value,
+        (v: unknown) => handleValueChange(rule.id, v),
+        fieldDef
+      );
+    }
 
     // "between" operator renders paired from/to inputs.
     if (opDef.requiresRange) {
@@ -383,7 +422,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
   // subsequent), field select, operator select, value input, and delete button.
   const renderRule = (rule: FilterRule, isFirst: boolean, parentLogic: 'and' | 'or') => {
     const fieldDef = fields.find((f) => f.key === rule.field);
-    const operators = fieldDef ? getOperatorsForField(fieldDef) : [];
+    const operators = fieldDef ? getOperatorsForFieldWithCustom(fieldDef, customOperators) : [];
 
     return (
       <div
@@ -579,6 +618,70 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
               <span style={{ fontSize: 12, lineHeight: 1 }}>&#9633;</span>
               {addGroupLabel}
             </button>
+          )}
+          {showAddFilter && isRoot && (
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <button
+                onClick={() => setAddFilterOpen((prev) => !prev)}
+                data-testid="add-filter-button"
+                style={{
+                  ...smallBtnStyle,
+                  border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
+                }}
+              >
+                <span style={{ fontSize: 14, lineHeight: 1 }}>+</span>
+                {addFilterLabel}
+              </button>
+              {addFilterOpen && (
+                <div
+                  data-testid="add-filter-dropdown"
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: 4,
+                    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
+                    border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
+                    borderRadius: 4,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                    zIndex: 10,
+                    minWidth: 180,
+                    maxHeight: 260,
+                    overflowY: 'auto',
+                    padding: '4px 0',
+                  }}
+                >
+                  {fields.map((f) => (
+                    <div
+                      key={f.key}
+                      onClick={() => {
+                        handleAddRule(group.id, f.key);
+                        setAddFilterOpen(false);
+                      }}
+                      data-testid={`add-filter-field-${f.key}`}
+                      style={{
+                        padding: '6px 12px',
+                        cursor: 'pointer',
+                        fontSize: compact ? 12 : 13,
+                        color: 'var(--ds-color-text-primary, var(--ds-color-text))',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.background = 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.background = 'transparent';
+                      }}
+                    >
+                      {f.icon && <span>{f.icon}</span>}
+                      <span>{f.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
 

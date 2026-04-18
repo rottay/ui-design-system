@@ -34,12 +34,15 @@ import type {
   FilterRule,
   FilterFieldDefinition,
   FilterOperator,
+  OperatorDefinition,
+  CustomOperatorDefinition,
 } from '../FilterBuilder.types';
 import {
   isFilterGroup,
-  getOperatorsForField,
+  getOperatorsForFieldWithCustom,
   generateFilterId,
   OPERATOR_DEFINITIONS,
+  toOperatorDefinition,
 } from '../FilterBuilder.types';
 
 const { Text } = Typography;
@@ -94,7 +97,30 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     loading,
     className,
     style,
+    customOperators,
+    showAddFilter,
+    addFilterLabel = 'Add filter',
   } = props;
+
+  // Build a merged operator definitions list (built-in + custom) once.
+  const allOperatorDefs: OperatorDefinition[] = React.useMemo(() => {
+    if (!customOperators?.length) return OPERATOR_DEFINITIONS;
+    return [...OPERATOR_DEFINITIONS, ...customOperators.map(toOperatorDefinition)];
+  }, [customOperators]);
+
+  // Lookup map for custom operators that provide a custom value renderer.
+  const customRenderMap = React.useMemo(() => {
+    const map = new Map<string, NonNullable<CustomOperatorDefinition['renderValue']>>();
+    if (customOperators) {
+      for (const co of customOperators) {
+        if (co.renderValue) map.set(co.key, co.renderValue);
+      }
+    }
+    return map;
+  }, [customOperators]);
+
+  // State for the "Add Filter" field selector dropdown.
+  const [addFilterOpen, setAddFilterOpen] = React.useState(false);
 
   // Recursively walk the filter tree to find and update the target group.
   // Immutable updates at every level so React detects changes correctly.
@@ -158,10 +184,12 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
   // New rules default to the first available field and its first valid
   // operator. Value starts as undefined so the input renders empty.
   const handleAddRule = useCallback(
-    (groupId: string) => {
-      const defaultField = fields[0];
+    (groupId: string, fieldKey?: string) => {
+      const defaultField = fieldKey
+        ? fields.find((f) => f.key === fieldKey) ?? fields[0]
+        : fields[0];
       if (!defaultField) return;
-      const ops = getOperatorsForField(defaultField);
+      const ops = getOperatorsForFieldWithCustom(defaultField, customOperators);
       const newRule: FilterRule = {
         id: generateFilterId(),
         field: defaultField.key,
@@ -175,7 +203,7 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [fields, value, onChange, updateGroup]
+    [fields, value, onChange, updateGroup, customOperators]
   );
 
   const handleAddGroup = useCallback(
@@ -224,7 +252,7 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
     (ruleId: string, fieldKey: string) => {
       const fieldDef = fields.find((f) => f.key === fieldKey);
       if (!fieldDef) return;
-      const ops = getOperatorsForField(fieldDef);
+      const ops = getOperatorsForFieldWithCustom(fieldDef, customOperators);
       onChange(
         updateRule(value, ruleId, (rule) => ({
           ...rule,
@@ -234,14 +262,14 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [fields, value, onChange, updateRule]
+    [fields, value, onChange, updateRule, customOperators]
   );
 
   // Clear the value when switching to an operator that doesn't need one
   // (e.g. "is empty"), but preserve it when the new operator still does.
   const handleOperatorChange = useCallback(
     (ruleId: string, operator: FilterOperator) => {
-      const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === operator);
+      const opDef = allOperatorDefs.find((o) => o.key === operator);
       onChange(
         updateRule(value, ruleId, (rule) => ({
           ...rule,
@@ -250,7 +278,7 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [value, onChange, updateRule]
+    [value, onChange, updateRule, allOperatorDefs]
   );
 
   const handleValueChange = useCallback(
@@ -268,10 +296,21 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
   // Renders the appropriate Ant Design input control based on the field type
   // and operator. Some operators (isEmpty, isNotEmpty) need no value input at
   // all, while "between" needs a paired range of two inputs.
+  // Custom operators with a renderValue function get priority.
   const renderValueInput = (rule: FilterRule, fieldDef: FilterFieldDefinition) => {
-    const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === rule.operator);
+    const opDef = allOperatorDefs.find((o) => o.key === rule.operator);
     // Operators like "isEmpty" / "isNotEmpty" are unary -- no value needed.
     if (!opDef?.requiresValue) return null;
+
+    // Custom operator with a custom value renderer takes priority.
+    const customRenderer = customRenderMap.get(rule.operator);
+    if (customRenderer) {
+      return customRenderer(
+        rule.value,
+        (v: unknown) => handleValueChange(rule.id, v),
+        fieldDef
+      );
+    }
 
     const size = compact ? 'small' as const : 'middle' as const;
 
@@ -327,7 +366,7 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
             size={size}
             placeholder={fieldDef.placeholder ?? 'Value'}
             value={rule.value}
-            onChange={(v) => handleValueChange(rule.id, v)}
+            onChange={(v: unknown) => handleValueChange(rule.id, v)}
             style={{ width: 120 }}
           />
         );
@@ -350,7 +389,7 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
             mode={rule.operator === 'in' || rule.operator === 'notIn' || fieldDef.type === 'multiSelect' ? 'multiple' : undefined}
             placeholder={fieldDef.placeholder ?? 'Select...'}
             value={rule.value}
-            onChange={(v) => handleValueChange(rule.id, v)}
+            onChange={(v: unknown) => handleValueChange(rule.id, v)}
             options={fieldDef.options}
             style={{ minWidth: 140 }}
           />
@@ -379,7 +418,7 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
   // selector, value input, and delete button -- all laid out in a horizontal strip.
   const renderRule = (rule: FilterRule, isFirst: boolean, parentLogic: 'and' | 'or') => {
     const fieldDef = fields.find((f) => f.key === rule.field);
-    const operators = fieldDef ? getOperatorsForField(fieldDef) : [];
+    const operators = fieldDef ? getOperatorsForFieldWithCustom(fieldDef, customOperators) : [];
     const size = compact ? 'small' as const : 'middle' as const;
 
     return (
@@ -520,6 +559,68 @@ export default function ClassicFilterBuilder(props: FilterBuilderProps) {
             >
               {addGroupLabel}
             </Button>
+          )}
+          {showAddFilter && isRoot && (
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <Button
+                size="small"
+                type="default"
+                icon={<PlusOutlined />}
+                onClick={() => setAddFilterOpen((prev) => !prev)}
+                data-testid="add-filter-button"
+              >
+                {addFilterLabel}
+              </Button>
+              {addFilterOpen && (
+                <div
+                  data-testid="add-filter-dropdown"
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: 4,
+                    background: 'var(--ds-color-bg-elevated, #fff)',
+                    border: '1px solid var(--ds-color-border, #d9d9d9)',
+                    borderRadius: 6,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                    zIndex: 10,
+                    minWidth: 180,
+                    maxHeight: 260,
+                    overflowY: 'auto',
+                    padding: '4px 0',
+                  }}
+                >
+                  {fields.map((f) => (
+                    <div
+                      key={f.key}
+                      onClick={() => {
+                        handleAddRule(group.id, f.key);
+                        setAddFilterOpen(false);
+                      }}
+                      data-testid={`add-filter-field-${f.key}`}
+                      style={{
+                        padding: '6px 12px',
+                        cursor: 'pointer',
+                        fontSize: compact ? 12 : 13,
+                        color: 'var(--ds-color-text-primary)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.background = 'var(--ds-color-bg-secondary, #f5f5f5)';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.background = 'transparent';
+                      }}
+                    >
+                      {f.icon && <span>{f.icon}</span>}
+                      <span>{f.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
 

@@ -18,15 +18,87 @@
 import type { ReactNode } from 'react';
 import type { PatternBaseProps } from '../../foundation/types';
 
+// ---------------------------------------------------------------------------
+// Custom Operator Extensibility
+// ---------------------------------------------------------------------------
+
 /**
- * Union of all comparison operators available for filter rules.
+ * Definition for a custom operator registered by the consuming app.
  *
- * The operators are deliberately generic and field-type-agnostic at this level.
- * `DEFAULT_OPERATORS_BY_TYPE` narrows which operators are valid for each
- * `FilterFieldType`, and individual fields can further restrict the set via
- * `FilterFieldDefinition.operators`.
+ * Custom operators extend the built-in set (equals, contains, between, etc.)
+ * with domain-specific comparisons such as `isOverdue`, `matchesRegex`, or
+ * `withinRadius`. They are merged into the operator dropdown at runtime for
+ * each field type listed in `fieldTypes`.
+ *
+ * @example
+ * ```ts
+ * const customOps: CustomOperatorDefinition[] = [
+ *   {
+ *     key: 'matchesRegex',
+ *     label: 'matches regex',
+ *     fieldTypes: ['text'],
+ *     valueCount: 1,
+ *   },
+ *   {
+ *     key: 'isOverdue',
+ *     label: 'is overdue',
+ *     fieldTypes: ['date'],
+ *     valueCount: 0,
+ *   },
+ *   {
+ *     key: 'withinRadius',
+ *     label: 'within radius',
+ *     fieldTypes: ['number'],
+ *     valueCount: 2,
+ *     renderValue: (value, onChange) => {
+ *       // custom two-input renderer for lat/lng + radius
+ *     },
+ *   },
+ * ];
+ * ```
  */
-export type FilterOperator =
+export interface CustomOperatorDefinition {
+  /** Unique key identifying this operator. Must not collide with built-in keys. */
+  key: string;
+
+  /** Human-readable label shown in the operator dropdown. */
+  label: string;
+
+  /** Which field types this operator applies to. */
+  fieldTypes: FilterFieldType[];
+
+  /**
+   * Number of value inputs required:
+   * - `0` for unary operators like `isEmpty` or `isOverdue` (no value input).
+   * - `1` for standard binary operators like `equals` or `matchesRegex`.
+   * - `2` for range operators like `between` or `withinRadius`.
+   */
+  valueCount: 0 | 1 | 2;
+
+  /**
+   * Custom value renderer for complex inputs. When provided, replaces the
+   * default type-based input widget for this operator.
+   *
+   * @param value - Current filter value.
+   * @param onChange - Callback to update the value.
+   * @param field - The field definition this operator is applied to.
+   * @returns A React element rendering the value input.
+   */
+  renderValue?: (
+    value: unknown,
+    onChange: (v: unknown) => void,
+    field: FilterFieldDefinition
+  ) => ReactNode;
+
+  /** Optional hint for server-side query builders describing evaluation strategy. */
+  evaluationHint?: string;
+}
+
+/**
+ * Built-in filter operators known at compile time. Used to narrow types in
+ * the default operator registry and to provide autocomplete in IDEs.
+ */
+export type BuiltInFilterOperator =
   | 'equals'
   | 'notEquals'
   | 'contains'
@@ -42,6 +114,15 @@ export type FilterOperator =
   | 'notIn'
   | 'isEmpty'
   | 'isNotEmpty';
+
+/**
+ * Union of all comparison operators available for filter rules.
+ *
+ * Includes the built-in set plus an `(string & {})` escape hatch that allows
+ * custom operator keys registered via `CustomOperatorDefinition` without
+ * losing autocomplete for built-in operators.
+ */
+export type FilterOperator = BuiltInFilterOperator | (string & {});
 
 /**
  * A single filter condition (leaf node in the filter tree).
@@ -160,7 +241,7 @@ export interface FilterFieldDefinition {
    * Explicit list of operators allowed for this field. When provided, this
    * overrides the defaults from `DEFAULT_OPERATORS_BY_TYPE[type]`. Useful
    * for restricting operators on specific fields (e.g. disallowing
-   * `contains` on an ID field).
+   * `contains` on an ID field). Custom operator keys are also valid here.
    */
   operators?: FilterOperator[];
 
@@ -202,10 +283,74 @@ export interface OperatorDefinition {
 }
 
 /**
- * Registry of all supported operators with their display labels and
- * input requirements. Used as the source of truth when rendering operator
- * dropdowns and determining value input visibility.
+ * Converts a `CustomOperatorDefinition` into an `OperatorDefinition` that
+ * can be used alongside the built-in operator registry in dropdowns and
+ * value-input visibility logic.
  */
+export function toOperatorDefinition(custom: CustomOperatorDefinition): OperatorDefinition {
+  return {
+    key: custom.key,
+    label: custom.label,
+    requiresValue: custom.valueCount > 0,
+    requiresRange: custom.valueCount === 2,
+  };
+}
+
+/**
+ * Merges custom operators into the `DEFAULT_OPERATORS_BY_TYPE` map for a
+ * given set of custom operator definitions. Returns a new map where each
+ * field type's operator list is extended with the custom operators that
+ * declare compatibility with that type.
+ *
+ * The original `DEFAULT_OPERATORS_BY_TYPE` is never mutated.
+ *
+ * @param customOperators - Custom operator definitions to merge.
+ * @returns A merged copy of the default operators map.
+ */
+export function mergeOperatorsByType(
+  customOperators: CustomOperatorDefinition[]
+): Record<FilterFieldType, FilterOperator[]> {
+  const merged = { ...DEFAULT_OPERATORS_BY_TYPE };
+  for (const fieldType of Object.keys(merged) as FilterFieldType[]) {
+    merged[fieldType] = [...merged[fieldType]];
+  }
+  for (const custom of customOperators) {
+    for (const fieldType of custom.fieldTypes) {
+      if (merged[fieldType]) {
+        merged[fieldType].push(custom.key);
+      }
+    }
+  }
+  return merged;
+}
+
+/**
+ * Returns the list of `OperatorDefinition` objects available for a given
+ * field, including any custom operators. Checks the field's custom
+ * `operators` array first, then falls back to the (optionally merged)
+ * default operator map.
+ *
+ * @param field - The field definition to get operators for.
+ * @param customOperators - Optional custom operator definitions to include.
+ * @returns Filtered array of operator definitions.
+ */
+export function getOperatorsForFieldWithCustom(
+  field: FilterFieldDefinition,
+  customOperators?: CustomOperatorDefinition[]
+): OperatorDefinition[] {
+  const allDefs: OperatorDefinition[] = [...OPERATOR_DEFINITIONS];
+  if (customOperators) {
+    for (const custom of customOperators) {
+      allDefs.push(toOperatorDefinition(custom));
+    }
+  }
+  const operatorMap = customOperators
+    ? mergeOperatorsByType(customOperators)
+    : DEFAULT_OPERATORS_BY_TYPE;
+  const allowedKeys = field.operators ?? operatorMap[field.type];
+  return allDefs.filter((op) => allowedKeys.includes(op.key));
+}
+
 export const OPERATOR_DEFINITIONS: OperatorDefinition[] = [
   { key: 'equals', label: 'equals', requiresValue: true, requiresRange: false },
   { key: 'notEquals', label: 'does not equal', requiresValue: true, requiresRange: false },
@@ -353,4 +498,46 @@ export interface FilterBuilderProps extends PatternBaseProps {
    * @default false
    */
   compact?: boolean;
+
+  // ---------------------------------------------------------------------------
+  // Custom Operator Extensibility (Wave 3)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Custom operators registered by the consuming app. These are merged into
+   * the operator dropdown at runtime for each field type listed in the
+   * definition's `fieldTypes` array. Custom operators can provide their own
+   * value renderer via `renderValue`.
+   *
+   * @example
+   * ```tsx
+   * <PatternFilterBuilder
+   *   customOperators={[
+   *     { key: 'matchesRegex', label: 'matches regex', fieldTypes: ['text'], valueCount: 1 },
+   *     { key: 'isOverdue', label: 'is overdue', fieldTypes: ['date'], valueCount: 0 },
+   *   ]}
+   *   // ...other props
+   * />
+   * ```
+   */
+  customOperators?: CustomOperatorDefinition[];
+
+  // ---------------------------------------------------------------------------
+  // "Add Filter" Field Selector (Wave 3)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * When `true`, shows an "Add Filter" button that opens a field selector
+   * dropdown. Selecting a field adds a new empty rule for that field to the
+   * root filter group. This provides progressive disclosure instead of
+   * requiring users to manually change the field on a new rule.
+   * @default false
+   */
+  showAddFilter?: boolean;
+
+  /**
+   * Label for the "Add Filter" button shown when `showAddFilter` is `true`.
+   * @default "Add filter"
+   */
+  addFilterLabel?: string;
 }

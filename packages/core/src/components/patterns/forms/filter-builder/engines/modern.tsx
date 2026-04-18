@@ -26,12 +26,15 @@ import type {
   FilterRule,
   FilterFieldDefinition,
   FilterOperator,
+  OperatorDefinition,
+  CustomOperatorDefinition,
 } from '../FilterBuilder.types';
 import {
   isFilterGroup,
-  getOperatorsForField,
+  getOperatorsForFieldWithCustom,
   generateFilterId,
   OPERATOR_DEFINITIONS,
+  toOperatorDefinition,
 } from '../FilterBuilder.types';
 
 /**
@@ -57,7 +60,30 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     loading,
     className,
     style,
+    customOperators,
+    showAddFilter,
+    addFilterLabel = 'Add filter',
   } = props;
+
+  // Build a merged operator definitions list (built-in + custom) once.
+  const allOperatorDefs: OperatorDefinition[] = React.useMemo(() => {
+    if (!customOperators?.length) return OPERATOR_DEFINITIONS;
+    return [...OPERATOR_DEFINITIONS, ...customOperators.map(toOperatorDefinition)];
+  }, [customOperators]);
+
+  // Lookup map for custom operators that provide a custom value renderer.
+  const customRenderMap = React.useMemo(() => {
+    const map = new Map<string, NonNullable<CustomOperatorDefinition['renderValue']>>();
+    if (customOperators) {
+      for (const co of customOperators) {
+        if (co.renderValue) map.set(co.key, co.renderValue);
+      }
+    }
+    return map;
+  }, [customOperators]);
+
+  // State for the "Add Filter" field selector dropdown.
+  const [addFilterOpen, setAddFilterOpen] = React.useState(false);
 
   // Immutable recursive tree update: walks from root to find the target group,
   // spreading at every level so React's reconciler detects the change.
@@ -122,10 +148,12 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
   // row renders with sensible dropdowns pre-selected. Value starts undefined
   // to show the placeholder text in the input.
   const handleAddRule = useCallback(
-    (groupId: string) => {
-      const defaultField = fields[0];
+    (groupId: string, fieldKey?: string) => {
+      const defaultField = fieldKey
+        ? fields.find((f) => f.key === fieldKey) ?? fields[0]
+        : fields[0];
       if (!defaultField) return;
-      const ops = getOperatorsForField(defaultField);
+      const ops = getOperatorsForFieldWithCustom(defaultField, customOperators);
       const newRule: FilterRule = {
         id: generateFilterId(),
         field: defaultField.key,
@@ -139,7 +167,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [fields, value, onChange, updateGroup]
+    [fields, value, onChange, updateGroup, customOperators]
   );
 
   const handleAddGroup = useCallback(
@@ -187,7 +215,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     (ruleId: string, fieldKey: string) => {
       const fieldDef = fields.find((f) => f.key === fieldKey);
       if (!fieldDef) return;
-      const ops = getOperatorsForField(fieldDef);
+      const ops = getOperatorsForFieldWithCustom(fieldDef, customOperators);
       onChange(
         updateRule(value, ruleId, (rule) => ({
           ...rule,
@@ -197,14 +225,14 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [fields, value, onChange, updateRule]
+    [fields, value, onChange, updateRule, customOperators]
   );
 
   // Clear the value when switching to a unary operator (e.g. "is empty")
   // so stale values are not accidentally sent to the consumer's query builder.
   const handleOperatorChange = useCallback(
     (ruleId: string, operator: FilterOperator) => {
-      const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === operator);
+      const opDef = allOperatorDefs.find((o) => o.key === operator);
       onChange(
         updateRule(value, ruleId, (rule) => ({
           ...rule,
@@ -213,7 +241,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [value, onChange, updateRule]
+    [value, onChange, updateRule, allOperatorDefs]
   );
 
   const handleValueChange = useCallback(
@@ -235,10 +263,21 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
   // Renders the appropriate native input for the field type. Uses native HTML
   // elements (input, select, checkbox) styled with DaisyUI classes rather
   // than Ant Design components, keeping the bundle lightweight.
+  // Custom operators with a renderValue function get priority.
   const renderValueInput = (rule: FilterRule, fieldDef: FilterFieldDefinition) => {
-    const opDef = OPERATOR_DEFINITIONS.find((o) => o.key === rule.operator);
+    const opDef = allOperatorDefs.find((o) => o.key === rule.operator);
     // Unary operators (isEmpty, isNotEmpty) render no value input.
     if (!opDef?.requiresValue) return null;
+
+    // Custom operator with a custom value renderer takes priority.
+    const customRenderer = customRenderMap.get(rule.operator);
+    if (customRenderer) {
+      return customRenderer(
+        rule.value,
+        (v: unknown) => handleValueChange(rule.id, v),
+        fieldDef
+      );
+    }
 
     // Range operators ("between") require paired from/to inputs.
     if (opDef.requiresRange) {
@@ -338,7 +377,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
   // type-appropriate value input, and a delete button.
   const renderRule = (rule: FilterRule, isFirst: boolean, parentLogic: 'and' | 'or') => {
     const fieldDef = fields.find((f) => f.key === rule.field);
-    const operators = fieldDef ? getOperatorsForField(fieldDef) : [];
+    const operators = fieldDef ? getOperatorsForFieldWithCustom(fieldDef, customOperators) : [];
 
     return (
       <div
@@ -506,6 +545,69 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
               </svg>
               {addGroupLabel}
             </button>
+          )}
+          {showAddFilter && isRoot && (
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <button
+                style={{ background: 'var(--ds-color-bg-elevated, transparent)', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                onClick={() => setAddFilterOpen((prev) => !prev)}
+                data-testid="add-filter-button"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                {addFilterLabel}
+              </button>
+              {addFilterOpen && (
+                <div
+                  data-testid="add-filter-dropdown"
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: 4,
+                    background: 'var(--ds-color-bg-elevated, #fff)',
+                    border: '1px solid var(--ds-color-border)',
+                    borderRadius: 'var(--ds-radius-lg, 8px)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                    zIndex: 10,
+                    minWidth: 180,
+                    maxHeight: 260,
+                    overflowY: 'auto',
+                    padding: '4px 0',
+                  }}
+                >
+                  {fields.map((f) => (
+                    <div
+                      key={f.key}
+                      onClick={() => {
+                        handleAddRule(group.id, f.key);
+                        setAddFilterOpen(false);
+                      }}
+                      data-testid={`add-filter-field-${f.key}`}
+                      style={{
+                        padding: '6px 12px',
+                        cursor: 'pointer',
+                        fontSize: compact ? 12 : 13,
+                        color: 'var(--ds-color-text-primary)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.background = 'var(--ds-color-bg-secondary, #f5f5f5)';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.background = 'transparent';
+                      }}
+                    >
+                      {f.icon && <span>{f.icon}</span>}
+                      <span>{f.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
 
