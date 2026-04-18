@@ -2,11 +2,17 @@
 
 /**
  * @fileoverview BarChart -- D3-backed categorical bar chart supporting vertical and horizontal
- * orientations. Uses `scaleBand` for the category axis and `scaleLinear` for the value axis.
- * Bars animate with a staggered grow-from-baseline effect driven by the chart personality system.
- * Grouped and stacked modes are accepted as props but currently render as simple single-series bars.
+ * orientations, plus multi-series grouped and stacked modes.
+ *
+ * Single-series: pass `data` -- uses `scaleBand` for the category axis and `scaleLinear` for
+ * the value axis. Bars animate with a staggered grow-from-baseline effect.
+ *
+ * Multi-series: pass `series` -- renders grouped bars (side-by-side via inner `scaleBand`) or
+ * stacked bars (cumulative segments via `d3.stack()`). Each series gets a distinct color from
+ * the personality palette, with legend and tooltips showing series names.
  *
  * @example
+ * // Single-series
  * <BarChart
  *   data={[{ label: 'Q1', value: 120 }, { label: 'Q2', value: 340 }]}
  *   orientation="vertical"
@@ -14,10 +20,33 @@
  *   height={300}
  *   title="Quarterly Revenue"
  * />
+ *
+ * @example
+ * // Multi-series grouped
+ * <BarChart
+ *   series={[
+ *     { name: 'Q1', data: [{ x: 'Jan', y: 10 }, { x: 'Feb', y: 20 }] },
+ *     { name: 'Q2', data: [{ x: 'Jan', y: 15 }, { x: 'Feb', y: 25 }] },
+ *   ]}
+ *   height={300}
+ *   title="Quarterly Comparison"
+ * />
+ *
+ * @example
+ * // Multi-series stacked
+ * <BarChart
+ *   series={[
+ *     { name: 'Revenue', data: [{ x: 'Jan', y: 100 }, { x: 'Feb', y: 200 }] },
+ *     { name: 'Costs', data: [{ x: 'Jan', y: 60 }, { x: 'Feb', y: 90 }] },
+ *   ]}
+ *   stacked
+ *   height={300}
+ *   title="Revenue vs Costs"
+ * />
  */
 
-import { memo, useEffect, useRef } from 'react';
-import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select } from 'd3';
+import { memo, useEffect, useMemo, useRef } from 'react';
+import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select, stack, sum } from 'd3';
 
 import type { ChartBaseProps, DataPoint, Series } from '../Charts.types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
@@ -26,10 +55,14 @@ import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link BarChart} component. */
 export interface BarChartProps extends ChartBaseProps {
-  data: DataPoint[];
+  /** Single-series data. Ignored when `series` is provided. */
+  data?: DataPoint[];
   orientation?: 'vertical' | 'horizontal';
+  /** Stack bars on top of each other (multi-series only). */
   stacked?: boolean;
+  /** Group bars side-by-side (multi-series default, explicit flag is optional). */
   grouped?: boolean;
+  /** Multi-series data. When provided, `data` is ignored. */
   series?: Series[];
   barRadius?: number;
   barGap?: number;
@@ -40,6 +73,7 @@ export interface BarChartProps extends ChartBaseProps {
 
 /**
  * Renders a categorical bar chart powered by D3's `scaleBand` + `scaleLinear`.
+ * Supports single-series (`data`), grouped multi-series, and stacked multi-series.
  *
  * @param props - See {@link BarChartProps} for the full option set.
  * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
@@ -79,28 +113,87 @@ export const BarChart = memo(function BarChart({
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
-  const summary = {
-    caption: title ? `${title} data summary` : 'Bar chart data summary',
-    headers: ['Label', 'Value'],
-    rows: data.map((item) => [item.label, item.value]),
-  };
+
+  // Determine rendering mode: multi-series (grouped/stacked) vs single-series.
+  const isMultiSeries = series != null && series.length > 0;
+  const singleData = data ?? [];
+
+  // For multi-series, extract the unique category labels across all series.
+  // Each series point uses `x` for the category key (matching the Series type).
+  const categories = useMemo(() => {
+    if (!isMultiSeries) return singleData.map((d) => d.label);
+    const seen = new Set<string>();
+    const result: string[] = [];
+    for (const s of series!) {
+      for (const pt of s.data) {
+        const key = String(pt.x);
+        if (!seen.has(key)) {
+          seen.add(key);
+          result.push(key);
+        }
+      }
+    }
+    return result;
+  }, [isMultiSeries, singleData, series]);
+
+  // Resolve the color for each series entry.
+  const seriesColors = useMemo(() => {
+    if (!isMultiSeries) return [];
+    return series!.map((s, i) => s.color ?? colors[i % colors.length]);
+  }, [isMultiSeries, series, colors]);
+
+  // Build summary table for accessibility.
+  const summary = useMemo(() => {
+    if (isMultiSeries) {
+      return {
+        caption: title ? `${title} data summary` : 'Bar chart data summary',
+        headers: ['Category', ...series!.map((s) => s.name)],
+        rows: categories.map((cat) => {
+          const values = series!.map((s) => {
+            const pt = s.data.find((d) => String(d.x) === cat);
+            return pt ? pt.y : 0;
+          });
+          return [cat, ...values];
+        }),
+      };
+    }
+    return {
+      caption: title ? `${title} data summary` : 'Bar chart data summary',
+      headers: ['Label', 'Value'],
+      rows: singleData.map((item) => [item.label, item.value]),
+    };
+  }, [isMultiSeries, title, series, categories, singleData]);
+
+  // Build legend node.
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      {data.map((d, i) => (
-        <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
-        </div>
-      ))}
-    </div>
+    isMultiSeries ? (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+        {series!.map((s, i) => (
+          <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+            <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: seriesColors[i], display: 'inline-block' }} />
+            <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+        {singleData.map((d, i) => (
+          <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+            <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+            <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+          </div>
+        ))}
+      </div>
+    )
   ) : null;
 
+  // ── D3 rendering ──────────────────────────────────────────────────────────
   useEffect(() => {
-    if (!svgRef.current || !data || data.length === 0) return;
+    if (!svgRef.current) return;
+    if (!isMultiSeries && singleData.length === 0) return;
+    if (isMultiSeries && categories.length === 0) return;
 
     const svg = select(svgRef.current);
-    // Full clear on each render: D3's enter/update/exit pattern is overkill here
-    // because the entire dataset is typically replaced, not incrementally updated.
     svg.selectAll('*').remove();
 
     const innerWidth = chartWidth - margin.left - margin.right;
@@ -112,160 +205,498 @@ export const BarChart = memo(function BarChart({
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    if (orientation === 'vertical') {
-      // scaleBand evenly distributes categories across the x-axis with uniform
-      // padding between them; barGap controls the padding-to-step ratio.
-      const x = scaleBand()
-        .domain(data.map((d) => d.label))
-        .range([0, innerWidth])
-        .padding(barGap);
+    // ── Multi-series rendering (grouped or stacked) ─────────────────────────
+    if (isMultiSeries) {
+      const seriesNames = series!.map((s) => s.name);
 
-      // .nice() rounds the domain to friendly tick boundaries (e.g. 97 -> 100)
-      // so the top gridline never clips the tallest bar.
-      const y = scaleLinear()
-        .domain([0, max(data, (d) => d.value) ?? 0])
-        .nice()
-        .range([innerHeight, 0]);
-
-      // X axis
-      g.append('g')
-        .attr('transform', `translate(0,${innerHeight})`)
-        .call(axisBottom(x))
-        .selectAll('text')
-        .style('fill', 'var(--ds-color-text-secondary)')
-        .style('font-size', '12px');
-
-      // Y axis
-      g.append('g')
-        .call(axisLeft(y).ticks(tickCount))
-        .selectAll('text')
-        .style('fill', 'var(--ds-color-text-secondary)')
-        .style('font-size', '12px');
-
-      // Grid lines
-      g.append('g')
-        .attr('class', 'grid')
-        .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
-        .selectAll('line')
-        .style('stroke', 'var(--ds-color-border-secondary)')
-        .style('stroke-opacity', 0.5);
-
-      g.selectAll('.grid .domain').remove();
-
-      // Bars
-      const bars = g
-        .selectAll('.bar')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('class', 'bar')
-        .attr('x', (d) => x(d.label) ?? 0)
-        .attr('width', x.bandwidth())
-        .attr('rx', barRadius)
-        .attr('ry', barRadius)
-        .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
-
-      if (chartPersonality.tooltip) {
-        bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
+      // Build a lookup map: category -> { [seriesName]: value }
+      // d3.stack() expects an array of objects keyed by series name.
+      const rowMap = new Map<string, Record<string, number>>();
+      for (const cat of categories) {
+        const row: Record<string, number> = {};
+        for (const s of series!) {
+          const pt = s.data.find((d) => String(d.x) === cat);
+          row[s.name] = pt ? pt.y : 0;
+        }
+        rowMap.set(cat, row);
       }
+      const tableRows = categories.map((cat) => ({ __category: cat, ...rowMap.get(cat)! }));
 
-      // Bars grow upward from the x-axis with staggered delay so the viewer
-      // perceives a left-to-right reveal instead of a simultaneous pop-in.
-      if (chartPersonality.animate) {
-        bars
-          .attr('y', innerHeight)
-          .attr('height', 0)
-          .transition()
-          .duration(chartPersonality.animationDuration)
-          .delay((_, i) => i * 50)
-          .attr('y', (d) => y(d.value))
-          .attr('height', (d) => innerHeight - y(d.value));
+      if (orientation === 'vertical') {
+        // Outer band maps categories to horizontal position.
+        const x0 = scaleBand()
+          .domain(categories)
+          .range([0, innerWidth])
+          .padding(barGap);
+
+        if (stacked) {
+          // ── Vertical stacked ────────────────────────────────────────────────
+          const stackGen = stack<Record<string, unknown>>().keys(seriesNames);
+          const stackedData = stackGen(tableRows);
+
+          // Domain upper bound is the max cumulative sum across all categories.
+          const yMax = max(categories, (cat) => {
+            const row = rowMap.get(cat)!;
+            return sum(seriesNames, (name) => row[name]);
+          }) ?? 0;
+
+          const y = scaleLinear().domain([0, yMax]).nice().range([innerHeight, 0]);
+
+          // Axes
+          g.append('g')
+            .attr('transform', `translate(0,${innerHeight})`)
+            .call(axisBottom(x0))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          g.append('g')
+            .call(axisLeft(y).ticks(tickCount))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          // Grid
+          g.append('g')
+            .attr('class', 'grid')
+            .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
+            .selectAll('line')
+            .style('stroke', 'var(--ds-color-border-secondary)')
+            .style('stroke-opacity', 0.5);
+          g.selectAll('.grid .domain').remove();
+
+          // Render each stacked layer as a group of rects.
+          stackedData.forEach((layer, layerIdx) => {
+            const color = seriesColors[layerIdx];
+            const seriesName = seriesNames[layerIdx];
+
+            const bars = g.selectAll(`.bar-stack-${layerIdx}`)
+              .data(layer)
+              .enter()
+              .append('rect')
+              .attr('class', `bar-stack-${layerIdx}`)
+              .attr('x', (d) => x0((d.data as Record<string, string>).__category) ?? 0)
+              .attr('width', x0.bandwidth())
+              .attr('rx', layerIdx === stackedData.length - 1 ? barRadius : 0)
+              .attr('ry', layerIdx === stackedData.length - 1 ? barRadius : 0)
+              .attr('fill', color);
+
+            if (chartPersonality.tooltip) {
+              bars.append('title').text((d) => {
+                const cat = (d.data as Record<string, string>).__category;
+                const val = d[1] - d[0];
+                return compactState.compactTooltip ? String(val) : `${cat} - ${seriesName}: ${val}`;
+              });
+            }
+
+            if (chartPersonality.animate) {
+              bars
+                .attr('y', innerHeight)
+                .attr('height', 0)
+                .transition()
+                .duration(chartPersonality.animationDuration)
+                .delay((_, i) => i * 50)
+                .attr('y', (d) => y(d[1]))
+                .attr('height', (d) => y(d[0]) - y(d[1]));
+            } else {
+              bars
+                .attr('y', (d) => y(d[1]))
+                .attr('height', (d) => y(d[0]) - y(d[1]));
+            }
+
+            if (showValues) {
+              g.selectAll(`.value-stack-${layerIdx}`)
+                .data(layer)
+                .enter()
+                .append('text')
+                .attr('class', `value-stack-${layerIdx}`)
+                .attr('x', (d) => (x0((d.data as Record<string, string>).__category) ?? 0) + x0.bandwidth() / 2)
+                .attr('y', (d) => y(d[1]) + (y(d[0]) - y(d[1])) / 2)
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central')
+                .style('fill', 'var(--ds-color-text-primary)')
+                .style('font-size', '10px')
+                .text((d) => {
+                  const val = d[1] - d[0];
+                  return val > 0 ? val : '';
+                });
+            }
+          });
+        } else {
+          // ── Vertical grouped ────────────────────────────────────────────────
+          // Inner band subdivides each category slot for side-by-side bars.
+          const x1 = scaleBand()
+            .domain(seriesNames)
+            .range([0, x0.bandwidth()])
+            .padding(0.05);
+
+          const yMax = max(series!, (s) => max(s.data, (d) => d.y)) ?? 0;
+          const y = scaleLinear().domain([0, yMax]).nice().range([innerHeight, 0]);
+
+          // Axes
+          g.append('g')
+            .attr('transform', `translate(0,${innerHeight})`)
+            .call(axisBottom(x0))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          g.append('g')
+            .call(axisLeft(y).ticks(tickCount))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          // Grid
+          g.append('g')
+            .attr('class', 'grid')
+            .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
+            .selectAll('line')
+            .style('stroke', 'var(--ds-color-border-secondary)')
+            .style('stroke-opacity', 0.5);
+          g.selectAll('.grid .domain').remove();
+
+          // For each category, draw one bar per series.
+          const categoryGroups = g.selectAll('.category-group')
+            .data(categories)
+            .enter()
+            .append('g')
+            .attr('class', 'category-group')
+            .attr('transform', (cat) => `translate(${x0(cat) ?? 0},0)`);
+
+          series!.forEach((s, sIdx) => {
+            const color = seriesColors[sIdx];
+
+            const bars = categoryGroups
+              .append('rect')
+              .attr('class', `bar-grouped-${sIdx}`)
+              .attr('x', x1(s.name) ?? 0)
+              .attr('width', x1.bandwidth())
+              .attr('rx', barRadius)
+              .attr('ry', barRadius)
+              .attr('fill', color)
+              // Attach the value for this series at this category.
+              .each(function (_cat) {
+                const pt = s.data.find((d) => String(d.x) === _cat);
+                select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesName: s.name });
+              });
+
+            if (chartPersonality.tooltip) {
+              bars.append('title').text((d: any) =>
+                compactState.compactTooltip ? String(d.value) : `${d.category} - ${d.seriesName}: ${d.value}`
+              );
+            }
+
+            if (chartPersonality.animate) {
+              bars
+                .attr('y', innerHeight)
+                .attr('height', 0)
+                .transition()
+                .duration(chartPersonality.animationDuration)
+                .delay((_, i) => (i * seriesNames.length + sIdx) * 30)
+                .attr('y', (d: any) => y(d.value))
+                .attr('height', (d: any) => innerHeight - y(d.value));
+            } else {
+              bars
+                .attr('y', (d: any) => y(d.value))
+                .attr('height', (d: any) => innerHeight - y(d.value));
+            }
+
+            if (showValues) {
+              categoryGroups
+                .append('text')
+                .attr('class', `value-grouped-${sIdx}`)
+                .attr('x', (x1(s.name) ?? 0) + x1.bandwidth() / 2)
+                .attr('text-anchor', 'middle')
+                .style('fill', 'var(--ds-color-text-primary)')
+                .style('font-size', '10px')
+                .each(function (_cat) {
+                  const pt = s.data.find((d) => String(d.x) === _cat);
+                  const val = pt ? pt.y : 0;
+                  select(this)
+                    .attr('y', y(val) - 4)
+                    .text(val > 0 ? val : '');
+                });
+            }
+          });
+        }
       } else {
-        bars.attr('y', (d) => y(d.value)).attr('height', (d) => innerHeight - y(d.value));
-      }
+        // ── Horizontal multi-series ───────────────────────────────────────────
+        const y0 = scaleBand()
+          .domain(categories)
+          .range([0, innerHeight])
+          .padding(barGap);
 
-      // Values
-      if (showValues) {
-        g.selectAll('.value')
-          .data(data)
-          .enter()
-          .append('text')
-          .attr('class', 'value')
-          .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
-          .attr('y', (d) => y(d.value) - 5)
-          .attr('text-anchor', 'middle')
-          .style('fill', 'var(--ds-color-text-primary)')
-          .style('font-size', '11px')
-          .text((d) => d.value);
+        if (stacked) {
+          // ── Horizontal stacked ──────────────────────────────────────────────
+          const stackGen = stack<Record<string, unknown>>().keys(seriesNames);
+          const stackedData = stackGen(tableRows);
+
+          const xMax = max(categories, (cat) => {
+            const row = rowMap.get(cat)!;
+            return sum(seriesNames, (name) => row[name]);
+          }) ?? 0;
+
+          const x = scaleLinear().domain([0, xMax]).nice().range([0, innerWidth]);
+
+          g.append('g')
+            .attr('transform', `translate(0,${innerHeight})`)
+            .call(axisBottom(x).ticks(tickCount))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          g.append('g')
+            .call(axisLeft(y0))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          stackedData.forEach((layer, layerIdx) => {
+            const color = seriesColors[layerIdx];
+            const seriesName = seriesNames[layerIdx];
+
+            const bars = g.selectAll(`.bar-hstack-${layerIdx}`)
+              .data(layer)
+              .enter()
+              .append('rect')
+              .attr('class', `bar-hstack-${layerIdx}`)
+              .attr('y', (d) => y0((d.data as Record<string, string>).__category) ?? 0)
+              .attr('height', y0.bandwidth())
+              .attr('rx', layerIdx === stackedData.length - 1 ? barRadius : 0)
+              .attr('ry', layerIdx === stackedData.length - 1 ? barRadius : 0)
+              .attr('fill', color);
+
+            if (chartPersonality.tooltip) {
+              bars.append('title').text((d) => {
+                const cat = (d.data as Record<string, string>).__category;
+                const val = d[1] - d[0];
+                return compactState.compactTooltip ? String(val) : `${cat} - ${seriesName}: ${val}`;
+              });
+            }
+
+            if (chartPersonality.animate) {
+              bars
+                .attr('x', 0)
+                .attr('width', 0)
+                .transition()
+                .duration(chartPersonality.animationDuration)
+                .delay((_, i) => i * 50)
+                .attr('x', (d) => x(d[0]))
+                .attr('width', (d) => x(d[1]) - x(d[0]));
+            } else {
+              bars
+                .attr('x', (d) => x(d[0]))
+                .attr('width', (d) => x(d[1]) - x(d[0]));
+            }
+          });
+        } else {
+          // ── Horizontal grouped ──────────────────────────────────────────────
+          const y1 = scaleBand()
+            .domain(seriesNames)
+            .range([0, y0.bandwidth()])
+            .padding(0.05);
+
+          const xMax = max(series!, (s) => max(s.data, (d) => d.y)) ?? 0;
+          const x = scaleLinear().domain([0, xMax]).nice().range([0, innerWidth]);
+
+          g.append('g')
+            .attr('transform', `translate(0,${innerHeight})`)
+            .call(axisBottom(x).ticks(tickCount))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          g.append('g')
+            .call(axisLeft(y0))
+            .selectAll('text')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '12px');
+
+          const categoryGroups = g.selectAll('.category-group')
+            .data(categories)
+            .enter()
+            .append('g')
+            .attr('class', 'category-group')
+            .attr('transform', (cat) => `translate(0,${y0(cat) ?? 0})`);
+
+          series!.forEach((s, sIdx) => {
+            const color = seriesColors[sIdx];
+
+            const bars = categoryGroups
+              .append('rect')
+              .attr('class', `bar-hgrouped-${sIdx}`)
+              .attr('y', y1(s.name) ?? 0)
+              .attr('height', y1.bandwidth())
+              .attr('rx', barRadius)
+              .attr('ry', barRadius)
+              .attr('fill', color)
+              .each(function (_cat) {
+                const pt = s.data.find((d) => String(d.x) === _cat);
+                select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesName: s.name });
+              });
+
+            if (chartPersonality.tooltip) {
+              bars.append('title').text((d: any) =>
+                compactState.compactTooltip ? String(d.value) : `${d.category} - ${d.seriesName}: ${d.value}`
+              );
+            }
+
+            if (chartPersonality.animate) {
+              bars
+                .attr('x', 0)
+                .attr('width', 0)
+                .transition()
+                .duration(chartPersonality.animationDuration)
+                .delay((_, i) => (i * seriesNames.length + sIdx) * 30)
+                .attr('width', (d: any) => x(d.value));
+            } else {
+              bars.attr('x', 0).attr('width', (d: any) => x(d.value));
+            }
+          });
+        }
       }
     } else {
-      // Horizontal orientation: swap the role of the axes -- scaleBand maps
-      // categories along the y-axis, scaleLinear maps values along the x-axis.
-      const y = scaleBand()
-        .domain(data.map((d) => d.label))
-        .range([0, innerHeight])
-        .padding(barGap);
+      // ── Single-series rendering (original logic) ──────────────────────────
+      if (orientation === 'vertical') {
+        const x = scaleBand()
+          .domain(singleData.map((d) => d.label))
+          .range([0, innerWidth])
+          .padding(barGap);
 
-      const x = scaleLinear()
-        .domain([0, max(data, (d) => d.value) ?? 0])
-        .nice()
-        .range([0, innerWidth]);
+        const y = scaleLinear()
+          .domain([0, max(singleData, (d) => d.value) ?? 0])
+          .nice()
+          .range([innerHeight, 0]);
 
-      g.append('g')
-        .attr('transform', `translate(0,${innerHeight})`)
-        .call(axisBottom(x).ticks(tickCount))
-        .selectAll('text')
-        .style('fill', 'var(--ds-color-text-secondary)')
-        .style('font-size', '12px');
+        g.append('g')
+          .attr('transform', `translate(0,${innerHeight})`)
+          .call(axisBottom(x))
+          .selectAll('text')
+          .style('fill', 'var(--ds-color-text-secondary)')
+          .style('font-size', '12px');
 
-      g.append('g')
-        .call(axisLeft(y))
-        .selectAll('text')
-        .style('fill', 'var(--ds-color-text-secondary)')
-        .style('font-size', '12px');
+        g.append('g')
+          .call(axisLeft(y).ticks(tickCount))
+          .selectAll('text')
+          .style('fill', 'var(--ds-color-text-secondary)')
+          .style('font-size', '12px');
 
-      const bars = g
-        .selectAll('.bar')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('class', 'bar')
-        .attr('y', (d) => y(d.label) ?? 0)
-        .attr('height', y.bandwidth())
-        .attr('rx', barRadius)
-        .attr('ry', barRadius)
-        .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
+        g.append('g')
+          .attr('class', 'grid')
+          .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
+          .selectAll('line')
+          .style('stroke', 'var(--ds-color-border-secondary)')
+          .style('stroke-opacity', 0.5);
+        g.selectAll('.grid .domain').remove();
 
-      if (chartPersonality.tooltip) {
-        bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
-      }
-
-      // Horizontal bars grow rightward from the y-axis, mirroring the vertical
-      // grow-upward pattern for visual consistency across orientations.
-      if (chartPersonality.animate) {
-        bars
-          .attr('x', 0)
-          .attr('width', 0)
-          .transition()
-          .duration(chartPersonality.animationDuration)
-          .delay((_, i) => i * 50)
-          .attr('width', (d) => x(d.value));
-      } else {
-        bars.attr('x', 0).attr('width', (d) => x(d.value));
-      }
-
-      if (showValues) {
-        g.selectAll('.value')
-          .data(data)
+        const bars = g
+          .selectAll('.bar')
+          .data(singleData)
           .enter()
-          .append('text')
-          .attr('class', 'value')
-          .attr('x', (d) => x(d.value) + 5)
-          .attr('y', (d) => (y(d.label) ?? 0) + y.bandwidth() / 2)
-          .attr('dominant-baseline', 'middle')
-          .style('fill', 'var(--ds-color-text-primary)')
-          .style('font-size', '11px')
-          .text((d) => d.value);
+          .append('rect')
+          .attr('class', 'bar')
+          .attr('x', (d) => x(d.label) ?? 0)
+          .attr('width', x.bandwidth())
+          .attr('rx', barRadius)
+          .attr('ry', barRadius)
+          .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
+
+        if (chartPersonality.tooltip) {
+          bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
+        }
+
+        if (chartPersonality.animate) {
+          bars
+            .attr('y', innerHeight)
+            .attr('height', 0)
+            .transition()
+            .duration(chartPersonality.animationDuration)
+            .delay((_, i) => i * 50)
+            .attr('y', (d) => y(d.value))
+            .attr('height', (d) => innerHeight - y(d.value));
+        } else {
+          bars.attr('y', (d) => y(d.value)).attr('height', (d) => innerHeight - y(d.value));
+        }
+
+        if (showValues) {
+          g.selectAll('.value')
+            .data(singleData)
+            .enter()
+            .append('text')
+            .attr('class', 'value')
+            .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
+            .attr('y', (d) => y(d.value) - 5)
+            .attr('text-anchor', 'middle')
+            .style('fill', 'var(--ds-color-text-primary)')
+            .style('font-size', '11px')
+            .text((d) => d.value);
+        }
+      } else {
+        const y = scaleBand()
+          .domain(singleData.map((d) => d.label))
+          .range([0, innerHeight])
+          .padding(barGap);
+
+        const x = scaleLinear()
+          .domain([0, max(singleData, (d) => d.value) ?? 0])
+          .nice()
+          .range([0, innerWidth]);
+
+        g.append('g')
+          .attr('transform', `translate(0,${innerHeight})`)
+          .call(axisBottom(x).ticks(tickCount))
+          .selectAll('text')
+          .style('fill', 'var(--ds-color-text-secondary)')
+          .style('font-size', '12px');
+
+        g.append('g')
+          .call(axisLeft(y))
+          .selectAll('text')
+          .style('fill', 'var(--ds-color-text-secondary)')
+          .style('font-size', '12px');
+
+        const bars = g
+          .selectAll('.bar')
+          .data(singleData)
+          .enter()
+          .append('rect')
+          .attr('class', 'bar')
+          .attr('y', (d) => y(d.label) ?? 0)
+          .attr('height', y.bandwidth())
+          .attr('rx', barRadius)
+          .attr('ry', barRadius)
+          .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
+
+        if (chartPersonality.tooltip) {
+          bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
+        }
+
+        if (chartPersonality.animate) {
+          bars
+            .attr('x', 0)
+            .attr('width', 0)
+            .transition()
+            .duration(chartPersonality.animationDuration)
+            .delay((_, i) => i * 50)
+            .attr('width', (d) => x(d.value));
+        } else {
+          bars.attr('x', 0).attr('width', (d) => x(d.value));
+        }
+
+        if (showValues) {
+          g.selectAll('.value')
+            .data(singleData)
+            .enter()
+            .append('text')
+            .attr('class', 'value')
+            .attr('x', (d) => x(d.value) + 5)
+            .attr('y', (d) => (y(d.label) ?? 0) + y.bandwidth() / 2)
+            .attr('dominant-baseline', 'middle')
+            .style('fill', 'var(--ds-color-text-primary)')
+            .style('font-size', '11px')
+            .text((d) => d.value);
+        }
       }
     }
 
@@ -297,7 +728,15 @@ export const BarChart = memo(function BarChart({
     // Style axis lines
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [data, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, colors, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
+  }, [data, series, isMultiSeries, singleData, categories, seriesColors, stacked, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, colors, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
+
+  const itemCount = isMultiSeries
+    ? series!.reduce((n, s) => n + s.data.length, 0)
+    : singleData.length;
+
+  const modeDescriptor = isMultiSeries
+    ? stacked ? 'Stacked multi-series.' : 'Grouped multi-series.'
+    : '';
 
   return (
     <ChartScaffold
@@ -312,8 +751,9 @@ export const BarChart = memo(function BarChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Bar chart'}
-      ariaDescription={describeChart('Bar chart', data.length, subtitle, [
+      ariaDescription={describeChart('Bar chart', itemCount, subtitle, [
         orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.',
+        modeDescriptor || null,
         xAxisLabel ? `X axis: ${xAxisLabel}.` : null,
         yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
       ].filter(Boolean).join(' '))}

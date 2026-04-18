@@ -61,3 +61,15 @@ export type { WaterfallChartProps, WaterfallDataPoint } from './waterfall';
 
 export { ScatterChart } from './scatter';
 export type { ScatterChartProps, ScatterDataPoint } from './scatter';
+
+export { CalendarHeatMap } from './calendar-heatmap';
+export type { CalendarHeatMapProps, CalendarHeatMapDataPoint } from './calendar-heatmap';
+
+export { BulletChart } from './bullet';
+export type { BulletChartProps, BulletDataPoint } from './bullet';
+
+export { Histogram } from './histogram';
+export type { HistogramProps } from './histogram';
+
+export { SankeyChart } from './sankey';
+export type { SankeyChartProps, SankeyNode, SankeyLink } from './sankey';
