@@ -2,8 +2,10 @@
 
 /**
  * @fileoverview Chart hooks barrel -- exports useChartDimensions (responsive
- * container measurement via ResizeObserver) and useChartPersonality (personality
- * token resolution for chart rendering behavior).
+ * container measurement via ResizeObserver), useChartPersonality (personality
+ * token resolution for chart rendering behavior), useChartCompact (responsive
+ * compact mode), and useChartTheme (DS token to resolved hex bridge for
+ * chart rendering).
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -86,3 +88,6 @@ export type { ChartPersonalityOptions, ResolvedChartPersonality } from './use-ch
 
 export { useChartCompact } from './use-chart-compact';
 export type { UseChartCompactOptions, ResolvedChartCompact } from './use-chart-compact';
+
+export { useChartTheme } from './use-chart-theme';
+export type { ChartTheme } from './use-chart-theme';

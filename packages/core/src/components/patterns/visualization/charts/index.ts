@@ -49,3 +49,15 @@ export type { GanttChartProps, GanttTask } from './gantt-chart';
 
 export { NetworkGraph } from './network-graph';
 export type { NetworkGraphProps, NetworkNode, NetworkLink } from './network-graph';
+
+export { GaugeChart } from './gauge';
+export type { GaugeChartProps, GaugeSegment } from './gauge';
+
+export { Sparkline } from './sparkline';
+export type { SparklineProps } from './sparkline';
+
+export { WaterfallChart } from './waterfall';
+export type { WaterfallChartProps, WaterfallDataPoint } from './waterfall';
+
+export { ScatterChart } from './scatter';
+export type { ScatterChartProps, ScatterDataPoint } from './scatter';
