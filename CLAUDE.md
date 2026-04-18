@@ -145,6 +145,56 @@ Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated art
 - The brand compiler (`compilers/brand-theme/`) converts BrandTheme to CSS vars and personality tokens.
 - BrandTheme `.ts` files MUST stay in sync with CSS artifacts. If you edit one, update the other.
 
+## Waves 2-6 Feature Inventory (2026-04-17)
+
+Features implemented across Waves 2 through 6 of the DS execution plan.
+
+### Wave 2 -- Multi-View Collections
+
+- `CollectionViewMode` type: `table | cards | grid | kanban | gallery | calendar`
+- Per-mode config interfaces: `CollectionKanbanConfig`, `CollectionCalendarConfig`, etc.
+- `ViewModeSwitcher` structure (segmented icon control)
+- `PatternGridView` pattern (CSS grid, selection, pagination)
+- `PatternGalleryView` pattern (image grid, aspect ratio, captions)
+- `CollectionRenderDispatch` (internal, routes to correct pattern per mode)
+- `CollectionWorkspaceSurface` accepts `viewModes` prop
+
+### Wave 3 -- Advanced Data Interactions
+
+- `ExportButton` structure (CSV/JSON/Clipboard export, zero external deps)
+- `ColumnMenu` extended: `pinnedColumns`, `columnWidths`, `groups`
+- `FilterBuilder` extended: `customOperators`, `showAddFilter`, `CustomOperatorDefinition`
+- Inline Cell Editing: `EditableConfig<T>`, `InlineCellEditor`, `useInlineEditing` hook
+- Row Grouping: `groupBy`, aggregations (`count | sum | average | min | max`), collapsible headers
+- Virtual Scrolling: `useVirtualScroll` hook, `virtualized` prop on PatternDataTable, `scrollToRow` API
+
+### Wave 4 -- Mobile and Internationalization
+
+- `PatternLocaleSwitcher` pattern (3 engines, 5 locales, flag emoji, keyboard nav)
+- `mobileNavigation` config on `WorkspacePreviewRailConfig`
+- `FormBuilder` `autoAdaptive` prop (auto-stack on mobile)
+- `Modal` primitive `adaptiveFullscreen` prop (100vw/100dvh on mobile, default true)
+
+### Wave 5 -- Surface Lifecycle and Permissions
+
+- `useSurfaceState` hook (8 lifecycle states, `renderState` helper)
+- Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyStateCard`, `SurfaceErrorStateCard`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`
+- `useSurfaceProfileDefaultsWithOverrides` hook
+- `SurfaceVisualOverrides` type on all 33 surface visual configs
+- Enhanced permissions: `isRowAllowed`, `cascadeRules`, `resolveFieldAccess`
+
+### Wave 6 -- Branding Validation, Collaboration, and Lint Rules
+
+- `validateBrandingContrast()` from `@rottay/design-system/server`
+- `useCrossTabSync()` hook (BroadcastChannel + localStorage fallback)
+- Collaboration primitives: `PresenceBar`, `PresenceTypingIndicator`, `LiveCursor`
+- ESLint rules (from `@rottay/design-system/eslint`):
+  - `@rottay/no-raw-html`
+  - `@rottay/no-hardcoded-colors`
+  - `@rottay/no-db-in-components`
+
+---
+
 ### Component CSS variable pattern (2026-04-17)
 
 Modern engine components read **component-specific CSS variables** with fallback to generic tokens:
