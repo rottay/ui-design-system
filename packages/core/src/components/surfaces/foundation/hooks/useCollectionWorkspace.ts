@@ -11,6 +11,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   CollectionWorkspaceConfig,
+  CollectionViewMode,
   WorkspaceControlsConfig,
   CollectionBehaviorConfig,
 } from '../contracts/collection';
@@ -146,7 +147,7 @@ export function useCollectionWorkspace<T>(
   const setViewMode = useCallback(
     (mode: string) => {
       setInternalViewMode(mode);
-      controls?.viewMode?.onChange?.(mode);
+      controls?.viewMode?.onChange?.(mode as CollectionViewMode);
     },
     [controls?.viewMode?.onChange],
   );

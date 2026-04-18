@@ -12,3 +12,4 @@ export * from './saved-views-menu';
 export * from './selection-preview-rail';
 export * from './scope-switcher';
 export * from './table-toolbar';
+export * from './view-mode-switcher';

@@ -51,6 +51,13 @@ export type {
   WorkspaceActiveFiltersConfig,
   SmartSelectionSet,
   WorkspaceShellPresentationConfig,
+  CollectionViewMode,
+  CollectionKanbanConfig,
+  CollectionCalendarConfig,
+  CollectionGridConfig,
+  CollectionGalleryConfig,
+  CollectionCardsConfig,
+  CollectionViewModeConfigs,
 } from './foundation/contracts/collection';
 export { useCollectionWorkspace } from './foundation/hooks/useCollectionWorkspace';
 

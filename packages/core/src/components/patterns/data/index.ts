@@ -1,9 +1,11 @@
 /**
  * @fileoverview data patterns group barrel.
- * Data display patterns: tables, detail panels, list toolbars, column settings, saved views, stat grids.
+ * Data display patterns: tables, grid views, gallery views, detail panels, list toolbars, column settings, saved views, stat grids.
  */
 
 export * from './data-table';
+export * from './grid-view';
+export * from './gallery-view';
 export * from './detail-panel';
 export * from './list-toolbar';
 export * from './column-settings';

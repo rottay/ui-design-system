@@ -17,6 +17,153 @@ import type {
   SortConfig,
 } from '../../../patterns/foundation/types';
 import type { SavedView } from '../../../patterns/data/saved-views/SavedViews.types';
+import type { CalendarEvent } from '../../../patterns/visualization/calendar-view/CalendarView.types';
+
+// ---------------------------------------------------------------------------
+// Canonical view modes
+// ---------------------------------------------------------------------------
+
+/**
+ * Canonical render modes for collection workspaces.
+ *
+ * - table:    PatternDataTable rows
+ * - cards:    Responsive card grid (auto columns, custom card renderer)
+ * - grid:     Fixed-column CSS grid with PatternGridView
+ * - kanban:   PatternKanbanBoard columns grouped by a field
+ * - gallery:  Image/media-focused grid with PatternGalleryView
+ * - calendar: PatternCalendarView with date-field mapping
+ */
+export type CollectionViewMode =
+  | 'table'
+  | 'cards'
+  | 'grid'
+  | 'kanban'
+  | 'gallery'
+  | 'calendar';
+
+/**
+ * Kanban-specific configuration when viewMode === 'kanban'.
+ * Tells the workspace which data field drives column grouping and
+ * how to render cards inside kanban columns.
+ */
+export interface CollectionKanbanConfig<T = unknown> {
+  /** Field name whose distinct values become kanban columns. */
+  groupByField: keyof T & string;
+  /** Static column definitions (overrides auto-detection from groupByField). */
+  columns?: Array<{
+    id: string;
+    title: string;
+    color?: string;
+    limit?: number;
+  }>;
+  /** Custom card renderer for kanban cards. Falls back to renderCard. */
+  renderCard?: (item: T, columnId: string) => ReactNode;
+  /** Custom column header renderer. */
+  renderColumnHeader?: (columnId: string, title: string, count: number) => ReactNode;
+  /** Called when a card is dragged between columns. */
+  onCardMove?: (
+    itemId: string,
+    fromColumn: string,
+    toColumn: string,
+    position: number,
+  ) => void;
+  /** Called when "add item" is clicked inside a column. */
+  onAddItem?: (columnId: string) => void;
+  /** Add item button label. */
+  addItemLabel?: string;
+  /** Column gap in px or CSS value. */
+  columnGap?: number | string;
+  /** Minimum column width in px or CSS value. */
+  columnMinWidth?: number | string;
+}
+
+/**
+ * Calendar-specific configuration when viewMode === 'calendar'.
+ * Tells the workspace which data fields map to calendar event dates.
+ */
+export interface CollectionCalendarConfig<T = unknown> {
+  /** Field name on T that holds the start date (Date or ISO string). */
+  startField: keyof T & string;
+  /** Field name on T that holds the end date. Optional for point events. */
+  endField?: keyof T & string;
+  /** Field name on T that holds the event title. Falls back to first text column. */
+  titleField?: keyof T & string;
+  /** Field name on T for color. Optional. */
+  colorField?: keyof T & string;
+  /** Whether events without endField are treated as all-day. */
+  defaultAllDay?: boolean;
+  /** Custom event chip renderer. */
+  renderEvent?: (item: T, event: CalendarEvent<T>) => ReactNode;
+  /** Called when a date cell is clicked. */
+  onDateClick?: (date: Date) => void;
+  /** Default calendar sub-view. */
+  defaultView?: 'month' | 'week' | 'day';
+}
+
+/**
+ * Grid-specific configuration when viewMode === 'grid'.
+ */
+export interface CollectionGridConfig {
+  /** Number of columns: 1-6 or 'auto' for auto-fill. */
+  columns?: number | 'auto';
+  /** Minimum card width for auto-fill mode. */
+  minCardWidth?: number | string;
+  /** Gap between grid items. */
+  gap?: number | string;
+  /** Aspect ratio for grid cells (e.g. '1/1', '16/9', 'auto'). */
+  aspectRatio?: string;
+}
+
+/**
+ * Gallery-specific configuration when viewMode === 'gallery'.
+ */
+export interface CollectionGalleryConfig<T = unknown> {
+  /** Field name on T that holds the image/media URL. */
+  imageField: keyof T & string;
+  /** Field name on T for the caption/title. */
+  captionField?: keyof T & string;
+  /** Number of columns or 'auto'. */
+  columns?: number | 'auto';
+  /** Minimum thumbnail width. */
+  minThumbnailWidth?: number | string;
+  /** Gap between gallery items. */
+  gap?: number | string;
+  /** Aspect ratio for thumbnails. */
+  aspectRatio?: string;
+  /** Custom gallery item renderer. */
+  renderItem?: (item: T, index: number) => ReactNode;
+  /** Called when a gallery item is clicked. */
+  onItemClick?: (item: T, index: number) => void;
+  /** Show/hide captions. */
+  showCaptions?: boolean;
+}
+
+/**
+ * Cards-specific configuration when viewMode === 'cards'.
+ * Formalizes what today is an ad-hoc mobileCard render prop.
+ */
+export interface CollectionCardsConfig<T = unknown> {
+  /** Card renderer. Today this is the mobileCard prop. */
+  renderCard: (item: T, index: number) => ReactNode;
+  /** Number of columns or 'auto'. */
+  columns?: number | 'auto';
+  /** Minimum card width for auto-fill. */
+  minCardWidth?: number | string;
+  /** Gap between cards. */
+  gap?: number | string;
+}
+
+/**
+ * Per-view-mode configuration map.
+ * Apps provide only the modes they want to enable.
+ */
+export interface CollectionViewModeConfigs<T = unknown> {
+  cards?: CollectionCardsConfig<T>;
+  grid?: CollectionGridConfig;
+  kanban?: CollectionKanbanConfig<T>;
+  gallery?: CollectionGalleryConfig<T>;
+  calendar?: CollectionCalendarConfig<T>;
+}
 
 // ---------------------------------------------------------------------------
 // Controls
@@ -93,12 +240,12 @@ export interface WorkspaceExportConfig {
   onExport?: (format: string) => void;
 }
 
-/** View mode switching (table/cards/board/gallery/calendar). */
+/** View mode switching (table/cards/grid/kanban/gallery/calendar). */
 export interface WorkspaceViewModeConfig {
   enabled: boolean;
-  modes: string[];
-  value?: string;
-  onChange?: (mode: string) => void;
+  modes: CollectionViewMode[];
+  value?: CollectionViewMode;
+  onChange?: (mode: CollectionViewMode) => void;
 }
 
 /** Scope switcher configuration. */
@@ -268,4 +415,6 @@ export interface CollectionWorkspaceConfig<T> {
   loading?: boolean;
   error?: ReactNode;
   emptyState?: ReactNode;
+  /** Per-mode render configuration. Table mode needs no config (uses columns). */
+  viewModes?: CollectionViewModeConfigs<T>;
 }
