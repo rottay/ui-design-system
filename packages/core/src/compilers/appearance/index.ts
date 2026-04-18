@@ -19,6 +19,19 @@ import type {
   TenantAppearanceAdvanced,
   BrandButtonVariantChrome,
 } from '../../contracts/themes';
+import { isValidCssColor, clampValue } from '../_shared/color-math';
+
+// ── Validation helpers ──────────────────────────────────────
+
+/** Only set a CSS color var if the value is a valid CSS color. */
+function setColor(vars: Record<string, string>, key: string, value: string | undefined): void {
+  if (value && isValidCssColor(value)) vars[key] = value;
+}
+
+/** Set any CSS var (non-color values like fonts, padding, etc). */
+function setVar(vars: Record<string, string>, key: string, value: string | number | undefined | null): void {
+  if (value != null) vars[key] = String(value);
+}
 
 // ── General tier ──────────────────────────────────────────
 
@@ -58,12 +71,12 @@ export function appearanceGeneralToVariables(
 ): Record<string, string> {
   const vars: Record<string, string> = {};
 
-  // Palette
+  // Palette (validated - invalid colors are silently skipped)
   if (general.palette) {
     const p = general.palette;
-    if (p.primary) vars['--ds-color-primary'] = p.primary;
-    if (p.secondary) vars['--ds-color-secondary'] = p.secondary;
-    if (p.accent) vars['--ds-color-accent'] = p.accent;
+    setColor(vars, '--ds-color-primary', p.primary);
+    setColor(vars, '--ds-color-secondary', p.secondary);
+    setColor(vars, '--ds-color-accent', p.accent);
     // backgroundMode is consumed by ThemeProvider, not a CSS variable
   }
 

@@ -350,8 +350,10 @@ export function useTokens(): DesignTokens {
       // Spacing values are density-scaled at resolution time rather than via
       // CSS calc() because components consume them as numeric pixel values
       // for style objects and layout calculations.
+      // Clamp densityScale to safe range (0.5-3) to prevent layout breakage
+      // from extreme tenant overrides or DB corruption.
       spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96].map(
-        v => Math.round(v * densityScale)
+        v => Math.round(v * Math.max(0.5, Math.min(3, densityScale)))
       ),
       typography: {
         fontSize: {

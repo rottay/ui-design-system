@@ -13,6 +13,42 @@ export function isHexColor(value: string): boolean {
   return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
 }
 
+/**
+ * Validate that a value is a valid CSS color.
+ * Accepts: hex (#fff, #ffffff), rgb(), rgba(), hsl(), hsla(), oklch(),
+ * var(--ds-*), color-mix(), named colors (transparent, inherit, currentColor).
+ */
+export function isValidCssColor(value: string): boolean {
+  if (!value || typeof value !== 'string') return false;
+  const v = value.trim();
+  if (isHexColor(v)) return true;
+  if (/^(rgb|rgba|hsl|hsla|oklch|lab|lch)\s*\(/.test(v)) return true;
+  if (/^var\(--/.test(v)) return true;
+  if (/^color-mix\(/.test(v)) return true;
+  if (/^(transparent|inherit|currentColor|none|unset|initial)$/i.test(v)) return true;
+  return false;
+}
+
+/**
+ * Validate that a value is a valid CSS dimension (size).
+ * Accepts: 0, 12px, 1.5rem, 0.875em, 50%, var(--ds-*).
+ */
+export function isValidCssDimension(value: string): boolean {
+  if (!value || typeof value !== 'string') return false;
+  const v = value.trim();
+  if (v === '0') return true;
+  if (/^var\(--/.test(v)) return true;
+  if (/^\d+(\.\d+)?(px|rem|em|%|vw|vh|dvh|svh|ch|ex)$/.test(v)) return true;
+  return false;
+}
+
+/**
+ * Clamp a numeric value within bounds. Returns clamped value.
+ */
+export function clampValue(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
 /** Expand shorthand hex (#abc) to full form (#aabbcc). */
 export function normalizeHexColor(value: string): string {
   if (!isHexColor(value)) return value;

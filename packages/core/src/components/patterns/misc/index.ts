@@ -11,3 +11,5 @@ export * from './cockpit-header';
 export * from './workbench-header';
 export * from './page-shell';
 export * from './empty-state';
+export { TokenInspector } from './token-inspector';
+export { BrandingPreviewSandbox } from './branding-preview-sandbox';
