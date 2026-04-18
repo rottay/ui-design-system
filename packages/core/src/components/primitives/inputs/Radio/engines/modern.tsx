@@ -78,6 +78,8 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   }, []);
 
   /* -- Sizes -------------------------------------------------------- */
+  // TODO: migrate to CSS custom properties (--ds-radio-size-xs through --ds-radio-size-xl)
+  // once inline style numeric values can be replaced with token references
   const sizeMap: Record<string, number> = {
     xs: 14, sm: 16, md: 18, lg: 20, xl: 24,
   };
@@ -95,7 +97,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     height: circleSize,
     minWidth: circleSize,
     borderRadius: '50%',
-    border: `2px solid ${isChecked ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)'}`,
+    border: `2px solid ${isChecked ? 'var(--ds-radio-checked-bg, var(--ds-color-primary))' : 'var(--ds-radio-border, var(--ds-color-border-secondary))'}`,
     backgroundColor: 'transparent',
     display: 'flex',
     alignItems: 'center',
@@ -103,7 +105,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     transition: `border-color ${transitionTiming}, box-shadow ${transitionTiming}`,
     flexShrink: 0,
     ...(isHovered && !disabled && !isChecked && {
-      borderColor: 'var(--ds-color-border)',
+      borderColor: 'var(--ds-radio-border, var(--ds-color-border))',
     }),
     ...(isHovered && !disabled && isChecked && {
       borderColor: 'var(--ds-color-primary-hover)',
@@ -113,7 +115,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
       outlineOffset: '2px',
     }),
     ...(disabled && {
-      opacity: 0.5,
+      opacity: 'var(--ds-radio-disabled-opacity, 0.5)' as unknown as number,
       cursor: 'not-allowed',
     }),
   };
@@ -122,7 +124,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     width: dotSize,
     height: dotSize,
     borderRadius: '50%',
-    backgroundColor: 'var(--ds-color-primary)',
+    backgroundColor: 'var(--ds-radio-indicator-color, var(--ds-color-text-on-primary, #fff))',
     transform: isChecked ? 'scale(1)' : 'scale(0)',
     transition: `transform ${transitionTiming}`,
   };

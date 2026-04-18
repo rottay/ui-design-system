@@ -169,7 +169,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     const base: React.CSSProperties = {
       position: 'sticky',
       zIndex: 10,
-      background: 'var(--ds-surface-card)',
+      background: 'var(--ds-table-bg, var(--ds-surface-card))',
     };
     if (position === 'left' || position === true) return { ...base, left: 0 };
     if (position === 'right') return { ...base, right: 0 };
@@ -346,10 +346,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             minWidth: column.minWidth,
             textAlign: column.align,
             position: stickyConfig.enabled || column.fixed ? 'sticky' : undefined,
-            ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40, zIndex: 20, background: 'var(--ds-surface-inset)' } : {}),
+            ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40, zIndex: 20, background: 'var(--ds-table-header-bg, var(--ds-surface-inset))' } : {}),
             ...getFixedStyle(column.fixed),
             ...(isSortable ? { cursor: 'pointer', userSelect: 'none' as const, transition: 'color 0.15s' } : {}),
-            ...(bordered ? { borderBottom: '1px solid var(--ds-color-border)' } : {}),
+            ...(bordered ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
             ...column.style,
           }}
           onClick={() => isSortable && handleSort(column)}
@@ -405,7 +405,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     return (
-      <tr style={{ background: 'var(--ds-surface-inset)', transition: 'background-color 0.2s' }}>
+      <tr style={{ background: 'var(--ds-table-header-bg, var(--ds-surface-inset))', transition: 'background-color 0.2s' }}>
         {rowSelection && <th style={{ width: 48 }} />}
         {showExpandCol && <th style={{ width: 48 }} />}
         {leafColumns.map((col, i) => {
@@ -469,7 +469,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             aria-expanded={hasExpandable ? isExpanded : undefined}
             {...(onRow?.(record, actualIndex) || {})}
             onMouseEnter={rowHoverable ? (e) => {
-              if (!isSelected) (e.currentTarget as HTMLElement).style.background = 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)';
+              if (!isSelected) (e.currentTarget as HTMLElement).style.background = 'var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent))';
             } : undefined}
             onMouseLeave={rowHoverable ? (e) => {
               (e.currentTarget as HTMLElement).style.background = isSelected ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' : '';
@@ -545,7 +545,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, maxWidth: 320 } : {}),
                     ...getFixedStyle(column.fixed),
                     ...(cellEditable && !cellIsEditing ? { cursor: 'pointer', transition: 'all 0.15s' } : {}),
-                    ...(bordered ? { borderBottom: '1px solid var(--ds-color-border)' } : {}),
+                    ...(bordered ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
                     ...column.style,
                   }}
                   role="gridcell"
@@ -576,7 +576,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
           {/* Expanded row content */}
           {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
-            <tr style={{ background: 'var(--ds-surface-inset)' }}>
+            <tr style={{ background: 'var(--ds-table-row-bg-striped, var(--ds-surface-inset))' }}>
               <td colSpan={totalColSpan} style={{ padding: 16, animation: 'rottay-table-expand 0.3s ease-out' }}>
                 {expandable.expandedRowRender(record, actualIndex, expandable.indentSize || 0, true)}
               </td>
@@ -601,7 +601,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         borderCollapse: 'collapse',
         fontSize: sizeTokens.fontSize,
         tableLayout: props.tableLayout === 'fixed' ? 'fixed' : undefined,
-        ...(bordered ? { border: '1px solid var(--ds-color-border)' } : {}),
+        ...(bordered ? { border: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
       }}
     >
       {/* Column group for widths */}
@@ -703,7 +703,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       {/* Loading overlay */}
       {loading && (
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 30, background: 'color-mix(in srgb, var(--ds-surface-card) 50%, transparent)' }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 30, background: 'color-mix(in srgb, var(--ds-table-bg, var(--ds-surface-card)) 50%, transparent)' }}>
           <span
             style={{
               display: 'inline-block',

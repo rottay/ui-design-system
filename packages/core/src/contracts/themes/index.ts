@@ -102,6 +102,21 @@ export interface BrandTypography {
   headingWeightBias?: 'lighter' | 'normal' | 'heavier';
   headingLetterSpacing?: string;
   labelStyle?: 'uppercase' | 'sentence' | 'capitalize';
+  /** Per-context letter spacing */
+  letterSpacing?: {
+    display?: string;
+    heading?: string;
+    body?: string;
+    mono?: string;
+  };
+  /** Per-context line height */
+  lineHeight?: {
+    display?: number;
+    heading?: number;
+    body?: number;
+    tight?: number;
+    relaxed?: number;
+  };
 }
 
 export interface BrandSurfaces {
@@ -141,10 +156,16 @@ export interface BrandChrome {
   layout?: BrandLayoutChrome;
   /** Shell background grid (for premium grid-overlay effects) */
   shell?: BrandShellChrome;
-  /** Button variant colors and shadows */
+  /** Button variant colors, input chrome, disabled states */
   controls?: BrandControlsChrome;
-  /** Table header styling */
+  /** Table header, row, and cell styling */
   table?: BrandTableChrome;
+  /** Card component chrome (bg, border, shadow, header/body/footer) */
+  cardComponent?: BrandCardChrome;
+  /** Modal/dialog chrome */
+  modal?: BrandModalChrome;
+  /** Tabs chrome */
+  tabs?: BrandTabsChrome;
 }
 
 export interface BrandSidebarChrome {
@@ -186,26 +207,159 @@ export interface BrandShellChrome {
   gridOpacity?: number;
 }
 
+export interface BrandButtonVariantChrome {
+  bg?: string;
+  bgHover?: string;
+  bgActive?: string;
+  color?: string;
+  text?: string;
+  border?: string;
+  borderHover?: string;
+  shadow?: string;
+  shadowHover?: string;
+}
+
 export interface BrandControlsChrome {
   /** Primary button chrome */
-  buttonPrimary?: { bg?: string; bgHover?: string; text?: string; border?: string; shadow?: string };
+  buttonPrimary?: BrandButtonVariantChrome;
   /** Secondary button chrome */
-  buttonSecondary?: { bg?: string; bgHover?: string; text?: string; border?: string };
+  buttonSecondary?: BrandButtonVariantChrome;
   /** Default button chrome */
-  buttonDefault?: { bg?: string; bgHover?: string; text?: string; border?: string };
+  buttonDefault?: BrandButtonVariantChrome;
   /** Ghost button chrome */
-  buttonGhost?: { bg?: string; bgHover?: string; text?: string };
-  /** Input field chrome */
-  input?: { bg?: string; border?: string; borderFocus?: string; shadowFocus?: string };
+  buttonGhost?: BrandButtonVariantChrome;
+  /** Text button chrome */
+  buttonText?: BrandButtonVariantChrome;
+  /** Link button chrome */
+  buttonLink?: { color?: string; colorHover?: string; colorActive?: string };
+  /** Success semantic button */
+  buttonSuccess?: BrandButtonVariantChrome;
+  /** Warning semantic button */
+  buttonWarning?: BrandButtonVariantChrome;
+  /** Error/danger semantic button */
+  buttonError?: BrandButtonVariantChrome;
+  /** Info semantic button */
+  buttonInfo?: BrandButtonVariantChrome;
   /** Disabled state treatment (shared across control types) */
-  disabled?: { opacity?: number; bg?: string; text?: string; border?: string };
+  disabled?: { opacity?: number; bg?: string; text?: string; border?: string; borderColor?: string };
+  /** Focus ring */
+  focusRing?: string;
+  /** Input field chrome */
+  input?: BrandInputChrome;
+}
+
+export interface BrandInputChrome {
+  bg?: string;
+  bgHover?: string;
+  bgFocus?: string;
+  bgDisabled?: string;
+  color?: string;
+  colorPlaceholder?: string;
+  colorDisabled?: string;
+  border?: string;
+  borderHover?: string;
+  borderFocus?: string;
+  borderDisabled?: string;
+  disabledOpacity?: number;
+  shadowFocus?: string;
+  /** Filled variant */
+  filled?: { bg?: string; bgHover?: string; bgFocus?: string };
+  /** Addon (prefix/suffix) */
+  addon?: { bg?: string; color?: string; border?: string };
+  /** Label */
+  label?: { color?: string };
+  /** Helper text */
+  helper?: { color?: string };
+  /** Clear button */
+  clear?: { color?: string; colorHover?: string };
+  /** Validation states */
+  successBorder?: string;
+  successShadowFocus?: string;
+  warningBorder?: string;
+  warningShadowFocus?: string;
+  errorBorder?: string;
+  errorShadowFocus?: string;
+  errorColor?: string;
 }
 
 export interface BrandTableChrome {
+  bg?: string;
+  border?: string;
+  /** Header */
   headerBg?: string;
   headerColor?: string;
   headerFontWeight?: string | number;
   headerFontSize?: string;
+  headerBorder?: string;
+  /** Rows */
+  rowBg?: string;
+  rowBgHover?: string;
+  rowBgStriped?: string;
+  rowBgSelected?: string;
+  rowBorder?: string;
+  /** Cells */
+  cellPadding?: string;
+  cellFontSize?: string;
+  cellColor?: string;
+  /** Loading */
+  loadingOverlayBg?: string;
+}
+
+export interface BrandCardChrome {
+  bg?: string;
+  bgHover?: string;
+  color?: string;
+  border?: string;
+  borderHover?: string;
+  borderAccentHover?: string;
+  shadow?: string;
+  shadowHover?: string;
+  shadowElevated?: string;
+  /** Header */
+  headerBorder?: string;
+  headerColor?: string;
+  titleColor?: string;
+  subtitleColor?: string;
+  /** Body */
+  bodyColor?: string;
+  /** Footer */
+  footerBorder?: string;
+  footerBg?: string;
+  /** Image */
+  imagePlaceholderBg?: string;
+  imagePlaceholderColor?: string;
+}
+
+export interface BrandModalChrome {
+  bg?: string;
+  color?: string;
+  shadow?: string;
+  /** Overlay */
+  overlayBg?: string;
+  overlayBackdrop?: string;
+  /** Header */
+  headerBg?: string;
+  headerBorder?: string;
+  titleColor?: string;
+  subtitleColor?: string;
+  /** Body */
+  bodyColor?: string;
+  /** Footer */
+  footerBorder?: string;
+  footerBg?: string;
+  /** Close button */
+  closeColor?: string;
+  closeColorHover?: string;
+  closeBgHover?: string;
+}
+
+export interface BrandTabsChrome {
+  border?: string;
+  color?: string;
+  colorHover?: string;
+  colorActive?: string;
+  bgHover?: string;
+  borderActive?: string;
 }
 
 // ── Vertical Theme ──────────────────────────────────────
@@ -260,26 +414,35 @@ export interface TenantAppearanceGeneral {
 }
 
 /**
- * Expert-level, fine-grained customization for guarded use cases.
+ * Expert-level, fine-grained customization for DB-driven tenants.
  *
- * Every field has a real compiler path. Fields that were declared but
- * never compiled have been removed:
- * - chrome.shell: removed (no compiler maps shell chrome from appearance)
- * - chrome.table: removed (no compiler maps table chrome from appearance)
- * - motion: removed (no compiler — re-add with personality system)
- * - charts: removed (no chart palette system)
- * - darkMode: removed (no dark-mode overlay compiler)
+ * Every field maps directly to a CSS variable compiled by the appearance
+ * compiler. All fields are optional and additive - tenants only set what
+ * they want to override. Everything else inherits from BrandTheme or DS base.
+ *
+ * ~140 CSS variables exposed across all chrome categories.
+ * Previously: ~20 fields. Now: full chrome parity with BrandTheme.
  */
 export interface TenantAppearanceAdvanced {
   chrome?: {
-    sidebar?: Pick<BrandSidebarChrome, 'bg' | 'border' | 'text' | 'textMuted' | 'itemColorActive' | 'itemBgActive' | 'itemBgHover'>;
+    /** Full sidebar chrome (17 fields) */
+    sidebar?: Partial<BrandSidebarChrome>;
+    /** Layout header and sider shell chrome */
     layout?: Partial<BrandLayoutChrome>;
-    /** Only buttonPrimary.bg and buttonPrimary.text are compiled today. */
-    controls?: {
-      buttonPrimary?: Pick<NonNullable<BrandControlsChrome['buttonPrimary']>, 'bg' | 'text'>;
-    };
+    /** Shell background grid (premium atmosphere effects) */
+    shell?: Partial<BrandShellChrome>;
+    /** All button variants + full input chrome + disabled + focus */
+    controls?: Partial<BrandControlsChrome>;
+    /** Table header, row, cell, loading chrome */
+    table?: Partial<BrandTableChrome>;
+    /** Card component chrome (bg, border, shadow, header/body/footer) */
+    cardComponent?: Partial<BrandCardChrome>;
+    /** Modal/dialog chrome (bg, overlay, header/body/footer, close) */
+    modal?: Partial<BrandModalChrome>;
+    /** Tabs chrome (border, color states) */
+    tabs?: Partial<BrandTabsChrome>;
   };
-  /** Allowlisted raw token overrides. Keys must start with `--ds-`. */
+  /** Allowlisted raw token overrides. Keys must start with `--ds-`. Max 200. */
   tokenOverrides?: Record<`--ds-${string}`, string | number>;
 }
 

@@ -2,14 +2,14 @@
  * Rottay first-party vertical theme.
  *
  * Dark-first premium AI/security command center.
- * Graphite environments, restrained cobalt/cyan accents, crisp off-white type.
+ * White primary on dark canvas, graphite environments, restrained accents.
  * Disciplined spring motion, mono pairing for data surfaces.
  *
- * H4 brief: dark, sober, technical, premium. Reduce purple/teal SaaS energy.
- * Strengthen shell and layout as identity. Controls feel tool-like, not app-generic.
+ * Design: Vercel/Linear inspired - dark, sober, technical, premium.
+ * Primary: #FFFFFF (white on dark), Canvas: #0C0C0E
  *
- * Source data: vertical registry (platform), personality preset (expressive),
- * tenant CSS (tokens/css/artifacts/rottay/index.css).
+ * Source: tokens/css/artifacts/rottay/index.css (canonical visual reference).
+ * This file MUST stay in sync with the CSS artifact.
  */
 
 import type { BrandTheme } from '../../../contracts/themes';
@@ -19,42 +19,53 @@ export const rottayBrandTheme: BrandTheme = {
   name: 'Rottay',
 
   palette: {
-    // H4: reduce purple/teal SaaS energy. Restrained cobalt + icy cyan.
-    primaryColor: '#3B82F6',       // restrained cobalt (was indigo #6366F1)
-    secondaryColor: '#71717A',     // steel/graphite neutral (was zinc #A1A1AA)
-    accentColor: '#06B6D4',        // icy cyan, used sparingly (was teal #14B8A6)
-    darkPrimaryColor: '#60A5FA',   // lighter cobalt for dark surfaces
-    darkSecondaryColor: '#A1A1AA', // steel on dark
-    darkAccentColor: '#22D3EE',    // brighter cyan for dark contrast
+    // Dark-first: white primary on dark canvas (Vercel/Linear style)
+    primaryColor: '#FFFFFF',
+    secondaryColor: '#A0A0A5',
+    accentColor: '#A0A0A5',
+    darkPrimaryColor: '#FFFFFF',
+    darkSecondaryColor: '#A0A0A5',
+    darkAccentColor: '#A0A0A5',
     darkBackgroundColor: '#0C0C0E',
-    // Semantic: serious and muted, not candy-bright
-    successColor: '#16A34A',       // darker green (serious)
-    warningColor: '#CA8A04',       // amber (not bright yellow)
-    errorColor: '#DC2626',         // deep red
-    infoColor: '#3B82F6',          // matches primary cobalt
+    // Semantic: serious and muted
+    successColor: '#22C55E',
+    warningColor: '#F59E0B',
+    errorColor: '#EF4444',
+    infoColor: '#3B82F6',
   },
 
   typography: {
-    fontFamilyBase: 'var(--font-geist-sans)',
-    fontFamilyHeading: 'var(--font-geist-sans)',
-    fontFamilyMono: 'var(--font-geist-mono)',
-    fontFamilyDisplay: 'var(--font-geist-sans)',
+    fontFamilyBase: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+    fontFamilyHeading: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+    fontFamilyMono: "'JetBrains Mono', 'Geist Mono', ui-monospace, monospace",
+    fontFamilyDisplay: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
     headingWeightBias: 'normal',
     headingLetterSpacing: '-0.025em',
     labelStyle: 'sentence',
+    letterSpacing: {
+      display: '-0.025em',
+      heading: '-0.015em',
+      body: '0',
+      mono: '0',
+    },
+    lineHeight: {
+      display: 1.1,
+      heading: 1.2,
+      body: 1.6,
+      tight: 1.25,
+      relaxed: 1.75,
+    },
   },
 
   surfaces: {
     densityScale: 1.0,
-    // Sharp and restrained (H4: slightly sharper corners than other brands)
-    borderRadius: { sm: '4px', md: '6px', lg: '8px', xl: '12px' },
+    borderRadius: { sm: '6px', md: '10px', lg: '14px', xl: '18px' },
     shadows: {
-      sm: '0 1px 2px rgba(0, 0, 0, 0.3)',
-      md: '0 4px 12px rgba(0, 0, 0, 0.25)',
-      lg: '0 8px 24px rgba(0, 0, 0, 0.3)',
-      xl: '0 16px 48px rgba(0, 0, 0, 0.35)',
+      sm: '0 1px 2px rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.14)',
+      md: '0 2px 4px rgba(0, 0, 0, 0.32), 0 8px 24px rgba(0, 0, 0, 0.18)',
+      lg: '0 8px 20px rgba(0, 0, 0, 0.28), 0 16px 40px rgba(0, 0, 0, 0.22)',
+      xl: '0 16px 40px rgba(0, 0, 0, 0.34), 0 24px 56px rgba(0, 0, 0, 0.28)',
     },
-    // Rottay: no glass, no gradients, subtle overlays (H4: low-gloss, serious)
     glass: { blur: 'none', background: 'none', border: 'none' },
     gradients: { primary: 'none', surface: 'none', mesh: 'none' },
     overlays: {
@@ -137,25 +148,110 @@ export const rottayBrandTheme: BrandTheme = {
       siderBorder: '#18181C',
     },
     shell: {
-      // Grid overlay removed from structures in R1-P2/P3 (decorative noise).
-      // Values retained for backward compat but no longer consumed by any structure.
       gridSize: '28px',
       gridLine: 'rgba(255, 255, 255, 0.03)',
       gridOpacity: 0.9,
     },
     controls: {
-      buttonPrimary: { bg: '#FFFFFF', bgHover: '#E0E0E0', text: '#0C0C0E', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.30)' },
-      buttonSecondary: { bg: '#2A2A2F', bgHover: '#3A3A40', text: '#ECECEC', border: '#3A3A40' },
-      buttonDefault: { bg: '#18181B', bgHover: '#222226', text: '#ECECEC', border: '#3A3A40' },
-      buttonGhost: { bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', text: '#A0A0A5' },
-      input: { bg: '#18181B', border: '#3A3A40', borderFocus: '#3B82F6', shadowFocus: '0 0 0 1px rgba(59, 130, 246, 0.3)' },
-      disabled: { opacity: 0.4, bg: '#18181B', text: '#52525B', border: '#2A2A2F' },
+      buttonPrimary: { bg: '#FFFFFF', bgHover: '#E0E0E0', bgActive: '#D4D4D8', text: '#0C0C0E', color: '#0C0C0E', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.30)', shadowHover: '0 2px 12px rgba(255, 255, 255, 0.08)' },
+      buttonSecondary: { bg: '#2A2A2F', bgHover: '#3A3A40', bgActive: '#4A4A4F', text: '#ECECEC', color: '#ECECEC', border: '#3A3A40', borderHover: 'rgba(255, 255, 255, 0.14)' },
+      buttonDefault: { bg: '#18181B', bgHover: '#222226', bgActive: '#2A2A2F', text: '#ECECEC', color: '#ECECEC', border: '#3A3A40', borderHover: 'rgba(255, 255, 255, 0.18)' },
+      buttonGhost: { bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: '#A0A0A5' },
+      buttonText: { bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: '#A0A0A5' },
+      buttonLink: { color: '#ECECEC', colorHover: '#FFFFFF', colorActive: '#D4D4D8' },
+      buttonSuccess: { bg: '#16A34A', bgHover: '#15803D', bgActive: '#166534', text: '#ffffff', color: '#ffffff', border: 'transparent' },
+      buttonWarning: { bg: '#D97706', bgHover: '#B45309', bgActive: '#92400E', text: '#FFFFFF', color: '#FFFFFF', border: 'transparent' },
+      buttonError: { bg: '#EF4444', bgHover: '#DC2626', bgActive: '#B91C1C', text: '#ffffff', color: '#ffffff', border: 'transparent' },
+      buttonInfo: { bg: '#3B82F6', bgHover: '#2563EB', bgActive: '#1D4ED8', text: '#ffffff', color: '#ffffff', border: 'transparent' },
+      disabled: { opacity: 0.4, bg: '#18181B', text: '#52525B', border: '#2A2A2F', borderColor: '#2A2A2F' },
+      focusRing: '0 0 0 2px rgba(255, 255, 255, 0.20)',
+      input: {
+        bg: '#131316',
+        bgHover: '#1A1A1E',
+        bgFocus: '#131316',
+        bgDisabled: '#18181B',
+        color: '#ECECEC',
+        colorPlaceholder: '#6B6B72',
+        colorDisabled: '#52525B',
+        border: '#2A2A2F',
+        borderHover: '#3A3A40',
+        borderFocus: 'rgba(255, 255, 255, 0.36)',
+        borderDisabled: '#2A2A2F',
+        disabledOpacity: 0.4,
+        shadowFocus: '0 0 0 3px rgba(255, 255, 255, 0.10)',
+        filled: { bg: '#1A1A1E', bgHover: '#222226', bgFocus: '#1A1A1E' },
+        addon: { bg: '#1A1A1E', color: '#6B6B72', border: '#2A2A2F' },
+        label: { color: '#A0A0A5' },
+        helper: { color: '#6B6B72' },
+        clear: { color: '#6B6B72', colorHover: '#A0A0A5' },
+        successBorder: '#16A34A',
+        successShadowFocus: '0 0 0 2px rgba(34, 197, 94, 0.18)',
+        warningBorder: '#D97706',
+        warningShadowFocus: '0 0 0 2px rgba(245, 158, 11, 0.18)',
+        errorBorder: '#EF4444',
+        errorShadowFocus: '0 0 0 2px rgba(239, 68, 68, 0.18)',
+        errorColor: '#EF4444',
+      },
     },
     table: {
+      bg: '#0C0C0E',
+      border: '#2A2A2F',
       headerBg: '#131316',
       headerColor: '#A0A0A5',
       headerFontWeight: 600,
       headerFontSize: '0.6875rem',
+      rowBg: '#0C0C0E',
+      rowBgHover: 'rgba(255, 255, 255, 0.025)',
+      rowBgStriped: '#131316',
+      rowBgSelected: 'rgba(255, 255, 255, 0.05)',
+      rowBorder: '#222226',
+      cellPadding: '0.875rem 1rem',
+      cellFontSize: '0.875rem',
+      cellColor: '#ECECEC',
+      loadingOverlayBg: 'rgba(12, 12, 14, 0.7)',
+    },
+    cardComponent: {
+      bg: '#18181B',
+      bgHover: '#1A1A1E',
+      color: '#ECECEC',
+      border: '#2A2A2F',
+      borderHover: '#3A3A40',
+      borderAccentHover: 'rgba(255, 255, 255, 0.14)',
+      shadow: 'none',
+      shadowHover: '0 8px 24px rgba(0, 0, 0, 0.20)',
+      shadowElevated: '0 16px 40px rgba(0, 0, 0, 0.28)',
+      headerBorder: '#2A2A2F',
+      headerColor: '#ECECEC',
+      titleColor: '#ECECEC',
+      subtitleColor: '#A0A0A5',
+      bodyColor: '#A0A0A5',
+      footerBorder: '#2A2A2F',
+      footerBg: '#101012',
+    },
+    modal: {
+      bg: '#1A1A1E',
+      color: '#ECECEC',
+      shadow: '0 24px 64px rgba(0, 0, 0, 0.40)',
+      overlayBg: 'rgba(0, 0, 0, 0.64)',
+      overlayBackdrop: 'blur(10px)',
+      headerBg: '#222226',
+      headerBorder: '#2A2A2F',
+      titleColor: '#ECECEC',
+      subtitleColor: '#6B6B72',
+      bodyColor: '#A0A0A5',
+      footerBorder: '#2A2A2F',
+      footerBg: '#1A1A1E',
+      closeColor: '#6B6B72',
+      closeColorHover: '#ECECEC',
+      closeBgHover: 'rgba(255, 255, 255, 0.05)',
+    },
+    tabs: {
+      border: '#2A2A2F',
+      color: '#6B6B72',
+      colorHover: '#ECECEC',
+      colorActive: '#ECECEC',
+      bgHover: 'rgba(255, 255, 255, 0.03)',
+      borderActive: '#FFFFFF',
     },
   },
 };

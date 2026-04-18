@@ -121,9 +121,56 @@ First-party brand sources live in `tokens/ts/brand-themes/`.
 
 Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated artifacts`
 
-- `BrandTheme` owns: palette, typography, surfaces, motion, charts, chrome (sidebar, layout, shell, controls, table), engineBridge
+### BrandTheme scope (~140 CSS variables)
+
+- `palette` -- primary, secondary, accent, semantic colors (light + dark variants)
+- `typography` -- 4 font families, weight bias, letter spacing per-context (display/heading/body/mono), line height per-context
+- `surfaces` -- density scale, border radius (sm/md/lg/xl), shadows, glass, gradients, overlays
+- `motion` -- entrance type, spring physics, hover lift/scale, skeleton style, stagger
+- `charts` -- animation, line style, dots, gradient fill, tooltip style
+- `chrome.controls` -- 10 button variants (primary/secondary/default/ghost/text/link/success/warning/error/info), each with bg/bgHover/bgActive/color/border/shadow + full input chrome (bg/border/focus/disabled/filled/addon/validation) + disabled state + focus ring
+- `chrome.table` -- bg, border, header (bg/color/fontWeight/fontSize), row (bg/hover/striped/selected/border), cell (padding/fontSize/color), loading overlay
+- `chrome.cardComponent` -- bg, border, shadow (rest/hover/elevated), header/body/footer sections
+- `chrome.modal` -- bg, overlay (bg/backdrop), header/body/footer, close button
+- `chrome.tabs` -- border, color states (default/hover/active), active indicator
+- `chrome.sidebar` -- 17 fields (bg, border, text, item sizing, group headers, footer)
+- `chrome.layout` -- header, sider bg/border/backdrop
+
+### Key rules
+
 - `TenantConfig.brandTheme` is the canonical field. Legacy `personality`/`tokenOverrides` fields are deprecated compat.
-- Product profile is **not** part of the visual merge when brandTheme is present — only `surfaceDefaults` survives.
-- First-party tenant CSS files are **generated snapshots**, not the source of truth.
+- Product profile is **not** part of the visual merge when brandTheme is present -- only `surfaceDefaults` survives.
+- First-party tenant CSS files (`tokens/css/artifacts/`) are **generated snapshots**, not the source of truth. The `.ts` BrandTheme files are the source.
 - Domain-specific tokens (`--ds-ticket-*`, `--ds-event-*`) belong in consuming apps, not DS core.
-- The brand compiler (`runtime/brand-compiler/`) converts BrandTheme to legacy shapes for runtime and static generation.
+- The brand compiler (`compilers/brand-theme/`) converts BrandTheme to CSS vars and personality tokens.
+- BrandTheme `.ts` files MUST stay in sync with CSS artifacts. If you edit one, update the other.
+
+### Component CSS variable pattern (2026-04-17)
+
+Modern engine components read **component-specific CSS variables** with fallback to generic tokens:
+
+```tsx
+// Pattern: var(--ds-{component}-{property}, var(--ds-{generic-fallback}))
+background: 'var(--ds-button-primary-bg, var(--ds-color-primary))'
+border: 'var(--ds-input-border, var(--ds-color-border))'
+color: 'var(--ds-card-title-color, var(--ds-color-text-primary))'
+```
+
+This enables per-component customization via BrandTheme or TenantAppearanceAdvanced without breaking existing code. When the component-specific var is not set, the generic token is used.
+
+**Components migrated**: Button (13 variants), Input (15 props), Card (12), Table+PatternDataTable (12+12), Modal (11x2 files), Tabs (7), Radio (4), Checkbox (7).
+
+### TenantAppearanceAdvanced (~140 fields)
+
+DB-driven tenants can customize all chrome sections via `TenantAppearanceAdvanced`:
+- `chrome.controls` -- all 10 button variants + full input chrome + disabled + focus
+- `chrome.table` -- header, row, cell, loading overlay
+- `chrome.cardComponent` -- bg, border, shadow, header/body/footer
+- `chrome.modal` -- bg, overlay, header/body/footer, close
+- `chrome.tabs` -- border, color states
+- `chrome.sidebar` -- full 17 fields
+- `chrome.layout` -- full 6 fields
+- `chrome.shell` -- grid overlay
+- `tokenOverrides` -- raw `--ds-*` vars (max 200)
+
+The appearance compiler (`compilers/appearance/`) converts these to CSS vars injected by ThemeProvider.

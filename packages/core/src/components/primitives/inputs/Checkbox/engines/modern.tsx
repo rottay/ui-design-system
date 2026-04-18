@@ -52,7 +52,7 @@ const CheckIcon = ({ size }: { size: number }) => {
     >
       <path
         d="M2.5 6.5L5 9L9.5 3.5"
-        stroke="white"
+        stroke="var(--ds-checkbox-indicator-color, #fff)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -79,7 +79,7 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
     >
       <path
         d="M3 6H9"
-        stroke="white"
+        stroke="var(--ds-checkbox-indicator-color, #fff)"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -180,13 +180,13 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     borderRadius: isStandaloneIndicator ? '999px' : 'var(--ds-radius-sm)',
     border: `2px solid ${
       active
-        ? 'var(--ds-color-primary)'
+        ? 'var(--ds-checkbox-checked-bg, var(--ds-color-primary))'
         : isStandaloneIndicator
-          ? 'color-mix(in srgb, var(--ds-color-border) 88%, var(--ds-surface-panel) 12%)'
-          : 'var(--ds-color-border-secondary)'
+          ? 'color-mix(in srgb, var(--ds-checkbox-border, var(--ds-color-border)) 88%, var(--ds-surface-panel) 12%)'
+          : 'var(--ds-checkbox-border, var(--ds-color-border-secondary))'
     }`,
     backgroundColor: active
-      ? 'var(--ds-color-primary)'
+      ? 'var(--ds-checkbox-checked-bg, var(--ds-color-primary))'
       : isStandaloneIndicator
         ? 'color-mix(in srgb, var(--ds-surface-panel) 76%, var(--ds-color-text-primary) 24%)'
         : 'transparent',
@@ -197,7 +197,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     flexShrink: 0,
     transform: active ? 'scale(1)' : 'scale(1)',
     ...(isHovered && !disabled && !active && {
-      borderColor: isStandaloneIndicator ? 'var(--ds-color-text-secondary)' : 'var(--ds-color-border)',
+      borderColor: isStandaloneIndicator ? 'var(--ds-color-text-secondary)' : 'var(--ds-checkbox-border, var(--ds-color-border))',
       backgroundColor: isStandaloneIndicator
         ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%)'
         : undefined,
@@ -211,7 +211,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
       outlineOffset: '2px',
     }),
     ...(disabled && {
-      opacity: 0.5,
+      opacity: 'var(--ds-checkbox-disabled-opacity, 0.5)' as unknown as number,
       cursor: 'not-allowed',
     }),
   };

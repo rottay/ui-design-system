@@ -83,9 +83,11 @@ function buildShellStyle(
     fontSize: s.fontSize,
     lineHeight: s.lineHeight,
     fontFamily: 'inherit',
-    color: 'var(--ds-color-text-primary)',
-    backgroundColor: 'var(--ds-surface-control)',
-    border: '1px solid var(--ds-color-border)',
+    color: 'var(--ds-input-color, var(--ds-color-text-primary))',
+    backgroundColor: 'var(--ds-input-bg, var(--ds-surface-control))',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: 'var(--ds-input-border, var(--ds-color-border))',
     borderRadius: 'var(--ds-radius-md, 8px)',
     outline: '2px solid transparent',
     outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
@@ -95,17 +97,23 @@ function buildShellStyle(
 
   // Variant overrides
   if (variant === 'filled') {
-    base.backgroundColor = 'var(--ds-surface-canvas)';
-    base.border = '1px solid transparent';
+    base.backgroundColor = 'var(--ds-input-filled-bg, var(--ds-surface-canvas))';
+    base.borderColor = 'transparent';
   } else if (variant === 'flushed') {
     base.borderRadius = '0';
-    base.border = 'none';
-    base.borderBottom = '1px solid var(--ds-color-border)';
+    base.borderWidth = '0';
+    base.borderColor = 'transparent';
+    base.borderBottomWidth = '1px';
+    base.borderBottomStyle = 'solid';
+    base.borderBottomColor = 'var(--ds-input-border, var(--ds-color-border))';
     base.paddingLeft = '0';
     base.paddingRight = '0';
     base.backgroundColor = 'transparent';
   } else if (variant === 'unstyled') {
-    base.border = 'none';
+    base.borderWidth = '0';
+    base.borderColor = 'transparent';
+    base.borderBottomWidth = '0';
+    base.borderBottomColor = 'transparent';
     base.backgroundColor = 'transparent';
     base.outline = 'none';
     base.borderRadius = '0';
@@ -113,46 +121,47 @@ function buildShellStyle(
 
   // Hover
   if (isHovered && !isFocused && !hasError && !hasWarning && !isDisabled && variant !== 'unstyled') {
-    base.borderColor = 'var(--ds-color-border-hover)';
+    base.borderColor = 'var(--ds-input-border-hover, var(--ds-color-border-hover))';
   }
 
   // Focus
   if (isFocused && variant !== 'unstyled') {
-    base.borderColor = 'var(--ds-color-primary)';
-    base.outline = 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)';
+    base.borderColor = 'var(--ds-input-border-focus, var(--ds-color-primary))';
+    base.outline = 'var(--ds-focus-ring-width, 2px) solid var(--ds-input-shadow-focus, var(--ds-focus-ring-color))';
     if (variant === 'flushed') {
       base.outline = 'none';
-      base.borderBottom = '2px solid var(--ds-color-primary)';
+      base.borderBottomWidth = '2px';
+      base.borderBottomColor = 'var(--ds-input-border-focus, var(--ds-color-primary))';
     }
   }
 
   // Error
   if (hasError) {
-    base.borderColor = 'var(--ds-color-error)';
+    base.borderColor = 'var(--ds-input-error-border, var(--ds-color-error))';
     base.backgroundColor = variant === 'unstyled'
       ? 'transparent'
-      : 'color-mix(in srgb, var(--ds-color-error) 4%, transparent)';
+      : 'color-mix(in srgb, var(--ds-input-error-border, var(--ds-color-error)) 4%, transparent)';
     if (isFocused) {
-      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-error) 15%, transparent)';
+      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-input-error-border, var(--ds-color-error)) 15%, transparent)';
     }
   }
 
   // Warning
   if (hasWarning && !hasError) {
-    base.borderColor = 'var(--ds-color-warning)';
+    base.borderColor = 'var(--ds-input-warning-border, var(--ds-color-warning))';
     base.backgroundColor = variant === 'unstyled'
       ? 'transparent'
-      : 'color-mix(in srgb, var(--ds-color-warning) 4%, transparent)';
+      : 'color-mix(in srgb, var(--ds-input-warning-border, var(--ds-color-warning)) 4%, transparent)';
     if (isFocused) {
-      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-warning) 15%, transparent)';
+      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-input-warning-border, var(--ds-color-warning)) 15%, transparent)';
     }
   }
 
   // Disabled
   if (isDisabled) {
-    base.opacity = 0.5;
+    base.opacity = 'var(--ds-input-disabled-opacity, 0.5)' as any;
     base.cursor = 'not-allowed';
-    base.backgroundColor = 'var(--ds-surface-canvas)';
+    base.backgroundColor = 'var(--ds-input-bg-disabled, var(--ds-surface-canvas))';
   }
 
   return base;
@@ -366,7 +375,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     display: 'inline-flex',
     alignItems: 'center',
     flexShrink: 0,
-    color: 'var(--ds-color-text-muted)',
+    color: 'var(--ds-input-addon-color, var(--ds-color-text-muted))',
     lineHeight: 1,
   };
 
@@ -391,7 +400,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const placeholderStyleTag = (
     <style dangerouslySetInnerHTML={{ __html: `
       .${placeholderStyleId}::placeholder {
-        color: var(--ds-color-text-muted);
+        color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
         opacity: 1;
       }
     `}} />

@@ -162,9 +162,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: 'var(--ds-surface-overlay)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
+            backgroundColor: 'var(--ds-modal-overlay-bg, var(--ds-surface-overlay))',
+            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(8px))',
+            WebkitBackdropFilter: 'var(--ds-modal-overlay-backdrop, blur(8px))',
             animation: 'ds-modal-backdrop-fade var(--ds-motion-normal) var(--ds-motion-ease-out)',
           }}
         />
@@ -185,10 +185,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
             display: 'flex',
             flexDirection: 'column',
             margin: '16px',
-            backgroundColor: 'var(--ds-surface-card)',
+            backgroundColor: 'var(--ds-modal-bg, var(--ds-surface-card))',
             border: '1px solid var(--ds-color-border)',
             borderRadius: 'var(--ds-radius-xl)',
-            boxShadow: 'var(--ds-elevation-5)',
+            boxShadow: 'var(--ds-modal-shadow, var(--ds-elevation-5))',
             animation: 'ds-modal-panel-enter var(--ds-motion-normal) var(--ds-motion-ease-out)',
             outline: 'none',
             overflow: 'hidden',
@@ -203,7 +203,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '16px 24px',
-                borderBottom: '1px solid var(--ds-color-border)',
+                borderBottom: '1px solid var(--ds-modal-header-border, var(--ds-color-border))',
                 flexShrink: 0,
               }}
             >
@@ -213,7 +213,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                     fontSize: '16px',
                     fontWeight: 600,
                     lineHeight: '24px',
-                    color: 'inherit',
+                    color: 'var(--ds-modal-title-color, inherit)',
                   }}
                 >
                   {title}
@@ -235,13 +235,13 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                     borderRadius: 'var(--ds-radius-md)',
                     backgroundColor: 'transparent',
                     cursor: 'pointer',
-                    color: 'inherit',
+                    color: 'var(--ds-modal-close-color, inherit)',
                     transition: 'background-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
                     flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.backgroundColor =
-                      'var(--ds-surface-highlight)';
+                      'var(--ds-modal-close-bg-hover, var(--ds-surface-highlight))';
                   }}
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
@@ -262,6 +262,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
               overflowY: 'auto',
               padding: '24px',
               maxHeight: '70vh',
+              color: 'var(--ds-modal-body-color, inherit)',
             }}
           >
             {children}
@@ -276,7 +277,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 justifyContent: 'flex-end',
                 gap: '8px',
                 padding: '16px 24px',
-                borderTop: '1px solid var(--ds-color-border)',
+                borderTop: '1px solid var(--ds-modal-footer-border, var(--ds-color-border))',
                 flexShrink: 0,
               }}
             >

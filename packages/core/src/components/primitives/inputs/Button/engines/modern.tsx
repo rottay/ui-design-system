@@ -45,79 +45,108 @@ import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js'
 // ---------------------------------------------------------------------------
 const VARIANT_STYLES: Record<string, React.CSSProperties> = {
   primary: {
-    background: 'var(--ds-color-primary)',
-    color: 'var(--ds-color-text-on-primary)',
-    border: '1px solid var(--ds-color-primary)',
+    background: 'var(--ds-button-primary-bg, var(--ds-color-primary))',
+    color: 'var(--ds-button-primary-color, var(--ds-button-primary-text, var(--ds-color-text-on-primary)))',
+    border: '1px solid var(--ds-button-primary-border, var(--ds-color-primary))',
+    boxShadow: 'var(--ds-button-primary-shadow, none)',
   },
   secondary: {
-    background: 'transparent',
-    color: 'var(--ds-color-text-primary)',
-    border: '1px solid var(--ds-color-border)',
+    background: 'var(--ds-button-secondary-bg, transparent)',
+    color: 'var(--ds-button-secondary-color, var(--ds-button-secondary-text, var(--ds-color-text-primary)))',
+    border: '1px solid var(--ds-button-secondary-border, var(--ds-color-border))',
   },
   default: {
-    background: 'transparent',
-    color: 'var(--ds-color-text-primary)',
-    border: '1px solid var(--ds-color-border)',
+    background: 'var(--ds-button-default-bg, transparent)',
+    color: 'var(--ds-button-default-color, var(--ds-button-default-text, var(--ds-color-text-primary)))',
+    border: '1px solid var(--ds-button-default-border, var(--ds-color-border))',
   },
   outline: {
-    background: 'transparent',
-    color: 'var(--ds-color-text-primary)',
-    border: '1px solid var(--ds-color-border)',
+    background: 'var(--ds-button-default-bg, transparent)',
+    color: 'var(--ds-button-default-color, var(--ds-color-text-primary))',
+    border: '1px solid var(--ds-button-default-border, var(--ds-color-border))',
   },
   ghost: {
-    background: 'transparent',
-    color: 'var(--ds-color-text-primary)',
+    background: 'var(--ds-button-ghost-bg, transparent)',
+    color: 'var(--ds-button-ghost-color, var(--ds-button-ghost-text, var(--ds-color-text-primary)))',
     border: '1px solid transparent',
   },
   text: {
-    background: 'transparent',
-    color: 'var(--ds-color-text-primary)',
+    background: 'var(--ds-button-text-bg, transparent)',
+    color: 'var(--ds-button-text-color, var(--ds-button-text-text, var(--ds-color-text-primary)))',
     border: '1px solid transparent',
   },
   dashed: {
-    background: 'transparent',
-    color: 'var(--ds-color-text-primary)',
-    border: '1px dashed var(--ds-color-border)',
+    background: 'var(--ds-button-default-bg, transparent)',
+    color: 'var(--ds-button-default-color, var(--ds-color-text-primary))',
+    border: '1px dashed var(--ds-button-default-border, var(--ds-color-border))',
   },
   danger: {
-    background: 'var(--ds-color-error)',
-    color: 'var(--ds-color-text-on-primary)',
-    border: '1px solid var(--ds-color-error)',
+    background: 'var(--ds-button-error-bg, var(--ds-color-error))',
+    color: 'var(--ds-button-error-color, var(--ds-button-error-text, var(--ds-color-text-on-primary)))',
+    border: '1px solid var(--ds-button-error-border, var(--ds-color-error))',
+  },
+  success: {
+    background: 'var(--ds-button-success-bg, var(--ds-color-success))',
+    color: 'var(--ds-button-success-color, var(--ds-button-success-text, var(--ds-color-text-on-primary)))',
+    border: '1px solid var(--ds-button-success-border, var(--ds-color-success))',
+  },
+  warning: {
+    background: 'var(--ds-button-warning-bg, var(--ds-color-warning))',
+    color: 'var(--ds-button-warning-color, var(--ds-button-warning-text, var(--ds-color-text-on-primary)))',
+    border: '1px solid var(--ds-button-warning-border, var(--ds-color-warning))',
+  },
+  info: {
+    background: 'var(--ds-button-info-bg, var(--ds-color-info))',
+    color: 'var(--ds-button-info-color, var(--ds-button-info-text, var(--ds-color-text-on-primary)))',
+    border: '1px solid var(--ds-button-info-border, var(--ds-color-info))',
   },
   link: {
     background: 'transparent',
-    color: 'var(--ds-color-primary)',
+    color: 'var(--ds-button-link-color, var(--ds-color-primary))',
     border: '1px solid transparent',
   },
 };
 
-// Hover style overrides per variant
+// Hover style overrides per variant - uses brand compiler vars with fallbacks
 const VARIANT_HOVER_STYLES: Record<string, React.CSSProperties> = {
   primary: {
-    filter: 'brightness(1.1)',
+    background: 'var(--ds-button-primary-bg-hover, var(--ds-color-primary))',
+    boxShadow: 'var(--ds-button-primary-shadow-hover, var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05)))',
   },
   secondary: {
-    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.04))',
+    background: 'var(--ds-button-secondary-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.04)))',
+    borderColor: 'var(--ds-button-secondary-border-hover, var(--ds-color-border))',
   },
   default: {
-    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.04))',
+    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.04)))',
+    borderColor: 'var(--ds-button-default-border-hover, var(--ds-color-border))',
   },
   outline: {
-    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.04))',
+    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.04)))',
   },
   ghost: {
-    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.05))',
+    background: 'var(--ds-button-ghost-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.05)))',
   },
   text: {
-    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.05))',
+    background: 'var(--ds-button-text-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.05)))',
   },
   dashed: {
-    background: 'var(--ds-color-bg-subtle, rgba(0,0,0,0.02))',
+    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.02)))',
   },
   danger: {
-    filter: 'brightness(1.1)',
+    background: 'var(--ds-button-error-bg-hover, var(--ds-color-error))',
+  },
+  success: {
+    background: 'var(--ds-button-success-bg-hover, var(--ds-color-success))',
+  },
+  warning: {
+    background: 'var(--ds-button-warning-bg-hover, var(--ds-color-warning))',
+  },
+  info: {
+    background: 'var(--ds-button-info-bg-hover, var(--ds-color-info))',
   },
   link: {
+    color: 'var(--ds-button-link-color-hover, var(--ds-color-primary))',
     textDecoration: 'underline',
   },
 };
@@ -345,13 +374,10 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         ? 'scale(0.98)'
         : undefined,
 
-    // Hover shadow for elevated variants
-    boxShadow:
-      isHovered && !isInert && isElevatedVariant
-        ? 'var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))'
-        : shadow
-          ? 'var(--ds-elevation-1, 0 1px 3px 0 rgba(0, 0, 0, 0.1))'
-          : undefined,
+    // Shadow from variant base styles (hover shadow applied via hoverOverrides)
+    ...(shadow && !isHovered ? {
+      boxShadow: 'var(--ds-elevation-1, 0 1px 3px 0 rgba(0, 0, 0, 0.1))',
+    } : {}),
 
     // Focus ring: outline-based (not box-shadow, so it stacks with elevation)
     outline:
@@ -366,9 +392,12 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     // Hover overrides
     ...hoverOverrides,
 
-    // Disabled state
+    // Disabled state - uses brand compiler vars with fallback
     ...(isInert && !loading ? {
-      opacity: 0.5,
+      background: 'var(--ds-button-disabled-bg)',
+      color: 'var(--ds-button-disabled-color)',
+      borderColor: 'var(--ds-button-disabled-border-color, var(--ds-button-disabled-border))',
+      opacity: 'var(--ds-button-disabled-opacity, 0.5)' as unknown as number,
       pointerEvents: 'none' as const,
     } : {}),
 
@@ -387,6 +416,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   // -------------------------------------------------------------------------
   const startContent = iconPosition === 'start' ? icon : undefined;
   const endContent = iconPosition === 'end' ? icon : undefined;
+  const renderedChildren = React.Children.toArray(children);
 
   // Content opacity when loading (smooth fade)
   const contentOpacity: React.CSSProperties = loading ? {
@@ -435,7 +465,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
           }}
         >
           {startContent || prefix}
-          {children && (
+          {renderedChildren.length > 0 && (
             <span
               style={{
                 display: isFullWidth ? 'block' : 'inline',
@@ -445,7 +475,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
                 whiteSpace: isFullWidth ? 'normal' : 'inherit',
               }}
             >
-              {children}
+              {renderedChildren}
             </span>
           )}
           {endContent || suffix}

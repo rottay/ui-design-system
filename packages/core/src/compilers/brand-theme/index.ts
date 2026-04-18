@@ -160,10 +160,18 @@ export function mergePartialPersonality(
   };
 }
 
-/** Convert BrandTheme palette to a flat CSS variable map. */
+/**
+ * Convert BrandTheme palette to a flat CSS variable map.
+ * Emits light-mode vars by default. Dark-mode vars are emitted with
+ * a `--ds-dark-` prefix so ThemeProvider can apply them when dark mode
+ * is active. For bundled tenants the CSS artifact handles light/dark
+ * splitting directly; these dark vars are consumed by DB-driven tenants
+ * where runtime switching is needed.
+ */
 function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
   const vars: Record<string, string> = {};
   if (bt.palette) {
+    // Light-mode palette (default)
     if (bt.palette.primaryColor) vars['--ds-color-primary'] = bt.palette.primaryColor;
     if (bt.palette.secondaryColor) vars['--ds-color-secondary'] = bt.palette.secondaryColor;
     if (bt.palette.accentColor) vars['--ds-color-accent'] = bt.palette.accentColor;
@@ -171,12 +179,32 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     if (bt.palette.warningColor) vars['--ds-color-warning'] = bt.palette.warningColor;
     if (bt.palette.errorColor) vars['--ds-color-error'] = bt.palette.errorColor;
     if (bt.palette.infoColor) vars['--ds-color-info'] = bt.palette.infoColor;
+
+    // Dark-mode palette (consumed by ThemeProvider when data-theme='dark')
+    if (bt.palette.darkPrimaryColor) vars['--ds-dark-color-primary'] = bt.palette.darkPrimaryColor;
+    if (bt.palette.darkSecondaryColor) vars['--ds-dark-color-secondary'] = bt.palette.darkSecondaryColor;
+    if (bt.palette.darkAccentColor) vars['--ds-dark-color-accent'] = bt.palette.darkAccentColor;
+    if (bt.palette.darkBackgroundColor) vars['--ds-dark-color-background'] = bt.palette.darkBackgroundColor;
   }
   if (bt.typography) {
-    if (bt.typography.fontFamilyBase) vars['--ds-font-family-base'] = bt.typography.fontFamilyBase;
-    if (bt.typography.fontFamilyHeading) vars['--ds-font-family-heading'] = bt.typography.fontFamilyHeading;
-    if (bt.typography.fontFamilyMono) vars['--ds-font-family-mono'] = bt.typography.fontFamilyMono;
-    if (bt.typography.fontFamilyDisplay) vars['--ds-font-family-display'] = bt.typography.fontFamilyDisplay;
+    const ty = bt.typography;
+    if (ty.fontFamilyBase) vars['--ds-font-family-base'] = ty.fontFamilyBase;
+    if (ty.fontFamilyHeading) vars['--ds-font-family-heading'] = ty.fontFamilyHeading;
+    if (ty.fontFamilyMono) vars['--ds-font-family-mono'] = ty.fontFamilyMono;
+    if (ty.fontFamilyDisplay) vars['--ds-font-family-display'] = ty.fontFamilyDisplay;
+    if (ty.letterSpacing) {
+      if (ty.letterSpacing.display) vars['--ds-letter-spacing-display'] = ty.letterSpacing.display;
+      if (ty.letterSpacing.heading) vars['--ds-letter-spacing-heading'] = ty.letterSpacing.heading;
+      if (ty.letterSpacing.body) vars['--ds-letter-spacing-body'] = ty.letterSpacing.body;
+      if (ty.letterSpacing.mono) vars['--ds-letter-spacing-mono'] = ty.letterSpacing.mono;
+    }
+    if (ty.lineHeight) {
+      if (ty.lineHeight.display != null) vars['--ds-line-height-display'] = String(ty.lineHeight.display);
+      if (ty.lineHeight.heading != null) vars['--ds-line-height-heading'] = String(ty.lineHeight.heading);
+      if (ty.lineHeight.body != null) vars['--ds-line-height-body'] = String(ty.lineHeight.body);
+      if (ty.lineHeight.tight != null) vars['--ds-line-height-tight'] = String(ty.lineHeight.tight);
+      if (ty.lineHeight.relaxed != null) vars['--ds-line-height-relaxed'] = String(ty.lineHeight.relaxed);
+    }
   }
   return vars;
 }
@@ -251,62 +279,171 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
     // directly via repeating-linear-gradient.
   }
 
-  // Controls
+  // Controls — all button variants
   if (chrome.controls) {
     const c = chrome.controls;
-    if (c.buttonPrimary) {
-      if (c.buttonPrimary.bg) vars['--ds-button-primary-bg'] = c.buttonPrimary.bg;
-      if (c.buttonPrimary.bgHover) vars['--ds-button-primary-bg-hover'] = c.buttonPrimary.bgHover;
-      if (c.buttonPrimary.text) vars['--ds-button-primary-color'] = c.buttonPrimary.text;
-      if (c.buttonPrimary.border) vars['--ds-button-primary-border'] = c.buttonPrimary.border;
-      if (c.buttonPrimary.shadow) vars['--ds-button-primary-shadow'] = c.buttonPrimary.shadow;
+
+    // Helper: map a button variant to CSS vars
+    const mapBtn = (prefix: string, btn: typeof c.buttonPrimary) => {
+      if (!btn) return;
+      if (btn.bg) vars[`--ds-button-${prefix}-bg`] = btn.bg;
+      if (btn.bgHover) vars[`--ds-button-${prefix}-bg-hover`] = btn.bgHover;
+      if (btn.bgActive) vars[`--ds-button-${prefix}-bg-active`] = btn.bgActive;
+      if (btn.color) vars[`--ds-button-${prefix}-color`] = btn.color;
+      if (btn.text) vars[`--ds-button-${prefix}-text`] = btn.text;
+      if (btn.border) vars[`--ds-button-${prefix}-border`] = btn.border;
+      if (btn.borderHover) vars[`--ds-button-${prefix}-border-hover`] = btn.borderHover;
+      if (btn.shadow) vars[`--ds-button-${prefix}-shadow`] = btn.shadow;
+      if (btn.shadowHover) vars[`--ds-button-${prefix}-shadow-hover`] = btn.shadowHover;
+    };
+
+    mapBtn('primary', c.buttonPrimary);
+    mapBtn('secondary', c.buttonSecondary);
+    mapBtn('default', c.buttonDefault);
+    mapBtn('ghost', c.buttonGhost);
+    mapBtn('text', c.buttonText);
+    mapBtn('success', c.buttonSuccess);
+    mapBtn('warning', c.buttonWarning);
+    mapBtn('error', c.buttonError);
+    mapBtn('info', c.buttonInfo);
+
+    if (c.buttonLink) {
+      if (c.buttonLink.color) vars['--ds-button-link-color'] = c.buttonLink.color;
+      if (c.buttonLink.colorHover) vars['--ds-button-link-color-hover'] = c.buttonLink.colorHover;
+      if (c.buttonLink.colorActive) vars['--ds-button-link-color-active'] = c.buttonLink.colorActive;
     }
-    if (c.buttonSecondary) {
-      if (c.buttonSecondary.bg) vars['--ds-button-secondary-bg'] = c.buttonSecondary.bg;
-      if (c.buttonSecondary.bgHover) vars['--ds-button-secondary-bg-hover'] = c.buttonSecondary.bgHover;
-      if (c.buttonSecondary.text) vars['--ds-button-secondary-color'] = c.buttonSecondary.text;
-      if (c.buttonSecondary.border) vars['--ds-button-secondary-border'] = c.buttonSecondary.border;
-    }
-    if (c.buttonDefault) {
-      if (c.buttonDefault.bg) vars['--ds-button-default-bg'] = c.buttonDefault.bg;
-      if (c.buttonDefault.bgHover) vars['--ds-button-default-bg-hover'] = c.buttonDefault.bgHover;
-      if (c.buttonDefault.text) vars['--ds-button-default-color'] = c.buttonDefault.text;
-      if (c.buttonDefault.border) vars['--ds-button-default-border'] = c.buttonDefault.border;
-    }
-    if (c.buttonGhost) {
-      if (c.buttonGhost.bg) vars['--ds-button-ghost-bg'] = c.buttonGhost.bg;
-      if (c.buttonGhost.bgHover) vars['--ds-button-ghost-bg-hover'] = c.buttonGhost.bgHover;
-      if (c.buttonGhost.text) vars['--ds-button-ghost-color'] = c.buttonGhost.text;
-    }
-    if (c.input) {
-      if (c.input.bg) vars['--ds-input-bg'] = c.input.bg;
-      if (c.input.border) vars['--ds-input-border'] = c.input.border;
-      if (c.input.borderFocus) vars['--ds-input-border-focus'] = c.input.borderFocus;
-      if (c.input.shadowFocus) vars['--ds-input-shadow-focus'] = c.input.shadowFocus;
-    }
+
+    if (c.focusRing) vars['--ds-button-focus-ring'] = c.focusRing;
+
     if (c.disabled) {
-      // Button disabled (consumed by: button.css lines 178-183)
       if (c.disabled.opacity != null) vars['--ds-button-disabled-opacity'] = String(c.disabled.opacity);
       if (c.disabled.bg) vars['--ds-button-disabled-bg'] = c.disabled.bg;
       if (c.disabled.text) vars['--ds-button-disabled-color'] = c.disabled.text;
       if (c.disabled.border) vars['--ds-button-disabled-border'] = c.disabled.border;
-      if (c.disabled.border) vars['--ds-button-disabled-border-color'] = c.disabled.border;
-      // Input disabled (consumed by: input.css lines 78-87, 262-265)
+      if (c.disabled.borderColor) vars['--ds-button-disabled-border-color'] = c.disabled.borderColor;
+      // Input disabled mirrors
       if (c.disabled.bg) vars['--ds-input-bg-disabled'] = c.disabled.bg;
       if (c.disabled.text) vars['--ds-input-color-disabled'] = c.disabled.text;
       if (c.disabled.border) vars['--ds-input-border-disabled'] = c.disabled.border;
-      if (c.disabled.border) vars['--ds-input-border-color-disabled'] = c.disabled.border;
+      if (c.disabled.borderColor) vars['--ds-input-border-color-disabled'] = c.disabled.borderColor;
       if (c.disabled.opacity != null) vars['--ds-input-disabled-opacity'] = String(c.disabled.opacity);
+    }
+
+    // Input chrome (full)
+    if (c.input) {
+      const i = c.input;
+      if (i.bg) vars['--ds-input-bg'] = i.bg;
+      if (i.bgHover) vars['--ds-input-bg-hover'] = i.bgHover;
+      if (i.bgFocus) vars['--ds-input-bg-focus'] = i.bgFocus;
+      if (i.bgDisabled) vars['--ds-input-bg-disabled'] = i.bgDisabled;
+      if (i.color) vars['--ds-input-color'] = i.color;
+      if (i.colorPlaceholder) vars['--ds-input-color-placeholder'] = i.colorPlaceholder;
+      if (i.colorDisabled) vars['--ds-input-color-disabled'] = i.colorDisabled;
+      if (i.border) vars['--ds-input-border'] = i.border;
+      if (i.borderHover) vars['--ds-input-border-hover'] = i.borderHover;
+      if (i.borderFocus) vars['--ds-input-border-focus'] = i.borderFocus;
+      if (i.borderDisabled) vars['--ds-input-border-disabled'] = i.borderDisabled;
+      if (i.disabledOpacity != null) vars['--ds-input-disabled-opacity'] = String(i.disabledOpacity);
+      if (i.shadowFocus) vars['--ds-input-shadow-focus'] = i.shadowFocus;
+      if (i.filled) {
+        if (i.filled.bg) vars['--ds-input-filled-bg'] = i.filled.bg;
+        if (i.filled.bgHover) vars['--ds-input-filled-bg-hover'] = i.filled.bgHover;
+        if (i.filled.bgFocus) vars['--ds-input-filled-bg-focus'] = i.filled.bgFocus;
+      }
+      if (i.addon) {
+        if (i.addon.bg) vars['--ds-input-addon-bg'] = i.addon.bg;
+        if (i.addon.color) vars['--ds-input-addon-color'] = i.addon.color;
+        if (i.addon.border) vars['--ds-input-addon-border'] = i.addon.border;
+      }
+      if (i.label?.color) vars['--ds-input-label-color'] = i.label.color;
+      if (i.helper?.color) vars['--ds-input-helper-color'] = i.helper.color;
+      if (i.clear) {
+        if (i.clear.color) vars['--ds-input-clear-color'] = i.clear.color;
+        if (i.clear.colorHover) vars['--ds-input-clear-color-hover'] = i.clear.colorHover;
+      }
+      if (i.successBorder) vars['--ds-input-success-border'] = i.successBorder;
+      if (i.successShadowFocus) vars['--ds-input-success-shadow-focus'] = i.successShadowFocus;
+      if (i.warningBorder) vars['--ds-input-warning-border'] = i.warningBorder;
+      if (i.warningShadowFocus) vars['--ds-input-warning-shadow-focus'] = i.warningShadowFocus;
+      if (i.errorBorder) vars['--ds-input-error-border'] = i.errorBorder;
+      if (i.errorShadowFocus) vars['--ds-input-error-shadow-focus'] = i.errorShadowFocus;
+      if (i.errorColor) vars['--ds-input-error-color'] = i.errorColor;
     }
   }
 
-  // Table
+  // Table (full: header + row + cell)
   if (chrome.table) {
     const t = chrome.table;
+    if (t.bg) vars['--ds-table-bg'] = t.bg;
+    if (t.border) vars['--ds-table-border'] = t.border;
     if (t.headerBg) vars['--ds-table-header-bg'] = t.headerBg;
     if (t.headerColor) vars['--ds-table-header-color'] = t.headerColor;
     if (t.headerFontWeight != null) vars['--ds-table-header-font-weight'] = String(t.headerFontWeight);
     if (t.headerFontSize) vars['--ds-table-header-font-size'] = t.headerFontSize;
+    if (t.headerBorder) vars['--ds-table-header-border'] = t.headerBorder;
+    if (t.rowBg) vars['--ds-table-row-bg'] = t.rowBg;
+    if (t.rowBgHover) vars['--ds-table-row-bg-hover'] = t.rowBgHover;
+    if (t.rowBgStriped) vars['--ds-table-row-bg-striped'] = t.rowBgStriped;
+    if (t.rowBgSelected) vars['--ds-table-row-bg-selected'] = t.rowBgSelected;
+    if (t.rowBorder) vars['--ds-table-row-border'] = t.rowBorder;
+    if (t.cellPadding) vars['--ds-table-cell-padding'] = t.cellPadding;
+    if (t.cellFontSize) vars['--ds-table-cell-font-size'] = t.cellFontSize;
+    if (t.cellColor) vars['--ds-table-cell-color'] = t.cellColor;
+    if (t.loadingOverlayBg) vars['--ds-table-loading-overlay-bg'] = t.loadingOverlayBg;
+  }
+
+  // Card component chrome
+  if (chrome.cardComponent) {
+    const cc = chrome.cardComponent;
+    if (cc.bg) vars['--ds-card-bg'] = cc.bg;
+    if (cc.bgHover) vars['--ds-card-bg-hover'] = cc.bgHover;
+    if (cc.color) vars['--ds-card-color'] = cc.color;
+    if (cc.border) vars['--ds-card-border'] = cc.border;
+    if (cc.borderHover) vars['--ds-card-border-hover'] = cc.borderHover;
+    if (cc.borderAccentHover) vars['--ds-card-border-accent-hover'] = cc.borderAccentHover;
+    if (cc.shadow) vars['--ds-card-shadow'] = cc.shadow;
+    if (cc.shadowHover) vars['--ds-card-shadow-hover'] = cc.shadowHover;
+    if (cc.shadowElevated) vars['--ds-card-shadow-elevated'] = cc.shadowElevated;
+    if (cc.headerBorder) vars['--ds-card-header-border'] = cc.headerBorder;
+    if (cc.headerColor) vars['--ds-card-header-color'] = cc.headerColor;
+    if (cc.titleColor) vars['--ds-card-title-color'] = cc.titleColor;
+    if (cc.subtitleColor) vars['--ds-card-subtitle-color'] = cc.subtitleColor;
+    if (cc.bodyColor) vars['--ds-card-body-color'] = cc.bodyColor;
+    if (cc.footerBorder) vars['--ds-card-footer-border'] = cc.footerBorder;
+    if (cc.footerBg) vars['--ds-card-footer-bg'] = cc.footerBg;
+    if (cc.imagePlaceholderBg) vars['--ds-card-image-placeholder-bg'] = cc.imagePlaceholderBg;
+    if (cc.imagePlaceholderColor) vars['--ds-card-image-placeholder-color'] = cc.imagePlaceholderColor;
+  }
+
+  // Modal chrome
+  if (chrome.modal) {
+    const m = chrome.modal;
+    if (m.bg) vars['--ds-modal-bg'] = m.bg;
+    if (m.color) vars['--ds-modal-color'] = m.color;
+    if (m.shadow) vars['--ds-modal-shadow'] = m.shadow;
+    if (m.overlayBg) vars['--ds-modal-overlay-bg'] = m.overlayBg;
+    if (m.overlayBackdrop) vars['--ds-modal-overlay-backdrop'] = m.overlayBackdrop;
+    if (m.headerBg) vars['--ds-modal-header-bg'] = m.headerBg;
+    if (m.headerBorder) vars['--ds-modal-header-border'] = m.headerBorder;
+    if (m.titleColor) vars['--ds-modal-title-color'] = m.titleColor;
+    if (m.subtitleColor) vars['--ds-modal-subtitle-color'] = m.subtitleColor;
+    if (m.bodyColor) vars['--ds-modal-body-color'] = m.bodyColor;
+    if (m.footerBorder) vars['--ds-modal-footer-border'] = m.footerBorder;
+    if (m.footerBg) vars['--ds-modal-footer-bg'] = m.footerBg;
+    if (m.closeColor) vars['--ds-modal-close-color'] = m.closeColor;
+    if (m.closeColorHover) vars['--ds-modal-close-color-hover'] = m.closeColorHover;
+    if (m.closeBgHover) vars['--ds-modal-close-bg-hover'] = m.closeBgHover;
+  }
+
+  // Tabs chrome
+  if (chrome.tabs) {
+    const tb = chrome.tabs;
+    if (tb.border) vars['--ds-tabs-border'] = tb.border;
+    if (tb.color) vars['--ds-tab-color'] = tb.color;
+    if (tb.colorHover) vars['--ds-tab-color-hover'] = tb.colorHover;
+    if (tb.colorActive) vars['--ds-tab-color-active'] = tb.colorActive;
+    if (tb.bgHover) vars['--ds-tab-bg-hover'] = tb.bgHover;
+    if (tb.borderActive) vars['--ds-tab-border-active'] = tb.borderActive;
   }
 
   return vars;

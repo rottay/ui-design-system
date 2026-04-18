@@ -4,11 +4,11 @@
  * Premium wallet/fintech experience. White-first, black text, rounded,
  * fluid, safe, modern. Smooth reassuring transitions, soft spring.
  *
- * H4 brief: move away from beige/editorial warmth. Become more clearly
- * wallet/fintech. Strengthen card/object feeling. Improve motion polish.
+ * Design: Minimal light-first. Black primary on white canvas.
+ * Warm beige/sand accents. Largest border radius of all brands.
  *
- * Source data: vertical registry (evnto), personality preset (playful),
- * tenant CSS (tokens/css/artifacts/evnto/index.css).
+ * Source: tokens/css/artifacts/evnto/index.css (canonical visual reference).
+ * This file MUST stay in sync with the CSS artifact.
  */
 
 import type { BrandTheme } from '../../../contracts/themes';
@@ -18,42 +18,51 @@ export const evntoBrandTheme: BrandTheme = {
   name: 'Evnto',
 
   palette: {
-    // H4: white + cool grays, deep charcoal, restrained financial green
     primaryColor: '#171717',
     secondaryColor: '#B8A898',
-    accentColor: '#06b6d4',
-    darkPrimaryColor: '#F5F5F5',
-    darkSecondaryColor: '#D4C4B0',
-    darkAccentColor: '#22D3EE',
-    darkBackgroundColor: '#171717',
-    // Semantic: financial-appropriate
-    successColor: '#16A34A',
-    warningColor: '#EAB308',
-    errorColor: '#DC2626',
-    infoColor: '#0EA5E9',
+    accentColor: '#B8A898',
+    darkPrimaryColor: '#E8E8E0',
+    darkSecondaryColor: '#A89880',
+    darkAccentColor: '#A89880',
+    darkBackgroundColor: '#131210',
+    successColor: '#15803D',
+    warningColor: '#A16207',
+    errorColor: '#B91C1C',
+    infoColor: '#475569',
   },
 
   typography: {
-    fontFamilyBase: 'var(--font-geist-sans)',
-    fontFamilyHeading: 'var(--font-geist-sans)',
-    fontFamilyMono: 'var(--font-geist-mono)',
+    fontFamilyBase: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamilyHeading: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamilyMono: "'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, monospace",
+    fontFamilyDisplay: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     headingWeightBias: 'heavier',
     headingLetterSpacing: '-0.02em',
     labelStyle: 'capitalize',
+    letterSpacing: {
+      display: '-0.025em',
+      heading: '-0.02em',
+      body: '0',
+      mono: '0',
+    },
+    lineHeight: {
+      display: 1.1,
+      heading: 1.2,
+      body: 1.6,
+      tight: 1.25,
+      relaxed: 1.75,
+    },
   },
 
   surfaces: {
     densityScale: 1.125,
-    // H4: largest radii of the three brands
     borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px' },
-    // H4: softer shadows, more tactile containers
     shadows: {
       sm: '0 1px 3px rgba(0, 0, 0, 0.04)',
       md: '0 4px 12px rgba(0, 0, 0, 0.06)',
       lg: '0 8px 24px rgba(0, 0, 0, 0.08)',
       xl: '0 16px 48px rgba(0, 0, 0, 0.1)',
     },
-    // H4: subtle glass possible, no gradients, soft overlays
     glass: { blur: 'none', background: 'none', border: 'none' },
     gradients: { primary: 'none', surface: 'none', mesh: 'none' },
     overlays: {
@@ -122,7 +131,6 @@ export const evntoBrandTheme: BrandTheme = {
       itemPadding: '8px 12px',
       iconSize: '18px',
     },
-    // H4: lighter shell and navigation feel
     layout: {
       bg: '#FFFFFF',
       headerBg: 'rgba(255, 255, 255, 0.95)',
@@ -131,26 +139,39 @@ export const evntoBrandTheme: BrandTheme = {
       siderBg: '#FAFAFA',
       siderBorder: 'rgba(0, 0, 0, 0.06)',
     },
-    // Evnto: intentionally minimal shell (clean wallet feel)
     shell: {
       gridSize: '0px',
       gridLine: 'transparent',
       gridOpacity: 0,
     },
     controls: {
-      // H4: high clarity, soft curves, money-state feedback
-      buttonPrimary: { bg: '#171717', bgHover: '#262626', text: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
-      buttonSecondary: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.04)', text: '#171717', border: 'rgba(0, 0, 0, 0.15)' },
-      buttonDefault: { bg: '#FFFFFF', bgHover: '#FAFAFA', text: '#171717', border: 'rgba(0, 0, 0, 0.1)' },
-      buttonGhost: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.03)', text: '#525252' },
-      input: { bg: '#ffffff', border: 'rgba(0, 0, 0, 0.12)', borderFocus: '#171717', shadowFocus: '0 0 0 1px rgba(23, 23, 23, 0.2)' },
-      disabled: { opacity: 0.4, bg: '#FAFAFA', text: 'rgba(0, 0, 0, 0.25)', border: 'rgba(0, 0, 0, 0.06)' },
+      buttonPrimary: { bg: '#171717', bgHover: '#262626', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
+      buttonSecondary: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.04)', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.15)' },
+      buttonDefault: { bg: '#FFFFFF', bgHover: '#FAFAFA', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.1)' },
+      buttonGhost: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.03)', text: '#525252', color: '#525252' },
+      disabled: { opacity: 0.4, bg: '#FAFAFA', text: 'rgba(0, 0, 0, 0.25)', border: 'rgba(0, 0, 0, 0.06)', borderColor: 'rgba(0, 0, 0, 0.06)' },
+      input: {
+        bg: '#ffffff',
+        border: 'rgba(0, 0, 0, 0.12)',
+        borderFocus: '#171717',
+        shadowFocus: '0 0 0 1px rgba(23, 23, 23, 0.2)',
+        bgDisabled: '#FAFAFA',
+        colorDisabled: 'rgba(0, 0, 0, 0.25)',
+        borderDisabled: 'rgba(0, 0, 0, 0.06)',
+        disabledOpacity: 0.4,
+      },
     },
     table: {
       headerBg: 'rgba(0, 0, 0, 0.02)',
       headerColor: '#737373',
       headerFontWeight: 500,
       headerFontSize: '0.75rem',
+    },
+    cardComponent: {
+      bg: '#ffffff',
+      border: 'rgba(0, 0, 0, 0.08)',
+      shadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
+      shadowHover: '0 4px 12px rgba(0, 0, 0, 0.1)',
     },
   },
 };

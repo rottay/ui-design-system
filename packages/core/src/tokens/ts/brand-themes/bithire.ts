@@ -5,11 +5,11 @@
  * Blue family primary, softer radii, fast fades, calm forms.
  * Data-dense without looking harsh.
  *
- * H4 brief: deepen premium layer, soften corporate stiffness, give
- * sidebar/table/cards/forms more authored personality.
+ * Design: Professional corporate, clean with LinkedIn Blue (#0A66C2).
+ * Light backgrounds, system fonts, subtle shadows.
  *
- * Source data: vertical registry (bithire), personality preset (formal),
- * tenant CSS (tokens/css/artifacts/bithire/index.css).
+ * Source: tokens/css/artifacts/bithire/index.css (canonical visual reference).
+ * This file MUST stay in sync with the CSS artifact.
  */
 
 import type { BrandTheme } from '../../../contracts/themes';
@@ -20,30 +20,43 @@ export const bithireBrandTheme: BrandTheme = {
 
   palette: {
     primaryColor: '#0A66C2',
-    secondaryColor: '#004182',
+    secondaryColor: '#057642',
     accentColor: '#7FC15E',
-    darkPrimaryColor: '#4D9DE0',
-    darkSecondaryColor: '#1A73E8',
-    darkAccentColor: '#8FD16E',
-    darkBackgroundColor: '#1B1B1F',
+    darkPrimaryColor: '#1A7FE0',
+    darkSecondaryColor: '#2D8A6E',
+    darkAccentColor: '#4CAF50',
+    darkBackgroundColor: '#0F1520',
     successColor: '#057642',
-    warningColor: '#C37D16',
+    warningColor: '#E7A33E',
     errorColor: '#CC1016',
     infoColor: '#0A66C2',
   },
 
   typography: {
-    fontFamilyBase: 'var(--font-geist-sans)',
-    fontFamilyHeading: 'var(--font-geist-sans)',
-    fontFamilyMono: 'var(--font-geist-mono)',
+    fontFamilyBase: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+    fontFamilyHeading: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+    fontFamilyMono: "'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace",
+    fontFamilyDisplay: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
     headingWeightBias: 'heavier',
     headingLetterSpacing: '-0.01em',
     labelStyle: 'uppercase',
+    letterSpacing: {
+      display: '-0.02em',
+      heading: '-0.01em',
+      body: '0',
+      mono: '0',
+    },
+    lineHeight: {
+      display: 1.1,
+      heading: 1.25,
+      body: 1.6,
+      tight: 1.25,
+      relaxed: 1.75,
+    },
   },
 
   surfaces: {
     densityScale: 0.95,
-    // H4: softer radii than classic enterprise
     borderRadius: { sm: '6px', md: '8px', lg: '12px', xl: '16px' },
     shadows: {
       sm: '0 1px 2px rgba(0, 0, 0, 0.06)',
@@ -51,7 +64,6 @@ export const bithireBrandTheme: BrandTheme = {
       lg: '0 8px 24px rgba(0, 0, 0, 0.1)',
       xl: '0 16px 48px rgba(0, 0, 0, 0.12)',
     },
-    // BitHire: no glass, no gradients, subtle overlays (clean corporate)
     glass: { blur: 'none', background: 'none', border: 'none' },
     gradients: { primary: 'none', surface: 'none', mesh: 'none' },
     overlays: {
@@ -121,7 +133,6 @@ export const bithireBrandTheme: BrandTheme = {
       itemPadding: '6px 10px',
       iconSize: '16px',
     },
-    // H4: clean, structured header; no heavy shell
     layout: {
       bg: '#FFFFFF',
       headerBg: 'rgba(255, 255, 255, 0.92)',
@@ -130,26 +141,53 @@ export const bithireBrandTheme: BrandTheme = {
       siderBg: '#FFFFFF',
       siderBorder: 'rgba(0, 0, 0, 0.08)',
     },
-    // BitHire: intentionally minimal shell (no visible grid)
     shell: {
       gridSize: '0px',
       gridLine: 'transparent',
       gridOpacity: 0,
     },
     controls: {
-      buttonPrimary: { bg: '#0A66C2', bgHover: '#004182', text: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.1)' },
-      buttonSecondary: { bg: 'transparent', bgHover: 'rgba(10, 102, 194, 0.08)', text: '#0A66C2', border: '#0A66C2' },
-      // H4: refined, polished, mature
-      buttonDefault: { bg: '#FFFFFF', bgHover: '#F8F8F8', text: 'rgba(0, 0, 0, 0.85)', border: 'rgba(0, 0, 0, 0.15)' },
-      buttonGhost: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.04)', text: 'rgba(0, 0, 0, 0.65)' },
-      input: { bg: '#ffffff', border: 'rgba(0, 0, 0, 0.15)', borderFocus: '#0A66C2', shadowFocus: '0 0 0 1px #0A66C2' },
-      disabled: { opacity: 0.45, bg: '#F8F8F8', text: 'rgba(0, 0, 0, 0.3)', border: 'rgba(0, 0, 0, 0.08)' },
+      buttonPrimary: { bg: '#0A66C2', bgHover: '#004182', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.1)' },
+      buttonSecondary: { bg: 'transparent', bgHover: 'rgba(10, 102, 194, 0.08)', text: '#0A66C2', color: '#0A66C2', border: '#0A66C2' },
+      buttonDefault: { bg: '#FFFFFF', bgHover: '#F8F8F8', text: 'rgba(0, 0, 0, 0.85)', color: 'rgba(0, 0, 0, 0.85)', border: 'rgba(0, 0, 0, 0.15)' },
+      buttonGhost: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.04)', text: 'rgba(0, 0, 0, 0.65)', color: 'rgba(0, 0, 0, 0.65)' },
+      disabled: { opacity: 0.45, bg: '#F8F8F8', text: 'rgba(0, 0, 0, 0.3)', border: 'rgba(0, 0, 0, 0.08)', borderColor: 'rgba(0, 0, 0, 0.08)' },
+      input: {
+        bg: '#ffffff',
+        border: 'rgba(0, 0, 0, 0.15)',
+        borderHover: 'rgba(0, 0, 0, 0.3)',
+        borderFocus: '#0A66C2',
+        shadowFocus: '0 0 0 1px #0A66C2',
+        color: 'rgba(0, 0, 0, 0.9)',
+        colorPlaceholder: 'rgba(0, 0, 0, 0.4)',
+        bgDisabled: '#F8F8F8',
+        colorDisabled: 'rgba(0, 0, 0, 0.3)',
+        borderDisabled: 'rgba(0, 0, 0, 0.08)',
+        disabledOpacity: 0.45,
+      },
     },
     table: {
+      bg: '#ffffff',
+      border: 'rgba(0, 0, 0, 0.08)',
       headerBg: '#f3f2ef',
       headerColor: 'rgba(0, 0, 0, 0.6)',
       headerFontWeight: 600,
       headerFontSize: '0.75rem',
+      rowBg: '#ffffff',
+      rowBgHover: '#f3f2ef',
+      rowBgStriped: '#f9f9f7',
+      rowBgSelected: '#f0f7ff',
+      rowBorder: 'rgba(0, 0, 0, 0.08)',
+      cellPadding: '0.875rem 1rem',
+      cellFontSize: '0.875rem',
+      cellColor: 'rgba(0, 0, 0, 0.9)',
+    },
+    cardComponent: {
+      bg: '#ffffff',
+      bgHover: '#f9f9f7',
+      border: 'rgba(0, 0, 0, 0.08)',
+      shadow: '0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)',
+      shadowHover: '0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1)',
     },
   },
 };

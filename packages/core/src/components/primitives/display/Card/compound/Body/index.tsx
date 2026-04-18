@@ -92,10 +92,11 @@ export function CardBody({
     flex: 1,
     ...style,
   };
+  const renderedChildren = React.Children.toArray(children);
 
   return (
     <div className={`rottay-card-body ${className}`} style={bodyStyle}>
-      {children}
+      {renderedChildren}
     </div>
   );
 }

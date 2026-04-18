@@ -505,9 +505,9 @@ export default function ModernDataTable<T extends object>(
       {/* Table container: card surface, rounded, bordered */}
       <div
         style={{
-          background: 'var(--ds-surface-card)',
+          background: 'var(--ds-table-bg, var(--ds-surface-card))',
           borderRadius: 'var(--ds-radius-lg)',
-          border: '1px solid var(--ds-color-border-subtle)',
+          border: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
           overflow: 'hidden',
         }}
       >
@@ -527,8 +527,8 @@ export default function ModernDataTable<T extends object>(
                   display: 'flex',
                   gap: 16,
                   padding: '14px 16px',
-                  background: 'var(--ds-surface-inset, var(--ds-surface-panel))',
-                  borderBottom: '1px solid var(--ds-color-border-subtle)',
+                  background: 'var(--ds-table-header-bg, var(--ds-surface-inset, var(--ds-surface-panel)))',
+                  borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
                 }}
               >
                 {visibleColumns.slice(0, 5).map((col, ci) => (
@@ -554,7 +554,7 @@ export default function ModernDataTable<T extends object>(
                     gap: 16,
                     padding: '16px 16px',
                     borderBottom: i < skeletonRowCount - 1
-                      ? '1px solid var(--ds-color-border-subtle)'
+                      ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
                       : 'none',
                     animation: 'ds-shimmer 1.8s ease-in-out infinite',
                     animationDelay: `${i * 100}ms`,
@@ -670,8 +670,8 @@ export default function ModernDataTable<T extends object>(
                 <tr
                   ref={headerRowRef}
                   style={{
-                    background: 'color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%)',
-                    borderBottom: '1px solid var(--ds-color-border-subtle)',
+                    background: 'var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%))',
+                    borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
                   }}
                 >
                   {/* Select-all checkbox */}
@@ -954,26 +954,26 @@ export default function ModernDataTable<T extends object>(
                         style={{
                           cursor: onRowClick ? 'pointer' : undefined,
                           backgroundColor: isSelected
-                            ? 'color-mix(in srgb, var(--ds-color-primary) 9%, transparent)'
+                            ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
                             : striped && index % 2 === 1
-                              ? 'color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent)'
+                              ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
                               : 'transparent',
                           transition: `background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
                           borderBottom: !isLastRow
-                            ? '1px solid var(--ds-color-border-subtle)'
+                            ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
                             : 'none',
                         }}
                         onMouseEnter={(e) => {
                           if (hoverable && !isSelected) {
                             (e.currentTarget as HTMLElement).style.backgroundColor =
-                              'color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)';
+                              'var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))';
                           }
                         }}
                         onMouseLeave={(e) => {
                           (e.currentTarget as HTMLElement).style.backgroundColor = isSelected
-                            ? 'color-mix(in srgb, var(--ds-color-primary) 9%, transparent)'
+                            ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
                             : striped && index % 2 === 1
-                              ? 'color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent)'
+                              ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
                               : 'transparent';
                         }}
                       >
@@ -1055,7 +1055,7 @@ export default function ModernDataTable<T extends object>(
                                 whiteSpace: 'nowrap',
                                 maxWidth: 0,
                                 fontSize: 14,
-                                color: 'var(--ds-color-text-primary)',
+                                color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
                               }}
                             >
                               {col.render
@@ -1092,7 +1092,7 @@ export default function ModernDataTable<T extends object>(
                             style={{
                               padding: 0,
                               borderBottom: !isLastRow
-                                ? '1px solid var(--ds-color-border-subtle)'
+                                ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
                                 : 'none',
                             }}
                           >

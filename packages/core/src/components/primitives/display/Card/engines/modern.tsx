@@ -111,32 +111,32 @@ interface VariantHoverStyle {
 
 const VARIANT_STYLES: Record<string, VariantStyle> = {
   elevated: {
-    backgroundColor: 'var(--ds-card-elevated-bg, var(--ds-surface-card))',
+    backgroundColor: 'var(--ds-card-bg, var(--ds-card-elevated-bg, var(--ds-surface-card)))',
     borderWidth: 'var(--ds-card-elevated-border-width, 0)',
     borderStyle: 'solid',
-    borderColor: 'transparent',
-    boxShadow: 'var(--ds-card-elevated-shadow, var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03)))',
+    borderColor: 'var(--ds-card-border, transparent)',
+    boxShadow: 'var(--ds-card-shadow, var(--ds-card-elevated-shadow, var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03))))',
   },
   outlined: {
-    backgroundColor: 'var(--ds-card-bordered-bg, var(--ds-surface-card))',
+    backgroundColor: 'var(--ds-card-bg, var(--ds-card-bordered-bg, var(--ds-surface-card)))',
     borderWidth: 'var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px))',
     borderStyle: 'solid',
-    borderColor: 'var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle)))',
-    boxShadow: 'var(--ds-card-bordered-shadow, none)',
+    borderColor: 'var(--ds-card-border, var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle))))',
+    boxShadow: 'var(--ds-card-shadow, var(--ds-card-bordered-shadow, none))',
   },
   filled: {
-    backgroundColor: 'var(--ds-card-flat-bg, var(--ds-surface-panel))',
+    backgroundColor: 'var(--ds-card-bg, var(--ds-card-flat-bg, var(--ds-surface-panel)))',
     borderWidth: 'var(--ds-card-flat-border-width, 0)',
     borderStyle: 'solid',
-    borderColor: 'transparent',
-    boxShadow: 'var(--ds-card-flat-shadow, none)',
+    borderColor: 'var(--ds-card-border, transparent)',
+    boxShadow: 'var(--ds-card-shadow, var(--ds-card-flat-shadow, none))',
   },
   ghost: {
-    backgroundColor: 'var(--ds-card-ghost-bg, transparent)',
+    backgroundColor: 'var(--ds-card-bg, var(--ds-card-ghost-bg, transparent))',
     borderWidth: '0',
     borderStyle: 'solid',
-    borderColor: 'var(--ds-card-ghost-border-color, transparent)',
-    boxShadow: 'var(--ds-card-ghost-shadow, none)',
+    borderColor: 'var(--ds-card-border, var(--ds-card-ghost-border-color, transparent))',
+    boxShadow: 'var(--ds-card-shadow, var(--ds-card-ghost-shadow, none))',
   },
 };
 
@@ -148,12 +148,12 @@ function getHoverStyle(variant: string): VariantHoverStyle {
   switch (variant) {
     case 'elevated':
       return {
-        boxShadow: 'var(--ds-card-elevated-shadow-hover, var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03)))',
+        boxShadow: 'var(--ds-card-shadow-hover, var(--ds-card-elevated-shadow-hover, var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03))))',
         transform: 'var(--ds-card-interactive-transform-hover, translateY(-1px))',
       };
     case 'outlined':
       return {
-        borderColor: 'var(--ds-card-border-color-hover, var(--ds-color-border-secondary))',
+        borderColor: 'var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)))',
       };
     default:
       return {};
@@ -275,7 +275,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
 
   const headerSeparator: React.CSSProperties = divider
     ? {
-        borderBottom: '1px solid var(--ds-color-border)',
+        borderBottom: '1px solid var(--ds-card-header-border, var(--ds-color-border))',
         paddingBottom: 'var(--ds-spacing-4, 16px)',
         marginBottom: 'var(--ds-spacing-4, 16px)',
       }
@@ -395,7 +395,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         )}
 
         {/* Body */}
-        <div style={{ padding: paddingValue || BODY_PADDING }}>
+        <div style={{ padding: paddingValue || BODY_PADDING, color: 'var(--ds-card-body-color, inherit)' }}>
           {/* Header */}
           {(title || description || extra) && (
             <div style={{
@@ -410,7 +410,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                     fontSize: 'var(--ds-card-title-font-size, 15px)',
                     fontWeight: 600,
                     lineHeight: 1.4,
-                    color: 'var(--ds-color-text-primary)',
+                    color: 'var(--ds-card-title-color, var(--ds-color-text-primary))',
                     letterSpacing: 'var(--ds-card-title-letter-spacing, -0.01em)',
                   }}>
                     {title}
@@ -420,7 +420,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                   <div style={{
                     fontSize: 'var(--ds-card-description-font-size, 13px)',
                     lineHeight: 1.5,
-                    color: 'var(--ds-color-text-secondary)',
+                    color: 'var(--ds-card-subtitle-color, var(--ds-color-text-secondary))',
                     marginTop: title ? 'var(--ds-spacing-0-5, 2px)' : undefined,
                   }}>
                     {description}
@@ -447,7 +447,8 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               gap: 'var(--ds-spacing-2, 8px)',
               marginTop: 'var(--ds-spacing-4, 16px)',
               paddingTop: 'var(--ds-spacing-4, 16px)',
-              borderTop: '1px solid var(--ds-color-border)',
+              borderTop: '1px solid var(--ds-card-footer-border, var(--ds-color-border))',
+              backgroundColor: 'var(--ds-card-footer-bg, transparent)',
             }}>
               {actions.map((action, index) => (
                 <React.Fragment key={index}>{action}</React.Fragment>

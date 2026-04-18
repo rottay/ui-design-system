@@ -112,10 +112,10 @@ function getTabItemStyle(
         color: isDisabled
           ? 'var(--ds-color-text-tertiary)'
           : isActive
-            ? 'var(--ds-color-text-primary)'
+            ? 'var(--ds-tab-color-active, var(--ds-color-text-primary))'
             : isHovered
-              ? 'var(--ds-color-text-secondary)'
-              : 'var(--ds-color-text-tertiary)',
+              ? 'var(--ds-tab-color-hover, var(--ds-color-text-secondary))'
+              : 'var(--ds-tab-color, var(--ds-color-text-tertiary))',
         fontWeight: isActive ? 500 : 400,
       };
     }
@@ -129,7 +129,7 @@ function getTabItemStyle(
           : isActive
             ? 'var(--ds-surface-card)'
             : isHovered
-              ? 'var(--ds-surface-highlight)'
+              ? 'var(--ds-tab-bg-hover, var(--ds-surface-highlight))'
               : 'transparent',
         boxShadow: isActive && !isDisabled
           ? 'var(--ds-elevation-1)'
@@ -137,10 +137,10 @@ function getTabItemStyle(
         color: isDisabled
           ? 'var(--ds-color-text-tertiary)'
           : isActive
-            ? 'var(--ds-color-text-primary)'
+            ? 'var(--ds-tab-color-active, var(--ds-color-text-primary))'
             : isHovered
-              ? 'var(--ds-color-text-secondary)'
-              : 'var(--ds-color-text-tertiary)',
+              ? 'var(--ds-tab-color-hover, var(--ds-color-text-secondary))'
+              : 'var(--ds-tab-color, var(--ds-color-text-tertiary))',
         fontWeight: isActive ? 500 : 400,
       };
     }
@@ -161,8 +161,8 @@ function getTabItemStyle(
           : isActive
             ? 'var(--ds-color-text-on-primary)'
             : isHovered
-              ? 'var(--ds-color-text-secondary)'
-              : 'var(--ds-color-text-tertiary)',
+              ? 'var(--ds-tab-color-hover, var(--ds-color-text-secondary))'
+              : 'var(--ds-tab-color, var(--ds-color-text-tertiary))',
         fontWeight: isActive ? 500 : 400,
       };
     }
@@ -385,7 +385,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     WebkitOverflowScrolling: 'touch',
     scrollbarWidth: 'none',
     ...(type === 'line' && {
-      borderBottom: '1px solid var(--ds-color-border-subtle)',
+      borderBottom: '1px solid var(--ds-tabs-border, var(--ds-color-border-subtle))',
     }),
     ...(type === 'card' && {
       padding: '4px',
@@ -414,7 +414,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         bottom: 0,
         left: 0,
         height: '2px',
-        backgroundColor: 'var(--ds-color-primary)',
+        backgroundColor: 'var(--ds-tab-border-active, var(--ds-color-primary))',
         borderRadius: '1px 1px 0 0',
         transform: `translateX(${indicatorPos.left}px)`,
         width: `${indicatorPos.width}px`,
