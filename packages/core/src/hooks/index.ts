@@ -70,6 +70,7 @@
  * **State Hooks:**
  * - `useUndoRedo` - State management with full undo/redo history
  * - `useLayoutPreference` - Persisted layout preferences (sidebar, columns, density)
+ * - `useCrossTabSync` - Cross-tab synchronization via BroadcastChannel
  *
  * **Routing Hooks:**
  * - `useRouterState` - Sync surface state with URL query params (framework-agnostic)
@@ -318,9 +319,9 @@ export type {
 } from './notifications';
 
 // ============================================================================
-// State hooks -- undo/redo history and persisted layout preferences
+// State hooks -- undo/redo history, persisted layout preferences, cross-tab sync
 // ============================================================================
-export { useUndoRedo, useLayoutPreference } from './state';
+export { useUndoRedo, useLayoutPreference, useCrossTabSync } from './state';
 export type {
   UseUndoRedoOptions,
   UseUndoRedoReturn,
@@ -328,6 +329,10 @@ export type {
   LayoutPreference,
   UseLayoutPreferenceOptions,
   UseLayoutPreferenceReturn,
+  CrossTabMessageType,
+  CrossTabMessage,
+  UseCrossTabSyncOptions,
+  UseCrossTabSyncReturn,
 } from './state';
 
 // ============================================================================

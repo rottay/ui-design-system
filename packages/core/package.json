@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.6.21",
+  "version": "2.7.0",
   "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -62,6 +62,11 @@
       "import": "./styles/modern.css",
       "default": "./styles/modern.css"
     },
+    "./eslint": {
+      "types": "./dist/eslint.d.ts",
+      "import": "./dist/eslint.js",
+      "require": "./dist/eslint.cjs"
+    },
     "./dist/*.css": "./dist/*.css"
   },
   "files": [
@@ -78,7 +83,7 @@
     "README.md"
   ],
   "scripts": {
-    "dev": "vite build --watch",
+    "dev": "node scripts/dev.mjs",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:vertical-css",
     "build:modern-css": "postcss src/tokens/css/engines/modern/compiled.css -o dist/modern-engine.css",
     "build:vertical-css": "node scripts/build-vertical-css.mjs",

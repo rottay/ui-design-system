@@ -20,6 +20,12 @@
  * - Column management (visibility, width, reorder)
  * - ListSurface integration via ready-made props
  *
+ * **useCrossTabSync** - Cross-tab state synchronization:
+ * - BroadcastChannel API with localStorage fallback (Safari < 15.4)
+ * - Typed message protocol (invalidate, update, delete, create)
+ * - Entity type filtering and own-message suppression
+ * - SSR-safe with zero dependencies
+ *
  * @example Undo/redo in a form editor
  * ```tsx
  * const { state, set, undo, redo, canUndo } = useUndoRedo(initialFormData, { maxHistory: 50 });
@@ -50,3 +56,14 @@ export type {
   UseLayoutPreferenceOptions,
   UseLayoutPreferenceReturn,
 } from './layout-preference';
+
+// -- Cross-Tab Sync --
+// BroadcastChannel-based synchronization between tabs of the same origin.
+// Enables real-time entity invalidation/update when data changes in another tab.
+export { useCrossTabSync } from './cross-tab-sync';
+export type {
+  CrossTabMessageType,
+  CrossTabMessage,
+  UseCrossTabSyncOptions,
+  UseCrossTabSyncReturn,
+} from './cross-tab-sync';

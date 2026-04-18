@@ -25,3 +25,15 @@ export type {
 } from './runtime/tenant/resolution/resolve-request-tenant';
 
 export { toSupportedLocale } from './i18n/toSupportedLocale';
+
+// A11y: branding contrast validation (Wave 6.2 Accessibility Guardian)
+export {
+  validateBrandingContrast,
+  contrastRatio as brandingContrastRatio,
+} from './_internal/a11y/contrast';
+export type {
+  BrandingColors,
+  ContrastViolation,
+  ContrastSuggestion,
+  ContrastValidationResult,
+} from './_internal/a11y/contrast';

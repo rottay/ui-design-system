@@ -4,6 +4,8 @@ import dts from 'vite-plugin-dts';
 import preserveDirectives from 'rollup-plugin-preserve-directives';
 import { resolve } from 'path';
 
+const isWatchMode = process.argv.includes('--watch');
+
 export default defineConfig({
   plugins: [
     react(),
@@ -34,11 +36,16 @@ export default defineConfig({
     },
   },
   build: {
+    // In local watch mode the DS CSS bundles are generated separately into
+    // `dist/*.css`. Avoid wiping them on every JS rebuild. Production builds
+    // still clean `dist/` normally.
+    emptyOutDir: !isWatchMode,
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         server: resolve(__dirname, 'src/server.ts'),
         icons: resolve(__dirname, 'src/icons.ts'),
+        eslint: resolve(__dirname, 'src/eslint.ts'),
         // Only real package.json exports are listed as entries.
         // Component code is included via the root barrel and
         // preserveModules handles per-file output automatically.
