@@ -8,6 +8,79 @@
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineName } from '../../../contracts';
 
+// ---------------------------------------------------------------------------
+// Inline Cell Editing
+// ---------------------------------------------------------------------------
+
+/**
+ * Configuration for inline cell editing on a specific column.
+ *
+ * When a column's `editable` property is set to an `EditableConfig` object
+ * (rather than a plain `true`), the table uses this configuration to determine
+ * the editor widget, validation, and save behavior.
+ *
+ * @typeParam T - The shape of a single data row.
+ *
+ * @example
+ * ```tsx
+ * const columns: ColumnDef<User>[] = [
+ *   {
+ *     key: 'name',
+ *     header: 'Name',
+ *     accessorKey: 'name',
+ *     editable: {
+ *       type: 'text',
+ *       validate: (value) => (!value ? 'Name is required' : null),
+ *       placeholder: 'Enter name...',
+ *     },
+ *   },
+ *   {
+ *     key: 'role',
+ *     header: 'Role',
+ *     accessorKey: 'role',
+ *     editable: {
+ *       type: 'select',
+ *       options: [
+ *         { label: 'Admin', value: 'admin' },
+ *         { label: 'Member', value: 'member' },
+ *       ],
+ *     },
+ *   },
+ * ];
+ * ```
+ */
+export interface EditableConfig<T = unknown> {
+  /** Editor widget type. When omitted with `editable: true`, defaults to 'text'. */
+  type?: 'text' | 'number' | 'select' | 'date' | 'checkbox' | 'custom';
+  /** Options for the 'select' editor type. */
+  options?: Array<{ label: string; value: string | number }>;
+  /**
+   * Custom editor renderer for the 'custom' type.
+   * Receives the current value, the full row, and save/cancel callbacks.
+   */
+  render?: (
+    value: unknown,
+    row: T,
+    save: (newValue: unknown) => void,
+    cancel: () => void,
+  ) => ReactNode;
+  /**
+   * Validation function called before a cell value is saved.
+   * Returns an error message string when validation fails, or null when valid.
+   */
+  validate?: (value: unknown, row: T) => string | null;
+  /** Called when a cell value is saved. Supports async operations. */
+  onSave?: (row: T, columnKey: string, newValue: unknown, oldValue: unknown) => void | Promise<void>;
+  /** Whether this column can be edited conditionally per row. */
+  canEdit?: (row: T) => boolean;
+  /** Placeholder text shown in the editor input. */
+  placeholder?: string;
+  /** Minimum value constraint for 'number' type editors. */
+  min?: number;
+  /** Maximum value constraint for 'number' type editors. */
+  max?: number;
+}
+
 /**
  * Base props shared by every Tier 2 pattern component.
  *
@@ -82,8 +155,12 @@ export interface ColumnDef<T> {
   visible?: boolean;
   /** Pin column */
   pin?: 'left' | 'right';
-  /** Enable cell editing */
-  editable?: boolean;
+  /**
+   * Enable inline cell editing. When `true`, uses a default text editor.
+   * When an `EditableConfig` object, provides full control over editor type,
+   * validation, and save behavior.
+   */
+  editable?: boolean | EditableConfig<T>;
   /**
    * Responsive column behavior per device class.
    *

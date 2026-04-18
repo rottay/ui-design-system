@@ -11,7 +11,7 @@
  * rendering API reusable across domains.
  */
 
-export type { DataTablePatternProps } from './DataTable.types';
+export type { DataTablePatternProps, AggregationFn } from './DataTable.types';
 export { resolveAccessor, resolveRowKey } from './DataTable.types';
 export type {
   ColumnDef,
@@ -21,5 +21,10 @@ export type {
   FilterDef,
   PaginationConfig,
   BulkAction,
+  EditableConfig,
 } from '../../foundation/types';
 export { PatternDataTable } from './PatternDataTable';
+export { useVirtualScroll } from './useVirtualScroll';
+export type { UseVirtualScrollOptions, UseVirtualScrollReturn } from './useVirtualScroll';
+export { useGroupedData } from './useGroupedData';
+export type { GroupedSection } from './useGroupedData';

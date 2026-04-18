@@ -18,6 +18,22 @@ import type {
   BulkAction,
 } from '../../foundation/types';
 
+// ---------------------------------------------------------------------------
+// Aggregation
+// ---------------------------------------------------------------------------
+
+/**
+ * An aggregation function: either a built-in named strategy or a custom
+ * function that receives all items in a group and returns a display value.
+ */
+export type AggregationFn<T> =
+  | 'count'
+  | 'sum'
+  | 'average'
+  | 'min'
+  | 'max'
+  | ((items: T[]) => ReactNode);
+
 /**
  * Props for the DataTable pattern component.
  *
@@ -392,6 +408,116 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    * @default 'comfortable'
    */
   density?: 'compact' | 'comfortable' | 'spacious';
+
+  // ---------------------------------------------------------------------------
+  // Row Grouping
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Column key to group rows by. Rows with the same value in this column are
+   * collected under a collapsible group header. When omitted, no grouping is
+   * applied and all rows render flat.
+   */
+  groupBy?: string;
+
+  /**
+   * Aggregation functions for group header display, keyed by column key.
+   * Built-in strategies: `'count'`, `'sum'`, `'average'`, `'min'`, `'max'`.
+   * Pass a custom function `(items: T[]) => ReactNode` for full control.
+   *
+   * @example
+   * ```tsx
+   * aggregations={{ salary: 'average', id: 'count' }}
+   * ```
+   */
+  aggregations?: Record<string, AggregationFn<T>>;
+
+  /**
+   * Whether group sections are expanded when the table first renders.
+   * @default true
+   */
+  defaultGroupExpanded?: boolean;
+
+  /**
+   * Custom group header renderer. When provided, replaces the default group
+   * header row content entirely. The default header shows the group value,
+   * item count, aggregate summaries, and an expand/collapse chevron.
+   *
+   * @param groupValue - The value shared by all rows in the group.
+   * @param items      - The data rows belonging to this group.
+   * @param isExpanded - Whether the group is currently expanded.
+   */
+  renderGroupHeader?: (
+    groupValue: string,
+    items: T[],
+    isExpanded: boolean,
+  ) => ReactNode;
+
+  // ---------------------------------------------------------------------------
+  // Inline Cell Editing
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Called when a cell value is saved via inline editing.
+   * Receives the full row, the column key, and both old and new values.
+   * Supports async operations (e.g., server mutations).
+   */
+  onCellEdit?: (row: T, columnKey: string, newValue: unknown, oldValue: unknown) => void | Promise<void>;
+
+  /**
+   * Called when inline editing starts on a cell.
+   */
+  onCellEditStart?: (row: T, columnKey: string) => void;
+
+  /**
+   * Called when inline editing is cancelled on a cell.
+   */
+  onCellEditCancel?: (row: T, columnKey: string) => void;
+
+  /**
+   * Controlled editing cell state. When provided, the table uses this to
+   * determine which cell is in edit mode. Set to `null` to exit edit mode.
+   * When omitted, the table manages edit state internally.
+   */
+  editingCell?: { rowKey: string; columnKey: string } | null;
+
+  /**
+   * How the user triggers cell editing.
+   * - `'doubleClick'` (default): double-click a cell to enter edit mode
+   * - `'click'`: single click enters edit mode
+   * @default 'doubleClick'
+   */
+  editTrigger?: 'click' | 'doubleClick';
+
+  /**
+   * Enable Tab key navigation between editable cells in the same row.
+   * When the user presses Tab in an active editor, focus moves to the next
+   * editable cell. Shift+Tab moves to the previous editable cell.
+   * @default true
+   */
+  tabNavigation?: boolean;
+
+  // ---------------------------------------------------------------------------
+  // Virtual Scrolling
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Enable virtual scrolling for large datasets. When true, only the visible
+   * rows (plus an overscan buffer) are rendered to the DOM. Requires `maxHeight`
+   * to be set so the container has a fixed scrollable height.
+   *
+   * Uses fixed row heights only (no variable-height rows) for zero-dependency,
+   * lightweight performance.
+   * @default false
+   */
+  virtualized?: boolean;
+
+  /**
+   * Fixed row height in pixels used for virtual scroll calculations.
+   * Only effective when `virtualized` is true.
+   * @default 48
+   */
+  virtualRowHeight?: number;
 }
 
 /**

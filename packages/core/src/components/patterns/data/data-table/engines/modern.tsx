@@ -29,6 +29,20 @@ import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react'
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 import { Checkbox } from '../../../../primitives/inputs/Checkbox';
+import { useVirtualScroll } from '../useVirtualScroll';
+import { useGroupedData } from '../useGroupedData';
+import type { EditableConfig } from '../../../foundation/types';
+import { InlineCellEditor } from '../cell-editors';
+
+/**
+ * Resolves the EditableConfig for a column.
+ * Returns null if the column is not editable, or a normalized config object.
+ */
+function resolveEditableConfig<T>(editable: boolean | EditableConfig<T> | undefined): EditableConfig<T> | null {
+  if (!editable) return null;
+  if (editable === true) return { type: 'text' };
+  return editable;
+}
 
 /** Density -> cell padding mapping */
 const DENSITY_PADDING_MAP = {
@@ -112,6 +126,21 @@ export default function ModernDataTable<T extends object>(
     pinnedColumns,
     // Density
     density = 'comfortable',
+    // Virtual scrolling
+    virtualized = false,
+    virtualRowHeight = 48,
+    // Inline cell editing
+    onCellEdit,
+    onCellEditStart,
+    onCellEditCancel,
+    editingCell: controlledEditingCell,
+    editTrigger = 'doubleClick',
+    tabNavigation = true,
+    // Row grouping
+    groupBy,
+    aggregations,
+    defaultGroupExpanded = true,
+    renderGroupHeader,
   } = props;
 
   // ---------------------------------------------------------------------------
@@ -124,6 +153,39 @@ export default function ModernDataTable<T extends object>(
   // Expanded rows tracked as a Set for O(1) has/add/delete during toggle.
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
+
+  // --- Row grouping ---
+  const { sections, isGrouped } = useGroupedData(data, groupBy, aggregations);
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(() => {
+    if (defaultGroupExpanded) return new Set<string>();
+    return new Set(sections.map((s) => s.groupValue));
+  });
+  const toggleGroup = useCallback((groupValue: string) => {
+    setCollapsedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(groupValue)) {
+        next.delete(groupValue);
+      } else {
+        next.add(groupValue);
+      }
+      return next;
+    });
+  }, []);
+
+  // --- Inline editing state (uncontrolled fallback) ---
+  const [internalEditingCell, setInternalEditingCell] = useState<{
+    rowKey: string;
+    columnKey: string;
+  } | null>(null);
+  const editingCell = controlledEditingCell !== undefined ? controlledEditingCell : internalEditingCell;
+  const setEditingCell = useCallback(
+    (cell: { rowKey: string; columnKey: string } | null) => {
+      if (controlledEditingCell === undefined) {
+        setInternalEditingCell(cell);
+      }
+    },
+    [controlledEditingCell],
+  );
 
   // --- Column resize state ---
   const resizeRef = useRef<{
@@ -187,6 +249,103 @@ export default function ModernDataTable<T extends object>(
     () => processedColumns.filter((c) => c.visible !== false),
     [processedColumns]
   );
+
+  // ---------------------------------------------------------------------------
+  // Inline editing helpers
+  // ---------------------------------------------------------------------------
+
+  /** Find the next (or previous) editable column key relative to `currentKey`. */
+  const findAdjacentEditableCol = useCallback(
+    (currentKey: string, direction: 'next' | 'prev', row: T): string | null => {
+      const editableCols = visibleColumns.filter((col) => {
+        const cfg = resolveEditableConfig(col.editable);
+        if (!cfg) return false;
+        if (cfg.canEdit && !cfg.canEdit(row)) return false;
+        return true;
+      });
+      if (editableCols.length === 0) return null;
+      const currentIdx = editableCols.findIndex((c) => c.key === currentKey);
+      if (direction === 'next') {
+        const nextIdx = currentIdx + 1;
+        return nextIdx < editableCols.length ? editableCols[nextIdx].key : null;
+      } else {
+        const prevIdx = currentIdx - 1;
+        return prevIdx >= 0 ? editableCols[prevIdx].key : null;
+      }
+    },
+    [visibleColumns],
+  );
+
+  /** Enter edit mode for a cell. */
+  const enterEditMode = useCallback(
+    (rk: string, colKey: string, row: T) => {
+      const col = visibleColumns.find((c) => c.key === colKey);
+      if (!col) return;
+      const cfg = resolveEditableConfig(col.editable);
+      if (!cfg) return;
+      if (cfg.canEdit && !cfg.canEdit(row)) return;
+      setEditingCell({ rowKey: rk, columnKey: colKey });
+      onCellEditStart?.(row, colKey);
+    },
+    [visibleColumns, setEditingCell, onCellEditStart],
+  );
+
+  /** Handle saving a cell value from the inline editor. */
+  const handleCellSave = useCallback(
+    (row: T, rk: string, colKey: string, newValue: unknown, oldValue: unknown) => {
+      const col = visibleColumns.find((c) => c.key === colKey);
+      const cfg = resolveEditableConfig(col?.editable);
+      // Call column-level onSave if provided
+      if (cfg?.onSave) {
+        cfg.onSave(row, colKey, newValue, oldValue);
+      }
+      // Call table-level onCellEdit
+      onCellEdit?.(row, colKey, newValue, oldValue);
+      setEditingCell(null);
+    },
+    [visibleColumns, onCellEdit, setEditingCell],
+  );
+
+  /** Handle cancelling inline editing. */
+  const handleCellCancel = useCallback(
+    (row: T, colKey: string) => {
+      onCellEditCancel?.(row, colKey);
+      setEditingCell(null);
+    },
+    [onCellEditCancel, setEditingCell],
+  );
+
+  // ---------------------------------------------------------------------------
+  // Virtual scrolling
+  // ---------------------------------------------------------------------------
+
+  // Resolve container height from maxHeight for the virtual scroll hook.
+  // Only activate when both `virtualized` and a numeric `maxHeight` are set.
+  const resolvedContainerHeight = typeof maxHeight === 'number'
+    ? maxHeight
+    : typeof maxHeight === 'string' && maxHeight.endsWith('px')
+      ? parseInt(maxHeight, 10)
+      : 600; // sensible fallback when maxHeight is a CSS value like "60vh"
+
+  const virtualScroll = useVirtualScroll({
+    totalItems: data.length,
+    rowHeight: virtualRowHeight,
+    containerHeight: resolvedContainerHeight,
+    overscan: 5,
+  });
+
+  // When virtualized, only render the visible slice of data.
+  const virtualizedData = virtualized
+    ? data.slice(virtualScroll.startIndex, virtualScroll.endIndex)
+    : data;
+
+  // Bottom spacer height: total height minus offset of rendered rows minus
+  // rendered rows' total height.
+  const virtualBottomSpacerHeight = virtualized
+    ? virtualScroll.totalHeight
+      - virtualScroll.offsetTop
+      - (virtualScroll.endIndex - virtualScroll.startIndex) * virtualRowHeight
+    : 0;
 
   // ---------------------------------------------------------------------------
   // Resize handlers
@@ -496,6 +655,34 @@ export default function ModernDataTable<T extends object>(
           box-shadow: inset 3px 0 0 0 var(--ds-color-primary);
           background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent) !important;
         }
+        .ds-engine-modern td[data-editable="true"] {
+          cursor: text;
+        }
+        .ds-engine-modern td[data-editable="true"]:hover::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 2px;
+          background: var(--ds-color-primary, #3b82f6);
+          opacity: 0.4;
+          pointer-events: none;
+        }
+        .ds-engine-modern td[data-editing="true"] {
+          overflow: visible !important;
+          padding: 4px 6px !important;
+        }
+        .ds-engine-modern td[data-cell-dirty="true"]::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          background: var(--ds-color-warning, #f59e0b);
+          pointer-events: none;
+        }
       `}</style>
       {header}
 
@@ -513,6 +700,8 @@ export default function ModernDataTable<T extends object>(
       >
         {/* Scroll container */}
         <div
+          ref={virtualized ? virtualScroll.scrollRef : undefined}
+          onScroll={virtualized ? virtualScroll.onScroll : undefined}
           style={{
             overflowX: 'auto',
             ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}),
@@ -936,7 +1125,381 @@ export default function ModernDataTable<T extends object>(
                 </tr>
               </thead>
               <tbody ref={tbodyRef}>
-                {data.map((row, index) => {
+                {/* --------------------------------------------------------- */}
+                {/* Grouped rendering: group headers + collapsible sections    */}
+                {/* --------------------------------------------------------- */}
+                {isGrouped && (() => {
+                  let globalIndex = 0;
+
+                  return sections.map((section, sectionIndex) => {
+                    const isCollapsed = collapsedGroups.has(section.groupValue);
+                    const isLastSection = sectionIndex === sections.length - 1;
+
+                    // Build aggregate summary chips for the default header
+                    const aggregateChips = Object.entries(section.aggregates).map(
+                      ([colKey, value]) => {
+                        const col = visibleColumns.find((c) => c.key === colKey);
+                        const label = col
+                          ? (typeof col.header === 'string' ? col.header : colKey)
+                          : colKey;
+                        return `${label}: ${String(value ?? '')}`;
+                      },
+                    );
+
+                    const sectionStartIndex = globalIndex;
+                    const sectionRows: React.ReactElement[] = [];
+
+                    // -- Data rows (hidden when collapsed) --
+                    if (!isCollapsed) {
+                      section.items.forEach((row, localIndex) => {
+                        const index = sectionStartIndex + localIndex;
+                        const key = getRowKey(row, index);
+                        const isRowExpanded = expandedKeys.has(key);
+                        const isSelected = selectedKeys.includes(key);
+                        const isLastRowInSection = localIndex === section.items.length - 1;
+                        const isLastRowOverall = isLastSection && isLastRowInSection;
+
+                        sectionRows.push(
+                          <React.Fragment key={key}>
+                            <tr
+                              data-row-index={index}
+                              tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
+                              role="row"
+                              onClick={onRowClick ? () => onRowClick(row, index) : undefined}
+                              onKeyDown={(e) => handleRowKeyDown(e, row, index)}
+                              onFocus={() => setActiveRowIndex(index)}
+                              style={{
+                                cursor: onRowClick ? 'pointer' : undefined,
+                                backgroundColor: isSelected
+                                  ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
+                                  : striped && index % 2 === 1
+                                    ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
+                                    : 'transparent',
+                                transition: `background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
+                                borderBottom: !isLastRowOverall
+                                  ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
+                                  : 'none',
+                              }}
+                              onMouseEnter={(e) => {
+                                if (hoverable && !isSelected) {
+                                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                                    'var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))';
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = isSelected
+                                  ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
+                                  : striped && index % 2 === 1
+                                    ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
+                                    : 'transparent';
+                              }}
+                            >
+                              {selectable && (
+                                <td
+                                  style={{
+                                    padding: selectionCellPadding,
+                                    width: resolvedSelectionColumnWidth,
+                                    minWidth: resolvedSelectionColumnWidth,
+                                    maxWidth: resolvedSelectionColumnWidth,
+                                    boxSizing: 'border-box',
+                                    verticalAlign: 'middle',
+                                    textAlign: 'left',
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <Checkbox
+                                    size="sm"
+                                    checked={isSelected}
+                                    onChange={() => toggleSelection(key, row)}
+                                  />
+                                </td>
+                              )}
+                              {expandedRow && (
+                                <td style={{ padding: densityPadding }}>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setExpandedKeys((prev) => {
+                                        const next = new Set(prev);
+                                        next.has(key) ? next.delete(key) : next.add(key);
+                                        return next;
+                                      });
+                                    }}
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      width: 24,
+                                      height: 24,
+                                      border: 'none',
+                                      borderRadius: 'var(--ds-radius-sm, 6px)',
+                                      background: 'transparent',
+                                      color: 'var(--ds-color-text-secondary)',
+                                      cursor: 'pointer',
+                                      fontSize: 12,
+                                      transition: `background var(--ds-motion-fast, 150ms)`,
+                                    }}
+                                  >
+                                    {isRowExpanded ? '\u25BC' : '\u25B6'}
+                                  </button>
+                                </td>
+                              )}
+                              {/* Data cells (grouped path -- with inline editing) */}
+                              {visibleColumns.map((col, columnIndex) => {
+                                const pinSide = getPinSide(col.key, col.pin);
+                                const pinnedStyle = getPinnedStyle(pinSide);
+                                const resolvedWidth = columnWidths?.[col.key] ?? col.width;
+                                const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
+
+                                const editableCfg = resolveEditableConfig(col.editable);
+                                const isCellEditable = editableCfg != null
+                                  && (!editableCfg.canEdit || editableCfg.canEdit(row));
+                                const isCellEditing = editingCell?.rowKey === key
+                                  && editingCell?.columnKey === col.key;
+                                const cellValue = resolveAccessor(col, row);
+
+                                const grpTriggerProps: Record<string, unknown> = {};
+                                if (isCellEditable && !isCellEditing) {
+                                  const handler = (e: React.MouseEvent) => {
+                                    e.stopPropagation();
+                                    enterEditMode(key, col.key, row);
+                                  };
+                                  if (editTrigger === 'click') {
+                                    grpTriggerProps.onClick = handler;
+                                  } else {
+                                    grpTriggerProps.onDoubleClick = handler;
+                                  }
+                                }
+
+                                return (
+                                  <td
+                                    key={col.key}
+                                    data-editable={isCellEditable ? 'true' : undefined}
+                                    data-editing={isCellEditing ? 'true' : undefined}
+                                    {...grpTriggerProps}
+                                    style={{
+                                      textAlign: col.align,
+                                      width: resolvedWidth,
+                                      padding: isCellEditing
+                                        ? '4px 6px'
+                                        : isLeadingDataColumn && selectable
+                                          ? leadingDataColumnPadding
+                                          : densityPadding,
+                                      position: (pinnedStyle.position as any)
+                                        || (isCellEditable ? 'relative' : undefined),
+                                      left: pinnedStyle.left as any,
+                                      right: pinnedStyle.right as any,
+                                      zIndex: pinnedStyle.zIndex as any,
+                                      backgroundColor: pinSide
+                                        ? 'var(--ds-surface-card)'
+                                        : undefined,
+                                      overflow: isCellEditing ? 'visible' : 'hidden',
+                                      textOverflow: isCellEditing ? undefined : 'ellipsis',
+                                      whiteSpace: isCellEditing ? undefined : 'nowrap',
+                                      maxWidth: 0,
+                                      fontSize: 14,
+                                      color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
+                                    }}
+                                  >
+                                    {isCellEditing && editableCfg ? (
+                                      <InlineCellEditor
+                                        value={cellValue}
+                                        row={row}
+                                        columnKey={col.key}
+                                        config={editableCfg}
+                                        onSave={(newValue) =>
+                                          handleCellSave(row, key, col.key, newValue, cellValue)
+                                        }
+                                        onCancel={() => handleCellCancel(row, col.key)}
+                                        onTabNext={
+                                          tabNavigation
+                                            ? () => {
+                                                const nextCol = findAdjacentEditableCol(
+                                                  col.key, 'next', row,
+                                                );
+                                                if (nextCol) {
+                                                  enterEditMode(key, nextCol, row);
+                                                } else {
+                                                  setEditingCell(null);
+                                                }
+                                              }
+                                            : undefined
+                                        }
+                                        onTabPrev={
+                                          tabNavigation
+                                            ? () => {
+                                                const prevCol = findAdjacentEditableCol(
+                                                  col.key, 'prev', row,
+                                                );
+                                                if (prevCol) {
+                                                  enterEditMode(key, prevCol, row);
+                                                } else {
+                                                  setEditingCell(null);
+                                                }
+                                              }
+                                            : undefined
+                                        }
+                                      />
+                                    ) : col.render
+                                      ? col.render(cellValue, row, index)
+                                      : String(cellValue ?? '')}
+                                  </td>
+                                );
+                              })}
+                              {actions && (
+                                <td
+                                  style={{
+                                    textAlign: 'right',
+                                    width: resolvedActionsColumnWidth,
+                                    minWidth: resolvedActionsColumnWidth,
+                                    padding: actionCellPadding,
+                                    position: 'sticky',
+                                    right: 0,
+                                    zIndex: 2,
+                                    backgroundColor: 'var(--ds-surface-card)',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {actions(row, index)}
+                                </td>
+                              )}
+                            </tr>
+                            {expandedRow && isRowExpanded && (
+                              <tr>
+                                <td
+                                  colSpan={totalColSpan}
+                                  style={{
+                                    padding: 0,
+                                    borderBottom: !isLastRowOverall
+                                      ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
+                                      : 'none',
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      width: '100%',
+                                      padding: '12px 16px',
+                                      background: 'var(--ds-surface-inset)',
+                                    }}
+                                  >
+                                    {expandedRow(row)}
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>,
+                        );
+                      });
+                    }
+
+                    globalIndex += section.items.length;
+
+                    return (
+                      <React.Fragment key={`group-${section.groupValue}`}>
+                        {/* Group header row */}
+                        <tr
+                          role="row"
+                          aria-expanded={!isCollapsed}
+                          onClick={() => toggleGroup(section.groupValue)}
+                          style={{
+                            cursor: 'pointer',
+                            background: 'var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%))',
+                            borderBottom: '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))',
+                          }}
+                        >
+                          <td
+                            colSpan={totalColSpan}
+                            style={{
+                              padding: densityPadding,
+                              fontSize: 13,
+                              fontWeight: 600,
+                              color: 'var(--ds-color-text-primary)',
+                            }}
+                          >
+                            {renderGroupHeader
+                              ? renderGroupHeader(section.groupValue, section.items, !isCollapsed)
+                              : (
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                                  <span
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      width: 18,
+                                      height: 18,
+                                      fontSize: 10,
+                                      color: 'var(--ds-color-text-secondary)',
+                                      transition: 'transform var(--ds-motion-fast, 150ms) ease',
+                                      transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+                                    }}
+                                  >
+                                    {'\u25BC'}
+                                  </span>
+                                  <span>{section.groupValue || '(empty)'}</span>
+                                  <span
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      height: 20,
+                                      minWidth: 20,
+                                      padding: '0 6px',
+                                      borderRadius: 'var(--ds-radius-full, 9999px)',
+                                      background: 'color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
+                                      fontSize: 11,
+                                      fontWeight: 500,
+                                      color: 'var(--ds-color-text-secondary)',
+                                    }}
+                                  >
+                                    {section.items.length}
+                                  </span>
+                                  {aggregateChips.length > 0 && (
+                                    <span
+                                      style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: 6,
+                                        marginLeft: 4,
+                                        fontSize: 12,
+                                        fontWeight: 400,
+                                        color: 'var(--ds-color-text-muted)',
+                                      }}
+                                    >
+                                      {aggregateChips.map((chip, ci) => (
+                                        <span key={ci}>
+                                          {ci > 0 && (
+                                            <span style={{ margin: '0 2px', opacity: 0.4 }}>{'\u00B7'}</span>
+                                          )}
+                                          {chip}
+                                        </span>
+                                      ))}
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                          </td>
+                        </tr>
+                        {sectionRows}
+                      </React.Fragment>
+                    );
+                  });
+                })()}
+
+                {/* --------------------------------------------------------- */}
+                {/* Flat rendering (no groupBy): virtual scroll + inline edit  */}
+                {/* --------------------------------------------------------- */}
+                {!isGrouped && (
+                  <>
+                {/* Virtual scroll: top spacer row to push visible content down */}
+                {virtualized && virtualScroll.offsetTop > 0 && (
+                  <tr aria-hidden="true" style={{ height: virtualScroll.offsetTop, border: 'none' }}>
+                    <td colSpan={totalColSpan} style={{ padding: 0, border: 'none' }} />
+                  </tr>
+                )}
+                {virtualizedData.map((row, sliceIndex) => {
+                  // When virtualized, the actual data index is offset by startIndex
+                  const index = virtualized ? virtualScroll.startIndex + sliceIndex : sliceIndex;
                   const key = getRowKey(row, index);
                   const isExpanded = expandedKeys.has(key);
                   const isSelected = selectedKeys.includes(key);
@@ -953,6 +1516,8 @@ export default function ModernDataTable<T extends object>(
                         onFocus={() => setActiveRowIndex(index)}
                         style={{
                           cursor: onRowClick ? 'pointer' : undefined,
+                          height: virtualized ? virtualRowHeight : undefined,
+                          boxSizing: virtualized ? 'border-box' : undefined,
                           backgroundColor: isSelected
                             ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
                             : striped && index % 2 === 1
@@ -1029,38 +1594,107 @@ export default function ModernDataTable<T extends object>(
                             </button>
                           </td>
                         )}
-                        {/* Data cells */}
+                        {/* Data cells (with inline editing support) */}
                         {visibleColumns.map((col, columnIndex) => {
                           const pinSide = getPinSide(col.key, col.pin);
                           const pinnedStyle = getPinnedStyle(pinSide);
                           const resolvedWidth = columnWidths?.[col.key] ?? col.width;
                           const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
 
+                          // Inline editing: resolve config and state for this cell
+                          const editableCfg = resolveEditableConfig(col.editable);
+                          const isCellEditable = editableCfg != null
+                            && (!editableCfg.canEdit || editableCfg.canEdit(row));
+                          const isCellEditing = editingCell?.rowKey === key
+                            && editingCell?.columnKey === col.key;
+                          const cellValue = resolveAccessor(col, row);
+
+                          // Build the edit-trigger event handler
+                          const triggerProps: Record<string, unknown> = {};
+                          if (isCellEditable && !isCellEditing) {
+                            const handler = (e: React.MouseEvent) => {
+                              e.stopPropagation();
+                              enterEditMode(key, col.key, row);
+                            };
+                            if (editTrigger === 'click') {
+                              triggerProps.onClick = handler;
+                            } else {
+                              triggerProps.onDoubleClick = handler;
+                            }
+                          }
+
                           return (
                             <td
                               key={col.key}
+                              data-editable={isCellEditable ? 'true' : undefined}
+                              data-editing={isCellEditing ? 'true' : undefined}
+                              {...triggerProps}
                               style={{
                                 textAlign: col.align,
                                 width: resolvedWidth,
-                                padding: isLeadingDataColumn && selectable ? leadingDataColumnPadding : densityPadding,
-                                position: pinnedStyle.position as any,
+                                padding: isCellEditing
+                                  ? '4px 6px'
+                                  : isLeadingDataColumn && selectable
+                                    ? leadingDataColumnPadding
+                                    : densityPadding,
+                                position: (pinnedStyle.position as any)
+                                  || (isCellEditable ? 'relative' : undefined),
                                 left: pinnedStyle.left as any,
                                 right: pinnedStyle.right as any,
                                 zIndex: pinnedStyle.zIndex as any,
                                 backgroundColor: pinSide
                                   ? 'var(--ds-surface-card)'
                                   : undefined,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
+                                overflow: isCellEditing ? 'visible' : 'hidden',
+                                textOverflow: isCellEditing ? undefined : 'ellipsis',
+                                whiteSpace: isCellEditing ? undefined : 'nowrap',
                                 maxWidth: 0,
                                 fontSize: 14,
                                 color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
                               }}
                             >
-                              {col.render
-                                ? col.render(resolveAccessor(col, row), row, index)
-                                : String(resolveAccessor(col, row) ?? '')}
+                              {isCellEditing && editableCfg ? (
+                                <InlineCellEditor
+                                  value={cellValue}
+                                  row={row}
+                                  columnKey={col.key}
+                                  config={editableCfg}
+                                  onSave={(newValue) =>
+                                    handleCellSave(row, key, col.key, newValue, cellValue)
+                                  }
+                                  onCancel={() => handleCellCancel(row, col.key)}
+                                  onTabNext={
+                                    tabNavigation
+                                      ? () => {
+                                          const nextCol = findAdjacentEditableCol(
+                                            col.key, 'next', row,
+                                          );
+                                          if (nextCol) {
+                                            enterEditMode(key, nextCol, row);
+                                          } else {
+                                            setEditingCell(null);
+                                          }
+                                        }
+                                      : undefined
+                                  }
+                                  onTabPrev={
+                                    tabNavigation
+                                      ? () => {
+                                          const prevCol = findAdjacentEditableCol(
+                                            col.key, 'prev', row,
+                                          );
+                                          if (prevCol) {
+                                            enterEditMode(key, prevCol, row);
+                                          } else {
+                                            setEditingCell(null);
+                                          }
+                                        }
+                                      : undefined
+                                  }
+                                />
+                              ) : col.render
+                                ? col.render(cellValue, row, index)
+                                : String(cellValue ?? '')}
                             </td>
                           );
                         })}
@@ -1111,6 +1745,14 @@ export default function ModernDataTable<T extends object>(
                     </React.Fragment>
                   );
                 })}
+                {/* Virtual scroll: bottom spacer row to maintain total scroll height */}
+                {virtualized && virtualBottomSpacerHeight > 0 && (
+                  <tr aria-hidden="true" style={{ height: virtualBottomSpacerHeight, border: 'none' }}>
+                    <td colSpan={totalColSpan} style={{ padding: 0, border: 'none' }} />
+                  </tr>
+                )}
+                  </>
+                )}
               </tbody>
             </table>
           )}

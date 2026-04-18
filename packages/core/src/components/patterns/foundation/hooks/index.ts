@@ -17,6 +17,15 @@ export type { UseFormBuilderOptions, UseFormBuilderReturn } from './useFormBuild
 export { useFilterPanel } from './useFilterPanel';
 export type { UseFilterPanelOptions, UseFilterPanelReturn } from './useFilterPanel';
 
+export { useInlineEditing } from './useInlineEditing';
+export type { UseInlineEditingOptions, UseInlineEditingReturn } from './useInlineEditing';
+
+export { useVirtualScroll } from '../../../patterns/data/data-table/useVirtualScroll';
+export type { UseVirtualScrollOptions, UseVirtualScrollReturn } from '../../../patterns/data/data-table/useVirtualScroll';
+
+export { useGroupedData } from '../../../patterns/data/data-table/useGroupedData';
+export type { GroupedSection } from '../../../patterns/data/data-table/useGroupedData';
+
 // Column Builders
 export { column, columns, actionsColumn } from './columns';
 
