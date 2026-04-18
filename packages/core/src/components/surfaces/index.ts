@@ -77,6 +77,29 @@ export { resolvePosture, toBreakpoint } from './foundation/contracts/adaptive';
 export { useAdaptivePosture } from './foundation/hooks/useAdaptivePosture';
 export type { UseAdaptivePostureResult } from './foundation/hooks/useAdaptivePosture';
 
+// Foundation: surface lifecycle state machine hook
+export { useSurfaceState } from './foundation/hooks/useSurfaceState';
+export type {
+  SurfaceState,
+  SurfaceStateRenderConfig,
+  UseSurfaceStateOptions,
+  UseSurfaceStateReturn,
+} from './foundation/hooks/useSurfaceState';
+
+// Foundation: profile defaults + per-surface override hook
+export {
+  useSurfaceProfileDefaults,
+  normalizeSurfaceDensity,
+  resolveListCardMinWidth,
+  resolveSurfaceTabsType,
+} from './foundation/profile-defaults';
+export type {
+  ResolvedSurfaceProfileDefaults,
+  SurfaceDensity,
+  SurfaceSectionSpacing,
+} from './foundation/profile-defaults';
+export { useSurfaceProfileDefaultsWithOverrides } from './foundation/hooks/useSurfaceProfileDefaultsWithOverrides';
+
 // -- Layout: page shells, headers, sidebars --
 export * from './layout';
 

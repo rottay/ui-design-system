@@ -135,3 +135,24 @@ export function SurfaceErrorState({
     </Card>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Extended state components for the surface lifecycle state machine.
+// Re-exported from `surface-states.tsx` for barrel convenience.
+// ---------------------------------------------------------------------------
+export {
+  SurfaceLoadingSkeleton,
+  SurfaceEmptyStateCard,
+  SurfaceErrorStateCard,
+  SurfaceStaleBanner,
+  SurfaceOfflineBanner,
+} from './surface-states';
+
+export type {
+  SurfaceLoadingSkeletonProps,
+  SurfaceEmptyStateActionConfig,
+  SurfaceEmptyStateCardProps,
+  SurfaceErrorStateCardProps,
+  SurfaceStaleBannerProps,
+  SurfaceOfflineBannerProps,
+} from './surface-states';

@@ -62,7 +62,147 @@ export function resolveSurfacePermission(
     return true;
   }
 
+  // When cascade rules are defined, expand granted permissions before checking.
+  if (permissions.cascadeRules) {
+    const expanded = expandCascadedPermissions(permissions.granted, permissions.cascadeRules);
+
+    return expanded.has(permissionRule.permission);
+  }
+
   return permissions.granted?.includes(permissionRule.permission) ?? false;
+}
+
+// ---------------------------------------------------------------------------
+// Permission cascade + row-level helpers (Wave 5, section 5)
+// ---------------------------------------------------------------------------
+
+/**
+ * Expand granted permissions using cascade rules.
+ * Returns a new Set containing all explicitly granted + implied permissions.
+ *
+ * Example: granted=['users:delete'], cascadeRules={'users:delete':['users:edit','users:view']}
+ * Result: Set{'users:delete','users:edit','users:view'}
+ */
+export function expandCascadedPermissions(
+  granted: string[] | undefined,
+  cascadeRules: Record<string, string[]> | undefined
+): Set<string> {
+  const expanded = new Set(granted ?? []);
+
+  if (!cascadeRules) {
+    return expanded;
+  }
+
+  for (const permission of expanded) {
+    const implied = cascadeRules[permission];
+
+    if (implied) {
+      for (const impliedPermission of implied) {
+        expanded.add(impliedPermission);
+      }
+    }
+  }
+
+  return expanded;
+}
+
+/**
+ * Filter row-level actions: combines global permission checks with
+ * per-row evaluation when isRowAllowed is defined.
+ *
+ * Applies the same visibility and permission logic as `filterSurfaceActions`,
+ * then additionally checks `isRowAllowed` for each surviving action.
+ */
+export function filterSurfaceRowActions<TView>(
+  actions: SurfaceAction<TView>[] | undefined,
+  permissions: SurfacePermissionsConfig | undefined,
+  row: TView,
+  rowIndex: number
+): SurfaceAction<TView>[] {
+  // Start with the global action filter (visibility + permission rules).
+  const globallyAllowed = filterSurfaceActions(actions, permissions, row);
+
+  if (!permissions?.isRowAllowed) {
+    return globallyAllowed;
+  }
+
+  return globallyAllowed.filter((action) => {
+    const permissionRule = permissions.actions?.[action.id];
+
+    return permissions.isRowAllowed!({
+      kind: 'action',
+      id: action.id,
+      permission: permissionRule?.permission,
+      row,
+      rowIndex,
+    });
+  });
+}
+
+/**
+ * Check if a specific field is visible for a specific row.
+ * Falls back to global field permission if isRowAllowed is not defined.
+ */
+export function isFieldVisibleForRow<TView>(
+  fieldId: string,
+  permissions: SurfacePermissionsConfig | undefined,
+  row: TView,
+  rowIndex: number
+): boolean {
+  if (!permissions) {
+    return true;
+  }
+
+  // If isRowAllowed is defined, use it for field-level row checks.
+  if (permissions.isRowAllowed) {
+    const permissionRule = permissions.fields?.[fieldId];
+
+    return permissions.isRowAllowed({
+      kind: 'field',
+      id: fieldId,
+      permission: permissionRule?.permission,
+      row,
+      rowIndex,
+    });
+  }
+
+  // Fall back to global field permission.
+  return resolveSurfacePermission(permissions, {
+    kind: 'field',
+    id: fieldId,
+  });
+}
+
+/**
+ * Resolve field access level for a specific row.
+ *
+ * Priority chain:
+ * 1. `resolveFieldAccess` (dynamic per-row field access) -- highest priority
+ * 2. `isRowAllowed` (row-level permission check)
+ * 3. `isAllowed` (global dynamic callback)
+ * 4. Static field rules + granted array
+ *
+ * Returns 'visible' | 'readonly' | 'hidden'.
+ */
+export function resolveFieldAccessForRow<TView>(
+  fieldId: string,
+  permissions: SurfacePermissionsConfig | undefined,
+  row: TView,
+  rowIndex: number
+): 'visible' | 'readonly' | 'hidden' {
+  if (!permissions) {
+    return 'visible';
+  }
+
+  // 1. Dynamic per-row field access has highest priority.
+  if (permissions.resolveFieldAccess) {
+    return permissions.resolveFieldAccess({ fieldId, row, rowIndex });
+  }
+
+  // 2-4. Fall back to boolean visibility check.
+  const isVisible = isFieldVisibleForRow(fieldId, permissions, row, rowIndex);
+
+  return isVisible ? 'visible' : 'hidden';
 }
 
 /** Filter visible columns before they reach table-like patterns. */

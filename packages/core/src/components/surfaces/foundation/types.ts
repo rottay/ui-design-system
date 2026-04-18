@@ -181,6 +181,45 @@ export interface SurfacePermissionsConfig {
     id: string;
     permission?: string;
   }) => boolean;
+
+  /**
+   * Row-level permission evaluation. When provided, the surface checks
+   * whether the current user can perform a specific action on a specific row.
+   *
+   * This enables "can edit only own records" patterns without coupling
+   * the DS to any specific RBAC implementation.
+   */
+  isRowAllowed?: <T>(input: {
+    kind: 'action' | 'field';
+    id: string;
+    permission?: string;
+    row: T;
+    rowIndex: number;
+  }) => boolean;
+
+  /**
+   * Permission cascade rules. Maps a permission to the permissions it implies.
+   *
+   * Cascade chain example: delete -> edit -> view.
+   * If a user has 'users:delete' granted, they implicitly have 'users:edit'
+   * and 'users:view' as well.
+   *
+   * Apps opt in by providing a cascadeRules map.
+   * Example: { 'users:delete': ['users:edit', 'users:view'] }
+   */
+  cascadeRules?: Record<string, string[]>;
+
+  /**
+   * Dynamic field-level permissions evaluated per row.
+   * When provided, overrides static `fields` rules for the given row.
+   *
+   * Returns: 'visible' (read-write), 'readonly' (read-only), 'hidden' (not rendered).
+   */
+  resolveFieldAccess?: <T>(input: {
+    fieldId: string;
+    row: T;
+    rowIndex: number;
+  }) => 'visible' | 'readonly' | 'hidden';
 }
 
 /**
@@ -335,6 +374,9 @@ export interface ListSurfaceVisualConfig {
   onColumnResize?: (columnKey: string, width: number) => void;
   /** Callback when visible columns change (e.g., from a column settings panel). */
   onColumnVisibilityChange?: (visibleKeys: string[]) => void;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for list chrome, empty states, and custom renderers. */
@@ -470,6 +512,9 @@ export interface DashboardSurfaceVisualConfig {
   mobileSectionsColumns?: GridColumns;
   /** Stack sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for dashboard page chrome and content sections. */
@@ -575,6 +620,9 @@ export interface DetailSurfaceVisualConfig {
   sidebarWidth?: number | string;
   /** Move the sidebar content below the main detail content on mobile. Defaults to `true`. */
   collapseSidebarOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /**
@@ -620,6 +668,9 @@ export interface FormSurfaceVisualConfig {
   hideAsideOnMobile?: boolean;
   /** Keep the submit/cancel action cluster visible near the bottom on mobile. */
   mobileActionsSticky?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for form page chrome, descriptions, and field rendering. */
@@ -742,6 +793,9 @@ export interface WizardSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Use a compact step indicator on mobile (numbers only, no labels). */
   compactStepsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for wizard chrome, step-aware aside/footer, and error display. */
@@ -812,6 +866,9 @@ export interface HeaderSurfaceVisualConfig {
   compactOnMobile?: boolean;
   /** Hide secondary (non-primary) actions on mobile to reduce clutter. */
   hideSecondaryActionsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for header page chrome, description, metadata, and tab content. */
@@ -873,6 +930,9 @@ export interface SidebarSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Automatically collapse the sidebar on mobile viewports. */
   collapseOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for the sidebar, content area, header, footer, and aside. */
@@ -935,6 +995,9 @@ export interface DetailFormSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Hide the aside/summary panel on mobile to focus on the form. */
   hideAsideOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for detail-form chrome, summary panel, and error display. */
@@ -994,6 +1057,9 @@ export interface VisualizationSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
   compactChartsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for visualization chrome and introductory content. */
@@ -1068,6 +1134,9 @@ export interface SearchSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Keep the search input sticky at the top on mobile. */
   stickySearchOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for search input, result rendering, and empty states. */
@@ -1144,6 +1213,9 @@ export interface EditorSurfaceVisualConfig {
   hideToolbarOnMobile?: boolean;
   /** Use a compact single-row toolbar on mobile. */
   compactToolbarOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for editor chrome, toolbar, preview panel, and status bar. */
@@ -1250,6 +1322,9 @@ export interface OperationalSurfaceVisualConfig {
   hideSecondaryPanelOnMobile?: boolean;
   /** Stack the dashboard-style sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for operational chrome, panels, and dashboard sections. */
@@ -1334,6 +1409,9 @@ export interface MediaSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Maximum number of gallery columns on mobile. */
   mobileColumnsLimit?: number;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for media rendering: grid items, preview, and details panel. */
@@ -1424,6 +1502,9 @@ export interface ChatSurfaceVisualConfig {
   hideListOnMobile?: boolean;
   /** Keep the message composer input sticky at the bottom on mobile. */
   stickyInputOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for chat chrome, message rendering, and composer placeholder. */
@@ -1489,6 +1570,9 @@ export interface SchedulerSurfaceVisualConfig {
   mobileView?: 'list' | 'day' | 'week' | 'month';
   /** Hide the timeline sidebar on mobile. */
   hideTimelineOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for scheduler chrome, event rendering, and sidebar. */
@@ -1579,6 +1663,9 @@ export interface CompareSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Maximum number of items to compare side-by-side on mobile. */
   mobileCompareLimit?: number;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for comparison page chrome, intro text, and footer. */
@@ -1628,6 +1715,9 @@ export interface AuthSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Use a compact form layout on mobile (reduce spacing and padding). */
   compactFormOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for auth pages: form, hero image, legal text, and top bar. */
@@ -1682,6 +1772,9 @@ export interface MarketingSurfaceVisualConfig {
   heroPosition?: 'start' | 'end';
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /**
@@ -1732,6 +1825,9 @@ export interface OnboardingSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Hide the hero illustration on mobile to save vertical space. */
   hideIllustrationOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for onboarding chrome, hero, and progress checklist. */
@@ -1778,6 +1874,9 @@ export interface EmptyStateSurfaceVisualConfig {
   compactOnMobile?: boolean;
   /** Hide the illustration graphic on mobile. Set to false to keep it visible. */
   hideIllustrationOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation for empty-state: title, description, icon, and optional custom content. */
@@ -1823,6 +1922,9 @@ export interface SettingsSurfaceVisualConfig {
   stackOnTablet?: boolean;
   /** Collapse the settings sidebar navigation on mobile. */
   collapseSidebarOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for settings chrome, intro text, and optional sidebar. */
@@ -1905,6 +2007,9 @@ export interface AuditSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Use compact audit entries on mobile (fewer visible columns). */
   compactEntriesOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for audit log chrome and custom entry rendering. */
@@ -1993,6 +2098,9 @@ export interface BillingSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Collapse the billing sidebar on mobile. */
   collapseSidebarOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for billing chrome and custom plan rendering. */
@@ -2061,6 +2169,9 @@ export interface ProfileSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Collapse the profile sidebar navigation on mobile. */
   collapseSidebarOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for profile chrome, avatar, and header content. */
@@ -2135,6 +2246,9 @@ export interface NotificationSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Use compact notification items on mobile (smaller avatars, shorter text). */
   compactItemsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for notification chrome and empty state. */
@@ -2226,6 +2340,9 @@ export interface ImportExportSurfaceVisualConfig {
   maxWidth?: number | string;
   /** Stack import/export sections vertically on mobile. */
   stackOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for import/export chrome and empty state. */
@@ -2315,6 +2432,9 @@ export interface ReportSurfaceVisualConfig {
   stackSectionsOnMobile?: boolean;
   /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
   compactChartsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for report chrome, chart rendering, and empty state. */
@@ -2389,6 +2509,9 @@ export interface TeamSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Default view mode on mobile ('cards' or 'table'). */
   mobileDefaultView?: 'cards' | 'table';
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for team chrome, empty state, and custom member rendering. */
@@ -2471,6 +2594,9 @@ export interface IntegrationSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Use compact card rendering for integration items on mobile. */
   compactCardsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for integration chrome and empty state. */
@@ -2553,6 +2679,9 @@ export interface KanbanSurfaceVisualConfig {
   mobileColumnsLimit?: number;
   /** Stack columns vertically on mobile instead of horizontal scroll. */
   stackColumnsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for kanban chrome, card rendering, and column headers. */
@@ -2627,6 +2756,9 @@ export interface ActivitySurfaceVisualConfig {
   compactEntriesOnMobile?: boolean;
   /** Stack activity feed layout vertically on mobile. */
   stackOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for activity chrome and custom activity rendering. */
@@ -2701,6 +2833,9 @@ export interface FileBrowserSurfaceVisualConfig {
   mobileView?: 'grid' | 'list';
   /** Stack file browser layout vertically on mobile (breadcrumb + list). */
   stackOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for file browser chrome and custom file icon rendering. */
@@ -2783,6 +2918,9 @@ export interface PricingSurfaceVisualConfig {
   stackOnMobile?: boolean;
   /** Use compact column rendering on mobile (reduced feature rows, smaller text). */
   compactColumnsOnMobile?: boolean;
+
+  /** Override profile-level defaults for this specific surface instance. */
+  profileOverrides?: SurfaceVisualOverrides;
 }
 
 /** Presentation slots for pricing chrome, intro, footer, and custom plan headers. */
@@ -2820,4 +2958,35 @@ export interface PricingSurfaceConfig {
   presentation: PricingSurfacePresentationConfig;
   behavior: PricingSurfaceBehaviorConfig;
   permissions?: SurfacePermissionsConfig;
+}
+
+// ---------------------------------------------------------------------------
+// Shared visual overrides (Wave 5, section 4)
+// ---------------------------------------------------------------------------
+
+/**
+ * Visual overrides that any surface config can provide to override
+ * profile-level defaults for that specific surface instance.
+ *
+ * When present, these values take precedence over the product profile
+ * and personality token defaults resolved by `useSurfaceProfileDefaults()`.
+ *
+ * Precedence chain: surface visual overrides > personality tokens > product profile > fallback.
+ */
+export interface SurfaceVisualOverrides {
+  density?: 'compact' | 'comfortable' | 'spacious';
+  cardVariant?: 'outlined' | 'elevated' | 'filled' | 'ghost';
+  sectionSpacing?: 'sm' | 'md' | 'lg';
+  headerWeight?: 'lighter' | 'normal' | 'heavier';
+  animateEntrance?: boolean;
+  entranceStyle?: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
+  entranceDuration?: number;
+  staggerDelay?: number;
+  accentPosition?: 'top' | 'left' | 'none';
+  badgeShape?: 'rounded' | 'pill' | 'square';
+  labelStyle?: 'uppercase' | 'sentence' | 'capitalize';
+  countUpEnabled?: boolean;
+  pulseSpeed?: 'none' | 'slow' | 'normal' | 'fast';
+  accentBarThickness?: number;
+  accentBarStyle?: 'solid' | 'gradient' | 'animated';
 }
