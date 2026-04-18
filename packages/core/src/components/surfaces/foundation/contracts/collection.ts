@@ -294,6 +294,15 @@ export interface WorkspacePreviewRailConfig<T> {
   enabled: boolean;
   width?: string;
   render?: (item: T) => ReactNode;
+  /** Declarative mobile navigation when pane is hidden. */
+  mobileNavigation?: {
+    /** Enable mobile auto-routing. Default: false. */
+    enabled: boolean;
+    /** URL builder from item. When pane='hidden', clicking a row navigates here instead of opening panel. */
+    href?: (item: T) => string;
+    /** Custom click handler for mobile. Alternative to href. */
+    onClick?: (item: T) => void;
+  };
 }
 
 /** Row focus configuration (distinct from selection). */

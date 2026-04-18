@@ -25,6 +25,7 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect, type ReactNode, type CSSProperties } from 'react';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
+import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 /* -- DS Primitive imports ------------------------------------------------- */
 import { Input } from '../../../../primitives/inputs/Input';
@@ -115,7 +116,17 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     loading,
     className,
     style,
+    autoAdaptive = false,
   } = props;
+
+  /* -- Auto-adaptive layout override ------------------------------------ */
+
+  const { isMobile, isTablet } = useBreakpoints();
+
+  const adaptedLayout = autoAdaptive && isMobile && layout === 'grid' ? 'vertical' : layout;
+  const adaptedColumns = autoAdaptive
+    ? (isMobile ? 1 : isTablet ? Math.min(columns, 2) : columns)
+    : columns;
 
   /* -- State ------------------------------------------------------------ */
 
@@ -634,14 +645,14 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   /* -- Step field distribution ------------------------------------------ */
 
   const stepFields = useMemo(() => {
-    if (layout !== 'steps' || !stepLabels) return [visibleFields];
+    if (adaptedLayout !== 'steps' || !stepLabels) return [visibleFields];
     const perStep = Math.ceil(visibleFields.length / stepLabels.length);
     const groups: FieldDef[][] = [];
     for (let i = 0; i < stepLabels.length; i++) {
       groups.push(visibleFields.slice(i * perStep, (i + 1) * perStep));
     }
     return groups;
-  }, [layout, stepLabels, visibleFields]);
+  }, [adaptedLayout, stepLabels, visibleFields]);
 
   const handleStepChange = (step: number) => {
     if (controlledStep === undefined) setInternalStep(step);
@@ -656,7 +667,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
    * Otherwise all fields belong to a default unnamed section.
    */
   const groupedSections = useMemo(() => {
-    const fieldsToGroup = layout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
+    const fieldsToGroup = adaptedLayout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
     const sections: { key: string; title?: string; description?: string; fields: FieldDef[] }[] = [];
     let current: { key: string; title?: string; description?: string; fields: FieldDef[] } = {
       key: '__default',
@@ -680,7 +691,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     if (current.fields.length > 0 || current.title) sections.push(current);
 
     return sections;
-  }, [layout, stepFields, currentStep, visibleFields]);
+  }, [adaptedLayout, stepFields, currentStep, visibleFields]);
 
   /* -- Field renderer --------------------------------------------------- */
 
@@ -695,7 +706,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         key={field.name}
         style={{
           width: '100%',
-          ...(layout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
+          ...(adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
         }}
       >
         {showLabel ? (
@@ -735,12 +746,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   const renderFields = (fieldsToRender: FieldDef[]) => {
     const fieldElements = fieldsToRender.map(renderFormField);
 
-    if (layout === 'grid') {
+    if (adaptedLayout === 'grid') {
       return (
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`,
             gap: '20px',
           }}
         >
@@ -749,7 +760,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       );
     }
 
-    if (layout === 'horizontal') {
+    if (adaptedLayout === 'horizontal') {
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: gapStr }}>
           {fieldElements}
@@ -803,7 +814,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       )}
 
       {/* Wizard step indicator */}
-      {layout === 'steps' && stepLabels && (
+      {adaptedLayout === 'steps' && stepLabels && (
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 0, marginBottom: 32 }}>
           {stepLabels.map((label, i) => {
             const isActive = i === currentStep;
@@ -961,7 +972,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       })}
 
       {/* Wizard step navigation */}
-      {layout === 'steps' && stepLabels && (
+      {adaptedLayout === 'steps' && stepLabels && (
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',

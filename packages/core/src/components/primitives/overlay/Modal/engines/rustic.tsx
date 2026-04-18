@@ -11,6 +11,10 @@
  * </Modal>
  * ```
  *
+ * Wave 4: Adaptive fullscreen on mobile -- modals automatically expand to
+ * fill the viewport on screens < 640px for a native app-like experience.
+ * Controlled via the `adaptiveFullscreen` prop (default: true).
+ *
  * @module Modal/Engines/Rustic
  * @category Overlay
  * @package @rottay/design-system
@@ -25,6 +29,7 @@ import { Portal } from '../utils/Portal';
 import { Overlay } from '../utils/Overlay';
 import { FocusTrap } from '../utils/FocusTrap';
 import { useTranslation } from '../../../../../i18n';
+import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 /**
  * Rustic engine implementation of Modal using vanilla HTML/CSS.
@@ -40,6 +45,7 @@ import { useTranslation } from '../../../../../i18n';
  */
 export default function RusticModal(props: ModalProps): React.ReactElement | null {
   const { t } = useTranslation('components');
+  const { isMobile } = useBreakpoints();
 
   const {
     open,
@@ -57,6 +63,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     blurBackdrop = MODAL_DEFAULTS.blurBackdrop,
     placement = MODAL_DEFAULTS.placement,
     fullScreen = false,
+    adaptiveFullscreen = MODAL_DEFAULTS.adaptiveFullscreen,
     onOpen,
     onOpenChange,
     preventScroll = MODAL_DEFAULTS.preventScroll,
@@ -69,6 +76,12 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     className = '',
     style = {},
   } = props;
+
+  /** Whether the modal should render as fullscreen on the current viewport. */
+  const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
+
+  /** Whether the panel should behave as fullscreen (explicit or adaptive). */
+  const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
 
   // Handle ESC key
   const handleEscKey = useCallback(
@@ -130,6 +143,9 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
 
   // Placement affects vertical alignment within the full-screen flex container
   const getPlacementStyles = (): React.CSSProperties => {
+    if (isAdaptiveFullscreen) {
+      return { alignItems: 'stretch' };
+    }
     switch (placement) {
       case 'top':
         return { alignItems: 'flex-start', paddingTop: '10vh' };
@@ -144,33 +160,39 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
   // Modal container styles
   const modalContainerStyle: React.CSSProperties = {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: isAdaptiveFullscreen ? 'stretch' : 'center',
     width: '100%',
     height: '100%',
-    paddingTop: '20px',
-    paddingRight: '20px',
-    paddingBottom: '20px',
-    paddingLeft: '20px',
+    ...(isAdaptiveFullscreen
+      ? { padding: 0 }
+      : {
+          paddingTop: '20px',
+          paddingRight: '20px',
+          paddingBottom: '20px',
+          paddingLeft: '20px',
+        }),
     boxSizing: 'border-box',
     ...getPlacementStyles(),
   };
 
   // Entrance animation: scale(0.95)->scale(1) + opacity(0)->opacity(1) driven by CSS transition
   const modalStyle: React.CSSProperties = {
-    position: 'relative',
+    position: isAdaptiveFullscreen ? 'fixed' : 'relative',
+    ...(isAdaptiveFullscreen ? { top: 0, left: 0 } : {}),
     display: 'flex',
     flexDirection: 'column',
-    width: fullScreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md,
-    maxWidth: fullScreen ? '100vw' : '90vw',
-    maxHeight: fullScreen ? '100vh' : MAX_HEIGHT_MAP[size] || MAX_HEIGHT_MAP.md,
+    width: effectiveFullscreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md,
+    height: isAdaptiveFullscreen ? '100dvh' : undefined,
+    maxWidth: effectiveFullscreen ? 'none' : '90vw',
+    maxHeight: effectiveFullscreen ? 'none' : MAX_HEIGHT_MAP[size] || MAX_HEIGHT_MAP.md,
     backgroundColor: 'var(--ds-color-bg-elevated)',
-    borderRadius: fullScreen ? '0' : RADIUS_MAP[radius] || RADIUS_MAP.lg,
-    boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-shadow-2xl))' : 'none',
+    borderRadius: effectiveFullscreen ? '0' : RADIUS_MAP[radius] || RADIUS_MAP.lg,
+    boxShadow: isAdaptiveFullscreen ? 'none' : shadow ? 'var(--ds-modal-shadow, var(--ds-shadow-2xl))' : 'none',
     overflow: 'hidden',
     cursor: 'default',
-    transform: open ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-8px)',
-    opacity: open ? 1 : 0,
-    transition: disableAnimation
+    transform: isAdaptiveFullscreen ? undefined : open ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-8px)',
+    opacity: isAdaptiveFullscreen ? 1 : open ? 1 : 0,
+    transition: isAdaptiveFullscreen || disableAnimation
       ? 'none'
       : 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
     ...style,

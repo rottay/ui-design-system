@@ -41,6 +41,7 @@ import {
 } from 'antd';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
+import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
@@ -79,7 +80,17 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
     loading,
     className,
     style,
+    autoAdaptive = false,
   } = props;
+
+  /* -- Auto-adaptive layout override ------------------------------------ */
+
+  const { isMobile, isTablet } = useBreakpoints();
+
+  const adaptedLayout = autoAdaptive && isMobile && layout === 'grid' ? 'vertical' : layout;
+  const adaptedColumns = autoAdaptive
+    ? (isMobile ? 1 : isTablet ? Math.min(columns, 2) : columns)
+    : columns;
 
   // Lazy initializer merges field-level defaults with caller-supplied initialValues.
   // initialValues wins over defaultValue so server-loaded data takes precedence.
@@ -237,14 +248,14 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
   // not provided. This auto-grouping lets consumers add a wizard layout by just
   // supplying stepLabels without restructuring their field array.
   const stepFields = useMemo(() => {
-    if (layout !== 'steps' || !stepLabels) return [visibleFields];
+    if (adaptedLayout !== 'steps' || !stepLabels) return [visibleFields];
     const perStep = Math.ceil(visibleFields.length / stepLabels.length);
     const groups: FieldDef[][] = [];
     for (let i = 0; i < stepLabels.length; i++) {
       groups.push(visibleFields.slice(i * perStep, (i + 1) * perStep));
     }
     return groups;
-  }, [layout, stepLabels, visibleFields]);
+  }, [adaptedLayout, stepLabels, visibleFields]);
 
   // renderField is the consumer's escape hatch: it receives the default control,
   // the field definition, and current value so it can wrap, replace, or augment.
@@ -264,7 +275,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
         ) : undefined}
         help={error || field.description}
         validateStatus={error ? 'error' : undefined}
-        style={layout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : undefined}
+        style={adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : undefined}
       >
         {content}
       </Form.Item>
@@ -273,18 +284,18 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
 
   // Ant Design Form accepts 'horizontal' or 'vertical'; grid and steps
   // layouts use vertical item stacking and handle their own wrapping.
-  const formLayout = layout === 'horizontal' ? 'horizontal' : 'vertical';
+  const formLayout = adaptedLayout === 'horizontal' ? 'horizontal' : 'vertical';
 
   // In step mode, only the current step's fields are rendered.
-  const fieldsToRender = layout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
+  const fieldsToRender = adaptedLayout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
 
   const fieldElements = fieldsToRender.map(renderFormField);
 
   // Grid layout wraps field elements in a CSS grid container; all other
   // layouts rely on Ant Form's built-in stacking behaviour.
   const wrappedFields =
-    layout === 'grid' ? (
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap: typeof gap === 'number' ? `${gap}px` : gap }}>
+    adaptedLayout === 'grid' ? (
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`, gap: typeof gap === 'number' ? `${gap}px` : gap }}>
         {fieldElements}
       </div>
     ) : (
@@ -305,7 +316,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
 
       {/* Ant Design Steps component renders clickable step indicators.
           It is only mounted in 'steps' layout mode. */}
-      {layout === 'steps' && stepLabels && (
+      {adaptedLayout === 'steps' && stepLabels && (
         <Steps
           current={currentStep}
           onChange={handleStepChange}
@@ -320,7 +331,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
         {wrappedFields}
       </Form>
 
-      {layout === 'steps' && stepLabels && (
+      {adaptedLayout === 'steps' && stepLabels && (
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16 }}>
           <Button disabled={currentStep === 0} onClick={() => handleStepChange(currentStep - 1)}>
             Previous

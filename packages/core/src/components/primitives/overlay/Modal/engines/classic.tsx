@@ -11,6 +11,10 @@
  * </Modal>
  * ```
  *
+ * Wave 4: Adaptive fullscreen on mobile -- modals automatically expand to
+ * fill the viewport on screens < 640px for a native app-like experience.
+ * Controlled via the `adaptiveFullscreen` prop (default: true).
+ *
  * @module Modal/Engines/Classic
  * @category Overlay
  * @package @rottay/design-system
@@ -22,6 +26,7 @@ import React from 'react';
 import { Modal as AntModal } from 'antd';
 import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP } from '../Modal.types';
+import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 /**
  * Classic engine implementation of Modal using Ant Design.
@@ -36,6 +41,8 @@ import { MODAL_DEFAULTS, SIZE_MAP } from '../Modal.types';
  * @returns Ant Design Modal element, or null when closed
  */
 export default function ClassicModal(props: ModalProps): React.ReactElement | null {
+  const { isMobile } = useBreakpoints();
+
   const {
     open,
     onClose,
@@ -49,6 +56,7 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
     showBackdrop = MODAL_DEFAULTS.showBackdrop,
     placement = MODAL_DEFAULTS.placement,
     fullScreen = false,
+    adaptiveFullscreen = MODAL_DEFAULTS.adaptiveFullscreen,
     preventScroll: _preventScroll = MODAL_DEFAULTS.preventScroll,
     zIndex = MODAL_DEFAULTS.zIndex,
     disableAnimation = MODAL_DEFAULTS.disableAnimation,
@@ -56,31 +64,38 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
     style = {},
   } = props;
 
+  /** Whether the modal should render as fullscreen on the current viewport. */
+  const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
+
+  /** Whether the panel should behave as fullscreen (explicit or adaptive). */
+  const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
+
   // Fullscreen bypasses the SIZE_MAP entirely to fill the viewport
-  const width = fullScreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md;
+  const width = effectiveFullscreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md;
 
   // Ant Design uses a boolean `centered` prop instead of a placement string
-  const centered = placement === 'center';
+  const centered = isAdaptiveFullscreen ? false : placement === 'center';
 
   const handleCancel = () => {
     onClose();
   };
 
   // Fullscreen needs margin/padding overrides to eliminate default Ant spacing
-  const modalStyle: React.CSSProperties = fullScreen
+  const modalStyle: React.CSSProperties = effectiveFullscreen
     ? {
         top: 0,
         margin: 0,
-        maxWidth: '100vw',
-        height: '100vh',
+        maxWidth: 'none',
+        height: isAdaptiveFullscreen ? '100dvh' : '100vh',
         paddingBottom: 0,
+        borderRadius: 0,
         ...style,
       }
     : style;
 
-  const bodyStyle: React.CSSProperties = fullScreen
+  const bodyStyle: React.CSSProperties = effectiveFullscreen
     ? {
-        height: 'calc(100vh - 110px)',
+        height: isAdaptiveFullscreen ? 'calc(100dvh - 110px)' : 'calc(100vh - 110px)',
         overflow: 'auto',
       }
     : {};

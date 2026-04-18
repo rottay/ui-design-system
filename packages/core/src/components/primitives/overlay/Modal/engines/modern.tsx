@@ -8,6 +8,10 @@
  * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
  * border, and motion tokens with Drawer and Sheet modern engines.
  *
+ * Wave 4: Adaptive fullscreen on mobile -- modals automatically expand to
+ * fill the viewport on screens < 640px for a native app-like experience.
+ * Controlled via the `adaptiveFullscreen` prop (default: true).
+ *
  * @module Modal/Engines/Modern
  * @category Overlay
  * @package @rottay/design-system
@@ -20,6 +24,7 @@ import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../Modal.types';
 import { Portal } from '../utils/Portal';
 import { useTranslation } from '../../../../../i18n';
+import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 // ============================================================================
 // Constants
@@ -123,6 +128,8 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
 export default function ModernModal(props: ModalProps): React.ReactElement | null {
   const { t } = useTranslation('components');
 
+  const { isMobile } = useBreakpoints();
+
   const {
     open,
     onClose,
@@ -139,6 +146,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     blurBackdrop = MODAL_DEFAULTS.blurBackdrop,
     placement = MODAL_DEFAULTS.placement,
     fullScreen = false,
+    adaptiveFullscreen = MODAL_DEFAULTS.adaptiveFullscreen,
     preventScroll = MODAL_DEFAULTS.preventScroll,
     radius = MODAL_DEFAULTS.radius,
     shadow = MODAL_DEFAULTS.shadow,
@@ -149,6 +157,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     className = '',
     style = {},
   } = props;
+
+  /** Whether the modal should render as fullscreen on the current viewport. */
+  const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -215,11 +226,14 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   // -- derived values ---------------------------------------------------------
 
-  const panelWidth = fullScreen
+  /** Whether the panel should behave as fullscreen (explicit or adaptive). */
+  const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
+
+  const panelWidth = effectiveFullscreen
     ? '100vw'
     : PREMIUM_SIZE_MAP[size] || SIZE_MAP[size] || PREMIUM_SIZE_MAP.md;
 
-  const panelRadius = fullScreen
+  const panelRadius = effectiveFullscreen
     ? '0'
     : RADIUS_MAP[radius] || 'var(--ds-radius-lg)';
 
@@ -250,10 +264,12 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           border: 'none',
           backgroundColor: 'transparent',
           display: 'flex',
-          alignItems: placement === 'top' ? 'flex-start' : placement === 'bottom' ? 'flex-end' : 'center',
-          justifyContent: 'center',
-          paddingTop: placement === 'top' ? '10vh' : undefined,
-          paddingBottom: placement === 'bottom' ? '10vh' : undefined,
+          alignItems: isAdaptiveFullscreen
+            ? 'stretch'
+            : placement === 'top' ? 'flex-start' : placement === 'bottom' ? 'flex-end' : 'center',
+          justifyContent: isAdaptiveFullscreen ? 'stretch' : 'center',
+          paddingTop: isAdaptiveFullscreen ? undefined : placement === 'top' ? '10vh' : undefined,
+          paddingBottom: isAdaptiveFullscreen ? undefined : placement === 'bottom' ? '10vh' : undefined,
           zIndex,
         }}
         onClick={handleBackdropClick}
@@ -279,18 +295,20 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           role="document"
           onClick={(e) => e.stopPropagation()}
           style={{
-            position: 'relative',
+            position: isAdaptiveFullscreen ? 'fixed' : 'relative',
+            ...(isAdaptiveFullscreen ? { top: 0, left: 0 } : {}),
             width: panelWidth,
-            maxWidth: fullScreen ? '100vw' : '90vw',
-            maxHeight: fullScreen ? '100vh' : '85vh',
+            height: isAdaptiveFullscreen ? '100dvh' : undefined,
+            maxWidth: effectiveFullscreen ? 'none' : '90vw',
+            maxHeight: effectiveFullscreen ? 'none' : '85vh',
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--ds-modal-bg, var(--ds-surface-card))',
             color: 'var(--ds-modal-color, inherit)',
-            border: fullScreen ? 'none' : '1px solid var(--ds-color-border-subtle)',
+            border: effectiveFullscreen ? 'none' : '1px solid var(--ds-color-border-subtle)',
             borderRadius: panelRadius,
-            boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-3))' : 'none',
-            animation: `rottay-modal-enter ${MOTION_DURATION} ${MOTION_EASING}`,
+            boxShadow: isAdaptiveFullscreen ? 'none' : shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-3))' : 'none',
+            animation: isAdaptiveFullscreen ? undefined : `rottay-modal-enter ${MOTION_DURATION} ${MOTION_EASING}`,
             overflow: 'hidden',
             outline: 'none',
             ...style,

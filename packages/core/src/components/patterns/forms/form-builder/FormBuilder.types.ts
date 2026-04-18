@@ -179,4 +179,12 @@ export interface FormBuilderProps extends PatternBaseProps {
    * @param step - The new step index (zero-based).
    */
   onStepChange?: (step: number) => void;
+
+  /**
+   * Auto-adapt layout to screen size. When true, grid layout switches to
+   * vertical on phone, and columns are capped at 2 on tablet. Desktop
+   * uses props as-is.
+   * @default false
+   */
+  autoAdaptive?: boolean;
 }

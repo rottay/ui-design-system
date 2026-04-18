@@ -103,6 +103,18 @@ export interface ModalProps extends BaseComponentProps, EngineAwareProps, WithCh
   fullScreen?: boolean;
 
   /**
+   * When true, automatically renders the modal as fullscreen on mobile
+   * viewports (< 640px): 100vw width, 100dvh height, zero border-radius,
+   * no max-width constraint, and fixed positioning at top-left.
+   *
+   * This provides a native app-like experience on small screens while
+   * keeping the standard centered dialog on tablet/desktop.
+   *
+   * @default true
+   */
+  adaptiveFullscreen?: boolean;
+
+  /**
    * Callback when the modal opens (after animation completes).
    */
   onOpen?: () => void;
@@ -331,6 +343,8 @@ export const MODAL_DEFAULTS = {
   zIndex: 1000,
   /** Whether animations are disabled by default */
   disableAnimation: false,
+  /** Whether adaptive fullscreen on mobile is enabled by default */
+  adaptiveFullscreen: true,
 };
 
 /**

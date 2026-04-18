@@ -265,13 +265,27 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   const handleRowClick = useCallback(
     (item: T, index: number) => {
+      // Mobile navigation: when pane is hidden and mobileNavigation is enabled,
+      // navigate instead of opening the preview rail.
+      const mobileNav = behavior?.previewRail?.mobileNavigation;
+      if (posture.pane === 'hidden' && mobileNav?.enabled) {
+        if (mobileNav.href) {
+          window.location.href = mobileNav.href(item);
+          return;
+        }
+        if (mobileNav.onClick) {
+          mobileNav.onClick(item);
+          return;
+        }
+      }
+
       if (focusEnabled && behavior?.focus?.onFocusChange) {
         const key = resolveKey(item, rowKey);
         behavior.focus.onFocusChange(key === focusedKey ? null : key);
       }
       (onRowClick ?? behavior?.onRowClick)?.(item, index);
     },
-    [focusEnabled, behavior?.focus, behavior?.onRowClick, onRowClick, rowKey, focusedKey],
+    [focusEnabled, behavior?.focus, behavior?.onRowClick, behavior?.previewRail?.mobileNavigation, onRowClick, posture.pane, rowKey, focusedKey],
   );
 
   const handleExport = useMemo(() => {

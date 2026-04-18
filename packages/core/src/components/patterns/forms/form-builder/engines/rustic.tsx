@@ -23,6 +23,7 @@
 import React, { useState, useCallback, useMemo, type ReactNode, type CSSProperties } from 'react';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
+import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 // Personality-driven easing and duration: these reference CSS custom properties
 // so tenant themes can tune animation feel without touching component code.
@@ -228,7 +229,17 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     loading,
     className,
     style,
+    autoAdaptive = false,
   } = props;
+
+  /* -- Auto-adaptive layout override ------------------------------------ */
+
+  const { isMobile, isTablet } = useBreakpoints();
+
+  const adaptedLayout = autoAdaptive && isMobile && layout === 'grid' ? 'vertical' : layout;
+  const adaptedColumns = autoAdaptive
+    ? (isMobile ? 1 : isTablet ? Math.min(columns, 2) : columns)
+    : columns;
 
   // Lazy initializer: field-level defaults are merged first, then overridden
   // by initialValues so server-loaded data always takes precedence.
@@ -492,14 +503,14 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
   // not provided. This auto-grouping lets consumers add a wizard layout by
   // just supplying stepLabels without restructuring their field array.
   const stepFields = useMemo(() => {
-    if (layout !== 'steps' || !stepLabels) return [visibleFields];
+    if (adaptedLayout !== 'steps' || !stepLabels) return [visibleFields];
     const perStep = Math.ceil(visibleFields.length / stepLabels.length);
     const groups: FieldDef[][] = [];
     for (let i = 0; i < stepLabels.length; i++) {
       groups.push(visibleFields.slice(i * perStep, (i + 1) * perStep));
     }
     return groups;
-  }, [layout, stepLabels, visibleFields]);
+  }, [adaptedLayout, stepLabels, visibleFields]);
 
   // Step navigation supports both controlled (parent manages step) and
   // uncontrolled (internal state) modes -- same pattern as value management.
@@ -522,7 +533,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     // Horizontal layout puts label and input side-by-side in a flex row;
     // other layouts stack them vertically.
     const fieldStyle: CSSProperties =
-      layout === 'horizontal'
+      adaptedLayout === 'horizontal'
         ? { display: 'flex', alignItems: 'flex-start', gap: 12 }
         : {};
 
@@ -531,16 +542,16 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         key={field.name}
         style={{
           ...fieldStyle,
-          ...(layout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
+          ...(adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
         }}
       >
         {showLabel && (
-          <label style={{ ...s.label, ...(layout === 'horizontal' ? { minWidth: 140, paddingTop: 8 } : {}) }}>
+          <label style={{ ...s.label, ...(adaptedLayout === 'horizontal' ? { minWidth: 140, paddingTop: 8 } : {}) }}>
             {field.label ?? field.name}
             {showRequired && field.required && <span style={s.required}>*</span>}
           </label>
         )}
-        <div style={layout === 'horizontal' ? { flex: 1 } : undefined}>
+        <div style={adaptedLayout === 'horizontal' ? { flex: 1 } : undefined}>
           {content}
           {field.description && !error && <div style={s.hint}>{field.description}</div>}
           {error && <div style={s.error}>{error}</div>}
@@ -549,15 +560,15 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     );
   };
 
-  const fieldsToRender = layout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
+  const fieldsToRender = adaptedLayout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
   const fieldElements = fieldsToRender.map(renderFormField);
   const gapStr = typeof gap === 'number' ? `${gap}px` : gap;
 
   // Grid mode uses CSS Grid; all other layouts use a vertical flex column.
   // Gap is unified across both strategies so field spacing stays consistent.
   const containerStyle: CSSProperties =
-    layout === 'grid'
-      ? { display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap: gapStr }
+    adaptedLayout === 'grid'
+      ? { display: 'grid', gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`, gap: gapStr }
       : { display: 'flex', flexDirection: 'column', gap: gapStr };
 
   return (
@@ -575,7 +586,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
       {/* Step bar renders a bottom-bordered indicator for each step.
           Steps up to and including the current one are highlighted with
           the primary colour via the `s.stepItem(active)` factory. */}
-      {layout === 'steps' && stepLabels && (
+      {adaptedLayout === 'steps' && stepLabels && (
         <div style={s.stepBar}>
           {stepLabels.map((label, i) => (
             <div
@@ -591,7 +602,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
 
       <div style={containerStyle}>{fieldElements}</div>
 
-      {layout === 'steps' && stepLabels && (
+      {adaptedLayout === 'steps' && stepLabels && (
         <div style={s.navRow}>
           <button type="button" style={s.btn} disabled={currentStep === 0} onClick={() => handleStepChange(currentStep - 1)}>
             Previous
