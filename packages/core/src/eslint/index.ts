@@ -22,6 +22,7 @@
 import { noRawHtml } from './rules/no-raw-html';
 import { noHardcodedColors } from './rules/no-hardcoded-colors';
 import { noDbInComponents } from './rules/no-db-in-components';
+import { noDirectLucide } from './rules/no-direct-lucide';
 
 // ── Plugin object ──────────────────────────────────────────────────
 
@@ -29,6 +30,7 @@ export const rules = {
   'no-raw-html': noRawHtml,
   'no-hardcoded-colors': noHardcodedColors,
   'no-db-in-components': noDbInComponents,
+  'no-direct-lucide': noDirectLucide,
 };
 
 /** Standalone plugin reference (for manual wiring) */
@@ -49,6 +51,7 @@ export const configs = {
       '@rottay/no-raw-html': 'error' as const,
       '@rottay/no-hardcoded-colors': 'error' as const,
       '@rottay/no-db-in-components': 'error' as const,
+      '@rottay/no-direct-lucide': 'warn' as const,
     },
   },
 
@@ -64,6 +67,7 @@ export const configs = {
       '@rottay/no-raw-html': 'off' as const,
       '@rottay/no-hardcoded-colors': ['warn' as const, { allowTailwind: true }],
       '@rottay/no-db-in-components': 'error' as const,
+      '@rottay/no-direct-lucide': 'warn' as const,
     },
   },
 };

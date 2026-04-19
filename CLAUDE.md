@@ -145,6 +145,36 @@ Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated art
 - The brand compiler (`compilers/brand-theme/`) converts BrandTheme to CSS vars and personality tokens.
 - BrandTheme `.ts` files MUST stay in sync with CSS artifacts. If you edit one, update the other.
 
+## Icon System (109 curated icons)
+
+Icons are centralized in the DS via `createIcon()` factory wrapping lucide-react.
+Apps MUST import icons from `@rottay/design-system/icons`, NOT directly from `lucide-react`.
+
+### Import pattern
+```tsx
+// CORRECT
+import { SearchIcon, PlusIcon, CheckIcon } from '@rottay/design-system/icons';
+
+// WRONG - do not import lucide directly
+import { Search, Plus, Check } from 'lucide-react';
+```
+
+### Categories (10)
+navigation, action, status, content, communication, user, data, layout, media, misc
+
+### Token customization
+- `--ds-icon-stroke-width: 1.5` (tenant-overridable for heavier/lighter look)
+- `--ds-icon-{xs|sm|md|lg|xl|2xl}-size` for sizing
+- Color via `currentColor` (inherits from parent text, tenant-aware)
+
+### Adding new icons
+Add one line to the appropriate `src/icons/catalog/{category}.ts`:
+```tsx
+export const NewIcon = createIcon(LucideNew, 'NewIcon');
+```
+
+---
+
 ## Chart System (19 types)
 
 All charts are D3-backed, engine-agnostic, token-aware, personality-driven, and accessible.
