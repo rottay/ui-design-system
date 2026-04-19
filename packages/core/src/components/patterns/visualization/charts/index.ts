@@ -16,8 +16,12 @@ export type {
 export { DEFAULT_COLORS, DEFAULT_MARGIN, DEFAULT_COMPACT_CONFIG } from './Charts.types';
 
 // Hooks
-export { useChartDimensions, useChartPersonality, useChartCompact } from './hooks';
-export type { ChartPersonalityOptions, ResolvedChartPersonality, UseChartCompactOptions, ResolvedChartCompact } from './hooks';
+export { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip, useChartBrush, useChartExport } from './hooks';
+export type { ChartPersonalityOptions, ResolvedChartPersonality, UseChartCompactOptions, ResolvedChartCompact, UseChartTooltipReturn, BrushSelection, UseChartBrushOptions, UseChartBrushReturn, UseChartExportReturn } from './hooks';
+
+// Utils
+export { exportChart } from './utils';
+export type { ChartExportOptions } from './utils';
 
 // Charts
 export { BarChart } from './bar-chart';
@@ -73,3 +77,7 @@ export type { HistogramProps } from './histogram';
 
 export { SankeyChart } from './sankey';
 export type { SankeyChartProps, SankeyNode, SankeyLink } from './sankey';
+
+// Tooltip
+export { ChartTooltip, TooltipValue, TooltipSeries } from './tooltip';
+export type { ChartTooltipProps } from './tooltip';
