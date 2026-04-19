@@ -25,6 +25,7 @@
 import React, { useState, useCallback, useEffect, createContext, useContext } from 'react';
 import type { AppShellProps } from './types';
 import { SHELL_DEFAULTS } from './types';
+import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 
 // Re-export types for barrel consumers
 export type {
@@ -89,19 +90,11 @@ export function AppShell({
 
   // -- Mobile drawer state (independent of desktop collapsed) ---------------
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useBreakpoints();
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mq = window.matchMedia('(max-width: 768px)');
-    const handler = (e: MediaQueryListEvent | MediaQueryList) => {
-      setIsMobile(e.matches);
-      if (e.matches) setMobileOpen(false); // close drawer on resize to mobile
-    };
-    handler(mq);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
+    if (isMobile) setMobileOpen(false);
+  }, [isMobile]);
 
   // Close mobile drawer on route changes (children change)
   useEffect(() => {
@@ -253,6 +246,7 @@ export function AppShell({
             display: 'flex',
             flexDirection: 'column',
             minHeight: '100vh',
+            minWidth: 0,
             width: isMobile ? '100%' : `calc(100dvw - ${activeSidebarWidth}px)`,
           }}
         >
@@ -300,7 +294,7 @@ export function AppShell({
           )}
 
           {/* Content */}
-          <main style={{ flex: 1 }}>
+          <main style={{ flex: 1, minWidth: 0 }}>
             {children}
           </main>
 

@@ -233,6 +233,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
     ].filter(Boolean).join(' ');
 
     const ElementType = Component as ElementType;
+    const renderedChildren = React.Children.toArray(children);
 
     return (
       <>
@@ -249,7 +250,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
             'data-component': 'grid',
             'data-grid-id': needsResponsiveCSS ? gridId : undefined,
           },
-          children
+          renderedChildren
         )}
       </>
     );
@@ -290,6 +291,7 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>(
     ].filter(Boolean).join(' ');
 
     const ElementType = Component as ElementType;
+    const renderedChildren = React.Children.toArray(children);
 
     return React.createElement(
       ElementType,
@@ -299,7 +301,7 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>(
         style: computedStyle,
         'data-component': 'grid-item',
       },
-      children
+      renderedChildren
     );
   }
 );

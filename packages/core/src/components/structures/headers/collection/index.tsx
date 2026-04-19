@@ -23,7 +23,7 @@
  * users, or any specific entity. All copy comes from props.
  */
 
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 import { Keyboard } from 'lucide-react';
 
@@ -86,11 +86,32 @@ export function CollectionHeader({
   quickActions,
   surfaceVariant = 'default',
 }: CollectionHeaderProps) {
+  const [isCompactViewport, setIsCompactViewport] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia('(max-width: 959px)');
+    const syncViewport = () => setIsCompactViewport(mediaQuery.matches);
+    syncViewport();
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', syncViewport);
+      return () => mediaQuery.removeEventListener('change', syncViewport);
+    }
+
+    mediaQuery.addListener(syncViewport);
+    return () => mediaQuery.removeListener(syncViewport);
+  }, []);
+
   const embedded = surfaceVariant === 'embedded';
   const useDisplayTitle = titleTreatment === 'display';
   const useDottedTitle = titleTreatment === 'dotted';
   const useMonoSubtitle = subtitleTreatment === 'mono-technical';
   const editorialTech = layoutVariant === 'editorial-tech';
+  const compactLayout = isCompactViewport;
   const compactMetaItems = metaItems ?? [];
   const inlineMetaItems = metaItemsPlacement === 'inline-start' ? compactMetaItems : [];
   const eyebrowMetaItems = metaItemsPlacement === 'eyebrow-end' ? compactMetaItems : [];
@@ -168,10 +189,14 @@ export function CollectionHeader({
         overflow: 'hidden',
         padding: embedded
           ? editorialTech
-            ? 'var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px) var(--ds-spacing-1, 4px)'
+            ? compactLayout
+              ? 'var(--ds-spacing-4, 14px) var(--ds-spacing-4, 14px) var(--ds-spacing-1, 4px)'
+              : 'var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px) var(--ds-spacing-1, 4px)'
             : 'var(--ds-spacing-5, 18px) var(--ds-spacing-5, 18px) var(--ds-spacing-2, 10px)'
           : editorialTech
-            ? 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)'
+            ? compactLayout
+              ? 'var(--ds-spacing-4, 14px) var(--ds-spacing-4, 14px) var(--ds-spacing-2, 10px)'
+              : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)'
             : 'var(--ds-spacing-5, 18px) var(--ds-spacing-5, 18px) var(--ds-spacing-3, 14px)',
         background: embedded ? 'transparent' : 'var(--ds-surface-card)',
         borderBottom: embedded ? 'none' : '1px solid var(--ds-color-border-subtle)',
@@ -180,15 +205,15 @@ export function CollectionHeader({
       <Flex
         align="start"
         justify="between"
-        gap={editorialTech ? 24 : 18}
+        gap={compactLayout ? 14 : editorialTech ? 24 : 18}
         wrap="wrap"
         style={{ position: 'relative' }}
       >
         <Box
           style={{
             minWidth: 0,
-            flex: '1 1 560px',
-            maxWidth: editorialTech ? 840 : 820,
+            flex: compactLayout ? '1 1 100%' : '1 1 560px',
+            maxWidth: compactLayout ? '100%' : editorialTech ? 840 : 820,
             display: 'grid',
             gap: editorialTech ? 0 : undefined,
           }}
@@ -202,28 +227,42 @@ export function CollectionHeader({
               fontSize: useDisplayTitle
                 ? 'clamp(42px, 5.4vw, 58px)'
                 : useDottedTitle
-                  ? editorialTech
-                    ? 'clamp(40px, 5.2vw, 54px)'
-                    : 'clamp(38px, 4.8vw, 52px)'
+                  ? compactLayout
+                    ? 'clamp(26px, 8.8vw, 34px)'
+                    : editorialTech
+                      ? 'clamp(40px, 5.2vw, 54px)'
+                      : 'clamp(38px, 4.8vw, 52px)'
                 : 'var(--ds-font-size-4xl, 36px)',
               fontWeight: useDisplayTitle
                 ? ('var(--ds-font-weight-semibold, 680)' as any)
                 : useDottedTitle
-                  ? (editorialTech
-                      ? 'var(--ds-font-weight-semibold, 700)'
-                      : 'var(--ds-font-weight-extrabold, 820)') as any
+                  ? (compactLayout
+                      ? 'var(--ds-font-weight-bold, 760)'
+                      : editorialTech
+                        ? 'var(--ds-font-weight-semibold, 700)'
+                        : 'var(--ds-font-weight-extrabold, 820)') as any
                 : ('var(--ds-font-weight-bold, 780)' as any),
               letterSpacing: useDisplayTitle
                 ? '0.015em'
                 : useDottedTitle
-                  ? editorialTech
-                    ? '-0.052em'
-                    : '-0.04em'
+                  ? compactLayout
+                    ? '-0.022em'
+                    : editorialTech
+                      ? '-0.052em'
+                      : '-0.04em'
                   : '-0.05em',
               color: useDottedTitle ? 'transparent' : 'var(--ds-color-text-primary)',
               margin: 0,
               marginTop: 0,
-              lineHeight: useDisplayTitle ? 0.9 : useDottedTitle ? (editorialTech ? 0.84 : 0.88) : 0.92,
+              lineHeight: useDisplayTitle
+                ? 0.9
+                : useDottedTitle
+                  ? compactLayout
+                    ? 0.92
+                    : editorialTech
+                      ? 0.84
+                      : 0.88
+                  : 0.92,
               textWrap: 'balance',
               display: 'block',
               width: 'fit-content',
@@ -234,38 +273,48 @@ export function CollectionHeader({
               textTransform: (useDisplayTitle || useDottedTitle) ? ('uppercase' as const) : undefined,
               backgroundImage: useDottedTitle
                 ? [
-                    editorialTech
-                      ? 'radial-gradient(circle at 1.35px 1.35px, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0 0.56px, transparent 0.72px)'
-                      : 'radial-gradient(circle, color-mix(in srgb, var(--ds-color-text-primary) 96%, white 4%) 0 1px, transparent 1.2px)',
-                    editorialTech
-                      ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 84%, white 16%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, white 10%) 54%, color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent) 100%)'
-                      : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, transparent) 100%)',
+                    compactLayout
+                      ? 'radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--ds-color-text-primary) 90%, white 10%) 0 0.45px, transparent 0.65px)'
+                      : editorialTech
+                        ? 'radial-gradient(circle at 1.35px 1.35px, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0 0.56px, transparent 0.72px)'
+                        : 'radial-gradient(circle, color-mix(in srgb, var(--ds-color-text-primary) 96%, white 4%) 0 1px, transparent 1.2px)',
+                    compactLayout
+                      ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 88%, white 12%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 58%, transparent) 100%)'
+                      : editorialTech
+                        ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 84%, white 16%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, white 10%) 54%, color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent) 100%)'
+                        : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, transparent) 100%)',
                   ].join(', ')
                 : undefined,
               backgroundSize: useDottedTitle
-                ? editorialTech
-                  ? '5.2px 5.2px, 100% 100%'
-                  : '6px 6px, 100% 100%'
+                ? compactLayout
+                  ? '4px 4px, 100% 100%'
+                  : editorialTech
+                    ? '5.2px 5.2px, 100% 100%'
+                    : '6px 6px, 100% 100%'
                 : undefined,
               backgroundPosition: useDottedTitle ? '0 0, 0 0' : undefined,
               WebkitBackgroundClip: useDottedTitle ? ('text, text' as any) : undefined,
               backgroundClip: useDottedTitle ? ('text, text' as any) : undefined,
               WebkitTextFillColor: useDottedTitle ? 'transparent' : undefined,
               WebkitTextStroke: useDottedTitle
-                ? editorialTech
-                  ? '0.32px color-mix(in srgb, var(--ds-color-text-primary) 18%, transparent)'
-                  : '1px color-mix(in srgb, var(--ds-color-text-primary) 24%, transparent)'
+                ? compactLayout
+                  ? '0.24px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)'
+                  : editorialTech
+                    ? '0.32px color-mix(in srgb, var(--ds-color-text-primary) 18%, transparent)'
+                    : '1px color-mix(in srgb, var(--ds-color-text-primary) 24%, transparent)'
                 : undefined,
               filter: useDottedTitle
-                ? editorialTech
-                  ? 'drop-shadow(0 0 8px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))'
-                  : 'drop-shadow(0 0 18px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent))'
+                ? compactLayout
+                  ? 'drop-shadow(0 0 6px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))'
+                  : editorialTech
+                    ? 'drop-shadow(0 0 8px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))'
+                    : 'drop-shadow(0 0 18px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent))'
                 : undefined,
             }}
           >
             {title}
           </Box>
-          {editorialTech ? (
+          {editorialTech && !compactLayout ? (
             <Flex
               align="start"
               gap={12}
@@ -314,15 +363,19 @@ export function CollectionHeader({
                 fontSize: useDisplayTitle
                   ? 'var(--ds-font-size-xs, 11px)'
                   : useDottedTitle
-                    ? 'var(--ds-font-size-xs, 10px)'
+                    ? compactLayout
+                      ? '11px'
+                      : 'var(--ds-font-size-xs, 10px)'
                     : 'var(--ds-font-size-sm, 12px)',
                 color: 'var(--ds-color-text-secondary)',
                 marginTop: useDisplayTitle
                   ? 'var(--ds-spacing-2, 10px)'
                   : useDottedTitle
-                    ? 'var(--ds-spacing-2, 8px)'
+                    ? compactLayout
+                      ? 'var(--ds-spacing-2, 6px)'
+                      : 'var(--ds-spacing-2, 8px)'
                     : 'var(--ds-spacing-2, 7px)',
-                lineHeight: useDisplayTitle ? 1.65 : useDottedTitle ? 1.55 : 1.5,
+                lineHeight: useDisplayTitle ? 1.65 : useDottedTitle ? (compactLayout ? 1.45 : 1.55) : 1.5,
                 textWrap: 'pretty',
                 fontFamily: useMonoSubtitle
                   ? 'var(--ds-font-family-mono, var(--ds-font-family-base))'
@@ -330,19 +383,23 @@ export function CollectionHeader({
                 letterSpacing: useDisplayTitle
                   ? '0.03em'
                   : useMonoSubtitle
-                    ? '0.09em'
+                    ? compactLayout
+                      ? '0.05em'
+                      : '0.09em'
                     : useDottedTitle
-                      ? '0.08em'
+                      ? compactLayout
+                        ? '0.03em'
+                        : '0.08em'
                       : undefined,
                 textTransform: (useDisplayTitle || useDottedTitle || useMonoSubtitle) ? ('uppercase' as const) : undefined,
                 opacity: (useDisplayTitle || useDottedTitle) ? 0.88 : undefined,
-                maxWidth: 560,
+                maxWidth: compactLayout ? '100%' : 560,
               }}
             >
               {subtitle}
             </Text>
           )}
-          {editorialTech && (
+          {editorialTech && !compactLayout && (
             <Box
               style={{
                 marginTop: 'var(--ds-spacing-3, 12px)',
@@ -359,12 +416,12 @@ export function CollectionHeader({
           <Box
             style={{
               flexShrink: 0,
-              flex: '0 0 auto',
-              width: 'auto',
-              maxWidth: 'none',
+              flex: compactLayout ? '1 1 100%' : '0 0 auto',
+              width: compactLayout ? '100%' : 'auto',
+              maxWidth: compactLayout ? '100%' : 'none',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-end',
+              alignItems: compactLayout ? 'stretch' : 'flex-end',
             }}
           >
             {(eyebrowChip || eyebrowMetaItems.length > 0) && (
@@ -372,7 +429,7 @@ export function CollectionHeader({
                 align="center"
                 gap={8}
                 wrap="wrap"
-                justify="end"
+                justify={compactLayout ? 'start' : 'end'}
                 style={{
                   marginBottom: editorialTech ? 'var(--ds-spacing-2, 8px)' : 'var(--ds-spacing-3, 10px)',
                 }}
@@ -385,9 +442,11 @@ export function CollectionHeader({
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'flex-end',
+                justifyContent: compactLayout ? 'flex-start' : 'flex-end',
+                flexWrap: 'wrap',
                 gap: editorialTech ? 6 : 8,
                 padding: 'var(--ds-spacing-1, 2px)',
+                width: compactLayout ? '100%' : 'auto',
               borderRadius: 'var(--ds-radius-md, 15px)',
               border: '1px solid var(--ds-color-border-subtle)',
               background: embedded
@@ -400,7 +459,7 @@ export function CollectionHeader({
                   ? '0 8px 18px color-mix(in srgb, #000 12%, transparent), inset 0 1px 0 color-mix(in srgb, white 3%, transparent)'
                   : '0 10px 24px color-mix(in srgb, #000 16%, transparent), inset 0 1px 0 color-mix(in srgb, white 4%, transparent)'
                 : 'var(--ds-elevation-1)',
-              alignSelf: 'flex-end',
+              alignSelf: compactLayout ? 'stretch' : 'flex-end',
             }}
           >
               {inlineMetaItems.length > 0 && (
@@ -408,7 +467,7 @@ export function CollectionHeader({
                   align="center"
                   gap={6}
                   wrap="wrap"
-                  justify="end"
+                  justify={compactLayout ? 'start' : 'end'}
                   style={{
                     paddingLeft: 'var(--ds-spacing-2, 8px)',
                   }}
@@ -416,7 +475,7 @@ export function CollectionHeader({
                   {inlineMetaItems.map(renderMetaItem)}
                 </Flex>
               )}
-              <Flex align="center" gap={8} wrap="wrap" justify="end">
+              <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
                 {quickActions.map((action) => (
                   <Button
                     key={action.key}
@@ -460,17 +519,17 @@ export function CollectionHeader({
                   marginTop: 'var(--ds-spacing-3, 12px)',
                   display: 'grid',
                   gap: 'var(--ds-spacing-1, 6px)',
-                  justifyItems: 'end',
+                  justifyItems: compactLayout ? 'start' : 'end',
                 }}
               >
                 {belowMetaItems.length > 0 && (
-                  <Flex align="center" gap={8} wrap="wrap" justify="end">
+                  <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
                     {belowMetaItems.map(renderMetaItem)}
                   </Flex>
                 )}
 
                 {shortcuts && shortcuts.length > 0 && (
-                  <Flex align="center" gap={8} wrap="wrap" justify="end">
+                  <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
                     <Box
                       style={{
                         display: 'inline-flex',

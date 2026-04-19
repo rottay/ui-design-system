@@ -40,4 +40,25 @@ describe('Menu integration', () => {
       })
     );
   });
+
+  it('respects controlled openKeys through the modern engine', async () => {
+    const { Menu } = await import('..');
+    const onOpenChange = vi.fn();
+    const view = renderWithEngine(
+      <Menu engine="modern" items={items} openKeys={[]} onOpenChange={onOpenChange} />,
+      'modern'
+    );
+
+    fireEvent.click(await screen.findByText('Settings', undefined, { timeout: 10000 }));
+    expect(onOpenChange).toHaveBeenCalledWith(['settings']);
+
+    view.rerender(
+      <Menu engine="modern" items={items} openKeys={['settings']} onOpenChange={onOpenChange} />
+    );
+
+    expect((await screen.findByText('Settings', undefined, { timeout: 10000 })).closest('details')).toHaveAttribute('open');
+
+    fireEvent.click(screen.getByText('Settings'));
+    expect(onOpenChange).toHaveBeenLastCalledWith([]);
+  });
 });

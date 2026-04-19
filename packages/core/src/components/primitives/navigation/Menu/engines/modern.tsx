@@ -60,14 +60,30 @@ const ITEM_PADDING_X = 'var(--ds-sidebar-item-padding-inline, 16px)';
 const CHILD_ITEM_PADDING_X = 'var(--ds-sidebar-child-padding-inline, 8px)';
 /** Gap between icon and label */
 const ICON_LABEL_GAP = 'var(--ds-sidebar-item-gap, 10px)';
-/** Left indent for child items (compact enough for app sidebars and tree menus) */
-const CHILD_INDENT = 'var(--ds-sidebar-child-indent, 0px)';
 /** Width of the active accent bar */
 const ACCENT_BAR_WIDTH = 3;
 /** Border radius token */
 const RADIUS = 'var(--ds-radius-lg, 12px)';
 /** Transition for interactive states */
 const TRANSITION = 'background 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out';
+
+function getItemPaddingLeft(level: number, inlineIndent: number): string {
+  if (level <= 0) {
+    return ITEM_PADDING_X;
+  }
+
+  return `calc(${CHILD_ITEM_PADDING_X} + ${level * inlineIndent}px)`;
+}
+
+function getLevelStyleVars(level: number, inlineIndent: number): CSSProperties {
+  const paddingLeft = getItemPaddingLeft(level, inlineIndent);
+
+  return {
+    ['--rottay-menu-level' as string]: String(level),
+    ['--rottay-menu-inline-indent' as string]: `${inlineIndent}px`,
+    ['--rottay-menu-item-padding-left' as string]: paddingLeft,
+  };
+}
 
 // ============================================================================
 // Inline Style Builders
@@ -76,15 +92,18 @@ const TRANSITION = 'background 150ms ease-out, color 150ms ease-out, opacity 150
 /**
  * Builds the base style for a menu item anchor/button.
  */
-function getItemBaseStyle(level: number): CSSProperties {
+function getItemBaseStyle(level: number, inlineIndent: number): CSSProperties {
   const isChild = level > 0;
   return {
+    ...getLevelStyleVars(level, inlineIndent),
     display: 'flex',
     alignItems: 'center',
     gap: ICON_LABEL_GAP,
     height: isChild ? ITEM_HEIGHT_CHILD : ITEM_HEIGHT_TOP,
-    padding: `0 ${isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X}`,
-    paddingLeft: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
+    paddingTop: 0,
+    paddingRight: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
+    paddingBottom: 0,
+    paddingLeft: 'var(--rottay-menu-item-padding-left)',
     borderRadius: RADIUS,
     fontSize: isChild
       ? 'var(--ds-sidebar-item-font-size-child, 13.9px)'
@@ -168,15 +187,23 @@ function getDisabledStyle(): CSSProperties {
 /**
  * Style for submenu summary/trigger elements.
  */
-function getSummaryStyle(): CSSProperties {
+function getSummaryStyle(level: number, inlineIndent: number): CSSProperties {
+  const isChild = level > 0;
+
   return {
+    ...getLevelStyleVars(level, inlineIndent),
     display: 'flex',
     alignItems: 'center',
     gap: ICON_LABEL_GAP,
-    height: ITEM_HEIGHT_TOP,
-    padding: `0 ${ITEM_PADDING_X}`,
+    height: isChild ? ITEM_HEIGHT_CHILD : ITEM_HEIGHT_TOP,
+    paddingTop: 0,
+    paddingRight: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
+    paddingBottom: 0,
+    paddingLeft: 'var(--rottay-menu-item-padding-left)',
     borderRadius: RADIUS,
-    fontSize: 'var(--ds-sidebar-item-font-size, 15.75px)',
+    fontSize: isChild
+      ? 'var(--ds-sidebar-item-font-size-child, 13.9px)'
+      : 'var(--ds-sidebar-item-font-size, 15.75px)',
     fontWeight: 500,
     lineHeight: 1.28,
     color: 'var(--ds-color-text-secondary)',
@@ -233,17 +260,19 @@ function MenuItemRow({
   item,
   isSelected,
   level,
+  inlineIndent,
   onItemClick,
 }: {
   item: MenuItemInterface;
   isSelected: boolean;
   level: number;
+  inlineIndent: number;
   onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const isChild = level > 0;
 
-  const baseStyle = getItemBaseStyle(level);
+  const baseStyle = getItemBaseStyle(level, inlineIndent);
 
   // Compose final style
   let composedStyle: CSSProperties = { ...baseStyle };
@@ -359,29 +388,42 @@ function MenuItemRow({
 function SubmenuRow({
   item,
   level,
+  inlineIndent,
+  openKeys,
+  isOpen,
+  onSubmenuToggle,
   onItemClick,
   selectedKeys,
 }: {
   item: MenuItemInterface;
   level: number;
+  inlineIndent: number;
+  openKeys: string[];
+  isOpen: boolean;
+  onSubmenuToggle: (key: string, nextOpen: boolean) => void;
   onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
   selectedKeys: string[];
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const detailsRef = useRef<HTMLDetailsElement>(null);
+  const hadSelectedDescendantRef = useRef(false);
 
-  // Check if any child is selected (to auto-open the submenu)
-  const hasSelectedChild = item.children?.some((child) => selectedKeys.includes(child.key)) ?? false;
-
-  // Auto-open if a child is selected
-  useEffect(() => {
-    if (hasSelectedChild && detailsRef.current) {
-      detailsRef.current.open = true;
+  const hasSelectedDescendant = item.children?.some(function hasSelected(child) {
+    if (selectedKeys.includes(child.key)) {
+      return true;
     }
-  }, [hasSelectedChild]);
+
+    return child.children?.some(hasSelected) ?? false;
+  }) ?? false;
+
+  useEffect(() => {
+    if (hasSelectedDescendant && !hadSelectedDescendantRef.current && !isOpen) {
+      onSubmenuToggle(item.key, true);
+    }
+    hadSelectedDescendantRef.current = hasSelectedDescendant;
+  }, [hasSelectedDescendant, isOpen, item.key, onSubmenuToggle]);
 
   const summaryStyle: CSSProperties = {
-    ...getSummaryStyle(),
+    ...getSummaryStyle(level, inlineIndent),
     ...(item.disabled ? getDisabledStyle() : {}),
     ...(isHovered && !item.disabled
       ? { background: 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)' }
@@ -390,9 +432,14 @@ function SubmenuRow({
 
   return (
     <li key={item.key} style={{ listStyle: 'none', margin: '0.5px 0' }}>
-      <details ref={detailsRef} open={hasSelectedChild || undefined}>
+      <details open={isOpen}>
         <summary
           style={summaryStyle}
+          tabIndex={item.disabled ? -1 : 0}
+          aria-disabled={item.disabled || undefined}
+          aria-expanded={isOpen}
+          data-open={isOpen ? 'true' : undefined}
+          data-selected-descendant={hasSelectedDescendant ? 'true' : undefined}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onFocus={(e) => {
@@ -404,6 +451,18 @@ function SubmenuRow({
           onBlur={(e) => {
             e.currentTarget.style.outline = 'none';
             e.currentTarget.style.outlineOffset = '0';
+          }}
+          onKeyDown={(e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
+              e.preventDefault();
+              onSubmenuToggle(item.key, !isOpen);
+            }
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            if (!item.disabled) {
+              onSubmenuToggle(item.key, !isOpen);
+            }
           }}
         >
           {item.icon && (
@@ -464,7 +523,7 @@ function SubmenuRow({
             margin: 0,
           }}
         >
-          {renderModernMenuItems(item.children || [], onItemClick, selectedKeys, level + 1)}
+          {renderModernMenuItems(item.children || [], onItemClick, selectedKeys, openKeys, onSubmenuToggle, level + 1, inlineIndent)}
         </ul>
       </details>
     </li>
@@ -490,7 +549,10 @@ function renderModernMenuItems(
   items: MenuItemInterface[],
   onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void,
   selectedKeys: string[],
-  level: number = 0
+  openKeys: string[],
+  onSubmenuToggle: (key: string, nextOpen: boolean) => void,
+  level: number = 0,
+  inlineIndent: number = MENU_DEFAULTS.inlineIndent,
 ): React.ReactNode {
   return items.map((item) => {
     // Divider
@@ -505,7 +567,7 @@ function renderModernMenuItems(
           <div style={getGroupTitleStyle()}>{item.title || item.label}</div>
           {item.children && (
             <ul role="group" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {renderModernMenuItems(item.children, onItemClick, selectedKeys, level + 1)}
+              {renderModernMenuItems(item.children, onItemClick, selectedKeys, openKeys, onSubmenuToggle, level + 1, inlineIndent)}
             </ul>
           )}
         </li>
@@ -519,6 +581,10 @@ function renderModernMenuItems(
           key={item.key}
           item={item}
           level={level}
+          inlineIndent={inlineIndent}
+          openKeys={openKeys}
+          isOpen={openKeys.includes(item.key)}
+          onSubmenuToggle={onSubmenuToggle}
           onItemClick={onItemClick}
           selectedKeys={selectedKeys}
         />
@@ -533,6 +599,7 @@ function renderModernMenuItems(
         item={item}
         isSelected={isSelected}
         level={level}
+        inlineIndent={inlineIndent}
         onItemClick={onItemClick}
       />
     );
@@ -607,15 +674,19 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
     mode = MENU_DEFAULTS.mode,
     selectedKeys: controlledSelectedKeys,
     defaultSelectedKeys = [],
+    openKeys: controlledOpenKeys,
+    defaultOpenKeys = [],
     multiple = MENU_DEFAULTS.multiple,
     selectable = MENU_DEFAULTS.selectable,
     inlineCollapsed = MENU_DEFAULTS.inlineCollapsed,
     onSelect,
     onClick,
+    onOpenChange,
     theme = MENU_DEFAULTS.theme,
     children,
     className = '',
     style,
+    inlineIndent = MENU_DEFAULTS.inlineIndent,
   } = props;
 
   // ========================================================================
@@ -633,12 +704,41 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   /** Internal state for uncontrolled selection mode */
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(defaultSelectedKeys);
 
+  /** Internal state for uncontrolled submenu expansion mode */
+  const [internalOpenKeys, setInternalOpenKeys] = useState<string[]>(defaultOpenKeys);
+
   /** Use controlled or uncontrolled state */
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
+  const openKeys = controlledOpenKeys ?? internalOpenKeys;
 
   // ========================================================================
   // Event Handlers
   // ========================================================================
+
+  /**
+   * Handles submenu expansion state.
+   * Keeps the modern engine aligned with the Menu openKeys contract.
+   */
+  const handleSubmenuToggle = useCallback(
+    (key: string, nextOpen: boolean) => {
+      const alreadyOpen = openKeys.includes(key);
+
+      if ((nextOpen && alreadyOpen) || (!nextOpen && !alreadyOpen)) {
+        return;
+      }
+
+      const nextOpenKeys = nextOpen
+        ? [...openKeys, key]
+        : openKeys.filter((openKey) => openKey !== key);
+
+      if (controlledOpenKeys === undefined) {
+        setInternalOpenKeys(nextOpenKeys);
+      }
+
+      onOpenChange?.(nextOpenKeys);
+    },
+    [openKeys, controlledOpenKeys, onOpenChange]
+  );
 
   /**
    * Handles menu item click events.
@@ -713,7 +813,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
       role="menu"
     >
       {items
-        ? renderModernMenuItems(items, handleItemClick, selectedKeys)
+        ? renderModernMenuItems(items, handleItemClick, selectedKeys, openKeys, handleSubmenuToggle, 0, inlineIndent)
         : children}
     </ul>
   );

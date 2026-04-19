@@ -275,10 +275,8 @@ export function renderStackChildren(
   divider: ReactNode | undefined,
   direction: StackDirection
 ): ReactNode {
-  if (!divider) return children;
-
   const childArray = React.Children.toArray(children).filter(Boolean);
-  if (childArray.length <= 1) return children;
+  if (!divider || childArray.length <= 1) return childArray;
 
   return childArray.reduce<ReactNode[]>((acc, child, index) => {
     if (index === 0) {

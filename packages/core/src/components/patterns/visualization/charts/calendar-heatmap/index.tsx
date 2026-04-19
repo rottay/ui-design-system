@@ -56,7 +56,7 @@ export interface CalendarHeatMapProps extends ChartBaseProps {
   startDate?: Date | string;
   /** End date of the range. Default: today */
   endDate?: Date | string;
-  /** Color range [low, high]. Default: [--ds-color-bg-tertiary, --ds-color-success] */
+  /** Color range [low, high]. Default: [--ds-color-bg-tertiary, personality primary] */
   colorRange?: [string, string];
   /** Number of discrete color steps. Default: 5 */
   colorSteps?: number;
@@ -113,7 +113,8 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   data,
   startDate: startDateProp,
   endDate: endDateProp,
-  colorRange = ['var(--ds-color-bg-tertiary)', 'var(--ds-color-success)'],
+  colorRange,
+  colorScheme,
   colorSteps = 5,
   cellSize = 14,
   cellGap = 2,
@@ -134,7 +135,9 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
 }: CalendarHeatMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, heightProp);
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
+  const resolvedColorRange =
+    colorRange ?? ['var(--ds-color-bg-tertiary)', chartPersonality.colors[0] ?? 'var(--ds-color-primary-500)'];
 
   // Resolve date range -------------------------------------------------
   const endDate = useMemo(() => {
@@ -210,7 +213,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
     const minVal = 0;
 
     // Build discrete color steps via quantize scale
-    const colorInterpolator = interpolateRgb(colorRange[0], colorRange[1]);
+    const colorInterpolator = interpolateRgb(resolvedColorRange[0], resolvedColorRange[1]);
     const stepColors: string[] = [];
     for (let i = 0; i < colorSteps; i++) {
       stepColors.push(colorInterpolator(i / (colorSteps - 1)));
@@ -289,8 +292,8 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
       .attr('ry', 'var(--ds-radius-sm, 2)')
       .attr('fill', (d) => {
         const val = valueMap.get(fmtKey(d));
-        if (val == null || val === 0) return colorRange[0];
-        return colorScale(val) ?? colorRange[0];
+        if (val == null || val === 0) return resolvedColorRange[0];
+        return colorScale(val) ?? resolvedColorRange[0];
       })
       .style('cursor', onCellClick ? 'pointer' : 'default');
 
@@ -328,7 +331,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
     valueMap,
     startDate,
     endDate,
-    colorRange,
+    resolvedColorRange,
     colorSteps,
     cellSize,
     cellGap,

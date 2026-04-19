@@ -26,7 +26,6 @@ import { memo, useEffect, useRef } from 'react';
 import { max, scaleLinear, select } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
-import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -61,15 +60,17 @@ export const RadarChart = memo(function RadarChart({
   legend = true,
   animate,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
+  colorScheme,
   tooltip,
 }: RadarChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = height;
-  const allSeries = series ?? [{ name: 'Data', data, color: colors[0] }];
+  const allSeries = series ?? [{ name: 'Data', data, color: palette[0] }];
   const summary = {
     caption: title ? `${title} data summary` : 'Radar chart data summary',
     headers: ['Series', 'Axis', 'Value'],
@@ -81,7 +82,7 @@ export const RadarChart = memo(function RadarChart({
     <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {allSeries.map((s, i) => (
         <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block' }} />
           <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
         </div>
       ))}
@@ -91,7 +92,7 @@ export const RadarChart = memo(function RadarChart({
   useEffect(() => {
     if (!svgRef.current) return;
 
-    const allSeries = series ?? [{ name: 'Data', data, color: colors[0] }];
+    const allSeries = series ?? [{ name: 'Data', data, color: palette[0] }];
     if (allSeries.length === 0) return;
 
     const axes = allSeries[0].data.map((d) => d.axis);
@@ -164,7 +165,7 @@ export const RadarChart = memo(function RadarChart({
     // Data polygons: each series is a single filled polygon. The 20% fill
     // opacity lets overlapping series remain visible behind each other.
     allSeries.forEach((s, si) => {
-      const color = s.color ?? colors[si % colors.length];
+      const color = s.color ?? palette[si % palette.length];
       const points = s.data.map((d, i) => {
         const angle = angleSlice * i - Math.PI / 2;
         const r = rScale(d.value);
@@ -207,7 +208,7 @@ export const RadarChart = memo(function RadarChart({
         }
       });
     });
-  }, [data, series, chartWidth, chartHeight, maxValueProp, levels, showLabels, chartPersonality, colors]);
+  }, [data, series, chartWidth, chartHeight, maxValueProp, levels, showLabels, chartPersonality, palette]);
 
   return (
     <ChartScaffold

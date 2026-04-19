@@ -38,7 +38,7 @@ import {
 } from 'd3';
 
 import type { ChartBaseProps, Series } from '../Charts.types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
+import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -77,7 +77,8 @@ export const LineChart = memo(function LineChart({
   legend = true,
   animate,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
+  colorScheme,
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
@@ -86,7 +87,8 @@ export const LineChart = memo(function LineChart({
 }: LineChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
-  const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip });
+  const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
@@ -103,7 +105,7 @@ export const LineChart = memo(function LineChart({
     <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {series.map((s, i) => (
         <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 3, backgroundColor: s.color ?? colors[i % colors.length], display: 'inline-block', borderRadius: 1 }} />
+          <span style={{ width: 12, height: 3, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block', borderRadius: 1 }} />
           <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
         </div>
       ))}
@@ -192,7 +194,7 @@ export const LineChart = memo(function LineChart({
     // Each series is rendered as its own path (not a single multi-path) so that
     // individual stroke colors, area fills, and tooltip dot sets stay independent.
     series.forEach((s, i) => {
-      const color = s.color ?? colors[i % colors.length];
+      const color = s.color ?? palette[i % palette.length];
       const gradientId = `line-chart-area-${i}`;
 
       // Area fill: when gradient mode is active, a top-to-bottom linearGradient
@@ -315,7 +317,7 @@ export const LineChart = memo(function LineChart({
 
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [series, chartWidth, chartHeight, showArea, xType, chartPersonality, colors, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
+  }, [series, chartWidth, chartHeight, showArea, xType, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
 
   return (
     <ChartScaffold

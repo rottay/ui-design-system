@@ -40,7 +40,7 @@ import {
 } from 'd3';
 
 import type { ChartBaseProps, Series } from '../Charts.types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
+import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -77,7 +77,8 @@ export const AreaChart = memo(function AreaChart({
   legend = true,
   animate,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
+  colorScheme,
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
@@ -86,7 +87,8 @@ export const AreaChart = memo(function AreaChart({
 }: AreaChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
-  const chartPersonality = useChartPersonality({ animate, curved, tooltip });
+  const chartPersonality = useChartPersonality({ animate, curved, tooltip, colorScheme });
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
@@ -103,7 +105,7 @@ export const AreaChart = memo(function AreaChart({
     <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {series.map((s, i) => (
         <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? colors[i % colors.length], opacity, display: 'inline-block' }} />
+          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? palette[i % palette.length], opacity, display: 'inline-block' }} />
           <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
         </div>
       ))}
@@ -197,7 +199,7 @@ export const AreaChart = memo(function AreaChart({
       // Each layer contains [y0, y1] pairs; y0 is the cumulative baseline from
       // lower layers, y1 is the top of the current layer's contribution.
       stacked.forEach((layer, i) => {
-        const color = series[i]?.color ?? colors[i % colors.length];
+        const color = series[i]?.color ?? palette[i % palette.length];
         const gradientId = `area-chart-stack-${i}`;
 
         if (chartPersonality.useGradientFill) {
@@ -232,7 +234,7 @@ export const AreaChart = memo(function AreaChart({
       // Non-stacked: each series is an independent area from y=0 to d.y, layered
       // with opacity so overlapping regions remain visible underneath.
       series.forEach((s, i) => {
-        const color = s.color ?? colors[i % colors.length];
+        const color = s.color ?? palette[i % palette.length];
         const gradientId = `area-chart-series-${i}`;
 
         if (chartPersonality.useGradientFill) {
@@ -316,7 +318,7 @@ export const AreaChart = memo(function AreaChart({
 
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [series, chartWidth, chartHeight, stacked, opacity, chartPersonality, colors, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
+  }, [series, chartWidth, chartHeight, stacked, opacity, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
 
   return (
     <ChartScaffold

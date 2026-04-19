@@ -120,6 +120,7 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     const combinedClassName = [classes.join(' '), className]
       .filter(Boolean)
       .join(' ');
+    const renderedChildren = React.Children.toArray(children);
 
     return (
       <>
@@ -133,7 +134,7 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
           {...(responsive ? responsive.attrs : {})}
           {...rest}
         >
-          {children}
+          {renderedChildren}
         </div>
       </>
     );

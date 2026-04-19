@@ -348,6 +348,7 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   ].filter(Boolean).join(' ');
 
   const ElementType = Component as ElementType;
+  const renderedChildren = React.Children.toArray(children);
 
   return (
     <>
@@ -363,7 +364,7 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
           style: computedStyle,
           ...(responsive ? responsive.attrs : {}),
         },
-        children
+        renderedChildren
       )}
     </>
   );

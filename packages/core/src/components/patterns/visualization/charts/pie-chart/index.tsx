@@ -24,7 +24,6 @@ import { memo, useEffect, useRef } from 'react';
 import { arc, interpolate, pie, select, sum, type PieArcDatum } from 'd3';
 
 import type { ChartBaseProps, DataPoint } from '../Charts.types';
-import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -59,7 +58,8 @@ export const PieChart = memo(function PieChart({
   legend = true,
   animate,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
+  colorScheme,
   tooltip,
   compact,
   autoCompact,
@@ -67,7 +67,8 @@ export const PieChart = memo(function PieChart({
 }: PieChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
@@ -81,7 +82,7 @@ export const PieChart = memo(function PieChart({
     <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
         <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
           <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
         </div>
       ))}
@@ -135,7 +136,7 @@ export const PieChart = memo(function PieChart({
 
     const paths = slices
       .append('path')
-      .attr('fill', (d, i) => d.data.color ?? colors[i % colors.length])
+      .attr('fill', (d, i) => d.data.color ?? palette[i % palette.length])
       .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 2);
 
@@ -180,7 +181,7 @@ export const PieChart = memo(function PieChart({
           return d.data.label;
         });
     }
-  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, colors, compactState.compactTooltip, compactState.hideSeriesLabels]);
+  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, palette, compactState.compactTooltip, compactState.hideSeriesLabels]);
 
   return (
     <ChartScaffold

@@ -179,7 +179,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             type="number"
             className={`${prefix ? 'pl-8' : ''} ${suffix || controls ? 'pr-16' : ''} ${className}`}
             style={{
-              border: '1px solid var(--ds-color-border)',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              borderColor: 'var(--ds-color-border)',
               borderRadius: 'var(--ds-radius-md)',
               background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
               color: 'var(--ds-color-text-primary)',

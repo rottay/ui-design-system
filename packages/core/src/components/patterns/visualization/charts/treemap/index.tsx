@@ -25,7 +25,6 @@ import { memo, useEffect, useRef } from 'react';
 import { hierarchy, select, treemap } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
-import { DEFAULT_COLORS } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -63,12 +62,14 @@ export const TreeMap = memo(function TreeMap({
   legend = false,
   animate = true,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
+  colorScheme,
   tooltip = true,
 }: TreeMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
   const summary = {
@@ -80,7 +81,7 @@ export const TreeMap = memo(function TreeMap({
     <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
         <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: colors[i % colors.length], display: 'inline-block' }} />
+          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: palette[i % palette.length], display: 'inline-block' }} />
           <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.name}</span>
         </div>
       ))}
@@ -121,7 +122,7 @@ export const TreeMap = memo(function TreeMap({
       .append('rect')
       .attr('width', (d: any) => Math.max(0, d.x1 - d.x0))
       .attr('height', (d: any) => Math.max(0, d.y1 - d.y0))
-      .attr('fill', (_, i) => colors[i % colors.length])
+      .attr('fill', (_, i) => palette[i % palette.length])
       .attr('rx', 3)
       .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 1);
@@ -180,7 +181,7 @@ export const TreeMap = memo(function TreeMap({
     padding,
     chartPersonality.animate,
     chartPersonality.animationDuration,
-    colors,
+    palette,
     chartPersonality.tooltip,
   ]);
 

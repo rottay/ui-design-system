@@ -89,6 +89,8 @@ export interface ChartBaseProps {
   responsive?: boolean;
   /** Custom color palette; falls back to DEFAULT_COLORS if not provided */
   colors?: string[];
+  /** Named palette resolved from the active tenant/brand chart personality */
+  colorScheme?: ChartColorScheme;
   /** Whether to show tooltips on hover/focus */
   tooltip?: boolean;
   /** Pixel margins around the chart drawing area */
@@ -100,6 +102,13 @@ export interface ChartBaseProps {
   /** Container width breakpoint below which compact mode activates (default: 640px) */
   compactBreakpoint?: number;
 }
+
+export type ChartColorScheme =
+  | 'default'
+  | 'pastel'
+  | 'vibrant'
+  | 'monochrome'
+  | 'accessible';
 
 /** Default 10-color palette using mid-range design system token values */
 export const DEFAULT_COLORS = [

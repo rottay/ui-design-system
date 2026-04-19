@@ -97,7 +97,9 @@ function buildTriggerStyle(
     fontFamily: 'inherit',
     color: 'var(--ds-color-text-primary)',
     backgroundColor: 'var(--ds-surface-control)',
-    border: '1px solid var(--ds-color-border)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: 'var(--ds-color-border)',
     borderRadius: 'var(--ds-radius-md, 8px)',
     outline: '2px solid transparent',
     outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
@@ -111,11 +113,14 @@ function buildTriggerStyle(
   // Variant overrides
   if (variant === 'filled') {
     base.backgroundColor = 'var(--ds-surface-canvas)';
-    base.border = '1px solid transparent';
+    base.borderColor = 'transparent';
   } else if (variant === 'flushed') {
     base.borderRadius = '0';
-    base.border = 'none';
-    base.borderBottom = '1px solid var(--ds-color-border)';
+    base.borderWidth = '0';
+    base.borderColor = 'transparent';
+    base.borderBottomWidth = '1px';
+    base.borderBottomStyle = 'solid';
+    base.borderBottomColor = 'var(--ds-color-border)';
     base.paddingLeft = '0';
     base.paddingRight = '0';
     base.backgroundColor = 'transparent';
@@ -134,7 +139,8 @@ function buildTriggerStyle(
     base.outline = 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)';
     if (variant === 'flushed') {
       base.outline = 'none';
-      base.borderBottom = '2px solid var(--ds-color-primary)';
+      base.borderBottomWidth = '2px';
+      base.borderBottomColor = 'var(--ds-color-primary)';
     }
   }
 
@@ -814,7 +820,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       fontFamily: 'inherit',
       color: 'var(--ds-color-text-primary)',
       backgroundColor: 'var(--ds-surface-control)',
-      border: '1px solid var(--ds-color-border)',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'var(--ds-color-border)',
       borderRadius: 'var(--ds-radius-md, 8px)',
       outline: '2px solid transparent',
       outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
@@ -831,11 +839,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     // Variant overrides for native
     if (variant === 'filled') {
       nativeSelectStyle.backgroundColor = 'var(--ds-surface-canvas)';
-      nativeSelectStyle.border = '1px solid transparent';
+      nativeSelectStyle.borderColor = 'transparent';
     } else if (variant === 'flushed') {
       nativeSelectStyle.borderRadius = '0';
-      nativeSelectStyle.border = 'none';
-      nativeSelectStyle.borderBottom = '1px solid var(--ds-color-border)';
+      nativeSelectStyle.borderWidth = '0';
+      nativeSelectStyle.borderColor = 'transparent';
+      nativeSelectStyle.borderBottomWidth = '1px';
+      nativeSelectStyle.borderBottomStyle = 'solid';
+      nativeSelectStyle.borderBottomColor = 'var(--ds-color-border)';
       nativeSelectStyle.paddingLeft = '0';
       nativeSelectStyle.backgroundColor = 'transparent';
     }

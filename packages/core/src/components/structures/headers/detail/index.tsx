@@ -366,8 +366,10 @@ export function DetailHeader({
               ) : null}
 
               <Flex align="center" gap={12} wrap="wrap">
-                <Text
+                <Box
+                  as="h1"
                   style={{
+                    margin: 0,
                     fontSize: archetype === 'editorial' ? 34 : archetype === 'technical' ? 30 : 32,
                     fontWeight: 720,
                     letterSpacing: '-0.04em',
@@ -376,7 +378,7 @@ export function DetailHeader({
                   }}
                 >
                   {title}
-                </Text>
+                </Box>
                 {status ? <Badge variant={status.variant}>{status.label}</Badge> : null}
               </Flex>
 

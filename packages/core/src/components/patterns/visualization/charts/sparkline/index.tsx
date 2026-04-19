@@ -36,6 +36,8 @@ import {
   line as d3Line,
   scaleLinear,
 } from 'd3';
+import { useChartPersonality } from '../hooks';
+import type { ChartColorScheme } from '../Charts.types';
 
 /** Props for the {@link Sparkline} component. */
 export interface SparklineProps {
@@ -65,6 +67,8 @@ export interface SparklineProps {
   className?: string;
   /** Inline styles applied to the root svg element. */
   style?: React.CSSProperties;
+  /** Named palette resolved from the active tenant/brand chart personality */
+  colorScheme?: ChartColorScheme;
 }
 
 /** Maps curve prop strings to D3 curve factories. */
@@ -90,30 +94,37 @@ export const Sparkline = memo(function Sparkline({
   data,
   width = 100,
   height = 24,
-  color = 'var(--ds-color-primary)',
-  fill = false,
+  color,
+  fill,
   fillOpacity = 0.15,
   strokeWidth = 1.5,
-  curve = 'smooth',
-  showEndDot = true,
+  curve,
+  showEndDot,
   showMinMax = false,
-  animate = true,
+  animate,
   className,
   style,
+  colorScheme,
 }: SparklineProps) {
   const pathRef = useRef<SVGPathElement>(null);
   const uniqueId = useId();
   const gradientId = `sparkline-fill-${uniqueId}`;
+  const chartPersonality = useChartPersonality({ animate, colorScheme });
+  const resolvedColor = color ?? chartPersonality.colors[0] ?? 'var(--ds-color-primary)';
+  const resolvedFill = fill ?? chartPersonality.useGradientFill;
+  const resolvedCurve = curve ?? chartPersonality.lineMode;
+  const resolvedShowEndDot = showEndDot ?? chartPersonality.showDots;
+  const resolvedAnimate = animate ?? chartPersonality.animate;
 
   // Padding inside the SVG to prevent line/dot clipping at the edges.
-  const padding = { x: showEndDot || showMinMax ? 4 : 2, y: 2 };
+  const padding = { x: resolvedShowEndDot || showMinMax ? 4 : 2, y: 2 };
 
   // Resolve the numeric width for scale computation. When width is a CSS
   // string (e.g. '100%'), we use a fallback of 100px for the internal
   // scale domain; the SVG stretches via the width attribute.
   const numericWidth = typeof width === 'number' ? width : 100;
 
-  const curveFactory = CURVE_MAP[curve] ?? curveMonotoneX;
+  const curveFactory = CURVE_MAP[resolvedCurve] ?? curveMonotoneX;
 
   // Compute scales, line path, and area path once per data/dimension change.
   const computed = useMemo(() => {
@@ -141,7 +152,7 @@ export const Sparkline = memo(function Sparkline({
     const linePath = lineGenerator(data) ?? '';
 
     let areaPath: string | null = null;
-    if (fill) {
+    if (resolvedFill) {
       const areaGenerator = d3Area<number>()
         .x((_, i) => x(i))
         .y0(padding.y + innerHeight)
@@ -152,7 +163,7 @@ export const Sparkline = memo(function Sparkline({
     }
 
     // Compute dot positions
-    const endDot = showEndDot && data.length > 0
+    const endDot = resolvedShowEndDot && data.length > 0
       ? { cx: x(data.length - 1), cy: y(data[data.length - 1]) }
       : null;
 
@@ -167,16 +178,16 @@ export const Sparkline = memo(function Sparkline({
       }
       // Only show min/max dots if they differ from the end dot index
       // to avoid overlapping markers at the same position.
-      if (!showEndDot || minIdx !== data.length - 1) {
+      if (!resolvedShowEndDot || minIdx !== data.length - 1) {
         minDot = { cx: x(minIdx), cy: y(data[minIdx]) };
       }
-      if (!showEndDot || maxIdx !== data.length - 1) {
+      if (!resolvedShowEndDot || maxIdx !== data.length - 1) {
         maxDot = { cx: x(maxIdx), cy: y(data[maxIdx]) };
       }
     }
 
     return { linePath, areaPath, endDot, minDot, maxDot };
-  }, [data, numericWidth, height, padding.x, padding.y, curveFactory, fill, showEndDot, showMinMax]);
+  }, [data, numericWidth, height, padding.x, padding.y, curveFactory, resolvedFill, resolvedShowEndDot, showMinMax]);
 
   if (!computed || !data || data.length === 0) {
     return null;
@@ -199,7 +210,7 @@ export const Sparkline = memo(function Sparkline({
       aria-label={`Sparkline: ${data.length} data points, range ${Math.min(...data)} to ${Math.max(...data)}`}
     >
       {/* Scoped animation keyframes and reduced-motion override */}
-      {animate && (
+      {resolvedAnimate && (
         <style>{`
           @keyframes ${animationName} {
             from { stroke-dashoffset: var(--sparkline-length); }
@@ -215,17 +226,17 @@ export const Sparkline = memo(function Sparkline({
       )}
 
       {/* Area fill gradient for a top-to-bottom fade effect */}
-      {fill && computed.areaPath && (
+      {resolvedFill && computed.areaPath && (
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor={color} stopOpacity={fillOpacity} />
-            <stop offset="100%" stopColor={color} stopOpacity={fillOpacity * 0.15} />
+            <stop offset="0%" stopColor={resolvedColor} stopOpacity={fillOpacity} />
+            <stop offset="100%" stopColor={resolvedColor} stopOpacity={fillOpacity * 0.15} />
           </linearGradient>
         </defs>
       )}
 
       {/* Area fill path */}
-      {fill && computed.areaPath && (
+      {resolvedFill && computed.areaPath && (
         <path
           d={computed.areaPath}
           fill={`url(#${gradientId})`}
@@ -238,12 +249,12 @@ export const Sparkline = memo(function Sparkline({
         ref={pathRef}
         d={computed.linePath}
         fill="none"
-        stroke={color}
+        stroke={resolvedColor}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={animate ? animationName : undefined}
-        style={animate ? {
+        className={resolvedAnimate ? animationName : undefined}
+        style={resolvedAnimate ? {
           // The path length is estimated generously; the actual dasharray
           // value only needs to be >= the real path length for the drawing
           // trick to work. 2000 covers any reasonable sparkline width.
@@ -261,7 +272,7 @@ export const Sparkline = memo(function Sparkline({
           cx={computed.endDot.cx}
           cy={computed.endDot.cy}
           r={strokeWidth + 1}
-          fill={color}
+          fill={resolvedColor}
           stroke="var(--ds-color-bg-primary)"
           strokeWidth={1}
         />

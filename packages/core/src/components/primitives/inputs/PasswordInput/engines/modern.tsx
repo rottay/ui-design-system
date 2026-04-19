@@ -89,7 +89,8 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
   const inputStyle: React.CSSProperties = {
     width: '100%',
     paddingRight: 40,
-    border: '1px solid',
+    borderWidth: '1px',
+    borderStyle: 'solid',
     borderColor: error ? 'var(--ds-color-error)' : 'var(--ds-color-border)',
     background: disabled ? 'var(--ds-color-alpha-black-50)' : 'var(--ds-surface-input, var(--ds-surface-card))',
     borderRadius: 'var(--ds-radius-md)',

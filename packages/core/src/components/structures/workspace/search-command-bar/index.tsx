@@ -193,6 +193,7 @@ export function SearchCommandBar({
   const commandSuggestions = command.suggestions ?? [];
   const [showVoiceHelp, setShowVoiceHelp] = useState(false);
   const [isRequestingMicPermission, setIsRequestingMicPermission] = useState(false);
+  const [isCompactViewport, setIsCompactViewport] = useState(false);
 
   useEffect(() => {
     if (!isVoicePermissionBlocked && !needsVoicePermission) {
@@ -205,6 +206,24 @@ export function SearchCommandBar({
       setIsRequestingMicPermission(false);
     }
   }, [needsVoicePermission]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia('(max-width: 959px)');
+    const syncViewport = () => setIsCompactViewport(mediaQuery.matches);
+    syncViewport();
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', syncViewport);
+      return () => mediaQuery.removeEventListener('change', syncViewport);
+    }
+
+    mediaQuery.addListener(syncViewport);
+    return () => mediaQuery.removeListener(syncViewport);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -257,7 +276,8 @@ export function SearchCommandBar({
         : 'var(--ds-color-text-muted)';
 
   const showVoiceBadge = voiceSupported && (voiceStatus !== 'idle' || isVoicePermissionBlocked || needsVoicePermission);
-  const showInlineVoiceBadge = showVoiceBadge;
+  const hideInlinePermissionBadge = needsVoicePermission && isCompactViewport;
+  const showInlineVoiceBadge = showVoiceBadge && !hideInlinePermissionBadge;
   const hasClearButton = Boolean(command.value.trim()) && !isVoiceActive;
   const inputRightPadding = voiceSupported
     ? showInlineVoiceBadge

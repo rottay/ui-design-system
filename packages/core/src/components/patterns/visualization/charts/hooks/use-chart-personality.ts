@@ -11,7 +11,7 @@ import { useMemo } from 'react';
 import { useTokens } from '../../../../../hooks/tokens';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 import { useTranslation } from '../../../../../i18n';
-import { DEFAULT_COLORS, COLOR_SCHEME_MAP } from '../Charts.types';
+import { DEFAULT_COLORS, COLOR_SCHEME_MAP, type ChartColorScheme } from '../Charts.types';
 
 export interface ChartPersonalityOptions {
   animate?: boolean;
@@ -19,7 +19,7 @@ export interface ChartPersonalityOptions {
   curved?: boolean;
   tooltip?: boolean;
   /** Override the personality-driven color scheme */
-  colorScheme?: 'default' | 'pastel' | 'vibrant' | 'monochrome' | 'accessible';
+  colorScheme?: ChartColorScheme;
 }
 
 export interface ResolvedChartPersonality {
