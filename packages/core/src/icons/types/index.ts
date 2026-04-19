@@ -6,7 +6,8 @@
  * maps named size tokens to their CSS variable references.
  */
 
-import type { SVGProps, ForwardRefExoticComponent, RefAttributes } from 'react';
+import type React from 'react';
+import type { SVGProps } from 'react';
 import { ICON_SIZE_TOKENS, type IconSizeToken } from '../tokens';
 
 /**
@@ -42,11 +43,21 @@ export interface SvgIconProps extends SVGProps<SVGSVGElement> {
 }
 
 /**
- * Tipo para un componente de icono del sistema.
+ * Type for an icon component in the system.
+ *
+ * Widened to accept both DS-wrapped icons (from createIcon/catalog) and raw
+ * lucide-react icons. Any component that takes size, color, strokeWidth,
+ * className, style, title, and aria-hidden satisfies this contract.
  */
-export type IconComponent = ForwardRefExoticComponent<
-  SvgIconProps & RefAttributes<SVGSVGElement>
->;
+export type IconComponent = React.ComponentType<{
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | number;
+  color?: string;
+  strokeWidth?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  title?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 
 /**

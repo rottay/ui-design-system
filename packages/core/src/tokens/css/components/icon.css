@@ -35,7 +35,7 @@
   /* ========================================================================
      STROKE - Icon Stroke Settings
      ======================================================================== */
-  --ds-icon-stroke-width: 2;
+  --ds-icon-stroke-width: 1.5;
   --ds-icon-stroke-linecap: round;
   --ds-icon-stroke-linejoin: round;
 
