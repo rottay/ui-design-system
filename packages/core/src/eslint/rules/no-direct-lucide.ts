@@ -8,7 +8,7 @@
  * Type-only imports (`import type { LucideIcon } from 'lucide-react'`) are
  * allowed during the transition period.
  *
- * Files inside `**/icons/catalog/**` are exempt by default because the DS
+ * Files inside the DS icons catalog directory are exempt by default because the DS
  * catalog itself must re-export from lucide.
  *
  * Consumers can add extra exempt paths via the `exempt` option (glob patterns
