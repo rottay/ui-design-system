@@ -10,12 +10,31 @@ import {
   Switch,
   Textarea,
   Slider,
+  AutoComplete,
+  Cascader,
+  ColorPicker,
+  DatePicker,
+  InputNumber,
+  Mentions,
+  OTPInput,
+  Transfer,
+  Upload,
   // Display
   Avatar,
   Badge,
   Card,
   Tag,
   Tooltip,
+  Calendar,
+  Carousel,
+  Descriptions,
+  Empty,
+  Image,
+  List,
+  QRCode,
+  Statistic,
+  Timeline,
+  Tree,
   // Layout
   Box,
   Flex,
@@ -27,12 +46,22 @@ import {
   Progress,
   Spinner,
   Skeleton,
+  Rate,
+  Result,
   // Navigation
   Tabs,
   Breadcrumb,
   Pagination,
+  Steps,
+  Menu,
+  Segmented,
+  Anchor,
+  Affix,
   // Overlay
   Dropdown,
+  Popover,
+  Popconfirm,
+  Watermark,
   // Typography
   Text,
 } from '@rottay/design-system';
@@ -88,6 +117,74 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
       <Slider defaultValue={50} />
     </Box>
   ),
+  'auto-complete': (
+    <AutoComplete
+      options={[
+        { value: 'React' },
+        { value: 'Vue' },
+        { value: 'Angular' },
+      ]}
+      placeholder="Search framework..."
+      style={{ width: 220 }}
+    />
+  ),
+  'cascader': (
+    <Cascader
+      options={[
+        {
+          value: 'frontend',
+          label: 'Frontend',
+          children: [
+            { value: 'react', label: 'React' },
+            { value: 'vue', label: 'Vue' },
+          ],
+        },
+        {
+          value: 'backend',
+          label: 'Backend',
+          children: [
+            { value: 'node', label: 'Node.js' },
+          ],
+        },
+      ]}
+      placeholder="Select category..."
+      style={{ width: 240 }}
+    />
+  ),
+  'color-picker': <ColorPicker defaultValue="#6366f1" />,
+  'date-picker': <DatePicker placeholder="Select date" style={{ width: 200 }} />,
+  'input-number': (
+    <InputNumber min={0} max={100} defaultValue={42} style={{ width: 140 }} />
+  ),
+  'mentions': (
+    <Mentions
+      options={[
+        { value: 'daniel', label: 'Daniel' },
+        { value: 'maria', label: 'Maria' },
+        { value: 'carlos', label: 'Carlos' },
+      ]}
+      placeholder="Type @ to mention..."
+      style={{ width: 280 }}
+    />
+  ),
+  'otp-input': <OTPInput length={6} />,
+  'transfer': (
+    <Transfer
+      dataSource={[
+        { key: '1', title: 'Item 1' },
+        { key: '2', title: 'Item 2' },
+        { key: '3', title: 'Item 3' },
+        { key: '4', title: 'Item 4' },
+      ]}
+      targetKeys={['2']}
+      titles={['Source', 'Target']}
+    />
+  ),
+  'upload': (
+    <Upload action="">
+      <Button>Upload File</Button>
+    </Upload>
+  ),
 
   // -- Display --
   'avatar': (
@@ -129,6 +226,81 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
       <Text size="md">Body text with regular weight.</Text>
       <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>Muted helper text.</Text>
     </Stack>
+  ),
+  'calendar': <Calendar style={{ maxWidth: 320 }} />,
+  'carousel': (
+    <Carousel style={{ maxWidth: 320, height: 120 }}>
+      <Box style={{ height: 120, background: 'var(--ds-color-primary-100, #e8e0ff)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Text size="md">Slide 1</Text>
+      </Box>
+      <Box style={{ height: 120, background: 'var(--ds-color-primary-200, #c4b5fd)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Text size="md">Slide 2</Text>
+      </Box>
+      <Box style={{ height: 120, background: 'var(--ds-color-primary-100, #e8e0ff)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Text size="md">Slide 3</Text>
+      </Box>
+    </Carousel>
+  ),
+  'descriptions': (
+    <Descriptions title="User Info" column={1}>
+      <Descriptions.Item label="Name">Daniel Avila</Descriptions.Item>
+      <Descriptions.Item label="Role">Admin</Descriptions.Item>
+      <Descriptions.Item label="Status">Active</Descriptions.Item>
+    </Descriptions>
+  ),
+  'empty': <Empty description="No data available" />,
+  'image': (
+    <Image
+      width={120}
+      height={80}
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' fill='%23e8e0ff'%3E%3Crect width='120' height='80'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%236366f1' font-size='14'%3EImage%3C/text%3E%3C/svg%3E"
+      alt="Sample"
+    />
+  ),
+  'list': (
+    <List
+      dataSource={['Item One', 'Item Two', 'Item Three'] as string[]}
+      renderItem={(item) => <List.Item>{item as ReactNode}</List.Item>}
+      style={{ maxWidth: 280 }}
+    />
+  ),
+  'qr-code': <QRCode value="https://rottay.com" size={120} />,
+  'statistic': (
+    <Flex gap={24}>
+      <Statistic title="Active Users" value={1128} />
+      <Statistic title="Revenue" value={93.28} prefix="$" precision={2} />
+    </Flex>
+  ),
+  'timeline': (
+    <Timeline
+      items={[
+        { children: 'Create project' },
+        { children: 'Design system setup' },
+        { children: 'Deploy to production' },
+      ]}
+    />
+  ),
+  'tree': (
+    <Tree
+      treeData={[
+        {
+          title: 'Parent Node',
+          key: '0',
+          children: [
+            { title: 'Child 1', key: '0-0' },
+            { title: 'Child 2', key: '0-1' },
+          ],
+        },
+        {
+          title: 'Another Parent',
+          key: '1',
+          children: [
+            { title: 'Child 3', key: '1-0' },
+          ],
+        },
+      ]}
+      defaultExpandAll
+    />
   ),
 
   // -- Layout --
@@ -207,6 +379,29 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
     </Flex>
   ),
   'skeleton': <Skeleton active style={{ width: 260 }} />,
+  'drawer': (
+    <Button variant="primary" onClick={() => {}}>
+      Open Drawer (demo)
+    </Button>
+  ),
+  'message': (
+    <Button variant="default" onClick={() => {}}>
+      Show Message (demo)
+    </Button>
+  ),
+  'notification': (
+    <Button variant="default" onClick={() => {}}>
+      Show Notification (demo)
+    </Button>
+  ),
+  'rate': <Rate defaultValue={3} />,
+  'result': (
+    <Result
+      status="success"
+      title="Operation Successful"
+      subTitle="Your request has been processed."
+    />
+  ),
 
   // -- Navigation --
   'tabs': (
@@ -228,6 +423,45 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
     />
   ),
   'pagination': <Pagination total={100} pageSize={10} current={1} />,
+  'steps': (
+    <Steps
+      current={1}
+      items={[
+        { title: 'Setup' },
+        { title: 'Configure' },
+        { title: 'Deploy' },
+      ]}
+    />
+  ),
+  'menu': (
+    <Menu
+      mode="vertical"
+      items={[
+        { key: 'home', label: 'Home' },
+        { key: 'settings', label: 'Settings' },
+        { key: 'profile', label: 'Profile' },
+      ]}
+      style={{ width: 200 }}
+    />
+  ),
+  'segmented': (
+    <Segmented
+      options={['Daily', 'Weekly', 'Monthly']}
+      defaultValue="Weekly"
+    />
+  ),
+  'anchor': (
+    <Anchor affix={false}>
+      <Anchor.Link href="#section-1" title="Section 1" />
+      <Anchor.Link href="#section-2" title="Section 2" />
+      <Anchor.Link href="#section-3" title="Section 3" />
+    </Anchor>
+  ),
+  'affix': (
+    <Affix offsetTop={0}>
+      <Button variant="default">Affixed Button</Button>
+    </Affix>
+  ),
 
   // -- Overlay --
   'dropdown': (
@@ -247,6 +481,26 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
     <Button variant="primary" onClick={() => {}}>
       Open Modal (demo)
     </Button>
+  ),
+  'popover': (
+    <Popover content={<Text size="sm">Popover content here</Text>} title="Title">
+      <Button>Hover for Popover</Button>
+    </Popover>
+  ),
+  'popconfirm': (
+    <Popconfirm title="Are you sure?" onConfirm={() => {}}>
+      <Button variant="default">Delete Item</Button>
+    </Popconfirm>
+  ),
+  'tour': (
+    <Button variant="primary" onClick={() => {}}>
+      Start Tour (demo)
+    </Button>
+  ),
+  'watermark': (
+    <Watermark content="Rottay">
+      <Box style={{ height: 100, width: 240 }} />
+    </Watermark>
   ),
 };
 

@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { Box, Flex, Text, useTokens } from '@rottay/design-system';
+import { Box, Flex, Text, Dropdown } from '@rottay/design-system';
 import {
   ChevronRightIcon,
   HomeIcon,
@@ -35,10 +34,14 @@ interface HeaderProps {
   onSearchOpen?: () => void;
 }
 
+const THEME_COLORS: Record<Theme, string> = {
+  rottay: 'var(--ds-color-primary)',
+  bithire: '#6366f1',
+  evnto: '#ec4899',
+};
+
 export function Header({ onSearchOpen }: HeaderProps) {
-  const tokens = useTokens();
   const { engine: activeEngine, setEngine: setActiveEngine, tenantSlug: activeTheme, setTenantSlug: setActiveTheme } = useShowroom();
-  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const breadcrumbs = useBreadcrumbs();
 
   const engines: { key: Engine; label: string }[] = [
@@ -165,11 +168,38 @@ export function Header({ onSearchOpen }: HeaderProps) {
         </Flex>
 
         {/* Theme switcher */}
-        <Box style={{ position: 'relative' }}>
+        <Dropdown
+          menu={{
+            items: themes.map((theme) => ({
+              key: theme.key,
+              label: (
+                <Flex align="center" gap={8}>
+                  <Box
+                    style={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: '50%',
+                      background: THEME_COLORS[theme.key],
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Text size="sm">{theme.label}</Text>
+                </Flex>
+              ),
+            })),
+            onClick: ({ key }) => setActiveTheme(key as Theme),
+            selectedKeys: [activeTheme],
+            selectable: true,
+          }}
+          trigger={['click']}
+          placement="bottomRight"
+        >
           <Box
             as="button"
-            onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
               padding: '4px 12px',
               borderRadius: 6,
               border: '1px solid var(--ds-color-neutral-200)',
@@ -181,57 +211,17 @@ export function Header({ onSearchOpen }: HeaderProps) {
               transition: 'border-color 150ms ease',
             }}
           >
-            {themes.find((t) => t.key === activeTheme)?.label}
-          </Box>
-
-          {themeDropdownOpen && (
             <Box
               style={{
-                position: 'absolute',
-                top: '100%',
-                right: 0,
-                marginTop: 4,
-                background: 'var(--ds-color-white)',
-                border: '1px solid var(--ds-color-neutral-200)',
-                borderRadius: 8,
-                boxShadow: tokens.shadows.md,
-                overflow: 'hidden',
-                zIndex: 100,
-                minWidth: 120,
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: THEME_COLORS[activeTheme as Theme],
               }}
-            >
-              {themes.map((theme) => (
-                <Box
-                  key={theme.key}
-                  as="button"
-                  onClick={() => {
-                    setActiveTheme(theme.key);
-                    setThemeDropdownOpen(false);
-                  }}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    padding: '8px 14px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: '0.8125rem',
-                    fontWeight: activeTheme === theme.key ? 600 : 400,
-                    color: activeTheme === theme.key
-                      ? 'var(--ds-color-primary-600)'
-                      : 'var(--ds-color-text-primary)',
-                    background: activeTheme === theme.key
-                      ? 'var(--ds-color-primary-50)'
-                      : 'var(--ds-color-white)',
-                    transition: 'background 100ms ease',
-                  }}
-                >
-                  {theme.label}
-                </Box>
-              ))}
-            </Box>
-          )}
-        </Box>
+            />
+            {themes.find((t) => t.key === activeTheme)?.label}
+          </Box>
+        </Dropdown>
 
         {/* GitHub link */}
         <Box

@@ -2,18 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  Layers,
-  Puzzle,
-  LayoutGrid,
-  Monitor,
-  Palette,
-  Building2,
-  Briefcase,
-  PartyPopper,
-  ArrowRight,
-  ChevronRight,
-} from 'lucide-react';
+import { Layers, Puzzle, LayoutGrid, Monitor, Palette, PartyPopper } from 'lucide-react';
+import { Building2Icon, BriefcaseIcon, ArrowRightIcon, ChevronRightIcon } from '@rottay/design-system/icons';
+import { primitives, patterns, structures, surfaces, charts, icons } from '@/data/registry';
 
 /* ------------------------------------------------------------------ */
 /*  Animated counter hook                                              */
@@ -68,33 +59,33 @@ function StatPill({ label, count }: { label: string; count: number }) {
 const tiers = [
   {
     name: 'Primitives',
-    count: 97,
+    count: primitives.length,
     description: 'Engine-switched leaf components. The smallest reusable bricks.',
     color: 'from-blue-500 to-cyan-400',
     icon: Layers,
   },
   {
     name: 'Patterns',
-    count: 47,
+    count: patterns.length,
     description: 'Task-level compositions. Reusable machines made of bricks.',
     color: 'from-violet-500 to-purple-400',
     icon: Puzzle,
   },
   {
     name: 'Structures',
-    count: 21,
+    count: structures.length,
     description: 'Page-structure chrome. The frame around the machine.',
     color: 'from-amber-500 to-orange-400',
     icon: LayoutGrid,
   },
   {
     name: 'Surfaces',
-    count: 32,
+    count: surfaces.length,
     description: 'Declarative page recipes. The whole room layout.',
     color: 'from-emerald-500 to-teal-400',
     icon: Monitor,
   },
-] as const;
+];
 
 /* ------------------------------------------------------------------ */
 /*  Engine data                                                        */
@@ -139,7 +130,7 @@ const verticals = [
       'Admin portal for tenant management, billing, compliance, and system configuration.',
     color: '#3b82f6',
     gradient: 'from-blue-600 to-blue-400',
-    icon: Building2,
+    icon: Building2Icon,
   },
   {
     name: 'BitHire',
@@ -147,7 +138,7 @@ const verticals = [
       'AI-powered recruiting. Pipeline management, candidate tracking, and hiring workflows.',
     color: '#8b5cf6',
     gradient: 'from-violet-600 to-violet-400',
-    icon: Briefcase,
+    icon: BriefcaseIcon,
   },
   {
     name: 'Evnto',
@@ -214,25 +205,25 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200"
             >
               Explore the Showroom
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRightIcon className="h-4 w-4" />
             </Link>
             <Link
               href="/foundations"
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-6 py-3 text-sm font-semibold text-neutral-300 transition hover:border-neutral-500 hover:text-white"
             >
               Read the Docs
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRightIcon className="h-4 w-4" />
             </Link>
           </div>
 
           {/* Stats */}
           <div className="inline-flex flex-wrap items-center justify-center divide-x divide-neutral-800 rounded-xl border border-neutral-800 bg-neutral-900/60 backdrop-blur-sm">
-            <StatPill label="Primitives" count={97} />
-            <StatPill label="Patterns" count={47} />
-            <StatPill label="Structures" count={21} />
-            <StatPill label="Surfaces" count={32} />
-            <StatPill label="Charts" count={19} />
-            <StatPill label="Icons" count={109} />
+            <StatPill label="Primitives" count={primitives.length} />
+            <StatPill label="Patterns" count={patterns.length} />
+            <StatPill label="Structures" count={structures.length} />
+            <StatPill label="Surfaces" count={surfaces.length} />
+            <StatPill label="Charts" count={charts.length} />
+            <StatPill label="Icons" count={icons.length} />
           </div>
         </div>
       </section>
@@ -282,7 +273,7 @@ export default function HomePage() {
                   {/* Arrow connector (hidden on last) */}
                   {i < tiers.length - 1 && (
                     <div className="absolute top-1/2 -right-3 z-10 hidden -translate-y-1/2 text-neutral-300 lg:block">
-                      <ChevronRight className="h-5 w-5" />
+                      <ChevronRightIcon className="h-5 w-5" />
                     </div>
                   )}
                 </div>
@@ -404,7 +395,7 @@ export default function HomePage() {
             className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200"
           >
             Enter the Showroom
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRightIcon className="h-4 w-4" />
           </Link>
         </div>
       </section>

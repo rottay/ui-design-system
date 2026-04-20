@@ -478,7 +478,15 @@ const developers: NavSection = {
   slug: 'developers',
   label: 'Developers',
   children: [
-    { slug: 'developers', label: 'Developers', path: '/developers' },
+    {
+      slug: 'developers',
+      label: 'Developers',
+      path: '/developers',
+      children: [
+        { label: 'Getting Started', slug: 'getting-started', path: '/developers/getting-started' },
+        { label: 'Architecture', slug: 'architecture', path: '/developers/architecture' },
+      ],
+    },
   ],
 };
 

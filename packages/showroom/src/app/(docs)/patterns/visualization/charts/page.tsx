@@ -5,6 +5,7 @@ import {
   chartFamilies,
   charts,
 } from '@/data/registry';
+import { FeaturedCharts } from './featured-charts';
 
 // ---------------------------------------------------------------------------
 // Page
@@ -43,6 +44,9 @@ export default function ChartsOverviewPage() {
           </Text>
         </Box>
       </Box>
+
+      {/* Featured Charts - live previews */}
+      <FeaturedCharts />
 
       {/* Charts by family */}
       {chartFamilies.map((family) => {

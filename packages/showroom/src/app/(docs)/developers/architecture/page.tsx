@@ -1,7 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { Box, Flex, Stack, Text, Card, Badge } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
+import { ArrowLeftIcon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 
 const TIERS = [
@@ -104,6 +106,21 @@ export default function ArchitecturePage() {
 
   return (
     <Stack spacing="lg">
+      {/* Back link */}
+      <Link
+        href="/developers"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          fontSize: '0.875rem',
+          color: 'var(--ds-color-primary-500)',
+          textDecoration: 'none',
+        }}
+      >
+        <ArrowLeftIcon size={14} /> Back to Developers
+      </Link>
+
       {/* Page header */}
       <Box>
         <Text as={"h1" as any} size="2xl" weight="bold">

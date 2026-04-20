@@ -424,6 +424,263 @@ const PATTERN_PREVIEWS: Record<string, React.ReactNode> = {
       </Stack>
     </Box>
   ),
+
+  /* ---- kanban ---- */
+  'kanban-board': (
+    <Flex gap={12} style={{ overflowX: 'auto' }}>
+      {[
+        { title: 'To Do', items: ['Design review', 'API spec'] },
+        { title: 'In Progress', items: ['Auth module', 'Dashboard'] },
+        { title: 'Done', items: ['Setup CI'] },
+      ].map((col) => (
+        <Box
+          key={col.title}
+          style={{
+            flex: '1 1 160px',
+            minWidth: 140,
+            background: 'var(--ds-color-neutral-50, #f9fafb)',
+            borderRadius: 8,
+            padding: 10,
+          }}
+        >
+          <Text size="xs" weight="semibold" style={{ marginBottom: 8 }}>
+            {col.title}
+          </Text>
+          <Stack spacing={6}>
+            {col.items.map((item) => (
+              <Card key={item} style={{ padding: 8 }}>
+                <Text size="xs">{item}</Text>
+              </Card>
+            ))}
+          </Stack>
+        </Box>
+      ))}
+    </Flex>
+  ),
+
+  /* ---- file-manager ---- */
+  'file-manager': (
+    <Stack spacing={4}>
+      {[
+        { name: 'src/', type: 'folder' },
+        { name: 'package.json', type: 'file' },
+        { name: 'README.md', type: 'file' },
+        { name: 'tsconfig.json', type: 'file' },
+      ].map((f) => (
+        <Flex
+          key={f.name}
+          gap={8}
+          align="center"
+          style={{ padding: '6px 12px', borderRadius: 4 }}
+        >
+          <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+            {f.type === 'folder' ? '\u{1F4C1}' : '\u{1F4C4}'}
+          </Text>
+          <Text size="sm" style={{ flex: 1 }}>{f.name}</Text>
+          <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+            {f.type === 'folder' ? '4 items' : '2.1 KB'}
+          </Text>
+        </Flex>
+      ))}
+    </Stack>
+  ),
+
+  /* ---- locale-switcher ---- */
+  'locale-switcher': (
+    <Flex gap={4} style={{ flexWrap: 'wrap' }}>
+      {[
+        { code: 'EN', label: 'English', active: true },
+        { code: 'ES', label: 'Spanish', active: false },
+        { code: 'FR', label: 'French', active: false },
+        { code: 'DE', label: 'German', active: false },
+      ].map((loc) => (
+        <Box
+          key={loc.code}
+          style={{
+            padding: '6px 12px',
+            borderRadius: 6,
+            border: '1px solid var(--ds-color-border)',
+            background: loc.active ? 'var(--ds-color-primary)' : 'var(--ds-color-bg-container)',
+            cursor: 'pointer',
+          }}
+        >
+          <Text
+            size="xs"
+            weight={loc.active ? 'semibold' : 'normal'}
+            style={{ color: loc.active ? 'var(--ds-color-white, #fff)' : undefined }}
+          >
+            {loc.code}
+          </Text>
+        </Box>
+      ))}
+    </Flex>
+  ),
+
+  /* ---- environment-toggle ---- */
+  'environment-toggle': (
+    <Flex gap={4}>
+      {[
+        { name: 'Dev', active: true, color: 'var(--ds-color-success)' },
+        { name: 'Staging', active: false, color: 'var(--ds-color-warning)' },
+        { name: 'Prod', active: false, color: 'var(--ds-color-error)' },
+      ].map((env) => (
+        <Flex
+          key={env.name}
+          gap={6}
+          align="center"
+          style={{
+            padding: '6px 14px',
+            borderRadius: 6,
+            border: env.active
+              ? '2px solid var(--ds-color-primary)'
+              : '1px solid var(--ds-color-border)',
+            cursor: 'pointer',
+          }}
+        >
+          <Box
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              background: env.color,
+            }}
+          />
+          <Text size="xs" weight={env.active ? 'semibold' : 'normal'}>
+            {env.name}
+          </Text>
+        </Flex>
+      ))}
+    </Flex>
+  ),
+
+  /* ---- chat-surface ---- */
+  'chat-surface': (
+    <Stack spacing={12}>
+      <Flex gap={8}>
+        <Avatar size="sm">A</Avatar>
+        <Box
+          style={{
+            padding: '8px 12px',
+            borderRadius: 12,
+            background: 'var(--ds-color-neutral-100, #f3f4f6)',
+            maxWidth: '70%',
+          }}
+        >
+          <Text size="sm">Hey, can you review the latest PR?</Text>
+        </Box>
+      </Flex>
+      <Flex gap={8} justify="end">
+        <Box
+          style={{
+            padding: '8px 12px',
+            borderRadius: 12,
+            background: 'var(--ds-color-primary)',
+            maxWidth: '70%',
+          }}
+        >
+          <Text size="sm" style={{ color: 'var(--ds-color-white, #fff)' }}>
+            Sure, I will take a look now!
+          </Text>
+        </Box>
+        <Avatar size="sm">B</Avatar>
+      </Flex>
+    </Stack>
+  ),
+
+  /* ---- shortcuts-overlay ---- */
+  'shortcuts-overlay': (
+    <Box
+      style={{
+        border: '1px solid var(--ds-color-border)',
+        borderRadius: 8,
+        padding: 16,
+        maxWidth: 320,
+      }}
+    >
+      <Text size="sm" weight="semibold" style={{ marginBottom: 12 }}>
+        Keyboard Shortcuts
+      </Text>
+      <Stack spacing={8}>
+        {[
+          { keys: 'Cmd+K', action: 'Open command palette' },
+          { keys: 'Cmd+S', action: 'Save changes' },
+          { keys: 'Cmd+/', action: 'Toggle sidebar' },
+          { keys: 'Esc', action: 'Close modal' },
+        ].map((s) => (
+          <Flex key={s.keys} align="center" gap={8}>
+            <Box
+              style={{
+                padding: '2px 6px',
+                borderRadius: 4,
+                border: '1px solid var(--ds-color-border)',
+                background: 'var(--ds-color-neutral-50, #f9fafb)',
+              }}
+            >
+              <Text size="xs" weight="semibold">{s.keys}</Text>
+            </Box>
+            <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+              {s.action}
+            </Text>
+          </Flex>
+        ))}
+      </Stack>
+    </Box>
+  ),
+
+  /* ---- workspace-switcher ---- */
+  'workspace-switcher': (
+    <Box
+      style={{
+        border: '1px solid var(--ds-color-border)',
+        borderRadius: 8,
+        overflow: 'hidden',
+        maxWidth: 240,
+      }}
+    >
+      <Box style={{ padding: '8px 12px', borderBottom: '1px solid var(--ds-color-border)' }}>
+        <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>Switch workspace</Text>
+      </Box>
+      <Stack spacing={0}>
+        {[
+          { name: 'Acme Corp', active: true },
+          { name: 'Startup Inc', active: false },
+          { name: 'Personal', active: false },
+        ].map((ws) => (
+          <Flex
+            key={ws.name}
+            gap={8}
+            align="center"
+            style={{
+              padding: '8px 12px',
+              background: ws.active
+                ? 'var(--ds-color-primary-50, rgba(59,130,246,0.05))'
+                : 'transparent',
+              cursor: 'pointer',
+            }}
+          >
+            <Box
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 4,
+                background: 'var(--ds-color-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text size="xs" style={{ color: 'var(--ds-color-white, #fff)' }}>
+                {ws.name[0]}
+              </Text>
+            </Box>
+            <Text size="sm" weight={ws.active ? 'semibold' : 'normal'}>
+              {ws.name}
+            </Text>
+          </Flex>
+        ))}
+      </Stack>
+    </Box>
+  ),
 };
 
 // ---------------------------------------------------------------------------

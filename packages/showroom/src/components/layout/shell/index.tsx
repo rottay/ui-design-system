@@ -5,6 +5,7 @@ import { Box, Flex, useTokens } from '@rottay/design-system';
 import { Sidebar } from '../sidebar';
 import { Header } from '../header';
 import { SearchOverlay } from '../search';
+import { StateToast } from '../state-toast';
 
 export function ShowroomShell({ children }: { children: React.ReactNode }) {
   const tokens = useTokens();
@@ -48,6 +49,7 @@ export function ShowroomShell({ children }: { children: React.ReactNode }) {
         </Box>
       </Flex>
       <SearchOverlay isOpen={searchOpen} onClose={closeSearch} />
+      <StateToast />
     </Flex>
   );
 }

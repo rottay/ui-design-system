@@ -431,6 +431,199 @@ const STRUCTURE_PREVIEWS: Record<string, React.ReactNode> = {
       </Stack>
     </Box>
   ),
+
+  /* ---- form-header ---- */
+  'form-header': (
+    <Box
+      style={{
+        padding: '12px 16px',
+        border: '1px solid var(--ds-color-border)',
+        borderRadius: 8,
+        background: 'var(--ds-color-bg-container)',
+      }}
+    >
+      <Flex align="center" gap={12}>
+        <Text size="lg" weight="bold" style={{ flex: 1 }}>
+          Create New User
+        </Text>
+        <Button size="sm">Cancel</Button>
+        <Button size="sm" variant="primary">
+          Save
+        </Button>
+      </Flex>
+    </Box>
+  ),
+
+  /* ---- dashboard-insights ---- */
+  'dashboard-insights': (
+    <Flex gap={12} style={{ flexWrap: 'wrap' }}>
+      {[
+        { label: 'Conversion Rate', value: '3.2%', note: 'Up from 2.8% last week' },
+        { label: 'Avg. Session', value: '4m 12s', note: 'Down 8% vs last month' },
+        { label: 'Active Trials', value: '87', note: '12 expiring this week' },
+      ].map((insight) => (
+        <Card key={insight.label} style={{ flex: '1 1 160px', padding: 12 }}>
+          <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+            {insight.label}
+          </Text>
+          <Text size="lg" weight="bold" style={{ marginTop: 4 }}>
+            {insight.value}
+          </Text>
+          <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)', marginTop: 4 }}>
+            {insight.note}
+          </Text>
+        </Card>
+      ))}
+    </Flex>
+  ),
+
+  /* ---- column-menu ---- */
+  'column-menu': (
+    <Box
+      style={{
+        border: '1px solid var(--ds-color-border)',
+        borderRadius: 8,
+        padding: 12,
+        maxWidth: 220,
+      }}
+    >
+      <Text size="xs" weight="semibold" style={{ marginBottom: 8 }}>
+        Visible Columns
+      </Text>
+      <Stack spacing={6}>
+        {[
+          { name: 'Name', visible: true },
+          { name: 'Email', visible: true },
+          { name: 'Role', visible: true },
+          { name: 'Status', visible: false },
+          { name: 'Created', visible: false },
+        ].map((col) => (
+          <Flex key={col.name} gap={8} align="center">
+            <Box
+              style={{
+                width: 16,
+                height: 16,
+                borderRadius: 3,
+                border: '1px solid var(--ds-color-border)',
+                background: col.visible ? 'var(--ds-color-primary)' : 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {col.visible && (
+                <Text size="xs" style={{ color: 'var(--ds-color-white, #fff)', lineHeight: 1 }}>
+                  {'\u2713'}
+                </Text>
+              )}
+            </Box>
+            <Text size="xs">{col.name}</Text>
+          </Flex>
+        ))}
+      </Stack>
+    </Box>
+  ),
+
+  /* ---- saved-views-menu ---- */
+  'saved-views-menu': (
+    <Flex
+      gap={2}
+      style={{
+        padding: 4,
+        border: '1px solid var(--ds-color-border)',
+        borderRadius: 8,
+        background: 'var(--ds-color-bg-container)',
+        display: 'inline-flex',
+      }}
+    >
+      {['All Users', 'Active Only', 'Admins', 'Recent'].map((view, i) => (
+        <Box
+          key={view}
+          style={{
+            padding: '4px 12px',
+            borderRadius: 6,
+            cursor: 'pointer',
+            background: i === 0 ? 'var(--ds-color-primary)' : 'transparent',
+            color: i === 0 ? 'var(--ds-color-white, #fff)' : 'var(--ds-color-text-secondary)',
+          }}
+        >
+          <Text
+            size="xs"
+            weight={i === 0 ? 'semibold' : 'normal'}
+            style={{ color: i === 0 ? 'var(--ds-color-white, #fff)' : undefined }}
+          >
+            {view}
+          </Text>
+        </Box>
+      ))}
+    </Flex>
+  ),
+
+  /* ---- selection-preview-rail ---- */
+  'selection-preview-rail': (
+    <Box
+      style={{
+        padding: '8px 16px',
+        border: '1px solid var(--ds-color-primary)',
+        borderRadius: 8,
+        background: 'var(--ds-color-primary-50, rgba(59,130,246,0.05))',
+      }}
+    >
+      <Flex align="center" gap={12}>
+        <Badge variant="primary" size="sm">3 selected</Badge>
+        <Box style={{ flex: 1 }} />
+        <Button size="sm">Deselect All</Button>
+        <Button size="sm">Export</Button>
+        <Button size="sm" variant="primary">
+          Bulk Edit
+        </Button>
+      </Flex>
+    </Box>
+  ),
+
+  /* ---- form-sections ---- */
+  'form-sections': (
+    <Stack spacing={12}>
+      {[
+        { title: 'Basic Information', expanded: true, fields: ['Full Name', 'Email'] },
+        { title: 'Permissions', expanded: false, fields: [] },
+        { title: 'Preferences', expanded: false, fields: [] },
+      ].map((section) => (
+        <Box
+          key={section.title}
+          style={{
+            border: '1px solid var(--ds-color-border)',
+            borderRadius: 8,
+            overflow: 'hidden',
+          }}
+        >
+          <Flex
+            align="center"
+            gap={8}
+            style={{
+              padding: '8px 12px',
+              background: 'var(--ds-color-neutral-50, #f9fafb)',
+              cursor: 'pointer',
+            }}
+          >
+            <Text size="xs">{section.expanded ? '\u25BC' : '\u25B6'}</Text>
+            <Text size="sm" weight="semibold" style={{ flex: 1 }}>
+              {section.title}
+            </Text>
+          </Flex>
+          {section.expanded && (
+            <Box style={{ padding: 12 }}>
+              <Stack spacing={8}>
+                {section.fields.map((f) => (
+                  <Input key={f} placeholder={f} />
+                ))}
+              </Stack>
+            </Box>
+          )}
+        </Box>
+      ))}
+    </Stack>
+  ),
 };
 
 // ---------------------------------------------------------------------------
