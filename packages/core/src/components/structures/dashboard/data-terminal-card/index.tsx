@@ -37,8 +37,9 @@ import {
   Plus,
   BarChart3,
   Activity,
-  type LucideIcon,
 } from "lucide-react";
+import type { ComponentType } from 'react';
+type LucideIcon = ComponentType<any>;
 
 /**
  * Internal Link wrapper that resolves the consumer-supplied Link via the
