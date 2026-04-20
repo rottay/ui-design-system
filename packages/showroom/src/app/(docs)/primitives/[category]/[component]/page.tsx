@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge, Button } from '@rottay/design-system';
+import { Box, Flex, Stack, Text, Badge } from '@rottay/design-system';
 import {
   primitives,
   primitivesByCategory,
@@ -10,6 +10,7 @@ import { EngineComparison } from '@/components/playground';
 import { CodeBlock } from '@/components/playground';
 import { PropTable } from '@/components/playground';
 import type { PropDefinition } from '@/components/playground';
+import { LivePreview } from './live-preview';
 
 // ---------------------------------------------------------------------------
 // SSG
@@ -159,32 +160,9 @@ export default async function PrimitiveComponentPage({
         ))}
       </Flex>
 
-      {/* Engine comparison */}
+      {/* Engine comparison -- live DS component */}
       <EngineComparison>
-        <Flex direction="column" align="center" gap={8}>
-          <Box
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 8,
-              background: 'var(--ds-color-primary-100)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Text
-              size="lg"
-              weight="bold"
-              style={{ color: 'var(--ds-color-primary)' }}
-            >
-              {entry.name.charAt(0)}
-            </Text>
-          </Box>
-          <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-            {entry.name} preview
-          </Text>
-        </Flex>
+        <LivePreview slug={component} />
       </EngineComparison>
 
       {/* Import snippet */}

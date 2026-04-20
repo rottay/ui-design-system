@@ -3,182 +3,194 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Box, Flex, Stack, Text, Card, Badge, Input } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { SearchIcon } from '@rottay/design-system/icons';
+import * as AllIcons from '@rottay/design-system/icons';
 
-// ── Icon registry ──────────────────────────────────────────────────────
-// Organized by the 10 catalog categories. Each entry maps a display name
-// to the actual icon component so we can render it + build the import.
+// ── Category mapping ─────────────────────────────────────────────────
+// Maps each icon name to its catalog category. When a new icon is added
+// to the DS catalog, add it here to place it in the correct group.
+// Icons not listed here fall into 'misc' by default.
 
-import {
-  // navigation
-  ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon, ArrowDownIcon,
-  ArrowUpRightIcon, ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon,
-  ChevronRightIcon, HomeIcon, ExternalLinkIcon, MenuIcon,
-  MoreHorizontalIcon, PanelRightCloseIcon, ScanSearchIcon,
-  // action
-  PlusIcon, EditIcon, PencilIcon, PencilLineIcon, Trash2Icon,
-  SaveIcon, DownloadIcon, UploadIcon, CopyIcon, ClipboardCopyIcon,
-  RefreshCwIcon, RotateCcwIcon, SendIcon, Share2Icon, PowerIcon,
-  // status
-  CheckIcon, CheckCircleIcon, CheckCircle2Icon, XIcon, XCircleIcon,
-  AlertCircleIcon, AlertTriangleIcon, AlertOctagonIcon, InfoIcon,
-  BanIcon, LoaderCircleIcon, CircleAlertIcon,
-  // content
-  FileTextIcon, FileDownIcon, FolderIcon, BracesIcon,
-  BookmarkPlusIcon, BookmarkIcon, ImageIcon,
-  // communication
-  MailIcon, MessageSquareIcon, BellIcon, PhoneIcon, InboxIcon,
-  // user
-  UserIcon, UsersIcon, UserCheckIcon, UserXIcon, UserMinusIcon,
-  SettingsIcon, Settings2Icon, ShieldIcon, ShieldCheckIcon,
-  LockIcon, KeyIcon, KeyRoundIcon, FingerprintIcon, LogOutIcon,
-  // data
-  BarChart3Icon, TrendingUpIcon, TrendingDownIcon, ActivityIcon,
-  DatabaseIcon, FilterIcon, SlidersHorizontalIcon, LayersIcon, GlobeIcon,
-  // layout
-  ListIcon, LayoutGridIcon, Grid3x3Icon, Columns3Icon,
-  CalendarIcon, CalendarDaysIcon, AlignJustifyIcon, AlignCenterIcon,
-  AlignLeftIcon, LayoutTemplateIcon,
-  // media
-  EyeIcon, EyeOffIcon, StarIcon, ZapIcon, SparklesIcon,
-  MicIcon, MicOffIcon, AudioLinesIcon, CameraIcon,
-  // misc
-  BriefcaseIcon, Building2Icon, KeyboardIcon, ClockIcon,
-  Loader2Icon, FlagIcon, RocketIcon, GripVerticalIcon,
-  PinIcon, PinOffIcon, GitCompareIcon,
-} from '@rottay/design-system/icons';
+const CATEGORY_MAP: Record<string, string> = {
+  // Navigation (15)
+  ArrowLeftIcon: 'navigation',
+  ArrowRightIcon: 'navigation',
+  ArrowUpIcon: 'navigation',
+  ArrowDownIcon: 'navigation',
+  ArrowUpRightIcon: 'navigation',
+  ChevronDownIcon: 'navigation',
+  ChevronUpIcon: 'navigation',
+  ChevronLeftIcon: 'navigation',
+  ChevronRightIcon: 'navigation',
+  HomeIcon: 'navigation',
+  ExternalLinkIcon: 'navigation',
+  MenuIcon: 'navigation',
+  MoreHorizontalIcon: 'navigation',
+  PanelRightCloseIcon: 'navigation',
+  ScanSearchIcon: 'navigation',
+  // Action (15)
+  PlusIcon: 'action',
+  EditIcon: 'action',
+  PencilIcon: 'action',
+  PencilLineIcon: 'action',
+  Trash2Icon: 'action',
+  SaveIcon: 'action',
+  DownloadIcon: 'action',
+  UploadIcon: 'action',
+  CopyIcon: 'action',
+  ClipboardCopyIcon: 'action',
+  RefreshCwIcon: 'action',
+  RotateCcwIcon: 'action',
+  SendIcon: 'action',
+  Share2Icon: 'action',
+  PowerIcon: 'action',
+  // Status (12)
+  CheckIcon: 'status',
+  CheckCircleIcon: 'status',
+  CheckCircle2Icon: 'status',
+  XIcon: 'status',
+  XCircleIcon: 'status',
+  AlertCircleIcon: 'status',
+  AlertTriangleIcon: 'status',
+  AlertOctagonIcon: 'status',
+  InfoIcon: 'status',
+  BanIcon: 'status',
+  LoaderCircleIcon: 'status',
+  CircleAlertIcon: 'status',
+  // Content (7)
+  FileTextIcon: 'content',
+  FileDownIcon: 'content',
+  FolderIcon: 'content',
+  BracesIcon: 'content',
+  BookmarkPlusIcon: 'content',
+  BookmarkIcon: 'content',
+  ImageIcon: 'content',
+  // Communication (6)
+  MailIcon: 'communication',
+  MessageSquareIcon: 'communication',
+  BellIcon: 'communication',
+  PhoneIcon: 'communication',
+  InboxIcon: 'communication',
+  SendMessageIcon: 'communication',
+  // User (14)
+  UserIcon: 'user',
+  UsersIcon: 'user',
+  UserCheckIcon: 'user',
+  UserXIcon: 'user',
+  UserMinusIcon: 'user',
+  SettingsIcon: 'user',
+  Settings2Icon: 'user',
+  ShieldIcon: 'user',
+  ShieldCheckIcon: 'user',
+  LockIcon: 'user',
+  KeyIcon: 'user',
+  KeyRoundIcon: 'user',
+  FingerprintIcon: 'user',
+  LogOutIcon: 'user',
+  // Data (10)
+  BarChart3Icon: 'data',
+  TrendingUpIcon: 'data',
+  TrendingDownIcon: 'data',
+  ActivityIcon: 'data',
+  DatabaseIcon: 'data',
+  SearchIcon: 'data',
+  FilterIcon: 'data',
+  SlidersHorizontalIcon: 'data',
+  LayersIcon: 'data',
+  GlobeIcon: 'data',
+  // Layout (10)
+  ListIcon: 'layout',
+  LayoutGridIcon: 'layout',
+  Grid3x3Icon: 'layout',
+  Columns3Icon: 'layout',
+  CalendarIcon: 'layout',
+  CalendarDaysIcon: 'layout',
+  AlignJustifyIcon: 'layout',
+  AlignCenterIcon: 'layout',
+  AlignLeftIcon: 'layout',
+  LayoutTemplateIcon: 'layout',
+  // Media (9)
+  EyeIcon: 'media',
+  EyeOffIcon: 'media',
+  StarIcon: 'media',
+  ZapIcon: 'media',
+  SparklesIcon: 'media',
+  MicIcon: 'media',
+  MicOffIcon: 'media',
+  AudioLinesIcon: 'media',
+  CameraIcon: 'media',
+  // Misc (11)
+  BriefcaseIcon: 'misc',
+  Building2Icon: 'misc',
+  KeyboardIcon: 'misc',
+  ClockIcon: 'misc',
+  Loader2Icon: 'misc',
+  FlagIcon: 'misc',
+  RocketIcon: 'misc',
+  GripVerticalIcon: 'misc',
+  PinIcon: 'misc',
+  PinOffIcon: 'misc',
+  GitCompareIcon: 'misc',
+};
 
+// ── Non-icon exports to exclude from the registry ────────────────────
+const NON_ICON_EXPORTS = new Set([
+  'createIcon',
+  'ICON_SIZE_MAP',
+  'ICON_SIZE_TOKENS',
+  'BaseIcon',
+  'AlertIcon',
+  'LoaderIcon',
+]);
+
+// ── Constants ────────────────────────────────────────────────────────
+
+const CATEGORIES_LIST = [
+  'navigation', 'action', 'status', 'content', 'communication',
+  'user', 'data', 'layout', 'media', 'misc',
+];
+
+const CATEGORIES = ['all', ...CATEGORIES_LIST] as const;
+
+// ── Build the icon registry dynamically from AllIcons ────────────────
 interface IconEntry {
   name: string;
   component: React.ComponentType<{ size?: number }>;
   category: string;
 }
 
-const ICON_REGISTRY: IconEntry[] = [
-  // Navigation (15)
-  { name: 'ArrowLeftIcon', component: ArrowLeftIcon, category: 'navigation' },
-  { name: 'ArrowRightIcon', component: ArrowRightIcon, category: 'navigation' },
-  { name: 'ArrowUpIcon', component: ArrowUpIcon, category: 'navigation' },
-  { name: 'ArrowDownIcon', component: ArrowDownIcon, category: 'navigation' },
-  { name: 'ArrowUpRightIcon', component: ArrowUpRightIcon, category: 'navigation' },
-  { name: 'ChevronDownIcon', component: ChevronDownIcon, category: 'navigation' },
-  { name: 'ChevronUpIcon', component: ChevronUpIcon, category: 'navigation' },
-  { name: 'ChevronLeftIcon', component: ChevronLeftIcon, category: 'navigation' },
-  { name: 'ChevronRightIcon', component: ChevronRightIcon, category: 'navigation' },
-  { name: 'HomeIcon', component: HomeIcon, category: 'navigation' },
-  { name: 'ExternalLinkIcon', component: ExternalLinkIcon, category: 'navigation' },
-  { name: 'MenuIcon', component: MenuIcon, category: 'navigation' },
-  { name: 'MoreHorizontalIcon', component: MoreHorizontalIcon, category: 'navigation' },
-  { name: 'PanelRightCloseIcon', component: PanelRightCloseIcon, category: 'navigation' },
-  { name: 'ScanSearchIcon', component: ScanSearchIcon, category: 'navigation' },
-  // Action (15)
-  { name: 'PlusIcon', component: PlusIcon, category: 'action' },
-  { name: 'EditIcon', component: EditIcon, category: 'action' },
-  { name: 'PencilIcon', component: PencilIcon, category: 'action' },
-  { name: 'PencilLineIcon', component: PencilLineIcon, category: 'action' },
-  { name: 'Trash2Icon', component: Trash2Icon, category: 'action' },
-  { name: 'SaveIcon', component: SaveIcon, category: 'action' },
-  { name: 'DownloadIcon', component: DownloadIcon, category: 'action' },
-  { name: 'UploadIcon', component: UploadIcon, category: 'action' },
-  { name: 'CopyIcon', component: CopyIcon, category: 'action' },
-  { name: 'ClipboardCopyIcon', component: ClipboardCopyIcon, category: 'action' },
-  { name: 'RefreshCwIcon', component: RefreshCwIcon, category: 'action' },
-  { name: 'RotateCcwIcon', component: RotateCcwIcon, category: 'action' },
-  { name: 'SendIcon', component: SendIcon, category: 'action' },
-  { name: 'Share2Icon', component: Share2Icon, category: 'action' },
-  { name: 'PowerIcon', component: PowerIcon, category: 'action' },
-  // Status (12)
-  { name: 'CheckIcon', component: CheckIcon, category: 'status' },
-  { name: 'CheckCircleIcon', component: CheckCircleIcon, category: 'status' },
-  { name: 'CheckCircle2Icon', component: CheckCircle2Icon, category: 'status' },
-  { name: 'XIcon', component: XIcon, category: 'status' },
-  { name: 'XCircleIcon', component: XCircleIcon, category: 'status' },
-  { name: 'AlertCircleIcon', component: AlertCircleIcon, category: 'status' },
-  { name: 'AlertTriangleIcon', component: AlertTriangleIcon, category: 'status' },
-  { name: 'AlertOctagonIcon', component: AlertOctagonIcon, category: 'status' },
-  { name: 'InfoIcon', component: InfoIcon, category: 'status' },
-  { name: 'BanIcon', component: BanIcon, category: 'status' },
-  { name: 'LoaderCircleIcon', component: LoaderCircleIcon, category: 'status' },
-  { name: 'CircleAlertIcon', component: CircleAlertIcon, category: 'status' },
-  // Content (7)
-  { name: 'FileTextIcon', component: FileTextIcon, category: 'content' },
-  { name: 'FileDownIcon', component: FileDownIcon, category: 'content' },
-  { name: 'FolderIcon', component: FolderIcon, category: 'content' },
-  { name: 'BracesIcon', component: BracesIcon, category: 'content' },
-  { name: 'BookmarkPlusIcon', component: BookmarkPlusIcon, category: 'content' },
-  { name: 'BookmarkIcon', component: BookmarkIcon, category: 'content' },
-  { name: 'ImageIcon', component: ImageIcon, category: 'content' },
-  // Communication (5)
-  { name: 'MailIcon', component: MailIcon, category: 'communication' },
-  { name: 'MessageSquareIcon', component: MessageSquareIcon, category: 'communication' },
-  { name: 'BellIcon', component: BellIcon, category: 'communication' },
-  { name: 'PhoneIcon', component: PhoneIcon, category: 'communication' },
-  { name: 'InboxIcon', component: InboxIcon, category: 'communication' },
-  // User (14)
-  { name: 'UserIcon', component: UserIcon, category: 'user' },
-  { name: 'UsersIcon', component: UsersIcon, category: 'user' },
-  { name: 'UserCheckIcon', component: UserCheckIcon, category: 'user' },
-  { name: 'UserXIcon', component: UserXIcon, category: 'user' },
-  { name: 'UserMinusIcon', component: UserMinusIcon, category: 'user' },
-  { name: 'SettingsIcon', component: SettingsIcon, category: 'user' },
-  { name: 'Settings2Icon', component: Settings2Icon, category: 'user' },
-  { name: 'ShieldIcon', component: ShieldIcon, category: 'user' },
-  { name: 'ShieldCheckIcon', component: ShieldCheckIcon, category: 'user' },
-  { name: 'LockIcon', component: LockIcon, category: 'user' },
-  { name: 'KeyIcon', component: KeyIcon, category: 'user' },
-  { name: 'KeyRoundIcon', component: KeyRoundIcon, category: 'user' },
-  { name: 'FingerprintIcon', component: FingerprintIcon, category: 'user' },
-  { name: 'LogOutIcon', component: LogOutIcon, category: 'user' },
-  // Data (10)
-  { name: 'BarChart3Icon', component: BarChart3Icon, category: 'data' },
-  { name: 'TrendingUpIcon', component: TrendingUpIcon, category: 'data' },
-  { name: 'TrendingDownIcon', component: TrendingDownIcon, category: 'data' },
-  { name: 'ActivityIcon', component: ActivityIcon, category: 'data' },
-  { name: 'DatabaseIcon', component: DatabaseIcon, category: 'data' },
-  { name: 'SearchIcon', component: SearchIcon, category: 'data' },
-  { name: 'FilterIcon', component: FilterIcon, category: 'data' },
-  { name: 'SlidersHorizontalIcon', component: SlidersHorizontalIcon, category: 'data' },
-  { name: 'LayersIcon', component: LayersIcon, category: 'data' },
-  { name: 'GlobeIcon', component: GlobeIcon, category: 'data' },
-  // Layout (10)
-  { name: 'ListIcon', component: ListIcon, category: 'layout' },
-  { name: 'LayoutGridIcon', component: LayoutGridIcon, category: 'layout' },
-  { name: 'Grid3x3Icon', component: Grid3x3Icon, category: 'layout' },
-  { name: 'Columns3Icon', component: Columns3Icon, category: 'layout' },
-  { name: 'CalendarIcon', component: CalendarIcon, category: 'layout' },
-  { name: 'CalendarDaysIcon', component: CalendarDaysIcon, category: 'layout' },
-  { name: 'AlignJustifyIcon', component: AlignJustifyIcon, category: 'layout' },
-  { name: 'AlignCenterIcon', component: AlignCenterIcon, category: 'layout' },
-  { name: 'AlignLeftIcon', component: AlignLeftIcon, category: 'layout' },
-  { name: 'LayoutTemplateIcon', component: LayoutTemplateIcon, category: 'layout' },
-  // Media (9)
-  { name: 'EyeIcon', component: EyeIcon, category: 'media' },
-  { name: 'EyeOffIcon', component: EyeOffIcon, category: 'media' },
-  { name: 'StarIcon', component: StarIcon, category: 'media' },
-  { name: 'ZapIcon', component: ZapIcon, category: 'media' },
-  { name: 'SparklesIcon', component: SparklesIcon, category: 'media' },
-  { name: 'MicIcon', component: MicIcon, category: 'media' },
-  { name: 'MicOffIcon', component: MicOffIcon, category: 'media' },
-  { name: 'AudioLinesIcon', component: AudioLinesIcon, category: 'media' },
-  { name: 'CameraIcon', component: CameraIcon, category: 'media' },
-  // Misc (11)
-  { name: 'BriefcaseIcon', component: BriefcaseIcon, category: 'misc' },
-  { name: 'Building2Icon', component: Building2Icon, category: 'misc' },
-  { name: 'KeyboardIcon', component: KeyboardIcon, category: 'misc' },
-  { name: 'ClockIcon', component: ClockIcon, category: 'misc' },
-  { name: 'Loader2Icon', component: Loader2Icon, category: 'misc' },
-  { name: 'FlagIcon', component: FlagIcon, category: 'misc' },
-  { name: 'RocketIcon', component: RocketIcon, category: 'misc' },
-  { name: 'GripVerticalIcon', component: GripVerticalIcon, category: 'misc' },
-  { name: 'PinIcon', component: PinIcon, category: 'misc' },
-  { name: 'PinOffIcon', component: PinOffIcon, category: 'misc' },
-  { name: 'GitCompareIcon', component: GitCompareIcon, category: 'misc' },
-];
+const ICON_REGISTRY: IconEntry[] = Object.entries(AllIcons)
+  .filter(([name, value]) => {
+    if (NON_ICON_EXPORTS.has(name)) return false;
+    if (typeof value !== 'function') return false;
+    if (!name.endsWith('Icon')) return false;
+    return true;
+  })
+  .map(([name, component]) => ({
+    name,
+    component: component as React.ComponentType<{ size?: number }>,
+    category: CATEGORY_MAP[name] || 'misc',
+  }))
+  .sort((a, b) => {
+    const catOrder = CATEGORIES_LIST.indexOf(a.category) - CATEGORIES_LIST.indexOf(b.category);
+    if (catOrder !== 0) return catOrder;
+    return a.name.localeCompare(b.name);
+  });
 
-const CATEGORIES = [
-  'all', 'navigation', 'action', 'status', 'content', 'communication',
-  'user', 'data', 'layout', 'media', 'misc',
-] as const;
+const CATEGORY_LABELS: Record<string, string> = {
+  all: 'All',
+  navigation: 'Navigation',
+  action: 'Action',
+  status: 'Status',
+  content: 'Content',
+  communication: 'Communication',
+  user: 'User & Identity',
+  data: 'Data',
+  layout: 'Layout',
+  media: 'Media',
+  misc: 'Misc',
+};
+
+// ── IconCell ─────────────────────────────────────────────────────────
 
 function IconCell({ entry }: { entry: IconEntry }) {
   const tokens = useTokens();
@@ -215,6 +227,11 @@ function IconCell({ entry }: { entry: IconEntry }) {
         style={{
           color: copied ? 'var(--ds-color-success-600)' : 'var(--ds-color-text-primary)',
           transition: 'color 150ms ease',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 40,
+          height: 40,
         }}
       >
         <Icon size={24} />
@@ -233,6 +250,8 @@ function IconCell({ entry }: { entry: IconEntry }) {
     </Box>
   );
 }
+
+// ── Page ─────────────────────────────────────────────────────────────
 
 export default function IconsPage() {
   const tokens = useTokens();
@@ -254,6 +273,16 @@ export default function IconsPage() {
     }
     return counts;
   }, []);
+
+  // Group filtered icons by category for grouped display
+  const grouped = useMemo(() => {
+    const groups: Record<string, IconEntry[]> = {};
+    for (const entry of filtered) {
+      if (!groups[entry.category]) groups[entry.category] = [];
+      groups[entry.category].push(entry);
+    }
+    return groups;
+  }, [filtered]);
 
   return (
     <Stack spacing="lg">
@@ -283,7 +312,7 @@ export default function IconsPage() {
               placeholder="Search icons..."
               value={search}
               onChange={(value: string) => setSearch(value)}
-              prefix={<SearchIcon size={16} />}
+              prefix={<AllIcons.SearchIcon size={16} />}
             />
           </Box>
 
@@ -313,7 +342,7 @@ export default function IconsPage() {
                   transition: 'all 150ms ease',
                 }}
               >
-                {cat.charAt(0).toUpperCase() + cat.slice(1)} ({categoryCounts[cat] || 0})
+                {CATEGORY_LABELS[cat] || cat} ({categoryCounts[cat] || 0})
               </Box>
             ))}
           </Flex>
@@ -325,18 +354,36 @@ export default function IconsPage() {
         Showing {filtered.length} of {ICON_REGISTRY.length} icons
       </Text>
 
-      {/* Icon grid */}
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
-          gap: tokens.spacing[3],
-        }}
-      >
-        {filtered.map((entry) => (
-          <IconCell key={entry.name} entry={entry} />
-        ))}
-      </Box>
+      {/* Icon grid grouped by category */}
+      {CATEGORIES_LIST.map((cat) => {
+        const icons = grouped[cat];
+        if (!icons || icons.length === 0) return null;
+        return (
+          <Box key={cat}>
+            <Box style={{ marginBottom: tokens.spacing[3] }}>
+              <Flex align="center" gap={6}>
+                <Text as={"h2" as any} size="lg" weight="semibold">
+                  {CATEGORY_LABELS[cat] || cat}
+                </Text>
+                <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+                  {icons.length}
+                </Text>
+              </Flex>
+            </Box>
+            <Box
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+                gap: tokens.spacing[3],
+              }}
+            >
+              {icons.map((entry) => (
+                <IconCell key={entry.name} entry={entry} />
+              ))}
+            </Box>
+          </Box>
+        );
+      })}
 
       {filtered.length === 0 && (
         <Flex
