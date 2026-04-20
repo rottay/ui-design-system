@@ -261,7 +261,7 @@ A standalone Next.js 16 app that serves as the commercial showcase for the desig
 ```bash
 cd packages/showroom
 pnpm install
-pnpm dev          # http://localhost:7000 (Turbopack)
+pnpm dev          # http://localhost:7001 (Turbopack)
 pnpm build        # Production build (~10s, 265 pages)
 pnpm typecheck    # TypeScript check
 ```

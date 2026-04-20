@@ -11,13 +11,13 @@ pnpm install
 pnpm dev
 ```
 
-Open http://localhost:7000
+Open http://localhost:7001
 
 ## Scripts
 
 | Script | Description |
 |--------|-------------|
-| `pnpm dev` | Start dev server on port 7000 (Turbopack) |
+| `pnpm dev` | Start dev server on port 7001 (Turbopack) |
 | `pnpm build` | Production build (~10s, 265 static pages) |
 | `pnpm start` | Start production server |
 | `pnpm typecheck` | Run TypeScript type check |
