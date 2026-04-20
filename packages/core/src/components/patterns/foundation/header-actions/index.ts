@@ -27,7 +27,8 @@
  * exact same symbol names from `@rottay/design-system`.
  */
 
-import type { LucideIcon } from 'lucide-react';
+import type { ComponentType } from 'react';
+type LucideIcon = ComponentType<any>;
 import {
   ArrowUpRight,
   CalendarClock,

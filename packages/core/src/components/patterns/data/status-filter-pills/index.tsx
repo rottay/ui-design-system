@@ -12,7 +12,8 @@
  * their own state container.
  */
 
-import type { LucideIcon } from 'lucide-react';
+import type { ComponentType } from 'react';
+type LucideIcon = ComponentType<any>;
 
 import { Box, Flex, Text } from '../../../primitives';
 

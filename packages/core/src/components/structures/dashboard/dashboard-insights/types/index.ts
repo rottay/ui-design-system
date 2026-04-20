@@ -1,4 +1,5 @@
-import type { LucideIcon } from "lucide-react";
+import type { ComponentType } from 'react';
+type LucideIcon = ComponentType<any>;
 
 // Variant types
 export type MetricsVariant = "rows" | "cards" | "minimal" | "chart";

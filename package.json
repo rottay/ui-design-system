@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "sideEffects": [
     "*.css"
   ],

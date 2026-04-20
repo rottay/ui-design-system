@@ -53,7 +53,8 @@ import { type CSSProperties, type ReactNode } from 'react';
 
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Save, X } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import type { ComponentType } from 'react';
+type LucideIcon = ComponentType<any>;
 
 import { Box, Button, Flex, Spinner, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../runtime/adapters/navigation';

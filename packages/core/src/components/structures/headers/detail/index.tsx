@@ -44,7 +44,9 @@
 
 import { type CSSProperties, type ReactNode } from 'react';
 
-import { ArrowLeft, type LucideIcon } from 'lucide-react';
+import { ArrowLeftIcon } from '../../../../icons/catalog/navigation';
+import type { ComponentType } from 'react';
+type LucideIcon = ComponentType<any>;
 
 import { Badge, Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../runtime/adapters/navigation';
@@ -297,7 +299,7 @@ export function DetailHeader({
                   background: 'transparent',
                 }}
               >
-                <ArrowLeft style={{ width: 14, height: 14, color: sharedTextSecondary }} />
+                <ArrowLeftIcon style={{ width: 14, height: 14, color: sharedTextSecondary }} />
                 <Text size="xs" style={{ color: sharedTextSecondary }}>
                   {backLabel}
                 </Text>

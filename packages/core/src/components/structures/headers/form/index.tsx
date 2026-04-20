@@ -54,7 +54,9 @@
 
 import { type CSSProperties, type ReactNode } from 'react';
 
-import { ArrowLeft, type LucideIcon } from 'lucide-react';
+import { ArrowLeftIcon } from '../../../../icons/catalog/navigation';
+import type { ComponentType } from 'react';
+type LucideIcon = ComponentType<any>;
 
 import { Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../runtime/adapters/navigation';
@@ -256,7 +258,7 @@ export function FormHeader({
                   transition: 'all 0.2s ease',
                 }}
               >
-                <ArrowLeft style={{ width: 14, height: 14, color: 'var(--ds-color-text-secondary)' }} />
+                <ArrowLeftIcon style={{ width: 14, height: 14, color: 'var(--ds-color-text-secondary)' }} />
                 <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {backLabel}
                 </Text>
