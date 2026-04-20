@@ -1,11 +1,29 @@
 'use client';
 
+import { useState, useCallback, useEffect } from 'react';
 import { Box, Flex, useTokens } from '@rottay/design-system';
 import { Sidebar } from '../sidebar';
 import { Header } from '../header';
+import { SearchOverlay } from '../search';
 
 export function ShowroomShell({ children }: { children: React.ReactNode }) {
   const tokens = useTokens();
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const openSearch = useCallback(() => setSearchOpen(true), []);
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
+
+  // Global Cmd+K / Ctrl+K handler
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <Flex style={{ minHeight: '100vh' }}>
@@ -18,7 +36,7 @@ export function ShowroomShell({ children }: { children: React.ReactNode }) {
           background: 'var(--ds-color-neutral-50)',
         }}
       >
-        <Header />
+        <Header onSearchOpen={openSearch} />
         <Box
           style={{
             flex: 1,
@@ -29,6 +47,7 @@ export function ShowroomShell({ children }: { children: React.ReactNode }) {
           {children}
         </Box>
       </Flex>
+      <SearchOverlay isOpen={searchOpen} onClose={closeSearch} />
     </Flex>
   );
 }

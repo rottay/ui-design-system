@@ -19,13 +19,22 @@ import {
 } from '@rottay/design-system/icons';
 
 /**
+ * Navigation item that may have nested children for sub-navigation.
+ */
+interface NavChild {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+}
+
+/**
  * Navigation group definition for the sidebar tree.
  */
 interface NavGroup {
   label: string;
   icon: React.ReactNode;
   basePath: string;
-  children: { label: string; href: string }[];
+  children: NavChild[];
 }
 
 const NAV_GROUPS: NavGroup[] = [
@@ -34,7 +43,18 @@ const NAV_GROUPS: NavGroup[] = [
     icon: <LayersIcon size={16} />,
     basePath: '/foundations',
     children: [
-      { label: 'Tokens', href: '/foundations/tokens' },
+      {
+        label: 'Tokens',
+        href: '/foundations/tokens',
+        children: [
+          { label: 'Colors', href: '/foundations/tokens/colors' },
+          { label: 'Spacing', href: '/foundations/tokens/spacing' },
+          { label: 'Typography', href: '/foundations/tokens/typography' },
+          { label: 'Radius', href: '/foundations/tokens/radius' },
+          { label: 'Shadows', href: '/foundations/tokens/shadows' },
+          { label: 'Motion', href: '/foundations/tokens/motion' },
+        ],
+      },
       { label: 'Colors', href: '/foundations/colors' },
       { label: 'Typography', href: '/foundations/typography' },
       { label: 'Spacing', href: '/foundations/spacing' },
@@ -170,29 +190,62 @@ function NavGroupItem({ group }: { group: NavGroup }) {
         <Stack spacing={2} style={{ paddingLeft: 28, paddingTop: 4 }}>
           {group.children.map((item) => {
             const isActive = pathname === item.href;
+            const isChildActive = item.children?.some((c) => pathname === c.href) ?? false;
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                style={{ textDecoration: 'none' }}
-              >
-                <Box
-                  style={{
-                    padding: '5px 12px',
-                    borderRadius: 6,
-                    transition: 'background 150ms ease',
-                    background: isActive ? 'var(--ds-color-primary-100)' : 'transparent',
-                  }}
+              <Box key={item.href}>
+                <Link
+                  href={item.href}
+                  style={{ textDecoration: 'none' }}
                 >
-                  <Text
-                    size="sm"
-                    weight={isActive ? 'medium' : 'normal'}
-                    color={isActive ? 'primary' : 'secondary'}
+                  <Box
+                    style={{
+                      padding: '5px 12px',
+                      borderRadius: 6,
+                      transition: 'background 150ms ease',
+                      background: (isActive || isChildActive) ? 'var(--ds-color-primary-100)' : 'transparent',
+                    }}
                   >
-                    {item.label}
-                  </Text>
-                </Box>
-              </Link>
+                    <Text
+                      size="sm"
+                      weight={(isActive || isChildActive) ? 'medium' : 'normal'}
+                      color={(isActive || isChildActive) ? 'primary' : 'secondary'}
+                    >
+                      {item.label}
+                    </Text>
+                  </Box>
+                </Link>
+                {item.children && (isActive || isChildActive || pathname.startsWith(item.href + '/')) && (
+                  <Stack spacing={1} style={{ paddingLeft: 16, paddingTop: 2 }}>
+                    {item.children.map((sub) => {
+                      const isSubActive = pathname === sub.href;
+                      return (
+                        <Link
+                          key={sub.href}
+                          href={sub.href}
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Box
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: 5,
+                              transition: 'background 100ms ease',
+                              background: isSubActive ? 'var(--ds-color-primary-50)' : 'transparent',
+                            }}
+                          >
+                            <Text
+                              size="xs"
+                              weight={isSubActive ? 'medium' : 'normal'}
+                              color={isSubActive ? 'primary' : 'muted'}
+                            >
+                              {sub.label}
+                            </Text>
+                          </Box>
+                        </Link>
+                      );
+                    })}
+                  </Stack>
+                )}
+              </Box>
             );
           })}
         </Stack>

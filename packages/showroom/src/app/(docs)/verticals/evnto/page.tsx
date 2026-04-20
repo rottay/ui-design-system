@@ -14,6 +14,10 @@ import {
   ActivityIcon,
 } from '@rottay/design-system/icons';
 
+import { EventDashboardDemo } from '@/components/demos/evnto/event-dashboard';
+import { TicketBuilderDemo } from '@/components/demos/evnto/ticket-builder';
+import { VenueLayoutDemo } from '@/components/demos/evnto/venue-layout';
+
 interface DemoCategory {
   title: string;
   slug: string;
@@ -142,7 +146,67 @@ function EvntoContent() {
         ))}
       </Flex>
 
+      {/* Live Demo Previews */}
+      <Box>
+        <Text as={"h2" as any} size="xl" weight="bold">
+          Live Demos
+        </Text>
+        <Box style={{ marginTop: tokens.spacing[1] }}>
+          <Text
+            size="sm"
+            style={{ color: 'var(--ds-color-text-secondary)' }}
+          >
+            Interactive previews rendered with the Evnto engine configuration
+          </Text>
+        </Box>
+      </Box>
+
+      {/* Demo 1: Event Dashboard */}
+      <Card style={{ padding: tokens.spacing[5], overflow: 'hidden' }}>
+        <Stack spacing="md">
+          <Flex align="center" gap={8}>
+            <Badge variant="primary">Demo</Badge>
+            <Text size="sm" weight="semibold">
+              Event Operations Dashboard
+            </Text>
+          </Flex>
+          <EventDashboardDemo />
+        </Stack>
+      </Card>
+
+      {/* Demo 2: Ticket Builder */}
+      <Card style={{ padding: tokens.spacing[5], overflow: 'hidden' }}>
+        <Stack spacing="md">
+          <Flex align="center" gap={8}>
+            <Badge variant="primary">Demo</Badge>
+            <Text size="sm" weight="semibold">
+              Ticket Tier Builder
+            </Text>
+          </Flex>
+          <TicketBuilderDemo />
+        </Stack>
+      </Card>
+
+      {/* Demo 3: Venue Layout */}
+      <Card style={{ padding: tokens.spacing[5], overflow: 'hidden' }}>
+        <Stack spacing="md">
+          <Flex align="center" gap={8}>
+            <Badge variant="primary">Demo</Badge>
+            <Text size="sm" weight="semibold">
+              Venue Zone Overview
+            </Text>
+          </Flex>
+          <VenueLayoutDemo />
+        </Stack>
+      </Card>
+
       {/* Category cards */}
+      <Box style={{ marginTop: tokens.spacing[4] }}>
+        <Text as={"h2" as any} size="xl" weight="bold">
+          All Categories
+        </Text>
+      </Box>
+
       <Box
         style={{
           display: 'grid',

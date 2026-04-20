@@ -19,6 +19,7 @@ import {
   CodeBlock,
   ComponentPreview,
 } from '@/components/playground';
+import { useShowroom } from '@/components/showroom-context';
 
 type EngineType = 'classic' | 'modern' | 'rustic';
 type ComponentType = 'Button' | 'Input' | 'Card' | 'Badge';
@@ -133,8 +134,7 @@ function LivePreviewContent({ component }: { component: ComponentType }) {
 
 export default function PlaygroundPage() {
   const tokens = useTokens();
-  const [engine, setEngine] = useState<EngineType>('modern');
-  const [theme, setTheme] = useState('rottay');
+  const { engine, setEngine, tenantSlug: theme, setTenantSlug: setTheme } = useShowroom();
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>('Button');
 
   return (

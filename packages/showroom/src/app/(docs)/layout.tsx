@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { DesignSystemProvider } from '@rottay/design-system';
 import { ShowroomShell } from '@/components/layout/shell';
+import { ShowroomProvider, useShowroom } from '@/components/showroom-context';
 
-export default function DocsLayout({ children }: { children: React.ReactNode }) {
-  const [engine, setEngine] = useState<'classic' | 'modern' | 'rustic'>('modern');
-  const [tenantSlug, setTenantSlug] = useState('rottay');
+function ShowroomInner({ children }: { children: React.ReactNode }) {
+  const { engine, tenantSlug } = useShowroom();
 
   return (
     <DesignSystemProvider forceEngine={engine} tenantSlug={tenantSlug}>
@@ -14,5 +13,15 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         {children}
       </ShowroomShell>
     </DesignSystemProvider>
+  );
+}
+
+export default function DocsLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <ShowroomProvider>
+      <ShowroomInner>
+        {children}
+      </ShowroomInner>
+    </ShowroomProvider>
   );
 }

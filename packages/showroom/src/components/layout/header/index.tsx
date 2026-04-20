@@ -7,7 +7,9 @@ import {
   ChevronRightIcon,
   HomeIcon,
   ExternalLinkIcon,
+  SearchIcon,
 } from '@rottay/design-system/icons';
+import { useShowroom } from '@/components/showroom-context';
 
 type Engine = 'classic' | 'modern' | 'rustic';
 type Theme = 'rottay' | 'bithire' | 'evnto';
@@ -29,10 +31,13 @@ function useBreadcrumbs(): { label: string; href: string }[] {
   }));
 }
 
-export function Header() {
+interface HeaderProps {
+  onSearchOpen?: () => void;
+}
+
+export function Header({ onSearchOpen }: HeaderProps) {
   const tokens = useTokens();
-  const [activeEngine, setActiveEngine] = useState<Engine>('classic');
-  const [activeTheme, setActiveTheme] = useState<Theme>('rottay');
+  const { engine: activeEngine, setEngine: setActiveEngine, tenantSlug: activeTheme, setTenantSlug: setActiveTheme } = useShowroom();
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const breadcrumbs = useBreadcrumbs();
 
@@ -86,6 +91,40 @@ export function Header() {
 
       {/* Controls */}
       <Flex align="center" gap={16}>
+        {/* Search button */}
+        <Box
+          as="button"
+          onClick={() => onSearchOpen?.()}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '5px 10px 5px 8px',
+            borderRadius: 6,
+            border: '1px solid var(--ds-color-neutral-200)',
+            cursor: 'pointer',
+            fontSize: '0.8125rem',
+            color: 'var(--ds-color-text-tertiary)',
+            background: 'var(--ds-color-white)',
+            transition: 'border-color 150ms ease',
+          }}
+        >
+          <SearchIcon size={14} />
+          <span style={{ marginRight: 8 }}>Search</span>
+          <span
+            style={{
+              padding: '1px 5px',
+              borderRadius: 4,
+              border: '1px solid var(--ds-color-neutral-300)',
+              fontSize: '0.6875rem',
+              color: 'var(--ds-color-text-tertiary)',
+              lineHeight: 1.4,
+            }}
+          >
+            {'\u2318'}K
+          </span>
+        </Box>
+
         {/* Engine switcher */}
         <Flex
           align="center"

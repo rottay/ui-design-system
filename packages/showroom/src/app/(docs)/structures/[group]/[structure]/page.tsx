@@ -5,6 +5,7 @@ import {
   structureGroups,
   type StructureGroup,
 } from '@/data/registry';
+import { StructurePreview } from './structure-preview';
 
 // ---------------------------------------------------------------------------
 // SSG
@@ -92,7 +93,7 @@ export default async function StructureDetailPage({
         </Box>
       </Box>
 
-      {/* Live demo placeholder */}
+      {/* Live demo */}
       <Card>
         <Stack spacing="md">
           <Text as={"h3" as any} size="lg" weight="semibold">
@@ -100,21 +101,14 @@ export default async function StructureDetailPage({
           </Text>
           <Box
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: 200,
+              minHeight: 120,
               borderRadius: 8,
-              border: '2px dashed var(--ds-color-neutral-300)',
+              border: '1px solid var(--ds-color-neutral-200)',
               background: 'var(--ds-color-neutral-50)',
+              overflow: 'hidden',
             }}
           >
-            <Text
-              size="sm"
-              style={{ color: 'var(--ds-color-text-muted)' }}
-            >
-              Live demo for {entry.name} will be rendered here.
-            </Text>
+            <StructurePreview slug={entry.slug} />
           </Box>
         </Stack>
       </Card>

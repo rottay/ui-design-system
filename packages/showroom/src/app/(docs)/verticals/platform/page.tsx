@@ -13,6 +13,10 @@ import {
   BellIcon,
 } from '@rottay/design-system/icons';
 
+import PlatformDashboardDemo from '@/components/demos/platform/dashboard';
+import PlatformUserListDemo from '@/components/demos/platform/user-list';
+import PlatformTenantFormDemo from '@/components/demos/platform/tenant-form';
+
 interface DemoCategory {
   title: string;
   slug: string;
@@ -134,64 +138,113 @@ function PlatformContent() {
         ))}
       </Flex>
 
-      {/* Category cards */}
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-          gap: tokens.spacing[5],
-        }}
-      >
-        {PLATFORM_CATEGORIES.map((cat) => (
-          <Link
-            key={cat.slug}
-            href={`/verticals/platform/${cat.slug}`}
-            style={{ textDecoration: 'none' }}
+      {/* Live Demo Previews */}
+      <Stack spacing="xl">
+        <Box>
+          <Box
+            style={{
+              border: '1px solid var(--ds-color-neutral-200)',
+              borderRadius: tokens.borderRadius.lg,
+              padding: tokens.spacing[5],
+              background: 'var(--ds-color-neutral-50)',
+            }}
           >
-            <Card
-              hoverable
-              style={{
-                height: '100%',
-                cursor: 'pointer',
-                transition: 'box-shadow 200ms ease, transform 200ms ease',
-              }}
-            >
-              <Stack spacing="md">
-                <Flex align="center" justify="between">
-                  <Box
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: tokens.borderRadius.md,
-                      background: 'var(--ds-color-primary-50)',
-                      color: 'var(--ds-color-primary-500)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {cat.icon}
-                  </Box>
-                  <Badge>{cat.demoCount} demos</Badge>
-                </Flex>
+            <PlatformDashboardDemo />
+          </Box>
+        </Box>
 
-                <Box>
-                  <Text as={"h3" as any} size="lg" weight="semibold">
-                    {cat.title}
-                  </Text>
-                  <Box style={{ marginTop: tokens.spacing[1] }}>
-                    <Text
-                      size="sm"
-                      style={{ color: 'var(--ds-color-text-secondary)' }}
+        <Box>
+          <Box
+            style={{
+              border: '1px solid var(--ds-color-neutral-200)',
+              borderRadius: tokens.borderRadius.lg,
+              padding: tokens.spacing[5],
+              background: 'var(--ds-color-neutral-50)',
+            }}
+          >
+            <PlatformUserListDemo />
+          </Box>
+        </Box>
+
+        <Box>
+          <Box
+            style={{
+              border: '1px solid var(--ds-color-neutral-200)',
+              borderRadius: tokens.borderRadius.lg,
+              padding: tokens.spacing[5],
+              background: 'var(--ds-color-neutral-50)',
+            }}
+          >
+            <PlatformTenantFormDemo />
+          </Box>
+        </Box>
+      </Stack>
+
+      {/* Category cards */}
+      <Box>
+        <Box style={{ marginBottom: tokens.spacing[4] }}>
+          <Text as={"h2" as any} size="xl" weight="semibold">
+            All Categories
+          </Text>
+        </Box>
+        <Box
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: tokens.spacing[5],
+          }}
+        >
+          {PLATFORM_CATEGORIES.map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/verticals/platform/${cat.slug}`}
+              style={{ textDecoration: 'none' }}
+            >
+              <Card
+                hoverable
+                style={{
+                  height: '100%',
+                  cursor: 'pointer',
+                  transition: 'box-shadow 200ms ease, transform 200ms ease',
+                }}
+              >
+                <Stack spacing="md">
+                  <Flex align="center" justify="between">
+                    <Box
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: tokens.borderRadius.md,
+                        background: 'var(--ds-color-primary-50)',
+                        color: 'var(--ds-color-primary-500)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
-                      {cat.description}
+                      {cat.icon}
+                    </Box>
+                    <Badge>{cat.demoCount} demos</Badge>
+                  </Flex>
+
+                  <Box>
+                    <Text as={"h3" as any} size="lg" weight="semibold">
+                      {cat.title}
                     </Text>
+                    <Box style={{ marginTop: tokens.spacing[1] }}>
+                      <Text
+                        size="sm"
+                        style={{ color: 'var(--ds-color-text-secondary)' }}
+                      >
+                        {cat.description}
+                      </Text>
+                    </Box>
                   </Box>
-                </Box>
-              </Stack>
-            </Card>
-          </Link>
-        ))}
+                </Stack>
+              </Card>
+            </Link>
+          ))}
+        </Box>
       </Box>
     </Stack>
   );
