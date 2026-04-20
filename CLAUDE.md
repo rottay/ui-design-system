@@ -253,6 +253,65 @@ Features implemented across Waves 2 through 6 of the DS execution plan.
 
 ---
 
+## Showroom Package (packages/showroom/)
+
+A standalone Next.js 16 app that serves as the commercial showcase for the design system. Lives alongside packages/core/ in the same pnpm workspace.
+
+### Quick Start
+```bash
+cd packages/showroom
+pnpm install
+pnpm dev          # http://localhost:7000 (Turbopack)
+pnpm build        # Production build (~10s, 265 pages)
+pnpm typecheck    # TypeScript check
+```
+
+### Architecture
+- **Location**: `ui-design-system/packages/showroom/`
+- **Framework**: Next.js 16 + React 19 + TypeScript + Tailwind (marketing only)
+- **DS dependency**: `workspace:*` (hot-reload, no publish needed)
+- **Bundler**: Turbopack (no --webpack flag needed)
+- **Port**: 3002 (avoids collision with app-platform on 3000)
+- **Deploy target**: showroom.rottay.com (Vercel, separate project)
+
+### Route Tree (265 pages)
+```
+/                          Commercial landing page (Tailwind, marketing exception)
+/foundations/              Tokens, themes, engines, icons
+  /tokens/{colors,spacing,typography,radius,shadows,motion}
+  /icons                   109 searchable icons with copy-to-clipboard
+  /engines                 Side-by-side engine comparison
+  /themes                  3 brand themes with live preview
+/primitives/[category]/[component]   97 primitive pages with live rendering
+/patterns/[group]/[pattern]          47 pattern pages with previews
+  /visualization/charts/[type]       18 chart pages with real D3 rendering
+/structures/[group]/[structure]      21 structure pages
+/surfaces/[group]/[surface]          36 surface pages with composition
+/verticals/                          Platform, BitHire, Evnto
+  /platform/[category]              Dashboard, user list, tenant form demos
+  /bithire/[category]               Pipeline kanban, recruiter dashboard, scorecard
+  /evnto/[category]                 Event dashboard, ticket builder, venue layout
+/playground                          Interactive sandbox + theme builder
+/developers/                         Getting started + architecture deep-dive
+```
+
+### Key Components
+- `src/components/layout/` -- Shell, sidebar, header (with engine/theme switcher), footer, search (Cmd+K)
+- `src/components/playground/` -- Engine switcher, theme switcher, code block, prop table, component preview, engine comparison
+- `src/components/demos/` -- Vertical demo screens (platform/, bithire/, evnto/)
+- `src/components/showroom-context/` -- Global engine/theme state context
+- `src/data/registry/` -- Component registries (primitives, patterns, structures, surfaces, charts, icons)
+- `src/data/navigation.ts` -- Sidebar navigation tree
+
+### Rules
+- Marketing landing page (src/app/page.tsx) uses Tailwind + lucide-react (marketing exception)
+- ALL other pages use DS components (Box, Flex, Stack, Text, Card, Badge, Button)
+- Icons from @rottay/design-system/icons (not lucide-react)
+- folder/index.tsx pattern for all components
+- Data registries must stay in sync with packages/core/ components
+
+---
+
 ### Component CSS variable pattern (2026-04-17)
 
 Modern engine components read **component-specific CSS variables** with fallback to generic tokens:
