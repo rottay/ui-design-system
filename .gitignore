@@ -69,3 +69,4 @@ secrets/
 .turbo
 
 .vercel
+.env*.local

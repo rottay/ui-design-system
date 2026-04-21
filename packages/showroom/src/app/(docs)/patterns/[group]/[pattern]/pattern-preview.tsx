@@ -1,706 +1,234 @@
 'use client';
 
+import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
-  Box,
-  Flex,
-  Text,
-  Badge,
-  Card,
-  Button,
-  Input,
-  Stack,
-  Avatar,
-} from '@rottay/design-system';
+  SHOWROOM_SURFACES,
+  mixWithCanvas,
+  mixWithSurface,
+} from '@/components/playground/surface-tokens';
+import { patterns } from '@/data/registry';
+import type { PatternGroup } from '@/data/registry';
+import { renderPatternPreview } from './pattern-preview-fixtures';
 
-// ---------------------------------------------------------------------------
-// Preview map -- keyed by pattern slug from the registry
-// ---------------------------------------------------------------------------
-
-const PATTERN_PREVIEWS: Record<string, React.ReactNode> = {
-  /* ---- data ---- */
-  'data-table': (
-    <Box
-      style={{
-        border: '1px solid var(--ds-color-border)',
-        borderRadius: 8,
-        overflow: 'hidden',
-      }}
-    >
-      <Flex
-        style={{
-          padding: '8px 16px',
-          background: 'var(--ds-color-bg-container)',
-          borderBottom: '1px solid var(--ds-color-border)',
-        }}
-      >
-        <Text size="xs" weight="semibold" style={{ flex: 1 }}>
-          Name
-        </Text>
-        <Text size="xs" weight="semibold" style={{ flex: 1 }}>
-          Email
-        </Text>
-        <Text size="xs" weight="semibold" style={{ width: 80 }}>
-          Status
-        </Text>
-      </Flex>
-      {['Alice Johnson', 'Bob Smith', 'Carol Davis'].map((name, i) => (
-        <Flex
-          key={name}
-          style={{
-            padding: '8px 16px',
-            borderBottom:
-              i < 2 ? '1px solid var(--ds-color-border)' : undefined,
-          }}
-        >
-          <Text size="sm" style={{ flex: 1 }}>
-            {name}
-          </Text>
-          <Text
-            size="sm"
-            style={{ flex: 1, color: 'var(--ds-color-text-secondary)' }}
-          >
-            {name.toLowerCase().replace(' ', '.')}@acme.com
-          </Text>
-          <Box style={{ width: 80 }}>
-            <Badge
-              variant={i === 0 ? 'success' : 'secondary'}
-              size="sm"
-            >
-              {i === 0 ? 'Active' : 'Inactive'}
-            </Badge>
-          </Box>
-        </Flex>
-      ))}
-    </Box>
-  ),
-
-  'stats-grid': (
-    <Flex gap={16} style={{ flexWrap: 'wrap' }}>
-      {[
-        { label: 'Revenue', value: '$45.2K', change: '+12%' },
-        { label: 'Users', value: '1,247', change: '+8%' },
-        { label: 'Sessions', value: '8.4K', change: '-3%' },
-      ].map((s) => (
-        <Card key={s.label} style={{ flex: '1 1 120px', padding: 16 }}>
-          <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-            {s.label}
-          </Text>
-          <Text size="xl" weight="bold">
-            {s.value}
-          </Text>
-          <Text
-            size="xs"
-            style={{
-              color: s.change.startsWith('+')
-                ? 'var(--ds-color-success)'
-                : 'var(--ds-color-error)',
-            }}
-          >
-            {s.change}
-          </Text>
-        </Card>
-      ))}
-    </Flex>
-  ),
-
-  /* ---- forms ---- */
-  'form-builder': (
-    <Card style={{ maxWidth: 400 }}>
-      <Stack spacing={16}>
-        <Input placeholder="Full name" />
-        <Input placeholder="Email address" />
-        <Flex gap={8}>
-          <Button variant="primary">Submit</Button>
-          <Button>Cancel</Button>
-        </Flex>
-      </Stack>
-    </Card>
-  ),
-
-  'filter-builder': (
-    <Flex gap={8} style={{ flexWrap: 'wrap' }}>
-      <Badge variant="primary">Status: Active</Badge>
-      <Badge variant="secondary">Role: Admin</Badge>
-      <Badge variant="warning">Date: Last 30 days</Badge>
-      <Button size="sm">+ Add filter</Button>
-    </Flex>
-  ),
-
-  'step-wizard': (
-    <Box>
-      <Flex gap={4} align="center" style={{ marginBottom: 16 }}>
-        {['Account', 'Profile', 'Confirm'].map((step, i) => (
-          <Flex key={step} align="center" gap={4}>
-            <Box
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 12,
-                fontWeight: 600,
-                background:
-                  i === 0
-                    ? 'var(--ds-color-primary)'
-                    : 'var(--ds-color-neutral-200)',
-                color:
-                  i === 0
-                    ? 'var(--ds-color-white, #fff)'
-                    : 'var(--ds-color-text-muted)',
-              }}
-            >
-              {i + 1}
-            </Box>
-            <Text
-              size="xs"
-              weight={i === 0 ? 'semibold' : 'normal'}
-              style={{
-                color:
-                  i === 0
-                    ? 'var(--ds-color-text-primary)'
-                    : 'var(--ds-color-text-muted)',
-              }}
-            >
-              {step}
-            </Text>
-            {i < 2 && (
-              <Box
-                style={{
-                  width: 32,
-                  height: 1,
-                  background: 'var(--ds-color-border)',
-                }}
-              />
-            )}
-          </Flex>
-        ))}
-      </Flex>
-      <Stack spacing={12}>
-        <Input placeholder="Username" />
-        <Input placeholder="Password" />
-        <Flex gap={8} justify="end">
-          <Button variant="primary">Next</Button>
-        </Flex>
-      </Stack>
-    </Box>
-  ),
-
-  /* ---- communication ---- */
-  'activity-log': (
-    <Stack spacing={12}>
-      {[
-        'User Alice created account',
-        'Admin updated permissions',
-        'System backup completed',
-      ].map((msg, i) => (
-        <Flex key={i} gap={12} align="center">
-          <Avatar size="sm">{msg[0]}</Avatar>
-          <Box style={{ flex: 1 }}>
-            <Text size="sm">{msg}</Text>
-            <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-              {i + 1}h ago
-            </Text>
-          </Box>
-        </Flex>
-      ))}
-    </Stack>
-  ),
-
-  'comment-thread': (
-    <Stack spacing={16}>
-      {[
-        { author: 'Alice', text: 'Looks good to me. Approved.', time: '2h ago' },
-        { author: 'Bob', text: 'One minor fix needed on line 42.', time: '1h ago' },
-      ].map((c, i) => (
-        <Flex key={i} gap={12}>
-          <Avatar size="sm">{c.author[0]}</Avatar>
-          <Box style={{ flex: 1 }}>
-            <Flex gap={8} align="center">
-              <Text size="sm" weight="semibold">{c.author}</Text>
-              <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-                {c.time}
-              </Text>
-            </Flex>
-            <Text size="sm" style={{ marginTop: 4 }}>{c.text}</Text>
-          </Box>
-        </Flex>
-      ))}
-      <Flex gap={8}>
-        <Input placeholder="Write a reply..." style={{ flex: 1 }} />
-        <Button size="sm" variant="primary">Reply</Button>
-      </Flex>
-    </Stack>
-  ),
-
-  'notification-center': (
-    <Stack spacing={8}>
-      {[
-        { title: 'New assignment', desc: 'You have been assigned to Project X', unread: true },
-        { title: 'Deploy complete', desc: 'Production deploy succeeded', unread: true },
-        { title: 'Weekly report', desc: 'Your weekly summary is ready', unread: false },
-      ].map((n, i) => (
-        <Flex
-          key={i}
-          gap={12}
-          align="center"
-          style={{
-            padding: '8px 12px',
-            borderRadius: 6,
-            background: n.unread ? 'var(--ds-color-primary-50, rgba(59,130,246,0.05))' : 'transparent',
-          }}
-        >
-          <Box
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: n.unread ? 'var(--ds-color-primary)' : 'transparent',
-              flexShrink: 0,
-            }}
-          />
-          <Box style={{ flex: 1 }}>
-            <Text size="sm" weight="semibold">{n.title}</Text>
-            <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>{n.desc}</Text>
-          </Box>
-        </Flex>
-      ))}
-    </Stack>
-  ),
-
-  /* ---- misc ---- */
-  'empty-state': (
-    <Box
-      style={{
-        padding: 40,
-        textAlign: 'center',
-        border: '1px dashed var(--ds-color-border)',
-        borderRadius: 8,
-      }}
-    >
-      <Text size="lg" weight="semibold">
-        No data found
-      </Text>
-      <Text
-        size="sm"
-        style={{ color: 'var(--ds-color-text-muted)', marginTop: 8 }}
-      >
-        Try adjusting your filters or create a new item.
-      </Text>
-      <Button variant="primary" style={{ marginTop: 16 }}>
-        Create New
-      </Button>
-    </Box>
-  ),
-
-  'pricing-table': (
-    <Flex gap={16} style={{ flexWrap: 'wrap' }}>
-      {[
-        { plan: 'Starter', price: '$9', features: ['5 users', '10 GB', 'Email support'] },
-        { plan: 'Pro', price: '$29', features: ['25 users', '100 GB', 'Priority support'] },
-        { plan: 'Enterprise', price: '$99', features: ['Unlimited', '1 TB', 'Dedicated CSM'] },
-      ].map((p) => (
-        <Card key={p.plan} style={{ flex: '1 1 160px', padding: 16 }}>
-          <Text size="sm" weight="semibold">{p.plan}</Text>
-          <Text size="2xl" weight="bold" style={{ margin: '8px 0' }}>{p.price}</Text>
-          <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>/month</Text>
-          <Stack spacing={6} style={{ marginTop: 12 }}>
-            {p.features.map((f) => (
-              <Text key={f} size="xs">
-                {f}
-              </Text>
-            ))}
-          </Stack>
-          <Button
-            variant={p.plan === 'Pro' ? 'primary' : 'default'}
-            size="sm"
-            style={{ marginTop: 12, width: '100%' }}
-          >
-            Choose
-          </Button>
-        </Card>
-      ))}
-    </Flex>
-  ),
-
-  'user-profile-card': (
-    <Card style={{ maxWidth: 280, padding: 20 }}>
-      <Flex gap={12} align="center">
-        <Avatar size="md">AJ</Avatar>
-        <Box>
-          <Text size="sm" weight="semibold">Alice Johnson</Text>
-          <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-            alice@acme.com
-          </Text>
-        </Box>
-      </Flex>
-      <Flex gap={8} style={{ marginTop: 12 }}>
-        <Badge variant="primary" size="sm">Admin</Badge>
-        <Badge variant="success" size="sm">Active</Badge>
-      </Flex>
-      <Flex gap={8} style={{ marginTop: 12 }}>
-        <Button size="sm" style={{ flex: 1 }}>Edit</Button>
-        <Button size="sm" variant="primary" style={{ flex: 1 }}>Message</Button>
-      </Flex>
-    </Card>
-  ),
-
-  /* ---- workflow ---- */
-  'approval-workflow': (
-    <Flex gap={8} align="center">
-      {[
-        { label: 'Submitted', done: true },
-        { label: 'Review', done: true },
-        { label: 'Approved', done: false },
-      ].map((step, i) => (
-        <Flex key={step.label} align="center" gap={8}>
-          <Box
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 12,
-              fontWeight: 600,
-              background: step.done
-                ? 'var(--ds-color-success)'
-                : 'var(--ds-color-neutral-200)',
-              color: step.done
-                ? 'var(--ds-color-white, #fff)'
-                : 'var(--ds-color-text-muted)',
-            }}
-          >
-            {step.done ? '\u2713' : i + 1}
-          </Box>
-          <Text size="xs" weight={step.done ? 'semibold' : 'normal'}>
-            {step.label}
-          </Text>
-          {i < 2 && (
-            <Box
-              style={{
-                width: 32,
-                height: 2,
-                background: step.done
-                  ? 'var(--ds-color-success)'
-                  : 'var(--ds-color-border)',
-              }}
-            />
-          )}
-        </Flex>
-      ))}
-    </Flex>
-  ),
-
-  /* ---- navigation ---- */
-  'command-palette': (
-    <Box
-      style={{
-        border: '1px solid var(--ds-color-border)',
-        borderRadius: 8,
-        overflow: 'hidden',
-        maxWidth: 400,
-      }}
-    >
-      <Box style={{ padding: '8px 12px', borderBottom: '1px solid var(--ds-color-border)' }}>
-        <Input placeholder="Type a command..." />
-      </Box>
-      <Stack spacing={0}>
-        {['Go to Dashboard', 'Create New User', 'View Reports'].map((cmd, i) => (
-          <Box
-            key={cmd}
-            style={{
-              padding: '8px 16px',
-              background:
-                i === 0 ? 'var(--ds-color-primary-50, rgba(59,130,246,0.05))' : 'transparent',
-              cursor: 'pointer',
-            }}
-          >
-            <Text size="sm">{cmd}</Text>
-          </Box>
-        ))}
-      </Stack>
-    </Box>
-  ),
-
-  /* ---- kanban ---- */
-  'kanban-board': (
-    <Flex gap={12} style={{ overflowX: 'auto' }}>
-      {[
-        { title: 'To Do', items: ['Design review', 'API spec'] },
-        { title: 'In Progress', items: ['Auth module', 'Dashboard'] },
-        { title: 'Done', items: ['Setup CI'] },
-      ].map((col) => (
-        <Box
-          key={col.title}
-          style={{
-            flex: '1 1 160px',
-            minWidth: 140,
-            background: 'var(--ds-color-neutral-50, #f9fafb)',
-            borderRadius: 8,
-            padding: 10,
-          }}
-        >
-          <Text size="xs" weight="semibold" style={{ marginBottom: 8 }}>
-            {col.title}
-          </Text>
-          <Stack spacing={6}>
-            {col.items.map((item) => (
-              <Card key={item} style={{ padding: 8 }}>
-                <Text size="xs">{item}</Text>
-              </Card>
-            ))}
-          </Stack>
-        </Box>
-      ))}
-    </Flex>
-  ),
-
-  /* ---- file-manager ---- */
-  'file-manager': (
-    <Stack spacing={4}>
-      {[
-        { name: 'src/', type: 'folder' },
-        { name: 'package.json', type: 'file' },
-        { name: 'README.md', type: 'file' },
-        { name: 'tsconfig.json', type: 'file' },
-      ].map((f) => (
-        <Flex
-          key={f.name}
-          gap={8}
-          align="center"
-          style={{ padding: '6px 12px', borderRadius: 4 }}
-        >
-          <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
-            {f.type === 'folder' ? '\u{1F4C1}' : '\u{1F4C4}'}
-          </Text>
-          <Text size="sm" style={{ flex: 1 }}>{f.name}</Text>
-          <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-            {f.type === 'folder' ? '4 items' : '2.1 KB'}
-          </Text>
-        </Flex>
-      ))}
-    </Stack>
-  ),
-
-  /* ---- locale-switcher ---- */
-  'locale-switcher': (
-    <Flex gap={4} style={{ flexWrap: 'wrap' }}>
-      {[
-        { code: 'EN', label: 'English', active: true },
-        { code: 'ES', label: 'Spanish', active: false },
-        { code: 'FR', label: 'French', active: false },
-        { code: 'DE', label: 'German', active: false },
-      ].map((loc) => (
-        <Box
-          key={loc.code}
-          style={{
-            padding: '6px 12px',
-            borderRadius: 6,
-            border: '1px solid var(--ds-color-border)',
-            background: loc.active ? 'var(--ds-color-primary)' : 'var(--ds-color-bg-container)',
-            cursor: 'pointer',
-          }}
-        >
-          <Text
-            size="xs"
-            weight={loc.active ? 'semibold' : 'normal'}
-            style={{ color: loc.active ? 'var(--ds-color-white, #fff)' : undefined }}
-          >
-            {loc.code}
-          </Text>
-        </Box>
-      ))}
-    </Flex>
-  ),
-
-  /* ---- environment-toggle ---- */
-  'environment-toggle': (
-    <Flex gap={4}>
-      {[
-        { name: 'Dev', active: true, color: 'var(--ds-color-success)' },
-        { name: 'Staging', active: false, color: 'var(--ds-color-warning)' },
-        { name: 'Prod', active: false, color: 'var(--ds-color-error)' },
-      ].map((env) => (
-        <Flex
-          key={env.name}
-          gap={6}
-          align="center"
-          style={{
-            padding: '6px 14px',
-            borderRadius: 6,
-            border: env.active
-              ? '2px solid var(--ds-color-primary)'
-              : '1px solid var(--ds-color-border)',
-            cursor: 'pointer',
-          }}
-        >
-          <Box
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: env.color,
-            }}
-          />
-          <Text size="xs" weight={env.active ? 'semibold' : 'normal'}>
-            {env.name}
-          </Text>
-        </Flex>
-      ))}
-    </Flex>
-  ),
-
-  /* ---- chat-surface ---- */
-  'chat-surface': (
-    <Stack spacing={12}>
-      <Flex gap={8}>
-        <Avatar size="sm">A</Avatar>
-        <Box
-          style={{
-            padding: '8px 12px',
-            borderRadius: 12,
-            background: 'var(--ds-color-neutral-100, #f3f4f6)',
-            maxWidth: '70%',
-          }}
-        >
-          <Text size="sm">Hey, can you review the latest PR?</Text>
-        </Box>
-      </Flex>
-      <Flex gap={8} justify="end">
-        <Box
-          style={{
-            padding: '8px 12px',
-            borderRadius: 12,
-            background: 'var(--ds-color-primary)',
-            maxWidth: '70%',
-          }}
-        >
-          <Text size="sm" style={{ color: 'var(--ds-color-white, #fff)' }}>
-            Sure, I will take a look now!
-          </Text>
-        </Box>
-        <Avatar size="sm">B</Avatar>
-      </Flex>
-    </Stack>
-  ),
-
-  /* ---- shortcuts-overlay ---- */
-  'shortcuts-overlay': (
-    <Box
-      style={{
-        border: '1px solid var(--ds-color-border)',
-        borderRadius: 8,
-        padding: 16,
-        maxWidth: 320,
-      }}
-    >
-      <Text size="sm" weight="semibold" style={{ marginBottom: 12 }}>
-        Keyboard Shortcuts
-      </Text>
-      <Stack spacing={8}>
-        {[
-          { keys: 'Cmd+K', action: 'Open command palette' },
-          { keys: 'Cmd+S', action: 'Save changes' },
-          { keys: 'Cmd+/', action: 'Toggle sidebar' },
-          { keys: 'Esc', action: 'Close modal' },
-        ].map((s) => (
-          <Flex key={s.keys} align="center" gap={8}>
-            <Box
-              style={{
-                padding: '2px 6px',
-                borderRadius: 4,
-                border: '1px solid var(--ds-color-border)',
-                background: 'var(--ds-color-neutral-50, #f9fafb)',
-              }}
-            >
-              <Text size="xs" weight="semibold">{s.keys}</Text>
-            </Box>
-            <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-              {s.action}
-            </Text>
-          </Flex>
-        ))}
-      </Stack>
-    </Box>
-  ),
-
-  /* ---- workspace-switcher ---- */
-  'workspace-switcher': (
-    <Box
-      style={{
-        border: '1px solid var(--ds-color-border)',
-        borderRadius: 8,
-        overflow: 'hidden',
-        maxWidth: 240,
-      }}
-    >
-      <Box style={{ padding: '8px 12px', borderBottom: '1px solid var(--ds-color-border)' }}>
-        <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>Switch workspace</Text>
-      </Box>
-      <Stack spacing={0}>
-        {[
-          { name: 'Acme Corp', active: true },
-          { name: 'Startup Inc', active: false },
-          { name: 'Personal', active: false },
-        ].map((ws) => (
-          <Flex
-            key={ws.name}
-            gap={8}
-            align="center"
-            style={{
-              padding: '8px 12px',
-              background: ws.active
-                ? 'var(--ds-color-primary-50, rgba(59,130,246,0.05))'
-                : 'transparent',
-              cursor: 'pointer',
-            }}
-          >
-            <Box
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: 4,
-                background: 'var(--ds-color-primary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text size="xs" style={{ color: 'var(--ds-color-white, #fff)' }}>
-                {ws.name[0]}
-              </Text>
-            </Box>
-            <Text size="sm" weight={ws.active ? 'semibold' : 'normal'}>
-              {ws.name}
-            </Text>
-          </Flex>
-        ))}
-      </Stack>
-    </Box>
-  ),
+const GROUP_META: Record<
+  PatternGroup,
+  { label: string; note: string; minHeight: number }
+> = {
+  data: {
+    label: 'Data pattern',
+    note: 'Check scanning speed, selection, and whether the runtime is coming from the real DS export.',
+    minHeight: 220,
+  },
+  forms: {
+    label: 'Form pattern',
+    note: 'Check pacing, hierarchy, and whether the live component still feels teachable when the runtime changes.',
+    minHeight: 220,
+  },
+  visualization: {
+    label: 'Visualization pattern',
+    note: 'Check signal readability, interaction cues, and how clearly real DS rendering survives engine changes.',
+    minHeight: 220,
+  },
+  communication: {
+    label: 'Communication pattern',
+    note: 'Check freshness, authorship, and whether the information hierarchy stays legible across runtimes.',
+    minHeight: 220,
+  },
+  workflow: {
+    label: 'Workflow pattern',
+    note: 'Check queue clarity, decision support, and whether state changes are driven by the shared DS contract.',
+    minHeight: 220,
+  },
+  navigation: {
+    label: 'Navigation pattern',
+    note: 'Check discoverability, mode switching, and whether overlay patterns are rendered through the active runtime rather than mocked locally.',
+    minHeight: 220,
+  },
+  misc: {
+    label: 'Composite pattern',
+    note: 'Check cohesion, brand fit, and whether the component feels ready to anchor a real screen without showroom-only chrome.',
+    minHeight: 220,
+  },
 };
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
+function MissingAdapterNotice({
+  slug,
+  name,
+}: {
+  slug: string;
+  name: string;
+}) {
+  return (
+    <Card
+      style={{
+        width: '100%',
+        maxWidth: 560,
+        border: `1px dashed ${SHOWROOM_SURFACES.border}`,
+        background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.surface} 0%, ${SHOWROOM_SURFACES.subtle} 100%)`,
+        boxShadow: 'none',
+      }}
+    >
+      <Card.Body>
+        <Stack spacing="sm">
+          <Flex align="center" justify="between" gap={10} style={{ flexWrap: 'wrap' }}>
+            <Text size="sm" weight="semibold" style={{ lineHeight: 1.3 }}>
+              Preview adapter pending
+            </Text>
+            <Badge variant="secondary">{name}</Badge>
+          </Flex>
+          <Text size="sm" style={{ color: SHOWROOM_SURFACES.textSecondary }}>
+            The public DS export exists for <strong>{slug}</strong>, but this showroom route has not been
+            migrated to a live preview adapter yet. It now fails honestly instead of rendering a fake local mock.
+          </Text>
+        </Stack>
+      </Card.Body>
+    </Card>
+  );
+}
 
 export function PatternPreview({ slug }: { slug: string }) {
-  const preview = PATTERN_PREVIEWS[slug];
+  const entry = patterns.find((pattern) => pattern.slug === slug);
+  const preview = renderPatternPreview(slug);
+  const meta = entry ? GROUP_META[entry.group] : null;
+
   if (!preview) {
     return (
       <Box
         style={{
-          padding: 24,
+          minHeight: 220,
+          padding: 20,
           textAlign: 'center',
-          color: 'var(--ds-color-text-muted)',
+          color: SHOWROOM_SURFACES.textTertiary,
+          borderRadius: 20,
+          border: `1px dashed ${SHOWROOM_SURFACES.border}`,
+          background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${SHOWROOM_SURFACES.surface} 100%)`,
         }}
       >
-        <Text>Preview coming soon</Text>
+        {entry ? (
+          <MissingAdapterNotice slug={entry.slug} name={entry.name} />
+        ) : (
+          <Stack spacing={8} align="center">
+            <Text size="sm" weight="semibold" style={{ color: SHOWROOM_SURFACES.text }}>
+              Preview not found
+            </Text>
+            <Text size="xs" style={{ color: SHOWROOM_SURFACES.textSecondary }}>
+              No live composition is registered for <strong>{slug}</strong>.
+            </Text>
+          </Stack>
+        )}
       </Box>
     );
   }
-  return <Box style={{ padding: 16 }}>{preview}</Box>;
+
+  const accent =
+    entry?.group === 'data'
+      ? '#60a5fa'
+      : entry?.group === 'forms'
+        ? '#34d399'
+        : entry?.group === 'visualization'
+          ? '#a78bfa'
+          : entry?.group === 'communication'
+            ? '#f472b6'
+            : entry?.group === 'workflow'
+              ? '#f59e0b'
+              : entry?.group === 'navigation'
+                ? '#22d3ee'
+                : '#fb7185';
+
+  return (
+    <Stack spacing={10} style={{ width: '100%', minWidth: 0 }}>
+      <Box
+        style={{
+          padding: '10px 12px',
+          borderRadius: 14,
+          border: `1px solid ${SHOWROOM_SURFACES.border}`,
+          background: `linear-gradient(180deg, ${mixWithCanvas(accent, 9)} 0%, ${SHOWROOM_SURFACES.subtle} 100%)`,
+          boxShadow: SHOWROOM_SURFACES.shadow,
+        }}
+      >
+        <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
+          <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+            {meta ? <Badge variant="secondary">{meta.label}</Badge> : null}
+            {entry ? (
+              <Text
+                size="xs"
+                weight="semibold"
+                style={{
+                  fontFamily: 'var(--font-geist-mono)',
+                  color: SHOWROOM_SURFACES.text,
+                }}
+              >
+                {entry.name}
+              </Text>
+            ) : null}
+          </Flex>
+          {meta ? (
+            <Text size="xs" style={{ color: SHOWROOM_SURFACES.textSecondary, lineHeight: 1.45 }}>
+              {meta.note}
+            </Text>
+          ) : null}
+        </Flex>
+      </Box>
+
+      <Box
+        style={{
+          width: '100%',
+          minWidth: 0,
+          padding: 14,
+          borderRadius: 22,
+          border: `1px solid ${SHOWROOM_SURFACES.border}`,
+          background: `linear-gradient(180deg, ${mixWithCanvas(accent, 10)} 0%, ${SHOWROOM_SURFACES.subtle} 100%)`,
+          boxShadow: SHOWROOM_SURFACES.shadow,
+        }}
+      >
+        <Box
+          style={{
+            width: '100%',
+            minWidth: 0,
+            minHeight: Math.max((meta?.minHeight ?? 220) - 76, 148),
+            padding: 16,
+            borderRadius: 18,
+            border: `1px solid ${SHOWROOM_SURFACES.border}`,
+            background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.surface} 0%, ${mixWithSurface(
+              accent,
+              8,
+              SHOWROOM_SURFACES.surface,
+            )} 100%)`,
+            boxShadow: `inset 0 1px 0 ${mixWithSurface(
+              accent,
+              14,
+              'transparent',
+            )}`,
+          }}
+        >
+          <Flex gap={6} style={{ marginBottom: 12 }}>
+            {['12%', '20%', '28%'].map((opacity, index) => (
+              <Box
+                key={`${slug}-${index}`}
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: 999,
+                  background: `color-mix(in srgb, ${accent} ${opacity}, ${SHOWROOM_SURFACES.text})`,
+                }}
+              />
+            ))}
+          </Flex>
+
+          <Box
+            style={{
+              width: '100%',
+              minWidth: 0,
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              overflowX: 'auto',
+            }}
+          >
+            {preview}
+          </Box>
+        </Box>
+      </Box>
+    </Stack>
+  );
 }

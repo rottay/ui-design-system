@@ -106,6 +106,40 @@ function buildScopedChromeCss(bt: BrandTheme, slug: string): string | undefined 
   return `html[data-tenant='${slug}'] {\n${declarations}\n}`;
 }
 
+const VISUAL_BRANDING_KEYS = [
+  'primaryColor',
+  'secondaryColor',
+  'accentColor',
+  'darkPrimaryColor',
+  'darkSecondaryColor',
+  'darkAccentColor',
+  'darkBackgroundColor',
+  'successColor',
+  'warningColor',
+  'errorColor',
+  'infoColor',
+  'fontFamilyBase',
+  'fontFamilyHeading',
+  'fontFamilyMono',
+  'fontFamilyDisplay',
+] as const;
+
+function hasVisualBrandingFields(
+  branding: TenantConfig['branding'] | Partial<TenantConfig['branding']> | undefined,
+): boolean {
+  if (!branding) return false;
+  return VISUAL_BRANDING_KEYS.some((key) => branding[key] != null);
+}
+
+function stripVisualBrandingFields(branding: TenantConfig['branding']): TenantConfig['branding'] {
+  return {
+    companyName: branding.companyName,
+    logo: branding.logo,
+    logoMark: branding.logoMark,
+    favicon: branding.favicon,
+  };
+}
+
 export interface DesignSystemProviderProps {
   children: ReactNode;
   /**
@@ -390,9 +424,12 @@ export function DesignSystemProvider({
   const tenantConfig = syncTenantConfig ?? asyncTenantConfig;
 
   // When brandTheme is present, normalize branding and tokenOverrides so
-  // ALL downstream consumers (TenantProvider -> AntdConfigProvider, ThemeProvider,
-  // useTokens) see the same effective values. This prevents classic engine
-  // from reading stale config.branding while ThemeProvider uses brandTheme.palette.
+  // ALL downstream consumers see the same effective values. For bundled
+  // first-party tenants, the precompiled CSS artifacts remain the owner of the
+  // default palette/chrome unless the incoming tenant config explicitly sets
+  // visual branding fields. This avoids fighting the bundled CSS with inline
+  // runtime color injection while still allowing deliberate white-label
+  // overrides to flow through.
   // NOTE: This useMemo MUST run before the early return below to satisfy
   // React's Rules of Hooks (hooks must execute in the same order every render).
   const normalizedConfig = useMemo(() => {
@@ -401,9 +438,14 @@ export function DesignSystemProvider({
     const btBranding = brandThemeToBranding(tenantConfig.brandTheme);
     const btOverrides = brandThemeToTokenOverrides(tenantConfig.brandTheme);
     const tenantOverrides = tenantConfig.tokenOverrides;
+    const bundledTenantUsesCssOwnedBranding =
+      isBundledTenant(tenantConfig.slug) && !hasVisualBrandingFields(tenantConfig.branding);
+
     return {
       ...tenantConfig,
-      branding: { ...tenantConfig.branding, ...btBranding },
+      branding: bundledTenantUsesCssOwnedBranding
+        ? stripVisualBrandingFields(tenantConfig.branding)
+        : { ...btBranding, ...tenantConfig.branding },
       tokenOverrides: tenantOverrides
         ? deepMergeTokenOverrides(btOverrides, tenantOverrides)
         : Object.keys(btOverrides).length > 0 ? btOverrides as typeof tenantConfig.tokenOverrides : tenantConfig.tokenOverrides,

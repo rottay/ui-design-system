@@ -10,7 +10,7 @@
 'use client';
 
 import React, { forwardRef, useId, type ElementType, type Ref } from 'react';
-import type { StackProps, StackSpacingPreset, StackAlign, StackJustify, StackDirection } from '../Stack.types';
+import type { StackProps, StackSpacingPreset, StackDirection } from '../Stack.types';
 import { STACK_DEFAULTS, SPACING_MAP } from '../Stack.types';
 import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
 import {
@@ -19,78 +19,6 @@ import {
   renderStackChildren,
   buildStackStyles,
 } from '../../shared/responsive-helpers.js';
-
-const ALIGN_CLASS_MAP: Record<StackAlign, string> = {
-  start: 'items-start',
-  center: 'items-center',
-  end: 'items-end',
-  stretch: 'items-stretch',
-  baseline: 'items-baseline',
-};
-
-const JUSTIFY_CLASS_MAP: Record<StackJustify, string> = {
-  start: 'justify-start',
-  center: 'justify-center',
-  end: 'justify-end',
-  'space-between': 'justify-between',
-  'space-around': 'justify-around',
-  'space-evenly': 'justify-evenly',
-};
-
-/**
- * Builds Tailwind utility classes. Only scalar (non-responsive) values are mapped.
- */
-function buildTailwindClasses(props: StackProps): string[] {
-  const classes: string[] = ['flex'];
-  const {
-    direction,
-    spacing,
-    gap,
-    align,
-    justify,
-    wrap,
-    reverse = STACK_DEFAULTS.reverse,
-    fullWidth = STACK_DEFAULTS.fullWidth,
-    fullHeight = STACK_DEFAULTS.fullHeight,
-  } = props;
-
-  // Direction - only Tailwind class for scalar
-  if (!isResponsiveValue(direction)) {
-    const scalarDirection = scalarOrDefault<StackDirection>(direction, 'vertical');
-    if (scalarDirection === 'vertical') {
-      classes.push(reverse ? 'flex-col-reverse' : 'flex-col');
-    } else {
-      classes.push(reverse ? 'flex-row-reverse' : 'flex-row');
-    }
-  }
-
-  // Spacing — resolved via inline style in buildStackInlineStyles below.
-  // Gap is no longer a Tailwind class so DS tokens flow through.
-
-  if (!isResponsiveValue(align)) {
-    const scalarAlign = scalarOrDefault<StackAlign>(align, 'stretch');
-    classes.push(ALIGN_CLASS_MAP[scalarAlign]);
-  }
-
-  if (!isResponsiveValue(justify)) {
-    const scalarJustify = scalarOrDefault<StackJustify>(justify, 'start');
-    classes.push(JUSTIFY_CLASS_MAP[scalarJustify]);
-  }
-
-  if (!isResponsiveValue(wrap)) {
-    const scalarWrap = scalarOrDefault<boolean>(wrap, false);
-    classes.push(scalarWrap ? 'flex-wrap' : 'flex-nowrap');
-  }
-
-  if (fullWidth) {
-    classes.push('w-full');
-  }
-  if (fullHeight) {
-    classes.push('h-full');
-  }
-
-  return classes;
-}
 
 /**
  * Modern (Hermes) engine implementation of the Stack component.
@@ -120,7 +48,6 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
     }
   }
   const computedStyle = baseStyle;
-  const tailwindClasses = buildTailwindClasses(props);
   const renderedChildren = renderStackChildren(children, divider, scalarDirection);
 
   // Responsive CSS generation
@@ -136,7 +63,6 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const classNames = [
     'rottay-stack',
     'rottay-stack--modern',
-    ...tailwindClasses,
     className,
   ].filter(Boolean).join(' ');
 

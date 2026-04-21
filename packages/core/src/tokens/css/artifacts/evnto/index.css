@@ -27,10 +27,10 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
      ============================================ */
   --color-primary: oklch(15% 0.005 250);              /* #171717 near-black */
   --color-primary-content: oklch(100% 0 0);           /* #FFFFFF white */
-  --color-secondary: oklch(60% 0.03 60);              /* #B8A898 warm beige */
-  --color-secondary-content: oklch(15% 0.005 250);    /* #171717 */
-  --color-accent: oklch(60% 0.03 60);                 /* #B8A898 sand */
-  --color-accent-content: oklch(15% 0.005 250);       /* #171717 */
+  --color-secondary: oklch(53.5% 0.032 67);           /* #7A6A5A warm bronze */
+  --color-secondary-content: oklch(97% 0.005 100);    /* warm white */
+  --color-accent: oklch(53.5% 0.032 67);              /* #7A6A5A sand */
+  --color-accent-content: oklch(97% 0.005 100);       /* warm white */
   --color-neutral: oklch(42% 0.005 250);              /* #525252 medium gray */
   --color-neutral-content: oklch(98% 0 0);            /* #FAFAFA */
   --color-base-100: oklch(100% 0 0);                  /* #FFFFFF canvas */
@@ -79,9 +79,12 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --ds-color-secondary-800: #5a4a3a;
   --ds-color-secondary-900: #3a2a1a;
 
+  --ds-color-secondary: #7A6A5A;
+  --ds-color-secondary-hover: #5A4A3A;
+
   /* Accent - Sand/Beige for highlights */
-  --ds-color-accent: #b8a898;
-  --ds-color-accent-hover: #9a8a7a;
+  --ds-color-accent: #7A6A5A;
+  --ds-color-accent-hover: #5A4A3A;
 
   /* Neutral - Light grays */
   --ds-color-neutral-50: #fafafa;

@@ -21,9 +21,9 @@ export const bithireBrandTheme: BrandTheme = {
   palette: {
     primaryColor: '#0A66C2',
     secondaryColor: '#057642',
-    accentColor: '#7FC15E',
-    darkPrimaryColor: '#1A7FE0',
-    darkSecondaryColor: '#2D8A6E',
+    accentColor: '#5A9640',
+    darkPrimaryColor: '#1E84E6',
+    darkSecondaryColor: '#34987E',
     darkAccentColor: '#4CAF50',
     darkBackgroundColor: '#0F1520',
     successColor: '#057642',

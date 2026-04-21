@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import {
   BarChart,
   LineChart,
@@ -20,13 +21,23 @@ import {
   Histogram,
   SankeyChart,
 } from '@rottay/design-system';
-import { Box, Text } from '@rottay/design-system';
+import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
+import { charts } from '@/data/registry';
+import { useShowroomRuntime } from '@/components/showroom-context';
+import {
+  SHOWROOM_SURFACES,
+  mixWithCanvas,
+  mixWithSurface,
+} from '@/components/playground/surface-tokens';
+
+const PREVIEW_OVERLAY =
+  'radial-gradient(circle at top right, color-mix(in srgb, var(--ds-color-primary-500) 16%, transparent), transparent 28%), radial-gradient(circle at left bottom, color-mix(in srgb, var(--ds-color-success-500) 8%, transparent), transparent 34%)';
 
 // ---------------------------------------------------------------------------
 // Sample data for each chart type
 // ---------------------------------------------------------------------------
 
-const CHART_DEMOS: Record<string, React.ReactNode> = {
+const CHART_DEMOS: Record<string, ReactNode> = {
   'bar-chart': (
     <BarChart
       data={[
@@ -362,24 +373,38 @@ const CHART_DEMOS: Record<string, React.ReactNode> = {
 // ---------------------------------------------------------------------------
 
 export function ChartDemo({ slug }: { slug: string }) {
+  const runtime = useShowroomRuntime();
+  const chart = charts.find((item) => item.slug === slug);
   const demo = CHART_DEMOS[slug];
 
   if (!demo) {
     return (
       <Box
         style={{
+          minHeight: 240,
+          padding: 20,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: 200,
-          borderRadius: 8,
-          border: '2px dashed var(--ds-color-neutral-300)',
-          background: 'var(--ds-color-neutral-50)',
+          borderRadius: 16,
+          border: '1px dashed var(--ds-color-border, #d1d5db)',
+          background: 'var(--ds-color-bg-container, #ffffff)',
         }}
       >
-        <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
-          No demo available for this chart type.
-        </Text>
+        <Box style={{ textAlign: 'center' }}>
+          <Text size="sm" weight="semibold">
+            Demo coming soon
+          </Text>
+          <Text
+            size="xs"
+            style={{
+              marginTop: 8,
+              color: 'var(--ds-color-text-secondary)',
+            }}
+          >
+            No live chart demo is registered for <strong>{slug}</strong> yet.
+          </Text>
+        </Box>
       </Box>
     );
   }
@@ -387,14 +412,79 @@ export function ChartDemo({ slug }: { slug: string }) {
   return (
     <Box
       style={{
-        borderRadius: 8,
-        border: '1px solid var(--ds-color-neutral-200)',
-        background: 'var(--ds-color-bg-primary)',
-        padding: 16,
+        position: 'relative',
+        minHeight: 240,
+        borderRadius: 18,
+        border: `1px solid ${SHOWROOM_SURFACES.border}`,
+        background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.surface} 0%, ${mixWithCanvas(
+          'var(--ds-color-primary, #60a5fa)',
+          4,
+        )} 100%)`,
+        padding: 14,
         overflow: 'hidden',
+        boxShadow: SHOWROOM_SURFACES.shadow,
       }}
     >
-      {demo}
+      <Box
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: PREVIEW_OVERLAY,
+          pointerEvents: 'none',
+        }}
+      />
+      <Stack spacing="sm" style={{ position: 'relative' }}>
+        <Box
+          style={{
+            padding: '10px 12px',
+            borderRadius: 14,
+            border: `1px solid ${SHOWROOM_SURFACES.border}`,
+            background: `linear-gradient(180deg, ${mixWithCanvas(
+              'var(--ds-color-primary, #60a5fa)',
+              9,
+            )} 0%, ${SHOWROOM_SURFACES.subtle} 100%)`,
+            boxShadow: `inset 0 1px 0 ${mixWithSurface(
+              'var(--ds-color-primary, #60a5fa)',
+              10,
+              'transparent',
+            )}`,
+          }}
+        >
+          <Flex align="center" justify="between" style={{ gap: 12, flexWrap: 'wrap' }}>
+            <Box>
+              <Text size="xs" weight="semibold" style={{ display: 'block', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                Live runtime preview
+              </Text>
+              <Text size="sm" style={{ marginTop: 4, color: SHOWROOM_SURFACES.textSecondary, lineHeight: 1.45, maxWidth: 640 }}>
+                This chart is rendered by the active docs provider rather than a page-local mock frame.
+              </Text>
+            </Box>
+            <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+              <Badge variant="secondary">{runtime.tenantName}</Badge>
+              <Badge variant="secondary">{runtime.engine}</Badge>
+              <Badge variant="secondary">{runtime.productProfileLabel}</Badge>
+              {chart ? <Badge variant="secondary">{chart.family} family</Badge> : null}
+            </Flex>
+          </Flex>
+        </Box>
+        <Box
+          style={{
+            minWidth: 0,
+            padding: 12,
+            borderRadius: 16,
+            border: `1px solid ${SHOWROOM_SURFACES.border}`,
+            background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.surface} 0%, ${mixWithSurface(
+              'var(--ds-color-primary, #60a5fa)',
+              6,
+              SHOWROOM_SURFACES.subtle,
+            )} 100%)`,
+            overflowX: 'auto',
+          }}
+        >
+          {demo}
+        </Box>
+      </Stack>
     </Box>
   );
 }

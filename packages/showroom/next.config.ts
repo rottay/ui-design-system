@@ -1,18 +1,16 @@
+import { fileURLToPath } from 'node:url';
 import type { NextConfig } from 'next';
+
+const turbopackRoot = fileURLToPath(new URL('../../', import.meta.url));
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@rottay/design-system'],
+  allowedDevOrigins: ['127.0.0.1', 'localhost'],
+  turbopack: {
+    root: turbopackRoot,
+  },
   typescript: {
     ignoreBuildErrors: false,
-  },
-  experimental: {
-    optimizePackageImports: [
-      'lucide-react',
-      'antd',
-      '@ant-design/icons',
-      'framer-motion',
-    ],
   },
 };
 

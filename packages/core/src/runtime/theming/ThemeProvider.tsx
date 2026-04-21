@@ -234,6 +234,36 @@ function validateContrast(foreground: string, background: string, threshold = WC
   return ratio >= threshold;
 }
 
+interface BrandingContrastValidation {
+  warningKey: string;
+  label: string;
+  color?: string;
+  background: string;
+  threshold?: number;
+  requirement: string;
+}
+
+function validateBrandingColorContrast({
+  warningKey,
+  label,
+  color,
+  background,
+  threshold = WCAG_AA_NORMAL_TEXT,
+  requirement,
+}: BrandingContrastValidation): void {
+  if (!color || !isHexColor(normalizeHexColor(color))) return;
+
+  const normalizedColor = normalizeHexColor(color);
+  if (validateContrast(normalizedColor, background, threshold)) return;
+
+  const ratio = getContrastRatio(normalizedColor, background);
+  warnOnceInDev(
+    `${warningKey}:${normalizedColor}:${normalizeHexColor(background) ?? background}`,
+    `[DS] ${label} ${normalizedColor} may not meet WCAG AA contrast ratio on ${background} ` +
+      `(ratio: ${ratio?.toFixed(2)}:1, required: ${requirement})`
+  );
+}
+
 /**
  * Validates branding colors against WCAG AA contrast requirements and logs
  * development-only warnings for colors that may cause accessibility issues.
@@ -243,73 +273,54 @@ function validateContrast(foreground: string, background: string, threshold = WC
  */
 function validateBrandingContrast(branding: TenantBranding): void {
   const LIGHT_BG = '#ffffff';
-  const DARK_BG = '#171717';
+  const darkBackground = branding.darkBackgroundColor ?? '#171717';
 
-  if (branding.primaryColor && isHexColor(normalizeHexColor(branding.primaryColor))) {
-    const color = normalizeHexColor(branding.primaryColor);
+  validateBrandingColorContrast({
+    warningKey: 'wcag:primary:light',
+    label: 'Primary color',
+    color: branding.primaryColor,
+    background: LIGHT_BG,
+    requirement: `${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text`,
+  });
+  validateBrandingColorContrast({
+    warningKey: 'wcag:primary:dark',
+    label: 'Dark primary color',
+    color: branding.darkPrimaryColor ?? branding.primaryColor,
+    background: darkBackground,
+    requirement: `${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text`,
+  });
 
-    if (!validateContrast(color, LIGHT_BG)) {
-      const ratio = getContrastRatio(color, LIGHT_BG);
-      warnOnceInDev(
-        `wcag:primary:light:${color}`,
-        `[DS] Primary color ${color} may not meet WCAG AA contrast ratio on light backgrounds ` +
-        `(ratio: ${ratio?.toFixed(2)}:1, required: ${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text)`
-      );
-    }
+  validateBrandingColorContrast({
+    warningKey: 'wcag:secondary:light',
+    label: 'Secondary color',
+    color: branding.secondaryColor,
+    background: LIGHT_BG,
+    requirement: `${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text`,
+  });
+  validateBrandingColorContrast({
+    warningKey: 'wcag:secondary:dark',
+    label: 'Dark secondary color',
+    color: branding.darkSecondaryColor ?? branding.secondaryColor,
+    background: darkBackground,
+    requirement: `${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text`,
+  });
 
-    if (!validateContrast(color, DARK_BG)) {
-      const ratio = getContrastRatio(color, DARK_BG);
-      warnOnceInDev(
-        `wcag:primary:dark:${color}`,
-        `[DS] Primary color ${color} may not meet WCAG AA contrast ratio on dark backgrounds ` +
-        `(ratio: ${ratio?.toFixed(2)}:1, required: ${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text)`
-      );
-    }
-  }
-
-  if (branding.secondaryColor && isHexColor(normalizeHexColor(branding.secondaryColor))) {
-    const color = normalizeHexColor(branding.secondaryColor);
-
-    if (!validateContrast(color, LIGHT_BG)) {
-      const ratio = getContrastRatio(color, LIGHT_BG);
-      warnOnceInDev(
-        `wcag:secondary:light:${color}`,
-        `[DS] Secondary color ${color} may not meet WCAG AA contrast ratio on light backgrounds ` +
-        `(ratio: ${ratio?.toFixed(2)}:1, required: ${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text)`
-      );
-    }
-
-    if (!validateContrast(color, DARK_BG)) {
-      const ratio = getContrastRatio(color, DARK_BG);
-      warnOnceInDev(
-        `wcag:secondary:dark:${color}`,
-        `[DS] Secondary color ${color} may not meet WCAG AA contrast ratio on dark backgrounds ` +
-        `(ratio: ${ratio?.toFixed(2)}:1, required: ${WCAG_AA_NORMAL_TEXT}:1 for normal text, ${WCAG_AA_LARGE_TEXT}:1 for large text)`
-      );
-    }
-  }
-
-  if (branding.accentColor && isHexColor(normalizeHexColor(branding.accentColor))) {
-    const color = normalizeHexColor(branding.accentColor);
-
-    if (!validateContrast(color, LIGHT_BG, WCAG_AA_LARGE_TEXT)) {
-      const ratio = getContrastRatio(color, LIGHT_BG);
-      warnOnceInDev(
-        `wcag:accent:light:${color}`,
-        `[DS] Accent color ${color} may not meet WCAG AA contrast ratio on light backgrounds ` +
-        `(ratio: ${ratio?.toFixed(2)}:1, required: ${WCAG_AA_LARGE_TEXT}:1 for large text)`
-      );
-    }
-
-    if (!validateContrast(color, DARK_BG, WCAG_AA_LARGE_TEXT)) {
-      const ratio = getContrastRatio(color, DARK_BG);
-      warnOnceInDev(
-        `wcag:accent:dark:${color}`,
-        `[DS] Accent color ${color} may not meet WCAG AA contrast ratio on dark backgrounds ` +
-        `(ratio: ${ratio?.toFixed(2)}:1, required: ${WCAG_AA_LARGE_TEXT}:1 for large text)`
-      );
-    }
-  }
+  validateBrandingColorContrast({
+    warningKey: 'wcag:accent:light',
+    label: 'Accent color',
+    color: branding.accentColor,
+    background: LIGHT_BG,
+    threshold: WCAG_AA_LARGE_TEXT,
+    requirement: `${WCAG_AA_LARGE_TEXT}:1 for large text`,
+  });
+  validateBrandingColorContrast({
+    warningKey: 'wcag:accent:dark',
+    label: 'Dark accent color',
+    color: branding.darkAccentColor ?? branding.accentColor,
+    background: darkBackground,
+    threshold: WCAG_AA_LARGE_TEXT,
+    requirement: `${WCAG_AA_LARGE_TEXT}:1 for large text`,
+  });
 }
 
 /**
@@ -542,6 +553,9 @@ export function ThemeProvider({
   skipCssLoading = false,
 }: ThemeProviderProps): React.ReactElement {
   const [theme, setThemeState] = useState(initialTheme);
+  const [resolvedTheme, setResolvedTheme] = useState<'dark' | 'light' | 'base'>(
+    initialTheme === 'dark' ? 'dark' : initialTheme === 'light' ? 'light' : 'base'
+  );
   const [tenant, setTenantState] = useState(initialTenant);
   const [config, setConfig] = useState<ThemeConfig | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -804,7 +818,7 @@ export function ThemeProvider({
 
   useEffect(() => {
     // Skip if branding hasn't actually changed (prevents Fast Refresh loops)
-    const fullKey = brandingKey + tokenOverridesKey + appearanceKey;
+    const fullKey = brandingKey + tokenOverridesKey + appearanceKey + resolvedTheme;
     if (lastBrandingRef.current === fullKey) return;
     lastBrandingRef.current = fullKey;
 
@@ -824,6 +838,17 @@ export function ThemeProvider({
       validateBrandingContrast(branding);
     }
 
+    const isDarkTheme = resolvedTheme === 'dark';
+    const activePrimaryColor = isDarkTheme
+      ? branding?.darkPrimaryColor ?? branding?.primaryColor
+      : branding?.primaryColor;
+    const activeSecondaryColor = isDarkTheme
+      ? branding?.darkSecondaryColor ?? branding?.secondaryColor
+      : branding?.secondaryColor;
+    const activeAccentColor = isDarkTheme
+      ? branding?.darkAccentColor ?? branding?.accentColor
+      : branding?.accentColor;
+
     // ── Color scales (primary, secondary) ──────────────────────────
     // Runtime branding has to target the variable families the live DS
     // actually consumes. We separate semantic secondary from accent-specific
@@ -831,31 +856,31 @@ export function ThemeProvider({
     //
     // collectBrandColorScaleVars builds the full variable map in memory,
     // then applyVarsBatch writes them to the DOM in a single pass.
-    if (branding?.primaryColor) {
+    if (activePrimaryColor) {
       try {
-        const vars = collectBrandColorScaleVars('primary', branding.primaryColor);
+        const vars = collectBrandColorScaleVars('primary', activePrimaryColor);
         appliedVars.push(...applyVarsBatch(vars));
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
-          console.warn(`[DS] Invalid branding color "${branding.primaryColor}":`, error);
+          console.warn(`[DS] Invalid branding color "${activePrimaryColor}":`, error);
         }
       }
     }
 
-    if (branding?.secondaryColor) {
+    if (activeSecondaryColor) {
       try {
-        const vars = collectBrandColorScaleVars('secondary', branding.secondaryColor);
+        const vars = collectBrandColorScaleVars('secondary', activeSecondaryColor);
         appliedVars.push(...applyVarsBatch(vars));
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
-          console.warn(`[DS] Invalid branding color "${branding.secondaryColor}":`, error);
+          console.warn(`[DS] Invalid branding color "${activeSecondaryColor}":`, error);
         }
       }
     }
 
-    if (branding?.accentColor) {
-      safeSetProperty('--ds-color-accent', branding.accentColor);
-      safeSetProperty('--ds-color-accent-hover', branding.accentColor);
+    if (activeAccentColor) {
+      safeSetProperty('--ds-color-accent', activeAccentColor);
+      safeSetProperty('--ds-color-accent-hover', activeAccentColor);
     }
 
     // ── Semantic colors (success, warning, error, info) ────────────
@@ -887,9 +912,9 @@ export function ThemeProvider({
     // reflect the tenant's brand.
     try {
       const daisyOverrides = buildDaisyUiColorOverrides(
-        branding?.primaryColor,
-        branding?.secondaryColor,
-        branding?.accentColor,
+        activePrimaryColor,
+        activeSecondaryColor,
+        activeAccentColor,
       );
       for (const [key, value] of Object.entries(daisyOverrides)) {
         safeSetProperty(key, value);
@@ -997,7 +1022,7 @@ export function ThemeProvider({
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandingKey, tokenOverridesKey, appearanceKey]);
+  }, [brandingKey, tokenOverridesKey, appearanceKey, resolvedTheme]);
 
   // Chrome CSS injection for dynamic/DB-backed tenants with BrandTheme.
   // Uses a scoped <style> tag with html[data-tenant='x'] selector so dark-mode
@@ -1038,17 +1063,18 @@ export function ThemeProvider({
     };
 
     const applyThemeToDom = () => {
-      const resolvedTheme = resolveTheme();
+      const nextResolvedTheme = resolveTheme();
 
-      rootElement.setAttribute('data-theme', resolvedTheme);
-      rootElement.classList.toggle('dark', resolvedTheme === 'dark');
-      rootElement.style.colorScheme = resolvedTheme === 'dark' ? 'dark' : 'light';
+      setResolvedTheme((current) => (current === nextResolvedTheme ? current : nextResolvedTheme));
+      rootElement.setAttribute('data-theme', nextResolvedTheme);
+      rootElement.classList.toggle('dark', nextResolvedTheme === 'dark');
+      rootElement.style.colorScheme = nextResolvedTheme === 'dark' ? 'dark' : 'light';
 
       // Dev-only: verbose for debugging tenant/theme issues
       if (process.env.NODE_ENV === 'development') {
         const cs = getComputedStyle(rootElement);
         console.log('[DS:Theme] applied', {
-          resolvedTheme,
+          resolvedTheme: nextResolvedTheme,
           tenant,
           dataTenant: rootElement.getAttribute('data-tenant'),
           dataTheme: rootElement.getAttribute('data-theme'),

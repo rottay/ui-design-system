@@ -1,259 +1,183 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge, DesignSystemProvider } from '@rottay/design-system';
-import { useTokens } from '@rottay/design-system';
+import { useShowroomRuntime } from "@/components/showroom-context";
+import PlatformDashboardDemo from "@/components/demos/platform/dashboard";
+import PlatformTenantFormDemo from "@/components/demos/platform/tenant-form";
+import PlatformUserListDemo from "@/components/demos/platform/user-list";
+import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
 import {
-  UsersIcon,
-  Building2Icon,
-  ShieldIcon,
-  LockIcon,
-  FlagIcon,
-  SettingsIcon,
   BellIcon,
-} from '@rottay/design-system/icons';
+  Building2Icon,
+  FlagIcon,
+  LockIcon,
+  SettingsIcon,
+  ShieldIcon,
+  UsersIcon,
+} from "@rottay/design-system/icons";
 
-import PlatformDashboardDemo from '@/components/demos/platform/dashboard';
-import PlatformUserListDemo from '@/components/demos/platform/user-list';
-import PlatformTenantFormDemo from '@/components/demos/platform/tenant-form';
-
-interface DemoCategory {
-  title: string;
-  slug: string;
-  description: string;
-  demoCount: number;
-  icon: React.ReactNode;
-}
-
-const PLATFORM_CATEGORIES: DemoCategory[] = [
+const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
   {
-    title: 'Identity',
-    slug: 'identity',
-    description: 'User management, profiles, sessions, and authentication flows.',
+    title: "Identity",
+    slug: "identity",
+    description:
+      "User directories, profiles, sessions, and account-state control.",
     demoCount: 4,
     icon: <UsersIcon size={20} />,
+    lens: "Lifecycle control and operator trust",
   },
   {
-    title: 'Tenancy',
-    slug: 'tenancy',
-    description: 'Tenant CRUD, company profiles, branding, and billing settings.',
+    title: "Tenancy",
+    slug: "tenancy",
+    description:
+      "Tenant setup, branding, billing, and lifecycle control.",
     demoCount: 3,
     icon: <Building2Icon size={20} />,
+    lens: "Multi-tenant governance and brand integrity",
   },
   {
-    title: 'Permissions',
-    slug: 'permissions',
-    description: 'Role-based access control, permission matrices, and policy editor.',
+    title: "Permissions",
+    slug: "permissions",
+    description:
+      "Role models, permission matrices, and policy authoring.",
     demoCount: 3,
     icon: <ShieldIcon size={20} />,
+    lens: "Auditability and access confidence",
   },
   {
-    title: 'Auth',
-    slug: 'auth',
-    description: 'Login, MFA, password reset, session management, and API key admin.',
+    title: "Auth",
+    slug: "auth",
+    description:
+      "Sign-in, MFA, session posture, recovery, and API credentials.",
     demoCount: 4,
     icon: <LockIcon size={20} />,
+    lens: "Entry trust and credential hygiene",
   },
   {
-    title: 'Features',
-    slug: 'features',
-    description: 'Feature flag management, rollout strategies, and experiment tracking.',
+    title: "Features",
+    slug: "features",
+    description:
+      "Flags, rollouts, experiments, and release governance.",
     demoCount: 3,
     icon: <FlagIcon size={20} />,
+    lens: "Controlled release tooling",
   },
   {
-    title: 'Navigation',
-    slug: 'navigation',
-    description: 'Sidebar layouts, command palette, breadcrumbs, and admin shell.',
+    title: "Navigation",
+    slug: "navigation",
+    description:
+      "Admin shells, breadcrumbs, search, and fast module switching.",
     demoCount: 3,
     icon: <SettingsIcon size={20} />,
+    lens: "Orientation inside dense SaaS work",
   },
   {
-    title: 'Notifications',
-    slug: 'notifications',
-    description: 'Notification center, toast system, alert banners, and email templates.',
+    title: "Notifications",
+    slug: "notifications",
+    description:
+      "Alert centers, toasts, banners, and admin messaging.",
     demoCount: 3,
     icon: <BellIcon size={20} />,
+    lens: "Operational awareness and follow-up state",
   },
 ];
 
-function PlatformContent() {
-  const tokens = useTokens();
-  const totalDemos = PLATFORM_CATEGORIES.reduce(
-    (sum, cat) => sum + cat.demoCount,
-    0,
-  );
-
-  return (
-    <Stack spacing="lg">
-      {/* Page header */}
-      <Box>
-        <Flex align="center" gap={8}>
-          <Text as={"h1" as any} size="2xl" weight="bold">
-            Platform
-          </Text>
-          <Badge variant="primary">{totalDemos} demos</Badge>
-        </Flex>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text
-            size="md"
-            style={{ color: 'var(--ds-color-text-secondary)' }}
-          >
-            Admin control plane for multi-tenant SaaS. These demos render with
-            the classic engine, rottay theme, and compact density -- matching
-            the production Platform experience.
-          </Text>
-        </Box>
-      </Box>
-
-      {/* Config bar */}
-      <Flex gap={12} style={{ flexWrap: 'wrap' }}>
-        {[
-          { label: 'Engine', value: 'classic' },
-          { label: 'Theme', value: 'rottay' },
-          { label: 'Density', value: 'compact' },
-          { label: 'Vertical', value: 'platform' },
-        ].map((tag) => (
-          <Flex
-            key={tag.label}
-            align="center"
-            gap={6}
-            style={{
-              padding: '4px 12px',
-              borderRadius: 6,
-              background: 'var(--ds-color-neutral-100)',
-              border: '1px solid var(--ds-color-neutral-200)',
-            }}
-          >
-            <Text
-              size="xs"
-              style={{ color: 'var(--ds-color-text-muted)' }}
-            >
-              {tag.label}:
-            </Text>
-            <Text size="xs" weight="semibold">
-              {tag.value}
-            </Text>
-          </Flex>
-        ))}
-      </Flex>
-
-      {/* Live Demo Previews */}
-      <Stack spacing="xl">
-        <Box>
-          <Box
-            style={{
-              border: '1px solid var(--ds-color-neutral-200)',
-              borderRadius: tokens.borderRadius.lg,
-              padding: tokens.spacing[5],
-              background: 'var(--ds-color-neutral-50)',
-            }}
-          >
-            <PlatformDashboardDemo />
-          </Box>
-        </Box>
-
-        <Box>
-          <Box
-            style={{
-              border: '1px solid var(--ds-color-neutral-200)',
-              borderRadius: tokens.borderRadius.lg,
-              padding: tokens.spacing[5],
-              background: 'var(--ds-color-neutral-50)',
-            }}
-          >
-            <PlatformUserListDemo />
-          </Box>
-        </Box>
-
-        <Box>
-          <Box
-            style={{
-              border: '1px solid var(--ds-color-neutral-200)',
-              borderRadius: tokens.borderRadius.lg,
-              padding: tokens.spacing[5],
-              background: 'var(--ds-color-neutral-50)',
-            }}
-          >
-            <PlatformTenantFormDemo />
-          </Box>
-        </Box>
-      </Stack>
-
-      {/* Category cards */}
-      <Box>
-        <Box style={{ marginBottom: tokens.spacing[4] }}>
-          <Text as={"h2" as any} size="xl" weight="semibold">
-            All Categories
-          </Text>
-        </Box>
-        <Box
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: tokens.spacing[5],
-          }}
-        >
-          {PLATFORM_CATEGORIES.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/verticals/platform/${cat.slug}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Card
-                hoverable
-                style={{
-                  height: '100%',
-                  cursor: 'pointer',
-                  transition: 'box-shadow 200ms ease, transform 200ms ease',
-                }}
-              >
-                <Stack spacing="md">
-                  <Flex align="center" justify="between">
-                    <Box
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: tokens.borderRadius.md,
-                        background: 'var(--ds-color-primary-50)',
-                        color: 'var(--ds-color-primary-500)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {cat.icon}
-                    </Box>
-                    <Badge>{cat.demoCount} demos</Badge>
-                  </Flex>
-
-                  <Box>
-                    <Text as={"h3" as any} size="lg" weight="semibold">
-                      {cat.title}
-                    </Text>
-                    <Box style={{ marginTop: tokens.spacing[1] }}>
-                      <Text
-                        size="sm"
-                        style={{ color: 'var(--ds-color-text-secondary)' }}
-                      >
-                        {cat.description}
-                      </Text>
-                    </Box>
-                  </Box>
-                </Stack>
-              </Card>
-            </Link>
-          ))}
-        </Box>
-      </Box>
-    </Stack>
-  );
-}
+const PLATFORM_PROOF_POINTS = [
+  {
+    title: "Command over clutter",
+    description:
+      "Platform should separate alarms, rollout status, and deeper analysis immediately, even when the runtime flips to a darker or denser shell.",
+  },
+  {
+    title: "Governance-first composition",
+    description:
+      "Permissions, identity, and tenancy should feel auditable before they feel decorative, regardless of tenant chrome.",
+  },
+  {
+    title: "Operator continuity",
+    description:
+      "Dashboards, forms, and directories should read like one control plane under pressure instead of three unrelated demos.",
+  },
+];
 
 export default function PlatformPage() {
+  const runtime = useShowroomRuntime();
+  const totalDemos = PLATFORM_CATEGORIES.reduce(
+    (sum, category) => sum + category.demoCount,
+    0
+  );
+
   return (
-    <DesignSystemProvider tenantSlug="rottay" forceEngine="classic">
-      <PlatformContent />
-    </DesignSystemProvider>
+    <VerticalShowcaseShell
+      name="Platform"
+      slug="platform"
+      heroTitle="Platform should sell governance-grade product confidence while still adapting cleanly to the active tenant runtime."
+      heroSummary="The workflow, hierarchy, and operational language stay platform-specific here. What should change is the rendering posture, not the control-plane logic: dense admin surfaces still need a visible split between command metrics, active risk, and deeper analysis when BitHire, Evnto, or dark-first Rottay is driving the DS."
+      runtimeSummary={`Active provider: ${runtime.tenantName}, ${runtime.engine}, ${runtime.productProfileLabel}. The shell below should prove that structure and trust signals survive the switch.`}
+      auditPoints={[
+        "High information density",
+        "Visible system status",
+        "Governance-first polish",
+        "Dark-first safe surfaces",
+      ]}
+      heroMetrics={[
+        {
+          label: "Coverage",
+          value: `${totalDemos} demos`,
+          detail: "Across 7 admin categories that need to feel like one control plane.",
+        },
+        {
+          label: "Priority",
+          value: "Governance",
+          detail: "Permissions, identity, rollout risk, and tenant oversight stay above the fold.",
+        },
+        {
+          label: "Interaction bias",
+          value: "Compact confidence",
+          detail: "Fast command reads first, then deliberate drill-down into analysis.",
+        },
+      ]}
+      proofPoints={PLATFORM_PROOF_POINTS}
+      leadDemo={{
+        title: "Operations dashboard",
+        description:
+          "The KPI-heavy view that establishes trust and keeps operators oriented across tenants, uptime, security posture, launch risk, and rollout readiness.",
+        badge: "Command center",
+        inspectionNotes: [
+          "Whether headline metrics, risk, and analysis are visibly separated under dense chrome.",
+          "Whether supporting panels feel governed instead of ornamental.",
+          "Whether status language looks credible for enterprise admin workflows.",
+        ],
+        coverageNote:
+          "Identity, tenancy, and permissions should still feel native to one admin shell when the runtime switches.",
+        viewportHeight: 960,
+        children: <PlatformDashboardDemo />,
+      }}
+      supportingDemos={[
+        {
+          title: "Identity directory",
+          description:
+            "Dense user administration with search, status, access posture, and actionable context.",
+          badge: "Identity",
+          inspectionNotes: [],
+          coverageNote: "",
+          viewportHeight: 760,
+          children: <PlatformUserListDemo />,
+        },
+        {
+          title: "Tenant configuration",
+          description:
+            "Settings-heavy configuration flow with launch readiness, security guardrails, and brand governance.",
+          badge: "Tenancy",
+          inspectionNotes: [],
+          coverageNote: "",
+          viewportHeight: 760,
+          children: <PlatformTenantFormDemo />,
+        },
+      ]}
+      categories={PLATFORM_CATEGORIES}
+      categoryIntro="Use these cards to open focused governance lanes with deeper scenario inventory and component proof."
+      accentTint="rgba(59, 130, 246, 0.16)"
+      accentBorder="rgba(59, 130, 246, 0.28)"
+    />
   );
 }

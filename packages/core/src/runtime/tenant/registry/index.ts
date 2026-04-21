@@ -68,9 +68,9 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     features: ['*'],
     branding: {
       companyName: 'BitHire',
-      primaryColor: '#0A66C2',
-      secondaryColor: '#004182',
-      accentColor: '#7FC15E',
+      // Colors intentionally omitted -- defined in CSS tenant tokens
+      // (tokens/css/artifacts/bithire/index.css). The runtime should only
+      // inject visual branding when an app explicitly overrides it.
       logo: undefined,
     },
     brandTheme: bithireBrandTheme,
@@ -91,9 +91,9 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     features: ['*'],
     branding: {
       companyName: 'Evnto',
-      primaryColor: '#171717',
-      secondaryColor: '#b8a898',
-      accentColor: '#b8a898',
+      // Colors intentionally omitted -- defined in CSS tenant tokens
+      // (tokens/css/artifacts/evnto/index.css). The runtime should only
+      // inject visual branding when an app explicitly overrides it.
       logo: undefined,
     },
     brandTheme: evntoBrandTheme,

@@ -30,7 +30,7 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --color-primary-content: oklch(100% 0 0);           /* #FFFFFF white */
   --color-secondary: oklch(42% 0.06 160);             /* #057642 green */
   --color-secondary-content: oklch(100% 0 0);         /* #FFFFFF */
-  --color-accent: oklch(72% 0.14 135);                /* #7FC15E green accent */
+  --color-accent: oklch(61.2% 0.135 137);             /* #5A9640 green accent */
   --color-accent-content: oklch(7% 0.01 260);         /* near-black */
   --color-neutral: oklch(30% 0.01 250);               /* #474747 dark gray */
   --color-neutral-content: oklch(97% 0.005 100);      /* #F3F2EF */
@@ -80,9 +80,12 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-secondary-800: #023621;
   --ds-color-secondary-900: #012416;
 
+  --ds-color-secondary: #057642;
+  --ds-color-secondary-hover: #046339;
+
   /* Accent - Green */
-  --ds-color-accent: #7FC15E;
-  --ds-color-accent-hover: #6aad49;
+  --ds-color-accent: #5A9640;
+  --ds-color-accent-hover: #4F8A37;
 
   /* Neutral - LinkedIn Grays */
   --ds-color-neutral-50: #f3f2ef;
@@ -348,10 +351,10 @@ html[data-tenant='bithire'].dark {
   /* ============================================
      DaisyUI 5 color bridge (oklch format) - dark variant
      ============================================ */
-  --color-primary: oklch(58% 0.14 250);
-  --color-primary-content: oklch(98% 0.005 250);
-  --color-secondary: oklch(50% 0.06 160);
-  --color-secondary-content: oklch(95% 0.005 160);
+  --color-primary: oklch(61.0% 0.172 253);
+  --color-primary-content: oklch(18% 0.015 260);
+  --color-secondary: oklch(61.3% 0.102 173);
+  --color-secondary-content: oklch(18% 0.015 260);
   --color-accent: oklch(62% 0.12 140);
   --color-accent-content: oklch(98% 0.005 140);
   --color-neutral: oklch(25% 0.01 250);
@@ -382,14 +385,14 @@ html[data-tenant='bithire'].dark {
   --ds-color-primary-200: #163555;
   --ds-color-primary-300: #1A4F80;
   --ds-color-primary-400: #1A6DB5;
-  --ds-color-primary-500: #1A7FE0;
+  --ds-color-primary-500: #1E84E6;
   --ds-color-primary-600: #3B9AF0;
   --ds-color-primary-700: #6BB5F5;
   --ds-color-primary-800: #A0D0FA;
   --ds-color-primary-900: #D6EAFD;
 
   /* Primary main color */
-  --ds-color-primary: #1A7FE0;
+  --ds-color-primary: #1E84E6;
   --ds-color-primary-hover: #2B8FEF;
 
   /* Secondary - Teal/Green (dark variant) */
@@ -398,11 +401,14 @@ html[data-tenant='bithire'].dark {
   --ds-color-secondary-200: #153D30;
   --ds-color-secondary-300: #1E5C48;
   --ds-color-secondary-400: #267A5E;
-  --ds-color-secondary-500: #2D8A6E;
+  --ds-color-secondary-500: #34987E;
   --ds-color-secondary-600: #38A080;
   --ds-color-secondary-700: #5CBFA0;
   --ds-color-secondary-800: #90D8C0;
   --ds-color-secondary-900: #C8EDE0;
+
+  --ds-color-secondary-hover: #38A080;
+  --ds-color-secondary: #34987E;
 
   /* Accent - Green */
   --ds-color-accent: #4CAF50;

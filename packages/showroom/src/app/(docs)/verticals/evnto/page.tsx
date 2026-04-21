@@ -1,278 +1,193 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge, DesignSystemProvider } from '@rottay/design-system';
-import { useTokens } from '@rottay/design-system';
+import { useShowroomRuntime } from "@/components/showroom-context";
+import { EventDashboardDemo } from "@/components/demos/evnto/event-dashboard";
+import { TicketBuilderDemo } from "@/components/demos/evnto/ticket-builder";
+import { VenueLayoutDemo } from "@/components/demos/evnto/venue-layout";
+import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
 import {
-  CalendarIcon,
-  Building2Icon,
-  StarIcon,
-  SettingsIcon,
-  UsersIcon,
-  BarChart3Icon,
-  ZapIcon,
   ActivityIcon,
-} from '@rottay/design-system/icons';
+  BarChart3Icon,
+  Building2Icon,
+  CalendarIcon,
+  SettingsIcon,
+  StarIcon,
+  UsersIcon,
+  ZapIcon,
+} from "@rottay/design-system/icons";
 
-import { EventDashboardDemo } from '@/components/demos/evnto/event-dashboard';
-import { TicketBuilderDemo } from '@/components/demos/evnto/ticket-builder';
-import { VenueLayoutDemo } from '@/components/demos/evnto/venue-layout';
-
-interface DemoCategory {
-  title: string;
-  slug: string;
-  description: string;
-  demoCount: number;
-  icon: React.ReactNode;
-}
-
-const EVNTO_CATEGORIES: DemoCategory[] = [
+const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
   {
-    title: 'Event Management',
-    slug: 'event-management',
-    description: 'Event CRUD, scheduling, recurring events, and multi-day configuration.',
+    title: "Event Management",
+    slug: "event-management",
+    description:
+      "Event setup, scheduling, programming, and recurrence.",
     demoCount: 4,
     icon: <CalendarIcon size={20} />,
+    lens: "Programming the event itself",
   },
   {
-    title: 'Venue',
-    slug: 'venue',
-    description: 'Venue profiles, floor plans, capacity management, and availability calendars.',
+    title: "Venue",
+    slug: "venue",
+    description:
+      "Venue profiles, floor plans, capacity, and availability.",
     demoCount: 3,
     icon: <Building2Icon size={20} />,
+    lens: "Spatial planning and capacity control",
   },
   {
-    title: 'Ticketing',
-    slug: 'ticketing',
-    description: 'Ticket types, pricing tiers, promo codes, and sales dashboard.',
+    title: "Ticketing",
+    slug: "ticketing",
+    description:
+      "Ticket tiers, pricing rules, promo logic, and launch readiness.",
     demoCount: 4,
     icon: <StarIcon size={20} />,
+    lens: "Monetization and launch readiness",
   },
   {
-    title: 'Operations',
-    slug: 'operations',
-    description: 'Day-of operations checklist, vendor coordination, and timeline management.',
+    title: "Operations",
+    slug: "operations",
+    description:
+      "Checklists, vendor coordination, and day-of timeline control.",
     demoCount: 3,
     icon: <SettingsIcon size={20} />,
+    lens: "Showtime reliability and execution",
   },
   {
-    title: 'Staff',
-    slug: 'staff',
-    description: 'Staff scheduling, role assignments, shift management, and check-in tracking.',
+    title: "Staff",
+    slug: "staff",
+    description:
+      "Staff scheduling, roles, shifts, and live check-in.",
     demoCount: 3,
     icon: <UsersIcon size={20} />,
+    lens: "Ground-team orchestration",
   },
   {
-    title: 'Finance',
-    slug: 'finance',
-    description: 'Revenue tracking, expense management, settlement reports, and payouts.',
+    title: "Finance",
+    slug: "finance",
+    description:
+      "Revenue, expenses, settlements, and event economics.",
     demoCount: 3,
     icon: <BarChart3Icon size={20} />,
+    lens: "Commercial clarity and reconciliation",
   },
   {
-    title: 'Engagement',
-    slug: 'engagement',
-    description: 'Attendee engagement, live polls, social media integration, and feedback.',
+    title: "Engagement",
+    slug: "engagement",
+    description:
+      "Polls, social surfaces, feedback loops, and attendee energy.",
     demoCount: 3,
     icon: <ZapIcon size={20} />,
+    lens: "Audience momentum and participation",
   },
   {
-    title: 'Analytics',
-    slug: 'analytics',
-    description: 'Event performance metrics, attendance trends, and revenue analytics.',
+    title: "Analytics",
+    slug: "analytics",
+    description:
+      "Attendance, revenue, and engagement hindsight.",
     demoCount: 4,
     icon: <ActivityIcon size={20} />,
+    lens: "Operational and commercial hindsight",
   },
 ];
 
-function EvntoContent() {
-  const tokens = useTokens();
-  const totalDemos = EVNTO_CATEGORIES.reduce(
-    (sum, cat) => sum + cat.demoCount,
-    0,
-  );
-
-  return (
-    <Stack spacing="lg">
-      {/* Page header */}
-      <Box>
-        <Flex align="center" gap={8}>
-          <Text as={"h1" as any} size="2xl" weight="bold">
-            Evnto
-          </Text>
-          <Badge variant="primary">{totalDemos} demos</Badge>
-        </Flex>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text
-            size="md"
-            style={{ color: 'var(--ds-color-text-secondary)' }}
-          >
-            Events, nightlife, and venue management. These demos render with
-            the modern engine, evnto theme, and spacious density -- matching
-            the production Evnto experience.
-          </Text>
-        </Box>
-      </Box>
-
-      {/* Config bar */}
-      <Flex gap={12} style={{ flexWrap: 'wrap' }}>
-        {[
-          { label: 'Engine', value: 'modern' },
-          { label: 'Theme', value: 'evnto' },
-          { label: 'Density', value: 'spacious' },
-          { label: 'Vertical', value: 'evnto' },
-        ].map((tag) => (
-          <Flex
-            key={tag.label}
-            align="center"
-            gap={6}
-            style={{
-              padding: '4px 12px',
-              borderRadius: 6,
-              background: 'var(--ds-color-neutral-100)',
-              border: '1px solid var(--ds-color-neutral-200)',
-            }}
-          >
-            <Text
-              size="xs"
-              style={{ color: 'var(--ds-color-text-muted)' }}
-            >
-              {tag.label}:
-            </Text>
-            <Text size="xs" weight="semibold">
-              {tag.value}
-            </Text>
-          </Flex>
-        ))}
-      </Flex>
-
-      {/* Live Demo Previews */}
-      <Box>
-        <Text as={"h2" as any} size="xl" weight="bold">
-          Live Demos
-        </Text>
-        <Box style={{ marginTop: tokens.spacing[1] }}>
-          <Text
-            size="sm"
-            style={{ color: 'var(--ds-color-text-secondary)' }}
-          >
-            Interactive previews rendered with the Evnto engine configuration
-          </Text>
-        </Box>
-      </Box>
-
-      {/* Demo 1: Event Dashboard */}
-      <Card style={{ padding: tokens.spacing[5], overflow: 'hidden' }}>
-        <Stack spacing="md">
-          <Flex align="center" gap={8}>
-            <Badge variant="primary">Demo</Badge>
-            <Text size="sm" weight="semibold">
-              Event Operations Dashboard
-            </Text>
-          </Flex>
-          <EventDashboardDemo />
-        </Stack>
-      </Card>
-
-      {/* Demo 2: Ticket Builder */}
-      <Card style={{ padding: tokens.spacing[5], overflow: 'hidden' }}>
-        <Stack spacing="md">
-          <Flex align="center" gap={8}>
-            <Badge variant="primary">Demo</Badge>
-            <Text size="sm" weight="semibold">
-              Ticket Tier Builder
-            </Text>
-          </Flex>
-          <TicketBuilderDemo />
-        </Stack>
-      </Card>
-
-      {/* Demo 3: Venue Layout */}
-      <Card style={{ padding: tokens.spacing[5], overflow: 'hidden' }}>
-        <Stack spacing="md">
-          <Flex align="center" gap={8}>
-            <Badge variant="primary">Demo</Badge>
-            <Text size="sm" weight="semibold">
-              Venue Zone Overview
-            </Text>
-          </Flex>
-          <VenueLayoutDemo />
-        </Stack>
-      </Card>
-
-      {/* Category cards */}
-      <Box style={{ marginTop: tokens.spacing[4] }}>
-        <Text as={"h2" as any} size="xl" weight="bold">
-          All Categories
-        </Text>
-      </Box>
-
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-          gap: tokens.spacing[5],
-        }}
-      >
-        {EVNTO_CATEGORIES.map((cat) => (
-          <Link
-            key={cat.slug}
-            href={`/verticals/evnto/${cat.slug}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <Card
-              hoverable
-              style={{
-                height: '100%',
-                cursor: 'pointer',
-                transition: 'box-shadow 200ms ease, transform 200ms ease',
-              }}
-            >
-              <Stack spacing="md">
-                <Flex align="center" justify="between">
-                  <Box
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: tokens.borderRadius.md,
-                      background: 'var(--ds-color-primary-50)',
-                      color: 'var(--ds-color-primary-500)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {cat.icon}
-                  </Box>
-                  <Badge>{cat.demoCount} demos</Badge>
-                </Flex>
-
-                <Box>
-                  <Text as={"h3" as any} size="lg" weight="semibold">
-                    {cat.title}
-                  </Text>
-                  <Box style={{ marginTop: tokens.spacing[1] }}>
-                    <Text
-                      size="sm"
-                      style={{ color: 'var(--ds-color-text-secondary)' }}
-                    >
-                      {cat.description}
-                    </Text>
-                  </Box>
-                </Box>
-              </Stack>
-            </Card>
-          </Link>
-        ))}
-      </Box>
-    </Stack>
-  );
-}
+const EVNTO_PROOF_POINTS = [
+  {
+    title: "Atmosphere with discipline",
+    description:
+      "Evnto should feel expressive and premium without losing operational clarity under any runtime.",
+  },
+  {
+    title: "Revenue and operations together",
+    description:
+      "Ticketing, venue, and finance moments need to feel connected instead of siloed or demo-like.",
+  },
+  {
+    title: "Live-event confidence",
+    description:
+      "The UI has to stay legible when timing, capacity, and people pressure all spike, including in dark-first Rottay.",
+  },
+];
 
 export default function EvntoPage() {
+  const runtime = useShowroomRuntime();
+  const totalDemos = EVNTO_CATEGORIES.reduce(
+    (sum, category) => sum + category.demoCount,
+    0
+  );
+
   return (
-    <DesignSystemProvider tenantSlug="evnto" forceEngine="modern">
-      <EvntoContent />
-    </DesignSystemProvider>
+    <VerticalShowcaseShell
+      name="Evnto"
+      slug="evnto"
+      heroTitle="Evnto should feel like a polished event platform with commercial energy, not a gallery of isolated venue widgets."
+      heroSummary="Venue, ticketing, and live-operations semantics stay intact here. What should change is the rendering language, so the same event surfaces remain premium, legible, and commercially credible when the showroom runtime changes."
+      runtimeSummary={`Active provider: ${runtime.tenantName}, ${runtime.engine}, ${runtime.productProfileLabel}. The shell below should prove that atmosphere survives without relying on light-page assumptions.`}
+      auditPoints={[
+        "Spectacle only where it frames",
+        "Live-event pressure stays readable",
+        "Commercial tone with operational readiness",
+        "Premium in dark or light",
+      ]}
+      heroMetrics={[
+        {
+          label: "Coverage",
+          value: `${totalDemos} demos`,
+          detail: "Across 8 event workflows that need to feel like one product system.",
+        },
+        {
+          label: "Tone",
+          value: "Premium energy",
+          detail: "Expressive framing without sacrificing legibility or urgency.",
+        },
+        {
+          label: "Priority",
+          value: "Operations + revenue",
+          detail: "Live events demand both polish and control at the same time.",
+        },
+      ]}
+      proofPoints={EVNTO_PROOF_POINTS}
+      leadDemo={{
+        title: "Operations dashboard",
+        description:
+          "The live heartbeat of an event: capacity, velocity, revenue, attendee flow, and day-of execution.",
+        badge: "Live ops",
+        inspectionNotes: [
+          "Whether commercial and operational signals share one visual language.",
+          "Whether premium framing still leaves room for urgent controls.",
+          "Whether status, capacity, and revenue can be read at a glance.",
+        ],
+        coverageNote:
+          "Ticketing, venue, staff, and analytics should all feel like one live-event system with different moods.",
+        viewportHeight: 860,
+        children: <EventDashboardDemo />,
+      }}
+      supportingDemos={[
+        {
+          title: "Ticket tier builder",
+          description:
+            "Where monetization strategy becomes a usable control surface for pricing, inventory, and launch planning.",
+          badge: "Ticketing",
+          inspectionNotes: [],
+          coverageNote: "",
+          viewportHeight: 720,
+          children: <TicketBuilderDemo />,
+        },
+        {
+          title: "Venue zone overview",
+          description:
+            "Spatial planning that still feels premium and easy to read under real operational pressure.",
+          badge: "Venue",
+          inspectionNotes: [],
+          coverageNote: "",
+          viewportHeight: 760,
+          children: <VenueLayoutDemo />,
+        },
+      ]}
+      categories={EVNTO_CATEGORIES}
+      categoryIntro="Use these cards to open event-specific lanes with deeper scenario inventory and component proof."
+      accentTint="rgba(244, 63, 94, 0.16)"
+      accentBorder="rgba(244, 63, 94, 0.28)"
+    />
   );
 }

@@ -1,9 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge, Button } from '@rottay/design-system';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  DesignSystemProvider,
+  Flex,
+  Stack,
+  Text,
+} from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
+import { CodeBlock } from '@/components/playground';
+import { useShowroom } from '@/components/showroom-context';
 
 function TransitionDemo({
   label,
@@ -21,83 +32,70 @@ function TransitionDemo({
     <Box
       style={{
         padding: tokens.spacing[4],
-        borderRadius: tokens.borderRadius.md,
+        borderRadius: tokens.borderRadius.lg,
         border: '1px solid var(--ds-color-neutral-200)',
+        background: 'var(--ds-color-white)',
       }}
     >
-      <Flex align="center" justify="between" style={{ marginBottom: tokens.spacing[3] }}>
-        <Box>
-          <Text
-            size="sm"
-            weight="semibold"
-            style={{ fontFamily: 'var(--font-geist-mono, monospace)' }}
-          >
-            {label}
-          </Text>
-          <Box style={{ marginTop: 2 }}>
+      <Stack spacing="sm">
+        <Flex align="center" justify="between">
+          <Stack spacing={2}>
+            <Text
+              size="sm"
+              weight="semibold"
+              style={{ fontFamily: 'var(--font-geist-mono, monospace)' }}
+            >
+              {label}
+            </Text>
             <Text
               size="xs"
               style={{
-                fontFamily: 'var(--font-geist-mono, monospace)',
                 color: 'var(--ds-color-text-muted)',
+                fontFamily: 'var(--font-geist-mono, monospace)',
               }}
             >
               {value}
             </Text>
-          </Box>
-        </Box>
-        <Button
-          size="sm"
-          onClick={() => setActive((v) => !v)}
-        >
-          {active ? 'Reset' : 'Play'}
-        </Button>
-      </Flex>
-
-      <Text
-        size="xs"
-        style={{
-          color: 'var(--ds-color-text-secondary)',
-          marginBottom: tokens.spacing[3],
-        }}
-      >
-        {description}
-      </Text>
-
-      {/* Animated preview */}
-      <Box
-        style={{
-          height: 48,
-          position: 'relative',
-          background: 'var(--ds-color-neutral-50)',
-          borderRadius: tokens.borderRadius.sm,
-          overflow: 'hidden',
-        }}
-      >
+          </Stack>
+          <Button size="sm" onClick={() => setActive((current) => !current)}>
+            {active ? 'Reset' : 'Play'}
+          </Button>
+        </Flex>
+        <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          {description}
+        </Text>
         <Box
           style={{
-            position: 'absolute',
-            top: 8,
-            left: active ? 'calc(100% - 40px)' : '8px',
-            width: 32,
-            height: 32,
-            borderRadius: tokens.borderRadius.md,
-            background: 'var(--ds-color-primary-500)',
-            transition: `left ${value}`,
+            height: 56,
+            position: 'relative',
+            borderRadius: tokens.borderRadius.full,
+            background: 'var(--ds-color-neutral-50)',
+            overflow: 'hidden',
           }}
-        />
-      </Box>
+        >
+          <Box
+            style={{
+              position: 'absolute',
+              top: 12,
+              left: active ? 'calc(100% - 44px)' : '12px',
+              width: 32,
+              height: 32,
+              borderRadius: tokens.borderRadius.md,
+              background: 'var(--ds-color-primary-500)',
+              transition: `left ${value}`,
+            }}
+          />
+        </Box>
+      </Stack>
     </Box>
   );
 }
 
 function HoverDemo({
   label,
-  hoverTransition,
   transform,
 }: {
   label: string;
-  hoverTransition: string;
   transform: string;
 }) {
   const tokens = useTokens();
@@ -106,44 +104,45 @@ function HoverDemo({
     <Box style={{ textAlign: 'center' }}>
       <Box
         style={{
-          width: 64,
-          height: 64,
-          borderRadius: tokens.borderRadius.md,
+          width: 72,
+          height: 72,
+          margin: '0 auto',
+          borderRadius: tokens.borderRadius.lg,
           background: 'var(--ds-color-primary-100)',
           border: '1px solid var(--ds-color-primary-300)',
-          margin: '0 auto',
-          cursor: 'pointer',
-          transition: `all ${hoverTransition}`,
+          transition: `all ${tokens.motion.hover}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          cursor: 'pointer',
         }}
-        onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
-          const el = e.currentTarget;
-          el.style.transform = transform || 'scale(1.05)';
-          el.style.boxShadow = tokens.shadows.md;
-          el.style.background = 'var(--ds-color-primary-200)';
+        onMouseEnter={(event: React.MouseEvent<HTMLDivElement>) => {
+          const element = event.currentTarget;
+          element.style.transform = transform;
+          element.style.boxShadow = tokens.shadows.md;
+          element.style.background = 'var(--ds-color-primary-200)';
         }}
-        onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
-          const el = e.currentTarget;
-          el.style.transform = 'none';
-          el.style.boxShadow = 'none';
-          el.style.background = 'var(--ds-color-primary-100)';
+        onMouseLeave={(event: React.MouseEvent<HTMLDivElement>) => {
+          const element = event.currentTarget;
+          element.style.transform = 'none';
+          element.style.boxShadow = 'none';
+          element.style.background = 'var(--ds-color-primary-100)';
         }}
       >
-        <Text size="xs" weight="semibold" style={{ color: 'var(--ds-color-primary-600)' }}>
+        <Text size="xs" weight="semibold" style={{ color: 'var(--ds-color-primary-700)' }}>
           Hover
         </Text>
       </Box>
-      <Box style={{ marginTop: 8 }}>
-        <Text
-          size="xs"
-          weight="medium"
-          style={{ fontFamily: 'var(--font-geist-mono, monospace)' }}
-        >
-          {label}
-        </Text>
-      </Box>
+      <Text
+        size="xs"
+        style={{
+          marginTop: 8,
+          color: 'var(--ds-color-text-secondary)',
+          fontFamily: 'var(--font-geist-mono, monospace)',
+        }}
+      >
+        {label}
+      </Text>
     </Box>
   );
 }
@@ -154,51 +153,50 @@ function EntranceDemo() {
 
   const entrances = [
     { name: 'fadeIn', style: { animation: `fadeIn 600ms ${tokens.motion.spring} forwards` } },
-    { name: 'slideUp', style: { animation: `slideUp 400ms ${tokens.motion.spring} forwards` } },
-    { name: 'scaleIn', style: { animation: `scaleIn 400ms ${tokens.motion.spring} forwards` } },
+    { name: 'slideUp', style: { animation: `slideUp 420ms ${tokens.motion.spring} forwards` } },
+    { name: 'scaleIn', style: { animation: `scaleIn 420ms ${tokens.motion.spring} forwards` } },
   ];
 
   return (
-    <Card>
+    <Card style={{ padding: tokens.spacing[5] }}>
       <Stack spacing="md">
-        <Flex align="center" justify="between">
-          <Text as={"h3" as any} size="md" weight="semibold">
-            Entrance animations
-          </Text>
-          <Button
-            size="sm"
-            onClick={() => setKey((k) => k + 1)}
-          >
+        <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
+          <Box>
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              Entrance choreography
+            </Text>
+            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              Useful presets for modules entering premium documentation and workspace UI.
+            </Text>
+          </Box>
+          <Button size="sm" onClick={() => setKey((current) => current + 1)}>
             Replay
           </Button>
         </Flex>
-        <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          Common entrance patterns using CSS keyframes and the engine easing
-          curve.
-        </Text>
-        <Flex gap={24}>
-          {entrances.map((e) => (
-            <Box key={`${e.name}-${key}`} style={{ textAlign: 'center' }}>
+        <Flex gap={24} style={{ flexWrap: 'wrap' }}>
+          {entrances.map((entrance) => (
+            <Box key={`${entrance.name}-${key}`} style={{ textAlign: 'center' }}>
               <Box
                 style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: tokens.borderRadius.md,
-                  background: 'var(--ds-color-primary-500)',
+                  width: 72,
+                  height: 72,
                   margin: '0 auto',
+                  borderRadius: tokens.borderRadius.lg,
+                  background: 'var(--ds-color-primary-500)',
                   opacity: 0,
-                  ...e.style,
+                  ...entrance.style,
                 }}
               />
-              <Box style={{ marginTop: 8 }}>
-                <Text
-                  size="xs"
-                  weight="medium"
-                  style={{ fontFamily: 'var(--font-geist-mono, monospace)' }}
-                >
-                  {e.name}
-                </Text>
-              </Box>
+              <Text
+                size="xs"
+                style={{
+                  marginTop: 8,
+                  fontFamily: 'var(--font-geist-mono, monospace)',
+                  color: 'var(--ds-color-text-secondary)',
+                }}
+              >
+                {entrance.name}
+              </Text>
             </Box>
           ))}
         </Flex>
@@ -212,8 +210,98 @@ function EntranceDemo() {
             to { opacity: 1; transform: translateY(0); }
           }
           @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.92); }
             to { opacity: 1; transform: scale(1); }
+          }
+        `}</style>
+      </Stack>
+    </Card>
+  );
+}
+
+function MotionProfilePreview({
+  engine,
+  label,
+}: {
+  engine: 'classic' | 'modern' | 'rustic';
+  label: string;
+}) {
+  const { tenantSlug } = useShowroom();
+
+  return (
+    <DesignSystemProvider tenantSlug={tenantSlug} forceEngine={engine}>
+      <MotionProfilePreviewContent label={label} />
+    </DesignSystemProvider>
+  );
+}
+
+function MotionProfilePreviewContent({ label }: { label: string }) {
+  const tokens = useTokens();
+
+  return (
+    <Card style={{ padding: tokens.spacing[4], height: '100%' }}>
+      <Stack spacing="md">
+        <Flex align="center" justify="between">
+          <Text size="sm" weight="semibold">
+            {label}
+          </Text>
+          <Badge variant="secondary">{tokens.motion.durationScale}x</Badge>
+        </Flex>
+        <Stack spacing={6}>
+          <Text
+            size="xs"
+            style={{
+              color: 'var(--ds-color-text-muted)',
+              fontFamily: 'var(--font-geist-mono, monospace)',
+            }}
+          >
+            hover: {tokens.motion.hover}
+          </Text>
+          <Text
+            size="xs"
+            style={{
+              color: 'var(--ds-color-text-muted)',
+              fontFamily: 'var(--font-geist-mono, monospace)',
+            }}
+          >
+            transform: {tokens.motion.transform || 'none'}
+          </Text>
+          <Text
+            size="xs"
+            style={{
+              color: 'var(--ds-color-text-muted)',
+              fontFamily: 'var(--font-geist-mono, monospace)',
+            }}
+          >
+            spring: {tokens.motion.spring}
+          </Text>
+        </Stack>
+        <Box
+          style={{
+            height: 54,
+            borderRadius: 999,
+            background: 'var(--ds-color-neutral-50)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <Box
+            style={{
+              position: 'absolute',
+              top: 11,
+              left: 12,
+              width: 32,
+              height: 32,
+              borderRadius: tokens.borderRadius.md,
+              background: 'var(--ds-color-primary-500)',
+              animation: `motion-profile-slide ${Math.max(tokens.motion.durationScale, 0.6) * 1.3}s ${tokens.motion.spring} infinite alternate`,
+            }}
+          />
+        </Box>
+        <style>{`
+          @keyframes motion-profile-slide {
+            from { transform: translateX(0); }
+            to { transform: translateX(120px); }
           }
         `}</style>
       </Stack>
@@ -226,289 +314,233 @@ export default function MotionPage() {
 
   return (
     <Stack spacing="lg">
-      {/* Header */}
-      <Box>
-        <Flex align="center" gap={8}>
-          <Link
-            href="/foundations/tokens"
-            style={{
-              textDecoration: 'none',
-              color: 'var(--ds-color-text-muted)',
-              fontSize: '0.875rem',
-            }}
-          >
-            Tokens
-          </Link>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
-            /
-          </Text>
-          <Text as={"h1" as any} size="2xl" weight="bold">
-            Motion
-          </Text>
-        </Flex>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Motion tokens define transition timing, easing curves, hover
-            behavior, and duration scales. Classic is fast and linear, Modern
-            uses spring physics with lift transforms, and Rustic is quiet with
-            minimal motion.
-          </Text>
+      <Box
+        style={{
+          padding: tokens.spacing[5],
+          borderRadius: tokens.borderRadius.xl,
+          background:
+            'radial-gradient(circle at top left, rgba(0,102,204,0.14), transparent 34%), linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,250,252,0.94))',
+          border: '1px solid rgba(0, 102, 204, 0.1)',
+        }}
+      >
+        <Box
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: tokens.spacing[5],
+            alignItems: 'start',
+          }}
+        >
+          <Stack spacing="lg">
+            <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+              <Link
+                href="/foundations/tokens"
+                style={{
+                  textDecoration: 'none',
+                  color: 'var(--ds-color-primary-600)',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                }}
+              >
+                Tokens
+              </Link>
+              <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+                /
+              </Text>
+              <Badge variant="secondary">Interaction cadence</Badge>
+            </Flex>
+            <Stack spacing="sm">
+              <Text as={"h1" as any} size="2xl" weight="bold" style={{ letterSpacing: '-0.04em' }}>
+                Motion is where a neutral component API starts to feel product-specific.
+              </Text>
+              <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                Hover timing, lift transforms, spring easing, and duration
+                scaling give each engine a different sense of confidence.
+                Motion should clarify interaction, not perform for its own sake.
+              </Text>
+            </Stack>
+            <Box
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: tokens.spacing[4],
+              }}
+            >
+              {[
+                {
+                  label: 'Hover',
+                  value: tokens.motion.hover,
+                  detail: 'Applied to most micro-interactions.',
+                },
+                {
+                  label: 'Transform',
+                  value: tokens.motion.transform || 'none',
+                  detail: 'Lift or scale personality on hover.',
+                },
+                {
+                  label: 'Duration scale',
+                  value: `${tokens.motion.durationScale}x`,
+                  detail: 'Controls overall motion pacing.',
+                },
+              ].map((item) => (
+                <Card key={item.label} style={{ padding: tokens.spacing[4] }}>
+                  <Stack spacing={4}>
+                    <Text
+                      size="xs"
+                      weight="semibold"
+                      style={{
+                        color: 'var(--ds-color-text-muted)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      {item.label}
+                    </Text>
+                    <Text size="sm" weight="bold" style={{ fontFamily: 'var(--font-geist-mono, monospace)' }}>
+                      {item.value}
+                    </Text>
+                    <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                      {item.detail}
+                    </Text>
+                  </Stack>
+                </Card>
+              ))}
+            </Box>
+          </Stack>
+
+          <Card style={{ padding: tokens.spacing[5], background: 'rgba(15,23,42,0.95)', color: 'var(--ds-color-white)' }}>
+            <Stack spacing="md">
+              <Text size="sm" weight="semibold">
+                Active motion profile
+              </Text>
+              <Box
+                style={{
+                  height: 64,
+                  borderRadius: 999,
+                  background: 'rgba(255,255,255,0.08)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                <Box
+                  style={{
+                    position: 'absolute',
+                    top: 16,
+                    left: 16,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 12,
+                    background: 'rgba(255,255,255,0.92)',
+                    animation: `motion-hero-slide ${Math.max(tokens.motion.durationScale, 0.6) * 1.5}s ${tokens.motion.spring} infinite alternate`,
+                  }}
+                />
+              </Box>
+              <style>{`
+                @keyframes motion-hero-slide {
+                  from { transform: translateX(0) ${tokens.motion.transform || ''}; }
+                  to { transform: translateX(152px) ${tokens.motion.transform || ''}; }
+                }
+              `}</style>
+              <Text size="xs" style={{ color: 'rgba(255,255,255,0.66)' }}>
+                Same component, different choreography depending on engine.
+              </Text>
+            </Stack>
+          </Card>
         </Box>
       </Box>
 
-      {/* Current engine motion tokens */}
-      <Card>
-        <Stack spacing="md">
-          <Text as={"h3" as any} size="md" weight="semibold">
-            Active motion tokens
+      <Stack spacing="md">
+        <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
+          <Text as={"h2" as any} size="lg" weight="semibold">
+            Engine motion profiles
           </Text>
-          <Box
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-              gap: tokens.spacing[3],
-            }}
-          >
-            {[
-              { label: 'hover', value: tokens.motion.hover, desc: 'Hover transition timing' },
-              { label: 'transform', value: tokens.motion.transform, desc: 'Hover transform effect' },
-              { label: 'spring', value: tokens.motion.spring, desc: 'Easing curve for entrances' },
-              { label: 'durationScale', value: String(tokens.motion.durationScale), desc: 'Duration multiplier' },
-            ].map((item) => (
-              <Box
-                key={item.label}
-                style={{
-                  padding: tokens.spacing[3],
-                  borderRadius: tokens.borderRadius.md,
-                  background: 'var(--ds-color-neutral-50)',
-                }}
-              >
-                <Text
-                  size="xs"
-                  weight="semibold"
-                  style={{
-                    fontFamily: 'var(--font-geist-mono, monospace)',
-                    color: 'var(--ds-color-primary-600)',
-                  }}
-                >
-                  {item.label}
-                </Text>
-                <Box style={{ marginTop: 4 }}>
-                  <Text
-                    size="xs"
-                    style={{
-                      fontFamily: 'var(--font-geist-mono, monospace)',
-                      color: 'var(--ds-color-text-primary)',
-                    }}
-                  >
-                    {item.value}
-                  </Text>
-                </Box>
-                <Box style={{ marginTop: 4 }}>
-                  <Text
-                    size="xs"
-                    style={{ color: 'var(--ds-color-text-muted)' }}
-                  >
-                    {item.desc}
-                  </Text>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-        </Stack>
-      </Card>
+          <Badge variant="secondary">Three personalities</Badge>
+        </Flex>
+        <Box
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: tokens.spacing[4],
+          }}
+        >
+          <MotionProfilePreview engine="classic" label="Classic" />
+          <MotionProfilePreview engine="modern" label="Modern" />
+          <MotionProfilePreview engine="rustic" label="Rustic" />
+        </Box>
+      </Stack>
 
-      {/* Transition presets */}
-      <Card>
+      <Card style={{ padding: tokens.spacing[5] }}>
         <Stack spacing="md">
-          <Text as={"h3" as any} size="md" weight="semibold">
-            Transition presets
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Pre-composed transition CSS variables for common durations. Click
-            Play to see each timing.
-          </Text>
+          <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              Transition presets
+            </Text>
+            <Badge variant="secondary">Micro-interactions</Badge>
+          </Flex>
           <Box
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: tokens.spacing[3],
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: tokens.spacing[4],
             }}
           >
             <TransitionDemo
               label="fast"
               value="100ms ease"
-              description="Micro-interactions: toggles, checkboxes, icon state changes."
+              description="Useful for toggles, checks, and icon state changes."
             />
             <TransitionDemo
               label="normal"
               value="200ms ease"
-              description="Standard transitions: button hover, card hover, input focus."
+              description="The everyday hover and focus baseline."
             />
             <TransitionDemo
               label="slow"
               value="300ms ease"
-              description="Deliberate transitions: panel open, accordion expand."
+              description="Panel open states and deliberate layout shifts."
             />
             <TransitionDemo
               label="slower"
               value="500ms ease"
-              description="Dramatic transitions: modal entrance, page transitions."
+              description="Use sparingly for narrative transitions and dramatic reveals."
             />
           </Box>
         </Stack>
       </Card>
 
-      {/* Hover behavior */}
-      <Card>
+      <Card style={{ padding: tokens.spacing[5] }}>
         <Stack spacing="md">
-          <Text as={"h3" as any} size="md" weight="semibold">
+          <Text as={"h2" as any} size="lg" weight="semibold">
             Hover behavior
           </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            The hover token combines duration and easing. Modern adds a
-            translateY(-1px) lift transform. Hover over the boxes to see the
-            active engine behavior.
-          </Text>
-          <Flex gap={32} style={{ padding: `${tokens.spacing[4]}px 0` }}>
-            <HoverDemo
-              label="Scale"
-              hoverTransition={tokens.motion.hover}
-              transform="scale(1.05)"
-            />
-            <HoverDemo
-              label="Lift"
-              hoverTransition={tokens.motion.hover}
-              transform={tokens.motion.transform || 'translateY(-2px)'}
-            />
-            <HoverDemo
-              label="Combined"
-              hoverTransition={tokens.motion.hover}
-              transform={`scale(1.02) ${tokens.motion.transform || 'translateY(-1px)'}`}
-            />
+            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+              Hover is where engines advertise their personality. Try the cards
+              below to feel lift, scale, and combined movement.
+            </Text>
+          <Flex gap={32} style={{ flexWrap: 'wrap', paddingTop: tokens.spacing[2] }}>
+            <HoverDemo label="Lift" transform={tokens.motion.transform || 'translateY(-2px)'} />
+            <HoverDemo label="Scale" transform="scale(1.04)" />
+            <HoverDemo label="Combined" transform={`scale(1.02) ${tokens.motion.transform || 'translateY(-1px)'}`} />
           </Flex>
         </Stack>
       </Card>
 
-      {/* Entrance animations */}
       <EntranceDemo />
 
-      {/* Duration scale */}
-      <Card>
-        <Stack spacing="md">
-          <Text as={"h3" as any} size="md" weight="semibold">
-            Duration scale
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            The durationScale multiplier adjusts all animation durations. Classic
-            (0.8x) feels snappy, Modern (1.0x) is baseline, Rustic (0.6x) is
-            even faster because minimal motion should resolve quickly.
-          </Text>
-          <Box
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: tokens.spacing[3],
-            }}
-          >
-            {[
-              { engine: 'Classic', scale: 0.8, desc: 'Snappy, enterprise-grade' },
-              { engine: 'Modern', scale: 1.0, desc: 'Baseline, balanced' },
-              { engine: 'Rustic', scale: 0.6, desc: 'Fastest, minimal' },
-            ].map((item) => (
-              <Box
-                key={item.engine}
-                style={{
-                  padding: tokens.spacing[3],
-                  borderRadius: tokens.borderRadius.md,
-                  border: '1px solid var(--ds-color-neutral-200)',
-                  background:
-                    tokens.motion.durationScale === item.scale
-                      ? 'var(--ds-color-primary-50)'
-                      : 'transparent',
-                }}
-              >
-                <Flex align="center" justify="between">
-                  <Text size="sm" weight="semibold">
-                    {item.engine}
-                  </Text>
-                  {tokens.motion.durationScale === item.scale && (
-                    <Badge variant="primary">Active</Badge>
-                  )}
-                </Flex>
-                <Text
-                  size="lg"
-                  weight="bold"
-                  style={{
-                    fontFamily: 'var(--font-geist-mono, monospace)',
-                    color: 'var(--ds-color-primary-600)',
-                    marginTop: 4,
-                  }}
-                >
-                  {item.scale}x
-                </Text>
-                <Text
-                  size="xs"
-                  style={{ color: 'var(--ds-color-text-muted)', marginTop: 2 }}
-                >
-                  {item.desc}
-                </Text>
-              </Box>
-            ))}
-          </Box>
-        </Stack>
-      </Card>
+      <CodeBlock
+        title="Motion usage"
+        language="tsx"
+        code={`const tokens = useTokens();
 
-      {/* Code */}
-      <Card>
-        <Stack spacing="sm">
-          <Text size="sm" weight="semibold">
-            Usage
-          </Text>
-          <Box
-            style={{
-              fontFamily: 'var(--font-geist-mono, monospace)',
-              fontSize: '0.8125rem',
-              padding: tokens.spacing[4],
-              borderRadius: tokens.borderRadius.md,
-              background: 'var(--ds-color-neutral-900)',
-              color: 'var(--ds-color-neutral-100)',
-              lineHeight: 1.6,
-              overflowX: 'auto',
-            }}
-          >
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-100)' }}>
-              {`const tokens = useTokens();`}
-            </Text>
-            <br />
-            <br />
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-400)' }}>
-              {`// Hover transition`}
-            </Text>
-            <br />
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-100)' }}>
-              {`style={{ transition: \`all \${tokens.motion.hover}\` }}`}
-            </Text>
-            <br />
-            <br />
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-400)' }}>
-              {`// CSS variable presets`}
-            </Text>
-            <br />
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-100)' }}>
-              {`transition: var(--ds-transition-fast);   // 100ms`}
-            </Text>
-            <br />
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-100)' }}>
-              {`transition: var(--ds-transition-normal);  // 200ms`}
-            </Text>
-            <br />
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-100)' }}>
-              {`transition: var(--ds-transition-slow);    // 300ms`}
-            </Text>
-          </Box>
-        </Stack>
-      </Card>
+<Box
+  style={{
+    transition: \`all \${tokens.motion.hover}\`,
+    transform: isHovered ? tokens.motion.transform : 'none',
+  }}
+/>
+
+transition: var(--ds-transition-normal);`}
+      />
     </Stack>
   );
 }

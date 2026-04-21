@@ -60,6 +60,6 @@
     "kill-port": "^2.0.1"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.30.0"
+    "@changesets/cli": "^2.31.0"
   }
 }

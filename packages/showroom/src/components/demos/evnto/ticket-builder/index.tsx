@@ -1,333 +1,247 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState } from 'react';
+import { useShowroomRuntime } from '@/components/showroom-context';
 import {
-  Box,
-  Flex,
-  Stack,
-  Text,
-  Card,
   Badge,
+  Box,
   Button,
+  Card,
+  Flex,
   Input,
+  Select,
+  Stack,
+  Switch,
+  Text,
+  useTokens,
 } from '@rottay/design-system';
-import { useTokens } from '@rottay/design-system';
-import {
-  PlusIcon,
-  CheckIcon,
-  StarIcon,
-  SparklesIcon,
-} from '@rottay/design-system/icons';
+import { CheckIcon, SparklesIcon, StarIcon } from '@rottay/design-system/icons';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
+const SURFACE =
+  'var(--ds-color-bg-container, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)))';
+const ELEVATED_SURFACE =
+  'var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff))';
+const BORDER =
+  'var(--ds-color-border-subtle, var(--ds-color-border, rgba(148, 163, 184, 0.22)))';
+const TEXT_SECONDARY =
+  'var(--ds-color-text-secondary, var(--ds-color-text-muted, #64748b))';
+const TEXT_MUTED = 'var(--ds-color-text-muted, #64748b)';
+const HERO_BACKGROUND = `linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 12%, ${ELEVATED_SURFACE}) 0%, ${SURFACE} 100%)`;
+const CARD_SHADOW = 'var(--ds-shadow-lg, 0 20px 48px rgba(15, 23, 42, 0.1))';
+const PANEL_SHADOW = 'var(--ds-shadow-md, 0 12px 28px rgba(15, 23, 42, 0.08))';
+const PANEL_BACKGROUND = `linear-gradient(180deg, color-mix(in srgb, ${ELEVATED_SURFACE} 92%, ${SURFACE} 8%) 0%, ${SURFACE} 100%)`;
 
-interface TicketTier {
-  id: string;
-  name: string;
-  price: number;
-  features: string[];
-  quantity: number;
-  maxQuantity: number;
-  status: 'active' | 'sold-out' | 'draft';
-  icon: React.ReactNode;
-}
-
-// ---------------------------------------------------------------------------
-// Initial data
-// ---------------------------------------------------------------------------
-
-const INITIAL_TIERS: TicketTier[] = [
-  {
-    id: 'general',
-    name: 'General Admission',
-    price: 30,
-    features: [
-      'Main floor access',
-      'Standard bar service',
-      'Event wristband',
-    ],
-    quantity: 200,
-    maxQuantity: 500,
-    status: 'active',
-    icon: <CheckIcon size={18} />,
-  },
-  {
-    id: 'vip',
-    name: 'VIP',
-    price: 120,
-    features: [
-      'VIP lounge access',
-      'Premium open bar',
-      'Priority entry',
-      'Dedicated server',
-    ],
-    quantity: 50,
-    maxQuantity: 100,
-    status: 'active',
-    icon: <StarIcon size={18} />,
-  },
-  {
-    id: 'table',
-    name: 'Table Service',
-    price: 500,
-    features: [
-      'Reserved table (6 guests)',
-      'Bottle service included',
-      'Personal host',
-      'VIP parking',
-      'Backstage meet & greet',
-    ],
-    quantity: 8,
-    maxQuantity: 15,
-    status: 'active',
-    icon: <SparklesIcon size={18} />,
-  },
+const TIER_OPTIONS = [
+  { value: 'ga', label: 'General admission' },
+  { value: 'vip', label: 'VIP early entry' },
+  { value: 'table', label: 'Table package' },
 ];
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function formatCurrency(amount: number): string {
-  if (amount >= 1000) {
-    return `$${(amount / 1000).toFixed(1)}K`;
-  }
-  return `$${amount.toLocaleString()}`;
-}
-
-function statusVariant(status: TicketTier['status']): 'success' | 'error' | 'warning' {
-  switch (status) {
-    case 'active':
-      return 'success';
-    case 'sold-out':
-      return 'error';
-    case 'draft':
-      return 'warning';
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export function TicketBuilderDemo() {
+  const runtime = useShowroomRuntime();
   const tokens = useTokens();
-  const [tiers, setTiers] = useState<TicketTier[]>(INITIAL_TIERS);
-
-  const handleQuantityChange = useCallback(
-    (tierId: string, value: string) => {
-      const num = parseInt(value, 10);
-      if (isNaN(num) || num < 0) return;
-      setTiers((prev) =>
-        prev.map((t) =>
-          t.id === tierId
-            ? {
-                ...t,
-                quantity: Math.min(num, t.maxQuantity),
-                status: num === 0 ? 'sold-out' : num >= t.maxQuantity ? 'sold-out' : 'active',
-              }
-            : t,
-        ),
-      );
-    },
-    [],
-  );
-
-  const handleAddTier = useCallback(() => {
-    const newTier: TicketTier = {
-      id: `tier-${Date.now()}`,
-      name: 'New Tier',
-      price: 50,
-      features: ['Custom feature 1', 'Custom feature 2'],
-      quantity: 0,
-      maxQuantity: 100,
-      status: 'draft',
-      icon: <CheckIcon size={18} />,
-    };
-    setTiers((prev) => [...prev, newTier]);
-  }, []);
-
-  const totalProjected = useMemo(() => {
-    return tiers.reduce((sum, t) => sum + t.price * t.quantity, 0);
-  }, [tiers]);
-
-  const totalTickets = useMemo(() => {
-    return tiers.reduce((sum, t) => sum + t.quantity, 0);
-  }, [tiers]);
+  const [dynamicPricing, setDynamicPricing] = useState(true);
+  const [waitlistEnabled, setWaitlistEnabled] = useState(true);
 
   return (
     <Stack spacing="lg">
-      {/* Header */}
-      <Flex align="center" justify="between">
-        <Box>
-          <Text as={"h2" as any} size="xl" weight="bold">
-            Ticket Tier Builder
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Configure pricing tiers for your event
-          </Text>
-        </Box>
-        <Badge variant="primary">{tiers.length} tiers</Badge>
-      </Flex>
-
-      {/* Tier cards */}
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: tokens.spacing[4],
-        }}
-      >
-        {tiers.map((tier) => (
-          <Card
-            key={tier.id}
-            style={{
-              border: '1px solid var(--ds-color-border)',
-              position: 'relative',
-            }}
-          >
-            <Stack spacing="md">
-              {/* Tier header */}
-              <Flex align="center" justify="between">
-                <Flex align="center" gap={8}>
-                  <Box
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: tokens.borderRadius.md,
-                      background: 'var(--ds-color-primary-50)',
-                      color: 'var(--ds-color-primary-500)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {tier.icon}
-                  </Box>
-                  <Text size="lg" weight="semibold">
-                    {tier.name}
-                  </Text>
-                </Flex>
-                <Badge variant={statusVariant(tier.status)}>
-                  {tier.status}
-                </Badge>
-              </Flex>
-
-              {/* Price */}
-              <Box>
-                <Text size="2xl" weight="bold">
-                  ${tier.price}
-                </Text>
-                <Text
-                  size="xs"
-                  style={{ color: 'var(--ds-color-text-muted)' }}
-                >
-                  per ticket
-                </Text>
-              </Box>
-
-              {/* Features */}
-              <Stack spacing="xs">
-                {tier.features.map((feature, i) => (
-                  <Flex key={i} align="center" gap={6}>
-                    <Box
-                      style={{
-                        color: 'var(--ds-color-success)',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <CheckIcon size={14} />
-                    </Box>
-                    <Text size="sm">{feature}</Text>
-                  </Flex>
-                ))}
-              </Stack>
-
-              {/* Quantity input */}
-              <Box>
-                <Text
-                  size="xs"
-                  weight="medium"
-                  style={{
-                    color: 'var(--ds-color-text-secondary)',
-                    marginBottom: tokens.spacing[1],
-                  }}
-                >
-                  Quantity (max {tier.maxQuantity})
-                </Text>
-                <Input
-                  value={String(tier.quantity)}
-                  onChange={(value: string) =>
-                    handleQuantityChange(tier.id, value)
-                  }
-                  placeholder="0"
-                  size="md"
-                />
-              </Box>
-
-              {/* Tier revenue */}
-              <Flex align="center" justify="between">
-                <Text
-                  size="sm"
-                  style={{ color: 'var(--ds-color-text-secondary)' }}
-                >
-                  Tier revenue
-                </Text>
-                <Text size="sm" weight="semibold">
-                  {formatCurrency(tier.price * tier.quantity)}
-                </Text>
-              </Flex>
-            </Stack>
-          </Card>
-        ))}
-      </Box>
-
-      {/* Add tier button */}
-      <Box>
-        <Button
-          variant="default"
-          onClick={handleAddTier}
-          icon={<PlusIcon size={16} />}
-        >
-          Add Tier
-        </Button>
-      </Box>
-
-      {/* Revenue projection */}
       <Card
         style={{
-          background: 'var(--ds-color-primary-50)',
-          border: '1px solid var(--ds-color-primary-200)',
+          padding: tokens.spacing[4],
+          border: `1px solid ${BORDER}`,
+          background: HERO_BACKGROUND,
+          boxShadow: CARD_SHADOW,
         }}
       >
-        <Flex align="center" justify="between">
-          <Box>
-            <Text
-              size="sm"
-              weight="medium"
-              style={{ color: 'var(--ds-color-text-secondary)' }}
+        <Stack spacing="md">
+          <Flex align="start" justify="between" style={{ gap: 12, flexWrap: 'wrap' }}>
+            <Box style={{ minWidth: 0, flex: '1 1 320px' }}>
+              <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+                <Badge variant="primary">Ticketing ops</Badge>
+                <Badge variant="secondary">{runtime.tenantName}</Badge>
+              </Flex>
+              <Text as={"h2" as any} size="xl" weight="bold" style={{ marginTop: 12 }}>
+                Ticket tier builder
+              </Text>
+              <Text size="sm" style={{ marginTop: 6, color: TEXT_SECONDARY }}>
+                Pricing strategy, inventory release, and launch pressure should read like one
+                commercial control surface, not three disconnected inputs.
+              </Text>
+            </Box>
+
+            <Box
+              style={{
+              minWidth: 240,
+              padding: tokens.spacing[3],
+              borderRadius: tokens.borderRadius.xl,
+              border: `1px solid ${BORDER}`,
+              background: PANEL_BACKGROUND,
+              boxShadow: PANEL_SHADOW,
+            }}
+          >
+              <Text size="xs" weight="semibold" style={{ color: TEXT_MUTED }}>
+                Revenue posture
+              </Text>
+              <Text size="sm" weight="semibold" style={{ marginTop: 8 }}>
+                Dynamic release live
+              </Text>
+              <Text size="xs" style={{ marginTop: 6, color: TEXT_SECONDARY, lineHeight: 1.6 }}>
+                Showcase should feel premium while still making margin decisions obvious.
+              </Text>
+            </Box>
+          </Flex>
+
+          <Box
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 1.2fr) minmax(280px, 0.8fr)',
+              gap: tokens.spacing[4],
+            }}
+          >
+            <Card
+              style={{
+                padding: tokens.spacing[4],
+                border: `1px solid ${BORDER}`,
+                background: PANEL_BACKGROUND,
+                boxShadow: PANEL_SHADOW,
+              }}
             >
-              Total Revenue Projection
-            </Text>
-            <Text size="2xl" weight="bold">
-              {formatCurrency(totalProjected)}
-            </Text>
+              <Stack spacing="md">
+                <Box
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                    gap: tokens.spacing[3],
+                  }}
+                >
+                  <Box>
+                    <Text size="xs" weight="semibold" style={{ color: TEXT_MUTED }}>
+                      Tier type
+                    </Text>
+                    <Select defaultValue={TIER_OPTIONS[1].value} options={TIER_OPTIONS} style={{ marginTop: 8 }} />
+                  </Box>
+
+                  <Box>
+                    <Text size="xs" weight="semibold" style={{ color: TEXT_MUTED }}>
+                      Price
+                    </Text>
+                    <Input defaultValue="$180.00" style={{ marginTop: 8 }} />
+                  </Box>
+                </Box>
+
+                <Box
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                    gap: tokens.spacing[3],
+                  }}
+                >
+                  <Box>
+                    <Text size="xs" weight="semibold" style={{ color: TEXT_MUTED }}>
+                      Inventory cap
+                    </Text>
+                    <Input defaultValue="240" style={{ marginTop: 8 }} />
+                  </Box>
+
+                  <Box>
+                    <Text size="xs" weight="semibold" style={{ color: TEXT_MUTED }}>
+                      Promo window
+                    </Text>
+                    <Input defaultValue="48 hours before doors" style={{ marginTop: 8 }} />
+                  </Box>
+                </Box>
+
+                <Card
+                  style={{
+                    padding: tokens.spacing[3],
+                    border: `1px solid ${BORDER}`,
+                    background: SURFACE,
+                    boxShadow: PANEL_SHADOW,
+                  }}
+                >
+                  <Stack spacing="sm">
+                    <Flex align="center" justify="between" gap={12}>
+                      <Flex align="center" gap={10}>
+                        <StarIcon size={18} />
+                        <Box>
+                          <Text size="sm" weight="semibold">
+                            Dynamic pricing
+                          </Text>
+                          <Text size="xs" style={{ marginTop: 4, color: TEXT_SECONDARY }}>
+                            Raise or hold price as velocity changes.
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Switch checked={dynamicPricing} onChange={setDynamicPricing} />
+                    </Flex>
+
+                    <Flex align="center" justify="between" gap={12}>
+                      <Flex align="center" gap={10}>
+                        <SparklesIcon size={18} />
+                        <Box>
+                          <Text size="sm" weight="semibold">
+                            Waitlist unlock
+                          </Text>
+                          <Text size="xs" style={{ marginTop: 4, color: TEXT_SECONDARY }}>
+                            Auto-open overflow demand when churn spikes.
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Switch checked={waitlistEnabled} onChange={setWaitlistEnabled} />
+                    </Flex>
+                  </Stack>
+                </Card>
+
+                <Flex justify="between" align="center" style={{ gap: 12, flexWrap: 'wrap' }}>
+                  <Text size="xs" style={{ color: TEXT_MUTED }}>
+                    Last simulated sell-through update · 4 minutes ago
+                  </Text>
+                  <Flex gap={10} style={{ flexWrap: 'wrap' }}>
+                    <Button variant="ghost">Duplicate tier</Button>
+                    <Button>Publish pricing</Button>
+                  </Flex>
+                </Flex>
+              </Stack>
+            </Card>
+
+            <Stack spacing="md">
+              {[
+                {
+                  icon: <CheckIcon size={18} />,
+                  title: 'Inventory ladder',
+                  detail: 'VIP 82% sold · GA 54% sold · Tables 6 left',
+                },
+                {
+                  icon: <StarIcon size={18} />,
+                  title: 'Conversion read',
+                  detail: 'VIP tier outpacing forecast by 18% this cycle',
+                },
+              ].map((item) => (
+                <Card
+                  key={item.title}
+                  style={{
+                    padding: tokens.spacing[4],
+                    border: `1px solid ${BORDER}`,
+                    background: PANEL_BACKGROUND,
+                    boxShadow: PANEL_SHADOW,
+                  }}
+                >
+                  <Flex align="center" gap={10}>
+                    {item.icon}
+                    <Box>
+                      <Text size="sm" weight="semibold">
+                        {item.title}
+                      </Text>
+                      <Text size="xs" style={{ marginTop: 4, color: TEXT_SECONDARY }}>
+                        {item.detail}
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Card>
+              ))}
+            </Stack>
           </Box>
-          <Box style={{ textAlign: 'right' }}>
-            <Text
-              size="sm"
-              weight="medium"
-              style={{ color: 'var(--ds-color-text-secondary)' }}
-            >
-              Total Tickets
-            </Text>
-            <Text size="2xl" weight="bold">
-              {totalTickets.toLocaleString()}
-            </Text>
-          </Box>
-        </Flex>
+        </Stack>
       </Card>
     </Stack>
   );

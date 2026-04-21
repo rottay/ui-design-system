@@ -1,355 +1,1057 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, useTokens } from '@rottay/design-system';
+import { useEffect, useMemo, useState } from "react";
+import { ShowroomLink as Link } from "@/components/showroom-link";
+import { usePathname } from "next/navigation";
+import { Box, Flex, Text } from "@/components/showroom-ui";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
+  ExternalLinkIcon,
   HomeIcon,
-  LayersIcon,
-  LayoutGridIcon,
-  LayoutTemplateIcon,
-  BracesIcon,
-  SparklesIcon,
-  GlobeIcon,
-  RocketIcon,
-  SettingsIcon,
-} from '@rottay/design-system/icons';
+  SearchIcon,
+  XIcon,
+} from "@rottay/design-system/icons";
+import { navigation, type NavItem } from "@/data/navigation";
+import {
+  useShowroom,
+  useShowroomRuntime,
+} from "@/components/showroom-context";
+import {
+  countSectionEntries,
+  getRoutePresentation,
+  getSectionMeta,
+  getSectionOverviewPath,
+  isPathActive,
+} from "../config";
+import {
+  DOC_COUNTS,
+  ENGINE_OPTIONS,
+  getPreviewOption,
+  THEME_OPTIONS,
+} from "../runtime-options";
 
-/**
- * Navigation item that may have nested children for sub-navigation.
- */
-interface NavChild {
-  label: string;
-  href: string;
-  children?: { label: string; href: string }[];
+const shellBorder =
+  "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
+const shellBorderStrong =
+  "var(--showroom-shell-border-strong, var(--ds-color-border-secondary, #2b3038))";
+const shellSurface =
+  "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
+const shellSurfaceStrong =
+  "var(--showroom-shell-surface-strong, var(--ds-color-bg-tertiary, #15171b))";
+const shellSurfaceSubtle =
+  "var(--showroom-shell-surface-subtle, var(--ds-color-bg-elevated, #1a1c21))";
+const shellText =
+  "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
+const shellTextSecondary =
+  "var(--showroom-shell-text-secondary, var(--ds-color-text-secondary, #c0c4cc))";
+const shellTextTertiary =
+  "var(--showroom-shell-text-tertiary, var(--ds-color-text-muted, #848b98))";
+const shellActiveBg =
+  "var(--showroom-shell-active-bg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 9%, transparent))";
+const shellActiveBorder =
+  "var(--showroom-shell-active-border, var(--ds-color-border-focus, rgba(255, 255, 255, 0.18)))";
+const shellShadowStrong =
+  "var(--showroom-shell-shadow-strong, 0 28px 72px rgba(0, 0, 0, 0.38))";
+const desktopSidebarWidth =
+  "var(--showroom-shell-sidebar-width, clamp(420px, 24vw, 456px))";
+const mobileSidebarWidth = "min(440px, calc(100vw - 20px))";
+
+function getPreviewPillStyles(isSelected: boolean) {
+  return {
+    borderRadius: 999,
+    border: isSelected
+      ? `1px solid ${shellActiveBorder}`
+      : `1px solid ${shellBorder}`,
+    background: isSelected ? shellActiveBg : shellSurfaceStrong,
+    color: shellText,
+    cursor: "pointer",
+  } as const;
 }
 
-/**
- * Navigation group definition for the sidebar tree.
- */
-interface NavGroup {
-  label: string;
-  icon: React.ReactNode;
-  basePath: string;
-  children: NavChild[];
+interface SidebarProps {
+  isMobile?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
+  onSearchOpen?: () => void;
 }
 
-const NAV_GROUPS: NavGroup[] = [
-  {
-    label: 'Foundations',
-    icon: <LayersIcon size={16} />,
-    basePath: '/foundations',
-    children: [
-      {
-        label: 'Tokens',
-        href: '/foundations/tokens',
-        children: [
-          { label: 'Colors', href: '/foundations/tokens/colors' },
-          { label: 'Spacing', href: '/foundations/tokens/spacing' },
-          { label: 'Typography', href: '/foundations/tokens/typography' },
-          { label: 'Radius', href: '/foundations/tokens/radius' },
-          { label: 'Shadows', href: '/foundations/tokens/shadows' },
-          { label: 'Motion', href: '/foundations/tokens/motion' },
-        ],
-      },
-      { label: 'Colors', href: '/foundations/colors' },
-      { label: 'Typography', href: '/foundations/typography' },
-      { label: 'Spacing', href: '/foundations/spacing' },
-      { label: 'Motion', href: '/foundations/motion' },
-      { label: 'Icons', href: '/foundations/icons' },
-    ],
-  },
-  {
-    label: 'Primitives',
-    icon: <LayoutGridIcon size={16} />,
-    basePath: '/primitives',
-    children: [
-      { label: 'Button', href: '/primitives/button' },
-      { label: 'Input', href: '/primitives/input' },
-      { label: 'Text', href: '/primitives/text' },
-      { label: 'Card', href: '/primitives/card' },
-      { label: 'Modal', href: '/primitives/modal' },
-      { label: 'Tabs', href: '/primitives/tabs' },
-      { label: 'Box', href: '/primitives/box' },
-      { label: 'Flex', href: '/primitives/flex' },
-      { label: 'Stack', href: '/primitives/stack' },
-    ],
-  },
-  {
-    label: 'Patterns',
-    icon: <LayoutTemplateIcon size={16} />,
-    basePath: '/patterns',
-    children: [
-      { label: 'DataTable', href: '/patterns/data-table' },
-      { label: 'FormBuilder', href: '/patterns/form-builder' },
-      { label: 'KanbanBoard', href: '/patterns/kanban-board' },
-      { label: 'StatsGrid', href: '/patterns/stats-grid' },
-      { label: 'Charts', href: '/patterns/charts' },
-    ],
-  },
-  {
-    label: 'Structures',
-    icon: <BracesIcon size={16} />,
-    basePath: '/structures',
-    children: [
-      { label: 'CollectionHeader', href: '/structures/collection-header' },
-      { label: 'SearchCommandBar', href: '/structures/search-command-bar' },
-      { label: 'TableToolbar', href: '/structures/table-toolbar' },
-      { label: 'RecordFieldGrid', href: '/structures/record-field-grid' },
-    ],
-  },
-  {
-    label: 'Surfaces',
-    icon: <SparklesIcon size={16} />,
-    basePath: '/surfaces',
-    children: [
-      { label: 'ListSurface', href: '/surfaces/list-surface' },
-      { label: 'DashboardSurface', href: '/surfaces/dashboard-surface' },
-      { label: 'FormSurface', href: '/surfaces/form-surface' },
-      { label: 'CollectionWorkspace', href: '/surfaces/collection-workspace' },
-    ],
-  },
-  {
-    label: 'Verticals',
-    icon: <GlobeIcon size={16} />,
-    basePath: '/verticals',
-    children: [
-      { label: 'Platform', href: '/verticals/platform' },
-      { label: 'BitHire', href: '/verticals/bithire' },
-      { label: 'Evnto', href: '/verticals/evnto' },
-    ],
-  },
-  {
-    label: 'Playground',
-    icon: <RocketIcon size={16} />,
-    basePath: '/playground',
-    children: [
-      { label: 'Theme Builder', href: '/playground/theme-builder' },
-      { label: 'Engine Switcher', href: '/playground/engine-switcher' },
-    ],
-  },
-  {
-    label: 'Developers',
-    icon: <SettingsIcon size={16} />,
-    basePath: '/developers',
-    children: [
-      { label: 'Getting Started', href: '/developers/getting-started' },
-      { label: 'Architecture', href: '/developers/architecture' },
-      { label: 'Contributing', href: '/developers/contributing' },
-      { label: 'Changelog', href: '/developers/changelog' },
-    ],
-  },
-];
+interface NavNodeProps {
+  activePath: string;
+  item: NavItem;
+  level?: number;
+  onNavigate?: () => void;
+}
 
-function NavGroupItem({ group }: { group: NavGroup }) {
-  const pathname = usePathname();
-  const isGroupActive = pathname.startsWith(group.basePath);
-  const [isOpen, setIsOpen] = useState(isGroupActive);
+function NavNode({ activePath, item, level = 0, onNavigate }: NavNodeProps) {
+  const [manuallyOpen, setManuallyOpen] = useState(false);
+  const isActive = isPathActive(activePath, item.path);
+  const isOpen = item.children?.length ? manuallyOpen || isActive : false;
+  const metadataTone = isActive ? shellText : shellTextSecondary;
+
+  useEffect(() => {
+    if (isActive) {
+      setManuallyOpen(true);
+    }
+  }, [isActive]);
+
+  if (!item.children?.length) {
+    return (
+      <Link
+        href={item.path}
+        className="sidebar-link"
+        onClick={onNavigate}
+        style={{
+          textDecoration: "none",
+        }}
+      >
+        <Flex
+          align="center"
+          justify="between"
+          style={{
+            gap: 10,
+            padding: "8px 12px",
+            paddingLeft: 14 + level * 16,
+            borderRadius: 14,
+            background: isActive ? shellActiveBg : "transparent",
+            border: isActive
+              ? `1px solid ${shellActiveBorder}`
+              : "1px solid transparent",
+            transition:
+              "background 180ms ease, border-color 180ms ease, opacity 180ms ease",
+          }}
+        >
+          <Flex align="center" gap={10} style={{ minWidth: 0 }}>
+            <Box
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "999px",
+                background: isActive
+                  ? "var(--ds-color-primary, #ffffff)"
+                  : "var(--ds-color-neutral-400, #5b6170)",
+                flexShrink: 0,
+              }}
+            />
+            <Text
+              size="sm"
+              weight={isActive ? "semibold" : "medium"}
+              style={{
+                color: metadataTone,
+                lineHeight: 1.3,
+              }}
+            >
+              {item.label}
+            </Text>
+          </Flex>
+
+          {item.badge ? (
+            <Box
+              style={{
+                padding: "2px 7px",
+                borderRadius: 999,
+                background: shellSurfaceSubtle,
+                color: shellTextTertiary,
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                lineHeight: 1.2,
+                flexShrink: 0,
+              }}
+            >
+              {item.badge}
+            </Box>
+          ) : null}
+        </Flex>
+      </Link>
+    );
+  }
 
   return (
     <Box>
-      <Box
-        as="button"
-        {...({ type: 'button' } as any)}
-        onClick={() => setIsOpen(!isOpen)}
+      <Flex
+        align="center"
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '100%',
-          padding: '6px 12px',
-          cursor: 'pointer',
-          borderRadius: 6,
-          transition: 'background 150ms ease',
-          background: isGroupActive ? 'var(--ds-color-primary-50)' : 'transparent',
-          border: 'none',
-          textAlign: 'left',
+          gap: 8,
+          padding: "4px 0",
         }}
       >
-        <Flex align="center" gap={8}>
-          <Box style={{ color: isGroupActive ? 'var(--ds-color-primary-500)' : 'var(--ds-color-text-secondary)' }}>
-            {group.icon}
-          </Box>
-          <Text
-            size="sm"
-            weight={isGroupActive ? 'semibold' : 'medium'}
-            color={isGroupActive ? 'primary' : 'default'}
+        <Link
+          href={item.path}
+          className="sidebar-link"
+          onClick={onNavigate}
+          style={{
+            textDecoration: "none",
+            flex: 1,
+          }}
+        >
+          <Flex
+            align="center"
+            justify="between"
+            style={{
+              gap: 10,
+              padding: "8px 12px",
+              paddingLeft: 14 + level * 16,
+              borderRadius: 14,
+              background: isActive ? shellActiveBg : "transparent",
+              border: isActive
+                ? `1px solid ${shellActiveBorder}`
+                : "1px solid transparent",
+              transition:
+                "background 180ms ease, border-color 180ms ease, opacity 180ms ease",
+            }}
           >
-            {group.label}
-          </Text>
-        </Flex>
-        <Box style={{ color: 'var(--ds-color-text-tertiary)' }}>
-          {isOpen ? <ChevronDownIcon size={14} /> : <ChevronRightIcon size={14} />}
-        </Box>
-      </Box>
-
-      {isOpen && (
-        <Stack spacing={2} style={{ paddingLeft: 28, paddingTop: 4 }}>
-          {group.children.map((item) => {
-            const isActive = pathname === item.href;
-            const isChildActive = item.children?.some((c) => pathname === c.href) ?? false;
-            return (
-              <Box key={item.href}>
-                <Link
-                  href={item.href}
-                  style={{ textDecoration: 'none' }}
+            <Flex align="center" gap={10} style={{ minWidth: 0 }}>
+              <Box
+                style={{
+                  width: 6,
+                  height: 6,
+                borderRadius: "999px",
+                background: isActive
+                    ? "var(--ds-color-primary, #ffffff)"
+                    : "var(--ds-color-neutral-400, #5b6170)",
+                  flexShrink: 0,
+                }}
+              />
+              <Box style={{ minWidth: 0 }}>
+                <Text
+                  size="sm"
+                  weight={isActive ? "semibold" : "medium"}
+                  style={{
+                    color: metadataTone,
+                    lineHeight: 1.3,
+                  }}
                 >
-                  <Box
-                    style={{
-                      padding: '5px 12px',
-                      borderRadius: 6,
-                      transition: 'background 150ms ease',
-                      background: (isActive || isChildActive) ? 'var(--ds-color-primary-100)' : 'transparent',
-                    }}
-                  >
-                    <Text
-                      size="sm"
-                      weight={(isActive || isChildActive) ? 'medium' : 'normal'}
-                      color={(isActive || isChildActive) ? 'primary' : 'secondary'}
-                    >
-                      {item.label}
-                    </Text>
-                  </Box>
-                </Link>
-                {item.children && (isActive || isChildActive || pathname.startsWith(item.href + '/')) && (
-                  <Stack spacing={1} style={{ paddingLeft: 16, paddingTop: 2 }}>
-                    {item.children.map((sub) => {
-                      const isSubActive = pathname === sub.href;
-                      return (
-                        <Link
-                          key={sub.href}
-                          href={sub.href}
-                          style={{ textDecoration: 'none' }}
-                        >
-                          <Box
-                            style={{
-                              padding: '4px 10px',
-                              borderRadius: 5,
-                              transition: 'background 100ms ease',
-                              background: isSubActive ? 'var(--ds-color-primary-50)' : 'transparent',
-                            }}
-                          >
-                            <Text
-                              size="xs"
-                              weight={isSubActive ? 'medium' : 'normal'}
-                              color={isSubActive ? 'primary' : 'muted'}
-                            >
-                              {sub.label}
-                            </Text>
-                          </Box>
-                        </Link>
-                      );
-                    })}
-                  </Stack>
-                )}
+                  {item.label}
+                </Text>
               </Box>
-            );
-          })}
-        </Stack>
-      )}
+            </Flex>
+
+            <Box
+              style={{
+                padding: "2px 7px",
+                borderRadius: 999,
+                background: shellSurfaceSubtle,
+                color: shellTextTertiary,
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                lineHeight: 1.2,
+                flexShrink: 0,
+              }}
+            >
+              {item.children.length}
+            </Box>
+          </Flex>
+        </Link>
+
+        <Box
+          as="button"
+          {...({ type: "button" } as any)}
+          aria-label={
+            isOpen ? `Collapse ${item.label}` : `Expand ${item.label}`
+          }
+          onClick={() => setManuallyOpen((current) => !current)}
+          className="sidebar-toggle"
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 12,
+            border: `1px solid ${shellBorder}`,
+            background: shellSurfaceSubtle,
+            color: shellTextTertiary,
+            cursor: "pointer",
+            flexShrink: 0,
+          }}
+        >
+          {isOpen ? (
+            <ChevronDownIcon size={14} />
+          ) : (
+            <ChevronRightIcon size={14} />
+          )}
+        </Box>
+      </Flex>
+
+      {isOpen ? (
+        <Box style={{ display: "grid", gap: 2, paddingTop: 2 }}>
+          {item.children.map((child) => (
+            <NavNode
+              key={child.path}
+              activePath={activePath}
+              item={child}
+              level={level + 1}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </Box>
+      ) : null}
     </Box>
   );
 }
 
-export function Sidebar() {
-  const tokens = useTokens();
+export function Sidebar({
+  isMobile = false,
+  isOpen = true,
+  onClose,
+  onSearchOpen,
+}: SidebarProps) {
   const pathname = usePathname();
-  const isHome = pathname === '/';
+  const { engine, setEngine, tenantSlug, setTenantSlug } = useShowroom();
+  const runtime = useShowroomRuntime();
+  const presentation = useMemo(
+    () => getRoutePresentation(pathname),
+    [pathname]
+  );
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({});
+  const activeTheme = getPreviewOption(THEME_OPTIONS, tenantSlug);
+  const activeEngine = getPreviewOption(ENGINE_OPTIONS, engine);
+
+  useEffect(() => {
+    if (presentation.activeRecord?.section.slug) {
+      setExpandedSections((current) => ({
+        ...current,
+        [presentation.activeRecord.section.slug]: true,
+      }));
+    }
+  }, [presentation.activeRecord?.section.slug]);
+
+  if (!isOpen && isMobile) {
+    return null;
+  }
 
   return (
-    <Box
-      style={{
-        width: 280,
-        minWidth: 280,
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-        borderRight: '1px solid var(--ds-color-neutral-200)',
-        background: 'var(--ds-color-white)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      {/* Logo / Title */}
-      <Flex
-        align="center"
-        gap={10}
+    <>
+      {isMobile ? (
+        <Box
+          onClick={onClose}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "var(--showroom-shell-overlay, rgba(15, 23, 42, 0.42))",
+            zIndex: 70,
+          }}
+        />
+      ) : null}
+
+      <Box
+        className="showroom-sidebar"
         style={{
-          height: 56,
-          padding: '0 20px',
-          borderBottom: '1px solid var(--ds-color-neutral-200)',
-          flexShrink: 0,
+          position: isMobile ? "fixed" : "sticky",
+          top: 0,
+          left: 0,
+          zIndex: isMobile ? 80 : 20,
+          width: isMobile ? mobileSidebarWidth : desktopSidebarWidth,
+          minWidth: isMobile ? mobileSidebarWidth : desktopSidebarWidth,
+          height: "100vh",
+          background:
+            "linear-gradient(180deg, var(--showroom-shell-surface), var(--showroom-shell-surface-strong))",
+          borderRight: `1px solid ${shellBorder}`,
+          boxShadow: isMobile ? shellShadowStrong : "none",
+          display: "flex",
+          flexDirection: "column",
+          transform: isMobile ? "translateX(0)" : "none",
         }}
       >
         <Box
           style={{
-            width: 28,
-            height: 28,
-            borderRadius: 8,
-            background: 'var(--ds-color-primary-500)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            minHeight: 0,
           }}
         >
-          <Text size="sm" weight="bold" style={{ color: 'var(--ds-color-white)' }}>
-            R
-          </Text>
-        </Box>
-        <Stack spacing={0}>
-          <Text size="sm" weight="bold">Rottay DS</Text>
-          <Text size="xs" style={{ color: "var(--ds-color-text-muted)" }}>Design System</Text>
-        </Stack>
-      </Flex>
+          <Box
+            style={{
+              padding: isMobile ? "14px 14px 12px" : "16px 16px 14px",
+              borderBottom: `1px solid ${shellBorder}`,
+            }}
+          >
+            <Flex align="start" justify="between" style={{ gap: 12 }}>
+              <Flex align="start" gap={12}>
+                <Box
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 16,
+                    border: `1px solid ${shellBorderStrong}`,
+                    background:
+                      "linear-gradient(180deg, var(--showroom-shell-surface-strong), var(--showroom-shell-surface-subtle))",
+                    color: activeTheme.accent,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                  >
+                    <Text
+                      size="sm"
+                      weight="bold"
+                      style={{
+                        color: "inherit",
+                        letterSpacing: "0.18em",
+                      }}
+                    >
+                      DS
+                  </Text>
+                </Box>
 
-      {/* Navigation */}
-      <Box style={{ flex: 1, overflow: 'auto', padding: '12px 8px' }}>
-        <Stack spacing="xs">
-          {/* Home link */}
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <Flex
-              align="center"
-              gap={8}
+                <Box style={{ minWidth: 0 }}>
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{
+                      color: shellTextTertiary,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.16em",
+                    }}
+                  >
+                    Design system docs
+                  </Text>
+                  <Text
+                    size="md"
+                    weight="semibold"
+                    style={{
+                      color: shellText,
+                      lineHeight: 1.1,
+                      marginTop: 3,
+                    }}
+                  >
+                    Showroom
+                  </Text>
+                  <Text
+                    size="xs"
+                    style={{
+                      color: shellTextSecondary,
+                      lineHeight: 1.45,
+                      marginTop: 4,
+                    }}
+                  >
+                    Runtime-aware docs for tokens, components, recipes, and
+                    product screens.
+                  </Text>
+                  <Flex
+                    align="center"
+                    style={{ gap: 8, marginTop: 10, flexWrap: "wrap" }}
+                  >
+                    {[
+                      runtime.verticalLabel,
+                      activeEngine.label,
+                      `${DOC_COUNTS.total} assets`,
+                    ].map((label) => (
+                      <Box
+                        key={label}
+                        style={{
+                          padding: "4px 8px",
+                          borderRadius: 999,
+                          border: `1px solid ${shellBorder}`,
+                          background: shellSurfaceStrong,
+                        }}
+                      >
+                        <Text
+                          size="xs"
+                          weight="semibold"
+                          style={{ color: shellTextSecondary }}
+                        >
+                          {label}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Flex>
+                </Box>
+              </Flex>
+
+              {isMobile ? (
+                <Box
+                  as="button"
+                  {...({ type: "button" } as any)}
+                  onClick={onClose}
+                  className="sidebar-toggle"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 12,
+                    border: `1px solid ${shellBorder}`,
+                    background: shellSurfaceSubtle,
+                    color: shellText,
+                    cursor: "pointer",
+                    flexShrink: 0,
+                  }}
+                >
+                  <XIcon size={15} />
+                </Box>
+              ) : null}
+            </Flex>
+
+            <Flex style={{ gap: 8, marginTop: 12 }}>
+              <Link
+                href="/"
+                onClick={onClose}
+                className="shell-home-link"
+                style={{
+                  flex: 1,
+                  textDecoration: "none",
+                }}
+              >
+                <Flex
+                  align="center"
+                  justify="center"
+                  gap={8}
+                  style={{
+                    height: 40,
+                    borderRadius: 14,
+                    border: `1px solid ${shellBorder}`,
+                    background: shellSurfaceStrong,
+                    color: shellText,
+                  }}
+                >
+                  <HomeIcon size={14} />
+                  <Text size="sm" weight="medium" style={{ color: "inherit" }}>
+                    Landing
+                  </Text>
+                </Flex>
+              </Link>
+
+              <Box
+                as="button"
+                {...({ type: "button" } as any)}
+                onClick={onSearchOpen}
+                className="shell-search-trigger"
+                style={{
+                  flex: 1,
+                  height: 40,
+                  borderRadius: 14,
+                  border: `1px solid ${shellBorder}`,
+                  background: shellSurfaceStrong,
+                  color: shellText,
+                  cursor: "pointer",
+                }}
+              >
+                <Flex
+                  align="center"
+                  justify="between"
+                  style={{ padding: "0 14px" }}
+                >
+                  <Flex align="center" gap={9}>
+                    <SearchIcon size={14} />
+                    <Text
+                      size="sm"
+                      weight="medium"
+                      style={{ color: "inherit" }}
+                    >
+                      Search
+                    </Text>
+                  </Flex>
+                  <Box
+                    style={{
+                      padding: "2px 7px",
+                      borderRadius: 999,
+                      border: `1px solid ${shellBorderStrong}`,
+                      background: shellSurfaceSubtle,
+                      fontSize: "0.68rem",
+                      fontWeight: 600,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    Cmd K
+                  </Box>
+                </Flex>
+              </Box>
+            </Flex>
+
+            <Box
               style={{
-                padding: '6px 12px',
-                borderRadius: 6,
-                background: isHome ? 'var(--ds-color-primary-50)' : 'transparent',
-                transition: 'background 150ms ease',
+                marginTop: 12,
+                borderRadius: 18,
+                border: `1px solid ${shellBorder}`,
+                background:
+                  "linear-gradient(180deg, var(--showroom-shell-surface-strong), var(--showroom-shell-surface-subtle))",
+                padding: 14,
               }}
             >
-              <Box style={{ color: isHome ? 'var(--ds-color-primary-500)' : 'var(--ds-color-text-secondary)' }}>
-                <HomeIcon size={16} />
-              </Box>
-              <Text
-                size="sm"
-                weight={isHome ? 'semibold' : 'medium'}
-                color={isHome ? 'primary' : 'default'}
+              <Flex align="start" justify="between" style={{ gap: 12 }}>
+                <Box style={{ minWidth: 0 }}>
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{
+                      color: shellTextTertiary,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.16em",
+                    }}
+                  >
+                    Runtime studio
+                  </Text>
+                  <Text
+                    size="sm"
+                    weight="semibold"
+                    style={{
+                      color: shellText,
+                      marginTop: 4,
+                    }}
+                  >
+                    {runtime.verticalLabel} on {activeEngine.label}
+                  </Text>
+                  <Text
+                    size="xs"
+                    style={{
+                      color: shellTextSecondary,
+                      marginTop: 4,
+                    }}
+                  >
+                    {runtime.tenantName} tenant · {runtime.productProfileLabel}
+                  </Text>
+                </Box>
+
+                <Box
+                  style={{
+                    padding: "5px 9px",
+                    borderRadius: 999,
+                    border: `1px solid ${shellBorder}`,
+                    background: shellSurface,
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{ color: shellTextSecondary }}
+                  >
+                    {presentation.sectionMeta.eyebrow}
+                  </Text>
+                </Box>
+              </Flex>
+
+              <Box
+                style={{
+                  marginTop: 12,
+                  padding: 12,
+                  borderRadius: 16,
+                  border: `1px solid ${shellBorder}`,
+                  background: shellSurface,
+                }}
               >
-                Home
-              </Text>
+                <Text
+                  size="xs"
+                  weight="semibold"
+                  style={{
+                    color: shellTextTertiary,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.14em",
+                  }}
+                >
+                  Now viewing
+                </Text>
+                <Text
+                  size="sm"
+                  weight="semibold"
+                  style={{ color: shellText, marginTop: 5 }}
+                >
+                  {presentation.title}
+                </Text>
+                <Text
+                  size="xs"
+                  style={{
+                    color: shellTextSecondary,
+                    lineHeight: 1.45,
+                    marginTop: 6,
+                  }}
+                >
+                  {presentation.description}
+                </Text>
+              </Box>
+
+              <Box style={{ display: "grid", gap: 10, marginTop: 12 }}>
+                <Box>
+                  <Text
+                    size="xs"
+                    weight="medium"
+                    style={{ color: shellTextTertiary }}
+                  >
+                    Tenant
+                  </Text>
+                  <Flex style={{ gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+                    {THEME_OPTIONS.map((theme) => {
+                      const isSelected = theme.key === tenantSlug;
+                      return (
+                        <Box
+                          key={theme.key}
+                          as="button"
+                          {...({ type: "button" } as any)}
+                          onClick={() => setTenantSlug(theme.key)}
+                          className="preview-pill"
+                          style={getPreviewPillStyles(isSelected)}
+                        >
+                          <Flex
+                            align="center"
+                            gap={8}
+                            style={{ padding: "6px 10px" }}
+                          >
+                            <Box
+                              style={{
+                                width: 8,
+                                height: 8,
+                                borderRadius: 999,
+                                background: theme.accent,
+                                flexShrink: 0,
+                              }}
+                            />
+                            <Text
+                              size="xs"
+                              weight={isSelected ? "semibold" : "medium"}
+                              style={{ color: "inherit" }}
+                            >
+                              {theme.label}
+                            </Text>
+                          </Flex>
+                        </Box>
+                      );
+                    })}
+                  </Flex>
+                  <Text
+                    size="xs"
+                    style={{
+                      color: shellTextSecondary,
+                      lineHeight: 1.45,
+                      marginTop: 8,
+                    }}
+                  >
+                    {activeTheme.hint}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Text
+                    size="xs"
+                    weight="medium"
+                    style={{ color: shellTextTertiary }}
+                  >
+                    Engine
+                  </Text>
+                  <Flex style={{ gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+                    {ENGINE_OPTIONS.map((option) => {
+                      const isSelected = option.key === engine;
+                      return (
+                        <Box
+                          key={option.key}
+                          as="button"
+                          {...({ type: "button" } as any)}
+                          onClick={() => setEngine(option.key)}
+                          className="preview-pill"
+                          style={getPreviewPillStyles(isSelected)}
+                        >
+                          <Flex
+                            align="center"
+                            gap={8}
+                            style={{ padding: "6px 10px" }}
+                          >
+                            <Box
+                              style={{
+                                width: 8,
+                                height: 8,
+                                borderRadius: 999,
+                                background: option.accent,
+                                flexShrink: 0,
+                              }}
+                            />
+                            <Text
+                              size="xs"
+                              weight={isSelected ? "semibold" : "medium"}
+                              style={{ color: "inherit" }}
+                            >
+                              {option.label}
+                            </Text>
+                          </Flex>
+                        </Box>
+                      );
+                    })}
+                  </Flex>
+                  <Text
+                    size="xs"
+                    style={{
+                      color: shellTextSecondary,
+                      lineHeight: 1.45,
+                      marginTop: 8,
+                    }}
+                  >
+                    {activeEngine.hint}
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            style={{
+              flex: 1,
+              minHeight: 0,
+              overflow: "auto",
+              padding: isMobile ? "12px 10px 14px" : "12px 12px 16px",
+              display: "grid",
+              gap: 8,
+            }}
+          >
+            {navigation.map((section) => {
+              const meta = getSectionMeta(section.slug);
+              const overviewPath = getSectionOverviewPath(section);
+              const sectionIsActive = presentation.sectionSlug === section.slug;
+              const isExpanded =
+                expandedSections[section.slug] ?? sectionIsActive;
+              const Icon = meta.icon;
+
+              return (
+                <Box
+                  key={section.slug}
+                  style={{
+                    borderRadius: 18,
+                    border: sectionIsActive
+                      ? `1px solid ${shellActiveBorder}`
+                      : `1px solid ${shellBorder}`,
+                    background: sectionIsActive ? shellActiveBg : shellSurfaceStrong,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Box style={{ padding: "10px" }}>
+                    <Flex align="center" justify="between" style={{ gap: 10 }}>
+                      <Link
+                        href={overviewPath}
+                        onClick={onClose}
+                        className="sidebar-link"
+                        style={{
+                          flex: 1,
+                          textDecoration: "none",
+                        }}
+                      >
+                        <Flex align="center" gap={10}>
+                          <Flex
+                            align="center"
+                            justify="center"
+                            style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: 10,
+                              border: `1px solid ${
+                                sectionIsActive
+                                  ? shellActiveBorder
+                                  : shellBorder
+                              }`,
+                              background: sectionIsActive
+                                ? shellSurface
+                                : shellSurfaceSubtle,
+                              color: meta.accent,
+                              flexShrink: 0,
+                            }}
+                          >
+                            <Icon size={15} />
+                          </Flex>
+
+                          <Box style={{ minWidth: 0 }}>
+                            <Flex
+                              align="center"
+                              gap={8}
+                              style={{ flexWrap: "wrap" }}
+                            >
+                              <Text
+                                size="sm"
+                                weight="semibold"
+                                style={{
+                                  color: shellText,
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                {section.label}
+                              </Text>
+                              <Box
+                                style={{
+                                  padding: "2px 7px",
+                                  borderRadius: 999,
+                                  background: shellSurfaceSubtle,
+                                  color: shellTextTertiary,
+                                  fontSize: "0.68rem",
+                                  fontWeight: 600,
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                {countSectionEntries(section)}
+                              </Box>
+                            </Flex>
+                            {sectionIsActive ? (
+                              <Text
+                                size="xs"
+                                style={{
+                                  color: shellTextSecondary,
+                                  lineHeight: 1.4,
+                                  marginTop: 3,
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden",
+                                }}
+                              >
+                                {meta.description}
+                              </Text>
+                            ) : null}
+                          </Box>
+                        </Flex>
+                      </Link>
+
+                      <Box
+                        as="button"
+                        {...({ type: "button" } as any)}
+                        onClick={() =>
+                          setExpandedSections((current) => ({
+                            ...current,
+                            [section.slug]: !isExpanded,
+                          }))
+                        }
+                        className="sidebar-toggle"
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 12,
+                          border: `1px solid ${shellBorder}`,
+                          background: shellSurfaceSubtle,
+                          color: shellText,
+                          cursor: "pointer",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {isExpanded ? (
+                          <ChevronDownIcon size={15} />
+                        ) : (
+                          <ChevronRightIcon size={15} />
+                        )}
+                      </Box>
+                    </Flex>
+
+                    {isExpanded ? (
+                      <Box style={{ display: "grid", gap: 2, marginTop: 6 }}>
+                        {section.children.map((item) => (
+                          <NavNode
+                            key={item.path}
+                            activePath={pathname}
+                            item={item}
+                            onNavigate={onClose}
+                          />
+                        ))}
+                      </Box>
+                    ) : null}
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+
+          <Box
+            style={{
+              padding: isMobile ? "12px 14px 14px" : "14px 16px 16px",
+              borderTop: `1px solid ${shellBorder}`,
+              background: shellSurfaceStrong,
+            }}
+          >
+            <Flex align="center" justify="between" style={{ gap: 12 }}>
+              <Box>
+                <Text
+                  size="xs"
+                  weight="semibold"
+                  style={{ color: shellTextTertiary }}
+                >
+                  Library footprint
+                </Text>
+                <Text
+                  size="sm"
+                  weight="semibold"
+                  style={{
+                    color: shellText,
+                    marginTop: 4,
+                  }}
+                >
+                  {DOC_COUNTS.total} documented assets
+                </Text>
+              </Box>
+
+              <Link
+                href="/developers/getting-started"
+                onClick={onClose}
+                className="sidebar-link shell-inline-link"
+                style={{
+                  textDecoration: "none",
+                  color: shellText,
+                }}
+              >
+                <Flex align="center" gap={6}>
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{ color: "inherit" }}
+                  >
+                    Docs
+                  </Text>
+                  <ExternalLinkIcon size={12} />
+                </Flex>
+              </Link>
             </Flex>
-          </Link>
 
-          {/* Nav groups */}
-          {NAV_GROUPS.map((group) => (
-            <NavGroupItem key={group.basePath} group={group} />
-          ))}
-        </Stack>
+            <Box
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 8,
+                marginTop: 12,
+              }}
+            >
+              {[
+                `${DOC_COUNTS.primitives} primitives`,
+                `${DOC_COUNTS.patterns} patterns`,
+                `${DOC_COUNTS.structures} structures`,
+                `${DOC_COUNTS.surfaces} surfaces`,
+              ].map((label) => (
+                <Box
+                  key={label}
+                  style={{
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    border: `1px solid ${shellBorder}`,
+                    background: shellSurface,
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    weight="medium"
+                    style={{ color: shellTextSecondary }}
+                  >
+                    {label}
+                  </Text>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        </Box>
       </Box>
 
-      {/* Sidebar footer */}
-      <Box
-        style={{
-          padding: '12px 20px',
-          borderTop: '1px solid var(--ds-color-neutral-200)',
-          flexShrink: 0,
-        }}
-      >
-        <Text size="xs" style={{ color: "var(--ds-color-text-muted)" }}>v0.1.0</Text>
-      </Box>
-    </Box>
+      <style jsx>{`
+        .showroom-sidebar :global(::-webkit-scrollbar) {
+          width: 8px;
+        }
+
+        .showroom-sidebar :global(::-webkit-scrollbar-thumb) {
+          background: rgba(255, 255, 255, 0.14);
+          border-radius: 999px;
+          border: 1px solid transparent;
+          background-clip: padding-box;
+        }
+
+        .sidebar-link:hover,
+        .shell-home-link:hover,
+        .shell-search-trigger:hover,
+        .shell-inline-link:hover {
+          opacity: 0.92;
+        }
+
+        .sidebar-toggle:hover,
+        .preview-pill:hover {
+          opacity: 0.92;
+          border-color: ${shellBorderStrong};
+        }
+      `}</style>
+    </>
   );
 }

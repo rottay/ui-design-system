@@ -1,17 +1,21 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { Box, Flex, Stack, Text, Card, Badge, Input } from '@rottay/design-system';
+import { useMemo, useState } from 'react';
+import {
+  Badge,
+  Box,
+  Card,
+  Flex,
+  Input,
+  Stack,
+  Text,
+} from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
 import * as AllIcons from '@rottay/design-system/icons';
-
-// ── Category mapping ─────────────────────────────────────────────────
-// Maps each icon name to its catalog category. When a new icon is added
-// to the DS catalog, add it here to place it in the correct group.
-// Icons not listed here fall into 'misc' by default.
+import { CodeBlock } from '@/components/playground';
+import { FoundationTopRail } from '../foundation-top-rail';
 
 const CATEGORY_MAP: Record<string, string> = {
-  // Navigation (15)
   ArrowLeftIcon: 'navigation',
   ArrowRightIcon: 'navigation',
   ArrowUpIcon: 'navigation',
@@ -27,7 +31,6 @@ const CATEGORY_MAP: Record<string, string> = {
   MoreHorizontalIcon: 'navigation',
   PanelRightCloseIcon: 'navigation',
   ScanSearchIcon: 'navigation',
-  // Action (15)
   PlusIcon: 'action',
   EditIcon: 'action',
   PencilIcon: 'action',
@@ -43,7 +46,6 @@ const CATEGORY_MAP: Record<string, string> = {
   SendIcon: 'action',
   Share2Icon: 'action',
   PowerIcon: 'action',
-  // Status (12)
   CheckIcon: 'status',
   CheckCircleIcon: 'status',
   CheckCircle2Icon: 'status',
@@ -56,7 +58,6 @@ const CATEGORY_MAP: Record<string, string> = {
   BanIcon: 'status',
   LoaderCircleIcon: 'status',
   CircleAlertIcon: 'status',
-  // Content (7)
   FileTextIcon: 'content',
   FileDownIcon: 'content',
   FolderIcon: 'content',
@@ -64,14 +65,12 @@ const CATEGORY_MAP: Record<string, string> = {
   BookmarkPlusIcon: 'content',
   BookmarkIcon: 'content',
   ImageIcon: 'content',
-  // Communication (6)
   MailIcon: 'communication',
   MessageSquareIcon: 'communication',
   BellIcon: 'communication',
   PhoneIcon: 'communication',
   InboxIcon: 'communication',
   SendMessageIcon: 'communication',
-  // User (14)
   UserIcon: 'user',
   UsersIcon: 'user',
   UserCheckIcon: 'user',
@@ -86,7 +85,6 @@ const CATEGORY_MAP: Record<string, string> = {
   KeyRoundIcon: 'user',
   FingerprintIcon: 'user',
   LogOutIcon: 'user',
-  // Data (10)
   BarChart3Icon: 'data',
   TrendingUpIcon: 'data',
   TrendingDownIcon: 'data',
@@ -97,7 +95,6 @@ const CATEGORY_MAP: Record<string, string> = {
   SlidersHorizontalIcon: 'data',
   LayersIcon: 'data',
   GlobeIcon: 'data',
-  // Layout (10)
   ListIcon: 'layout',
   LayoutGridIcon: 'layout',
   Grid3x3Icon: 'layout',
@@ -108,7 +105,6 @@ const CATEGORY_MAP: Record<string, string> = {
   AlignCenterIcon: 'layout',
   AlignLeftIcon: 'layout',
   LayoutTemplateIcon: 'layout',
-  // Media (9)
   EyeIcon: 'media',
   EyeOffIcon: 'media',
   StarIcon: 'media',
@@ -118,7 +114,6 @@ const CATEGORY_MAP: Record<string, string> = {
   MicOffIcon: 'media',
   AudioLinesIcon: 'media',
   CameraIcon: 'media',
-  // Misc (11)
   BriefcaseIcon: 'misc',
   Building2Icon: 'misc',
   KeyboardIcon: 'misc',
@@ -132,7 +127,6 @@ const CATEGORY_MAP: Record<string, string> = {
   GitCompareIcon: 'misc',
 };
 
-// ── Non-icon exports to exclude from the registry ────────────────────
 const NON_ICON_EXPORTS = new Set([
   'createIcon',
   'ICON_SIZE_MAP',
@@ -142,42 +136,20 @@ const NON_ICON_EXPORTS = new Set([
   'LoaderIcon',
 ]);
 
-// ── Constants ────────────────────────────────────────────────────────
-
-const CATEGORIES_LIST = [
-  'navigation', 'action', 'status', 'content', 'communication',
-  'user', 'data', 'layout', 'media', 'misc',
-];
-
-const CATEGORIES = ['all', ...CATEGORIES_LIST] as const;
-
-// ── Build the icon registry dynamically from AllIcons ────────────────
-interface IconEntry {
-  name: string;
-  component: React.ComponentType<{ size?: number }>;
-  category: string;
-}
-
-const ICON_REGISTRY: IconEntry[] = Object.entries(AllIcons)
-  .filter(([name, value]) => {
-    if (NON_ICON_EXPORTS.has(name)) return false;
-    if (typeof value !== 'function') return false;
-    if (!name.endsWith('Icon')) return false;
-    return true;
-  })
-  .map(([name, component]) => ({
-    name,
-    component: component as React.ComponentType<{ size?: number }>,
-    category: CATEGORY_MAP[name] || 'misc',
-  }))
-  .sort((a, b) => {
-    const catOrder = CATEGORIES_LIST.indexOf(a.category) - CATEGORIES_LIST.indexOf(b.category);
-    if (catOrder !== 0) return catOrder;
-    return a.name.localeCompare(b.name);
-  });
+const CATEGORY_ORDER = [
+  'navigation',
+  'action',
+  'status',
+  'content',
+  'communication',
+  'user',
+  'data',
+  'layout',
+  'media',
+  'misc',
+] as const;
 
 const CATEGORY_LABELS: Record<string, string> = {
-  all: 'All',
   navigation: 'Navigation',
   action: 'Action',
   status: 'Status',
@@ -190,25 +162,68 @@ const CATEGORY_LABELS: Record<string, string> = {
   misc: 'Misc',
 };
 
-// ── IconCell ─────────────────────────────────────────────────────────
+interface IconEntry {
+  name: string;
+  component: React.ComponentType<{ size?: number }>;
+  category: string;
+}
+
+const ICON_REGISTRY: IconEntry[] = Object.entries(AllIcons)
+  .filter(([name, value]) => {
+    if (NON_ICON_EXPORTS.has(name)) return false;
+    if (typeof value !== 'function') return false;
+    return name.endsWith('Icon');
+  })
+  .map(([name, component]) => ({
+    name,
+    component: component as React.ComponentType<{ size?: number }>,
+    category: CATEGORY_MAP[name] || 'misc',
+  }))
+  .sort((a, b) => {
+    const categoryDelta = CATEGORY_ORDER.indexOf(a.category as (typeof CATEGORY_ORDER)[number]) -
+      CATEGORY_ORDER.indexOf(b.category as (typeof CATEGORY_ORDER)[number]);
+    if (categoryDelta !== 0) return categoryDelta;
+    return a.name.localeCompare(b.name);
+  });
+
+const ICON_SPOTLIGHTS = [
+  {
+    title: 'Navigation',
+    detail: 'Wayfinding, switchers, and shell chrome.',
+    icons: [AllIcons.MenuIcon, AllIcons.ArrowLeftIcon, AllIcons.ChevronRightIcon],
+  },
+  {
+    title: 'Action',
+    detail: 'Primary verbs and direct manipulation.',
+    icons: [AllIcons.PlusIcon, AllIcons.CheckIcon, AllIcons.DownloadIcon],
+  },
+  {
+    title: 'Status',
+    detail: 'Success, warnings, and operational states.',
+    icons: [
+      AllIcons.CheckCircleIcon,
+      AllIcons.AlertTriangleIcon,
+      AllIcons.LoaderCircleIcon,
+    ],
+  },
+] as const;
 
 function IconCell({ entry }: { entry: IconEntry }) {
   const tokens = useTokens();
   const [copied, setCopied] = useState(false);
   const Icon = entry.component;
 
-  const handleClick = useCallback(() => {
-    const importStatement = `import { ${entry.name} } from '@rottay/design-system/icons';`;
-    navigator.clipboard.writeText(importStatement).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
-  }, [entry.name]);
-
   return (
     <Box
       as="button"
-      onClick={handleClick}
+      onClick={() => {
+        navigator.clipboard
+          .writeText(`import { ${entry.name} } from '@rottay/design-system/icons';`)
+          .then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+          });
+      }}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -217,54 +232,46 @@ function IconCell({ entry }: { entry: IconEntry }) {
         padding: tokens.spacing[4],
         borderRadius: tokens.borderRadius.lg,
         border: '1px solid var(--ds-color-neutral-200)',
-        background: copied ? 'var(--ds-color-success-50)' : 'var(--ds-color-white)',
+        background:
+          copied
+            ? 'linear-gradient(180deg, var(--ds-color-success-50), var(--ds-color-white))'
+            : 'linear-gradient(180deg, var(--ds-color-white), var(--ds-color-neutral-50))',
         cursor: 'pointer',
         transition: 'all 150ms ease',
-        minWidth: 0,
       }}
     >
       <Box
         style={{
-          color: copied ? 'var(--ds-color-success-600)' : 'var(--ds-color-text-primary)',
-          transition: 'color 150ms ease',
+          width: 48,
+          height: 48,
+          borderRadius: 14,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: 40,
-          height: 40,
+          background: copied ? 'var(--ds-color-success-100)' : 'var(--ds-color-neutral-50)',
+          color: copied ? 'var(--ds-color-success-700)' : 'var(--ds-color-text-primary)',
         }}
       >
         <Icon size={24} />
       </Box>
       <Text
         size="xs"
-        color={copied ? 'default' : 'muted'}
         style={{
-          wordBreak: 'break-all',
           textAlign: 'center',
-          lineHeight: 1.3,
+          color: copied ? 'var(--ds-color-success-700)' : 'var(--ds-color-text-secondary)',
+          lineHeight: 1.45,
         }}
       >
-        {copied ? 'Copied!' : entry.name.replace(/Icon$/, '')}
+        {copied ? 'Copied import' : entry.name.replace(/Icon$/, '')}
       </Text>
     </Box>
   );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────
-
 export default function IconsPage() {
   const tokens = useTokens();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
-
-  const filtered = useMemo(() => {
-    return ICON_REGISTRY.filter((entry) => {
-      const matchesSearch = search === '' || entry.name.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = activeCategory === 'all' || entry.category === activeCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [search, activeCategory]);
 
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { all: ICON_REGISTRY.length };
@@ -274,7 +281,16 @@ export default function IconsPage() {
     return counts;
   }, []);
 
-  // Group filtered icons by category for grouped display
+  const filtered = useMemo(() => {
+    return ICON_REGISTRY.filter((entry) => {
+      const matchesSearch =
+        search === '' || entry.name.toLowerCase().includes(search.toLowerCase());
+      const matchesCategory =
+        activeCategory === 'all' || entry.category === activeCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [search, activeCategory]);
+
   const grouped = useMemo(() => {
     const groups: Record<string, IconEntry[]> = {};
     for (const entry of filtered) {
@@ -285,95 +301,176 @@ export default function IconsPage() {
   }, [filtered]);
 
   return (
-    <Stack spacing="lg">
-      {/* Page header */}
-      <Box>
-        <Flex align="center" gap={8}>
-          <Text as={"h1" as any} size="2xl" weight="bold">
-            Icons
-          </Text>
-          <Badge variant="primary">{ICON_REGISTRY.length} icons</Badge>
-        </Flex>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text size="md" style={{ color: "var(--ds-color-text-secondary)" }}>
-            All icons are lucide-react components wrapped via createIcon() with DS
-            defaults: token-driven sizing, currentColor inheritance, and the
-            rottay-icon CSS class. Click any icon to copy its import statement.
-          </Text>
-        </Box>
-      </Box>
+    <Stack spacing="lg" fullWidth>
+      <FoundationTopRail
+        backHref="/foundations"
+        backLabel="Foundations"
+        badge="Icon library"
+        title="Icons"
+        description="Icons are a semantic vocabulary layer for navigation, action, data, status, content, and system chrome. Search by task and copy imports directly from the catalog."
+        panels={[
+          {
+            title: 'Use this page for',
+            body: 'Finding the right icon by intent, not inventing custom SVG drift in product surfaces.',
+            tone: 'accent',
+          },
+          {
+            title: 'Interaction',
+            body: 'Click any icon cell to copy the import statement from @rottay/design-system/icons.',
+          },
+          {
+            title: 'Rendering contract',
+            body: 'All icons are wrapped for consistent sizing and currentColor behavior across themes and engines.',
+            tone: 'dark',
+          },
+        ]}
+        links={[
+          { label: 'Navigation' },
+          { label: 'Action' },
+          { label: 'Status' },
+          { label: 'Data' },
+          { label: 'Layout' },
+        ]}
+        stats={[
+          { label: 'Icons', value: `${ICON_REGISTRY.length}`, detail: 'Curated DS icon exports' },
+          { label: 'Categories', value: `${CATEGORY_ORDER.length}`, detail: 'Organized by UI intent' },
+          { label: 'Copy flow', value: '1 click', detail: 'Import statement to clipboard' },
+          { label: 'Sizing', value: 'currentColor', detail: 'Portable across surfaces' },
+        ]}
+      />
 
-      {/* Search + category filter */}
-      <Card>
-        <Stack spacing="md">
-          {/* Search input */}
-          <Box style={{ maxWidth: 400 }}>
-            <Input
-              placeholder="Search icons..."
-              value={search}
-              onChange={(value: string) => setSearch(value)}
-              prefix={<AllIcons.SearchIcon size={16} />}
-            />
-          </Box>
+      <Card style={{ width: '100%', padding: tokens.spacing[5] }}>
+        <Stack spacing="md" fullWidth>
+          <Flex align="center" justify="between" style={{ flexWrap: 'wrap', gap: 12 }}>
+            <Box>
+              <Text as={"h2" as any} size="xl" weight="semibold">
+                Icon language at a glance
+              </Text>
+              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                A compact editorial sample before you dive into the full catalog.
+              </Text>
+            </Box>
+            <Badge variant="secondary">Semantic sets</Badge>
+          </Flex>
 
-          {/* Category pills */}
-          <Flex gap={6} style={{ flexWrap: 'wrap' }}>
-            {CATEGORIES.map((cat) => (
+          <Box
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
+              gap: tokens.spacing[4],
+            }}
+          >
+            {ICON_SPOTLIGHTS.map((spotlight) => (
               <Box
-                key={cat}
-                as="button"
-                onClick={() => setActiveCategory(cat)}
+                key={spotlight.title}
                 style={{
-                  padding: '4px 12px',
-                  borderRadius: 999,
-                  border: '1px solid',
-                  borderColor: activeCategory === cat
-                    ? 'var(--ds-color-primary-500)'
-                    : 'var(--ds-color-neutral-200)',
-                  background: activeCategory === cat
-                    ? 'var(--ds-color-primary-50)'
-                    : 'var(--ds-color-white)',
-                  color: activeCategory === cat
-                    ? 'var(--ds-color-primary-700)'
-                    : 'var(--ds-color-text-secondary)',
-                  cursor: 'pointer',
-                  fontSize: '0.8125rem',
-                  fontWeight: activeCategory === cat ? 600 : 400,
-                  transition: 'all 150ms ease',
+                  padding: tokens.spacing[4],
+                  borderRadius: tokens.borderRadius.lg,
+                  border: '1px solid var(--ds-color-border-secondary)',
+                  background:
+                    'linear-gradient(180deg, var(--ds-color-bg-overlay), var(--ds-color-bg-elevated))',
                 }}
               >
-                {CATEGORY_LABELS[cat] || cat} ({categoryCounts[cat] || 0})
+                <Stack spacing="md">
+                  <Box>
+                    <Text size="sm" weight="semibold">
+                      {spotlight.title}
+                    </Text>
+                    <Text size="xs" style={{ marginTop: 4, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                      {spotlight.detail}
+                    </Text>
+                  </Box>
+                  <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+                    {spotlight.icons.map((IconComponent) => (
+                      <Box
+                        key={IconComponent.displayName || IconComponent.name}
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 14,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'var(--ds-color-white)',
+                        border: '1px solid var(--ds-color-neutral-200)',
+                      }}
+                    >
+                        <IconComponent size={18} />
+                      </Box>
+                    ))}
+                  </Flex>
+                </Stack>
+              </Box>
+            ))}
+          </Box>
+        </Stack>
+      </Card>
+
+      <Card style={{ width: '100%', padding: tokens.spacing[5] }}>
+        <Stack spacing="md" fullWidth>
+          <Flex align="center" justify="between" style={{ flexWrap: 'wrap', gap: 12 }}>
+            <Box style={{ maxWidth: 420, width: '100%' }}>
+              <Input
+                placeholder="Search icons..."
+                value={search}
+                onChange={(value: string) => setSearch(value)}
+                prefix={<AllIcons.SearchIcon size={16} />}
+              />
+            </Box>
+              <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+                Showing {filtered.length} of {ICON_REGISTRY.length}
+              </Text>
+            </Flex>
+          <Flex gap={6} style={{ flexWrap: 'wrap' }}>
+            {['all', ...CATEGORY_ORDER].map((category) => (
+              <Box
+                key={category}
+                as="button"
+                onClick={() => setActiveCategory(category)}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: 999,
+                  border: '1px solid',
+                  borderColor:
+                    activeCategory === category
+                      ? 'var(--ds-color-primary-500)'
+                      : 'var(--ds-color-neutral-200)',
+                  background:
+                    activeCategory === category
+                      ? 'var(--ds-color-primary-50)'
+                      : 'var(--ds-color-white)',
+                  color:
+                    activeCategory === category
+                      ? 'var(--ds-color-primary-700)'
+                      : 'var(--ds-color-text-secondary)',
+                  cursor: 'pointer',
+                  fontSize: '0.8125rem',
+                  fontWeight: activeCategory === category ? 600 : 400,
+                }}
+              >
+                {(CATEGORY_LABELS[category] || 'All')} ({categoryCounts[category] || ICON_REGISTRY.length})
               </Box>
             ))}
           </Flex>
         </Stack>
       </Card>
 
-      {/* Results count */}
-      <Text size="sm" style={{ color: "var(--ds-color-text-muted)" }}>
-        Showing {filtered.length} of {ICON_REGISTRY.length} icons
-      </Text>
-
-      {/* Icon grid grouped by category */}
-      {CATEGORIES_LIST.map((cat) => {
-        const icons = grouped[cat];
+      {CATEGORY_ORDER.map((category) => {
+        const icons = grouped[category];
         if (!icons || icons.length === 0) return null;
+
         return (
-          <Box key={cat}>
-            <Box style={{ marginBottom: tokens.spacing[3] }}>
-              <Flex align="center" gap={6}>
-                <Text as={"h2" as any} size="lg" weight="semibold">
-                  {CATEGORY_LABELS[cat] || cat}
-                </Text>
-                <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
-                  {icons.length}
-                </Text>
-              </Flex>
-            </Box>
+          <Stack key={category} spacing="md">
+            <Flex align="center" gap={8}>
+              <Text as={"h2" as any} size="lg" weight="semibold">
+                {CATEGORY_LABELS[category]}
+              </Text>
+              <Badge variant="secondary">{icons.length}</Badge>
+            </Flex>
             <Box
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
                 gap: tokens.spacing[3],
               }}
             >
@@ -381,51 +478,107 @@ export default function IconsPage() {
                 <IconCell key={entry.name} entry={entry} />
               ))}
             </Box>
-          </Box>
+          </Stack>
         );
       })}
 
       {filtered.length === 0 && (
-        <Flex
-          align="center"
-          justify="center"
-          style={{
-            padding: tokens.spacing[10],
-            color: 'var(--ds-color-text-tertiary)',
-          }}
-        >
-          <Text size="md" style={{ color: "var(--ds-color-text-muted)" }}>
-            No icons match your search.
-          </Text>
-        </Flex>
+        <Card style={{ padding: tokens.spacing[7], textAlign: 'center' }}>
+          <Stack spacing="sm">
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              No icons match the current filter
+            </Text>
+            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+              Try another keyword or reset to `all` categories.
+            </Text>
+          </Stack>
+        </Card>
       )}
 
-      {/* Import hint */}
-      <Card>
-        <Stack spacing="sm">
-          <Text size="sm" weight="semibold">Import Pattern</Text>
-          <Box
-            style={{
-              fontFamily: 'var(--font-geist-mono)',
-              fontSize: '0.8125rem',
-              padding: tokens.spacing[4],
-              borderRadius: tokens.borderRadius.md,
-              background: 'var(--ds-color-neutral-900)',
-              color: 'var(--ds-color-neutral-100)',
-              lineHeight: 1.6,
-              overflowX: 'auto',
-            }}
-          >
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-400)' }}>
-              {`// Always import from the DS, never from lucide-react directly`}
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: tokens.spacing[4],
+        }}
+      >
+        <Card style={{ padding: tokens.spacing[5] }}>
+          <Stack spacing="md">
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              Usage guidance
             </Text>
-            <br />
-            <Text size="sm" style={{ color: 'var(--ds-color-neutral-100)' }}>
-              {`import { SearchIcon, PlusIcon, CheckIcon } from '@rottay/design-system/icons';`}
+            {[
+              'Prefer task meaning over decorative novelty.',
+              'Match icon weight to nearby typography and button density.',
+              'Use icons to reinforce labels, not replace them in dense products.',
+              'Import from @rottay/design-system/icons only.',
+            ].map((rule) => (
+              <Box
+                key={rule}
+                style={{
+                  padding: '8px 10px',
+                  borderRadius: 12,
+                  background: 'var(--ds-color-bg-overlay)',
+                  border: '1px solid var(--ds-color-border-secondary)',
+                }}
+              >
+                <Text key={rule} size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                  {rule}
+                </Text>
+              </Box>
+            ))}
+          </Stack>
+        </Card>
+
+        <Card style={{ padding: tokens.spacing[5] }}>
+          <Stack spacing="md">
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              Sizing
             </Text>
-          </Box>
-        </Stack>
-      </Card>
+            <Flex gap={12} align="end">
+              {[16, 20, 24, 32].map((size) => (
+                <Stack key={size} spacing={4} align="center">
+                  <Box
+                    style={{
+                      width: 52,
+                      height: 52,
+                      borderRadius: 14,
+                      background: 'var(--ds-color-neutral-50)',
+                      border: '1px solid var(--ds-color-neutral-200)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <AllIcons.SearchIcon size={size} />
+                  </Box>
+                  <Text
+                    size="xs"
+                    style={{
+                      color: 'var(--ds-color-text-muted)',
+                      fontFamily: 'var(--font-geist-mono, monospace)',
+                    }}
+                  >
+                    {size}px
+                  </Text>
+                </Stack>
+              ))}
+            </Flex>
+          </Stack>
+        </Card>
+      </Box>
+
+      <CodeBlock
+        title="Icon import"
+        language="tsx"
+        code={`import { SearchIcon, PlusIcon, CheckIcon } from '@rottay/design-system/icons';
+
+<Button variant="primary">
+  <PlusIcon size={16} />
+  Add record
+</Button>`}
+      />
+
     </Stack>
   );
 }

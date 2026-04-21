@@ -19,8 +19,8 @@ export const evntoBrandTheme: BrandTheme = {
 
   palette: {
     primaryColor: '#171717',
-    secondaryColor: '#B8A898',
-    accentColor: '#B8A898',
+    secondaryColor: '#7A6A5A',
+    accentColor: '#7A6A5A',
     darkPrimaryColor: '#E8E8E0',
     darkSecondaryColor: '#A89880',
     darkAccentColor: '#A89880',

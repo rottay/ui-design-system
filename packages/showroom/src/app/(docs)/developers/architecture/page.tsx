@@ -1,112 +1,143 @@
 'use client';
 
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge } from '@rottay/design-system';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
 import { ArrowLeftIcon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
+import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial-chrome';
 
 const TIERS = [
   {
     name: 'Primitives',
+    analogy: 'Atomic UI parts',
     path: 'packages/core/src/components/primitives/',
-    analogy: 'A brick',
     description:
-      'Engine-switched leaf components. Each primitive has 4 engine implementations (classic, modern, rustic, custom) selected at runtime via createEngineComponent(). They solve local UI behavior and styling, not page-level tasks.',
-    categories: ['Display (20)', 'Inputs (26)', 'Feedback (12)', 'Layout (17)', 'Navigation (18)', 'Overlay (13)'],
-    examples: 'Button, Input, Card, Modal, Tabs, Badge, Text, Box, Flex, Stack',
-    decisionRule: 'Is it a leaf component with an engine switch?',
+      'Engine-aware leaf components with stable APIs. They solve local UI rendering, spacing, and interaction primitives.',
+    examples: 'Button, Input, Card, Modal, Text, Badge, Box, Flex, Stack',
+    decisionRule: 'Use when the problem is still a single component instead of a workflow.',
+    accent: 'var(--ds-color-info-bg)',
+    border: 'var(--ds-color-info-border)',
   },
   {
     name: 'Patterns',
+    analogy: 'Reusable task widgets',
     path: 'packages/core/src/components/patterns/',
-    analogy: 'A reusable machine made of bricks',
     description:
-      'Engine-agnostic, task-level compositions that solve generic UI tasks. They package common interaction logic so apps do not rewrite the same task flow. Patterns should not know what screen they are in.',
-    categories: ['Data', 'Forms', 'Visualization', 'Communication', 'Workflow', 'Navigation', 'Misc'],
+      'Repeatable work units such as tables, builders, kanban, stats, or timeline modules. Patterns should not know the route they live in.',
     examples: 'PatternDataTable, PatternFormBuilder, PatternKanbanBoard, PatternStatsGrid',
-    decisionRule: 'Does it solve a repeatable task involving multiple components?',
+    decisionRule: 'Use when the same behavior should travel across products and routes.',
+    accent: 'var(--ds-color-success-bg)',
+    border: 'var(--ds-color-success-border)',
   },
   {
     name: 'Structures',
+    analogy: 'Page chrome',
     path: 'packages/core/src/components/structures/',
-    analogy: 'The frame around the machine on a page',
     description:
-      'Page-structure families that wrap or accompany patterns to form page chrome. Think headers, toolbars, command bars, record panels. They define surrounding screen chrome, not the whole page.',
-    categories: ['Headers', 'Workspace', 'Record', 'Dashboard', 'Feedback'],
+      'Headers, toolbars, record framing, dashboard scaffolds, and layout context around patterns and content.',
     examples: 'CollectionHeader, SearchCommandBar, TableToolbar, RecordFieldGrid',
-    decisionRule: 'Does it organize a page around a task widget?',
+    decisionRule: 'Use when the problem is page framing, not the entire route contract.',
+    accent: 'var(--ds-color-warning-bg)',
+    border: 'var(--ds-color-warning-border)',
   },
   {
     name: 'Surfaces',
+    analogy: 'Full-screen recipes',
     path: 'packages/core/src/components/surfaces/',
-    analogy: 'The whole room layout',
     description:
-      'Declarative page-level recipes. They compose patterns + structures + primitives into a full screen contract. The app passes a configuration object; the surface handles composition.',
-    categories: ['Foundation (types, builders)', 'Layout (shell, header, sidebar)', 'Pages (6 domain groups)'],
+      'Declarative route-level contracts that combine structures, patterns, and primitives into a product-ready screen.',
     examples: 'ListSurface, DashboardSurface, FormSurface, CollectionWorkspaceSurface',
-    decisionRule: 'Does it describe a whole page as a config object?',
+    decisionRule: 'Use when the consuming app should configure a whole screen with shared contracts.',
+    accent: 'var(--ds-color-error-bg)',
+    border: 'var(--ds-color-error-border)',
   },
-];
+] as const;
+
+const DECISION_EXAMPLES = [
+  {
+    question: 'Need a reusable kanban workflow across products?',
+    tier: 'Pattern',
+    owner: 'Design System',
+  },
+  {
+    question: 'Need a users page header with filters and actions?',
+    tier: 'Structure',
+    owner: 'Design System',
+  },
+  {
+    question: 'Need a route that wires business data into a complete admin screen?',
+    tier: 'Surface + app orchestration',
+    owner: 'Shared contract, app-owned semantics',
+  },
+  {
+    question: 'Need a tenant-specific hiring policy or approval rule?',
+    tier: 'Consuming app',
+    owner: 'Consuming App',
+  },
+] as const;
 
 const ENGINES = [
   {
     name: 'Classic',
     foundation: 'Ant Design 5.21',
-    personality: 'Corporate, structured, enterprise-grade. Sharp corners, subtle shadows, professional typography.',
-    characteristics: ['Sharp border radius', 'Corporate shadows', 'Dense spacing', 'Enterprise feel'],
+    personality: 'Structured, precise, and admin-heavy.',
   },
   {
     name: 'Modern',
     foundation: 'Tailwind / DaisyUI',
-    personality: 'Clean, rounded, contemporary. Bold shadows, generous spacing, smooth transitions.',
-    characteristics: ['Rounded corners', 'Bold shadows', 'Generous spacing', 'Smooth motion'],
+    personality: 'Rounded, spacious, and contemporary.',
   },
   {
     name: 'Rustic',
     foundation: 'Vanilla CSS',
-    personality: 'Minimal, elegant, understated. Whisper-thin shadows, flat borders, quiet aesthetics.',
-    characteristics: ['Minimal radius', 'Whisper shadows', 'Flat design', 'Quiet aesthetics'],
+    personality: 'Quiet, minimal, and intentionally restrained.',
   },
-  {
-    name: 'Custom',
-    foundation: 'Pluggable component pack',
-    personality: 'Reserved for white-label tenants. Runtime-registered component overrides.',
-    characteristics: ['Tenant-defined', 'Pluggable', 'Runtime registration', 'Full override'],
-  },
-];
+] as const;
 
 const OWNERSHIP_RULES = [
   {
     belongs: 'Design System',
+    tone: 'success',
     items: [
-      'Generic UI building blocks (primitives)',
-      'Reusable task widgets (patterns)',
-      'Page-structure chrome (structures)',
-      'Declarative screen recipes (surfaces)',
-      'Theme/engine/tenant-aware visual customization',
-      'Icon catalog and chart system',
+      'Reusable UI capability and interaction patterns',
+      'Engine-aware rendering behavior and visual language',
+      'Shared page chrome and config-driven screen recipes',
+      'Theme, token, icon, and chart infrastructure',
     ],
   },
   {
     belongs: 'Consuming App',
+    tone: 'warning',
     items: [
-      'Domain-specific labels, business rules, and workflows',
-      'Route-specific fetch logic',
-      'Module-specific permissions and policy decisions',
-      'Entity mapping from API/domain to DS configs',
-      'Product copy and product semantics',
-      'Tenant/company/user/candidate/event-specific logic',
+      'Domain models, permissions, and workflow semantics',
+      'Route-specific data fetching and orchestration',
+      'Tenant business rules and product-specific exceptions',
+      'Mapping API responses into DS configuration objects',
     ],
   },
-];
+] as const;
+
+const RUNTIME_FLOW = [
+  'App route decides the domain task.',
+  'Surface describes the screen contract.',
+  'Structures add page chrome and context.',
+  'Patterns solve repeated workflows.',
+  'Primitives render through the active engine.',
+  'Tokens and BrandTheme finish the visual result.',
+] as const;
+
+const WARNINGS = [
+  'Do not put tenant semantics into shared components.',
+  'Do not rebuild page-level contracts with ad hoc primitive glue on every route.',
+  'Do not treat engine differences as product forks instead of runtime variants.',
+] as const;
 
 export default function ArchitecturePage() {
   const tokens = useTokens();
 
   return (
-    <Stack spacing="lg">
-      {/* Back link */}
+    <Stack spacing="xl" fullWidth>
       <Link
         href="/developers"
         style={{
@@ -114,320 +145,446 @@ export default function ArchitecturePage() {
           alignItems: 'center',
           gap: 6,
           fontSize: '0.875rem',
-          color: 'var(--ds-color-primary-500)',
+          color: 'var(--ds-color-link)',
           textDecoration: 'none',
         }}
       >
         <ArrowLeftIcon size={14} /> Back to Developers
       </Link>
 
-      {/* Page header */}
-      <Box>
-        <Text as={"h1" as any} size="2xl" weight="bold">
-          Architecture
-        </Text>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            A deep dive into the 4-tier component model, the engine system,
-            tenant branding, and the ownership model that governs what belongs
-            in the design system versus what stays in consuming apps.
-          </Text>
-        </Box>
-      </Box>
-
-      {/* 4-tier model */}
-      <Card>
-        <Stack spacing="md">
-          <Text as={"h2" as any} size="xl" weight="bold">
-            4-Tier Component Model
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            The design system organizes all components into four tiers under
-            packages/core/src/components/. Each tier has a clear responsibility
-            and a decision rule for what belongs there.
-          </Text>
-        </Stack>
-      </Card>
-
-      {/* Tier cards */}
-      {TIERS.map((tier, index) => (
-        <Card key={tier.name}>
-          <Stack spacing="md">
-            {/* Tier header */}
-            <Flex align="center" gap={12}>
-              <Box
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  background: 'var(--ds-color-primary-500)',
-                  color: 'var(--ds-color-text-inverse, #ffffff)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  fontSize: '0.875rem',
-                  fontWeight: 700,
-                }}
-              >
-                {index + 1}
-              </Box>
-              <Box>
-                <Flex align="center" gap={8}>
-                  <Text as={"h3" as any} size="lg" weight="bold">
-                    {tier.name}
-                  </Text>
-                  <Badge variant="primary">{tier.analogy}</Badge>
-                </Flex>
-                <Text
-                  size="xs"
-                  style={{
-                    fontFamily: 'var(--ds-font-mono, monospace)',
-                    color: 'var(--ds-color-text-muted)',
-                    marginTop: 2,
-                  }}
-                >
-                  {tier.path}
-                </Text>
-              </Box>
+      <Card
+        style={{
+          overflow: 'hidden',
+          border: '1px solid var(--ds-color-border-secondary)',
+          background:
+            'linear-gradient(180deg, var(--ds-color-bg-secondary), var(--ds-color-bg-surface))',
+          boxShadow: tokens.shadows.lg,
+        }}
+      >
+        <Box
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            background: `
+              radial-gradient(circle at top left, var(--ds-color-info-bg) 0%, transparent 34%),
+              radial-gradient(circle at 84% 18%, var(--ds-color-success-bg) 0%, transparent 26%),
+              linear-gradient(180deg, transparent 0%, var(--ds-color-bg-surface) 100%)
+            `,
+            opacity: 0.7,
+          }}
+        />
+        <Box
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+            gap: tokens.spacing[5],
+            alignItems: 'stretch',
+          }}
+        >
+          <Stack spacing="lg">
+            <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+              <Badge variant="primary">Architecture</Badge>
+              <Badge variant="secondary">4-tier ownership model</Badge>
             </Flex>
 
-            {/* Description */}
-            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-              {tier.description}
-            </Text>
-
-            {/* Categories */}
-            <Box>
+            <Stack spacing="sm">
               <Text
-                size="xs"
-                weight="semibold"
-                style={{ color: 'var(--ds-color-text-muted)', marginBottom: tokens.spacing[2] }}
+                as={"h1" as any}
+                size="2xl"
+                weight="bold"
+                style={{ letterSpacing: '-0.04em' }}
               >
-                Categories
+                The design system scales because capability, page framing, and
+                product semantics do not live in the same layer.
               </Text>
-              <Flex gap={6} style={{ flexWrap: 'wrap' }}>
-                {tier.categories.map((cat) => (
-                  <Badge key={cat}>{cat}</Badge>
-                ))}
-              </Flex>
-            </Box>
+              <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                This page is meant to stop accidental complexity early. It shows
+                how engines, tiers, and app-level semantics work together so new
+                shared work lands in the right place from the first decision.
+              </Text>
+            </Stack>
 
-            {/* Examples */}
-            <Box>
-              <Text
-                size="xs"
-                weight="semibold"
-                style={{ color: 'var(--ds-color-text-muted)', marginBottom: tokens.spacing[1] }}
-              >
-                Examples
-              </Text>
-              <Text
-                size="sm"
-                style={{
-                  fontFamily: 'var(--ds-font-mono, monospace)',
-                  color: 'var(--ds-color-text-secondary)',
-                }}
-              >
-                {tier.examples}
-              </Text>
-            </Box>
-
-            {/* Decision rule */}
             <Box
               style={{
-                padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                borderRadius: tokens.borderRadius.md,
-                background: 'var(--ds-color-primary-50)',
-                border: '1px solid var(--ds-color-primary-200)',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: tokens.spacing[3],
               }}
             >
-              <Text size="xs" weight="semibold" style={{ color: 'var(--ds-color-primary-700)' }}>
-                Decision rule
-              </Text>
-              <Text size="sm" style={{ color: 'var(--ds-color-primary-700)', marginTop: 2 }}>
-                {tier.decisionRule}
-              </Text>
-            </Box>
-          </Stack>
-        </Card>
-      ))}
-
-      {/* Engines */}
-      <Card>
-        <Stack spacing="md">
-          <Text as={"h2" as any} size="xl" weight="bold">
-            Engines
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            The DS ships three rendering engines plus a reserved custom engine.
-            Each engine wraps a different CSS foundation and produces distinct
-            visual output from the same component API. Engine selection happens
-            via createEngineComponent() at runtime.
-          </Text>
-
-          <Box
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-              gap: tokens.spacing[4],
-            }}
-          >
-            {ENGINES.map((engine) => (
-              <Box
-                key={engine.name}
-                style={{
-                  padding: tokens.spacing[4],
-                  borderRadius: tokens.borderRadius.md,
-                  background: 'var(--ds-color-neutral-50)',
-                  border: '1px solid var(--ds-color-neutral-200)',
-                }}
-              >
-                <Stack spacing="sm">
-                  <Flex align="center" justify="between">
-                    <Text size="sm" weight="bold">{engine.name}</Text>
+              {[
+                {
+                  label: 'Core model',
+                  value: '4 tiers',
+                  detail: 'Primitives, patterns, structures, and surfaces each own a different level.',
+                },
+                {
+                  label: 'Runtime leverage',
+                  value: 'Engines + themes',
+                  detail: 'Implementation tone changes without forcing API forks.',
+                },
+                {
+                  label: 'Key decision',
+                  value: 'Capability vs semantics',
+                  detail: 'Shared UI belongs in DS. Product rules stay in the app.',
+                },
+              ].map((item) => (
+                <Box
+                  key={item.label}
+                  style={{
+                    padding: tokens.spacing[4],
+                    borderRadius: tokens.borderRadius.lg,
+                    background:
+                      'linear-gradient(180deg, var(--ds-color-bg-overlay), var(--ds-color-bg-primary))',
+                    border: '1px solid var(--ds-color-border-secondary)',
+                    minHeight: 140,
+                  }}
+                >
+                  <Stack spacing={6}>
                     <Text
                       size="xs"
+                      weight="semibold"
                       style={{
-                        fontFamily: 'var(--ds-font-mono, monospace)',
                         color: 'var(--ds-color-text-muted)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
                       }}
                     >
+                      {item.label}
+                    </Text>
+                    <Text size="sm" weight="semibold" style={{ lineHeight: 1.3 }}>
+                      {item.value}
+                    </Text>
+                    <Box
+                      style={{
+                        paddingTop: 8,
+                        borderTop: '1px solid var(--ds-color-border-secondary)',
+                      }}
+                    >
+                      <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                        {item.detail}
+                      </Text>
+                    </Box>
+                  </Stack>
+                </Box>
+              ))}
+            </Box>
+          </Stack>
+
+          <Card
+            style={{
+              padding: tokens.spacing[5],
+              border: '1px solid var(--ds-color-border-secondary)',
+              background:
+                'linear-gradient(180deg, var(--ds-color-bg-primary), var(--ds-color-bg-elevated))',
+            }}
+          >
+              <Stack spacing="md">
+                <Text size="sm" weight="semibold" style={{ color: 'var(--ds-color-text-muted)' }}>
+                  Runtime flow
+                </Text>
+                <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.6 }}>
+                  Read this from top to bottom when a team is unsure what belongs in the app,
+                  what belongs in shared DS code, and where runtime styling actually resolves.
+                </Text>
+                <DocsCompactList
+                  numbered
+                  items={RUNTIME_FLOW.map((step, index) => ({
+                    title: step,
+                    tone: index === 0 ? 'accent' : 'default',
+                  }))}
+                />
+              </Stack>
+            </Card>
+        </Box>
+      </Card>
+
+      <Stack spacing="md">
+        <DocsSectionHeader
+          eyebrow="Decision support"
+          title="Decision board"
+          description="Use this when someone asks where new shared work should land so the answer is based on capability shape, not on folder familiarity."
+          actions={
+            <Badge variant="secondary">
+              {DECISION_EXAMPLES.length} common architecture calls
+            </Badge>
+          }
+          tone="accent"
+        />
+
+        <Box
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: tokens.spacing[4],
+          }}
+        >
+          {DECISION_EXAMPLES.map((example, index) => (
+            <Card key={example.question} style={{ padding: tokens.spacing[5], height: '100%' }}>
+                <Stack spacing="md" style={{ height: '100%' }}>
+                  <Badge variant={index === 0 ? 'primary' : 'secondary'}>{`0${index + 1}`}</Badge>
+                  <Text as={"h3" as any} size="lg" weight="semibold">
+                    {example.question}
+                  </Text>
+                  <Box
+                    style={{
+                      padding: tokens.spacing[3],
+                      borderRadius: tokens.borderRadius.lg,
+                      background: 'var(--ds-color-bg-overlay)',
+                      border: '1px solid var(--ds-color-border-secondary)',
+                    }}
+                  >
+                    <Stack spacing={4}>
+                      <Text
+                        size="xs"
+                        weight="semibold"
+                        style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}
+                      >
+                        Recommended tier
+                      </Text>
+                      <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                        {example.tier}
+                      </Text>
+                    </Stack>
+                  </Box>
+                  <Box
+                    style={{
+                      padding: '8px 10px',
+                      borderRadius: 12,
+                      background: 'var(--ds-color-bg-overlay)',
+                      border: '1px solid var(--ds-color-border-secondary)',
+                    }}
+                  >
+                    <Text
+                      size="xs"
+                      weight="semibold"
+                      style={{
+                        color: 'var(--ds-color-text-muted)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      Owner
+                    </Text>
+                    <Text size="sm" style={{ marginTop: 4, color: 'var(--ds-color-text-secondary)', lineHeight: 1.5 }}>
+                      {example.owner}
+                    </Text>
+                  </Box>
+                </Stack>
+              </Card>
+            ))}
+        </Box>
+      </Stack>
+
+      <Stack spacing="md">
+        <DocsSectionHeader
+          eyebrow="Shared system map"
+          title="The 4-tier model"
+          description="Each layer exists to reduce ambiguity in how shared UI grows, so teams can escalate only when the work truly changes shape."
+          actions={<Badge variant="secondary">Choose the smallest tier that truly fits</Badge>}
+        />
+
+        <Box
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: tokens.spacing[4],
+          }}
+        >
+          {TIERS.map((tier) => (
+            <Card key={tier.name} style={{ padding: tokens.spacing[5], height: '100%' }}>
+              <Stack spacing="md" style={{ height: '100%' }}>
+                <Flex align="center" justify="between" style={{ gap: 12 }}>
+                  <Box>
+                    <Text as={"h3" as any} size="lg" weight="semibold">
+                      {tier.name}
+                    </Text>
+                    <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+                      {tier.analogy}
+                    </Text>
+                  </Box>
+                  <Badge variant="secondary">{tier.name}</Badge>
+                </Flex>
+
+                <Box
+                  style={{
+                    padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    background: 'var(--ds-color-bg-overlay)',
+                    border: '1px solid var(--ds-color-border-secondary)',
+                  }}
+                >
+                  <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                    {tier.description}
+                  </Text>
+                </Box>
+
+                <Box
+                  style={{
+                    padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    background: 'var(--ds-color-bg-overlay)',
+                    border: '1px solid var(--ds-color-border-secondary)',
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{
+                      color: 'var(--ds-color-text-muted)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    Source path
+                  </Text>
+                  <Text
+                    size="xs"
+                    style={{
+                      marginTop: 4,
+                      color: 'var(--ds-color-text-muted)',
+                      fontFamily: 'var(--ds-font-family-mono, monospace)',
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    {tier.path}
+                  </Text>
+                </Box>
+
+                <Box
+                  style={{
+                    padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    background: tier.accent,
+                    border: `1px solid ${tier.border}`,
+                  }}
+                >
+                  <Text size="xs" weight="semibold">
+                    Decision rule
+                  </Text>
+                  <Text size="sm" style={{ marginTop: 4, color: 'var(--ds-color-text-secondary)' }}>
+                    {tier.decisionRule}
+                  </Text>
+                  </Box>
+
+                <Box
+                  style={{
+                    marginTop: 'auto',
+                    padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    background: 'var(--ds-color-bg-overlay)',
+                    border: '1px solid var(--ds-color-border-secondary)',
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{
+                      color: 'var(--ds-color-text-muted)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    Examples
+                  </Text>
+                  <Text size="xs" style={{ marginTop: 4, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                    {tier.examples}
+                  </Text>
+                </Box>
+              </Stack>
+            </Card>
+          ))}
+        </Box>
+      </Stack>
+
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+          gap: tokens.spacing[5],
+          alignItems: 'start',
+        }}
+      >
+        <Card style={{ padding: tokens.spacing[6] }}>
+          <Stack spacing="md">
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              Engine model
+            </Text>
+            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              Engines change implementation tone while preserving the consuming
+              API. That stability is the reason the same shared system can serve
+              different products without fragmentation.
+            </Text>
+            <Stack spacing="sm">
+              {ENGINES.map((engine) => (
+                <Box
+                  key={engine.name}
+                  style={{
+                    padding: tokens.spacing[4],
+                    borderRadius: tokens.borderRadius.lg,
+                    background: 'var(--ds-color-bg-overlay)',
+                    border: '1px solid var(--ds-color-border-secondary)',
+                  }}
+                >
+                  <Flex align="center" justify="between" style={{ gap: 12 }}>
+                    <Box>
+                      <Text size="sm" weight="semibold">
+                        {engine.name}
+                      </Text>
+                      <Text size="xs" style={{ marginTop: 4, color: 'var(--ds-color-text-secondary)' }}>
+                        {engine.personality}
+                      </Text>
+                    </Box>
+                    <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
                       {engine.foundation}
                     </Text>
                   </Flex>
-                  <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
-                    {engine.personality}
-                  </Text>
-                  <Flex gap={4} style={{ flexWrap: 'wrap' }}>
-                    {engine.characteristics.map((c) => (
-                      <Box
-                        key={c}
-                        style={{
-                          padding: '2px 6px',
-                          borderRadius: 4,
-                          background: 'var(--ds-color-neutral-100)',
-                          fontSize: '0.7rem',
-                          color: 'var(--ds-color-text-secondary)',
-                        }}
-                      >
-                        {c}
-                      </Box>
-                    ))}
-                  </Flex>
-                </Stack>
-              </Box>
-            ))}
-          </Box>
-
-          <CodeBlock
-            title="Engine selection"
-            language="tsx"
-            code={`// createEngineComponent reads the active engine from context
-// and renders the correct implementation at runtime
-import { createEngineComponent } from '@rottay/design-system';
-
-const Button = createEngineComponent({
+                </Box>
+              ))}
+            </Stack>
+            <CodeBlock
+              title="Engine selection"
+              language="tsx"
+              code={`const Button = createEngineComponent({
   classic: ClassicButton,
   modern: ModernButton,
   rustic: RusticButton,
-  custom: CustomButton,
 });
 
-// Usage -- engine is resolved automatically from the provider
-<Button variant="primary">Click me</Button>`}
-          />
-        </Stack>
-      </Card>
+<DesignSystemProvider forceEngine="modern" tenantSlug="bithire">
+  <Button variant="primary" />
+</DesignSystemProvider>`}
+            />
+          </Stack>
+        </Card>
 
-      {/* Tenant branding */}
-      <Card>
-        <Stack spacing="md">
-          <Text as={"h2" as any} size="xl" weight="bold">
-            Tenant Branding
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Each tenant can define a BrandTheme that controls approximately 140
-            CSS custom properties. The theme system uses a layered merge chain
-            where each layer can override values from the previous one.
-          </Text>
-
-          {/* Merge chain */}
-          <Box>
-            <Text
-              size="xs"
-              weight="semibold"
-              style={{ color: 'var(--ds-color-text-muted)', marginBottom: tokens.spacing[2] }}
-            >
-              Merge Chain
+        <Card style={{ padding: tokens.spacing[6] }}>
+          <Stack spacing="md">
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              Guardrails
             </Text>
-            <Stack spacing="xs">
-              {[
-                { label: 'DS base', desc: 'Default token values for all CSS variables' },
-                { label: 'Engine overrides', desc: 'borderRadius, shadows, surface, motion per engine' },
-                { label: 'Vertical baseline', desc: 'Platform/BitHire/Evnto preset overrides' },
-                { label: 'BrandTheme', desc: 'Tenant-specific customization (~140 CSS variables)' },
-              ].map((item, i) => (
-                <Flex key={i} align="center" gap={12}>
-                  <Box
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: '50%',
-                      background: 'var(--ds-color-primary-100)',
-                      color: 'var(--ds-color-primary-700)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      fontSize: '0.65rem',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {i + 1}
-                  </Box>
-                  <Box>
-                    <Text size="sm" weight="medium">{item.label}</Text>
-                    <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>{item.desc}</Text>
-                  </Box>
-                </Flex>
-              ))}
-            </Stack>
-          </Box>
+            <DocsCompactList
+              items={WARNINGS.map((warning) => ({
+                title: warning,
+                tone: 'warning',
+              }))}
+            />
+          </Stack>
+        </Card>
+      </Box>
 
-          <CodeBlock
-            title="CSS variable pattern"
-            language="tsx"
-            code={`// Components read component-specific CSS vars with generic fallback
-// This enables per-component customization via BrandTheme
-
-background: 'var(--ds-button-primary-bg, var(--ds-color-primary))'
-border: 'var(--ds-input-border, var(--ds-color-border))'
-color: 'var(--ds-card-title-color, var(--ds-color-text-primary))'
-
-// When the component-specific var is not set,
-// the generic token is used automatically`}
-          />
-        </Stack>
-      </Card>
-
-      {/* Ownership model */}
-      <Card>
+      <Card style={{ padding: tokens.spacing[6] }}>
         <Stack spacing="md">
-          <Text as={"h2" as any} size="xl" weight="bold">
-            Ownership Model
+          <Text as={"h2" as any} size="lg" weight="semibold">
+            Ownership split
           </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            The core rule: capability is shared, form is specialized. Before
-            adding a new component, ask: &quot;Could another app use this without
-            knowing what a tenant, candidate, role, company, interview, or event
-            is?&quot; If yes, it belongs in the DS. If no, it belongs in the app.
-          </Text>
-
           <Box
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: tokens.spacing[4],
             }}
           >
@@ -436,81 +593,45 @@ color: 'var(--ds-card-title-color, var(--ds-color-text-primary))'
                 key={section.belongs}
                 style={{
                   padding: tokens.spacing[4],
-                  borderRadius: tokens.borderRadius.md,
-                  background: section.belongs === 'Design System'
-                    ? 'var(--ds-color-success-50)'
-                    : 'var(--ds-color-warning-50)',
+                  borderRadius: tokens.borderRadius.xl,
+                  background:
+                    section.tone === 'success'
+                      ? 'var(--ds-color-success-bg)'
+                      : 'var(--ds-color-warning-bg)',
                   border: `1px solid ${
-                    section.belongs === 'Design System'
-                      ? 'var(--ds-color-success-200)'
-                      : 'var(--ds-color-warning-200)'
+                    section.tone === 'success'
+                      ? 'var(--ds-color-success-border)'
+                      : 'var(--ds-color-warning-border)'
                   }`,
                 }}
               >
                 <Text
                   size="sm"
                   weight="bold"
-                  style={{
-                    color: section.belongs === 'Design System'
-                      ? 'var(--ds-color-success-700)'
-                      : 'var(--ds-color-warning-700)',
-                    marginBottom: tokens.spacing[3],
-                  }}
+                  style={{ color: 'var(--ds-color-text-primary)' }}
                 >
                   Belongs in {section.belongs}
                 </Text>
-                <Stack spacing={4}>
-                  {section.items.map((item, i) => (
-                    <Flex key={i} align="baseline" gap={8}>
-                      <Text
-                        size="xs"
-                        style={{
-                          color: section.belongs === 'Design System'
-                            ? 'var(--ds-color-success-500)'
-                            : 'var(--ds-color-warning-500)',
-                        }}
-                      >
-                        -
-                      </Text>
-                      <Text
-                        size="xs"
-                        style={{
-                          color: section.belongs === 'Design System'
-                            ? 'var(--ds-color-success-700)'
-                            : 'var(--ds-color-warning-700)',
-                        }}
-                      >
+                <Stack spacing={6} style={{ marginTop: tokens.spacing[3] }}>
+                  {section.items.map((item) => (
+                    <Box
+                      key={item}
+                      style={{
+                        padding: '8px 10px',
+                        borderRadius: 12,
+                        background: 'rgba(255,255,255,0.38)',
+                        border: '1px solid rgba(255,255,255,0.28)',
+                      }}
+                    >
+                      <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
                         {item}
                       </Text>
-                    </Flex>
+                    </Box>
                   ))}
                 </Stack>
               </Box>
             ))}
           </Box>
-        </Stack>
-      </Card>
-
-      {/* Anti-patterns */}
-      <Card>
-        <Stack spacing="md">
-          <Text as={"h3" as any} size="lg" weight="semibold">
-            Anti-Patterns to Avoid
-          </Text>
-          <Stack spacing="xs">
-            {[
-              'Do not duplicate the same task widget per app if the behavior is the same',
-              'Do not move page chrome into patterns/ if it mainly organizes a screen',
-              'Do not move full route/page business logic into surfaces/',
-              'Do not promote product-specific components into the DS just because they are used twice',
-              'Prefer customizing with config, slots, or structures before creating app-specific rewrites',
-            ].map((item, i) => (
-              <Flex key={i} align="baseline" gap={8}>
-                <Text size="sm" style={{ color: 'var(--ds-color-error-500)' }}>-</Text>
-                <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{item}</Text>
-              </Flex>
-            ))}
-          </Stack>
         </Stack>
       </Card>
     </Stack>

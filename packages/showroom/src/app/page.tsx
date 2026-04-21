@@ -1,409 +1,1291 @@
-'use client';
+import type { CSSProperties, ElementType, ReactNode } from 'react';
+import type { Metadata } from 'next';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import {
+  ArrowUpRight,
+  Blocks,
+  Braces,
+  Layers3,
+  PartyPopper,
+  ShieldCheck,
+  Waypoints,
+  Workflow,
+} from 'lucide-react';
+import {
+  ArrowRightIcon,
+  BriefcaseIcon,
+  Building2Icon,
+  ChevronRightIcon,
+} from '@rottay/design-system/icons';
+import { charts } from '@/data/registry/charts';
+import { icons } from '@/data/registry/icons';
+import { patterns } from '@/data/registry/patterns';
+import { primitives } from '@/data/registry/primitives';
+import { structures } from '@/data/registry/structures';
+import { surfaces } from '@/data/registry/surfaces';
+import { Box, Card, Flex, Stack, Text } from '@rottay/design-system';
+import { LandingRuntimePanel } from './landing-runtime-panel';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Layers, Puzzle, LayoutGrid, Monitor, Palette, PartyPopper } from 'lucide-react';
-import { Building2Icon, BriefcaseIcon, ArrowRightIcon, ChevronRightIcon } from '@rottay/design-system/icons';
-import { primitives, patterns, structures, surfaces, charts, icons } from '@/data/registry';
+export const metadata: Metadata = {
+  title: 'Rottay Design System',
+  description:
+    'Presentation entry for the Rottay Design System with direct routes into foundations, architecture, playground tooling, and the component catalog.',
+};
 
-/* ------------------------------------------------------------------ */
-/*  Animated counter hook                                              */
-/* ------------------------------------------------------------------ */
-function useCountUp(target: number, duration = 1400) {
-  const [value, setValue] = useState(0);
-  const [started, setStarted] = useState(false);
+const catalogTotal =
+  primitives.length +
+  patterns.length +
+  structures.length +
+  surfaces.length +
+  charts.length +
+  icons.length;
 
-  useEffect(() => {
-    if (!started) return;
-    let raf: number;
-    const t0 = performance.now();
-    const tick = (now: number) => {
-      const progress = Math.min((now - t0) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(target * ease));
-      if (progress < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [started, target, duration]);
+const heroMetrics = [
+  {
+    value: `${catalogTotal}`,
+    label: 'Catalog entries',
+    detail: 'Coverage across components, charts, icons, and full-page recipes.',
+  },
+  {
+    value: '3',
+    label: 'Engines',
+    detail: 'Classic, Modern, and Rustic render the same component contract.',
+  },
+  {
+    value: '3',
+    label: 'Verticals',
+    detail: 'Platform, BitHire, and Evnto keep distinct voices without forks.',
+  },
+  {
+    value: '4',
+    label: 'Architecture tiers',
+    detail: 'Primitives, patterns, structures, and surfaces keep the catalog legible.',
+  },
+] as const;
 
-  return { value, start: () => setStarted(true) };
-}
+const proofCards = [
+  {
+    label: 'Story lens',
+    title: 'Overview before inventory',
+    detail:
+      'The front door should explain the system shape before the catalog depth takes over.',
+  },
+  {
+    label: 'Runtime lens',
+    title: 'Runtime is explained, not reenacted',
+    detail:
+      'The landing stays visually stable while playground, foundations, and live docs prove real tenant and engine switching.',
+  },
+  {
+    label: 'Handoff lens',
+    title: 'Routes stay obvious',
+    detail:
+      'Foundations, architecture, playground, and catalog stay one click away from the hero.',
+  },
+] as const;
 
-/* ------------------------------------------------------------------ */
-/*  Stat pill                                                          */
-/* ------------------------------------------------------------------ */
-function StatPill({ label, count }: { label: string; count: number }) {
-  const counter = useCountUp(count);
-
-  useEffect(() => {
-    const timer = setTimeout(() => counter.start(), 600);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <div className="flex flex-col items-center gap-1 px-4 py-3 sm:px-6">
-      <span className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-        {counter.value}
-      </span>
-      <span className="text-xs tracking-widest text-neutral-400 uppercase">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Tier card (Architecture section)                                   */
-/* ------------------------------------------------------------------ */
-const tiers = [
+const tierCards: Array<{
+  name: string;
+  count: number;
+  description: string;
+  examples: string;
+  href: string;
+  icon: ElementType;
+}> = [
   {
     name: 'Primitives',
     count: primitives.length,
-    description: 'Engine-switched leaf components. The smallest reusable bricks.',
-    color: 'from-blue-500 to-cyan-400',
-    icon: Layers,
+    description: 'Leaf components with stable APIs and engine-specific rendering.',
+    examples: 'Button, Input, Card, Modal, Tabs, Badge, Text.',
+    href: '/primitives',
+    icon: Layers3,
   },
   {
     name: 'Patterns',
     count: patterns.length,
-    description: 'Task-level compositions. Reusable machines made of bricks.',
-    color: 'from-violet-500 to-purple-400',
-    icon: Puzzle,
+    description: 'Reusable task modules that package repeatable workflows.',
+    examples: 'Data tables, form builders, kanban boards, stats panels.',
+    href: '/patterns',
+    icon: Workflow,
   },
   {
     name: 'Structures',
     count: structures.length,
-    description: 'Page-structure chrome. The frame around the machine.',
-    color: 'from-amber-500 to-orange-400',
-    icon: LayoutGrid,
+    description: 'Screen chrome and layout context around reusable work.',
+    examples: 'Headers, command bars, record frames, dashboard scaffolds.',
+    href: '/structures',
+    icon: Waypoints,
   },
   {
     name: 'Surfaces',
     count: surfaces.length,
-    description: 'Declarative page recipes. The whole room layout.',
-    color: 'from-emerald-500 to-teal-400',
-    icon: Monitor,
+    description: 'Declarative page recipes that compose the system into a screen.',
+    examples: 'ListSurface, DashboardSurface, FormSurface, workspace shells.',
+    href: '/surfaces',
+    icon: Braces,
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Engine data                                                        */
-/* ------------------------------------------------------------------ */
-const engines = [
+const engineCards: Array<{
+  name: string;
+  foundation: string;
+  personality: string;
+  summary: string;
+  traits: string[];
+}> = [
   {
     name: 'Classic',
-    runtime: 'Ant Design',
-    description:
-      'Enterprise density. Refined controls. Battle-tested component library with full accessibility out of the box.',
-    accent: '#1677ff',
-    bg: 'bg-[#111827]',
-    border: 'border-blue-500/30',
+    foundation: 'Ant Design 5.21',
+    personality: 'Structured, precise, enterprise-grade.',
+    summary:
+      'Best when the product needs disciplined density, professional chrome, and back-office confidence.',
+    traits: ['Tighter radius', 'Measured motion', 'Corporate depth'],
   },
   {
     name: 'Modern',
-    runtime: 'DaisyUI',
-    description:
-      'Utility-first styling. Crisp spacing. A Tailwind-native engine for teams that think in classes.',
-    accent: '#a78bfa',
-    bg: 'bg-[#111827]',
-    border: 'border-violet-500/30',
+    foundation: 'Tailwind / DaisyUI',
+    personality: 'Rounded, spacious, contemporary.',
+    summary:
+      'Generous rhythm and softer silhouettes turn the same contract into a friendlier product posture.',
+    traits: ['Soft corners', 'Expressive depth', 'SaaS-ready feel'],
   },
   {
     name: 'Rustic',
-    runtime: 'Vanilla CSS',
-    description:
-      'Zero dependencies. Pure CSS variables. The lightest engine for maximum control and smallest bundles.',
-    accent: '#f59e0b',
-    bg: 'bg-[#111827]',
-    border: 'border-amber-500/30',
+    foundation: 'Vanilla CSS',
+    personality: 'Quiet, elegant, intentionally minimal.',
+    summary:
+      'Lower visual noise and whisper-light shadows keep the product feeling premium without extra chrome.',
+    traits: ['Minimal radius', 'Whisper shadows', 'Low-noise UI'],
   },
-] as const;
+];
 
-/* ------------------------------------------------------------------ */
-/*  Vertical data                                                      */
-/* ------------------------------------------------------------------ */
-const verticals = [
+const verticalCards: Array<{
+  name: string;
+  theme: string;
+  engine: string;
+  description: string;
+  modules: string[];
+  icon: ElementType;
+  href: string;
+}> = [
   {
     name: 'Platform',
+    theme: 'Rottay',
+    engine: 'Classic engine',
     description:
-      'Admin portal for tenant management, billing, compliance, and system configuration.',
-    color: '#3b82f6',
-    gradient: 'from-blue-600 to-blue-400',
+      'Admin operations for tenants, billing, configuration, and compliance with denser enterprise ergonomics.',
+    modules: ['Tenancy', 'Billing', 'Operations'],
     icon: Building2Icon,
+    href: '/verticals/platform',
   },
   {
     name: 'BitHire',
+    theme: 'BitHire',
+    engine: 'Modern engine',
     description:
-      'AI-powered recruiting. Pipeline management, candidate tracking, and hiring workflows.',
-    color: '#8b5cf6',
-    gradient: 'from-violet-600 to-violet-400',
+      'Recruiter dashboards, pipelines, and scorecards with clearer hierarchy and a friendlier SaaS cadence.',
+    modules: ['Pipelines', 'Scorecards', 'Hiring flows'],
     icon: BriefcaseIcon,
+    href: '/verticals/bithire',
   },
   {
     name: 'Evnto',
+    theme: 'Evnto',
+    engine: 'Modern engine',
     description:
-      'Event management at scale. Ticketing, venue operations, and attendee engagement.',
-    color: '#f97316',
-    gradient: 'from-orange-600 to-orange-400',
+      'Venue, ticketing, and attendee operations that need more energy, richer color, and event-oriented surfaces.',
+    modules: ['Ticketing', 'Venues', 'Engagement'],
     icon: PartyPopper,
+    href: '/verticals/evnto',
+  },
+];
+
+const ownershipColumns = [
+  {
+    title: 'Belongs in the design system',
+    icon: ShieldCheck,
+    items: [
+      'Shared UI primitives and task-level patterns',
+      'Page chrome and full-screen surface recipes',
+      'Engine, theme, and token-driven visual behavior',
+      'Cross-product charts, icons, and interaction rules',
+    ],
+  },
+  {
+    title: 'Stays in consuming products',
+    icon: Blocks,
+    items: [
+      'Business rules, permissions, and domain decisions',
+      'Route-specific data fetching and orchestration',
+      'Product copy, semantics, and workflow exceptions',
+      'Entity-specific mapping from APIs into DS contracts',
+    ],
   },
 ] as const;
 
-/* ================================================================== */
-/*  Page                                                               */
-/* ================================================================== */
-export default function HomePage() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+const routeCards = [
+  {
+    label: 'Foundations',
+    href: '/foundations',
+    description: 'Tokens, engines, themes, and the runtime baseline.',
+  },
+  {
+    label: 'Architecture',
+    href: '/developers/architecture',
+    description: 'Ownership model, tiers, and integration guidance.',
+  },
+  {
+    label: 'Playground',
+    href: '/playground',
+    description: 'Live engine and tenant comparison on the real showroom runtime.',
+  },
+  {
+    label: 'Catalog',
+    href: '/primitives',
+    description: 'Primitives, patterns, structures, and surfaces.',
+  },
+] as const;
 
-  const fade = mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4';
+const heroLinkCards = [
+  { label: 'Foundations', href: '/foundations' },
+  { label: 'Architecture', href: '/developers/architecture' },
+  { label: 'Playground', href: '/playground' },
+  { label: 'Catalog', href: '/primitives' },
+] as const;
+
+const landingTheme: CSSProperties = {
+  ['--landing-canvas' as string]: '#f3ede3',
+  ['--landing-canvas-strong' as string]: '#ebe2d4',
+  ['--landing-surface' as string]: '#fffdfa',
+  ['--landing-surface-strong' as string]: '#f7f1e8',
+  ['--landing-panel' as string]: '#f3ece2',
+  ['--landing-panel-strong' as string]: '#ede2d3',
+  ['--landing-border' as string]: 'rgba(36, 30, 24, 0.12)',
+  ['--landing-border-strong' as string]: 'rgba(36, 30, 24, 0.18)',
+  ['--landing-ink' as string]: '#18130f',
+  ['--landing-muted' as string]: '#5f5549',
+  ['--landing-subtle' as string]: '#85796c',
+  ['--landing-link' as string]: '#2f271f',
+  ['--landing-shadow-sm' as string]: '0 16px 36px rgba(27, 22, 17, 0.08)',
+  ['--landing-shadow-md' as string]: '0 18px 44px rgba(27, 22, 17, 0.10)',
+  ['--landing-shadow-lg' as string]: '0 24px 58px rgba(27, 22, 17, 0.12)',
+};
+
+const border = '1px solid var(--landing-border, rgba(36, 30, 24, 0.12))';
+const borderStrong = '1px solid var(--landing-border-strong, rgba(36, 30, 24, 0.18))';
+
+function LandingBadge({
+  children,
+  tone = 'default',
+}: {
+  children: ReactNode;
+  tone?: 'default' | 'strong';
+}) {
+  const isStrong = tone === 'strong';
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">
-      {/* ---------------------------------------------------------- */}
-      {/*  HERO                                                       */}
-      {/* ---------------------------------------------------------- */}
-      <section className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden px-6 text-center">
-        {/* Background grid */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+    <Box
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: 30,
+        padding: '6px 12px',
+        borderRadius: 999,
+        border: isStrong ? '1px solid rgba(255, 255, 255, 0.12)' : border,
+        background: isStrong ? 'rgba(24, 19, 15, 0.92)' : 'rgba(255, 255, 255, 0.72)',
+        color: isStrong ? '#fffaf5' : 'var(--landing-ink, #18130f)',
+        boxShadow: isStrong ? '0 10px 24px rgba(27, 22, 17, 0.10)' : 'none',
+        backdropFilter: 'blur(14px)',
+      }}
+    >
+      <Text
+        as={"span" as any}
+        size="xs"
+        weight="semibold"
+        style={{ display: 'block', color: 'inherit', letterSpacing: '0.02em' }}
+      >
+        {children}
+      </Text>
+    </Box>
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  title,
+  body,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <Stack spacing={8} style={{ maxWidth: 800 }}>
+      <Text
+        size="xs"
+        weight="semibold"
+        style={{
+          color: 'var(--landing-subtle, #85796c)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.08em',
+        }}
+      >
+        {eyebrow}
+      </Text>
+      <Text
+        as={"h2" as any}
+        size="xl"
+        weight="bold"
+        style={{ color: 'var(--landing-ink, #18130f)', letterSpacing: '-0.04em' }}
+      >
+        {title}
+      </Text>
+      <Text
+        size="sm"
+        style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.6 }}
+      >
+        {body}
+      </Text>
+    </Stack>
+  );
+}
+
+function StatTile({
+  value,
+  label,
+  detail,
+}: {
+  value: string;
+  label: string;
+  detail: string;
+}) {
+  return (
+    <Box
+      style={{
+        padding: 16,
+        borderRadius: 20,
+        border,
+        background:
+          'linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, var(--landing-surface, #fffdfa) 100%)',
+        boxShadow: 'var(--landing-shadow-sm, 0 16px 36px rgba(27, 22, 17, 0.08))',
+      }}
+    >
+      <Stack spacing={6}>
+        <Text
+          size="xs"
+          weight="semibold"
           style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.4) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
+            color: 'var(--landing-subtle, #85796c)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
           }}
-        />
+        >
+          {label}
+        </Text>
+        <Text
+          size={value.length > 8 ? 'sm' : 'lg'}
+          weight="bold"
+          style={{ color: 'var(--landing-ink, #18130f)', lineHeight: 1.15 }}
+        >
+          {value}
+        </Text>
+        <Text
+          size="xs"
+          style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.55 }}
+        >
+          {detail}
+        </Text>
+      </Stack>
+    </Box>
+  );
+}
 
-        {/* Radial glow */}
-        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-blue-600/10 via-violet-600/10 to-transparent blur-3xl" />
+function PillLink({
+  href,
+  children,
+  primary = false,
+}: {
+  href: string;
+  children: ReactNode;
+  primary?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        padding: '10px 14px',
+        borderRadius: 999,
+        textDecoration: 'none',
+        fontWeight: 600,
+        color: primary ? '#fffaf5' : 'var(--landing-ink, #18130f)',
+        background: primary ? 'rgba(24, 19, 15, 0.92)' : 'rgba(255, 255, 255, 0.72)',
+        border: primary ? '1px solid rgba(255, 255, 255, 0.12)' : border,
+        boxShadow: primary
+          ? '0 12px 28px rgba(27, 22, 17, 0.14)'
+          : '0 8px 18px rgba(27, 22, 17, 0.04)',
+        backdropFilter: 'blur(14px)',
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
 
-        <div className={`relative z-10 max-w-4xl transition-all duration-700 ease-out ${fade}`}>
-          <p className="mb-4 text-sm tracking-[0.25em] text-neutral-400 uppercase">
-            @rottay/design-system
-          </p>
-
-          <h1 className="mb-6 text-4xl leading-tight font-bold tracking-tight sm:text-5xl md:text-6xl">
-            One Design System.
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-amber-400 bg-clip-text text-transparent">
-              Four Engines.
-            </span>{' '}
-            Every Brand.
-          </h1>
-
-          <p className="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-neutral-400 sm:text-lg">
-            A multi-tenant, multi-engine design system built on a 4-tier architecture.
-            Ship three verticals from a single component library -- with runtime engine
-            switching, 140-variable brand theming, and zero forks.
-          </p>
-
-          {/* CTA */}
-          <div className="mb-16 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/foundations"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200"
-            >
-              Explore the Showroom
-              <ArrowRightIcon className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/foundations"
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-6 py-3 text-sm font-semibold text-neutral-300 transition hover:border-neutral-500 hover:text-white"
-            >
-              Read the Docs
-              <ChevronRightIcon className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="inline-flex flex-wrap items-center justify-center divide-x divide-neutral-800 rounded-xl border border-neutral-800 bg-neutral-900/60 backdrop-blur-sm">
-            <StatPill label="Primitives" count={primitives.length} />
-            <StatPill label="Patterns" count={patterns.length} />
-            <StatPill label="Structures" count={structures.length} />
-            <StatPill label="Surfaces" count={surfaces.length} />
-            <StatPill label="Charts" count={charts.length} />
-            <StatPill label="Icons" count={icons.length} />
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------- */}
-      {/*  ARCHITECTURE                                                */}
-      {/* ---------------------------------------------------------- */}
-      <section className="bg-neutral-50 px-6 py-24 text-neutral-900">
-        <div className="mx-auto max-w-6xl">
-          <p className="mb-2 text-center text-sm tracking-[0.2em] text-neutral-500 uppercase">
-            Architecture
-          </p>
-          <h2 className="mb-4 text-center text-3xl font-bold tracking-tight sm:text-4xl">
-            Four Tiers. One Mental Model.
-          </h2>
-          <p className="mx-auto mb-14 max-w-2xl text-center text-neutral-500">
-            Every component belongs to exactly one tier. Primitives compose into patterns,
-            structures frame them on a page, and surfaces describe the whole screen.
-          </p>
-
-          {/* Tier flow */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {tiers.map((tier, i) => {
-              const Icon = tier.icon;
-              return (
-                <div
-                  key={tier.name}
-                  className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white p-6 transition hover:shadow-lg"
-                >
-                  {/* Gradient top bar */}
-                  <div
-                    className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${tier.color}`}
-                  />
-                  <div className="mb-4 flex items-center gap-3">
-                    <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${tier.color} text-white`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <span className="text-2xl font-bold">{tier.count}</span>
-                  </div>
-                  <h3 className="mb-1 text-lg font-semibold">{tier.name}</h3>
-                  <p className="text-sm leading-relaxed text-neutral-500">
-                    {tier.description}
-                  </p>
-
-                  {/* Arrow connector (hidden on last) */}
-                  {i < tiers.length - 1 && (
-                    <div className="absolute top-1/2 -right-3 z-10 hidden -translate-y-1/2 text-neutral-300 lg:block">
-                      <ChevronRightIcon className="h-5 w-5" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------- */}
-      {/*  ENGINES                                                     */}
-      {/* ---------------------------------------------------------- */}
-      <section className="bg-[#0a0a0a] px-6 py-24">
-        <div className="mx-auto max-w-6xl">
-          <p className="mb-2 text-center text-sm tracking-[0.2em] text-neutral-500 uppercase">
-            Runtime Engines
-          </p>
-          <h2 className="mb-4 text-center text-3xl font-bold tracking-tight sm:text-4xl">
-            Same Code. Four Faces.
-          </h2>
-          <p className="mx-auto mb-14 max-w-xl text-center text-neutral-500">
-            Write your component once. The active engine renders it with a completely
-            different visual identity -- at runtime, with zero code changes.
-          </p>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {engines.map((engine) => (
-              <div
-                key={engine.name}
-                className={`relative overflow-hidden rounded-2xl border ${engine.border} ${engine.bg} p-6 transition hover:border-opacity-60`}
-              >
-                {/* Accent dot */}
-                <div
-                  className="mb-5 h-3 w-3 rounded-full"
-                  style={{ backgroundColor: engine.accent }}
-                />
-                <h3 className="mb-1 text-xl font-semibold text-white">{engine.name}</h3>
-                <p className="mb-3 text-xs tracking-wider text-neutral-500 uppercase">
-                  {engine.runtime}
-                </p>
-                <p className="text-sm leading-relaxed text-neutral-400">
-                  {engine.description}
-                </p>
-
-                {/* Decorative preview bar */}
-                <div className="mt-6 flex gap-2">
-                  <div
-                    className="h-8 flex-1 rounded-md opacity-80"
-                    style={{ backgroundColor: engine.accent }}
-                  />
-                  <div className="h-8 w-20 rounded-md bg-neutral-800" />
-                  <div className="h-8 w-10 rounded-md bg-neutral-800" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------- */}
-      {/*  VERTICALS                                                   */}
-      {/* ---------------------------------------------------------- */}
-      <section className="bg-neutral-50 px-6 py-24 text-neutral-900">
-        <div className="mx-auto max-w-6xl">
-          <p className="mb-2 text-center text-sm tracking-[0.2em] text-neutral-500 uppercase">
-            Verticals
-          </p>
-          <h2 className="mb-4 text-center text-3xl font-bold tracking-tight sm:text-4xl">
-            Three Products. One System. Zero Forks.
-          </h2>
-          <p className="mx-auto mb-14 max-w-xl text-center text-neutral-500">
-            Each vertical defines its own brand identity -- colors, typography, motion,
-            and product profile -- without duplicating a single component.
-          </p>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {verticals.map((v) => {
-              const Icon = v.icon;
-              return (
-                <div
-                  key={v.name}
-                  className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white p-6 transition hover:shadow-lg"
-                >
-                  {/* Gradient accent */}
-                  <div
-                    className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${v.gradient}`}
-                  />
-                  <div
-                    className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
-                    style={{ backgroundColor: `${v.color}14` }}
-                  >
-                    <Icon className="h-6 w-6" style={{ color: v.color }} />
-                  </div>
-                  <h3 className="mb-2 text-lg font-semibold">{v.name}</h3>
-                  <p className="text-sm leading-relaxed text-neutral-500">{v.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------- */}
-      {/*  CTA FOOTER                                                  */}
-      {/* ---------------------------------------------------------- */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] to-[#111] px-6 py-24 text-center">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-blue-600/5 to-transparent" />
-
-        <div className="relative z-10 mx-auto max-w-2xl">
-          <Palette className="mx-auto mb-6 h-10 w-10 text-neutral-600" />
-          <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Ready to explore?
-          </h2>
-          <p className="mb-8 text-neutral-500">
-            Browse every primitive, pattern, structure, and surface in the interactive showroom.
-          </p>
-          <Link
-            href="/foundations"
-            className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200"
+export default function HomePage() {
+  return (
+    <main
+      style={{
+        ...landingTheme,
+        minHeight: '100vh',
+        color: 'var(--landing-ink, #18130f)',
+        background:
+          'radial-gradient(circle at top left, rgba(201, 185, 163, 0.24), transparent 28%), radial-gradient(circle at 92% 8%, rgba(82, 67, 52, 0.10), transparent 22%), linear-gradient(180deg, var(--landing-canvas, #f3ede3) 0%, var(--landing-canvas-strong, #ebe2d4) 100%)',
+        padding: 'clamp(20px, 3vw, 36px)',
+      }}
+    >
+      <Box style={{ maxWidth: 1440, margin: '0 auto' }}>
+        <Stack spacing="xl">
+          <Box
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 16,
+              flexWrap: 'wrap',
+            }}
           >
-            Enter the Showroom
-            <ArrowRightIcon className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
+            <Link
+              href="/"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 12,
+                textDecoration: 'none',
+                color: 'var(--landing-ink, #18130f)',
+              }}
+            >
+              <Box
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 14,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, #18130f 0%, #41362c 100%)',
+                  color: '#fffaf5',
+                  fontWeight: 800,
+                  boxShadow: '0 12px 24px rgba(27, 22, 17, 0.18)',
+                }}
+              >
+                R
+              </Box>
+              <Box>
+                <Text size="sm" weight="bold" style={{ color: 'var(--landing-ink, #18130f)' }}>
+                  Rottay Design System
+                </Text>
+                <Text size="xs" style={{ color: 'var(--landing-muted, #5f5549)' }}>
+                  Presentation entry with a clean handoff into docs
+                </Text>
+              </Box>
+            </Link>
 
-      {/* Footer bar */}
-      <footer className="border-t border-neutral-800 bg-[#0a0a0a] px-6 py-6 text-center text-xs text-neutral-600">
-        @rottay/design-system -- Built for multi-tenant, multi-engine product suites.
-      </footer>
+            <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+              {heroLinkCards.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '8px 12px',
+                    borderRadius: 999,
+                    textDecoration: 'none',
+                    border,
+                    background: 'rgba(255, 255, 255, 0.66)',
+                    color: 'var(--landing-ink, #18130f)',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    backdropFilter: 'blur(12px)',
+                  }}
+                >
+                  {item.label}
+                  <ArrowUpRight size={14} />
+                </Link>
+              ))}
+            </Flex>
+          </Box>
+
+          <Card
+            style={{
+              padding: 'clamp(22px, 4vw, 34px)',
+              borderRadius: 32,
+              border,
+              background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.84) 0%, var(--landing-surface, #fffdfa) 100%)',
+              boxShadow: 'var(--landing-shadow-lg, 0 24px 58px rgba(27, 22, 17, 0.12))',
+              overflow: 'hidden',
+              position: 'relative',
+            }}
+          >
+            <Box
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                pointerEvents: 'none',
+                background:
+                  'radial-gradient(circle at top right, rgba(119, 100, 79, 0.10), transparent 30%), radial-gradient(circle at bottom left, rgba(193, 176, 151, 0.18), transparent 28%)',
+              }}
+            />
+
+            <Box style={{ position: 'relative', zIndex: 1 }}>
+              <Box
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
+                  gap: 24,
+                  alignItems: 'start',
+                }}
+              >
+                <Stack spacing="lg">
+                  <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+                    <LandingBadge tone="strong">Design system front door</LandingBadge>
+                    <LandingBadge>Editorial landing</LandingBadge>
+                    <LandingBadge>Product-ready</LandingBadge>
+                  </Flex>
+
+                  <Stack spacing="sm">
+                    <Text
+                      as={"h1" as any}
+                      size="2xl"
+                      weight="bold"
+                      style={{
+                        color: 'var(--landing-ink, #18130f)',
+                        letterSpacing: '-0.05em',
+                        maxWidth: 760,
+                        lineHeight: 0.96,
+                      }}
+                    >
+                      A premium front door for a multi-engine design system.
+                    </Text>
+                    <Text
+                      size="md"
+                      style={{
+                        color: 'var(--landing-muted, #5f5549)',
+                        maxWidth: 760,
+                        lineHeight: 1.65,
+                      }}
+                    >
+                      This landing page should feel like a product argument: what the
+                      system covers, where runtime is proven, and which route teams should
+                      take next.
+                    </Text>
+                  </Stack>
+
+                  <Flex gap={10} style={{ flexWrap: 'wrap' }}>
+                    <PillLink href="/foundations" primary>
+                      Enter foundations
+                      <ArrowRightIcon size={14} />
+                    </PillLink>
+                    <PillLink href="/playground">
+                      Open playground
+                      <ChevronRightIcon size={14} />
+                    </PillLink>
+                    <PillLink href="/developers/architecture">
+                      Read architecture
+                      <ChevronRightIcon size={14} />
+                    </PillLink>
+                  </Flex>
+
+                  <Box
+                    style={{
+                      padding: 16,
+                      borderRadius: 24,
+                      background:
+                        'linear-gradient(180deg, rgba(255, 255, 255, 0.68) 0%, var(--landing-panel, #f3ece2) 100%)',
+                      border,
+                    }}
+                  >
+                    <Stack spacing={10}>
+                      <Text
+                        size="xs"
+                        weight="semibold"
+                        style={{
+                          color: 'var(--landing-subtle, #85796c)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.08em',
+                        }}
+                      >
+                        Runtime proof
+                      </Text>
+                      <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+                        {[
+                          'Landing stays stable',
+                          'Playground stays live',
+                          'Docs prove the runtime',
+                        ].map((item) => (
+                          <LandingBadge key={item}>{item}</LandingBadge>
+                        ))}
+                      </Flex>
+                    </Stack>
+                  </Box>
+
+                  <Box
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                      gap: 12,
+                    }}
+                  >
+                    {heroMetrics.map((metric) => (
+                      <StatTile
+                        key={metric.label}
+                        value={metric.value}
+                        label={metric.label}
+                        detail={metric.detail}
+                      />
+                    ))}
+                  </Box>
+                </Stack>
+
+                <LandingRuntimePanel />
+              </Box>
+            </Box>
+          </Card>
+
+          <Box
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))',
+              gap: 16,
+            }}
+          >
+            {proofCards.map((card, index) => (
+              <Card
+                key={card.title}
+                style={{
+                  padding: 20,
+                  borderRadius: 24,
+                  border,
+                  background:
+                    index === 1
+                      ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.86), var(--landing-surface-strong, #f7f1e8))'
+                      : 'linear-gradient(180deg, rgba(255, 255, 255, 0.74), var(--landing-surface, #fffdfa))',
+                  boxShadow: 'var(--landing-shadow-sm, 0 16px 36px rgba(27, 22, 17, 0.08))',
+                }}
+              >
+                <Stack spacing={8}>
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{
+                      color: 'var(--landing-subtle, #85796c)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    {card.label}
+                  </Text>
+                  <Text
+                    as={"h3" as any}
+                    size="lg"
+                    weight="semibold"
+                    style={{ color: 'var(--landing-ink, #18130f)', lineHeight: 1.15 }}
+                  >
+                    {card.title}
+                  </Text>
+                  <Text
+                    size="sm"
+                    style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.6 }}
+                  >
+                    {card.detail}
+                  </Text>
+                </Stack>
+              </Card>
+            ))}
+          </Box>
+
+          <Card
+            style={{
+              padding: 'clamp(20px, 3vw, 28px)',
+              borderRadius: 28,
+              border,
+              background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.80) 0%, var(--landing-surface, #fffdfa) 100%)',
+              boxShadow: 'var(--landing-shadow-md, 0 18px 44px rgba(27, 22, 17, 0.10))',
+            }}
+          >
+            <Stack spacing="md">
+              <SectionHeader
+                eyebrow="System shape"
+                title="The catalog is still the system, but the landing should frame it like a product."
+                body="Four tiers keep the model readable, while ownership and runtime guidance make clear what the DS owns and how teams should inspect live behavior."
+              />
+
+              <Box
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
+                  gap: 16,
+                }}
+              >
+                {tierCards.map((tier) => {
+                  const Icon = tier.icon;
+
+                  return (
+                    <Card
+                      key={tier.name}
+                      style={{
+                        padding: 20,
+                        borderRadius: 24,
+                        border,
+                        background:
+                          'linear-gradient(180deg, rgba(255, 255, 255, 0.74), var(--landing-surface, #fffdfa))',
+                        boxShadow: 'var(--landing-shadow-sm, 0 16px 36px rgba(27, 22, 17, 0.08))',
+                      }}
+                    >
+                      <Stack spacing="md">
+                        <Flex
+                          align="center"
+                          justify="between"
+                          gap={12}
+                          style={{ flexWrap: 'wrap' }}
+                        >
+                          <Flex align="center" gap={12}>
+                            <Box
+                              style={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: 16,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                background: 'var(--landing-panel-strong, #ede2d3)',
+                                color: 'var(--landing-ink, #18130f)',
+                                border: borderStrong,
+                              }}
+                            >
+                              <Icon size={18} />
+                            </Box>
+                            <Box>
+                              <Text
+                                size="xs"
+                                style={{ color: 'var(--landing-subtle, #85796c)' }}
+                              >
+                                {tier.count} items
+                              </Text>
+                              <Text
+                                as={"h3" as any}
+                                size="lg"
+                                weight="semibold"
+                                style={{ color: 'var(--landing-ink, #18130f)' }}
+                              >
+                                {tier.name}
+                              </Text>
+                            </Box>
+                          </Flex>
+                          <LandingBadge>{tier.name}</LandingBadge>
+                        </Flex>
+
+                        <Text
+                          size="sm"
+                          style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.6 }}
+                        >
+                          {tier.description}
+                        </Text>
+
+                        <Box
+                          style={{
+                            padding: 14,
+                            borderRadius: 20,
+                            background: 'var(--landing-panel, #f3ece2)',
+                            border,
+                          }}
+                        >
+                          <Stack spacing={6}>
+                            <Text
+                              size="xs"
+                              weight="semibold"
+                              style={{
+                                color: 'var(--landing-subtle, #85796c)',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.08em',
+                              }}
+                            >
+                              Examples
+                            </Text>
+                            <Text
+                              size="xs"
+                              style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.55 }}
+                            >
+                              {tier.examples}
+                            </Text>
+                          </Stack>
+                        </Box>
+
+                        <Link
+                          href={tier.href}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            textDecoration: 'none',
+                            color: 'var(--landing-link, #2f271f)',
+                            fontWeight: 600,
+                          }}
+                        >
+                          Explore {tier.name.toLowerCase()}
+                          <ArrowUpRight size={14} />
+                        </Link>
+                      </Stack>
+                    </Card>
+                  );
+                })}
+              </Box>
+
+              <Box
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+                  gap: 16,
+                }}
+              >
+                {ownershipColumns.map((column, index) => {
+                  const Icon = column.icon;
+
+                  return (
+                    <Card
+                      key={column.title}
+                      style={{
+                        padding: 20,
+                        borderRadius: 24,
+                        border,
+                        background:
+                          index === 0
+                            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.80), var(--landing-surface, #fffdfa))'
+                            : 'linear-gradient(180deg, rgba(255, 255, 255, 0.70), var(--landing-surface-strong, #f7f1e8))',
+                      }}
+                    >
+                      <Stack spacing="md">
+                        <Flex align="center" gap={12}>
+                          <Box
+                            style={{
+                              width: 42,
+                              height: 42,
+                              borderRadius: 14,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              background: 'var(--landing-panel, #f3ece2)',
+                              border,
+                              color: 'var(--landing-ink, #18130f)',
+                            }}
+                          >
+                            <Icon size={18} />
+                          </Box>
+                          <Text
+                            as={"h3" as any}
+                            size="lg"
+                            weight="semibold"
+                            style={{ color: 'var(--landing-ink, #18130f)' }}
+                          >
+                            {column.title}
+                          </Text>
+                        </Flex>
+                        <Stack spacing={8}>
+                          {column.items.map((item) => (
+                            <Box
+                              key={item}
+                              style={{
+                                padding: '10px 12px',
+                                borderRadius: 16,
+                                background: 'rgba(255, 255, 255, 0.66)',
+                                border,
+                              }}
+                            >
+                              <Text
+                                size="sm"
+                                style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.55 }}
+                              >
+                                {item}
+                              </Text>
+                            </Box>
+                          ))}
+                        </Stack>
+                      </Stack>
+                    </Card>
+                  );
+                })}
+              </Box>
+            </Stack>
+          </Card>
+
+          <Card
+            style={{
+              padding: 'clamp(20px, 3vw, 28px)',
+              borderRadius: 28,
+              border,
+              background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.80) 0%, var(--landing-surface-strong, #f7f1e8) 100%)',
+              boxShadow: 'var(--landing-shadow-md, 0 18px 44px rgba(27, 22, 17, 0.10))',
+            }}
+          >
+            <Stack spacing="md">
+              <SectionHeader
+                eyebrow="Runtime map"
+                title="Tenant, engine, and vertical still matter, but this page frames them instead of reenacting them."
+                body="The landing stays editorial. The runtime differences become real in playground, foundations, and the live catalog where the same components actually switch behavior."
+              />
+
+              <Box
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+                  gap: 16,
+                }}
+              >
+                <Card
+                  style={{
+                    padding: 20,
+                    borderRadius: 24,
+                    border,
+                    background:
+                      'linear-gradient(180deg, rgba(255, 255, 255, 0.76), var(--landing-surface, #fffdfa))',
+                  }}
+                >
+                  <Stack spacing="md">
+                    <Flex
+                      align="center"
+                      justify="between"
+                      gap={12}
+                      style={{ flexWrap: 'wrap' }}
+                    >
+                      <Text
+                        as={"h3" as any}
+                        size="lg"
+                        weight="semibold"
+                        style={{ color: 'var(--landing-ink, #18130f)' }}
+                      >
+                        Engine personalities
+                      </Text>
+                      <LandingBadge>3 renderers</LandingBadge>
+                    </Flex>
+                    <Stack spacing={12}>
+                      {engineCards.map((engine) => (
+                        <Box
+                          key={engine.name}
+                          style={{
+                            padding: 14,
+                            borderRadius: 18,
+                            border,
+                            background: 'rgba(255, 255, 255, 0.62)',
+                          }}
+                        >
+                          <Stack spacing={10}>
+                            <Flex
+                              align="center"
+                              justify="between"
+                              gap={10}
+                              style={{ flexWrap: 'wrap' }}
+                            >
+                              <Box style={{ minWidth: 0 }}>
+                                <Text
+                                  size="sm"
+                                  weight="semibold"
+                                  style={{ color: 'var(--landing-ink, #18130f)' }}
+                                >
+                                  {engine.name}
+                                </Text>
+                                <Text
+                                  size="xs"
+                                  style={{
+                                    color: 'var(--landing-subtle, #85796c)',
+                                    lineHeight: 1.55,
+                                  }}
+                                >
+                                  {engine.foundation}
+                                </Text>
+                              </Box>
+                              <LandingBadge>{engine.personality}</LandingBadge>
+                            </Flex>
+
+                            <Text
+                              size="xs"
+                              style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.55 }}
+                            >
+                              {engine.summary}
+                            </Text>
+
+                            <Flex gap={6} style={{ flexWrap: 'wrap' }}>
+                              {engine.traits.map((trait) => (
+                                <LandingBadge key={trait}>{trait}</LandingBadge>
+                              ))}
+                            </Flex>
+                          </Stack>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </Stack>
+                </Card>
+
+                <Card
+                  style={{
+                    padding: 20,
+                    borderRadius: 24,
+                    border,
+                    background:
+                      'linear-gradient(180deg, rgba(255, 255, 255, 0.76), var(--landing-surface, #fffdfa))',
+                  }}
+                >
+                  <Stack spacing="md">
+                    <Flex
+                      align="center"
+                      justify="between"
+                      gap={12}
+                      style={{ flexWrap: 'wrap' }}
+                    >
+                      <Text
+                        as={"h3" as any}
+                        size="lg"
+                        weight="semibold"
+                        style={{ color: 'var(--landing-ink, #18130f)' }}
+                      >
+                        Vertical presets
+                      </Text>
+                      <LandingBadge>3 product voices</LandingBadge>
+                    </Flex>
+
+                    <Stack spacing={12}>
+                      {verticalCards.map((vertical) => {
+                        const Icon = vertical.icon;
+
+                        return (
+                          <Box
+                            key={vertical.name}
+                            style={{
+                              padding: 14,
+                              borderRadius: 18,
+                              border,
+                              background: 'rgba(255, 255, 255, 0.62)',
+                            }}
+                          >
+                            <Stack spacing={10}>
+                              <Flex align="center" gap={12} style={{ flexWrap: 'wrap' }}>
+                                <Box
+                                  style={{
+                                    width: 42,
+                                    height: 42,
+                                    borderRadius: 14,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: 'var(--landing-panel-strong, #ede2d3)',
+                                    color: 'var(--landing-ink, #18130f)',
+                                    border: borderStrong,
+                                  }}
+                                >
+                                  <Icon size={18} />
+                                </Box>
+                                <Box style={{ minWidth: 0 }}>
+                                  <Text
+                                    size="sm"
+                                    weight="semibold"
+                                    style={{ color: 'var(--landing-ink, #18130f)' }}
+                                  >
+                                    {vertical.name}
+                                  </Text>
+                                  <Text
+                                    size="xs"
+                                    style={{ color: 'var(--landing-subtle, #85796c)', lineHeight: 1.55 }}
+                                  >
+                                    {vertical.theme} · {vertical.engine}
+                                  </Text>
+                                </Box>
+                              </Flex>
+
+                              <Text
+                                size="xs"
+                                style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.55 }}
+                              >
+                                {vertical.description}
+                              </Text>
+
+                              <Flex gap={6} style={{ flexWrap: 'wrap' }}>
+                                {vertical.modules.map((module) => (
+                                  <LandingBadge key={module}>{module}</LandingBadge>
+                                ))}
+                              </Flex>
+
+                              <Link
+                                href={vertical.href}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 8,
+                                  textDecoration: 'none',
+                                  color: 'var(--landing-link, #2f271f)',
+                                  fontWeight: 600,
+                                }}
+                              >
+                                View {vertical.name.toLowerCase()}
+                                <ArrowUpRight size={14} />
+                              </Link>
+                            </Stack>
+                          </Box>
+                        );
+                      })}
+                    </Stack>
+                  </Stack>
+                </Card>
+              </Box>
+            </Stack>
+          </Card>
+
+          <Card
+            style={{
+              padding: 'clamp(20px, 3vw, 28px)',
+              borderRadius: 28,
+              border,
+              background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, var(--landing-surface, #fffdfa) 100%)',
+              boxShadow: 'var(--landing-shadow-md, 0 18px 44px rgba(27, 22, 17, 0.10))',
+            }}
+          >
+            <Stack spacing="md">
+              <SectionHeader
+                eyebrow="Next routes"
+                title="Move from the overview into the route that matches the question."
+                body="The landing should get teams moving quickly, not trap them inside a generic front page."
+              />
+
+              <Box
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
+                  gap: 16,
+                }}
+              >
+                {routeCards.map((route) => (
+                  <Link key={route.href} href={route.href} style={{ textDecoration: 'none' }}>
+                    <Card
+                      hoverable
+                      style={{
+                        height: '100%',
+                        padding: 18,
+                        borderRadius: 22,
+                        border,
+                        background:
+                          'linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, var(--landing-surface, #fffdfa) 100%)',
+                        boxShadow: 'var(--landing-shadow-sm, 0 16px 36px rgba(27, 22, 17, 0.08))',
+                      }}
+                    >
+                      <Stack spacing={10}>
+                        <Flex
+                          align="center"
+                          justify="between"
+                          gap={12}
+                          style={{ flexWrap: 'wrap' }}
+                        >
+                          <Text
+                            size="sm"
+                            weight="semibold"
+                            style={{ color: 'var(--landing-ink, #18130f)' }}
+                          >
+                            {route.label}
+                          </Text>
+                          <LandingBadge>Open</LandingBadge>
+                        </Flex>
+                        <Text
+                          size="xs"
+                          style={{ color: 'var(--landing-muted, #5f5549)', lineHeight: 1.6 }}
+                        >
+                          {route.description}
+                        </Text>
+                        <Flex
+                          align="center"
+                          gap={6}
+                          style={{ color: 'var(--landing-link, #2f271f)' }}
+                        >
+                          <Text size="xs" weight="semibold">
+                            Go there
+                          </Text>
+                          <ArrowUpRight size={14} />
+                        </Flex>
+                      </Stack>
+                    </Card>
+                  </Link>
+                ))}
+              </Box>
+
+              <Box
+                style={{
+                  padding: 18,
+                  borderRadius: 24,
+                  border,
+                  background:
+                    'linear-gradient(180deg, rgba(255, 255, 255, 0.74) 0%, var(--landing-panel, #f3ece2) 100%)',
+                }}
+              >
+                <Flex
+                  align="center"
+                  justify="between"
+                  gap={12}
+                  style={{ flexWrap: 'wrap' }}
+                >
+                  <Box style={{ maxWidth: 760 }}>
+                    <Text
+                      size="xs"
+                      weight="semibold"
+                      style={{
+                        color: 'var(--landing-subtle, #85796c)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      Ready when you are
+                    </Text>
+                    <Text
+                      as={"h3" as any}
+                      size="lg"
+                      weight="bold"
+                      style={{ marginTop: 6, color: 'var(--landing-ink, #18130f)' }}
+                    >
+                      Explore documentation, then step into the working system.
+                    </Text>
+                    <Text
+                      size="sm"
+                      style={{
+                        marginTop: 6,
+                        color: 'var(--landing-muted, #5f5549)',
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      Foundations explain the system, architecture explains ownership,
+                      and the playground shows live rendering behavior.
+                    </Text>
+                  </Box>
+                  <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+                    <PillLink href="/foundations" primary>
+                      Explore docs
+                      <ArrowRightIcon size={14} />
+                    </PillLink>
+                    <PillLink href="/developers/architecture">
+                      Review architecture
+                      <ChevronRightIcon size={14} />
+                    </PillLink>
+                  </Flex>
+                </Flex>
+              </Box>
+            </Stack>
+          </Card>
+        </Stack>
+      </Box>
     </main>
   );
 }

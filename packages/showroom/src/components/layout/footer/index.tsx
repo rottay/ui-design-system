@@ -1,61 +1,209 @@
-'use client';
+"use client";
 
-import { Flex, Text, Box, useTokens } from '@rottay/design-system';
-import { ExternalLinkIcon } from '@rottay/design-system/icons';
+import { ShowroomLink as Link } from "@/components/showroom-link";
+import { Box, Flex, Text } from "@/components/showroom-ui";
+import { ExternalLinkIcon } from "@rottay/design-system/icons";
+import { useShowroomRuntime } from "@/components/showroom-context";
+import { DOC_COUNTS, ENGINE_OPTIONS, getPreviewOption } from "../runtime-options";
 
-interface FooterLink {
-  label: string;
-  href: string;
-}
-
-const FOOTER_LINKS: FooterLink[] = [
-  { label: 'GitHub', href: 'https://github.com/rottay/design-system' },
-  { label: 'Docs', href: '/developers/getting-started' },
-  { label: 'Storybook', href: 'https://storybook.rottay.com' },
+const FOOTER_LINKS = [
+  { href: "/developers/getting-started", label: "Getting Started" },
+  { href: "/playground/theme-builder", label: "Theme Builder" },
+  { href: "https://github.com/rottay/design-system", label: "Repository" },
 ];
 
+const shellBorder =
+  "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
+const shellSurface =
+  "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
+const shellSurfaceStrong =
+  "var(--showroom-shell-surface-strong, var(--ds-color-bg-tertiary, #15171b))";
+const shellText =
+  "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
+const shellTextSecondary =
+  "var(--showroom-shell-text-secondary, var(--ds-color-text-secondary, #c0c4cc))";
+const shellTextTertiary =
+  "var(--showroom-shell-text-tertiary, var(--ds-color-text-muted, #848b98))";
+
 export function Footer() {
-  const tokens = useTokens();
+  const runtime = useShowroomRuntime();
+  const activeEngine = getPreviewOption(ENGINE_OPTIONS, runtime.engine);
 
   return (
-    <Flex
-      align="center"
-      justify="between"
+    <Box
       style={{
-        padding: '16px 24px',
-        borderTop: '1px solid var(--ds-color-neutral-200)',
-        background: 'var(--ds-color-white)',
-        flexShrink: 0,
+        marginTop: 32,
+        paddingTop: 20,
+        borderTop: `1px solid ${shellBorder}`,
       }}
     >
-      <Flex align="center" gap={16}>
-        <Text size="xs" style={{ color: "var(--ds-color-text-muted)" }}>v0.1.0</Text>
-        <Text size="xs" style={{ color: "var(--ds-color-text-muted)" }}>
-          Built with @rottay/design-system
-        </Text>
-      </Flex>
+      <Box
+        style={{
+          display: "grid",
+          gap: 16,
+          padding: 18,
+          borderRadius: 24,
+          border: `1px solid ${shellBorder}`,
+          background:
+            "linear-gradient(180deg, var(--showroom-shell-surface-strong), var(--showroom-shell-surface))",
+        }}
+      >
+        <Flex
+          align="start"
+          justify="between"
+          style={{
+            gap: 16,
+            flexWrap: "wrap",
+          }}
+        >
+          <Box style={{ minWidth: 0, maxWidth: 720 }}>
+            <Text
+              size="xs"
+              weight="semibold"
+              style={{
+                color: shellTextTertiary,
+                textTransform: "uppercase",
+                letterSpacing: "0.16em",
+              }}
+            >
+              Docs runtime
+            </Text>
+            <Text
+              size="lg"
+              weight="semibold"
+              style={{ color: shellText, marginTop: 6 }}
+            >
+              Premium shell powered by live design-system tokens
+            </Text>
+            <Text
+              size="sm"
+              style={{
+                color: shellTextSecondary,
+                lineHeight: 1.55,
+                marginTop: 8,
+              }}
+            >
+              The same docs frame follows the active tenant and engine so token,
+              component, and surface pages can be judged in the runtime they
+              will actually ship with.
+            </Text>
+          </Box>
 
-      <Flex align="center" gap={16}>
-        {FOOTER_LINKS.map((link) => (
           <Box
-            key={link.label}
-            as="a"
-            {...({ href: link.href, target: link.href.startsWith('http') ? '_blank' : undefined, rel: link.href.startsWith('http') ? 'noopener noreferrer' : undefined } as any)}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-              textDecoration: 'none',
-              color: 'var(--ds-color-text-secondary)',
-              fontSize: '0.75rem',
-              transition: 'color 150ms ease',
+              padding: "7px 11px",
+              borderRadius: 999,
+              border: `1px solid ${shellBorder}`,
+              background: shellSurface,
             }}
           >
-            {link.label}
-            {link.href.startsWith('http') && <ExternalLinkIcon size={11} />}
+            <Text size="xs" weight="semibold" style={{ color: shellText }}>
+              {DOC_COUNTS.total} documented assets
+            </Text>
           </Box>
-        ))}
-      </Flex>
-    </Flex>
+        </Flex>
+
+        <Box
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: 12,
+          }}
+        >
+          {[
+            { label: "Tenant", value: runtime.tenantName },
+            { label: "Vertical", value: runtime.verticalLabel },
+            { label: "Engine", value: activeEngine.label },
+          ].map((item) => (
+            <Box
+              key={item.label}
+              style={{
+                padding: 14,
+                borderRadius: 18,
+                border: `1px solid ${shellBorder}`,
+                background: shellSurface,
+              }}
+            >
+              <Text size="xs" style={{ color: shellTextTertiary }}>
+                {item.label}
+              </Text>
+              <Text
+                size="sm"
+                weight="semibold"
+                style={{ color: shellText, marginTop: 6 }}
+              >
+                {item.value}
+              </Text>
+            </Box>
+          ))}
+        </Box>
+
+        <Flex
+          align="center"
+          justify="between"
+          style={{
+            gap: 14,
+            flexWrap: "wrap",
+            paddingTop: 4,
+          }}
+        >
+          <Flex align="center" gap={16} style={{ flexWrap: "wrap" }}>
+            {FOOTER_LINKS.map((link) =>
+              link.href.startsWith("http") ? (
+                <Box
+                  key={link.label}
+                  as="a"
+                  {...({
+                    href: link.href,
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                  } as any)}
+                  className="footer-link"
+                  style={{
+                    textDecoration: "none",
+                    color: shellText,
+                  }}
+                >
+                  <Flex align="center" gap={6}>
+                    <Text
+                      size="xs"
+                      weight="semibold"
+                      style={{ color: "inherit" }}
+                    >
+                      {link.label}
+                    </Text>
+                    <ExternalLinkIcon size={11} />
+                  </Flex>
+                </Box>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="footer-link"
+                  style={{
+                    textDecoration: "none",
+                    color: shellText,
+                  }}
+                >
+                  <Text size="xs" weight="semibold" style={{ color: "inherit" }}>
+                    {link.label}
+                  </Text>
+                </Link>
+              )
+            )}
+          </Flex>
+
+          <Text size="xs" style={{ color: shellTextTertiary }}>
+            Showroom shell v0.3.0
+          </Text>
+        </Flex>
+      </Box>
+
+      <style jsx>{`
+        .footer-link:hover {
+          opacity: 0.92;
+        }
+      `}</style>
+    </Box>
   );
 }

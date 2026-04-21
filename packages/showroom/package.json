@@ -4,33 +4,34 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack --port 7001",
-    "build": "next build",
+    "dev": "next dev --webpack --port 7001",
+    "dev:turbopack": "next dev --turbopack --port 7001",
+    "build": "next build --webpack",
     "start": "next start --port 7001",
     "typecheck": "tsc --noEmit",
     "lint": "next lint"
   },
   "dependencies": {
-    "@rottay/design-system": "workspace:*",
-    "antd": "^5.21.0",
-    "@ant-design/icons": "^5.5.0",
+    "@ant-design/icons": "^5.6.1",
+    "@rottay/design-system": "file:/Users/daniel/Developer/Rottay/ui-design-system/packages/core/rottay-design-system-2.7.3.tgz",
+    "antd": "^5.29.3",
     "d3": "^7.9.0",
-    "framer-motion": "^12.0.0",
-    "geist": "^1.3.0",
+    "framer-motion": "^12.38.0",
+    "geist": "^1.7.0",
     "lucide-react": "^0.563.0",
-    "next": "^16.1.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "next": "^16.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/postcss": "^4.2.4",
     "@types/d3": "^7.4.3",
-    "@types/node": "^20.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18",
-    "typescript": "^5.7.2"
+    "@types/node": "^20.19.39",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=20"

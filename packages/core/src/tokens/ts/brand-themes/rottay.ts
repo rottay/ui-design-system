@@ -19,10 +19,10 @@ export const rottayBrandTheme: BrandTheme = {
   name: 'Rottay',
 
   palette: {
-    // Dark-first: white primary on dark canvas (Vercel/Linear style)
-    primaryColor: '#FFFFFF',
-    secondaryColor: '#A0A0A5',
-    accentColor: '#A0A0A5',
+    // Light-mode runtime colors mirror the explicit light artifact.
+    primaryColor: '#0A0A0A',
+    secondaryColor: '#6B6B6B',
+    accentColor: '#6B6B6B',
     darkPrimaryColor: '#FFFFFF',
     darkSecondaryColor: '#A0A0A5',
     darkAccentColor: '#A0A0A5',

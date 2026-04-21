@@ -84,11 +84,8 @@ export function hexToOklch(hex: string): string {
   return `oklch(${lPct}% ${c} ${hue})`;
 }
 
-/**
- * Extract the oklch lightness component (0-1) from a hex color.
- * Used internally to determine whether content text should be dark or light.
- */
-function getOklchLightness(hex: string): number {
+/** Convert a hex string to WCAG relative luminance. */
+function getRelativeLuminance(hex: string): number {
   let h = hex.replace('#', '');
   if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
 
@@ -96,10 +93,31 @@ function getOklchLightness(hex: string): number {
   const g = srgbToLinear(parseInt(h.slice(2, 4), 16) / 255);
   const b = srgbToLinear(parseInt(h.slice(4, 6), 16) / 255);
 
-  const [x, y, z] = linearRgbToXyz(r, g, b);
-  const [L] = xyzToOklab(x, y, z);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
 
-  return L;
+/** Compute WCAG contrast ratio between two hex colors. */
+function getContrastRatio(hex1: string, hex2: string): number {
+  const lum1 = getRelativeLuminance(hex1);
+  const lum2 = getRelativeLuminance(hex2);
+  const lighter = Math.max(lum1, lum2);
+  const darker = Math.min(lum1, lum2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+/**
+ * Choose the more readable DaisyUI content token for a brand fill color.
+ * This avoids lightness-threshold mistakes on mid-tone tenant colors.
+ */
+function getReadableContentColor(hex: string): string {
+  const lightContentHex = '#F7F7F5';
+  const darkContentHex = '#111827';
+  const lightContrast = getContrastRatio(hex, lightContentHex);
+  const darkContrast = getContrastRatio(hex, darkContentHex);
+
+  return darkContrast >= lightContrast
+    ? 'oklch(18% 0.015 260)'
+    : 'oklch(97% 0.005 100)';
 }
 
 /**
@@ -124,28 +142,17 @@ export function buildDaisyUiColorOverrides(
 
   if (primaryColor) {
     overrides['--color-primary'] = hexToOklch(primaryColor);
-    // Auto-generate content color using perceptual oklch lightness.
-    // If lightness > 0.6, the background is "light" so use dark text; otherwise light text.
-    const lightness = getOklchLightness(primaryColor);
-    overrides['--color-primary-content'] = lightness > 0.6
-      ? 'oklch(7% 0.01 260)'
-      : 'oklch(96% 0.008 100)';
+    overrides['--color-primary-content'] = getReadableContentColor(primaryColor);
   }
 
   if (secondaryColor) {
     overrides['--color-secondary'] = hexToOklch(secondaryColor);
-    const lightness = getOklchLightness(secondaryColor);
-    overrides['--color-secondary-content'] = lightness > 0.6
-      ? 'oklch(7% 0.01 260)'
-      : 'oklch(96% 0.008 100)';
+    overrides['--color-secondary-content'] = getReadableContentColor(secondaryColor);
   }
 
   if (accentColor) {
     overrides['--color-accent'] = hexToOklch(accentColor);
-    const lightness = getOklchLightness(accentColor);
-    overrides['--color-accent-content'] = lightness > 0.6
-      ? 'oklch(7% 0.01 260)'
-      : 'oklch(96% 0.008 100)';
+    overrides['--color-accent-content'] = getReadableContentColor(accentColor);
   }
 
   return overrides;

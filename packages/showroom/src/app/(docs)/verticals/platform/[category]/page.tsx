@@ -1,20 +1,35 @@
 'use client';
 
 import { use } from 'react';
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge, DesignSystemProvider } from '@rottay/design-system';
-import { useTokens } from '@rottay/design-system';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { ChevronLeftIcon } from '@rottay/design-system/icons';
+import {
+  VerticalCategoryAppendix,
+  type VerticalDemoItem,
+} from '../../vertical-category-appendix';
 
-interface DemoItem {
-  title: string;
-  description: string;
-  components: string[];
+interface CategoryData {
+  label: string;
+  summary: string;
+  operators: string[];
+  tempo: string;
+  principles: string[];
+  demos: VerticalDemoItem[];
 }
 
-const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
+const PLATFORM_DEMOS: Record<string, CategoryData> = {
   identity: {
     label: 'Identity',
+    summary:
+      'Platform identity surfaces are about trust at scale: fast lookup, stable user context, and clear control over sessions and profile state.',
+    operators: ['Admins', 'Support', 'Security teams'],
+    tempo: 'High-frequency operational review',
+    principles: [
+      'Keep user state obvious.',
+      'Make account actions reversible when possible.',
+      'Surface role and session context early.',
+    ],
     demos: [
       {
         title: 'User List',
@@ -40,6 +55,15 @@ const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   tenancy: {
     label: 'Tenancy',
+    summary:
+      'Tenancy views carry the white-label promise of the platform: each customer has branding, billing, domains, and lifecycle state that operators must govern safely.',
+    operators: ['Platform ops', 'Customer success', 'Billing admins'],
+    tempo: 'Periodic configuration plus exception handling',
+    principles: [
+      'Show tenant identity before controls.',
+      'Separate billing from brand setup.',
+      'Make environment state auditable.',
+    ],
     demos: [
       {
         title: 'Tenant List',
@@ -60,6 +84,15 @@ const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   permissions: {
     label: 'Permissions',
+    summary:
+      'Permissions are the governance heart of the platform, where safety, discoverability, and policy confidence need to coexist.',
+    operators: ['Security', 'Admins', 'Compliance owners'],
+    tempo: 'Low-frequency but high-risk configuration',
+    principles: [
+      'Show blast radius before save.',
+      'Group resources into mental models, not raw IDs.',
+      'Make inherited state visible.',
+    ],
     demos: [
       {
         title: 'Role Manager',
@@ -80,6 +113,15 @@ const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   auth: {
     label: 'Auth',
+    summary:
+      'Auth surfaces set the tone for platform credibility. They need to feel secure, legible, and unforgiving about ambiguity while still remaining humane.',
+    operators: ['End users', 'Security admins', 'Integrations teams'],
+    tempo: 'Entry-point and exception-driven',
+    principles: [
+      'Keep trust signals visible.',
+      'Favor step clarity over visual novelty.',
+      'Separate credential management from identity profile tasks.',
+    ],
     demos: [
       {
         title: 'Login Flow',
@@ -105,6 +147,15 @@ const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   features: {
     label: 'Features',
+    summary:
+      'Feature tooling turns rollout control into a first-class product capability. These views balance experimentation with governance.',
+    operators: ['Product ops', 'Release managers', 'Experiment owners'],
+    tempo: 'Planned operational steering',
+    principles: [
+      'Rollout state should be glanceable.',
+      'Treat experiments and flags as distinct decisions.',
+      'Prioritize safe defaults and reversal.',
+    ],
     demos: [
       {
         title: 'Flag Dashboard',
@@ -125,6 +176,15 @@ const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   navigation: {
     label: 'Navigation',
+    summary:
+      'Platform navigation is a productivity feature. It needs to help operators jump between deep modules without losing orientation.',
+    operators: ['Admins', 'Support', 'Power users'],
+    tempo: 'Continuous throughout every workflow',
+    principles: [
+      'Keep hierarchy stable.',
+      'Expose shortcuts for expert users.',
+      'Preserve context during movement.',
+    ],
     demos: [
       {
         title: 'Admin Sidebar',
@@ -145,6 +205,15 @@ const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   notifications: {
     label: 'Notifications',
+    summary:
+      'Notification patterns keep operators informed without flooding them. The platform uses them to surface change, urgency, and follow-up state.',
+    operators: ['Admins', 'Support', 'End users'],
+    tempo: 'Interrupt-driven and contextual',
+    principles: [
+      'Match channel to urgency.',
+      'Keep escalation state concise.',
+      'Allow quick return to source context.',
+    ],
     demos: [
       {
         title: 'Notification Center',
@@ -166,123 +235,78 @@ const PLATFORM_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
 };
 
 function PlatformCategoryContent({ category }: { category: string }) {
-  const tokens = useTokens();
   const data = PLATFORM_DEMOS[category];
 
   if (!data) {
     return (
-      <Stack spacing="md">
+      <Stack spacing="lg" fullWidth>
         <Link href="/verticals/platform" style={{ textDecoration: 'none' }}>
           <Flex align="center" gap={4}>
             <ChevronLeftIcon size={16} />
             <Text size="sm" color="primary">Back to Platform</Text>
           </Flex>
         </Link>
-        <Text as={"h1" as any} size="2xl" weight="bold">
-          Category not found
-        </Text>
-        <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          The category &quot;{category}&quot; does not exist in the Platform vertical.
-        </Text>
+        <Card
+          style={{
+            padding: 'var(--ds-spacing-5, 20px)',
+            border: '1px solid var(--ds-color-border, rgba(148, 163, 184, 0.28))',
+            background:
+              'linear-gradient(180deg, rgba(59, 130, 246, 0.08), transparent 36%), var(--ds-color-bg-container, #ffffff)',
+          }}
+        >
+          <Stack spacing="md">
+            <Badge variant="secondary">Unknown category</Badge>
+            <Box>
+              <Text
+                as={"h1" as any}
+                size="2xl"
+                weight="bold"
+                style={{ display: 'block' }}
+              >
+                Category not found
+              </Text>
+              <Text
+                size="md"
+                style={{
+                  display: 'block',
+                  marginTop: 8,
+                  color: 'var(--ds-color-text-secondary)',
+                  lineHeight: 1.6,
+                }}
+              >
+                The category &quot;{category}&quot; does not exist in the Platform vertical.
+              </Text>
+            </Box>
+            <Box
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-border-radius-lg, 16px)',
+                background: 'var(--ds-color-bg-secondary, #f1f5f9)',
+                border: '1px solid var(--ds-color-border, rgba(148, 163, 184, 0.28))',
+              }}
+            >
+              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.5 }}>
+                Open the parent vertical to pick a supported governance lane and inspect the live showcase from there.
+              </Text>
+            </Box>
+          </Stack>
+        </Card>
       </Stack>
     );
   }
 
   return (
-    <Stack spacing="lg">
-      {/* Back link + header */}
-      <Box>
-        <Link href="/verticals/platform" style={{ textDecoration: 'none' }}>
-          <Flex align="center" gap={4} style={{ marginBottom: tokens.spacing[3] }}>
-            <ChevronLeftIcon size={16} />
-            <Text size="sm" color="primary">Back to Platform</Text>
-          </Flex>
-        </Link>
-        <Flex align="center" gap={8}>
-          <Text as={"h1" as any} size="2xl" weight="bold">
-            {data.label}
-          </Text>
-          <Badge variant="primary">{data.demos.length} demos</Badge>
-        </Flex>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Platform {data.label.toLowerCase()} demos rendered with the
-            classic engine and rottay theme.
-          </Text>
-        </Box>
-      </Box>
-
-      {/* Demo cards */}
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: tokens.spacing[5],
-        }}
-      >
-        {data.demos.map((demo) => (
-          <Card
-            key={demo.title}
-            style={{ height: '100%' }}
-          >
-            <Stack spacing="md">
-              <Box>
-                <Text as={"h3" as any} size="lg" weight="semibold">
-                  {demo.title}
-                </Text>
-                <Box style={{ marginTop: tokens.spacing[1] }}>
-                  <Text
-                    size="sm"
-                    style={{ color: 'var(--ds-color-text-secondary)' }}
-                  >
-                    {demo.description}
-                  </Text>
-                </Box>
-              </Box>
-
-              {/* Placeholder preview */}
-              <Box
-                style={{
-                  height: 120,
-                  borderRadius: tokens.borderRadius.md,
-                  background: 'var(--ds-color-neutral-50)',
-                  border: '1px dashed var(--ds-color-neutral-300)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Text
-                  size="xs"
-                  style={{ color: 'var(--ds-color-text-muted)' }}
-                >
-                  Demo preview placeholder
-                </Text>
-              </Box>
-
-              {/* Component tags */}
-              <Flex gap={4} style={{ flexWrap: 'wrap' }}>
-                {demo.components.map((name) => (
-                  <Box
-                    key={name}
-                    style={{
-                      padding: '2px 8px',
-                      borderRadius: 4,
-                      background: 'var(--ds-color-neutral-100)',
-                      fontSize: '0.75rem',
-                      color: 'var(--ds-color-text-secondary)',
-                      fontFamily: 'var(--font-geist-mono)',
-                    }}
-                  >
-                    {name}
-                  </Box>
-                ))}
-              </Flex>
-            </Stack>
-          </Card>
-        ))}
-      </Box>
-    </Stack>
+    <VerticalCategoryAppendix
+      backHref="/verticals/platform"
+      backLabel="Back to Platform"
+      label={data.label}
+      headline={`${data.label} in Platform is about controlled clarity, not ornamental UI.`}
+      summary={`${data.summary} The workflow stays Platform-specific, but the live rendering should still come from the active docs runtime rather than a local preset.`}
+      operators={data.operators}
+      tempo={data.tempo}
+      principles={data.principles}
+      demos={data.demos}
+    />
   );
 }
 
@@ -293,9 +317,5 @@ export default function PlatformCategoryPage({
 }) {
   const { category } = use(params);
 
-  return (
-    <DesignSystemProvider tenantSlug="rottay" forceEngine="classic">
-      <PlatformCategoryContent category={category} />
-    </DesignSystemProvider>
-  );
+  return <PlatformCategoryContent category={category} />;
 }

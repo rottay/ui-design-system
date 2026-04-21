@@ -1,6 +1,11 @@
 'use client';
 
-import { Box, Flex, Text, Tag } from '@rottay/design-system';
+import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
+import {
+  SHOWROOM_SURFACES,
+  mixWithCanvas,
+  mixWithSurface,
+} from '../surface-tokens';
 
 export interface PropDefinition {
   name: string;
@@ -15,53 +20,130 @@ export interface PropTableProps {
   title?: string;
 }
 
+function ValueChip({
+  value,
+  tone = 'default',
+}: {
+  value: string;
+  tone?: 'default' | 'muted';
+}) {
+  return (
+    <Box
+      as="code"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        padding: '5px 8px',
+        borderRadius: 10,
+        border: `1px solid ${SHOWROOM_SURFACES.border}`,
+        background:
+          tone === 'muted'
+            ? SHOWROOM_SURFACES.subtle
+            : mixWithCanvas('var(--ds-color-primary, #60a5fa)', 8),
+        color:
+          tone === 'muted'
+            ? SHOWROOM_SURFACES.textSecondary
+            : SHOWROOM_SURFACES.text,
+        fontFamily: 'var(--font-geist-mono, monospace)',
+        fontSize: 12,
+        lineHeight: 1.4,
+        wordBreak: 'break-word',
+      }}
+    >
+      {value}
+    </Box>
+  );
+}
+
 export function PropTable({ props, title }: PropTableProps) {
+  const requiredCount = props.filter((prop) => prop.required).length;
+  const optionalCount = props.length - requiredCount;
+
   return (
     <Box
       style={{
-        borderRadius: 'var(--ds-border-radius-md, 8px)',
-        border: '1px solid var(--ds-color-border, #e5e7eb)',
+        borderRadius: 22,
+        border: `1px solid ${SHOWROOM_SURFACES.border}`,
         overflow: 'hidden',
+        background: `linear-gradient(180deg, ${mixWithSurface(
+          'var(--ds-color-primary, #60a5fa)',
+          8,
+          SHOWROOM_SURFACES.surface,
+        )} 0%, ${SHOWROOM_SURFACES.surface} 100%)`,
+        boxShadow: SHOWROOM_SURFACES.shadow,
       }}
     >
-      {title && (
-        <Box
-          padding="sm"
-          style={{
-            borderBottom: '1px solid var(--ds-color-border, #e5e7eb)',
-            background: 'var(--ds-color-bg-elevated, #fafafa)',
-          }}
-        >
-          <Text size="sm" weight="semibold">
-            {title}
+      <Flex
+        align="center"
+        justify="between"
+        gap={12}
+        style={{
+          padding: '16px 18px',
+          borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
+          background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${mixWithSurface(
+            'var(--ds-color-text-primary, #ececec)',
+            5,
+            SHOWROOM_SURFACES.subtle,
+          )} 100%)`,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Box>
+          {title ? (
+            <Text
+              size="sm"
+              weight="semibold"
+              style={{ display: 'block', color: SHOWROOM_SURFACES.text, lineHeight: 1.35 }}
+            >
+              {title}
+            </Text>
+          ) : null}
+          <Text
+            size="xs"
+            style={{
+              display: 'block',
+              marginTop: 6,
+              color: SHOWROOM_SURFACES.textSecondary,
+              lineHeight: 1.45,
+            }}
+          >
+            Prop contracts stay readable across dark-first and light-first tenants.
           </Text>
         </Box>
-      )}
-      <Box style={{ overflowX: 'auto' }}>
+
+        <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+          <Badge variant="secondary">{props.length} props</Badge>
+          <Badge variant="secondary">{requiredCount} required</Badge>
+          <Badge variant="secondary">{optionalCount} optional</Badge>
+        </Flex>
+      </Flex>
+
+      <Box className="showroom-prop-table-desktop" style={{ overflowX: 'auto' }}>
         <Box
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(120px, 1fr) minmax(140px, 1.5fr) minmax(80px, 0.7fr) minmax(60px, 0.5fr) minmax(180px, 2fr)',
-            minWidth: 640,
+            gridTemplateColumns:
+              'minmax(170px, 1.1fr) minmax(180px, 1.25fr) minmax(120px, 0.8fr) minmax(120px, 0.7fr) minmax(260px, 1.8fr)',
+            minWidth: 920,
           }}
         >
-          {/* Header row */}
           {['Name', 'Type', 'Default', 'Required', 'Description'].map((heading) => (
             <Box
               key={heading}
-              padding="sm"
               style={{
-                background: 'var(--ds-color-bg-elevated, #fafafa)',
-                borderBottom: '2px solid var(--ds-color-border, #e5e7eb)',
+                padding: '12px 14px',
+                borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
+                background: SHOWROOM_SURFACES.subtle,
               }}
             >
               <Text
                 size="xs"
                 weight="semibold"
                 style={{
+                  display: 'block',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  color: 'var(--ds-color-text-secondary, #666666)',
+                  letterSpacing: '0.08em',
+                  color: SHOWROOM_SURFACES.textTertiary,
                 }}
               >
                 {heading}
@@ -69,93 +151,84 @@ export function PropTable({ props, title }: PropTableProps) {
             </Box>
           ))}
 
-          {/* Data rows */}
           {props.map((prop, index) => {
-            const isEven = index % 2 === 0;
-            const rowBg = isEven
-              ? 'var(--ds-color-bg-container, #ffffff)'
-              : 'var(--ds-color-bg-elevated, #fafafa)';
+            const rowBackground =
+              index % 2 === 0
+                ? SHOWROOM_SURFACES.surface
+                : mixWithCanvas('var(--ds-color-primary, #60a5fa)', 5);
 
             return (
               <Box key={prop.name} style={{ display: 'contents' }}>
                 <Box
-                  padding="sm"
                   style={{
-                    background: rowBg,
-                    borderBottom: '1px solid var(--ds-color-border, #e5e7eb)',
+                    padding: '14px',
+                    borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
+                    background: rowBackground,
                   }}
                 >
                   <Text
                     size="sm"
                     weight="semibold"
                     style={{
-                      fontFamily: 'var(--ds-font-mono, monospace)',
-                      color: 'var(--ds-color-primary, #0066cc)',
+                      display: 'block',
+                      color: SHOWROOM_SURFACES.text,
+                      fontFamily: 'var(--font-geist-mono, monospace)',
+                      lineHeight: 1.35,
                     }}
                   >
                     {prop.name}
                   </Text>
                 </Box>
+
                 <Box
-                  padding="sm"
                   style={{
-                    background: rowBg,
-                    borderBottom: '1px solid var(--ds-color-border, #e5e7eb)',
+                    padding: '14px',
+                    borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
+                    background: rowBackground,
                   }}
                 >
-                  <Text
-                    size="xs"
-                    style={{
-                      fontFamily: 'var(--ds-font-mono, monospace)',
-                      color: 'var(--ds-color-text-secondary, #666666)',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {prop.type}
-                  </Text>
+                  <ValueChip value={prop.type} tone="muted" />
                 </Box>
+
                 <Box
-                  padding="sm"
                   style={{
-                    background: rowBg,
-                    borderBottom: '1px solid var(--ds-color-border, #e5e7eb)',
+                    padding: '14px',
+                    borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
+                    background: rowBackground,
                   }}
                 >
-                  <Text
-                    size="xs"
-                    style={{
-                      fontFamily: 'var(--ds-font-mono, monospace)',
-                      color: 'var(--ds-color-text-muted, #999999)',
-                    }}
-                  >
-                    {prop.defaultValue ?? '-'}
-                  </Text>
+                  <ValueChip value={prop.defaultValue ?? 'none'} />
                 </Box>
+
                 <Box
-                  padding="sm"
                   style={{
-                    background: rowBg,
-                    borderBottom: '1px solid var(--ds-color-border, #e5e7eb)',
+                    padding: '14px',
+                    borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
+                    background: rowBackground,
                   }}
                 >
                   <Flex align="center">
-                    {prop.required ? (
-                      <Tag variant="error" size="sm">Yes</Tag>
-                    ) : (
-                      <Text size="xs" style={{ color: 'var(--ds-color-text-muted, #999999)' }}>
-                        No
-                      </Text>
-                    )}
+                    <Badge variant={prop.required ? 'error' : 'secondary'}>
+                      {prop.required ? 'Required' : 'Optional'}
+                    </Badge>
                   </Flex>
                 </Box>
+
                 <Box
-                  padding="sm"
                   style={{
-                    background: rowBg,
-                    borderBottom: '1px solid var(--ds-color-border, #e5e7eb)',
+                    padding: '14px',
+                    borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
+                    background: rowBackground,
                   }}
                 >
-                  <Text size="sm" style={{ color: 'var(--ds-color-text-primary, #1a1a1a)' }}>
+                  <Text
+                    size="sm"
+                    style={{
+                      display: 'block',
+                      color: SHOWROOM_SURFACES.textSecondary,
+                      lineHeight: 1.6,
+                    }}
+                  >
                     {prop.description}
                   </Text>
                 </Box>
@@ -164,6 +237,80 @@ export function PropTable({ props, title }: PropTableProps) {
           })}
         </Box>
       </Box>
+
+      <Stack className="showroom-prop-table-mobile" spacing="sm" style={{ padding: 16 }}>
+        {props.map((prop) => (
+          <Box
+            key={prop.name}
+            style={{
+              padding: 16,
+              borderRadius: 18,
+              border: `1px solid ${SHOWROOM_SURFACES.border}`,
+              background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.surface} 0%, ${mixWithCanvas(
+                'var(--ds-color-primary, #60a5fa)',
+                5,
+              )} 100%)`,
+            }}
+          >
+            <Stack spacing="sm">
+              <Flex
+                align="center"
+                justify="between"
+                gap={10}
+                style={{ flexWrap: 'wrap' }}
+              >
+                <Text
+                  size="sm"
+                  weight="semibold"
+                  style={{
+                    display: 'block',
+                    color: SHOWROOM_SURFACES.text,
+                    fontFamily: 'var(--font-geist-mono, monospace)',
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {prop.name}
+                </Text>
+                <Badge variant={prop.required ? 'error' : 'secondary'}>
+                  {prop.required ? 'Required' : 'Optional'}
+                </Badge>
+              </Flex>
+
+              <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+                <ValueChip value={prop.type} tone="muted" />
+                <ValueChip value={prop.defaultValue ?? 'none'} />
+              </Flex>
+
+              <Text
+                size="sm"
+                style={{
+                  display: 'block',
+                  color: SHOWROOM_SURFACES.textSecondary,
+                  lineHeight: 1.6,
+                }}
+              >
+                {prop.description}
+              </Text>
+            </Stack>
+          </Box>
+        ))}
+      </Stack>
+
+      <style>{`
+        .showroom-prop-table-mobile {
+          display: none;
+        }
+
+        @media (max-width: 960px) {
+          .showroom-prop-table-desktop {
+            display: none;
+          }
+
+          .showroom-prop-table-mobile {
+            display: flex;
+          }
+        }
+      `}</style>
     </Box>
   );
 }

@@ -17,7 +17,8 @@ Open http://localhost:7001
 
 | Script | Description |
 |--------|-------------|
-| `pnpm dev` | Start dev server on port 7001 (Turbopack) |
+| `pnpm dev` | Start stable dev server on port 7001 (webpack) |
+| `pnpm dev:turbopack` | Experimental Turbopack dev server |
 | `pnpm build` | Production build (~10s, 265 static pages) |
 | `pnpm start` | Start production server |
 | `pnpm typecheck` | Run TypeScript type check |
@@ -80,4 +81,4 @@ Deploys to showroom.rottay.com via Vercel.
 | Framework | Next.js |
 | Build Command | `pnpm build` |
 | Node Version | >= 20 |
-| Port | 3002 (dev) |
+| Port | 7001 (dev) |

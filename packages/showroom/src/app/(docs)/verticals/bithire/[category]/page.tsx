@@ -1,20 +1,35 @@
 'use client';
 
 import { use } from 'react';
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge, DesignSystemProvider } from '@rottay/design-system';
-import { useTokens } from '@rottay/design-system';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { ChevronLeftIcon } from '@rottay/design-system/icons';
+import {
+  VerticalCategoryAppendix,
+  type VerticalDemoItem,
+} from '../../vertical-category-appendix';
 
-interface DemoItem {
-  title: string;
-  description: string;
-  components: string[];
+interface CategoryData {
+  label: string;
+  summary: string;
+  operators: string[];
+  tempo: string;
+  principles: string[];
+  demos: VerticalDemoItem[];
 }
 
-const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
+const BITHIRE_DEMOS: Record<string, CategoryData> = {
   pipeline: {
     label: 'Pipeline',
+    summary:
+      'Pipeline surfaces are the operating room of BitHire. They make movement, prioritization, and candidate momentum visible to recruiters at a glance.',
+    operators: ['Recruiters', 'Hiring leads', 'Talent ops'],
+    tempo: 'High-frequency triage and movement',
+    principles: [
+      'Stage progression should feel spatial and obvious.',
+      'Signal density matters more than ornamental chrome.',
+      'Quick actions should keep momentum high.',
+    ],
     demos: [
       {
         title: 'Pipeline Kanban',
@@ -40,6 +55,15 @@ const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   interviews: {
     label: 'Interviews',
+    summary:
+      'Interview tooling turns subjective conversations into structured, comparable signal without slowing teams down.',
+    operators: ['Interviewers', 'Recruiters', 'Hiring managers'],
+    tempo: 'Structured evaluation checkpoints',
+    principles: [
+      'Capture evidence close to the moment.',
+      'Keep criteria legible and weighted.',
+      'Make feedback easy to consolidate.',
+    ],
     demos: [
       {
         title: 'Interview Calendar',
@@ -60,6 +84,15 @@ const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   'ai-agents': {
     label: 'AI Agents',
+    summary:
+      'AI agent surfaces should feel like explainable copilots, not black boxes. They accelerate sourcing and screening while preserving human judgment.',
+    operators: ['Recruiters', 'Talent intelligence', 'Hiring leads'],
+    tempo: 'Assistive and insight-driven',
+    principles: [
+      'Show rationale next to recommendations.',
+      'Balance confidence scores with human override.',
+      'Keep AI suggestions actionable, not abstract.',
+    ],
     demos: [
       {
         title: 'Sourcing Agent',
@@ -80,6 +113,15 @@ const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   positions: {
     label: 'Positions',
+    summary:
+      'Position management frames the work before candidates ever arrive. These views define role quality, approvals, and hiring readiness.',
+    operators: ['Recruiters', 'Hiring managers', 'People ops'],
+    tempo: 'Planned setup with approval loops',
+    principles: [
+      'Clarify scope before publishing.',
+      'Separate approval status from editing state.',
+      'Keep requirements and incentives readable.',
+    ],
     demos: [
       {
         title: 'Position List',
@@ -100,6 +142,15 @@ const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   analytics: {
     label: 'Analytics',
+    summary:
+      'Analytics views turn recruiting into a measurable system, making funnel quality, speed, and fairness visible across the hiring process.',
+    operators: ['Leads', 'Ops analysts', 'Executives'],
+    tempo: 'Review and decision support',
+    principles: [
+      'Lead with trend direction, not raw chart novelty.',
+      'Keep comparison surfaces easy to scan.',
+      'Tie insights back to action.',
+    ],
     demos: [
       {
         title: 'Hiring Funnel',
@@ -125,6 +176,15 @@ const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   teams: {
     label: 'Teams',
+    summary:
+      'Team views ensure recruiting effort stays balanced across recruiters and interviewers instead of overloading a few people invisibly.',
+    operators: ['Talent ops', 'Recruiting leads', 'Coordinators'],
+    tempo: 'Capacity planning and balancing',
+    principles: [
+      'Show current load before assignment.',
+      'Make utilization visible and comparable.',
+      'Support redistribution without losing context.',
+    ],
     demos: [
       {
         title: 'Team Directory',
@@ -145,6 +205,15 @@ const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   workflows: {
     label: 'Workflows',
+    summary:
+      'Workflow tooling scales recruiting operations by encoding repeatable transitions, notifications, and automation rules directly into the product.',
+    operators: ['Talent ops', 'Recruiters', 'Admins'],
+    tempo: 'Rule-based process optimization',
+    principles: [
+      'Make automations inspectable.',
+      'Keep transition logic discoverable.',
+      'Treat notifications as part of the workflow, not an afterthought.',
+    ],
     demos: [
       {
         title: 'Workflow Builder',
@@ -166,123 +235,78 @@ const BITHIRE_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
 };
 
 function BitHireCategoryContent({ category }: { category: string }) {
-  const tokens = useTokens();
   const data = BITHIRE_DEMOS[category];
 
   if (!data) {
     return (
-      <Stack spacing="md">
+      <Stack spacing="lg" fullWidth>
         <Link href="/verticals/bithire" style={{ textDecoration: 'none' }}>
           <Flex align="center" gap={4}>
             <ChevronLeftIcon size={16} />
             <Text size="sm" color="primary">Back to BitHire</Text>
           </Flex>
         </Link>
-        <Text as={"h1" as any} size="2xl" weight="bold">
-          Category not found
-        </Text>
-        <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          The category &quot;{category}&quot; does not exist in the BitHire vertical.
-        </Text>
+        <Card
+          style={{
+            padding: 'var(--ds-spacing-5, 20px)',
+            border: '1px solid var(--ds-color-border, rgba(148, 163, 184, 0.28))',
+            background:
+              'linear-gradient(180deg, rgba(99, 102, 241, 0.08), transparent 36%), var(--ds-color-bg-container, #ffffff)',
+          }}
+        >
+          <Stack spacing="md">
+            <Badge variant="secondary">Unknown category</Badge>
+            <Box>
+              <Text
+                as={"h1" as any}
+                size="2xl"
+                weight="bold"
+                style={{ display: 'block' }}
+              >
+                Category not found
+              </Text>
+              <Text
+                size="md"
+                style={{
+                  display: 'block',
+                  marginTop: 8,
+                  color: 'var(--ds-color-text-secondary)',
+                  lineHeight: 1.6,
+                }}
+              >
+                The category &quot;{category}&quot; does not exist in the BitHire vertical.
+              </Text>
+            </Box>
+            <Box
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-border-radius-lg, 16px)',
+                background: 'var(--ds-color-bg-secondary, #f1f5f9)',
+                border: '1px solid var(--ds-color-border, rgba(148, 163, 184, 0.28))',
+              }}
+            >
+              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.5 }}>
+                Open the parent vertical to pick a supported recruiting lane and inspect the live showcase from there.
+              </Text>
+            </Box>
+          </Stack>
+        </Card>
       </Stack>
     );
   }
 
   return (
-    <Stack spacing="lg">
-      {/* Back link + header */}
-      <Box>
-        <Link href="/verticals/bithire" style={{ textDecoration: 'none' }}>
-          <Flex align="center" gap={4} style={{ marginBottom: tokens.spacing[3] }}>
-            <ChevronLeftIcon size={16} />
-            <Text size="sm" color="primary">Back to BitHire</Text>
-          </Flex>
-        </Link>
-        <Flex align="center" gap={8}>
-          <Text as={"h1" as any} size="2xl" weight="bold">
-            {data.label}
-          </Text>
-          <Badge variant="primary">{data.demos.length} demos</Badge>
-        </Flex>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            BitHire {data.label.toLowerCase()} demos rendered with the
-            modern engine and bithire theme.
-          </Text>
-        </Box>
-      </Box>
-
-      {/* Demo cards */}
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: tokens.spacing[5],
-        }}
-      >
-        {data.demos.map((demo) => (
-          <Card
-            key={demo.title}
-            style={{ height: '100%' }}
-          >
-            <Stack spacing="md">
-              <Box>
-                <Text as={"h3" as any} size="lg" weight="semibold">
-                  {demo.title}
-                </Text>
-                <Box style={{ marginTop: tokens.spacing[1] }}>
-                  <Text
-                    size="sm"
-                    style={{ color: 'var(--ds-color-text-secondary)' }}
-                  >
-                    {demo.description}
-                  </Text>
-                </Box>
-              </Box>
-
-              {/* Placeholder preview */}
-              <Box
-                style={{
-                  height: 120,
-                  borderRadius: tokens.borderRadius.md,
-                  background: 'var(--ds-color-neutral-50)',
-                  border: '1px dashed var(--ds-color-neutral-300)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Text
-                  size="xs"
-                  style={{ color: 'var(--ds-color-text-muted)' }}
-                >
-                  Demo preview placeholder
-                </Text>
-              </Box>
-
-              {/* Component tags */}
-              <Flex gap={4} style={{ flexWrap: 'wrap' }}>
-                {demo.components.map((name) => (
-                  <Box
-                    key={name}
-                    style={{
-                      padding: '2px 8px',
-                      borderRadius: 4,
-                      background: 'var(--ds-color-neutral-100)',
-                      fontSize: '0.75rem',
-                      color: 'var(--ds-color-text-secondary)',
-                      fontFamily: 'var(--font-geist-mono)',
-                    }}
-                  >
-                    {name}
-                  </Box>
-                ))}
-              </Flex>
-            </Stack>
-          </Card>
-        ))}
-      </Box>
-    </Stack>
+    <VerticalCategoryAppendix
+      backHref="/verticals/bithire"
+      backLabel="Back to BitHire"
+      label={data.label}
+      headline={`${data.label} in BitHire is built for speed, visibility, and decision support.`}
+      summary={`${data.summary} These scenarios stay BitHire-specific in workflow and copy, but the live visuals should still come from the active docs runtime instead of a local preset.`}
+      operators={data.operators}
+      tempo={data.tempo}
+      principles={data.principles}
+      demos={data.demos}
+    />
   );
 }
 
@@ -293,9 +317,5 @@ export default function BitHireCategoryPage({
 }) {
   const { category } = use(params);
 
-  return (
-    <DesignSystemProvider tenantSlug="bithire" forceEngine="modern">
-      <BitHireCategoryContent category={category} />
-    </DesignSystemProvider>
-  );
+  return <BitHireCategoryContent category={category} />;
 }

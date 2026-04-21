@@ -1,20 +1,35 @@
 'use client';
 
 import { use } from 'react';
-import Link from 'next/link';
-import { Box, Flex, Stack, Text, Card, Badge, DesignSystemProvider } from '@rottay/design-system';
-import { useTokens } from '@rottay/design-system';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { ChevronLeftIcon } from '@rottay/design-system/icons';
+import {
+  VerticalCategoryAppendix,
+  type VerticalDemoItem,
+} from '../../vertical-category-appendix';
 
-interface DemoItem {
-  title: string;
-  description: string;
-  components: string[];
+interface CategoryData {
+  label: string;
+  summary: string;
+  operators: string[];
+  tempo: string;
+  principles: string[];
+  demos: VerticalDemoItem[];
 }
 
-const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
+const EVNTO_DEMOS: Record<string, CategoryData> = {
   'event-management': {
     label: 'Event Management',
+    summary:
+      'Event management is the planning spine of Evnto. These views define the event, its timing, and the operational shape the rest of the product must support.',
+    operators: ['Organizers', 'Producers', 'Ops leads'],
+    tempo: 'Planning and pre-event configuration',
+    principles: [
+      'Keep chronology legible.',
+      'Separate setup from live operations.',
+      'Support rich configuration without visual clutter.',
+    ],
     demos: [
       {
         title: 'Event List',
@@ -40,6 +55,15 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   venue: {
     label: 'Venue',
+    summary:
+      'Venue tooling translates physical space into product structure. It needs to show capacity, geometry, and booking reality in a way teams can act on quickly.',
+    operators: ['Venue managers', 'Producers', 'Ops coordinators'],
+    tempo: 'Spatial planning and resource coordination',
+    principles: [
+      'Make capacity and conflicts visible.',
+      'Treat space as a first-class data model.',
+      'Keep floor-plan tooling readable under pressure.',
+    ],
     demos: [
       {
         title: 'Venue Directory',
@@ -60,6 +84,15 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   ticketing: {
     label: 'Ticketing',
+    summary:
+      'Ticketing interfaces are where commercial strategy becomes product UX. They need to feel premium while staying precise enough for pricing and rules.',
+    operators: ['Revenue managers', 'Organizers', 'Marketing teams'],
+    tempo: 'Commercial configuration and monitoring',
+    principles: [
+      'Show pricing logic clearly.',
+      'Keep promotional rules traceable.',
+      'Surface revenue impact next to controls.',
+    ],
     demos: [
       {
         title: 'Ticket Types',
@@ -85,6 +118,15 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   operations: {
     label: 'Operations',
+    summary:
+      'Operations pages take Evnto from beautiful planning tool to reliable live-event system. They prioritize clarity, checklistability, and team coordination.',
+    operators: ['Ops leads', 'Producers', 'Vendor coordinators'],
+    tempo: 'Time-sensitive execution',
+    principles: [
+      'Surface blockers early.',
+      'Keep task ownership explicit.',
+      'Use timeline context to reduce stress during showtime.',
+    ],
     demos: [
       {
         title: 'Ops Checklist',
@@ -105,6 +147,15 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   staff: {
     label: 'Staff',
+    summary:
+      'Staff tooling aligns people, roles, and shifts across the event lifecycle so on-site execution stays coordinated.',
+    operators: ['Staff coordinators', 'Ops leads', 'Supervisors'],
+    tempo: 'Scheduling and live verification',
+    principles: [
+      'Make staffing gaps visible.',
+      'Keep role state concise.',
+      'Support fast check-in and attendance verification.',
+    ],
     demos: [
       {
         title: 'Staff Roster',
@@ -125,6 +176,15 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   finance: {
     label: 'Finance',
+    summary:
+      'Finance surfaces reveal event economics after ticketing and operations converge. They need to feel credible, structured, and low-noise.',
+    operators: ['Finance managers', 'Organizers', 'Settlement owners'],
+    tempo: 'Periodic review and reconciliation',
+    principles: [
+      'Favor trustworthy breakdowns over decoration.',
+      'Clarify gross, fees, and net states.',
+      'Make event-to-event comparison easy.',
+    ],
     demos: [
       {
         title: 'Revenue Dashboard',
@@ -145,6 +205,15 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   engagement: {
     label: 'Engagement',
+    summary:
+      'Engagement views are where Evnto becomes experiential. They convert audience participation, social energy, and feedback into visible product moments.',
+    operators: ['Marketing', 'Hosts', 'Community teams'],
+    tempo: 'Live and post-event audience interaction',
+    principles: [
+      'Keep audience energy visible.',
+      'Support moderation and curation.',
+      'Make participation loops easy to trigger.',
+    ],
     demos: [
       {
         title: 'Live Polls',
@@ -165,6 +234,15 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
   },
   analytics: {
     label: 'Analytics',
+    summary:
+      'Analytics in Evnto pulls together attendance, commercial performance, and engagement so teams can understand what really happened before the next event.',
+    operators: ['Leadership', 'Revenue teams', 'Event analysts'],
+    tempo: 'Review, optimization, and forecasting',
+    principles: [
+      'Blend operational and commercial insight.',
+      'Keep trend reading simple and obvious.',
+      'Support post-event action, not passive reporting.',
+    ],
     demos: [
       {
         title: 'Attendance Dashboard',
@@ -191,123 +269,78 @@ const EVNTO_DEMOS: Record<string, { label: string; demos: DemoItem[] }> = {
 };
 
 function EvntoCategoryContent({ category }: { category: string }) {
-  const tokens = useTokens();
   const data = EVNTO_DEMOS[category];
 
   if (!data) {
     return (
-      <Stack spacing="md">
+      <Stack spacing="lg" fullWidth>
         <Link href="/verticals/evnto" style={{ textDecoration: 'none' }}>
           <Flex align="center" gap={4}>
             <ChevronLeftIcon size={16} />
             <Text size="sm" color="primary">Back to Evnto</Text>
           </Flex>
         </Link>
-        <Text as={"h1" as any} size="2xl" weight="bold">
-          Category not found
-        </Text>
-        <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          The category &quot;{category}&quot; does not exist in the Evnto vertical.
-        </Text>
+        <Card
+          style={{
+            padding: 'var(--ds-spacing-5, 20px)',
+            border: '1px solid var(--ds-color-border, rgba(148, 163, 184, 0.28))',
+            background:
+              'linear-gradient(180deg, rgba(244, 63, 94, 0.08), transparent 36%), var(--ds-color-bg-container, #ffffff)',
+          }}
+        >
+          <Stack spacing="md">
+            <Badge variant="secondary">Unknown category</Badge>
+            <Box>
+              <Text
+                as={"h1" as any}
+                size="2xl"
+                weight="bold"
+                style={{ display: 'block' }}
+              >
+                Category not found
+              </Text>
+              <Text
+                size="md"
+                style={{
+                  display: 'block',
+                  marginTop: 8,
+                  color: 'var(--ds-color-text-secondary)',
+                  lineHeight: 1.6,
+                }}
+              >
+                The category &quot;{category}&quot; does not exist in the Evnto vertical.
+              </Text>
+            </Box>
+            <Box
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-border-radius-lg, 16px)',
+                background: 'var(--ds-color-bg-secondary, #f1f5f9)',
+                border: '1px solid var(--ds-color-border, rgba(148, 163, 184, 0.28))',
+              }}
+            >
+              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.5 }}>
+                Open the parent vertical to pick a supported event lane and inspect the live showcase from there.
+              </Text>
+            </Box>
+          </Stack>
+        </Card>
       </Stack>
     );
   }
 
   return (
-    <Stack spacing="lg">
-      {/* Back link + header */}
-      <Box>
-        <Link href="/verticals/evnto" style={{ textDecoration: 'none' }}>
-          <Flex align="center" gap={4} style={{ marginBottom: tokens.spacing[3] }}>
-            <ChevronLeftIcon size={16} />
-            <Text size="sm" color="primary">Back to Evnto</Text>
-          </Flex>
-        </Link>
-        <Flex align="center" gap={8}>
-          <Text as={"h1" as any} size="2xl" weight="bold">
-            {data.label}
-          </Text>
-          <Badge variant="primary">{data.demos.length} demos</Badge>
-        </Flex>
-        <Box style={{ marginTop: tokens.spacing[2] }}>
-          <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Evnto {data.label.toLowerCase()} demos rendered with the modern
-            engine and evnto theme.
-          </Text>
-        </Box>
-      </Box>
-
-      {/* Demo cards */}
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: tokens.spacing[5],
-        }}
-      >
-        {data.demos.map((demo) => (
-          <Card
-            key={demo.title}
-            style={{ height: '100%' }}
-          >
-            <Stack spacing="md">
-              <Box>
-                <Text as={"h3" as any} size="lg" weight="semibold">
-                  {demo.title}
-                </Text>
-                <Box style={{ marginTop: tokens.spacing[1] }}>
-                  <Text
-                    size="sm"
-                    style={{ color: 'var(--ds-color-text-secondary)' }}
-                  >
-                    {demo.description}
-                  </Text>
-                </Box>
-              </Box>
-
-              {/* Placeholder preview */}
-              <Box
-                style={{
-                  height: 120,
-                  borderRadius: tokens.borderRadius.md,
-                  background: 'var(--ds-color-neutral-50)',
-                  border: '1px dashed var(--ds-color-neutral-300)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Text
-                  size="xs"
-                  style={{ color: 'var(--ds-color-text-muted)' }}
-                >
-                  Demo preview placeholder
-                </Text>
-              </Box>
-
-              {/* Component tags */}
-              <Flex gap={4} style={{ flexWrap: 'wrap' }}>
-                {demo.components.map((name) => (
-                  <Box
-                    key={name}
-                    style={{
-                      padding: '2px 8px',
-                      borderRadius: 4,
-                      background: 'var(--ds-color-neutral-100)',
-                      fontSize: '0.75rem',
-                      color: 'var(--ds-color-text-secondary)',
-                      fontFamily: 'var(--font-geist-mono)',
-                    }}
-                  >
-                    {name}
-                  </Box>
-                ))}
-              </Flex>
-            </Stack>
-          </Card>
-        ))}
-      </Box>
-    </Stack>
+    <VerticalCategoryAppendix
+      backHref="/verticals/evnto"
+      backLabel="Back to Evnto"
+      label={data.label}
+      headline={`${data.label} in Evnto balances premium presentation with live-event clarity.`}
+      summary={`${data.summary} These scenarios stay Evnto-specific in workflow and copy, but the live visuals should still come from the active docs runtime instead of a local preset.`}
+      operators={data.operators}
+      tempo={data.tempo}
+      principles={data.principles}
+      demos={data.demos}
+    />
   );
 }
 
@@ -318,9 +351,5 @@ export default function EvntoCategoryPage({
 }) {
   const { category } = use(params);
 
-  return (
-    <DesignSystemProvider tenantSlug="evnto" forceEngine="modern">
-      <EvntoCategoryContent category={category} />
-    </DesignSystemProvider>
-  );
+  return <EvntoCategoryContent category={category} />;
 }

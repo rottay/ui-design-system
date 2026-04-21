@@ -1,78 +1,91 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useShowroomRuntime } from '@/components/showroom-context';
 import {
+  Badge,
   Box,
+  CalendarHeatMap,
+  Card,
   Flex,
   Stack,
   Text,
-  Badge,
-  CalendarHeatMap,
+  useTokens,
 } from '@rottay/design-system';
-import { useTokens } from '@rottay/design-system';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
+const SURFACE =
+  'var(--ds-color-bg-container, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)))';
+const ELEVATED_SURFACE =
+  'var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff))';
+const SUBTLE_SURFACE =
+  'var(--ds-color-bg-secondary, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)))';
+const BORDER =
+  'var(--ds-color-border-subtle, var(--ds-color-border, rgba(148, 163, 184, 0.28)))';
+const TEXT_SECONDARY =
+  'var(--ds-color-text-secondary, var(--ds-color-text-muted, #64748b))';
+const TEXT_MUTED = 'var(--ds-color-text-muted, #64748b)';
+const HERO_BACKGROUND = `linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, ${ELEVATED_SURFACE}) 0%, ${SURFACE} 100%)`;
+const CARD_SHADOW = 'var(--ds-shadow-lg, 0 20px 48px rgba(15, 23, 42, 0.1))';
+const PANEL_SHADOW = 'var(--ds-shadow-md, 0 12px 28px rgba(15, 23, 42, 0.08))';
+const PANEL_BACKGROUND = `linear-gradient(180deg, color-mix(in srgb, ${ELEVATED_SURFACE} 92%, ${SURFACE} 8%) 0%, ${SURFACE} 100%)`;
 
 interface VenueZone {
   id: string;
   name: string;
   capacity: number;
   current: number;
-  status: 'open' | 'full' | 'closed';
+  status: 'open' | 'watch' | 'full';
   color: string;
   gridArea: string;
 }
 
-// ---------------------------------------------------------------------------
-// Zone data
-// ---------------------------------------------------------------------------
-
 const VENUE_ZONES: VenueZone[] = [
   {
     id: 'main-floor',
-    name: 'Main Floor',
+    name: 'Main floor',
     capacity: 1500,
     current: 1120,
     status: 'open',
-    color: 'var(--ds-color-primary)',
+    color: 'var(--ds-color-primary, #ffffff)',
     gridArea: '1 / 1 / 3 / 3',
   },
   {
-    id: 'vip-area',
-    name: 'VIP Area',
+    id: 'vip-lounge',
+    name: 'VIP lounge',
     capacity: 200,
     current: 185,
-    status: 'open',
-    color: 'var(--ds-color-warning)',
+    status: 'watch',
+    color: 'var(--ds-color-warning, #ffffff)',
     gridArea: '1 / 3 / 2 / 4',
   },
   {
-    id: 'bar',
-    name: 'Bar',
+    id: 'bar-east',
+    name: 'Bar east',
     capacity: 120,
     current: 120,
     status: 'full',
-    color: 'var(--ds-color-error)',
+    color: 'var(--ds-color-error, #ffffff)',
     gridArea: '2 / 3 / 3 / 4',
   },
   {
-    id: 'entrance',
-    name: 'Entrance',
+    id: 'arrival-lane',
+    name: 'Arrival lane',
     capacity: 80,
     current: 32,
     status: 'open',
-    color: 'var(--ds-color-success)',
+    color: 'var(--ds-color-success, #ffffff)',
     gridArea: '3 / 1 / 4 / 4',
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+const OPS_NOTES = [
+  'VIP lounge staffing needs one more host before doors.',
+  'Bar east is at hard capacity and should redirect overflow to west service.',
+  'Arrival lane throughput is healthy and can absorb the next traffic wave.',
+];
 
-function occupancyPercent(zone: VenueZone): number {
+const HEATMAP_START = '2026-02-01';
+
+function occupancyPercent(zone: VenueZone) {
   return Math.round((zone.current / zone.capacity) * 100);
 }
 
@@ -80,209 +93,318 @@ function statusVariant(status: VenueZone['status']): 'success' | 'error' | 'warn
   switch (status) {
     case 'open':
       return 'success';
+    case 'watch':
+      return 'warning';
     case 'full':
       return 'error';
-    case 'closed':
-      return 'warning';
   }
 }
 
-// ---------------------------------------------------------------------------
-// Generate heatmap data for the current month
-// ---------------------------------------------------------------------------
-
-function generateMonthEvents(): { date: string; value: number }[] {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const startDate = new Date(year, month - 2, 1);
-  const endDate = new Date(year, month + 1, 0);
+function generateHeatmapData() {
+  const start = new Date(`${HEATMAP_START}T12:00:00Z`);
   const data: { date: string; value: number }[] = [];
 
-  for (
-    let d = new Date(startDate);
-    d <= endDate;
-    d.setDate(d.getDate() + 1)
-  ) {
-    const day = d.getDay();
-    // Weekends have more events
-    const isWeekend = day === 0 || day === 5 || day === 6;
-    const base = isWeekend ? 3 : 1;
-    const value = Math.floor(Math.random() * 4) + base;
-    const iso = d.toISOString().split('T')[0];
-    // Skip some weekdays for realism
-    if (!isWeekend && Math.random() < 0.3) continue;
-    data.push({ date: iso, value });
+  for (let offset = 0; offset < 84; offset += 1) {
+    const current = new Date(start);
+    current.setUTCDate(start.getUTCDate() + offset);
+    const day = current.getUTCDay();
+    const weekend = day === 5 || day === 6 || day === 0;
+    const pulse = weekend ? 3 : 1;
+    const pattern = (offset * 7) % 5;
+    const value = pulse + pattern;
+
+    if (!weekend && pattern === 0) {
+      continue;
+    }
+
+    data.push({
+      date: current.toISOString().split('T')[0],
+      value,
+    });
   }
+
   return data;
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export function VenueLayoutDemo() {
+  const runtime = useShowroomRuntime();
   const tokens = useTokens();
-
-  const heatmapData = useMemo(() => generateMonthEvents(), []);
-  const heatmapStart = useMemo(() => {
-    const d = new Date();
-    d.setMonth(d.getMonth() - 2);
-    d.setDate(1);
-    return d.toISOString().split('T')[0];
-  }, []);
+  const heatmapData = generateHeatmapData();
 
   return (
     <Stack spacing="lg">
-      {/* Header */}
-      <Flex align="center" justify="between">
-        <Box>
-          <Text as={"h2" as any} size="xl" weight="bold">
-            Venue Zone Overview
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Real-time occupancy by zone -- Club Neon, 2340 capacity
-          </Text>
-        </Box>
-        <Badge variant="primary">4 zones</Badge>
-      </Flex>
+      <Card
+        style={{
+          padding: tokens.spacing[4],
+          border: `1px solid ${BORDER}`,
+          background: HERO_BACKGROUND,
+          boxShadow: CARD_SHADOW,
+        }}
+      >
+        <Stack spacing="md">
+          <Flex align="start" justify="between" style={{ gap: 12, flexWrap: 'wrap' }}>
+            <Box style={{ minWidth: 0, flex: '1 1 320px' }}>
+              <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+                <Badge variant="primary">Venue control</Badge>
+                <Badge variant="secondary">{runtime.tenantName}</Badge>
+              </Flex>
+              <Text as={"h2" as any} size="xl" weight="bold" style={{ marginTop: 12 }}>
+                Club Neon spatial overview
+              </Text>
+              <Text size="sm" style={{ marginTop: 6, color: TEXT_SECONDARY }}>
+                Real-time occupancy, zone pressure, and event cadence rendered
+                through the active DS runtime.
+              </Text>
+            </Box>
 
-      {/* Venue grid layout */}
+            <Box
+              style={{
+                padding: tokens.spacing[3],
+                borderRadius: tokens.borderRadius.xl,
+                background: PANEL_BACKGROUND,
+                border: `1px solid ${BORDER}`,
+                minWidth: 220,
+                boxShadow: PANEL_SHADOW,
+              }}
+            >
+              <Text size="xs" weight="semibold" style={{ color: TEXT_MUTED }}>
+                Venue readiness
+              </Text>
+              <Text size="lg" weight="bold" style={{ marginTop: 6 }}>
+                92%
+              </Text>
+              <Text size="xs" style={{ marginTop: 6, color: TEXT_SECONDARY }}>
+                Only the VIP lounge staffing assignment remains unresolved.
+              </Text>
+            </Box>
+          </Flex>
+
+          <Box
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+              gap: tokens.spacing[3],
+            }}
+          >
+            {[
+              {
+                label: 'Venue capacity',
+                value: '2,340',
+                detail: 'Across main floor, VIP, service, and arrival lanes.',
+              },
+              {
+                label: 'Current occupancy',
+                value: '1,457',
+                detail: '62% of total venue headcount is already on-site.',
+              },
+              {
+                label: 'Hot zones',
+                value: '2 zones',
+                detail: 'VIP and bar east need active monitoring during doors.',
+              },
+            ].map((item) => (
+              <Box
+                key={item.label}
+                style={{
+                  minWidth: 0,
+                  padding: tokens.spacing[3],
+                  borderRadius: tokens.borderRadius.lg,
+                  background: PANEL_BACKGROUND,
+                  border: `1px solid ${BORDER}`,
+                  boxShadow: PANEL_SHADOW,
+                }}
+              >
+                <Text
+                  size="xs"
+                  weight="semibold"
+                  style={{
+                    color: TEXT_MUTED,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                  }}
+                >
+                  {item.label}
+                </Text>
+                <Text size="lg" weight="bold" style={{ marginTop: 8 }}>
+                  {item.value}
+                </Text>
+                <Text size="xs" style={{ marginTop: 6, color: TEXT_SECONDARY }}>
+                  {item.detail}
+                </Text>
+              </Box>
+            ))}
+          </Box>
+        </Stack>
+      </Card>
+
       <Box
         style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
-          gridTemplateRows: '160px 160px 100px',
-          gap: tokens.spacing[3],
+          gridTemplateColumns: 'minmax(0, 1.1fr) minmax(260px, 0.9fr)',
+          gap: tokens.spacing[4],
+          alignItems: 'start',
         }}
       >
-        {VENUE_ZONES.map((zone) => {
-          const pct = occupancyPercent(zone);
-          return (
+        <Card
+          style={{
+            padding: tokens.spacing[4],
+            border: `1px solid ${BORDER}`,
+            background: PANEL_BACKGROUND,
+            boxShadow: PANEL_SHADOW,
+          }}
+        >
+          <Stack spacing="md">
+            <Text as={"h3" as any} size="lg" weight="semibold">
+              Zone layout
+            </Text>
             <Box
-              key={zone.id}
               style={{
-                gridArea: zone.gridArea,
-                borderRadius: tokens.borderRadius.lg,
-                border: `2px solid ${zone.color}`,
-                background: 'var(--ds-color-bg-secondary)',
-                padding: tokens.spacing[4],
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                position: 'relative',
-                overflow: 'hidden',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gridTemplateRows: '160px 160px 100px',
+                gap: tokens.spacing[3],
               }}
             >
-              {/* Occupancy fill bar (background) */}
-              <Box
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: `${pct}%`,
-                  background: zone.color,
-                  opacity: 0.08,
-                  transition: 'height 400ms ease',
-                }}
-              />
+              {VENUE_ZONES.map((zone) => {
+                const percent = occupancyPercent(zone);
 
-              {/* Zone content */}
-              <Flex align="center" justify="between" style={{ position: 'relative', zIndex: 1 }}>
-                <Text size="lg" weight="semibold">
-                  {zone.name}
-                </Text>
-                <Badge variant={statusVariant(zone.status)}>
-                  {zone.status}
-                </Badge>
-              </Flex>
-
-              <Box style={{ position: 'relative', zIndex: 1 }}>
-                <Flex align="center" gap={8}>
-                  <Text size="2xl" weight="bold">
-                    {zone.current.toLocaleString()}
-                  </Text>
-                  <Text
-                    size="sm"
-                    style={{ color: 'var(--ds-color-text-muted)' }}
-                  >
-                    / {zone.capacity.toLocaleString()}
-                  </Text>
-                </Flex>
-
-                {/* Occupancy bar */}
-                <Box
-                  style={{
-                    marginTop: tokens.spacing[2],
-                    height: 6,
-                    borderRadius: 3,
-                    background: 'var(--ds-color-neutral-200)',
-                    overflow: 'hidden',
-                  }}
-                >
+                return (
                   <Box
+                    key={zone.id}
                     style={{
-                      width: `${pct}%`,
-                      height: '100%',
-                      borderRadius: 3,
-                      background: zone.color,
-                      transition: 'width 400ms ease',
+                      gridArea: zone.gridArea,
+                      borderRadius: tokens.borderRadius.xl,
+                      border: `1px solid ${BORDER}`,
+                      background: `linear-gradient(180deg, color-mix(in srgb, ${zone.color} 16%, ${SUBTLE_SURFACE}) 0%, ${SUBTLE_SURFACE} 52%)`,
+                      padding: tokens.spacing[4],
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      boxShadow: PANEL_SHADOW,
                     }}
-                  />
-                </Box>
+                  >
+                    <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
+                      <Text size="lg" weight="semibold">
+                        {zone.name}
+                      </Text>
+                      <Badge variant={statusVariant(zone.status)}>{zone.status}</Badge>
+                    </Flex>
 
-                <Flex align="center" justify="between" style={{ marginTop: tokens.spacing[1] }}>
-                  <Text
-                    size="xs"
-                    style={{ color: 'var(--ds-color-text-muted)' }}
-                  >
-                    {pct}% occupied
-                  </Text>
-                  <Text
-                    size="xs"
-                    style={{ color: 'var(--ds-color-text-muted)' }}
-                  >
-                    {zone.capacity - zone.current} spots left
-                  </Text>
-                </Flex>
-              </Box>
+                    <Box>
+                      <Flex align="center" gap={8}>
+                        <Text size="2xl" weight="bold">
+                          {zone.current.toLocaleString()}
+                        </Text>
+                        <Text size="sm" style={{ color: TEXT_MUTED }}>
+                          / {zone.capacity.toLocaleString()}
+                        </Text>
+                      </Flex>
+
+                      <Box
+                        style={{
+                          marginTop: tokens.spacing[2],
+                          height: 8,
+                          borderRadius: 999,
+                          background: SURFACE,
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <Box
+                          style={{
+                            width: `${percent}%`,
+                            height: '100%',
+                            borderRadius: 999,
+                            background: zone.color,
+                          }}
+                        />
+                      </Box>
+
+                      <Flex align="center" justify="between" style={{ marginTop: tokens.spacing[1] }}>
+                        <Text size="xs" style={{ color: TEXT_MUTED }}>
+                          {percent}% occupied
+                        </Text>
+                        <Text size="xs" style={{ color: TEXT_MUTED }}>
+                          {zone.capacity - zone.current} spots left
+                        </Text>
+                      </Flex>
+                    </Box>
+                  </Box>
+                );
+              })}
             </Box>
-          );
-        })}
-      </Box>
+          </Stack>
+        </Card>
 
-      {/* Calendar heatmap -- event schedule */}
-      <Box>
-        <Stack spacing="sm">
-          <Text as={"h3" as any} size="lg" weight="semibold">
-            Event Schedule
-          </Text>
-          <Text
-            size="sm"
-            style={{ color: 'var(--ds-color-text-secondary)' }}
-          >
-            Events per day -- last 3 months
-          </Text>
-          <Box
+        <Stack spacing="md">
+          <Card
             style={{
-              background: 'var(--ds-color-bg-secondary)',
-              borderRadius: tokens.borderRadius.lg,
               padding: tokens.spacing[4],
-              border: '1px solid var(--ds-color-border)',
+              border: `1px solid ${BORDER}`,
+              background: PANEL_BACKGROUND,
+              boxShadow: PANEL_SHADOW,
             }}
           >
-            <CalendarHeatMap
-              data={heatmapData}
-              startDate={heatmapStart}
-              height={160}
-              title="Event Schedule"
-              colorRange={[
-                'var(--ds-color-neutral-200)',
-                'var(--ds-color-primary)',
-              ]}
-            />
-          </Box>
+            <Stack spacing="sm">
+              <Text as={"h3" as any} size="md" weight="semibold">
+                Ops watchlist
+              </Text>
+              {OPS_NOTES.map((note) => (
+                <Box
+                  key={note}
+                  style={{
+                    padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    background: SURFACE,
+                    border: `1px solid ${BORDER}`,
+                    boxShadow: PANEL_SHADOW,
+                  }}
+                >
+                  <Text size="sm" style={{ color: TEXT_SECONDARY }}>
+                    {note}
+                  </Text>
+                </Box>
+              ))}
+            </Stack>
+          </Card>
+
+          <Card
+            style={{
+              padding: tokens.spacing[4],
+              border: `1px solid ${BORDER}`,
+              background: PANEL_BACKGROUND,
+              boxShadow: PANEL_SHADOW,
+            }}
+          >
+            <Stack spacing="sm">
+              <Text as={"h3" as any} size="md" weight="semibold">
+                Event schedule density
+              </Text>
+              <Text size="sm" style={{ color: TEXT_SECONDARY }}>
+                Event activity over the last 12 weeks, used to plan staffing and
+                venue utilization.
+              </Text>
+              <Box
+                style={{
+                  background: SURFACE,
+                  borderRadius: tokens.borderRadius.xl,
+                  padding: tokens.spacing[4],
+                  border: `1px solid ${BORDER}`,
+                  boxShadow: PANEL_SHADOW,
+                }}
+              >
+                <CalendarHeatMap
+                  data={heatmapData}
+                  startDate={HEATMAP_START}
+                  height={160}
+                  title="Event schedule"
+                  colorRange={[
+                    'var(--ds-color-border-subtle, rgba(148, 163, 184, 0.18))',
+                    'var(--ds-color-primary, #ffffff)',
+                  ]}
+                />
+              </Box>
+            </Stack>
+          </Card>
         </Stack>
       </Box>
     </Stack>
