@@ -1,4 +1,4 @@
 {
   "framework": "nextjs",
-  "ignoreCommand": "bash packages/showroom/scripts/vercel-ignore-build.sh"
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- ."
 }
