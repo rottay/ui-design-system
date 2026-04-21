@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
-    "@rottay/design-system": "file:/Users/daniel/Developer/Rottay/ui-design-system/packages/core/rottay-design-system-2.7.3.tgz",
+    "@rottay/design-system": "workspace:*",
     "antd": "^5.29.3",
     "d3": "^7.9.0",
     "framer-motion": "^12.38.0",
