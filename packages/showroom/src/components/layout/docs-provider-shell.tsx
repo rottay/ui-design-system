@@ -21,9 +21,11 @@ export function DocsProviderShell({
   tenantSlug: 'rottay' | 'bithire' | 'evnto';
 }) {
   const tenantConfig = getKnownTenantConfig(tenantSlug);
+  const runtimeKey = `${tenantSlug}:${engine}:${productProfile}`;
 
   return (
     <DesignSystemProvider
+      key={runtimeKey}
       tenantConfig={tenantConfig ?? undefined}
       forceEngine={engine}
       productProfile={productProfile}

@@ -87,16 +87,20 @@ function SurfaceRouteCard({ entry }: { entry: SurfaceEntry }) {
     <Link href={`/surfaces/${entry.group}/${entry.slug}`} style={{ textDecoration: 'none' }}>
       <Card
         hoverable
+        className="showroom-surfaces-route-card"
         style={{
           height: '100%',
           border: SUBTLE_BORDER,
           background:
             'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary-500) 5%, var(--ds-surface-card, var(--ds-color-bg-elevated))) 0%, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%)',
           boxShadow: SHADOW,
+          containerType: 'inline-size',
+          containerName: 'showroom-surface-card',
         }}
       >
         <Stack spacing="md" style={{ height: '100%' }}>
           <Flex
+            className="showroom-surfaces-route-card-head"
             align="start"
             justify="between"
             gap={12}
@@ -107,6 +111,7 @@ function SurfaceRouteCard({ entry }: { entry: SurfaceEntry }) {
                 {entry.name}
               </Text>
               <Text
+                className="showroom-surfaces-route-card-path"
                 size="xs"
                 style={{
                   display: 'block',
@@ -114,7 +119,9 @@ function SurfaceRouteCard({ entry }: { entry: SurfaceEntry }) {
                   color: 'var(--ds-color-text-muted)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.08em',
-                  overflowWrap: 'anywhere',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 }}
               >
                 /surfaces/{entry.group}/{entry.slug}
@@ -304,9 +311,10 @@ export default async function SurfaceGroupPage({
               </Box>
 
               <Box
+                className="showroom-surfaces-group-metrics-grid"
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                  gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
                   gap: 12,
                 }}
               >
@@ -399,9 +407,10 @@ export default async function SurfaceGroupPage({
         tone="accent"
       >
         <Box
+          className="showroom-surfaces-group-catalog-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
             gap: 16,
           }}
         >
@@ -412,9 +421,47 @@ export default async function SurfaceGroupPage({
       </DocsPanel>
 
       <style>{`
+        .showroom-surfaces-group-catalog-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        @container showroom-content (max-width: 1720px) {
+          .showroom-surfaces-group-catalog-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 1210px) {
+          .showroom-surfaces-group-catalog-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
         @container showroom-content (max-width: 1080px) {
           .showroom-surfaces-group-hero-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+
+        @container showroom-content (max-width: 1180px) {
+          .showroom-surfaces-group-metrics-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 760px) {
+          .showroom-surfaces-group-catalog-grid,
+          .showroom-surfaces-group-metrics-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+
+        @container showroom-surface-card (max-width: 360px) {
+          .showroom-surfaces-route-card-head {
+            flex-direction: column !important;
+            align-items: stretch !important;
           }
         }
       `}</style>

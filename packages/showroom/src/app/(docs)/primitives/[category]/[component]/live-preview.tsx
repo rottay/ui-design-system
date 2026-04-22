@@ -1944,54 +1944,82 @@ export function LivePreview({ slug }: LivePreviewProps) {
       }}
     >
       <Stack spacing="sm" style={{ height: '100%' }}>
-        <Flex
-          align="start"
-          justify="between"
-          gap={10}
+        <Box
           style={{
-            flexWrap: 'wrap',
             paddingBottom: 10,
             borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
           }}
         >
-          <Box style={{ minWidth: 0, flex: 1 }}>
-            <Flex
-              align="center"
-              gap={8}
-              style={{ minWidth: 0, flexWrap: 'wrap' }}
-            >
-              {meta ? <Badge variant="secondary">{meta.label}</Badge> : null}
-              {entry ? (
-                <Badge variant={hasFixture ? 'success' : 'warning'}>
-                  {hasFixture ? 'DS fixture' : 'Adapter pending'}
-                </Badge>
-              ) : null}
-              {entry ? (
+          <Flex
+            align="center"
+            justify="between"
+            gap={10}
+            style={{ minWidth: 0, minHeight: 44 }}
+          >
+            <Box style={{ minWidth: 0, flex: 1 }}>
+              {meta ? (
                 <Text
                   size="xs"
                   weight="semibold"
                   style={{
                     display: 'block',
-                    fontFamily: 'var(--font-geist-mono)',
+                    color: SHOWROOM_SURFACES.textTertiary,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    fontFamily: 'var(--font-geist-sans)',
+                  }}
+                >
+                  {meta.label}
+                </Text>
+              ) : null}
+              {entry ? (
+                <Text
+                  size="sm"
+                  weight="semibold"
+                  style={{
+                    display: 'block',
+                    marginTop: 4,
                     color: SHOWROOM_SURFACES.text,
-                    lineHeight: 1.35,
+                    lineHeight: 1.2,
+                    fontFamily: 'var(--font-geist-sans)',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                   }}
                 >
                   {entry.name}
                 </Text>
               ) : null}
-            </Flex>
-          </Box>
-          <Flex
-            gap={8}
-            style={{ minWidth: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}
-          >
-            {entry ? (
-              <Badge variant="secondary">{entry.engines.length} engines</Badge>
-            ) : null}
-            <Badge variant="secondary">Runtime-bound preview</Badge>
+            </Box>
+
+            <Box
+              style={{
+                flexShrink: 0,
+                padding: '6px 10px',
+                borderRadius: 999,
+                border: `1px solid ${SHOWROOM_SURFACES.border}`,
+                background: SHOWROOM_SURFACES.surface,
+                maxWidth: '52%',
+              }}
+            >
+              <Text
+                size="xs"
+                weight="semibold"
+                style={{
+                  display: 'block',
+                  color: SHOWROOM_SURFACES.textSecondary,
+                  lineHeight: 1.2,
+                  fontFamily: 'var(--font-geist-sans)',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {entry ? `${entry.engines.length} live engines` : 'Live preview'}
+              </Text>
+            </Box>
           </Flex>
-        </Flex>
+        </Box>
 
         <Flex
           style={{
@@ -2097,7 +2125,7 @@ export function LivePreview({ slug }: LivePreviewProps) {
           </Text>
           <Divider />
           <Box style={{ marginTop: 10 }}>
-            <RuntimeFingerprint compact itemLimit={6} showHeader={false} />
+            <RuntimeFingerprint compact compactColumns={2} itemLimit={6} showHeader={false} />
           </Box>
         </Box>
 
@@ -2108,6 +2136,7 @@ export function LivePreview({ slug }: LivePreviewProps) {
               borderRadius: 16,
               border: `1px solid ${SHOWROOM_SURFACES.border}`,
               background: SHOWROOM_SURFACES.subtle,
+              minHeight: 72,
             }}
           >
             <Flex align="start" gap={10} style={{ minWidth: 0 }}>

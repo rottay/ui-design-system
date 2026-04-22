@@ -43,28 +43,29 @@ const TENANT_OPTIONS: Array<{ value: ShowroomTheme; label: string }> = [
 ];
 
 const SIDEBAR_BACKGROUND =
-  "var(--ds-sidebar-bg, var(--ds-layout-sider-bg, var(--ds-color-bg-primary)))";
+  "var(--showroom-shell-canvas, var(--ds-sidebar-bg, var(--ds-layout-sider-bg, var(--ds-color-bg-primary))))";
 const SIDEBAR_BORDER =
-  "var(--ds-sidebar-border, var(--ds-layout-sider-border, var(--ds-color-border-subtle)))";
-const SIDEBAR_TEXT = "var(--ds-sidebar-text, var(--ds-color-text-primary))";
+  "var(--showroom-shell-border, var(--ds-sidebar-border, var(--ds-layout-sider-border, var(--ds-color-border-subtle))))";
+const SIDEBAR_TEXT =
+  "var(--showroom-shell-text, var(--ds-sidebar-text, var(--ds-color-text-primary)))";
 const SIDEBAR_MUTED =
-  "var(--ds-sidebar-text-muted, var(--ds-color-text-secondary))";
+  "var(--showroom-shell-text-secondary, var(--ds-sidebar-text-muted, var(--ds-color-text-secondary)))";
 const NAV_ITEM_ACTIVE_BG =
-  "var(--ds-sidebar-item-bg-active, color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, transparent))";
+  "var(--showroom-shell-active-bg, var(--ds-sidebar-item-bg-active, color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, transparent)))";
 const NAV_ITEM_HOVER_BG =
-  "var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary, #ffffff) 5%, transparent))";
+  "var(--showroom-shell-hover-bg, var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary, #ffffff) 5%, transparent)))";
 const NAV_ITEM_ACTIVE_TEXT =
-  "var(--ds-sidebar-item-color-active, var(--ds-color-text-primary))";
+  "var(--showroom-shell-text, var(--ds-sidebar-item-color-active, var(--ds-color-text-primary)))";
 const NAV_ITEM_TEXT =
-  "var(--ds-sidebar-item-color, var(--ds-color-text-secondary))";
+  "var(--showroom-shell-text-secondary, var(--ds-sidebar-item-color, var(--ds-color-text-secondary)))";
 const HEADER_BACKGROUND =
-  "var(--ds-layout-header-bg, color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent))";
+  "var(--showroom-shell-header-backdrop, var(--ds-layout-header-bg, color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent)))";
 const HEADER_BORDER =
-  "var(--ds-layout-header-border, var(--ds-color-border-subtle))";
+  "var(--showroom-shell-border-strong, var(--ds-layout-header-border, var(--ds-color-border-subtle)))";
 const PAGE_BACKGROUND =
-  "var(--ds-layout-bg, var(--ds-color-bg-primary, #0b0d12))";
-const STABLE_SIDEBAR_WIDTH = 428;
-const SHELL_CONTENT_MAX_WIDTH = 1680;
+  "var(--showroom-shell-canvas, var(--ds-layout-bg, var(--ds-color-bg-primary, #0b0d12)))";
+const STABLE_SIDEBAR_WIDTH = 424;
+const SHELL_CONTENT_MAX_WIDTH = 1800;
 const DOCUMENTED_ROUTE_COUNT = navigation.reduce(
   (count, section) => count + countSectionEntries(section),
   0
@@ -96,46 +97,47 @@ function NavigationBranch({
   return (
     <Box
       style={{
-        paddingLeft: depth > 0 ? 10 : 0,
+        paddingLeft: depth > 0 ? 12 : 0,
         borderLeft:
           depth > 0
-            ? `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 76%, transparent)`
+            ? `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 52%, transparent)`
             : "none",
       }}
     >
-      <Link href={item.path} style={{ textDecoration: "none" }}>
+      <Link
+        href={item.path}
+        className="showroom-shell-nav-link"
+        style={{ textDecoration: "none", display: "block" }}
+      >
         <Box
+          className="showroom-shell-nav-item"
+          data-active={active ? "true" : "false"}
           style={{
-            padding:
-              depth === 0
-                ? "10px 12px"
-                : "8px 10px",
-            borderRadius: depth === 0 ? 16 : 12,
+            padding: depth === 0 ? "8px 10px" : "6px 8px",
+            borderRadius: depth === 0 ? 15 : 11,
             border: active
               ? `1px solid color-mix(in srgb, var(--ds-color-primary, #ffffff) 24%, ${SIDEBAR_BORDER})`
-              : `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 52%, transparent)`,
+              : "1px solid transparent",
             background: active
               ? `linear-gradient(135deg, ${NAV_ITEM_ACTIVE_BG} 0%, color-mix(in srgb, var(--ds-color-primary, #ffffff) 4%, var(--ds-color-bg-elevated, #ffffff)) 100%)`
-              : depth === 0
-                ? "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 68%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 44%, transparent) 100%)"
-                : "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 40%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 28%, transparent) 100%)",
+              : "transparent",
             boxShadow: active
               ? "0 14px 30px color-mix(in srgb, var(--ds-color-primary, #ffffff) 12%, transparent)"
-              : "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 56%, transparent)",
+              : "none",
             transition:
-              "background-color 160ms ease, border-color 160ms ease, transform 160ms ease",
+              "background-color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease",
           }}
         >
           <Flex align="center" justify="between" gap={10}>
             <Flex align="center" gap={10} style={{ minWidth: 0, flex: 1 }}>
               <Box
                 style={{
-                  width: depth === 0 ? 8 : 6,
-                  height: depth === 0 ? 8 : 6,
+                  width: depth === 0 ? 7 : 5,
+                  height: depth === 0 ? 7 : 5,
                   borderRadius: 999,
                   background: active
                     ? "var(--ds-color-primary)"
-                    : `color-mix(in srgb, ${SIDEBAR_MUTED} 48%, transparent)`,
+                    : `color-mix(in srgb, ${SIDEBAR_MUTED} 38%, transparent)`,
                   flexShrink: 0,
                 }}
               />
@@ -144,9 +146,9 @@ function NavigationBranch({
                 style={{
                   display: "block",
                   color: active ? NAV_ITEM_ACTIVE_TEXT : NAV_ITEM_TEXT,
-                  fontSize: depth === 0 ? "13.5px" : "12.5px",
-                  fontWeight: active ? 650 : depth === 0 ? 560 : 520,
-                  lineHeight: 1.35,
+                  fontSize: depth === 0 ? "13.25px" : "12.25px",
+                  fontWeight: active ? 650 : depth === 0 ? 560 : 525,
+                  lineHeight: 1.3,
                 }}
               >
                 {itemLabel}
@@ -191,34 +193,47 @@ function NavigationSection({
 
   return (
     <Box
+      className="showroom-shell-nav-section"
+      data-active={active ? "true" : "false"}
       style={{
-        padding: 12,
-        borderRadius: 22,
+        padding: active ? 10 : "4px 2px 0",
+        borderRadius: active ? 20 : 0,
         border: active
           ? `1px solid color-mix(in srgb, ${sectionMeta.accent} 32%, ${SIDEBAR_BORDER})`
-          : `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 72%, transparent)`,
+          : "1px solid transparent",
         background: active
           ? `linear-gradient(180deg, color-mix(in srgb, ${sectionMeta.accent} 10%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 42%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)`
-          : "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 48%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 24%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)",
+          : "transparent",
         boxShadow: active
           ? "var(--ds-shadow-sm, 0 12px 28px rgba(0, 0, 0, 0.1))"
-          : "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 58%, transparent)",
+          : "none",
+        transition:
+          "background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease",
       }}
     >
       <Flex align="start" justify="between" gap={12}>
         <Flex align="start" gap={12} style={{ minWidth: 0 }}>
           <Box
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 12,
+              width: active ? 36 : 32,
+              height: active ? 36 : 32,
+              borderRadius: active ? 12 : 10,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              border: `1px solid color-mix(in srgb, ${sectionMeta.accent} 24%, ${SIDEBAR_BORDER})`,
-              background: `color-mix(in srgb, ${sectionMeta.accent} 12%, transparent)`,
-              color: sectionMeta.accent,
+              border: active
+                ? `1px solid color-mix(in srgb, ${sectionMeta.accent} 24%, ${SIDEBAR_BORDER})`
+                : `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 30%, transparent)`,
+              background: active
+                ? `color-mix(in srgb, ${sectionMeta.accent} 12%, transparent)`
+                : "transparent",
+              color: active
+                ? sectionMeta.accent
+                : `color-mix(in srgb, ${sectionMeta.accent} 72%, ${SIDEBAR_MUTED})`,
               flexShrink: 0,
+              boxShadow: active
+                ? "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 52%, transparent)"
+                : "none",
             }}
           >
             <SectionIcon size={16} />
@@ -252,12 +267,18 @@ function NavigationSection({
         spacing="xs"
         fullWidth
         style={{
-          marginTop: 12,
-          padding: 6,
+          marginTop: active ? 12 : 10,
+          padding: active ? 6 : "10px 0 0",
           borderRadius: 18,
-          background:
-            "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 26%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 18%, transparent) 100%)",
-          border: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 42%, transparent)`,
+          background: active
+            ? "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 26%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 18%, transparent) 100%)"
+            : "transparent",
+          border: active
+            ? `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 42%, transparent)`
+            : "none",
+          borderTop: active
+            ? "none"
+            : `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 28%, transparent)`,
         }}
       >
         {section.children.map((item) => (
@@ -316,8 +337,8 @@ function SegmentedGroup<T extends string>({
       </Flex>
       <Box
         style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))`,
+          display: "flex",
+          flexWrap: "wrap",
           gap: 4,
           padding: 3,
           borderRadius: 14,
@@ -336,10 +357,11 @@ function SegmentedGroup<T extends string>({
               onClick={() => onSelect(option.value)}
               style={{
                 appearance: "none",
-                width: "100%",
-                minWidth: 0,
+                width: "auto",
+                minWidth: 68,
+                flex: "1 1 72px",
                 minHeight: 34,
-                padding: "6px 8px",
+                padding: "6px 10px",
                 borderRadius: 10,
                 border: selected
                   ? "1px solid color-mix(in srgb, var(--ds-color-primary, #ffffff) 28%, var(--ds-color-border-subtle))"
@@ -418,20 +440,22 @@ function SidebarLaunchpad({
   return (
     <Box
       style={{
-        padding: 22,
-        borderRadius: 26,
-        border: `1px solid ${SIDEBAR_BORDER}`,
+        padding: 18,
+        borderRadius: 24,
+        border: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 82%, transparent)`,
         background: [
-          "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 9%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 52%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)",
+          "radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--ds-color-primary, #ffffff) 12%, transparent) 0%, transparent 38%)",
+          "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 7%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 40%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)",
         ].join(", "),
-        boxShadow: "var(--ds-shadow-lg, 0 24px 56px rgba(0, 0, 0, 0.2))",
+        boxShadow:
+          "0 18px 40px color-mix(in srgb, var(--ds-color-shadow, rgba(0, 0, 0, 0.16)) 14%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 48%, transparent)",
       }}
     >
       <Stack spacing="sm" fullWidth>
         <Box
           style={{
-            width: 64,
-            height: 4,
+            width: 44,
+            height: 3,
             borderRadius: 999,
             background:
               'linear-gradient(90deg, var(--ds-color-primary, #ffffff) 0%, var(--ds-color-secondary, var(--ds-color-primary, #ffffff)) 100%)',
@@ -441,10 +465,10 @@ function SidebarLaunchpad({
         <Flex align="center" gap={12}>
           <Box
             style={{
-              width: 44,
-              height: 44,
-              borderRadius: 16,
-              border: `1px solid ${SIDEBAR_BORDER}`,
+              width: 40,
+              height: 40,
+              borderRadius: 14,
+              border: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 74%, transparent)`,
               background:
                 "color-mix(in srgb, var(--ds-color-primary, #ffffff) 14%, transparent)",
               color: SIDEBAR_TEXT,
@@ -486,7 +510,12 @@ function SidebarLaunchpad({
 
         <Text
           size="sm"
-          style={{ display: "block", color: SIDEBAR_MUTED, lineHeight: 1.65 }}
+          style={{
+            display: "block",
+            color: SIDEBAR_MUTED,
+            lineHeight: 1.55,
+            maxWidth: "34ch",
+          }}
         >
           Published-package documentation wired to the real DS runtime so the
           same routes reveal how tenant and engine reshape identical component
@@ -495,171 +524,191 @@ function SidebarLaunchpad({
 
         <Flex gap={8} style={{ flexWrap: "wrap" }}>
           <Badge variant="primary">{runtimeLabel}</Badge>
-          <Badge variant="secondary">Real runtime</Badge>
-          <Badge variant="secondary">No fake skin</Badge>
+          <Badge variant="secondary">Published package</Badge>
         </Flex>
 
         <Box
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(108px, 1fr))",
-            gap: 8,
+            padding: 8,
+            borderRadius: 18,
+            border: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 52%, transparent)`,
+            background:
+              "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 42%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 18%, transparent) 100%)",
+            boxShadow:
+              "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 50%, transparent)",
           }}
         >
           <Box
+            className="showroom-shell-launchpad-signals"
             style={{
-              minWidth: 0,
-              padding: 12,
-              borderRadius: 16,
-              border: `1px solid ${SIDEBAR_BORDER}`,
-              background:
-                "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 52%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 30%, transparent) 100%)",
-              boxShadow:
-                "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 56%, transparent)",
+              display: "grid",
+              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
             }}
           >
-            <Text
-              size="xs"
-              weight="semibold"
+            <Box
+              className="showroom-shell-launchpad-signal"
               style={{
-                display: "block",
-                color: SIDEBAR_MUTED,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
+                minWidth: 0,
+                padding: "2px 10px 4px 4px",
               }}
             >
-              Primary
-            </Text>
-            <Flex align="center" gap={8} style={{ marginTop: 8 }}>
-              <Box
-                style={{
-                  width: 14,
-                  height: 14,
-                  borderRadius: 999,
-                  background: tokens.colors.primary,
-                  border: `1px solid ${SIDEBAR_BORDER}`,
-                  flexShrink: 0,
-                }}
-              />
               <Text
                 size="xs"
                 weight="semibold"
                 style={{
                   display: "block",
-                  minWidth: 0,
-                  color: SIDEBAR_TEXT,
-                  fontFamily: "var(--font-geist-mono)",
-                  wordBreak: "break-word",
+                  color: SIDEBAR_MUTED,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
                 }}
               >
-                {tokens.colors.primary}
+                Primary
               </Text>
-            </Flex>
-          </Box>
+              <Flex align="center" gap={8} style={{ marginTop: 8 }}>
+                <Box
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: 999,
+                    background: tokens.colors.primary,
+                    border: `1px solid ${SIDEBAR_BORDER}`,
+                    flexShrink: 0,
+                  }}
+                />
+                <Text
+                  size="xs"
+                  weight="semibold"
+                  style={{
+                    display: "block",
+                    minWidth: 0,
+                    color: SIDEBAR_TEXT,
+                    fontFamily: "var(--font-geist-mono)",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {tokens.colors.primary}
+                </Text>
+              </Flex>
+              <Text
+                size="xs"
+                style={{
+                  display: "block",
+                  marginTop: 6,
+                  color: SIDEBAR_MUTED,
+                  lineHeight: 1.4,
+                }}
+              >
+                {runtime.tenantName}
+              </Text>
+            </Box>
 
-          <Box
-            style={{
-              minWidth: 0,
-              padding: 12,
-              borderRadius: 16,
-              border: `1px solid ${SIDEBAR_BORDER}`,
-              background:
-                "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 52%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 30%, transparent) 100%)",
-              boxShadow:
-                "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 56%, transparent)",
-            }}
-          >
-            <Text
-              size="xs"
-              weight="semibold"
+            <Box
+              className="showroom-shell-launchpad-signal"
               style={{
-                display: "block",
-                color: SIDEBAR_MUTED,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
+                minWidth: 0,
+                padding: "2px 10px",
+                borderLeft: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 38%, transparent)`,
+                borderRight: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 38%, transparent)`,
               }}
             >
-              Radius
-            </Text>
-            <Flex align="center" gap={8} style={{ marginTop: 8 }}>
-              <Box
-                style={{
-                  width: 28,
-                  height: 18,
-                  borderRadius: tokens.borderRadius.lg,
-                  background:
-                    "linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 18%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 78%, transparent) 100%)",
-                  border: `1px solid ${SIDEBAR_BORDER}`,
-                  flexShrink: 0,
-                }}
-              />
               <Text
                 size="xs"
                 weight="semibold"
                 style={{
                   display: "block",
-                  minWidth: 0,
-                  color: SIDEBAR_TEXT,
-                  fontFamily: "var(--font-geist-mono)",
-                  wordBreak: "break-word",
+                  color: SIDEBAR_MUTED,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
                 }}
               >
-                {tokens.borderRadius.lg}
+                Radius
               </Text>
-            </Flex>
-          </Box>
+              <Flex align="center" gap={8} style={{ marginTop: 8 }}>
+                <Box
+                  style={{
+                    width: 24,
+                    height: 16,
+                    borderRadius: tokens.borderRadius.lg,
+                    background:
+                      "linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 18%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 78%, transparent) 100%)",
+                    border: `1px solid ${SIDEBAR_BORDER}`,
+                    flexShrink: 0,
+                  }}
+                />
+                <Text
+                  size="xs"
+                  weight="semibold"
+                  style={{
+                    display: "block",
+                    minWidth: 0,
+                    color: SIDEBAR_TEXT,
+                    fontFamily: "var(--font-geist-mono)",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {tokens.borderRadius.lg}
+                </Text>
+              </Flex>
+              <Text
+                size="xs"
+                style={{
+                  display: "block",
+                  marginTop: 6,
+                  color: SIDEBAR_MUTED,
+                  lineHeight: 1.4,
+                }}
+              >
+                Surface shape
+              </Text>
+            </Box>
 
-          <Box
-            style={{
-              minWidth: 0,
-              padding: 12,
-              borderRadius: 16,
-              border: `1px solid ${SIDEBAR_BORDER}`,
-              background:
-                "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 52%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 30%, transparent) 100%)",
-              boxShadow:
-                "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 56%, transparent)",
-            }}
-          >
-            <Text
-              size="xs"
-              weight="semibold"
+            <Box
+              className="showroom-shell-launchpad-signal"
               style={{
-                display: "block",
-                color: SIDEBAR_MUTED,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
+                minWidth: 0,
+                padding: "2px 4px 4px 10px",
               }}
             >
-              Density
-            </Text>
-            <Text
-              size="xs"
-              weight="semibold"
-              style={{
-                display: "block",
-                marginTop: 8,
-                color: SIDEBAR_TEXT,
-                lineHeight: 1.35,
-              }}
-            >
-              {tokens.personality.card.paddingDensity}
-            </Text>
-            <Text
-              size="xs"
-              style={{
-                display: "block",
-                marginTop: 5,
-                color: SIDEBAR_MUTED,
-                lineHeight: 1.45,
-              }}
-            >
-              {runtime.productProfileLabel}
-            </Text>
+              <Text
+                size="xs"
+                weight="semibold"
+                style={{
+                  display: "block",
+                  color: SIDEBAR_MUTED,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Density
+              </Text>
+              <Text
+                size="xs"
+                weight="semibold"
+                style={{
+                  display: "block",
+                  marginTop: 8,
+                  color: SIDEBAR_TEXT,
+                  lineHeight: 1.35,
+                }}
+              >
+                {tokens.personality.card.paddingDensity}
+              </Text>
+              <Text
+                size="xs"
+                style={{
+                  display: "block",
+                  marginTop: 6,
+                  color: SIDEBAR_MUTED,
+                  lineHeight: 1.4,
+                }}
+              >
+                {runtime.productProfileLabel}
+              </Text>
+            </Box>
           </Box>
         </Box>
 
-        <Flex gap={10} style={{ flexWrap: "wrap", marginTop: 4 }}>
+        <Flex gap={8} style={{ flexWrap: "wrap", marginTop: 2 }}>
           <Link href="/" style={{ textDecoration: "none" }}>
             <Button variant={pathname === "/" ? "primary" : "default"} size="sm">
               Landing
@@ -685,13 +734,13 @@ function SidebarNavigator({ pathname }: { pathname: string }) {
     <Box
       style={{
         minHeight: 0,
-        padding: 16,
-        borderRadius: 24,
-        border: `1px solid ${SIDEBAR_BORDER}`,
+        padding: 14,
+        borderRadius: 22,
+        border: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 60%, transparent)`,
         background:
-          "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 62%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 34%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)",
+          "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 42%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 18%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)",
         boxShadow:
-          "var(--ds-shadow-sm, 0 12px 28px rgba(0, 0, 0, 0.08)), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 58%, transparent)",
+          "0 12px 30px color-mix(in srgb, var(--ds-color-shadow, rgba(0, 0, 0, 0.12)) 6%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 52%, transparent)",
       }}
     >
       <Stack spacing="sm" fullWidth style={{ minHeight: 0 }}>
@@ -725,7 +774,7 @@ function SidebarNavigator({ pathname }: { pathname: string }) {
 
         <Text
           size="xs"
-          style={{ display: "block", color: SIDEBAR_MUTED, lineHeight: 1.55 }}
+          style={{ display: "block", color: SIDEBAR_MUTED, lineHeight: 1.5 }}
         >
           Foundations first, then primitives, patterns, structures, and surfaces.
           Keep this rail legible enough to scan without hunting.
@@ -751,11 +800,13 @@ function SidebarFooter() {
   return (
     <Box
       style={{
-        padding: 18,
-        borderRadius: 22,
-        border: `1px solid ${SIDEBAR_BORDER}`,
+        padding: 16,
+        borderRadius: 20,
+        border: `1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 56%, transparent)`,
         background:
-          "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 7%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 45%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)",
+          "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 32%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 0%, color-mix(in srgb, var(--ds-color-primary, #ffffff) 4%, var(--ds-sidebar-bg, var(--ds-color-bg-primary))) 100%)",
+        boxShadow:
+          "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 44%, transparent)",
       }}
     >
       <Stack spacing="sm" fullWidth>
@@ -886,6 +937,31 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
         background: shellBackdrop,
         color: "var(--ds-color-text-primary)",
         ["--showroom-sidebar-width" as string]: `${sidebarWidth}px`,
+        ["--showroom-shell-canvas" as string]: `color-mix(in srgb, var(--ds-color-bg-secondary, var(--ds-color-bg-primary, #ffffff)) 94%, ${tokens.colors.primary} 6%)`,
+        ["--showroom-shell-surface" as string]: `color-mix(in srgb, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)) 88%, ${tokens.colors.primary} 12%)`,
+        ["--showroom-shell-surface-strong" as string]: `color-mix(in srgb, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)) 92%, ${tokens.colors.secondary} 8%)`,
+        ["--showroom-shell-surface-subtle" as string]: `color-mix(in srgb, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)) 82%, ${tokens.colors.secondary} 18%)`,
+        ["--showroom-shell-border" as string]: `color-mix(in srgb, var(--ds-color-border-subtle, var(--ds-color-border, rgba(148, 163, 184, 0.22))) 84%, ${tokens.colors.primary} 16%)`,
+        ["--showroom-shell-border-strong" as string]: `color-mix(in srgb, var(--ds-color-border, rgba(148, 163, 184, 0.32)) 78%, ${tokens.colors.secondary} 22%)`,
+        ["--showroom-shell-text" as string]: "var(--ds-color-text-primary, #101418)",
+        ["--showroom-shell-text-secondary" as string]:
+          "var(--ds-color-text-secondary, #5b6677)",
+        ["--showroom-shell-text-tertiary" as string]:
+          "var(--ds-color-text-muted, #7d8797)",
+        ["--showroom-shell-active-bg" as string]:
+          `color-mix(in srgb, ${tokens.colors.primary} 12%, var(--showroom-shell-surface-subtle))`,
+        ["--showroom-shell-hover-bg" as string]:
+          `color-mix(in srgb, ${tokens.colors.primary} 8%, var(--showroom-shell-surface))`,
+        ["--showroom-shell-active-border" as string]:
+          `color-mix(in srgb, ${tokens.colors.primary} 24%, var(--showroom-shell-border-strong))`,
+        ["--showroom-shell-header-backdrop" as string]:
+          "color-mix(in srgb, var(--showroom-shell-canvas) 84%, transparent)",
+        ["--showroom-shell-overlay" as string]:
+          `color-mix(in srgb, ${tokens.colors.primary} 10%, rgba(15, 23, 42, 0.24))`,
+        ["--showroom-shell-shadow" as string]:
+          "0 16px 36px color-mix(in srgb, var(--ds-color-shadow, rgba(15, 23, 42, 0.12)) 14%, transparent)",
+        ["--showroom-shell-shadow-strong" as string]:
+          "0 28px 72px color-mix(in srgb, var(--ds-color-shadow, rgba(15, 23, 42, 0.16)) 20%, transparent)",
       }}
     >
       <Box className="showroom-shell-grid">
@@ -906,7 +982,7 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
             className="showroom-shell-sidebar-frame"
             style={{
               gap: tokens.spacing[3],
-              minHeight: `calc(100vh - ${(tokens.spacing[5] + tokens.spacing[6]) * 2}px)`,
+              minHeight: "100%",
             }}
           >
             <SidebarLaunchpad
@@ -917,7 +993,9 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
 
             <SidebarNavigator pathname={pathname} />
 
-            <SidebarFooter />
+            <Box className="showroom-shell-sidebar-footer-wrap">
+              <SidebarFooter />
+            </Box>
           </Box>
         </Box>
 
@@ -929,9 +1007,10 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
               position: "sticky",
               top: 0,
               zIndex: 20,
-              padding: `${tokens.spacing[3]}px ${desktopGutter}px ${tokens.spacing[2]}px`,
+              padding: `${tokens.spacing[2]}px ${desktopGutter}px ${tokens.spacing[1]}px`,
+              borderBottom: `1px solid ${HEADER_BORDER}`,
               background:
-                "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 98%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary) 92%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-primary) 68%, transparent) 100%)",
+                "linear-gradient(180deg, color-mix(in srgb, var(--showroom-shell-canvas) 94%, transparent) 0%, color-mix(in srgb, var(--showroom-shell-canvas) 88%, transparent) 72%, color-mix(in srgb, var(--showroom-shell-canvas) 70%, transparent) 100%)",
               backdropFilter: "blur(18px)",
             }}
           >
@@ -941,67 +1020,75 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                 width: "100%",
                 maxWidth: SHELL_CONTENT_MAX_WIDTH,
                 margin: "0 auto",
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.xl,
-                border: "1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)",
+                padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                borderRadius: tokens.borderRadius.lg,
+                border: "1px solid color-mix(in srgb, var(--showroom-shell-border-strong) 76%, transparent)",
                 background:
-                  "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 88%, transparent) 100%)",
+                  "linear-gradient(180deg, color-mix(in srgb, var(--showroom-shell-surface-subtle) 78%, transparent) 0%, color-mix(in srgb, var(--showroom-shell-surface) 92%, transparent) 100%)",
                 boxShadow:
-                  "0 14px 34px color-mix(in srgb, var(--ds-color-shadow, rgba(0, 0, 0, 0.12)) 18%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)",
+                  "var(--showroom-shell-shadow), inset 0 -1px 0 color-mix(in srgb, var(--showroom-shell-border) 68%, transparent)",
               }}
             >
               <Box
                 className="showroom-shell-header-stack"
                 style={{
                   display: "grid",
-                  gap: tokens.spacing[2],
+                  gap: tokens.spacing[1],
                 }}
               >
                 <Box className="showroom-shell-header-meta-grid">
                   <Box
                     style={{
                       minWidth: 0,
-                      padding: `${tokens.spacing[1]}px 0`,
+                      padding: "2px 0 0",
                       display: "grid",
-                      gap: 6,
+                      gap: 4,
                     }}
                   >
-                    <Flex align="center" gap={6} style={{ flexWrap: "wrap" }}>
-                      <Badge variant="secondary">Published DS package</Badge>
-                      <Badge variant="secondary">{route.sectionMeta.eyebrow}</Badge>
-                      <Badge variant="secondary">
-                        {runtime.tenantName} / {runtime.engine}
-                      </Badge>
-                    </Flex>
+                    <Text
+                      size="xs"
+                      weight="semibold"
+                      style={{
+                        display: "block",
+                        color: "var(--ds-color-text-muted)",
+                        lineHeight: 1.35,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                      }}
+                    >
+                      Published DS package · {route.sectionMeta.eyebrow} · {runtime.tenantName} /{" "}
+                      {runtime.engine}
+                    </Text>
                     <Text
                       size="xs"
                       style={{
                         display: "block",
                         color: "var(--ds-color-text-muted)",
-                        lineHeight: 1.4,
+                        lineHeight: 1.35,
                       }}
                     >
-                      Shared route metadata for the active runtime, kept inline so the
-                      shell reads like a thin header band instead of a hero card.
+                      Shared route metadata for the active runtime, kept inline so the shell reads
+                      like a thin header band.
                     </Text>
                   </Box>
 
-                  <Flex
-                    align="center"
-                    justify="end"
-                    gap={8}
-                    style={{ flexWrap: "wrap", minWidth: 0 }}
+                  <Box
+                    className="showroom-shell-principle-grid"
+                    style={{
+                      minWidth: 0,
+                    }}
                   >
                     {principleSignals.map((item) => (
                       <Box
+                        className="showroom-shell-principle-pill"
                         key={item.label}
                         style={{
                           minWidth: 0,
-                          padding: "8px 10px",
-                          borderRadius: 999,
-                          border: "1px solid var(--ds-color-border-subtle)",
+                          padding: "10px 12px",
+                          borderRadius: 18,
+                          border: "1px solid var(--showroom-shell-border)",
                           background:
-                            "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 80%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 74%, transparent) 100%)",
+                            "linear-gradient(180deg, color-mix(in srgb, var(--showroom-shell-surface-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--showroom-shell-surface) 88%, transparent) 100%)",
                         }}
                       >
                         <Flex align="center" gap={8} style={{ minWidth: 0 }}>
@@ -1011,7 +1098,7 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                               height: 9,
                               borderRadius: 999,
                               flexShrink: 0,
-                              border: "1px solid var(--ds-color-border-subtle)",
+                              border: "1px solid var(--showroom-shell-border)",
                               background:
                                 ("swatch" in item ? item.swatch : undefined) ??
                                 "color-mix(in srgb, var(--ds-color-primary, #ffffff) 16%, transparent)",
@@ -1029,25 +1116,40 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                           >
                             {item.label}
                           </Text>
-                          <Text
-                            size="xs"
-                            weight="semibold"
-                            style={{
-                              display: "block",
-                              color: "var(--ds-color-text-primary)",
-                              overflowWrap: "anywhere",
-                              fontFamily:
-                                item.label === "Palette" || item.label === "Radius"
-                                  ? "var(--font-geist-mono)"
-                                  : undefined,
-                            }}
-                          >
-                            {item.value}
-                          </Text>
                         </Flex>
+                        <Text
+                          size="xs"
+                          weight="semibold"
+                          style={{
+                            display: "block",
+                            marginTop: 6,
+                            color: "var(--ds-color-text-primary)",
+                            overflowWrap: "anywhere",
+                            fontSize: "12px",
+                            lineHeight: 1.3,
+                            fontFamily:
+                              item.label === "Palette" || item.label === "Radius"
+                                ? "var(--font-geist-mono)"
+                                : undefined,
+                          }}
+                        >
+                          {item.value}
+                        </Text>
+                        <Text
+                          size="xs"
+                          style={{
+                            display: "block",
+                            marginTop: 4,
+                            color: "var(--ds-color-text-muted)",
+                            fontSize: "10px",
+                            lineHeight: 1.35,
+                          }}
+                        >
+                          {item.detail}
+                        </Text>
                       </Box>
                     ))}
-                  </Flex>
+                  </Box>
                 </Box>
 
                 <Box className="showroom-shell-hero-grid">
@@ -1060,12 +1162,12 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                     <Flex align="start" gap={12} style={{ minWidth: 0 }}>
                       <Box
                         style={{
-                          width: 38,
-                          height: 38,
+                          width: 34,
+                          height: 34,
                           borderRadius: tokens.borderRadius.lg,
-                          border: "1px solid var(--ds-color-border-subtle)",
+                          border: "1px solid var(--showroom-shell-border)",
                           background:
-                            "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 12%, var(--ds-color-bg-elevated)) 0%, color-mix(in srgb, var(--ds-color-primary, #ffffff) 6%, var(--ds-color-bg-primary)) 100%)",
+                            "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 14%, var(--showroom-shell-surface-subtle)) 0%, color-mix(in srgb, var(--ds-color-primary, #ffffff) 7%, var(--showroom-shell-surface)) 100%)",
                           color: "var(--ds-color-primary)",
                           display: "flex",
                           alignItems: "center",
@@ -1079,24 +1181,114 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                       </Box>
 
                       <Stack spacing="xs" style={{ minWidth: 0, flex: 1, gap: 4 }}>
-                        <Flex gap={6} style={{ flexWrap: "wrap", marginBottom: 2 }}>
-                          <Badge variant="secondary">{runtime.productProfileLabel}</Badge>
-                          <Badge variant="secondary">{runtime.verticalLabel}</Badge>
-                        </Flex>
                         <BreadcrumbTrail items={breadcrumbItems} />
-                        <Text
-                          as={"h2" as any}
-                          size="xl"
-                          weight="bold"
+                        <Box
+                          className="showroom-shell-route-head"
                           style={{
-                            display: "block",
-                            color: "var(--ds-color-text-primary)",
-                            fontSize: "clamp(1.28rem, 1.08rem + 0.55vw, 1.72rem)",
-                            lineHeight: 1,
+                            display: "grid",
+                            gridTemplateColumns: "minmax(0, 1fr) auto",
+                            alignItems: "start",
+                            gap: 8,
+                            paddingTop: 4,
+                            paddingBottom: 6,
+                            borderBottom:
+                              "1px solid color-mix(in srgb, var(--showroom-shell-border) 82%, transparent)",
                           }}
                         >
-                          {route.title}
-                        </Text>
+                          <Text
+                            as={"h2" as any}
+                            size="xl"
+                            weight="bold"
+                            style={{
+                              display: "block",
+                              color: "var(--ds-color-text-primary)",
+                              fontSize: "clamp(1.32rem, 1.1rem + 0.62vw, 1.8rem)",
+                              lineHeight: 0.98,
+                            }}
+                          >
+                            {route.title}
+                          </Text>
+
+                          <Flex
+                            className="showroom-shell-route-pills"
+                          gap={6}
+                          style={{
+                            flexWrap: "wrap",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                          }}
+                        >
+                            <Box
+                              style={{
+                                padding: "4px 8px",
+                                borderRadius: 999,
+                                border: "1px solid var(--showroom-shell-border)",
+                                background:
+                                  "linear-gradient(180deg, color-mix(in srgb, var(--showroom-shell-surface-subtle) 84%, transparent) 0%, color-mix(in srgb, var(--showroom-shell-surface) 88%, transparent) 100%)",
+                              }}
+                            >
+                              <Text
+                                size="xs"
+                                style={{
+                                  display: "block",
+                                  color: "var(--ds-color-text-muted)",
+                                  textTransform: "uppercase",
+                                  letterSpacing: "0.07em",
+                                  fontSize: "10px",
+                                }}
+                              >
+                                Active profile
+                              </Text>
+                              <Text
+                                size="xs"
+                                weight="semibold"
+                                style={{
+                                  display: "block",
+                                  marginTop: 2,
+                                  color: "var(--ds-color-text-primary)",
+                                  fontSize: "11px",
+                                }}
+                              >
+                                {runtime.productProfileLabel}
+                              </Text>
+                            </Box>
+
+                            <Box
+                              style={{
+                                padding: "4px 8px",
+                                borderRadius: 999,
+                                border: "1px solid var(--showroom-shell-border)",
+                                background:
+                                  "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-secondary, #ffffff) 10%, var(--showroom-shell-surface-subtle)) 0%, color-mix(in srgb, var(--showroom-shell-surface) 90%, transparent) 100%)",
+                              }}
+                            >
+                              <Text
+                                size="xs"
+                                style={{
+                                  display: "block",
+                                  color: "var(--ds-color-text-muted)",
+                                  textTransform: "uppercase",
+                                  letterSpacing: "0.07em",
+                                  fontSize: "10px",
+                                }}
+                              >
+                                Runtime posture
+                              </Text>
+                              <Text
+                                size="xs"
+                                weight="semibold"
+                                style={{
+                                  display: "block",
+                                  marginTop: 2,
+                                  color: "var(--ds-color-text-primary)",
+                                  fontSize: "11px",
+                                }}
+                              >
+                                {runtime.tenantName} / {runtime.engine}
+                              </Text>
+                            </Box>
+                          </Flex>
+                        </Box>
                         <Text
                           size="sm"
                           style={{
@@ -1108,78 +1300,6 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                         >
                           {route.description}
                         </Text>
-
-                        <Flex gap={6} style={{ flexWrap: "wrap", marginTop: 2 }}>
-                          <Box
-                            style={{
-                              padding: "5px 8px",
-                              borderRadius: 999,
-                              border: "1px solid var(--ds-color-border-subtle)",
-                              background:
-                                "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 76%, transparent) 100%)",
-                            }}
-                          >
-                            <Text
-                              size="xs"
-                              style={{
-                                display: "block",
-                                color: "var(--ds-color-text-muted)",
-                                textTransform: "uppercase",
-                                letterSpacing: "0.07em",
-                                fontSize: "10.5px",
-                              }}
-                            >
-                              Active profile
-                            </Text>
-                            <Text
-                              size="xs"
-                              weight="semibold"
-                              style={{
-                                display: "block",
-                                marginTop: 2,
-                                color: "var(--ds-color-text-primary)",
-                                fontSize: "11.5px",
-                              }}
-                            >
-                              {runtime.productProfileLabel}
-                            </Text>
-                          </Box>
-
-                          <Box
-                            style={{
-                              padding: "5px 8px",
-                              borderRadius: 999,
-                              border: "1px solid var(--ds-color-border-subtle)",
-                              background:
-                                "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-secondary, #ffffff) 8%, var(--ds-color-bg-elevated, #ffffff)) 0%, color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 78%, transparent) 100%)",
-                            }}
-                          >
-                            <Text
-                              size="xs"
-                              style={{
-                                display: "block",
-                                color: "var(--ds-color-text-muted)",
-                                textTransform: "uppercase",
-                                letterSpacing: "0.07em",
-                                fontSize: "10.5px",
-                              }}
-                            >
-                              Runtime posture
-                            </Text>
-                            <Text
-                              size="xs"
-                              weight="semibold"
-                              style={{
-                                display: "block",
-                                marginTop: 2,
-                                color: "var(--ds-color-text-primary)",
-                                fontSize: "11.5px",
-                              }}
-                            >
-                              {runtime.tenantName} / {runtime.engine}
-                            </Text>
-                          </Box>
-                        </Flex>
                       </Stack>
                     </Flex>
                   </Box>
@@ -1187,11 +1307,11 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                   <Box className="showroom-shell-control-stack" style={{ minWidth: 0 }}>
                     <Box
                       style={{
-                        padding: tokens.spacing[2],
-                        borderRadius: tokens.borderRadius.xl,
-                        border: "1px solid var(--ds-color-border-subtle)",
+                        padding: "10px 12px",
+                        borderRadius: tokens.borderRadius.lg,
+                        border: "1px solid var(--showroom-shell-border)",
                         background:
-                          "linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 8%, var(--ds-color-bg-elevated, #ffffff)) 0%, color-mix(in srgb, var(--ds-color-secondary, #ffffff) 7%, var(--ds-color-bg-primary, #ffffff)) 100%)",
+                          "linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, var(--showroom-shell-surface-subtle)) 0%, color-mix(in srgb, var(--ds-color-secondary, #ffffff) 8%, var(--showroom-shell-surface)) 100%)",
                       }}
                     >
                       <Text
@@ -1209,7 +1329,7 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
 
                       <Box
                         className="showroom-shell-toolbar-grid"
-                        style={{ minWidth: 0, marginTop: tokens.spacing[2] }}
+                        style={{ minWidth: 0, marginTop: 10 }}
                       >
                         <SegmentedGroup
                           label="Tenant"
@@ -1267,8 +1387,12 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
           position: sticky;
           top: 0;
           align-self: start;
-          max-height: 100vh;
-          overflow: hidden;
+          box-sizing: border-box;
+          height: 100vh;
+          overflow-y: auto;
+          overflow-x: hidden;
+          overscroll-behavior: contain;
+          scrollbar-gutter: stable;
         }
 
         .showroom-shell-main {
@@ -1276,29 +1400,66 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
         }
 
         .showroom-shell-sidebar-frame {
-          display: grid;
-          grid-template-rows: auto minmax(0, 1fr) auto;
+          display: flex;
+          flex-direction: column;
+          min-height: 100%;
+        }
+
+        .showroom-shell-sidebar-footer-wrap {
+          margin-top: auto;
         }
 
         .showroom-shell-nav-scroll {
           min-height: 0;
-          overflow: auto;
-          margin-right: -4px;
-          padding-right: 4px;
+          overflow: visible;
+          margin-right: 0;
+          padding-right: 0;
+        }
+
+        .showroom-shell-nav-link {
+          display: block;
+        }
+
+        .showroom-shell-nav-link:hover .showroom-shell-nav-item[data-active="false"],
+        .showroom-shell-nav-link:focus-visible .showroom-shell-nav-item[data-active="false"] {
+          background:
+            linear-gradient(
+              180deg,
+              ${NAV_ITEM_HOVER_BG} 0%,
+              color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 28%, transparent) 100%
+            );
+          border-color: color-mix(in srgb, ${SIDEBAR_BORDER} 56%, transparent);
+          transform: translateX(2px);
+        }
+
+        .showroom-shell-nav-link:focus-visible {
+          outline: none;
         }
 
         .showroom-shell-header-meta-grid {
           display: grid;
-          grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
-          gap: 10px;
+          grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.82fr);
+          gap: 8px;
           align-items: start;
         }
 
         .showroom-shell-hero-grid {
           display: grid;
-          grid-template-columns: minmax(0, 1.55fr) minmax(300px, 404px);
-          gap: 18px;
+          grid-template-columns: minmax(0, 1.72fr) minmax(250px, 312px);
+          gap: 14px;
           align-items: start;
+        }
+
+        .showroom-shell-principle-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(132px, 1fr));
+          gap: 8px;
+          min-width: 0;
+        }
+
+        .showroom-shell-principle-pill {
+          min-height: 78px;
+          align-content: start;
         }
 
         .showroom-shell-control-stack {
@@ -1320,12 +1481,46 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
           gap: 8px;
         }
 
-        @media (max-width: 1480px) {
+        .showroom-shell-route-pills {
+          min-width: 0;
+        }
+
+        .showroom-shell-launchpad-signal {
+          min-width: 0;
+        }
+
+        @media (max-width: 1560px) {
           .showroom-shell-header-meta-grid {
             grid-template-columns: minmax(0, 1fr);
           }
 
+          .showroom-shell-principle-grid {
+            justify-content: start !important;
+          }
+        }
+
+        @media (max-width: 1440px) {
           .showroom-shell-hero-grid {
+            grid-template-columns: minmax(0, 1fr);
+          }
+
+          .showroom-shell-route-head {
+            grid-template-columns: minmax(0, 1fr);
+          }
+
+          .showroom-shell-route-pills {
+            justify-content: flex-start !important;
+          }
+        }
+
+        @media (max-width: 960px) {
+          .showroom-shell-principle-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 720px) {
+          .showroom-shell-principle-grid {
             grid-template-columns: minmax(0, 1fr);
           }
         }
@@ -1336,6 +1531,23 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
           }
         }
 
+        @media (max-width: 1280px) {
+          .showroom-shell-launchpad-signals {
+            grid-template-columns: minmax(0, 1fr) !important;
+          }
+
+          .showroom-shell-launchpad-signal {
+            padding: 4px 2px !important;
+            border: none !important;
+            border-top: 1px solid color-mix(in srgb, ${SIDEBAR_BORDER} 30%, transparent);
+          }
+
+          .showroom-shell-launchpad-signal:first-child {
+            border-top: none !important;
+            padding-top: 0 !important;
+          }
+        }
+
         @media (max-width: 1240px) {
           .showroom-shell-grid {
             grid-template-columns: minmax(0, 1fr);
@@ -1343,14 +1555,13 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
 
           .showroom-shell-sidebar {
             position: relative;
-            max-height: none;
+            height: auto;
             border-right: none;
             border-bottom: 1px solid var(--ds-color-border-subtle);
             overflow: visible;
           }
 
           .showroom-shell-sidebar-frame {
-            grid-template-rows: auto;
             min-height: 0 !important;
           }
 
@@ -1363,11 +1574,11 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
 
         @media (max-width: 760px) {
           .showroom-shell-header {
-            padding: 16px 16px 0;
+            padding: 16px 16px 10px;
           }
 
           .showroom-shell-header-surface {
-            padding: 10px 0 8px;
+            padding: 10px 12px 8px;
           }
 
           .showroom-shell-hero-grid {

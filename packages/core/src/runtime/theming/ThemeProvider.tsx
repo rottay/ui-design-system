@@ -86,6 +86,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useLayoutEffect,
   useCallback,
   useMemo,
   useRef,
@@ -104,6 +105,9 @@ import {
   buildRuntimeScale,
   getReadableForegroundColor,
 } from '../../compilers/_shared/color-math';
+
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 // ─────────────────────────────────────────────────────────────────
 // SHALLOW FINGERPRINT (avoids JSON.stringify on every render)
@@ -570,9 +574,13 @@ export function ThemeProvider({
     [vertical]
   );
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setThemeState(initialTheme);
   }, [initialTheme]);
+
+  useIsomorphicLayoutEffect(() => {
+    setTenantState((current) => (current === initialTenant ? current : initialTenant));
+  }, [initialTenant]);
 
   /**
    * Injects emergency Rottay tokens as inline style element
@@ -1050,7 +1058,7 @@ export function ThemeProvider({
    * Without this sync, calling `setTheme('dark')` changes state but not the
    * actual variables the UI consumes.
    */
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const rootElement = document.documentElement;
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 

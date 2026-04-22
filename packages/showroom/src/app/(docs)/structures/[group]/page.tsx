@@ -410,9 +410,10 @@ export default async function StructureGroupPage({
         tone="accent"
       >
         <Box
+          className="showroom-structures-group-catalog-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
             gap: 16,
           }}
         >
@@ -424,6 +425,7 @@ export default async function StructureGroupPage({
             >
               <Card
                 hoverable
+                className="showroom-structures-group-catalog-card"
                 style={{
                   height: '100%',
                   padding: 20,
@@ -431,6 +433,8 @@ export default async function StructureGroupPage({
                   background:
                     'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary-500) 4%, var(--ds-surface-card, var(--ds-color-bg-elevated))) 0%, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%)',
                   boxShadow: SHADOW,
+                  containerType: 'inline-size',
+                  containerName: 'showroom-structure-card',
                 }}
               >
                 <Stack spacing="md" style={{ height: '100%' }}>
@@ -606,6 +610,24 @@ export default async function StructureGroupPage({
       </DocsPanel>
 
       <style>{`
+        .showroom-structures-group-catalog-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        @container showroom-content (max-width: 1720px) {
+          .showroom-structures-group-catalog-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 1210px) {
+          .showroom-structures-group-catalog-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
         @container showroom-content (max-width: 1180px) {
           .showroom-structures-group-hero-grid {
             grid-template-columns: 1fr !important;
@@ -613,9 +635,16 @@ export default async function StructureGroupPage({
         }
 
         @container showroom-content (max-width: 920px) {
+          .showroom-structures-group-catalog-grid,
           .showroom-structures-group-audit-grid,
           .showroom-structures-group-metrics-grid,
           .showroom-structures-group-pairings-grid,
+          .showroom-structures-group-export-card-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+
+        @container showroom-structure-card (max-width: 360px) {
           .showroom-structures-group-export-card-grid {
             grid-template-columns: 1fr !important;
           }

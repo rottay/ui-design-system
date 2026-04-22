@@ -115,6 +115,7 @@ function PatternReferenceCard({
     <Link href={href} style={{ textDecoration: "none" }}>
       <Card
         hoverable
+        className="showroom-patterns-group-card"
         style={{
           height: "100%",
           padding: 18,
@@ -130,6 +131,8 @@ function PatternReferenceCard({
           flexDirection: "column",
           gap: 12,
           minHeight: 296,
+          containerType: "inline-size",
+          containerName: "showroom-pattern-card",
         }}
       >
         <Stack spacing="sm" fullWidth style={{ height: "100%" }}>
@@ -222,6 +225,7 @@ function PatternReferenceCard({
           </Box>
 
           <Flex
+            className="showroom-patterns-group-card-footer"
             align="center"
             justify="between"
             gap={10}
@@ -448,9 +452,9 @@ export default async function PatternGroupPage({
         className="showroom-patterns-group-support-grid"
         style={{
           display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           gap: 14,
+          alignItems: "start",
         }}
       >
         <DocsPanel
@@ -658,10 +662,10 @@ export default async function PatternGroupPage({
       >
         {entries.length > 0 ? (
           <Box
+            className="showroom-patterns-group-catalog-grid"
             style={{
               display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+              gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
               gap: 14,
             }}
           >
@@ -696,10 +700,47 @@ export default async function PatternGroupPage({
       </DocsPanel>
 
       <style>{`
+        .showroom-patterns-group-catalog-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+        }
+
+        .showroom-patterns-group-support-grid > * {
+          height: auto !important;
+          align-self: start;
+        }
+
+        @container showroom-content (max-width: 1720px) {
+          .showroom-patterns-group-catalog-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 1210px) {
+          .showroom-patterns-group-catalog-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 1260px) {
+          .showroom-patterns-group-support-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
         @container showroom-content (max-width: 920px) {
           .showroom-patterns-group-hero-grid,
-          .showroom-patterns-group-support-grid {
+          .showroom-patterns-group-support-grid,
+          .showroom-patterns-group-catalog-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+
+        @container showroom-pattern-card (max-width: 360px) {
+          .showroom-patterns-group-card-footer {
+            flex-direction: column !important;
+            align-items: stretch !important;
           }
         }
       `}</style>

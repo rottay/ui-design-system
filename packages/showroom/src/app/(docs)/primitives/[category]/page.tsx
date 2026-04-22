@@ -88,6 +88,275 @@ const INSET_SURFACE =
 const SUBTLE_BORDER =
   '1px solid var(--ds-color-border-subtle, var(--ds-color-neutral-200))';
 const SHADOW = '0 20px 48px var(--ds-color-shadow, rgba(0, 0, 0, 0.22))';
+const ENGINE_LABELS: Record<PrimitiveEntry['engines'][number], string> = {
+  classic: 'Classic',
+  modern: 'Modern',
+  rustic: 'Rustic',
+};
+const CATEGORY_PREVIEW_COPY: Record<
+  PrimitiveCategory,
+  {
+    eyebrow: string;
+    title: string;
+    supporting: string;
+    rail: string[];
+    chips: string[];
+    focus: string;
+  }
+> = {
+  display: {
+    eyebrow: 'Read surface',
+    title: 'Headline, support, and metadata stay legible.',
+    supporting: 'Quiet information density without losing hierarchy.',
+    rail: ['status', 'badge', 'density'],
+    chips: ['content', 'hierarchy'],
+    focus: 'Legibility first',
+  },
+  inputs: {
+    eyebrow: 'Input state',
+    title: 'Label, field, and helper text read as one system.',
+    supporting: 'Focus, error, and keyboard states stay obvious.',
+    rail: ['focus', 'error', 'keys'],
+    chips: ['capture', 'feedback'],
+    focus: 'State clarity',
+  },
+  feedback: {
+    eyebrow: 'System signal',
+    title: 'Status, urgency, and consequence stay readable.',
+    supporting: 'The primitive should frame motion and recovery cleanly.',
+    rail: ['success', 'warning', 'undo'],
+    chips: ['status', 'recovery'],
+    focus: 'Urgency control',
+  },
+  layout: {
+    eyebrow: 'Spatial rhythm',
+    title: 'Sections align before custom page chrome appears.',
+    supporting: 'Spacing and balance should feel deliberate under load.',
+    rail: ['grid', 'gap', 'flow'],
+    chips: ['rhythm', 'balance'],
+    focus: 'Composition power',
+  },
+  navigation: {
+    eyebrow: 'Wayfinding',
+    title: 'Current location and movement cues stay visible.',
+    supporting: 'Active state and orientation should never feel guessed.',
+    rail: ['active', 'path', 'switch'],
+    chips: ['context', 'pace'],
+    focus: 'Orientation',
+  },
+  overlay: {
+    eyebrow: 'Layer behavior',
+    title: 'Attention shifts without losing the base page.',
+    supporting: 'Anchoring, escape, and interruption handling stay calm.',
+    rail: ['anchor', 'escape', 'depth'],
+    chips: ['layering', 'return'],
+    focus: 'Interrupt safely',
+  },
+};
+
+function PrimitiveCardPreview({ entry }: { entry: PrimitiveEntry }) {
+  const preview = CATEGORY_PREVIEW_COPY[entry.category];
+  const accent =
+    entry.category === 'display'
+      ? 'var(--ds-color-primary-500)'
+      : entry.category === 'inputs'
+        ? 'var(--ds-color-info-500)'
+        : entry.category === 'feedback'
+          ? 'var(--ds-color-warning-500)'
+          : entry.category === 'layout'
+            ? 'var(--ds-color-secondary-500)'
+            : entry.category === 'navigation'
+              ? 'var(--ds-color-success-500)'
+              : 'var(--ds-color-danger-500)';
+
+  return (
+    <Box
+      style={{
+        padding: '14px 14px 12px',
+        borderRadius: 16,
+        border: SUBTLE_BORDER,
+        background:
+          'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated) 84%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent) 100%)',
+        boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent)',
+      }}
+    >
+      <Stack spacing="xs" fullWidth style={{ minWidth: 0, gap: 10 }}>
+        <Flex align="center" justify="between" gap={10} style={{ flexWrap: 'wrap' }}>
+          <Flex align="center" gap={8}>
+            <Box
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 999,
+                background: accent,
+                boxShadow: `0 0 0 4px color-mix(in srgb, ${accent} 14%, transparent)`,
+                flexShrink: 0,
+              }}
+            />
+            <Text
+              size="xs"
+              weight="semibold"
+              style={{
+                display: 'block',
+                color: 'var(--ds-color-text-muted)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {preview.eyebrow}
+            </Text>
+          </Flex>
+
+          <Box
+            style={{
+              padding: '5px 10px',
+              borderRadius: 999,
+              border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 80%, transparent)',
+              background: 'color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent)',
+            }}
+          >
+            <Text
+              size="xs"
+              weight="semibold"
+              style={{
+                display: 'block',
+                color: 'var(--ds-color-text-secondary)',
+                letterSpacing: '0.04em',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {preview.focus}
+            </Text>
+          </Box>
+        </Flex>
+
+        <Box
+          className="showroom-primitives-card-preview-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 156px), 1fr))',
+            gap: 10,
+            alignItems: 'stretch',
+          }}
+        >
+          <Box
+            style={{
+              minWidth: 0,
+              padding: '11px 12px',
+              borderRadius: 14,
+              border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 84%, transparent)',
+              background:
+                'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 94%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent) 100%)',
+            }}
+          >
+            <Flex align="center" gap={5}>
+              {[0, 1, 2].map((dot) => (
+                <Box
+                  key={dot}
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 999,
+                    background:
+                      dot === 0
+                        ? accent
+                        : 'color-mix(in srgb, var(--ds-color-text-primary) 18%, transparent)',
+                  }}
+                />
+              ))}
+            </Flex>
+
+            <Text
+              size="xs"
+              weight="semibold"
+              style={{
+                display: 'block',
+                marginTop: 10,
+                color: 'var(--ds-color-text-primary)',
+                lineHeight: 1.45,
+                overflowWrap: 'anywhere',
+              }}
+            >
+              {preview.title}
+            </Text>
+            <Text
+              className="showroom-primitives-card-preview-supporting"
+              size="xs"
+              style={{
+                display: 'block',
+                marginTop: 6,
+                color: 'var(--ds-color-text-secondary)',
+                lineHeight: 1.5,
+                overflowWrap: 'anywhere',
+              }}
+            >
+              {preview.supporting}
+            </Text>
+
+            <Flex gap={6} style={{ flexWrap: 'wrap', marginTop: 10 }}>
+              {preview.chips.map((chip) => (
+                <Box
+                  key={chip}
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: 999,
+                    border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
+                    background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent)',
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{
+                      display: 'block',
+                      color: 'var(--ds-color-text-muted)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {chip}
+                  </Text>
+                </Box>
+              ))}
+            </Flex>
+          </Box>
+
+          <Stack spacing="xs" fullWidth style={{ gap: 8 }}>
+            {preview.rail.map((item) => (
+              <Box
+                key={item}
+                style={{
+                  minHeight: 0,
+                  padding: '9px 10px',
+                  borderRadius: 12,
+                  border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 80%, transparent)',
+                  background:
+                    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated) 92%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent) 100%)',
+                }}
+              >
+                <Text
+                  size="xs"
+                  weight="semibold"
+                  style={{
+                    display: 'block',
+                    color: 'var(--ds-color-text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {item}
+                </Text>
+              </Box>
+            ))}
+          </Stack>
+        </Box>
+      </Stack>
+    </Box>
+  );
+}
 
 function getCategoryLabel(slug: string): string {
   const category = primitiveCategories.find((item) => item.slug === slug);
@@ -107,6 +376,7 @@ function PrimitiveReferenceCard({
     <Link href={href} style={{ textDecoration: 'none' }}>
       <Card
         hoverable
+        className="showroom-primitives-reference-card"
         style={{
           height: '100%',
           padding: 18,
@@ -114,6 +384,9 @@ function PrimitiveReferenceCard({
           background: CARD_SURFACE,
           cursor: 'pointer',
           boxShadow: SHADOW,
+          overflow: 'hidden',
+          containerType: 'inline-size',
+          containerName: 'primitive-reference-card',
         }}
       >
         <Stack spacing="sm" fullWidth style={{ height: '100%' }}>
@@ -141,6 +414,7 @@ function PrimitiveReferenceCard({
                   fontFamily: 'var(--font-geist-mono)',
                   color: 'var(--ds-color-text-primary)',
                   lineHeight: 1.15,
+                  overflowWrap: 'anywhere',
                 }}
               >
                 {entry.name}
@@ -153,10 +427,17 @@ function PrimitiveReferenceCard({
 
           <Text
             size="sm"
-            style={{ display: 'block', color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}
+            style={{
+              display: 'block',
+              color: 'var(--ds-color-text-secondary)',
+              lineHeight: 1.55,
+              overflowWrap: 'anywhere',
+            }}
           >
             {entry.description}
           </Text>
+
+          <PrimitiveCardPreview entry={entry} />
 
           <Box
             style={{
@@ -194,43 +475,168 @@ function PrimitiveReferenceCard({
               </Text>
             </Box>
 
-            <Flex align="center" justify="between" gap={10} style={{ flexWrap: 'wrap', marginTop: 12 }}>
-              <Flex gap={6} style={{ flexWrap: 'wrap' }}>
-                {entry.engines.map((engine) => (
-                  <Box
-                    key={engine}
+            <Stack spacing="xs" fullWidth style={{ marginTop: 12, gap: 10 }}>
+              <Box
+                style={{
+                  padding: '12px 14px',
+                  borderRadius: 14,
+                  background: INSET_SURFACE,
+                  border: SUBTLE_BORDER,
+                }}
+              >
+                <Flex align="center" justify="between" gap={10} style={{ flexWrap: 'wrap' }}>
+                  <Text
+                    className="showroom-primitives-card-support-label"
+                    size="xs"
+                    weight="semibold"
                     style={{
-                      padding: '4px 10px',
+                      display: 'block',
+                      color: 'var(--ds-color-text-muted)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    Engine support
+                  </Text>
+                  <Text
+                    className="showroom-primitives-card-support-detail"
+                    size="xs"
+                    weight="medium"
+                    style={{
+                      display: 'block',
+                      color: 'var(--ds-color-text-secondary)',
+                      lineHeight: 1.35,
+                      textAlign: 'right',
+                    }}
+                  >
+                    {entry.engines.length === 3 ? 'Full runtime coverage' : 'Partial coverage'}
+                  </Text>
+                </Flex>
+
+                <Box
+                  className="showroom-primitives-card-engine-grid"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(96px, 1fr))',
+                    gap: 8,
+                    marginTop: 10,
+                  }}
+                >
+                  {entry.engines.map((engine) => (
+                    <Box
+                      key={engine}
+                      style={{
+                        minWidth: 0,
+                        minHeight: 44,
+                        padding: '9px 10px',
+                        borderRadius: 12,
+                        border: SUBTLE_BORDER,
+                        background:
+                          'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent) 100%)',
+                      }}
+                    >
+                      <Flex align="center" justify="center" gap={6}>
+                        <Box
+                          style={{
+                            width: 7,
+                            height: 7,
+                            borderRadius: 999,
+                            background:
+                              engine === 'classic'
+                                ? 'var(--ds-color-info-500)'
+                                : engine === 'modern'
+                                  ? 'var(--ds-color-success-500)'
+                                  : 'var(--ds-color-warning-500)',
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Text
+                          size="xs"
+                          weight="semibold"
+                          style={{
+                            display: 'block',
+                            color: 'var(--ds-color-text-secondary)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {ENGINE_LABELS[engine]}
+                        </Text>
+                      </Flex>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+
+              <Box
+                className="showroom-primitives-card-cta"
+                style={{
+                  padding: '12px 14px',
+                  borderRadius: 14,
+                  border: '1px solid color-mix(in srgb, var(--ds-color-primary-500) 18%, var(--ds-color-border-subtle))',
+                  background:
+                    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary-500) 6%, var(--ds-color-bg-elevated)) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 90%, transparent) 100%)',
+                }}
+              >
+                <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
+                  <Box
+                    className="showroom-primitives-card-cta-body"
+                    style={{ minWidth: 0, flex: '1 1 180px' }}
+                  >
+                    <Text
+                      size="xs"
+                      weight="semibold"
+                      style={{
+                        display: 'block',
+                        color: 'var(--ds-color-text-muted)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      Open reference
+                    </Text>
+                    <Text
+                      size="sm"
+                      weight="medium"
+                    style={{
+                      display: 'block',
+                      marginTop: 6,
+                      color: 'var(--ds-color-text-secondary)',
+                      lineHeight: 1.45,
+                      overflowWrap: 'anywhere',
+                    }}
+                  >
+                    Jump into usage guidance, API surface, and runtime-specific notes.
+                    </Text>
+                  </Box>
+
+                  <Box
+                    style={{
+                      padding: '7px 11px',
                       borderRadius: 999,
-                      background: 'var(--ds-color-neutral-100)',
+                      border: '1px solid color-mix(in srgb, var(--ds-color-primary-500) 28%, var(--ds-color-border-subtle))',
+                      background: 'color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)',
+                      flexShrink: 0,
                     }}
                   >
                     <Text
                       size="xs"
+                      weight="semibold"
                       style={{
                         display: 'block',
-                        color: 'var(--ds-color-text-secondary)',
-                        fontFamily: 'var(--font-geist-mono)',
+                        color: 'var(--ds-color-primary-600)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      {engine}
+                      View page
                     </Text>
                   </Box>
-                ))}
-              </Flex>
-              <Text
-                size="xs"
-                weight="semibold"
-                style={{
-                  display: 'block',
-                  color: 'var(--ds-color-primary-600)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
-                }}
-              >
-                Open Reference
-              </Text>
-            </Flex>
+                </Flex>
+              </Box>
+            </Stack>
           </Box>
         </Stack>
       </Card>
@@ -395,6 +801,7 @@ export default async function PrimitiveCategoryPage({ params }: PageProps) {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
           gap: 16,
+          alignItems: 'start',
         }}
       >
         <DocsPanel
@@ -505,10 +912,12 @@ export default async function PrimitiveCategoryPage({ params }: PageProps) {
       >
         {entries.length > 0 ? (
           <Box
+            className="showroom-primitives-category-catalog-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
               gap: 16,
+              alignItems: 'start',
             }}
           >
             {entries.map((entry, index) => (
@@ -542,10 +951,39 @@ export default async function PrimitiveCategoryPage({ params }: PageProps) {
       </DocsPanel>
 
       <style>{`
+        .showroom-primitives-category-catalog-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+          gap: 16px;
+        }
+
+        .showroom-primitives-category-support-grid > * {
+          height: auto !important;
+          align-self: start;
+        }
+
         @container showroom-content (max-width: 920px) {
           .showroom-primitives-category-hero-grid,
-          .showroom-primitives-category-support-grid {
+          .showroom-primitives-category-support-grid,
+          .showroom-primitives-category-catalog-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+
+        @container primitive-reference-card (max-width: 440px) {
+          .showroom-primitives-card-preview-supporting,
+          .showroom-primitives-card-cta-body {
+            display: none !important;
+          }
+        }
+
+        @container primitive-reference-card (max-width: 380px) {
+          .showroom-primitives-card-engine-grid {
+            grid-template-columns: minmax(0, 1fr) !important;
+          }
+
+          .showroom-primitives-card-support-detail {
+            text-align: left !important;
           }
         }
       `}</style>

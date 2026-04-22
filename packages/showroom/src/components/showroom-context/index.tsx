@@ -1,10 +1,12 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useState,
   type ReactNode,
 } from 'react';
@@ -24,6 +26,8 @@ export type ShowroomVertical = 'platform' | 'bithire' | 'evnto';
 
 const ENGINE_STORAGE_KEY = 'rottay-showroom-engine';
 const THEME_STORAGE_KEY = 'rottay-showroom-theme';
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 function isShowroomTheme(value: string | null): value is ShowroomTheme {
   return isShowroomTenantValue(value);
@@ -150,6 +154,7 @@ const SHOWROOM_RUNTIME_META: Record<
 };
 
 export function ShowroomProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const [engine, setEngine] = useState<ShowroomEngine>(getInitialEngine);
   const [tenantSlug, setTenantSlug] = useState<ShowroomTheme>(getInitialTenant);
 
@@ -208,6 +213,21 @@ export function ShowroomProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const runtimeOverride = readRuntimeOverrideFromLocation();
+
+    if (runtimeOverride?.engine && runtimeOverride.engine !== engine) {
+      setEngine(runtimeOverride.engine);
+    }
+
+    if (
+      runtimeOverride?.tenantSlug &&
+      runtimeOverride.tenantSlug !== tenantSlug
+    ) {
+      setTenantSlug(runtimeOverride.tenantSlug);
+    }
+  }, [engine, pathname, tenantSlug]);
+
+  useIsomorphicLayoutEffect(() => {
     document.documentElement.setAttribute('data-showroom-engine', engine);
     document.documentElement.setAttribute('data-showroom-tenant', tenantSlug);
 

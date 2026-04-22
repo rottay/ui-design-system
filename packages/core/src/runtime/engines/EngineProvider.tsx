@@ -27,12 +27,22 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import type { EngineName, EngineContextValue, EngineProviderProps } from '../../contracts';
 import { getDefaultEngine, isValidEngine } from './registry';
 import { warnOnceInDev } from '../../_internal/utils/runtime-logger';
 
 const EngineContext = createContext<EngineContextValue | null>(null);
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 // Re-export type from types (single source of truth)
 export type { EngineProviderProps } from '../../contracts';
@@ -43,12 +53,13 @@ export function EngineProvider({
 }: EngineProviderProps): React.ReactElement {
   const [engine, setEngineState] = useState<EngineName>(defaultEngine);
 
-  // Sync immediately when parent changes the defaultEngine prop.
-  // This is React's recommended pattern for adjusting state based on props
-  // (avoids the useEffect one-render delay anti-pattern).
-  if (defaultEngine !== engine && isValidEngine(defaultEngine)) {
-    setEngineState(defaultEngine);
-  }
+  // Keep the controlled runtime engine in sync before paint so route changes
+  // do not briefly render with the previous engine's DOM attributes.
+  useIsomorphicLayoutEffect(() => {
+    if (defaultEngine !== engine && isValidEngine(defaultEngine)) {
+      setEngineState(defaultEngine);
+    }
+  }, [defaultEngine, engine]);
 
   const setEngine = useCallback((newEngine: EngineName) => {
     if (isValidEngine(newEngine)) {
@@ -63,7 +74,7 @@ export function EngineProvider({
   }, []);
 
   // Sync engine name to DOM so CSS selectors like [data-engine='modern'] work.
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     document.documentElement.setAttribute('data-engine', engine);
     return () => {
       document.documentElement.removeAttribute('data-engine');

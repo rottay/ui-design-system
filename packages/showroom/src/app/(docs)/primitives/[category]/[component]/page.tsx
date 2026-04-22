@@ -518,8 +518,8 @@ function ReferencePanel({
   return (
     <Box
       style={{
-        padding: 24,
-        borderRadius: 24,
+        padding: 20,
+        borderRadius: 22,
         border: `1px solid ${SHOWROOM_SURFACES.border}`,
         background: subtle
           ? `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${mixWithCanvas(
@@ -531,7 +531,7 @@ function ReferencePanel({
               6,
               SHOWROOM_SURFACES.surface,
             )} 100%)`,
-        boxShadow: SHOWROOM_SURFACES.shadow,
+        boxShadow: `0 16px 36px ${mixWithCanvas('var(--ds-color-shadow, rgba(15, 23, 42, 0.16))', 12)}`,
         color: SHOWROOM_SURFACES.text,
         ...style,
       }}
@@ -552,8 +552,8 @@ function GuidanceCard({
     <Box
       style={{
         height: '100%',
-        padding: 18,
-        borderRadius: 20,
+        padding: 16,
+        borderRadius: 18,
         border: `1px solid ${SHOWROOM_SURFACES.border}`,
         background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${mixWithCanvas(
           'var(--ds-color-primary, #60a5fa)',
@@ -561,8 +561,8 @@ function GuidanceCard({
         )} 100%)`,
         display: 'flex',
         flexDirection: 'column',
-        gap: 10,
-        minHeight: 140,
+        gap: 8,
+        minHeight: 128,
       }}
     >
       <Stack spacing="sm">
@@ -578,13 +578,13 @@ function GuidanceCard({
         >
           {title}
         </Text>
-        <Box style={{ paddingTop: 10, borderTop: `1px solid ${SHOWROOM_SURFACES.border}` }}>
+        <Box style={{ paddingTop: 4 }}>
           <Stack spacing="xs">
             {items.map((item) => (
               <Box
                 key={item}
                 style={{
-                  padding: '10px 12px',
+                  padding: '9px 12px',
                   borderRadius: 12,
                   border: `1px solid ${SHOWROOM_SURFACES.border}`,
                   background: SHOWROOM_SURFACES.surface,
@@ -606,6 +606,261 @@ function GuidanceCard({
           </Stack>
         </Box>
       </Stack>
+    </Box>
+  );
+}
+
+function SectionAsideCard({
+  label,
+  title,
+  detail,
+  footer,
+}: {
+  label: string;
+  title: string;
+  detail: string;
+  footer?: string;
+}) {
+  return (
+    <Box
+      style={{
+        height: '100%',
+        padding: 16,
+        borderRadius: 20,
+        border: `1px solid ${SHOWROOM_SURFACES.borderStrong}`,
+        background: `linear-gradient(180deg, ${mixWithSurface(
+          'var(--ds-color-primary, #60a5fa)',
+          8,
+          SHOWROOM_SURFACES.subtle,
+        )} 0%, ${SHOWROOM_SURFACES.surface} 100%)`,
+        boxShadow: SHOWROOM_SURFACES.shadow,
+      }}
+    >
+      <Stack spacing="sm">
+        <Text
+          size="xs"
+          weight="semibold"
+          style={{
+            display: 'block',
+            color: SHOWROOM_SURFACES.textTertiary,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+          }}
+        >
+          {label}
+        </Text>
+        <Text
+          size="md"
+          weight="semibold"
+          style={{
+            display: 'block',
+            color: SHOWROOM_SURFACES.text,
+            lineHeight: 1.35,
+            overflowWrap: 'anywhere',
+          }}
+        >
+          {title}
+        </Text>
+        <Text
+          size="sm"
+          style={{
+            display: 'block',
+            color: SHOWROOM_SURFACES.textSecondary,
+            lineHeight: 1.6,
+            overflowWrap: 'anywhere',
+          }}
+        >
+          {detail}
+        </Text>
+        {footer ? (
+          <Box
+            style={{
+              marginTop: 2,
+              paddingTop: 12,
+              borderTop: `1px solid ${SHOWROOM_SURFACES.border}`,
+            }}
+          >
+            <Text
+              size="xs"
+              style={{
+                display: 'block',
+                color: SHOWROOM_SURFACES.textTertiary,
+                lineHeight: 1.5,
+              }}
+            >
+              {footer}
+            </Text>
+          </Box>
+        ) : null}
+      </Stack>
+    </Box>
+  );
+}
+
+function CodeFrame({
+  label,
+  title,
+  detail,
+  children,
+}: {
+  label: string;
+  title: string;
+  detail: string;
+  children: ReactNode;
+}) {
+  return (
+    <Box
+      className="primitive-code-frame"
+      style={{
+        padding: 14,
+        borderRadius: 24,
+        border: `1px solid ${SHOWROOM_SURFACES.border}`,
+        background: `linear-gradient(180deg, ${mixWithCanvas(
+          'var(--ds-color-primary, #60a5fa)',
+          4,
+        )} 0%, ${SHOWROOM_SURFACES.surface} 100%)`,
+        boxShadow: `inset 0 1px 0 color-mix(in srgb, white 10%, transparent)`,
+      }}
+    >
+      <Stack spacing="sm">
+        <Box style={{ padding: '2px 4px 0' }}>
+          <Text
+            size="xs"
+            weight="semibold"
+            style={{
+              display: 'block',
+              color: SHOWROOM_SURFACES.textTertiary,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
+          >
+            {label}
+          </Text>
+          <Text
+            size="sm"
+            weight="semibold"
+            style={{
+              display: 'block',
+              marginTop: 6,
+              color: SHOWROOM_SURFACES.text,
+              lineHeight: 1.35,
+            }}
+          >
+            {title}
+          </Text>
+          <Text
+            size="xs"
+            style={{
+              display: 'block',
+              marginTop: 6,
+              color: SHOWROOM_SURFACES.textSecondary,
+              lineHeight: 1.55,
+            }}
+          >
+            {detail}
+          </Text>
+        </Box>
+        {children}
+      </Stack>
+    </Box>
+  );
+}
+
+function RelatedPrimitiveCard({
+  sibling,
+  categoryLabel,
+}: {
+  sibling: PrimitiveEntry;
+  categoryLabel: string;
+}) {
+  return (
+    <Box
+      className="primitive-related-card"
+      style={{
+        height: '100%',
+        padding: 16,
+        borderRadius: 20,
+        border: `1px solid ${SHOWROOM_SURFACES.border}`,
+        background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${mixWithCanvas(
+          'var(--ds-color-primary, #60a5fa)',
+          5,
+        )} 100%)`,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        minHeight: 156,
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+      }}
+    >
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+        <Flex align="center" justify="between" gap={10} style={{ flexWrap: 'wrap' }}>
+          <Text
+            size="xs"
+            weight="semibold"
+            style={{
+              display: 'block',
+              color: SHOWROOM_SURFACES.textTertiary,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
+          >
+            Also in {categoryLabel}
+          </Text>
+          <Text size="xs" style={{ color: SHOWROOM_SURFACES.textTertiary }}>
+            {sibling.engines.length} engines
+          </Text>
+        </Flex>
+        <Text
+          size="md"
+          weight="semibold"
+          style={{
+            display: 'block',
+            color: SHOWROOM_SURFACES.text,
+            lineHeight: 1.3,
+            overflowWrap: 'anywhere',
+          }}
+        >
+          {sibling.name}
+        </Text>
+        <Text
+          size="sm"
+          style={{
+            display: 'block',
+            color: SHOWROOM_SURFACES.textSecondary,
+            lineHeight: 1.6,
+            overflowWrap: 'anywhere',
+          }}
+        >
+          {sibling.description}
+        </Text>
+      </Box>
+
+      <Flex
+        align="center"
+        justify="between"
+        gap={10}
+        style={{
+          paddingTop: 12,
+          borderTop: `1px solid ${SHOWROOM_SURFACES.border}`,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Text size="xs" style={{ color: SHOWROOM_SURFACES.textSecondary }}>
+          Peer primitive within the same category set.
+        </Text>
+        <Text
+          size="xs"
+          weight="semibold"
+          style={{
+            display: 'block',
+            color: SHOWROOM_SURFACES.text,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+          }}
+        >
+          Open detail
+        </Text>
+      </Flex>
     </Box>
   );
 }
@@ -663,193 +918,109 @@ export default async function PrimitiveComponentPage({
   const importStatement = `import { ${entry.name} } from '@rottay/design-system';`;
   const usageSnippet = getUsageSnippet(entry);
   const placeholderProps = getPlaceholderProps(entry);
+  const requiredPropsCount = placeholderProps.filter((prop) => prop.required).length;
+  const optionalPropsCount = placeholderProps.length - requiredPropsCount;
   const siblingEntries = (primitivesByCategory[categoryKey] ?? [])
     .filter((primitive) => primitive.slug !== entry.slug)
     .slice(0, 4);
 
   return (
-    <Stack spacing="xl" fullWidth>
+    <Stack spacing="lg" fullWidth>
       <ReferencePanel>
-        <Stack spacing="lg">
-          <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
-            <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
-              <Link href="/primitives" style={{ textDecoration: 'none' }}>
-                <Text
-                  size="xs"
-                  weight="semibold"
-                  style={{
-                    color: 'var(--ds-color-text-muted)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                  }}
-                >
-                  Primitives
-                </Text>
-              </Link>
-              <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-                /
-              </Text>
-              <Link href={`/primitives/${category}`} style={{ textDecoration: 'none' }}>
-                <Text
-                  size="xs"
-                  weight="semibold"
-                  style={{
-                    color: 'var(--ds-color-text-muted)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                  }}
-                >
-                  {categoryLabel}
-                </Text>
-              </Link>
-              <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
-                /
-              </Text>
-              <Text
-                size="xs"
-                weight="semibold"
-                style={{
-                  color: 'var(--ds-color-text-primary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                }}
-              >
-                {entry.name}
-              </Text>
-            </Flex>
-
-            <Flex gap={8} style={{ flexWrap: 'wrap' }}>
-              <Badge variant="secondary">{categoryLabel}</Badge>
-              <Badge variant="secondary">{entry.engines.length} engines</Badge>
-              <Badge variant="secondary">Runtime-driven docs</Badge>
-            </Flex>
-          </Flex>
-
-          <Box style={{ paddingTop: 14, borderTop: `1px solid ${SHOWROOM_SURFACES.border}` }}>
+        <Stack spacing="md">
           <Box
             className="primitive-component-header-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'minmax(0, 1.5fr) minmax(280px, 0.9fr)',
-              gap: 18,
+              gridTemplateColumns: 'minmax(0, 1.35fr) minmax(280px, 0.95fr)',
+              gap: 16,
               alignItems: 'start',
             }}
           >
-            <Stack spacing="md">
-              <Box>
-                <Box
-                  style={{
-                    padding: 18,
-                    borderRadius: 20,
-                    border: `1px solid ${SHOWROOM_SURFACES.border}`,
-                    background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.surface} 0%, ${mixWithSurface(
-                      'var(--ds-color-primary, #60a5fa)',
-                      6,
-                      SHOWROOM_SURFACES.subtle,
-                    )} 100%)`,
-                  }}
-                >
-                  <Text
-                    size="xs"
-                    weight="semibold"
-                    style={{
-                      display: 'block',
-                      color: SHOWROOM_SURFACES.textTertiary,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.08em',
-                    }}
-                  >
-                    Context
-                  </Text>
-                  <Text
-                    as={"h1" as any}
-                    size="2xl"
-                    weight="bold"
-                    style={{
-                      display: 'block',
-                      marginTop: 10,
-                      lineHeight: 1.05,
-                      letterSpacing: '-0.03em',
-                    }}
-                  >
-                    {entry.name}
-                  </Text>
-                  <Text
-                    size="md"
-                    style={{
-                      display: 'block',
-                      marginTop: 10,
-                      color: 'var(--ds-color-text-secondary)',
-                      lineHeight: 1.65,
-                    }}
-                  >
-                    {entry.description}
-                  </Text>
-                </Box>
-              </Box>
-
-              <Box style={{ paddingTop: 10, borderTop: `1px solid ${SHOWROOM_SURFACES.border}` }}>
-                <Text
-                  size="sm"
-                  style={{
-                    display: 'block',
-                    color: 'var(--ds-color-text-secondary)',
-                    lineHeight: 1.55,
-                  }}
-                >
-                  {guidance.promise}
-                </Text>
-              </Box>
+            <Stack spacing="sm">
+              <Text
+                size="xs"
+                weight="semibold"
+                style={{
+                  display: 'block',
+                  color: 'var(--ds-color-text-muted)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                }}
+              >
+                Reference summary
+              </Text>
+              <Text
+                size="lg"
+                weight="semibold"
+                style={{
+                  display: 'block',
+                  color: 'var(--ds-color-text-primary)',
+                  lineHeight: 1.45,
+                }}
+              >
+                {entry.description}
+              </Text>
+              <Text
+                size="sm"
+                style={{
+                  display: 'block',
+                  color: 'var(--ds-color-text-secondary)',
+                  lineHeight: 1.6,
+                  maxWidth: '62ch',
+                }}
+              >
+                {guidance.promise}
+              </Text>
 
               <Box
                 style={{
-                  padding: 16,
+                  padding: '14px 16px',
                   borderRadius: 18,
                   border: `1px solid ${SHOWROOM_SURFACES.border}`,
                   background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${mixWithCanvas(
                     'var(--ds-color-primary, #60a5fa)',
-                    5,
+                    4,
                   )} 100%)`,
                 }}
               >
-                <Stack spacing="sm">
-                  <Text
-                    size="xs"
-                    weight="semibold"
-                    style={{
-                      display: 'block',
-                      color: 'var(--ds-color-text-muted)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.08em',
-                    }}
-                  >
-                    How to read this page
-                  </Text>
-                  <Text
-                    size="sm"
-                    style={{
-                      display: 'block',
-                      color: 'var(--ds-color-text-secondary)',
-                      lineHeight: 1.55,
-                    }}
-                  >
-                    Use the showroom switchers in the sidebar to change engine and tenant, then
-                    judge this primitive in the live preview before styling around it locally.
-                  </Text>
-                </Stack>
+                <Text
+                  size="xs"
+                  weight="semibold"
+                  style={{
+                    display: 'block',
+                    color: 'var(--ds-color-text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                  }}
+                >
+                  How to read this page
+                </Text>
+                <Text
+                  size="sm"
+                  style={{
+                    display: 'block',
+                    marginTop: 8,
+                    color: 'var(--ds-color-text-secondary)',
+                    lineHeight: 1.55,
+                  }}
+                >
+                  Use the showroom switchers in the sidebar to change engine and tenant, then
+                  judge this primitive in the live preview before styling around it locally.
+                </Text>
               </Box>
             </Stack>
 
             <Box
               style={{
                 display: 'grid',
-                gap: 12,
+                gap: 10,
               }}
             >
               <Box
                 style={{
-                  padding: 14,
-                  borderRadius: 18,
+                  padding: 12,
+                  borderRadius: 16,
                   border: `1px solid ${SHOWROOM_SURFACES.border}`,
                   background: SHOWROOM_SURFACES.subtle,
                 }}
@@ -900,7 +1071,6 @@ export default async function PrimitiveComponentPage({
                 />
               </Box>
             </Box>
-          </Box>
           </Box>
 
           <Box
@@ -964,9 +1134,17 @@ export default async function PrimitiveComponentPage({
         </Stack>
       </ReferencePanel>
 
-      <ReferencePanel>
+      <ReferencePanel subtle>
         <Stack spacing="md">
-          <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
+          <Box
+            className="primitive-detail-section-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 1.2fr) minmax(280px, 0.8fr)',
+              gap: 16,
+              alignItems: 'start',
+            }}
+          >
             <Box>
               <Text
                 size="xs"
@@ -995,11 +1173,40 @@ export default async function PrimitiveComponentPage({
                 Keep the primitive contract visible. These snippets are meant to help teams consume
                 the base component before they wrap or escalate it.
               </Text>
+              <Link
+                href={`/primitives/${category}`}
+                style={{ display: 'inline-block', marginTop: 12, textDecoration: 'none' }}
+              >
+                <Text size="sm" weight="semibold" style={{ color: 'var(--ds-color-primary)' }}>
+                  Browse all {categoryLabel}
+                </Text>
+              </Link>
             </Box>
-            <Badge variant="secondary">Base contract</Badge>
-          </Flex>
+            <SectionAsideCard
+              label="Adoption posture"
+              title={`Start with ${entry.name}, not a wrapper`}
+              detail={`Import directly from the design system package, verify the base behavior across ${entry.engines.length} engines here, and only wrap when workflow logic starts repeating.`}
+              footer="The primitive should stay legible before any page-specific chrome is layered on top."
+            />
+          </Box>
 
-          <GuidanceCard title="Usage notes" items={PRIMITIVE_USAGE_NOTES} />
+          <Box
+            className="primitive-detail-section-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 1fr) minmax(260px, 0.85fr)',
+              gap: 16,
+              alignItems: 'stretch',
+            }}
+          >
+            <GuidanceCard title="Usage notes" items={PRIMITIVE_USAGE_NOTES} />
+            <SectionAsideCard
+              label="Published entrypoint"
+              title="@rottay/design-system"
+              detail={`Use the shared package surface as the default import path for ${entry.name}. It keeps adoption readable and future extraction work straightforward.`}
+              footer={`Base tier: ${categoryLabel}`}
+            />
+          </Box>
 
           <Box
             style={{
@@ -1009,15 +1216,35 @@ export default async function PrimitiveComponentPage({
               alignItems: 'start',
             }}
           >
-            <CodeBlock code={importStatement} language="tsx" title="Import" />
-            <CodeBlock code={usageSnippet} language="tsx" title="Usage" />
+            <CodeFrame
+              label="Entrypoint"
+              title="Keep imports direct"
+              detail="Reach for the published DS export first so teams can read the contract at a glance."
+            >
+              <CodeBlock code={importStatement} language="tsx" title="Import" />
+            </CodeFrame>
+            <CodeFrame
+              label="Baseline example"
+              title={`Start with ${entry.name}`}
+              detail="Use the smallest valid composition first, then layer in product-specific wrappers only when the workflow truly needs them."
+            >
+              <CodeBlock code={usageSnippet} language="tsx" title="Usage" />
+            </CodeFrame>
           </Box>
         </Stack>
       </ReferencePanel>
 
       <ReferencePanel>
         <Stack spacing="md">
-          <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
+          <Box
+            className="primitive-detail-section-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 1.2fr) minmax(280px, 0.8fr)',
+              gap: 16,
+              alignItems: 'start',
+            }}
+          >
             <Box>
               <Text
                 size="xs"
@@ -1047,16 +1274,67 @@ export default async function PrimitiveComponentPage({
                 this table is extracted directly from the DS.
               </Text>
             </Box>
-            <Badge variant="secondary">{placeholderProps.length} reference rows</Badge>
-          </Flex>
-          <PropTable title={`${entry.name} props`} props={placeholderProps} />
+            <SectionAsideCard
+              label="Reference scan"
+              title={`${placeholderProps.length} documented props`}
+              detail={`${requiredPropsCount} required and ${optionalPropsCount} optional rows are listed here so teams can review the contract without digging through source immediately.`}
+              footer="Confirm uncommon edge cases against the component implementation until this table is extracted automatically."
+            />
+          </Box>
+          <Box
+            style={{
+              padding: 14,
+              borderRadius: 26,
+              border: `1px solid ${SHOWROOM_SURFACES.border}`,
+              background: `linear-gradient(180deg, ${mixWithCanvas(
+                'var(--ds-color-primary, #60a5fa)',
+                4,
+              )} 0%, ${SHOWROOM_SURFACES.surface} 100%)`,
+            }}
+          >
+            <Box style={{ padding: '0 4px 14px' }}>
+              <Text
+                size="xs"
+                weight="semibold"
+                style={{
+                  display: 'block',
+                  color: SHOWROOM_SURFACES.textTertiary,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                }}
+              >
+                Reference discipline
+              </Text>
+              <Text
+                size="sm"
+                style={{
+                  display: 'block',
+                  marginTop: 8,
+                  color: SHOWROOM_SURFACES.textSecondary,
+                  lineHeight: 1.55,
+                }}
+              >
+                The table below is tuned for quick scanning in docs. For unusual composition or
+                engine-specific behavior, treat the DS source as the final authority.
+              </Text>
+            </Box>
+            <PropTable title={`${entry.name} props`} props={placeholderProps} />
+          </Box>
         </Stack>
       </ReferencePanel>
 
       {siblingEntries.length ? (
-        <ReferencePanel>
+        <ReferencePanel subtle>
           <Stack spacing="md">
-            <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
+            <Box
+              className="primitive-detail-section-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 1.2fr) minmax(280px, 0.8fr)',
+                gap: 16,
+                alignItems: 'start',
+              }}
+            >
               <Box>
                 <Text
                   size="xs"
@@ -1073,13 +1351,35 @@ export default async function PrimitiveComponentPage({
                 <Text as={"h2" as any} size="lg" weight="semibold" style={{ display: 'block' }}>
                   Continue within {categoryLabel}
                 </Text>
-              </Box>
-              <Link href={`/primitives/${category}`} style={{ textDecoration: 'none' }}>
-                <Text size="sm" weight="semibold" style={{ color: 'var(--ds-color-primary)' }}>
-                  Browse all
+                <Text
+                  size="sm"
+                  style={{
+                    display: 'block',
+                    marginTop: 6,
+                    color: 'var(--ds-color-text-secondary)',
+                    lineHeight: 1.55,
+                    maxWidth: '58ch',
+                  }}
+                >
+                  If {entry.name} is close but not quite right, scan nearby primitives in the same
+                  tier before jumping to a heavier surface or pattern abstraction.
                 </Text>
-              </Link>
-            </Flex>
+                <Link
+                  href={`/primitives/${category}`}
+                  style={{ display: 'inline-block', marginTop: 12, textDecoration: 'none' }}
+                >
+                  <Text size="sm" weight="semibold" style={{ color: 'var(--ds-color-primary)' }}>
+                    Browse all {categoryLabel}
+                  </Text>
+                </Link>
+              </Box>
+              <SectionAsideCard
+                label="Next move"
+                title={`Stay within ${categoryLabel} first`}
+                detail="Category siblings usually solve adjacent states while preserving the same primitive contract level and runtime expectations."
+                footer="Escalate to patterns or surfaces only when the interaction model itself changes."
+              />
+            </Box>
 
             <Box
               style={{
@@ -1092,49 +1392,10 @@ export default async function PrimitiveComponentPage({
                 <Link
                   key={sibling.slug}
                   href={`/primitives/${category}/${sibling.slug}`}
-                  style={{ textDecoration: 'none' }}
+                  className="primitive-related-link"
+                  style={{ display: 'block', height: '100%', textDecoration: 'none' }}
                 >
-                  <Box
-                    style={{
-                      height: '100%',
-                      padding: 16,
-                      borderRadius: 18,
-                      border: `1px solid ${SHOWROOM_SURFACES.border}`,
-                      background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${mixWithCanvas(
-                        'var(--ds-color-primary, #60a5fa)',
-                        5,
-                      )} 100%)`,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 8,
-                      minHeight: 112,
-                    }}
-                  >
-                    <Text
-                      size="sm"
-                      weight="semibold"
-                      style={{
-                        display: 'block',
-                        lineHeight: 1.3,
-                        overflowWrap: 'anywhere',
-                      }}
-                    >
-                      {sibling.name}
-                    </Text>
-                    <Box style={{ marginTop: 2, paddingTop: 8, borderTop: `1px solid ${SHOWROOM_SURFACES.border}` }}>
-                      <Text
-                        size="xs"
-                        style={{
-                          display: 'block',
-                          color: 'var(--ds-color-text-secondary)',
-                          lineHeight: 1.5,
-                          overflowWrap: 'anywhere',
-                        }}
-                      >
-                        {sibling.description}
-                      </Text>
-                    </Box>
-                  </Box>
+                  <RelatedPrimitiveCard sibling={sibling} categoryLabel={categoryLabel} />
                 </Link>
               ))}
             </Box>
@@ -1147,6 +1408,26 @@ export default async function PrimitiveComponentPage({
           .primitive-component-header-grid {
             grid-template-columns: 1fr;
           }
+        }
+
+        @media (max-width: 1180px) {
+          .primitive-detail-section-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .primitive-related-link:focus-visible {
+          outline: none;
+        }
+
+        .primitive-related-link:hover .primitive-related-card,
+        .primitive-related-link:focus-visible .primitive-related-card {
+          transform: translateY(-3px);
+          border-color: ${SHOWROOM_SURFACES.borderStrong};
+          box-shadow: 0 20px 44px ${mixWithCanvas(
+            'var(--ds-color-shadow, rgba(15, 23, 42, 0.16))',
+            14,
+          )};
         }
       `}</style>
     </Stack>

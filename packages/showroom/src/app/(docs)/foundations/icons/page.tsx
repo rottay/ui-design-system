@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ElementType } from 'react';
 import {
   Badge,
   Box,
@@ -13,178 +13,76 @@ import {
 import { useTokens } from '@rottay/design-system';
 import * as AllIcons from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
+import {
+  iconCategories,
+  icons as curatedIcons,
+  type IconCategory,
+  type IconEntry as CuratedIconEntry,
+} from '@/data/registry/icons';
 import { FoundationTopRail } from '../foundation-top-rail';
 
-const CATEGORY_MAP: Record<string, string> = {
-  ArrowLeftIcon: 'navigation',
-  ArrowRightIcon: 'navigation',
-  ArrowUpIcon: 'navigation',
-  ArrowDownIcon: 'navigation',
-  ArrowUpRightIcon: 'navigation',
-  ChevronDownIcon: 'navigation',
-  ChevronUpIcon: 'navigation',
-  ChevronLeftIcon: 'navigation',
-  ChevronRightIcon: 'navigation',
-  HomeIcon: 'navigation',
-  ExternalLinkIcon: 'navigation',
-  MenuIcon: 'navigation',
-  MoreHorizontalIcon: 'navigation',
-  PanelRightCloseIcon: 'navigation',
-  ScanSearchIcon: 'navigation',
-  PlusIcon: 'action',
-  EditIcon: 'action',
-  PencilIcon: 'action',
-  PencilLineIcon: 'action',
-  Trash2Icon: 'action',
-  SaveIcon: 'action',
-  DownloadIcon: 'action',
-  UploadIcon: 'action',
-  CopyIcon: 'action',
-  ClipboardCopyIcon: 'action',
-  RefreshCwIcon: 'action',
-  RotateCcwIcon: 'action',
-  SendIcon: 'action',
-  Share2Icon: 'action',
-  PowerIcon: 'action',
-  CheckIcon: 'status',
-  CheckCircleIcon: 'status',
-  CheckCircle2Icon: 'status',
-  XIcon: 'status',
-  XCircleIcon: 'status',
-  AlertCircleIcon: 'status',
-  AlertTriangleIcon: 'status',
-  AlertOctagonIcon: 'status',
-  InfoIcon: 'status',
-  BanIcon: 'status',
-  LoaderCircleIcon: 'status',
-  CircleAlertIcon: 'status',
-  FileTextIcon: 'content',
-  FileDownIcon: 'content',
-  FolderIcon: 'content',
-  BracesIcon: 'content',
-  BookmarkPlusIcon: 'content',
-  BookmarkIcon: 'content',
-  ImageIcon: 'content',
-  MailIcon: 'communication',
-  MessageSquareIcon: 'communication',
-  BellIcon: 'communication',
-  PhoneIcon: 'communication',
-  InboxIcon: 'communication',
-  SendMessageIcon: 'communication',
-  UserIcon: 'user',
-  UsersIcon: 'user',
-  UserCheckIcon: 'user',
-  UserXIcon: 'user',
-  UserMinusIcon: 'user',
-  SettingsIcon: 'user',
-  Settings2Icon: 'user',
-  ShieldIcon: 'user',
-  ShieldCheckIcon: 'user',
-  LockIcon: 'user',
-  KeyIcon: 'user',
-  KeyRoundIcon: 'user',
-  FingerprintIcon: 'user',
-  LogOutIcon: 'user',
-  BarChart3Icon: 'data',
-  TrendingUpIcon: 'data',
-  TrendingDownIcon: 'data',
-  ActivityIcon: 'data',
-  DatabaseIcon: 'data',
-  SearchIcon: 'data',
-  FilterIcon: 'data',
-  SlidersHorizontalIcon: 'data',
-  LayersIcon: 'data',
-  GlobeIcon: 'data',
-  ListIcon: 'layout',
-  LayoutGridIcon: 'layout',
-  Grid3x3Icon: 'layout',
-  Columns3Icon: 'layout',
-  CalendarIcon: 'layout',
-  CalendarDaysIcon: 'layout',
-  AlignJustifyIcon: 'layout',
-  AlignCenterIcon: 'layout',
-  AlignLeftIcon: 'layout',
-  LayoutTemplateIcon: 'layout',
-  EyeIcon: 'media',
-  EyeOffIcon: 'media',
-  StarIcon: 'media',
-  ZapIcon: 'media',
-  SparklesIcon: 'media',
-  MicIcon: 'media',
-  MicOffIcon: 'media',
-  AudioLinesIcon: 'media',
-  CameraIcon: 'media',
-  BriefcaseIcon: 'misc',
-  Building2Icon: 'misc',
-  KeyboardIcon: 'misc',
-  ClockIcon: 'misc',
-  Loader2Icon: 'misc',
-  FlagIcon: 'misc',
-  RocketIcon: 'misc',
-  GripVerticalIcon: 'misc',
-  PinIcon: 'misc',
-  PinOffIcon: 'misc',
-  GitCompareIcon: 'misc',
-};
+const CATEGORY_ORDER: IconCategory[] = iconCategories.map((category) => category.slug);
 
-const NON_ICON_EXPORTS = new Set([
-  'createIcon',
-  'ICON_SIZE_MAP',
-  'ICON_SIZE_TOKENS',
-  'BaseIcon',
-  'AlertIcon',
-  'LoaderIcon',
-]);
+const CATEGORY_LABELS: Record<IconCategory, string> = iconCategories.reduce(
+  (labels, category) => {
+    labels[category.slug] = category.label;
+    return labels;
+  },
+  {} as Record<IconCategory, string>,
+);
+const FILTER_CATEGORIES: Array<'all' | IconCategory> = ['all', ...CATEGORY_ORDER];
 
-const CATEGORY_ORDER = [
-  'navigation',
-  'action',
-  'status',
-  'content',
-  'communication',
-  'user',
-  'data',
-  'layout',
-  'media',
-  'misc',
-] as const;
-
-const CATEGORY_LABELS: Record<string, string> = {
-  navigation: 'Navigation',
-  action: 'Action',
-  status: 'Status',
-  content: 'Content',
-  communication: 'Communication',
-  user: 'User & Identity',
-  data: 'Data',
-  layout: 'Layout',
-  media: 'Media',
-  misc: 'Misc',
-};
-
-interface IconEntry {
-  name: string;
-  component: React.ComponentType<{ size?: number }>;
-  category: string;
+interface IconEntry extends CuratedIconEntry {
+  component: ElementType<{ size?: number }>;
+  usesFallback: boolean;
 }
 
-const ICON_REGISTRY: IconEntry[] = Object.entries(AllIcons)
-  .filter(([name, value]) => {
-    if (NON_ICON_EXPORTS.has(name)) return false;
-    if (typeof value !== 'function') return false;
-    return name.endsWith('Icon');
+const ICON_EXPORTS = AllIcons as Record<string, unknown>;
+const ICON_FALLBACK = AllIcons.SearchIcon as ElementType<{ size?: number }>;
+
+function normalizeIconSearchValue(value: string) {
+  return value.toLowerCase().replace(/icon$/g, '').replace(/[\s_-]+/g, '');
+}
+
+function resolveIconComponent(
+  name: CuratedIconEntry['name'],
+): { component: ElementType<{ size?: number }>; usesFallback: boolean } {
+  const component = ICON_EXPORTS[name];
+
+  if (!component) {
+    return {
+      component: ICON_FALLBACK,
+      usesFallback: true,
+    };
+  }
+
+  return {
+    component: component as ElementType<{ size?: number }>,
+    usesFallback: false,
+  };
+}
+
+const ICON_REGISTRY: IconEntry[] = curatedIcons
+  .map((entry) => {
+    const { component, usesFallback } = resolveIconComponent(entry.name);
+
+    return {
+      slug: entry.slug,
+      name: entry.name,
+      lucideSource: entry.lucideSource,
+      component,
+      category: entry.category,
+      usesFallback,
+    } satisfies IconEntry;
   })
-  .map(([name, component]) => ({
-    name,
-    component: component as React.ComponentType<{ size?: number }>,
-    category: CATEGORY_MAP[name] || 'misc',
-  }))
   .sort((a, b) => {
-    const categoryDelta = CATEGORY_ORDER.indexOf(a.category as (typeof CATEGORY_ORDER)[number]) -
-      CATEGORY_ORDER.indexOf(b.category as (typeof CATEGORY_ORDER)[number]);
+    const categoryDelta = CATEGORY_ORDER.indexOf(a.category) -
+      CATEGORY_ORDER.indexOf(b.category);
     if (categoryDelta !== 0) return categoryDelta;
     return a.name.localeCompare(b.name);
   });
+
+const MISSING_ICON_EXPORTS = ICON_REGISTRY.filter((entry) => entry.usesFallback);
 
 const ICON_SPOTLIGHTS = [
   {
@@ -228,14 +126,18 @@ function IconCell({ entry }: { entry: IconEntry }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: tokens.spacing[2],
+        gap: tokens.spacing[3],
+        minWidth: 0,
+        minHeight: 192,
         padding: tokens.spacing[4],
         borderRadius: tokens.borderRadius.lg,
-        border: '1px solid var(--ds-color-neutral-200)',
+        border: '1px solid var(--ds-color-border-secondary)',
         background:
           copied
             ? 'linear-gradient(180deg, var(--ds-color-success-50), var(--ds-color-white))'
-            : 'linear-gradient(180deg, var(--ds-color-white), var(--ds-color-neutral-50))',
+            : 'linear-gradient(180deg, var(--ds-color-bg-elevated), var(--ds-color-bg-overlay))',
+        boxShadow:
+          'inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary) 74%, transparent)',
         cursor: 'pointer',
         transition: 'all 150ms ease',
       }}
@@ -254,16 +156,47 @@ function IconCell({ entry }: { entry: IconEntry }) {
       >
         <Icon size={24} />
       </Box>
-      <Text
-        size="xs"
+
+      <Stack spacing="xs" fullWidth style={{ minWidth: 0, alignItems: 'center', textAlign: 'center' }}>
+        <Text
+          size="xs"
+          style={{
+            display: 'block',
+            color: copied ? 'var(--ds-color-success-700)' : 'var(--ds-color-text-secondary)',
+            lineHeight: 1.45,
+            overflowWrap: 'anywhere',
+          }}
+        >
+          {copied ? 'Copied import' : entry.name.replace(/Icon$/, '')}
+        </Text>
+        <Text
+          size="xs"
+          style={{
+            display: 'block',
+            color: 'var(--ds-color-text-muted)',
+            lineHeight: 1.35,
+            fontFamily: 'var(--font-geist-mono, monospace)',
+            overflowWrap: 'anywhere',
+          }}
+        >
+          {entry.slug}
+        </Text>
+      </Stack>
+
+      <Box
         style={{
-          textAlign: 'center',
-          color: copied ? 'var(--ds-color-success-700)' : 'var(--ds-color-text-secondary)',
-          lineHeight: 1.45,
+          width: '100%',
+          marginTop: 'auto',
+          paddingTop: tokens.spacing[2],
+          borderTop: '1px solid var(--ds-color-border-secondary)',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
-        {copied ? 'Copied import' : entry.name.replace(/Icon$/, '')}
-      </Text>
+        <Badge variant={entry.usesFallback ? 'warning' : 'secondary'}>
+          {entry.usesFallback ? 'fallback glyph' : CATEGORY_LABELS[entry.category]}
+        </Badge>
+      </Box>
     </Box>
   );
 }
@@ -271,25 +204,48 @@ function IconCell({ entry }: { entry: IconEntry }) {
 export default function IconsPage() {
   const tokens = useTokens();
   const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | IconCategory>('all');
+  const normalizedSearch = normalizeIconSearchValue(search.trim());
+
+  const searchedIcons = useMemo(() => {
+    if (normalizedSearch === '') {
+      return ICON_REGISTRY;
+    }
+
+    return ICON_REGISTRY.filter((entry) => {
+      const searchableValues = [
+        entry.name,
+        entry.slug,
+        entry.lucideSource,
+        CATEGORY_LABELS[entry.category],
+        entry.name.replace(/Icon$/, ''),
+      ];
+
+      return searchableValues.some((value) =>
+        normalizeIconSearchValue(value).includes(normalizedSearch)
+      );
+    });
+  }, [normalizedSearch]);
 
   const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: ICON_REGISTRY.length };
-    for (const entry of ICON_REGISTRY) {
+    const counts = iconCategories.reduce(
+      (accumulator, category) => {
+        accumulator[category.slug] = 0;
+        return accumulator;
+      },
+      { all: searchedIcons.length } as Record<'all' | IconCategory, number>,
+    );
+    for (const entry of searchedIcons) {
       counts[entry.category] = (counts[entry.category] || 0) + 1;
     }
     return counts;
-  }, []);
+  }, [searchedIcons]);
 
   const filtered = useMemo(() => {
-    return ICON_REGISTRY.filter((entry) => {
-      const matchesSearch =
-        search === '' || entry.name.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory =
-        activeCategory === 'all' || entry.category === activeCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [search, activeCategory]);
+    return searchedIcons.filter((entry) =>
+      activeCategory === 'all' || entry.category === activeCategory
+    );
+  }, [searchedIcons, activeCategory]);
 
   const grouped = useMemo(() => {
     const groups: Record<string, IconEntry[]> = {};
@@ -339,6 +295,29 @@ export default function IconsPage() {
         ]}
       />
 
+      {MISSING_ICON_EXPORTS.length > 0 && (
+        <Card
+          style={{
+            width: '100%',
+            padding: tokens.spacing[4],
+            border: '1px solid var(--ds-color-warning-200)',
+            background:
+              'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-warning-100) 76%, white) 0%, var(--ds-color-white) 100%)',
+          }}
+        >
+          <Stack spacing="xs">
+            <Text as={"h2" as any} size="lg" weight="semibold">
+              Some curated icons are using a safe fallback
+            </Text>
+            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+              {MISSING_ICON_EXPORTS.length} registry entries are not resolving to a dedicated icon export.
+              The catalog keeps rendering instead of collapsing to an empty page so QA can keep moving while those
+              exports are reconciled.
+            </Text>
+          </Stack>
+        </Card>
+      )}
+
       <Card style={{ width: '100%', padding: tokens.spacing[5] }}>
         <Stack spacing="md" fullWidth>
           <Flex align="center" justify="between" style={{ flexWrap: 'wrap', gap: 12 }}>
@@ -353,10 +332,11 @@ export default function IconsPage() {
             <Badge variant="secondary">Semantic sets</Badge>
           </Flex>
 
-          <Box
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
+            <Box
+              className="showroom-icons-spotlight-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
               gap: tokens.spacing[4],
             }}
           >
@@ -417,12 +397,12 @@ export default function IconsPage() {
                 prefix={<AllIcons.SearchIcon size={16} />}
               />
             </Box>
-              <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
-                Showing {filtered.length} of {ICON_REGISTRY.length}
-              </Text>
-            </Flex>
+            <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+              Showing {filtered.length} of {categoryCounts.all} matching icons
+            </Text>
+          </Flex>
           <Flex gap={6} style={{ flexWrap: 'wrap' }}>
-            {['all', ...CATEGORY_ORDER].map((category) => (
+            {FILTER_CATEGORIES.map((category) => (
               <Box
                 key={category}
                 as="button"
@@ -448,7 +428,7 @@ export default function IconsPage() {
                   fontWeight: activeCategory === category ? 600 : 400,
                 }}
               >
-                {(CATEGORY_LABELS[category] || 'All')} ({categoryCounts[category] || ICON_REGISTRY.length})
+                {(category === 'all' ? 'All' : CATEGORY_LABELS[category])} ({categoryCounts[category] || 0})
               </Box>
             ))}
           </Flex>
@@ -460,25 +440,37 @@ export default function IconsPage() {
         if (!icons || icons.length === 0) return null;
 
         return (
-          <Stack key={category} spacing="md">
-            <Flex align="center" gap={8}>
-              <Text as={"h2" as any} size="lg" weight="semibold">
-                {CATEGORY_LABELS[category]}
-              </Text>
-              <Badge variant="secondary">{icons.length}</Badge>
-            </Flex>
-            <Box
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
-                gap: tokens.spacing[3],
-              }}
-            >
-              {icons.map((entry) => (
-                <IconCell key={entry.name} entry={entry} />
-              ))}
-            </Box>
-          </Stack>
+          <Card
+            key={category}
+            style={{
+              width: '100%',
+              padding: tokens.spacing[5],
+              border: '1px solid var(--ds-color-border-secondary)',
+              background:
+                'linear-gradient(180deg, var(--ds-color-bg-elevated), var(--ds-color-bg-overlay))',
+            }}
+          >
+            <Stack spacing="md" fullWidth>
+              <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+                <Text as={"h2" as any} size="lg" weight="semibold">
+                  {CATEGORY_LABELS[category]}
+                </Text>
+                <Badge variant="secondary">{icons.length}</Badge>
+              </Flex>
+              <Box
+                className="showroom-icons-category-grid"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
+                  gap: tokens.spacing[3],
+                }}
+              >
+                {icons.map((entry) => (
+                  <IconCell key={entry.name} entry={entry} />
+                ))}
+              </Box>
+            </Stack>
+          </Card>
         );
       })}
 
@@ -578,6 +570,46 @@ export default function IconsPage() {
   Add record
 </Button>`}
       />
+
+      <style>{`
+        .showroom-icons-category-grid {
+          display: grid;
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: ${tokens.spacing[3]}px;
+        }
+
+        @container showroom-content (max-width: 1720px) {
+          .showroom-icons-category-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 1380px) {
+          .showroom-icons-category-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 1080px) {
+          .showroom-icons-spotlight-grid,
+          .showroom-icons-category-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 820px) {
+          .showroom-icons-category-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container showroom-content (max-width: 620px) {
+          .showroom-icons-spotlight-grid,
+          .showroom-icons-category-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
 
     </Stack>
   );

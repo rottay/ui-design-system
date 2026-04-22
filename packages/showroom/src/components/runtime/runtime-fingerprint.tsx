@@ -6,6 +6,7 @@ import { useShowroomRuntime } from '@/components/showroom-context';
 
 export interface RuntimeFingerprintProps {
   compact?: boolean;
+  compactColumns?: number;
   itemLimit?: number;
   showHeader?: boolean;
 }
@@ -36,6 +37,7 @@ function getBadgeRadius(shape: 'rounded' | 'pill' | 'square', radius: string) {
 
 export function RuntimeFingerprint({
   compact = false,
+  compactColumns,
   itemLimit,
   showHeader = true,
 }: RuntimeFingerprintProps) {
@@ -221,7 +223,10 @@ export function RuntimeFingerprint({
   const visibleMetrics = itemLimit ? metrics.slice(0, itemLimit) : metrics;
   const gap = compact ? 8 : 12;
   const tileRadius = compact ? tokens.borderRadius.lg : tokens.borderRadius.xl;
-  const compactColumns = compact ? 3 : 4;
+  const resolvedCompactColumns = compact
+    ? Math.max(1, Math.min(compactColumns ?? 3, visibleMetrics.length || 1))
+    : 4;
+  const compactTileMinHeight = resolvedCompactColumns <= 2 ? 118 : 132;
 
   return (
     <Stack spacing={compact ? 'xs' : 'sm'} fullWidth>
@@ -252,7 +257,7 @@ export function RuntimeFingerprint({
         style={{
           display: 'grid',
           gridTemplateColumns: compact
-            ? 'repeat(3, minmax(0, 1fr))'
+            ? `repeat(${resolvedCompactColumns}, minmax(0, 1fr))`
             : 'repeat(auto-fit, minmax(196px, 1fr))',
           gap,
         }}
@@ -266,7 +271,7 @@ export function RuntimeFingerprint({
               alignContent: 'start',
               gap: compact ? 8 : 10,
               padding: compact ? '9px 10px' : 14,
-              minHeight: compact ? 132 : undefined,
+              minHeight: compact ? compactTileMinHeight : undefined,
               borderRadius: tileRadius,
               border: '1px solid var(--ds-color-border-subtle, #e5e7eb)',
               background:
@@ -362,7 +367,7 @@ export function RuntimeFingerprint({
             lineHeight: 1.45,
           }}
         >
-          Compact runtime evidence across {Math.min(visibleMetrics.length, compactColumns)}+ token signals.
+          Compact runtime evidence across {Math.min(visibleMetrics.length, resolvedCompactColumns)}+ token signals.
         </Text>
       ) : null}
     </Stack>

@@ -668,6 +668,7 @@ export default function PrimitivesPage() {
                   style={{ textDecoration: 'none' }}
                 >
                   <Card
+                    className="showroom-primitives-taxonomy-card"
                     hoverable
                     style={{
                       height: '100%',
@@ -676,6 +677,8 @@ export default function PrimitivesPage() {
                       border: SUBTLE_BORDER,
                       background: CARD_SURFACE,
                       boxShadow: SHADOW,
+                      containerType: 'inline-size',
+                      containerName: 'primitive-taxonomy-card',
                     }}
                   >
                     <Stack spacing="md" fullWidth style={{ height: '100%' }}>
@@ -699,10 +702,26 @@ export default function PrimitivesPage() {
                             {editorial.icon}
                           </Box>
                           <Box style={{ minWidth: 0 }}>
-                            <Text as={"h3" as any} size="lg" weight="semibold">
+                            <Text
+                              as={"h3" as any}
+                              size="lg"
+                              weight="semibold"
+                              style={{
+                                display: 'block',
+                                lineHeight: 1.15,
+                                overflowWrap: 'anywhere',
+                              }}
+                            >
                               {category.label}
                             </Text>
-                            <Text size="xs" style={{ marginTop: 4, color: 'var(--ds-color-text-muted)' }}>
+                            <Text
+                              size="xs"
+                              style={{
+                                marginTop: 4,
+                                color: 'var(--ds-color-text-muted)',
+                                lineHeight: 1.45,
+                              }}
+                            >
                               {editorial.headline}
                             </Text>
                           </Box>
@@ -710,11 +729,19 @@ export default function PrimitivesPage() {
                         <Badge variant="secondary">{entries.length} items</Badge>
                       </Flex>
 
-                      <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                      <Text
+                        size="sm"
+                        style={{
+                          color: 'var(--ds-color-text-secondary)',
+                          lineHeight: 1.58,
+                          overflowWrap: 'anywhere',
+                        }}
+                      >
                         {editorial.description}
                       </Text>
 
                       <Box
+                        className="showroom-primitives-taxonomy-split"
                         style={{
                           display: 'grid',
                           gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 0.88fr)',
@@ -736,7 +763,15 @@ export default function PrimitivesPage() {
                           >
                             Use for
                           </Text>
-                          <Text size="sm" style={{ marginTop: 8, color: 'var(--ds-color-text-secondary)' }}>
+                          <Text
+                            size="sm"
+                            style={{
+                              marginTop: 8,
+                              color: 'var(--ds-color-text-secondary)',
+                              lineHeight: 1.55,
+                              overflowWrap: 'anywhere',
+                            }}
+                          >
                             {editorial.bestFor}
                           </Text>
                         </Box>
@@ -760,7 +795,15 @@ export default function PrimitivesPage() {
                           >
                             Typical outcome
                           </Text>
-                          <Text size="sm" style={{ marginTop: 8, color: 'var(--ds-color-text-secondary)' }}>
+                          <Text
+                            size="sm"
+                            style={{
+                              marginTop: 8,
+                              color: 'var(--ds-color-text-secondary)',
+                              lineHeight: 1.55,
+                              overflowWrap: 'anywhere',
+                            }}
+                          >
                             {editorial.buildHint}
                           </Text>
                         </Box>
@@ -788,11 +831,16 @@ export default function PrimitivesPage() {
                           </Text>
                           {leadEntry ? <Badge variant="secondary">Open {leadEntry.name}</Badge> : null}
                         </Flex>
-                        <Flex gap={6} style={{ flexWrap: 'wrap', marginTop: 10 }}>
+                        <Flex
+                          className="showroom-primitives-taxonomy-chip-wrap"
+                          gap={6}
+                          style={{ flexWrap: 'wrap', marginTop: 10 }}
+                        >
                           {entries.slice(0, 4).map((entry) => (
                             <Box
                               key={entry.slug}
                               style={{
+                                maxWidth: '100%',
                                 padding: '5px 10px',
                                 borderRadius: 999,
                                 background: 'var(--ds-color-neutral-100)',
@@ -801,8 +849,11 @@ export default function PrimitivesPage() {
                               <Text
                                 size="xs"
                                 style={{
+                                  display: 'block',
                                   color: 'var(--ds-color-text-secondary)',
                                   fontFamily: 'var(--font-geist-mono)',
+                                  lineHeight: 1.4,
+                                  overflowWrap: 'anywhere',
                                 }}
                               >
                                 {entry.name}
@@ -948,15 +999,17 @@ export default function PrimitivesPage() {
           .showroom-primitives-entry-grid {
             grid-template-columns: 1fr !important;
           }
-
-          .showroom-primitives-category-grid > * > * > * > div:nth-child(4) {
-            grid-template-columns: 1fr !important;
-          }
         }
 
         @container showroom-content (max-width: 920px) {
           .showroom-primitives-layer-rail {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @container primitive-taxonomy-card (max-width: 520px) {
+          .showroom-primitives-taxonomy-split {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

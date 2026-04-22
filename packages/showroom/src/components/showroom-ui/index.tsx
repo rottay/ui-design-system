@@ -509,15 +509,15 @@ export function DocsMetricTile({
       {...props}
       style={{
         minWidth: 0,
-        padding: 16,
+        padding: 14,
         borderRadius: 18,
         border: DOCS_PANEL_BORDER,
         background: panelTone.background,
         boxShadow: DOCS_PANEL_SHADOW,
         display: 'flex',
         flexDirection: 'column',
-        gap: 10,
-        minHeight: detail ? 142 : 104,
+        gap: 8,
+        minHeight: detail ? 126 : 92,
         ...style,
       }}
     >
@@ -537,7 +537,7 @@ export function DocsMetricTile({
         style={{
           flex: 1,
           minWidth: 0,
-          padding: '12px 14px',
+          padding: '10px 12px',
           borderRadius: 14,
           background: DOCS_PANEL_SURFACE,
           border: DOCS_PANEL_BORDER,

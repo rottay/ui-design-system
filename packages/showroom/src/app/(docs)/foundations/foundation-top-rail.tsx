@@ -65,7 +65,10 @@ function RailJumpPill({ label, href }: RailLink) {
         fontSize: '0.8125rem',
         fontWeight: 600,
         lineHeight: 1.35,
-        overflowWrap: 'anywhere',
+        maxWidth: '100%',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
       }}
     >
       {label}
@@ -189,7 +192,7 @@ export function FoundationTopRail({
           style={{
             display: 'grid',
             gridTemplateColumns: hasAside
-              ? 'minmax(0, 1.15fr) minmax(320px, 0.85fr)'
+              ? 'minmax(0, 1.18fr) minmax(280px, 0.82fr)'
               : 'minmax(0, 1fr)',
             gap: 20,
             alignItems: 'start',
@@ -371,7 +374,7 @@ export function FoundationTopRail({
                 <Box
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(128px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
                     gap: 10,
                     width: '100%',
                   }}
@@ -433,7 +436,7 @@ export function FoundationTopRail({
                 <Box
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
                     gap: 10,
                     width: '100%',
                   }}
@@ -502,7 +505,7 @@ export function FoundationTopRail({
         </Box>
 
         <style>{`
-          @container showroom-content (max-width: 1280px) {
+          @container showroom-content (max-width: 1360px) {
             .foundation-top-rail-grid {
               grid-template-columns: 1fr !important;
             }

@@ -82,6 +82,7 @@ export function CodeBlock({
   return (
     <Box
       style={{
+        position: 'relative',
         borderRadius: 22,
         border: `1px solid ${SHOWROOM_SURFACES.borderStrong}`,
         overflow: 'hidden',
@@ -93,12 +94,21 @@ export function CodeBlock({
         boxShadow: SHOWROOM_SURFACES.shadowStrong,
       }}
     >
+      <Box
+        style={{
+          position: 'absolute',
+          inset: '0 0 auto 0',
+          height: 3,
+          background: `linear-gradient(90deg, ${accent} 0%, color-mix(in srgb, ${accent} 26%, transparent) 100%)`,
+          opacity: 0.9,
+        }}
+      />
       <Flex
         align="start"
         justify="between"
         gap={12}
         style={{
-          padding: '16px 18px',
+          padding: '18px 18px 16px',
           borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
           background: `linear-gradient(180deg, ${mixWithSurface(
             accent,
@@ -131,27 +141,81 @@ export function CodeBlock({
           </Flex>
 
           <Box style={{ minWidth: 0, flex: 1 }}>
-            {title ? (
-              <Text
-                size="sm"
-                weight="semibold"
-                style={{ display: 'block', color: SHOWROOM_SURFACES.text, lineHeight: 1.35 }}
-              >
-                {title}
-              </Text>
-            ) : null}
-            <Text
-              size="xs"
-              style={{
-                display: 'block',
-                marginTop: title ? 5 : 0,
-                color: SHOWROOM_SURFACES.textSecondary,
-                lineHeight: 1.45,
-              }}
+            <Flex
+              align="start"
+              justify="between"
+              gap={12}
+              style={{ minWidth: 0, flexWrap: 'wrap' }}
             >
-              {summary}
-            </Text>
-            <Flex gap={8} style={{ marginTop: title ? 6 : 0, flexWrap: 'wrap' }}>
+              <Box style={{ minWidth: 0, flex: 1 }}>
+                {title ? (
+                  <Text
+                    size="sm"
+                    weight="semibold"
+                    style={{ display: 'block', color: SHOWROOM_SURFACES.text, lineHeight: 1.35 }}
+                  >
+                    {title}
+                  </Text>
+                ) : null}
+                <Text
+                  size="xs"
+                  style={{
+                    display: 'block',
+                    marginTop: title ? 5 : 0,
+                    color: SHOWROOM_SURFACES.textSecondary,
+                    lineHeight: 1.45,
+                    maxWidth: '42ch',
+                  }}
+                >
+                  {summary}
+                </Text>
+              </Box>
+
+              <Flex gap={8} style={{ flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                <Box
+                  style={{
+                    padding: '5px 8px',
+                    borderRadius: 999,
+                    border: `1px solid ${SHOWROOM_SURFACES.borderStrong}`,
+                    background: mixWithSurface(
+                      accent,
+                      14,
+                      SHOWROOM_SURFACES.surface,
+                    ),
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    weight="semibold"
+                    style={{
+                      display: 'block',
+                      color: SHOWROOM_SURFACES.textSecondary,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    {language}
+                  </Text>
+                </Box>
+
+                <Box
+                  style={{
+                    padding: '5px 8px',
+                    borderRadius: 999,
+                    border: `1px solid ${SHOWROOM_SURFACES.borderStrong}`,
+                    background: mixWithSurface(accent, 5, SHOWROOM_SURFACES.surface),
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    style={{ display: 'block', color: SHOWROOM_SURFACES.textSecondary }}
+                  >
+                    {lines.length} {lines.length === 1 ? 'line' : 'lines'}
+                  </Text>
+                </Box>
+              </Flex>
+            </Flex>
+            <Flex gap={8} style={{ marginTop: 10, flexWrap: 'wrap' }}>
               <Box
                 style={{
                   padding: '5px 8px',
@@ -174,7 +238,7 @@ export function CodeBlock({
                     letterSpacing: '0.08em',
                   }}
                 >
-                  {language}
+                  Consumption
                 </Text>
               </Box>
 
@@ -190,7 +254,7 @@ export function CodeBlock({
                   size="xs"
                   style={{ display: 'block', color: SHOWROOM_SURFACES.textSecondary }}
                 >
-                  {lines.length} {lines.length === 1 ? 'line' : 'lines'}
+                  Runtime-aware snippet
                 </Text>
               </Box>
             </Flex>

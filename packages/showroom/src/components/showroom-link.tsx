@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState, type ComponentProps } from 'react';
 import {
   applyShowroomRuntimeQuery,
@@ -41,6 +42,7 @@ function readRuntimeLinkState() {
 }
 
 export function ShowroomLink(props: ShowroomLinkProps) {
+  const pathname = usePathname();
   const [runtimeState, setRuntimeState] = useState(readRuntimeLinkState);
 
   useEffect(() => {
@@ -57,6 +59,10 @@ export function ShowroomLink(props: ShowroomLinkProps) {
       window.removeEventListener('showroom-runtime-change', syncRuntimeState);
     };
   }, []);
+
+  useEffect(() => {
+    setRuntimeState(readRuntimeLinkState());
+  }, [pathname]);
 
   const href = useMemo(
     () =>

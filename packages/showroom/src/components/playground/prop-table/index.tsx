@@ -118,6 +118,86 @@ export function PropTable({ props, title }: PropTableProps) {
         </Flex>
       </Flex>
 
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: 10,
+          padding: '14px 18px 0',
+          background: `linear-gradient(180deg, ${mixWithSurface(
+            'var(--ds-color-primary, #60a5fa)',
+            4,
+            SHOWROOM_SURFACES.surface,
+          )} 0%, ${SHOWROOM_SURFACES.surface} 100%)`,
+        }}
+      >
+        <Box
+          style={{
+            padding: '10px 12px',
+            borderRadius: 14,
+            border: `1px solid ${SHOWROOM_SURFACES.border}`,
+            background: SHOWROOM_SURFACES.subtle,
+          }}
+        >
+          <Text
+            size="xs"
+            weight="semibold"
+            style={{
+              display: 'block',
+              color: SHOWROOM_SURFACES.textTertiary,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
+          >
+            Fast read
+          </Text>
+          <Text
+            size="sm"
+            style={{
+              display: 'block',
+              marginTop: 6,
+              color: SHOWROOM_SURFACES.textSecondary,
+              lineHeight: 1.5,
+            }}
+          >
+            Start with required props, then scan defaults before dropping to per-row details.
+          </Text>
+        </Box>
+
+        <Box
+          style={{
+            padding: '10px 12px',
+            borderRadius: 14,
+            border: `1px solid ${SHOWROOM_SURFACES.border}`,
+            background: SHOWROOM_SURFACES.subtle,
+          }}
+        >
+          <Text
+            size="xs"
+            weight="semibold"
+            style={{
+              display: 'block',
+              color: SHOWROOM_SURFACES.textTertiary,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
+          >
+            Contract posture
+          </Text>
+          <Text
+            size="sm"
+            style={{
+              display: 'block',
+              marginTop: 6,
+              color: SHOWROOM_SURFACES.textSecondary,
+              lineHeight: 1.5,
+            }}
+          >
+            This reference stays intentionally concise so the primitive contract remains scannable.
+          </Text>
+        </Box>
+      </Box>
+
       <Box className="showroom-prop-table-desktop" style={{ overflowX: 'auto' }}>
         <Box
           style={{
@@ -133,7 +213,11 @@ export function PropTable({ props, title }: PropTableProps) {
               style={{
                 padding: '12px 14px',
                 borderBottom: `1px solid ${SHOWROOM_SURFACES.border}`,
-                background: SHOWROOM_SURFACES.subtle,
+                background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${mixWithSurface(
+                  'var(--ds-color-primary, #60a5fa)',
+                  5,
+                  SHOWROOM_SURFACES.subtle,
+                )} 100%)`,
               }}
             >
               <Text
@@ -155,7 +239,7 @@ export function PropTable({ props, title }: PropTableProps) {
             const rowBackground =
               index % 2 === 0
                 ? SHOWROOM_SURFACES.surface
-                : mixWithCanvas('var(--ds-color-primary, #60a5fa)', 5);
+                : mixWithCanvas('var(--ds-color-primary, #60a5fa)', 4);
 
             return (
               <Box key={prop.name} style={{ display: 'contents' }}>
