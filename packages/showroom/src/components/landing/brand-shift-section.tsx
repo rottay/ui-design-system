@@ -4,36 +4,42 @@ import { ShowroomLink as Link } from '@/components/showroom-link';
 const SHIFT_DIMENSIONS = [
   {
     label: 'Palette',
+    bridgeLabel: 'Palette',
     detail: 'Temperature, contrast, and emphasis shift together.',
     before: 'Accent swap on a neutral shell.',
     after: 'A brand-owned grayscale with authored contrast.',
   },
   {
     label: 'Surface treatment',
+    bridgeLabel: 'Surface',
     detail: 'Paper, glass, and layering change the perceived finish.',
     before: 'Flat white cards with generic panels.',
     after: 'Layered off-white surfaces with premium depth.',
   },
   {
     label: 'Chrome',
+    bridgeLabel: 'Chrome',
     detail: 'Framing, strokes, and control hardware set the posture.',
     before: 'Utility borders and stock controls.',
     after: 'Quiet chrome tuned to the product voice.',
   },
   {
     label: 'Radius',
+    bridgeLabel: 'Radius',
     detail: 'Corners become a recognizable silhouette system-wide.',
     before: 'One-size edge treatment.',
     after: 'A distinct edge language across every surface.',
   },
   {
     label: 'Density',
+    bridgeLabel: 'Density',
     detail: 'Spacing tempo decides whether the product feels rushed or composed.',
     before: 'Compressed rhythm and tactical stacking.',
     after: 'Air, cadence, and breathing room that feel intentional.',
   },
   {
     label: 'Motion',
+    bridgeLabel: 'Motion',
     detail: 'Timing and easing finish the impression once the screen moves.',
     before: 'Default transitions and generic easing.',
     after: 'Calm cues with a branded sense of hush.',
@@ -172,7 +178,6 @@ export const brandShiftSectionCss = `
   .brand-shift__mini-label,
   .brand-shift__screen-label,
   .brand-shift__axis-label,
-  .brand-shift__axis-anchor,
   .brand-shift__ledger-label,
   .brand-shift__reach-kicker,
   .brand-shift__reach-label,
@@ -321,8 +326,8 @@ export const brandShiftSectionCss = `
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 116px minmax(0, 1fr);
-    gap: 18px;
+    grid-template-columns: minmax(0, 1fr) 104px minmax(0, 1fr);
+    gap: 16px;
     align-items: stretch;
     margin-top: 18px;
     padding-top: 18px;
@@ -673,38 +678,54 @@ export const brandShiftSectionCss = `
 
   .brand-shift__axis {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
     justify-content: center;
-    gap: 10px;
+    justify-items: center;
+    gap: 12px;
     min-width: 0;
-    padding: 18px 14px;
-    border: 1px solid rgba(19, 17, 16, 0.1);
-    border-radius: 22px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.74) 0%, rgba(244, 244, 241, 0.84) 100%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    padding: 8px 0;
   }
 
   .brand-shift__axis::before {
     content: '';
     position: absolute;
-    top: 16px;
-    bottom: 16px;
+    top: 12px;
+    bottom: 12px;
     left: 50%;
     width: 1px;
-    background: linear-gradient(180deg, transparent, rgba(19, 17, 16, 0.18), transparent);
+    background: linear-gradient(180deg, transparent, rgba(19, 17, 16, 0.2) 18%, rgba(19, 17, 16, 0.08) 82%, transparent);
     transform: translateX(-50%);
   }
 
-  .brand-shift__axis-anchor {
+  .brand-shift__axis-header {
     position: relative;
     z-index: 1;
-    display: block;
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+  }
+
+  .brand-shift__axis-label {
     text-align: center;
   }
 
-  .brand-shift__axis-anchor:last-of-type {
-    margin-top: auto;
+  .brand-shift__axis-caption {
+    margin: 0;
+    max-width: 12ch;
+    color: var(--landing-subtle, #7c7a75);
+    font-size: 0.72rem;
+    line-height: 1.48;
+    text-align: center;
+  }
+
+  .brand-shift__axis-track {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
   }
 
   .brand-shift__axis-pill {
@@ -713,17 +734,23 @@ export const brandShiftSectionCss = `
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 34px;
-    padding: 7px 12px;
+    min-height: 30px;
+    max-width: 100%;
+    padding: 7px 10px;
     border-radius: 999px;
     border: 1px solid rgba(19, 17, 16, 0.12);
     background: rgba(251, 251, 249, 0.82);
     color: var(--landing-ink-soft, #201e1c);
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.11em;
     text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
     backdrop-filter: blur(8px);
+    box-shadow:
+      0 8px 18px rgba(19, 17, 16, 0.035),
+      inset 0 1px 0 rgba(255, 255, 255, 0.64);
   }
 
   .brand-shift__reach {
@@ -1052,20 +1079,34 @@ export const brandShiftSectionCss = `
     }
 
     .brand-shift__axis {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: start;
-      padding: 14px;
+      justify-items: start;
+      gap: 10px;
+      padding: 6px 0 2px;
     }
 
     .brand-shift__axis::before {
-      top: 50%;
-      bottom: auto;
+      top: auto;
+      bottom: 22px;
       left: 0;
       right: 0;
       width: auto;
       height: 1px;
-      transform: translateY(-50%);
+      transform: none;
+    }
+
+    .brand-shift__axis-header {
+      justify-items: start;
+    }
+
+    .brand-shift__axis-caption,
+    .brand-shift__axis-label {
+      text-align: left;
+    }
+
+    .brand-shift__axis-track {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
     }
 
     .brand-shift__reach {
@@ -1313,14 +1354,20 @@ export function BrandShiftSection({
                 <BrandSurfacePreview tone="before" />
 
                 <div className="brand-shift__axis" aria-label="Shift dimensions">
-                  <p className="brand-shift__axis-anchor">Inherited</p>
-                  <p className="brand-shift__axis-label">What moves</p>
-                  {SHIFT_DIMENSIONS.map((dimension) => (
-                    <span className="brand-shift__axis-pill" key={dimension.label}>
-                      {dimension.label}
-                    </span>
-                  ))}
-                  <p className="brand-shift__axis-anchor">Authored</p>
+                  <div className="brand-shift__axis-header">
+                    <p className="brand-shift__axis-label">What moves</p>
+                    <p className="brand-shift__axis-caption">
+                      The contract stays. The finish changes together.
+                    </p>
+                  </div>
+
+                  <div className="brand-shift__axis-track">
+                    {SHIFT_DIMENSIONS.map((dimension) => (
+                      <span className="brand-shift__axis-pill" key={dimension.label}>
+                        {dimension.bridgeLabel}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <BrandSurfacePreview tone="after" />

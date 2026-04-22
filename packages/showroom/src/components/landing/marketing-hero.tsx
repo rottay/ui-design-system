@@ -226,55 +226,6 @@ export function MarketingHero({
                 </div>
               </div>
             </article>
-
-            <div className="marketing-hero__stage">
-              <div className="marketing-hero__stage-shell">
-                <article className="marketing-hero__statement">
-                  <div className="marketing-hero__statement-meta">
-                    <span>Operating thesis</span>
-                    <span>Edition 01</span>
-                  </div>
-                  <div className="marketing-hero__statement-mark" aria-hidden="true">
-                    01
-                  </div>
-                  <h2 className="marketing-hero__statement-title">
-                    Brand should enter the room before the UI starts explaining itself.
-                  </h2>
-                  <p className="marketing-hero__statement-body">
-                    The center of the hero now behaves like a campaign surface: stronger contrast,
-                    tighter hierarchy, and a clearer point of view that makes the system feel
-                    chosen rather than merely assembled.
-                  </p>
-
-                  <div className="marketing-hero__statement-tags" aria-label="Hero promise signals">
-                    {statementTags.map((tag) => (
-                      <span className="marketing-hero__statement-tag" key={tag}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-
-                <div className="marketing-hero__stage-panel">
-                  {stageHighlights.map((item) => (
-                    <article className="marketing-hero__stage-item" key={item.label}>
-                      <p className="marketing-hero__stage-item-label">{item.label}</p>
-                      <p className="marketing-hero__stage-item-value">{item.value}</p>
-                      <p className="marketing-hero__stage-item-detail">{item.detail}</p>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="marketing-hero__manifesto">
-              {manifestoItems.map((item) => (
-                <article className="marketing-hero__manifesto-item" key={item.title}>
-                  <p className="marketing-hero__manifesto-title">{item.title}</p>
-                  <p className="marketing-hero__manifesto-detail">{item.detail}</p>
-                </article>
-              ))}
-            </div>
           </div>
 
           <aside className="marketing-hero__proof">
@@ -290,6 +241,55 @@ export function MarketingHero({
               </article>
             ))}
           </aside>
+
+          <div className="marketing-hero__stage">
+            <div className="marketing-hero__stage-shell">
+              <article className="marketing-hero__statement">
+                <div className="marketing-hero__statement-meta">
+                  <span>Operating thesis</span>
+                  <span>Edition 01</span>
+                </div>
+                <div className="marketing-hero__statement-mark" aria-hidden="true">
+                  01
+                </div>
+                <h2 className="marketing-hero__statement-title">
+                  Brand should enter the room before the UI starts explaining itself.
+                </h2>
+                <p className="marketing-hero__statement-body">
+                  The center of the hero now behaves like a campaign surface: stronger contrast,
+                  tighter hierarchy, and a clearer point of view that makes the system feel chosen
+                  rather than merely assembled.
+                </p>
+
+                <div className="marketing-hero__statement-tags" aria-label="Hero promise signals">
+                  {statementTags.map((tag) => (
+                    <span className="marketing-hero__statement-tag" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </article>
+
+              <div className="marketing-hero__stage-panel">
+                {stageHighlights.map((item) => (
+                  <article className="marketing-hero__stage-item" key={item.label}>
+                    <p className="marketing-hero__stage-item-label">{item.label}</p>
+                    <p className="marketing-hero__stage-item-value">{item.value}</p>
+                    <p className="marketing-hero__stage-item-detail">{item.detail}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="marketing-hero__manifesto">
+            {manifestoItems.map((item) => (
+              <article className="marketing-hero__manifesto-item" key={item.title}>
+                <p className="marketing-hero__manifesto-title">{item.title}</p>
+                <p className="marketing-hero__manifesto-detail">{item.detail}</p>
+              </article>
+            ))}
+          </div>
         </div>
 
         <div className="marketing-hero__proof-strip" aria-label="Proof strip">
@@ -407,14 +407,36 @@ export const marketingHeroStyles = `
 
   .marketing-hero__grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.82fr) minmax(250px, 0.78fr);
+    grid-template-columns: minmax(0, 1.38fr) minmax(300px, 0.62fr);
+    grid-template-areas:
+      "main proof"
+      "stage stage"
+      "manifesto manifesto";
     gap: clamp(18px, 2vw, 30px);
     align-items: start;
   }
 
   .marketing-hero__main,
-  .marketing-hero__proof {
+  .marketing-hero__proof,
+  .marketing-hero__stage,
+  .marketing-hero__manifesto {
     position: relative;
+  }
+
+  .marketing-hero__main {
+    grid-area: main;
+  }
+
+  .marketing-hero__proof {
+    grid-area: proof;
+  }
+
+  .marketing-hero__stage {
+    grid-area: stage;
+  }
+
+  .marketing-hero__manifesto {
+    grid-area: manifesto;
   }
 
   .marketing-hero__brief,
@@ -608,7 +630,6 @@ export const marketingHeroStyles = `
 
   .marketing-hero__stage {
     position: relative;
-    margin-top: clamp(24px, 2.6vw, 34px);
     padding: 10px;
     border-radius: 34px;
     border: 1px solid var(--marketing-hero-line-strong);
@@ -633,8 +654,8 @@ export const marketingHeroStyles = `
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(252px, 0.82fr);
-    gap: 12px;
+    grid-template-columns: minmax(0, 1.28fr) minmax(340px, 0.92fr);
+    gap: 14px;
   }
 
   .marketing-hero__statement {
@@ -761,7 +782,6 @@ export const marketingHeroStyles = `
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
-    margin-top: 18px;
     padding-top: 18px;
     border-top: 1px solid var(--marketing-hero-line);
   }
@@ -888,7 +908,7 @@ export const marketingHeroStyles = `
 
   @media (max-width: 1260px) {
     .marketing-hero__grid {
-      grid-template-columns: minmax(0, 1.18fr) minmax(250px, 0.82fr);
+      grid-template-columns: minmax(0, 1.12fr) minmax(260px, 0.88fr);
     }
 
     .marketing-hero__brief {
@@ -898,7 +918,6 @@ export const marketingHeroStyles = `
     .marketing-hero__proof {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-column: 1 / -1;
     }
 
     .marketing-hero__proof-strip {
@@ -932,6 +951,14 @@ export const marketingHeroStyles = `
       max-width: none;
     }
 
+    .marketing-hero__grid {
+      grid-template-areas:
+        "main"
+        "stage"
+        "proof"
+        "manifesto";
+    }
+
     .marketing-hero__lead-meta {
       align-items: flex-start;
       flex-direction: column;
@@ -941,11 +968,6 @@ export const marketingHeroStyles = `
     .marketing-hero__headline-notes {
       justify-content: flex-start;
     }
-
-    .marketing-hero__proof {
-      order: 3;
-    }
-
     .marketing-hero__proof-card,
     .marketing-hero__brief,
     .marketing-hero__statement {
