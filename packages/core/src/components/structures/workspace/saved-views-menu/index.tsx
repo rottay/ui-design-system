@@ -385,7 +385,7 @@ export function SavedViewsMenu({
                 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, white 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)))',
               border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)',
               borderRadius: 18,
-              boxShadow: '0 24px 60px color-mix(in srgb, black 24%, transparent)',
+              boxShadow: '0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent)',
               overflow: 'hidden',
             }}
           >

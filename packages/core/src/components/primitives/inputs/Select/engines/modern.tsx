@@ -96,7 +96,7 @@ function buildTriggerStyle(
     lineHeight: s.lineHeight,
     fontFamily: 'inherit',
     color: 'var(--ds-color-text-primary)',
-    backgroundColor: 'var(--ds-surface-control)',
+    backgroundColor: 'var(--ds-select-bg, var(--ds-surface-control))',
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: 'var(--ds-color-border)',
@@ -112,7 +112,7 @@ function buildTriggerStyle(
 
   // Variant overrides
   if (variant === 'filled') {
-    base.backgroundColor = 'var(--ds-surface-canvas)';
+    base.backgroundColor = 'var(--ds-select-filled-bg, var(--ds-surface-canvas))';
     base.borderColor = 'transparent';
   } else if (variant === 'flushed') {
     base.borderRadius = '0';
@@ -131,11 +131,13 @@ function buildTriggerStyle(
   // Hover
   if (isHovered && !isOpen && !hasError && !hasWarning && !isDisabled) {
     base.borderColor = 'var(--ds-color-border-hover)';
+    base.backgroundColor = 'var(--ds-select-bg-hover, var(--ds-select-bg, var(--ds-surface-control)))';
   }
 
   // Open (focus)
   if (isOpen) {
     base.borderColor = 'var(--ds-color-primary)';
+    base.backgroundColor = 'var(--ds-select-bg-focus, var(--ds-select-bg, var(--ds-surface-control)))';
     base.outline = 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)';
     if (variant === 'flushed') {
       base.outline = 'none';
@@ -166,7 +168,7 @@ function buildTriggerStyle(
   if (isDisabled) {
     base.opacity = 0.5;
     base.cursor = 'not-allowed';
-    base.backgroundColor = 'var(--ds-surface-canvas)';
+    base.backgroundColor = 'var(--ds-select-bg-disabled, var(--ds-surface-canvas))';
   }
 
   return base;
@@ -183,10 +185,10 @@ const DROPDOWN_STYLE: React.CSSProperties = {
   right: 0,
   zIndex: 180,
   background:
-    'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-color-bg-primary) 22%, var(--ds-surface-card)))',
-  border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)',
+    'var(--ds-select-dropdown-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-color-bg-primary) 22%, var(--ds-surface-card))))',
+  border: '1px solid var(--ds-select-dropdown-border-color, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent))',
   borderRadius: 14,
-  boxShadow: '0 20px 48px color-mix(in srgb, black 22%, transparent)',
+  boxShadow: 'var(--ds-select-dropdown-shadow, var(--ds-shadow-popover, var(--ds-shadow-lg, var(--ds-card-shadow))))',
   backdropFilter: 'blur(16px)',
   WebkitBackdropFilter: 'blur(16px)',
   padding: '4px',

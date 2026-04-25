@@ -195,7 +195,7 @@ export function AppShell({
               flexDirection: 'column',
               overflow: 'hidden',
               transition: `width ${transition}`,
-              background: 'var(--ds-sidebar-bg, var(--ds-surface-shell, #0D0D10))',
+              background: 'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated, #FFFFFF)))',
               borderRight: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
             }}
           >
@@ -227,7 +227,7 @@ export function AppShell({
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden',
-                background: 'var(--ds-sidebar-bg, var(--ds-surface-shell, #0D0D10))',
+                background: 'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated, #FFFFFF)))',
                 borderRight: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
                 boxShadow: 'var(--ds-elevation-3)',
               }}

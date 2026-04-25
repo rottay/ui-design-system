@@ -449,8 +449,8 @@ export function SearchCommandBar({
                   : 'var(--ds-surface-panel)',
                 boxShadow: embedded
                   ? editorialTech
-                    ? '0 10px 28px color-mix(in srgb, #000 18%, transparent), inset 0 1px 0 color-mix(in srgb, white 4%, transparent)'
-                    : '0 12px 28px color-mix(in srgb, #000 14%, transparent), inset 0 1px 0 color-mix(in srgb, white 3%, transparent)'
+                    ? '0 10px 28px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)'
+                    : '0 12px 28px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)'
                   : 'var(--ds-elevation-1)',
               }}
             >

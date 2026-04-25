@@ -31,13 +31,13 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --color-secondary: oklch(42% 0.06 160);             /* #057642 green */
   --color-secondary-content: oklch(100% 0 0);         /* #FFFFFF */
   --color-accent: oklch(61.2% 0.135 137);             /* #5A9640 green accent */
-  --color-accent-content: oklch(7% 0.01 260);         /* near-black */
+  --color-accent-content: oklch(7% 0.01 260);         /* deep blue-gray */
   --color-neutral: oklch(30% 0.01 250);               /* #474747 dark gray */
   --color-neutral-content: oklch(97% 0.005 100);      /* #F3F2EF */
   --color-base-100: oklch(100% 0 0);                  /* #FFFFFF canvas */
   --color-base-200: oklch(96% 0.005 80);              /* #F3F2EF secondary bg */
   --color-base-300: oklch(93% 0.005 80);              /* #EAE9E5 tertiary bg */
-  --color-base-content: oklch(12% 0.01 260);          /* rgba(0,0,0,0.9) text */
+  --color-base-content: oklch(12% 0.01 260);          /* deep blue-gray text */
   --color-success: oklch(42% 0.06 160);               /* #057642 */
   --color-success-content: oklch(100% 0 0);
   --color-warning: oklch(72% 0.12 75);                /* #E7A33E */
@@ -102,25 +102,51 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   /* Backgrounds - Light, professional */
   --ds-color-bg-primary: #ffffff;
   --ds-color-bg-secondary: #f3f2ef;
-  --ds-color-bg-tertiary: #eae9e5;
+  --ds-color-bg-tertiary: #e8eef6;
   --ds-color-bg-elevated: #ffffff;
   --ds-color-bg-surface: #ffffff;
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.6);
+  --ds-color-bg-overlay: rgba(15, 42, 67, 0.42);
+  --ds-color-bg-input: #ffffff;
+  --ds-surface-control: #ffffff;
+  --ds-surface-card: #ffffff;
+  --ds-surface-canvas: #F8FBFF;
+  --ds-surface-panel: #F4F8FD;
 
-  /* Text - Dark text on light backgrounds */
-  --ds-color-text-primary: rgba(0, 0, 0, 0.9);
-  --ds-color-text-secondary: rgba(0, 0, 0, 0.6);
-  --ds-color-text-tertiary: rgba(0, 0, 0, 0.4);
-  --ds-color-text-muted: rgba(0, 0, 0, 0.4);
-  --ds-color-text-disabled: rgba(0, 0, 0, 0.3);
+  /* Text - BitHire blue-gray, never inherited browser defaults */
+  --ds-color-text-primary: #162A43;
+  --ds-color-text-secondary: #52677E;
+  --ds-color-text-tertiary: #7C8CA0;
+  --ds-color-text-muted: #8795A6;
+  --ds-color-text-disabled: #A7B2C0;
   --ds-color-text-on-primary: #ffffff;
 
-  /* Borders - LinkedIn style */
-  --ds-color-border: rgba(0, 0, 0, 0.08);
-  --ds-color-border-primary: rgba(0, 0, 0, 0.08);
-  --ds-color-border-secondary: rgba(0, 0, 0, 0.15);
-  --ds-color-border-tertiary: rgba(0, 0, 0, 0.06);
+  /* Borders - BitHire blue-tinted chrome, including subtle fallback */
+  --ds-color-border: #D3DEEA;
+  --ds-color-border-primary: #D3DEEA;
+  --ds-color-border-secondary: #BCCBDC;
+  --ds-color-border-tertiary: #E2EAF3;
+  --ds-color-border-subtle: #DEE8F2;
   --ds-color-border-focus: #0A66C2;
+
+  /* LinkedIn-inspired surface chrome, tinted for BitHire */
+  --ds-card-bg: #FFFFFF;
+  --ds-card-border: #D3DEEA;
+  --ds-card-header-border: #DEE8F2;
+  --ds-card-footer-border: #DEE8F2;
+  --ds-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06);
+  --ds-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
+  --ds-table-bg: #FFFFFF;
+  --ds-table-border: #D3DEEA;
+  --ds-table-header-bg: #F3F2EF;
+  --ds-table-header-color: #52677E;
+  --ds-table-row-bg: #FFFFFF;
+  --ds-table-row-border: #DEE8F2;
+  --ds-table-row-bg-hover: #F4F8FD;
+  --ds-table-row-bg-striped: #FAFCFF;
+  --ds-workspace-shell-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 58%, #F4F8FD 100%);
+  --ds-workspace-shell-border: #D3DEEA;
+  --ds-workspace-shell-overlay: linear-gradient(180deg, rgba(10, 102, 194, 0.035) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%);
+  --ds-workspace-shell-shadow: 0 1px 2px rgba(22, 42, 67, 0.04), 0 10px 24px rgba(22, 42, 67, 0.06);
 
   /* Typography - LinkedIn uses system fonts */
   --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
@@ -149,10 +175,13 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-radius-full: 9999px;
 
   /* Shadows - subtle, professional */
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
-  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --ds-shadow-sm: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-shadow-md: 0 4px 12px rgba(22, 42, 67, 0.08);
+  --ds-shadow-lg: 0 8px 24px rgba(22, 42, 67, 0.1);
+  --ds-shadow-xl: 0 16px 48px rgba(22, 42, 67, 0.12);
+  --ds-shadow-popover: 0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06);
+  --ds-datepicker-panel-shadow: var(--ds-shadow-popover);
+  --ds-timepicker-panel-shadow: var(--ds-shadow-popover);
 
   /* Button overrides */
   --ds-button-primary-bg: #0A66C2;
@@ -163,48 +192,68 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-button-secondary-text: #0A66C2;
   --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
   --ds-button-primary-border: transparent;
-  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --ds-button-primary-shadow: 0 1px 2px rgba(22, 42, 67, 0.1);
   --ds-button-default-bg: #FFFFFF;
-  --ds-button-default-bg-hover: #F8F8F8;
-  --ds-button-default-color: rgba(0, 0, 0, 0.85);
-  --ds-button-default-border: rgba(0, 0, 0, 0.15);
+  --ds-button-default-bg-hover: #F4F8FD;
+  --ds-button-default-color: #162A43;
+  --ds-button-default-border: #BCCBDC;
   --ds-button-ghost-bg: transparent;
-  --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.04);
-  --ds-button-ghost-color: rgba(0, 0, 0, 0.65);
-  --ds-button-disabled-bg: #F8F8F8;
-  --ds-button-disabled-color: rgba(0, 0, 0, 0.3);
-  --ds-button-disabled-border: rgba(0, 0, 0, 0.08);
-  --ds-button-disabled-border-color: rgba(0, 0, 0, 0.08);
+  --ds-button-ghost-bg-hover: #F4F8FD;
+  --ds-button-ghost-color: #52677E;
+  --ds-button-disabled-bg: #F8FAFC;
+  --ds-button-disabled-color: #A7B2C0;
+  --ds-button-disabled-border: #E2EAF3;
+  --ds-button-disabled-border-color: #E2EAF3;
   --ds-button-disabled-opacity: 0.45;
 
   /* Card overrides */
   --ds-card-bg: #ffffff;
-  --ds-card-bg-hover: #f9f9f7;
-  --ds-card-border: rgba(0, 0, 0, 0.08);
-  --ds-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --ds-card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+  --ds-card-bg-hover: #F9FBFE;
+  --ds-card-border: #D3DEEA;
+  --ds-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06);
+  --ds-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
 
   /* Input overrides */
   --ds-input-bg: #ffffff;
-  --ds-input-border: rgba(0, 0, 0, 0.15);
-  --ds-input-border-hover: rgba(0, 0, 0, 0.3);
+  --ds-input-bg-hover: #ffffff;
+  --ds-input-bg-focus: #ffffff;
+  --ds-input-border: #BCCBDC;
+  --ds-input-border-color: #BCCBDC;
+  --ds-input-border-color-hover: #90A6BE;
+  --ds-input-border-color-focus: #0A66C2;
+  --ds-input-border-hover: #90A6BE;
   --ds-input-border-focus: #0A66C2;
   --ds-input-shadow-focus: 0 0 0 1px #0A66C2;
-  --ds-input-color: rgba(0, 0, 0, 0.9);
-  --ds-input-color-placeholder: rgba(0, 0, 0, 0.4);
-  --ds-input-bg-disabled: #F8F8F8;
-  --ds-input-color-disabled: rgba(0, 0, 0, 0.3);
-  --ds-input-border-disabled: rgba(0, 0, 0, 0.08);
-  --ds-input-border-color-disabled: rgba(0, 0, 0, 0.08);
+  --ds-input-color: #162A43;
+  --ds-input-color-placeholder: #8795A6;
+  --ds-input-bg-disabled: #F8FAFC;
+  --ds-input-color-disabled: #A7B2C0;
+  --ds-input-border-disabled: #E2EAF3;
+  --ds-input-border-color-disabled: #E2EAF3;
   --ds-input-disabled-opacity: 0.45;
+  --ds-select-bg: #ffffff;
+  --ds-select-bg-hover: #ffffff;
+  --ds-select-bg-focus: #ffffff;
+  --ds-select-color: #162A43;
+  --ds-select-color-placeholder: #8795A6;
+  --ds-select-border-color: #BCCBDC;
+  --ds-select-border-color-hover: #90A6BE;
+  --ds-select-border-color-focus: #0A66C2;
+  --ds-select-dropdown-bg: #ffffff;
+  --ds-select-dropdown-border-color: #D3DEEA;
+  --ds-select-dropdown-shadow: var(--ds-shadow-popover);
+  --ds-select-option-bg-hover: #F4F8FD;
+  --ds-select-option-bg-selected: #E8F3FF;
+  --ds-select-option-color: #162A43;
+  --ds-select-option-color-selected: #0A66C2;
 
   /* Layout */
   --ds-layout-bg: #FFFFFF;
   --ds-layout-header-bg: rgba(255, 255, 255, 0.92);
   --ds-layout-header-backdrop: blur(8px);
-  --ds-layout-header-border: rgba(0, 0, 0, 0.08);
+  --ds-layout-header-border: #D3DEEA;
   --ds-layout-sider-bg: #FFFFFF;
-  --ds-layout-sider-border: rgba(0, 0, 0, 0.08);
+  --ds-layout-sider-border: #D3DEEA;
 
   /* Shell (intentionally minimal) */
   --ds-shell-grid-size: 0px;
@@ -213,20 +262,20 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
 
   /* Table */
   --ds-table-bg: #ffffff;
-  --ds-table-border: rgba(0, 0, 0, 0.08);
+  --ds-table-border: #D3DEEA;
   --ds-table-radius: var(--ds-radius-lg);
   --ds-table-header-bg: #f3f2ef;
-  --ds-table-header-color: rgba(0, 0, 0, 0.6);
+  --ds-table-header-color: #52677E;
   --ds-table-header-font-weight: 600;
   --ds-table-header-font-size: 0.75rem;
   --ds-table-row-bg: #ffffff;
-  --ds-table-row-bg-hover: #f3f2ef;
-  --ds-table-row-bg-striped: #f9f9f7;
-  --ds-table-row-bg-selected: #f0f7ff;
-  --ds-table-row-border: rgba(0, 0, 0, 0.08);
+  --ds-table-row-bg-hover: #F4F8FD;
+  --ds-table-row-bg-striped: #FAFCFF;
+  --ds-table-row-bg-selected: #E8F3FF;
+  --ds-table-row-border: #DEE8F2;
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-cell-font-size: 0.875rem;
-  --ds-table-cell-color: rgba(0, 0, 0, 0.9);
+  --ds-table-cell-color: #162A43;
 
   /* Link colors */
   --ds-color-link: #0A66C2;
@@ -234,10 +283,10 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-link-visited: #6b3fa0;
 
   /* Interactive states */
-  --ds-color-interactive-border: rgba(0, 0, 0, 0.15);
-  --ds-color-interactive-bg-hover: rgba(0, 0, 0, 0.04);
+  --ds-color-interactive-border: #BCCBDC;
+  --ds-color-interactive-bg-hover: rgba(10, 102, 194, 0.06);
   --ds-color-interactive-bg-active: rgba(10, 102, 194, 0.08);
-  --ds-color-interactive-bg-muted: rgba(0, 0, 0, 0.04);
+  --ds-color-interactive-bg-muted: #F4F8FD;
 
   /* Status colors */
   --ds-color-success: #057642;
@@ -276,30 +325,31 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   /* Group Headers - Bold, slightly larger than items */
   --ds-sidebar-group-font-size: 11px;
   --ds-sidebar-group-font-weight: 600;
-  --ds-sidebar-group-color: rgba(0, 0, 0, 0.55);
+  --ds-sidebar-group-color: #6B7F95;
   --ds-sidebar-group-letter-spacing: 0.04em;
   --ds-sidebar-group-margin-top: 8px;
   --ds-sidebar-group-margin-bottom: 4px;
   --ds-sidebar-group-padding-top: 10px;
-  --ds-sidebar-group-border: 1px solid rgba(0, 0, 0, 0.08);
+  --ds-sidebar-group-border: 1px solid #D3DEEA;
 
   /* Nav Items - Compact, smaller than header */
   --ds-sidebar-item-font-size: 13px;
   --ds-sidebar-item-font-weight: 400;
   --ds-sidebar-item-font-weight-active: 500;
-  --ds-sidebar-item-color: rgba(0, 0, 0, 0.65);
+  --ds-sidebar-item-color: #52677E;
   --ds-sidebar-item-color-active: #0A66C2;
   --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
-  --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.04);
+  --ds-sidebar-item-bg-hover: #F4F8FD;
   --ds-sidebar-item-indent: 6px;
   --ds-sidebar-item-padding: 6px 10px;
   --ds-sidebar-icon-size: 16px;
 
   /* Sidebar specific */
   --ds-sidebar-bg: #ffffff;
-  --ds-sidebar-border: rgba(0, 0, 0, 0.08);
-  --ds-sidebar-text: rgba(0, 0, 0, 0.9);
-  --ds-sidebar-text-muted: rgba(0, 0, 0, 0.55);
+  --ds-sidebar-footer-bg: #F8FBFF;
+  --ds-sidebar-border: #D3DEEA;
+  --ds-sidebar-text: #162A43;
+  --ds-sidebar-text-muted: #6B7F95;
 
   /* ============================================
      BITHIRE SPECIFIC - Recruiting Domain Tokens
@@ -432,7 +482,7 @@ html[data-tenant='bithire'].dark {
   --ds-color-bg-tertiary: #1B2535;
   --ds-color-bg-elevated: #1F2940;
   --ds-color-bg-surface: #151D2B;
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --ds-color-bg-overlay: rgba(15, 42, 67, 0.58);
 
   /* Text - Light text on dark backgrounds */
   --ds-color-text-primary: #E4E8ED;
@@ -447,6 +497,7 @@ html[data-tenant='bithire'].dark {
   --ds-color-border-primary: #253545;
   --ds-color-border-secondary: #1D2A38;
   --ds-color-border-tertiary: #182230;
+  --ds-color-border-subtle: #132032;
   --ds-color-border-focus: #1A7FE0;
 
   /* Typography - Same family, dark mode inherits */
@@ -476,10 +527,10 @@ html[data-tenant='bithire'].dark {
   --ds-radius-full: 9999px;
 
   /* Shadows - same authored scale as light (BrandTheme has one scale) */
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
-  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --ds-shadow-sm: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-shadow-md: 0 4px 12px rgba(22, 42, 67, 0.08);
+  --ds-shadow-lg: 0 8px 24px rgba(22, 42, 67, 0.1);
+  --ds-shadow-xl: 0 16px 48px rgba(22, 42, 67, 0.12);
 
   /* Button overrides - dark */
   --ds-button-primary-bg: #1A7FE0;
@@ -494,8 +545,8 @@ html[data-tenant='bithire'].dark {
   --ds-card-bg: #151D2B;
   --ds-card-bg-hover: #1B2535;
   --ds-card-border: #253545;
-  --ds-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
-  --ds-card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --ds-card-shadow: 0 4px 12px rgba(22, 42, 67, 0.16), 0 2px 4px rgba(22, 42, 67, 0.10);
+  --ds-card-shadow-hover: 0 8px 24px rgba(22, 42, 67, 0.18), 0 4px 8px rgba(22, 42, 67, 0.12);
 
   /* Input overrides - dark */
   --ds-input-bg: #0F1520;
@@ -591,6 +642,7 @@ html[data-tenant='bithire'].dark {
 
   /* Sidebar specific */
   --ds-sidebar-bg: #0A0F18;
+  --ds-sidebar-footer-bg: #0A0F18;
   --ds-sidebar-border: #1D2A38;
   --ds-sidebar-text: #9AACBF;
   --ds-sidebar-text-muted: #5A7085;
@@ -632,4 +684,141 @@ html[data-tenant='bithire'].dark {
   --ds-interview-cancelled-text: var(--ds-color-error);
   --ds-interview-no-show: var(--ds-color-warning-100);
   --ds-interview-no-show-text: var(--ds-color-warning);
+}
+
+/* ============================================
+   BITHIRE CLEAR MODE GUARD
+   BitHire intentionally stays in a light LinkedIn/tech aesthetic even when
+   the shell receives `.dark` from system/host preferences.
+   ============================================ */
+html[data-tenant='bithire'][data-theme='dark'],
+html[data-tenant='bithire'].dark {
+  color-scheme: light;
+
+  --color-primary: oklch(50% 0.14 250);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(42% 0.06 160);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(61.2% 0.135 137);
+  --color-accent-content: oklch(7% 0.01 260);
+  --color-neutral: oklch(30% 0.01 250);
+  --color-neutral-content: oklch(97% 0.005 100);
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(96% 0.005 80);
+  --color-base-300: oklch(93% 0.005 80);
+  --color-base-content: oklch(12% 0.01 260);
+
+  --ds-color-bg-primary: #ffffff;
+  --ds-color-bg-secondary: #f3f2ef;
+  --ds-color-bg-tertiary: #e8eef6;
+  --ds-color-bg-elevated: #ffffff;
+  --ds-color-bg-surface: #ffffff;
+  --ds-color-bg-overlay: rgba(15, 42, 67, 0.42);
+  --ds-color-bg-input: #ffffff;
+  --ds-surface-control: #ffffff;
+  --ds-surface-card: #ffffff;
+  --ds-surface-canvas: #F8FBFF;
+  --ds-surface-panel: #F4F8FD;
+
+  --ds-color-text-primary: #162A43;
+  --ds-color-text-secondary: #52677E;
+  --ds-color-text-tertiary: #7C8CA0;
+  --ds-color-text-muted: #8795A6;
+  --ds-color-text-disabled: #A7B2C0;
+  --ds-color-text-on-primary: #ffffff;
+
+  --ds-color-border: #D3DEEA;
+  --ds-color-border-primary: #D3DEEA;
+  --ds-color-border-secondary: #BCCBDC;
+  --ds-color-border-tertiary: #E2EAF3;
+  --ds-color-border-subtle: #DEE8F2;
+  --ds-color-border-focus: #0A66C2;
+  --ds-color-interactive-border: #BCCBDC;
+  --ds-color-interactive-bg-hover: rgba(10, 102, 194, 0.06);
+  --ds-color-interactive-bg-active: rgba(10, 102, 194, 0.08);
+  --ds-color-interactive-bg-muted: #F4F8FD;
+
+  --ds-card-bg: #ffffff;
+  --ds-card-bg-hover: #F9FBFE;
+  --ds-card-border: #D3DEEA;
+  --ds-card-header-border: #DEE8F2;
+  --ds-card-footer-border: #DEE8F2;
+  --ds-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06);
+  --ds-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
+
+  --ds-table-bg: #ffffff;
+  --ds-table-border: #D3DEEA;
+  --ds-table-header-bg: #f3f2ef;
+  --ds-table-header-color: #52677E;
+  --ds-table-row-bg: #ffffff;
+  --ds-table-row-bg-hover: #F4F8FD;
+  --ds-table-row-bg-striped: #FAFCFF;
+  --ds-table-row-bg-selected: #E8F3FF;
+  --ds-table-row-border: #DEE8F2;
+  --ds-table-cell-color: #162A43;
+
+  --ds-input-bg: #ffffff;
+  --ds-input-bg-hover: #ffffff;
+  --ds-input-bg-focus: #ffffff;
+  --ds-input-bg-disabled: #F8FAFC;
+  --ds-input-color: #162A43;
+  --ds-input-color-placeholder: #8795A6;
+  --ds-input-color-disabled: #A7B2C0;
+  --ds-input-border: #BCCBDC;
+  --ds-input-border-color: #BCCBDC;
+  --ds-input-border-hover: #90A6BE;
+  --ds-input-border-color-hover: #90A6BE;
+  --ds-input-border-focus: #0A66C2;
+  --ds-input-border-color-focus: #0A66C2;
+  --ds-input-border-disabled: #E2EAF3;
+  --ds-input-border-color-disabled: #E2EAF3;
+  --ds-input-shadow-focus: 0 0 0 1px #0A66C2;
+
+  --ds-select-bg: #ffffff;
+  --ds-select-bg-hover: #ffffff;
+  --ds-select-bg-focus: #ffffff;
+  --ds-select-color: #162A43;
+  --ds-select-color-placeholder: #8795A6;
+  --ds-select-border-color: #BCCBDC;
+  --ds-select-border-color-hover: #90A6BE;
+  --ds-select-border-color-focus: #0A66C2;
+  --ds-select-dropdown-bg: #ffffff;
+  --ds-select-dropdown-border-color: #D3DEEA;
+  --ds-select-dropdown-shadow: var(--ds-shadow-popover);
+  --ds-select-option-bg-hover: #F4F8FD;
+  --ds-select-option-bg-selected: #E8F3FF;
+  --ds-select-option-color: #162A43;
+  --ds-select-option-color-selected: #0A66C2;
+
+  --ds-dropdown-bg: #ffffff;
+  --ds-dropdown-border: #D3DEEA;
+  --ds-dropdown-shadow: var(--ds-shadow-popover);
+  --ds-popover-bg: #ffffff;
+  --ds-popover-border: #D3DEEA;
+  --ds-popover-shadow: var(--ds-shadow-popover);
+  --ds-modal-bg: #ffffff;
+  --ds-modal-border: #D3DEEA;
+  --ds-modal-shadow: var(--ds-shadow-popover);
+
+  --ds-layout-bg: #FFFFFF;
+  --ds-layout-header-bg: rgba(255, 255, 255, 0.92);
+  --ds-layout-header-border: #D3DEEA;
+  --ds-layout-sider-bg: #FFFFFF;
+  --ds-layout-sider-border: #D3DEEA;
+  --ds-sidebar-bg: #ffffff;
+  --ds-sidebar-footer-bg: #F8FBFF;
+  --ds-sidebar-border: #D3DEEA;
+  --ds-sidebar-text: #162A43;
+  --ds-sidebar-text-muted: #6B7F95;
+  --ds-sidebar-item-color: #52677E;
+  --ds-sidebar-item-color-active: #0A66C2;
+  --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
+  --ds-sidebar-item-bg-hover: #F4F8FD;
+  --ds-sidebar-group-color: #6B7F95;
+  --ds-sidebar-group-border: 1px solid #D3DEEA;
+
+  --ds-workspace-shell-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 58%, #F4F8FD 100%);
+  --ds-workspace-shell-border: #D3DEEA;
+  --ds-workspace-shell-overlay: linear-gradient(180deg, rgba(10, 102, 194, 0.035) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%);
+  --ds-workspace-shell-shadow: 0 1px 2px rgba(22, 42, 67, 0.04), 0 10px 24px rgba(22, 42, 67, 0.06);
 }

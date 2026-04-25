@@ -112,6 +112,8 @@ export function CollectionHeader({
   const useMonoSubtitle = subtitleTreatment === 'mono-technical';
   const editorialTech = layoutVariant === 'editorial-tech';
   const compactLayout = isCompactViewport;
+  const displayInk = 'var(--ds-collection-header-display-color, var(--ds-color-primary))';
+  const displayShade = 'var(--ds-collection-header-display-shade, var(--ds-color-text-primary))';
   const compactMetaItems = metaItems ?? [];
   const inlineMetaItems = metaItemsPlacement === 'inline-start' ? compactMetaItems : [];
   const eyebrowMetaItems = metaItemsPlacement === 'eyebrow-end' ? compactMetaItems : [];
@@ -268,21 +270,21 @@ export function CollectionHeader({
               width: 'fit-content',
               textRendering: 'optimizeLegibility',
               textShadow: useDisplayTitle
-                ? '0 0 24px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)'
+                ? `0 0 24px color-mix(in srgb, ${displayInk} 12%, transparent)`
                 : undefined,
               textTransform: (useDisplayTitle || useDottedTitle) ? ('uppercase' as const) : undefined,
               backgroundImage: useDottedTitle
                 ? [
                     compactLayout
-                      ? 'radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--ds-color-text-primary) 90%, white 10%) 0 0.45px, transparent 0.65px)'
+                      ? `radial-gradient(circle at 1px 1px, color-mix(in srgb, ${displayInk} 76%, ${displayShade} 24%) 0 0.45px, transparent 0.65px)`
                       : editorialTech
-                        ? 'radial-gradient(circle at 1.35px 1.35px, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0 0.56px, transparent 0.72px)'
-                        : 'radial-gradient(circle, color-mix(in srgb, var(--ds-color-text-primary) 96%, white 4%) 0 1px, transparent 1.2px)',
+                        ? `radial-gradient(circle at 1.35px 1.35px, color-mix(in srgb, ${displayInk} 78%, ${displayShade} 22%) 0 0.56px, transparent 0.72px)`
+                        : `radial-gradient(circle, color-mix(in srgb, ${displayInk} 82%, ${displayShade} 18%) 0 1px, transparent 1.2px)`,
                     compactLayout
-                      ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 88%, white 12%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 58%, transparent) 100%)'
+                      ? `linear-gradient(180deg, color-mix(in srgb, ${displayShade} 60%, ${displayInk} 40%) 0%, color-mix(in srgb, ${displayInk} 52%, transparent) 100%)`
                       : editorialTech
-                        ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 84%, white 16%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, white 10%) 54%, color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent) 100%)'
-                        : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 92%, white 8%) 0%, color-mix(in srgb, var(--ds-color-text-primary) 72%, transparent) 100%)',
+                        ? `linear-gradient(180deg, color-mix(in srgb, ${displayShade} 58%, ${displayInk} 42%) 0%, color-mix(in srgb, ${displayInk} 68%, ${displayShade} 20%) 54%, color-mix(in srgb, ${displayInk} 42%, transparent) 100%)`
+                        : `linear-gradient(180deg, color-mix(in srgb, ${displayShade} 58%, ${displayInk} 42%) 0%, color-mix(in srgb, ${displayInk} 56%, transparent) 100%)`,
                   ].join(', ')
                 : undefined,
               backgroundSize: useDottedTitle
@@ -298,17 +300,17 @@ export function CollectionHeader({
               WebkitTextFillColor: useDottedTitle ? 'transparent' : undefined,
               WebkitTextStroke: useDottedTitle
                 ? compactLayout
-                  ? '0.24px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)'
+                  ? `0.24px color-mix(in srgb, ${displayInk} 20%, transparent)`
                   : editorialTech
-                    ? '0.32px color-mix(in srgb, var(--ds-color-text-primary) 18%, transparent)'
-                    : '1px color-mix(in srgb, var(--ds-color-text-primary) 24%, transparent)'
+                    ? `0.32px color-mix(in srgb, ${displayInk} 24%, transparent)`
+                    : `1px color-mix(in srgb, ${displayInk} 28%, transparent)`
                 : undefined,
               filter: useDottedTitle
                 ? compactLayout
-                  ? 'drop-shadow(0 0 6px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))'
+                  ? `drop-shadow(0 0 6px color-mix(in srgb, ${displayInk} 8%, transparent))`
                   : editorialTech
-                    ? 'drop-shadow(0 0 8px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))'
-                    : 'drop-shadow(0 0 18px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent))'
+                    ? `drop-shadow(0 0 8px color-mix(in srgb, ${displayInk} 10%, transparent))`
+                    : `drop-shadow(0 0 18px color-mix(in srgb, ${displayInk} 12%, transparent))`
                 : undefined,
             }}
           >
@@ -341,7 +343,7 @@ export function CollectionHeader({
                     : useDottedTitle
                       ? '10px'
                       : 'var(--ds-font-size-sm, 12px)',
-                  color: 'color-mix(in srgb, var(--ds-color-text-secondary) 68%, white 32%)',
+                  color: 'color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%)',
                   lineHeight: 1.56,
                   textWrap: 'pretty',
                   fontFamily: useMonoSubtitle
@@ -456,8 +458,8 @@ export function CollectionHeader({
                 : 'var(--ds-surface-panel)',
               boxShadow: embedded
                 ? editorialTech
-                  ? '0 8px 18px color-mix(in srgb, #000 12%, transparent), inset 0 1px 0 color-mix(in srgb, white 3%, transparent)'
-                  : '0 10px 24px color-mix(in srgb, #000 16%, transparent), inset 0 1px 0 color-mix(in srgb, white 4%, transparent)'
+                  ? '0 8px 18px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)'
+                  : '0 10px 24px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)'
                 : 'var(--ds-elevation-1)',
               alignSelf: compactLayout ? 'stretch' : 'flex-end',
             }}

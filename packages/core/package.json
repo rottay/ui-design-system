@@ -27,40 +27,40 @@
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
     },
-    "./styles": {
-      "style": "./styles/index.css",
-      "import": "./styles/index.css",
-      "default": "./styles/index.css"
+  "./styles": {
+      "style": "./dist/styles.css",
+      "import": "./dist/styles.css",
+      "default": "./dist/styles.css"
     },
     "./styles.css": {
-      "style": "./styles/index.css",
-      "import": "./styles/index.css",
-      "default": "./styles/index.css"
+      "style": "./dist/styles.css",
+      "import": "./dist/styles.css",
+      "default": "./dist/styles.css"
     },
     "./styles/platform": {
-      "style": "./styles/platform.css",
-      "import": "./styles/platform.css",
-      "default": "./styles/platform.css"
+      "style": "./dist/platform.css",
+      "import": "./dist/platform.css",
+      "default": "./dist/platform.css"
     },
     "./styles/bithire": {
-      "style": "./styles/bithire.css",
-      "import": "./styles/bithire.css",
-      "default": "./styles/bithire.css"
+      "style": "./dist/bithire.css",
+      "import": "./dist/bithire.css",
+      "default": "./dist/bithire.css"
     },
     "./styles/evnto": {
-      "style": "./styles/evnto.css",
-      "import": "./styles/evnto.css",
-      "default": "./styles/evnto.css"
+      "style": "./dist/evnto.css",
+      "import": "./dist/evnto.css",
+      "default": "./dist/evnto.css"
     },
     "./styles/rottay": {
-      "style": "./styles/rottay.css",
-      "import": "./styles/rottay.css",
-      "default": "./styles/rottay.css"
+      "style": "./dist/platform.css",
+      "import": "./dist/platform.css",
+      "default": "./dist/platform.css"
     },
     "./styles/modern": {
-      "style": "./styles/modern.css",
-      "import": "./styles/modern.css",
-      "default": "./styles/modern.css"
+      "style": "./dist/modern-engine.css",
+      "import": "./dist/modern-engine.css",
+      "default": "./dist/modern-engine.css"
     },
     "./eslint": {
       "types": "./dist/eslint.d.ts",

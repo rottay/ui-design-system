@@ -127,7 +127,7 @@ export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
     key: 'bithire',
     label: 'BitHire',
     description: 'Recruiting vertical with editorial aesthetics, comfortable density, and people-first workflows.',
-    engine: 'classic',
+    engine: 'modern',
     density: 'comfortable',
     personality: {
       animation: {

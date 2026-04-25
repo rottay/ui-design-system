@@ -4,6 +4,7 @@
  */
 
 export * from './auth';
+export * from './oauth-transition';
 export * from './marketing';
 export * from './onboarding';
 export * from './chat';

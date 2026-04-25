@@ -47,6 +47,7 @@ export type {
   WorkspaceSelectionConfig,
   WorkspacePreviewRailConfig,
   WorkspaceFocusConfig,
+  WorkspaceCellEditingConfig,
   WorkspaceResponsiveConfig,
   WorkspaceActiveFiltersConfig,
   SmartSelectionSet,

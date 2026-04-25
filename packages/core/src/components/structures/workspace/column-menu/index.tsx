@@ -454,7 +454,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)',
               borderRadius: 22,
               boxShadow:
-                '0 28px 72px color-mix(in srgb, black 30%, transparent), 0 1px 0 color-mix(in srgb, white 8%, transparent) inset',
+                '0 28px 72px color-mix(in srgb, var(--ds-color-primary) 18%, transparent), 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 62%, transparent) inset',
               backdropFilter: 'blur(18px) saturate(1.05)',
               WebkitBackdropFilter: 'blur(18px) saturate(1.05)',
               overflow: 'hidden',
@@ -549,7 +549,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))'
                             : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))',
                           boxShadow: isVisible
-                            ? '0 10px 22px color-mix(in srgb, black 10%, transparent), 0 1px 0 color-mix(in srgb, white 5%, transparent) inset'
+                            ? '0 10px 22px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 56%, transparent) inset'
                             : '0 1px 0 color-mix(in srgb, white 4%, transparent) inset',
                           overflow: 'hidden',
                         }}
@@ -835,7 +835,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))'
                                 : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))',
                               boxShadow: isVisible
-                                ? '0 10px 22px color-mix(in srgb, black 10%, transparent), 0 1px 0 color-mix(in srgb, white 5%, transparent) inset'
+                                ? '0 10px 22px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 56%, transparent) inset'
                                 : '0 1px 0 color-mix(in srgb, white 4%, transparent) inset',
                               overflow: 'hidden',
                             }}

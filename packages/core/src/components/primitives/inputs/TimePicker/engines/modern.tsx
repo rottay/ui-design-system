@@ -87,7 +87,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
   const panelStyle: React.CSSProperties = {
     background: 'var(--ds-color-bg-elevated)',
     borderRadius: 'var(--ds-radius-lg, 12px)',
-    boxShadow: 'var(--ds-elevation-3, 0 10px 25px -5px rgba(0,0,0,.15), 0 4px 10px -5px rgba(0,0,0,.1))',
+    boxShadow: 'var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)))',
     border: '1px solid var(--ds-color-border)',
     fontFamily: 'inherit',
     animation: 'rottay-select-slide-in var(--ds-motion-duration-fast, 0.15s) ease-out',

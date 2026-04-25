@@ -17,7 +17,7 @@
  * Run after build:modern-css so dist/modern-engine.css exists.
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -25,6 +25,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
 const srcCss = resolve(root, 'src/tokens/css');
 const dist = resolve(root, 'dist');
+const styles = resolve(root, 'styles');
 
 function readFile(path) {
   if (!existsSync(path)) {
@@ -76,6 +77,8 @@ const verticals = [
   { name: 'evnto',   tenantFile: 'artifacts/evnto/index.css' },
 ];
 
+mkdirSync(styles, { recursive: true });
+
 for (const { name, tenantFile } of verticals) {
   console.log(`Building dist/${name}.css ...`);
 
@@ -121,6 +124,10 @@ for (const { name, tenantFile } of verticals) {
 
   const sizeKB = Math.round(bundle.length / 1024);
   writeFileSync(resolve(dist, `${name}.css`), bundle);
+  writeFileSync(resolve(styles, `${name}.css`), bundle);
+  if (name === 'platform') {
+    writeFileSync(resolve(styles, 'rottay.css'), bundle);
+  }
   console.log(`  -> dist/${name}.css (${sizeKB}KB)`);
 }
 
@@ -154,6 +161,8 @@ const stylesBundle = [
 ].join('\n');
 
 writeFileSync(resolve(dist, 'styles.css'), stylesBundle);
+writeFileSync(resolve(styles, 'index.css'), stylesBundle);
+writeFileSync(resolve(styles, 'modern.css'), modernEngine);
 console.log(`  -> dist/styles.css (${Math.round(stylesBundle.length / 1024)}KB)`);
 
 console.log('Done. All vertical bundles are tenant-scoped.');

@@ -318,7 +318,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     padding: 'var(--ds-spacing-3, 12px)',
     background: 'var(--ds-color-bg-elevated)',
     borderRadius: 'var(--ds-radius-lg, 12px)',
-    boxShadow: 'var(--ds-elevation-4, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1))',
+    boxShadow: 'var(--ds-datepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)))',
     border: '1px solid var(--ds-color-border)',
     width: 288,
     fontFamily: 'inherit',

@@ -69,6 +69,12 @@ export interface CollectionRenderDispatchProps<T extends object> {
   resizable?: boolean;
   columnWidths?: Record<string, number>;
   onColumnResize?: (key: string, width: number) => void;
+  onCellEdit?: (row: T, columnKey: string, newValue: unknown, oldValue: unknown) => void | Promise<void>;
+  onCellEditStart?: (row: T, columnKey: string) => void;
+  onCellEditCancel?: (row: T, columnKey: string) => void;
+  editingCell?: { rowKey: string; columnKey: string } | null;
+  editTrigger?: 'click' | 'doubleClick';
+  tabNavigation?: boolean;
   mobileCard?: (row: T, index: number) => ReactNode;
 
   // Cards-specific (legacy inline card grid)
@@ -352,6 +358,12 @@ export function CollectionRenderDispatch<T extends object>(
       resizable={props.resizable}
       columnWidths={props.columnWidths}
       onColumnResize={props.onColumnResize}
+      onCellEdit={props.onCellEdit}
+      onCellEditStart={props.onCellEditStart}
+      onCellEditCancel={props.onCellEditCancel}
+      editingCell={props.editingCell}
+      editTrigger={props.editTrigger}
+      tabNavigation={props.tabNavigation}
       mobileCard={mobileCard}
     />
   );

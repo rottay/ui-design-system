@@ -562,6 +562,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               resizable={presentation?.resizable}
               columnWidths={controls?.columnSettings?.columnWidths}
               onColumnResize={controls?.columnSettings?.onColumnResize}
+              onCellEdit={behavior?.cellEditing?.onCellEdit}
+              onCellEditStart={behavior?.cellEditing?.onCellEditStart}
+              onCellEditCancel={behavior?.cellEditing?.onCellEditCancel}
+              editingCell={behavior?.cellEditing?.editingCell}
+              editTrigger={behavior?.cellEditing?.editTrigger}
+              tabNavigation={behavior?.cellEditing?.tabNavigation}
               mobileCard={mobileCard}
             />
           </Box>
@@ -596,8 +602,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const hasActiveFilters = activeFilterCount > 0;
   const showInlineResultCount = !contextSlot;
   const shellConfig = presentation?.shell;
+  const useWorkspaceShell = Boolean(isPremium && shellConfig);
   const useAtmosphericShell = Boolean(
-    isPremium && shellConfig?.variant && shellConfig.variant !== 'default',
+    useWorkspaceShell && shellConfig?.variant && shellConfig.variant !== 'default',
   );
   const editorialTechMasthead = Boolean(
     useAtmosphericShell && header?.layoutVariant === 'editorial-tech',
@@ -647,7 +654,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         <CollectionHeader
           {...header}
           shortcuts={promotedShortcuts ? undefined : header.shortcuts}
-          surfaceVariant={useAtmosphericShell ? 'embedded' : header.surfaceVariant}
+          surfaceVariant={useWorkspaceShell ? 'embedded' : header.surfaceVariant}
         />
       )}
 
@@ -664,7 +671,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           commands={command.commands}
           showCommandPalette={command.showCommandPalette}
           topRailSlot={commandTopRailSlot}
-          surfaceVariant={useAtmosphericShell ? 'embedded' : 'default'}
+          surfaceVariant={useWorkspaceShell ? 'embedded' : 'default'}
           layoutVariant={header?.layoutVariant}
         />
       )}
@@ -677,8 +684,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               ? '0 20px 4px'
               : '0 16px 6px',
           marginTop: slotsCollapsed ? 0 : editorialTechMasthead ? -2 : -4,
-          background: useAtmosphericShell ? 'transparent' : 'var(--ds-surface-card)',
-          borderBottom: useAtmosphericShell ? 'none' : '1px solid var(--ds-color-border-subtle)',
+          background: useWorkspaceShell ? 'transparent' : 'var(--ds-surface-card)',
+          borderBottom: useWorkspaceShell ? 'none' : '1px solid var(--ds-color-border-subtle)',
           maxHeight: slotsCollapsed ? 0 : 36,
           opacity: slotsCollapsed ? 0 : 1,
           overflow: 'hidden',
@@ -729,7 +736,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       <Box
         style={{
           padding: '6px 16px 0',
-          borderTop: useAtmosphericShell
+          borderTop: useWorkspaceShell
             ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 16%, transparent)'
             : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 30%, transparent)',
           position: 'relative',
@@ -852,7 +859,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                             fontWeight: 700,
                             borderRadius: 8,
                             background: 'var(--ds-color-primary)',
-                            color: '#fff',
+                            color: 'var(--ds-color-text-on-primary)',
                           }}
                         >
                           {activeFilterCount}
@@ -992,7 +999,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           onRemoveFilter={activeFilters.onRemove}
           onClearAll={activeFilters.onClearAll}
           onAddFilter={activeFilters.onAddFilter}
-          surfaceVariant={useAtmosphericShell ? 'embedded' : 'default'}
+          surfaceVariant={useWorkspaceShell ? 'embedded' : 'default'}
         />
       )}
 
@@ -1095,6 +1102,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               resizable={presentation?.resizable}
               columnWidths={controls?.columnSettings?.columnWidths}
               onColumnResize={controls?.columnSettings?.onColumnResize}
+              onCellEdit={behavior?.cellEditing?.onCellEdit}
+              onCellEditStart={behavior?.cellEditing?.onCellEditStart}
+              onCellEditCancel={behavior?.cellEditing?.onCellEditCancel}
+              editingCell={behavior?.cellEditing?.editingCell}
+              editTrigger={behavior?.cellEditing?.editTrigger}
+              tabNavigation={behavior?.cellEditing?.tabNavigation}
               mobileCard={mobileCard}
               focusEnabled={focusEnabled}
             />
@@ -1128,7 +1141,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   return (
     <>
-      {useAtmosphericShell ? (
+      {useWorkspaceShell ? (
         <WorkspaceShell
           variant={shellConfig?.variant}
           mood={shellConfig?.mood}

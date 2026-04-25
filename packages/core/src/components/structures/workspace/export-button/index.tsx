@@ -297,7 +297,7 @@ export function ExportButton<T = unknown>({
               border: '1px solid var(--ds-color-border, #e2e2e2)',
               background: 'var(--ds-color-bg-elevated, #fff)',
               boxShadow:
-                '0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06)',
+                '0 4px 12px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 3px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
             }}
           >
             {formats.map((fmt) => {
@@ -329,14 +329,14 @@ export function ExportButton<T = unknown>({
                   }}
                   onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
                     (e.currentTarget as HTMLElement).style.background =
-                      'var(--ds-color-bg-hover, rgba(0, 0, 0, 0.04))';
+                      'var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent))';
                   }}
                   onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
                     (e.currentTarget as HTMLElement).style.background = 'transparent';
                   }}
                   onFocus={(e: React.FocusEvent<HTMLElement>) => {
                     (e.currentTarget as HTMLElement).style.background =
-                      'var(--ds-color-bg-hover, rgba(0, 0, 0, 0.04))';
+                      'var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent))';
                   }}
                   onBlur={(e: React.FocusEvent<HTMLElement>) => {
                     (e.currentTarget as HTMLElement).style.background = 'transparent';

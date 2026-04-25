@@ -28,6 +28,14 @@ const SHELL_OPACITY = {
   high: 0.74,
 } as const;
 
+const TOKENIZED_MASK_COLOR = 'var(--ds-workspace-shell-mask-color, var(--ds-color-primary))';
+const TOKENIZED_MASK_STRONG =
+  `color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 58%, transparent)`;
+const TOKENIZED_MASK_MID =
+  `color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 32%, transparent)`;
+const TOKENIZED_MASK_LOW =
+  `color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 8%, transparent)`;
+
 export function WorkspaceShell({
   variant = 'default',
   mood = 'calm',
@@ -48,7 +56,7 @@ export function WorkspaceShell({
   const showAmbientField = fieldPattern === 'ambient' || fieldPattern === 'hybrid';
   const borderColor =
     continuity === 'seamless'
-      ? 'color-mix(in srgb, var(--ds-color-border-subtle) 52%, transparent)'
+      ? 'var(--ds-workspace-shell-border, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle) 76%))'
       : 'var(--ds-color-border-subtle)';
 
   const focalAreas =
@@ -61,17 +69,19 @@ export function WorkspaceShell({
         ]
       : undefined;
 
-  const overlayBackground = [
-    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-canvas) 10%, transparent) 36%, color-mix(in srgb, var(--ds-color-bg-canvas) 44%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-canvas) 62%, transparent) 100%)',
-    previewEmphasis && previewActive
-      ? 'radial-gradient(38% 48% at 92% 48%, color-mix(in srgb, var(--ds-color-primary) 10%, transparent) 0%, transparent 74%)'
-      : null,
-    focusReaction && focusActive
-      ? 'radial-gradient(46% 38% at 28% 18%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent) 0%, transparent 78%)'
-      : null,
-  ]
-    .filter(Boolean)
-    .join(', ');
+  const overlayBackground = isAtmospheric
+    ? [
+        'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-canvas) 10%, transparent) 36%, color-mix(in srgb, var(--ds-color-bg-canvas) 44%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-canvas) 62%, transparent) 100%)',
+        previewEmphasis && previewActive
+          ? 'radial-gradient(38% 48% at 92% 48%, color-mix(in srgb, var(--ds-color-primary) 10%, transparent) 0%, transparent 74%)'
+          : null,
+        focusReaction && focusActive
+          ? 'radial-gradient(46% 38% at 28% 18%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent) 0%, transparent 78%)'
+          : null,
+      ]
+        .filter(Boolean)
+        .join(', ')
+    : 'var(--ds-workspace-shell-overlay, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 4%, transparent) 0%, transparent 36%, color-mix(in srgb, var(--ds-color-bg-secondary) 24%, transparent) 100%))';
 
   return (
     <Box
@@ -83,11 +93,15 @@ export function WorkspaceShell({
         borderRadius: rounded,
         border: `1px solid ${borderColor}`,
         background:
-          continuity === 'seamless'
-            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-canvas) 8%) 0%, color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%) 44%, color-mix(in srgb, var(--ds-color-bg-canvas) 82%, var(--ds-surface-card) 18%) 100%)'
+          isAtmospheric
+            ? continuity === 'seamless'
+              ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-canvas) 8%) 0%, color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%) 44%, color-mix(in srgb, var(--ds-color-bg-canvas) 82%, var(--ds-surface-card) 18%) 100%)'
+              : 'var(--ds-surface-card)'
+            : continuity === 'seamless'
+              ? 'var(--ds-workspace-shell-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-primary) 8%) 0%, color-mix(in srgb, var(--ds-surface-card) 82%, var(--ds-color-bg-secondary) 18%) 52%, color-mix(in srgb, var(--ds-color-bg-canvas) 72%, var(--ds-surface-card) 28%) 100%))'
             : 'var(--ds-surface-card)',
         boxShadow:
-          '0 28px 60px color-mix(in srgb, #000 24%, transparent), inset 0 1px 0 color-mix(in srgb, white 5%, transparent)',
+          'var(--ds-workspace-shell-shadow, 0 20px 48px color-mix(in srgb, var(--ds-color-primary) 11%, transparent), 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 70%, transparent))',
         ...style,
       }}
     >
@@ -102,7 +116,7 @@ export function WorkspaceShell({
               pattern="orbital"
               shape="square"
               blendMode="normal"
-              color="rgba(247, 247, 243, 0.99)"
+              color="var(--ds-workspace-shell-particle-primary, color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%))"
               sizeRange={mood === 'active' ? [0.85, 2.1] : [0.75, 1.85]}
               opacity={Math.min(0.92, SHELL_OPACITY[intensity] + 0.12)}
               focalAreas={focalAreas}
@@ -112,9 +126,9 @@ export function WorkspaceShell({
                 pointerEvents: 'none',
                 zIndex: 0,
                 WebkitMaskImage:
-                  'linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.96) 24%, rgba(0,0,0,0.9) 54%, rgba(0,0,0,0.52) 80%, rgba(0,0,0,0.12) 100%)',
+                  `linear-gradient(180deg, ${TOKENIZED_MASK_STRONG} 0%, ${TOKENIZED_MASK_STRONG} 24%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 46%, transparent) 54%, ${TOKENIZED_MASK_MID} 80%, ${TOKENIZED_MASK_LOW} 100%)`,
                 maskImage:
-                  'linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.96) 24%, rgba(0,0,0,0.9) 54%, rgba(0,0,0,0.52) 80%, rgba(0,0,0,0.12) 100%)',
+                  `linear-gradient(180deg, ${TOKENIZED_MASK_STRONG} 0%, ${TOKENIZED_MASK_STRONG} 24%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 46%, transparent) 54%, ${TOKENIZED_MASK_MID} 80%, ${TOKENIZED_MASK_LOW} 100%)`,
               }}
             />
           )}
@@ -126,7 +140,7 @@ export function WorkspaceShell({
               mood={mood}
               pattern="ambient"
               shape="square"
-              color="rgba(221, 224, 227, 0.8)"
+              color="var(--ds-workspace-shell-particle-secondary, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent))"
               sizeRange={[0.35, 0.95]}
               opacity={Math.max(0.14, SHELL_OPACITY[intensity] * 0.24)}
               focalAreas={focalAreas}
@@ -136,9 +150,9 @@ export function WorkspaceShell({
                 pointerEvents: 'none',
                 zIndex: 0,
                 WebkitMaskImage:
-                  'linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.86) 40%, rgba(0,0,0,0.42) 100%)',
+                  `linear-gradient(180deg, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 36%, transparent) 0%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 42%, transparent) 40%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 18%, transparent) 100%)`,
                 maskImage:
-                  'linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.86) 40%, rgba(0,0,0,0.42) 100%)',
+                  `linear-gradient(180deg, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 36%, transparent) 0%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 42%, transparent) 40%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 18%, transparent) 100%)`,
               }}
             />
           )}

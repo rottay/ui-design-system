@@ -314,6 +314,25 @@ export interface WorkspaceFocusConfig {
   onFocusChange?: (key: string | null) => void;
 }
 
+/** Inline cell editing configuration (delegates to PatternDataTable). */
+export interface WorkspaceCellEditingConfig<T> {
+  /**
+   * Called when a cell value is saved via inline editing.
+   * Receives the full row, the column key, and both old and new values.
+   */
+  onCellEdit?: (row: T, columnKey: string, newValue: unknown, oldValue: unknown) => void | Promise<void>;
+  /** Called when inline editing starts on a cell. */
+  onCellEditStart?: (row: T, columnKey: string) => void;
+  /** Called when inline editing is cancelled on a cell. */
+  onCellEditCancel?: (row: T, columnKey: string) => void;
+  /** Controlled editing cell state. */
+  editingCell?: { rowKey: string; columnKey: string } | null;
+  /** How users enter edit mode. Defaults to the table's double-click behavior. */
+  editTrigger?: 'click' | 'doubleClick';
+  /** Enable keyboard navigation between editable cells. */
+  tabNavigation?: boolean;
+}
+
 /** Smart selection set button definition. */
 export interface SmartSelectionSet {
   key: string;
@@ -334,6 +353,8 @@ export interface CollectionBehaviorConfig<T> {
   previewRail?: WorkspacePreviewRailConfig<T>;
   /** Row focus for preview rail (distinct from checkbox selection). */
   focus?: WorkspaceFocusConfig;
+  /** Inline edit callbacks for editable columns. */
+  cellEditing?: WorkspaceCellEditingConfig<T>;
   onRowClick?: (item: T, index: number) => void;
   onRowDoubleClick?: (item: T, index: number) => void;
   expandedRow?: (item: T) => ReactNode;
