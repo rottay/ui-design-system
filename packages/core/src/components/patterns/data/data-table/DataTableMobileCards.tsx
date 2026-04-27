@@ -119,12 +119,14 @@ export function DataTableMobileCards<T extends object>({
             onClick={() => onRowClick?.(row, index)}
             style={{
               overflow: 'hidden',
+              background: 'var(--ds-collection-card-bg, var(--ds-card-bg))',
+              borderRadius: 'var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)))',
               borderColor: isSelected
-                ? 'var(--ds-color-primary)'
-                : undefined,
+                ? 'var(--ds-collection-card-selected-border, var(--ds-color-primary))'
+                : 'var(--ds-collection-card-border, var(--ds-card-border-color))',
               boxShadow: isSelected
-                ? '0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)'
-                : undefined,
+                ? 'var(--ds-collection-card-selected-ring, 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent))'
+                : 'var(--ds-collection-card-shadow, none)',
             }}
           >
             <Card.Body>

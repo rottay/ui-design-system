@@ -41,12 +41,42 @@ import {
 
 import type { ListToolbarProps, FilterPillConfig, DensityKey } from '../ListToolbar.types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import {
+  FILTER_PILL_ACTIVE_BG,
+  FILTER_PILL_ACTIVE_BORDER,
+  FILTER_PILL_ACTIVE_COLOR,
+  FILTER_PILL_ACTIVE_SHADOW,
+  FILTER_PILL_BG,
+  FILTER_PILL_BORDER,
+  FILTER_PILL_COLOR,
+  FILTER_PILL_FOCUS_RING,
+  FILTER_PILL_FRAME_BG,
+  FILTER_PILL_FRAME_SHADOW,
+  FILTER_PILL_HOVER_BG,
+  FILTER_PILL_HOVER_BORDER,
+  FILTER_PILL_SHADOW,
+  SEARCH_ICON_COLOR,
+  TOOLBAR_BG,
+  TOOLBAR_BORDER,
+  TOOLBAR_BORDER_BOTTOM,
+  TOOLBAR_COLOR,
+  TOOLBAR_CONTROL_BG,
+  TOOLBAR_CONTROL_BORDER,
+  TOOLBAR_CONTROL_COLOR,
+  TOOLBAR_DIVIDER,
+  TOOLBAR_GAP,
+  TOOLBAR_PADDING,
+  TOOLBAR_RADIUS,
+  TOOLBAR_SHADOW,
+  TRANSITION,
+  searchInputStyle,
+} from '../tokens';
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-const TRANSITION_FAST = '150ms ease';
+const TRANSITION_FAST = TRANSITION;
 
 const DENSITY_OPTIONS: {
   key: DensityKey;
@@ -102,18 +132,34 @@ function FilterPill({
         justifyContent: 'center',
         padding: '4px 14px',
         borderRadius: 20,
-        border: isActive
-          ? '1.5px solid var(--ds-color-text-primary)'
-          : '1.5px solid transparent',
-        background: 'transparent',
-        color: isActive
-          ? 'var(--ds-color-text-primary)'
-          : 'var(--ds-color-text-secondary)',
+        border: `1.5px solid ${isActive ? FILTER_PILL_ACTIVE_BORDER : FILTER_PILL_BORDER}`,
+        background: isActive ? FILTER_PILL_ACTIVE_BG : FILTER_PILL_BG,
+        color: isActive ? FILTER_PILL_ACTIVE_COLOR : FILTER_PILL_COLOR,
+        boxShadow: isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW,
         fontSize: 13,
         fontWeight: isActive ? 500 : 400,
         cursor: 'pointer',
-        transition: `color ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
+        transition: `color ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
         whiteSpace: 'nowrap' as const,
+        outline: 'none',
+      }}
+      onMouseEnter={(event) => {
+        if (!isActive) {
+          event.currentTarget.style.background = FILTER_PILL_HOVER_BG;
+          event.currentTarget.style.borderColor = FILTER_PILL_HOVER_BORDER;
+        }
+      }}
+      onMouseLeave={(event) => {
+        if (!isActive) {
+          event.currentTarget.style.background = FILTER_PILL_BG;
+          event.currentTarget.style.borderColor = FILTER_PILL_BORDER;
+        }
+      }}
+      onFocus={(event) => {
+        event.currentTarget.style.boxShadow = FILTER_PILL_FOCUS_RING;
+      }}
+      onBlur={(event) => {
+        event.currentTarget.style.boxShadow = isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW;
       }}
     >
       {label}
@@ -165,10 +211,13 @@ function ViewModeToggle({
     <Box
       style={{
         display: 'inline-flex',
-        border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
+        border: `1px solid ${TOOLBAR_CONTROL_BORDER}`,
         borderRadius: 6,
         overflow: 'hidden',
         flexShrink: 0,
+        background: TOOLBAR_CONTROL_BG,
+        color: TOOLBAR_CONTROL_COLOR,
+        boxShadow: FILTER_PILL_FRAME_SHADOW,
       }}
     >
       {modes.map((mode) => {
@@ -184,14 +233,10 @@ function ViewModeToggle({
               gap: 5,
               padding: '4px 10px',
               border: 'none',
-              background: isActive
-                ? 'var(--ds-color-bg-secondary)'
-                : 'transparent',
+              background: isActive ? FILTER_PILL_ACTIVE_BG : 'transparent',
               borderRight:
-                mode.key === 'list' ? '1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)' : 'none',
-              color: isActive
-                ? 'var(--ds-color-text-primary)'
-                : 'var(--ds-color-text-secondary)',
+                mode.key === 'list' ? `1px solid ${TOOLBAR_DIVIDER}` : 'none',
+              color: isActive ? FILTER_PILL_ACTIVE_COLOR : TOOLBAR_CONTROL_COLOR,
               fontWeight: isActive ? 500 : 400,
               fontSize: 12,
               cursor: 'pointer',
@@ -234,11 +279,9 @@ function DensitySection({
               padding: '8px 10px',
               borderRadius: 6,
               border: isActive
-                ? '1px solid var(--ds-color-primary)'
-                : '1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
-              background: isActive
-                ? 'var(--ds-color-bg-secondary)'
-                : 'transparent',
+                ? `1px solid ${FILTER_PILL_ACTIVE_BORDER}`
+                : `1px solid ${TOOLBAR_CONTROL_BORDER}`,
+              background: isActive ? FILTER_PILL_ACTIVE_BG : TOOLBAR_CONTROL_BG,
               cursor: 'pointer',
               transition: `background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
               width: '100%',
@@ -251,8 +294,8 @@ function DensitySection({
                 height: 16,
                 borderRadius: '50%',
                 border: isActive
-                  ? '5px solid var(--ds-color-primary)'
-                  : '2px solid var(--ds-color-border)',
+                  ? `5px solid ${FILTER_PILL_ACTIVE_COLOR}`
+                  : `2px solid ${TOOLBAR_CONTROL_BORDER}`,
                 flexShrink: 0,
                 transition: `border ${TRANSITION_FAST}`,
               }}
@@ -263,8 +306,8 @@ function DensitySection({
                 alignItems: 'center',
                 gap: 6,
                 color: isActive
-                  ? 'var(--ds-color-text-primary)'
-                  : 'var(--ds-color-text-secondary)',
+                  ? FILTER_PILL_ACTIVE_COLOR
+                  : TOOLBAR_CONTROL_COLOR,
               }}
             >
               {opt.icon}
@@ -281,7 +324,7 @@ function DensitySection({
                 <Text
                   style={{
                     fontSize: 11,
-                    color: 'var(--ds-color-text-muted)',
+                    color: FILTER_PILL_COLOR,
                     lineHeight: 1.2,
                   }}
                 >
@@ -323,7 +366,7 @@ function SettingsDropdownContent({
               <Text
                 style={{
                   fontSize: 13,
-                  color: 'var(--ds-color-text-muted)',
+                  color: FILTER_PILL_COLOR,
                   padding: '12px 0',
                 }}
               >
@@ -348,7 +391,7 @@ function SettingsDropdownContent({
               <Text
                 style={{
                   fontSize: 13,
-                  color: 'var(--ds-color-text-muted)',
+                  color: FILTER_PILL_COLOR,
                   padding: '12px 0',
                 }}
               >
@@ -427,22 +470,24 @@ export default function ClassicListToolbar({
     <Box
       className={className}
       style={{
-        background: 'var(--ds-color-bg-primary)',
-        border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
-        borderRadius: 8,
+        background: TOOLBAR_BG,
+        border: `1px solid ${TOOLBAR_BORDER}`,
+        borderRadius: TOOLBAR_RADIUS,
+        color: TOOLBAR_COLOR,
+        boxShadow: TOOLBAR_SHADOW,
         overflow: 'hidden',
         ...style,
       }}
     >
       {isMobile ? (
         <>
-          <Stack spacing="md" style={{ padding: '14px 14px 12px' }}>
+          <Stack spacing="md" style={{ padding: 'var(--ds-toolbar-padding, 14px 14px 12px)' }}>
             <Flex align="center" justify="between" gap={12}>
               <Flex align="center" gap={10} style={{ minWidth: 0 }}>
                 {icon && (
                   <Box
                     style={{
-                      color: 'var(--ds-color-text-secondary)',
+                      color: TOOLBAR_CONTROL_COLOR,
                       display: 'flex',
                       alignItems: 'center',
                       flexShrink: 0,
@@ -456,7 +501,7 @@ export default function ClassicListToolbar({
                     style={{
                       fontSize: 15,
                       fontWeight: 600,
-                      color: 'var(--ds-color-text-primary)',
+                      color: TOOLBAR_COLOR,
                       lineHeight: 1.2,
                     }}
                   >
@@ -480,10 +525,10 @@ export default function ClassicListToolbar({
               prefix={
                 <Search
                   size={14}
-                  style={{ color: 'var(--ds-color-text-muted)' }}
+                  style={{ color: SEARCH_ICON_COLOR }}
                 />
               }
-              style={{ height: 38 }}
+              style={searchInputStyle({ height: 38 })}
             />
 
             {filterPills && filterPills.length > 0 && (
@@ -573,12 +618,13 @@ export default function ClassicListToolbar({
               wrap="wrap"
               style={{
                 padding: '0 14px 12px',
-                borderTop: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)',
+                borderTop: `1px solid ${TOOLBAR_BORDER_BOTTOM}`,
+                background: FILTER_PILL_FRAME_BG,
               }}
             >
               <Filter
                 size={12}
-                style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}
+                style={{ color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}
               />
               {activeFilterChips.map((chip) => (
                 <Tag
@@ -603,7 +649,7 @@ export default function ClassicListToolbar({
                     fontSize: 11,
                     height: 24,
                     padding: '0 8px',
-                    color: 'var(--ds-color-text-muted)',
+                    color: FILTER_PILL_COLOR,
                   }}
                 >
                   Clear All
@@ -620,11 +666,11 @@ export default function ClassicListToolbar({
       <Flex
         align="center"
         style={{
-          padding: '10px 16px',
-          borderBottom: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)',
+          padding: TOOLBAR_PADDING,
+          borderBottom: `1px solid ${TOOLBAR_BORDER_BOTTOM}`,
           flexWrap: 'wrap',
           minWidth: 0,
-          gap: 10,
+          gap: TOOLBAR_GAP,
         }}
       >
         {/* Left: Title + count */}
@@ -632,7 +678,7 @@ export default function ClassicListToolbar({
           {icon && (
             <Box
               style={{
-                color: 'var(--ds-color-text-secondary)',
+                color: TOOLBAR_CONTROL_COLOR,
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -644,7 +690,7 @@ export default function ClassicListToolbar({
             style={{
               fontSize: 15,
               fontWeight: 600,
-              color: 'var(--ds-color-text-primary)',
+              color: TOOLBAR_COLOR,
             }}
           >
             {title}
@@ -662,7 +708,7 @@ export default function ClassicListToolbar({
               style={{
                 width: 1,
                 height: 16,
-                background: 'color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
+                background: TOOLBAR_DIVIDER,
                 flexShrink: 0,
                 marginRight: 4,
               }}
@@ -678,7 +724,7 @@ export default function ClassicListToolbar({
               style={{
                 width: 1,
                 height: 16,
-                background: 'color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
+                background: TOOLBAR_DIVIDER,
                 flexShrink: 0,
                 marginLeft: 4,
               }}
@@ -699,10 +745,10 @@ export default function ClassicListToolbar({
       <Flex
         align="center"
         style={{
-          padding: '10px 16px',
+          padding: TOOLBAR_PADDING,
           flexWrap: 'wrap',
           minWidth: 0,
-          gap: 10,
+          gap: TOOLBAR_GAP,
         }}
       >
         <Flex align="center" gap={10} style={{ width: '100%', minWidth: 0 }}>
@@ -716,10 +762,10 @@ export default function ClassicListToolbar({
               prefix={
                 <Search
                   size={14}
-                  style={{ color: 'var(--ds-color-text-muted)' }}
+                  style={{ color: SEARCH_ICON_COLOR }}
                 />
               }
-              style={{ height: 36 }}
+              style={searchInputStyle({ height: 36 })}
             />
           </Box>
 
@@ -801,12 +847,13 @@ export default function ClassicListToolbar({
           gap={6}
           style={{
             padding: '6px 16px 10px',
-            borderTop: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)',
+            borderTop: `1px solid ${TOOLBAR_BORDER_BOTTOM}`,
+            background: FILTER_PILL_FRAME_BG,
           }}
         >
           <Filter
             size={12}
-            style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}
+            style={{ color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}
           />
           {activeFilterChips.map((chip) => (
             <Tag
@@ -831,7 +878,7 @@ export default function ClassicListToolbar({
                 fontSize: 11,
                 height: 22,
                 padding: '0 6px',
-                color: 'var(--ds-color-text-muted)',
+                color: FILTER_PILL_COLOR,
               }}
             >
               Clear All

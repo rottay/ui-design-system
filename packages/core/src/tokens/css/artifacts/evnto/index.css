@@ -140,10 +140,10 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   /* Button overrides */
   --ds-button-primary-bg: #171717;
   --ds-button-primary-bg-hover: #262626;
-  --ds-button-primary-text: #ffffff;
+  --ds-button-primary-color: #ffffff;
   --ds-button-secondary-bg: transparent;
   --ds-button-secondary-border: rgba(0, 0, 0, 0.15);
-  --ds-button-secondary-text: #171717;
+  --ds-button-secondary-color: #171717;
   --ds-button-secondary-bg-hover: rgba(0, 0, 0, 0.04);
   --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
@@ -352,12 +352,12 @@ html[data-tenant='evnto'].dark {
 
   /* Button tokens - dark */
   --ds-button-primary-bg: #E8E8E0;
-  --ds-button-primary-text: #131210;
+  --ds-button-primary-color: #131210;
   --ds-button-primary-hover-bg: #F0F0E8;
   --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   --ds-button-secondary-bg: transparent;
-  --ds-button-secondary-text: #A8A898;
+  --ds-button-secondary-color: #A8A898;
   --ds-button-secondary-border: #2E2C24;
   --ds-button-secondary-hover-bg: #1C1A16;
   --ds-button-default-bg: #1C1A16;

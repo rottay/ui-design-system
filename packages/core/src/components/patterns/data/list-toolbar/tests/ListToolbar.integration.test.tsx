@@ -34,6 +34,7 @@ describe('PatternListToolbar integration', () => {
           onViewModeChange={vi.fn()}
           density="comfortable"
           onDensityChange={vi.fn()}
+          className="toolbar-token-contract"
           primaryAction={{
             label: 'Create event',
             onClick: vi.fn(),
@@ -45,7 +46,12 @@ describe('PatternListToolbar integration', () => {
       expect(await screen.findByText('Events')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /create event/i })).toBeInTheDocument();
-      expect(screen.getByText('All')).toBeInTheDocument();
+      if (engine === 'modern') {
+        expect(screen.getByRole('button', { name: /status/i })).toBeInTheDocument();
+      } else {
+        expect(screen.getByText('All')).toBeInTheDocument();
+      }
+      expect(document.querySelector('.toolbar-token-contract')?.getAttribute('style')).toContain('--ds-toolbar-shadow');
     },
     45000,
   );

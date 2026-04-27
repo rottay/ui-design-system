@@ -10,6 +10,7 @@ import {
   buildTenantSelector,
   generateTenantCss,
   generateTenantCssFile,
+  resolveTenantVisualConfig,
 } from '../generator';
 
 const TENANT: TenantConfig = {
@@ -96,6 +97,69 @@ describe('tenant css generator', () => {
     expect(css).toContain('--ds-divider-style: dashed;');
     expect(css).toContain('--ds-typography-label-transform: capitalize;');
     expect(css).toContain('--ds-card-shadow: var(--ds-shadow-md);');
+  });
+
+  it('uses the shared resolver for BrandTheme, tenant compat fields, and appearance precedence', () => {
+    const config: TenantConfig = {
+      ...TENANT,
+      slug: 'precedence',
+      name: 'Precedence',
+      branding: {
+        companyName: 'Precedence',
+        primaryColor: '#123456',
+      },
+      brandTheme: {
+        id: 'precedence-brand',
+        name: 'Precedence Brand',
+        palette: {
+          primaryColor: '#654321',
+        },
+        surfaces: {
+          densityScale: 0.9,
+          borderRadius: {
+            md: '10px',
+          },
+        },
+        chrome: {
+          sidebar: {
+            bg: '#111111',
+          },
+        },
+      },
+      tokenOverrides: {
+        densityScale: 1.2,
+        borderRadius: {
+          md: '18px',
+        },
+      },
+      appearance: {
+        general: {
+          palette: {
+            primary: '#abcdef',
+          },
+        },
+        advanced: {
+          tokenOverrides: {
+            '--ds-radius-md': '22px',
+            '--ds-sidebar-bg': '#222222',
+          },
+        },
+      },
+    };
+
+    const resolved = resolveTenantVisualConfig(config);
+    const css = generateTenantCss(config, { includeDarkSelector: false });
+
+    expect(resolved.compiledBrand?.tokenOverrides.borderRadius?.md).toBe('10px');
+    expect(resolved.config.branding.primaryColor).toBe('#123456');
+    expect(resolved.config.tokenOverrides?.densityScale).toBe(1.2);
+    expect(resolved.config.tokenOverrides?.borderRadius?.md).toBe('18px');
+
+    expect(css).toContain('--ds-color-primary-500: #123456;');
+    expect(css).toContain('--ds-color-primary: #abcdef;');
+    expect(css).toContain('--ds-density-scale: 1.2;');
+    expect(css).toContain('--ds-radius-md: 22px;');
+    expect(css).toContain('--ds-sidebar-bg: #222222;');
   });
 
   it('includes a dark selector block by default and can package a file artifact', () => {

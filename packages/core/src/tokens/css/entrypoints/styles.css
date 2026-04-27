@@ -59,6 +59,7 @@
 @import '../components/collapse.css' layer(rottay-components);
 @import '../components/tree.css' layer(rottay-components);
 @import '../components/empty.css' layer(rottay-components);
+@import '../components/patterns.css' layer(rottay-components);
 
 /* =============================================================================
    LAYER 3: ENGINE THEMES (rottay-engines)

@@ -38,6 +38,7 @@
   --ds-card-border-color-hover: var(--ds-color-neutral-300);
   --ds-card-border-style: solid;
   --ds-card-border-radius: var(--ds-radius-lg);
+  --ds-card-radius: var(--ds-card-border-radius);
 
   /* Borderless variant */
   --ds-card-borderless-border-width: 0;
@@ -166,6 +167,73 @@
   --ds-card-interactive-transition: all 0.3s ease;
 
   /* ========================================================================
+     PREMIUM WHITE-LABEL CARD FOUNDATION
+     Shared contract for signal, workspace, compact, tall, and collection cards
+     ======================================================================== */
+  --ds-premium-card-radius: var(--ds-card-radius, var(--ds-radius-lg));
+  --ds-premium-card-padding: var(--ds-card-md-padding);
+  --ds-premium-card-gap: var(--ds-spacing-3, 12px);
+  --ds-premium-card-min-height: auto;
+  --ds-premium-card-grid-size: 22px;
+  --ds-premium-card-grid-line: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  --ds-premium-card-grid-bg:
+    linear-gradient(var(--ds-premium-card-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-premium-card-grid-line) 1px, transparent 1px);
+  --ds-premium-card-bg: var(--ds-card-bg);
+  --ds-premium-card-bg-hover: var(--ds-card-bg-hover);
+  --ds-premium-card-glass-bg: color-mix(in srgb, var(--ds-card-bg) 86%, transparent);
+  --ds-premium-card-overlay: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-color-primary) 4%, transparent),
+    transparent 48%
+  );
+  --ds-premium-card-border: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-border-color));
+  --ds-premium-card-border-hover: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-card-border-color));
+  --ds-premium-card-selected-border: color-mix(in srgb, var(--ds-color-primary) 46%, var(--ds-card-border-color));
+  --ds-premium-card-selected-ring: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+  --ds-premium-card-shadow: var(--ds-card-shadow-sm);
+  --ds-premium-card-shadow-hover: var(--ds-card-shadow-hover);
+  --ds-premium-card-depth:
+    0 1px 2px color-mix(in srgb, var(--ds-card-color) 4%, transparent),
+    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-card-bg) 72%, transparent);
+  --ds-premium-card-sheen: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ds-card-bg) 42%, transparent),
+    transparent
+  );
+  --ds-premium-card-hover-transform: translateY(-2px) scale(1);
+  --ds-premium-card-transition:
+    background var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out);
+
+  --ds-premium-card-icon-bg: var(--ds-surface-icon-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg)));
+  --ds-premium-card-icon-border: var(--ds-surface-icon-border, color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-card-border-color)));
+  --ds-premium-card-icon-color: var(--ds-color-primary);
+  --ds-premium-card-title-color: var(--ds-card-title-color);
+  --ds-premium-card-body-color: var(--ds-card-body-color);
+  --ds-premium-card-label-color: var(--ds-card-color-muted);
+  --ds-premium-card-value-color: var(--ds-card-color);
+  --ds-premium-card-value-color-hover: var(--ds-color-primary);
+  --ds-premium-card-number-min-width: 4ch;
+  --ds-premium-card-number-font-variant: tabular-nums;
+  --ds-premium-card-footer-bg: color-mix(in srgb, var(--ds-color-bg-secondary) 72%, var(--ds-card-bg));
+  --ds-premium-card-footer-border: color-mix(in srgb, var(--ds-card-border-color) 72%, transparent);
+  --ds-premium-card-footer-color: var(--ds-card-footer-color);
+  --ds-premium-card-status-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg));
+  --ds-premium-card-status-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-card-border-color));
+  --ds-premium-card-status-color: var(--ds-color-primary);
+  --ds-premium-card-action-bg: color-mix(in srgb, var(--ds-card-bg) 84%, transparent);
+  --ds-premium-card-action-border: color-mix(in srgb, var(--ds-card-border-color) 82%, transparent);
+  --ds-premium-card-action-color: var(--ds-color-primary);
+  --ds-premium-card-meter-track: color-mix(in srgb, var(--ds-card-border-color) 48%, var(--ds-color-bg-secondary));
+  --ds-premium-card-meter-track-border: color-mix(in srgb, var(--ds-card-border-color) 82%, transparent);
+  --ds-premium-card-meter-fill: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary));
+
+  /* ========================================================================
      LOADING STATE
      Skeleton/loading appearance
      ======================================================================== */
@@ -263,4 +331,33 @@
   --ds-card-disabled-opacity: 0.5;
   --ds-card-disabled-cursor: not-allowed;
   --ds-card-disabled-bg: var(--ds-card-bg-disabled);
+}
+
+.ds-card {
+  isolation: isolate;
+}
+
+.ds-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    var(--ds-premium-card-grid-bg),
+    var(--ds-premium-card-overlay);
+  background-size:
+    var(--ds-premium-card-grid-size) var(--ds-premium-card-grid-size),
+    auto;
+  opacity: var(--ds-premium-card-grid-opacity, 0.18);
+  mask-image: linear-gradient(180deg, var(--ds-color-text-primary), transparent 86%);
+}
+
+.ds-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ds-card--interactive {
+  transition: var(--ds-premium-card-transition);
 }

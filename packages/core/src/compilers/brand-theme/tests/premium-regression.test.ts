@@ -228,14 +228,15 @@ describe('first-party CSS baseline: sidebar vars', () => {
 describe('first-party CSS baseline: controls vars', () => {
   it('bithire CSS has button chrome', () => {
     const css = readTenantCss('bithire');
-    // First-party CSS uses -text (legacy name). Engines consume -color.
-    // The shared pipeline emits -color (the engine-consumed name).
+    // First-party CSS uses the same engine-consumed -color names as the shared pipeline.
     expectVarPrefixes(css, [
       '--ds-button-primary-bg',
-      '--ds-button-primary-text',
+      '--ds-button-primary-color',
       '--ds-button-secondary-bg',
-      '--ds-button-secondary-text',
+      '--ds-button-secondary-color',
     ]);
+    expect(css).not.toContain('--ds-button-primary-text');
+    expect(css).not.toContain('--ds-button-secondary-text');
   });
 
   it('bithire CSS has input chrome', () => {

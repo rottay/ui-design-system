@@ -238,6 +238,13 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   // Get color variant styles
   const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
+  const cardClassName = [
+    'ds-card',
+    `ds-card--${variant}`,
+    isInteractive ? 'ds-card--interactive' : '',
+    hasColorVariant ? `ds-card--tone-${colorVariant}` : '',
+    className,
+  ].filter(Boolean).join(' ');
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
   const radiusValue = RADIUS_MAP[radius] || 'var(--ds-radius-lg, 12px)';
@@ -256,9 +263,10 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     cursor: clickable || onClick ? 'pointer' : undefined,
     outline: onClick ? 'none' : undefined,
     overflow: 'hidden',
-    // Color variant accent
+    // Color variant accent. Keep the signal on the full card frame so tenants
+    // can theme card language without hard-coded side rails.
     ...(hasColorVariant && {
-      borderLeft: `4px solid ${colorStyles.borderColor}`,
+      borderColor: colorStyles.borderColor,
       backgroundColor: colorStyles.background,
     }),
     ...style,
@@ -295,7 +303,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     return (
       <>
         {responsiveStyleTag}
-        <div style={cardStyle} className={className} {...responsiveAttrs}>
+        <div style={cardStyle} className={cardClassName} {...responsiveAttrs}>
           {/* Placeholder cover */}
           {cover && (
             <div style={{
@@ -371,7 +379,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     <>
       {responsiveStyleTag}
       <div
-        className={className}
+        className={cardClassName}
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

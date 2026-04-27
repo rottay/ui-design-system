@@ -156,12 +156,34 @@ export interface BrandChrome {
   layout?: BrandLayoutChrome;
   /** Shell background grid (for premium grid-overlay effects) */
   shell?: BrandShellChrome;
+  /** Workspace/search/list toolbar chrome */
+  toolbar?: BrandToolbarChrome;
+  /** Filter pill/toggle chrome used by dense list filters */
+  filterPill?: BrandFilterPillChrome;
+  /** Breadcrumb and breadcrumb-bar chrome */
+  breadcrumb?: BrandBreadcrumbChrome;
+  /** Global/local search chrome */
+  search?: BrandSearchChrome;
   /** Button variant colors, input chrome, disabled states */
   controls?: BrandControlsChrome;
   /** Table header, row, and cell styling */
   table?: BrandTableChrome;
   /** Card component chrome (bg, border, shadow, header/body/footer) */
   cardComponent?: BrandCardChrome;
+  /** Metric/stat cards used in dashboards and command headers */
+  metricCard?: BrandMetricCardChrome;
+  /** Signal/status cards used for operational insights */
+  signalCard?: BrandSignalCardChrome;
+  /** Workspace cards used inside command/list/detail workspaces */
+  workspaceCard?: BrandPremiumCardChrome;
+  /** Dense cards for compact lists, rails, and mobile fallbacks */
+  compactCard?: BrandPremiumCardChrome;
+  /** Tall cards for rich records, summaries, and media-forward layouts */
+  tallCard?: BrandPremiumCardChrome;
+  /** Collection item cards used by cards/grid view modes */
+  collectionCard?: BrandPremiumCardChrome;
+  /** Listing grid chrome shared by collection cards and skeleton/empty states */
+  listingGrid?: BrandListingGridChrome;
   /** Modal/dialog chrome */
   modal?: BrandModalChrome;
   /** Tabs chrome */
@@ -205,6 +227,103 @@ export interface BrandShellChrome {
   gridSize?: string;
   gridLine?: string;
   gridOpacity?: number;
+  bg?: string;
+  border?: string;
+  overlay?: string;
+  shadow?: string;
+  activeBg?: string;
+  activeGradient?: string;
+  dropdownShadow?: string;
+  shimmerFaint?: string;
+  shimmerSoft?: string;
+  shimmerMedium?: string;
+  shimmerStrong?: string;
+  commandFont?: string;
+  commandLetterSpacing?: string;
+  commandGridSize?: string;
+  commandGridLineSoft?: string;
+  commandGridLine?: string;
+  commandGridLineStrong?: string;
+  commandGridBg?: string;
+  commandGridBgStrong?: string;
+  commandGlow?: string;
+  commandLine?: string;
+  commandRailBg?: string;
+}
+
+export interface BrandToolbarChrome {
+  bg?: string;
+  border?: string;
+  borderBottom?: string;
+  color?: string;
+  shadow?: string;
+  radius?: string;
+  padding?: string;
+  gap?: string;
+  controlBg?: string;
+  controlBorder?: string;
+  controlColor?: string;
+  divider?: string;
+}
+
+export interface BrandFilterPillChrome {
+  bg?: string;
+  border?: string;
+  color?: string;
+  shadow?: string;
+  frameBg?: string;
+  frameBorder?: string;
+  frameShadow?: string;
+  hoverBg?: string;
+  hoverBorder?: string;
+  activeBg?: string;
+  activeBorder?: string;
+  activeColor?: string;
+  activeShadow?: string;
+  focusRing?: string;
+  countBg?: string;
+  countActiveBg?: string;
+  countBorder?: string;
+  countActiveBorder?: string;
+  countRing?: string;
+  countActiveRing?: string;
+}
+
+export interface BrandBreadcrumbChrome {
+  bg?: string;
+  border?: string;
+  color?: string;
+  linkColor?: string;
+  itemColor?: string;
+  colorHover?: string;
+  colorActive?: string;
+  separatorColor?: string;
+  fontSize?: string;
+  fontWeight?: string | number;
+  padding?: string;
+}
+
+export interface BrandSearchChrome {
+  bg?: string;
+  border?: string;
+  color?: string;
+  shadow?: string;
+  radius?: string;
+  inputBg?: string;
+  inputBorder?: string;
+  inputColor?: string;
+  placeholderColor?: string;
+  iconColor?: string;
+  clearColor?: string;
+  clearColorHover?: string;
+  resultBg?: string;
+  resultBgHover?: string;
+  resultBorder?: string;
+  resultShadow?: string;
+  resultTitleColor?: string;
+  resultMetaColor?: string;
+  categoryColor?: string;
+  emptyBg?: string;
 }
 
 export interface BrandButtonVariantChrome {
@@ -285,49 +404,171 @@ export interface BrandInputChrome {
 export interface BrandTableChrome {
   bg?: string;
   border?: string;
+  radius?: string;
   /** Header */
   headerBg?: string;
+  headerBgHover?: string;
   headerColor?: string;
   headerFontWeight?: string | number;
   headerFontSize?: string;
   headerBorder?: string;
+  headerShadow?: string;
   /** Rows */
   rowBg?: string;
   rowBgHover?: string;
   rowBgStriped?: string;
   rowBgSelected?: string;
+  rowBgExpanded?: string;
   rowBorder?: string;
+  rowHoverShadow?: string;
   /** Cells */
   cellPadding?: string;
   cellFontSize?: string;
   cellColor?: string;
+  /** Filter/header utilities */
+  filterRowBg?: string;
+  filterFocusShadow?: string;
+  /** Drag/resize/action affordances */
+  resizeBg?: string;
+  resizeBgHover?: string;
+  reorderBg?: string;
+  actionBg?: string;
+  actionBorder?: string;
+  sheen?: string;
+  pageButtonHoverShadow?: string;
   /** Loading */
   loadingOverlayBg?: string;
 }
 
 export interface BrandCardChrome {
+  padding?: string;
+  paddingSm?: string;
+  paddingMd?: string;
+  paddingLg?: string;
+  paddingXl?: string;
   bg?: string;
   bgHover?: string;
   color?: string;
+  colorMuted?: string;
   border?: string;
+  borderColor?: string;
   borderHover?: string;
+  borderColorHover?: string;
   borderAccentHover?: string;
+  radius?: string;
   shadow?: string;
   shadowHover?: string;
   shadowElevated?: string;
+  focusRing?: string;
+  hoverTransform?: string;
   /** Header */
   headerBorder?: string;
+  headerBorderColor?: string;
+  headerBg?: string;
   headerColor?: string;
+  headerPadding?: string;
   titleColor?: string;
+  titleFontSize?: string;
+  titleFontWeight?: string | number;
   subtitleColor?: string;
   /** Body */
   bodyColor?: string;
+  bodyPadding?: string;
   /** Footer */
   footerBorder?: string;
+  footerBorderColor?: string;
   footerBg?: string;
+  footerColor?: string;
+  footerPadding?: string;
   /** Image */
   imagePlaceholderBg?: string;
   imagePlaceholderColor?: string;
+}
+
+export interface BrandPremiumCardChrome {
+  bg?: string;
+  bgHover?: string;
+  border?: string;
+  borderHover?: string;
+  selectedBorder?: string;
+  selectedRing?: string;
+  shadow?: string;
+  shadowHover?: string;
+  radius?: string;
+  padding?: string;
+  gap?: string;
+  minHeight?: string;
+  glassBg?: string;
+  gridSize?: string;
+  gridLine?: string;
+  gridBg?: string;
+  overlay?: string;
+  sheen?: string;
+  depth?: string;
+  hoverTransform?: string;
+  transition?: string;
+  iconBg?: string;
+  iconBorder?: string;
+  iconColor?: string;
+  titleColor?: string;
+  bodyColor?: string;
+  labelColor?: string;
+  valueColor?: string;
+  valueHoverColor?: string;
+  footerBg?: string;
+  footerBorder?: string;
+  footerColor?: string;
+  statusBg?: string;
+  statusBorder?: string;
+  statusColor?: string;
+  actionBg?: string;
+  actionBorder?: string;
+  actionColor?: string;
+  meterTrack?: string;
+  meterTrackBorder?: string;
+  meterFill?: string;
+  numberMinWidth?: string;
+  numberFontVariant?: string;
+}
+
+export interface BrandMetricCardChrome extends BrandPremiumCardChrome {
+  trendColor?: string;
+  trendColorWarning?: string;
+  trendColorError?: string;
+  trendErrorBg?: string;
+  trendErrorBorder?: string;
+  meterFillSuccess?: string;
+  meterFillWarning?: string;
+  meterFillError?: string;
+  meterFillNeutral?: string;
+  meterHeight?: string;
+}
+
+export interface BrandSignalCardChrome extends BrandPremiumCardChrome {
+  accent?: string;
+  soft?: string;
+  badgeBg?: string;
+  badgeBorder?: string;
+  badgeColor?: string;
+  sectionBg?: string;
+  sectionAltBg?: string;
+  topLineDisplay?: string;
+}
+
+export interface BrandListingGridChrome {
+  gap?: string;
+  minCardWidth?: string;
+  minCompactWidth?: string;
+  minTallWidth?: string;
+  columns?: string;
+  cardGap?: string;
+  cardBg?: string;
+  cardBorder?: string;
+  cardShadow?: string;
+  selectedRing?: string;
+  emptyBg?: string;
+  emptyBorder?: string;
+  skeletonBg?: string;
 }
 
 export interface BrandModalChrome {
@@ -431,12 +672,34 @@ export interface TenantAppearanceAdvanced {
     layout?: Partial<BrandLayoutChrome>;
     /** Shell background grid (premium atmosphere effects) */
     shell?: Partial<BrandShellChrome>;
+    /** Workspace/search/list toolbar chrome */
+    toolbar?: Partial<BrandToolbarChrome>;
+    /** Filter pill/toggle chrome used by dense list filters */
+    filterPill?: Partial<BrandFilterPillChrome>;
+    /** Breadcrumb and breadcrumb-bar chrome */
+    breadcrumb?: Partial<BrandBreadcrumbChrome>;
+    /** Global/local search chrome */
+    search?: Partial<BrandSearchChrome>;
     /** All button variants + full input chrome + disabled + focus */
     controls?: Partial<BrandControlsChrome>;
     /** Table header, row, cell, loading chrome */
     table?: Partial<BrandTableChrome>;
     /** Card component chrome (bg, border, shadow, header/body/footer) */
     cardComponent?: Partial<BrandCardChrome>;
+    /** Metric/stat cards used in dashboards and command headers */
+    metricCard?: Partial<BrandMetricCardChrome>;
+    /** Signal/status cards used for operational insights */
+    signalCard?: Partial<BrandSignalCardChrome>;
+    /** Workspace cards used inside command/list/detail workspaces */
+    workspaceCard?: Partial<BrandPremiumCardChrome>;
+    /** Dense cards for compact lists, rails, and mobile fallbacks */
+    compactCard?: Partial<BrandPremiumCardChrome>;
+    /** Tall cards for rich records, summaries, and media-forward layouts */
+    tallCard?: Partial<BrandPremiumCardChrome>;
+    /** Collection item cards used by cards/grid view modes */
+    collectionCard?: Partial<BrandPremiumCardChrome>;
+    /** Listing grid chrome shared by collection cards and skeleton/empty states */
+    listingGrid?: Partial<BrandListingGridChrome>;
     /** Modal/dialog chrome (bg, overlay, header/body/footer, close) */
     modal?: Partial<BrandModalChrome>;
     /** Tabs chrome (border, color states) */

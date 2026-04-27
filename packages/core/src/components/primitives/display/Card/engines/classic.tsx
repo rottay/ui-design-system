@@ -211,10 +211,10 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
           borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
           cursor: clickable || onClick ? 'pointer' : undefined,
           ...shadowStyle,
-          // Color variant overrides both border-left and background, giving
-          // cards a semantic accent (e.g. green for success, red for error).
+          // Color variant tints the whole card frame; tenants can override
+          // this without inheriting hard-coded side rails.
           ...(hasColorVariant && {
-            borderLeft: `4px solid ${colorStyles.borderColor}`,
+            borderColor: colorStyles.borderColor,
             backgroundColor: colorStyles.background,
           }),
           ...style,

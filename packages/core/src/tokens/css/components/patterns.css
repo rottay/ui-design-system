@@ -1,0 +1,313 @@
+/**
+ * Pattern Tokens - Rottay Design System
+ *
+ * Tenant-free reusable styling contracts for application surfaces and compact
+ * data patterns. Apps can compose these tokens without depending on a vertical
+ * namespace.
+ */
+
+:root {
+  /* Surface patterns */
+  --ds-surface-card-bg: var(--ds-surface-card, var(--ds-card-bg));
+  --ds-surface-card-border: var(--ds-color-border);
+  --ds-surface-card-border-strong: var(--ds-color-border-secondary);
+  --ds-surface-card-border-soft: var(--ds-color-border-subtle);
+  --ds-surface-card-shadow: var(--ds-card-shadow, var(--ds-shadow-sm));
+  --ds-surface-card-shadow-hover: var(--ds-card-shadow-hover, var(--ds-shadow-md));
+  --ds-surface-panel-bg: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  --ds-surface-control-bg: var(--ds-surface-control, var(--ds-color-bg-input));
+  --ds-color-surface-raised: var(--ds-surface-card-bg);
+  --ds-color-surface-subtle: var(--ds-surface-panel-bg);
+  --ds-color-text-subtle: var(--ds-color-text-muted);
+  --ds-control-ink: var(--ds-color-text-primary);
+  --ds-control-ink-muted: var(--ds-color-text-secondary);
+  --ds-control-on-brand: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  --ds-control-surface: var(--ds-surface-card-bg);
+  --ds-control-surface-raised: color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg));
+  --ds-control-brand-tint: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-control-surface));
+  --ds-control-brand-tint-hover: color-mix(in srgb, var(--ds-color-primary) 15%, var(--ds-control-surface));
+  --ds-control-brand-border: color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border));
+  --ds-surface-hero-bg: linear-gradient(
+    145deg,
+    var(--ds-surface-card-bg),
+    color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel-bg))
+  );
+  --ds-workspace-hero-bg: var(--ds-surface-hero-bg);
+  --ds-surface-focus-ring: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  --ds-surface-icon-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-bg)),
+    color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-surface-card-bg))
+  );
+  --ds-surface-icon-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-surface-card-border));
+  --ds-icon-tile-bg: var(--ds-surface-icon-bg);
+  --ds-icon-tile-border: var(--ds-surface-icon-border);
+  --ds-surface-chip-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg));
+  --ds-surface-chip-color: var(--ds-color-primary);
+  --ds-surface-chip-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-surface-card-border));
+  --ds-chip-bg: var(--ds-surface-chip-bg);
+  --ds-chip-color: var(--ds-surface-chip-color);
+  --ds-chip-border: var(--ds-surface-chip-border);
+  --ds-pill-bg: var(--ds-chip-bg);
+  --ds-pill-color: var(--ds-chip-color);
+  --ds-pill-border: var(--ds-chip-border);
+  --ds-surface-highlight-faint: color-mix(in srgb, var(--ds-surface-card-bg) 34%, transparent);
+  --ds-surface-highlight-soft: color-mix(in srgb, var(--ds-surface-card-bg) 46%, transparent);
+  --ds-surface-highlight-medium: color-mix(in srgb, var(--ds-surface-card-bg) 64%, transparent);
+  --ds-surface-highlight-strong: color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+  --ds-shell-shimmer-faint: linear-gradient(90deg, transparent, var(--ds-surface-highlight-faint), transparent);
+  --ds-shell-shimmer-soft: linear-gradient(90deg, transparent, var(--ds-surface-highlight-soft), transparent);
+  --ds-shell-shimmer-medium: linear-gradient(90deg, transparent, var(--ds-surface-highlight-medium), transparent);
+  --ds-shell-shimmer-strong: linear-gradient(90deg, transparent, var(--ds-surface-highlight-strong), transparent);
+  --ds-shell-active-bg: var(--ds-color-neutral-100, var(--ds-surface-panel-bg));
+  --ds-shell-active-gradient: linear-gradient(90deg, var(--ds-shell-active-bg), transparent);
+  --ds-shell-dropdown-shadow: var(--ds-shadow-dropdown, var(--ds-shadow-lg));
+  --ds-command-grid-size: var(--ds-shell-grid-size, 22px);
+  --ds-command-grid-line-soft: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  --ds-command-grid-line: color-mix(in srgb, var(--ds-color-primary) 11%, transparent);
+  --ds-command-grid-line-strong: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+  --ds-command-grid-bg: linear-gradient(var(--ds-command-grid-line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-command-grid-line-soft) 1px, transparent 1px);
+  --ds-command-grid-bg-strong: linear-gradient(var(--ds-command-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-command-grid-line) 1px, transparent 1px);
+  --ds-command-grid-opacity: 0.16;
+  --ds-command-scan-speed: 3s;
+  --ds-command-font: var(--ds-font-family-mono, monospace);
+  --ds-command-letter-spacing: 0;
+  --ds-command-glow: 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
+    0 10px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+  --ds-command-line: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-primary) 62%, transparent), transparent);
+  --ds-command-rail-bg: linear-gradient(180deg, var(--ds-surface-card-bg) 0%, var(--ds-surface-panel-bg) 100%);
+
+  /* Rich / premium cards */
+  --ds-rich-card-bg: var(--ds-premium-card-bg);
+  --ds-rich-card-border: var(--ds-premium-card-border);
+  --ds-rich-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-rich-card-border-selected: var(--ds-premium-card-selected-border);
+  --ds-rich-card-ring-selected: var(--ds-premium-card-selected-ring);
+  --ds-rich-card-sheen: var(--ds-premium-card-sheen);
+  --ds-rich-card-header-bg: color-mix(in srgb, var(--ds-surface-card-bg) 82%, var(--ds-surface-panel-bg));
+  --ds-rich-card-section-bg: var(--ds-surface-card-bg);
+  --ds-rich-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg));
+  --ds-rich-card-footer-bg: var(--ds-premium-card-footer-bg);
+
+  /* Signal / metric cards */
+  --ds-signal-card-accent: var(--ds-color-primary);
+  --ds-signal-card-soft: color-mix(in srgb, var(--ds-signal-card-accent) 11%, var(--ds-surface-card-bg));
+  --ds-signal-card-bg: var(--ds-premium-card-bg);
+  --ds-signal-card-border: color-mix(in srgb, var(--ds-signal-card-accent) 12%, var(--ds-surface-card-border));
+  --ds-signal-card-border-hover: color-mix(in srgb, var(--ds-signal-card-accent) 24%, var(--ds-surface-card-border));
+  --ds-signal-card-shadow: var(--ds-premium-card-shadow);
+  --ds-signal-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-signal-card-radius: var(--ds-premium-card-radius);
+  --ds-signal-card-padding: var(--ds-premium-card-padding);
+  --ds-signal-card-grid-bg: var(--ds-premium-card-grid-bg);
+  --ds-signal-card-icon-bg: var(--ds-premium-card-icon-bg);
+  --ds-signal-card-icon-border: var(--ds-premium-card-icon-border);
+  --ds-signal-card-title-color: var(--ds-premium-card-title-color);
+  --ds-signal-card-body-color: var(--ds-premium-card-body-color);
+  --ds-signal-card-section-bg: var(--ds-rich-card-section-bg);
+  --ds-signal-card-section-alt-bg: var(--ds-rich-card-section-alt-bg);
+  --ds-signal-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-signal-card-status-bg: var(--ds-premium-card-status-bg);
+  --ds-signal-card-status-border: var(--ds-premium-card-status-border);
+  --ds-signal-card-status-color: var(--ds-premium-card-status-color);
+  --ds-signal-card-action-color: var(--ds-premium-card-action-color);
+  --ds-signal-card-badge-bg: var(--ds-premium-card-status-bg);
+  --ds-signal-card-badge-border: var(--ds-premium-card-status-border);
+  --ds-signal-card-badge-color: var(--ds-premium-card-status-color);
+  --ds-signal-card-meter-track: var(--ds-premium-card-meter-track);
+  --ds-signal-card-meter-track-border: var(--ds-premium-card-meter-track-border);
+  --ds-signal-card-meter-fill: var(--ds-premium-card-meter-fill);
+  --ds-signal-card-top-line-display: none;
+
+  --ds-metric-card-bg: var(--ds-premium-card-bg);
+  --ds-metric-card-border: var(--ds-premium-card-border);
+  --ds-metric-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-metric-card-selected-border: var(--ds-premium-card-selected-border);
+  --ds-metric-card-selected-ring: var(--ds-premium-card-selected-ring);
+  --ds-metric-card-shadow: var(--ds-premium-card-shadow);
+  --ds-metric-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-metric-card-radius: var(--ds-premium-card-radius);
+  --ds-metric-card-padding: var(--ds-card-sm-padding);
+  --ds-metric-card-min-height: 118px;
+  --ds-metric-card-sheen: var(--ds-premium-card-sheen);
+  --ds-metric-card-icon-bg: var(--ds-premium-card-icon-bg);
+  --ds-metric-card-icon-border: var(--ds-premium-card-icon-border);
+  --ds-metric-card-icon-color: var(--ds-premium-card-icon-color);
+  --ds-metric-card-label-color: var(--ds-premium-card-label-color);
+  --ds-metric-card-value-color: var(--ds-premium-card-value-color);
+  --ds-metric-card-value-color-hover: var(--ds-premium-card-value-color-hover);
+  --ds-metric-card-number-min-width: var(--ds-premium-card-number-min-width);
+  --ds-metric-card-number-font-variant: var(--ds-premium-card-number-font-variant);
+  --ds-metric-card-meter-height: 6px;
+  --ds-metric-card-meter-track: var(--ds-premium-card-meter-track);
+  --ds-metric-card-meter-track-border: var(--ds-premium-card-meter-track-border);
+  --ds-metric-card-meter-fill: var(--ds-premium-card-meter-fill);
+  --ds-metric-card-meter-fill-success: var(--ds-meter-fill-success, var(--ds-premium-card-meter-fill));
+  --ds-metric-card-meter-fill-warning: var(--ds-meter-fill-warning, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-accent)));
+  --ds-metric-card-meter-fill-error: var(--ds-meter-fill-error, linear-gradient(90deg, var(--ds-color-error), var(--ds-color-primary)));
+  --ds-metric-card-meter-fill-neutral: var(--ds-meter-fill-neutral, linear-gradient(90deg, var(--ds-color-text-muted), var(--ds-color-primary)));
+
+  /* Tables and compact collection chrome */
+  --ds-table-header-bg-hover: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-table-header-bg));
+  --ds-table-header-border: color-mix(in srgb, var(--ds-table-border) 82%, transparent);
+  --ds-table-header-shadow: inset 0 -1px 0 var(--ds-table-header-border);
+  --ds-table-resize-bg: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-table-border));
+  --ds-table-resize-bg-hover: var(--ds-color-primary);
+  --ds-table-reorder-bg: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-table-bg));
+  --ds-table-action-bg: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--ds-table-bg) 60%, transparent),
+    var(--ds-table-bg)
+  );
+  --ds-table-action-border: color-mix(in srgb, var(--ds-table-border) 70%, transparent);
+  --ds-table-action-slots-width: 88px;
+  --ds-table-sheen: linear-gradient(90deg, var(--ds-card-side-accent-soft, transparent), transparent 24%);
+  --ds-table-row-hover-shadow: inset 1px 0 0 color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
+  --ds-collection-border: color-mix(in srgb, var(--ds-color-primary) 11%, var(--ds-color-border));
+  --ds-collection-border-soft: color-mix(in srgb, var(--ds-collection-border) 62%, transparent);
+  --ds-collection-depth:
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+  --ds-collection-rail: color-mix(in srgb, var(--ds-color-primary) 44%, transparent);
+  --ds-collection-row-hover: var(--ds-table-row-bg-hover);
+  --ds-workspace-card-bg: var(--ds-premium-card-bg);
+  --ds-workspace-card-border: var(--ds-premium-card-border);
+  --ds-workspace-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-workspace-card-shadow: var(--ds-premium-card-depth);
+  --ds-workspace-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-workspace-card-radius: var(--ds-premium-card-radius);
+  --ds-workspace-card-padding: var(--ds-card-md-padding);
+  --ds-workspace-card-grid-bg: var(--ds-premium-card-grid-bg);
+  --ds-workspace-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-workspace-card-status-bg: var(--ds-premium-card-status-bg);
+  --ds-workspace-card-status-border: var(--ds-premium-card-status-border);
+  --ds-workspace-card-status-color: var(--ds-premium-card-status-color);
+  --ds-workspace-card-action-color: var(--ds-premium-card-action-color);
+
+  --ds-compact-card-bg: var(--ds-premium-card-bg);
+  --ds-compact-card-border: var(--ds-premium-card-border);
+  --ds-compact-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-compact-card-shadow: var(--ds-premium-card-shadow);
+  --ds-compact-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-compact-card-radius: var(--ds-radius-md);
+  --ds-compact-card-padding: var(--ds-card-sm-padding);
+  --ds-compact-card-gap: var(--ds-spacing-2, 8px);
+  --ds-compact-card-min-height: 92px;
+
+  --ds-tall-card-bg: var(--ds-premium-card-bg);
+  --ds-tall-card-border: var(--ds-premium-card-border);
+  --ds-tall-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-tall-card-shadow: var(--ds-premium-card-depth);
+  --ds-tall-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-tall-card-radius: var(--ds-radius-xl);
+  --ds-tall-card-padding: var(--ds-card-lg-padding);
+  --ds-tall-card-gap: var(--ds-spacing-4, 16px);
+  --ds-tall-card-min-height: 240px;
+  --ds-tall-card-footer-bg: var(--ds-premium-card-footer-bg);
+
+  --ds-collection-card-bg: var(--ds-premium-card-bg);
+  --ds-collection-card-bg-hover: var(--ds-premium-card-bg-hover);
+  --ds-collection-card-border: var(--ds-premium-card-border);
+  --ds-collection-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-collection-card-selected-border: var(--ds-premium-card-selected-border);
+  --ds-collection-card-selected-ring: var(--ds-premium-card-selected-ring);
+  --ds-collection-card-shadow: var(--ds-premium-card-shadow);
+  --ds-collection-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-collection-card-radius: var(--ds-premium-card-radius);
+  --ds-collection-card-padding: var(--ds-card-md-padding);
+  --ds-collection-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-collection-card-status-bg: var(--ds-premium-card-status-bg);
+  --ds-collection-card-status-border: var(--ds-premium-card-status-border);
+  --ds-collection-card-status-color: var(--ds-premium-card-status-color);
+  --ds-collection-card-action-color: var(--ds-premium-card-action-color);
+
+  --ds-listing-grid-gap: var(--ds-card-grid-gap);
+  --ds-listing-grid-min-card-width: 280px;
+  --ds-listing-grid-min-compact-width: 220px;
+  --ds-listing-grid-min-tall-width: 320px;
+  --ds-listing-grid-columns: repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width), 1fr));
+  --ds-listing-grid-card-gap: var(--ds-premium-card-gap);
+  --ds-listing-grid-card-bg: var(--ds-collection-card-bg);
+  --ds-listing-grid-card-border: var(--ds-collection-card-border);
+  --ds-listing-grid-card-shadow: var(--ds-collection-card-shadow);
+  --ds-listing-grid-selected-ring: var(--ds-collection-card-selected-ring);
+  --ds-listing-grid-empty-bg: var(--ds-collection-card-bg);
+  --ds-listing-grid-empty-border: var(--ds-collection-card-border);
+  --ds-listing-grid-skeleton-bg: var(--ds-premium-card-bg);
+
+  /* Pills and meters */
+  --ds-filter-pill-frame-border: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card-border));
+  --ds-filter-pill-frame-shadow:
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--ds-surface-card-bg) 50%, transparent);
+  --ds-filter-pill-focus-ring: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  --ds-cell-pill-bg: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card-bg));
+  --ds-cell-pill-border: color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-surface-card-border));
+  --ds-cell-pill-color: var(--ds-color-text-secondary);
+  --ds-cell-pill-dot-current: currentColor;
+  --ds-cell-pill-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent),
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  --ds-meter-track: color-mix(in srgb, var(--ds-surface-card-border) 48%, var(--ds-surface-panel-bg));
+  --ds-meter-track-border: color-mix(in srgb, var(--ds-surface-card-border) 82%, transparent);
+  --ds-meter-fill: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary));
+  --ds-meter-fill-success: linear-gradient(90deg, var(--ds-color-success), color-mix(in srgb, var(--ds-color-success) 72%, var(--ds-color-secondary)));
+  --ds-meter-fill-warning: linear-gradient(90deg, var(--ds-color-warning), color-mix(in srgb, var(--ds-color-warning) 70%, var(--ds-color-accent)));
+  --ds-meter-fill-error: linear-gradient(90deg, var(--ds-color-error), color-mix(in srgb, var(--ds-color-error) 72%, var(--ds-color-primary)));
+  --ds-meter-fill-neutral: linear-gradient(90deg, var(--ds-color-text-muted), color-mix(in srgb, var(--ds-color-text-muted) 72%, var(--ds-color-primary)));
+  --ds-cell-meter-track: color-mix(in srgb, var(--ds-surface-panel-bg) 78%, var(--ds-surface-card-bg));
+  --ds-cell-meter-track-border: color-mix(in srgb, var(--ds-surface-card-border) 78%, transparent);
+  --ds-cell-meter-fill: var(--ds-meter-fill);
+  --ds-cell-meter-shadow: inset 0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
+
+  /* Empty/error/chart surfaces */
+  --ds-empty-state-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card-bg)),
+    var(--ds-surface-panel-bg)
+  );
+  --ds-empty-state-border: color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-surface-card-border));
+  --ds-empty-state-icon-bg: var(--ds-surface-icon-bg);
+  --ds-empty-state-icon-border: var(--ds-surface-icon-border);
+  --ds-empty-bg: var(--ds-empty-state-bg);
+  --ds-empty-border: var(--ds-empty-state-border);
+  --ds-empty-icon-bg: var(--ds-empty-state-icon-bg);
+  --ds-empty-icon-border: var(--ds-empty-state-icon-border);
+  --ds-error-state-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card-bg)),
+    var(--ds-surface-panel-bg)
+  );
+  --ds-error-state-border: color-mix(in srgb, var(--ds-color-error) 28%, var(--ds-surface-card-border));
+  --ds-error-state-icon-bg: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card-bg));
+  --ds-chart-panel-bg: linear-gradient(
+    145deg,
+    var(--ds-surface-card-bg),
+    color-mix(in srgb, var(--ds-color-secondary) 4%, var(--ds-surface-panel-bg))
+  );
+  --ds-chart-card-bg: var(--ds-chart-panel-bg);
+  --ds-chart-plot-bg: color-mix(in srgb, var(--ds-surface-panel-bg) 78%, var(--ds-surface-card-bg));
+  --ds-chart-accent: var(--ds-color-primary);
+  --ds-chart-grid: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-border));
+  --ds-chart-axis: var(--ds-color-text-muted);
+  --ds-chart-grid-color: var(--ds-chart-grid);
+  --ds-chart-axis-color: var(--ds-chart-axis);
+  --ds-chart-tooltip-bg: var(--ds-surface-card-bg);
+  --ds-chart-tooltip-border: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-surface-card-border));
+  --ds-skeleton-bg: linear-gradient(
+    90deg,
+    var(--ds-surface-panel-bg) 25%,
+    color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg)) 50%,
+    var(--ds-surface-panel-bg) 75%
+  );
+  --ds-page-transition-duration: var(--ds-motion-normal, 260ms);
+  --ds-workflow-gap: 32px;
+  --ds-workflow-rail-width: 360px;
+  --ds-control-disabled-bg: var(--ds-button-disabled-bg);
+  --ds-control-disabled-border: var(--ds-button-disabled-border);
+  --ds-control-disabled-color: var(--ds-button-disabled-color);
+  --ds-control-disabled-opacity: var(--ds-button-disabled-opacity);
+}

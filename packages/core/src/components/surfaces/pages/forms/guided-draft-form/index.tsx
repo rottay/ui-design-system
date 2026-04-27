@@ -351,8 +351,8 @@ function SectionNav({
               onClick={() => onSectionClick(section.key)}
               style={{
                 borderRadius: 'var(--ds-radius-sm)',
-                borderLeft: `3px solid ${
-                  isActive ? 'var(--ds-color-primary)' : 'transparent'
+                border: `1px solid ${
+                  isActive ? 'color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary))' : 'transparent'
                 }`,
                 background: isActive
                   ? 'var(--ds-color-primary-bg, var(--ds-color-bg-tertiary))'

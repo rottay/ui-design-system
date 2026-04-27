@@ -57,30 +57,54 @@ import {
 
 import type { ListToolbarProps, FilterPillConfig, DensityKey } from '../ListToolbar.types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import {
+  FILTER_PILL_ACTIVE_BG,
+  FILTER_PILL_ACTIVE_BORDER,
+  FILTER_PILL_ACTIVE_COLOR,
+  FILTER_PILL_ACTIVE_SHADOW,
+  FILTER_PILL_BG,
+  FILTER_PILL_BORDER,
+  FILTER_PILL_COLOR,
+  FILTER_PILL_COUNT_ACTIVE_BG,
+  FILTER_PILL_COUNT_ACTIVE_BORDER,
+  FILTER_PILL_FOCUS_RING,
+  FILTER_PILL_FRAME_BG,
+  FILTER_PILL_HOVER_BG,
+  FILTER_PILL_HOVER_BORDER,
+  FILTER_PILL_SHADOW,
+  SEARCH_ICON_COLOR,
+  TOOLBAR_BG,
+  TOOLBAR_BORDER,
+  TOOLBAR_BORDER_BOTTOM,
+  TOOLBAR_COLOR,
+  TOOLBAR_CONTROL_BG,
+  TOOLBAR_CONTROL_BORDER,
+  TOOLBAR_CONTROL_COLOR,
+  TOOLBAR_DIVIDER,
+  TOOLBAR_GAP,
+  TOOLBAR_PADDING,
+  TOOLBAR_RADIUS,
+  TOOLBAR_SHADOW,
+  EASE_OUT,
+  MOTION_FAST,
+  searchInputStyle,
+} from '../tokens';
 
 // ============================================================================
 // DESIGN TOKENS (local aliases for readability)
 // ============================================================================
 
-const MOTION_FAST = 'var(--ds-motion-fast, 150ms)';
-const EASE_OUT = 'var(--ds-motion-ease-out, ease-out)';
 const T = `${MOTION_FAST} ${EASE_OUT}`;
 
 const RADIUS_SM = 'var(--ds-radius-sm, 6px)';
-const RADIUS_MD = 'var(--ds-radius-md, 8px)';
+const RADIUS_MD = TOOLBAR_RADIUS;
 
-const COLOR_BORDER = 'var(--ds-color-border)';
-const COLOR_PRIMARY = 'var(--ds-color-primary)';
-const COLOR_TEXT_PRIMARY = 'var(--ds-color-text-primary)';
-const COLOR_TEXT_SECONDARY = 'var(--ds-color-text-secondary)';
-const COLOR_TEXT_MUTED = 'var(--ds-color-text-muted)';
+const COLOR_TEXT_PRIMARY = TOOLBAR_COLOR;
+const COLOR_TEXT_SECONDARY = TOOLBAR_CONTROL_COLOR;
+const COLOR_TEXT_MUTED = FILTER_PILL_COLOR;
 const COLOR_TEXT_ON_PRIMARY = 'var(--ds-color-text-on-primary, #fff)';
-const SURFACE_CARD = 'var(--ds-surface-card)';
-const SURFACE_HIGHLIGHT = 'var(--ds-surface-highlight)';
-const SURFACE_OVERLAY = 'var(--ds-surface-overlay, var(--ds-surface-card))';
 
 // Spacing constants (px)
-const GAP_SECTION = 16; // between major groups
 const GAP_INTRA = 6;   // within a group
 
 // Shared icon-button dimensions
@@ -97,10 +121,10 @@ const iconButtonBase: React.CSSProperties = {
   justifyContent: 'center',
   width: ICON_BTN_SIZE,
   height: ICON_BTN_SIZE,
-  border: `1px solid transparent`,
+  border: `1px solid ${TOOLBAR_CONTROL_BORDER}`,
   borderRadius: RADIUS_SM,
-  background: 'transparent',
-  color: COLOR_TEXT_SECONDARY,
+  background: TOOLBAR_CONTROL_BG,
+  color: TOOLBAR_CONTROL_COLOR,
   cursor: 'pointer',
   flexShrink: 0,
   transition: `background ${T}, color ${T}, border-color ${T}`,
@@ -110,13 +134,7 @@ const iconButtonBase: React.CSSProperties = {
 
 /** Hover style applied via onMouseEnter/Leave for icon buttons. */
 const iconButtonHover: React.CSSProperties = {
-  background: SURFACE_HIGHLIGHT,
-  color: COLOR_TEXT_PRIMARY,
-};
-
-/** Active (selected) state for segmented-control segments. */
-const segmentActive: React.CSSProperties = {
-  background: SURFACE_HIGHLIGHT,
+  background: FILTER_PILL_HOVER_BG,
   color: COLOR_TEXT_PRIMARY,
 };
 
@@ -171,10 +189,11 @@ function SegmentedControl({
       style={{
         display: 'inline-flex',
         borderRadius: RADIUS_SM,
-        border: `1px solid ${COLOR_BORDER}`,
+        border: `1px solid ${TOOLBAR_CONTROL_BORDER}`,
         overflow: 'hidden',
         flexShrink: 0,
-        background: SURFACE_CARD,
+        background: TOOLBAR_CONTROL_BG,
+        color: TOOLBAR_CONTROL_COLOR,
         ...extraStyle,
       }}
     >
@@ -217,8 +236,8 @@ function Segment({
         width: ICON_BTN_SIZE,
         height: 30,
         border: 'none',
-        background: active ? SURFACE_HIGHLIGHT : hovered ? 'color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)' : 'transparent',
-        color: active ? COLOR_TEXT_PRIMARY : hovered ? COLOR_TEXT_SECONDARY : COLOR_TEXT_MUTED,
+        background: active ? FILTER_PILL_ACTIVE_BG : hovered ? FILTER_PILL_HOVER_BG : 'transparent',
+        color: active ? FILTER_PILL_ACTIVE_COLOR : hovered ? COLOR_TEXT_PRIMARY : TOOLBAR_CONTROL_COLOR,
         cursor: 'pointer',
         transition: `background ${T}, color ${T}`,
         padding: 0,
@@ -238,7 +257,7 @@ function Segment({
             right: '20%',
             height: 2,
             borderRadius: 1,
-            background: COLOR_PRIMARY,
+            background: FILTER_PILL_ACTIVE_COLOR,
             transition: `opacity ${T}`,
           }}
         />
@@ -274,7 +293,7 @@ function IconButton({
       style={{
         ...iconButtonBase,
         ...(hovered ? iconButtonHover : {}),
-        borderColor: hovered ? COLOR_BORDER : 'transparent',
+        borderColor: hovered ? FILTER_PILL_HOVER_BORDER : TOOLBAR_CONTROL_BORDER,
         ...extraStyle,
       }}
     >
@@ -302,7 +321,7 @@ function ToolbarDivider() {
       style={{
         width: 1,
         height: 20,
-        background: COLOR_BORDER,
+        background: TOOLBAR_DIVIDER,
         flexShrink: 0,
         marginInline: 4,
         opacity: 0.6,
@@ -362,18 +381,19 @@ function FilterButton({
           padding: '0 12px',
           borderRadius: RADIUS_SM,
           border: isActive
-            ? `1px solid ${COLOR_PRIMARY}`
-            : `1px solid ${hovered ? COLOR_TEXT_MUTED : COLOR_BORDER}`,
+            ? `1px solid ${FILTER_PILL_ACTIVE_BORDER}`
+            : `1px solid ${hovered ? FILTER_PILL_HOVER_BORDER : FILTER_PILL_BORDER}`,
           background: isActive
-            ? 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)'
+            ? FILTER_PILL_ACTIVE_BG
             : hovered
-              ? SURFACE_HIGHLIGHT
-              : 'transparent',
+              ? FILTER_PILL_HOVER_BG
+              : FILTER_PILL_BG,
           color: isActive
-            ? COLOR_PRIMARY
+            ? FILTER_PILL_ACTIVE_COLOR
             : hovered
               ? COLOR_TEXT_PRIMARY
-              : COLOR_TEXT_SECONDARY,
+              : FILTER_PILL_COLOR,
+          boxShadow: isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW,
           fontSize: 13,
           fontWeight: 500,
           cursor: 'pointer',
@@ -382,6 +402,12 @@ function FilterButton({
           flexShrink: 0,
           outline: 'none',
           lineHeight: 1,
+        }}
+        onFocus={(event) => {
+          event.currentTarget.style.boxShadow = FILTER_PILL_FOCUS_RING;
+        }}
+        onBlur={(event) => {
+          event.currentTarget.style.boxShadow = isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW;
         }}
       >
         {pill.label}
@@ -396,7 +422,8 @@ function FilterButton({
               height: 18,
               padding: '0 5px',
               borderRadius: 9,
-              background: COLOR_PRIMARY,
+              background: FILTER_PILL_COUNT_ACTIVE_BG,
+              border: `1px solid ${FILTER_PILL_COUNT_ACTIVE_BORDER}`,
               color: COLOR_TEXT_ON_PRIMARY,
               fontSize: 11,
               fontWeight: 600,
@@ -439,19 +466,19 @@ function FilterDropdownItem({
         padding: '8px 12px',
         border: 'none',
         background: selected
-          ? SURFACE_HIGHLIGHT
+          ? FILTER_PILL_ACTIVE_BG
           : hovered
-            ? 'color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)'
+            ? FILTER_PILL_HOVER_BG
             : 'transparent',
         color: selected
-          ? COLOR_TEXT_PRIMARY
-          : COLOR_TEXT_SECONDARY,
+          ? FILTER_PILL_ACTIVE_COLOR
+          : FILTER_PILL_COLOR,
         fontWeight: selected ? 500 : 400,
         fontSize: 13,
         cursor: 'pointer',
         transition: `background ${T}`,
         textAlign: 'left' as const,
-        borderRadius: 4,
+        borderRadius: RADIUS_SM,
         outline: 'none',
         lineHeight: 1.4,
       }}
@@ -460,7 +487,7 @@ function FilterDropdownItem({
         {label}
       </Text>
       {selected && (
-        <Text as="span" style={{ fontSize: 12, opacity: 0.6, color: COLOR_PRIMARY, flexShrink: 0 }}>
+        <Text as="span" style={{ fontSize: 12, opacity: 0.6, color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}>
           &#10003;
         </Text>
       )}
@@ -657,19 +684,19 @@ function DensityOptionRow({
         padding: '8px 10px',
         borderRadius: RADIUS_SM,
         border: active
-          ? `1px solid ${COLOR_PRIMARY}`
-          : `1px solid ${hovered ? COLOR_TEXT_MUTED : COLOR_BORDER}`,
+          ? `1px solid ${FILTER_PILL_ACTIVE_BORDER}`
+          : `1px solid ${hovered ? FILTER_PILL_HOVER_BORDER : FILTER_PILL_BORDER}`,
         background: active
-          ? SURFACE_HIGHLIGHT
+          ? FILTER_PILL_ACTIVE_BG
           : hovered
-            ? 'color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)'
-            : 'transparent',
+            ? FILTER_PILL_HOVER_BG
+            : FILTER_PILL_BG,
         cursor: 'pointer',
         transition: `background ${T}, border-color ${T}`,
         textAlign: 'left' as const,
         color: active
-          ? COLOR_TEXT_PRIMARY
-          : COLOR_TEXT_SECONDARY,
+          ? FILTER_PILL_ACTIVE_COLOR
+          : FILTER_PILL_COLOR,
         fontSize: 13,
         fontWeight: active ? 500 : 400,
         outline: 'none',
@@ -690,7 +717,7 @@ function DensityOptionRow({
       {active && (
         <Text
           as="span"
-          style={{ marginLeft: 'auto', fontSize: 12, color: COLOR_PRIMARY }}
+          style={{ marginLeft: 'auto', fontSize: 12, color: FILTER_PILL_ACTIVE_COLOR }}
         >
           &#10003;
         </Text>
@@ -764,7 +791,7 @@ function MobileOverflow({
             <Box
               style={{
                 height: 1,
-                background: COLOR_BORDER,
+                background: TOOLBAR_DIVIDER,
                 marginInline: 14,
                 opacity: 0.5,
               }}
@@ -818,8 +845,8 @@ function MobileOverflowItem({
         width: '100%',
         padding: '8px 14px',
         border: 'none',
-        background: hovered ? SURFACE_HIGHLIGHT : 'transparent',
-        color: hovered ? COLOR_TEXT_PRIMARY : COLOR_TEXT_SECONDARY,
+        background: hovered ? FILTER_PILL_HOVER_BG : 'transparent',
+        color: hovered ? COLOR_TEXT_PRIMARY : TOOLBAR_CONTROL_COLOR,
         fontSize: 13,
         fontWeight: 500,
         cursor: 'pointer',
@@ -916,9 +943,12 @@ export default function ModernListToolbar({
     <Box
       className={className}
       style={{
-        background: SURFACE_CARD,
-        borderBottom: `1px solid ${COLOR_BORDER}`,
+        background: TOOLBAR_BG,
+        border: `1px solid ${TOOLBAR_BORDER}`,
+        borderBottom: `1px solid ${TOOLBAR_BORDER_BOTTOM}`,
         borderRadius: `${RADIUS_MD} ${RADIUS_MD} 0 0`,
+        color: TOOLBAR_COLOR,
+        boxShadow: TOOLBAR_SHADOW,
         ...style,
       }}
     >
@@ -926,7 +956,7 @@ export default function ModernListToolbar({
         /* ================================================================ */
         /* MOBILE LAYOUT                                                    */
         /* ================================================================ */
-        <Stack spacing="sm" style={{ padding: '12px 16px' }}>
+        <Stack spacing="sm" style={{ padding: 'var(--ds-toolbar-padding, 12px 16px)' }}>
           {/* Row 1: Title + actions */}
           <Flex align="center" justify="between" gap={8}>
             <Flex align="center" gap={8} style={{ minWidth: 0, flex: 1 }}>
@@ -998,7 +1028,7 @@ export default function ModernListToolbar({
               prefix={
                 <Search
                   size={14}
-                  style={{ color: COLOR_TEXT_MUTED }}
+                  style={{ color: SEARCH_ICON_COLOR }}
                 />
               }
               suffix={
@@ -1006,10 +1036,10 @@ export default function ModernListToolbar({
                   <FilterCountBadge count={activeFilterCount} />
                 ) : undefined
               }
-              style={{
+              style={searchInputStyle({
                 height: 36,
                 borderRadius: RADIUS_SM,
-              }}
+              })}
             />
           </Box>
 
@@ -1042,11 +1072,11 @@ export default function ModernListToolbar({
           <Flex
             align="center"
             style={{
-              padding: '10px 16px',
-            gap: GAP_INTRA,
-            flexWrap: 'nowrap',
-            minWidth: 0,
-          }}
+              padding: TOOLBAR_PADDING,
+              gap: TOOLBAR_GAP,
+              flexWrap: 'nowrap',
+              minWidth: 0,
+            }}
           >
             {/* ── Left section: Title + Count ────────────────────────── */}
             {showTitleCluster && (
@@ -1069,7 +1099,7 @@ export default function ModernListToolbar({
                       fontWeight: 600,
                       color: COLOR_TEXT_PRIMARY,
                       whiteSpace: 'nowrap',
-                      letterSpacing: '-0.01em',
+                      letterSpacing: 0,
                     }}
                   >
                     {title}
@@ -1099,7 +1129,7 @@ export default function ModernListToolbar({
               prefix={
                 <Search
                   size={14}
-                  style={{ color: COLOR_TEXT_MUTED }}
+                  style={{ color: SEARCH_ICON_COLOR }}
                 />
               }
               suffix={
@@ -1107,11 +1137,11 @@ export default function ModernListToolbar({
                   <FilterCountBadge count={activeFilterCount} />
                 ) : undefined
               }
-              style={{
+              style={searchInputStyle({
                 height: ICON_BTN_SIZE,
                 borderRadius: RADIUS_SM,
                 fontSize: 13,
-              }}
+              })}
             />
           </Box>
 
@@ -1219,14 +1249,14 @@ export default function ModernListToolbar({
           wrap="wrap"
           style={{
             padding: '8px 16px',
-            borderTop: `1px solid ${COLOR_BORDER}`,
-            background: 'color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-card))',
+            borderTop: `1px solid ${TOOLBAR_BORDER_BOTTOM}`,
+            background: FILTER_PILL_FRAME_BG,
           }}
         >
           <Flex align="center" gap={6} style={{ flexShrink: 0 }}>
             <Filter
               size={12}
-              style={{ color: COLOR_PRIMARY, flexShrink: 0 }}
+              style={{ color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}
             />
             <Text
               style={{
@@ -1244,7 +1274,7 @@ export default function ModernListToolbar({
             style={{
               width: 1,
               height: 14,
-              background: COLOR_BORDER,
+              background: TOOLBAR_DIVIDER,
               flexShrink: 0,
               opacity: 0.5,
             }}
@@ -1326,7 +1356,8 @@ function FilterCountBadge({ count }: { count: number }) {
         height: 18,
         padding: '0 5px',
         borderRadius: 9,
-        background: COLOR_PRIMARY,
+        background: FILTER_PILL_COUNT_ACTIVE_BG,
+        border: `1px solid ${FILTER_PILL_COUNT_ACTIVE_BORDER}`,
         color: COLOR_TEXT_ON_PRIMARY,
         fontSize: 10,
         fontWeight: 700,

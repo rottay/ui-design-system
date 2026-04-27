@@ -5,12 +5,46 @@ import { Box, Text, Stack, Flex } from "@/components/primitives";
 import { Activity, TrendingUp, TrendingDown } from "lucide-react";
 import { useSmoothCounter } from "@/motion/hooks";
 import type { MetricsProps, KeyMetric } from "../../types";
+import {
+  METRIC_CARD_BG,
+  METRIC_CARD_BORDER,
+  METRIC_CARD_BORDER_HOVER,
+  METRIC_CARD_ICON_BG,
+  METRIC_CARD_ICON_BORDER,
+  METRIC_CARD_ICON_COLOR,
+  METRIC_CARD_METER_FILL_ERROR,
+  METRIC_CARD_METER_FILL_SUCCESS,
+  METRIC_CARD_NUMBER_FONT_VARIANT,
+  METRIC_CARD_NUMBER_MIN_WIDTH,
+  METRIC_CARD_PADDING,
+  METRIC_CARD_RADIUS,
+  METRIC_CARD_SHADOW,
+  METRIC_CARD_SHADOW_HOVER,
+  METRIC_CARD_SHEEN,
+  METRIC_CARD_TREND_COLOR,
+  METRIC_CARD_TREND_ERROR_COLOR,
+  METRIC_CARD_VALUE_COLOR,
+  METRIC_CARD_VALUE_HOVER_COLOR,
+  METRIC_MONO_FONT,
+  METRIC_PANEL_BADGE_BG,
+  METRIC_PANEL_BADGE_BORDER,
+  METRIC_PANEL_BADGE_COLOR,
+  METRIC_PANEL_BG,
+  METRIC_PANEL_BORDER,
+  METRIC_PANEL_ICON_BG,
+  METRIC_PANEL_ICON_BORDER,
+  METRIC_PANEL_RADIUS,
+  METRIC_PANEL_SHADOW,
+  METRIC_PANEL_TITLE_COLOR,
+} from "../tokens";
 
 function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; index: number }) {
   const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, "")) || 0;
   const suffix = metric.value.replace(/[0-9.-]/g, "");
   const animatedValue = Math.floor(useSmoothCounter(0, numericValue, 1000, index * 150));
   const [isHovered, setIsHovered] = useState(false);
+  const trendColor = metric.positive ? METRIC_CARD_TREND_COLOR : METRIC_CARD_TREND_ERROR_COLOR;
+  const meterFill = metric.positive ? METRIC_CARD_METER_FILL_SUCCESS : METRIC_CARD_METER_FILL_ERROR;
 
   return (
     <Box
@@ -18,9 +52,11 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        padding: "12px 14px",
-        background: "var(--ds-color-bg-primary)",
-        border: "1px solid var(--ds-color-border-secondary)",
+        padding: METRIC_CARD_PADDING,
+        background: METRIC_CARD_BG,
+        border: `1px solid ${METRIC_CARD_BORDER}`,
+        borderRadius: METRIC_CARD_RADIUS,
+        boxShadow: METRIC_CARD_SHADOW,
         position: "relative",
         overflow: "hidden",
       }}
@@ -32,9 +68,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
           top: 0,
           bottom: 0,
           width: isHovered ? 6 : 4,
-          background: metric.positive
-            ? "linear-gradient(180deg, var(--ds-color-primary), var(--ds-color-success))"
-            : "linear-gradient(180deg, var(--ds-color-warning), var(--ds-color-error))",
+          background: meterFill,
           transition: "width 0.3s ease",
         }}
       />
@@ -47,7 +81,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
           left: "-100%",
           width: "100%",
           height: "100%",
-          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)",
+          background: METRIC_CARD_SHEEN,
           pointerEvents: "none",
         }}
       />
@@ -62,8 +96,8 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "var(--ds-color-primary-100)",
-              border: "2px solid var(--ds-color-primary-200)",
+              background: METRIC_CARD_ICON_BG,
+              border: `2px solid ${METRIC_CARD_ICON_BORDER}`,
               position: "relative",
             }}
           >
@@ -71,7 +105,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
               style={{
                 width: 18,
                 height: 18,
-                color: "var(--ds-color-primary)",
+                color: METRIC_CARD_ICON_COLOR,
               }}
             />
           </Box>
@@ -80,7 +114,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
             <Text
               size="sm"
               weight="medium"
-              style={{ color: "var(--ds-color-text-primary)" }}
+              style={{ color: METRIC_CARD_VALUE_COLOR }}
             >
               {metric.label}
             </Text>
@@ -88,20 +122,20 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
               {metric.positive ? (
                 <TrendingUp
                   className="trend-icon"
-                  style={{ width: 12, height: 12, color: "var(--ds-color-success)" }}
+                  style={{ width: 12, height: 12, color: trendColor }}
                 />
               ) : (
                 <TrendingDown
                   className="trend-icon"
-                  style={{ width: 12, height: 12, color: "var(--ds-color-error)" }}
+                  style={{ width: 12, height: 12, color: trendColor }}
                 />
               )}
               <Text
                 size="xs"
                 weight="bold"
                 style={{
-                  color: metric.positive ? "var(--ds-color-success)" : "var(--ds-color-error)",
-                  fontFamily: "monospace",
+                  color: trendColor,
+                  fontFamily: METRIC_MONO_FONT,
                 }}
               >
                 {metric.change}
@@ -116,9 +150,12 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
             style={{
               fontSize: 28,
               fontWeight: 800,
-              color: "var(--ds-color-text-primary)",
-              fontFamily: "monospace",
-              letterSpacing: "-0.02em",
+              color: METRIC_CARD_VALUE_COLOR,
+              fontFamily: METRIC_MONO_FONT,
+              letterSpacing: 0,
+              minWidth: METRIC_CARD_NUMBER_MIN_WIDTH,
+              textAlign: "right",
+              fontVariantNumeric: METRIC_CARD_NUMBER_FONT_VARIANT,
             }}
           >
             {animatedValue}{suffix}
@@ -135,8 +172,10 @@ export function MetricsRows({ metrics }: MetricsProps) {
       style={{
         height: 415,
         padding: "16px",
-        background: "var(--ds-color-bg-secondary)",
-        border: "1px solid var(--ds-color-border-secondary)",
+        background: METRIC_PANEL_BG,
+        border: `1px solid ${METRIC_PANEL_BORDER}`,
+        borderRadius: METRIC_PANEL_RADIUS,
+        boxShadow: METRIC_PANEL_SHADOW,
         display: "flex",
         flexDirection: "column",
         position: "relative",
@@ -149,7 +188,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
         style={{
           paddingBottom: 12,
           marginBottom: 12,
-          borderBottom: "1px solid var(--ds-color-border-secondary)",
+          borderBottom: `1px solid ${METRIC_PANEL_BORDER}`,
           position: "relative",
         }}
       >
@@ -162,13 +201,13 @@ export function MetricsRows({ metrics }: MetricsProps) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "var(--ds-color-primary-100)",
-              border: "1px solid var(--ds-color-primary-200)",
+              background: METRIC_PANEL_ICON_BG,
+              border: `1px solid ${METRIC_PANEL_ICON_BORDER}`,
             }}
           >
-            <Activity style={{ width: 16, height: 16, color: "var(--ds-color-primary)" }} />
+            <Activity style={{ width: 16, height: 16, color: METRIC_CARD_ICON_COLOR }} />
           </Box>
-          <Text weight="bold" style={{ color: "var(--ds-color-text-primary)" }}>
+          <Text weight="bold" style={{ color: METRIC_PANEL_TITLE_COLOR }}>
             Key Metrics
           </Text>
         </Flex>
@@ -176,8 +215,8 @@ export function MetricsRows({ metrics }: MetricsProps) {
           className="live-badge-v3"
           style={{
             padding: "6px 12px",
-            background: "var(--ds-color-success-100)",
-            border: "1px solid var(--ds-color-success-200)",
+            background: METRIC_PANEL_BADGE_BG,
+            border: `1px solid ${METRIC_PANEL_BADGE_BORDER}`,
           }}
         >
           <Flex align="center" gap={6}>
@@ -187,13 +226,13 @@ export function MetricsRows({ metrics }: MetricsProps) {
                 width: 8,
                 height: 8,
                 borderRadius: "50%",
-                background: "var(--ds-color-success)",
+                background: METRIC_PANEL_BADGE_COLOR,
               }}
             />
             <Text
               size="xs"
               weight="bold"
-              style={{ color: "var(--ds-color-success)", fontFamily: "monospace" }}
+              style={{ color: METRIC_PANEL_BADGE_COLOR, fontFamily: METRIC_MONO_FONT }}
             >
               LIVE
             </Text>
@@ -222,12 +261,12 @@ export function MetricsRows({ metrics }: MetricsProps) {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .metric-row-v3:hover {
-          border-color: var(--ds-color-primary-200);
+          border-color: ${METRIC_CARD_BORDER_HOVER};
           transform: translateX(6px);
-          box-shadow: -4px 0 20px var(--ds-color-primary-100);
+          box-shadow: ${METRIC_CARD_SHADOW_HOVER};
         }
         .metric-row-v3:hover .metric-row-value {
-          color: var(--ds-color-primary);
+          color: ${METRIC_CARD_VALUE_HOVER_COLOR};
         }
         .metric-row-v3:hover .row-shimmer {
           animation: shimmer 0.8s ease-in-out;
@@ -246,17 +285,17 @@ export function MetricsRows({ metrics }: MetricsProps) {
           to { left: 100%; }
         }
         @keyframes dotGlow {
-          0%, 100% { box-shadow: 0 0 4px var(--ds-color-success), 0 0 8px var(--ds-color-success); }
-          50% { box-shadow: 0 0 8px var(--ds-color-success), 0 0 16px var(--ds-color-success); }
+          0%, 100% { box-shadow: 0 0 4px ${METRIC_PANEL_BADGE_COLOR}, 0 0 8px ${METRIC_PANEL_BADGE_COLOR}; }
+          50% { box-shadow: 0 0 8px ${METRIC_PANEL_BADGE_COLOR}, 0 0 16px ${METRIC_PANEL_BADGE_COLOR}; }
         }
 
         .metrics-scroll {
           scrollbar-width: thin;
-          scrollbar-color: var(--ds-color-primary-200) transparent;
+          scrollbar-color: ${METRIC_CARD_ICON_BORDER} transparent;
         }
         .metrics-scroll::-webkit-scrollbar { width: 4px; }
         .metrics-scroll::-webkit-scrollbar-track { background: transparent; }
-        .metrics-scroll::-webkit-scrollbar-thumb { background: var(--ds-color-primary-200); border-radius: 2px; }
+        .metrics-scroll::-webkit-scrollbar-thumb { background: ${METRIC_CARD_ICON_BORDER}; border-radius: 2px; }
       `}</style>
     </Box>
   );

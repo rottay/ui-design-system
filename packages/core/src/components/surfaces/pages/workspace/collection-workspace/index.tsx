@@ -428,7 +428,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           style={{
             position: 'relative',
             background: 'color-mix(in srgb, var(--ds-color-primary) 7%, transparent)',
-            boxShadow: 'inset 3px 0 0 0 var(--ds-color-primary)',
+            boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 34%, transparent)',
             borderRadius: 'var(--ds-radius-xs, 2px)',
             transition: 'background 150ms ease-out, box-shadow 150ms ease-out',
           }}

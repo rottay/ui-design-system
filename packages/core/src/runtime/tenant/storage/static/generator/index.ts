@@ -10,10 +10,12 @@
  */
 
 import type { TenantConfig } from '../../../../../contracts';
-import { compileBrandTheme, brandThemeToBranding, brandThemeToPersonality, brandThemeToChromeVariables, mergePartialPersonality, deepMergeTokenOverrides, brandThemeToTokenOverrides } from '../../../../../compilers/brand-theme';
+import type { CompiledBrand } from '../../../../../contracts/themes';
+import { compileBrandTheme, brandThemeToBranding, mergePartialPersonality, deepMergeTokenOverrides } from '../../../../../compilers/brand-theme';
 import { isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor, buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor } from '../../../../../compilers/_shared/color-math';
 import { appearanceToVariables } from '../../../../../compilers/appearance';
 import { getVerticalPreset } from '../../../../verticals/registry';
+import type { VerticalPreset } from '../../../../verticals/types';
 import { getProductProfile } from '../../../../product-profiles/registry';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
@@ -21,6 +23,152 @@ const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 export interface GenerateTenantCssOptions {
   includeDarkSelector?: boolean;
   includeSystemDarkSelector?: boolean;
+}
+
+export interface ResolveTenantVisualConfigOptions {
+  /**
+   * Resolved vertical preset. When omitted, config.vertical is resolved locally.
+   * DesignSystemProvider passes its already-resolved vertical here so prop-level
+   * vertical overrides and static generation follow the same brand merge path.
+   */
+  vertical?: VerticalPreset;
+  /**
+   * Static generation must materialize the legacy path (vertical -> profile ->
+   * tenant) into CSS. Runtime keeps that legacy path in useTokens().
+   */
+  includeLegacyProductProfile?: boolean;
+  /**
+   * Bundled first-party tenants already get their default visual fields from
+   * precompiled CSS, so runtime should not inject duplicate palette/font vars.
+   */
+  useCssOwnedBranding?: boolean;
+}
+
+export interface ResolvedTenantVisualConfig {
+  config: TenantConfig;
+  compiledBrand?: CompiledBrand;
+}
+
+const VISUAL_BRANDING_KEYS = [
+  'primaryColor',
+  'secondaryColor',
+  'accentColor',
+  'darkPrimaryColor',
+  'darkSecondaryColor',
+  'darkAccentColor',
+  'darkBackgroundColor',
+  'successColor',
+  'warningColor',
+  'errorColor',
+  'infoColor',
+  'fontFamilyBase',
+  'fontFamilyHeading',
+  'fontFamilyMono',
+  'fontFamilyDisplay',
+] as const;
+
+export function hasVisualBrandingFields(
+  branding: TenantConfig['branding'] | Partial<TenantConfig['branding']> | undefined,
+): boolean {
+  if (!branding) return false;
+  return VISUAL_BRANDING_KEYS.some((key) => branding[key] != null);
+}
+
+function stripVisualBrandingFields(branding: TenantConfig['branding']): TenantConfig['branding'] {
+  return {
+    companyName: branding.companyName,
+    logo: branding.logo,
+    logoMark: branding.logoMark,
+    favicon: branding.favicon,
+  };
+}
+
+function mergeDefinedBranding(
+  base: Partial<TenantConfig['branding']>,
+  override: TenantConfig['branding'],
+): TenantConfig['branding'] {
+  const result: Partial<TenantConfig['branding']> = { ...base };
+
+  for (const [key, value] of Object.entries(override) as Array<
+    [keyof TenantConfig['branding'], TenantConfig['branding'][keyof TenantConfig['branding']]]
+  >) {
+    if (value !== undefined) {
+      result[key] = value;
+    }
+  }
+
+  return result as TenantConfig['branding'];
+}
+
+/**
+ * Resolve the tenant visual bridge used by both runtime and static CSS paths.
+ *
+ * Precedence:
+ * - Brand path: vertical -> compileBrandTheme(brandTheme) -> tenant
+ * - Legacy static path: vertical -> product profile -> tenant
+ * - Appearance is intentionally not folded into config; callers layer
+ *   appearanceToVariables() last so it can override CSS vars without mutating
+ *   tenant identity/compat fields.
+ */
+export function resolveTenantVisualConfig(
+  config: TenantConfig,
+  options: ResolveTenantVisualConfigOptions = {}
+): ResolvedTenantVisualConfig {
+  const vertical = options.vertical ?? (config.vertical ? getVerticalPreset(config.vertical) : undefined);
+
+  if (config.brandTheme) {
+    const compiledBrand = compileBrandTheme({
+      brandTheme: config.brandTheme,
+      tenantSlug: config.slug,
+      verticalPersonality: vertical?.personality,
+      verticalTokenOverrides: vertical?.tokenOverrides,
+    });
+
+    const branding = options.useCssOwnedBranding
+      ? stripVisualBrandingFields(config.branding)
+      : mergeDefinedBranding(brandThemeToBranding(config.brandTheme), config.branding);
+
+    return {
+      compiledBrand,
+      config: {
+        ...config,
+        branding,
+        personality: mergePartialPersonality(
+          compiledBrand.personality,
+          config.personality ?? {},
+        ),
+        tokenOverrides: deepMergeTokenOverrides(
+          compiledBrand.tokenOverrides,
+          config.tokenOverrides,
+        ) as TenantConfig['tokenOverrides'],
+      },
+    };
+  }
+
+  if (!options.includeLegacyProductProfile) {
+    return { config };
+  }
+
+  const profile = getProductProfile(vertical?.defaultProductProfile);
+  const personality = mergePartialPersonality(
+    mergePartialPersonality(vertical?.personality ?? {}, profile.personality ?? {}),
+    config.personality ?? {},
+  );
+  const profileOverrides = deepMergeTokenOverrides(
+    vertical?.tokenOverrides ?? {},
+    profile.tokenOverrides ?? {},
+  );
+  const tokenOverrides = config.tokenOverrides
+    ? deepMergeTokenOverrides(profileOverrides, config.tokenOverrides)
+    : profileOverrides;
+
+  return {
+    config: {
+      ...config,
+      personality,
+      tokenOverrides: tokenOverrides as TenantConfig['tokenOverrides'],
+    },
+  };
 }
 
 // Color math (isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor,
@@ -451,87 +599,26 @@ export function buildTenantSelector(slug: string): string {
 }
 
 /**
- * Generate a complete CSS stylesheet for a tenant config.
+ * Generate a complete CSS stylesheet from an already-resolved tenant visual config.
  *
  * Produces up to three selector blocks:
  * 1. Light theme -- branding + personality + token overrides
  * 2. Dark theme -- explicit `[data-theme='dark']` / `.dark` selectors
  * 3. System dark -- `@media (prefers-color-scheme: dark)` for unset themes
  *
- * @param config - Full tenant configuration with branding and personality
+ * @param resolvedVisualConfig - Output from resolveTenantVisualConfig()
  * @param options - Control dark mode selector generation
  * @returns Raw CSS string ready for injection or file writing
  */
-export function generateTenantCss(
-  config: TenantConfig,
+export function generateTenantCssFromResolvedVisualConfig(
+  resolvedVisualConfig: ResolvedTenantVisualConfig,
   options: GenerateTenantCssOptions = {}
 ): string {
-  const selector = buildTenantSelector(config.slug);
+  const effectiveConfig = resolvedVisualConfig.config;
+  const selector = buildTenantSelector(effectiveConfig.slug);
   const includeDarkSelector = options.includeDarkSelector ?? true;
   const includeSystemDarkSelector = options.includeSystemDarkSelector ?? true;
-
-  // Resolve vertical baseline (same as DesignSystemProvider at runtime).
-  const vertical = config.vertical ? getVerticalPreset(config.vertical) : undefined;
-
-  // Derive effective config matching the runtime merge chain.
-  // Both paths incorporate the vertical baseline so the static generator
-  // and DesignSystemProvider produce the same results.
-  //
-  // BrandTheme path: vertical -> brandTheme -> tenant overrides
-  //   (profile skipped — brandTheme replaces its visual role)
-  // Legacy path:     vertical -> profile -> tenant
-  //   (profile resolved from vertical.defaultProductProfile, matching runtime)
-  let effectiveConfig: TenantConfig;
-
-  if (config.brandTheme) {
-    effectiveConfig = {
-      ...config,
-      branding: { ...config.branding, ...brandThemeToBranding(config.brandTheme) },
-      personality: mergePartialPersonality(
-        mergePartialPersonality(
-          vertical?.personality ?? {},
-          brandThemeToPersonality(config.brandTheme),
-        ),
-        config.personality ?? {},
-      ),
-      tokenOverrides: (() => {
-        const verticalOverrides = vertical?.tokenOverrides ?? {};
-        const btOverrides = brandThemeToTokenOverrides(config.brandTheme!);
-        const merged = deepMergeTokenOverrides(verticalOverrides, btOverrides);
-        return config.tokenOverrides
-          ? (deepMergeTokenOverrides(merged, config.tokenOverrides) as TenantConfig['tokenOverrides'])
-          : (merged as TenantConfig['tokenOverrides']);
-      })(),
-    };
-  } else {
-    // Legacy path: vertical -> profile -> tenant
-    // Resolve product profile from vertical's default (same as runtime in
-    // DesignSystemProvider line 404: productProfile ?? vertical.defaultProductProfile).
-    const profile = getProductProfile(vertical?.defaultProductProfile);
-    const verticalPers = vertical?.personality ?? {};
-    const profilePers = profile.personality ?? {};
-    const verticalOvr = vertical?.tokenOverrides ?? {};
-    const profileOvr = profile.tokenOverrides ?? {};
-
-    effectiveConfig = {
-      ...config,
-      personality: mergePartialPersonality(
-        mergePartialPersonality(verticalPers, profilePers),
-        config.personality ?? {},
-      ),
-      tokenOverrides: (() => {
-        const merged = deepMergeTokenOverrides(verticalOvr, profileOvr);
-        return config.tokenOverrides
-          ? (deepMergeTokenOverrides(merged, config.tokenOverrides) as TenantConfig['tokenOverrides'])
-          : (Object.keys(merged).length > 0 ? merged as TenantConfig['tokenOverrides'] : config.tokenOverrides);
-      })(),
-    };
-  }
-
-  // Chrome variables from BrandTheme (sidebar, layout, shell, controls, table)
-  const chromeVars = effectiveConfig.brandTheme
-    ? brandThemeToChromeVariables(effectiveConfig.brandTheme)
-    : {};
+  const compiledBrandVars = resolvedVisualConfig.compiledBrand?.cssVariables ?? {};
 
   // Appearance variables from TenantAppearance (General + Advanced tiers).
   // Layered AFTER chrome vars so appearance overrides win when both are
@@ -547,11 +634,10 @@ export function generateTenantCss(
     ...personalityVariables(effectiveConfig),
   };
 
-  // Chrome vars are light-only — dark chrome requires dark-specific values
-  // from BrandTheme which is future work. Including them in the dark block
-  // would override first-party dark CSS values.
-  // Appearance vars layer on top of chrome (highest priority in light mode).
-  const lightDeclarations = { ...baseDeclarations, ...chromeVars, ...appearanceVars };
+  // Compiled BrandTheme vars include palette, structural, typography, and
+  // chrome CSS. Tenant compat fields then override palette/structure, and
+  // appearance stays the highest-priority CSS layer.
+  const lightDeclarations = { ...compiledBrandVars, ...baseDeclarations, ...appearanceVars };
 
   // Block 1: light-theme tenant variables (always generated)
   const blocks = [toCssBlock(selector, lightDeclarations)];
@@ -596,6 +682,25 @@ export function generateTenantCss(
     ...blocks,
     '',
   ].join('\n');
+}
+
+/**
+ * Generate a complete CSS stylesheet for a tenant config.
+ *
+ * @param config - Full tenant configuration with branding and personality
+ * @param options - Control dark mode selector generation
+ * @returns Raw CSS string ready for injection or file writing
+ */
+export function generateTenantCss(
+  config: TenantConfig,
+  options: GenerateTenantCssOptions = {}
+): string {
+  return generateTenantCssFromResolvedVisualConfig(
+    resolveTenantVisualConfig(config, {
+      includeLegacyProductProfile: true,
+    }),
+    options,
+  );
 }
 
 /**

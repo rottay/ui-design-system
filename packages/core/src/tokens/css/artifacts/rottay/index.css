@@ -366,7 +366,6 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-button-primary-bg-hover: #E0E0E0;
   --ds-button-primary-bg-active: #D4D4D8;
   --ds-button-primary-color: #0C0C0E;
-  --ds-button-primary-text: #0C0C0E;
   --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
   --ds-button-primary-shadow-hover: 0 2px 12px rgba(255, 255, 255, 0.08);
@@ -377,7 +376,6 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-button-secondary-bg-active: #4A4A4F;
   --ds-button-secondary-color: #ECECEC;
   --ds-button-secondary-border: #3A3A40;
-  --ds-button-secondary-text: #ECECEC;
   --ds-button-secondary-border-hover: rgba(255, 255, 255, 0.14);
 
   /* Button Default - Subtle dark bg with border */
@@ -1935,7 +1933,6 @@ html[data-tenant='rottay'].light {
   --ds-button-primary-bg-hover: #2A2A2A;
   --ds-button-primary-bg-active: #3D3D3D;
   --ds-button-primary-color: #FFFFFF;
-  --ds-button-primary-text: #FFFFFF;
   --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06);
   --ds-button-primary-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.12);
@@ -1946,7 +1943,6 @@ html[data-tenant='rottay'].light {
   --ds-button-secondary-bg-active: #EDEDEC;
   --ds-button-secondary-color: #1A1A1A;
   --ds-button-secondary-border: #E5E5E3;
-  --ds-button-secondary-text: #1A1A1A;
   --ds-button-secondary-border-hover: #D4D4D2;
 
   /* Button Default - White bg with border */

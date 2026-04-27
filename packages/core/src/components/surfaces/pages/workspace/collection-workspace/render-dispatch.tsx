@@ -253,9 +253,9 @@ export function CollectionRenderDispatch<T extends object>(
       return (
         <Box style={{
           padding: '32px 20px',
-          borderRadius: 'var(--ds-radius-xl, 24px)',
-          border: '1px solid var(--ds-color-border)',
-          background: 'var(--ds-card-bg, var(--ds-surface-card))',
+          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 24px))',
+          border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
+          background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
         }}>
           <Text style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</Text>
         </Box>
@@ -264,9 +264,9 @@ export function CollectionRenderDispatch<T extends object>(
     if (data.length === 0) {
       return (
         <Box style={{
-          borderRadius: 'var(--ds-radius-xl, 24px)',
-          border: '1px solid var(--ds-color-border)',
-          background: 'var(--ds-card-bg, var(--ds-surface-card))',
+          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 24px))',
+          border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
+          background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
           overflow: 'hidden',
         }}>
           {emptyState ?? (
@@ -281,9 +281,11 @@ export function CollectionRenderDispatch<T extends object>(
       <Box style={{
         display: 'grid',
         gridTemplateColumns: viewModes?.cards?.columns
-          ? `repeat(${viewModes.cards.columns === 'auto' ? 'auto-fill, minmax(280px, 1fr)' : `${viewModes.cards.columns}, 1fr`})`
-          : 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: viewModes?.cards?.gap ?? 'var(--ds-spacing-4, 16px)',
+          ? viewModes.cards.columns === 'auto'
+            ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
+            : `repeat(${viewModes.cards.columns}, 1fr)`
+          : 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))',
+        gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
       }}>
         {data.map((item, i) => (
           <Box

@@ -32,7 +32,7 @@ import { resolveGridRowKey } from './GridView.types';
 
 const DEFAULT_COLUMNS = 'auto' as const;
 const DEFAULT_MIN_COLUMN_WIDTH = 280;
-const DEFAULT_GAP = 'var(--ds-spacing-4, 16px)';
+const DEFAULT_GAP = 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))';
 const SKELETON_COUNT = 6;
 const MAX_FIXED_COLUMNS = 6;
 
@@ -89,12 +89,11 @@ function SelectableCard<T>({
     <Box
       style={{
         position: 'relative',
-        borderRadius: 'var(--ds-radius-lg, 8px)',
-        outline: selected
-          ? '2px solid var(--ds-color-primary, #1890ff)'
-          : '2px solid transparent',
-        outlineOffset: -1,
-        transition: 'outline-color 0.15s ease',
+        borderRadius: 'var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 8px)))',
+        boxShadow: selected
+          ? 'var(--ds-collection-card-selected-ring, var(--ds-premium-card-selected-ring, 0 0 0 2px var(--ds-color-primary)))'
+          : 'none',
+        transition: 'box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)',
       }}
     >
       {/* Checkbox overlay */}
@@ -260,8 +259,8 @@ export function PatternGridView<T>(
         style={{
           padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
           borderRadius: 'var(--ds-radius-lg, 8px)',
-          border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
-          background: 'var(--ds-color-bg-primary, #fff)',
+          border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)))',
+          background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary, #fff)))',
           textAlign: 'center',
         }}
       >

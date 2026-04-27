@@ -444,7 +444,7 @@ export const RADIUS_MAP: Record<string, string> = {
 
 /**
  * Mapping of color variants to CSS styles.
- * Each variant provides border-left color and background tint.
+ * Each variant provides a semantic frame color and background tint.
  *
  * @constant
  * @type {Record<string, { borderColor: string; background: string }>}

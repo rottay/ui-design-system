@@ -4,6 +4,7 @@ import {
   brandThemeToTokenOverrides,
   brandThemeToPersonality,
   brandThemeToBranding,
+  brandThemeToChromeVariables,
   deepMergeTokenOverrides,
   compileBrandTheme,
 } from '../index';
@@ -273,6 +274,17 @@ describe('compileBrandTheme', () => {
     expect(result.cssVariables['--ds-color-accent']).toBe('#0000FF');
   });
 
+  it('produces normalized dark palette aliases', () => {
+    const result = compileBrandTheme({
+      brandTheme: MOCK_BRAND_THEME,
+      tenantSlug: 'test',
+    });
+    expect(result.cssVariables['--ds-color-dark-primary']).toBe('#CC0000');
+    expect(result.cssVariables['--ds-color-dark-accent']).toBe('#0000CC');
+    expect(result.cssVariables['--ds-dark-color-primary']).toBeUndefined();
+    expect(result.cssVariables['--ds-dark-color-accent']).toBeUndefined();
+  });
+
   it('produces scoped CSS string', () => {
     const result = compileBrandTheme({
       brandTheme: MOCK_BRAND_THEME,
@@ -313,6 +325,70 @@ describe('compileBrandTheme', () => {
   });
 });
 
+describe('brandThemeToChromeVariables', () => {
+  it('emits canonical button color vars from text alias', () => {
+    const vars = brandThemeToChromeVariables({
+      id: 'button-alias',
+      name: 'Button Alias',
+      chrome: {
+        controls: {
+          buttonPrimary: { bg: '#ffffff', text: '#111111' },
+          buttonSecondary: { color: '#222222', text: '#333333' },
+        },
+      },
+    });
+
+    expect(vars['--ds-button-primary-color']).toBe('#111111');
+    expect(vars['--ds-button-secondary-color']).toBe('#222222');
+    expect(vars['--ds-button-primary-text']).toBeUndefined();
+    expect(vars['--ds-button-secondary-text']).toBeUndefined();
+  });
+
+  it('emits premium card variant chrome and listing grid vars', () => {
+    const vars = brandThemeToChromeVariables({
+      id: 'premium-cards',
+      name: 'Premium Cards',
+      chrome: {
+        workspaceCard: {
+          bg: 'linear-gradient(#fff, #f7f9ff)',
+          footerBg: '#f7f9ff',
+        },
+        compactCard: {
+          padding: '10px',
+        },
+        tallCard: {
+          minHeight: '280px',
+        },
+        collectionCard: {
+          selectedBorder: '#0055ff',
+        },
+        listingGrid: {
+          gap: '18px',
+          minCardWidth: '300px',
+        },
+        metricCard: {
+          valueHoverColor: '#0055ff',
+          trendColorError: '#cc0000',
+        },
+        signalCard: {
+          accent: '#0055ff',
+          shadowHover: '0 12px 28px rgba(0,0,0,0.12)',
+        },
+      },
+    });
+
+    expect(vars['--ds-workspace-card-footer-bg']).toBe('#f7f9ff');
+    expect(vars['--ds-compact-card-padding']).toBe('10px');
+    expect(vars['--ds-tall-card-min-height']).toBe('280px');
+    expect(vars['--ds-collection-card-selected-border']).toBe('#0055ff');
+    expect(vars['--ds-listing-grid-min-card-width']).toBe('300px');
+    expect(vars['--ds-metric-card-value-color-hover']).toBe('#0055ff');
+    expect(vars['--ds-metric-card-trend-color-error']).toBe('#cc0000');
+    expect(vars['--ds-signal-card-accent']).toBe('#0055ff');
+    expect(vars['--ds-signal-card-shadow-hover']).toBe('0 12px 28px rgba(0,0,0,0.12)');
+  });
+});
+
 describe('parity: first-party brand pipeline', () => {
   it('bithire BrandTheme produces same palette as registry branding', () => {
     // Demonstrates that the same BrandTheme works for both first-party
@@ -320,8 +396,8 @@ describe('parity: first-party brand pipeline', () => {
     // bithireBrandTheme imported at top of file
     const branding = brandThemeToBranding(bithireBrandTheme);
     expect(branding.primaryColor).toBe('#0A66C2');
-    expect(branding.secondaryColor).toBe('#004182');
-    expect(branding.accentColor).toBe('#7FC15E');
+    expect(branding.secondaryColor).toBe('#057642');
+    expect(branding.accentColor).toBe('#5A9640');
   });
 
   it('DB-backed tenant uses same pipeline as first-party', () => {
@@ -470,7 +546,7 @@ describe('parity: static generator with brandTheme', () => {
   });
 
   it('vertical baseline layers before brandTheme in static generator', () => {
-    // evnto vertical has: bounce entrance, intensity 1.5, spacious density,
+    // evnto vertical has: slideUp entrance, intensity 1.2, spacious density,
     // borderRadius sm:10px. The bithire brandTheme overrides most of these.
     // The generator should resolve vertical -> brandTheme -> tenant.
     const configWithVertical: TenantConfig = {
@@ -481,7 +557,7 @@ describe('parity: static generator with brandTheme', () => {
       plan: 'pro',
       features: [],
       branding: { companyName: 'Test' },
-      vertical: 'evnto', // evnto vertical has bounce, intensity 1.5, spacious
+      vertical: 'evnto', // evnto vertical has slideUp, intensity 1.2, spacious
       brandTheme: {
         id: 'partial-brand',
         name: 'Partial Brand',
@@ -491,11 +567,11 @@ describe('parity: static generator with brandTheme', () => {
     };
     const css = generateTenantCss(configWithVertical, { includeDarkSelector: false });
     // Vertical personality should be present (brandTheme has no motion/charts/chrome)
-    expect(css).toContain('--ds-personality-animation-entrance: bounce'); // from evnto vertical
-    expect(css).toContain('--ds-personality-animation-intensity: 1.5'); // from evnto vertical
+    expect(css).toContain('--ds-personality-animation-entrance: slideUp'); // from evnto vertical
+    expect(css).toContain('--ds-personality-animation-intensity: 1.2'); // from evnto vertical
     expect(css).toContain('--ds-personality-card-padding-density: spacious'); // from evnto vertical
     // Vertical tokenOverrides should be present
-    expect(css).toContain('--ds-density-scale: 1.125'); // from evnto vertical
+    expect(css).toContain('--ds-density-scale: 1.05'); // from evnto vertical
     // Palette from brandTheme
     expect(css).toContain('--ds-color-primary-500');
   });

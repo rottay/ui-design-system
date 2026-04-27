@@ -101,6 +101,103 @@ describe('appearanceAdvancedToVariables', () => {
     expect(vars['--ds-button-primary-bg']).toBe('#0066FF');
   });
 
+  it('chrome.controls.button text alias emits canonical color var only', () => {
+    const vars = appearanceAdvancedToVariables({
+      chrome: { controls: { buttonPrimary: { text: '#111111' } } },
+    });
+    expect(vars['--ds-button-primary-color']).toBe('#111111');
+    expect(vars['--ds-button-primary-text']).toBeUndefined();
+  });
+
+  it('chrome.controls.button color wins over text alias', () => {
+    const vars = appearanceAdvancedToVariables({
+      chrome: { controls: { buttonPrimary: { color: '#222222', text: '#111111' } } },
+    });
+    expect(vars['--ds-button-primary-color']).toBe('#222222');
+  });
+
+  it('chrome advanced covers BrandChrome parity categories', () => {
+    const advanced: TenantAppearanceAdvanced = {
+      chrome: {
+        shell: {
+          bg: '#fafafa',
+          commandGridSize: '22px',
+        },
+        toolbar: {
+          bg: '#ffffff',
+          controlBorder: '#dddddd',
+        },
+        filterPill: {
+          frameBorder: '#cccccc',
+          countActiveRing: 'inset 0 0 0 1px #cccccc',
+        },
+        breadcrumb: {
+          colorActive: '#111111',
+          separatorColor: '#999999',
+        },
+        search: {
+          iconColor: '#777777',
+          clearColor: '#666666',
+          resultTitleColor: '#222222',
+        },
+        table: {
+          radius: '12px',
+          rowBgExpanded: '#f4f4f4',
+          resizeBg: '#dddddd',
+        },
+        cardComponent: {
+          padding: '16px',
+          borderColor: '#dddddd',
+          radius: '8px',
+        },
+        metricCard: {
+          selectedRing: '0 0 0 3px #eeeeee',
+          meterFillSuccess: 'linear-gradient(#0a0, #080)',
+          valueHoverColor: '#0055ff',
+        },
+        signalCard: {
+          badgeColor: '#0055ff',
+          sectionAltBg: '#f5f7ff',
+        },
+        workspaceCard: {
+          bg: 'linear-gradient(#fff, #f7f9ff)',
+          footerBg: '#f7f9ff',
+        },
+        compactCard: {
+          padding: '10px',
+        },
+        tallCard: {
+          minHeight: '280px',
+        },
+        collectionCard: {
+          selectedBorder: '#0055ff',
+        },
+        listingGrid: {
+          gap: '18px',
+          minCardWidth: '300px',
+        },
+      },
+    };
+
+    const vars = appearanceAdvancedToVariables(advanced);
+    expect(vars['--ds-workspace-shell-bg']).toBe('#fafafa');
+    expect(vars['--ds-command-grid-size']).toBe('22px');
+    expect(vars['--ds-toolbar-control-border']).toBe('#dddddd');
+    expect(vars['--ds-filter-pill-count-active-ring']).toBe('inset 0 0 0 1px #cccccc');
+    expect(vars['--ds-breadcrumb-active-color']).toBe('#111111');
+    expect(vars['--ds-input-search-icon-color']).toBe('#777777');
+    expect(vars['--ds-table-row-bg-expanded']).toBe('#f4f4f4');
+    expect(vars['--ds-card-border-radius']).toBe('8px');
+    expect(vars['--ds-metric-card-meter-fill-success']).toBe('linear-gradient(#0a0, #080)');
+    expect(vars['--ds-metric-card-value-color-hover']).toBe('#0055ff');
+    expect(vars['--ds-signal-card-section-alt-bg']).toBe('#f5f7ff');
+    expect(vars['--ds-workspace-card-footer-bg']).toBe('#f7f9ff');
+    expect(vars['--ds-compact-card-padding']).toBe('10px');
+    expect(vars['--ds-tall-card-min-height']).toBe('280px');
+    expect(vars['--ds-collection-card-selected-border']).toBe('#0055ff');
+    expect(vars['--ds-listing-grid-min-card-width']).toBe('300px');
+  });
+
   it('tokenOverrides with --ds- prefix are passed through', () => {
     const vars = appearanceAdvancedToVariables({
       tokenOverrides: {

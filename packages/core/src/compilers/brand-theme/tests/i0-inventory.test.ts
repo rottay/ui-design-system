@@ -106,6 +106,13 @@ describe('first-party artifact integrity', () => {
     expect(new Set(css.match(/--ds-[\w-]+/g)).size).toBeGreaterThan(60);
   });
 
+  it.each(TENANTS)('%s artifact uses canonical button color vars', (tenant) => {
+    const css = readFileSync(resolve(CSS_SRC, `artifacts/${tenant}/index.css`), 'utf-8');
+    expect(css).toContain('--ds-button-primary-color');
+    expect(css).toContain('--ds-button-secondary-color');
+    expect(css).not.toMatch(/--ds-button-[\w-]+-text\s*:/);
+  });
+
   it('legacy tenant (themanagementmiami) exists', () => {
     expect(existsSync(resolve(CSS_SRC, 'legacy/themanagementmiami/index.css'))).toBe(true);
   });
@@ -207,10 +214,10 @@ describe('H3 contract: rottay', () => {
 
   describe('rottay surfaces', () => {
     it('densityScale', () => expect(rottayBrandTheme.surfaces?.densityScale).toBeDefined());
-    it('borderRadius.sm', () => expect(rottayBrandTheme.surfaces?.borderRadius?.sm).toBe('4px'));
-    it('borderRadius.md', () => expect(rottayBrandTheme.surfaces?.borderRadius?.md).toBe('6px'));
-    it('borderRadius.lg', () => expect(rottayBrandTheme.surfaces?.borderRadius?.lg).toBe('8px'));
-    it('borderRadius.xl', () => expect(rottayBrandTheme.surfaces?.borderRadius?.xl).toBe('12px'));
+    it('borderRadius.sm', () => expect(rottayBrandTheme.surfaces?.borderRadius?.sm).toBe('6px'));
+    it('borderRadius.md', () => expect(rottayBrandTheme.surfaces?.borderRadius?.md).toBe('10px'));
+    it('borderRadius.lg', () => expect(rottayBrandTheme.surfaces?.borderRadius?.lg).toBe('14px'));
+    it('borderRadius.xl', () => expect(rottayBrandTheme.surfaces?.borderRadius?.xl).toBe('18px'));
     it('shadows.sm', () => expect(rottayBrandTheme.surfaces?.shadows?.sm).toBeTruthy());
     it('glass (none)', () => expect(rottayBrandTheme.surfaces?.glass?.blur).toBe('none'));
     it('gradients (none)', () => expect(rottayBrandTheme.surfaces?.gradients?.primary).toBe('none'));
@@ -263,9 +270,9 @@ describe('H3 contract: rottay', () => {
   });
 
   describe('rottay palette (semantic — filled I4)', () => {
-    it('successColor', () => expect(rottayBrandTheme.palette?.successColor).toBe('#16A34A'));
-    it('warningColor', () => expect(rottayBrandTheme.palette?.warningColor).toBe('#CA8A04'));
-    it('errorColor', () => expect(rottayBrandTheme.palette?.errorColor).toBe('#DC2626'));
+    it('successColor', () => expect(rottayBrandTheme.palette?.successColor).toBe('#22C55E'));
+    it('warningColor', () => expect(rottayBrandTheme.palette?.warningColor).toBe('#F59E0B'));
+    it('errorColor', () => expect(rottayBrandTheme.palette?.errorColor).toBe('#EF4444'));
     it('infoColor', () => expect(rottayBrandTheme.palette?.infoColor).toBe('#3B82F6'));
   });
 
@@ -492,6 +499,14 @@ describe('H3 contract: bithire', () => {
       expect(artifact).toContain('--ds-shell-grid-size: 0px');
       // gridOpacity removed from CSS — alpha baked into gridLine color
     });
+    it('artifact has BitHire premium DS-only chrome vars', () => {
+      const artifact = readFileSync(resolve(__dirname, '../../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
+      expect(artifact).toContain('--ds-premium-card-header-top-line-display: none');
+      expect(artifact).toContain('--ds-table-header-bubble-bg: transparent');
+      expect(artifact).toContain('--ds-shell-breadcrumb-height: 28px');
+      expect(artifact).toContain('--ds-global-search-results-width');
+      expect(artifact).not.toContain('--bithire-');
+    });
     it('artifact has buttonDefault + buttonGhost', () => {
       const artifact = readFileSync(resolve(__dirname, '../../../tokens/css/artifacts/bithire/index.css'), 'utf-8');
       expect(artifact).toContain('--ds-button-default-bg: #FFFFFF');
@@ -558,10 +573,10 @@ describe('H3 contract: evnto', () => {
   });
 
   describe('evnto palette (semantic — filled I6)', () => {
-    it('successColor', () => expect(evntoBrandTheme.palette?.successColor).toBe('#16A34A'));
-    it('warningColor', () => expect(evntoBrandTheme.palette?.warningColor).toBe('#EAB308'));
-    it('errorColor', () => expect(evntoBrandTheme.palette?.errorColor).toBe('#DC2626'));
-    it('infoColor', () => expect(evntoBrandTheme.palette?.infoColor).toBe('#0EA5E9'));
+    it('successColor', () => expect(evntoBrandTheme.palette?.successColor).toBe('#15803D'));
+    it('warningColor', () => expect(evntoBrandTheme.palette?.warningColor).toBe('#A16207'));
+    it('errorColor', () => expect(evntoBrandTheme.palette?.errorColor).toBe('#B91C1C'));
+    it('infoColor', () => expect(evntoBrandTheme.palette?.infoColor).toBe('#475569'));
   });
 
   describe('evnto chrome.layout (filled I6)', () => {

@@ -49,6 +49,7 @@
 @import '../components/timeline.css' layer(rottay-components);
 @import '../components/qrcode.css' layer(rottay-components);
 @import '../components/list.css' layer(rottay-components);
+@import '../components/patterns.css' layer(rottay-components);
 @import '../runtime/bridges/collapse.css' layer(rottay-components);
 
 /* Layer 3: Engine themes */

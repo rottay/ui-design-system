@@ -16,6 +16,26 @@ import type { ComponentType } from 'react';
 type LucideIcon = ComponentType<any>;
 
 import { Box, Flex, Text } from '../../../primitives';
+import {
+  FILTER_PILL_ACTIVE_BG,
+  FILTER_PILL_ACTIVE_BORDER,
+  FILTER_PILL_ACTIVE_COLOR,
+  FILTER_PILL_ACTIVE_SHADOW,
+  FILTER_PILL_BG,
+  FILTER_PILL_BORDER,
+  FILTER_PILL_COLOR,
+  FILTER_PILL_COUNT_ACTIVE_BG,
+  FILTER_PILL_COUNT_ACTIVE_BORDER,
+  FILTER_PILL_COUNT_ACTIVE_RING,
+  FILTER_PILL_COUNT_BG,
+  FILTER_PILL_COUNT_BORDER,
+  FILTER_PILL_COUNT_RING,
+  FILTER_PILL_FOCUS_RING,
+  FILTER_PILL_HOVER_BG,
+  FILTER_PILL_HOVER_BORDER,
+  FILTER_PILL_SHADOW,
+  TRANSITION,
+} from '../list-toolbar/tokens';
 
 export interface StatusFilterPillOption {
   value: string;
@@ -74,17 +94,32 @@ export function StatusFilterPills({
               gap: 6,
               padding,
               borderRadius: 9999,
-              border: isSelected
-                ? '1px solid color-mix(in srgb, var(--ds-color-primary) 60%, var(--ds-color-border))'
-                : '1px solid color-mix(in srgb, var(--ds-color-border) 88%, transparent)',
-              background: isSelected
-                ? 'color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card))'
-                : 'color-mix(in srgb, var(--ds-surface-card) 86%, transparent)',
+              border: `1px solid ${isSelected ? FILTER_PILL_ACTIVE_BORDER : FILTER_PILL_BORDER}`,
+              background: isSelected ? FILTER_PILL_ACTIVE_BG : FILTER_PILL_BG,
+              color: isSelected ? FILTER_PILL_ACTIVE_COLOR : FILTER_PILL_COLOR,
               cursor: 'pointer',
-              transition: 'all 0.15s ease',
+              transition: `background ${TRANSITION}, border-color ${TRANSITION}, color ${TRANSITION}, box-shadow ${TRANSITION}`,
               outline: 'none',
-              boxShadow: isSelected ? 'var(--ds-elevation-1)' : 'none',
+              boxShadow: isSelected ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW,
               backdropFilter: 'blur(6px)',
+            }}
+            onMouseEnter={(event) => {
+              if (!isSelected) {
+                event.currentTarget.style.background = FILTER_PILL_HOVER_BG;
+                event.currentTarget.style.borderColor = FILTER_PILL_HOVER_BORDER;
+              }
+            }}
+            onMouseLeave={(event) => {
+              if (!isSelected) {
+                event.currentTarget.style.background = FILTER_PILL_BG;
+                event.currentTarget.style.borderColor = FILTER_PILL_BORDER;
+              }
+            }}
+            onFocus={(event) => {
+              event.currentTarget.style.boxShadow = FILTER_PILL_FOCUS_RING;
+            }}
+            onBlur={(event) => {
+              event.currentTarget.style.boxShadow = isSelected ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW;
             }}
           >
             {Icon && (
@@ -93,8 +128,8 @@ export function StatusFilterPills({
                   width: size === 'sm' ? 12 : 14,
                   height: size === 'sm' ? 12 : 14,
                   color: isSelected
-                    ? 'var(--ds-color-primary)'
-                    : 'var(--ds-color-text-muted)',
+                    ? FILTER_PILL_ACTIVE_COLOR
+                    : FILTER_PILL_COLOR,
                 }}
               />
             )}
@@ -103,9 +138,7 @@ export function StatusFilterPills({
               style={{
                 fontSize,
                 fontWeight: isSelected ? 500 : 400,
-                color: isSelected
-                  ? 'var(--ds-color-primary)'
-                  : 'var(--ds-color-text-primary)',
+                color: isSelected ? FILTER_PILL_ACTIVE_COLOR : FILTER_PILL_COLOR,
               }}
             >
               {option.label}
@@ -120,19 +153,19 @@ export function StatusFilterPills({
                   height: size === 'sm' ? 18 : 20,
                   padding: '0 6px',
                   borderRadius: 999,
-                  background: isSelected
-                    ? 'color-mix(in srgb, var(--ds-color-primary) 18%, transparent)'
-                    : 'color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
+                  background: isSelected ? FILTER_PILL_COUNT_ACTIVE_BG : FILTER_PILL_COUNT_BG,
+                  border: `1px solid ${isSelected ? FILTER_PILL_COUNT_ACTIVE_BORDER : FILTER_PILL_COUNT_BORDER}`,
+                  boxShadow: isSelected ? FILTER_PILL_COUNT_ACTIVE_RING : FILTER_PILL_COUNT_RING,
                 }}
               >
                 <Text
                   size="sm"
                   style={{
                     fontSize: fontSize - 1,
-                    fontFamily: 'monospace',
+                    fontFamily: 'var(--ds-font-family-mono, monospace)',
                     color: isSelected
-                      ? 'var(--ds-color-primary)'
-                      : 'var(--ds-color-text-muted)',
+                      ? FILTER_PILL_ACTIVE_COLOR
+                      : FILTER_PILL_COLOR,
                   }}
                 >
                   {option.count}

@@ -204,9 +204,10 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       ? 'var(--ds-card-hover-transform, translateY(-2px) scale(1.005))'
       : 'translateY(0) scale(1)',
     ...variantStyles[variant],
-    // Color variant accent: left border + tinted background for semantic cues.
+    // Color variant tints the full frame so tenants can theme semantic cues
+    // without inheriting one-sided rails.
     ...(hasColorVariant && {
-      borderLeft: `4px solid ${colorStyles.borderColor}`,
+      borderColor: colorStyles.borderColor,
       backgroundColor: colorStyles.background,
     }),
     // Hover background/border shift only for non-color-variant cards,

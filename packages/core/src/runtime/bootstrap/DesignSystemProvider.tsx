@@ -91,54 +91,14 @@ import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
-import { brandThemeToBranding, brandThemeToTokenOverrides, brandThemeToChromeVariables, deepMergeTokenOverrides } from '../../compilers/brand-theme';
 import { appearanceToVariables } from '../../compilers/appearance';
 import { isBundledTenant } from '../tenant/registry';
-import type { BrandTheme } from '../../contracts/themes';
+import {
+  generateTenantCssFromResolvedVisualConfig,
+  hasVisualBrandingFields,
+  resolveTenantVisualConfig,
+} from '../tenant/storage/static/generator';
 import { CommandRegistryProvider } from '../../hooks/commands';
-
-/** Build a scoped CSS string from BrandTheme chrome for dynamic tenants. */
-function buildScopedChromeCss(bt: BrandTheme, slug: string): string | undefined {
-  const vars = brandThemeToChromeVariables(bt);
-  const entries = Object.entries(vars).filter(([, v]) => v != null);
-  if (entries.length === 0) return undefined;
-  const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
-  return `html[data-tenant='${slug}'] {\n${declarations}\n}`;
-}
-
-const VISUAL_BRANDING_KEYS = [
-  'primaryColor',
-  'secondaryColor',
-  'accentColor',
-  'darkPrimaryColor',
-  'darkSecondaryColor',
-  'darkAccentColor',
-  'darkBackgroundColor',
-  'successColor',
-  'warningColor',
-  'errorColor',
-  'infoColor',
-  'fontFamilyBase',
-  'fontFamilyHeading',
-  'fontFamilyMono',
-  'fontFamilyDisplay',
-] as const;
-
-function hasVisualBrandingFields(
-  branding: TenantConfig['branding'] | Partial<TenantConfig['branding']> | undefined,
-): boolean {
-  if (!branding) return false;
-  return VISUAL_BRANDING_KEYS.some((key) => branding[key] != null);
-}
-
-function stripVisualBrandingFields(branding: TenantConfig['branding']): TenantConfig['branding'] {
-  return {
-    companyName: branding.companyName,
-    logo: branding.logo,
-    logoMark: branding.logoMark,
-    favicon: branding.favicon,
-  };
-}
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -423,57 +383,56 @@ export function DesignSystemProvider({
   // Final resolved config: sync path takes priority
   const tenantConfig = syncTenantConfig ?? asyncTenantConfig;
 
-  // When brandTheme is present, normalize branding and tokenOverrides so
-  // ALL downstream consumers see the same effective values. For bundled
-  // first-party tenants, the precompiled CSS artifacts remain the owner of the
-  // default palette/chrome unless the incoming tenant config explicitly sets
-  // visual branding fields. This avoids fighting the bundled CSS with inline
-  // runtime color injection while still allowing deliberate white-label
-  // overrides to flow through.
-  // NOTE: This useMemo MUST run before the early return below to satisfy
-  // React's Rules of Hooks (hooks must execute in the same order every render).
-  const normalizedConfig = useMemo(() => {
-    if (!tenantConfig) return tenantConfig;
-    if (!tenantConfig.brandTheme) return tenantConfig;
-    const btBranding = brandThemeToBranding(tenantConfig.brandTheme);
-    const btOverrides = brandThemeToTokenOverrides(tenantConfig.brandTheme);
-    const tenantOverrides = tenantConfig.tokenOverrides;
-    const bundledTenantUsesCssOwnedBranding =
-      isBundledTenant(tenantConfig.slug) && !hasVisualBrandingFields(tenantConfig.branding);
-
-    return {
-      ...tenantConfig,
-      branding: bundledTenantUsesCssOwnedBranding
-        ? stripVisualBrandingFields(tenantConfig.branding)
-        : { ...btBranding, ...tenantConfig.branding },
-      tokenOverrides: tenantOverrides
-        ? deepMergeTokenOverrides(btOverrides, tenantOverrides)
-        : Object.keys(btOverrides).length > 0 ? btOverrides as typeof tenantConfig.tokenOverrides : tenantConfig.tokenOverrides,
-    };
-  }, [tenantConfig]);
-
-  // Resolve TenantAppearance (General + Advanced) into CSS custom properties.
-  // These are layered ON TOP of brandTheme/tokenOverrides in the merge chain.
-  const appearanceCssVars = useMemo(() => {
-    if (!tenantConfig?.appearance) return undefined;
-    const vars = appearanceToVariables(tenantConfig.appearance);
-    return Object.keys(vars).length > 0 ? vars : undefined;
-  }, [tenantConfig?.appearance]);
-
-  if (loading || !normalizedConfig) {
-    return <LoadingScreen />;
-  }
-
   // Vertical can come from the app explicitly or from the resolved tenant
-  // record itself. This keeps platform-managed tenants fully runtime-driven
-  // while still letting apps force a different preset for previews or local experiments.
-  const verticalSource = vertical ?? normalizedConfig.vertical ?? undefined;
-  const resolvedVertical: VerticalPreset | undefined =
-    verticalSource == null
+  // record itself. Resolve it before visual normalization so runtime and static
+  // BrandTheme compilation share the same vertical baseline.
+  const resolvedVertical: VerticalPreset | undefined = useMemo(() => {
+    const verticalSource = vertical ?? tenantConfig?.vertical ?? undefined;
+    return verticalSource == null
       ? undefined
       : typeof verticalSource === 'string'
         ? getVerticalPreset(verticalSource)
         : verticalSource;
+  }, [vertical, tenantConfig?.vertical]);
+
+  // When brandTheme is present, normalize via the shared static/runtime visual
+  // resolver so branding, tokenOverrides, and compiled BrandTheme CSS follow
+  // one precedence path. For bundled first-party tenants, the precompiled CSS
+  // artifacts remain the owner of default palette/chrome unless the incoming
+  // tenant config explicitly sets visual branding fields.
+  // NOTE: This useMemo MUST run before the early return below to satisfy
+  // React's Rules of Hooks (hooks must execute in the same order every render).
+  const resolvedVisualConfig = useMemo(() => {
+    if (!tenantConfig) return null;
+    const bundledTenantUsesCssOwnedBranding =
+      isBundledTenant(tenantConfig.slug) && !hasVisualBrandingFields(tenantConfig.branding);
+
+    return resolveTenantVisualConfig(tenantConfig, {
+      vertical: resolvedVertical,
+      useCssOwnedBranding: bundledTenantUsesCssOwnedBranding,
+    });
+  }, [tenantConfig, resolvedVertical]);
+
+  const normalizedConfig = resolvedVisualConfig?.config ?? null;
+
+  // Resolve TenantAppearance (General + Advanced) into CSS custom properties.
+  // These are layered ON TOP of brandTheme/tokenOverrides in the merge chain.
+  const appearanceCssVars = useMemo(() => {
+    if (!normalizedConfig?.appearance) return undefined;
+    const vars = appearanceToVariables(normalizedConfig.appearance);
+    return Object.keys(vars).length > 0 ? vars : undefined;
+  }, [normalizedConfig?.appearance]);
+
+  const generatedTenantCss = useMemo(() => {
+    if (!resolvedVisualConfig) return undefined;
+    const config = resolvedVisualConfig.config;
+    if (!config?.brandTheme || isBundledTenant(config.slug)) return undefined;
+    return generateTenantCssFromResolvedVisualConfig(resolvedVisualConfig);
+  }, [resolvedVisualConfig]);
+
+  if (loading || !normalizedConfig) {
+    return <LoadingScreen />;
+  }
 
   // Final precedence used by the runtime:
   // force props -> explicit tenant theme (light/dark/auto) -> appearance.backgroundMode -> DS fallback.
@@ -515,11 +474,7 @@ export function DesignSystemProvider({
               branding={normalizedConfig.branding}
               tokenOverrides={normalizedConfig.tokenOverrides}
               appearanceVars={appearanceCssVars}
-              generatedChromeCss={
-                normalizedConfig.brandTheme && !isBundledTenant(normalizedConfig.slug)
-                  ? buildScopedChromeCss(normalizedConfig.brandTheme, normalizedConfig.slug)
-                  : undefined
-              }
+              generatedChromeCss={generatedTenantCss}
               skipCssLoading={skipCssLoading}
               cssBaseUrl={cssBaseUrl}
             >
