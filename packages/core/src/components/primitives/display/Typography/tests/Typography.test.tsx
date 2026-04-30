@@ -10,6 +10,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Typography, Heading, Text, Paragraph } from '../';
+import { EngineProvider } from '../../../../../runtime/engines/EngineProvider';
 
 function stripTypographyProps(props: Record<string, unknown>) {
   const {
@@ -362,6 +363,22 @@ describe('Typography namespace', () => {
     expect(screen.getByText('Title')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
     expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('uses the EngineProvider engine when no engine prop is passed', () => {
+    render(
+      <EngineProvider defaultEngine="modern">
+        <Typography.Heading>Context heading</Typography.Heading>
+        <Typography.Text>Context text</Typography.Text>
+        <Typography.Paragraph>Context paragraph</Typography.Paragraph>
+        <Typography.Link href="/docs">Context link</Typography.Link>
+      </EngineProvider>
+    );
+
+    expect(screen.getByText('Context heading')).toHaveAttribute('data-engine', 'modern');
+    expect(screen.getByText('Context text')).toHaveAttribute('data-engine', 'modern');
+    expect(screen.getByText('Context paragraph')).toHaveAttribute('data-engine', 'modern');
+    expect(screen.getByText('Context link')).toHaveAttribute('data-engine', 'modern');
   });
 });
 

@@ -440,6 +440,8 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
     expect(scopedCss).toContain("html[data-tenant='db-customer']");
     expect(scopedCss).toContain('--ds-button-primary-bg: #0A66C2');
     expect(scopedCss).toContain('--ds-sidebar-bg: #ffffff');
+    expect(scopedCss).toContain('--ds-command-home-panel-border: #A9C9EA');
+    expect(scopedCss).toContain('--ds-command-home-meter-fill: linear-gradient(90deg, #0A66C2, #057642)');
     // NOT inline on :root — proper specificity
     expect(scopedCss).not.toContain(':root');
   });

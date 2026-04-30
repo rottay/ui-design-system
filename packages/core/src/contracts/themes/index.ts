@@ -249,6 +249,29 @@ export interface BrandShellChrome {
   commandGlow?: string;
   commandLine?: string;
   commandRailBg?: string;
+  commandHomeMaxWidth?: string;
+  commandHomeGap?: string;
+  commandHomePanelGap?: string;
+  commandHomeGridLine?: string;
+  commandHomePanelBorder?: string;
+  commandHomePanelBorderSoft?: string;
+  commandHomePanelShadow?: string;
+  commandHomePanelBg?: string;
+  commandHomePanelBgStrong?: string;
+  commandHomeCompactActionHeight?: string;
+  commandHomeConsoleMinHeight?: string;
+  commandHomeConsolePadding?: string;
+  commandHomeConsoleBg?: string;
+  commandHomeSurfaceBg?: string;
+  commandHomeHeroBg?: string;
+  commandHomeIconBg?: string;
+  commandHomeIconBorder?: string;
+  commandHomeControlBg?: string;
+  commandHomeControlBorder?: string;
+  commandHomeControlHoverBg?: string;
+  commandHomeControlHoverBorder?: string;
+  commandHomeMeterBg?: string;
+  commandHomeMeterFill?: string;
 }
 
 export interface BrandToolbarChrome {

@@ -1,71 +1,262 @@
-name: Design System CI/CD
+name: '[ui] Design System'
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ds-quality-${{ github.ref }}
   cancel-in-progress: true
 
-jobs:
-  checks:
-    name: Design System CI/CD
-    uses: rottay/.github-workflows/.github/workflows/package-ci-changesets.yml@v1.7.0
-    with:
-      run-lint: false
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+env:
+  NODE_VERSION: '22'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
-  storybook:
-    needs: checks
-    name: Build Storybook
+jobs:
+  # ─────────────────────────────────────────────────────
+  #  Detect which packages changed
+  # ─────────────────────────────────────────────────────
+  detect:
+    name: Detect Changes
     runs-on: self-hosted
-    timeout-minutes: 20
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    timeout-minutes: 2
+    outputs:
+      core: ${{ steps.changes.outputs.core }}
+      showroom: ${{ steps.changes.outputs.showroom }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed packages
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          else
+            CHANGED=$(git diff --name-only HEAD~1 2>/dev/null || git diff --name-only HEAD)
+          fi
+
+          CORE="false"
+          SHOWROOM="false"
+
+          if echo "$CHANGED" | grep -q '^packages/core/'; then
+            CORE="true"
+          fi
+
+          if echo "$CHANGED" | grep -q '^packages/showroom/'; then
+            SHOWROOM="true"
+          fi
+
+          # Root config changes affect both
+          if echo "$CHANGED" | grep -qE '^(package\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json)'; then
+            CORE="true"
+            SHOWROOM="true"
+          fi
+
+          echo "core=$CORE" >> $GITHUB_OUTPUT
+          echo "showroom=$SHOWROOM" >> $GITHUB_OUTPUT
+          echo "Core changed: $CORE"
+          echo "Showroom changed: $SHOWROOM"
+
+  # ─────────────────────────────────────────────────────
+  #  Core Library (typecheck, build, test, storybook)
+  # ─────────────────────────────────────────────────────
+  core:
+    name: Core Library
+    needs: detect
+    if: needs.detect.outputs.core == 'true'
+    runs-on: self-hosted
+    timeout-minutes: 15
     permissions:
       contents: read
       packages: read
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
           registry-url: https://npm.pkg.github.com
           scope: '@rottay'
-      - name: Install
+
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Build Storybook
-        id: storybook
+
+      - name: Typecheck
+        run: pnpm --filter @rottay/design-system run typecheck
+
+      - name: Build
+        run: pnpm --filter @rottay/design-system run build
+
+      - name: Unit tests with coverage
+        run: pnpm --filter @rottay/design-system run test:ci
+        env:
+          NODE_ENV: test
+
+      - name: Coverage summary
+        if: always()
         run: |
-          start_ts=$(date +%s)
-          set +e
-          pnpm build-storybook 2>&1 | tee /tmp/storybook.txt
-          result=$?
-          set -e
-          dur=$(( $(date +%s) - start_ts ))
-          {
-            echo "## Storybook Build"
-            echo ""
-            echo "> Design System component library build."
-            echo ""
-            echo "| Status | Duration | Runner |"
-            echo "|:------:|:--------:|:------:|"
-            if [ $result -eq 0 ]; then
-              echo "| **Passed** | ${dur}s | $(hostname) |"
-            else
-              echo "| **Failed** | ${dur}s | $(hostname) |"
-            fi
-            echo ""
-            echo "---"
-            echo "*Commit: [\`${GITHUB_SHA:0:7}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}) on \`${GITHUB_REF_NAME}\` by \`${GITHUB_ACTOR}\`*"
-          } >> "$GITHUB_STEP_SUMMARY"
-          exit $result
+          COVERAGE_FILE="packages/core/coverage/coverage-summary.json"
+          if [ -f "$COVERAGE_FILE" ]; then
+            LINES=$(node -e "const c=require('./$COVERAGE_FILE');console.log(c.total.lines.pct)")
+            BRANCHES=$(node -e "const c=require('./$COVERAGE_FILE');console.log(c.total.branches.pct)")
+            FUNCTIONS=$(node -e "const c=require('./$COVERAGE_FILE');console.log(c.total.functions.pct)")
+            STATEMENTS=$(node -e "const c=require('./$COVERAGE_FILE');console.log(c.total.statements.pct)")
+
+            {
+              echo "## Core Library - Coverage"
+              echo ""
+              echo "| Metric | Coverage |"
+              echo "|--------|----------|"
+              echo "| Lines | ${LINES}% |"
+              echo "| Branches | ${BRANCHES}% |"
+              echo "| Functions | ${FUNCTIONS}% |"
+              echo "| Statements | ${STATEMENTS}% |"
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Coverage file not found, skipping summary" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Build Storybook
+        if: github.ref == 'refs/heads/main'
+        run: pnpm --filter @rottay/design-system run build-storybook
         env:
           NODE_OPTIONS: --max-old-space-size=5120
+
+      - name: Security audit
+        run: pnpm audit --audit-level=high || true
+
+  # ─────────────────────────────────────────────────────
+  #  Showroom App (typecheck, lint, build)
+  # ─────────────────────────────────────────────────────
+  showroom:
+    name: Showroom App
+    needs: [detect, core]
+    if: |
+      always() &&
+      (needs.detect.outputs.showroom == 'true' || needs.detect.outputs.core == 'true') &&
+      (needs.core.result == 'success' || needs.core.result == 'skipped')
+    runs-on: self-hosted
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@rottay'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Build core (dependency)
+        run: pnpm --filter @rottay/design-system run build
+
+      - name: Typecheck
+        run: pnpm --filter @rottay/showroom run typecheck
+
+      - name: Lint
+        run: pnpm --filter @rottay/showroom run lint
+
+      - name: Build
+        run: pnpm --filter @rottay/showroom run build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+  # ─────────────────────────────────────────────────────
+  #  Changeset Validation (PRs only)
+  # ─────────────────────────────────────────────────────
+  changeset:
+    name: Changeset Validation
+    runs-on: self-hosted
+    timeout-minutes: 3
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate changeset
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '^packages/core/' || true)
+          if [ -n "$CHANGED" ]; then
+            CHANGESETS=$(ls .changeset/*.md 2>/dev/null | grep -v README || true)
+            if [ -z "$CHANGESETS" ]; then
+              echo "::error::Core library changes detected but no changeset found. Run: pnpm changeset"
+              echo ""
+              echo "Changed files:"
+              echo "$CHANGED"
+              exit 1
+            fi
+            echo "Changeset found: $CHANGESETS"
+          else
+            echo "No core library changes, changeset not required"
+          fi
+
+  # ─────────────────────────────────────────────────────
+  #  Summary
+  # ─────────────────────────────────────────────────────
+  gate:
+    name: Summary
+    needs: [detect, core, showroom, changeset]
+    if: always()
+    runs-on: self-hosted
+    timeout-minutes: 2
+    steps:
+      - name: Evaluate results
+        run: |
+          echo "## Design System - Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Job | Result |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-----|--------|" >> "$GITHUB_STEP_SUMMARY"
+
+          CORE_RESULT="${{ needs.core.result }}"
+          SHOWROOM_RESULT="${{ needs.showroom.result }}"
+          CHANGESET_RESULT="${{ needs.changeset.result }}"
+
+          if [ "$CORE_RESULT" = "skipped" ]; then
+            echo "| Core Library | Skipped (no changes) |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Core Library | $CORE_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ "$SHOWROOM_RESULT" = "skipped" ]; then
+            echo "| Showroom App | Skipped (no changes) |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Showroom App | $SHOWROOM_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ "$CHANGESET_RESULT" = "skipped" ]; then
+            echo "| Changeset | Skipped (push event) |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Changeset | $CHANGESET_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          # Fail if any required job failed
+          if [ "$CORE_RESULT" = "failure" ] || [ "$SHOWROOM_RESULT" = "failure" ] || [ "$CHANGESET_RESULT" = "failure" ]; then
+            echo ""
+            echo "CI FAILED"
+            exit 1
+          fi
+
+          echo ""
+          echo "CI passed"

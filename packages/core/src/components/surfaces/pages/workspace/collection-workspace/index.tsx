@@ -681,14 +681,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           padding: slotsCollapsed
             ? 0
             : editorialTechMasthead
-              ? '0 20px 4px'
-              : '0 16px 6px',
-          marginTop: slotsCollapsed ? 0 : editorialTechMasthead ? -2 : -4,
+              ? '0 20px 12px'
+              : '0 16px 12px',
+          marginTop: slotsCollapsed ? 0 : editorialTechMasthead ? 0 : 2,
           background: useWorkspaceShell ? 'transparent' : 'var(--ds-surface-card)',
           borderBottom: useWorkspaceShell ? 'none' : '1px solid var(--ds-color-border-subtle)',
-          maxHeight: slotsCollapsed ? 0 : 36,
+          maxHeight: slotsCollapsed ? 0 : 320,
           opacity: slotsCollapsed ? 0 : 1,
-          overflow: 'hidden',
+          overflow: slotsCollapsed ? 'hidden' : 'visible',
           transition: 'max-height 250ms ease-out, opacity 250ms ease-out, padding 250ms ease-out',
           pointerEvents: slotsCollapsed ? 'none' : undefined,
         }}>

@@ -59,6 +59,7 @@ import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
 } from '../../../../../../runtime/personality/primitives';
+import { useEngineContext } from '../../../../../../runtime/engines/EngineProvider';
 import type { TextProps } from '../../Typography.types';
 import { ClassicText } from '../../engines/classic';
 import { ModernText } from '../../engines/modern';
@@ -109,11 +110,13 @@ const engineMap: Record<
  * @returns The engine-specific inline text element with personality token styles merged in
  */
 export const TypographyText = forwardRef<HTMLElement, TextProps>(
-  ({ engine = 'classic', ...props }, ref) => {
+  ({ engine, ...props }, ref) => {
+    const { engine: contextEngine } = useEngineContext();
+    const activeEngine = engine ?? contextEngine;
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
     // Fall back to ClassicText if an unrecognized engine name is provided
-    const Component = engineMap[engine] || ClassicText;
+    const Component = engineMap[activeEngine] || ClassicText;
 
     return (
       <Component

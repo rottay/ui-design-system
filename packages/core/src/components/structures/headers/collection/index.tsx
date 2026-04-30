@@ -214,8 +214,12 @@ export function CollectionHeader({
         <Box
           style={{
             minWidth: 0,
-            flex: compactLayout ? '1 1 100%' : '1 1 560px',
-            maxWidth: compactLayout ? '100%' : editorialTech ? 840 : 820,
+            flex: compactLayout
+              ? '1 1 100%'
+              : editorialTech
+                ? '1 1 clamp(300px, 42%, 560px)'
+                : '1 1 clamp(280px, 38%, 460px)',
+            maxWidth: compactLayout ? '100%' : editorialTech ? 680 : 560,
             display: 'grid',
             gap: editorialTech ? 0 : undefined,
           }}
@@ -417,13 +421,15 @@ export function CollectionHeader({
         {quickActions && quickActions.length > 0 && (
           <Box
             style={{
-              flexShrink: 0,
-              flex: compactLayout ? '1 1 100%' : '0 0 auto',
+              flexShrink: 1,
+              flex: compactLayout ? '1 1 100%' : '1 1 min(100%, 420px)',
               width: compactLayout ? '100%' : 'auto',
-              maxWidth: compactLayout ? '100%' : 'none',
+              maxWidth: compactLayout ? '100%' : 560,
+              minWidth: compactLayout ? 0 : 300,
+              marginLeft: compactLayout ? 0 : 'auto',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: compactLayout ? 'stretch' : 'flex-end',
+              alignItems: 'stretch',
             }}
           >
             {(eyebrowChip || eyebrowMetaItems.length > 0) && (
@@ -448,22 +454,23 @@ export function CollectionHeader({
                 flexWrap: 'wrap',
                 gap: editorialTech ? 6 : 8,
                 padding: 'var(--ds-spacing-1, 2px)',
-                width: compactLayout ? '100%' : 'auto',
-              borderRadius: 'var(--ds-radius-md, 15px)',
-              border: '1px solid var(--ds-color-border-subtle)',
-              background: embedded
-                ? editorialTech
-                  ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, transparent)'
-                  : 'color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)'
-                : 'var(--ds-surface-panel)',
-              boxShadow: embedded
-                ? editorialTech
-                  ? '0 8px 18px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)'
-                  : '0 10px 24px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)'
-                : 'var(--ds-elevation-1)',
-              alignSelf: compactLayout ? 'stretch' : 'flex-end',
-            }}
-          >
+                width: compactLayout ? '100%' : 'fit-content',
+                maxWidth: '100%',
+                borderRadius: 'var(--ds-radius-md, 15px)',
+                border: '1px solid var(--ds-color-border-subtle)',
+                background: embedded
+                  ? editorialTech
+                    ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, transparent)'
+                    : 'color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)'
+                  : 'var(--ds-surface-panel)',
+                boxShadow: embedded
+                  ? editorialTech
+                    ? '0 8px 18px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)'
+                    : '0 10px 24px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)'
+                  : 'var(--ds-elevation-1)',
+                alignSelf: compactLayout ? 'stretch' : 'flex-end',
+              }}
+            >
               {inlineMetaItems.length > 0 && (
                 <Flex
                   align="center"

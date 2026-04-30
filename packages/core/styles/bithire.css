@@ -5678,6 +5678,30 @@ html.dark {
   --ds-rich-card-section-bg: var(--ds-surface-card-bg);
   --ds-rich-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg));
   --ds-rich-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-premium-card-accent: var(--ds-signal-card-accent, var(--ds-color-primary));
+  --ds-premium-card-header-bg: var(--ds-rich-card-header-bg);
+  --ds-premium-card-section-bg: var(--ds-rich-card-section-bg);
+  --ds-premium-card-section-alt-bg: var(--ds-rich-card-section-alt-bg);
+  --ds-premium-card-rim: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ds-premium-card-accent) 34%, transparent) 18%,
+    color-mix(in srgb, var(--ds-color-secondary, var(--ds-premium-card-accent)) 24%, transparent) 50%,
+    color-mix(in srgb, var(--ds-premium-card-accent) 34%, transparent) 82%,
+    transparent
+  );
+  --ds-surface-card-grid-size: var(--ds-premium-card-grid-size, 22px);
+  --ds-surface-card-grid-line: color-mix(in srgb, var(--ds-premium-card-accent) 5%, transparent);
+  --ds-surface-card-grid-line-strong: color-mix(in srgb, var(--ds-premium-card-accent) 8%, transparent);
+  --ds-surface-card-grid-bg:
+    linear-gradient(var(--ds-surface-card-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-surface-card-grid-line) 1px, transparent 1px),
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      color-mix(in srgb, var(--ds-surface-card-bg) 34%, transparent) 46%,
+      transparent 66%
+    );
 
   /* Signal / metric cards */
   --ds-signal-card-accent: var(--ds-color-primary);
@@ -5898,6 +5922,2020 @@ html.dark {
   --ds-control-disabled-border: var(--ds-button-disabled-border);
   --ds-control-disabled-color: var(--ds-button-disabled-color);
   --ds-control-disabled-opacity: var(--ds-button-disabled-opacity);
+
+  /* Command/AI home surfaces */
+  --ds-command-home-max-width: var(--ds-command-surface-max-width, 1120px);
+  --ds-command-home-gap: var(--ds-space-4, 16px);
+  --ds-command-home-panel-gap: var(--ds-space-3, 14px);
+  --ds-command-home-grid-line: var(--ds-command-grid-line-soft, var(--ds-shell-command-grid-line-soft, color-mix(in srgb, var(--ds-color-primary) 8%, transparent)));
+  --ds-command-home-panel-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 20%,
+    var(--ds-color-border-secondary, var(--ds-color-border-primary))
+  );
+  --ds-command-home-panel-border-soft: color-mix(
+    in srgb,
+    var(--ds-command-home-panel-border) 68%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-command-home-panel-shadow: var(
+    --ds-command-glow,
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 16px 42px color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
+  );
+  --ds-command-home-panel-bg: var(
+    --ds-premium-card-bg,
+    linear-gradient(
+      180deg,
+      var(--ds-surface-card-bg) 0%,
+      color-mix(in srgb, var(--ds-surface-panel-bg) 56%, var(--ds-surface-card-bg)) 100%
+    )
+  );
+  --ds-command-home-panel-bg-strong: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg) 0%,
+    color-mix(in srgb, var(--ds-surface-panel-bg) 32%, var(--ds-surface-card-bg)) 100%
+  );
+  --ds-command-home-compact-action-height: var(--ds-command-action-height, 202px);
+  --ds-command-home-console-min-height: var(--ds-command-console-min-height, calc(100vh - 108px));
+  --ds-command-home-console-padding: var(--ds-command-console-padding, clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px);
+  --ds-command-home-console-bg:
+    repeating-linear-gradient(90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 30px),
+    var(--ds-workspace-shell-overlay, transparent),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-surface-card-bg) 96%, var(--ds-color-primary) 4%) 0%,
+      color-mix(in srgb, var(--ds-surface-panel-bg) 72%, var(--ds-surface-card-bg)) 100%
+    );
+  --ds-command-home-surface-bg:
+    repeating-linear-gradient(90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(0deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 26px),
+    var(
+      --ds-command-rail-bg,
+      linear-gradient(
+        180deg,
+        var(--ds-surface-card-bg) 0%,
+        color-mix(in srgb, var(--ds-surface-panel-bg) 58%, var(--ds-surface-card-bg)) 100%
+      )
+    );
+  --ds-command-home-hero-bg:
+    repeating-linear-gradient(90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(0deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 28px),
+    var(
+      --ds-premium-card-bg,
+      linear-gradient(
+        180deg,
+        var(--ds-surface-card-bg) 0%,
+        color-mix(in srgb, var(--ds-surface-panel-bg) 50%, var(--ds-surface-card-bg)) 100%
+      )
+    );
+  --ds-command-home-icon-bg: var(--ds-surface-icon-bg, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg)));
+  --ds-command-home-icon-border: var(--ds-surface-icon-border, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-primary)));
+  --ds-command-home-control-bg: var(--ds-toolbar-control-bg, var(--ds-button-default-bg, var(--ds-surface-card-bg)));
+  --ds-command-home-control-border: var(--ds-toolbar-control-border, var(--ds-button-default-border, var(--ds-color-border-primary)));
+  --ds-command-home-control-hover-bg: var(--ds-button-default-bg-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card-bg)));
+  --ds-command-home-control-hover-border: var(--ds-button-secondary-border, var(--ds-color-border-focus));
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  --ds-command-home-card-bg:
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-command-home-card-tone) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-command-home-card-tone) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(180deg, var(--ds-surface-card-bg), var(--ds-surface-panel-bg));
+  --ds-command-home-card-shadow: var(--ds-surface-card-shadow, var(--ds-card-shadow, 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)));
+  --ds-command-home-card-shadow-hover: var(--ds-surface-card-shadow-hover, var(--ds-card-shadow-hover, 0 2px 6px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)));
+  --ds-command-home-meter-bg: var(--ds-meter-track, color-mix(in srgb, var(--ds-color-border-primary) 72%, transparent));
+  --ds-command-home-meter-fill: var(--ds-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success)));
+  --ds-home-grid-line: var(--ds-command-home-grid-line);
+  --ds-home-panel-border: var(--ds-command-home-panel-border);
+  --ds-home-panel-shadow: var(--ds-command-home-panel-shadow);
+  --ds-home-compact-action-height: var(--ds-command-home-compact-action-height);
+}
+
+@keyframes ds-surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ds-meter-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ds-command-home-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:where(.ds-workspace-frame) {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--ds-workspace-shell-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-base);
+  background: var(--ds-workspace-shell-bg);
+  box-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
+  animation: ds-surface-enter 180ms ease-out;
+}
+
+:where(.ds-workspace-frame--list) {
+  --ds-workspace-shell-bg: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg) 0%,
+    var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 50%,
+    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg)) 100%
+  );
+}
+
+:where(.ds-workspace-frame--detail) {
+  --ds-workspace-shell-overlay: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-color-primary) 5.5%, transparent) 0%,
+    transparent 44%,
+    color-mix(in srgb, var(--ds-color-secondary, var(--ds-color-primary)) 7%, transparent) 100%
+  );
+}
+
+:where(.ds-workspace-frame--form) {
+  overflow: visible;
+  --ds-workspace-shell-bg: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg) 0%,
+    var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 46%,
+    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-panel-bg)) 100%
+  );
+}
+
+:where(.ds-workspace-frame)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--ds-workspace-shell-overlay);
+}
+
+:where(.ds-workspace-frame__inner) {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-workspace-frame) > :not(:where(.ds-workspace-frame__inner)) {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-workspace-frame--padded) > :where(.ds-workspace-frame__inner) {
+  padding: var(--ds-workspace-frame-padding, clamp(16px, 2.2vw, 28px));
+}
+
+:where(.ds-workspace-frame--loading) {
+  min-height: min(720px, calc(100vh - 64px));
+}
+
+:where(.ds-workspace-grid) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, var(--ds-workflow-rail-width, 360px));
+  gap: clamp(20px, 2.2vw, 32px);
+  width: 100%;
+}
+
+:where(.ds-workspace-grid__main, .ds-workspace-grid__rail) {
+  min-width: 0;
+}
+
+:where(.ds-command-grid) {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--ds-command-grid-bg-strong);
+  background-size: var(--ds-command-grid-size) var(--ds-command-grid-size);
+  opacity: var(--ds-command-grid-opacity, 0.18);
+}
+
+:where(
+  .ds-surface-hero,
+  .ds-surface-card,
+  .ds-surface-panel,
+  .ds-surface-rail-card,
+  .ds-surface-table-card,
+  .ds-rich-card,
+  .ds-metric-card,
+  .ds-stat-card
+) {
+  color: var(--ds-color-text-primary);
+}
+
+:where(.ds-surface-hero) {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ds-color-border-secondary);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-workspace-hero-bg);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--ds-premium-card-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-premium-card-bg);
+  background-clip: padding-box;
+  box-shadow: var(--ds-card-shadow);
+  animation: ds-surface-enter var(--ds-duration-slow, 260ms) var(--ds-ease-out, ease-out) both;
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease,
+    transform var(--ds-duration-fast, 160ms) ease,
+    filter var(--ds-duration-fast, 160ms) ease;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card)::before,
+:where(.ds-surface-table-card)::before,
+:where(.ds-rich-card)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    var(--ds-surface-card-grid-bg),
+    var(--ds-premium-card-sheen);
+  background-size:
+    var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size),
+    auto;
+  opacity: 0.28;
+  mask-image: linear-gradient(180deg, var(--ds-color-text-primary), transparent 82%);
+  transition: opacity var(--ds-duration-fast, 160ms) ease;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card)::after,
+:where(.ds-surface-table-card)::after,
+:where(.ds-rich-card)::after {
+  content: none;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card, .ds-surface-table-card, .ds-rich-card) > * {
+  position: relative;
+  z-index: 2;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):hover {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover);
+  transform: translateY(-1px);
+  filter: saturate(1.01);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):hover::before {
+  opacity: 0.42;
+}
+
+:where(.ds-surface-panel) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 92%, var(--ds-surface-card-bg));
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    background var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease;
+}
+
+:where(.ds-surface-panel)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--ds-surface-card-grid-bg);
+  background-size: var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size);
+  opacity: 0.16;
+  mask-image: linear-gradient(180deg, var(--ds-color-text-primary), transparent 76%);
+}
+
+:where(.ds-surface-panel) > * {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-surface-panel):focus-within {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
+  box-shadow: var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-surface-control-row) {
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-sm);
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
+}
+
+:where(.ds-surface-table-card) {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--ds-premium-card-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-premium-card-bg);
+  box-shadow: var(--ds-card-shadow);
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease,
+    filter var(--ds-duration-fast, 160ms) ease;
+}
+
+:where(:where(.ds-surface-table-card), .ds-collection-enhanced) :where(.ds-engine-modern) {
+  --ds-table-bg: var(--ds-surface-card-bg);
+  --ds-table-border: var(--ds-color-border);
+  --ds-table-row-bg: var(--ds-surface-card-bg);
+  --ds-table-cell-color: var(--ds-color-text-primary);
+  min-width: 0;
+}
+
+:where(.ds-rich-card) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  background: var(--ds-premium-card-bg);
+  border: 1px solid var(--ds-premium-card-border);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-card-shadow);
+  animation: ds-surface-enter var(--ds-duration-slow, 260ms) var(--ds-ease-out, ease-out) both;
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease,
+    transform var(--ds-duration-fast, 160ms) ease,
+    filter var(--ds-duration-fast, 160ms) ease;
+}
+
+:where(.ds-rich-card--interactive):hover {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover);
+  transform: translateY(-1px);
+  filter: saturate(1.015);
+}
+
+:where(.ds-rich-card--interactive:hover, .ds-rich-card--interactive:focus-within, .ds-rich-card--selected)::before {
+  opacity: 0.44;
+}
+
+:where(.ds-rich-card--interactive):focus-within {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover), var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-rich-card--selected) {
+  border-color: var(--ds-premium-card-selected-border);
+  box-shadow: var(--ds-card-shadow), var(--ds-premium-card-selected-ring);
+}
+
+:where(.ds-rich-card__header) {
+  position: relative;
+  overflow: hidden;
+  background: var(--ds-premium-card-header-bg);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section) {
+  background: var(--ds-premium-card-section-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section--alt) {
+  background: var(--ds-premium-card-section-alt-bg);
+}
+
+:where(.ds-rich-card__footer) {
+  background: var(--ds-premium-card-footer-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__icon) {
+  border: 1px solid var(--ds-icon-tile-border);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-primary);
+  background: var(--ds-icon-tile-bg);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    transform var(--ds-duration-fast, 160ms) ease;
+}
+
+:where(.ds-rich-card--interactive:hover, .ds-rich-card--interactive:focus-within) :where(.ds-rich-card__icon) {
+  border-color: color-mix(in srgb, currentColor 34%, var(--ds-color-border));
+  transform: translateY(-1px);
+}
+
+:where(.ds-rich-card__label) {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono);
+  font-weight: 760;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+:where(.ds-metric-card-link) {
+  border-radius: var(--ds-radius-md);
+  color: inherit;
+}
+
+:where(.ds-metric-card-link):focus-visible {
+  outline: none;
+}
+
+:where(.ds-metric-card, .ds-stat-card) {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--ds-color-text-primary);
+  container-type: inline-size;
+  --ds-signal-card-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ds-surface-card-bg) 94%, var(--ds-signal-card-soft, transparent)) 0%,
+    color-mix(in srgb, var(--ds-surface-panel-bg) 82%, var(--ds-signal-card-soft, transparent)) 58%,
+    color-mix(in srgb, var(--ds-surface-card-bg) 88%, var(--ds-signal-card-accent, var(--ds-color-primary)) 12%) 100%
+  );
+  transition:
+    max-height 260ms ease,
+    opacity 220ms ease,
+    padding 260ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    filter 180ms ease;
+}
+
+:where(.ds-metric-card--hidden) {
+  overflow: hidden;
+}
+
+:where(.ds-metric-card):where(.ds-rich-card)::before {
+  background-image:
+    var(--ds-surface-card-grid-bg),
+    linear-gradient(115deg, transparent 0%, var(--ds-surface-highlight-faint) 46%, transparent 64%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 5%, transparent),
+      transparent 52%
+    );
+  background-size:
+    18px 18px,
+    18px 18px,
+    auto;
+  opacity: 0.34;
+}
+
+:where(.ds-metric-card) > :not(:where(.ds-command-grid)):not(:where(.ds-metric-card__halo)) {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-metric-card__halo) {
+  position: absolute;
+  right: -54px;
+  bottom: -48px;
+  z-index: 0;
+  width: 132px;
+  height: 132px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent) 0%,
+    transparent 66%
+  );
+  opacity: 0.3;
+}
+
+:where(.ds-metric-card__header) {
+  min-height: 38px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+:where(.ds-metric-card__title-row, .ds-metric-card__body-row) {
+  min-width: 0;
+}
+
+:where(.ds-metric-card__status-dot) {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ds-signal-card-accent, var(--ds-color-primary));
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 10%, transparent),
+    0 0 12px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, transparent);
+}
+
+:where(.ds-metric-card__body) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 7px;
+}
+
+:where(.ds-metric-card__label) {
+  overflow: hidden;
+  color: color-mix(in srgb, var(--ds-color-text-primary) 78%, var(--ds-color-text-muted));
+  font-family: var(--ds-font-family-mono);
+  font-size: 11px;
+  font-weight: 820;
+  letter-spacing: 0;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__subtitle) {
+  overflow: hidden;
+  color: var(--ds-color-text-muted);
+  font-weight: 620;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__icon) {
+  width: 38px;
+  height: 38px;
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 20%, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-primary);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card-bg) 84%, transparent), transparent),
+    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 12%, var(--ds-icon-tile-bg));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, transparent);
+}
+
+:where(.ds-metric-card__value, .ds-stat-card__value) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-display);
+  font-size: var(--ds-metric-card-value-size, 2.25rem);
+  font-weight: 840;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+@container (max-width: 230px) {
+  :where(.ds-metric-card__value, .ds-stat-card__value) {
+    --ds-metric-card-value-size: 1.875rem;
+  }
+}
+
+:where(.ds-metric-card__operational) {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--ds-color-text-muted);
+  font-weight: 620;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+:where(.ds-metric-card__trend) {
+  flex-shrink: 0;
+  min-height: 26px;
+  max-width: 45%;
+  padding: 5px 8px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 13%, var(--ds-color-border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 72%, transparent);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__trend) > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:where(.ds-metric-card__trend--up) {
+  border-color: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card__trend--down) {
+  border-color: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card__footer) {
+  flex-shrink: 0;
+  min-height: 44px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+:where(.ds-metric-card__progress-meta) {
+  margin-bottom: 7px;
+}
+
+:where(.ds-metric-card__progress-label, .ds-metric-card__progress-value) {
+  font-family: var(--ds-font-family-mono);
+  font-weight: 760;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+:where(.ds-metric-card__progress-label) {
+  color: var(--ds-color-text-muted);
+}
+
+:where(.ds-metric-card__progress-value) {
+  color: var(--ds-signal-card-accent, var(--ds-color-primary));
+}
+
+:where(.ds-metric-card__progress) {
+  position: relative;
+  height: var(--ds-metric-card-meter-height, 6px);
+  overflow: hidden;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border) 70%, transparent), color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent)),
+    color-mix(in srgb, var(--ds-color-border) 58%, transparent);
+  box-shadow:
+    inset 0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ds-surface-card-bg) 62%, transparent);
+}
+
+:where(.ds-metric-card__progress-bar) {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ds-meter-fill);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 32%, transparent);
+  transition: width 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:where(.ds-metric-card__progress-bar)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--ds-surface-highlight-medium), transparent);
+  transform: translateX(-100%);
+  animation: ds-meter-sweep 1.4s ease-out 120ms 1;
+}
+
+:where(.ds-metric-card__status-row) {
+  min-width: 0;
+  margin-top: 10px;
+}
+
+:where(.ds-metric-card__status-row) > * {
+  min-width: 0;
+}
+
+:where(.ds-metric-card__status-text, .ds-metric-card__status-tag) {
+  overflow: hidden;
+  font-family: var(--ds-font-family-mono);
+  font-weight: 760;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__status-text) {
+  color: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-text-muted));
+}
+
+:where(.ds-metric-card__status-tag) {
+  flex-shrink: 0;
+  max-width: 44%;
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 18%, var(--ds-color-border));
+  border-radius: 999px;
+  color: var(--ds-signal-card-accent, var(--ds-color-primary));
+  background: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card--interactive):hover {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, var(--ds-color-border));
+  box-shadow: var(--ds-signal-card-shadow-hover);
+  transform: translateY(-2px);
+  filter: saturate(1.015);
+}
+
+:where(.ds-metric-card-link):focus-visible :where(.ds-metric-card) {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 42%, var(--ds-color-border));
+  box-shadow: var(--ds-signal-card-shadow-hover), var(--ds-shadow-focus-ring);
+  transform: translateY(-1px);
+}
+
+:where(.ds-metric-card--interactive:hover, .ds-metric-card-link:focus-visible) :where(.ds-metric-card__icon) {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 40%, var(--ds-color-border));
+}
+
+:is(.ds-command-home-shell) {
+  display: grid;
+  gap: var(--ds-command-home-gap);
+  min-width: 0;
+  width: 100%;
+  color: var(--ds-color-text-primary);
+}
+
+:is(.ds-command-home-shell *) {
+  box-sizing: border-box;
+}
+
+:is(.ds-command-home-shell a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:is(.ds-command-home-console) {
+  display: grid;
+  gap: 20px;
+  justify-self: center;
+  min-height: var(--ds-command-home-console-min-height);
+  min-width: 0;
+  width: min(100%, var(--ds-command-home-max-width));
+  max-width: var(--ds-command-home-max-width);
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  overflow: hidden;
+  border: 1px solid var(--ds-command-home-panel-border);
+  border-radius: var(--ds-radius-lg, 10px);
+  background-clip: padding-box;
+  background: var(--ds-command-home-console-bg);
+  box-shadow:
+    var(--ds-command-home-panel-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(.ds-command-home-console > *) {
+  min-width: 0;
+}
+
+:is(.ds-command-home-hero) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-lg, 10px);
+  background-clip: padding-box;
+  background: var(--ds-command-home-hero-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 12px 30px color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(.ds-command-home-icon, .ds-command-home-hero__mark, .ds-command-home-message-avatar, .ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--ds-command-home-icon-border);
+  color: var(--ds-color-primary);
+  background: var(--ds-command-home-icon-bg);
+}
+
+:is(.ds-command-home-hero__mark) {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-hero__status) {
+  justify-content: flex-end;
+  justify-self: end;
+  min-width: 0;
+  max-width: min(100%, 430px);
+}
+
+:is(.ds-command-home-hero__pill) {
+  min-height: 30px;
+  padding: 6px 10px;
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-text-secondary);
+  background: var(--ds-command-home-control-bg);
+  font-size: 0.75rem;
+  font-weight: 760;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+:is(.ds-command-home-eyebrow, .ds-command-home-section-title, .ds-command-home-launchpad-card__eyebrow, .ds-launchpad-card__eyebrow, .ds-command-home-next-move__action) {
+  color: var(--ds-color-primary);
+  font-family: var(--ds-font-family-mono);
+  font-weight: 820;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+:is(.ds-command-home-eyebrow, .ds-command-home-section-title) {
+  font-size: 0.75rem;
+}
+
+:is(.ds-command-home-title) {
+  margin: 0;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-display, var(--ds-font-family-heading, var(--ds-font-family-base)));
+  font-size: var(--ds-command-home-title-size, 2rem);
+  font-weight: 880;
+  letter-spacing: 0;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+
+:is(.ds-command-home-lede) {
+  max-width: 720px;
+  color: var(--ds-color-text-secondary);
+  font-size: 0.90625rem;
+  line-height: 1.45;
+}
+
+:is(.ds-command-home-subtle) {
+  min-width: 0;
+  color: var(--ds-color-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+:is(.ds-command-home-status-dot) {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--ds-color-success);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+}
+
+:is(.ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-error) {
+  justify-self: center;
+  width: min(100%, var(--ds-command-home-max-width));
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-sm, 6px);
+  background: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-surface-card-bg));
+  color: var(--ds-color-text-primary);
+  font-size: 0.8125rem;
+}
+
+:is(.ds-command-home-launchpad, .ds-launchpad) {
+  display: grid;
+  gap: var(--ds-command-home-panel-gap);
+  width: 100%;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-lg, 10px);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+}
+
+:is(.ds-command-home-launchpad__header, .ds-launchpad__header) {
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-launchpad__title, .ds-launchpad__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 1.05rem;
+  font-weight: 840;
+  line-height: 1.2;
+}
+
+:is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card) {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background-clip: padding-box;
+  background: var(--ds-command-home-panel-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    0 10px 24px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease,
+    transform var(--ds-duration-fast, 160ms) ease;
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-launchpad-card__eyebrow, .ds-launchpad-card__eyebrow) {
+  font-size: 0.6875rem;
+}
+
+:is(.ds-command-home-launchpad-card__title, .ds-launchpad-card__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.9375rem;
+  font-weight: 820;
+  line-height: 1.2;
+}
+
+:is(.ds-command-home-launchpad-card__copy, .ds-launchpad-card__copy) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.78125rem;
+  line-height: 1.45;
+}
+
+:is(.ds-command-home-launchpad-card__arrow, .ds-launchpad-card__arrow) {
+  color: var(--ds-color-text-muted);
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='green'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='green'] .ds-command-home-capability__icon),
+:is(.ds-command-home-next-move[data-tone='green'] .ds-command-home-prompt-row__icon) {
+  color: var(--ds-color-success);
+  border-color: color-mix(in srgb, var(--ds-color-success) 32%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon),
+:is(.ds-command-home-next-move[data-tone='teal'] .ds-command-home-prompt-row__icon) {
+  color: var(--ds-color-success);
+  border-color: color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 7%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon) {
+  color: var(--ds-color-warning);
+  border-color: color-mix(in srgb, var(--ds-color-warning) 36%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-command-grid) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  align-items: start;
+  gap: var(--ds-command-home-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-chat-panel, .ds-ai-chat-panel, .ds-command-home-rail) {
+  min-width: 0;
+}
+
+:is(.ds-command-home-chat-panel, .ds-ai-chat-panel) {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-lg, 10px);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 34px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-rail) {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  width: 100%;
+  max-width: 100%;
+}
+
+:is(.ds-command-home-brief) {
+  display: grid;
+  place-items: center;
+  min-height: 178px;
+  padding: 22px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-lg, 10px);
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent 46%),
+    var(--ds-command-home-panel-bg);
+  text-align: center;
+}
+
+:is(.ds-command-home-brief__icon) {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-block-end: 12px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-md, 8px);
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-brief__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 1rem;
+  font-weight: 820;
+  line-height: 1.25;
+}
+
+:is(.ds-command-home-brief__copy) {
+  max-width: 520px;
+  color: var(--ds-color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+:is(.ds-command-home-chat-stream, .ds-ai-chat-stream) {
+  width: 100%;
+  min-height: 240px;
+  max-height: 380px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-command-home-panel-bg);
+  overflow: auto;
+}
+
+:is(.ds-command-home-message-row, .ds-ai-chat-message-row) {
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-message-avatar, .ds-ai-chat-message-avatar) {
+  width: 30px;
+  height: 30px;
+  margin-inline-end: 8px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-message, .ds-ai-chat-message) {
+  max-width: min(78%, 720px);
+  min-width: 0;
+  padding: 12px 13px;
+  border: 1px solid var(--ds-color-border-primary);
+  border-radius: var(--ds-radius-md, 8px);
+  box-shadow: var(--ds-shadow-xs);
+}
+
+:is(.ds-command-home-message--assistant, .ds-ai-chat-message--assistant) {
+  background: color-mix(in srgb, var(--ds-surface-card-bg) 88%, var(--ds-color-primary) 4%);
+}
+
+:is(.ds-command-home-message--user, .ds-ai-chat-message--user) {
+  color: var(--ds-color-text-on-primary, #fff);
+  background: var(--ds-color-primary);
+  border-color: color-mix(in srgb, var(--ds-color-primary) 75%, var(--ds-color-border-primary));
+}
+
+:is(.ds-command-home-message__text, .ds-ai-chat-message__text) {
+  color: inherit;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+:is(.ds-command-home-tools, .ds-ai-chat-tools) {
+  margin-block-start: 8px;
+}
+
+:is(.ds-command-home-tool-call, .ds-ai-chat-tool-call) {
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 7px;
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-tool-call__text, .ds-ai-chat-tool-call__text, .ds-command-home-message__error, .ds-ai-chat-message__error) {
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+:is(.ds-command-home-message__error, .ds-ai-chat-message__error) {
+  margin-block-start: 6px;
+  color: var(--ds-color-danger, var(--ds-color-error));
+}
+
+:is(.ds-command-home-prompt-area, .ds-ai-prompt-area) {
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-prompts, .ds-ai-prompts) {
+  display: grid;
+  gap: 8px;
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-command-home-control-bg);
+  color: var(--ds-color-text-primary);
+  cursor: pointer;
+  text-align: start;
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease,
+    transform var(--ds-duration-fast, 160ms) ease;
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row):hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 48%, var(--ds-color-border-primary));
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row):disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+:is(.ds-command-home-prompt-row__label, .ds-ai-prompt-row__label) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.90625rem;
+  font-weight: 650;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+:is(.ds-command-home-prompt-row__intent, .ds-ai-prompt-row__intent) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+:is(.ds-command-home-composer, .ds-ai-composer) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  width: 100%;
+  height: var(--ds-command-home-compact-action-height);
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-lg, 10px);
+  background: var(--ds-command-home-panel-bg-strong);
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-composer__toolbar, .ds-command-home-composer__footer, .ds-ai-composer__toolbar, .ds-ai-composer__footer) {
+  min-width: 0;
+}
+
+:is(.ds-command-home-composer__input, .ds-ai-composer__input) {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+:is(.ds-command-home-composer, .ds-ai-composer) :is(textarea) {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  border-radius: var(--ds-radius-md, 8px) !important;
+  background: var(--ds-surface-card-bg) !important;
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button) {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+  color: var(--ds-color-text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    color var(--ds-duration-fast, 160ms) ease,
+    background var(--ds-duration-fast, 160ms) ease;
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 0.8125rem;
+  font-weight: 690;
+}
+
+:is(.ds-command-home-icon-button, .ds-ai-icon-button) {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  color: var(--ds-color-primary);
+  background: var(--ds-command-home-control-hover-bg);
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button):disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+:is(.ds-command-home-send, .ds-ai-send) {
+  min-width: 48px;
+  padding-inline: 16px;
+}
+
+:is(.ds-command-home-live-pill, .ds-live-pill) {
+  min-width: 0;
+  color: var(--ds-color-success);
+  font-size: 0.75rem;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+:is(.ds-command-home-rail-card, .ds-rail-card) {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-lg, 10px);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 32px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-rail-card__title, .ds-rail-card__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.9375rem;
+  font-weight: 820;
+  line-height: 1.2;
+}
+
+:is(.ds-command-home-rail-card__copy, .ds-rail-card__copy) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+:is(.ds-command-home-rail-card__badge, .ds-rail-card__badge) {
+  padding: 5px 10px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-success);
+  background: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-surface-card-bg));
+  font-size: 0.75rem;
+  font-weight: 760;
+}
+
+:is(.ds-command-home-today__score) {
+  color: var(--ds-color-text-primary);
+  font-size: 2rem;
+  font-weight: 880;
+  line-height: 1;
+}
+
+:is(.ds-command-home-meter, .ds-meter) {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--ds-command-home-meter-bg);
+}
+
+:is(.ds-command-home-meter, .ds-meter) > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ds-command-home-meter-fill);
+}
+
+:is(.ds-command-home-next-move) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-command-home-control-bg);
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease,
+    transform var(--ds-duration-fast, 160ms) ease;
+}
+
+:is(.ds-command-home-next-move):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-next-move__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+:is(.ds-command-home-next-move__copy) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+:is(.ds-command-home-next-move__action) {
+  font-size: 0.6875rem;
+  font-weight: 840;
+}
+
+:is(.ds-command-home-search-card) {
+  height: var(--ds-command-home-compact-action-height);
+  min-height: var(--ds-command-home-compact-action-height);
+  align-content: stretch;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+:is(.ds-command-home-search-list) {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-height: 0;
+  height: 100%;
+}
+
+:is(.ds-command-home-search-lane) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  min-height: 40px;
+  height: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-command-home-control-bg);
+  color: var(--ds-color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 760;
+  transition:
+    border-color var(--ds-duration-fast, 160ms) ease,
+    box-shadow var(--ds-duration-fast, 160ms) ease,
+    transform var(--ds-duration-fast, 160ms) ease;
+}
+
+:is(.ds-command-home-search-lane):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-footnote) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding-inline: 4px;
+  color: var(--ds-color-text-secondary);
+}
+
+:is(.ds-command-home-footnote__text, .ds-command-home-footnote__layer p) {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  writing-mode: horizontal-tb;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: normal;
+}
+
+:is(.ds-command-home-footnote__layer) {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 7px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+:is(.ds-command-home-footnote-dot) {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+}
+
+:is(.ds-command-home-arrow) {
+  color: var(--ds-color-text-muted);
+}
+
+:is(.ds-command-home-spin) {
+  animation: ds-command-home-spin 900ms linear infinite;
+}
+
+@media (max-width: 980px) {
+  :is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  :is(.ds-command-home-command-grid, .ds-workspace-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  :is(.ds-command-home-composer, .ds-ai-composer, .ds-command-home-search-card) {
+    height: auto;
+    min-height: var(--ds-command-home-compact-action-height);
+  }
+}
+
+@media (max-width: 640px) {
+  :is(.ds-command-home-hero) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  :is(.ds-command-home-hero__status) {
+    justify-content: flex-start;
+  }
+
+  :is(.ds-command-home-console) {
+    min-height: auto;
+    padding: 14px;
+  }
+
+  :is(.ds-command-home-message, .ds-ai-chat-message) {
+    max-width: 100%;
+  }
+
+  :is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
+    grid-template-columns: 1fr;
+  }
+
+  :is(.ds-command-home-launchpad-card, .ds-launchpad-card) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  :is(.ds-command-home-launchpad-card__arrow, .ds-launchpad-card__arrow) {
+    display: none;
+  }
+
+  :is(.ds-command-home-composer__footer, .ds-ai-composer__footer) {
+    align-items: stretch !important;
+    flex-direction: column;
+  }
+
+  :is(.ds-command-home-send, .ds-ai-send) {
+    width: 100%;
+  }
+}
+
+/*
+ * Command home runtime contract.
+ *
+ * These scoped selectors intentionally carry normal specificity so this DS-owned
+ * surface wins over the generic Box/Flex/Stack/Button primitives that apps use
+ * to compose it. The earlier pattern rules stay tokenized and reusable; this
+ * layer preserves the actual rendered contract after moving the Home styles
+ * out of app-local CSS.
+ */
+.ds-command-home-shell .ds-command-home-console {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  justify-self: center;
+  width: min(100%, var(--ds-command-home-max-width));
+  max-width: var(--ds-command-home-max-width);
+  min-width: 0;
+  min-height: var(--ds-command-home-console-min-height);
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  overflow: hidden;
+  border: 1px solid var(--ds-command-home-panel-border);
+  border-radius: 12px;
+  background: var(--ds-command-home-console-bg);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    var(--ds-command-home-panel-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-hero,
+.ds-command-home-shell .ds-launchpad,
+.ds-command-home-shell .ds-command-home-rail-card,
+.ds-command-home-shell .ds-command-home-brief,
+.ds-command-home-shell .ds-ai-composer {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ds-command-home-panel-border);
+  border-radius: 10px;
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 2px rgba(22, 42, 67, 0.08),
+    0 12px 28px rgba(22, 42, 67, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.ds-command-home-shell .ds-command-home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding: 16px 18px;
+  background: var(--ds-command-home-hero-bg);
+}
+
+.ds-command-home-shell .ds-command-home-hero__status {
+  justify-content: flex-end;
+  justify-self: end;
+  max-width: min(100%, 430px);
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-command-home-hero__mark,
+.ds-command-home-shell .ds-command-home-capability__icon,
+.ds-command-home-shell .ds-command-home-prompt-row__icon,
+.ds-command-home-shell .ds-command-home-brief__icon,
+.ds-command-home-shell .ds-ai-chat-message-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--ds-command-home-icon-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-primary);
+  background: var(--ds-command-home-icon-bg);
+}
+
+.ds-command-home-shell .ds-command-home-hero__mark {
+  width: 42px;
+  height: 42px;
+}
+
+.ds-command-home-shell .ds-command-home-eyebrow,
+.ds-command-home-shell .ds-command-home-section-title,
+.ds-command-home-shell .ds-launchpad-card__eyebrow,
+.ds-command-home-shell .ds-command-home-next-move__action {
+  color: var(--ds-color-primary) !important;
+  font-family: var(--ds-font-family-mono) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 820 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.ds-command-home-shell .ds-command-home-title {
+  color: var(--ds-color-text-primary) !important;
+  font-size: var(--ds-command-home-title-size, 2rem) !important;
+  font-weight: 880 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.08 !important;
+}
+
+.ds-command-home-shell .ds-command-home-lede,
+.ds-command-home-shell .ds-command-home-subtle {
+  color: var(--ds-color-text-secondary) !important;
+}
+
+.ds-command-home-shell .ds-launchpad .ds-command-home-section-title,
+.ds-command-home-shell .ds-ai-prompt-area .ds-command-home-section-title,
+.ds-command-home-shell .ds-command-home-rail-card .ds-command-home-section-title,
+.ds-command-home-shell .ds-launchpad-card__eyebrow {
+  color: var(--ds-color-text-muted) !important;
+}
+
+.ds-command-home-shell .ds-launchpad__title {
+  color: var(--ds-color-text-primary) !important;
+  font-size: 1rem !important;
+  font-weight: 840 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.ds-command-home-shell .ds-launchpad-card__title,
+.ds-command-home-shell .ds-rail-card__title,
+.ds-command-home-shell .ds-command-home-brief__title,
+.ds-command-home-shell .ds-command-home-next-move__title {
+  color: var(--ds-color-text-primary) !important;
+  font-weight: 820 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.ds-command-home-shell .ds-launchpad-card__title,
+.ds-command-home-shell .ds-command-home-next-move__title {
+  font-size: 0.875rem !important;
+}
+
+.ds-command-home-shell .ds-launchpad-card__copy,
+.ds-command-home-shell .ds-rail-card__copy,
+.ds-command-home-shell .ds-command-home-brief__copy,
+.ds-command-home-shell .ds-command-home-next-move__copy,
+.ds-command-home-shell .ds-ai-prompt-row__intent {
+  color: var(--ds-color-text-secondary) !important;
+  font-size: 0.78125rem !important;
+  line-height: 1.4 !important;
+}
+
+.ds-command-home-shell .ds-command-home-capability__icon,
+.ds-command-home-shell .ds-command-home-prompt-row__icon {
+  width: 34px;
+  height: 34px;
+}
+
+.ds-command-home-shell .ds-launchpad {
+  display: grid;
+  gap: var(--ds-command-home-panel-gap);
+  width: 100%;
+  padding: 18px;
+}
+
+.ds-command-home-shell .ds-launchpad__header {
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-launchpad__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-launchpad-card {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 110px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
+  border-radius: var(--ds-radius-sm, 8px);
+  background-clip: padding-box;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone='blue'],
+.ds-command-home-shell .ds-command-home-next-move[data-tone='blue'] {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone='green'],
+.ds-command-home-shell .ds-command-home-next-move[data-tone='green'] {
+  --ds-command-home-card-tone: var(--ds-color-success);
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone='teal'],
+.ds-command-home-shell .ds-command-home-next-move[data-tone='teal'] {
+  --ds-command-home-card-tone: var(--ds-color-accent, var(--ds-color-success));
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone='amber'],
+.ds-command-home-shell .ds-command-home-next-move[data-tone='amber'] {
+  --ds-command-home-card-tone: var(--ds-color-warning);
+}
+
+.ds-command-home-shell .ds-launchpad-card:hover {
+  border-color: color-mix(in srgb, var(--ds-command-home-card-tone) 30%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
+  box-shadow: var(--ds-command-home-card-shadow-hover);
+  transform: translateY(-1px);
+}
+
+.ds-command-home-shell .ds-launchpad-card__arrow {
+  align-self: start;
+  margin-block-start: 2px;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-command-home-shell .ds-command-home-command-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  align-items: start;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-ai-chat-panel {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ds-command-home-shell .ds-command-home-rail {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.ds-command-home-shell .ds-command-home-rail-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-brief {
+  display: grid;
+  place-items: center;
+  min-height: 178px;
+  padding: 22px;
+  text-align: center;
+}
+
+.ds-command-home-shell .ds-ai-prompts {
+  display: grid;
+  gap: 8px;
+}
+
+.ds-command-home-shell .ds-ai-prompt-row {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
+  border-radius: var(--ds-radius-sm, 8px);
+  color: var(--ds-color-text-primary);
+  background: var(--ds-command-home-card-bg) !important;
+  background-size: 24px 24px, 24px 24px, auto !important;
+  box-shadow: var(--ds-command-home-card-shadow) !important;
+  text-align: start;
+}
+
+.ds-command-home-shell .ds-ai-prompt-row:hover {
+  border-color: color-mix(in srgb, var(--ds-command-home-card-tone) 30%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
+  box-shadow: var(--ds-command-home-card-shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+.ds-command-home-shell .ds-ai-prompt-row__label {
+  color: var(--ds-color-text-primary) !important;
+  font-size: 0.875rem !important;
+  font-weight: 760 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.25 !important;
+}
+
+.ds-command-home-shell .ds-ai-composer {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  width: 100%;
+  height: var(--ds-command-home-compact-action-height);
+  min-width: 0;
+  padding: 12px;
+  border-color: var(--ds-command-home-panel-border);
+  background: var(--ds-command-home-panel-bg-strong);
+}
+
+.ds-command-home-shell .ds-ai-composer__input {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ds-command-home-shell .ds-ai-composer textarea {
+  width: 100%;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  resize: none;
+  border-radius: var(--ds-radius-md, 8px) !important;
+  background: var(--ds-surface-card-bg) !important;
+}
+
+.ds-command-home-shell .ds-ai-context-select,
+.ds-command-home-shell .ds-ai-icon-button {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-text-secondary);
+  background: var(--ds-command-home-control-bg);
+}
+
+.ds-command-home-shell .ds-ai-context-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 0.8125rem;
+  font-weight: 690;
+}
+
+.ds-command-home-shell .ds-ai-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.ds-command-home-shell .ds-command-home-search-card {
+  height: var(--ds-command-home-compact-action-height);
+  min-height: var(--ds-command-home-compact-action-height);
+  align-content: stretch;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.ds-command-home-shell .ds-command-home-search-list {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+}
+
+.ds-command-home-shell .ds-command-home-search-lane,
+.ds-command-home-shell .ds-command-home-next-move {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
+  border-radius: var(--ds-radius-sm, 8px);
+  background: var(--ds-command-home-card-bg) !important;
+  background-size: 24px 24px, 24px 24px, auto !important;
+  box-shadow: var(--ds-command-home-card-shadow) !important;
+}
+
+.ds-command-home-shell .ds-command-home-search-lane:hover,
+.ds-command-home-shell .ds-command-home-next-move:hover {
+  border-color: color-mix(in srgb, var(--ds-command-home-card-tone) 30%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
+  box-shadow: var(--ds-command-home-card-shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+.ds-command-home-shell .ds-command-home-search-lane {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 40px;
+  height: 100%;
+  padding: 9px 11px;
+}
+
+.ds-command-home-shell .ds-command-home-next-move {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  padding: 11px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding-inline: 4px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote__text,
+.ds-command-home-shell .ds-command-home-footnote__layer p {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  writing-mode: horizontal-tb;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.ds-command-home-shell .ds-command-home-footnote__layer {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 7px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .ds-command-home-shell .ds-command-home-command-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .ds-command-home-shell .ds-launchpad__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ds-command-home-shell .ds-ai-composer,
+  .ds-command-home-shell .ds-command-home-search-card {
+    height: auto;
+    min-height: var(--ds-command-home-compact-action-height);
+  }
+}
+
+@media (max-width: 640px) {
+  .ds-command-home-shell .ds-command-home-hero {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .ds-command-home-shell .ds-command-home-hero__status {
+    justify-content: flex-start;
+    justify-self: start;
+  }
+
+  .ds-command-home-shell .ds-launchpad__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ds-command-home-shell .ds-ai-composer__footer {
+    align-items: stretch !important;
+    flex-direction: column;
+  }
+
+  .ds-command-home-shell .ds-ai-send {
+    width: 100%;
+  }
 }
 
 }
@@ -23555,4 +25593,43 @@ html[data-tenant='bithire'].dark {
   --ds-global-search-result-badge-bg: color-mix(in srgb, var(--ds-surface-panel) 76%, transparent);
   --ds-global-search-result-badge-bg-selected: var(--ds-surface-card);
   --ds-global-search-result-badge-border: var(--ds-color-border-subtle);
+}
+
+/* Command / AI home tenant identity.
+   Mirrors chrome.shell.commandHome* in brand-themes/bithire.ts for the
+   static CSS bundle until the vertical CSS builder emits BrandTheme chrome. */
+html[data-tenant='bithire'] {
+  --ds-command-home-max-width: 1120px;
+  --ds-command-home-gap: 16px;
+  --ds-command-home-panel-gap: 14px;
+  --ds-command-home-grid-line: rgba(10, 102, 194, 0.06);
+  --ds-command-home-panel-border: #A9C9EA;
+  --ds-command-home-panel-border-soft: #B7D3F2;
+  --ds-command-home-panel-shadow: 0 1px 2px rgba(22, 42, 67, 0.08), 0 16px 36px rgba(10, 102, 194, 0.10);
+  --ds-command-home-panel-bg: #FFFFFF;
+  --ds-command-home-panel-bg-strong: #FFFFFF;
+  --ds-command-home-compact-action-height: 202px;
+  --ds-command-home-console-min-height: calc(100vh - 108px);
+  --ds-command-home-console-padding: clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px;
+  --ds-command-home-console-bg:
+    repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px),
+    linear-gradient(180deg, #F6FAFE 0%, #EEF6FF 100%);
+  --ds-command-home-surface-bg:
+    repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 250, 254, 0.92) 100%);
+  --ds-command-home-hero-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
+  --ds-command-home-icon-bg: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg));
+  --ds-command-home-icon-border: color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border-primary));
+  --ds-command-home-control-bg: #FFFFFF;
+  --ds-command-home-control-border: #B7D3F2;
+  --ds-command-home-control-hover-bg: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg));
+  --ds-command-home-control-hover-border: color-mix(in srgb, var(--ds-color-primary) 42%, var(--ds-color-border-primary));
+  --ds-command-home-meter-bg: color-mix(in srgb, var(--ds-color-border-primary) 72%, transparent);
+  --ds-command-home-meter-fill: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success));
+  --ds-home-grid-line: var(--ds-command-home-grid-line);
+  --ds-home-panel-border: var(--ds-command-home-panel-border);
+  --ds-home-panel-shadow: var(--ds-command-home-panel-shadow);
+  --ds-home-compact-action-height: var(--ds-command-home-compact-action-height);
 }

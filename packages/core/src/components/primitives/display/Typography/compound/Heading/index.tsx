@@ -49,6 +49,7 @@ import {
   mergePersonalityStyle,
   resolveTypographyHeadingStyle,
 } from '../../../../../../runtime/personality/primitives';
+import { useEngineContext } from '../../../../../../runtime/engines/EngineProvider';
 import type { HeadingProps } from '../../Typography.types';
 import { ClassicHeading } from '../../engines/classic';
 import { ModernHeading } from '../../engines/modern';
@@ -94,11 +95,13 @@ const engineMap: Record<
  * @returns The engine-specific heading element with optional personality token styles applied
  */
 export const TypographyHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ engine = 'classic', ...props }, ref) => {
+  ({ engine, ...props }, ref) => {
+    const { engine: contextEngine } = useEngineContext();
+    const activeEngine = engine ?? contextEngine;
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
     // Fall back to ClassicHeading if an unrecognized engine name is provided
-    const Component = engineMap[engine] || ClassicHeading;
+    const Component = engineMap[activeEngine] || ClassicHeading;
 
     return (
       <Component

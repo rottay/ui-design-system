@@ -1098,3 +1098,42 @@ html[data-tenant='bithire'].dark {
   --ds-global-search-result-badge-bg-selected: var(--ds-surface-card);
   --ds-global-search-result-badge-border: var(--ds-color-border-subtle);
 }
+
+/* Command / AI home tenant identity.
+   Mirrors chrome.shell.commandHome* in brand-themes/bithire.ts for the
+   static CSS bundle until the vertical CSS builder emits BrandTheme chrome. */
+html[data-tenant='bithire'] {
+  --ds-command-home-max-width: 1120px;
+  --ds-command-home-gap: 16px;
+  --ds-command-home-panel-gap: 14px;
+  --ds-command-home-grid-line: rgba(10, 102, 194, 0.06);
+  --ds-command-home-panel-border: #A9C9EA;
+  --ds-command-home-panel-border-soft: #B7D3F2;
+  --ds-command-home-panel-shadow: 0 1px 2px rgba(22, 42, 67, 0.08), 0 16px 36px rgba(10, 102, 194, 0.10);
+  --ds-command-home-panel-bg: #FFFFFF;
+  --ds-command-home-panel-bg-strong: #FFFFFF;
+  --ds-command-home-compact-action-height: 202px;
+  --ds-command-home-console-min-height: calc(100vh - 108px);
+  --ds-command-home-console-padding: clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px;
+  --ds-command-home-console-bg:
+    repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px),
+    linear-gradient(180deg, #F6FAFE 0%, #EEF6FF 100%);
+  --ds-command-home-surface-bg:
+    repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 250, 254, 0.92) 100%);
+  --ds-command-home-hero-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
+  --ds-command-home-icon-bg: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg));
+  --ds-command-home-icon-border: color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border-primary));
+  --ds-command-home-control-bg: #FFFFFF;
+  --ds-command-home-control-border: #B7D3F2;
+  --ds-command-home-control-hover-bg: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg));
+  --ds-command-home-control-hover-border: color-mix(in srgb, var(--ds-color-primary) 42%, var(--ds-color-border-primary));
+  --ds-command-home-meter-bg: color-mix(in srgb, var(--ds-color-border-primary) 72%, transparent);
+  --ds-command-home-meter-fill: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success));
+  --ds-home-grid-line: var(--ds-command-home-grid-line);
+  --ds-home-panel-border: var(--ds-command-home-panel-border);
+  --ds-home-panel-shadow: var(--ds-command-home-panel-shadow);
+  --ds-home-compact-action-height: var(--ds-command-home-compact-action-height);
+}

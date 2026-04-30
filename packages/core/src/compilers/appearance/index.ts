@@ -325,6 +325,29 @@ export function appearanceAdvancedToVariables(
     if (sh.commandGlow) vars['--ds-command-glow'] = sh.commandGlow;
     if (sh.commandLine) vars['--ds-command-line'] = sh.commandLine;
     if (sh.commandRailBg) vars['--ds-command-rail-bg'] = sh.commandRailBg;
+    if (sh.commandHomeMaxWidth) vars['--ds-command-home-max-width'] = sh.commandHomeMaxWidth;
+    if (sh.commandHomeGap) vars['--ds-command-home-gap'] = sh.commandHomeGap;
+    if (sh.commandHomePanelGap) vars['--ds-command-home-panel-gap'] = sh.commandHomePanelGap;
+    if (sh.commandHomeGridLine) vars['--ds-command-home-grid-line'] = sh.commandHomeGridLine;
+    if (sh.commandHomePanelBorder) vars['--ds-command-home-panel-border'] = sh.commandHomePanelBorder;
+    if (sh.commandHomePanelBorderSoft) vars['--ds-command-home-panel-border-soft'] = sh.commandHomePanelBorderSoft;
+    if (sh.commandHomePanelShadow) vars['--ds-command-home-panel-shadow'] = sh.commandHomePanelShadow;
+    if (sh.commandHomePanelBg) vars['--ds-command-home-panel-bg'] = sh.commandHomePanelBg;
+    if (sh.commandHomePanelBgStrong) vars['--ds-command-home-panel-bg-strong'] = sh.commandHomePanelBgStrong;
+    if (sh.commandHomeCompactActionHeight) vars['--ds-command-home-compact-action-height'] = sh.commandHomeCompactActionHeight;
+    if (sh.commandHomeConsoleMinHeight) vars['--ds-command-home-console-min-height'] = sh.commandHomeConsoleMinHeight;
+    if (sh.commandHomeConsolePadding) vars['--ds-command-home-console-padding'] = sh.commandHomeConsolePadding;
+    if (sh.commandHomeConsoleBg) vars['--ds-command-home-console-bg'] = sh.commandHomeConsoleBg;
+    if (sh.commandHomeSurfaceBg) vars['--ds-command-home-surface-bg'] = sh.commandHomeSurfaceBg;
+    if (sh.commandHomeHeroBg) vars['--ds-command-home-hero-bg'] = sh.commandHomeHeroBg;
+    if (sh.commandHomeIconBg) vars['--ds-command-home-icon-bg'] = sh.commandHomeIconBg;
+    if (sh.commandHomeIconBorder) vars['--ds-command-home-icon-border'] = sh.commandHomeIconBorder;
+    if (sh.commandHomeControlBg) vars['--ds-command-home-control-bg'] = sh.commandHomeControlBg;
+    if (sh.commandHomeControlBorder) vars['--ds-command-home-control-border'] = sh.commandHomeControlBorder;
+    if (sh.commandHomeControlHoverBg) vars['--ds-command-home-control-hover-bg'] = sh.commandHomeControlHoverBg;
+    if (sh.commandHomeControlHoverBorder) vars['--ds-command-home-control-hover-border'] = sh.commandHomeControlHoverBorder;
+    if (sh.commandHomeMeterBg) vars['--ds-command-home-meter-bg'] = sh.commandHomeMeterBg;
+    if (sh.commandHomeMeterFill) vars['--ds-command-home-meter-fill'] = sh.commandHomeMeterFill;
   }
 
   // ── Toolbar ──

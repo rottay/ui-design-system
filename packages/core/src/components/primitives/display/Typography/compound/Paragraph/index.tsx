@@ -53,6 +53,7 @@ import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
 } from '../../../../../../runtime/personality/primitives';
+import { useEngineContext } from '../../../../../../runtime/engines/EngineProvider';
 import type { ParagraphProps } from '../../Typography.types';
 import { ClassicParagraph } from '../../engines/classic';
 import { ModernParagraph } from '../../engines/modern';
@@ -101,11 +102,13 @@ const engineMap: Record<
  * @returns The engine-specific paragraph element with personality token styles merged in
  */
 export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
-  ({ engine = 'classic', ...props }, ref) => {
+  ({ engine, ...props }, ref) => {
+    const { engine: contextEngine } = useEngineContext();
+    const activeEngine = engine ?? contextEngine;
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
     // Fall back to ClassicParagraph if an unrecognized engine name is provided
-    const Component = engineMap[engine] || ClassicParagraph;
+    const Component = engineMap[activeEngine] || ClassicParagraph;
 
     return (
       <Component

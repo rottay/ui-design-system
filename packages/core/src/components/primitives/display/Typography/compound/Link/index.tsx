@@ -47,6 +47,7 @@ import type { LinkProps } from '../../Typography.types';
 import { ClassicLink } from '../../engines/classic';
 import { ModernLink } from '../../engines/modern';
 import { RusticLink } from '../../engines/rustic';
+import { useEngineContext } from '../../../../../../runtime/engines/EngineProvider';
 
 /**
  * Map of engine names to their respective Link implementations.
@@ -92,9 +93,11 @@ const engineMap: Record<
  * @returns The engine-specific anchor element with consistent link styling
  */
 export const TypographyLink = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ engine = 'classic', ...props }, ref) => {
+  ({ engine, ...props }, ref) => {
+    const { engine: contextEngine } = useEngineContext();
+    const activeEngine = engine ?? contextEngine;
     // Fall back to ClassicLink if an unrecognized engine name is provided
-    const Component = engineMap[engine] || ClassicLink;
+    const Component = engineMap[activeEngine] || ClassicLink;
     // Link does not apply personality tokens; styling is fully engine-driven
     return <Component ref={ref} {...props} />;
   }
