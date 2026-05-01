@@ -1,5 +1,9 @@
 # Claude Code Rules - Design System
 
+## Non-Negotiable: No Cross-Module Direct Queries
+
+Apps, verticals, and modules must never query tables owned by another module/schema directly. Cross-module communication must go through the owning module's exported use cases, actions, factories, or repository ports. If a needed capability does not exist, create and export it in the owning module first; do not import foreign Drizzle schemas, create local bridge queries, or duplicate tables across schemas. Infrastructure-only health checks such as `SELECT 1` may test connectivity, but they must not read or mutate module-owned tables.
+
 ## AI Documentation
 
 - **Catálogo Central**: `/docs-engineering/README.md`
