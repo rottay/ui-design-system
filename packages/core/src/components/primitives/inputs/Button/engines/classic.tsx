@@ -132,6 +132,7 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
     'aria-label': ariaLabel,
     'data-testid': dataTestId,
     tabIndex,
+    ...nativeButtonProps
   } = props;
 
   // `fullWidth` is the DS-preferred name; `block` is kept for backward
@@ -187,6 +188,7 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   // End-positioned icons are rendered manually after children.
   const startIcon = iconPosition === 'start' ? icon : undefined;
   const endIcon = iconPosition === 'end' ? icon : undefined;
+  const passthroughProps = nativeButtonProps as Partial<React.ComponentProps<typeof AntButton>>;
 
   return (
     <>
@@ -194,6 +196,7 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
       <AntButton
+        {...passthroughProps}
         ref={ref}
         {...variantProps}
         size={SIZE_MAP[size || 'md']}

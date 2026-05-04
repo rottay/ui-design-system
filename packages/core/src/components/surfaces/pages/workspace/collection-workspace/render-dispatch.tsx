@@ -92,6 +92,118 @@ function resolveKey<T extends object>(
   return typeof rowKey === 'function' ? rowKey(item) : String(item[rowKey]);
 }
 
+function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNode {
+  if (!pagination) return null;
+
+  const pageSize = Math.max(1, pagination.pageSize);
+  const total = Math.max(0, pagination.total);
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const current = Math.min(Math.max(1, pagination.current), totalPages);
+  const start = total === 0 ? 0 : (current - 1) * pageSize + 1;
+  const end = Math.min(current * pageSize, total);
+  const pageSizeOptions = pagination.pageSizeOptions?.length
+    ? pagination.pageSizeOptions
+    : [pageSize];
+  const canGoBack = current > 1;
+  const canGoForward = current < totalPages;
+
+  const buttonStyle: React.CSSProperties = {
+    minWidth: 34,
+    height: 34,
+    padding: '0 12px',
+    borderRadius: 'var(--ds-radius-md, 8px)',
+    border: '1px solid var(--ds-color-border, #d4d4d8)',
+    background: 'var(--ds-color-bg-primary, #fff)',
+    color: 'var(--ds-color-text-primary, #18181b)',
+    cursor: 'pointer',
+    fontSize: 13,
+    fontWeight: 600,
+  };
+
+  const disabledButtonStyle: React.CSSProperties = {
+    ...buttonStyle,
+    opacity: 0.45,
+    cursor: 'not-allowed',
+  };
+
+  return (
+    <Box
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 'var(--ds-spacing-3, 12px)',
+        flexWrap: 'wrap',
+        padding: 'var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px)',
+        marginTop: 'var(--ds-spacing-4, 16px)',
+        borderRadius: 'var(--ds-radius-lg, 12px)',
+        border: '1px solid var(--ds-color-border, #d4d4d8)',
+        background: 'var(--ds-color-bg-primary, #fff)',
+      }}
+    >
+      <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+        {start}-{end} of {total.toLocaleString()}
+      </Text>
+
+      <Box style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <button
+          type="button"
+          disabled={!canGoBack}
+          onClick={() => pagination.onChange(current - 1, pageSize)}
+          style={canGoBack ? buttonStyle : disabledButtonStyle}
+          aria-label="Go to previous page"
+        >
+          Previous
+        </button>
+        <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+          Page {current} of {totalPages}
+        </Text>
+        <button
+          type="button"
+          disabled={!canGoForward}
+          onClick={() => pagination.onChange(current + 1, pageSize)}
+          style={canGoForward ? buttonStyle : disabledButtonStyle}
+          aria-label="Go to next page"
+        >
+          Next
+        </button>
+      </Box>
+
+      {pageSizeOptions.length > 1 ? (
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            color: 'var(--ds-color-text-muted)',
+            fontSize: 13,
+          }}
+        >
+          Rows
+          <select
+            value={pageSize}
+            onChange={(event) => pagination.onChange(1, Number(event.currentTarget.value))}
+            style={{
+              height: 34,
+              borderRadius: 'var(--ds-radius-md, 8px)',
+              border: '1px solid var(--ds-color-border, #d4d4d8)',
+              background: 'var(--ds-color-bg-primary, #fff)',
+              color: 'var(--ds-color-text-primary, #18181b)',
+              padding: '0 28px 0 10px',
+            }}
+          >
+            {pageSizeOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
+    </Box>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -278,28 +390,31 @@ export function CollectionRenderDispatch<T extends object>(
       );
     }
     return (
-      <Box style={{
-        display: 'grid',
-        gridTemplateColumns: viewModes?.cards?.columns
-          ? viewModes.cards.columns === 'auto'
-            ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
-            : `repeat(${viewModes.cards.columns}, 1fr)`
-          : 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))',
-        gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
-      }}>
-        {data.map((item, i) => (
-          <Box
-            key={resolveKey(item, rowKey)}
-            onClick={() => onRowClick?.(item, i)}
-            style={{ cursor: focusEnabled || onRowClick ? 'pointer' : undefined }}
-          >
-            {viewModes?.cards?.renderCard
-              ? viewModes.cards.renderCard(item, i)
-              : mobileCard(item, i)
-            }
-          </Box>
-        ))}
-      </Box>
+      <>
+        <Box style={{
+          display: 'grid',
+          gridTemplateColumns: viewModes?.cards?.columns
+            ? viewModes.cards.columns === 'auto'
+              ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
+              : `repeat(${viewModes.cards.columns}, 1fr)`
+            : 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))',
+          gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
+        }}>
+          {data.map((item, i) => (
+            <Box
+              key={resolveKey(item, rowKey)}
+              onClick={() => onRowClick?.(item, i)}
+              style={{ cursor: focusEnabled || onRowClick ? 'pointer' : undefined }}
+            >
+              {viewModes?.cards?.renderCard
+                ? viewModes.cards.renderCard(item, i)
+                : mobileCard(item, i)
+              }
+            </Box>
+          ))}
+        </Box>
+        {renderPaginationFooter(props.pagination)}
+      </>
     );
   }
 

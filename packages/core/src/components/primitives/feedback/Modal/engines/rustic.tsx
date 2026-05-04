@@ -74,6 +74,8 @@
 import React, { useEffect } from 'react';
 import type { ModalProps, ModalSize } from '../Modal.types';
 import { MODAL_DEFAULTS } from '../Modal.types';
+import { Portal } from '../../../overlay/Modal/utils/Portal';
+import { useModalInertSiblings } from '../../../overlay/Modal/utils/useModalInertSiblings';
 
 // ============================================================================
 // Constants
@@ -199,6 +201,10 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     style,
   } = props;
 
+  const isOpen = Boolean(open);
+
+  useModalInertSiblings(isOpen);
+
   // ---------------------------------------------------------------------------
   // Event Handlers
   // ---------------------------------------------------------------------------
@@ -230,7 +236,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
    * Only active when modal is open and closeOnEscape is true.
    */
   useEffect(() => {
-    if (!open || !closeOnEscape) return;
+    if (!isOpen || !closeOnEscape) return;
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCancel();
@@ -238,7 +244,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [open, closeOnEscape]);
+  }, [isOpen, closeOnEscape]);
 
   // ---------------------------------------------------------------------------
   // Body Scroll Lock
@@ -249,7 +255,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
    * Prevents background content from scrolling while modal is visible.
    */
   useEffect(() => {
-    if (open) {
+    if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -258,14 +264,14 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [open]);
+  }, [isOpen]);
 
   // ---------------------------------------------------------------------------
   // Early Return
   // ---------------------------------------------------------------------------
 
   // Don't render anything when closed
-  if (!open) return <></>;
+  if (!isOpen) return <></>;
 
   // ---------------------------------------------------------------------------
   // Size Styles
@@ -363,15 +369,16 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
   // ---------------------------------------------------------------------------
 
   return (
-    <div
-      className={`rottay-modal-overlay ${className}`}
-      style={overlayStyle}
-      onClick={closeOnOverlayClick ? handleCancel : undefined}
-    >
-      {/* stopPropagation prevents overlay click handler from firing when
-        user clicks inside the modal content. role="dialog" + aria-modal="true"
-        informs assistive technologies this is a modal context, enabling
-        proper focus trapping behavior in screen readers. */}
+    <Portal>
+      <div
+        className={`rottay-modal-overlay ${className}`}
+        style={overlayStyle}
+        onClick={closeOnOverlayClick ? handleCancel : undefined}
+      >
+        {/* stopPropagation prevents overlay click handler from firing when
+          user clicks inside the modal content. role="dialog" + aria-modal="true"
+          informs assistive technologies this is a modal context, enabling
+          proper focus trapping behavior in screen readers. */}
       <div
         className="rottay-modal"
         style={modalStyle}
@@ -434,6 +441,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </Portal>
   );
 }

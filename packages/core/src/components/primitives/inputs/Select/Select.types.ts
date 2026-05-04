@@ -176,6 +176,14 @@ export interface SelectProps<T = string | number> extends EngineAwareProps {
   name?: string;
   /** ID attribute */
   id?: string;
+  /** Accessible label forwarded to the interactive control. */
+  'aria-label'?: string;
+  /** Accessible labelled-by reference forwarded to the interactive control. */
+  'aria-labelledby'?: string;
+  /** Accessible described-by reference forwarded to the interactive control. */
+  'aria-describedby'?: string;
+  /** Test id forwarded to the interactive control. */
+  'data-testid'?: string;
   /** Autofocus attribute */
   autoFocus?: boolean;
   /** Prefix element */

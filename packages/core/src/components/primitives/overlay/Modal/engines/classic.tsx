@@ -26,6 +26,7 @@ import React from 'react';
 import { Modal as AntModal } from 'antd';
 import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP } from '../Modal.types';
+import { useModalInertSiblings } from '../utils/useModalInertSiblings';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 /**
@@ -69,6 +70,8 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
 
   /** Whether the panel should behave as fullscreen (explicit or adaptive). */
   const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
+
+  useModalInertSiblings(open);
 
   // Fullscreen bypasses the SIZE_MAP entirely to fill the viewport
   const width = effectiveFullscreen ? '100vw' : SIZE_MAP[size] || SIZE_MAP.md;

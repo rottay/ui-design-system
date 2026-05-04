@@ -23,6 +23,7 @@ import React, { useEffect, useCallback, useRef } from 'react';
 import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../Modal.types';
 import { Portal } from '../utils/Portal';
+import { useModalInertSiblings } from '../utils/useModalInertSiblings';
 import { useTranslation } from '../../../../../i18n';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
@@ -162,6 +163,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useModalInertSiblings(open);
 
   // -- ESC key ----------------------------------------------------------------
 

@@ -58,7 +58,7 @@
 'use client';
 
 import type { EngineAwareProps } from '../../../../contracts';
-import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent } from 'react';
+import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent, InputHTMLAttributes } from 'react';
 import type { ResponsiveValue } from '../../layout/shared/types';
 
 /**
@@ -87,7 +87,20 @@ export type InputStatus = 'default' | 'error' | 'warning' | 'success';
  * Supported HTML input types.
  * Determines browser behavior for input fields (keyboard, validation, masking).
  */
-export type InputType = 'text' | 'password' | 'email' | 'number' | 'tel' | 'url' | 'search';
+export type InputType =
+  | 'text'
+  | 'password'
+  | 'email'
+  | 'number'
+  | 'tel'
+  | 'url'
+  | 'search'
+  | 'date'
+  | 'time'
+  | 'datetime-local'
+  | 'month'
+  | 'week'
+  | 'color';
 
 /**
  * Props for the Input component.
@@ -154,6 +167,20 @@ export interface InputProps extends EngineAwareProps {
   maxLength?: number;
   /** Minimum length */
   minLength?: number;
+  /** Minimum value for date, time, and numeric inputs */
+  min?: string | number;
+  /** Maximum value for date, time, and numeric inputs */
+  max?: string | number;
+  /** Step increment for date, time, and numeric inputs */
+  step?: string | number;
+  /** Native input validation pattern */
+  pattern?: string;
+  /** Input mode hint for mobile keyboards */
+  inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode'];
+  /** Native title attribute */
+  title?: string;
+  /** Native tab index */
+  tabIndex?: number;
   /** Prefix element */
   prefix?: ReactNode;
   /** Suffix element */
@@ -190,6 +217,8 @@ export interface InputProps extends EngineAwareProps {
   'aria-label'?: string;
   /** ARIA described by */
   'aria-describedby'?: string;
+  /** ARIA invalid state override */
+  'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
   /** Data test id */
   'data-testid'?: string;
 }

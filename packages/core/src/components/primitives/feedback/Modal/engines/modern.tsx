@@ -27,7 +27,9 @@
 
 import React, { useEffect, useCallback, useRef } from 'react';
 import type { ModalProps, ModalSize } from '../Modal.types';
-import { MODAL_DEFAULTS } from '../Modal.types';
+import { MODAL_DEFAULTS, PADDING_MAP } from '../Modal.types';
+import { Portal } from '../../../overlay/Modal/utils/Portal';
+import { useModalInertSiblings } from '../../../overlay/Modal/utils/useModalInertSiblings';
 
 // ============================================================================
 // Constants
@@ -59,6 +61,36 @@ const MODAL_STYLES = `
 }
 `;
 
+const RADIUS_MAP = {
+  none: '0',
+  sm: 'var(--ds-radius-sm)',
+  md: 'var(--ds-radius-md)',
+  lg: 'var(--ds-radius-lg)',
+  xl: 'var(--ds-radius-xl)',
+} as const;
+
+function getPlacementStyles(
+  placement: ModalProps['placement'],
+  centered: boolean | undefined,
+): Pick<React.CSSProperties, 'alignItems' | 'paddingTop' | 'paddingBottom'> {
+  if (placement === 'top') {
+    return { alignItems: 'flex-start', paddingTop: '10vh' };
+  }
+
+  if (placement === 'bottom') {
+    return { alignItems: 'flex-end', paddingBottom: '10vh' };
+  }
+
+  return centered
+    ? { alignItems: 'center' }
+    : { alignItems: 'flex-start', paddingTop: '10vh' };
+}
+
+function getOverlayBackground(showBackdrop: boolean, overlayOpacity: number): string {
+  if (!showBackdrop) return 'transparent';
+  return `rgba(0, 0, 0, ${Math.min(Math.max(overlayOpacity, 0), 1)})`;
+}
+
 // ============================================================================
 // Component
 // ============================================================================
@@ -68,15 +100,30 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
     open,
     size = MODAL_DEFAULTS.size as ModalSize,
     centered = MODAL_DEFAULTS.centered,
+    placement = 'center',
+    fullScreen = false,
+    zIndex = MODAL_DEFAULTS.zIndex,
+    radius = MODAL_DEFAULTS.radius,
+    shadow = MODAL_DEFAULTS.shadow,
+    padding = MODAL_DEFAULTS.padding,
     title,
+    description,
+    header,
     children,
     footer,
     hideFooter,
+    divider = MODAL_DEFAULTS.divider,
     onClose,
     onOpenChange,
     closable = MODAL_DEFAULTS.closable,
     closeOnOverlayClick = MODAL_DEFAULTS.closeOnOverlayClick,
+    closeOnBackdropClick,
     closeOnEscape = MODAL_DEFAULTS.closeOnEscape,
+    preventScroll = MODAL_DEFAULTS.preventScroll,
+    disableAnimation = MODAL_DEFAULTS.disableAnimation,
+    showBackdrop = MODAL_DEFAULTS.showBackdrop,
+    overlayOpacity = MODAL_DEFAULTS.overlayOpacity,
+    blurBackdrop = MODAL_DEFAULTS.blurBackdrop,
     okText = 'OK',
     cancelText = 'Cancel',
     onOk,
@@ -87,6 +134,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   } = props;
 
   const panelRef = useRef<HTMLDivElement>(null);
+  const isOpen = Boolean(open);
+  const backdropClosable = closeOnBackdropClick ?? closeOnOverlayClick;
+
+  useModalInertSiblings(isOpen);
 
   // -- handlers ---------------------------------------------------------------
 
@@ -103,18 +154,18 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   // -- escape key -------------------------------------------------------------
 
   useEffect(() => {
-    if (!open || !closeOnEscape) return;
+    if (!isOpen || !closeOnEscape) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCancel();
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open, closeOnEscape, handleCancel]);
+  }, [isOpen, closeOnEscape, handleCancel]);
 
   // -- body scroll lock -------------------------------------------------------
 
   useEffect(() => {
-    if (open) {
+    if (isOpen && preventScroll) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -122,26 +173,29 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [open]);
+  }, [isOpen, preventScroll]);
 
   // -- focus trap (return focus to panel on open) -----------------------------
 
   useEffect(() => {
-    if (open && panelRef.current) {
+    if (isOpen && panelRef.current) {
       panelRef.current.focus();
     }
-  }, [open]);
+  }, [isOpen]);
 
   // -- early return -----------------------------------------------------------
 
-  if (!open) return <></>;
+  if (!isOpen) return <></>;
 
-  const maxWidth = SIZE_WIDTH_MAP[size as ModalSize] || SIZE_WIDTH_MAP.md;
+  const maxWidth = fullScreen ? '100vw' : SIZE_WIDTH_MAP[size as ModalSize] || SIZE_WIDTH_MAP.md;
+  const placementStyles = getPlacementStyles(placement, centered);
+  const sectionBorder = divider ? '1px solid var(--ds-modal-border-color, var(--ds-color-border))' : 'none';
+  const contentPadding = PADDING_MAP[padding ?? 'lg'] ?? PADDING_MAP.lg;
 
   // -- render -----------------------------------------------------------------
 
   return (
-    <>
+    <Portal>
       <style dangerouslySetInnerHTML={{ __html: MODAL_STYLES }} />
 
       {/* Fullscreen backdrop */}
@@ -149,25 +203,28 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
         style={{
           position: 'fixed',
           inset: 0,
-          zIndex: 1000,
+          zIndex,
           display: 'flex',
-          alignItems: centered ? 'center' : 'flex-start',
+          alignItems: placementStyles.alignItems,
           justifyContent: 'center',
-          paddingTop: centered ? undefined : '10vh',
+          paddingTop: placementStyles.paddingTop,
+          paddingBottom: placementStyles.paddingBottom,
         }}
       >
         {/* Overlay */}
-        <div
-          onClick={closeOnOverlayClick ? handleCancel : undefined}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundColor: 'var(--ds-modal-overlay-bg, var(--ds-surface-overlay))',
-            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(8px))',
-            WebkitBackdropFilter: 'var(--ds-modal-overlay-backdrop, blur(8px))',
-            animation: 'ds-modal-backdrop-fade var(--ds-motion-normal) var(--ds-motion-ease-out)',
-          }}
-        />
+        {showBackdrop ? (
+          <div
+            onClick={backdropClosable ? handleCancel : undefined}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundColor: getOverlayBackground(showBackdrop, overlayOpacity ?? MODAL_DEFAULTS.overlayOpacity ?? 0.45),
+              backdropFilter: blurBackdrop ? 'var(--ds-modal-overlay-backdrop, blur(8px))' : undefined,
+              WebkitBackdropFilter: blurBackdrop ? 'var(--ds-modal-overlay-backdrop, blur(8px))' : undefined,
+              animation: disableAnimation ? undefined : 'ds-modal-backdrop-fade var(--ds-motion-normal) var(--ds-motion-ease-out)',
+            }}
+          />
+        ) : null}
 
         {/* Panel */}
         <div
@@ -179,47 +236,66 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
           className={className}
           style={{
             position: 'relative',
-            width: '100%',
+            width: fullScreen ? '100vw' : '100%',
             maxWidth,
-            maxHeight: '85vh',
+            height: fullScreen ? '100vh' : undefined,
+            maxHeight: fullScreen ? '100vh' : '85vh',
             display: 'flex',
             flexDirection: 'column',
-            margin: '16px',
+            margin: fullScreen ? 0 : '16px',
             backgroundColor: 'var(--ds-modal-bg, var(--ds-surface-card))',
             border: '1px solid var(--ds-color-border)',
-            borderRadius: 'var(--ds-radius-xl)',
-            boxShadow: 'var(--ds-modal-shadow, var(--ds-elevation-5))',
-            animation: 'ds-modal-panel-enter var(--ds-motion-normal) var(--ds-motion-ease-out)',
+            borderRadius: fullScreen ? 0 : (RADIUS_MAP[radius ?? 'lg'] ?? RADIUS_MAP.lg),
+            boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-5))' : 'none',
+            animation: disableAnimation ? undefined : 'ds-modal-panel-enter var(--ds-motion-normal) var(--ds-motion-ease-out)',
             outline: 'none',
             overflow: 'hidden',
             ...style,
           }}
         >
           {/* ---- Header ---- */}
-          {(title || closable) && (
+          {(header || title || description || closable) && (
             <div
               style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 justifyContent: 'space-between',
                 padding: '16px 24px',
-                borderBottom: '1px solid var(--ds-modal-header-border, var(--ds-color-border))',
+                borderBottom: sectionBorder,
                 flexShrink: 0,
               }}
             >
-              {title && (
-                <span
-                  style={{
-                    fontSize: '16px',
-                    fontWeight: 600,
-                    lineHeight: '24px',
-                    color: 'var(--ds-modal-title-color, inherit)',
-                  }}
-                >
-                  {title}
-                </span>
-              )}
-              {!title && <span />}
+              <div style={{ minWidth: 0 }}>
+                {header ?? (
+                  <>
+                    {title && (
+                      <span
+                        style={{
+                          display: 'block',
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          lineHeight: '24px',
+                          color: 'var(--ds-modal-title-color, inherit)',
+                        }}
+                      >
+                        {title}
+                      </span>
+                    )}
+                    {description && (
+                      <div
+                        style={{
+                          marginTop: title ? 4 : 0,
+                          fontSize: 13,
+                          lineHeight: '20px',
+                          color: 'var(--ds-modal-description-color, var(--ds-color-text-secondary))',
+                        }}
+                      >
+                        {description}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
               {closable && (
                 <button
                   type="button"
@@ -260,8 +336,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
             style={{
               flex: '1 1 auto',
               overflowY: 'auto',
-              padding: '24px',
-              maxHeight: '70vh',
+              padding: contentPadding,
+              maxHeight: fullScreen ? undefined : '70vh',
               color: 'var(--ds-modal-body-color, inherit)',
             }}
           >
@@ -277,7 +353,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 justifyContent: 'flex-end',
                 gap: '8px',
                 padding: '16px 24px',
-                borderTop: '1px solid var(--ds-modal-footer-border, var(--ds-color-border))',
+                borderTop: sectionBorder,
                 flexShrink: 0,
               }}
             >
@@ -327,6 +403,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
           )}
         </div>
       </div>
-    </>
+    </Portal>
   );
 }

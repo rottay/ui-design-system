@@ -75,7 +75,7 @@
 
 'use client';
 
-import React, { forwardRef, useState, useId } from 'react';
+import React, { forwardRef, useState, useId, type AnchorHTMLAttributes } from 'react';
 import type { ButtonProps, ButtonSize } from '../Button.types';
 import { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from '../Button.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -334,6 +334,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const responsiveStyleTag = responsive && responsive.css ? (
       <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
     ) : null;
+    const anchorProps = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
 
     // When href is set, render an <a> instead of <button> for correct
     // semantics (screen readers announce it as a link, browser features like
@@ -343,6 +344,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
         <>
           {responsiveStyleTag}
           <a
+            {...anchorProps}
             href={href}
             target={target}
             className={classNames}

@@ -246,6 +246,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     onClick,
     className = '',
     style,
+    ...nativeButtonProps
   } = props;
 
   const [isHovered, setIsHovered] = useState(false);
@@ -431,6 +432,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
       <button
+        {...nativeButtonProps}
         ref={ref}
         type={htmlType}
         className={classes}

@@ -65,6 +65,13 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     errorMessage,
     maxLength,
     minLength,
+    min,
+    max,
+    step,
+    pattern,
+    inputMode,
+    title,
+    tabIndex,
     prefix,
     suffix,
     clearable = INPUT_DEFAULTS.clearable,
@@ -84,6 +91,7 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'data-testid': dataTestId,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
   } = props;
 
   // Responsive size handling
@@ -356,10 +364,17 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           required={required}
           maxLength={maxLength}
           minLength={minLength}
+          min={min}
+          max={max}
+          step={step}
+          pattern={pattern}
+          inputMode={inputMode}
+          title={title}
+          tabIndex={tabIndex}
           autoComplete={autoComplete}
           aria-label={ariaLabel}
           aria-describedby={ariaDescribedBy}
-          aria-invalid={hasError}
+          aria-invalid={ariaInvalid ?? hasError}
           data-testid={dataTestId}
           style={inputStyle}
           onChange={handleChange}

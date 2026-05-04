@@ -936,6 +936,30 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     disabled,
   );
 
+  const {
+    engine: _customEngine,
+    readOnly: _customReadOnly,
+    required: customRequired,
+    filterOption: _customFilterOption,
+    onSearch: _customOnSearch,
+    onClear: _customOnClear,
+    prefix: _customPrefix,
+    suffix: _customSuffix,
+    children: _customChildren,
+    maxTagCount: _customMaxTagCount,
+    searchable: _customSearchable,
+    clearable: _customClearable,
+    allowClear: _customAllowClear,
+    showSearch: _customShowSearch,
+    error: _customError,
+    loading: _customLoading,
+    optionGroups: _customOptionGroups,
+    virtual: _customVirtual,
+    tokenSeparators: _customTokenSeparators,
+    forceCustomDropdown: _customForceCustomDropdown,
+    ...triggerHtmlProps
+  } = rest as any;
+
   const handleDropdownScroll = (e: React.UIEvent<HTMLDivElement>) => {
     setScrollTop(e.currentTarget.scrollTop);
   };
@@ -1094,6 +1118,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
       {/* Trigger */}
       <div
+        {...triggerHtmlProps}
         style={triggerStyle}
         onClick={() => {
           if (!disabled && !loading) {
@@ -1109,6 +1134,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
+        aria-required={customRequired ? true : undefined}
         onFocus={onFocus as any}
         onBlur={onBlur as any}
       >
@@ -1162,6 +1188,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       {isOpen && typeof document !== 'undefined' && createPortal(
         <div
           ref={dropdownRef}
+          data-rottay-portal="true"
           role="listbox"
           style={{
             ...DROPDOWN_STYLE,

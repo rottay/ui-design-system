@@ -28,6 +28,7 @@ import { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } fro
 import { Portal } from '../utils/Portal';
 import { Overlay } from '../utils/Overlay';
 import { FocusTrap } from '../utils/FocusTrap';
+import { useModalInertSiblings } from '../utils/useModalInertSiblings';
 import { useTranslation } from '../../../../../i18n';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
@@ -79,6 +80,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
 
   /** Whether the modal should render as fullscreen on the current viewport. */
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
+
+  useModalInertSiblings(open);
 
   /** Whether the panel should behave as fullscreen (explicit or adaptive). */
   const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
