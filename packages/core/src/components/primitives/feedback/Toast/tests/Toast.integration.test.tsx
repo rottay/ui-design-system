@@ -5,7 +5,7 @@ import { message, notification } from 'antd';
 
 import { Toast, ToastProvider, toast, useToast } from '..';
 import { getToastMethods } from '../utils';
-import { renderSurface } from '../../../../surfaces/common/test-utils';
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 import { renderWithEngine } from '../../../../../_internal/testing/helpers/engine-test-utils';
 
 function ToastHarness(): React.ReactElement {

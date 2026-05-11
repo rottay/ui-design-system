@@ -47,6 +47,16 @@ class IntersectionObserverMock {
 
 beforeEach(() => {
   vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+    setTransform: vi.fn(),
+    clearRect: vi.fn(),
+    beginPath: vi.fn(),
+    arc: vi.fn(),
+    fill: vi.fn(),
+    fillRect: vi.fn(),
+    globalAlpha: 1,
+    fillStyle: '',
+  } as unknown as CanvasRenderingContext2D);
 });
 
 afterEach(() => {

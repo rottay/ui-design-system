@@ -18,8 +18,8 @@ import { renderHook } from '@testing-library/react';
 import React from 'react';
 
 import { ResponsiveProvider, useResponsive } from '../index';
-import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
-import { useResponsiveValue } from '../../../../hooks/responsive/useResponsiveValue';
+import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
+import { useResponsiveValue } from '../../../hooks/responsive/useResponsiveValue';
 
 // ---------------------------------------------------------------------------
 // matchMedia mock infrastructure

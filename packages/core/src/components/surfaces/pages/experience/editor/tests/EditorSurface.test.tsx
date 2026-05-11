@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { EditorSurface } from '..';
 import type { EditorSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(): EditorSurfaceConfig {
   return {
@@ -28,7 +28,7 @@ function buildConfig(): EditorSurfaceConfig {
 
 describe('EditorSurface', () => {
   beforeAll(async () => {
-    await import('../../../primitives/inputs/Textarea/engines/rustic');
+    await import('../../../../../primitives/inputs/Textarea/engines/rustic');
   });
 
   it('routes save actions through the current editor value', async () => {
@@ -36,7 +36,7 @@ describe('EditorSurface', () => {
 
     renderSurface(<EditorSurface config={config} />);
 
-    const textbox = await screen.findByRole('textbox', undefined, { timeout: 15000 });
+    const textbox = await screen.findByDisplayValue('Draft copy', undefined, { timeout: 15000 });
 
     fireEvent.change(textbox, {
       target: {
@@ -44,7 +44,9 @@ describe('EditorSurface', () => {
       },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /Save draft/i }));
+    const saveButton = screen.getByText('Save draft').closest('button');
+    if (!saveButton) throw new Error('Save draft button not found');
+    fireEvent.click(saveButton);
 
     await waitFor(() => {
       expect(config.behavior.saveAction?.onClick).toHaveBeenCalledWith('Updated draft copy');
@@ -102,12 +104,18 @@ describe('EditorSurface', () => {
     expect(screen.getByText('Preview panel')).toBeInTheDocument();
     expect(screen.getByText('Editor status')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Custom editor' }));
+    const customEditorButton = screen.getByText('Custom editor').closest('button');
+    if (!customEditorButton) throw new Error('Custom editor button not found');
+    fireEvent.click(customEditorButton);
     expect(onChange).toHaveBeenCalledWith('Controlled value + custom');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    const cancelButton = screen.getByText('Cancel').closest('button');
+    if (!cancelButton) throw new Error('Cancel button not found');
+    fireEvent.click(cancelButton);
     expect(cancelAction.onClick).toHaveBeenCalledTimes(1);
 
-    expect(screen.getByRole('button', { name: 'Publish' })).toBeDisabled();
+    const publishButton = screen.getByText('Publish').closest('button');
+    if (!publishButton) throw new Error('Publish button not found');
+    expect(publishButton).toBeDisabled();
   });
 });

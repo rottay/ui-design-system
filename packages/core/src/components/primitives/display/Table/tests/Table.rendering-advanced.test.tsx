@@ -100,8 +100,10 @@ describe.each([
 
     const table = screen.getByRole('grid');
     if (_engine === 'modern') {
-      expect(table.className).toContain('table-fixed');
-      expect(screen.getByText('Bea Stone').closest('td')?.className).toContain('truncate');
+      expect((table as HTMLTableElement).style.tableLayout).toBe('fixed');
+      expect(screen.getByText('Bea Stone').closest('td')).toHaveStyle({
+        textOverflow: 'ellipsis',
+      });
     } else {
       expect((table as HTMLTableElement).style.tableLayout).toBe('fixed');
       expect(screen.getByText('Bea Stone').closest('td')).toHaveStyle({
@@ -122,7 +124,7 @@ describe.each([
     );
 
     if (_engine === 'modern') {
-      expect(container.querySelector('.loading-spinner')).toBeTruthy();
+      expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
     } else {
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     }

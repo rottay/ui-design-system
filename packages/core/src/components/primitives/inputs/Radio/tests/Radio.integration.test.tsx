@@ -8,7 +8,7 @@ describe('Radio integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'selects the live component in the %s engine',
     async (engine) => {
-      const { Radio } = await import('.');
+      const { Radio } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -25,7 +25,7 @@ describe('Radio integration', () => {
   );
 
   it('supports keyboard activation in the rustic engine', async () => {
-    const { Radio } = await import('.');
+    const { Radio } = await import('..');
     const onChange = vi.fn();
 
     renderWithEngine(
@@ -45,7 +45,7 @@ describe('Radio integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'updates radio groups in the %s engine',
     async (engine) => {
-      const { Radio } = await import('.');
+      const { Radio } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -71,7 +71,7 @@ describe('Radio integration', () => {
   it.each(['solid', 'outline'] as const)(
     'renders rustic button-style radio groups with %s styling',
     async (buttonStyle) => {
-      const { Radio } = await import('.');
+      const { Radio } = await import('..');
 
       renderWithEngine(
         <Radio.Group
@@ -93,7 +93,7 @@ describe('Radio integration', () => {
   it.each(['primary', 'secondary', 'success', 'warning', 'error'] as const)(
     'renders rustic color variant %s without crashing',
     async (color) => {
-      const { Radio } = await import('.');
+      const { Radio } = await import('..');
 
       renderWithEngine(
         <Radio engine="rustic" name={`color-${color}`} value={color} label={`Color ${color}`} color={color} checked onChange={() => undefined} />,

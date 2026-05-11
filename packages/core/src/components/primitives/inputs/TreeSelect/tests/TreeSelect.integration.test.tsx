@@ -23,7 +23,7 @@ describe('TreeSelect integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'opens and selects nested options in the %s engine',
     async (engine) => {
-      const { TreeSelect } = await import('.');
+      const { TreeSelect } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -55,7 +55,7 @@ describe('TreeSelect integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'supports checkable multi-select in the %s engine',
     async (engine) => {
-      const { TreeSelect } = await import('.');
+      const { TreeSelect } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -85,7 +85,7 @@ describe('TreeSelect integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'ignores disabled nodes in the %s engine',
     async (engine) => {
-      const { TreeSelect } = await import('.');
+      const { TreeSelect } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -107,7 +107,7 @@ describe('TreeSelect integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'clears selected values in the %s engine',
     async (engine) => {
-      const { TreeSelect } = await import('.');
+      const { TreeSelect } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -134,7 +134,7 @@ describe('TreeSelect integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'renders custom empty content in the %s engine',
     async (engine) => {
-      const { TreeSelect } = await import('.');
+      const { TreeSelect } = await import('..');
 
       renderWithEngine(
         <TreeSelect
@@ -153,7 +153,7 @@ describe('TreeSelect integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'reports dropdown visibility changes in the %s engine',
     async (engine) => {
-      const { TreeSelect } = await import('.');
+      const { TreeSelect } = await import('..');
       const onDropdownVisibleChange = vi.fn();
 
       renderWithEngine(

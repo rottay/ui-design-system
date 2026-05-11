@@ -33,7 +33,7 @@ import {
   createSidebarSurfaceConfig,
   createVisualizationSurfaceConfig,
   createWizardSurfaceConfig,
-} from '../../../builders';
+} from '../../builders';
 
 describe('surface config builders', () => {
   it('adds mobile-safe defaults for the responsive builders', () => {

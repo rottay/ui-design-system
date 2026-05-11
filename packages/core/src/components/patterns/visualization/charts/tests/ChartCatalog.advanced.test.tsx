@@ -11,7 +11,7 @@ import {
   RadarChart,
   TreeMap,
 } from '..';
-import { renderSurface } from '../../../../surfaces/common/test-utils';
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
 describe('chart catalog advanced coverage', () => {
   it('covers bar chart horizontal orientation, labels, legend, tooltip, and axis-label branches', async () => {

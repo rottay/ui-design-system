@@ -7,7 +7,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { OTPInput } from '../';
 
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockOTPInput = ({
       length = 6,

@@ -25,7 +25,7 @@ const mockResponsive = {
   isTouchDevice: false,
 };
 
-vi.mock('../../../../runtime/responsive', () => ({
+vi.mock('../../../../../runtime/responsive', () => ({
   useResponsive: () => mockResponsive,
 }));
 
@@ -33,7 +33,7 @@ vi.mock('../../../../runtime/responsive', () => ({
 // Mock: Modal
 // ---------------------------------------------------------------------------
 
-vi.mock('../Modal', () => {
+vi.mock('../../Modal', () => {
   const MockModalBody = ({ children }: any) => (
     <div data-testid="modal-body">{children}</div>
   );
@@ -70,7 +70,7 @@ vi.mock('../Modal', () => {
 // Mock: Drawer
 // ---------------------------------------------------------------------------
 
-vi.mock('../../feedback/Drawer', () => {
+vi.mock('../../../feedback/Drawer', () => {
   const MockDrawer = ({
     open,
     onClose,
@@ -110,7 +110,7 @@ vi.mock('../../feedback/Drawer', () => {
 // Mock: Sheet
 // ---------------------------------------------------------------------------
 
-vi.mock('../Sheet', () => {
+vi.mock('../../Sheet', () => {
   const MockSheet = ({
     open,
     onOpenChange,

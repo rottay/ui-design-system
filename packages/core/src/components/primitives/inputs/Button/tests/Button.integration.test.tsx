@@ -6,7 +6,7 @@ import { renderWithEngine, STABLE_ENGINES } from '../../../../../_internal/testi
 
 describe('Button integration', () => {
   it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {
-    const { Button } = await import('.');
+    const { Button } = await import('..');
     renderWithEngine(<Button engine={engine}>Save changes</Button>, engine);
 
     expect(
@@ -15,7 +15,7 @@ describe('Button integration', () => {
   }, 45000);
 
   it.each(STABLE_ENGINES)('forwards refs through the factory with the %s engine', async (engine) => {
-    const { Button } = await import('.');
+    const { Button } = await import('..');
     const ref = createRef<any>();
 
     renderWithEngine(
@@ -30,7 +30,7 @@ describe('Button integration', () => {
   });
 
   it('covers rustic anchor, loading, and disabled link fallbacks through the live engine', async () => {
-    const { Button } = await import('.');
+    const { Button } = await import('..');
     const handleClick = vi.fn();
 
     const { rerender } = renderWithEngine(
@@ -90,7 +90,7 @@ describe('Button integration', () => {
   });
 
   it('covers rustic interactive state branches through the live engine', async () => {
-    const { Button } = await import('.');
+    const { Button } = await import('..');
     const handleClick = vi.fn();
 
     renderWithEngine(

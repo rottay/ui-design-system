@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { TreeSelect } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockTreeSelect = ({
       treeData,

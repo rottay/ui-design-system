@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.8.6",
+  "version": "2.8.7",
   "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -102,6 +102,130 @@
     "lint:integration": "node scripts/audit-integration.mjs",
     "lint:vertical": "node scripts/audit-vertical-compliance.mjs",
     "docs:taxonomy": "node scripts/generate-taxonomy.mjs"
+  },
+  "releaseSync": {
+    "gateCommands": {
+      "test:unit": [
+        {
+          "label": "unit system/runtime/tokens",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/_internal",
+            "src/hooks",
+            "src/motion",
+            "src/runtime",
+            "src/tokens"
+          ]
+        },
+        {
+          "label": "unit components/patterns",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/patterns"
+          ]
+        },
+        {
+          "label": "unit components/primitives",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/primitives"
+          ]
+        },
+        {
+          "label": "unit surfaces/foundation-layout",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/surfaces/foundation/common/tests/builders.test.ts",
+            "src/components/surfaces/foundation/common/tests/helpers.test.ts",
+            "src/components/surfaces/foundation/tests/builders.test.ts",
+            "src/components/surfaces/layout/header/tests/HeaderSurface.test.tsx",
+            "src/components/surfaces/layout/sidebar/tests/SidebarSurface.test.tsx"
+          ]
+        },
+        {
+          "label": "unit surfaces/admin",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/surfaces/pages/admin"
+          ]
+        },
+        {
+          "label": "unit surfaces/data",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/surfaces/pages/data"
+          ]
+        },
+        {
+          "label": "unit surfaces/experience",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/surfaces/pages/experience"
+          ]
+        },
+        {
+          "label": "unit surfaces/forms",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/surfaces/pages/forms"
+          ]
+        },
+        {
+          "label": "unit surfaces/operations",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/surfaces/pages/operations"
+          ]
+        },
+        {
+          "label": "unit surfaces/workspace",
+          "pnpm": [
+            "exec",
+            "vitest",
+            "run",
+            "--project",
+            "unit",
+            "src/components/surfaces/pages/workspace"
+          ]
+        }
+      ]
+    }
   },
   "engines": {
     "node": ">=20"

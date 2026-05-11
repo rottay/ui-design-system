@@ -2,7 +2,7 @@ import React from 'react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 import { PatternCockpitHeader } from '../index';
-import { renderSurface } from '../../../../surfaces/common/test-utils';
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
 /**
  * Pre-load the rustic engine modules used by the classic CockpitHeader engine
@@ -11,10 +11,10 @@ import { renderSurface } from '../../../../surfaces/common/test-utils';
  */
 beforeAll(async () => {
   await Promise.all([
-    import('../../../primitives/layout/Box/engines/rustic'),
-    import('../../../primitives/layout/Flex/engines/rustic'),
-    import('../../../primitives/display/Typography/engines/rustic'),
-    import('../../../primitives/display/Tag/engines/rustic'),
+    import('../../../../primitives/layout/Box/engines/rustic'),
+    import('../../../../primitives/layout/Flex/engines/rustic'),
+    import('../../../../primitives/display/Typography/engines/rustic'),
+    import('../../../../primitives/display/Tag/engines/rustic'),
   ]);
 });
 

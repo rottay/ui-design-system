@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { HeaderSurface } from '..';
 import type { HeaderSurfaceConfig } from '../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<HeaderSurfaceConfig>): HeaderSurfaceConfig {
   return {
@@ -46,8 +46,8 @@ function buildConfig(overrides?: Partial<HeaderSurfaceConfig>): HeaderSurfaceCon
 
 describe('HeaderSurface', () => {
   beforeAll(async () => {
-    await import('../../../primitives/navigation/Tabs/engines/rustic');
-    await import('../../../primitives/inputs/Button/engines/rustic');
+    await import('../../../../primitives/navigation/Tabs/engines/rustic');
+    await import('../../../../primitives/inputs/Button/engines/rustic');
   });
 
   it('switches tabs and forwards tab changes when uncontrolled', async () => {
@@ -71,7 +71,7 @@ describe('HeaderSurface', () => {
   });
 
   it('filters tabs and actions through permissions while keeping badges visible', async () => {
-    await import('../../../primitives/inputs/Button/engines/rustic');
+    await import('../../../../primitives/inputs/Button/engines/rustic');
 
     const config = buildConfig({
       behavior: {
@@ -120,10 +120,10 @@ describe('HeaderSurface', () => {
 
     renderSurface(<HeaderSurface config={config} />);
 
-    expect(await screen.findByRole('tab', { name: /Overview/i })).toBeInTheDocument();
+    expect(await screen.findByText('Overview')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.queryByRole('tab', { name: /Activity/i })).not.toBeInTheDocument();
-    expect(await screen.findByRole('button', { name: /Invite/i }, { timeout: 15000 })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Danger zone/i })).not.toBeInTheDocument();
+    expect(screen.queryByText('Activity')).not.toBeInTheDocument();
+    expect(await screen.findByText('Invite')).toBeInTheDocument();
+    expect(screen.queryByText('Danger zone')).not.toBeInTheDocument();
   });
 });

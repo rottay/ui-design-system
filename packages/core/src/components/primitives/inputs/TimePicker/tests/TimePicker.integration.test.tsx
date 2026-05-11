@@ -8,7 +8,7 @@ describe('TimePicker integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'changes values in the live %s engine',
     async (engine) => {
-      const { TimePicker } = await import('.');
+      const { TimePicker } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -26,7 +26,7 @@ describe('TimePicker integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'clears selected values in the live %s engine',
     async (engine) => {
-      const { TimePicker } = await import('.');
+      const { TimePicker } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -47,7 +47,7 @@ describe('TimePicker integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'exposes RangePicker through the %s engine',
     async (engine) => {
-      const { TimePicker } = await import('.');
+      const { TimePicker } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -70,7 +70,7 @@ describe('TimePicker integration', () => {
   );
 
   it('respects the no-seconds format in the rustic engine', async () => {
-    const { TimePicker } = await import('.');
+    const { TimePicker } = await import('..');
 
     renderWithEngine(
       <TimePicker engine="rustic" placeholder="Meeting time" format="HH:mm" />,

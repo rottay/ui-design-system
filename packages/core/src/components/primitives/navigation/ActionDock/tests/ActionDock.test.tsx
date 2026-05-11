@@ -8,7 +8,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ActionDock } from '../';
 
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockActionDock = ({ children, position = 'bottom', style }: any) => {
       const isBottom = position === 'bottom';

@@ -9,6 +9,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import ClassicBox from '../engines/classic';
+import { SPACING_MAP } from '../Box.types';
 
 describe('ClassicBox responsive props', () => {
   describe('backward compatibility', () => {
@@ -18,7 +19,7 @@ describe('ClassicBox responsive props', () => {
       );
       const box = container.querySelector('.rottay-box--classic');
       expect(box).toBeInTheDocument();
-      expect(box).toHaveStyle({ padding: '1rem' });
+      expect(box).toHaveStyle({ padding: SPACING_MAP.md });
       // No style tag should be injected
       expect(container.querySelector('style')).toBeNull();
     });
@@ -52,9 +53,9 @@ describe('ClassicBox responsive props', () => {
 
       expect(styleTag).not.toBeNull();
       expect(box).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain('padding: 0.5rem;');
+      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.sm};`);
       expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
-      expect(styleTag?.textContent).toContain('padding: 2rem;');
+      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.xl};`);
     });
 
     it('generates CSS for responsive px (horizontal padding)', () => {
@@ -62,10 +63,10 @@ describe('ClassicBox responsive props', () => {
         <ClassicBox px={{ base: 'xs', md: 'lg' }}>Content</ClassicBox>
       );
       const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('padding-left: 0.25rem;');
-      expect(styleTag?.textContent).toContain('padding-right: 0.25rem;');
+      expect(styleTag?.textContent).toContain(`padding-left: ${SPACING_MAP.xs};`);
+      expect(styleTag?.textContent).toContain(`padding-right: ${SPACING_MAP.xs};`);
       expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
-      expect(styleTag?.textContent).toContain('padding-left: 1.5rem;');
+      expect(styleTag?.textContent).toContain(`padding-left: ${SPACING_MAP.lg};`);
     });
   });
 
@@ -75,9 +76,9 @@ describe('ClassicBox responsive props', () => {
         <ClassicBox m={{ xs: 'sm', xl: '2xl' }}>Content</ClassicBox>
       );
       const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('margin: 0.5rem;');
+      expect(styleTag?.textContent).toContain(`margin: ${SPACING_MAP.sm};`);
       expect(styleTag?.textContent).toContain('@media (min-width: 1280px)');
-      expect(styleTag?.textContent).toContain('margin: 2.5rem;');
+      expect(styleTag?.textContent).toContain(`margin: ${SPACING_MAP['2xl']};`);
     });
 
     it('generates CSS for responsive mx (horizontal margin)', () => {
@@ -85,8 +86,8 @@ describe('ClassicBox responsive props', () => {
         <ClassicBox mx={{ phone: 'xs', desktop: 'lg' }}>Content</ClassicBox>
       );
       const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('margin-left: 0.25rem;');
-      expect(styleTag?.textContent).toContain('margin-right: 0.25rem;');
+      expect(styleTag?.textContent).toContain(`margin-left: ${SPACING_MAP.xs};`);
+      expect(styleTag?.textContent).toContain(`margin-right: ${SPACING_MAP.xs};`);
       expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
     });
   });
@@ -137,13 +138,13 @@ describe('ClassicBox responsive props', () => {
       );
       const styleTag = container.querySelector('style');
       // phone -> xs (no media query)
-      expect(styleTag?.textContent).toContain('padding: 0.25rem;');
+      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.xs};`);
       // tablet -> sm (640px)
       expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
-      expect(styleTag?.textContent).toContain('padding: 1rem;');
+      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.md};`);
       // desktop -> lg (1024px)
       expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
-      expect(styleTag?.textContent).toContain('padding: 2rem;');
+      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.xl};`);
     });
   });
 });

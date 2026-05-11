@@ -6,8 +6,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { DashboardSurface } from '..';
 import type { DashboardSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
-import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
+import { renderSurface } from '../../../../foundation/common/test-utils';
+import { mockMatchMedia } from '../../../../../../_internal/testing/helpers/match-media';
 
 function buildDashboardConfig(onHeaderAction = vi.fn()): DashboardSurfaceConfig {
   return {
@@ -60,7 +60,9 @@ describe('DashboardSurface', () => {
     expect(await screen.findByText('Section content')).toBeInTheDocument();
     expect(await screen.findByText('Attendees')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /refresh/i }));
+    const refreshButton = screen.getByText('Refresh').closest('button');
+    if (!refreshButton) throw new Error('Refresh button not found');
+    fireEvent.click(refreshButton);
     expect(onHeaderAction).toHaveBeenCalledTimes(1);
   });
 
@@ -77,7 +79,9 @@ describe('DashboardSurface', () => {
 
     expect(await screen.findByText('Unable to load live metrics')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /try again/i }));
+    const retryButton = screen.getByText('Try again').closest('button');
+    if (!retryButton) throw new Error('Try again button not found');
+    fireEvent.click(retryButton);
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
 

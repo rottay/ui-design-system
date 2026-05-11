@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { AutoComplete } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockAutoComplete = ({
       options,

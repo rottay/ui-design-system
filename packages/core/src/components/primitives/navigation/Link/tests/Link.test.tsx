@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Link } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockLink = ({ children, href, type, disabled, underline, external, ...props }: any) => (
       <a

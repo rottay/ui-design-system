@@ -5,8 +5,8 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { FormSurface } from '..';
 import type { FormSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
-import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
+import { renderSurface } from '../../../../foundation/common/test-utils';
+import { mockMatchMedia } from '../../../../../../_internal/testing/helpers/match-media';
 
 function buildConfig(): FormSurfaceConfig {
   return {
@@ -30,7 +30,7 @@ function buildConfig(): FormSurfaceConfig {
 
 describe('FormSurface', () => {
   beforeAll(async () => {
-    await import('../../../primitives/inputs/Button/engines/rustic');
+    await import('../../../../../primitives/inputs/Button/engines/rustic');
   });
 
   it('routes submission through the unified submitAction contract', async () => {
@@ -89,8 +89,8 @@ describe('FormSurface', () => {
       />
     );
 
-    expect(await screen.findByRole('button', { name: /create record/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
+    expect(screen.getAllByText('Create record').length).toBeGreaterThan(0);
+    expect(screen.getByText('Cancel')).toBeInTheDocument();
     expect(screen.queryByText('Helpful aside')).not.toBeInTheDocument();
   });
 });

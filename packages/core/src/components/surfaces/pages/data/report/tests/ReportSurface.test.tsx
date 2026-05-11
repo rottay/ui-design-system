@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ReportSurface } from '..';
 import type { ReportSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<ReportSurfaceConfig>): ReportSurfaceConfig {
   return {
@@ -94,7 +94,8 @@ describe('ReportSurface', () => {
 
     renderSurface(<ReportSurface config={config} />);
 
-    const pdfButton = await screen.findByRole('button', { name: /^PDF$/i });
+    const pdfButton = await screen.findByText('PDF').then((node) => node.closest('button'));
+    if (!pdfButton) throw new Error('PDF export button not found');
     fireEvent.click(pdfButton);
     expect(config.behavior.onExport).toHaveBeenCalledWith('pdf');
   });
@@ -117,7 +118,8 @@ describe('ReportSurface', () => {
 
     renderSurface(<ReportSurface config={config} />);
 
-    const generateButton = await screen.findByRole('button', { name: /generate/i });
+    const generateButton = await screen.findByText('Generate').then((node) => node.closest('button'));
+    if (!generateButton) throw new Error('Generate button not found');
     fireEvent.click(generateButton);
     expect(config.behavior.onGenerate).toHaveBeenCalledTimes(1);
   });

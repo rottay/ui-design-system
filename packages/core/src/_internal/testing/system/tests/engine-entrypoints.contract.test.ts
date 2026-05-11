@@ -10,11 +10,11 @@ import * as componentsEntry from '../../../../components';
 import * as iconsEntry from '../../../../icons';
 import * as i18nEntry from '../../../../i18n';
 
-const engineBarrels = import.meta.glob('../../../components/**/engines/classic.tsx', {
+const engineBarrels = import.meta.glob('../../../../components/**/engines/classic.tsx', {
   eager: true,
 }) as Record<string, Record<string, unknown>>;
 
-const compoundBarrels = import.meta.glob('../../../components/**/compound/**/index.ts', {
+const compoundBarrels = import.meta.glob('../../../../components/**/compound/**/index.ts', {
   eager: true,
 }) as Record<string, Record<string, unknown>>;
 

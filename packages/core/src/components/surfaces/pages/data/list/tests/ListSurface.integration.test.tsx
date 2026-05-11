@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ListSurface } from '..';
 import type { EntityAdapter, ListSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 interface RawCandidate {
   id: string;

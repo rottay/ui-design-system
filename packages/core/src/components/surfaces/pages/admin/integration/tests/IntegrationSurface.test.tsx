@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { IntegrationSurface } from '..';
 import type { IntegrationSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<IntegrationSurfaceConfig>): IntegrationSurfaceConfig {
   return {
@@ -55,7 +55,8 @@ describe('IntegrationSurface', () => {
 
     renderSurface(<IntegrationSurface config={config} />);
 
-    const createButton = await screen.findByRole('button', { name: /create key/i });
+    const createButton = await screen.findByText('Create Key').then((node) => node.closest('button'));
+    if (!createButton) throw new Error('Create Key button not found');
     fireEvent.click(createButton);
     expect(config.behavior.onCreateKey).toHaveBeenCalledTimes(1);
   });
@@ -65,8 +66,9 @@ describe('IntegrationSurface', () => {
 
     renderSurface(<IntegrationSurface config={config} />);
 
-    const revokeButtons = await screen.findAllByRole('button', { name: /revoke/i });
-    fireEvent.click(revokeButtons[0]);
+    const revokeButton = await screen.findAllByText('Revoke').then((nodes) => nodes[0]?.closest('button'));
+    if (!revokeButton) throw new Error('Revoke button not found');
+    fireEvent.click(revokeButton);
     expect(config.behavior.onRevokeKey).toHaveBeenCalledWith('k1');
   });
 

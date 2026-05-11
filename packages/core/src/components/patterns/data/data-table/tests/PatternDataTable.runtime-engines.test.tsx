@@ -94,7 +94,7 @@ describe('PatternDataTable runtime engines', () => {
       if (engine === 'classic') {
         expect(document.querySelector('.ant-spin-spinning')).toBeTruthy();
       } else if (engine === 'modern') {
-        expect(document.querySelector('.loading-spinner')).toBeTruthy();
+        expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
       } else {
         expect(screen.getByRole('status', { name: /loading/i })).toBeInTheDocument();
       }

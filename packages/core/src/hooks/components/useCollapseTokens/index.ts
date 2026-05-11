@@ -44,7 +44,7 @@ import {
   getCollapseSlotTokens,
   type CollapseTokenOptions,
   type CollapseSlot,
-} from '../../../tokens/ts/components/collapse-token-utils';
+} from '../../../tokens';
 
 export interface UseCollapseTokensOptions extends CollapseTokenOptions {
   /** Additional className for the root element */

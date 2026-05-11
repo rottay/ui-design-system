@@ -85,13 +85,14 @@ describe('RusticButton responsive size', () => {
 
 describe('ModernButton responsive size', () => {
   describe('backward compatibility', () => {
-    it('renders plain scalar size as DaisyUI class', () => {
+    it('renders plain scalar size as tokenized inline style', () => {
       const { container } = render(
         <ModernButton size="sm">Small</ModernButton>
       );
       const button = container.querySelector('.rottay-button--modern');
       expect(button).toBeInTheDocument();
-      expect(button?.className).toContain('btn-sm');
+      expect(button?.className).not.toContain('btn-sm');
+      expect(button?.className).toContain('rottay-button');
       expect(container.querySelector('style')).toBeNull();
     });
   });
@@ -110,7 +111,7 @@ describe('ModernButton responsive size', () => {
       expect(button?.className).not.toContain('btn-sm');
       expect(button?.className).not.toContain('btn-lg');
       // Should still contain variant and base classes
-      expect(button?.className).toContain('btn');
+      expect(button?.className).toContain('rottay-button');
       expect(button?.className).toContain('rottay-button--modern');
     });
 

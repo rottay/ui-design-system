@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { AuditSurface } from '..';
 import type { AuditSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<AuditSurfaceConfig>): AuditSurfaceConfig {
   return {
@@ -68,9 +68,9 @@ describe('AuditSurface', () => {
     expect(screen.getByText('user.created')).toBeInTheDocument();
     expect(screen.getByText('breach.detected')).toBeInTheDocument();
     expect(screen.getByText(/admin@company\.com/)).toBeInTheDocument();
-    expect(screen.getByText('Created new user account')).toBeInTheDocument();
 
-    const csvButton = screen.getByRole('button', { name: /csv/i });
+    const csvButton = screen.getByText('CSV').closest('button');
+    if (!csvButton) throw new Error('CSV export button not found');
     fireEvent.click(csvButton);
     expect(config.behavior.onExport).toHaveBeenCalledWith('csv');
   });

@@ -28,7 +28,7 @@
 import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
-import { Checkbox } from '../../../../primitives/inputs/Checkbox';
+import ModernCheckbox from '../../../../primitives/inputs/Checkbox/engines/modern';
 import { useVirtualScroll } from '../useVirtualScroll';
 import { useGroupedData } from '../useGroupedData';
 import type { EditableConfig } from '../../../foundation/types';
@@ -709,7 +709,7 @@ export default function ModernDataTable<T extends object>(
         >
           {/* Loading state: skeleton rows with shimmer animation */}
           {loading ? (
-            <div style={{ width: '100%' }}>
+            <div role="status" aria-label="Loading" style={{ width: '100%' }}>
               {/* Skeleton header */}
               <div
                 style={{
@@ -881,7 +881,7 @@ export default function ModernDataTable<T extends object>(
                         textAlign: 'left',
                       }}
                     >
-                      <Checkbox
+                      <ModernCheckbox
                         size="sm"
                         checked={selectedKeys.length === data.length && data.length > 0}
                         indeterminate={selectedKeys.length > 0 && selectedKeys.length < data.length}
@@ -1207,7 +1207,7 @@ export default function ModernDataTable<T extends object>(
                                   }}
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  <Checkbox
+                                  <ModernCheckbox
                                     size="sm"
                                     checked={isSelected}
                                     onChange={() => toggleSelection(key, row)}
@@ -1556,7 +1556,7 @@ export default function ModernDataTable<T extends object>(
                             }}
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <Checkbox
+                            <ModernCheckbox
                               size="sm"
                               checked={isSelected}
                               onChange={() => toggleSelection(key, row)}
@@ -1824,6 +1824,7 @@ export default function ModernDataTable<T extends object>(
                   disabled={isFirstPage}
                   onClick={() => pagination.onChange(pagination.current - 1, pagination.pageSize)}
                   style={navBtnStyle(isFirstPage)}
+                  aria-label="Previous page"
                 >
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M10 12L6 8L10 4" />
@@ -1881,6 +1882,7 @@ export default function ModernDataTable<T extends object>(
                   disabled={isLastPage}
                   onClick={() => pagination.onChange(pagination.current + 1, pagination.pageSize)}
                   style={navBtnStyle(isLastPage)}
+                  aria-label="Next page"
                 >
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M6 4L10 8L6 12" />

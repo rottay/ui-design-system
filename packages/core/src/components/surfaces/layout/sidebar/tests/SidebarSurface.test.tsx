@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { SidebarSurface } from '..';
 import type { SidebarSurfaceConfig } from '../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../foundation/common/test-utils';
 
 function buildConfig(): SidebarSurfaceConfig {
   return {
@@ -29,12 +29,12 @@ describe('SidebarSurface', () => {
 
     renderSurface(<SidebarSurface config={config} />);
 
-    fireEvent.click(await screen.findByRole('button', { name: /Collapse nav/i }));
+    fireEvent.click(await screen.findByText('Collapse nav'));
 
     await waitFor(() => {
       expect(config.behavior.onCollapsedChange).toHaveBeenCalledWith(true);
     });
 
-    expect(await screen.findByRole('button', { name: /Expand/i })).toBeInTheDocument();
+    expect(await screen.findByText('Expand')).toBeInTheDocument();
   });
 });

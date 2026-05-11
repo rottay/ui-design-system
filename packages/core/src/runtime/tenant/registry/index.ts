@@ -16,7 +16,7 @@
  */
 
 import type { TenantConfig, EngineName } from '../../../contracts';
-import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '../../../tokens/ts/brand-themes';
+import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '../../../tokens';
 
 /**
  * First-party tenants that ship with the DS.

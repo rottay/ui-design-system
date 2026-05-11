@@ -32,7 +32,7 @@ const OPTION_GROUPS = [
 
 describe('Select advanced engine coverage', () => {
   it('covers the modern native select branch with flushed styling, loading, aliases, and placeholder handling', async () => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const handleChange = vi.fn();
     const handleFocus = vi.fn();
     const handleBlur = vi.fn();
@@ -80,7 +80,7 @@ describe('Select advanced engine coverage', () => {
   });
 
   it('covers the modern custom dropdown branch with filtering, no-results, tag collapsing, clearing, and disabled/loading guards', async () => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const handleChange = vi.fn();
     const handleSearch = vi.fn();
     const handleClear = vi.fn();
@@ -153,7 +153,7 @@ describe('Select advanced engine coverage', () => {
   });
 
   it('covers rustic single-select branches for hidden inputs, filled styling, maxTagCount, and loading/disabled guards', async () => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const handleChange = vi.fn();
 
     const { container, rerender } = renderWithEngine(
@@ -211,7 +211,7 @@ describe('Select advanced engine coverage', () => {
   });
 
   it('covers the modern grouped + virtual branch with token separators, keyboard navigation, escape, and virtual scrolling', async () => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const handleChange = vi.fn();
     const handleSearch = vi.fn();
 
@@ -263,7 +263,7 @@ describe('Select advanced engine coverage', () => {
   });
 
   it('covers the rustic grouped + virtual branch with token separators, backspace removal, and escape close', async () => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const handleChange = vi.fn();
     const handleSearch = vi.fn();
     const originalScrollIntoView = Element.prototype.scrollIntoView;

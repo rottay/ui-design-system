@@ -17,12 +17,12 @@ import {
   resolveSurfaceButtonVariant,
   resolveSurfaceDetailActionVariant,
   stringifySurfaceValue,
-} from '../../../helpers';
+} from '../../helpers';
 import {
   normalizeSurfaceDensity,
   resolveListCardMinWidth,
   resolveSurfaceTabsType,
-} from '../../../profile-defaults';
+} from '../../profile-defaults';
 
 describe('normalizeSurfaceError', () => {
   it('extracts message and stack from Error instances', () => {

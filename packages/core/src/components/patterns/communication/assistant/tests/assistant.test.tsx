@@ -1,6 +1,6 @@
 import React from 'react';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { renderSurface } from '../../../../surfaces/common/test-utils';
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 import {
   AssistantStatusBadge,
   MessageBubble,
@@ -13,11 +13,11 @@ import { screen } from '@testing-library/react';
 
 beforeAll(async () => {
   await Promise.all([
-    import('../../../primitives/layout/Box/engines/rustic'),
-    import('../../../primitives/layout/Stack/engines/rustic'),
-    import('../../../primitives/display/Card/engines/rustic'),
-    import('../../../primitives/display/Tag/engines/rustic'),
-    import('../../../primitives/display/Typography/engines/rustic'),
+    import('../../../../primitives/layout/Box/engines/rustic'),
+    import('../../../../primitives/layout/Stack/engines/rustic'),
+    import('../../../../primitives/display/Card/engines/rustic'),
+    import('../../../../primitives/display/Tag/engines/rustic'),
+    import('../../../../primitives/display/Typography/engines/rustic'),
   ]);
 });
 

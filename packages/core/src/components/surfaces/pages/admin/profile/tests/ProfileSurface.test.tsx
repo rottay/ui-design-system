@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ProfileSurface } from '..';
 import type { ProfileSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<ProfileSurfaceConfig>): ProfileSurfaceConfig {
   return {
@@ -61,7 +61,8 @@ describe('ProfileSurface', () => {
 
     renderSurface(<ProfileSurface config={config} />);
 
-    const deleteButton = await screen.findByRole('button', { name: /delete account/i });
+    const deleteButton = await screen.findByText('Delete Account').then((node) => node.closest('button'));
+    if (!deleteButton) throw new Error('Delete Account button not found');
     fireEvent.click(deleteButton);
     expect(config.behavior.onDeleteAccount).toHaveBeenCalledTimes(1);
   });

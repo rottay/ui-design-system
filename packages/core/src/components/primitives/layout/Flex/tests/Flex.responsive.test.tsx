@@ -185,12 +185,12 @@ describe('ClassicFlex responsive props', () => {
 
 describe('ModernFlex responsive props', () => {
   describe('backward compatibility', () => {
-    it('renders plain scalar direction as Tailwind class without a style tag', () => {
+    it('renders plain scalar direction as inline style without a style tag', () => {
       const { container } = render(
         <ModernFlex direction="column">Content</ModernFlex>
       );
       const flex = container.firstChild as HTMLElement;
-      expect(flex.className).toContain('flex-col');
+      expect(flex).toHaveStyle({ flexDirection: 'column' });
       expect(container.querySelector('style')).toBeNull();
     });
 

@@ -113,7 +113,7 @@ describe('PatternPricingTable', () => {
       const { container } = renderWithEngine(<Component {...createProps({ loading: true })} />, engine);
 
       if (engine === 'modern') {
-        expect(container.querySelector('.loading-spinner')).toBeTruthy();
+        expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
         return;
       }
 

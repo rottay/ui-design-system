@@ -2,12 +2,12 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 
-import { AuthSurface } from '../../../auth';
-import { DetailSurface } from '../../../detail';
-import { FormSurface } from '../../../form';
-import { ListSurface } from '../../../list';
-import { MarketingSurface } from '../../../marketing';
-import { OperationalSurface } from '../../../operational';
+import { AuthSurface } from '../../../pages/experience/auth';
+import { DetailSurface } from '../../../pages/data/detail';
+import { FormSurface } from '../../../pages/forms/form';
+import { ListSurface } from '../../../pages/data/list';
+import { MarketingSurface } from '../../../pages/experience/marketing';
+import { OperationalSurface } from '../../../pages/operations/operational';
 import type {
   AuthSurfaceConfig,
   DetailSurfaceConfig,
@@ -16,7 +16,7 @@ import type {
   ListSurfaceConfig,
   MarketingSurfaceConfig,
   OperationalSurfaceConfig,
-} from '../../../types';
+} from '../../types';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../../_internal/testing/helpers/engine-test-utils';
 import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
 

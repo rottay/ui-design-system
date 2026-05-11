@@ -1,23 +1,29 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import type { FormBuilderProps } from '../FormBuilder.types';
 import ClassicFormBuilder from '../engines/classic';
 import ModernFormBuilder from '../engines/modern';
 import RusticFormBuilder from '../engines/rustic';
+import {
+  renderWithEngine,
+  type StableEngineName,
+} from '../../../../../_internal/testing/helpers/engine-test-utils';
 
 const ENGINE_COMPONENTS = {
   classic: ClassicFormBuilder,
   modern: ModernFormBuilder,
   rustic: RusticFormBuilder,
-} as const;
+} satisfies Record<StableEngineName, React.ComponentType<FormBuilderProps>>;
 
 describe('PatternFormBuilder runtime engines', () => {
   it.each(Object.entries(ENGINE_COMPONENTS))(
     'renders the rich field matrix through the %s engine',
     async (_engine, Component) => {
-      render(
+      const engine = _engine as StableEngineName;
+
+      renderWithEngine(
         <Component
           title="Create Event"
           description="Operational event form"
@@ -72,12 +78,13 @@ describe('PatternFormBuilder runtime engines', () => {
           ]}
           actions={<button type="submit">Create event</button>}
           onSubmit={() => undefined}
-        />
+        />,
+        engine
       );
 
-      expect(screen.getByText('Create Event')).toBeInTheDocument();
-      expect(screen.getByText('Operational event form')).toBeInTheDocument();
-      expect(screen.getByText('Event name')).toBeInTheDocument();
+      expect(await screen.findByText('Create Event')).toBeInTheDocument();
+      expect(await screen.findByText('Operational event form')).toBeInTheDocument();
+      expect(await screen.findByText('Event name')).toBeInTheDocument();
       expect(screen.getByText('Details')).toBeInTheDocument();
       expect(screen.getByText('Event type')).toBeInTheDocument();
       expect(screen.getByText('Tags')).toBeInTheDocument();
@@ -95,8 +102,9 @@ describe('PatternFormBuilder runtime engines', () => {
       const onSubmit = vi.fn();
       const onValidationChange = vi.fn();
       const onStepChange = vi.fn();
+      const engine = _engine as StableEngineName;
 
-      render(
+      renderWithEngine(
         <Component
           title="Setup Wizard"
           layout="steps"
@@ -132,21 +140,27 @@ describe('PatternFormBuilder runtime engines', () => {
             },
           ]}
           actions={<button type="submit">Finish</button>}
-        />
+        />,
+        engine
       );
 
-      fireEvent.click(screen.getByRole('button', { name: /finish/i }));
+      expect(await screen.findByText('Event name')).toBeInTheDocument();
+      const finishButton = await screen.findByRole('button', { name: /finish/i });
+      const form = finishButton.closest('form');
+      expect(form).not.toBeNull();
+
+      fireEvent.submit(form as HTMLFormElement);
 
       await waitFor(() => {
         expect(onValidationChange).toHaveBeenCalled();
-      });
+      }, { timeout: 1_000 });
 
-      const textbox = screen.getAllByRole('textbox')[0];
+      const textbox = (await screen.findAllByRole('textbox'))[0];
       fireEvent.change(textbox, { target: { value: 'Launch week' } });
 
       // Classic number inputs render as spinbuttons, while the modern/rustic
       // engines use the native number role. The query keeps the test portable.
-      const spinbutton = screen.getByRole('spinbutton');
+      const spinbutton = await screen.findByRole('spinbutton');
       fireEvent.change(spinbutton, { target: { value: '120' } });
 
       const slugField = screen.getAllByRole('textbox').find((node) => {
@@ -164,16 +178,21 @@ describe('PatternFormBuilder runtime engines', () => {
         expect(onStepChange).toHaveBeenCalled();
       }
 
-      fireEvent.click(screen.getByRole('button', { name: /finish/i }));
+      fireEvent.submit(form as HTMLFormElement);
 
       await waitFor(() => {
+        if (onSubmit.mock.calls.length === 0) {
+          throw new Error(
+            `Form submit was not called. Validation calls: ${JSON.stringify(onValidationChange.mock.calls)}`
+          );
+        }
         expect(onSubmit).toHaveBeenCalledWith(
           expect.objectContaining({
             eventName: 'Launch week',
             capacity: 120,
           })
         );
-      });
+      }, { timeout: 1_000 });
     }
   );
 
@@ -182,8 +201,9 @@ describe('PatternFormBuilder runtime engines', () => {
     async (_engine, Component) => {
       const onChange = vi.fn();
       const onStepChange = vi.fn();
+      const engine = _engine as StableEngineName;
 
-      render(
+      renderWithEngine(
         <Component
           layout="steps"
           stepLabels={['Basics', 'Preferences']}
@@ -231,10 +251,12 @@ describe('PatternFormBuilder runtime engines', () => {
               render: (_field, value) => <div>Preview: {String(value ?? 'empty')}</div>,
             },
           ]}
-        />
+        />,
+        engine
       );
 
-      fireEvent.change(screen.getAllByRole('textbox')[0], {
+      const textboxes = await screen.findAllByRole('textbox');
+      fireEvent.change(textboxes[0], {
         target: { value: 'Launch Week' },
       });
 

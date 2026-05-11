@@ -6,7 +6,7 @@ import { renderWithEngine } from '../../../../../_internal/testing/helpers/engin
 
 describe('DatePicker rustic advanced coverage', () => {
   it('covers rustic picker variants, clear handling, disabled clear guards, and range updates', async () => {
-    const { DatePicker } = await import('.');
+    const { DatePicker } = await import('..');
     const handleChange = vi.fn();
 
     const yearRender = renderWithEngine(
@@ -65,7 +65,7 @@ describe('DatePicker rustic advanced coverage', () => {
   }, 10000);
 
   it('covers controlled rustic values, week mode, and allowClear guards', async () => {
-    const { DatePicker } = await import('.');
+    const { DatePicker } = await import('..');
     const handleChange = vi.fn();
 
     renderWithEngine(
@@ -94,7 +94,7 @@ describe('DatePicker rustic advanced coverage', () => {
   });
 
   it('covers rustic time mode, disabled dates, custom cells, and extra footer branches', async () => {
-    const { DatePicker } = await import('.');
+    const { DatePicker } = await import('..');
     const handleChange = vi.fn();
 
     renderWithEngine(
@@ -142,7 +142,7 @@ describe('DatePicker rustic advanced coverage', () => {
   });
 
   it('covers rustic month panel callbacks and year navigation branches', async () => {
-    const { DatePicker } = await import('.');
+    const { DatePicker } = await import('..');
     const handleChange = vi.fn();
     const handlePanelChange = vi.fn();
 

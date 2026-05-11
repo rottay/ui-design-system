@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { MediaSurface } from '..';
 import type { MediaSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<MediaSurfaceConfig>): MediaSurfaceConfig {
   return {
@@ -63,7 +63,9 @@ describe('MediaSurface', () => {
       );
     });
 
-    fireEvent.click(await screen.findByRole('button', { name: 'Promote asset' }));
+    const promoteButton = await screen.findByText('Promote asset').then((node) => node.closest('button'));
+    if (!promoteButton) throw new Error('Promote asset button not found');
+    fireEvent.click(promoteButton);
 
     expect(config.behavior.itemActions?.[0]?.onClick).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'asset-2', title: 'Crowd Closeup' })

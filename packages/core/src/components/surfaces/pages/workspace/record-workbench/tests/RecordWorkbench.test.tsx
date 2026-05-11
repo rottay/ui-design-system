@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { RecordWorkbenchSurface } from '../index';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 describe('RecordWorkbenchSurface', () => {
   const baseTabs = [
@@ -28,12 +28,13 @@ describe('RecordWorkbenchSurface', () => {
   });
 
   it('renders tabs with proper ARIA attributes', async () => {
-    renderSurface(
+    const { container } = renderSurface(
       <RecordWorkbenchSurface title="John Doe" tabs={baseTabs} />,
     );
-    const tablist = await screen.findByRole('tablist');
+    await screen.findByText('John Doe');
+    const tablist = container.querySelector('[role="tablist"]');
     expect(tablist).toBeInTheDocument();
-    const tabs = await screen.findAllByRole('tab');
+    const tabs = Array.from(container.querySelectorAll('[role="tab"]'));
     expect(tabs).toHaveLength(2);
     expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
   });

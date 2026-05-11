@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
+import { mockMatchMedia } from '../../../../../../_internal/testing/helpers/match-media';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { CompareSurface } from '..';
 import type { CompareSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<CompareSurfaceConfig>): CompareSurfaceConfig {
   return {
@@ -43,7 +43,7 @@ function buildConfig(overrides?: Partial<CompareSurfaceConfig>): CompareSurfaceC
 
 describe('CompareSurface', () => {
   beforeAll(async () => {
-    await import('../../../primitives/display/Table/engines/rustic');
+    await import('../../../../../primitives/display/Table/engines/rustic');
   });
 
   it('localizes the default empty state through the provider locale', async () => {

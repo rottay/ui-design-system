@@ -62,7 +62,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
   if (loading) {
     return (
       <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span style={spinnerStyle(24)} />
+        <span role="status" aria-label="Loading" style={spinnerStyle(24)} />
       </div>
     );
   }

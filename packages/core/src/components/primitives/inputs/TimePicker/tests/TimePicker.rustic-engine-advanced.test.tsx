@@ -6,7 +6,7 @@ import { renderWithEngine } from '../../../../../_internal/testing/helpers/engin
 
 describe('TimePicker rustic advanced coverage', () => {
   it('covers rustic parsing branches, clear handling, disabled clear guards, and range updates', async () => {
-    const { TimePicker } = await import('.');
+    const { TimePicker } = await import('..');
     const handleChange = vi.fn();
 
     const { container, rerender } = renderWithEngine(
@@ -84,7 +84,7 @@ describe('TimePicker rustic advanced coverage', () => {
   }, 10000);
 
   it('covers controlled rustic values, invalid string parsing, and allowClear guards', async () => {
-    const { TimePicker } = await import('.');
+    const { TimePicker } = await import('..');
     const handleChange = vi.fn();
 
     const { container } = renderWithEngine(

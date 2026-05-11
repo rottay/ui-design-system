@@ -6,7 +6,7 @@ import { renderWithEngine, STABLE_ENGINES } from '../../../../../_internal/testi
 
 describe('Grid integration', () => {
   it.each(STABLE_ENGINES)('renders the live grid with the %s engine', async (engine) => {
-    const { Grid } = await import('.');
+    const { Grid } = await import('..');
 
     renderWithEngine(
       <Grid engine={engine} columns={{ xs: 1, md: 3 }} gap="md" data-testid="grid">
@@ -23,7 +23,7 @@ describe('Grid integration', () => {
   }, 15000);
 
   it('injects responsive CSS hooks for the modern engine', async () => {
-    const { Grid } = await import('.');
+    const { Grid } = await import('..');
 
     renderWithEngine(
       <Grid engine="modern" columns={{ xs: 1, md: 2 }} gap="sm" data-testid="grid-modern">

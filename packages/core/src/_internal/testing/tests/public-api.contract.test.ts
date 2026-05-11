@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 // Navigate from src/_internal/testing/ up to the package root
-const PACKAGE_JSON_PATH = join(TEST_DIR, '..', '..', '..', 'package.json');
+const PACKAGE_JSON_PATH = join(TEST_DIR, '..', '..', '..', '..', 'package.json');
 
 describe('public api contract', () => {
   // The root barrel lazily wires a large public surface area, so in full coverage

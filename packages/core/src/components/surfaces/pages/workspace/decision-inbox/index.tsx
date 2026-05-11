@@ -364,7 +364,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
           <Card.Body>
             <Flex align="center" gap={3} wrap="wrap">
               <Badge variant="primary" badgeStyle="soft" size="sm">
-                {workspace.selectedKeys.length} selected
+                {workspace.selectedKeys.length} items selected
               </Badge>
               <Box style={{ flex: 1 }} />
 

@@ -32,9 +32,9 @@
 import React, { useRef, useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../../foundation/types';
-import { Switch } from '../../../../primitives/inputs/Switch';
-import { Checkbox } from '../../../../primitives/inputs/Checkbox';
-import { Select } from '../../../../primitives/inputs/Select';
+import ModernSwitch from '../../../../primitives/inputs/Switch/engines/modern';
+import ModernCheckbox from '../../../../primitives/inputs/Checkbox/engines/modern';
+import ModernSelect from '../../../../primitives/inputs/Select/engines/modern';
 
 /* ---------------------------------------------------------------------------
  * Shared inline-style constants
@@ -111,7 +111,7 @@ function renderFilterControl(
       );
     case 'select':
       return (
-        <Select
+        <ModernSelect
           size="sm"
           forceCustomDropdown
           placeholder={filter.placeholder ?? 'Select...'}
@@ -128,7 +128,7 @@ function renderFilterControl(
           {filter.options?.map((o) => {
             const checked = ((value as string[]) ?? []).includes(o.value);
             return (
-              <Checkbox
+              <ModernCheckbox
                 key={o.value}
                 size="sm"
                 checked={checked}
@@ -147,7 +147,7 @@ function renderFilterControl(
       );
     case 'boolean':
       return (
-        <Switch
+        <ModernSwitch
           size="small"
           checked={!!value}
           onChange={(checked) => onChange(filter.key, checked)}

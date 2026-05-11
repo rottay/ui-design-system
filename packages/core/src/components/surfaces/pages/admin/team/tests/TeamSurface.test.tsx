@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { TeamSurface } from '..';
 import type { TeamSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<TeamSurfaceConfig>): TeamSurfaceConfig {
   return {
@@ -51,7 +51,8 @@ describe('TeamSurface', () => {
 
     renderSurface(<TeamSurface config={config} />);
 
-    const inviteButton = await screen.findByRole('button', { name: /invite member/i });
+    const inviteButton = await screen.findByText('Invite Member').then((node) => node.closest('button'));
+    if (!inviteButton) throw new Error('Invite Member button not found');
     fireEvent.click(inviteButton);
     expect(config.behavior.onInvite).toHaveBeenCalledTimes(1);
   });
@@ -61,8 +62,9 @@ describe('TeamSurface', () => {
 
     renderSurface(<TeamSurface config={config} />);
 
-    const removeButtons = await screen.findAllByRole('button', { name: /remove/i });
-    fireEvent.click(removeButtons[0]);
+    const removeButton = await screen.findAllByText('Remove').then((nodes) => nodes[0]?.closest('button'));
+    if (!removeButton) throw new Error('Remove button not found');
+    fireEvent.click(removeButton);
     expect(config.behavior.onRemove).toHaveBeenCalledWith('m1');
   });
 

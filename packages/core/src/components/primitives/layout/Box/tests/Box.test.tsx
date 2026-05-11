@@ -9,7 +9,7 @@ import React, { createRef } from 'react';
 import { Box } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockBox = React.forwardRef<HTMLElement, any>(({
       children,
@@ -388,12 +388,12 @@ describe('Box', () => {
 
 describe('Box Types', () => {
   it('exports BoxProps type', async () => {
-    const { BoxProps } = await import('./Box.types');
+    const { BoxProps } = await import('../Box.types');
     expect(BoxProps).toBeUndefined(); // Types are compile-time only
   });
 
   it('exports BOX_DEFAULTS constant', async () => {
-    const { BOX_DEFAULTS } = await import('./Box.types');
+    const { BOX_DEFAULTS } = await import('../Box.types');
     expect(BOX_DEFAULTS).toBeDefined();
     expect(BOX_DEFAULTS.as).toBe('div');
     expect(BOX_DEFAULTS.padding).toBe('none');
@@ -401,21 +401,21 @@ describe('Box Types', () => {
   });
 
   it('exports SPACING_MAP constant', async () => {
-    const { SPACING_MAP } = await import('./Box.types');
+    const { SPACING_MAP } = await import('../Box.types');
     expect(SPACING_MAP).toBeDefined();
     expect(SPACING_MAP.none).toBe('0');
-    expect(SPACING_MAP.md).toBe('1rem');
+    expect(SPACING_MAP.md).toBe('var(--ds-spacing-4, 1rem)');
   });
 
   it('exports RADIUS_MAP constant', async () => {
-    const { RADIUS_MAP } = await import('./Box.types');
+    const { RADIUS_MAP } = await import('../Box.types');
     expect(RADIUS_MAP).toBeDefined();
     expect(RADIUS_MAP.none).toBe('0');
-    expect(RADIUS_MAP.full).toBe('9999px');
+    expect(RADIUS_MAP.full).toBe('var(--ds-radius-full, 9999px)');
   });
 
   it('exports SHADOW_MAP constant', async () => {
-    const { SHADOW_MAP } = await import('./Box.types');
+    const { SHADOW_MAP } = await import('../Box.types');
     expect(SHADOW_MAP).toBeDefined();
     expect(SHADOW_MAP.none).toBe('none');
     expect(SHADOW_MAP.md).toContain('rgba');

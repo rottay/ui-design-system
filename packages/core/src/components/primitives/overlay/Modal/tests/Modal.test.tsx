@@ -9,12 +9,12 @@ import React, { createRef } from 'react';
 import { Modal } from '../';
 
 // Mock Portal to render inline for testing
-vi.mock('./utils/Portal', () => ({
+vi.mock('../utils/Portal', () => ({
   Portal: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockModal = React.forwardRef<HTMLDivElement, any>(({
       open,
@@ -284,7 +284,7 @@ describe('Modal', () => {
 
 describe('Modal Types', () => {
   it('exports MODAL_DEFAULTS constant', async () => {
-    const { MODAL_DEFAULTS } = await import('./Modal.types');
+    const { MODAL_DEFAULTS } = await import('../Modal.types');
     expect(MODAL_DEFAULTS).toBeDefined();
     expect(MODAL_DEFAULTS.size).toBe('md');
     expect(MODAL_DEFAULTS.closable).toBe(true);
@@ -293,7 +293,7 @@ describe('Modal Types', () => {
   });
 
   it('exports SIZE_MAP constant', async () => {
-    const { SIZE_MAP } = await import('./Modal.types');
+    const { SIZE_MAP } = await import('../Modal.types');
     expect(SIZE_MAP).toBeDefined();
     expect(SIZE_MAP.xs).toBe('var(--ds-modal-xs-width)');
     expect(SIZE_MAP.md).toBe('var(--ds-modal-md-width)');
@@ -301,14 +301,14 @@ describe('Modal Types', () => {
   });
 
   it('exports PADDING_MAP constant', async () => {
-    const { PADDING_MAP } = await import('./Modal.types');
+    const { PADDING_MAP } = await import('../Modal.types');
     expect(PADDING_MAP).toBeDefined();
     expect(PADDING_MAP.none).toBe('var(--ds-modal-padding-none)');
     expect(PADDING_MAP.lg).toBe('var(--ds-modal-padding-lg)');
   });
 
   it('exports RADIUS_MAP constant', async () => {
-    const { RADIUS_MAP } = await import('./Modal.types');
+    const { RADIUS_MAP } = await import('../Modal.types');
     expect(RADIUS_MAP).toBeDefined();
     expect(RADIUS_MAP.none).toBe('var(--ds-modal-radius-none)');
     expect(RADIUS_MAP.lg).toBe('var(--ds-modal-radius-lg)');

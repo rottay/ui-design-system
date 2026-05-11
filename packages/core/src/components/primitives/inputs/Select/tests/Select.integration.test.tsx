@@ -30,7 +30,7 @@ const TEST_TENANT_CONFIG: TenantConfig = {
 
 describe('Select integration', () => {
   it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const { DesignSystemProvider } = await import('../../../../../bootstrap');
     render(
       <DesignSystemProvider
@@ -48,7 +48,7 @@ describe('Select integration', () => {
   }, 45000);
 
   it.each(STABLE_ENGINES)('forwards refs through the factory with the %s engine', async (engine) => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const { DesignSystemProvider } = await import('../../../../../bootstrap');
     const ref = createRef<any>();
 
@@ -76,7 +76,7 @@ describe('Select integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'supports custom dropdown flows in the live %s engine',
     async (engine) => {
-      const { Select } = await import('.');
+      const { Select } = await import('..');
       const handleChange = vi.fn();
       const handleSearch = vi.fn();
 
@@ -125,7 +125,7 @@ describe('Select integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'shows the empty search state in the live %s engine',
     async (engine) => {
-      const { Select } = await import('.');
+      const { Select } = await import('..');
       const { container } = renderWithEngine(
         <Suspense fallback={<div data-testid="loading">Loading...</div>}>
           <Select
@@ -157,7 +157,7 @@ describe('Select integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'supports native single-select changes in the live %s engine',
     async (engine) => {
-      const { Select } = await import('.');
+      const { Select } = await import('..');
       const handleChange = vi.fn();
 
       renderWithEngine(

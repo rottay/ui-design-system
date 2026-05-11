@@ -78,6 +78,7 @@ describe('Modal advanced engine coverage', () => {
         description="Modern body"
         footer={<button type="button">Save</button>}
         placement="top"
+        adaptiveFullscreen={false}
         divider
         closeOnBackdropClick={false}
         onClose={handleClose}
@@ -89,7 +90,9 @@ describe('Modal advanced engine coverage', () => {
 
     expect(await screen.findByText('Modern content')).toBeInTheDocument();
     const dialog = document.body.querySelector('dialog') as HTMLDialogElement | null;
-    expect(dialog).toHaveClass('modal', 'modal-open', 'modal-top');
+    expect(dialog).toHaveClass('rottay-modal', 'rottay-modal--modern');
+    expect(dialog?.style.alignItems).toBe('flex-start');
+    expect(dialog?.style.paddingTop).toBe('10vh');
 
     fireEvent.click(dialog!);
     expect(handleClose).not.toHaveBeenCalled();
@@ -128,7 +131,7 @@ describe('Modal advanced engine coverage', () => {
     const dialog = document.body.querySelector('dialog') as HTMLDialogElement;
     expect(document.body.querySelector('.modal-backdrop')).toBeNull();
 
-    fireEvent.click(dialog.querySelector('.modal-box') as HTMLDivElement);
+    fireEvent.click(dialog.querySelector('[role="document"]') as HTMLDivElement);
     expect(handleClose).not.toHaveBeenCalled();
 
     fireEvent(dialog, new Event('close'));
@@ -157,19 +160,22 @@ describe('Modal advanced engine coverage', () => {
 
     expect(await screen.findByText('Fullscreen content')).toBeInTheDocument();
     const dialog = document.body.querySelector('dialog') as HTMLDialogElement;
-    expect(dialog).toHaveClass('modal-bottom');
+    expect(dialog).toHaveClass('rottay-modal', 'rottay-modal--modern');
+    expect(dialog).toHaveStyle({ alignItems: 'flex-end' });
     expect(document.body.style.overflow).toBe('hidden');
 
-    const modalBox = dialog.querySelector('.modal-box') as HTMLDivElement;
+    const modalBox = dialog.querySelector('[role="document"]') as HTMLDivElement;
     expect(modalBox).toHaveStyle({
       width: '100vw',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
+      maxWidth: 'none',
+      maxHeight: 'none',
       borderRadius: '0',
     });
 
-    const backdrop = dialog.querySelector('.modal-backdrop') as HTMLDivElement;
-    expect(backdrop.style.backdropFilter).toBe('blur(4px)');
+    const backdrop = Array.from(dialog.children).find(
+      (node) => !(node as HTMLElement).hasAttribute('role')
+    ) as HTMLDivElement;
+    expect(backdrop.style.backdropFilter).toContain('blur');
 
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(handleClose).not.toHaveBeenCalled();

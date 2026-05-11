@@ -449,17 +449,11 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
             >
               <Text size="sm" weight="medium" style={{ flex: 1 }}>Recent Activity</Text>
               {recentActivity.viewAllHref && !recentActivity.onViewAll && (
-                <Button
-                  size="xs"
-                  variant="link"
-                  onClick={() => {
-                    if (typeof window !== 'undefined') {
-                      window.location.href = recentActivity.viewAllHref!;
-                    }
-                  }}
-                >
-                  View all
-                </Button>
+                <a href={recentActivity.viewAllHref} style={{ textDecoration: 'none' }}>
+                  <Button size="xs" variant="link">
+                    View all
+                  </Button>
+                </a>
               )}
               {recentActivity.onViewAll && (
                 <Button

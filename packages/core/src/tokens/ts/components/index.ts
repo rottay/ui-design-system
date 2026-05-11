@@ -27,6 +27,7 @@ export * from './timeline';
 export * from './qrcode';
 export * from './list';
 export * from './collapse';
+export * from './collapse-token-utils';
 
 // Named imports for grouped exports
 import { avatarTokens } from './avatar';

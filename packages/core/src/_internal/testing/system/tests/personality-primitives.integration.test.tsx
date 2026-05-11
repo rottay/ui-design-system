@@ -20,7 +20,7 @@ import {
   Statistic,
   Tag,
   Typography,
-} from '../../../components/primitives';
+} from '../../../../components/primitives';
 
 class IntersectionObserverMock {
   constructor(private readonly callback: IntersectionObserverCallback) {}
@@ -98,30 +98,30 @@ function renderWithProfile(
 describe('primitive personality integration', () => {
   beforeAll(async () => {
     await Promise.all([
-      import('../../../components/primitives/inputs/Button/engines/classic'),
-      import('../../../components/primitives/inputs/Button/engines/modern'),
-      import('../../../components/primitives/inputs/Button/engines/rustic'),
-      import('../../../components/primitives/display/Card/engines/classic'),
-      import('../../../components/primitives/display/Card/engines/modern'),
-      import('../../../components/primitives/display/Card/engines/rustic'),
-      import('../../../components/primitives/display/Badge/engines/classic'),
-      import('../../../components/primitives/display/Badge/engines/modern'),
-      import('../../../components/primitives/display/Badge/engines/rustic'),
-      import('../../../components/primitives/display/Tag/engines/classic'),
-      import('../../../components/primitives/display/Tag/engines/modern'),
-      import('../../../components/primitives/display/Tag/engines/rustic'),
-      import('../../../components/primitives/feedback/Skeleton/engines/classic'),
-      import('../../../components/primitives/feedback/Skeleton/engines/modern'),
-      import('../../../components/primitives/feedback/Skeleton/engines/rustic'),
-      import('../../../components/primitives/layout/Divider/engines/classic'),
-      import('../../../components/primitives/layout/Divider/engines/modern'),
-      import('../../../components/primitives/layout/Divider/engines/rustic'),
-      import('../../../components/primitives/display/Statistic/engines/classic'),
-      import('../../../components/primitives/display/Statistic/engines/modern'),
-      import('../../../components/primitives/display/Statistic/engines/rustic'),
-      import('../../../components/primitives/display/Typography/engines/classic'),
-      import('../../../components/primitives/display/Typography/engines/modern'),
-      import('../../../components/primitives/display/Typography/engines/rustic'),
+      import('../../../../components/primitives/inputs/Button/engines/classic'),
+      import('../../../../components/primitives/inputs/Button/engines/modern'),
+      import('../../../../components/primitives/inputs/Button/engines/rustic'),
+      import('../../../../components/primitives/display/Card/engines/classic'),
+      import('../../../../components/primitives/display/Card/engines/modern'),
+      import('../../../../components/primitives/display/Card/engines/rustic'),
+      import('../../../../components/primitives/display/Badge/engines/classic'),
+      import('../../../../components/primitives/display/Badge/engines/modern'),
+      import('../../../../components/primitives/display/Badge/engines/rustic'),
+      import('../../../../components/primitives/display/Tag/engines/classic'),
+      import('../../../../components/primitives/display/Tag/engines/modern'),
+      import('../../../../components/primitives/display/Tag/engines/rustic'),
+      import('../../../../components/primitives/feedback/Skeleton/engines/classic'),
+      import('../../../../components/primitives/feedback/Skeleton/engines/modern'),
+      import('../../../../components/primitives/feedback/Skeleton/engines/rustic'),
+      import('../../../../components/primitives/layout/Divider/engines/classic'),
+      import('../../../../components/primitives/layout/Divider/engines/modern'),
+      import('../../../../components/primitives/layout/Divider/engines/rustic'),
+      import('../../../../components/primitives/display/Statistic/engines/classic'),
+      import('../../../../components/primitives/display/Statistic/engines/modern'),
+      import('../../../../components/primitives/display/Statistic/engines/rustic'),
+      import('../../../../components/primitives/display/Typography/engines/classic'),
+      import('../../../../components/primitives/display/Typography/engines/modern'),
+      import('../../../../components/primitives/display/Typography/engines/rustic'),
     ]);
   });
 

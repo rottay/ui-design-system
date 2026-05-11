@@ -12,7 +12,7 @@ const OPTIONS = [
 
 describe('Select rustic engine', () => {
   it('covers searchable multi-select keyboard navigation, clear, and disabled-option branches', async () => {
-    const { Select } = await import('.');
+    const { Select } = await import('..');
     const handleChange = vi.fn();
     const handleSearch = vi.fn();
     const handleClear = vi.fn();

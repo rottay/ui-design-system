@@ -3,7 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-import runtimeTokens from '../../../tokens';
+import { tokens as runtimeTokens } from '../index';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const CSS_ROOT = join(TEST_DIR, '..', 'css');

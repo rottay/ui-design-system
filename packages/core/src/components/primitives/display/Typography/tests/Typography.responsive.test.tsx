@@ -130,13 +130,14 @@ describe('ApolloText responsive size', () => {
 
 describe('ModernHeading responsive size', () => {
   describe('backward compatibility', () => {
-    it('renders plain scalar size as Tailwind class', () => {
+    it('renders plain scalar size as tokenized inline style', () => {
       const { container } = render(
         <ModernHeading level="h1" size="3xl">Title</ModernHeading>
       );
       const heading = container.querySelector('h1');
       expect(heading).toBeInTheDocument();
-      expect(heading?.className).toContain('text-5xl');
+      expect(heading?.className).not.toContain('text-5xl');
+      expect(heading?.className).toContain('font-bold');
       expect(container.querySelector('style')).toBeNull();
     });
   });
@@ -164,13 +165,14 @@ describe('ModernHeading responsive size', () => {
 
 describe('ModernText responsive size', () => {
   describe('backward compatibility', () => {
-    it('renders plain scalar size as Tailwind class', () => {
+    it('renders plain scalar size as tokenized inline style', () => {
       const { container } = render(
         <ModernText size="lg">Content</ModernText>
       );
       const text = container.querySelector('span');
       expect(text).toBeInTheDocument();
-      expect(text?.className).toContain('text-lg');
+      expect(text?.className).not.toContain('text-lg');
+      expect(text?.className).toContain('font-normal');
       expect(container.querySelector('style')).toBeNull();
     });
   });

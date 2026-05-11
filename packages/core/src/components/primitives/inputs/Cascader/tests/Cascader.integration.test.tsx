@@ -26,7 +26,7 @@ describe('Cascader integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'opens and selects nested values in the %s engine',
     async (engine) => {
-      const { Cascader } = await import('.');
+      const { Cascader } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -56,7 +56,7 @@ describe('Cascader integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'ignores disabled options in the %s engine',
     async (engine) => {
-      const { Cascader } = await import('.');
+      const { Cascader } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -77,7 +77,7 @@ describe('Cascader integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'clears selected values in the %s engine',
     async (engine) => {
-      const { Cascader } = await import('.');
+      const { Cascader } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -99,7 +99,7 @@ describe('Cascader integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'renders custom empty content in the %s engine',
     async (engine) => {
-      const { Cascader } = await import('.');
+      const { Cascader } = await import('..');
 
       renderWithEngine(
         <Cascader

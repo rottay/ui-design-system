@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { SettingsSurface } from '..';
 import type { SettingsSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<SettingsSurfaceConfig>): SettingsSurfaceConfig {
   return {
@@ -40,7 +40,7 @@ function buildConfig(overrides?: Partial<SettingsSurfaceConfig>): SettingsSurfac
 
 describe('SettingsSurface', () => {
   beforeAll(async () => {
-    await import('../../../primitives/navigation/Tabs/engines/rustic');
+    await import('../../../../../primitives/navigation/Tabs/engines/rustic');
   });
 
   it('switches tabs and forwards tab changes', async () => {

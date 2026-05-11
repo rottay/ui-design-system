@@ -3,7 +3,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { AreaChart, LineChart } from '..';
-import { renderSurface } from '../../../../surfaces/common/test-utils';
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
 describe('Area and line chart advanced coverage', () => {
   let originalGetTotalLength: PropertyDescriptor | undefined;

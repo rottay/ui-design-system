@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import React, { createRef } from 'react';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => {
+vi.mock('../../../../../runtime/engines/factory', () => {
   // Define MockGridItem inside the factory to avoid hoisting issues
   const MockGridItem = React.forwardRef<HTMLElement, any>(({
     children,
@@ -568,7 +568,7 @@ describe('Grid and Grid.Item Integration', () => {
 
 describe('Grid Types', () => {
   it('exports GRID_DEFAULTS constant', async () => {
-    const { GRID_DEFAULTS } = await import('./Grid.types');
+    const { GRID_DEFAULTS } = await import('../Grid.types');
     expect(GRID_DEFAULTS).toBeDefined();
     expect(GRID_DEFAULTS.columns).toBe(12);
     expect(GRID_DEFAULTS.gap).toBe('md');
@@ -578,28 +578,28 @@ describe('Grid Types', () => {
   });
 
   it('exports GRID_ITEM_DEFAULTS constant', async () => {
-    const { GRID_ITEM_DEFAULTS } = await import('./Grid.types');
+    const { GRID_ITEM_DEFAULTS } = await import('../Grid.types');
     expect(GRID_ITEM_DEFAULTS).toBeDefined();
     expect(GRID_ITEM_DEFAULTS.as).toBe('div');
   });
 
   it('exports GAP_MAP constant', async () => {
-    const { GAP_MAP } = await import('./Grid.types');
+    const { GAP_MAP } = await import('../Grid.types');
     expect(GAP_MAP).toBeDefined();
     expect(GAP_MAP.none).toBe('0');
-    expect(GAP_MAP.md).toBe('1rem');
-    expect(GAP_MAP.xl).toBe('2rem');
+    expect(GAP_MAP.md).toBe('var(--ds-spacing-4, 1rem)');
+    expect(GAP_MAP.xl).toBe('var(--ds-spacing-8, 2rem)');
   });
 
   it('exports ALIGN_ITEMS_MAP constant', async () => {
-    const { ALIGN_ITEMS_MAP } = await import('./Grid.types');
+    const { ALIGN_ITEMS_MAP } = await import('../Grid.types');
     expect(ALIGN_ITEMS_MAP).toBeDefined();
     expect(ALIGN_ITEMS_MAP.start).toBe('start');
     expect(ALIGN_ITEMS_MAP.center).toBe('center');
   });
 
   it('exports JUSTIFY_ITEMS_MAP constant', async () => {
-    const { JUSTIFY_ITEMS_MAP } = await import('./Grid.types');
+    const { JUSTIFY_ITEMS_MAP } = await import('../Grid.types');
     expect(JUSTIFY_ITEMS_MAP).toBeDefined();
     expect(JUSTIFY_ITEMS_MAP.start).toBe('start');
     expect(JUSTIFY_ITEMS_MAP.stretch).toBe('stretch');
@@ -621,4 +621,3 @@ describe('Grid tenants', () => {
     document.documentElement.removeAttribute('data-tenant');
   });
 });
-

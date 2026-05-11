@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Radio } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockRadio = ({
       children,

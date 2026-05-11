@@ -8,7 +8,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BottomTabBar } from '../';
 
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MAX_ITEMS = 5;
     const MockBottomTabBar = ({ items, activeKey, onChange, style }: any) => {

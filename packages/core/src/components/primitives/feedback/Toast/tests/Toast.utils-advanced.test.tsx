@@ -132,7 +132,7 @@ describe('Toast utilities advanced coverage', () => {
 
   it('resolves animation helpers and injects styles only once', async () => {
     vi.resetModules();
-    const { getAnimationName, getToastAnimationStyle, injectToastStyles } = await import('./utils/animations');
+    const { getAnimationName, getToastAnimationStyle, injectToastStyles } = await import('../utils/animations');
 
     document.documentElement.style.setProperty('--ds-toast-enter-duration', '180ms');
     document.documentElement.style.setProperty('--ds-toast-exit-duration', '240ms');

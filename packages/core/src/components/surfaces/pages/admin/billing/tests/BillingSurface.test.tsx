@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { BillingSurface } from '..';
 import type { BillingSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<BillingSurfaceConfig>): BillingSurfaceConfig {
   return {
@@ -63,11 +63,13 @@ describe('BillingSurface', () => {
 
     renderSurface(<BillingSurface config={config} />);
 
-    const upgradeButton = await screen.findByRole('button', { name: /upgrade/i });
+    const upgradeButton = await screen.findByText('Upgrade').then((node) => node.closest('button'));
+    if (!upgradeButton) throw new Error('Upgrade button not found');
     fireEvent.click(upgradeButton);
     expect(config.behavior.onUpgrade).toHaveBeenCalledTimes(1);
 
-    const cancelButton = screen.getByRole('button', { name: /cancel/i });
+    const cancelButton = screen.getByText('Cancel').closest('button');
+    if (!cancelButton) throw new Error('Cancel button not found');
     fireEvent.click(cancelButton);
     expect(config.behavior.onCancel).toHaveBeenCalledTimes(1);
   });

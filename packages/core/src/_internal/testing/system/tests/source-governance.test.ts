@@ -292,12 +292,12 @@ describe('folder structure', () => {
       'bootstrap',
       'engines',
       'theming',
-      'tenancy',
+      'tenant',
       'personality',
       'verticals',
       'product-profiles',
       'features',
-      'providers',
+      'responsive',
     ];
     for (const folder of expected) {
       expect(

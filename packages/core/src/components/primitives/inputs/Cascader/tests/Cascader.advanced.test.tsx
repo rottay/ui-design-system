@@ -8,7 +8,7 @@ describe('Cascader advanced coverage', () => {
   it.each(['modern', 'rustic'] as const)(
     'covers fieldNames, hover expansion, search selection, displayRender, and clearing in the %s engine',
     async (engine) => {
-      const { Cascader } = await import('.');
+      const { Cascader } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -70,7 +70,7 @@ describe('Cascader advanced coverage', () => {
   it.each(['modern', 'rustic'] as const)(
     'covers async loadData, custom notFoundContent, open control, and outside-close signaling in the %s engine',
     async (engine) => {
-      const { Cascader } = await import('.');
+      const { Cascader } = await import('..');
       const asyncNode = { value: 'async', label: 'Async', isLeaf: false } as any;
       const loadData = vi.fn(async (path) => {
         const target = path[path.length - 1];

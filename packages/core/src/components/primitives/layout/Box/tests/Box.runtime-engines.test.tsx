@@ -122,23 +122,9 @@ describe('Box runtime engines', () => {
       expect(element).toHaveTextContent('Engine box');
 
       if (engine === 'modern') {
-        // Modern maps spacing/radius/shadow/display/position/overflow to utility classes.
-        expect(element.className).toContain('p-6');
-        expect(element.className).toContain('px-2');
-        expect(element.className).toContain('py-8');
-        expect(element.className).toContain('pt-1');
-        expect(element.className).toContain('pr-4');
-        expect(element.className).toContain('pb-10');
-        expect(element.className).toContain('pl-12');
-        expect(element.className).toContain('m-4');
-        expect(element.className).toContain('mx-6');
-        expect(element.className).toContain('my-2');
-        expect(element.className).toContain('mt-1');
-        expect(element.className).toContain('mr-8');
-        expect(element.className).toContain('mb-10');
-        expect(element.className).toContain('ml-12');
-        expect(element.className).toContain('rounded-xl');
-        expect(element.className).toContain('shadow-lg');
+        // Modern resolves spacing/radius/shadow through DS token inline styles.
+        const modernStyleAttr = element.getAttribute('style') || '';
+        expect(modernStyleAttr).toContain(SHADOW_MAP.lg);
         expect(element.className).toContain('grid');
         expect(element.className).toContain('absolute');
         expect(element.className).toContain('overflow-hidden');

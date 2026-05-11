@@ -9,7 +9,7 @@ import React from 'react';
 import { Alert } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockAlert = React.forwardRef<HTMLDivElement, any>(({
       message,

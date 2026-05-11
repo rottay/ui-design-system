@@ -8,7 +8,7 @@ describe('DatePicker integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'changes values in the live %s engine',
     async (engine) => {
-      const { DatePicker } = await import('.');
+      const { DatePicker } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -29,7 +29,7 @@ describe('DatePicker integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'clears selected values in the live %s engine',
     async (engine) => {
-      const { DatePicker } = await import('.');
+      const { DatePicker } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -49,7 +49,7 @@ describe('DatePicker integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'exposes RangePicker through the %s engine',
     async (engine) => {
-      const { DatePicker } = await import('.');
+      const { DatePicker } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -75,7 +75,7 @@ describe('DatePicker integration', () => {
   it.each(['week', 'month', 'year'] as const)(
     'renders picker mode %s in the rustic engine',
     async (picker) => {
-      const { DatePicker } = await import('.');
+      const { DatePicker } = await import('..');
 
       renderWithEngine(
         <DatePicker engine="rustic" picker={picker} placeholder={`Select ${picker}`} />,

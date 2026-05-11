@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { DetailFormSurface } from '..';
 import type { DetailFormSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(): DetailFormSurfaceConfig {
   return {
@@ -39,7 +39,9 @@ describe('DetailFormSurface', () => {
 
     renderSurface(<DetailFormSurface config={config} />);
 
-    fireEvent.click(await screen.findByRole('button', { name: /Save changes/i }));
+    const saveButton = await screen.findByText('Save changes').then((node) => node.closest('button'));
+    if (!saveButton) throw new Error('Save changes button not found');
+    fireEvent.click(saveButton);
 
     await waitFor(() => {
       expect(config.behavior.submitAction.onClick).toHaveBeenCalledWith({});

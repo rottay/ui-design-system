@@ -9,6 +9,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import ApolloStack from '../engines/rustic';
+import { SPACING_MAP } from '../Stack.types';
 
 describe('RusticStack responsive props', () => {
   describe('backward compatibility', () => {
@@ -27,7 +28,7 @@ describe('RusticStack responsive props', () => {
         <ApolloStack spacing="lg">Content</ApolloStack>
       );
       const stack = container.querySelector('.rottay-stack--rustic');
-      expect(stack).toHaveStyle({ gap: '1.5rem' });
+      expect(stack?.getAttribute('style')).toContain(`gap: ${SPACING_MAP.lg}`);
       expect(container.querySelector('style')).toBeNull();
     });
   });
@@ -54,11 +55,11 @@ describe('RusticStack responsive props', () => {
         <ApolloStack spacing={{ xs: 'sm', md: 'lg', xl: '2xl' }}>Content</ApolloStack>
       );
       const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('gap: 0.5rem;');
+      expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.sm};`);
       expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
-      expect(styleTag?.textContent).toContain('gap: 1.5rem;');
+      expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.lg};`);
       expect(styleTag?.textContent).toContain('@media (min-width: 1280px)');
-      expect(styleTag?.textContent).toContain('gap: 2.5rem;');
+      expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP['2xl']};`);
     });
 
     it('generates CSS for responsive gap with numbers', () => {
@@ -121,13 +122,13 @@ describe('RusticStack responsive props', () => {
       const styleTag = container.querySelector('style');
       // phone -> xs (no media query)
       expect(styleTag?.textContent).toContain('flex-direction: column;');
-      expect(styleTag?.textContent).toContain('gap: 0.5rem;');
+      expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.sm};`);
       // tablet -> sm (640px)
       expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
       expect(styleTag?.textContent).toContain('flex-direction: row;');
       // desktop -> lg (1024px)
       expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
-      expect(styleTag?.textContent).toContain('gap: 2rem;');
+      expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.xl};`);
     });
   });
 });

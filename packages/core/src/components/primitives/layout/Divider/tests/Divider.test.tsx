@@ -15,7 +15,7 @@ import {
 } from '../Divider.types';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockDivider = React.forwardRef<HTMLDivElement, any>(({
       children,
@@ -322,11 +322,11 @@ describe('Divider Types and Constants', () => {
   describe('SPACING_MAP', () => {
     it('has correct spacing values', () => {
       expect(SPACING_MAP.none).toBe('0');
-      expect(SPACING_MAP.xs).toBe('0.25rem');
-      expect(SPACING_MAP.sm).toBe('0.5rem');
-      expect(SPACING_MAP.md).toBe('1rem');
-      expect(SPACING_MAP.lg).toBe('1.5rem');
-      expect(SPACING_MAP.xl).toBe('2rem');
+      expect(SPACING_MAP.xs).toBe('var(--ds-spacing-1, 0.25rem)');
+      expect(SPACING_MAP.sm).toBe('var(--ds-spacing-2, 0.5rem)');
+      expect(SPACING_MAP.md).toBe('var(--ds-spacing-4, 1rem)');
+      expect(SPACING_MAP.lg).toBe('var(--ds-spacing-6, 1.5rem)');
+      expect(SPACING_MAP.xl).toBe('var(--ds-spacing-8, 2rem)');
     });
   });
 

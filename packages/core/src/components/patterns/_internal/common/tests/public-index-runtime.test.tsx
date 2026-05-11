@@ -1,13 +1,13 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { describeEachEngine, renderWithEngine } from '../../../../_internal/testing/helpers/engine-test-utils';
-import { PatternActivityLog } from '../../activity-log';
-import { PatternCommentThread } from '../../comment-thread';
-import { PatternFileManager } from '../../file-manager';
-import { PatternInvoiceTemplate } from '../../invoice-template';
-import { PatternNotificationCenter } from '../../notification-center';
-import { PatternPricingTable } from '../../pricing-table';
-import { PatternUserProfileCard } from '../../user-profile-card';
+import { describeEachEngine, renderWithEngine } from '../../../../../_internal/testing/helpers/engine-test-utils';
+import { PatternActivityLog } from '../../../communication/activity-log';
+import { PatternCommentThread } from '../../../communication/comment-thread';
+import { PatternNotificationCenter } from '../../../communication/notification-center';
+import { PatternInvoiceTemplate } from '../../../forms/invoice-template';
+import { PatternFileManager } from '../../../misc/file-manager';
+import { PatternPricingTable } from '../../../misc/pricing-table';
+import { PatternUserProfileCard } from '../../../misc/user-profile-card';
 
 describeEachEngine('public pattern indexes', (engine) => {
   it('loads PatternActivityLog through the public component', async () => {

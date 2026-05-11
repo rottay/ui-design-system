@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ActivitySurface } from '..';
 import type { ActivitySurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<ActivitySurfaceConfig>): ActivitySurfaceConfig {
   return {

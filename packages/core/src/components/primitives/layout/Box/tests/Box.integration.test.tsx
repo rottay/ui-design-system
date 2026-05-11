@@ -6,7 +6,7 @@ import { renderWithEngine, STABLE_ENGINES } from '../../../../../_internal/testi
 
 describe('Box integration', () => {
   it.each(STABLE_ENGINES)('renders the live box with the %s engine', async (engine) => {
-    const { Box } = await import('.');
+    const { Box } = await import('..');
 
     renderWithEngine(
       <Box

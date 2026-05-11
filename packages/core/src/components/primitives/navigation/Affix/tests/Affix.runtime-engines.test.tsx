@@ -81,7 +81,7 @@ describe('Affix runtime engines', () => {
     });
 
     expect(affix.style.bottom).toBe('10px');
-    expect(affix.className).toContain('shadow-md');
+    expect(affix.style.boxShadow).toBe('var(--ds-elevation-1)');
     expect(addEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), { passive: true });
 
     placeholderRect = createRect({ top: 640, bottom: 715, left: 12, right: 212, width: 200, height: 75 });
@@ -92,7 +92,7 @@ describe('Affix runtime engines', () => {
       expect(affix.style.position).toBe('');
     });
 
-    expect(affix.className).not.toContain('shadow-md');
+    expect(affix.style.boxShadow).toBe('');
 
     unmount();
     expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function));

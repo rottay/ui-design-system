@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { DecisionInboxSurface } from '../index';
 import { useCollectionWorkspace } from '../../../../foundation/hooks/useCollectionWorkspace';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 import type { CollectionWorkspaceConfig } from '../../../../foundation/contracts/collection';
 
 describe('DecisionInboxSurface', () => {

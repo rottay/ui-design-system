@@ -7,7 +7,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MobileHeader } from '../';
 
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockMobileHeader = ({ title, leftAction, rightActions, onBack, sticky = false, style, children }: any) => {
       const leftSlot = leftAction ?? (

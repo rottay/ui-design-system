@@ -5,8 +5,8 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { DetailSurface } from '..';
 import type { DetailSurfaceConfig, EntityAdapter } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
-import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
+import { renderSurface } from '../../../../foundation/common/test-utils';
+import { mockMatchMedia } from '../../../../../../_internal/testing/helpers/match-media';
 
 interface RawWorkspace {
   id: string;
@@ -105,7 +105,9 @@ describe('DetailSurface', () => {
       />
     );
 
-    fireEvent.click(await screen.findByRole('button', { name: /try again/i }));
+    const retryButton = await screen.findByText('Try again').then((node) => node.closest('button'));
+    if (!retryButton) throw new Error('Try again button not found');
+    fireEvent.click(retryButton);
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
 
@@ -143,9 +145,9 @@ describe('DetailSurface', () => {
     expect(await screen.findByText('Acme Workspace')).toBeInTheDocument();
     expect(screen.getByText('Overview content')).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Security/i })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Edit/i })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Archive/i })).not.toBeInTheDocument();
+    expect(screen.queryByText('Security')).not.toBeInTheDocument();
+    expect(screen.getByText('Edit').closest('button')).toBeInTheDocument();
+    expect(screen.queryByText('Archive')).not.toBeInTheDocument();
   });
 
   it('switches visible tabs and forwards tab changes', async () => {
@@ -172,7 +174,9 @@ describe('DetailSurface', () => {
       />
     );
 
-    fireEvent.click(await screen.findByRole('button', { name: /Activity/i }));
+    const activityTab = await screen.findByText('Activity').then((node) => node.closest('button'));
+    if (!activityTab) throw new Error('Activity tab not found');
+    fireEvent.click(activityTab);
 
     await waitFor(() => {
       expect(config.behavior.onTabChange).toHaveBeenCalledWith('activity');
@@ -245,7 +249,9 @@ describe('DetailSurface', () => {
     expect(screen.getByText('Workspace footer')).toBeInTheDocument();
     expect(screen.getByText('Workspaces')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
+    const editButton = screen.getByText('Edit').closest('button');
+    if (!editButton) throw new Error('Edit button not found');
+    fireEvent.click(editButton);
     expect(editAction).toHaveBeenCalledTimes(1);
   });
 

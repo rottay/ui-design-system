@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { ChatSurface } from '..';
 import type { ChatSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<ChatSurfaceConfig>): ChatSurfaceConfig {
   return {
@@ -35,7 +35,7 @@ function buildConfig(overrides?: Partial<ChatSurfaceConfig>): ChatSurfaceConfig 
 
 describe('ChatSurface', () => {
   beforeAll(async () => {
-    await import('../../../primitives/inputs/Textarea/engines/rustic');
+    await import('../../../../../primitives/inputs/Textarea/engines/rustic');
   });
 
   it('sends the current draft and clears uncontrolled composer state', async () => {
@@ -47,7 +47,9 @@ describe('ChatSurface', () => {
       timeout: 15000,
     });
     fireEvent.change(textarea, { target: { value: 'Show me the summary' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+    const sendButton = screen.getByText('Send').closest('button');
+    if (!sendButton) throw new Error('Send button not found');
+    fireEvent.click(sendButton);
 
     await waitFor(() => {
       expect(config.behavior.onSend).toHaveBeenCalledWith('Show me the summary');
@@ -122,7 +124,9 @@ describe('ChatSurface', () => {
     renderSurface(<ChatSurface config={config} />);
 
     expect(await screen.findByText('Custom tool: summarize_event')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Send' })).toBeDisabled();
+    const sendButton = screen.getByText('Send').closest('button');
+    if (!sendButton) throw new Error('Send button not found');
+    expect(sendButton).toBeDisabled();
   });
 
   it('keeps controlled drafts external, renders sidebar content, and localizes empty state', async () => {
@@ -160,6 +164,8 @@ describe('ChatSurface', () => {
     expect(
       await screen.findByText('Envia el primer mensaje para comenzar la conversacion.')
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Enviar' })).toBeDisabled();
+    const localizedSendButton = screen.getByText('Enviar').closest('button');
+    if (!localizedSendButton) throw new Error('Enviar button not found');
+    expect(localizedSendButton).toBeDisabled();
   });
 });

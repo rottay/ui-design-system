@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { GuidedDraftFormSurface } from '../index';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 describe('GuidedDraftFormSurface', () => {
   const baseSections = [

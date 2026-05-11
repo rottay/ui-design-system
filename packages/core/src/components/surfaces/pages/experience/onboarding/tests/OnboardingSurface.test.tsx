@@ -6,8 +6,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { OnboardingSurface } from '..';
 import type { OnboardingSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
-import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
+import { renderSurface } from '../../../../foundation/common/test-utils';
+import { mockMatchMedia } from '../../../../../../_internal/testing/helpers/match-media';
 
 function buildConfig(overrides?: Partial<OnboardingSurfaceConfig>): OnboardingSurfaceConfig {
   return {

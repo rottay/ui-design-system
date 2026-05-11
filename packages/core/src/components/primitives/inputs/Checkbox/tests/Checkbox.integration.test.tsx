@@ -8,7 +8,7 @@ describe('Checkbox integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'toggles the live component in the %s engine',
     async (engine) => {
-      const { Checkbox } = await import('.');
+      const { Checkbox } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -36,7 +36,7 @@ describe('Checkbox integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'renders indeterminate state accessibly in the %s engine',
     async (engine) => {
-      const { Checkbox } = await import('.');
+      const { Checkbox } = await import('..');
 
       renderWithEngine(
         <Checkbox engine={engine} label="Select all" indeterminate />,
@@ -51,7 +51,7 @@ describe('Checkbox integration', () => {
   it.each(['modern', 'rustic'] as const)(
     'updates checkbox groups in the %s engine',
     async (engine) => {
-      const { Checkbox } = await import('.');
+      const { Checkbox } = await import('..');
       const onChange = vi.fn();
 
       renderWithEngine(
@@ -77,7 +77,7 @@ describe('Checkbox integration', () => {
   it.each(['full', 'none', 'sm', 'md', 'lg'] as const)(
     'renders rustic radius variant %s without crashing',
     async (radius) => {
-      const { Checkbox } = await import('.');
+      const { Checkbox } = await import('..');
 
       renderWithEngine(
         <Checkbox engine="rustic" label={`Radius ${radius}`} radius={radius} checked onChange={() => undefined} />,
@@ -91,7 +91,7 @@ describe('Checkbox integration', () => {
   it.each(['primary', 'secondary', 'success', 'warning', 'error'] as const)(
     'renders rustic color variant %s without crashing',
     async (color) => {
-      const { Checkbox } = await import('.');
+      const { Checkbox } = await import('..');
 
       renderWithEngine(
         <Checkbox

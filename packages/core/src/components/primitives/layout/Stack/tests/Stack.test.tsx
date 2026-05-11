@@ -9,7 +9,7 @@ import React, { createRef } from 'react';
 import { Stack } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockStack = React.forwardRef<HTMLElement, any>(({
       children,
@@ -464,7 +464,7 @@ describe('Stack', () => {
 
 describe('Stack Types and Constants', () => {
   it('exports STACK_DEFAULTS constant', async () => {
-    const { STACK_DEFAULTS } = await import('./Stack.types');
+    const { STACK_DEFAULTS } = await import('../Stack.types');
     expect(STACK_DEFAULTS).toBeDefined();
     expect(STACK_DEFAULTS.as).toBe('div');
     expect(STACK_DEFAULTS.direction).toBe('vertical');
@@ -475,19 +475,19 @@ describe('Stack Types and Constants', () => {
   });
 
   it('exports SPACING_MAP constant', async () => {
-    const { SPACING_MAP } = await import('./Stack.types');
+    const { SPACING_MAP } = await import('../Stack.types');
     expect(SPACING_MAP).toBeDefined();
     expect(SPACING_MAP.none).toBe('0');
-    expect(SPACING_MAP.xs).toBe('0.25rem');
-    expect(SPACING_MAP.sm).toBe('0.5rem');
-    expect(SPACING_MAP.md).toBe('1rem');
-    expect(SPACING_MAP.lg).toBe('1.5rem');
-    expect(SPACING_MAP.xl).toBe('2rem');
-    expect(SPACING_MAP['2xl']).toBe('2.5rem');
+    expect(SPACING_MAP.xs).toBe('var(--ds-spacing-1, 0.25rem)');
+    expect(SPACING_MAP.sm).toBe('var(--ds-spacing-2, 0.5rem)');
+    expect(SPACING_MAP.md).toBe('var(--ds-spacing-4, 1rem)');
+    expect(SPACING_MAP.lg).toBe('var(--ds-spacing-6, 1.5rem)');
+    expect(SPACING_MAP.xl).toBe('var(--ds-spacing-8, 2rem)');
+    expect(SPACING_MAP['2xl']).toBe('var(--ds-spacing-10, 2.5rem)');
   });
 
   it('exports ALIGN_MAP constant', async () => {
-    const { ALIGN_MAP } = await import('./Stack.types');
+    const { ALIGN_MAP } = await import('../Stack.types');
     expect(ALIGN_MAP).toBeDefined();
     expect(ALIGN_MAP.start).toBe('flex-start');
     expect(ALIGN_MAP.center).toBe('center');
@@ -497,7 +497,7 @@ describe('Stack Types and Constants', () => {
   });
 
   it('exports JUSTIFY_MAP constant', async () => {
-    const { JUSTIFY_MAP } = await import('./Stack.types');
+    const { JUSTIFY_MAP } = await import('../Stack.types');
     expect(JUSTIFY_MAP).toBeDefined();
     expect(JUSTIFY_MAP.start).toBe('flex-start');
     expect(JUSTIFY_MAP.center).toBe('center');
@@ -508,9 +508,9 @@ describe('Stack Types and Constants', () => {
   });
 
   it('exports resolveSpacing function', async () => {
-    const { resolveSpacing } = await import('./Stack.types');
+    const { resolveSpacing } = await import('../Stack.types');
     expect(resolveSpacing).toBeDefined();
-    expect(resolveSpacing('md')).toBe('1rem');
+    expect(resolveSpacing('md')).toBe('var(--ds-spacing-4, 1rem)');
     expect(resolveSpacing(16)).toBe('16px');
     expect(resolveSpacing('none')).toBe('0');
     expect(resolveSpacing(undefined)).toBe('0');
@@ -521,7 +521,7 @@ describe('Stack Types and Constants', () => {
 // These functions are referenced in engines but not yet exported from types
 describe.skip('Stack Base Utilities', () => {
   it('exports buildStackStyles function', async () => {
-    const { buildStackStyles } = await import('./Stack.types');
+    const { buildStackStyles } = await import('../Stack.types');
     expect(buildStackStyles).toBeDefined();
 
     const styles = buildStackStyles({
@@ -539,7 +539,7 @@ describe.skip('Stack Base Utilities', () => {
   });
 
   it('exports filterStackProps function', async () => {
-    const { filterStackProps } = await import('./Stack.types');
+    const { filterStackProps } = await import('../Stack.types');
     expect(filterStackProps).toBeDefined();
 
     const filtered = filterStackProps({

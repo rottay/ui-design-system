@@ -9,7 +9,7 @@ import React, { createRef } from 'react';
 import { Container } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockContainer = React.forwardRef<HTMLDivElement, any>(({
       children,
@@ -194,12 +194,12 @@ describe('Container', () => {
 
 describe('Container Types', () => {
   it('exports ContainerProps type', async () => {
-    const { ContainerProps } = await import('./Container.types');
+    const { ContainerProps } = await import('../Container.types');
     expect(ContainerProps).toBeUndefined(); // Types are compile-time only
   });
 
   it('exports CONTAINER_DEFAULTS constant', async () => {
-    const { CONTAINER_DEFAULTS } = await import('./Container.types');
+    const { CONTAINER_DEFAULTS } = await import('../Container.types');
     expect(CONTAINER_DEFAULTS).toBeDefined();
     expect(CONTAINER_DEFAULTS.center).toBe(true);
     expect(CONTAINER_DEFAULTS.padding).toBe('md');
@@ -208,18 +208,18 @@ describe('Container Types', () => {
   });
 
   it('exports CONTAINER_MAX_WIDTHS constant', async () => {
-    const { CONTAINER_MAX_WIDTHS } = await import('./Container.types');
+    const { CONTAINER_MAX_WIDTHS } = await import('../Container.types');
     expect(CONTAINER_MAX_WIDTHS).toBeDefined();
-    expect(CONTAINER_MAX_WIDTHS.sm).toBe('640px');
-    expect(CONTAINER_MAX_WIDTHS.lg).toBe('1024px');
+    expect(CONTAINER_MAX_WIDTHS.sm).toBe('var(--ds-container-sm, 640px)');
+    expect(CONTAINER_MAX_WIDTHS.lg).toBe('var(--ds-container-lg, 1024px)');
     expect(CONTAINER_MAX_WIDTHS.full).toBe('100%');
   });
 
   it('exports CONTAINER_PADDINGS constant', async () => {
-    const { CONTAINER_PADDINGS } = await import('./Container.types');
+    const { CONTAINER_PADDINGS } = await import('../Container.types');
     expect(CONTAINER_PADDINGS).toBeDefined();
     expect(CONTAINER_PADDINGS.none).toBe('0');
-    expect(CONTAINER_PADDINGS.md).toBe('16px');
+    expect(CONTAINER_PADDINGS.md).toBe('var(--ds-spacing-4, 16px)');
   });
 });
 

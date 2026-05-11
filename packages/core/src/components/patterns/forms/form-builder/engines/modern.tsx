@@ -153,11 +153,19 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   const updateValue = useCallback(
     (name: string, value: unknown) => {
-      const next = { ...currentValues, [name]: value };
-      if (!controlledValues) setInternalValues(next);
+      if (!controlledValues) {
+        setInternalValues((previousValues) => {
+          const next = { ...previousValues, [name]: value };
+          onChange?.(next);
+          return next;
+        });
+        return;
+      }
+
+      const next = { ...controlledValues, [name]: value };
       onChange?.(next);
     },
-    [currentValues, controlledValues, onChange]
+    [controlledValues, onChange]
   );
 
   const isHidden = useCallback(

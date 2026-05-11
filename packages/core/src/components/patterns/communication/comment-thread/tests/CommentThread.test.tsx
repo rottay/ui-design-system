@@ -170,7 +170,11 @@ describe('PatternCommentThread', () => {
       const Component = COMPONENTS[engine];
       const { container, rerender } = renderWithEngine(<Component {...createProps({ loading: true })} />, engine);
 
-      expect(container.querySelector('.loading-spinner') || screen.queryByText(/loading/i)).toBeTruthy();
+      if (engine === 'modern') {
+        expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
+      } else {
+        expect(container.querySelector('.loading-spinner') || screen.queryByText(/loading/i)).toBeTruthy();
+      }
 
       rerender(
         <Component

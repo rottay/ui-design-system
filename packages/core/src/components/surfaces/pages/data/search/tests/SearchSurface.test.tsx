@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { SearchSurface } from '..';
 import type { SearchSurfaceConfig } from '../../../../foundation/types';
-import { renderSurface } from '../../common/test-utils';
+import { renderSurface } from '../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<SearchSurfaceConfig>): SearchSurfaceConfig {
   return {
@@ -88,7 +88,9 @@ describe('SearchSurface', () => {
       );
     });
 
-    fireEvent.click(await screen.findByRole('button', { name: 'Open profile' }));
+    const openProfileButton = await screen.findByText('Open profile').then((node) => node.closest('button'));
+    if (!openProfileButton) throw new Error('Open profile button not found');
+    fireEvent.click(openProfileButton);
 
     expect(config.behavior.resultActions?.[0]?.onClick).toHaveBeenCalledWith(
       expect.objectContaining({ id: '2', title: 'Andre Silva' })
@@ -116,7 +118,7 @@ describe('SearchSurface', () => {
 
     renderSurface(<SearchSurface config={config} />);
 
-    expect(screen.queryByRole('button', { name: 'Manage search' })).not.toBeInTheDocument();
+    expect(screen.queryByText('Manage search')).not.toBeInTheDocument();
   });
 
   it('localizes default empty states through the root design system provider', async () => {

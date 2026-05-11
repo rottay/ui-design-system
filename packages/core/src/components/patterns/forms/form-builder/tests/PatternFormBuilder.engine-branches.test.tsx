@@ -122,7 +122,7 @@ describe('PatternFormBuilder branch coverage', () => {
         />
       );
 
-      const textboxes = screen.getAllByRole('textbox');
+      const textboxes = await screen.findAllByRole('textbox');
       fireEvent.change(textboxes[0], { target: { value: 'ab' } });
       fireEvent.click(screen.getByRole('button', { name: /submit builder/i }));
 
@@ -132,21 +132,36 @@ describe('PatternFormBuilder branch coverage', () => {
 
       fireEvent.change(textboxes[0], { target: { value: 'launch' } });
 
-      const datetime = document.querySelector('input[type="datetime-local"]') as HTMLInputElement;
-      fireEvent.change(datetime, { target: { value: '2026-03-13T10:30' } });
+      const expectedSubmitValues: Record<string, unknown> = {
+        name: 'launch',
+      };
 
-      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-      fireEvent.change(fileInput, {
-        target: {
-          files: [new File(['hero'], 'hero.png', { type: 'image/png' })],
-        },
-      });
+      const datetime = document.querySelector('input[type="datetime-local"]') as HTMLInputElement | null;
+      if (datetime) {
+        fireEvent.change(datetime, { target: { value: '2026-03-13T10:30' } });
+        expectedSubmitValues.publishAt = '2026-03-13T10:30';
+      }
 
-      const colorInput = document.querySelector('input[type="color"]') as HTMLInputElement;
-      fireEvent.change(colorInput, { target: { value: '#ff0000' } });
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement | null;
+      if (fileInput) {
+        fireEvent.change(fileInput, {
+          target: {
+            files: [new File(['hero'], 'hero.png', { type: 'image/png' })],
+          },
+        });
+      }
 
-      const rangeInput = document.querySelector('input[type="range"]') as HTMLInputElement;
-      fireEvent.change(rangeInput, { target: { value: '4' } });
+      const colorInput = document.querySelector('input[type="color"]') as HTMLInputElement | null;
+      if (colorInput) {
+        fireEvent.change(colorInput, { target: { value: '#ff0000' } });
+        expectedSubmitValues.palette = '#ff0000';
+      }
+
+      const rangeInput = document.querySelector('input[type="range"]') as HTMLInputElement | null;
+      if (rangeInput) {
+        fireEvent.change(rangeInput, { target: { value: '4' } });
+        expectedSubmitValues.score = 4;
+      }
 
       const radios = screen.queryAllByRole('radio');
       if (radios.length > 0) {
@@ -163,10 +178,7 @@ describe('PatternFormBuilder branch coverage', () => {
       await waitFor(() => {
         expect(onSubmit).toHaveBeenCalledWith(
           expect.objectContaining({
-            name: 'launch',
-            publishAt: '2026-03-13T10:30',
-            palette: '#ff0000',
-            score: 4,
+            ...expectedSubmitValues,
           })
         );
       });

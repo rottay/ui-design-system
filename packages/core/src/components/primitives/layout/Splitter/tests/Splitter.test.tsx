@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import { Splitter } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: (name: string) => {
     if (name === 'Splitter') {
       const MockSplitter = ({

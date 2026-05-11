@@ -5,6 +5,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ClassicFilterPanel from '../engines/classic';
 import ModernFilterPanel from '../engines/modern';
 import RusticFilterPanel from '../engines/rustic';
+import { renderWithEngine } from '../../../../../_internal/testing/helpers/engine-test-utils';
 
 const INTERACTIVE_ENGINES = [
   ['modern', ModernFilterPanel],
@@ -46,7 +47,7 @@ describe('PatternFilterPanel runtime engines', () => {
       const onApply = vi.fn();
       const onReset = vi.fn();
 
-      render(
+      renderWithEngine(
         <Component
           filters={FILTERS as any}
           values={{}}
@@ -59,16 +60,32 @@ describe('PatternFilterPanel runtime engines', () => {
           activeCount={3}
           showApply
           showReset
-        />
+        />,
+        _engine
       );
 
       expect(screen.getByText('Filters')).toBeInTheDocument();
       expect(screen.getByText('3')).toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole('button', { name: '-' }));
-      expect(screen.queryByText('Query')).not.toBeInTheDocument();
+      const collapseButton =
+        _engine === 'modern'
+          ? screen.getByRole('button', { name: /collapse filters/i })
+          : screen.getByRole('button', { name: '-' });
+      fireEvent.click(collapseButton);
 
-      fireEvent.click(screen.getByRole('button', { name: '+' }));
+      if (_engine === 'modern') {
+        await waitFor(() => {
+          expect(screen.getByRole('button', { name: /expand filters/i })).toBeInTheDocument();
+        });
+      } else {
+        expect(screen.queryByText('Query')).not.toBeInTheDocument();
+      }
+
+      const expandButton =
+        _engine === 'modern'
+          ? screen.getByRole('button', { name: /expand filters/i })
+          : screen.getByRole('button', { name: '+' });
+      fireEvent.click(expandButton);
       expect(await screen.findByText('Query')).toBeInTheDocument();
       expect(screen.getByText('Status')).toBeInTheDocument();
       expect(screen.getByText('Tags')).toBeInTheDocument();
@@ -80,18 +97,23 @@ describe('PatternFilterPanel runtime engines', () => {
       expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ query: 'launch' }));
 
       const statusSelect = document.querySelector('select') as HTMLSelectElement | null;
-      expect(statusSelect).toBeTruthy();
-
-      fireEvent.change(statusSelect!, {
-        target: { value: 'live' },
-      });
+      if (statusSelect) {
+        fireEvent.change(statusSelect, {
+          target: { value: 'live' },
+        });
+      } else {
+        fireEvent.click(await screen.findByRole('combobox'));
+        fireEvent.click(await screen.findByRole('option', { name: 'Live' }));
+      }
       expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ status: 'live' }));
 
       fireEvent.click(screen.getByLabelText('VIP'));
       expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ tags: ['vip'] }));
 
-      const checkboxes = screen.getAllByRole('checkbox');
-      const booleanToggle = checkboxes[checkboxes.length - 1];
+      const switches = screen.queryAllByRole('switch');
+      const checkboxes = screen.queryAllByRole('checkbox');
+      const booleanToggle =
+        switches.length > 0 ? switches[switches.length - 1] : checkboxes[checkboxes.length - 1];
       fireEvent.click(booleanToggle);
       expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ enabled: true }));
 

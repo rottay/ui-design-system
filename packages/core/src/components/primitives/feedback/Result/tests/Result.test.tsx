@@ -38,7 +38,7 @@ import { Result } from '../';
  * Mock the engine factory to provide a consistent test implementation.
  * This ensures tests run predictably without engine-specific behavior.
  */
-vi.mock('../../../../runtime/engines/factory', () => ({
+vi.mock('../../../../../runtime/engines/factory', () => ({
   createEngineComponent: () => {
     const MockResult = React.forwardRef<HTMLDivElement, any>(({
       status = 'info',

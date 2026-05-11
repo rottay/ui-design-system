@@ -520,11 +520,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         )}
         <Flex gap={4}>
           <Box style={{ flex: 1, minWidth: 0 }}>
-            <PatternDataTable<T>
+            <CollectionRenderDispatch<T>
+              viewMode={effectiveViewMode}
+              viewModes={viewModes}
               data={data}
               columns={columns}
               rowKey={rowKey}
               loading={loading}
+              error={error}
               emptyState={emptyState}
               actions={actions}
               actionsColumnWidth={actionsColumnWidth}
