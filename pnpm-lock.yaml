@@ -38,7 +38,7 @@ importers:
         version: 12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       geist:
         specifier: ^1.3.0
-        version: 1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
+        version: 1.7.0(next@16.2.4(@babel/core@7.29.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
       lucide-react:
         specifier: '>=0.545.0 <1.0.0'
         version: 0.563.0(react@19.2.5)
@@ -140,8 +140,8 @@ importers:
         specifier: ^5.6.1
         version: 5.6.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@rottay/design-system':
-        specifier: 2.8.10
-        version: 2.8.10(@ant-design/icons@5.6.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@heroui/react@2.8.10(@react-spectrum/provider@3.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@types/react@19.2.14)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@4.2.4))(antd@5.29.3(date-fns@4.1.0)(luxon@3.7.2)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(d3@7.9.0)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(geist@1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)))(lucide-react@0.563.0(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: 2.8.11
+        version: 2.8.11(@ant-design/icons@5.6.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@heroui/react@2.8.10(@react-spectrum/provider@3.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@types/react@19.2.14)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@4.2.4))(antd@5.29.3(date-fns@4.1.0)(luxon@3.7.2)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(d3@7.9.0)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(geist@1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)))(lucide-react@0.563.0(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       antd:
         specifier: ^5.29.3
         version: 5.29.3(date-fns@4.1.0)(luxon@3.7.2)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -153,7 +153,7 @@ importers:
         version: 12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       geist:
         specifier: ^1.7.0
-        version: 1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
+        version: 1.7.0(next@16.2.4(@babel/core@7.29.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
       lucide-react:
         specifier: ^0.563.0
         version: 0.563.0(react@19.2.5)
@@ -2564,8 +2564,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rottay/design-system@2.8.10':
-    resolution: {integrity: sha512-NFHOoV62wUb84UZRpb81uN5HVAAIEQ6IPodbzCrKQn2Up7W8gNeXtT8lhjxl98AeUYMgbSaokPXBVCYey6731w==, tarball: https://npm.pkg.github.com/download/@rottay/design-system/2.8.10/90b7cc884a09643c667848a05520755f518a8818}
+  '@rottay/design-system@2.8.11':
+    resolution: {integrity: sha512-dThrHkEX3F16X5mKlgDkOEOam6zz8ip0YhQa4ZiRJT69l4GqmgUVgWe1pzGoQK/f+NTv2c9DW/OGcFSsllSjcw==, tarball: https://npm.pkg.github.com/download/@rottay/design-system/2.8.11/ebf6bc5459754b17e0313563c8dca09d3bb841a3}
     engines: {node: '>=20'}
     peerDependencies:
       '@ant-design/icons': ^5.5.0
@@ -8369,7 +8369,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.2':
     optional: true
 
-  '@rottay/design-system@2.8.10(@ant-design/icons@5.6.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@heroui/react@2.8.10(@react-spectrum/provider@3.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@types/react@19.2.14)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@4.2.4))(antd@5.29.3(date-fns@4.1.0)(luxon@3.7.2)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(d3@7.9.0)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(geist@1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)))(lucide-react@0.563.0(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@rottay/design-system@2.8.11(@ant-design/icons@5.6.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@heroui/react@2.8.10(@react-spectrum/provider@3.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@types/react@19.2.14)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@4.2.4))(antd@5.29.3(date-fns@4.1.0)(luxon@3.7.2)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(d3@7.9.0)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(geist@1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)))(lucide-react@0.563.0(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
       '@ant-design/icons': 5.6.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@heroui/react': 2.8.10(@react-spectrum/provider@3.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@types/react@19.2.14)(framer-motion@12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@4.2.4)
@@ -8377,7 +8377,7 @@ snapshots:
       d3: 7.9.0
       dayjs: 1.11.20
       framer-motion: 12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      geist: 1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
+      geist: 1.7.0(next@16.2.4(@babel/core@7.29.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
       lucide-react: 0.563.0(react@19.2.5)
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
@@ -9593,7 +9593,7 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  geist@1.7.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)):
+  geist@1.7.0(next@16.2.4(@babel/core@7.29.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)):
     dependencies:
       next: 16.2.4(@babel/core@7.29.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
 
