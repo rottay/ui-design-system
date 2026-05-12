@@ -31,8 +31,15 @@ function DefaultSearchResult({
       clickable
       hoverable
       style={{
-        borderColor: selected ? 'var(--ds-color-primary-500)' : undefined,
-      }}
+        backgroundColor: selected
+          ? 'var(--ds-search-result-bg-hover, var(--ds-search-result-bg, var(--ds-card-bg)))'
+          : 'var(--ds-search-result-bg, var(--ds-card-bg))',
+        borderColor: selected
+          ? 'var(--ds-color-primary-500)'
+          : 'var(--ds-search-result-border, var(--ds-card-border-color, var(--ds-color-border-subtle)))',
+        boxShadow: 'var(--ds-search-result-shadow, var(--ds-card-shadow, none))',
+        '--ds-card-bg-hover': 'var(--ds-search-result-bg-hover, var(--ds-card-bg-hover))',
+      } as React.CSSProperties}
     >
       <Card.Body>
         <Stack spacing="sm">
@@ -50,11 +57,19 @@ function DefaultSearchResult({
               </Box>
             )}
             <Stack spacing="xs">
-              <Text style={{ fontWeight: 700 }}>{result.title}</Text>
+              <Text style={{ fontWeight: 700, color: 'var(--ds-search-result-title-color, var(--ds-color-text-primary))' }}>
+                {result.title}
+              </Text>
               {result.description && (
-                <Text style={{ color: 'var(--ds-color-text-muted)' }}>{result.description}</Text>
+                <Text style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}>
+                  {result.description}
+                </Text>
               )}
-              {result.meta}
+              {result.meta && (
+                <Box style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}>
+                  {result.meta}
+                </Box>
+              )}
               {result.badge}
             </Stack>
           </Box>
@@ -163,17 +178,21 @@ export function SearchSurface({
             misleading empty states during fetches. */}
         {!hasEnoughQuery && !loading ? (
           config.presentation.emptyQueryState ?? (
-            <SurfaceEmptyState
-              title={tSurface('search.empty_query_title')}
-              description={emptyQueryDescription}
-            />
+            <Box style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}>
+              <SurfaceEmptyState
+                title={tSurface('search.empty_query_title')}
+                description={emptyQueryDescription}
+              />
+            </Box>
           )
         ) : config.behavior.results.length === 0 && !loading ? (
           config.presentation.emptyResultsState ?? (
-            <SurfaceEmptyState
-              title={tSurface('search.empty_results_title')}
-              description={tSurface('search.empty_results_description')}
-            />
+            <Box style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}>
+              <SurfaceEmptyState
+                title={tSurface('search.empty_results_title')}
+                description={tSurface('search.empty_results_description')}
+              />
+            </Box>
           )
         ) : (
           <Grid columns={splitLayout ? 12 : 1} gap="lg">

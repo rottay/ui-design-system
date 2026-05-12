@@ -153,7 +153,7 @@ function getHoverStyle(variant: string): VariantHoverStyle {
       };
     case 'outlined':
       return {
-        borderColor: 'var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)))',
+        borderColor: 'var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))))',
       };
     default:
       return {};
@@ -418,7 +418,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                     fontSize: 'var(--ds-card-title-font-size, 15px)',
                     fontWeight: 600,
                     lineHeight: 1.4,
-                    color: 'var(--ds-card-title-color, var(--ds-color-text-primary))',
+                    color: 'var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)))',
                     letterSpacing: 'var(--ds-card-title-letter-spacing, -0.01em)',
                   }}>
                     {title}

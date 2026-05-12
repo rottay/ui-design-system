@@ -25,8 +25,8 @@ import { COLLAPSE_DEFAULTS } from '../Collapse.types';
 
 /** Keyframes for collapse content transition */
 const COLLAPSE_STYLES = `
-.rottay-collapse-content{overflow:hidden;transition:max-height 0.2s ease,opacity 0.2s ease,padding 0.2s ease}
-.rottay-collapse-arrow{display:inline-block;transition:transform 0.2s ease}
+.rottay-collapse-content{overflow:hidden;transition:max-height var(--ds-collapse-transition-duration,0.2s) var(--ds-collapse-transition-timing,ease),opacity var(--ds-collapse-transition-duration,0.2s) var(--ds-collapse-transition-timing,ease),padding var(--ds-collapse-transition-duration,0.2s) var(--ds-collapse-transition-timing,ease)}
+.rottay-collapse-arrow{display:inline-block;transition:var(--ds-collapse-icon-default-idle-transition,transform 0.2s ease)}
 `.trim();
 
 /** Shared state between Collapse and its Panel children via React Context */
@@ -108,10 +108,26 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
         ref={ref}
         className={className || undefined}
         style={{
-          borderRadius: 'var(--ds-radius-md)',
-          ...(context.bordered ? { border: '1px solid var(--ds-color-border)' } : {}),
-          ...(context.ghost ? {} : { background: 'var(--ds-surface-card)' }),
-          ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}),
+          borderRadius: context.ghost
+            ? 'var(--ds-collapse-root-ghost-idle-border-radius, 0)'
+            : 'var(--ds-collapse-root-default-idle-border-radius, var(--ds-radius-md))',
+          ...(context.bordered
+            ? {
+                border: 'var(--ds-collapse-root-default-idle-border-width, 1px) var(--ds-collapse-root-default-idle-border-style, solid) var(--ds-collapse-root-default-idle-border-color, var(--ds-color-border))',
+              }
+            : {}),
+          ...(context.ghost
+            ? { background: 'var(--ds-collapse-root-ghost-idle-bg, transparent)' }
+            : { background: 'var(--ds-collapse-root-default-idle-bg, var(--ds-surface-card))' }),
+          boxShadow: context.ghost
+            ? 'var(--ds-collapse-root-ghost-idle-shadow, none)'
+            : 'var(--ds-collapse-root-default-idle-shadow, none)',
+          ...(disabled
+            ? {
+                opacity: 'var(--ds-collapse-header-default-disabled-opacity, 0.5)',
+                cursor: 'var(--ds-collapse-header-default-disabled-cursor, not-allowed)',
+              }
+            : {}),
           ...style,
         }}
       >
@@ -121,10 +137,26 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             display: 'flex',
             alignItems: 'center',
             gap: 8,
-            padding: '12px 16px',
-            cursor: disabled ? 'not-allowed' : 'pointer',
+            padding: context.ghost
+              ? 'var(--ds-collapse-header-ghost-idle-padding-y, 8px) var(--ds-collapse-header-ghost-idle-padding-x, 12px)'
+              : 'var(--ds-collapse-header-default-idle-padding-y, 12px) var(--ds-collapse-header-default-idle-padding-x, 16px)',
+            cursor: disabled ? 'var(--ds-collapse-header-default-disabled-cursor, not-allowed)' : 'var(--ds-collapse-header-default-idle-cursor, pointer)',
             userSelect: 'none',
-            fontWeight: 500,
+            fontSize: 'var(--ds-collapse-header-default-idle-font-size, inherit)',
+            fontWeight: 'var(--ds-collapse-header-default-idle-font-weight, 500)',
+            lineHeight: 'var(--ds-collapse-header-default-idle-line-height, normal)',
+            color: disabled
+              ? 'var(--ds-collapse-header-default-disabled-color, var(--ds-color-text-disabled))'
+              : isActive
+                ? 'var(--ds-collapse-header-default-expanded-color, var(--ds-color-primary))'
+                : 'var(--ds-collapse-header-default-idle-color, inherit)',
+            background: disabled
+              ? 'var(--ds-collapse-header-default-disabled-bg, transparent)'
+              : isActive
+                ? 'var(--ds-collapse-header-default-expanded-bg, transparent)'
+                : context.ghost
+                  ? 'var(--ds-collapse-header-ghost-idle-bg, transparent)'
+                  : 'var(--ds-collapse-header-default-idle-bg, transparent)',
           }}
           onClick={handleClick}
           role="button"
@@ -142,7 +174,15 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
           style={{
             maxHeight: isActive ? contentHeight || 9999 : 0,
             opacity: isActive ? 1 : 0,
-            padding: isActive ? '0 16px 16px 16px' : '0 16px',
+            color: 'var(--ds-collapse-content-default-idle-color, inherit)',
+            background: context.ghost
+              ? 'var(--ds-collapse-content-ghost-idle-bg, transparent)'
+              : 'var(--ds-collapse-content-default-idle-bg, transparent)',
+            fontSize: 'var(--ds-collapse-content-default-idle-font-size, inherit)',
+            lineHeight: 'var(--ds-collapse-content-default-idle-line-height, normal)',
+            padding: isActive
+              ? `0 var(--ds-collapse-content-default-idle-padding-x, 16px) var(--ds-collapse-content-default-idle-padding-y, 16px) var(--ds-collapse-content-default-idle-padding-x, 16px)`
+              : '0 var(--ds-collapse-content-default-idle-padding-x, 16px)',
           }}
         >
           {children}
@@ -226,7 +266,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 4,
+            gap: 'var(--ds-spacing-1, 4px)',
             ...style,
           }}
         >

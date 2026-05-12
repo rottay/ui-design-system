@@ -221,10 +221,19 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
           {Object.entries(grouped).map(([group, groupItems]) => (
             <div key={group}>
               {group && (
-                <div style={{ ...menuSectionTitleStyle, paddingLeft: 20, paddingRight: 20, paddingTop: 12, paddingBottom: 4 }}>
-                  {group}
-                </div>
-              )}
+              <div
+                style={{
+                  ...menuSectionTitleStyle,
+                  color: 'var(--ds-search-category-color, var(--ds-color-text-muted))',
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  paddingTop: 12,
+                  paddingBottom: 4,
+                }}
+              >
+                {group}
+              </div>
+            )}
               {groupItems.map((item) => {
                 itemIndex++;
                 const idx = itemIndex;

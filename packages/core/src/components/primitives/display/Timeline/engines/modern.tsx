@@ -26,17 +26,17 @@ import { TIMELINE_DEFAULTS } from '../Timeline.types';
  * Map color names to DS token background styles.
  */
 const COLOR_STYLE_MAP: Record<string, React.CSSProperties> = {
-  blue: { background: 'var(--ds-color-primary)' },
-  red: { background: 'var(--ds-color-error)' },
-  green: { background: 'var(--ds-color-success)' },
-  gray: { background: 'var(--ds-surface-panel)' },
-  primary: { background: 'var(--ds-color-primary)' },
-  success: { background: 'var(--ds-color-success)' },
-  warning: { background: 'var(--ds-color-warning)' },
-  error: { background: 'var(--ds-color-error)' },
+  blue: { background: 'var(--ds-timeline-color-blue, var(--ds-color-primary))' },
+  red: { background: 'var(--ds-timeline-color-red, var(--ds-color-error))' },
+  green: { background: 'var(--ds-timeline-color-green, var(--ds-color-success))' },
+  gray: { background: 'var(--ds-timeline-color-gray, var(--ds-surface-panel))' },
+  primary: { background: 'var(--ds-timeline-color-primary, var(--ds-color-primary))' },
+  success: { background: 'var(--ds-timeline-color-success, var(--ds-color-success))' },
+  warning: { background: 'var(--ds-timeline-color-warning, var(--ds-color-warning))' },
+  error: { background: 'var(--ds-timeline-color-error, var(--ds-color-error))' },
 };
 
-const DEFAULT_COLOR_STYLE: React.CSSProperties = { background: 'var(--ds-color-primary)' };
+const DEFAULT_COLOR_STYLE: React.CSSProperties = { background: 'var(--ds-timeline-color-primary, var(--ds-color-primary))' };
 
 /**
  * ModernTimeline - DaisyUI implementation of Timeline.
@@ -81,7 +81,15 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
   };
 
   return (
-    <ul className={`timeline timeline-vertical ${className}`} style={style}>
+    <ul
+      className={`timeline timeline-vertical ${className}`}
+      style={{
+        fontSize: 'var(--ds-timeline-content-font-size, inherit)',
+        lineHeight: 'var(--ds-timeline-content-line-height, normal)',
+        color: 'var(--ds-timeline-content-color, inherit)',
+        ...style,
+      }}
+    >
       {orderedItems.map((item, index) => {
         // Items can arrive as React elements (JSX children) or plain objects
         // (items prop). Extract props uniformly for consistent rendering.
@@ -99,10 +107,16 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
 
         return (
           <li key={index}>
-            {index > 0 && <hr style={{ background: 'var(--ds-surface-panel)' }} />}
+            {index > 0 && <hr style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
             <div className={positionClass}>
               {itemProps.label && (
-                <div className="text-sm mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <div
+                  className="text-sm mb-1"
+                  style={{
+                    color: 'var(--ds-timeline-label-color, var(--ds-color-text-secondary))',
+                    fontSize: 'var(--ds-timeline-label-font-size, 12px)',
+                  }}
+                >
                   {itemProps.label}
                 </div>
               )}
@@ -112,10 +126,18 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
             </div>
             <div className="timeline-middle">
               {itemProps.dot || (
-                <div className="w-3 h-3 rounded-full" style={colorStyle} />
+                <div
+                  className="rounded-full"
+                  style={{
+                    width: 'var(--ds-timeline-dot-size, 12px)',
+                    height: 'var(--ds-timeline-dot-size, 12px)',
+                    borderWidth: 'var(--ds-timeline-dot-border-width, 0)',
+                    ...colorStyle,
+                  }}
+                />
               )}
             </div>
-            {index < orderedItems.length - 1 && <hr style={{ background: 'var(--ds-surface-panel)' }} />}
+            {index < orderedItems.length - 1 && <hr style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
           </li>
         );
       })}
@@ -124,13 +146,21 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           to visually indicate an in-progress or upcoming event. */}
       {pending && (
         <li>
-          <hr style={{ background: 'var(--ds-surface-panel)' }} />
+          <hr style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />
           <div className="timeline-start">
-            <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
+            <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-timeline-pending-dot-color, var(--ds-color-primary))', borderRadius: '50%', animation: 'spin 0.6s linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
             {pending}
           </div>
           <div className="timeline-middle">
-            <div className="w-3 h-3 rounded-full animate-pulse" style={{ background: 'var(--ds-surface-panel)' }} />
+            <div
+              className="rounded-full animate-pulse"
+              style={{
+                width: 'var(--ds-timeline-dot-size, 12px)',
+                height: 'var(--ds-timeline-dot-size, 12px)',
+                background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))',
+                animation: 'var(--ds-timeline-pending-animation, pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite)',
+              }}
+            />
           </div>
         </li>
       )}

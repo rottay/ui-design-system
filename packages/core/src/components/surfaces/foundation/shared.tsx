@@ -53,6 +53,8 @@ export function SurfaceActionBar<TView>({
           disabled={action.disabled}
           loading={action.loading}
           icon={action.icon}
+          aria-label={action.label}
+          data-surface-action={action.id}
           onClick={(event: MouseEvent<HTMLButtonElement>) => {
             if (stopPropagation) {
               event.stopPropagation();

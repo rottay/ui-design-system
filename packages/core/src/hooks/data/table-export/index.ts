@@ -67,6 +67,12 @@ export interface TableExportColumn {
   /** Display header for this column in the exported file. */
   header: string;
 
+  /** Hidden columns are omitted from CSV, JSON, and clipboard exports. */
+  hidden?: boolean;
+
+  /** Set to false to keep a visible UI column out of export payloads. */
+  exportable?: boolean;
+
   /**
    * Optional render function to transform the raw value before export.
    * Use this for date formatting, currency symbols, boolean labels, etc.
@@ -151,6 +157,10 @@ function resolveCell(item: any, column: TableExportColumn): string {
   if (raw === null || raw === undefined) return '';
   if (typeof raw === 'object') return JSON.stringify(raw);
   return String(raw);
+}
+
+function getExportColumns(columns: TableExportColumn[]): TableExportColumn[] {
+  return columns.filter((column) => column.hidden !== true && column.exportable !== false);
 }
 
 /**
@@ -245,7 +255,7 @@ export function useTableExport<T>(
 
   // ---- Build rows from data + columns ----
   const buildRows = useCallback((): string[][] => {
-    const cols = columnsRef.current;
+    const cols = getExportColumns(columnsRef.current);
     const items = dataRef.current;
 
     return items.map((item) =>
@@ -261,10 +271,11 @@ export function useTableExport<T>(
 
     try {
       const cols = columnsRef.current;
+      const exportColumns = getExportColumns(cols);
       const rows = buildRows();
 
       // Header row
-      const headerLine = cols.map((c) => escapeCsvValue(c.header)).join(',');
+      const headerLine = exportColumns.map((c) => escapeCsvValue(c.header)).join(',');
 
       // Data rows
       const dataLines = rows.map((row) =>
@@ -291,12 +302,13 @@ export function useTableExport<T>(
 
     try {
       const cols = columnsRef.current;
+      const exportColumns = getExportColumns(cols);
       const items = dataRef.current;
 
       // Build array of objects using column headers as keys
       const exportData = items.map((item) => {
         const obj: Record<string, string> = {};
-        for (const col of cols) {
+        for (const col of exportColumns) {
           obj[col.header] = resolveCell(item, col);
         }
         return obj;
@@ -322,10 +334,11 @@ export function useTableExport<T>(
 
     try {
       const cols = columnsRef.current;
+      const exportColumns = getExportColumns(cols);
       const rows = buildRows();
 
       // Header row
-      const headerLine = cols.map((c) => escapeTabValue(c.header)).join('\t');
+      const headerLine = exportColumns.map((c) => escapeTabValue(c.header)).join('\t');
 
       // Data rows
       const dataLines = rows.map((row) =>

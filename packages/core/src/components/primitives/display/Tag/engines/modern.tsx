@@ -58,11 +58,11 @@ const CloseIcon: React.FC = () => (
  * Maps size prop to inline CSSProperties for the tag pill.
  */
 const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  xs: { height: 18, padding: '0 4px', fontSize: 10 },
-  sm: { height: 22, padding: '0 6px', fontSize: 11 },
-  md: { height: 26, padding: '0 8px', fontSize: 12 },
-  lg: { height: 30, padding: '0 10px', fontSize: 14 },
-  xl: { height: 30, padding: '0 10px', fontSize: 14 },
+  xs: { height: 'var(--ds-tag-xs-height, 18px)', padding: 'var(--ds-tag-xs-padding, 0 4px)', fontSize: 'var(--ds-tag-xs-font-size, 10px)' },
+  sm: { height: 'var(--ds-tag-sm-height, 22px)', padding: 'var(--ds-tag-sm-padding, 0 6px)', fontSize: 'var(--ds-tag-sm-font-size, 11px)' },
+  md: { height: 'var(--ds-tag-md-height, var(--ds-tag-default-height, 26px))', padding: 'var(--ds-tag-md-padding, var(--ds-tag-default-padding, 0 8px))', fontSize: 'var(--ds-tag-md-font-size, var(--ds-tag-default-font-size, 12px))' },
+  lg: { height: 'var(--ds-tag-lg-height, 30px)', padding: 'var(--ds-tag-lg-padding, 0 10px)', fontSize: 'var(--ds-tag-lg-font-size, 14px)' },
+  xl: { height: 'var(--ds-tag-xl-height, 30px)', padding: 'var(--ds-tag-xl-padding, 0 10px)', fontSize: 'var(--ds-tag-xl-font-size, 14px)' },
 };
 
 /**
@@ -81,11 +81,11 @@ const VARIANT_STYLES: Record<string, React.CSSProperties> = {
  * Maps radius prop to inline borderRadius values.
  */
 const RADIUS_STYLES: Record<string, string | number> = {
-  none: 0,
-  sm: 2,
-  md: 'var(--ds-radius-md)',
-  lg: 'var(--ds-radius-lg)',
-  full: 9999,
+  none: 'var(--ds-tag-radius-none, 0)',
+  sm: 'var(--ds-tag-radius-sm, 2px)',
+  md: 'var(--ds-tag-radius-md, var(--ds-tag-default-radius, var(--ds-radius-md)))',
+  lg: 'var(--ds-tag-radius-lg, var(--ds-radius-lg))',
+  full: 'var(--ds-tag-radius-full, 9999px)',
 };
 
 /**
@@ -154,18 +154,18 @@ export default function ModernTag(props: TagProps): React.ReactElement {
   const tagStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: 4,
-    lineHeight: 1,
-    fontWeight: 500,
+    gap: 'var(--ds-tag-icon-gap, 4px)',
+    lineHeight: 'var(--ds-tag-line-height, 1)',
+    fontWeight: 'var(--ds-tag-font-weight, 500)',
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
-    transition: 'all 0.2s',
+    transition: 'var(--ds-tag-transition, all 0.2s)',
     borderRadius: RADIUS_STYLES[radius] ?? RADIUS_STYLES.md,
     ...(SIZE_STYLES[size] || SIZE_STYLES.md),
     ...variantStyles,
     ...outlinedOverrides,
     ...(color && { backgroundColor: color }),
-    ...(bordered && { boxShadow: 'inset 0 0 0 1px var(--ds-color-border)' }),
+    ...(bordered && { boxShadow: 'inset 0 0 0 var(--ds-tag-border-width, 1px) var(--ds-color-border)' }),
     ...(clickable && { cursor: 'pointer' }),
     ...style,
   };
@@ -189,7 +189,7 @@ export default function ModernTag(props: TagProps): React.ReactElement {
         <button
           type="button"
           onClick={handleClose}
-          style={{ marginLeft: 2, background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'inherit', display: 'inline-flex' }}
+          style={{ marginLeft: 'var(--ds-tag-close-gap, 2px)', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'inherit', display: 'inline-flex' }}
           aria-label="Remove tag"
         >
           <CloseIcon />

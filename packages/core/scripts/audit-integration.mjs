@@ -58,21 +58,29 @@ function relPath(abs) {
 // Rule 1: Premium chrome vars without non-test consumers
 // ============================================================================
 
-// Read the brand compiler to extract all emitted CSS variable names
+// Read the brand compiler to extract chrome CSS variable names. Palette,
+// typography, and surface vars are foundational theme output; this rule guards
+// the explicit chrome channel because those vars should be read by engines,
+// components, surfaces, or component CSS token bridges.
 const compilerPath = join(SRC_ROOT, 'compilers/brand-theme/index.ts');
 const compilerSource = readSafe(compilerPath);
+const chromeStart = compilerSource.indexOf('export function brandThemeToChromeVariables');
+const chromeEnd = compilerSource.indexOf('export const compileBrandTheme', chromeStart);
+const chromeCompilerSource = chromeStart >= 0
+  ? compilerSource.slice(chromeStart, chromeEnd >= 0 ? chromeEnd : undefined)
+  : '';
 
-// Extract all --ds-* variable names emitted by the compiler
+// Extract all --ds-* chrome variable names emitted by the compiler
 const emittedVars = new Set();
 const varPattern = /vars\['(--ds-[a-z0-9-]+)'\]/g;
 let match;
-while ((match = varPattern.exec(compilerSource)) !== null) {
+while ((match = varPattern.exec(chromeCompilerSource)) !== null) {
   emittedVars.add(match[1]);
 }
 
 // Also catch the direct string literals like `--ds-sidebar-*`
 const directVarPattern = /['"`](--ds-(?:sidebar|layout|shell|page-shell|button-disabled|button-default|button-ghost|input-disabled|input-bg-disabled|input-color-disabled|input-border-disabled|table)[a-z0-9-]*)['"`]/g;
-while ((match = directVarPattern.exec(compilerSource)) !== null) {
+while ((match = directVarPattern.exec(chromeCompilerSource)) !== null) {
   emittedVars.add(match[1]);
 }
 
@@ -88,6 +96,7 @@ if (emittedVars.size > 0) {
   const consumerDirs = [
     join(SRC_ROOT, 'tokens/css/engines'),
     join(SRC_ROOT, 'components'),
+    join(SRC_ROOT, 'tokens/css/components'),
     join(SRC_ROOT, 'tokens/css/runtime'),
     join(SRC_ROOT, 'tokens/css/foundation'),
   ];
@@ -111,7 +120,7 @@ if (emittedVars.size > 0) {
       violations.push({
         rule: 'orphan-premium-var',
         path: relPath(compilerPath),
-        message: `Premium var "${varName}" is emitted by the compiler but has no non-test consumer in engines/components/surfaces.`,
+        message: `Premium chrome var "${varName}" is emitted by the compiler but has no non-test consumer in engines/components/surfaces/token CSS.`,
       });
     }
   }

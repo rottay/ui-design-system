@@ -532,6 +532,62 @@ describe('useTableExport', () => {
   });
 
   describe('Object Values', () => {
+    it('omits hidden and non-exportable columns from all export formats', async () => {
+      const data = [
+        {
+          name: 'Alice',
+          email: 'alice@test.com',
+          salary: '$150,000',
+          internalScore: 'high',
+        },
+      ];
+
+      const columns = [
+        { key: 'name', header: 'Name' },
+        { key: 'email', header: 'Email' },
+        { key: 'salary', header: 'Salary', hidden: true },
+        { key: 'internalScore', header: 'Internal Score', exportable: false },
+      ];
+
+      const { result } = renderHook(() =>
+        useTableExport({
+          data,
+          columns,
+        })
+      );
+
+      act(() => {
+        result.current.exportCsv();
+      });
+
+      let content = lastBlobContent!.replace('\uFEFF', '');
+      expect(content.split('\r\n')[0]).toBe('Name,Email');
+      expect(content).not.toContain('Salary');
+      expect(content).not.toContain('Internal Score');
+      expect(content).not.toContain('$150,000');
+      expect(content).not.toContain('high');
+
+      act(() => {
+        result.current.exportJson();
+      });
+
+      const json = JSON.parse(lastBlobContent!);
+      expect(json).toEqual([{ Name: 'Alice', Email: 'alice@test.com' }]);
+
+      const writeText = vi.fn().mockResolvedValue(undefined);
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText },
+        configurable: true,
+      });
+
+      await act(async () => {
+        await result.current.exportClipboard();
+      });
+
+      content = writeText.mock.calls[0][0] as string;
+      expect(content).toBe('Name\tEmail\nAlice\talice@test.com');
+    });
+
     it('serializes object values as JSON when no render function provided', () => {
       const data = [
         {

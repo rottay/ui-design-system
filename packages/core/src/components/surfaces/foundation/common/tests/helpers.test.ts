@@ -10,12 +10,15 @@ import {
   filterSurfaceActions,
   filterSurfaceColumns,
   filterSurfaceFields,
+  filterSurfaceRowActions,
   filterSurfaceTabbedViews,
   normalizeSurfaceError,
   resolveColumnValue,
+  resolveFieldAccessForRow,
   resolveSurfaceAction,
   resolveSurfaceButtonVariant,
   resolveSurfaceDetailActionVariant,
+  resolveSurfacePermission,
   stringifySurfaceValue,
 } from '../../helpers';
 import {
@@ -163,6 +166,81 @@ describe('normalizeSurfaceError', () => {
         }
       )
     ).toHaveLength(1);
+  });
+
+  it('passes runtime context to permission callbacks and honors action allowlists', () => {
+    const runtimeContext = {
+      tenantSlug: 'bithire',
+      userId: 'user-1',
+      role: 'recruiter',
+    };
+    const isAllowed = vi.fn(({ permission, context }) => {
+      return context?.tenantSlug === 'bithire' && permission === 'records:edit';
+    });
+
+    const permissions = {
+      runtimeContext,
+      allowedActions: ['edit'],
+      actions: {
+        edit: { permission: 'records:edit' },
+        delete: { permission: 'records:delete' },
+      },
+      isAllowed,
+    };
+
+    expect(
+      filterSurfaceActions(
+        [
+          { id: 'edit', label: 'Edit' },
+          { id: 'delete', label: 'Delete' },
+          { id: 'export', label: 'Export' },
+        ],
+        permissions
+      ).map((action) => action.id)
+    ).toEqual(['edit']);
+
+    expect(isAllowed).toHaveBeenCalledWith({
+      kind: 'action',
+      id: 'edit',
+      permission: 'records:edit',
+      context: runtimeContext,
+    });
+    expect(resolveSurfacePermission(permissions, { kind: 'action', id: 'export' })).toBe(false);
+  });
+
+  it('passes runtime context to row actions and field access resolvers', () => {
+    const runtimeContext = { userId: 'owner-1' };
+    const row = { id: 'record-1', ownerId: 'owner-1', locked: false };
+    const permissions = {
+      runtimeContext,
+      isRowAllowed: vi.fn(({ id, row: item, context }) => {
+        return id === 'edit' && item.ownerId === context?.userId;
+      }),
+      resolveFieldAccess: vi.fn(({ fieldId, row: item, context }) => {
+        if (fieldId === 'salary' && item.ownerId !== context?.userId) return 'hidden';
+        return 'readonly';
+      }),
+    };
+
+    expect(
+      filterSurfaceRowActions(
+        [
+          { id: 'edit', label: 'Edit' },
+          { id: 'archive', label: 'Archive' },
+        ],
+        permissions,
+        row,
+        0
+      ).map((action) => action.id)
+    ).toEqual(['edit']);
+
+    expect(resolveFieldAccessForRow('salary', permissions, row, 0)).toBe('readonly');
+    expect(permissions.isRowAllowed).toHaveBeenCalledWith(
+      expect.objectContaining({ context: runtimeContext })
+    );
+    expect(permissions.resolveFieldAccess).toHaveBeenCalledWith(
+      expect.objectContaining({ context: runtimeContext })
+    );
   });
 
   it('normalizes surface action variants and utility helpers', () => {

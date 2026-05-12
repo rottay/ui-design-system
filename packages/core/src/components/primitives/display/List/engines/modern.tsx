@@ -22,11 +22,37 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
     const { avatar, title, description, className = '', style } = props;
     // flex-start alignment so multi-line descriptions don't center the avatar
     return (
-      <div ref={ref} className={`flex items-start gap-3 ${className}`} style={style}>
+      <div
+        ref={ref}
+        className={`flex items-start ${className}`}
+        style={{ gap: 'var(--ds-list-meta-avatar-margin-right, 12px)', ...style }}
+      >
         {avatar && <div className="flex-shrink-0">{avatar}</div>}
         <div className="flex-1 min-w-0">
-          {title && <div className="font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>{title}</div>}
-          {description && <div className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</div>}
+          {title && (
+            <div
+              className="font-medium"
+              style={{
+                color: 'var(--ds-list-meta-title-color, var(--ds-color-text-primary))',
+                fontSize: 'var(--ds-list-meta-title-font-size, inherit)',
+                fontWeight: 'var(--ds-list-meta-title-font-weight, 500)',
+              }}
+            >
+              {title}
+            </div>
+          )}
+          {description && (
+            <div
+              className="text-sm"
+              style={{
+                color: 'var(--ds-list-meta-description-color, var(--ds-color-text-secondary))',
+                fontSize: 'var(--ds-list-meta-description-font-size, 0.875rem)',
+                marginTop: 'var(--ds-list-meta-description-margin-top, 0)',
+              }}
+            >
+              {description}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -42,13 +68,33 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
     return (
       <li
         ref={ref}
-        className={`flex items-center justify-between py-3 ${className}`}
-        style={style}
+        className={`flex items-center justify-between ${className}`}
+        style={{
+          padding: 'var(--ds-list-default-padding-vertical, 12px) var(--ds-list-default-padding-horizontal, 16px)',
+          background: 'var(--ds-list-item-background-color, transparent)',
+          color: 'var(--ds-list-text-color, inherit)',
+          transition: 'background var(--ds-list-transition-duration, 0.2s) var(--ds-list-transition-timing, ease-in-out)',
+          ...style,
+        }}
       >
         <div className="flex-1 min-w-0">{children}</div>
-        {extra && <div className="ml-4 flex-shrink-0">{extra}</div>}
+        {extra && (
+          <div
+            className="flex-shrink-0"
+            style={{ marginLeft: 'var(--ds-list-extra-margin-left, 16px)' }}
+          >
+            {extra}
+          </div>
+        )}
         {actions && actions.length > 0 && (
-          <div className="ml-4 flex items-center gap-2">
+          <div
+            className="flex items-center"
+            style={{
+              marginLeft: 'var(--ds-list-extra-margin-left, 16px)',
+              gap: 'var(--ds-list-actions-gap, 8px)',
+              color: 'var(--ds-list-actions-color, var(--ds-color-primary))',
+            }}
+          >
             {actions.map((action, index) => (
               <span key={index}>{action}</span>
             ))}
@@ -85,10 +131,10 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       style,
     } = props;
 
-    const sizeClasses = {
-      small: 'text-sm',
-      default: 'text-base',
-      large: 'text-lg',
+    const sizeFontSize = {
+      small: 'var(--ds-list-sm-font-size, 12px)',
+      default: 'var(--ds-list-default-font-size, 14px)',
+      large: 'var(--ds-list-lg-font-size, 16px)',
     };
 
     // Prefer renderItem for data-driven lists; fall back to children for declarative usage
@@ -99,14 +145,18 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     // Three-row skeleton with avatar circle + two text bars to match typical list layouts
     if (loading) {
       return (
-        <div ref={ref} className={`animate-pulse ${className}`} style={style}>
+        <div
+          ref={ref}
+          className={`animate-pulse ${className}`}
+          style={{ opacity: 'var(--ds-list-loading-opacity, 0.6)', ...style }}
+        >
           {[1, 2, 3].map((i) => (
             <div key={i} className="py-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full" style={{ background: 'var(--ds-surface-panel)' }} />
+                <div className="w-10 h-10 rounded-full" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
                 <div className="flex-1">
-                  <div className="h-4 rounded w-1/3 mb-2" style={{ background: 'var(--ds-surface-panel)' }} />
-                  <div className="h-3 rounded w-2/3" style={{ background: 'var(--ds-surface-panel)' }} />
+                  <div className="h-4 rounded w-1/3 mb-2" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
+                  <div className="h-3 rounded w-2/3" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
                 </div>
               </div>
             </div>
@@ -118,16 +168,29 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     return (
       <div
         ref={ref}
-        className={`${bordered ? 'border rounded-lg' : ''} ${sizeClasses[size]} ${className}`}
+        className={`${bordered ? 'border rounded-lg' : ''} ${className}`}
         style={{
-          ...(bordered && { borderColor: 'var(--ds-color-border)' }),
+          background: 'var(--ds-list-background-color, transparent)',
+          color: 'var(--ds-list-text-color, inherit)',
+          fontSize: sizeFontSize[size],
+          ...(bordered && {
+            borderColor: 'var(--ds-list-border-color, var(--ds-color-border))',
+            borderWidth: 'var(--ds-list-border-width, 1px)',
+            borderRadius: 'var(--ds-list-border-radius, var(--ds-radius-lg))',
+          }),
           ...style,
         }}
       >
         {header && (
           <div
             className={`px-4 py-3 font-medium ${bordered ? 'border-b' : ''}`}
-            style={bordered ? { borderColor: 'var(--ds-color-border)' } : undefined}
+            style={{
+              padding: 'var(--ds-list-header-padding-vertical, 12px) var(--ds-list-header-padding-horizontal, 16px)',
+              fontSize: 'var(--ds-list-header-font-size, inherit)',
+              fontWeight: 'var(--ds-list-header-font-weight, 600)',
+              background: 'var(--ds-list-header-background-color, transparent)',
+              ...(bordered ? { borderColor: 'var(--ds-list-border-color, var(--ds-color-border))' } : {}),
+            }}
           >
             {header}
           </div>
@@ -144,7 +207,13 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             <React.Fragment key={index}>
               {child}
               {split && index < React.Children.count(listContent) - 1 && !grid && (
-                <div className="border-b" style={{ borderColor: 'var(--ds-color-border)' }} />
+                <div
+                  className="border-b"
+                  style={{
+                    borderColor: 'var(--ds-list-split-color, var(--ds-color-border))',
+                    borderBottomWidth: 'var(--ds-list-split-width, 1px)',
+                  }}
+                />
               )}
             </React.Fragment>
           ))}
@@ -152,7 +221,12 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         {footer && (
           <div
             className={`px-4 py-3 ${bordered ? 'border-t' : ''}`}
-            style={bordered ? { borderColor: 'var(--ds-color-border)' } : undefined}
+            style={{
+              padding: 'var(--ds-list-footer-padding-vertical, 12px) var(--ds-list-footer-padding-horizontal, 16px)',
+              fontSize: 'var(--ds-list-footer-font-size, inherit)',
+              background: 'var(--ds-list-footer-background-color, transparent)',
+              ...(bordered ? { borderColor: 'var(--ds-list-border-color, var(--ds-color-border))' } : {}),
+            }}
           >
             {footer}
           </div>

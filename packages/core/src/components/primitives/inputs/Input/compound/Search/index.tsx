@@ -105,7 +105,7 @@ export const InputSearch = (props: InputSearchProps) => {
         cursor: 'pointer',
         padding: '4px',
         display: 'flex',
-        color: 'var(--ds-input-border-focus)',
+        color: 'var(--ds-input-search-icon-color, var(--ds-search-icon-color, var(--ds-input-border-focus)))',
       }}
       aria-label="Search"
     >

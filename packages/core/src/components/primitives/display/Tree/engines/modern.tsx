@@ -107,7 +107,7 @@ const DropIndicator: React.FC<{ position: 'before' | 'inside' | 'after'; level: 
         paddingLeft: left,
       }}
     >
-      <div className="h-0.5 rounded-full" style={{ background: 'var(--ds-color-primary)', animation: 'rottay-drop-indicator 0.3s ease-out' }} />
+      <div className="h-0.5 rounded-full" style={{ background: 'var(--ds-tree-line-color, var(--ds-color-primary))', animation: 'rottay-drop-indicator 0.3s ease-out' }} />
     </div>
   );
 };
@@ -201,9 +201,9 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   // Non-leaf nodes without children are assumed to support async loading,
   // so they get an expander arrow that triggers loadData on first click.
   const showExpander = (hasChildren || (!isLeaf && !hasChildren)) && !isLeaf;
-  // 24px indent per level. Modern engine uses paddingLeft via inline style
-  // because Tailwind's pl-* utilities are static and don't support dynamic values.
-  const paddingLeft = level * 24;
+  // Modern engine uses paddingLeft via inline style because Tailwind's pl-*
+  // utilities are static and don't support dynamic token values.
+  const paddingLeft = level === 0 ? 0 : `calc(${level} * var(--ds-tree-indent, 24px))`;
 
   const isDraggable = propDraggable && !disabled;
   const isDropTarget = dropTarget?.key === nodeKey;
@@ -248,27 +248,33 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
               <div
                 key={i}
                 className="absolute top-0 bottom-0 border-l"
-                style={{ left: i * 24 + 12, borderColor: 'var(--ds-color-border)' }}
+                style={{
+                  left: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)`,
+                  borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
+                  borderLeftWidth: 'var(--ds-tree-line-width, 1px)',
+                }}
               />
             ) : null,
           )}
           <div
             className="absolute border-t"
             style={{
-              left: (level - 1) * 24 + 12,
+              left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
               top: '50%',
               width: 12,
-              borderColor: 'var(--ds-color-border)',
+              borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
+              borderTopWidth: 'var(--ds-tree-line-width, 1px)',
             }}
           />
           {isLast && (
             <div
               className="absolute border-l"
               style={{
-                left: (level - 1) * 24 + 12,
+                left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
                 height: '50%',
-                borderColor: 'var(--ds-color-border)',
+                borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
+                borderLeftWidth: 'var(--ds-tree-line-width, 1px)',
               }}
             />
           )}
@@ -276,10 +282,11 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             <div
               className="absolute border-l"
               style={{
-                left: (level - 1) * 24 + 12,
+                left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
                 bottom: 0,
-                borderColor: 'var(--ds-color-border)',
+                borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
+                borderLeftWidth: 'var(--ds-tree-line-width, 1px)',
               }}
             />
           )}
@@ -312,12 +319,17 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           .filter(Boolean)
           .join(' ')}
         style={{
+          padding: 'var(--ds-tree-node-padding, 4px 8px)',
           paddingLeft,
+          background: 'var(--ds-tree-node-bg, transparent)',
+          color: disabled
+            ? 'var(--ds-tree-node-color-disabled, var(--ds-color-text-disabled))'
+            : 'var(--ds-tree-node-color, inherit)',
           ...(isSelected
             ? {
-                background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
+                background: 'var(--ds-tree-node-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))',
                 borderColor: 'var(--ds-color-primary)',
-                color: 'var(--ds-color-primary)',
+                color: 'var(--ds-tree-node-color-selected, var(--ds-color-primary))',
               }
             : {}),
           ...(isFocused ? { '--tw-ring-color': 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)' } as React.CSSProperties : {}),
@@ -331,7 +343,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         onMouseEnter={(e) => {
           if (!isSelected && !disabled) {
             const el = e.currentTarget as HTMLElement;
-            el.style.background = 'color-mix(in srgb, var(--ds-surface-inset) 50%, transparent)';
+            el.style.background = 'var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent))';
             el.style.borderLeft = '2px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent)';
           }
         }}
@@ -377,7 +389,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         ) : showExpander ? (
           <button
             type="button"
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, marginRight: 4, flexShrink: 0 }}
+            style={{ background: 'transparent', color: 'var(--ds-tree-icon-color, var(--ds-color-text-primary))', width: 'var(--ds-tree-switcher-size, 24px)', height: 'var(--ds-tree-switcher-size, 24px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, marginRight: 4, flexShrink: 0 }}
             onClick={handleToggle}
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             tabIndex={-1}
@@ -388,7 +400,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 isExpanded ? 'rotate-90' : '',
               ].join(' ')}
             >
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <svg width="var(--ds-tree-icon-size, 12px)" height="var(--ds-tree-icon-size, 12px)" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M6 4l4 4-4 4z" />
               </svg>
             </span>
@@ -415,6 +427,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             disabled={disabled || disableCheckbox}
             onChange={handleCheck}
             onClick={(e) => e.stopPropagation()}
+            style={{ marginRight: 'var(--ds-tree-checkbox-margin, 8px)' }}
             aria-label={`Select ${typeof title === 'string' ? title : ''}`}
             tabIndex={-1}
           />
@@ -422,7 +435,12 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
 
         {/* Icon */}
         {showIcon && icon && (
-          <span className="mr-2 flex-shrink-0 flex items-center">{icon}</span>
+          <span
+            className="mr-2 flex-shrink-0 flex items-center"
+            style={{ color: 'var(--ds-tree-icon-color, currentColor)', width: 'var(--ds-tree-icon-size, 16px)', height: 'var(--ds-tree-icon-size, 16px)' }}
+          >
+            {icon}
+          </span>
         )}
 
         {/* Title */}
@@ -894,7 +912,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
     <div
       ref={treeContainerRef}
       className={`rottay-tree rottay-tree--modern ${className}`}
-      style={style}
+      style={{ background: 'var(--ds-tree-bg, transparent)', ...style }}
       role="tree"
       aria-multiselectable={props.multiple || false}
       onKeyDown={handleKeyDown}

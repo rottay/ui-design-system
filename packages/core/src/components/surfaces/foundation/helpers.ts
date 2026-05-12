@@ -43,6 +43,16 @@ export function resolveSurfacePermission(
     return true;
   }
 
+  if (input.kind === 'action') {
+    if (permissions.allowedActions && !permissions.allowedActions.includes(input.id)) {
+      return false;
+    }
+
+    if (permissions.deniedActions?.includes(input.id)) {
+      return false;
+    }
+  }
+
   const permissionRule =
     input.kind === 'field'
       ? permissions.fields?.[input.id]
@@ -55,6 +65,7 @@ export function resolveSurfacePermission(
       kind: input.kind,
       id: input.id,
       permission: permissionRule?.permission,
+      context: permissions.runtimeContext,
     });
   }
 
@@ -135,6 +146,7 @@ export function filterSurfaceRowActions<TView>(
       permission: permissionRule?.permission,
       row,
       rowIndex,
+      context: permissions.runtimeContext,
     });
   });
 }
@@ -163,6 +175,7 @@ export function isFieldVisibleForRow<TView>(
       permission: permissionRule?.permission,
       row,
       rowIndex,
+      context: permissions.runtimeContext,
     });
   }
 
@@ -196,7 +209,12 @@ export function resolveFieldAccessForRow<TView>(
 
   // 1. Dynamic per-row field access has highest priority.
   if (permissions.resolveFieldAccess) {
-    return permissions.resolveFieldAccess({ fieldId, row, rowIndex });
+    return permissions.resolveFieldAccess({
+      fieldId,
+      row,
+      rowIndex,
+      context: permissions.runtimeContext,
+    });
   }
 
   // 2-4. Fall back to boolean visibility check.

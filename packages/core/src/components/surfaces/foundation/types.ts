@@ -159,6 +159,16 @@ export interface SurfacePermissionRule {
   reason?: string;
 }
 
+/** Runtime metadata that apps may pass into surface permission callbacks. */
+export interface SurfaceRuntimeContext {
+  tenantId?: string;
+  tenantSlug?: string;
+  productProfile?: string;
+  userId?: string;
+  role?: string;
+  [key: string]: unknown;
+}
+
 /**
  * Permission configuration accepted by every surface config's `permissions` field.
  *
@@ -175,11 +185,18 @@ export interface SurfacePermissionsConfig {
   actions?: Record<string, SurfacePermissionRule | undefined>;
   /** Per-tab permission rules, keyed by tab `key`. */
   tabs?: Record<string, SurfacePermissionRule | undefined>;
+  /** Optional runtime context forwarded to all permission callbacks. */
+  runtimeContext?: SurfaceRuntimeContext;
+  /** When provided, only these action IDs may render. */
+  allowedActions?: string[];
+  /** Action IDs that must never render, even if otherwise granted. */
+  deniedActions?: string[];
   /** Dynamic callback for apps needing runtime permission evaluation. */
   isAllowed?: (input: {
     kind: 'field' | 'action' | 'tab';
     id: string;
     permission?: string;
+    context?: SurfaceRuntimeContext;
   }) => boolean;
 
   /**
@@ -195,6 +212,7 @@ export interface SurfacePermissionsConfig {
     permission?: string;
     row: T;
     rowIndex: number;
+    context?: SurfaceRuntimeContext;
   }) => boolean;
 
   /**
@@ -219,6 +237,7 @@ export interface SurfacePermissionsConfig {
     fieldId: string;
     row: T;
     rowIndex: number;
+    context?: SurfaceRuntimeContext;
   }) => 'visible' | 'readonly' | 'hidden';
 }
 
