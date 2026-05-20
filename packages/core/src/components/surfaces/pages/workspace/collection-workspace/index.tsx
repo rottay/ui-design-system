@@ -17,15 +17,18 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { CheckSquare2, Filter } from 'lucide-react';
-import type { ColumnDef } from '../../../../patterns/foundation/types';
+import { CheckSquare2, ChevronDown, Filter } from 'lucide-react';
+import type { ColumnDef, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
 import type {
   CollectionWorkspaceConfig,
   WorkspaceActiveFiltersConfig,
 } from '../../../foundation/contracts/collection';
 import type { AdaptiveConfig } from '../../../foundation/contracts/adaptive';
 import type { DensityKey, ViewMode } from '../../../../patterns/data/list-toolbar/ListToolbar.types';
-import type { CollectionHeaderProps } from '../../../../structures/headers/collection';
+import type {
+  CollectionHeaderMetaItem,
+  CollectionHeaderProps,
+} from '../../../../structures/headers/collection';
 import type {
   SearchCommandBarConfig,
   SearchCommandBarCommand,
@@ -101,6 +104,171 @@ function resolveKey<T extends object>(
   return typeof rowKey === 'function' ? rowKey(item) : String(item[rowKey]);
 }
 
+function resolveSortValue<T extends object>(row: T, column: ColumnDef<T>): unknown {
+  if (column.accessorFn) return column.accessorFn(row);
+  if (column.accessorKey) return row[column.accessorKey];
+  return (row as Record<string, unknown>)[column.key];
+}
+
+function compareSortValues(a: unknown, b: unknown): number {
+  if (a == null && b == null) return 0;
+  if (a == null) return 1;
+  if (b == null) return -1;
+
+  if (a instanceof Date && b instanceof Date) {
+    return a.getTime() - b.getTime();
+  }
+
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a - b;
+  }
+
+  if (typeof a === 'boolean' && typeof b === 'boolean') {
+    return Number(a) - Number(b);
+  }
+
+  return String(a).localeCompare(String(b), undefined, {
+    numeric: true,
+    sensitivity: 'base',
+  });
+}
+
+const HIGH_VALUE_SCOPE_KEYS = [
+  'open',
+  'active',
+  'published',
+  'pending',
+  'pending_approval',
+  'urgent',
+  'high-risk',
+  'watchlist',
+  'draft',
+  'paused',
+  'closed',
+  'completed',
+  'approved',
+  'overloaded',
+  'open-capacity',
+];
+
+function formatHeaderMetaCount(value: number): string {
+  if (!Number.isFinite(value)) return '0';
+  return new Intl.NumberFormat('en-US', {
+    notation: Math.abs(value) >= 10000 ? 'compact' : 'standard',
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+function normalizeHeaderMetaLabel(value: string): string {
+  return value
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+function readHeaderMetaValue(row: object, keys: string[]): unknown {
+  const record = row as Record<string, unknown>;
+  for (const key of keys) {
+    if (record[key] != null) return record[key];
+  }
+  return undefined;
+}
+
+function buildStatusMetaItems<T extends object>(data: T[]): CollectionHeaderMetaItem[] {
+  const counts = new Map<string, number>();
+
+  data.forEach((row) => {
+    const value = readHeaderMetaValue(row, ['status', 'state', 'stage']);
+    if (typeof value !== 'string' || !value.trim()) return;
+    const key = normalizeHeaderMetaLabel(value);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  });
+
+  return [...counts.entries()]
+    .sort(([leftKey, leftCount], [rightKey, rightCount]) => {
+      const leftPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(leftKey);
+      const rightPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(rightKey);
+      if (leftPriority !== -1 || rightPriority !== -1) {
+        return (leftPriority === -1 ? 999 : leftPriority) - (rightPriority === -1 ? 999 : rightPriority);
+      }
+      return rightCount - leftCount;
+    })
+    .slice(0, 2)
+    .map(([key, count]) => ({
+      key: `status-${key}`,
+      label: `${formatHeaderMetaCount(count)} ${key}`,
+      tone: ['open', 'active', 'published', 'completed', 'approved'].includes(key)
+        ? 'success'
+        : 'neutral',
+    }));
+}
+
+function buildDefaultHeaderMetaItems<T extends object>({
+  data,
+  controls,
+  loading,
+  error,
+}: {
+  data?: T[];
+  controls?: CollectionWorkspaceConfig<T>['controls'];
+  loading?: boolean;
+  error?: ReactNode;
+}): CollectionHeaderMetaItem[] {
+  if (error) {
+    return [{ key: 'state-error', label: 'Needs attention', tone: 'neutral' }];
+  }
+
+  if (loading) {
+    return [{ key: 'state-loading', label: 'Syncing data', tone: 'primary' }];
+  }
+
+  const rows = Array.isArray(data) ? data : [];
+  const items: CollectionHeaderMetaItem[] = [
+    {
+      key: 'visible',
+      label: `${formatHeaderMetaCount(rows.length)} in view`,
+      tone: 'primary',
+    },
+  ];
+
+  const scopes = controls?.scopes?.scopes ?? [];
+  const scopedItems = scopes
+    .filter((scope) => scope.key !== 'all' && typeof scope.count === 'number')
+    .sort((left, right) => {
+      const leftPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(left.key);
+      const rightPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(right.key);
+      if (leftPriority !== -1 || rightPriority !== -1) {
+        return (leftPriority === -1 ? 999 : leftPriority) - (rightPriority === -1 ? 999 : rightPriority);
+      }
+      return (right.count ?? 0) - (left.count ?? 0);
+    })
+    .slice(0, 3)
+    .map((scope) => ({
+      key: `scope-${scope.key}`,
+      label: `${formatHeaderMetaCount(scope.count ?? 0)} ${normalizeHeaderMetaLabel(scope.label)}`,
+      tone: ['open', 'active', 'published', 'completed', 'approved'].includes(scope.key)
+        ? 'success'
+        : 'neutral',
+    } satisfies CollectionHeaderMetaItem));
+
+  for (const item of scopedItems) {
+    if (items.length >= 4) break;
+    items.push(item);
+  }
+
+  if (items.length < 3) {
+    for (const item of buildStatusMetaItems(rows)) {
+      if (items.length >= 4) break;
+      if (!items.some((existing) => existing.label === item.label)) {
+        items.push(item);
+      }
+    }
+  }
+
+  return items;
+}
+
 // ---------------------------------------------------------------------------
 // Enhanced CSS
 // ---------------------------------------------------------------------------
@@ -144,6 +312,51 @@ const ENHANCED_CSS = `
 `;
 
 const COLLECTION_WORKSPACE_COLUMNS_EVENT = 'collection-workspace:toggle-columns-menu';
+
+const PAGE_SIZE_CONTROL_CSS = `
+.ds-collection-page-size-control {
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+.ds-collection-page-size-control:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+}
+.ds-collection-page-size-control:focus-within {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 42%, var(--ds-color-border-secondary));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent),
+    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+.ds-collection-page-size-control__picker {
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease;
+}
+.ds-collection-page-size-control__value,
+.ds-collection-page-size-control__chevron {
+  transition:
+    color 140ms ease,
+    transform 140ms ease;
+}
+.ds-collection-page-size-control:hover .ds-collection-page-size-control__picker,
+.ds-collection-page-size-control:focus-within .ds-collection-page-size-control__picker {
+  background: color-mix(in srgb, var(--ds-color-primary) 13%, var(--ds-surface-card-bg));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-secondary));
+  color: var(--ds-color-primary);
+}
+.ds-collection-page-size-control:hover .ds-collection-page-size-control__chevron,
+.ds-collection-page-size-control:focus-within .ds-collection-page-size-control__chevron {
+  color: var(--ds-color-primary);
+  transform: translateY(1px);
+}
+.ds-collection-page-size-control__select:focus {
+  outline: none;
+}
+`;
 
 // ---------------------------------------------------------------------------
 // Compact utility button (inline in controls row)
@@ -190,6 +403,211 @@ function UtilityIcon({
   );
 }
 
+function getPageSizeOptions(pagination?: PaginationConfig | false): number[] {
+  if (!pagination) return [];
+
+  const options = pagination.pageSizeOptions?.length
+    ? pagination.pageSizeOptions
+    : [pagination.pageSize];
+
+  return [...new Set(options.concat(pagination.pageSize))]
+    .filter((option) => Number.isFinite(option) && option > 0)
+    .sort((left, right) => left - right);
+}
+
+function formatPaginationRange(pagination?: PaginationConfig | false, visibleCount?: number): string {
+  if (!pagination) return `${visibleCount ?? 0} results`;
+
+  const pageSize = Math.max(1, pagination.pageSize);
+  const total = Math.max(0, pagination.total);
+  if (pagination.loadMode === 'incremental') {
+    const visible = Math.min(Math.max(0, visibleCount ?? 0), total);
+    return total === 0 ? '0 results' : `1-${visible} of ${total.toLocaleString()}`;
+  }
+
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const current = Math.min(Math.max(1, pagination.current), totalPages);
+
+  if (total === 0) return '0 results';
+
+  const start = (current - 1) * pageSize + 1;
+  const end = Math.min(current * pageSize, total);
+
+  return `${start}-${end} of ${total.toLocaleString()}`;
+}
+
+function PageSizeControl({
+  pagination,
+  visibleCount,
+}: {
+  pagination?: PaginationConfig | false;
+  visibleCount: number;
+}) {
+  const options = getPageSizeOptions(pagination);
+  const rangeLabel = formatPaginationRange(pagination, visibleCount);
+  const isIncremental = !!pagination && pagination.loadMode === 'incremental';
+  const unitLabel = isIncremental ? 'Cards' : 'Rows';
+  const suffixLabel = isIncremental ? '/ batch' : '/ page';
+
+  if (!pagination || options.length <= 1) {
+    return (
+      <Text
+        size="xs"
+        style={{
+          fontSize: 11,
+          color: 'var(--ds-color-text-muted)',
+          fontWeight: 600,
+          fontVariantNumeric: 'tabular-nums',
+          whiteSpace: 'nowrap' as const,
+        }}
+      >
+        {rangeLabel}
+      </Text>
+    );
+  }
+
+  return (
+    <>
+      <style>{PAGE_SIZE_CONTROL_CSS}</style>
+      <Box
+        as="label"
+        className="ds-collection-page-size-control"
+        title={isIncremental ? 'Cards per batch' : 'Rows per page'}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 8,
+          minHeight: 30,
+          padding: '3px 5px 3px 10px',
+          borderRadius: 999,
+          border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 74%, transparent)',
+          background: 'color-mix(in srgb, var(--ds-surface-card-bg) 90%, transparent)',
+          color: 'var(--ds-color-text-muted)',
+          cursor: 'pointer',
+          fontSize: 11,
+          fontWeight: 680,
+          fontVariantNumeric: 'tabular-nums',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        <Text
+          as="span"
+          size="xs"
+          style={{
+            fontSize: 11,
+            color: 'var(--ds-color-text-secondary)',
+            fontWeight: 680,
+            lineHeight: 1,
+          }}
+        >
+          {rangeLabel}
+        </Text>
+        <Box
+          className="ds-collection-page-size-control__picker"
+          style={{
+            position: 'relative',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5,
+            height: 26,
+            minWidth: 104,
+            padding: '0 26px 0 9px',
+            borderRadius: 999,
+            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary))',
+            background: 'color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg))',
+            color: 'var(--ds-color-text-primary)',
+            boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent)',
+          }}
+        >
+          <Text
+            as="span"
+            size="xs"
+            style={{
+              color: 'var(--ds-color-text-muted)',
+              fontSize: 10,
+              fontWeight: 780,
+              letterSpacing: 0,
+              lineHeight: 1,
+              textTransform: 'uppercase',
+            }}
+          >
+            {unitLabel}
+          </Text>
+          <Text
+            as="span"
+            className="ds-collection-page-size-control__value"
+            size="xs"
+            style={{
+              color: 'var(--ds-color-text-primary)',
+              fontSize: 12,
+              fontWeight: 860,
+              lineHeight: 1,
+            }}
+          >
+            {pagination.pageSize}
+          </Text>
+          <Text
+            as="span"
+            size="xs"
+            style={{
+              color: 'var(--ds-color-text-muted)',
+              fontSize: 10,
+              fontWeight: 760,
+              lineHeight: 1,
+            }}
+          >
+            {suffixLabel}
+          </Text>
+          <select
+            aria-label={isIncremental ? 'Cards per batch' : 'Rows per page'}
+            className="ds-collection-page-size-control__select"
+            value={pagination.pageSize}
+            onChange={(event) => pagination.onChange(1, Number(event.currentTarget.value))}
+            style={{
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              position: 'absolute',
+              inset: 0,
+              zIndex: 2,
+              width: '100%',
+              height: '100%',
+              border: 0,
+              borderRadius: 999,
+              background: 'transparent',
+              color: 'transparent',
+              cursor: 'pointer',
+              fontSize: 11,
+              fontWeight: 820,
+              lineHeight: 1,
+              opacity: 0,
+              padding: 0,
+              outline: 'none',
+            }}
+          >
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option} / page
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            aria-hidden
+            className="ds-collection-page-size-control__chevron"
+            size={13}
+            strokeWidth={2.3}
+            style={{
+              position: 'absolute',
+              right: 8,
+              color: 'var(--ds-color-text-muted)',
+              pointerEvents: 'none',
+            }}
+          />
+        </Box>
+      </Box>
+    </>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -230,14 +648,42 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     config: { controls, behavior, presentation, data, columns },
     defaultViewMode,
   });
+  const [internalSorting, setInternalSorting] = useState<SortConfig | null>(
+    behavior?.sorting ?? null,
+  );
+  const columnsResizable = presentation?.resizable ?? !!controls?.columnSettings?.onColumnResize;
 
   const posture = useAdaptivePosture(adaptive);
-  const density: DensityKey = controls?.density?.value ?? 'comfortable';
+  const density: DensityKey = controls?.density?.value ?? 'compact';
   const compact = density === 'compact';
   const enhanced = presentation?.enhancedInteractions ?? false;
-  const isPremium = Boolean(header || command);
+  const fallbackHeaderMetaItems = buildDefaultHeaderMetaItems({
+    data,
+    controls,
+    loading,
+    error,
+  });
+  const resolvedHeader = header
+    ? {
+        ...header,
+        metaItems: header.metaItems?.length ? header.metaItems : fallbackHeaderMetaItems,
+        metaItemsPlacement: header.metaItemsPlacement ?? 'eyebrow-end',
+      }
+    : header;
+  const isPremium = Boolean(resolvedHeader || command);
   const selectionEnabled = behavior?.selection?.enabled ?? false;
   const canToggleSelectionMode = Boolean(behavior?.selection?.onModeChange);
+  const searchCommand = command
+    ?? (controls?.search?.enabled
+        ? {
+            placeholder: controls.search.placeholder ?? 'Search...',
+            value: workspace.searchValue,
+            onSearch: workspace.setSearchValue,
+            hint: undefined,
+            suggestions: undefined,
+            recentQueries: undefined,
+          }
+        : undefined);
 
   // Collapsible advanced filters
   const hasFilters = Boolean(controls?.filters && controls.filters.length > 0);
@@ -252,15 +698,18 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   const filterLayout = posture.filters === 'sheet' || posture.filters === 'dropdown'
     ? 'stacked' : 'inline';
+  const showOptionalChrome = !posture.compactHeader && !posture.isPhone;
 
   // Focus
   const focusEnabled = behavior?.focus?.enabled ?? false;
   const focusedKey = behavior?.focus?.focusedKey ?? null;
   const previewKey = focusedKey
     ?? (workspace.selectedKeys.length === 1 ? workspace.selectedKeys[0] : null);
+  const previewRailAllowed = effectiveViewMode === 'table' || effectiveViewMode === 'list';
   const showPreviewRail = behavior?.previewRail?.enabled
     && behavior.previewRail.render
     && posture.pane !== 'hidden'
+    && previewRailAllowed
     && previewKey != null;
 
   const handleRowClick = useCallback(
@@ -299,6 +748,51 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     [columns],
   );
 
+  const usesExternalSorting = Boolean(behavior?.onSortChange);
+
+  useEffect(() => {
+    if (usesExternalSorting) {
+      setInternalSorting(behavior?.sorting ?? null);
+    }
+  }, [behavior?.sorting, usesExternalSorting]);
+
+  const effectiveSorting = usesExternalSorting
+    ? behavior?.sorting ?? null
+    : internalSorting;
+
+  const handleSortChange = useCallback(
+    (sort: SortConfig) => {
+      if (behavior?.onSortChange) {
+        behavior.onSortChange(sort);
+        return;
+      }
+
+      setInternalSorting(sort);
+    },
+    [behavior?.onSortChange],
+  );
+
+  const displayData = useMemo(() => {
+    if (usesExternalSorting || !effectiveSorting) return data;
+
+    const sortColumn = columns.find((column) => column.key === effectiveSorting.key);
+    if (!sortColumn?.sortable) return data;
+
+    return data
+      .map((item, index) => ({ item, index }))
+      .sort((left, right) => {
+        const comparison = compareSortValues(
+          resolveSortValue(left.item, sortColumn),
+          resolveSortValue(right.item, sortColumn),
+        );
+        const directedComparison =
+          effectiveSorting.direction === 'asc' ? comparison : -comparison;
+
+        return directedComparison || left.index - right.index;
+      })
+      .map(({ item }) => item);
+  }, [columns, data, effectiveSorting, usesExternalSorting]);
+
   const hasColumnMenu = Boolean(
     controls?.columnSettings?.enabled &&
       (
@@ -323,6 +817,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       columns.map((column) => ({
         key: column.key,
         title: typeof column.header === 'string' ? column.header : column.key,
+        group: column.group,
       })),
     [columns],
   );
@@ -453,7 +948,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     const toolbarViewMode: ViewMode = workspace.activeViewMode === 'table' ? 'list' : 'cards';
 
     return (
-      <Stack spacing="md" style={{ maxWidth: presentation?.maxWidth }}>
+      <Stack spacing="md" style={{ width: '100%', maxWidth: presentation?.maxWidth }}>
         {headerSlot}
         {!showToolbar && (
           <Box>
@@ -518,12 +1013,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             layout={filterLayout}
           />
         )}
-        <Flex gap={4}>
-          <Box style={{ flex: 1, minWidth: 0 }}>
+        <Flex gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
+          <Box style={{ flex: '1 1 100%', minWidth: 0, width: '100%' }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
-              data={data}
+              data={displayData}
               columns={columns}
               rowKey={rowKey}
               loading={loading}
@@ -539,8 +1034,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               selectedKeys={selectionEnabled ? workspace.selectedKeys : undefined}
               onSelectionChange={selectionEnabled ? workspace.setSelection : undefined}
               bulkActions={behavior?.bulkActions}
-              sorting={behavior?.sorting}
-              onSortChange={behavior?.onSortChange}
+              sorting={effectiveSorting}
+              onSortChange={handleSortChange}
               pagination={behavior?.pagination}
               compact={compact}
               density={density}
@@ -562,7 +1057,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               onPinChange={controls?.columnSettings?.onPinnedColumnsChange ? (pinned) => {
                 controls.columnSettings!.onPinnedColumnsChange!(pinned);
               } : undefined}
-              resizable={presentation?.resizable}
+              resizable={columnsResizable}
               columnWidths={controls?.columnSettings?.columnWidths}
               onColumnResize={controls?.columnSettings?.onColumnResize}
               onCellEdit={behavior?.cellEditing?.onCellEdit}
@@ -575,12 +1070,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             />
           </Box>
           {showPreviewRail && (() => {
-            const railItem = data.find((item) => resolveKey(item, rowKey) === previewKey);
+            const railItem = displayData.find((item) => resolveKey(item, rowKey) === previewKey);
             if (!railItem) return null;
             return (
               <Box style={{
                 width: behavior!.previewRail!.width ?? '380px',
-                flexShrink: 0,
+                minWidth: behavior!.previewRail!.width ?? '380px',
+                maxWidth: behavior!.previewRail!.width ?? '380px',
+                flex: `0 0 ${behavior!.previewRail!.width ?? '380px'}`,
                 borderLeft: '2px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary))',
                 paddingLeft: 'var(--ds-spacing-md, 16px)',
                 overflow: 'auto',
@@ -613,8 +1110,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     useAtmosphericShell && header?.layoutVariant === 'editorial-tech',
   );
   const promotedShortcuts =
-    editorialTechMasthead && command && header?.shortcuts?.length
-      ? header.shortcuts
+    editorialTechMasthead && searchCommand && resolvedHeader?.shortcuts?.length
+      ? resolvedHeader.shortcuts
       : undefined;
   const commandTopRailSlot = promotedShortcuts ? (
     <Flex align="center" gap={10} wrap="wrap" justify="end">
@@ -653,33 +1150,33 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   ) : undefined;
   const topChrome = (
     <>
-      {header && (
+      {resolvedHeader && (
         <CollectionHeader
-          {...header}
-          shortcuts={promotedShortcuts ? undefined : header.shortcuts}
-          surfaceVariant={useWorkspaceShell ? 'embedded' : header.surfaceVariant}
+          {...resolvedHeader}
+          shortcuts={promotedShortcuts ? undefined : resolvedHeader.shortcuts}
+          surfaceVariant={useWorkspaceShell ? 'embedded' : resolvedHeader.surfaceVariant}
         />
       )}
 
-      {command && (
+      {searchCommand && (
         <SearchCommandBar
           command={{
-            placeholder: command.placeholder,
-            value: command.value,
-            onSearch: command.onSearch,
-            hint: command.hint,
-            suggestions: command.suggestions,
-            recentQueries: command.recentQueries,
+            placeholder: searchCommand.placeholder,
+            value: searchCommand.value,
+            onSearch: searchCommand.onSearch,
+            hint: searchCommand.hint,
+            suggestions: searchCommand.suggestions,
+            recentQueries: searchCommand.recentQueries,
           }}
-          commands={command.commands}
-          showCommandPalette={command.showCommandPalette}
+          commands={command?.commands}
+          showCommandPalette={command?.showCommandPalette}
           topRailSlot={commandTopRailSlot}
           surfaceVariant={useWorkspaceShell ? 'embedded' : 'default'}
-          layoutVariant={header?.layoutVariant}
+          layoutVariant={resolvedHeader?.layoutVariant}
         />
       )}
 
-      {contextSlot && (
+      {contextSlot && showOptionalChrome && (
         <Box style={{
           padding: slotsCollapsed
             ? 0
@@ -722,12 +1219,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       ) : topChrome}
 
       {/* 4. Stats slot (optional, collapsible) */}
-      {statsSlot && (
+      {statsSlot && showOptionalChrome && (
         <Box style={{
-          padding: slotsCollapsed ? 0 : '14px 16px 0',
+          padding: slotsCollapsed ? 0 : '14px 16px 10px',
           maxHeight: slotsCollapsed ? 0 : 400,
           opacity: slotsCollapsed ? 0 : 1,
-          overflow: 'hidden',
+          overflow: slotsCollapsed ? 'hidden' : 'visible',
           transition: 'max-height 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1)',
           pointerEvents: slotsCollapsed ? 'none' : undefined,
         }}>
@@ -747,7 +1244,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           overflow: 'visible',
         }}
       >
-        <Flex align="center" gap={10} wrap="nowrap" style={{ minHeight: 34 }}>
+        <Flex
+          align="center"
+          gap={10}
+          wrap={posture.isPhone ? 'wrap' : 'nowrap'}
+          style={{ minHeight: 34 }}
+        >
           <Box
             style={{
               flex: 1,
@@ -814,7 +1316,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               {hasFilters && (
                 <Box
                   style={{
-                    maxHeight: filtersExpanded ? 88 : 0,
+                    maxHeight: filtersExpanded ? (posture.isPhone ? 96 : 48) : 0,
                     opacity: filtersExpanded ? 1 : 0,
                     transform: filtersExpanded ? 'translateY(0)' : 'translateY(8px)',
                     overflow: filtersExpanded ? 'visible' : 'hidden',
@@ -832,6 +1334,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                     style={{
                       minWidth: 0,
                       padding: '2px 0',
+                      overflow: 'visible',
                     }}
                   >
                     <Flex align="center" gap={6} style={{ flexShrink: 0 }}>
@@ -870,7 +1373,16 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                       )}
                     </Flex>
 
-                    <Box style={{ flex: 1, minWidth: 0 }}>
+                    <Box
+                      style={{
+                        flex: '1 1 auto',
+                        minWidth: 0,
+                        overflowX: posture.isPhone ? 'visible' : 'auto',
+                        overflowY: 'visible',
+                        scrollbarWidth: 'thin',
+                        paddingBottom: posture.isPhone ? 0 : 2,
+                      }}
+                    >
                       <PatternFilterPanel
                         filters={controls!.filters!}
                         values={workspace.filterValues}
@@ -882,6 +1394,17 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                           position: 'relative',
                           zIndex: 32,
                           overflow: 'visible',
+                          minWidth: posture.isPhone ? undefined : 'max-content',
+                          ['--ds-filter-panel-inline-wrap' as string]: posture.isPhone ? 'wrap' : 'nowrap',
+                          ['--ds-filter-panel-inline-flex' as string]: posture.isPhone
+                            ? '1 1 268px'
+                            : '0 0 auto',
+                          ['--ds-filter-panel-inline-min-width' as string]: posture.isPhone
+                            ? '196px'
+                            : 'auto',
+                          ['--ds-filter-panel-inline-control-width' as string]: posture.isPhone
+                            ? '100%'
+                            : '156px',
                         }}
                       />
                     </Box>
@@ -948,6 +1471,22 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 actions={columnMenuActions}
                 visibleActions={controls?.columnSettings?.visibleActionKeys}
                 onVisibleActionsChange={handleVisibleActionsApply}
+                pinnedColumns={
+                  controls?.columnSettings?.pinnedColumns
+                    ? {
+                        left: controls.columnSettings.pinnedColumns.left ?? [],
+                        right: controls.columnSettings.pinnedColumns.right ?? [],
+                      }
+                    : undefined
+                }
+                onPinChange={
+                  controls?.columnSettings?.onPinnedColumnsChange
+                    ? (pinned) => controls.columnSettings!.onPinnedColumnsChange!(pinned)
+                    : undefined
+                }
+                columnWidths={controls?.columnSettings?.columnWidths}
+                onColumnResize={controls?.columnSettings?.onColumnResize}
+                groups={controls?.columnSettings?.groups}
                 onReset={handleColumnsReset}
                 compact
                 externalToggleEventName={COLLECTION_WORKSPACE_COLUMNS_EVENT}
@@ -978,18 +1517,10 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             )}
 
             {showInlineResultCount && (
-              <Text
-                size="xs"
-                style={{
-                  fontSize: 11,
-                  color: 'var(--ds-color-text-muted)',
-                  fontWeight: 600,
-                  fontVariantNumeric: 'tabular-nums',
-                  whiteSpace: 'nowrap' as const,
-                }}
-              >
-                {data.length} results
-              </Text>
+              <PageSizeControl
+                pagination={behavior?.pagination}
+                visibleCount={data.length}
+              />
             )}
           </Flex>
         </Flex>
@@ -1057,13 +1588,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       )}
 
       {/* 7. Table + preview rail */}
-      <Box style={{ padding: '4px 16px 16px' }}>
-        <Flex gap={4}>
-          <Box style={{ flex: 1, minWidth: 0 }}>
+      <Box style={{ width: '100%', padding: posture.isPhone ? '4px 10px 12px' : '4px 16px 16px' }}>
+        <Flex gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
+          <Box style={{ flex: '1 1 100%', minWidth: 0, width: '100%' }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
-              data={data}
+              data={displayData}
               columns={columns}
               rowKey={rowKey}
               loading={loading}
@@ -1079,8 +1610,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               selectedKeys={selectionEnabled ? workspace.selectedKeys : undefined}
               onSelectionChange={selectionEnabled ? workspace.setSelection : undefined}
               bulkActions={behavior?.bulkActions}
-              sorting={behavior?.sorting}
-              onSortChange={behavior?.onSortChange}
+              sorting={effectiveSorting}
+              onSortChange={handleSortChange}
               pagination={behavior?.pagination}
               compact={compact}
               density={density}
@@ -1102,7 +1633,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               onPinChange={controls?.columnSettings?.onPinnedColumnsChange ? (pinned) => {
                 controls.columnSettings!.onPinnedColumnsChange!(pinned);
               } : undefined}
-              resizable={presentation?.resizable}
+              resizable={columnsResizable}
               columnWidths={controls?.columnSettings?.columnWidths}
               onColumnResize={controls?.columnSettings?.onColumnResize}
               onCellEdit={behavior?.cellEditing?.onCellEdit}
@@ -1118,17 +1649,18 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
           {/* Preview rail */}
           {showPreviewRail && (() => {
-            const railItem = data.find((item) => resolveKey(item, rowKey) === previewKey);
+            const railItem = displayData.find((item) => resolveKey(item, rowKey) === previewKey);
             if (!railItem) return null;
             return (
               <Box style={{
                 width: behavior!.previewRail!.width ?? '380px',
-                flexShrink: 0,
+                minWidth: behavior!.previewRail!.width ?? '380px',
+                maxWidth: behavior!.previewRail!.width ?? '380px',
+                flex: `0 0 ${behavior!.previewRail!.width ?? '380px'}`,
                 borderLeft: '2px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary))',
                 paddingLeft: 'var(--ds-spacing-md, 16px)',
                 background: 'color-mix(in srgb, var(--ds-surface-card) 50%, var(--ds-color-bg-primary) 50%)',
                 borderRadius: '0 var(--ds-radius-sm, 6px) var(--ds-radius-sm, 6px) 0',
-                transition: 'width 200ms ease-out',
                 overflow: 'auto',
               }}>
                 {behavior!.previewRail!.render!(railItem)}
@@ -1156,12 +1688,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           focusActive={Boolean(focusedKey)}
           previewActive={Boolean(showPreviewRail)}
           className={enhanced ? 'ds-collection-enhanced' : undefined}
-          style={{ maxWidth: presentation?.maxWidth }}
+          style={{ width: '100%', maxWidth: presentation?.maxWidth }}
         >
           {premiumContent}
         </WorkspaceShell>
       ) : (
-        <Box style={{ maxWidth: presentation?.maxWidth }}>
+        <Box style={{ width: '100%', maxWidth: presentation?.maxWidth }}>
           {premiumContent}
         </Box>
       )}

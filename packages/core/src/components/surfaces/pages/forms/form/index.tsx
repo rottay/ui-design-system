@@ -122,9 +122,9 @@ export function FormSurface({
   // enough. This keeps the form full-width by default, matching the most
   // common create/edit screen layout without explicit configuration.
   const formContent = (
-    <Grid columns={showAside && !shouldStack ? 12 : 1} gap={sectionSpacing}>
+    <Grid columns={showAside && !shouldStack ? 12 : 1} gap={sectionSpacing} style={{ width: '100%' }}>
       <Grid.Item span={showAside && !shouldStack ? 8 : undefined}>
-        <Card variant={profileDefaults.cardVariant}>
+        <Card variant={profileDefaults.cardVariant} style={{ width: '100%' }}>
           <Card.Body>
             <Stack spacing={sectionSpacing}>
               {config.presentation.description && (

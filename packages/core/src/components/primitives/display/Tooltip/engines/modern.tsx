@@ -44,7 +44,8 @@
 
 'use client';
 
-import React, { forwardRef, useState, useEffect, useRef, useCallback } from 'react';
+import React, { forwardRef, useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import type { TooltipProps } from '../Tooltip.types';
 import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
 
@@ -61,30 +62,85 @@ const COLOR_STYLE_MAP: Record<string, React.CSSProperties> = {
 };
 
 /**
- * Maps placement to positioning styles for the tooltip bubble.
- */
-const PLACEMENT_STYLES: Record<string, React.CSSProperties> = {
-  'top':          { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: 6 },
-  'top-start':    { bottom: '100%', left: 0, marginBottom: 6 },
-  'top-end':      { bottom: '100%', right: 0, marginBottom: 6 },
-  'bottom':       { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 6 },
-  'bottom-start': { top: '100%', left: 0, marginTop: 6 },
-  'bottom-end':   { top: '100%', right: 0, marginTop: 6 },
-  'left':         { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: 6 },
-  'left-start':   { right: '100%', top: 0, marginRight: 6 },
-  'left-end':     { right: '100%', bottom: 0, marginRight: 6 },
-  'right':        { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: 6 },
-  'right-start':  { left: '100%', top: 0, marginLeft: 6 },
-  'right-end':    { left: '100%', bottom: 0, marginLeft: 6 },
-};
-
-/**
  * Normalize trigger prop to an array of trigger types.
  */
 function normalizeTriggers(trigger?: string | string[]): string[] {
   if (!trigger) return ['hover'];
   if (Array.isArray(trigger)) return trigger;
   return [trigger];
+}
+
+function resolveMaxWidth(maxWidth: TooltipProps['maxWidth']): string | number {
+  return maxWidth ?? 'var(--ds-tooltip-max-width, 280px)';
+}
+
+const TOOLTIP_OFFSET = 8;
+const VIEWPORT_MARGIN = 8;
+const FALLBACK_TOOLTIP_WIDTH = 240;
+const FALLBACK_TOOLTIP_HEIGHT = 40;
+
+interface PortalPosition {
+  top: number;
+  left: number;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(value, max));
+}
+
+function getPortalPosition(
+  triggerRect: DOMRect,
+  tooltipRect: DOMRect | undefined,
+  placement: NonNullable<TooltipProps['placement']>,
+): PortalPosition {
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const width = tooltipRect?.width || FALLBACK_TOOLTIP_WIDTH;
+  const height = tooltipRect?.height || FALLBACK_TOOLTIP_HEIGHT;
+  const [side, align = 'center'] = placement.split('-') as [string, string?];
+
+  let top = triggerRect.bottom + TOOLTIP_OFFSET;
+  let left = triggerRect.left + triggerRect.width / 2 - width / 2;
+
+  if (side === 'top' || side === 'bottom') {
+    top = side === 'top'
+      ? triggerRect.top - TOOLTIP_OFFSET - height
+      : triggerRect.bottom + TOOLTIP_OFFSET;
+
+    if (align === 'start') {
+      left = triggerRect.left;
+    } else if (align === 'end') {
+      left = triggerRect.right - width;
+    }
+
+    if (side === 'top' && top < VIEWPORT_MARGIN) {
+      top = triggerRect.bottom + TOOLTIP_OFFSET;
+    } else if (side === 'bottom' && top + height > viewportHeight - VIEWPORT_MARGIN) {
+      top = triggerRect.top - TOOLTIP_OFFSET - height;
+    }
+  } else {
+    left = side === 'left'
+      ? triggerRect.left - TOOLTIP_OFFSET - width
+      : triggerRect.right + TOOLTIP_OFFSET;
+    top = triggerRect.top + triggerRect.height / 2 - height / 2;
+
+    if (align === 'start') {
+      top = triggerRect.top;
+    } else if (align === 'end') {
+      top = triggerRect.bottom - height;
+    }
+
+    if (side === 'left' && left < VIEWPORT_MARGIN) {
+      left = triggerRect.right + TOOLTIP_OFFSET;
+    } else if (side === 'right' && left + width > viewportWidth - VIEWPORT_MARGIN) {
+      left = triggerRect.left - TOOLTIP_OFFSET - width;
+    }
+  }
+
+  return {
+    left: clamp(left, VIEWPORT_MARGIN, Math.max(VIEWPORT_MARGIN, viewportWidth - width - VIEWPORT_MARGIN)),
+    top: clamp(top, VIEWPORT_MARGIN, Math.max(VIEWPORT_MARGIN, viewportHeight - height - VIEWPORT_MARGIN)),
+  };
 }
 
 /**
@@ -118,6 +174,8 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       showDelay = TOOLTIP_DEFAULTS.showDelay,
       hideDelay = TOOLTIP_DEFAULTS.hideDelay,
       onVisibleChange,
+      maxWidth = TOOLTIP_DEFAULTS.maxWidth,
+      zIndex,
       className = '',
       style,
     } = props;
@@ -129,6 +187,9 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     // Internal state only used in uncontrolled mode
     const [internalVisible, setInternalVisible] = useState(false);
+    const [portalPosition, setPortalPosition] = useState<PortalPosition | null>(null);
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
+    const tooltipRef = useRef<HTMLDivElement | null>(null);
     const showTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -142,6 +203,40 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
         if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
       };
     }, []);
+
+    const setWrapperRef = useCallback((node: HTMLDivElement | null) => {
+      wrapperRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    }, [ref]);
+
+    const updatePortalPosition = useCallback(() => {
+      if (!wrapperRef.current) return;
+      const triggerRect = wrapperRef.current.getBoundingClientRect();
+      const tooltipRect = tooltipRef.current?.getBoundingClientRect();
+      setPortalPosition(getPortalPosition(triggerRect, tooltipRect, placement));
+    }, [placement]);
+
+    useLayoutEffect(() => {
+      if (!isVisible || disabled || typeof document === 'undefined') {
+        setPortalPosition(null);
+        return undefined;
+      }
+
+      updatePortalPosition();
+      const frame = window.requestAnimationFrame(updatePortalPosition);
+      window.addEventListener('resize', updatePortalPosition);
+      window.addEventListener('scroll', updatePortalPosition, true);
+
+      return () => {
+        window.cancelAnimationFrame(frame);
+        window.removeEventListener('resize', updatePortalPosition);
+        window.removeEventListener('scroll', updatePortalPosition, true);
+      };
+    }, [disabled, isVisible, updatePortalPosition, content, maxWidth]);
 
     const show = useCallback(() => {
       if (disabled) return;
@@ -204,18 +299,31 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     // Tooltip bubble styles: DS tokens for colors, shadow, radius
     const bubbleStyle: React.CSSProperties = {
-      position: 'absolute',
-      ...(PLACEMENT_STYLES[placement] || PLACEMENT_STYLES.top),
+      position: 'fixed',
+      top: portalPosition?.top ?? 0,
+      left: portalPosition?.left ?? 0,
       ...(COLOR_STYLE_MAP[color] || COLOR_STYLE_MAP.default),
       borderRadius: 'var(--ds-radius-md)',
       boxShadow: 'var(--ds-elevation-2)',
       padding: '6px 10px',
       fontSize: 12,
-      whiteSpace: 'nowrap',
+      width: 'max-content',
+      maxWidth: resolveMaxWidth(maxWidth),
+      maxInlineSize: resolveMaxWidth(maxWidth),
+      boxSizing: 'border-box',
+      whiteSpace: 'normal',
+      overflowWrap: 'anywhere',
+      wordBreak: 'normal',
+      textAlign: 'left',
+      lineHeight: 1.35,
+      writingMode: 'horizontal-tb',
+      textOrientation: 'mixed',
       pointerEvents: 'none',
-      zIndex: 50,
+      zIndex: zIndex ?? 'var(--ds-z-index-tooltip, var(--ds-tooltip-z-index, 2700))',
       opacity: isVisible ? 1 : 0,
-      transform: `${(PLACEMENT_STYLES[placement] || PLACEMENT_STYLES.top).transform || ''} scale(${isVisible ? 1 : 0.95})`.trim(),
+      visibility: portalPosition ? 'visible' : 'hidden',
+      transform: `scale(${isVisible ? 1 : 0.95})`,
+      transformOrigin: 'center',
       transition: 'opacity 0.15s ease, transform 0.15s ease',
     };
 
@@ -228,17 +336,20 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     return (
       <div
-        ref={ref}
+        ref={setWrapperRef}
         className={className || undefined}
         style={wrapperStyle}
         {...eventHandlers}
       >
         {children}
-        {!disabled && content && (
-          <div role="tooltip" style={bubbleStyle} aria-hidden={!isVisible}>
-            {content}
-          </div>
-        )}
+        {!disabled && content && isVisible && typeof document !== 'undefined'
+          ? createPortal(
+              <div ref={tooltipRef} role="tooltip" style={bubbleStyle} aria-hidden={!isVisible}>
+                {content}
+              </div>,
+              document.body,
+            )
+          : null}
       </div>
     );
   }

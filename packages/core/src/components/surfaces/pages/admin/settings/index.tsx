@@ -32,6 +32,15 @@ export interface SettingsSurfaceProps {
   loading?: boolean;
 }
 
+function isEmptyTabLabel(label: React.ReactNode): boolean {
+  return (
+    label === null ||
+    label === undefined ||
+    label === false ||
+    (typeof label === 'string' && label.trim() === '')
+  );
+}
+
 export function SettingsSurface({
   config,
   loading = false,
@@ -53,6 +62,32 @@ export function SettingsSurface({
       ? config.behavior.activeTab
       : visibleTabs[0]?.key;
   const isControlledTabState = config.behavior.activeTab !== undefined;
+  const singleVisibleTab = visibleTabs.length === 1 ? visibleTabs[0] : undefined;
+  const shouldUnboxTabs =
+    !!singleVisibleTab &&
+    isEmptyTabLabel(singleVisibleTab.label) &&
+    !singleVisibleTab.icon &&
+    !singleVisibleTab.badge;
+  const contentFrame = config.presentation.contentFrame ?? 'auto';
+  const shouldRenderContentCard =
+    contentFrame === 'card' || (contentFrame === 'auto' && !shouldUnboxTabs);
+
+  const renderTabContent = (tab: (typeof visibleTabs)[number]) => (
+    <Stack spacing={sectionSpacing}>
+      {tab.description && (
+        <Text
+          size="sm"
+          style={{
+            color: 'var(--ds-color-text-muted)',
+            lineHeight: 1.5,
+          }}
+        >
+          {tab.description}
+        </Text>
+      )}
+      {tab.content}
+    </Stack>
+  );
 
   const tabsNode = (
     <Tabs
@@ -61,22 +96,7 @@ export function SettingsSurface({
         label: <SurfaceTabbedLabel view={tab} />,
         icon: tab.icon,
         disabled: tab.disabled,
-        children: (
-          <Stack spacing={sectionSpacing}>
-            {tab.description && (
-              <Text
-                size="sm"
-                style={{
-                  color: 'var(--ds-color-text-muted)',
-                  lineHeight: 1.5,
-                }}
-              >
-                {tab.description}
-              </Text>
-            )}
-            {tab.content}
-          </Stack>
-        ),
+        children: renderTabContent(tab),
       }))}
       type={config.visual.tabsType ?? profileDefaults.tabsType}
       centered={config.visual.centeredTabs}
@@ -86,38 +106,50 @@ export function SettingsSurface({
     />
   );
 
+  const contentBody = (
+    <Stack spacing={sectionSpacing}>
+      {config.presentation.intro && (
+        <Text
+          size="sm"
+          style={{
+            color: 'var(--ds-color-text-muted)',
+            lineHeight: 1.6,
+          }}
+        >
+          {config.presentation.intro}
+        </Text>
+      )}
+      {shouldUnboxTabs && singleVisibleTab ? renderTabContent(singleVisibleTab) : tabsNode}
+      {config.presentation.footer && (
+        shouldRenderContentCard ? (
+          <Card
+            variant={profileDefaults.cardVariant}
+            style={{
+              borderColor: 'var(--ds-color-border-secondary)',
+              background: 'var(--ds-color-bg-secondary)',
+            }}
+          >
+            <Card.Body>{config.presentation.footer}</Card.Body>
+          </Card>
+        ) : (
+          config.presentation.footer
+        )
+      )}
+    </Stack>
+  );
+
+  const framedContent = shouldRenderContentCard ? (
+    <Card variant={profileDefaults.cardVariant}>
+      <Card.Body>{contentBody}</Card.Body>
+    </Card>
+  ) : (
+    contentBody
+  );
+
   const settingsContent = (
     <Grid columns={config.presentation.sidebar && !shouldStack ? 12 : 1} gap="lg">
       <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
-        <Card variant={profileDefaults.cardVariant}>
-          <Card.Body>
-            <Stack spacing={sectionSpacing}>
-              {config.presentation.intro && (
-                <Text
-                  size="sm"
-                  style={{
-                    color: 'var(--ds-color-text-muted)',
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {config.presentation.intro}
-                </Text>
-              )}
-              {tabsNode}
-              {config.presentation.footer && (
-                <Card
-                  variant={profileDefaults.cardVariant}
-                  style={{
-                    borderColor: 'var(--ds-color-border-secondary)',
-                    background: 'var(--ds-color-bg-secondary)',
-                  }}
-                >
-                  <Card.Body>{config.presentation.footer}</Card.Body>
-                </Card>
-              )}
-            </Stack>
-          </Card.Body>
-        </Card>
+        {framedContent}
       </Grid.Item>
 
       {config.presentation.sidebar && (

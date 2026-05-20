@@ -87,6 +87,7 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
     required,
     maxLength,
     rows = TEXTAREA_DEFAULTS.rows,
+    autoSize,
     onChange,
     onFocus,
     onBlur,
@@ -162,7 +163,7 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
     border: `1px solid ${computedBorderColor}`,
     borderRadius: 'var(--ds-radius-md)',
     padding: `${cfg.paddingV}px ${cfg.paddingH}px`,
-    resize: 'vertical',
+    resize: autoSize ? 'none' : 'vertical',
     transition: `border-color ${transitionTiming}, outline-color ${transitionTiming}, background-color ${transitionTiming}`,
     outline: 'none',
     boxSizing: 'border-box',
@@ -188,7 +189,7 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
       readOnly={readOnly}
       required={required}
       maxLength={maxLength}
-      rows={rows}
+      rows={typeof autoSize === 'object' ? (autoSize.minRows ?? rows) : autoSize ? 1 : rows}
       onChange={handleChange}
       onFocus={handleFocus}
       onBlur={handleBlur}

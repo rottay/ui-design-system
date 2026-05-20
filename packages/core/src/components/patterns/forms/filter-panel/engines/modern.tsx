@@ -32,6 +32,23 @@
 import React, { useRef, useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../../foundation/types';
+import {
+  AlertTriangle,
+  BriefcaseBusiness,
+  CalendarClock,
+  CheckCircle2,
+  CircleDot,
+  ClipboardCheck,
+  Clock3,
+  Layers3,
+  MapPin,
+  Route,
+  ShieldCheck,
+  Target,
+  UserRound,
+  UsersRound,
+  XCircle,
+} from 'lucide-react';
 import ModernSwitch from '../../../../primitives/inputs/Switch/engines/modern';
 import ModernCheckbox from '../../../../primitives/inputs/Checkbox/engines/modern';
 import ModernSelect from '../../../../primitives/inputs/Select/engines/modern';
@@ -83,6 +100,196 @@ const inlineLabelStyle: React.CSSProperties = {
   flexShrink: 0,
 };
 
+type FilterOption = NonNullable<FilterDef['options']>[number];
+type FilterOptionTone = NonNullable<FilterOption['tone']>;
+type FilterIconComponent = React.ComponentType<{ size?: number; strokeWidth?: number }>;
+
+function SlidersFallbackIcon({ size = 14, strokeWidth = 2 }: { size?: number; strokeWidth?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 21v-7" />
+      <path d="M4 10V3" />
+      <path d="M12 21v-9" />
+      <path d="M12 8V3" />
+      <path d="M20 21v-5" />
+      <path d="M20 12V3" />
+      <path d="M2 14h4" />
+      <path d="M10 8h4" />
+      <path d="M18 16h4" />
+    </svg>
+  );
+}
+
+const OPTION_TONE_STYLES: Record<FilterOptionTone, { color: string; bg: string; border: string }> = {
+  neutral: {
+    color: 'var(--ds-color-text-secondary)',
+    bg: 'color-mix(in srgb, var(--ds-color-bg-primary) 64%, transparent)',
+    border: 'color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
+  },
+  primary: {
+    color: 'var(--ds-color-primary)',
+    bg: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
+    border: 'color-mix(in srgb, var(--ds-color-primary) 24%, transparent)',
+  },
+  success: {
+    color: 'var(--ds-color-success)',
+    bg: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)',
+    border: 'color-mix(in srgb, var(--ds-color-success) 24%, transparent)',
+  },
+  warning: {
+    color: 'var(--ds-color-warning)',
+    bg: 'color-mix(in srgb, var(--ds-color-warning) 12%, transparent)',
+    border: 'color-mix(in srgb, var(--ds-color-warning) 28%, transparent)',
+  },
+  danger: {
+    color: 'var(--ds-color-error)',
+    bg: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)',
+    border: 'color-mix(in srgb, var(--ds-color-error) 24%, transparent)',
+  },
+  info: {
+    color: 'var(--ds-color-info, var(--ds-color-primary))',
+    bg: 'color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 10%, transparent)',
+    border: 'color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent)',
+  },
+};
+
+function normalizeFilterToken(value: unknown): string {
+  return String(value ?? '')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+function inferOptionTone(filter: FilterDef, option: FilterOption): FilterOptionTone {
+  if (option.tone) return option.tone;
+
+  const token = `${normalizeFilterToken(filter.key)} ${normalizeFilterToken(filter.label)} ${normalizeFilterToken(option.value)} ${normalizeFilterToken(option.label)}`;
+
+  if (/(cancel|cancelled|canceled|reject|rejected|failed|no hire|no show|blocked|closed)/.test(token)) return 'danger';
+  if (/(needs|missing|gap|risk|urgent|overdue|pending|draft|unassigned|unscored|attention|paused)/.test(token)) return 'warning';
+  if (/(ready|scored|completed|complete|active|accepted|approved|hired|published|attached|assigned|healthy|clear)/.test(token)) return 'success';
+  if (/(scheduled|open|live|available|route|system design|technical|screen)/.test(token)) return 'primary';
+  if (/(remote|hybrid|onsite|on site|market|location|source|channel)/.test(token)) return 'info';
+
+  return 'neutral';
+}
+
+function inferOptionIcon(filter: FilterDef, option: FilterOption): FilterIconComponent {
+  const token = `${normalizeFilterToken(filter.key)} ${normalizeFilterToken(filter.label)} ${normalizeFilterToken(option.value)} ${normalizeFilterToken(option.label)}`;
+
+  if (/(cancel|reject|failed|blocked|closed|no hire|no show)/.test(token)) return XCircle;
+  if (/(needs|missing|gap|risk|urgent|overdue|unassigned|unscored|attention)/.test(token)) return AlertTriangle;
+  if (/(ready|scored|completed|active|accepted|approved|hired|published|attached|assigned|clear)/.test(token)) return CheckCircle2;
+  if (/(score|evidence|debrief|readiness|review|decision)/.test(token)) return ClipboardCheck;
+  if (/(date|time|deadline|schedule|scheduled|clock|cadence|recent)/.test(token)) return CalendarClock;
+  if (/(owner|interviewer|recruiter|team|squad|panel|candidate)/.test(token)) return UsersRound;
+  if (/(person|user|requester|referrer|employee)/.test(token)) return UserRound;
+  if (/(job|role|position|department|business unit|client|company)/.test(token)) return BriefcaseBusiness;
+  if (/(location|market|remote|hybrid|onsite|on site)/.test(token)) return MapPin;
+  if (/(route|meeting|link)/.test(token)) return Route;
+  if (/(priority|target|fit|match|confidence)/.test(token)) return Target;
+  if (/(status|stage|type|workflow|category)/.test(token)) return Layers3;
+  if (/(sla|security|approval|compliance|guard)/.test(token)) return ShieldCheck;
+  if (/(pending|draft|open|paused)/.test(token)) return Clock3;
+
+  return CircleDot;
+}
+
+function inferOptionDescription(filter: FilterDef, option: FilterOption): React.ReactNode {
+  if (option.description) return option.description;
+
+  const key = normalizeFilterToken(filter.key);
+  const label = normalizeFilterToken(filter.label);
+  const value = normalizeFilterToken(option.value);
+  const optionLabel = normalizeFilterToken(option.label);
+  const token = `${key} ${label} ${value} ${optionLabel}`;
+
+  if (/system design/.test(token)) return 'Architecture loops and senior technical calibration.';
+  if (/(technical|coding|engineering)/.test(token)) return 'Hands-on technical signal and reviewer alignment.';
+  if (/(behavioral|culture|cultural|values)/.test(token)) return 'People, collaboration, and role-fit signal.';
+  if (/(screen|screening|intro)/.test(token)) return 'Early qualification and next-step readiness.';
+  if (/(final round|onsite|on site|panel)/.test(token)) return 'Late-stage panel coverage and decision evidence.';
+  if (/(remote|hybrid|onsite|on site|market|location)/.test(token)) return 'Location and work-mode slice for routing decisions.';
+  if (/(linkedin|referral|agency|job board|direct|website|source|channel)/.test(token)) return 'Origin channel for quality and attribution analysis.';
+  if (/(urgent|critical|high priority|priority)/.test(token)) return 'Escalated demand that should surface before routine work.';
+  if (/(draft|not live|unpublished)/.test(token)) return 'Needs setup before it can drive candidate movement.';
+  if (/(published|live|open)/.test(token)) return 'Visible demand that can create candidate movement.';
+  if (/(paused|closed|archived|inactive)/.test(token)) return 'Removed from active operating flow.';
+  if (/(accepted|approved|hired|completed|complete)/.test(token)) return 'Completed path with usable downstream evidence.';
+  if (/(declined|rejected|cancelled|canceled|failed)/.test(token)) return 'Closed out with no forward movement expected.';
+  if (/(missing|gap|risk|overdue|blocked|needs attention)/.test(token)) return 'Needs owner action before the queue is healthy.';
+  if (/(assigned|attached|mapped|covered)/.test(token)) return 'Ownership and handoff are visible.';
+  if (/(unassigned|unattached|no owner)/.test(token)) return 'No accountable owner is visible yet.';
+  if (key.includes('type') || label.includes('type')) return 'Filter by loop, record, or operating type.';
+  if (key.includes('score') || label.includes('score')) {
+    if (/unscored|needs/.test(token)) return 'Needs evidence before review.';
+    if (/scored|ready|complete/.test(token)) return 'Has reviewable signal.';
+    return 'Score and evidence posture.';
+  }
+  if (key.includes('readiness') || label.includes('readiness')) return 'Show records by action readiness.';
+  if (key.includes('route') || label.includes('route')) return 'Meeting link or location handoff state.';
+  if (key.includes('owner') || label.includes('owner') || key.includes('panel') || label.includes('panel')) {
+    return 'Accountability and coverage state.';
+  }
+  if (key.includes('debrief') || label.includes('debrief') || key.includes('decision') || label.includes('decision')) {
+    return 'Decision workspace and follow-up state.';
+  }
+  if (key.includes('status') || label.includes('status') || key.includes('stage') || label.includes('stage')) {
+    return 'Current lifecycle state.';
+  }
+  if (key.includes('priority') || label.includes('priority')) return 'Operating urgency and escalation level.';
+  if (key.includes('source') || label.includes('source') || key.includes('channel') || label.includes('channel')) {
+    return 'Origin channel or intake source.';
+  }
+  if (key.includes('location') || key.includes('market') || label.includes('location') || label.includes('market')) {
+    return 'Market, location, or work-mode slice.';
+  }
+  if (/system design|technical|behavioral|culture|screen|panel/.test(token)) {
+    return 'Interview format for reviewer alignment.';
+  }
+
+  return `Only records matching ${filter.label.toLowerCase()}.`;
+}
+
+function renderOptionIcon(filter: FilterDef, option: FilterOption) {
+  if (option.icon) return option.icon;
+
+  const tone = inferOptionTone(filter, option);
+  const toneStyle = OPTION_TONE_STYLES[tone];
+  const Icon = inferOptionIcon(filter, option);
+
+  return (
+    <span
+      aria-hidden
+      style={{
+        width: 22,
+        height: 22,
+        borderRadius: 8,
+        border: `1px solid ${toneStyle.border}`,
+        background: toneStyle.bg,
+        color: toneStyle.color,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      }}
+    >
+      <Icon size={13} strokeWidth={2.2} />
+    </span>
+  );
+}
+
+function enrichFilterOption(filter: FilterDef, option: FilterOption) {
+  return {
+    value: option.value,
+    label: option.label,
+    disabled: option.disabled,
+    icon: renderOptionIcon(filter, option),
+    description: inferOptionDescription(filter, option),
+  };
+}
+
 /* ---------------------------------------------------------------------------
  * Filter controls
  * ----------------------------------------------------------------------- */
@@ -117,7 +324,7 @@ function renderFilterControl(
           placeholder={filter.placeholder ?? 'Select...'}
           value={(value as string) ?? undefined}
           onChange={(val) => onChange(filter.key, val || undefined)}
-          options={filter.options?.map((o) => ({ value: o.value, label: o.label })) ?? []}
+          options={filter.options?.map((option) => enrichFilterOption(filter, option)) ?? []}
           allowClear
           style={{ width: '100%' }}
         />
@@ -310,7 +517,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
         isInline
           ? {
               display: 'flex',
-              flexWrap: 'wrap',
+              flexWrap: 'var(--ds-filter-panel-inline-wrap, wrap)' as React.CSSProperties['flexWrap'],
               gap: 10,
               alignItems: 'center',
               position: 'relative',
@@ -330,8 +537,8 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
           style={
             isInline
               ? {
-                  flex: '1 1 268px',
-                  minWidth: 196,
+                  flex: 'var(--ds-filter-panel-inline-flex, 1 1 268px)',
+                  minWidth: 'var(--ds-filter-panel-inline-min-width, 196px)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
@@ -342,7 +549,16 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
           }
         >
           <span style={isInline ? inlineLabelStyle : labelStyle}>{filter.label}</span>
-          <div style={isInline ? { flex: 1, minWidth: 0 } : undefined}>
+          <div
+            style={
+              isInline
+                ? {
+                    flex: '1 1 var(--ds-filter-panel-inline-control-width, 0px)',
+                    minWidth: 0,
+                  }
+                : undefined
+            }
+          >
             {renderFilterControl(filter, values[filter.key], handleChange)}
           </div>
         </div>

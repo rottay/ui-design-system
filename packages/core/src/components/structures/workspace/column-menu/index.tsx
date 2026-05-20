@@ -14,7 +14,7 @@
  * Key differences from ColumnSettingsDropdown:
  *   - Owns the trigger button + portal (drop-in for command bars)
  *   - Draft state with "Apply columns" CTA, not live updates
- *   - Up/down arrows for reordering (no drag handles)
+ *   - Visible drag handle plus up/down arrows for reordering
  *   - Listens to a custom DOM event for external open requests
  *
  * The family stays domain-agnostic: it works with any column shape that
@@ -25,7 +25,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, PinOff, RotateCcw } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, GripVertical, PinOff, RotateCcw } from 'lucide-react';
 
 import { Box, Checkbox, Flex, Text } from '../../../primitives';
 
@@ -194,6 +194,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
   const [draftWidths, setDraftWidths] = useState<Record<string, number>>(columnWidths ?? {});
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
   const [editingWidthKey, setEditingWidthKey] = useState<string | null>(null);
+  const [draggedColumnKey, setDraggedColumnKey] = useState<string | null>(null);
+  const [dragOverColumnKey, setDragOverColumnKey] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   const orderedColumns = useMemo(() => {
@@ -265,9 +267,62 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
 
   const handleMove = useCallback((key: string, direction: -1 | 1) => {
     setDraftOrder((previous) => {
-      const index = previous.indexOf(key);
-      return moveItem(previous, index, index + direction);
+      const knownColumnKeys = columns.map((column) => column.key);
+      const knownColumnKeySet = new Set(knownColumnKeys);
+      const completeOrder = [
+        ...previous.filter((columnKey) => knownColumnKeySet.has(columnKey)),
+        ...knownColumnKeys.filter((columnKey) => !previous.includes(columnKey)),
+      ];
+      const index = completeOrder.indexOf(key);
+      return moveItem(completeOrder, index, index + direction);
     });
+  }, [columns]);
+
+  const moveDraftColumn = useCallback((sourceKey: string, targetKey: string) => {
+    if (sourceKey === targetKey) return;
+
+    setDraftOrder((previous) => {
+      const knownColumnKeys = columns.map((column) => column.key);
+      const knownColumnKeySet = new Set(knownColumnKeys);
+      const completeOrder = [
+        ...previous.filter((columnKey) => knownColumnKeySet.has(columnKey)),
+        ...knownColumnKeys.filter((columnKey) => !previous.includes(columnKey)),
+      ];
+      const sourceIndex = completeOrder.indexOf(sourceKey);
+      const targetIndex = completeOrder.indexOf(targetKey);
+
+      return moveItem(completeOrder, sourceIndex, targetIndex);
+    });
+  }, [columns]);
+
+  const handleColumnDragStart = useCallback((event: React.DragEvent<HTMLElement>, key: string) => {
+    setDraggedColumnKey(key);
+    setDragOverColumnKey(null);
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', key);
+  }, []);
+
+  const handleColumnDragOver = useCallback((event: React.DragEvent<HTMLElement>, key: string) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    if (draggedColumnKey && draggedColumnKey !== key) {
+      setDragOverColumnKey(key);
+    }
+  }, [draggedColumnKey]);
+
+  const handleColumnDrop = useCallback((event: React.DragEvent<HTMLElement>, key: string) => {
+    event.preventDefault();
+    const sourceKey = event.dataTransfer.getData('text/plain') || draggedColumnKey;
+    if (sourceKey) {
+      moveDraftColumn(sourceKey, key);
+    }
+    setDraggedColumnKey(null);
+    setDragOverColumnKey(null);
+  }, [draggedColumnKey, moveDraftColumn]);
+
+  const handleColumnDragEnd = useCallback(() => {
+    setDraggedColumnKey(null);
+    setDragOverColumnKey(null);
   }, []);
 
   const handleToggleAction = useCallback((key: string, locked?: boolean) => {
@@ -488,7 +543,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                       color: 'color-mix(in srgb, var(--ds-color-text-muted) 92%, var(--ds-color-text-secondary) 8%)',
                     }}
                   >
-                    Toggle visibility here, then drag the live header to fine-tune final order.
+                    Configure the table surface before applying.
                   </Text>
                 </Box>
                 <Flex align="center" gap={6}>
@@ -536,26 +591,63 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     const isPinned = isPinnedLeft || isPinnedRight;
                     const currentWidth = draftWidths[column.key];
                     const isEditingWidth = editingWidthKey === column.key;
+                    const isDragging = draggedColumnKey === column.key;
+                    const isDragTarget = dragOverColumnKey === column.key && draggedColumnKey !== column.key;
 
                     return (
                       <Box
                         key={column.key}
+                        onDragOver={(event: React.DragEvent<HTMLElement>) => handleColumnDragOver(event, column.key)}
+                        onDrop={(event: React.DragEvent<HTMLElement>) => handleColumnDrop(event, column.key)}
                         style={{
-                          border: isVisible
+                          border: isDragTarget
+                            ? '1px solid color-mix(in srgb, var(--ds-color-primary) 54%, transparent)'
+                            : isVisible
                             ? '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)'
                             : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)',
                           borderRadius: 16,
-                          background: isVisible
+                          background: isDragTarget
+                            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-primary) 16%))'
+                            : isVisible
                             ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))'
                             : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))',
                           boxShadow: isVisible
                             ? '0 10px 22px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 56%, transparent) inset'
                             : '0 1px 0 color-mix(in srgb, white 4%, transparent) inset',
                           overflow: 'hidden',
+                          opacity: isDragging ? 0.58 : 1,
+                          transition: 'border-color 0.16s ease, background 0.16s ease, opacity 0.16s ease',
                         }}
                       >
                         <Flex align="center" justify="between" gap={10} style={{ padding: '13px 15px' }}>
                           <Flex align="center" gap={12} style={{ minWidth: 0, flex: 1 }}>
+                            <Box
+                              as="button"
+                              draggable
+                              aria-label={`Drag to move ${column.title}`}
+                              title={`Drag to move ${column.title}`}
+                              onDragStart={(event: React.DragEvent<HTMLElement>) => handleColumnDragStart(event, column.key)}
+                              onDragEnd={handleColumnDragEnd}
+                              onClick={(event: React.MouseEvent<HTMLElement>) => event.preventDefault()}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: 24,
+                                height: 28,
+                                padding: 0,
+                                border: 'none',
+                                borderRadius: 8,
+                                background: 'transparent',
+                                color: isDragTarget || isDragging
+                                  ? 'var(--ds-color-primary)'
+                                  : 'color-mix(in srgb, var(--ds-color-text-secondary) 82%, var(--ds-color-text-muted) 18%)',
+                                cursor: isDragging ? 'grabbing' : 'grab',
+                                flexShrink: 0,
+                              }}
+                            >
+                              <GripVertical style={{ width: 15, height: 15 }} />
+                            </Box>
                             <Checkbox
                               checked={isVisible}
                               size="sm"

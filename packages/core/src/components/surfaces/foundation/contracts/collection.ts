@@ -209,6 +209,8 @@ export interface WorkspaceColumnSettingsConfig {
   columnOrder?: string[];
   pinnedColumns?: { left?: string[]; right?: string[] };
   lockedColumns?: string[];
+  /** Optional column groups rendered as collapsible sections in the column menu. */
+  groups?: Array<{ key: string; label: string; columns: string[] }>;
   /** Optional row-action visibility controls shown in the same customization panel. */
   actionItems?: WorkspaceActionSettingItem[];
   /** Controlled list of row action keys currently visible in the table. */

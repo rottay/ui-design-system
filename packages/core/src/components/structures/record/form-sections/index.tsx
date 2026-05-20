@@ -263,8 +263,8 @@ function getSectionShellStyles(
 
 export function FormSections({
   sections,
-  accordion = true,
-  collapsible = true,
+  accordion = false,
+  collapsible = false,
   defaultActiveKeys,
   activeKeys,
   onChange,

@@ -82,9 +82,11 @@ export function createListSurfaceConfig<TView>(
   return {
     ...config,
     visual: {
+      compact: true,
       mobileDefaultView: 'cards',
       hideViewSwitchOnMobile: true,
       mobileFiltersLayout: 'stacked',
+      filterPanelChrome: 'plain',
       ...config.visual,
     },
   };
@@ -157,6 +159,7 @@ export function createFormSurfaceConfig(
   return {
     ...config,
     visual: {
+      maxWidth: '100%',
       hideAsideOnMobile: true,
       mobileActionsSticky: true,
       ...config.visual,

@@ -155,6 +155,8 @@ export interface ColumnDef<T> {
   visible?: boolean;
   /** Pin column */
   pin?: 'left' | 'right';
+  /** Optional category key used by collection column menus. */
+  group?: string;
   /**
    * Enable inline cell editing. When `true`, uses a default text editor.
    * When an `EditableConfig` object, provides full control over editor type,
@@ -203,7 +205,17 @@ export interface FilterDef {
   /** Control type that determines the rendered filter widget. */
   type: 'text' | 'select' | 'multi-select' | 'date' | 'date-range' | 'number' | 'number-range' | 'boolean';
   /** Available choices for select and multi-select filter types. */
-  options?: { label: string; value: string }[];
+  options?: Array<{
+    label: string;
+    value: string;
+    disabled?: boolean;
+    /** Optional icon rendered in custom select menus. */
+    icon?: ReactNode;
+    /** Optional supporting copy rendered under the option label. */
+    description?: ReactNode;
+    /** Optional visual tone for richer filter option rendering. */
+    tone?: 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+  }>;
   /** Placeholder text shown when the filter has no value. */
   placeholder?: string;
   /** Initial filter value applied before user interaction. */
@@ -220,6 +232,8 @@ export interface PaginationConfig {
   pageSize: number;
   /** Total number of items across all pages. */
   total: number;
+  /** Presentation mode for pagination. Incremental shows 1-N and loads the next page from a sentinel. */
+  loadMode?: 'paged' | 'incremental';
   /** Selectable page-size options shown in the page-size dropdown. */
   pageSizeOptions?: number[];
   /** Callback fired when the user changes page or page size. */

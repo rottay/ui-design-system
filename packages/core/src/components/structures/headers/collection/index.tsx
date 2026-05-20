@@ -238,7 +238,7 @@ export function CollectionHeader({
                     : editorialTech
                       ? 'clamp(40px, 5.2vw, 54px)'
                       : 'clamp(38px, 4.8vw, 52px)'
-                : 'var(--ds-font-size-4xl, 36px)',
+                : 'clamp(var(--ds-font-size-3xl, 30px), 2vw, var(--ds-font-size-4xl, 36px))',
               fontWeight: useDisplayTitle
                 ? ('var(--ds-font-weight-semibold, 680)' as any)
                 : useDottedTitle
@@ -247,7 +247,7 @@ export function CollectionHeader({
                       : editorialTech
                         ? 'var(--ds-font-weight-semibold, 700)'
                         : 'var(--ds-font-weight-extrabold, 820)') as any
-                : ('var(--ds-font-weight-bold, 780)' as any),
+                : ('var(--ds-font-weight-bold, 700)' as any),
               letterSpacing: useDisplayTitle
                 ? '0.015em'
                 : useDottedTitle
@@ -256,7 +256,7 @@ export function CollectionHeader({
                     : editorialTech
                       ? '-0.052em'
                       : '-0.04em'
-                  : '-0.05em',
+                  : 0,
               color: useDottedTitle ? 'transparent' : 'var(--ds-color-text-primary)',
               margin: 0,
               marginTop: 0,
@@ -268,7 +268,7 @@ export function CollectionHeader({
                     : editorialTech
                       ? 0.84
                       : 0.88
-                  : 0.92,
+                  : 1.05,
               textWrap: 'balance',
               display: 'block',
               width: 'fit-content',
@@ -363,47 +363,69 @@ export function CollectionHeader({
               </Text>
             </Flex>
           ) : (
-            <Text
+            <Flex
+              align="start"
+              gap={10}
               style={{
-                display: 'block',
-                fontSize: useDisplayTitle
-                  ? 'var(--ds-font-size-xs, 11px)'
-                  : useDottedTitle
-                    ? compactLayout
-                      ? '11px'
-                      : 'var(--ds-font-size-xs, 10px)'
-                    : 'var(--ds-font-size-sm, 12px)',
-                color: 'var(--ds-color-text-secondary)',
                 marginTop: useDisplayTitle
                   ? 'var(--ds-spacing-2, 10px)'
                   : useDottedTitle
                     ? compactLayout
                       ? 'var(--ds-spacing-2, 6px)'
                       : 'var(--ds-spacing-2, 8px)'
-                    : 'var(--ds-spacing-2, 7px)',
-                lineHeight: useDisplayTitle ? 1.65 : useDottedTitle ? (compactLayout ? 1.45 : 1.55) : 1.5,
-                textWrap: 'pretty',
-                fontFamily: useMonoSubtitle
-                  ? 'var(--ds-font-family-mono, var(--ds-font-family-base))'
-                  : undefined,
-                letterSpacing: useDisplayTitle
-                  ? '0.03em'
-                  : useMonoSubtitle
-                    ? compactLayout
-                      ? '0.05em'
-                      : '0.09em'
-                    : useDottedTitle
-                      ? compactLayout
-                        ? '0.03em'
-                        : '0.08em'
-                      : undefined,
-                textTransform: (useDisplayTitle || useDottedTitle || useMonoSubtitle) ? ('uppercase' as const) : undefined,
-                opacity: (useDisplayTitle || useDottedTitle) ? 0.88 : undefined,
-                maxWidth: compactLayout ? '100%' : 560,
+                    : 'var(--ds-spacing-3, 10px)',
+                paddingTop: compactLayout ? 'var(--ds-spacing-2, 8px)' : 'var(--ds-spacing-3, 10px)',
+                maxWidth: compactLayout ? '100%' : 620,
+                borderTop: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)',
               }}
             >
-              {subtitle}
-            </Text>
+              <Box
+                aria-hidden
+                style={{
+                  width: 3,
+                  minHeight: compactLayout ? 28 : 34,
+                  alignSelf: 'stretch',
+                  flexShrink: 0,
+                  borderRadius: 999,
+                  background:
+                    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 48%, transparent) 0%, color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 100%)',
+                }}
+              />
+              <Text
+                style={{
+                  display: 'block',
+                  fontSize: useDisplayTitle
+                    ? 'var(--ds-font-size-xs, 11px)'
+                    : useDottedTitle
+                      ? compactLayout
+                        ? '11px'
+                        : 'var(--ds-font-size-xs, 10px)'
+                      : 'var(--ds-font-size-sm, 12px)',
+                  color: 'var(--ds-color-text-secondary)',
+                  lineHeight: useDisplayTitle ? 1.65 : useDottedTitle ? (compactLayout ? 1.45 : 1.55) : 1.5,
+                  textWrap: 'pretty',
+                  fontFamily: useMonoSubtitle
+                    ? 'var(--ds-font-family-mono, var(--ds-font-family-base))'
+                    : undefined,
+                  letterSpacing: useDisplayTitle
+                    ? '0.03em'
+                    : useMonoSubtitle
+                      ? compactLayout
+                        ? '0.05em'
+                        : '0.09em'
+                      : useDottedTitle
+                        ? compactLayout
+                          ? '0.03em'
+                          : '0.08em'
+                        : undefined,
+                  textTransform: (useDisplayTitle || useDottedTitle || useMonoSubtitle) ? ('uppercase' as const) : undefined,
+                  opacity: (useDisplayTitle || useDottedTitle) ? 0.88 : undefined,
+                  maxWidth: '100%',
+                }}
+              >
+                {subtitle}
+              </Text>
+            </Flex>
           )}
           {editorialTech && !compactLayout && (
             <Box
@@ -591,7 +613,62 @@ export function CollectionHeader({
           </Box>
         )}
 
-        {!quickActions?.length && eyebrowChip}
+        {!quickActions?.length && (eyebrowChip || compactMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
+          <Box
+            style={{
+              flexShrink: 1,
+              flex: compactLayout ? '1 1 100%' : '1 1 min(100%, 420px)',
+              width: compactLayout ? '100%' : 'auto',
+              maxWidth: compactLayout ? '100%' : 560,
+              minWidth: compactLayout ? 0 : 260,
+              marginLeft: compactLayout ? 0 : 'auto',
+              display: 'grid',
+              gap: 'var(--ds-spacing-2, 8px)',
+              justifyItems: compactLayout ? 'start' : 'end',
+            }}
+          >
+            {(eyebrowChip || eyebrowMetaItems.length > 0) && (
+              <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
+                {eyebrowMetaItems.map(renderMetaItem)}
+                {eyebrowChip}
+              </Flex>
+            )}
+
+            {(inlineMetaItems.length > 0 || belowMetaItems.length > 0) && (
+              <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
+                {[...inlineMetaItems, ...belowMetaItems].map(renderMetaItem)}
+              </Flex>
+            )}
+
+            {shortcuts && shortcuts.length > 0 && (
+              <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
+                {shortcuts.map((shortcut) => (
+                  <Box
+                    key={shortcut.key}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      minHeight: 'var(--ds-spacing-5, 20px)',
+                      padding: '0 var(--ds-spacing-2, 8px)',
+                      borderRadius: 999,
+                      border: '1px solid var(--ds-color-border-subtle)',
+                      background: embedded
+                        ? 'color-mix(in srgb, var(--ds-surface-panel) 66%, transparent)'
+                        : 'var(--ds-surface-panel)',
+                      color: 'var(--ds-color-text-muted)',
+                      fontSize: 'var(--ds-font-size-xs, 9px)',
+                      fontWeight: 700,
+                      letterSpacing: '0.03em',
+                      lineHeight: 1,
+                    }}
+                  >
+                    {shortcut.label}
+                  </Box>
+                ))}
+              </Flex>
+            )}
+          </Box>
+        )}
       </Flex>
     </Box>
   );

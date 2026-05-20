@@ -46,7 +46,7 @@
 
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, type CSSProperties } from 'react';
 import { Tooltip as AntTooltip } from 'antd';
 import type { TooltipProps } from '../Tooltip.types';
 import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
@@ -69,6 +69,10 @@ const PLACEMENT_MAP: Record<string, string> = {
   'right-start': 'rightTop',
   'right-end': 'rightBottom',
 };
+
+function resolveMaxWidth(maxWidth: TooltipProps['maxWidth']): string | number {
+  return maxWidth ?? 'var(--ds-tooltip-max-width, 300px)';
+}
 
 /**
  * Classic (Ant Design) implementation of the Tooltip component.
@@ -103,6 +107,7 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       disabled,
       color,
       zIndex,
+      maxWidth = TOOLTIP_DEFAULTS.maxWidth,
       className,
       style,
       ...restProps
@@ -132,6 +137,15 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       error: 'var(--ds-tooltip-error-bg, #ff4d4f)',
     };
 
+    const bodyStyle: CSSProperties = {
+      maxWidth: resolveMaxWidth(maxWidth),
+      whiteSpace: 'normal',
+      overflowWrap: 'anywhere',
+      wordBreak: 'normal',
+      textAlign: 'left',
+      lineHeight: 1.35,
+    };
+
     // When disabled, pass undefined as title to suppress the tooltip entirely
     // rather than rendering an empty popup.
     return (
@@ -147,7 +161,10 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
         onOpenChange={onVisibleChange}
         color={color ? colorMap[color] : undefined}
         zIndex={zIndex}
-        styles={style ? { root: style } : undefined}
+        styles={{
+          ...(style ? { root: style } : {}),
+          body: bodyStyle,
+        }}
         classNames={className ? { root: className } : undefined}
         {...restProps}
       >

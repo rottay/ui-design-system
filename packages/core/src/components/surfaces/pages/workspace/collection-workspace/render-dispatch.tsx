@@ -92,6 +92,153 @@ function resolveKey<T extends object>(
   return typeof rowKey === 'function' ? rowKey(item) : String(item[rowKey]);
 }
 
+function getColumnHeader(column: ColumnDef<unknown>): ReactNode {
+  return typeof column.header === 'string' ? column.header : column.key;
+}
+
+function getColumnValue<T extends object>(
+  row: T,
+  column: ColumnDef<T>,
+  index: number,
+): ReactNode {
+  const rawValue = column.accessorFn
+    ? column.accessorFn(row)
+    : column.accessorKey
+      ? row[column.accessorKey]
+      : (row as Record<string, unknown>)[column.key];
+
+  if (column.render) {
+    return column.render(rawValue, row, index);
+  }
+
+  if (rawValue == null || rawValue === '') return 'Not set';
+  if (rawValue instanceof Date) return rawValue.toLocaleDateString();
+  if (typeof rawValue === 'boolean') return rawValue ? 'Yes' : 'No';
+  if (typeof rawValue === 'object') return JSON.stringify(rawValue);
+  return String(rawValue);
+}
+
+function renderFallbackCard<T extends object>({
+  row,
+  index,
+  columns,
+  actions,
+}: {
+  row: T;
+  index: number;
+  columns: ColumnDef<T>[];
+  actions?: (row: T, index: number) => ReactNode;
+}): ReactNode {
+  const visibleColumns = columns
+    .filter((column) => column.visible !== false)
+    .slice(0, 6);
+  const [primaryColumn, ...detailColumns] = visibleColumns;
+  const primaryValue = primaryColumn
+    ? getColumnValue(row, primaryColumn, index)
+    : `Record ${index + 1}`;
+  const actionContent = actions?.(row, index);
+
+  return (
+    <Box
+      style={{
+        minHeight: 172,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        padding: 14,
+        boxSizing: 'border-box',
+        borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-lg, 12px))',
+        border: '1px solid var(--ds-collection-card-border, var(--ds-color-border-secondary, var(--ds-color-border)))',
+        background: 'var(--ds-collection-card-bg, var(--ds-surface-card, var(--ds-color-bg-primary)))',
+        boxShadow: 'var(--ds-collection-card-shadow, 0 10px 24px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))',
+        overflow: 'hidden',
+      }}
+    >
+      <Box style={{ minWidth: 0 }}>
+        <Text
+          size="xs"
+          style={{
+            display: 'block',
+            fontSize: 10,
+            fontWeight: 800,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: 'var(--ds-color-text-muted)',
+            marginBottom: 4,
+          }}
+        >
+          {primaryColumn ? getColumnHeader(primaryColumn as ColumnDef<unknown>) : 'Record'}
+        </Text>
+        <Text
+          weight="semibold"
+          style={{
+            display: 'block',
+            color: 'var(--ds-color-text-primary)',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {primaryValue}
+        </Text>
+      </Box>
+
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: '10px 14px',
+          minWidth: 0,
+        }}
+      >
+        {detailColumns.slice(0, 4).map((column) => (
+          <Box key={column.key} style={{ minWidth: 0 }}>
+            <Text
+              size="xs"
+              style={{
+                display: 'block',
+                fontSize: 10,
+                fontWeight: 750,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                color: 'var(--ds-color-text-muted)',
+                marginBottom: 3,
+              }}
+            >
+              {getColumnHeader(column as ColumnDef<unknown>)}
+            </Text>
+            <Text
+              size="sm"
+              style={{
+                display: 'block',
+                color: 'var(--ds-color-text-secondary, var(--ds-color-text-primary))',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {getColumnValue(row, column, index)}
+            </Text>
+          </Box>
+        ))}
+      </Box>
+
+      {actionContent ? (
+        <Box
+          style={{
+            marginTop: 'auto',
+            paddingTop: 10,
+            borderTop: '1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary))',
+          }}
+        >
+          {actionContent}
+        </Box>
+      ) : null}
+    </Box>
+  );
+}
+
 function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNode {
   if (!pagination) return null;
 
@@ -204,6 +351,96 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
   );
 }
 
+function CardsIncrementalFooter({
+  pagination,
+  visibleCount,
+}: {
+  pagination: PaginationConfig;
+  visibleCount: number;
+}): React.ReactElement {
+  const sentinelRef = React.useRef<HTMLElement | null>(null);
+  const loadingRef = React.useRef(false);
+  const pageSize = Math.max(1, pagination.pageSize);
+  const total = Math.max(0, pagination.total);
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const current = Math.min(Math.max(1, pagination.current), totalPages);
+  const visible = Math.min(Math.max(0, visibleCount), total);
+  const canLoadMore = visible < total && current < totalPages;
+
+  const loadMore = React.useCallback(() => {
+    if (!canLoadMore || loadingRef.current) return;
+    loadingRef.current = true;
+    pagination.onChange(current + 1, pageSize);
+    window.setTimeout(() => {
+      loadingRef.current = false;
+    }, 220);
+  }, [canLoadMore, current, pageSize, pagination]);
+
+  React.useEffect(() => {
+    loadingRef.current = false;
+  }, [current, visible]);
+
+  React.useEffect(() => {
+    if (!canLoadMore) return;
+    const node = sentinelRef.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) loadMore();
+      },
+      { rootMargin: '420px 0px 420px' },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [canLoadMore, loadMore]);
+
+  return (
+    <Box
+      ref={sentinelRef}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10,
+        minHeight: 54,
+        marginTop: 'var(--ds-spacing-4, 16px)',
+        color: 'var(--ds-color-text-muted)',
+        fontSize: 12,
+        fontWeight: 650,
+      }}
+    >
+      <Text size="xs" style={{ color: 'inherit', fontSize: 12, fontVariantNumeric: 'tabular-nums' }}>
+        {total === 0 ? '0 results' : `Showing 1-${visible} of ${total.toLocaleString()}`}
+      </Text>
+      {canLoadMore ? (
+        <button
+          type="button"
+          onClick={loadMore}
+          style={{
+            minHeight: 32,
+            padding: '0 13px',
+            borderRadius: 999,
+            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary))',
+            background: 'color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg, white))',
+            color: 'var(--ds-color-primary)',
+            cursor: 'pointer',
+            fontSize: 12,
+            fontWeight: 760,
+          }}
+        >
+          Load more
+        </button>
+      ) : (
+        <Text size="xs" style={{ color: 'inherit', fontSize: 12 }}>
+          End of cards
+        </Text>
+      )}
+    </Box>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -221,6 +458,7 @@ export function CollectionRenderDispatch<T extends object>(
     emptyState,
     error,
     mobileCard,
+    actions,
     onRowClick,
     focusEnabled,
   } = props;
@@ -359,8 +597,10 @@ export function CollectionRenderDispatch<T extends object>(
     );
   }
 
-  // ── Cards mode (legacy inline grid with mobileCard) ──
-  if (viewMode === 'cards' && mobileCard) {
+  // ── Cards mode ──
+  if (viewMode === 'cards') {
+    const cardRenderer = viewModes?.cards?.renderCard ?? mobileCard;
+
     if (loading && data.length === 0) {
       return (
         <Box style={{
@@ -389,31 +629,60 @@ export function CollectionRenderDispatch<T extends object>(
         </Box>
       );
     }
+    const cardColumns = viewModes?.cards?.columns;
+    const explicitColumnCount = typeof cardColumns === 'number' ? cardColumns : undefined;
+    const hasLoneFinalCard = Boolean(
+      explicitColumnCount &&
+      explicitColumnCount > 1 &&
+      data.length > explicitColumnCount &&
+      data.length % explicitColumnCount === 1,
+    );
+
     return (
       <>
         <Box style={{
           display: 'grid',
-          gridTemplateColumns: viewModes?.cards?.columns
-            ? viewModes.cards.columns === 'auto'
+          gridTemplateColumns: cardColumns
+            ? cardColumns === 'auto'
               ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
-              : `repeat(${viewModes.cards.columns}, 1fr)`
+              : `repeat(${cardColumns}, minmax(0, 1fr))`
             : 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))',
           gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
-        }}>
-          {data.map((item, i) => (
+          padding: '1px 1px 8px',
+          boxSizing: 'border-box',
+          alignItems: 'stretch',
+          ['--ds-listing-grid-min-card-width' as string]:
+            viewModes?.cards?.minCardWidth
+              ? typeof viewModes.cards.minCardWidth === 'number'
+                ? `${viewModes.cards.minCardWidth}px`
+                : viewModes.cards.minCardWidth
+              : undefined,
+        } as React.CSSProperties}>
+          {data.map((item, i) => {
+            const isLoneFinalCard = hasLoneFinalCard && i === data.length - 1;
+            return (
             <Box
               key={resolveKey(item, rowKey)}
               onClick={() => onRowClick?.(item, i)}
-              style={{ cursor: focusEnabled || onRowClick ? 'pointer' : undefined }}
+              style={{
+                cursor: focusEnabled || onRowClick ? 'pointer' : undefined,
+                gridColumn: isLoneFinalCard ? '1 / -1' : undefined,
+                minWidth: 0,
+                height: '100%',
+              }}
             >
-              {viewModes?.cards?.renderCard
-                ? viewModes.cards.renderCard(item, i)
-                : mobileCard(item, i)
-              }
+              {cardRenderer
+                ? cardRenderer(item, i)
+                : renderFallbackCard({ row: item, index: i, columns, actions })}
             </Box>
-          ))}
+            );
+          })}
         </Box>
-        {renderPaginationFooter(props.pagination)}
+        {props.pagination && props.pagination.loadMode === 'incremental' ? (
+          <CardsIncrementalFooter pagination={props.pagination} visibleCount={data.length} />
+        ) : (
+          renderPaginationFooter(props.pagination)
+        )}
       </>
     );
   }

@@ -1949,6 +1949,11 @@ export interface SettingsSurfaceVisualConfig {
 /** Presentation slots for settings chrome, intro text, and optional sidebar. */
 export interface SettingsSurfacePresentationConfig {
   chrome: SurfacePageChrome;
+  /**
+   * Outer frame used around settings content. `auto` keeps the card frame for
+   * tabbed settings and removes it for single unlabeled content tabs.
+   */
+  contentFrame?: 'auto' | 'card' | 'plain';
   /** Introductory content rendered above the settings tabs. */
   intro?: ReactNode;
   /** Sidebar navigation for settings categories (alternative to tabs). */

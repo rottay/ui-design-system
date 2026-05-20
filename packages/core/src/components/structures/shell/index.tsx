@@ -146,7 +146,8 @@ export function AppShell({
             overflowX: 'hidden',
             padding: (!isDrawer && collapsed)
               ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
-              : 'var(--ds-spacing-3, 10px) var(--ds-spacing-3, 10px) var(--ds-spacing-3, 12px)',
+              : 'var(--ds-spacing-3, 10px) var(--ds-spacing-3, 10px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px)',
+            scrollPaddingBlockEnd: 'calc(var(--ds-spacing-6, 24px) + 76px)',
           }}
         >
           {sidebar.nav}

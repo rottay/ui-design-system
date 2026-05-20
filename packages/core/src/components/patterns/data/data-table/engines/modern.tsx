@@ -26,6 +26,7 @@
  */
 
 import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
+import { GripVertical } from 'lucide-react';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 import ModernCheckbox from '../../../../primitives/inputs/Checkbox/engines/modern';
@@ -462,6 +463,65 @@ export default function ModernDataTable<T extends object>(
     [reorderable, onColumnReorder, columnOrder, processedColumns]
   );
 
+  const handleHeaderDragStart = useCallback(
+    (e: React.DragEvent, key: string) => {
+      if (!reorderable || !onColumnReorder) {
+        e.preventDefault();
+        return;
+      }
+
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('[data-column-resize-handle="true"]')) {
+        e.preventDefault();
+        return;
+      }
+
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', key);
+      setDragSourceKey(key);
+    },
+    [reorderable, onColumnReorder],
+  );
+
+  const handleHeaderDragOver = useCallback(
+    (e: React.DragEvent, key: string) => {
+      if (!dragSourceKey || dragSourceKey === key) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      setDragOverKey(key);
+    },
+    [dragSourceKey],
+  );
+
+  const handleHeaderDrop = useCallback(
+    (e: React.DragEvent, targetKey: string) => {
+      e.preventDefault();
+      const sourceKey = e.dataTransfer.getData('text/plain') || dragSourceKey;
+      setDragSourceKey(null);
+      setDragOverKey(null);
+
+      if (!sourceKey || sourceKey === targetKey || !onColumnReorder) return;
+
+      const currentOrder = columnOrder && columnOrder.length > 0
+        ? columnOrder
+        : processedColumns.map((c) => c.key);
+      const newOrder = [...currentOrder];
+      const sourceIdx = newOrder.indexOf(sourceKey);
+      const targetIdx = newOrder.indexOf(targetKey);
+      if (sourceIdx === -1 || targetIdx === -1) return;
+
+      newOrder.splice(sourceIdx, 1);
+      newOrder.splice(targetIdx, 0, sourceKey);
+      onColumnReorder(newOrder);
+    },
+    [columnOrder, dragSourceKey, onColumnReorder, processedColumns],
+  );
+
+  const handleHeaderDragEnd = useCallback(() => {
+    setDragSourceKey(null);
+    setDragOverKey(null);
+  }, []);
+
   // ---------------------------------------------------------------------------
   // Pin helpers
   // ---------------------------------------------------------------------------
@@ -628,7 +688,12 @@ export default function ModernDataTable<T extends object>(
   return (
     <div
       className={`ds-pattern-data-table ds-engine-modern ds-table-density-${density} ${className ?? ''}`}
-      style={{ width: '100%', ...style }}
+      style={{
+        width: '100%',
+        minWidth: 0,
+        contain: 'layout style',
+        ...style,
+      }}
     >
       {/* Premium polish styles for resize handles, row hover, keyboard nav, etc. */}
       <style>{`
@@ -696,6 +761,7 @@ export default function ModernDataTable<T extends object>(
           borderRadius: 'var(--ds-radius-lg)',
           border: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
           overflow: 'hidden',
+          minWidth: 0,
         }}
       >
         {/* Scroll container */}
@@ -704,7 +770,12 @@ export default function ModernDataTable<T extends object>(
           onScroll={virtualized ? virtualScroll.onScroll : undefined}
           style={{
             overflowX: 'auto',
-            ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}),
+            scrollbarGutter: 'stable both-edges',
+            overscrollBehavior: 'contain',
+            minWidth: 0,
+            ...(maxHeight
+              ? { maxHeight, overflowY: 'auto' as const }
+              : { overflowY: 'hidden' as const }),
           }}
         >
           {/* Loading state: skeleton rows with shimmer animation */}
@@ -940,10 +1011,16 @@ export default function ModernDataTable<T extends object>(
                           userSelect: col.sortable || reorderable || resizable ? 'none' : undefined,
                           opacity: dragSourceKey === col.key ? 0.45 : 1,
                           transition: `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out), background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
-                          cursor: col.sortable ? 'pointer' : undefined,
+                          cursor: reorderable && onColumnReorder ? 'grab' : col.sortable ? 'pointer' : undefined,
                         }}
                         data-col-key={col.key}
                         data-sortable={col.sortable ? 'true' : undefined}
+                        draggable={reorderable && !!onColumnReorder}
+                        title={reorderable && onColumnReorder ? `Drag header to move ${typeof col.header === 'string' ? col.header : col.key}` : undefined}
+                        onDragStart={reorderable && onColumnReorder ? (e) => handleHeaderDragStart(e, col.key) : undefined}
+                        onDragOver={reorderable && onColumnReorder ? (e) => handleHeaderDragOver(e, col.key) : undefined}
+                        onDrop={reorderable && onColumnReorder ? (e) => handleHeaderDrop(e, col.key) : undefined}
+                        onDragEnd={reorderable && onColumnReorder ? handleHeaderDragEnd : undefined}
                         onClick={col.sortable ? () => handleSort(col.key) : undefined}
                         onKeyDown={col.sortable ? (e) => handleHeaderKeyDown(e, col.key) : undefined}
                       >
@@ -960,21 +1037,30 @@ export default function ModernDataTable<T extends object>(
                           {reorderable && onColumnReorder && (
                             <span
                               onMouseDown={(e) => handleReorderStart(e, col.key)}
+                              title={`Drag to move ${typeof col.header === 'string' ? col.header : col.key}`}
                               style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: 18,
+                                height: 18,
                                 cursor: dragSourceKey ? 'grabbing' : 'grab',
-                                opacity: dragSourceKey === col.key ? 0.8 : 0.35,
+                                opacity: dragSourceKey === col.key ? 0.95 : 0.72,
                                 fontSize: 11,
                                 lineHeight: 1,
                                 flexShrink: 0,
                                 marginRight: 4,
-                                padding: '2px',
-                                borderRadius: 3,
-                                transition: `opacity var(--ds-motion-fast, 150ms)`,
+                                padding: 0,
+                                borderRadius: 5,
+                                border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)',
+                                background: 'color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)',
+                                color: 'var(--ds-color-text-secondary)',
+                                transition: `opacity var(--ds-motion-fast, 150ms), border-color var(--ds-motion-fast, 150ms), background-color var(--ds-motion-fast, 150ms)`,
                               }}
                               aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
                               role="button"
                             >
-                              {'\u2807'}
+                              <GripVertical size={13} strokeWidth={2.2} aria-hidden />
                             </span>
                           )}
                           <span
@@ -1042,6 +1128,7 @@ export default function ModernDataTable<T extends object>(
                         {resizable && onColumnResize && (
                           <span
                             className="ds-resize-handle"
+                            data-column-resize-handle="true"
                             role="separator"
                             aria-label={`Resize column ${typeof col.header === 'string' ? col.header : col.key}`}
                             tabIndex={0}

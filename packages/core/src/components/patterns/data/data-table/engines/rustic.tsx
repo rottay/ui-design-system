@@ -24,6 +24,7 @@
  */
 
 import React, { useMemo, useState, useCallback, useRef } from 'react';
+import { GripVertical } from 'lucide-react';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 
@@ -500,7 +501,7 @@ export default function RusticDataTable<T extends object>(
     (col: (typeof processedColumns)[number]) => {
       // When reordering is enabled, wrap the header in a draggable container
       // with a grab-handle icon and a drop-target indicator line.
-      if (reorderable) {
+      if (reorderable && onColumnReorder) {
         return (
           <span
             style={{
@@ -509,6 +510,7 @@ export default function RusticDataTable<T extends object>(
               gap: 4,
               position: 'relative',
               userSelect: 'none',
+              cursor: 'grab',
             }}
             draggable
             onDragStart={(e) => handleDragStart(e, col.key)}
@@ -517,16 +519,27 @@ export default function RusticDataTable<T extends object>(
             onDragEnd={handleDragEnd}
           >
             <span
+              title={`Drag to move ${typeof col.header === 'string' ? col.header : col.key}`}
               style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 18,
+                height: 18,
                 cursor: 'grab',
-                opacity: 0.4,
+                opacity: dragSourceKey === col.key ? 0.95 : 0.72,
                 fontSize: 10,
                 lineHeight: 1,
                 flexShrink: 0,
+                borderRadius: 5,
+                border: '1px solid var(--ds-color-border-secondary, rgba(148, 163, 184, 0.55))',
+                background: 'color-mix(in srgb, var(--ds-surface-inset, #f8fafc) 72%, transparent)',
+                color: 'var(--ds-color-text-secondary, #475569)',
               }}
-              aria-hidden="true"
+              aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
+              role="button"
             >
-              {'\u2807'}
+              <GripVertical size={13} strokeWidth={2.2} aria-hidden />
             </span>
             <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {col.header}

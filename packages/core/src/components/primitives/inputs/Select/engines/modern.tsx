@@ -451,6 +451,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return buildRenderableList(filteredOptions, optionGroups);
   }, [filteredOptions, optionGroups, isSearchable, searchValue]);
 
+  const hasRichDropdownOptions = useMemo(
+    () => allOptions.some((option) => Boolean(option.icon || option.description)),
+    [allOptions],
+  );
+
   // Selectable indices (skip headers + disabled)
   const selectableIndices = useMemo(() => {
     const indices: number[] = [];
@@ -647,7 +652,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
     const rect = containerRef.current.getBoundingClientRect();
     const gutter = 12;
-    const width = Math.min(Math.max(rect.width, 240), window.innerWidth - gutter * 2);
+    const minWidth = hasRichDropdownOptions ? 320 : 240;
+    const maxWidth = Math.min(hasRichDropdownOptions ? 440 : window.innerWidth - gutter * 2, window.innerWidth - gutter * 2);
+    const width = Math.min(Math.max(rect.width, minWidth), maxWidth);
     const left = Math.min(Math.max(gutter, rect.left), window.innerWidth - width - gutter);
 
     setDropdownPosition({
@@ -655,7 +662,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       left,
       width,
     });
-  }, []);
+  }, [hasRichDropdownOptions]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -1067,8 +1074,34 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             )}
           </span>
         )}
-        {option.icon && <span style={{ display: 'inline-flex', flexShrink: 0 }}>{option.icon}</span>}
-        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
+        {option.icon && <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
+        <span
+          style={{
+            flex: 1,
+            minWidth: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: option.description ? 2 : 0,
+            overflow: 'hidden',
+          }}
+        >
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
+          {option.description && (
+            <span
+              style={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                color: 'var(--ds-color-text-muted)',
+                fontSize: 11,
+                lineHeight: '14px',
+                fontWeight: 450,
+              }}
+            >
+              {option.description}
+            </span>
+          )}
+        </span>
         {!multiple && isSelected && (
           <span style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
             <CheckIcon />
@@ -1313,8 +1346,34 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                               )}
                             </span>
                           )}
-                          {option.icon && <span style={{ display: 'inline-flex', flexShrink: 0 }}>{option.icon}</span>}
-                          <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
+                          {option.icon && <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
+                          <span
+                            style={{
+                              flex: 1,
+                              minWidth: 0,
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: option.description ? 2 : 0,
+                              overflow: 'hidden',
+                            }}
+                          >
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
+                            {option.description && (
+                              <span
+                                style={{
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  color: 'var(--ds-color-text-muted)',
+                                  fontSize: 11,
+                                  lineHeight: '14px',
+                                  fontWeight: 450,
+                                }}
+                              >
+                                {option.description}
+                              </span>
+                            )}
+                          </span>
                           {!multiple && isSelected && (
                             <span style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
                               <CheckIcon />
