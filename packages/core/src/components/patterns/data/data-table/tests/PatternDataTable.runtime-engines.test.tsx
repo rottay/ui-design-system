@@ -79,6 +79,72 @@ function renderTable(
 }
 
 describe('PatternDataTable runtime engines', () => {
+  it('keeps modern body cells from collapsing visible data columns', () => {
+    render(
+      <ModernDataTable<Row>
+        data={rows}
+        rowKey="id"
+        columns={[
+          {
+            key: 'name',
+            header: 'Event',
+            accessorKey: 'name',
+            width: 220,
+            minWidth: 180,
+            maxWidth: 320,
+          },
+          {
+            key: 'venue',
+            header: 'Venue',
+            accessorKey: 'venue',
+            width: 160,
+            minWidth: 140,
+          },
+        ]}
+      />
+    );
+
+    const firstDataCell = screen.getByText('Spring Summit').closest('td');
+
+    expect(firstDataCell).toHaveStyle({
+      width: '220px',
+      minWidth: '180px',
+      maxWidth: '320px',
+    });
+    expect(firstDataCell?.style.maxWidth).not.toBe('0px');
+  });
+
+  it('uses minWidth as the modern fixed-table width when a resizable column has no explicit width', () => {
+    render(
+      <ModernDataTable<Row>
+        data={rows}
+        rowKey="id"
+        columns={[
+          {
+            key: 'name',
+            header: 'Event',
+            accessorKey: 'name',
+            minWidth: 260,
+          },
+          {
+            key: 'venue',
+            header: 'Venue',
+            accessorKey: 'venue',
+            width: 160,
+          },
+        ]}
+        resizable
+      />
+    );
+
+    const firstDataCell = screen.getByText('Spring Summit').closest('td');
+
+    expect(firstDataCell).toHaveStyle({
+      width: '260px',
+      minWidth: '260px',
+    });
+  });
+
   it.each(Object.entries(ENGINE_COMPONENTS))(
     'renders loading and empty states through the %s engine',
     async (engine, Component) => {

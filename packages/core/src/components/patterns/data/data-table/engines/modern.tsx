@@ -218,6 +218,11 @@ export default function ModernDataTable<T extends object>(
   const actionCellPadding = ACTION_CELL_PADDING_MAP[density] ?? ACTION_CELL_PADDING_MAP.comfortable;
   const resolvedSelectionColumnWidth = 22;
   const resolvedActionsColumnWidth = actionsColumnWidth ?? 120;
+  const resolveColumnWidth = useCallback(
+    (col: NonNullable<DataTablePatternProps<T>['columns']>[number]) =>
+      columnWidths?.[col.key] ?? col.width ?? (resizable ? col.minWidth : undefined),
+    [columnWidths, resizable],
+  );
 
   // --- Process columns: visibility filter -> reorder sort ---
   const processedColumns = useMemo(() => {
@@ -971,7 +976,7 @@ export default function ModernDataTable<T extends object>(
                   {visibleColumns.map((col, columnIndex) => {
                     const pinSide = getPinSide(col.key, col.pin);
                     const pinnedStyle = getPinnedStyle(pinSide);
-                    const resolvedWidth = columnWidths?.[col.key] ?? col.width;
+                    const resolvedWidth = resolveColumnWidth(col);
                     const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
 
                     return (
@@ -1335,7 +1340,7 @@ export default function ModernDataTable<T extends object>(
                               {visibleColumns.map((col, columnIndex) => {
                                 const pinSide = getPinSide(col.key, col.pin);
                                 const pinnedStyle = getPinnedStyle(pinSide);
-                                const resolvedWidth = columnWidths?.[col.key] ?? col.width;
+                                const resolvedWidth = resolveColumnWidth(col);
                                 const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
 
                                 const editableCfg = resolveEditableConfig(col.editable);
@@ -1367,6 +1372,8 @@ export default function ModernDataTable<T extends object>(
                                     style={{
                                       textAlign: col.align,
                                       width: resolvedWidth,
+                                      minWidth: col.minWidth,
+                                      maxWidth: col.maxWidth,
                                       padding: isCellEditing
                                         ? '4px 6px'
                                         : isLeadingDataColumn && selectable
@@ -1383,7 +1390,6 @@ export default function ModernDataTable<T extends object>(
                                       overflow: isCellEditing ? 'visible' : 'hidden',
                                       textOverflow: isCellEditing ? undefined : 'ellipsis',
                                       whiteSpace: isCellEditing ? undefined : 'nowrap',
-                                      maxWidth: 0,
                                       fontSize: 14,
                                       color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
                                     }}
@@ -1685,7 +1691,7 @@ export default function ModernDataTable<T extends object>(
                         {visibleColumns.map((col, columnIndex) => {
                           const pinSide = getPinSide(col.key, col.pin);
                           const pinnedStyle = getPinnedStyle(pinSide);
-                          const resolvedWidth = columnWidths?.[col.key] ?? col.width;
+                          const resolvedWidth = resolveColumnWidth(col);
                           const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
 
                           // Inline editing: resolve config and state for this cell
@@ -1719,6 +1725,8 @@ export default function ModernDataTable<T extends object>(
                               style={{
                                 textAlign: col.align,
                                 width: resolvedWidth,
+                                minWidth: col.minWidth,
+                                maxWidth: col.maxWidth,
                                 padding: isCellEditing
                                   ? '4px 6px'
                                   : isLeadingDataColumn && selectable
@@ -1735,7 +1743,6 @@ export default function ModernDataTable<T extends object>(
                                 overflow: isCellEditing ? 'visible' : 'hidden',
                                 textOverflow: isCellEditing ? undefined : 'ellipsis',
                                 whiteSpace: isCellEditing ? undefined : 'nowrap',
-                                maxWidth: 0,
                                 fontSize: 14,
                                 color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
                               }}
